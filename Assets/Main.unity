@@ -108,8 +108,8 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 31
-    agentClimb: 0.1
+    agentSlope: 45
+    agentClimb: 0.2
     ledgeDropHeight: 2
     maxJumpAcrossDistance: 2
     minRegionArea: 1
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 165257067}
   - component: {fileID: 165257066}
   - component: {fileID: 165257065}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,7 +431,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1665684677}
-  - {fileID: 1291049166}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -478,6 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9eaaaf37e2495140b380cbe19635418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agent: {fileID: 0}
   health: 0
   willpower: 0
   strength: 0
@@ -537,7 +537,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 399923701}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: WaterPane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +599,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 773745698}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ GameObject:
   - component: {fileID: 842878636}
   - component: {fileID: 842878635}
   - component: {fileID: 842878634}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -764,7 +764,7 @@ GameObject:
   - component: {fileID: 1003287512}
   - component: {fileID: 1003287511}
   - component: {fileID: 1003287510}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -859,7 +859,7 @@ GameObject:
   - component: {fileID: 1056779495}
   - component: {fileID: 1056779494}
   - component: {fileID: 1056779493}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: Bottom (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1086,7 +1086,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1204074227}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: River
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1172,12 +1172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad87d169ed984048b1e428b5333fbfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LookOffset: 1
-  CameraAngle: 45
-  DefaultZoom: 5
-  ZoomMax: 2
-  ZoomMin: 10
-  RotationSpeed: 20
+  offset: {x: 4.5, y: 10.5, z: 4.5}
 --- !u!4 &1291049166
 Transform:
   m_ObjectHideFlags: 0
@@ -1186,12 +1181,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291049164}
   m_LocalRotation: {x: 0.17670354, y: -0.8194912, z: 0.42660013, w: 0.33944437}
-  m_LocalPosition: {x: 4.5, y: 10, z: 4.5}
+  m_LocalPosition: {x: 4.5, y: 10.5, z: 4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1728564191}
-  m_Father: {fileID: 328581275}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 55, y: -135, z: 0}
 --- !u!1 &1529498834
 GameObject:
@@ -1331,7 +1326,7 @@ GameObject:
   - component: {fileID: 1608172965}
   - component: {fileID: 1608172968}
   - component: {fileID: 1608172967}
-  m_Layer: 4
+  m_Layer: 0
   m_Name: Surface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1907,7 +1902,7 @@ GameObject:
   - component: {fileID: 1957454145}
   - component: {fileID: 1957454144}
   - component: {fileID: 1957454143}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -19,13 +19,13 @@ public class InputManager : MonoBehaviour
             _input.Player.CameraMove.performed += cameraControl.OnMove;
             _input.Player.CameraMove.canceled += cameraControl.OnMove;
 
-            _input.Player.CameraRotate.performed += cameraControl.OnRotate;
-            _input.Player.CameraRotate.canceled += cameraControl.OnRotate;
+            //_input.Player.CameraRotate.performed += cameraControl.OnRotate;
+            //_input.Player.CameraRotate.canceled += cameraControl.OnRotate;
 
             //_input.Player.CameraRotateToggle.performed += cameraControl.OnRotateToggle;
             //_input.Player.CameraRotateToggle.canceled += cameraControl.OnRotateToggle;
 
-            _input.Player.CameraZoom.performed += cameraControl.OnZoom;
+            //_input.Player.CameraZoom.performed += cameraControl.OnZoom;
         }
         if(playerControl == null)
         {

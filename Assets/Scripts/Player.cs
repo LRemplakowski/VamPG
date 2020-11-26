@@ -1,18 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Player : Vampire
 {
-    public override void Move()
+    public override void Move(Vector3 moveTarget)
     {
-        throw new System.NotImplementedException();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        agent.SetDestination(moveTarget);
     }
 
     // Update is called once per frame

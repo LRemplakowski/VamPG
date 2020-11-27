@@ -10,9 +10,9 @@ public class Destination : Condition
     private const float completionMargin = 0.1f;
     private bool hasPath = false;
 
-    public Destination(Creature traveler)
+    public Destination(NavMeshAgent agent)
     {
-        agent = traveler.GetComponent<NavMeshAgent>();
+        this.agent = agent;
     }
     public override bool IsMet()
     {

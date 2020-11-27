@@ -9,10 +9,10 @@ public class Move : Action
     private NavMeshAgent navMeshAgent;
     private Vector3 destination;
 
-    public Move(Creature owner, Vector3 destination)
+    public Move(NavMeshAgent navMeshAgent, Vector3 destination)
     {
-        this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
-        conditions.Add(new Destination(owner));
+        this.navMeshAgent = navMeshAgent;
+        conditions.Add(new Destination(navMeshAgent));
         this.destination = destination;
     }
     public override void Begin()

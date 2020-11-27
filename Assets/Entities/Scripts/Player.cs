@@ -8,8 +8,12 @@ public class Player : Vampire
     public override void Move(Vector3 moveTarget)
     {
         ClearAllActions();
-        AddActionToQueue(new Move(this, moveTarget));
+        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget));
     }
 
- 
+    public void InteractWith(IInteractable target)
+    {
+        ClearAllActions();
+        AddActionToQueue(new Interact(target, this));
+    }
 }

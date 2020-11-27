@@ -19,10 +19,16 @@ public class PlayerControlScript : MonoBehaviour
         //Debug.Log(player);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100, movementMask))
+        if (Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("Move hit");
-            player.Move(hit.point);
+            if(Entity.IsInteractable(hit.collider.gameObject))
+            {
+                player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
+            }
+            else if (Physics.Raycast(ray, out hit, 100, movementMask))
+            {
+                player.Move(hit.point);
+            }
         }
     }
 
@@ -33,7 +39,7 @@ public class PlayerControlScript : MonoBehaviour
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, 100))
         {
-            Debug.Log("Ray hit");
+            //Debug.Log("Ray hit");
             if(lastHit == null)
             {
                 lastHit = hit.collider;

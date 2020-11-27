@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public interface IInteractable
 {
-    [SerializeField]
+    
     GameObject HoverHighlight
     {
         get;
@@ -22,5 +22,27 @@ public interface IInteractable
         set;
     }
 
+    GameObject TargetedBy
+    {
+        get;
+        set;
+    }
+
+    Transform InteractionTarget
+    {
+        get;
+        set;
+    }
+
+    bool Interacted
+    {
+        get;
+        set;
+    }
+
     void Interact();
+
+    void OnDrawGizmosSelected();
+
+    Transform GetTransform();
 }

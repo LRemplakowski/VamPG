@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Idle : Action
 {
+    public override void Abort()
+    {
+        
+    }
+
     public override void Begin()
     {
         

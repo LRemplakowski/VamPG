@@ -14,7 +14,6 @@ public class Container : Entity, IInteractable
     }
 
     private bool _isHoveredOver;
-    [HideInInspector]
     public bool IsHoveredOver
     {
         get => _isHoveredOver;

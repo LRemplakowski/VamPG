@@ -15,8 +15,15 @@ public class Move : Action
         conditions.Add(new Destination(navMeshAgent));
         this.destination = destination;
     }
+
+    public override void Abort()
+    {
+        navMeshAgent.isStopped = true;
+    }
+
     public override void Begin()
     {
         navMeshAgent.SetDestination(destination);
+        navMeshAgent.isStopped = false;
     }
 }

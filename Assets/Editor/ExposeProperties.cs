@@ -167,6 +167,8 @@ public class PropertyField
 			propertyType = SerializedPropertyType.Enum;
 		else if (typeof(GameObject).IsAssignableFrom(type))
 			propertyType = SerializedPropertyType.ObjectReference;
+		else if (typeof(Transform).IsAssignableFrom(type))
+			propertyType = SerializedPropertyType.ObjectReference;
 		return propertyType != SerializedPropertyType.Generic;
 	}
 }

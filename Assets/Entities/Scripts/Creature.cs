@@ -41,8 +41,24 @@ public abstract class Creature : Entity
 
     public void ClearAllActions()
     {
+        ActionQueue.Peek().Abort();
         ActionQueue.Clear();
         ActionQueue.Enqueue(new Idle());
+    }
+
+    public bool RotateTowardsTarget(Transform target)
+    {
+        Vector3 direction = (target.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        float dot = Quaternion.Dot(transform.rotation, lookRotation);
+        return dot >= 0.999f || dot <= -0.999f;
+    }
+
+    public IEnumerator FaceTarget(Transform target)
+    {
+        yield return new WaitUntil(() => RotateTowardsTarget(target));
+        StopCoroutine(FaceTarget(target));
     }
 
     public void Update()

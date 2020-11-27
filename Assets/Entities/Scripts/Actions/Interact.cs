@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Interact : Action
 {
-    private IInteractable target;
+    private readonly IInteractable target;
     private Move moveToTarget;
 
     public Interact(IInteractable target, Creature owner)
@@ -13,6 +13,14 @@ public class Interact : Action
         this.target = target;
         this.owner = owner;
         conditions.Add(new InteractionComplete(target));
+    }
+
+    public override void Abort()
+    {
+        owner.StopCoroutine(InteractIfCloseEnough());
+        owner.StopCoroutine(owner.FaceTarget(target.GetTransform()));
+        moveToTarget.Abort();
+        target.Interacted = false;
     }
 
     public override void Begin()
@@ -26,6 +34,7 @@ public class Interact : Action
         }
         else
         {
+            owner.StartCoroutine(owner.FaceTarget(target.GetTransform()));
             target.TargetedBy = owner.gameObject;
             target.Interact();
         }
@@ -34,6 +43,8 @@ public class Interact : Action
     private IEnumerator InteractIfCloseEnough()
     {
         yield return new WaitUntil(() => moveToTarget.IsFinished());
+
+        yield return new WaitUntil(() => owner.RotateTowardsTarget(target.GetTransform()));
 
         target.TargetedBy = owner.gameObject;
         target.Interact();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractionComplete : Condition
 {
-    IInteractable target;
+    readonly IInteractable target;
     public InteractionComplete(IInteractable target)
     {
         this.target = target;
@@ -14,7 +14,6 @@ public class InteractionComplete : Condition
     {
         if(target.Interacted == true)
         {
-            target.Interacted = false;
             return true;
         }
         return false;

@@ -9,6 +9,8 @@ public abstract class Action
 
     public abstract void Begin();
 
+    public abstract void Abort();
+
     public virtual bool IsFinished()
     {
         if (conditions.Count == 0) return true;
@@ -23,6 +25,7 @@ public abstract class Action
                 return false;
             }
         }
+        this.Abort();
         return true;
     }
 }

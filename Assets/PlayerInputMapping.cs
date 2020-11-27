@@ -51,10 +51,18 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""ClickPosition"",
+                    ""name"": ""Click"",
                     ""type"": ""Button"",
                     ""id"": ""4e1d31c1-b9cf-4651-bf23-29b3b50e4313"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""45c46636-5c1a-48a0-b7d3-0e840788d914"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -210,7 +218,18 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""ClickPosition"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85d5a619-97a1-4824-b4c6-f559fcf12df2"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -286,7 +305,8 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         m_Player_CameraRotate = m_Player.FindAction("CameraRotate", throwIfNotFound: true);
         m_Player_CameraRotateToggle = m_Player.FindAction("CameraRotateToggle", throwIfNotFound: true);
         m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
-        m_Player_ClickPosition = m_Player.FindAction("ClickPosition", throwIfNotFound: true);
+        m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
+        m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -340,7 +360,8 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_CameraRotate;
     private readonly InputAction m_Player_CameraRotateToggle;
     private readonly InputAction m_Player_CameraZoom;
-    private readonly InputAction m_Player_ClickPosition;
+    private readonly InputAction m_Player_Click;
+    private readonly InputAction m_Player_MousePosition;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -349,7 +370,8 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
         public InputAction @CameraRotateToggle => m_Wrapper.m_Player_CameraRotateToggle;
         public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
-        public InputAction @ClickPosition => m_Wrapper.m_Player_ClickPosition;
+        public InputAction @Click => m_Wrapper.m_Player_Click;
+        public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -371,9 +393,12 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @CameraZoom.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
                 @CameraZoom.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraZoom;
-                @ClickPosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClickPosition;
-                @ClickPosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClickPosition;
-                @ClickPosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClickPosition;
+                @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
+                @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -390,9 +415,12 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @CameraZoom.started += instance.OnCameraZoom;
                 @CameraZoom.performed += instance.OnCameraZoom;
                 @CameraZoom.canceled += instance.OnCameraZoom;
-                @ClickPosition.started += instance.OnClickPosition;
-                @ClickPosition.performed += instance.OnClickPosition;
-                @ClickPosition.canceled += instance.OnClickPosition;
+                @Click.started += instance.OnClick;
+                @Click.performed += instance.OnClick;
+                @Click.canceled += instance.OnClick;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
             }
         }
     }
@@ -448,6 +476,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         void OnCameraRotate(InputAction.CallbackContext context);
         void OnCameraRotateToggle(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
-        void OnClickPosition(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
     }
 }

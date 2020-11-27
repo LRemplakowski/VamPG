@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public abstract class Creature : MonoBehaviour
+public abstract class Creature : Entity
 {
     public NavMeshAgent agent;
     
@@ -24,17 +24,14 @@ public abstract class Creature : MonoBehaviour
 
     public abstract void Move(Vector3 moveTarget);
 
-    private void Awake()
-    {
-        health = stamina + 3;
-        willpower = composure + resolve;
-    }
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<Action>();
         ActionQueue.Enqueue(new Idle());
+
+        health = stamina + 3;
+        willpower = composure + resolve;
     }
 
     public void AddActionToQueue(Action action)

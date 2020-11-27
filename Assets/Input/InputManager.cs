@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    public CameraControlScript cameraControl;
-    public PlayerControlScript playerControl;
+    private CameraControlScript cameraControl;
+    private PlayerControlScript playerControl;
     private PlayerInputMapping _input;
 
     void Awake()
@@ -31,7 +31,8 @@ public class InputManager : MonoBehaviour
         {
             playerControl = FindObjectOfType<PlayerControlScript>();
 
-            _input.Player.ClickPosition.performed += playerControl.OnClick;
+            _input.Player.Click.performed += playerControl.OnClick;
+            _input.Player.MousePosition.performed += playerControl.OnMousePosition;
         }
     }
 

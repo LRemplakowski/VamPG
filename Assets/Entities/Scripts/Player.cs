@@ -7,12 +7,9 @@ public class Player : Vampire
 {
     public override void Move(Vector3 moveTarget)
     {
-        agent.SetDestination(moveTarget);
+        ClearAllActions();
+        AddActionToQueue(new Move(this, moveTarget));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+ 
 }

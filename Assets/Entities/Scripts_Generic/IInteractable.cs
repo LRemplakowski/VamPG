@@ -28,7 +28,7 @@ public interface IInteractable
         set;
     }
 
-    Transform InteractionTarget
+    Transform InteractionTransform
     {
         get;
         set;
@@ -43,6 +43,4 @@ public interface IInteractable
     void Interact();
 
     void OnDrawGizmosSelected();
-
-    Transform GetTransform();
 }

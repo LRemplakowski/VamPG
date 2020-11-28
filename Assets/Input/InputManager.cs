@@ -6,18 +6,18 @@ public class InputManager : MonoBehaviour
 {
     private CameraControlScript cameraControl;
     private PlayerControlScript playerControl;
-    private PlayerInputMapping _input;
+    private PlayerInputMapping input;
 
     void Awake()
     {
-        _input = new PlayerInputMapping();
+        input = new PlayerInputMapping();
 
         if(cameraControl == null)
         {
             cameraControl = FindObjectOfType<CameraControlScript>();
 
-            _input.Player.CameraMove.performed += cameraControl.OnMove;
-            _input.Player.CameraMove.canceled += cameraControl.OnMove;
+            input.Player.CameraMove.performed += cameraControl.OnMove;
+            input.Player.CameraMove.canceled += cameraControl.OnMove;
 
             //_input.Player.CameraRotate.performed += cameraControl.OnRotate;
             //_input.Player.CameraRotate.canceled += cameraControl.OnRotate;
@@ -31,8 +31,8 @@ public class InputManager : MonoBehaviour
         {
             playerControl = FindObjectOfType<PlayerControlScript>();
 
-            _input.Player.Click.performed += playerControl.OnClick;
-            _input.Player.MousePosition.performed += playerControl.OnMousePosition;
+            input.Player.Click.performed += playerControl.OnClick;
+            input.Player.MousePosition.performed += playerControl.OnMousePosition;
         }
     }
 
@@ -40,12 +40,12 @@ public class InputManager : MonoBehaviour
     {
         //Enable all actions under the Player action map
         // You can do this on an individual action level by calling _input.Player.CameraMove.Enable() instead.
-        _input.Player.Enable();
+        input.Player.Enable();
     }
 
     void OnDisable()
     {
         //Disable all actions under the Player action map
-        _input.Player.Disable();
+        input.Player.Disable();
     }
 }

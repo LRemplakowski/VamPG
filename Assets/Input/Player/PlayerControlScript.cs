@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Player))]
 public class PlayerControlScript : MonoBehaviour
 {
+    private const int raycastRange = 100;
+
     private Player player;
     private Vector2 mousePosition;
     private Collider lastHit;
@@ -19,13 +21,13 @@ public class PlayerControlScript : MonoBehaviour
         //Debug.Log(player);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
+        if (Physics.Raycast(ray, out hit, raycastRange))
         {
             if(Entity.IsInteractable(hit.collider.gameObject))
             {
                 player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
             }
-            else if (Physics.Raycast(ray, out hit, 100, movementMask))
+            else if (Physics.Raycast(ray, out hit, raycastRange, movementMask))
             {
                 player.Move(hit.point);
             }
@@ -37,7 +39,7 @@ public class PlayerControlScript : MonoBehaviour
         mousePosition = context.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, 100))
+        if(Physics.Raycast(ray, out hit, raycastRange))
         {
             //Debug.Log("Ray hit");
             if(lastHit == null)

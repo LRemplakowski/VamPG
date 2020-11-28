@@ -10,10 +10,10 @@ public class CameraControlScript : MonoBehaviour
 
 
     //Movement variables
-    private const float InternalMoveTargetSpeed = 8.0f;
-    private const float InternalMoveSpeed = 4.0f;
-    private Vector3 _moveTarget;
-    private Vector3 _moveDirection;
+    private const float internalMoveTargetSpeed = 8.0f;
+    private const float internalMoveSpeed = 4.0f;
+    private Vector3 moveTarget;
+    private Vector3 moveDirection;
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -23,27 +23,27 @@ public class CameraControlScript : MonoBehaviour
         if(value.x == 0 && value.y == 0)
         {
             //Debug.Log("Vector 0");
-            _moveDirection = Vector3.zero;
+            moveDirection = Vector3.zero;
         }
         else if(value.y == 1 || value.y == -1)
         {
             //Debug.Log("Vector forward or backward");
-            _moveDirection = new Vector3(value.y, 0, value.y);
+            moveDirection = new Vector3(value.y, 0, value.y);
         }
         else if(value.x == 1 || value.x == -1)
         {
             //Debug.Log("Move left or right");
-            _moveDirection = new Vector3(value.x, 0, -value.x);
+            moveDirection = new Vector3(value.x, 0, -value.x);
         }
         else if(value.x == value.y)
         {
             //Debug.Log("Move diagonal up right/down left");
-            _moveDirection = new Vector3(value.x+value.y, 0, 0);
+            moveDirection = new Vector3(value.x+value.y, 0, 0);
         }
         else
         {
             //Debug.Log("Move diagonal up left/down right");
-            _moveDirection = new Vector3(0, 0, -value.x + value.y);
+            moveDirection = new Vector3(0, 0, -value.x + value.y);
         }
     }
 
@@ -51,16 +51,16 @@ public class CameraControlScript : MonoBehaviour
     {
         target = FindObjectOfType<Player>().transform;
         transform.position = target.position + offset;
-        _moveTarget = transform.position;
+        moveTarget = transform.position;
     }
 
     private void FixedUpdate()
     {
-        _moveTarget -= _moveDirection * Time.fixedDeltaTime * InternalMoveTargetSpeed;
+        moveTarget -= moveDirection * Time.fixedDeltaTime * internalMoveTargetSpeed;
     }
 
     private void LateUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * InternalMoveSpeed);
+        transform.position = Vector3.Lerp(transform.position, moveTarget, Time.deltaTime * internalMoveSpeed);
     }
 }

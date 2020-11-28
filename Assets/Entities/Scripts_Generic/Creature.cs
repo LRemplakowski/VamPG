@@ -6,6 +6,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public abstract class Creature : Entity
 {
+    private const int healthBase = 3;
+    private const float lookTowardsRotationSpeed = 5.0f;
+
     public NavMeshAgent agent;
     
     [ReadOnly]
@@ -30,7 +33,7 @@ public abstract class Creature : Entity
         ActionQueue = new Queue<Action>();
         ActionQueue.Enqueue(new Idle());
 
-        health = stamina + 3;
+        health = stamina + healthBase;
         willpower = composure + resolve;
     }
 
@@ -50,7 +53,7 @@ public abstract class Creature : Entity
     {
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookTowardsRotationSpeed);
         float dot = Quaternion.Dot(transform.rotation, lookRotation);
         return dot >= 0.999f || dot <= -0.999f;
     }

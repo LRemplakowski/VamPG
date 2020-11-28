@@ -10,7 +10,8 @@ public abstract class Creature : Entity
     private const float lookTowardsRotationSpeed = 5.0f;
 
     public NavMeshAgent agent;
-    
+    public Inventory inventory;
+
     [ReadOnly]
     [SerializeField]
     private int health = 3;
@@ -29,6 +30,8 @@ public abstract class Creature : Entity
 
     void Start()
     {
+        if (inventory == null)
+            inventory = ScriptableObject.CreateInstance<Inventory>();
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<Action>();
         ActionQueue.Enqueue(new Idle());
@@ -51,6 +54,8 @@ public abstract class Creature : Entity
 
     public bool RotateTowardsTarget(Transform target)
     {
+        if (target == null)
+            return true;
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookTowardsRotationSpeed);

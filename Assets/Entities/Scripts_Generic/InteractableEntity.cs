@@ -32,7 +32,7 @@ public abstract class InteractableEntity : Entity, IInteractable
         get => _interactionDistance;
         set => _interactionDistance = value;
     }
-    public GameObject TargetedBy { get; set; }
+    public Creature TargetedBy { get; set; }
     public bool Interacted { get; set; }
 
     [HideInInspector, SerializeField]

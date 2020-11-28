@@ -22,7 +22,7 @@ public interface IInteractable
         set;
     }
 
-    GameObject TargetedBy
+    Creature TargetedBy
     {
         get;
         set;

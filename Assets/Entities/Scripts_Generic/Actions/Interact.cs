@@ -19,14 +19,15 @@ public class Interact : Action
     {
         owner.StopCoroutine(InteractIfCloseEnough());
         owner.StopCoroutine(owner.FaceTarget(target.InteractionTransform));
-        moveToTarget.Abort();
+        if (moveToTarget != null)
+            moveToTarget.Abort();
         target.Interacted = false;
     }
 
     public override void Begin()
     {
         float distance = Vector3.Distance(target.InteractionTransform.position, owner.transform.position);
-        if(distance > target.InteractionDistance)
+        if (distance > target.InteractionDistance)
         {
             moveToTarget = new Move(owner.gameObject.GetComponent<NavMeshAgent>(), target.InteractionTransform.position);
             moveToTarget.Begin();
@@ -35,18 +36,18 @@ public class Interact : Action
         else
         {
             owner.StartCoroutine(owner.FaceTarget(target.InteractionTransform));
-            target.TargetedBy = owner.gameObject;
+            target.TargetedBy = owner;
             target.Interact();
         }
     }
 
     private IEnumerator InteractIfCloseEnough()
     {
-        yield return new WaitUntil(() => moveToTarget.IsFinished());
-
+        yield return new WaitUntil(() => Vector3.Distance(target.InteractionTransform.position, owner.transform.position) <= target.InteractionDistance);
+        moveToTarget.Abort();
         yield return new WaitUntil(() => owner.RotateTowardsTarget(target.InteractionTransform));
 
-        target.TargetedBy = owner.gameObject;
+        target.TargetedBy = owner;
         target.Interact();
         owner.StopCoroutine(InteractIfCloseEnough());
 

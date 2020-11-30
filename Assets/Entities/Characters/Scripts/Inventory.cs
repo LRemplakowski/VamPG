@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory/Creature Inventory")]
-public class Inventory : ScriptableObject
+public class Inventory : MonoBehaviour
 {
     public delegate void OnItemChanged();
     public OnItemChanged onItemChangedCallback;

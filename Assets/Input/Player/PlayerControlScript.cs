@@ -12,22 +12,23 @@ public class PlayerControlScript : MonoBehaviour
     private Vector2 mousePosition;
     private Collider lastHit;
 
-    public LayerMask movementMask;
+    public LayerMask defaultRaycastMask;
 
 
 
     public void OnClick(InputAction.CallbackContext context)
     {
         //Debug.Log(player);
+        if (context.phase != InputActionPhase.Performed)
+            return;
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, raycastRange))
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
         {
-            if(Entity.IsInteractable(hit.collider.gameObject))
+            if (Entity.IsInteractable(hit.collider.gameObject))
             {
                 player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
             }
-            else if (Physics.Raycast(ray, out hit, raycastRange, movementMask))
+            else
             {
                 player.Move(hit.point);
             }
@@ -36,29 +37,38 @@ public class PlayerControlScript : MonoBehaviour
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
+        if (context.phase != InputActionPhase.Performed)
+            return;
         mousePosition = context.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit, raycastRange))
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
         {
             //Debug.Log("Ray hit");
-            if(lastHit == null)
+            if (lastHit == null)
             {
                 lastHit = hit.collider;
             }
-            if(lastHit != hit.collider)
+            if (lastHit != hit.collider)
             {
-                if(Entity.IsInteractable(lastHit.gameObject))
+                if (Entity.IsInteractable(lastHit.gameObject))
                 {
                     lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = false;
                 }
                 lastHit = hit.collider;
             }
-            if(Entity.IsInteractable(lastHit.gameObject))
+            if (Entity.IsInteractable(lastHit.gameObject))
             {
                 lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = true;
             }
         }
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (context.phase != InputActionPhase.Performed)
+            return;
+        InputManager.Input.SwitchCurrentActionMap("UI");
+        FindObjectOfType<UIManager>().ToggleInventory();
     }
 
     // Start is called before the first frame update

@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 7828057772619420947}
   - component: {fileID: 7828057772619420946}
   - component: {fileID: 7828057772619420945}
+  - component: {fileID: 3824156417545321265}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0dea9b76bb330241af066117b9ddc98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementMask:
+  defaultRaycastMask:
     serializedVersion: 2
     m_Bits: 256
 --- !u!114 &7828057772619420945
@@ -143,6 +144,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f128f793501134096a45ee3577b511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3824156417545321265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828057772619420944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7717ad4615f546c409d4cd5c1b47e9b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 20
+  items: []
 --- !u!1001 &7828057773588395862
 PrefabInstance:
   m_ObjectHideFlags: 0

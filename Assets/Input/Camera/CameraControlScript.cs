@@ -17,6 +17,8 @@ public class CameraControlScript : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (context.phase != InputActionPhase.Performed || context.phase != InputActionPhase.Canceled)
+            return;
         Vector2 value = context.ReadValue<Vector2>();
         Debug.Log(value.x + " " + value.y);
         //Camera is offset relative to world X & Y axis, hence we adjust direction based on input

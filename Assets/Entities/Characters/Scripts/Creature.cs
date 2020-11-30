@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory))]
 public abstract class Creature : Entity
 {
     private const int healthBase = 3;
@@ -30,8 +30,7 @@ public abstract class Creature : Entity
 
     void Start()
     {
-        if (inventory == null)
-            inventory = ScriptableObject.CreateInstance<Inventory>();
+        inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<Action>();
         ActionQueue.Enqueue(new Idle());

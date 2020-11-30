@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IVampire
+public class PlayerInventoryUI : UIWindow
 {
-    int Hunger { get; set; }
-    int Humanity { get; set; }
+    
 }

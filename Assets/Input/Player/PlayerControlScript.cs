@@ -63,14 +63,6 @@ public class PlayerControlScript : MonoBehaviour
         }
     }
 
-    public void OnInventory(InputAction.CallbackContext context)
-    {
-        if (context.phase != InputActionPhase.Performed)
-            return;
-        InputManager.Input.SwitchCurrentActionMap("UI");
-        FindObjectOfType<UIManager>().ToggleInventory();
-    }
-
     // Start is called before the first frame update
     void Start()
     {

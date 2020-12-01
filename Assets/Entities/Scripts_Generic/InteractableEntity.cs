@@ -52,6 +52,7 @@ public abstract class InteractableEntity : Entity, IInteractable
         }
     }
 
+    //If overriden, base should be called always, after any override logic.
     public virtual void Interact()
     {
         Debug.Log(TargetedBy + " interacted with object " + gameObject);

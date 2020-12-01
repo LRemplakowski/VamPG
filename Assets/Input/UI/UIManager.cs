@@ -67,5 +67,9 @@ public class UIManager : MonoBehaviour
         {
             InputManager.Input.SwitchCurrentActionMap("Player");
         }
+        else
+        {
+            InputManager.Input.SwitchCurrentActionMap("UI");
+        }
     }
 }

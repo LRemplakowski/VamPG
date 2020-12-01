@@ -251,6 +251,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""RightHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""be1d8881-715b-4137-bef3-3ee94d4fba5b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold""
                 }
             ],
             ""bindings"": [
@@ -295,6 +303,17 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c5d46bd3-16fa-436b-98bf-e94d893c7840"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RightHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -377,6 +396,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
+        m_UI_RightHold = m_UI.FindAction("RightHold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -495,6 +515,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_Escape;
     private readonly InputAction m_UI_Inventory;
+    private readonly InputAction m_UI_RightHold;
     public struct UIActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -503,6 +524,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @Escape => m_Wrapper.m_UI_Escape;
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
+        public InputAction @RightHold => m_Wrapper.m_UI_RightHold;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -524,6 +546,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @Inventory.started -= m_Wrapper.m_UIActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnInventory;
+                @RightHold.started -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
+                @RightHold.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
+                @RightHold.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -540,6 +565,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
+                @RightHold.started += instance.OnRightHold;
+                @RightHold.performed += instance.OnRightHold;
+                @RightHold.canceled += instance.OnRightHold;
             }
         }
     }
@@ -603,5 +631,6 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         void OnPoint(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
+        void OnRightHold(InputAction.CallbackContext context);
     }
 }

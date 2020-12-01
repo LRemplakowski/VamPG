@@ -17,18 +17,19 @@ public class UIManager : MonoBehaviour
             ToggleActionMap();
         }
     }
+
     private void Awake()
     {
         if (inventoryUI == null)
             inventoryUI = FindObjectOfType<PlayerInventoryUI>();
-        windows =  new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
+        windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
     }
 
     public void ToggleInventory()
     {
         bool active = inventoryUI.gameObject.activeSelf;
         Debug.Log("Inventory active: " + active);
-        if(active)
+        if (active)
         {
             inventoryUI.gameObject.SetActive(false);
             --ActiveWindows;
@@ -37,7 +38,7 @@ public class UIManager : MonoBehaviour
         {
             inventoryUI.gameObject.SetActive(true);
             ++ActiveWindows;
-        }    
+        }
     }
 
     public void OnEscape(InputAction.CallbackContext context)
@@ -54,7 +55,7 @@ public class UIManager : MonoBehaviour
 
     public void OnInventory(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
             ToggleInventory();
         }
@@ -72,4 +73,6 @@ public class UIManager : MonoBehaviour
             InputManager.Input.SwitchCurrentActionMap("UI");
         }
     }
+
+
 }

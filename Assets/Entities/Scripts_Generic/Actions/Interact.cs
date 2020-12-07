@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Interact : Action
+public class Interact : EntityAction
 {
     private readonly IInteractable target;
     private Move moveToTarget;

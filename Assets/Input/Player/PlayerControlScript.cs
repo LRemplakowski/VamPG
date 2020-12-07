@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Player))]
-public class PlayerControlScript : MonoBehaviour
+public class PlayerControlScript : InputHandler
 {
     private const int raycastRange = 100;
 
@@ -21,6 +22,16 @@ public class PlayerControlScript : MonoBehaviour
         //Debug.Log(player);
         if (context.phase != InputActionPhase.Performed)
             return;
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            Debug.Log("Pointer over game object");
+            return;
+        }
+        ManageInput(HandleWorldClick);
+    }
+
+    private void HandleWorldClick()
+    {
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
         {

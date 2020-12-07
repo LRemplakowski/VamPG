@@ -24,7 +24,7 @@ public abstract class Creature : Entity
     public int intelligence, wits, resolve;
 
     [HideInInspector]
-    public Queue<Action> ActionQueue { get; private set; }
+    public Queue<EntityAction> ActionQueue { get; private set; }
 
     public abstract void Move(Vector3 moveTarget);
 
@@ -32,14 +32,14 @@ public abstract class Creature : Entity
     {
         inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();
-        ActionQueue = new Queue<Action>();
+        ActionQueue = new Queue<EntityAction>();
         ActionQueue.Enqueue(new Idle());
 
         health = stamina + healthBase;
         willpower = composure + resolve;
     }
 
-    public void AddActionToQueue(Action action)
+    public void AddActionToQueue(EntityAction action)
     {
         ActionQueue.Enqueue(action);
     }

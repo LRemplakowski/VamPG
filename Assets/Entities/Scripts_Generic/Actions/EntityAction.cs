@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Action
+public abstract class EntityAction
 {
     protected Creature owner;
     protected List<Condition> conditions = new List<Condition>();

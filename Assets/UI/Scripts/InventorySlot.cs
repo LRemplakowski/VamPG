@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
-public class InventoryButton : MonoBehaviour
+public class InventorySlot : MonoBehaviour
 {
     public Image itemIcon;
+    public CustomContextMenu contextMenu;
+    public PlayerInventoryUI inventoryWindow;
 
     private InventoryItem item;
 
@@ -25,6 +28,10 @@ public class InventoryButton : MonoBehaviour
                 }
             }
         }
+        if(inventoryWindow == null)
+        {
+            inventoryWindow = GetComponentInParent<PlayerInventoryUI>();
+        }
     }
 
     public void OnClick()
@@ -34,6 +41,21 @@ public class InventoryButton : MonoBehaviour
         {
 
         }
+    }
+
+    public void OnDrag()
+    {
+        Debug.Log("Inventory slot drag!");
+        Debug.Log(Time.time);
+    }
+
+    public void OnRightHold()
+    {
+        Debug.Log(contextMenu);
+        //dropdownMenu.gameObject.SetActive(!dropdownMenu.gameObject.activeSelf);
+        inventoryWindow.selected = item;
+        if(item != null)
+            contextMenu.InvokeMenu(this.transform.position, inventoryWindow);
     }
 
     public void AddItem(InventoryItem item)

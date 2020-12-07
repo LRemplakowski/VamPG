@@ -9,7 +9,6 @@ public class Inventory : MonoBehaviour
 
     public virtual bool Add(InventoryItem item)
     {
-        
         if(!item.isDefaultItem)
         {
             Debug.Log("Inventory size: " + size + "\nCurrent item count: " + items.Count);

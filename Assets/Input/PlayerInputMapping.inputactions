@@ -44,6 +44,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Escape",
+                    "type": "Button",
+                    "id": "cb12a3a9-ae32-40ce-8347-9952e1df95aa",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -200,6 +208,17 @@
                     "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "706555bf-8d5a-4a18-b141-d47a6fbbc117",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -232,12 +251,12 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Inventory",
+                    "name": "RightHold",
                     "type": "Button",
-                    "id": "beb5b211-cabd-4259-ac07-af80c951ceec",
+                    "id": "be1d8881-715b-4137-bef3-3ee94d4fba5b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Hold"
                 }
             ],
             "bindings": [
@@ -276,12 +295,12 @@
                 },
                 {
                     "name": "",
-                    "id": "f2d300de-4557-4937-8189-16818ccd50bc",
-                    "path": "<Keyboard>/i",
+                    "id": "c5d46bd3-16fa-436b-98bf-e94d893c7840",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Inventory",
+                    "action": "RightHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

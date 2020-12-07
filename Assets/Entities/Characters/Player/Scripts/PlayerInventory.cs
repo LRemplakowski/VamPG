@@ -12,8 +12,17 @@ public class PlayerInventory : Inventory
         bool success = base.Add(item);
         if(success)
         {
+            Debug.Log("PlayerInventory: Check for callback");
             if (onItemChangedCallback != null)
+            {
+                Debug.Log("Invoking inventory callback");
                 onItemChangedCallback.Invoke();
+            }
+            else
+            {
+                Debug.Log("Inventory callback not found");
+            }
+                
         }
         return success;
     }

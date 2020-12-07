@@ -6,6 +6,6 @@ public class Inspect : ContextAction
 {
     public override void OnClick()
     {
-        Debug.Log("Inspecting item");
+        Debug.Log("Inspecting item "+item.name);
     }
 }

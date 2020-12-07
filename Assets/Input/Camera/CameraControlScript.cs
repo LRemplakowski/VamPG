@@ -17,7 +17,8 @@ public class CameraControlScript : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (context.phase != InputActionPhase.Performed || context.phase != InputActionPhase.Canceled)
+        Debug.Log("Camera OnMove");
+        if (!(context.performed || context.canceled))
             return;
         Vector2 value = context.ReadValue<Vector2>();
         Debug.Log(value.x + " " + value.y);

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Move : Action
+public class Move : EntityAction
 {
     private NavMeshAgent navMeshAgent;
     private Vector3 destination;

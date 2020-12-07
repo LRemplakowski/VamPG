@@ -46,9 +46,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5101462937561227377}
-  - component: {fileID: 7854417329296843662}
-  - component: {fileID: 5521078388272267807}
-  - component: {fileID: 8158279270202367271}
+  - component: {fileID: 25070550243888944}
+  - component: {fileID: 1497099264934010310}
+  - component: {fileID: 5400058073072583612}
   m_Layer: 5
   m_Name: Inventory Slot
   m_TagString: Untagged
@@ -76,7 +76,7 @@ RectTransform:
   m_AnchoredPosition: {x: -115, y: 175}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7854417329296843662
+--- !u!114 &25070550243888944
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,8 +91,8 @@ MonoBehaviour:
   onLeft:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5521078388272267807}
-        m_TargetAssemblyTypeName: InventoryButton, Assembly-CSharp
+      - m_Target: {fileID: 1497099264934010310}
+        m_TargetAssemblyTypeName: InventorySlot, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -103,17 +103,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onRight:
-    m_PersistentCalls:
-      m_Calls: []
-  onMiddle:
-    m_PersistentCalls:
-      m_Calls: []
   onRightHold:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5521078388272267807}
-        m_TargetAssemblyTypeName: InventoryButton, Assembly-CSharp
+      - m_Target: {fileID: 1497099264934010310}
+        m_TargetAssemblyTypeName: InventorySlot, Assembly-CSharp
         m_MethodName: OnRightHold
         m_Mode: 1
         m_Arguments:
@@ -127,8 +121,8 @@ MonoBehaviour:
   onDrag:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5521078388272267807}
-        m_TargetAssemblyTypeName: InventoryButton, Assembly-CSharp
+      - m_Target: {fileID: 1497099264934010310}
+        m_TargetAssemblyTypeName: InventorySlot, Assembly-CSharp
         m_MethodName: OnDrag
         m_Mode: 1
         m_Arguments:
@@ -139,7 +133,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5521078388272267807
+--- !u!114 &1497099264934010310
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemIcon: {fileID: 5101462938055185669}
   contextMenu: {fileID: 5640617257856255941, guid: 04690dab77cb0d745a7d6835e765d3fa, type: 3}
---- !u!114 &8158279270202367271
+--- !u!114 &5400058073072583612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

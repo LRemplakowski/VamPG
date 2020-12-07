@@ -2,11 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-public class GUIClickController : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IDragHandler
+public class GUIClickController : InputHandler, IPointerClickHandler, IPointerDownHandler, IDragHandler
 {
     public UnityEvent onLeft;
-    public UnityEvent onRight;
-    public UnityEvent onMiddle;
     public UnityEvent onRightHold;
     public UnityEvent onDrag;
 
@@ -16,33 +14,35 @@ public class GUIClickController : MonoBehaviour, IPointerClickHandler, IPointerD
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         {
-            mousePosition = eventData.position;
-            onDrag.Invoke();
+            ManageInput(InvokeDrag, eventData);
         }
+    }
+
+    private void InvokeDrag(PointerEventData eventData)
+    {
+        mousePosition = eventData.position;
+        InvokeEvent(onDrag);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left && !eventData.dragging)
         {
-            Debug.Log(eventData.clickTime + "\n" + Time.time);
-            onLeft.Invoke();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            onRight.Invoke();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Middle)
-        {
-            onMiddle.Invoke();
+            ManageInput(InvokeEvent, onLeft);
         }
     }
 
+    private void InvokeEvent(UnityEvent e)
+    {
+        e.Invoke();
+    }
+
+    //Used to handle mouse button hold
     public void OnPointerDown(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Right)
         {
-            onRightHold.Invoke();
+            ManageInput(InvokeEvent, onRightHold);
         }
     }
 }

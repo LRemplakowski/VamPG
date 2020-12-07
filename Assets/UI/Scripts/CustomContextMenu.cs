@@ -14,17 +14,18 @@ public abstract class CustomContextMenu : MonoBehaviour
     [HideInInspector]
     private static CustomContextMenu instance;
 
-    public void InvokeMenu(Vector3 position)
+    public virtual void InvokeMenu(Vector3 position, UIWindow parent)
     {
         Canvas canvas = FindObjectOfType<Canvas>();
         if (canvas == null)
             return;
         ClearContextMenu();
 
-        instance = Instantiate(this, position+offset, Quaternion.identity, canvas.transform);
+        instance = Instantiate(this, position+offset, Quaternion.identity, parent.transform);
         foreach(ContextAction action in actions)
         {
-            Instantiate(action).transform.SetParent(instance.transform, false);
+            ContextAction a = Instantiate(action);
+            a.transform.SetParent(instance.transform, false);
         }
     }
 

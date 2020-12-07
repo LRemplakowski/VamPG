@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class UIManager : MonoBehaviour
+public class GUIWindowsManager : InputHandler
 {
     public PlayerInventoryUI inventoryUI;
     private List<UIWindow> windows = new List<UIWindow>();
@@ -11,11 +12,7 @@ public class UIManager : MonoBehaviour
     private int ActiveWindows
     {
         get => _activeWindows;
-        set
-        {
-            _activeWindows = value;
-            ToggleActionMap();
-        }
+        set => _activeWindows = value;
     }
 
     private void Awake()
@@ -25,7 +22,7 @@ public class UIManager : MonoBehaviour
         windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
     }
 
-    public void ToggleInventory()
+    private void ToggleInventory()
     {
         bool active = inventoryUI.gameObject.activeSelf;
         Debug.Log("Inventory active: " + active);
@@ -43,36 +40,33 @@ public class UIManager : MonoBehaviour
 
     public void OnEscape(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
+        if (context.performed)
         {
-            foreach (UIWindow window in windows)
+            if(ActiveWindows <= 0)
             {
-                window.gameObject.SetActive(false);
+                Debug.Log("Invoke pause menu");
             }
-            ActiveWindows = 0;
+            else
+            {
+                ManageInput(ClearAllGUIWindows);
+            }
         }
+    }
+
+    private void ClearAllGUIWindows()
+    {
+        foreach (UIWindow window in windows)
+        {
+            window.gameObject.SetActive(false);
+        }
+        ActiveWindows = 0;
     }
 
     public void OnInventory(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            ToggleInventory();
+            ManageInput(ToggleInventory);
         }
     }
-
-    private void ToggleActionMap()
-    {
-        Debug.Log("Action map toggle! Active windows: " + ActiveWindows);
-        if(ActiveWindows <= 0)
-        {
-            InputManager.Input.SwitchCurrentActionMap("Player");
-        }
-        else
-        {
-            InputManager.Input.SwitchCurrentActionMap("UI");
-        }
-    }
-
-
 }

@@ -28,7 +28,7 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
 
-    void Start()
+    private void Start()
     {
         inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();

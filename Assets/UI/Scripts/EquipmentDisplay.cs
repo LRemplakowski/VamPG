@@ -29,7 +29,7 @@ public class EquipmentDisplay : MonoBehaviour
         //Debug.Log("Update display: "+newItem);
         foreach(EquipmentDisplaySlot s in displaySlots)
         {
-            EquipmentPiece item = equipmentManager.GetItemInSlot(s.equipmentSlot) != null ? equipmentManager.GetItemInSlot(s.equipmentSlot) : null;
+            EquipmentPiece item = equipmentManager.GetItemInSlot(s.equipmentSlot);
             s.DisplayItem(item);
         }
     }

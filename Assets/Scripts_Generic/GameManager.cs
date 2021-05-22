@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static Player player;
+    private static Player player;
 
     #region Singleton
     public static GameManager instance;
@@ -39,5 +39,10 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
+    }
+
+    public static Player GetPlayer()
+    {
+        return player;
     }
 }

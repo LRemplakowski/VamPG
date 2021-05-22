@@ -7,6 +7,7 @@ public class EquipmentPiece : InventoryItem
 {
     public EquipmentSlot slot;
     public SkinnedMeshRenderer meshRenderer;
+    public EquipmentMeshRegion[] coveredMeshRegions;
 
     public override void Use()
     {

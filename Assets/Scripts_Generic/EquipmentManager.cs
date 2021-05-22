@@ -23,6 +23,9 @@ public class EquipmentManager : MonoBehaviour
     public delegate void OnEquipmentChanged(EquipmentPiece newItem, EquipmentPiece oldItem);
     public OnEquipmentChanged onEquipmentChanged;
 
+    public const float BLEND_SHAPES_MIN_WEIGHT = 0.0f;
+    public const float BLEND_SHAPES_MAX_WEIGHT = 100.0f;
+
     private void OnEnable()
     {
         int numSlots = System.Enum.GetNames(typeof(EquipmentSlot)).Length;
@@ -39,13 +42,7 @@ public class EquipmentManager : MonoBehaviour
     {
         int slotIndex = (int)newItem.slot;
 
-        EquipmentPiece oldItem = null;
-
-        if(currentEquipment[slotIndex] != null)
-        {
-            oldItem = currentEquipment[slotIndex];
-            GameManager.player.inventory.Add(currentEquipment[slotIndex]);
-        }
+        EquipmentPiece oldItem = Unequip(slotIndex);
 
         currentEquipment[slotIndex] = newItem;
 
@@ -53,6 +50,8 @@ public class EquipmentManager : MonoBehaviour
         {
             onEquipmentChanged.Invoke(newItem, oldItem);
         }
+
+        SetEquipmentBlendShapes(newItem, BLEND_SHAPES_MAX_WEIGHT);
 
         if(targetMesh != null)
         {
@@ -64,7 +63,7 @@ public class EquipmentManager : MonoBehaviour
         }
     }
 
-    public void Unequip(int slotIndex)
+    public EquipmentPiece Unequip(int slotIndex)
     {
         if(currentEquipment[slotIndex] != null)
         {
@@ -72,15 +71,19 @@ public class EquipmentManager : MonoBehaviour
                 Destroy(currentMeshes[slotIndex].gameObject);
 
             EquipmentPiece oldItem = currentEquipment[slotIndex];
-            GameManager.player.inventory.Add(oldItem);
+            GameManager.GetPlayer().inventory.Add(oldItem);
+
+            SetEquipmentBlendShapes(oldItem, BLEND_SHAPES_MIN_WEIGHT);
 
             currentEquipment[slotIndex] = null;
 
             if (onEquipmentChanged != null)
-            {
                 onEquipmentChanged.Invoke(null, oldItem);
-            }
+
+            return oldItem;
         }
+
+        return null;
     }
 
     public void UnequipAll()
@@ -88,6 +91,18 @@ public class EquipmentManager : MonoBehaviour
         for(int i = 0; i < currentEquipment.Length; i++)
         {
             Unequip(i);
+        }
+    }
+
+    private void SetEquipmentBlendShapes(EquipmentPiece item, float weight)
+    {
+        Debug.LogWarning("SetEquipmentBlendShapes called!");
+        foreach(EquipmentMeshRegion blendShape in item.coveredMeshRegions)
+        {
+            Debug.LogWarning("Initial blendShape = " + targetMesh.GetBlendShapeWeight((int) blendShape));
+            Debug.LogWarning("Changing blend shape " + blendShape + " for item " + item + " to " + weight);
+            targetMesh.SetBlendShapeWeight((int)blendShape, weight);
+            Debug.LogWarning(targetMesh.GetBlendShapeWeight((int)blendShape));
         }
     }
 }

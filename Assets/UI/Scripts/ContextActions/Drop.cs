@@ -7,7 +7,7 @@ public class Drop : ContextAction
     public override void OnClick()
     {
         Debug.Log("Dropping item "+item.name);
-        item.DropOnGround(GameManager.player.transform.position);
-        GameManager.player.inventory.Remove(item);
+        item.DropOnGround(GameManager.GetPlayer().transform.position);
+        GameManager.GetPlayer().inventory.Remove(item);
     }
 }

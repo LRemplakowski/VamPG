@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class GUIWindowsManager : InputHandler
 {
     public PlayerInventoryUI inventoryUI;
+    public CharacterSheetUI characterSheetUI;
     private List<UIWindow> windows = new List<UIWindow>();
     private int _activeWindows = 0;
     private int ActiveWindows
@@ -34,6 +35,22 @@ public class GUIWindowsManager : InputHandler
         else
         {
             inventoryUI.gameObject.SetActive(true);
+            ++ActiveWindows;
+        }
+    }
+
+    private void ToggleCharacterSheet()
+    {
+        bool active = characterSheetUI.gameObject.activeSelf;
+        Debug.Log("Character sheet actvie: " + active);
+        if (active)
+        {
+            characterSheetUI.gameObject.SetActive(false);
+            --ActiveWindows;
+        }
+        else
+        {
+            characterSheetUI.gameObject.SetActive(true);
             ++ActiveWindows;
         }
     }
@@ -67,6 +84,14 @@ public class GUIWindowsManager : InputHandler
         if (context.performed)
         {
             ManageInput(ToggleInventory);
+        }
+    }
+
+    public void OnCharacterSheet(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            ManageInput(ToggleCharacterSheet);
         }
     }
 }

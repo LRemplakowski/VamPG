@@ -50,6 +50,5 @@ public class Interact : EntityAction
         target.TargetedBy = owner;
         target.Interact();
         owner.StopCoroutine(InteractIfCloseEnough());
-
     }
 }

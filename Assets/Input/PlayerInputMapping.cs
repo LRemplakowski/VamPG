@@ -51,6 +51,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""CharacterSheet"",
+                    ""type"": ""Button"",
+                    ""id"": ""bc103939-7778-4ea1-9f4f-f7e5275e5908"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Inventory"",
                     ""type"": ""Button"",
                     ""id"": ""73be0c94-55bc-420a-a277-b86ba3a225f3"",
@@ -232,6 +240,17 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""action"": ""Escape"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b410a5c6-eed7-43d0-aa9a-171bddafad48"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CharacterSheet"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -389,6 +408,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
         m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
         m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
+        m_Player_CharacterSheet = m_Player.FindAction("CharacterSheet", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         // UI
@@ -450,6 +470,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_CameraZoom;
     private readonly InputAction m_Player_Click;
     private readonly InputAction m_Player_MousePosition;
+    private readonly InputAction m_Player_CharacterSheet;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Escape;
     public struct PlayerActions
@@ -460,6 +481,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
         public InputAction @Click => m_Wrapper.m_Player_Click;
         public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
+        public InputAction @CharacterSheet => m_Wrapper.m_Player_CharacterSheet;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -483,6 +505,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
                 @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
                 @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @CharacterSheet.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
+                @CharacterSheet.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
+                @CharacterSheet.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
                 @Inventory.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
                 @Inventory.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInventory;
@@ -505,6 +530,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @MousePosition.started += instance.OnMousePosition;
                 @MousePosition.performed += instance.OnMousePosition;
                 @MousePosition.canceled += instance.OnMousePosition;
+                @CharacterSheet.started += instance.OnCharacterSheet;
+                @CharacterSheet.performed += instance.OnCharacterSheet;
+                @CharacterSheet.canceled += instance.OnCharacterSheet;
                 @Inventory.started += instance.OnInventory;
                 @Inventory.performed += instance.OnInventory;
                 @Inventory.canceled += instance.OnInventory;
@@ -623,6 +651,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
+        void OnCharacterSheet(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
     }

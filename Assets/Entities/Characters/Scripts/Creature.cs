@@ -28,7 +28,7 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
 
-    void Start()
+    private void Start()
     {
         inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();
@@ -70,16 +70,17 @@ public abstract class Creature : Entity
 
     public void Update()
     {
-        if(ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+        if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
         {
             ActionQueue.Dequeue();
             ActionQueue.Peek().Begin();
         }
-        if(ActionQueue.Peek().IsFinished())
+        if (ActionQueue.Peek().IsFinished())
         {
             Debug.Log("Action finished!");
             ActionQueue.Dequeue();
-            if (ActionQueue.Count == 0) ActionQueue.Enqueue(new Idle());
+            if (ActionQueue.Count == 0) 
+                ActionQueue.Enqueue(new Idle());
             ActionQueue.Peek().Begin();
         }
     }

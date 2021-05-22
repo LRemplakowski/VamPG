@@ -6,18 +6,30 @@ public class InventoryItem : ScriptableObject
     new public string name = "New Item";
     public Sprite icon = null;
     public bool isDefaultItem = false;
-    public PickableItem pickablePrefab;
+    public PickableItem placeablePrefab;
 
-    public void SpawnPlaceable(Vector3 position)
+    public void DropOnGround(Vector3 position)
     {
-        if(pickablePrefab != null)
+        if(placeablePrefab != null)
         {
-            PickableItem dropped = Instantiate(pickablePrefab, position, Quaternion.identity);
+            PickableItem dropped = Instantiate(placeablePrefab, position, Quaternion.identity);
             dropped.item = this;
         }
         else
         {
             Debug.LogError("InventoryItem " + this + " has no placeable reference!");
         }
+    }
+
+    public virtual void Use()
+    {
+        //Handle item usage here
+
+        Debug.Log("Player used item " + this);
+    }
+
+    public void RemoveFromInventory()
+    {
+        GameManager.GetPlayer().inventory.Remove(this);
     }
 }

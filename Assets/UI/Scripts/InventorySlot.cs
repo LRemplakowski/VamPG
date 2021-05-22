@@ -39,7 +39,7 @@ public class InventorySlot : MonoBehaviour
         Debug.Log("Inventory slot clicked!");
         if(item != null)
         {
-
+            item.Use(); 
         }
     }
 

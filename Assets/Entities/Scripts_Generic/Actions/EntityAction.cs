@@ -13,7 +13,12 @@ public abstract class EntityAction
 
     public virtual bool IsFinished()
     {
-        if (conditions.Count == 0) return true;
+        if (conditions.Count == 0)
+        {
+            Debug.LogError("Aborting action, no conditions present");
+            this.Abort();
+            return true;
+        }
         foreach(Condition c in conditions)
         {
             if(c.IsMet())

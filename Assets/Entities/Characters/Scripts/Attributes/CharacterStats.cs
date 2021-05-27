@@ -2,76 +2,96 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : MonoBehaviour
+[CreateAssetMenu(fileName = "New Stats", menuName = "Character/Stats/Mortal")]
+public class CharacterStats : ScriptableObject
 {
     [SerializeField]
-    private TrackedAttribute health, willpower;
+    private Tracker 
+        health = new Tracker(TrackerType.Health), 
+        willpower = new Tracker(TrackerType.Willpower);
     // MAIN STATS
     [SerializeField]
-    private Attribute strength, dexterity, stamina;
-    [SerializeField]
-    private Attribute charisma, manipulation, composure;
-    [SerializeField]
-    private Attribute intelligence, wits, resolve;
+    private Attribute[] attributes = new Attribute[9] { 
+        new Attribute(AttributeType.Strength),
+        new Attribute(AttributeType.Dexterity),
+        new Attribute(AttributeType.Stamina),
+        new Attribute(AttributeType.Charisma),
+        new Attribute(AttributeType.Manipulation),
+        new Attribute(AttributeType.Composure),
+        new Attribute(AttributeType.Intelligence),
+        new Attribute(AttributeType.Wits),
+        new Attribute(AttributeType.Resolve)
+        };
+
     // SKILLS
+    [SerializeField]
+    private Skill[] skills = new Skill[27] {
+        /*--PHYSICAL--*/
+        new Skill(SkillType.Atheltics),
+        new Skill(SkillType.Brawl),
+        new Skill(SkillType.Craft),
+        new Skill(SkillType.Drive),
+        new Skill(SkillType.Firearms),
+        new Skill(SkillType.Larceny),
+        new Skill(SkillType.Melee),
+        new Skill(SkillType.Stealth),
+        new Skill(SkillType.Survival),
+        /*--SOCIAL--*/
+        new Skill(SkillType.AnimalKen),
+        new Skill(SkillType.Etiquette),
+        new Skill(SkillType.Insight),
+        new Skill(SkillType.Intimidation),
+        new Skill(SkillType.Leadership),
+        new Skill(SkillType.Performance),
+        new Skill(SkillType.Persuasion),
+        new Skill(SkillType.Streetwise),
+        new Skill(SkillType.Subterfuge),
+        /*--MENTAL--*/
+        new Skill(SkillType.Academics),
+        new Skill(SkillType.Awareness),
+        new Skill(SkillType.Finance),
+        new Skill(SkillType.Investigation),
+        new Skill(SkillType.Medicine),
+        new Skill(SkillType.Occult),
+        new Skill(SkillType.Politics),
+        new Skill(SkillType.Science),
+        new Skill(SkillType.Technology)
+        };
 
-
-    public void Start()
+    public virtual Tracker GetTracker(TrackerType type)
     {
-        health.SetBaseValue(CharacterConsts.HEALTH_BASE + stamina.GetValue());
-        health.SetCurrent(health.GetValue());
-        willpower.SetBaseValue(composure.GetValue() + resolve.GetValue());
-        willpower.SetCurrent(willpower.GetValue());
-    }
-
-    public TrackedAttribute GetHealth()
-    {
-        return health;
-    }
-
-    public TrackedAttribute GetWillpower()
-    {
-        return willpower;
+        switch(type)
+        {
+            case TrackerType.Health:
+                return health;
+            case TrackerType.Willpower:
+                return willpower;
+            default:
+                return new Tracker(TrackerType.Invalid);
+        }
     }
 
     public Attribute GetAttribute(AttributeType type)
     {
-        switch (type)
+        foreach (Attribute a in attributes)
         {
-            case AttributeType.Strength:
-                return strength;
-            case AttributeType.Dexterity:
-                return dexterity;
-            case AttributeType.Stamina:
-                return stamina;
-            case AttributeType.Charisma:
-                return charisma;
-            case AttributeType.Manipulation:
-                return manipulation;
-            case AttributeType.Composure:
-                return composure;
-            case AttributeType.Intelligence:
-                return intelligence;
-            case AttributeType.Wits:
-                return wits;
-            case AttributeType.Resolve:
-                return resolve;
-            default:
-                break;
+            if (a.GetType().Equals(type))
+            {
+                return a;
+            }
         }
-        return null;
+        return new Attribute(AttributeType.Invalid);
     }
 
-    public enum AttributeType
+    public Skill GetSkill(SkillType type)
     {
-        Strength,
-        Dexterity,
-        Stamina,
-        Charisma,
-        Manipulation,
-        Composure,
-        Intelligence,
-        Wits,
-        Resolve
+        foreach (Skill s in skills)
+        {
+            if (s.GetType().Equals(type))
+            {
+                return s;
+            }
+        }
+        return new Skill(SkillType.Invalid);
     }
 }

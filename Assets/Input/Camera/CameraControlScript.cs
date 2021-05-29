@@ -52,7 +52,7 @@ public class CameraControlScript : MonoBehaviour
 
     private void Start()
     {
-        target = FindObjectOfType<Player>().transform;
+        target = GameManager.GetPlayer().transform;
         transform.position = target.position + offset;
         moveTarget = transform.position;
     }

@@ -33,6 +33,14 @@ public class EquipmentManager : MonoBehaviour
         currentMeshes = new SkinnedMeshRenderer[numSlots];
     }
 
+    public void Start()
+    {
+        if (targetMesh == null)
+        {
+            targetMesh = GameManager.GetPlayer().GetComponentInChildren<SkinnedMeshRenderer>();
+        }
+    }
+
     public EquipmentPiece GetItemInSlot(EquipmentSlot slot)
     {
         return currentEquipment[(int)slot];

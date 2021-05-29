@@ -169,6 +169,8 @@ public class PropertyField
 			propertyType = SerializedPropertyType.ObjectReference;
 		else if (typeof(Transform).IsAssignableFrom(type))
 			propertyType = SerializedPropertyType.ObjectReference;
+		else if (typeof(BaseStat).IsAssignableFrom(type))
+			propertyType = SerializedPropertyType.ObjectReference;
 		return propertyType != SerializedPropertyType.Generic;
 	}
 }

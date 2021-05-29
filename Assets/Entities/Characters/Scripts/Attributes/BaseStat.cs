@@ -4,20 +4,19 @@ using UnityEngine;
 
 public abstract class BaseStat
 {
-    [SerializeField]
-    protected int baseValue;
-
     public delegate void OnValueChange();
     public OnValueChange onValueChange;
 
     protected List<Modifier> modifiers = new List<Modifier>();
 
-    public void SetBaseValue(int value)
+    public virtual void SetBaseValue(int value)
     {
-        baseValue = value;
+        SetBaseValueImpl(value);
         if (onValueChange != null)
             onValueChange.Invoke();
     }
+
+    protected abstract void SetBaseValueImpl(int value);
 
     public abstract int GetValue();
 

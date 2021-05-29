@@ -11,7 +11,7 @@ public class CharacterStats : ScriptableObject
         willpower = new Tracker(TrackerType.Willpower);
     // MAIN STATS
     [SerializeField]
-    private Attribute[] attributes = new Attribute[9] { 
+    private Attribute[] attributes = new Attribute[9] {
         new Attribute(AttributeType.Strength),
         new Attribute(AttributeType.Dexterity),
         new Attribute(AttributeType.Stamina),

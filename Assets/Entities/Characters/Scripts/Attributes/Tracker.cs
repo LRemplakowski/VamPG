@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Tracker : BaseStat
 {
+    [SerializeField, Range(1, 100)]
+    private int baseValue = 1;
     [SerializeField]
     private int currentValue;
     [SerializeField]
@@ -12,6 +14,11 @@ public class Tracker : BaseStat
 
     public delegate void OnTrackerNegativeOrZero();
     public OnTrackerNegativeOrZero onTrackerNegativeOrZero;
+
+    protected override void SetBaseValueImpl(int value)
+    {
+        this.baseValue = value;
+    }
 
     public Tracker(TrackerType trackerType)
     {

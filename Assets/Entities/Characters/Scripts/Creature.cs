@@ -6,22 +6,11 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory))]
 public abstract class Creature : Entity
 {
-    private const int healthBase = 3;
     private const float lookTowardsRotationSpeed = 5.0f;
 
     public NavMeshAgent agent;
     public Inventory inventory;
-
-    [ReadOnly]
-    [SerializeField]
-    private int health = 3;
-    [ReadOnly]
-    [SerializeField]
-    private int willpower = 2;
-
-    public int strength, dexterity, stamina;
-    public int charisma, manipulation, composure;
-    public int intelligence, wits, resolve;
+    public GridElement CurrentGridPosition { get; set; }
 
     [HideInInspector]
     public Queue<EntityAction> ActionQueue { get; private set; }
@@ -34,9 +23,6 @@ public abstract class Creature : Entity
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<EntityAction>();
         ActionQueue.Enqueue(new Idle());
-
-        health = stamina + healthBase;
-        willpower = composure + resolve;
     }
 
     public void AddActionToQueue(EntityAction action)
@@ -83,5 +69,13 @@ public abstract class Creature : Entity
                 ActionQueue.Enqueue(new Idle());
             ActionQueue.Peek().Begin();
         }
+    }
+
+    private void OnDrawGizmos()
+    {   
+        float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
+        Debug.LogError("movement range " + movementRange);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, movementRange);
     }
 }

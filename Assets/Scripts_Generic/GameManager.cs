@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static Player player;
+    private static Creature CurrentActiveActor { get; set; }
 
     #region Singleton
     public static GameManager instance;

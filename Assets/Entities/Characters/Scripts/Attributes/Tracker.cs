@@ -35,6 +35,11 @@ public class Tracker : BaseStat
         return finalValue;  
     }
 
+    public TrackerType GetTrackerType()
+    {
+        return this.trackerType;
+    }
+
     public int GetCurrentValue()
     {
         return currentValue;

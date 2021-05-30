@@ -24,4 +24,8 @@ public class Attribute : BaseStat
         modifiers.ForEach(m => finalValue += m.Value);
         return finalValue;
     }
+    public AttributeType GetAttributeType()
+    {
+        return this.attributeType;
+    }
 }

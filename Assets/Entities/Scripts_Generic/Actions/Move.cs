@@ -23,6 +23,7 @@ public class Move : EntityAction
 
     public override void Begin()
     {
+        Debug.Log("Player destination == " + destination);
         navMeshAgent.SetDestination(destination);
         navMeshAgent.isStopped = false;
     }

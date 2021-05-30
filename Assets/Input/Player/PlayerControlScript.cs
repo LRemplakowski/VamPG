@@ -35,13 +35,34 @@ public class PlayerControlScript : InputHandler
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
         {
-            if (Entity.IsInteractable(hit.collider.gameObject))
+            switch (StateManager.instance.GetCurrentState())
             {
-                player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
-            }
-            else
-            {
-                player.Move(hit.point);
+                case GameState.Combat:
+                    {
+                        if (GridElement.IsInstance(hit.collider.gameObject))
+                        {
+                            player.Move(hit.collider.gameObject.transform.position);
+                        }
+                        break;
+                    }
+                case GameState.Exploration:
+                    {
+                        if (Entity.IsInteractable(hit.collider.gameObject))
+                        {
+                            player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
+                        }
+                        else
+                        {
+                            player.Move(hit.point);
+                        }
+                        break;
+                    }
+                case GameState.Conversation:
+                    {
+                        break;
+                    }
+                default:
+                    break;
             }
         }
     }
@@ -59,17 +80,46 @@ public class PlayerControlScript : InputHandler
             {
                 lastHit = hit.collider;
             }
-            if (lastHit != hit.collider)
+            switch (StateManager.instance.GetCurrentState())
             {
-                if (Entity.IsInteractable(lastHit.gameObject))
-                {
-                    lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = false;
-                }
-                lastHit = hit.collider;
-            }
-            if (Entity.IsInteractable(lastHit.gameObject))
-            {
-                lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = true;
+                case GameState.Exploration:
+                    {
+                        if (lastHit != hit.collider)
+                        {
+                            if (GridElement.IsInstance(lastHit.gameObject))
+                            {
+                                lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
+                            }
+                            lastHit = hit.collider;
+                        }
+                        if (Entity.IsInteractable(lastHit.gameObject))
+                        {
+                            lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = true;
+                        }
+                        break;
+                    }  
+                case GameState.Combat:
+                    {
+                        if (lastHit != hit.collider)
+                        {
+                            if (GridElement.IsInstance(lastHit.gameObject))
+                            {
+                                lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
+                            }
+                            lastHit = hit.collider;
+                        }
+                        if (GridElement.IsInstance(lastHit.gameObject))
+                        {
+                            lastHit.gameObject.GetComponent<GridElement>().MouseOver = true;
+                        }
+                        break;
+                    }
+                case GameState.Conversation:
+                    {
+                        break;
+                    }
+                default:
+                    break;
             }
         }
     }

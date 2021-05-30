@@ -16,6 +16,7 @@ public abstract class Creature : Entity
     public Queue<EntityAction> ActionQueue { get; private set; }
 
     public abstract void Move(Vector3 moveTarget);
+    public abstract void Move(GridElement moveTarger);
 
     private void Start()
     {
@@ -74,7 +75,6 @@ public abstract class Creature : Entity
     private void OnDrawGizmos()
     {   
         float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
-        Debug.LogError("movement range " + movementRange);
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, movementRange);
     }

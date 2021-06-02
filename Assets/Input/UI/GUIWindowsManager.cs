@@ -19,7 +19,9 @@ public class GUIWindowsManager : InputHandler
     private void Awake()
     {
         if (inventoryUI == null)
-            inventoryUI = FindObjectOfType<PlayerInventoryUI>();
+            inventoryUI = FindObjectOfType<PlayerInventoryUI>(true);
+        if (characterSheetUI == null)
+            characterSheetUI = FindObjectOfType<CharacterSheetUI>(true);
         windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
     }
 

@@ -18,4 +18,12 @@ public class InteractionComplete : Condition
         }
         return false;
     }
+
+    public override string ToString()
+    {
+        string interaction = "Type<InteractionComplete>:\n" +
+            "Interaction target: " + target + "\n" +
+            "Interacted with target? " + target.Interacted;
+        return interaction;
+    }
 }

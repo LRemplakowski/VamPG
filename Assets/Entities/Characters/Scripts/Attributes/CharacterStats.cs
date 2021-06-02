@@ -75,7 +75,7 @@ public class CharacterStats : ScriptableObject
     {
         foreach (Attribute a in attributes)
         {
-            if (a.GetType().Equals(type))
+            if (a.GetAttributeType().Equals(type))
             {
                 return a;
             }
@@ -87,7 +87,7 @@ public class CharacterStats : ScriptableObject
     {
         foreach (Skill s in skills)
         {
-            if (s.GetType().Equals(type))
+            if (s.GetSkillType().Equals(type))
             {
                 return s;
             }

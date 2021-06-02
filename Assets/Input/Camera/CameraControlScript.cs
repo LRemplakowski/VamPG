@@ -31,28 +31,28 @@ public class CameraControlScript : MonoBehaviour
         else if(value.y == 1 || value.y == -1)
         {
             //Debug.Log("Vector forward or backward");
-            moveDirection = new Vector3(value.y, 0, value.y);
+            moveDirection = new Vector3(-value.y, 0, -value.y);
         }
         else if(value.x == 1 || value.x == -1)
         {
             //Debug.Log("Move left or right");
-            moveDirection = new Vector3(value.x, 0, -value.x);
+            moveDirection = new Vector3(-value.x, 0, value.x);
         }
         else if(value.x == value.y)
         {
             //Debug.Log("Move diagonal up right/down left");
-            moveDirection = new Vector3(value.x+value.y, 0, 0);
+            moveDirection = new Vector3(-value.x+-value.y, 0, 0);
         }
         else
         {
             //Debug.Log("Move diagonal up left/down right");
-            moveDirection = new Vector3(0, 0, -value.x + value.y);
+            moveDirection = new Vector3(0, 0, value.x + -value.y);
         }
     }
 
     private void Start()
     {
-        target = FindObjectOfType<Player>().transform;
+        target = GameManager.GetPlayer().transform;
         transform.position = target.position + offset;
         moveTarget = transform.position;
     }

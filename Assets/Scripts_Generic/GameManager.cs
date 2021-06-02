@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private static Player player;
+    private static Creature currentActiveActor;
+    private static GridController gridController;
 
     #region Singleton
     public static GameManager instance;
@@ -39,10 +41,22 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
+        gridController = FindObjectOfType<GridController>();
+        currentActiveActor = player;
     }
 
     public static Player GetPlayer()
     {
         return player;
+    }
+
+    public static Creature GetCurrentActiveActor()
+    {
+        return currentActiveActor;
+    }
+
+    public static GridController GetGridController()
+    {
+        return gridController;
     }
 }

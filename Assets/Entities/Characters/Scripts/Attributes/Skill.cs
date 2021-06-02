@@ -22,4 +22,9 @@ public class Skill : BaseStat
     {
         return baseValue;
     }
+
+    public SkillType GetSkillType()
+    {
+        return this.skillType;
+    }
 }

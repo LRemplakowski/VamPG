@@ -6,37 +6,36 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory))]
 public abstract class Creature : Entity
 {
-    private const int healthBase = 3;
     private const float lookTowardsRotationSpeed = 5.0f;
 
     public NavMeshAgent agent;
     public Inventory inventory;
-
-    [ReadOnly]
-    [SerializeField]
-    private int health = 3;
-    [ReadOnly]
-    [SerializeField]
-    private int willpower = 2;
-
-    public int strength, dexterity, stamina;
-    public int charisma, manipulation, composure;
-    public int intelligence, wits, resolve;
+    [SerializeField, ReadOnly]
+    private GridElement _currentGridPosition;
+    [ExposeProperty]
+    public GridElement CurrentGridPosition 
+    {
+        get => _currentGridPosition;
+        set
+        {
+            Debug.Log("Previous pos: " + _currentGridPosition);
+            _currentGridPosition = value;
+            Debug.Log("New pos: " + _currentGridPosition);
+        }
+    }
 
     [HideInInspector]
     public Queue<EntityAction> ActionQueue { get; private set; }
 
     public abstract void Move(Vector3 moveTarget);
+    public abstract void Move(GridElement moveTarget);
 
     private void Start()
     {
         inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<EntityAction>();
-        ActionQueue.Enqueue(new Idle());
-
-        health = stamina + healthBase;
-        willpower = composure + resolve;
+        ActionQueue.Enqueue(new Idle(this));
     }
 
     public void AddActionToQueue(EntityAction action)
@@ -48,7 +47,7 @@ public abstract class Creature : Entity
     {
         ActionQueue.Peek().Abort();
         ActionQueue.Clear();
-        ActionQueue.Enqueue(new Idle());
+        ActionQueue.Enqueue(new Idle(this));
     }
 
     public bool RotateTowardsTarget(Transform target)
@@ -77,11 +76,18 @@ public abstract class Creature : Entity
         }
         if (ActionQueue.Peek().IsFinished())
         {
-            Debug.Log("Action finished!");
+            Debug.Log("Action finished!\n" + ActionQueue.Peek());
             ActionQueue.Dequeue();
             if (ActionQueue.Count == 0) 
-                ActionQueue.Enqueue(new Idle());
+                ActionQueue.Enqueue(new Idle(this));
             ActionQueue.Peek().Begin();
         }
+    }
+
+    private void OnDrawGizmos()
+    {   
+        float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, movementRange);
     }
 }

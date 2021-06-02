@@ -7,7 +7,6 @@ public class Destination : Condition
 {
     private NavMeshAgent agent;
 
-    private const float completionMargin = 0.1f;
     private bool hasPath = false;
 
     public Destination(NavMeshAgent agent)
@@ -22,7 +21,7 @@ public class Destination : Condition
     private bool AtEndOfPath()
     {
         hasPath |= agent.hasPath;
-        if (hasPath && agent.remainingDistance <= agent.stoppingDistance + completionMargin)
+        if (hasPath && agent.remainingDistance <= agent.stoppingDistance + ActionConsts.COMPLETION_MARGIN)
         {
             // Arrived
             hasPath = false;
@@ -30,5 +29,13 @@ public class Destination : Condition
         }
 
         return false;
+    }
+
+    public override string ToString()
+    {
+        string condition = "Type<Destination>:\n" +
+            "Distance to target: " + agent.remainingDistance + "\n" +
+            "Agent has path? " + agent.hasPath;
+        return condition;
     }
 }

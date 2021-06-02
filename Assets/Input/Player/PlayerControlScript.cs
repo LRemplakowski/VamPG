@@ -15,8 +15,6 @@ public class PlayerControlScript : InputHandler
 
     public LayerMask defaultRaycastMask;
 
-
-
     public void OnClick(InputAction.CallbackContext context)
     {
         //Debug.Log(player);
@@ -39,9 +37,9 @@ public class PlayerControlScript : InputHandler
             {
                 case GameState.Combat:
                     {
-                        if (GridElement.IsInstance(hit.collider.gameObject))
+                        if (GridElement.IsInstance(hit.collider.gameObject) && hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.StartingPoint)
                         {
-                            player.Move(hit.collider.gameObject.transform.position);
+                            player.Move(hit.collider.gameObject.GetComponent<GridElement>());
                         }
                         break;
                     }
@@ -86,9 +84,9 @@ public class PlayerControlScript : InputHandler
                     {
                         if (lastHit != hit.collider)
                         {
-                            if (GridElement.IsInstance(lastHit.gameObject))
+                            if (Entity.IsInteractable(lastHit.gameObject))
                             {
-                                lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
+                                lastHit.gameObject.GetComponent<IInteractable>().IsHoveredOver = false;
                             }
                             lastHit = hit.collider;
                         }

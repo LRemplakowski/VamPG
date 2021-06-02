@@ -10,20 +10,32 @@ public abstract class Creature : Entity
 
     public NavMeshAgent agent;
     public Inventory inventory;
-    public GridElement CurrentGridPosition { get; set; }
+    [SerializeField, ReadOnly]
+    private GridElement _currentGridPosition;
+    [ExposeProperty]
+    public GridElement CurrentGridPosition 
+    {
+        get => _currentGridPosition;
+        set
+        {
+            Debug.Log("Previous pos: " + _currentGridPosition);
+            _currentGridPosition = value;
+            Debug.Log("New pos: " + _currentGridPosition);
+        }
+    }
 
     [HideInInspector]
     public Queue<EntityAction> ActionQueue { get; private set; }
 
     public abstract void Move(Vector3 moveTarget);
-    public abstract void Move(GridElement moveTarger);
+    public abstract void Move(GridElement moveTarget);
 
     private void Start()
     {
         inventory = GetComponent<Inventory>();
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<EntityAction>();
-        ActionQueue.Enqueue(new Idle());
+        ActionQueue.Enqueue(new Idle(this));
     }
 
     public void AddActionToQueue(EntityAction action)
@@ -35,7 +47,7 @@ public abstract class Creature : Entity
     {
         ActionQueue.Peek().Abort();
         ActionQueue.Clear();
-        ActionQueue.Enqueue(new Idle());
+        ActionQueue.Enqueue(new Idle(this));
     }
 
     public bool RotateTowardsTarget(Transform target)
@@ -64,10 +76,10 @@ public abstract class Creature : Entity
         }
         if (ActionQueue.Peek().IsFinished())
         {
-            Debug.Log("Action finished!");
+            Debug.Log("Action finished!\n" + ActionQueue.Peek());
             ActionQueue.Dequeue();
             if (ActionQueue.Count == 0) 
-                ActionQueue.Enqueue(new Idle());
+                ActionQueue.Enqueue(new Idle(this));
             ActionQueue.Peek().Begin();
         }
     }

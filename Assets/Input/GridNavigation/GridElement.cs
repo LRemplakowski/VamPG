@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GridElement : MonoBehaviour
+[System.Serializable]
+public class GridElement : ExposableMonobehaviour
 {
-    public Vector2 GridPosition { get; set; }
+    [SerializeField]
+    public Vector2Int GridPosition { get; set; }
+    [SerializeField]
+    public Status Visited { get; set; }
 
     private bool _isMouseOver = false;
     public bool MouseOver {
@@ -40,5 +44,17 @@ public class GridElement : MonoBehaviour
     public static bool IsInstance(GameObject gameObject)
     {
         return gameObject.GetComponent<GridElement>() != null;
+    }
+
+    public override string ToString()
+    {
+        return "GridElement(X: "+GridPosition.x+", Y: "+GridPosition.y+", isActive:"+gameObject.activeSelf+", visited: "+Visited+")";
+    }
+
+    public enum Status
+    {
+        NotVisited = -1,
+        Visited = 1,
+        StartingPoint = 0
     }
 }

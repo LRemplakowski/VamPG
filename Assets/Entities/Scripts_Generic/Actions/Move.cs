@@ -13,19 +13,18 @@ public class Move : EntityAction
     public delegate void OnMovementStarted();
     public static OnMovementStarted onMovementStarted;
 
+    protected override Creature Owner 
+    { 
+        get; 
+        set; 
+    }
+
     public Move(NavMeshAgent navMeshAgent, Vector3 destination)
     {
         this.navMeshAgent = navMeshAgent;
+        Owner = navMeshAgent.gameObject.GetComponent<Creature>();
         conditions.Add(new Destination(navMeshAgent));
         this.destination = destination;
-    }
-
-    public Move(NavMeshAgent navMeshAgent, GridElement target)
-    {
-        this.navMeshAgent = navMeshAgent;
-        conditions.Add(new Destination(navMeshAgent));
-        this.destination = target.transform.position;
-        owner.CurrentGridPosition = target;
     }
 
     public override void Abort()

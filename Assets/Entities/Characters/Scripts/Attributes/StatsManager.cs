@@ -36,4 +36,19 @@ public class StatsManager : MonoBehaviour
     {
         Debug.Log("Character died!");
     }
+
+    public int GetCombatSpeed()
+    {
+        Attribute dexterity = characterStats.GetAttribute(AttributeType.Dexterity);
+        Skill athletics = characterStats.GetSkill(SkillType.Atheltics);
+        if (dexterity.GetAttributeType() != AttributeType.Invalid && athletics.GetSkillType() != SkillType.Invalid)
+            return (dexterity.GetValue() + athletics.GetValue());
+        else
+            return 0;
+    }
+
+    public float GetAttackRange()
+    {
+        return 30.0f;
+    }
 }

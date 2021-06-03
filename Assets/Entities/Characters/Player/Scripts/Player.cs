@@ -14,8 +14,8 @@ public class Player : Creature
     public override void Move(GridElement moveTarget)
     {
         ClearAllActions();
-        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
         CurrentGridPosition = moveTarget;
+        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
     }
 
     public void InteractWith(IInteractable target)

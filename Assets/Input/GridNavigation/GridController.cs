@@ -25,21 +25,21 @@ public class GridController : ExposableMonobehaviour
 
     private NavMeshAgent playerAgent;
 
-    private bool _highlightGrid;
-    [SerializeField, ExposeProperty]
-    public bool HighlightGrid
-    {
-        get => _highlightGrid;
-        set
-        {
-            _highlightGrid = value;
-            if (_highlightGrid)
-            {
-                SetElementsInRangeActive();
-                HighlightGrid = false;
-            }
-        }
-    }
+    //private bool _highlightGrid;
+    //[SerializeField, ExposeProperty]
+    //public bool HighlightGrid
+    //{
+    //    get => _highlightGrid;
+    //    set
+    //    {
+    //        _highlightGrid = value;
+    //        if (_highlightGrid)
+    //        {
+    //            SetElementsInRangeActive();
+    //            HighlightGrid = false;
+    //        }
+    //    }
+    //}
 
     private void OnEnable()
     {
@@ -59,7 +59,7 @@ public class GridController : ExposableMonobehaviour
         bottomLeft = transform.position;
         playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
         GenerateGrid();
-        TempMovePlayerToNearestGridElement();
+        //TempMovePlayerToNearestGridElement();
     }
 
     private void GenerateGrid()
@@ -102,16 +102,15 @@ public class GridController : ExposableMonobehaviour
         return false;
     }
 
-    private void TempMovePlayerToNearestGridElement()
+    public void MoveCreatureToNearestGridElement(Creature creature)
     {
         float distance = float.MaxValue;
         GridElement nearest = null;
-        Player player = GameManager.GetPlayer();
         foreach (GridElement g in gridElements)
         {
             if (g == null)
                 continue;
-            float newDistance = Vector3.Distance(player.transform.position, g.transform.position);
+            float newDistance = Vector3.Distance(creature.transform.position, g.transform.position);
             if (newDistance < distance)
             {
                 nearest = g;
@@ -119,7 +118,7 @@ public class GridController : ExposableMonobehaviour
             }
         }
         if (nearest != null)
-            player.Move(nearest);
+            creature.Move(nearest);
     }
 
     public void ClearActiveElements()
@@ -134,7 +133,7 @@ public class GridController : ExposableMonobehaviour
 
     private void SetElementsInRangeActive()
     {
-        Creature currentActiveActor = GameManager.GetCurrentActiveActor();
+        Creature currentActiveActor = TurnCombatManager.instance.CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;

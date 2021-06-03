@@ -22,7 +22,6 @@ public class PlayerControlScript : InputHandler
             return;
         if (EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("Pointer over game object");
             return;
         }
         ManageInput(HandleWorldClick);

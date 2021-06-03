@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager))]
 public abstract class Creature : Entity
 {
     private const float lookTowardsRotationSpeed = 5.0f;
@@ -29,6 +29,22 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
+
+    private void OnCombatStart()
+    {
+        GameManager.GetGridController().MoveCreatureToNearestGridElement(this);
+    }
+
+    #region Enable&Disable
+    private void OnEnable()
+    {
+        TurnCombatManager.instance.onCombatStart += OnCombatStart;
+    }
+    private void OnDisable()
+    {
+        TurnCombatManager.instance.onCombatStart -= OnCombatStart;
+    }
+    #endregion
 
     private void Start()
     {

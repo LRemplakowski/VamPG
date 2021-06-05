@@ -715,6 +715,7 @@ GameObject:
   - component: {fileID: 3388364958803105148}
   - component: {fileID: 3388364958803105151}
   - component: {fileID: 3857704502908565574}
+  - component: {fileID: 2538197363813703174}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -776,11 +777,11 @@ NavMeshAgent:
   m_GameObject: {fileID: 3388364958803105150}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.25
   m_Speed: 3.5
   m_Acceleration: 12
   avoidancePriority: 50
-  m_AngularSpeed: 180
+  m_AngularSpeed: 360
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -803,17 +804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   inventory: {fileID: 3857704502908565574}
-  health: 3
-  willpower: 2
-  strength: 0
-  dexterity: 0
-  stamina: 0
-  charisma: 0
-  manipulation: 0
-  composure: 0
-  intelligence: 0
-  wits: 0
-  resolve: 0
+  _currentGridPosition: {fileID: 0}
 --- !u!114 &3388364958803105148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,6 +820,7 @@ MonoBehaviour:
   defaultRaycastMask:
     serializedVersion: 2
     m_Bits: 256
+  attackRangeIndicator: {fileID: 8846080538953350489, guid: 2d56fbc1ab28f9847a6b40eb40891d0c, type: 3}
 --- !u!114 &3388364958803105151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -855,6 +847,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 20
   items: []
+--- !u!114 &2538197363813703174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3388364958803105150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6af099b1f4bd5a34b851456c4b291b66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: 11400000, guid: 58b4a4c1d920a5f4a88f08abc1258494, type: 2}
+  owner: {fileID: 0}
 --- !u!1 &3401278881782269668
 GameObject:
   m_ObjectHideFlags: 0

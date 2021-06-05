@@ -8,17 +8,23 @@ public class Interact : EntityAction
     private readonly IInteractable target;
     private Move moveToTarget;
 
+    protected override Creature Owner 
+    { 
+        get; 
+        set; 
+    }
+
     public Interact(IInteractable target, Creature owner)
     {
         this.target = target;
-        this.owner = owner;
+        Owner = owner;
         conditions.Add(new InteractionComplete(target));
     }
 
     public override void Abort()
     {
-        owner.StopCoroutine(InteractIfCloseEnough());
-        owner.StopCoroutine(owner.FaceTarget(target.InteractionTransform));
+        Owner.StopCoroutine(InteractIfCloseEnough());
+        Owner.StopCoroutine(Owner.FaceTarget(target.InteractionTransform));
         if (moveToTarget != null)
             moveToTarget.Abort();
         target.Interacted = false;
@@ -26,29 +32,29 @@ public class Interact : EntityAction
 
     public override void Begin()
     {
-        float distance = Vector3.Distance(target.InteractionTransform.position, owner.transform.position);
+        float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
         if (distance > target.InteractionDistance)
         {
-            moveToTarget = new Move(owner.gameObject.GetComponent<NavMeshAgent>(), target.InteractionTransform.position);
+            moveToTarget = new Move(Owner.gameObject.GetComponent<NavMeshAgent>(), target.InteractionTransform.position);
             moveToTarget.Begin();
-            owner.StartCoroutine(InteractIfCloseEnough());
+            Owner.StartCoroutine(InteractIfCloseEnough());
         }
         else
         {
-            owner.StartCoroutine(owner.FaceTarget(target.InteractionTransform));
-            target.TargetedBy = owner;
+            Owner.StartCoroutine(Owner.FaceTarget(target.InteractionTransform));
+            target.TargetedBy = Owner;
             target.Interact();
         }
     }
 
     private IEnumerator InteractIfCloseEnough()
     {
-        yield return new WaitUntil(() => Vector3.Distance(target.InteractionTransform.position, owner.transform.position) <= target.InteractionDistance);
+        yield return new WaitUntil(() => Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) <= target.InteractionDistance);
         moveToTarget.Abort();
-        yield return new WaitUntil(() => owner.RotateTowardsTarget(target.InteractionTransform));
+        yield return new WaitUntil(() => Owner.RotateTowardsTarget(target.InteractionTransform));
 
-        target.TargetedBy = owner;
+        target.TargetedBy = Owner;
         target.Interact();
-        owner.StopCoroutine(InteractIfCloseEnough());
+        Owner.StopCoroutine(InteractIfCloseEnough());
     }
 }

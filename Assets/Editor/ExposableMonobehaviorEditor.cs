@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
+[CanEditMultipleObjects]
 [CustomEditor(typeof(ExposableMonobehaviour), true)]
 public class ExposableMonobehaviourEditor : Editor
 {

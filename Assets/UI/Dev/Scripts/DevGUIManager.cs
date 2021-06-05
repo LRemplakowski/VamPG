@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DevGUIManager : MonoBehaviour
+public class DevGUIManager : ExposableMonobehaviour
 {
     #region Enable&Disable
     private void OnEnable()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager))]
+[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager)), RequireComponent(typeof(CombatBehaviour))]
 public abstract class Creature : Entity
 {
     private const float lookTowardsRotationSpeed = 5.0f;
@@ -18,9 +18,12 @@ public abstract class Creature : Entity
         get => _currentGridPosition;
         set
         {
+            if (_currentGridPosition)
+                _currentGridPosition.Visited = GridElement.Status.NotVisited;
             Debug.Log("Previous pos: " + _currentGridPosition);
             _currentGridPosition = value;
             Debug.Log("New pos: " + _currentGridPosition);
+            _currentGridPosition.Visited = GridElement.Status.Occupied;
         }
     }
 
@@ -29,22 +32,6 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
-
-    private void OnCombatStart()
-    {
-        GameManager.GetGridController().MoveCreatureToNearestGridElement(this);
-    }
-
-    #region Enable&Disable
-    private void OnEnable()
-    {
-        TurnCombatManager.instance.onCombatStart += OnCombatStart;
-    }
-    private void OnDisable()
-    {
-        TurnCombatManager.instance.onCombatStart -= OnCombatStart;
-    }
-    #endregion
 
     private void Start()
     {
@@ -92,7 +79,7 @@ public abstract class Creature : Entity
         }
         if (ActionQueue.Peek().IsFinished())
         {
-            Debug.Log("Action finished!\n" + ActionQueue.Peek());
+            //Debug.Log("Action finished!\n" + ActionQueue.Peek());
             ActionQueue.Dequeue();
             if (ActionQueue.Count == 0) 
                 ActionQueue.Enqueue(new Idle(this));

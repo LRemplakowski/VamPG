@@ -36,7 +36,9 @@ public class PlayerControlScript : InputHandler
             {
                 case GameState.Combat:
                     {
-                        if (GridElement.IsInstance(hit.collider.gameObject) && hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.StartingPoint)
+                        if (!TurnCombatManager.instance.IsActiveActorPlayer())
+                            return;
+                        if (GridElement.IsInstance(hit.collider.gameObject) && hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
                         {
                             player.Move(hit.collider.gameObject.GetComponent<GridElement>());
                         }
@@ -97,6 +99,8 @@ public class PlayerControlScript : InputHandler
                     }  
                 case GameState.Combat:
                     {
+                        if (!TurnCombatManager.instance.IsActiveActorPlayer())
+                            return;
                         if (lastHit != hit.collider)
                         {
                             if (GridElement.IsInstance(lastHit.gameObject))

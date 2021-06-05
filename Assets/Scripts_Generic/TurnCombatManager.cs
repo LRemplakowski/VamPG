@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TurnCombatManager : MonoBehaviour
+public class TurnCombatManager : ExposableMonobehaviour
 {
     public delegate void OnCombatStart();
     public OnCombatStart onCombatStart;
@@ -47,8 +47,13 @@ public class TurnCombatManager : MonoBehaviour
             _currentActiveActor = value;
         }
     }
+    [SerializeField]
     private GridController _gridInstance;
-    public GridController GridInstance { get; set; }
+    public GridController GridInstance 
+    {
+        get => _gridInstance;
+        set => _gridInstance = value; 
+    }
 
     private Creature[] creaturesInCombat;
 
@@ -59,10 +64,12 @@ public class TurnCombatManager : MonoBehaviour
 
     public void SetCurrentActiveActor(int index)
     {
-        Creature c = creaturesInCombat[index];
-        if (c != null)
-            CurrentActiveActor = c;
+        Creature c = null;
+        if (index < creaturesInCombat.Length)
+            c = creaturesInCombat[index];
+        CurrentActiveActor = c;
     }
+
     private void MaybeStartOrEndCombat(GameState newState, GameState oldState)
     {
         if (newState == GameState.Combat)
@@ -75,10 +82,20 @@ public class TurnCombatManager : MonoBehaviour
                 Debug.Log("onCombatStart called");
             }
         }
-        else
+        else if (oldState == GameState.Combat)
         {
             if (onCombatEnd != null)
                 onCombatEnd.Invoke();
         }
+    }
+
+    public bool IsActiveActorPlayer()
+    {
+        return _currentActiveActor.IsOfType(typeof(Player));
+    }
+
+    public bool IsActiveActorNPC()
+    {
+        return _currentActiveActor.IsOfType(typeof(NPC));
     }
 }

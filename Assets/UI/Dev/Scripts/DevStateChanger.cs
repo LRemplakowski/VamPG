@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Dropdown))]
-public class DevStateChanger : MonoBehaviour
+public class DevStateChanger : ExposableMonobehaviour
 {
     private void Start()
     {

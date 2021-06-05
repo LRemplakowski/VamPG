@@ -23,10 +23,12 @@ public class GridElement : ExposableMonobehaviour
 
     public Material hover, idle;
     private MeshRenderer meshRenderer;
+    private Transform visualTransform;
 
     public void Awake()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
+        visualTransform = GetComponentInChildren<Transform>();
     }
 
     private void SetHoverHighlight(bool hovered)
@@ -55,6 +57,7 @@ public class GridElement : ExposableMonobehaviour
     {
         NotVisited = -1,
         Visited = 1,
-        StartingPoint = 0
+        Occupied = 0,
+        ProvidesCover = -2
     }
 }

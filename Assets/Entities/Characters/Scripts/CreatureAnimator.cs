@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CreatureAnimator : MonoBehaviour
+public class CreatureAnimator : ExposableMonobehaviour
 {
     const float movementAnimationSmoothTime = 0.1f;
 

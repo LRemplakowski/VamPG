@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentManager : MonoBehaviour
+public class EquipmentManager : ExposableMonobehaviour
 {
     #region Instance
     public static EquipmentManager instance;

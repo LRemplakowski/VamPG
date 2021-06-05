@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentDisplay : MonoBehaviour
+public class EquipmentDisplay : ExposableMonobehaviour
 {
     private EquipmentDisplaySlot[] displaySlots;
 

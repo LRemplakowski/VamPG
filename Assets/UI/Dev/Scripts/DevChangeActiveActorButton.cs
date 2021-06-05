@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DevChangeActiveActorButton : MonoBehaviour
+public class DevChangeActiveActorButton : ExposableMonobehaviour
 {
     public void NextActor()
     {

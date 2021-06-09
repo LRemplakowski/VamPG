@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class DevMoveActorToPosition : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static bool InputOverride { get; private set; }
+
+    #region Enable&Disable
+    private void OnEnable()
     {
-        
+        Move.onMovementStarted += OnMovementStarted;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        Move.onMovementStarted -= OnMovementStarted;
+    }
+    #endregion
+
+    private void Start()
+    {
+        InputOverride = false;
+    }
+
+    public void OnButtonClick()
+    {
+        InputOverride = true;
+        TurnCombatManager.instance.GridInstance.Dev_SetWholeGridActive();
+    }
+
+    private void OnMovementStarted(Creature who)
+    {
+        InputOverride = false;
     }
 }

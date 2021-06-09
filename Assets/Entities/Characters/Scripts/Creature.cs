@@ -19,11 +19,11 @@ public abstract class Creature : Entity
         set
         {
             if (_currentGridPosition)
+            {
                 _currentGridPosition.Visited = GridElement.Status.NotVisited;
-            Debug.Log("Previous pos: " + _currentGridPosition);
+            }
+            value.Visited = GridElement.Status.Occupied;
             _currentGridPosition = value;
-            Debug.Log("New pos: " + _currentGridPosition);
-            _currentGridPosition.Visited = GridElement.Status.Occupied;
         }
     }
 

@@ -18,7 +18,7 @@ public class CreatureAnimator : ExposableMonobehaviour
 
     private void Update()
     {
-        float speedPercentage = agent.velocity.magnitude / agent.speed;
-        animator.SetFloat("speedPercentage", speedPercentage, movementAnimationSmoothTime, Time.deltaTime);
+        float speedPercentage = agent.velocity.magnitude;
+        animator.SetFloat("Speed", speedPercentage, movementAnimationSmoothTime, Time.deltaTime);
     }
 }

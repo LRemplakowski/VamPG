@@ -9,7 +9,15 @@ public class GridElement : ExposableMonobehaviour
     [SerializeField]
     public Vector2Int GridPosition { get; set; }
     [SerializeField]
-    public Status Visited { get; set; }
+    private Status _visited;
+    public Status Visited 
+    {
+        get => _visited; 
+        set
+        {
+            _visited = value;
+        }
+    }
 
     private bool _isMouseOver = false;
     public bool MouseOver {

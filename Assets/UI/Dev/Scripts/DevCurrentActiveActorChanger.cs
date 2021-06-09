@@ -31,6 +31,8 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
             options.Add(new Dropdown.OptionData(c.gameObject.ToString()));
         }
         dropdown.AddOptions(options);
+        if (TurnCombatManager.instance.CurrentActiveActor != null)
+            dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(TurnCombatManager.instance.CurrentActiveActor));
     }
 
     private void OnActiveActorChanged(Creature newActor, Creature oldActor)

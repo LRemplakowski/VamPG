@@ -3,68 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Creature))]
-public class CombatBehaviour : ExposableMonobehaviour
+public abstract class CombatBehaviour : ExposableMonobehaviour
 {
-    private CoverDetector coverDetector;
+    protected CoverDetector coverDetector;
+
+    public bool HasMoved { get; set; }
 
     #region Enable&Disable
-    private void OnEnable()
+    protected void OnEnable()
     {
+        Debug.Log("fired for " + this.gameObject.name);
         coverDetector = GetComponentInChildren<CoverDetector>();
         TurnCombatManager.instance.onCombatStart += OnCombatStart;
         coverDetector.onLookForCoverFinished += OnLookForCoverFinished;
-        TurnCombatManager.instance.onActiveActorChanged += OnActiveActorChanged;
+        TurnCombatManager.instance.onCombatRoundBegin += OnCombatRoundBegin;
+        Move.onMovementStarted += OnMovementStarted;
+        Move.onMovementFinished += OnMovementFinished;
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         TurnCombatManager.instance.onCombatStart -= OnCombatStart;
         coverDetector.onLookForCoverFinished -= OnLookForCoverFinished;
-        TurnCombatManager.instance.onActiveActorChanged -= OnActiveActorChanged;
+        TurnCombatManager.instance.onCombatRoundBegin -= OnCombatRoundBegin;
+        Move.onMovementFinished -= OnMovementFinished;
+        Move.onMovementStarted -= OnMovementStarted;
     }
     #endregion
 
-    private Creature owner;
+    protected Creature owner;
 
-    private void Start()
+    protected void Start()
     {
         owner = GetComponent<Creature>();
     }
 
-    private void OnCombatStart()
-    {
-        GridController gridController = GameManager.GetGridController();
-        GridElement g = gridController.GetNearestGridElement(this.transform.position);
-        owner.Move(g);
-    }
+    protected abstract void OnCombatStart();
 
-    private void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover)
-    {
-        Debug.LogWarning("Positions near cover: " + positionsNearCover.Count);
-        int random = UnityEngine.Random.Range(0, positionsNearCover.Count);
-        int index = 0;
-        foreach (KeyValuePair<GridElement, List<Cover>> pair in positionsNearCover)
-        {
-            if (index == random)
-            {
-                owner.Move(pair.Key);
-                break;
-            }
-            index++;
-        }
-    }
+    protected abstract void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover);
 
-    private void OnActiveActorChanged(Creature newActor, Creature previousActor)
-    {
-        if (newActor.IsOfType(typeof(Player)))
-            return;
-        if (newActor.Equals(owner))
-        {
-            Debug.LogWarning("active actor changed in combat behaviour!");
-            List<GridElement> elementsInRange = TurnCombatManager.instance.GridInstance.GetElementsInRangeOfActor(owner);
-            Debug.LogWarning("elements in range count: " + elementsInRange.Count);
-            coverDetector.StartLookingForCover(elementsInRange);
-        }
-    }
+    protected abstract void OnCombatRoundBegin(Creature newActor);
+
+    protected abstract void OnMovementStarted(Creature who);
+
+    protected abstract void OnMovementFinished(Creature who);
 }
 

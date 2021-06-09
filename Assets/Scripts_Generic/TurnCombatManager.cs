@@ -12,6 +12,12 @@ public class TurnCombatManager : ExposableMonobehaviour
     public OnCombatEnd onCombatEnd;
     public delegate void OnActiveActorChanged(Creature newActor, Creature previousActor);
     public OnActiveActorChanged onActiveActorChanged;
+    public delegate void OnCombatRoundBegin(Creature currentActor);
+    public OnCombatRoundBegin onCombatRoundBegin;
+    public delegate void OnCombatRoundEnd(Creature currentActor);
+    public OnCombatRoundEnd onCombatRoundEnd;
+
+    private int roundCounter;
 
     #region Instance
     public static TurnCombatManager instance;
@@ -28,10 +34,12 @@ public class TurnCombatManager : ExposableMonobehaviour
     private void OnEnable()
     {
         StateManager.instance.onGameStateChanged += MaybeStartOrEndCombat;
+        onActiveActorChanged += NewRound;
     }
     private void OnDisable()
     {
         StateManager.instance.onGameStateChanged -= MaybeStartOrEndCombat;
+        onActiveActorChanged -= NewRound;
     }
     #endregion
 
@@ -70,23 +78,57 @@ public class TurnCombatManager : ExposableMonobehaviour
         CurrentActiveActor = c;
     }
 
+    private void NewRound(Creature newActor, Creature previousActor)
+    {
+        if (previousActor != null && onCombatRoundEnd != null)
+        {
+            onCombatRoundEnd.Invoke(previousActor);
+        }
+        if (newActor != null && onCombatRoundBegin != null)
+        {
+            onCombatRoundBegin.Invoke(newActor);
+        }
+    }
+
+    public void NextRound()
+    {
+        int index = GetCreaturesInCombat().IndexOf(CurrentActiveActor);
+        SetCurrentActiveActor(++index < creaturesInCombat.Length ? index : 0);
+    }
+
     private void MaybeStartOrEndCombat(GameState newState, GameState oldState)
     {
         if (newState == GameState.Combat)
         {
+            roundCounter = 0;
+            _gridInstance = GameManager.GetGridController();
             creaturesInCombat = FindObjectsOfType<Creature>();
-            CurrentActiveActor = GameManager.GetPlayer();
             if (onCombatStart != null)
             {
                 onCombatStart.Invoke();
-                Debug.Log("onCombatStart called");
             }
+            roundCounter = 1;
+            CurrentActiveActor = GameManager.GetPlayer();
         }
         else if (oldState == GameState.Combat)
         {
+            roundCounter = 0;
+            if (onCombatRoundEnd != null && _currentActiveActor != null)
+                onCombatRoundEnd.Invoke(_currentActiveActor);
+            _currentActiveActor = null;
             if (onCombatEnd != null)
                 onCombatEnd.Invoke();
         }
+    }
+
+    public bool IsBeforeFirstRound()
+    {
+        return roundCounter <= 0;
+    }
+
+    public bool IsFirstRoundOfCombat()
+    {
+        return roundCounter == 1;
     }
 
     public bool IsActiveActorPlayer()

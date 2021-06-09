@@ -8,9 +8,9 @@ public class Move : EntityAction
 {
     private NavMeshAgent navMeshAgent;
     private Vector3 destination;
-    public delegate void OnMovementFinished();
+    public delegate void OnMovementFinished(Creature who);
     public static OnMovementFinished onMovementFinished;
-    public delegate void OnMovementStarted();
+    public delegate void OnMovementStarted(Creature who);
     public static OnMovementStarted onMovementStarted;
 
     protected override Creature Owner 
@@ -30,6 +30,8 @@ public class Move : EntityAction
     public override void Abort()
     {
         navMeshAgent.isStopped = true;
+        if (onMovementFinished != null)
+            onMovementFinished.Invoke(this.Owner);
     }
 
     public override void Begin()
@@ -37,7 +39,7 @@ public class Move : EntityAction
         navMeshAgent.SetDestination(destination);
         navMeshAgent.isStopped = false;
         if (onMovementStarted != null)
-            onMovementStarted.Invoke();
+            onMovementStarted.Invoke(this.Owner);
     }
 
     public override bool IsFinished()
@@ -46,7 +48,7 @@ public class Move : EntityAction
         if (finished)
         {
             if (onMovementFinished != null)
-                onMovementFinished.Invoke();
+                onMovementFinished.Invoke(this.Owner);
             return true;
         }
         else

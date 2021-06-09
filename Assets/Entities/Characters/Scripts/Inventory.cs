@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory : ExposableMonobehaviour
 {
     public int size = 20;
     public List<InventoryItem> items = new List<InventoryItem>();

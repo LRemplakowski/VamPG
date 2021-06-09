@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : ExposableMonobehaviour
 {
     private static Player player;
-    private static Creature currentActiveActor;
     private static GridController gridController;
 
     #region Singleton
-    public static GameManager instance;
+    private static GameManager instance;
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -42,17 +41,11 @@ public class GameManager : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
         gridController = FindObjectOfType<GridController>();
-        currentActiveActor = player;
     }
 
     public static Player GetPlayer()
     {
         return player;
-    }
-
-    public static Creature GetCurrentActiveActor()
-    {
-        return currentActiveActor;
     }
 
     public static GridController GetGridController()

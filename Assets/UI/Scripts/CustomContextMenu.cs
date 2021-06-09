@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(GridLayoutGroup))]
-public abstract class CustomContextMenu : MonoBehaviour
+public abstract class CustomContextMenu : ExposableMonobehaviour
 {
     public Vector3 offset = new Vector3(0,0,0);
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CreatureAnimator : MonoBehaviour
+public class CreatureAnimator : ExposableMonobehaviour
 {
     const float movementAnimationSmoothTime = 0.1f;
 
@@ -18,7 +18,7 @@ public class CreatureAnimator : MonoBehaviour
 
     private void Update()
     {
-        float speedPercentage = agent.velocity.magnitude / agent.speed;
-        animator.SetFloat("speedPercentage", speedPercentage, movementAnimationSmoothTime, Time.deltaTime);
+        float speedPercentage = agent.velocity.magnitude;
+        animator.SetFloat("Speed", speedPercentage, movementAnimationSmoothTime, Time.deltaTime);
     }
 }

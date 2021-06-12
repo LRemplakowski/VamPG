@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DD;
 
 public class GUIWindowsManager : InputHandler
 {
     public PlayerInventoryUI inventoryUI;
     public CharacterSheetUI characterSheetUI;
+    public DialogueWindowUI dialogueUI;
     private List<UIWindow> windows = new List<UIWindow>();
     private int _activeWindows = 0;
     private int ActiveWindows
@@ -18,12 +20,29 @@ public class GUIWindowsManager : InputHandler
 
     private void Awake()
     {
+        Canvas canvas = FindObjectOfType<Canvas>();
         if (inventoryUI == null)
-            inventoryUI = FindObjectOfType<PlayerInventoryUI>(true);
+            inventoryUI = canvas.GetComponentInChildren<PlayerInventoryUI>(true);
         if (characterSheetUI == null)
-            characterSheetUI = FindObjectOfType<CharacterSheetUI>(true);
+            characterSheetUI = canvas.GetComponentInChildren<CharacterSheetUI>(true);
+        if (dialogueUI == null)
+            dialogueUI = canvas.GetComponentInChildren<DialogueWindowUI>(true);
         windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
     }
+
+    #region Enable&Disable
+    private void OnEnable()
+    {
+        DialogueManager.onDialogueBegin += ToggleDialogue;
+        DialogueManager.onDialogueEnd += ToggleDialogue;
+    }
+
+    private void OnDisable()
+    {
+        DialogueManager.onDialogueBegin -= ToggleDialogue;
+        DialogueManager.onDialogueEnd -= ToggleDialogue;
+    }
+    #endregion
 
     private void ToggleInventory()
     {
@@ -37,6 +56,22 @@ public class GUIWindowsManager : InputHandler
         else
         {
             inventoryUI.gameObject.SetActive(true);
+            ++ActiveWindows;
+        }
+    }
+
+    private void ToggleDialogue()
+    {
+        bool active = dialogueUI.gameObject.activeSelf;
+        Debug.Log("Dialogue window active: " + active);
+        if (active)
+        {
+            dialogueUI.gameObject.SetActive(false);
+            --ActiveWindows;
+        }
+        else
+        {
+            dialogueUI.gameObject.SetActive(true);
             ++ActiveWindows;
         }
     }

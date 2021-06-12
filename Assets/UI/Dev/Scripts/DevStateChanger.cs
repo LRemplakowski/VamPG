@@ -7,9 +7,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Dropdown))]
 public class DevStateChanger : ExposableMonobehaviour
 {
-    private void Start()
+    private Dropdown dropdown;
+
+    private void OnEnable()
     {
-        Dropdown dropdown = GetComponent<Dropdown>();
+        dropdown = GetComponent<Dropdown>();
         dropdown.ClearOptions();
         List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
         foreach (int g in Enum.GetValues(typeof(GameState)))
@@ -18,5 +20,22 @@ public class DevStateChanger : ExposableMonobehaviour
         }
         dropdown.AddOptions(options);
         dropdown.SetValueWithoutNotify((int)StateManager.instance.GetCurrentState());
+        StateManager.instance.onGameStateChanged += OnStateChange;
+    }
+
+    private void OnDisable()
+    {
+        StateManager.instance.onGameStateChanged -= OnStateChange;
+    }
+
+    private void OnStateChange(GameState newState, GameState oldState)
+    {
+        if (dropdown.value != (int)newState)
+            UpdateDisplayedState(newState);
+    }
+
+    private void UpdateDisplayedState(GameState state)
+    {
+        dropdown.SetValueWithoutNotify((int)state);
     }
 }

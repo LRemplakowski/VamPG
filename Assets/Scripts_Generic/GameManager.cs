@@ -52,4 +52,9 @@ public class GameManager : ExposableMonobehaviour
     {
         return gridController;
     }
+
+    public static string GetLanguage()
+    {
+        return "PL";
+    }    
 }

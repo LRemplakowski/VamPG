@@ -6,8 +6,20 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager)), RequireComponent(typeof(CombatBehaviour))]
 public abstract class Creature : Entity
 {
-    private const float lookTowardsRotationSpeed = 5.0f;
+    public enum Sex
+    {
+        M, 
+        F
+    }
 
+    public Sex GetSex()
+    {
+        return sex;
+    }
+
+    private const float lookTowardsRotationSpeed = 5.0f;
+    [SerializeField]
+    private Sex sex = Sex.F;
     public NavMeshAgent agent;
     public Inventory inventory;
     [SerializeField, ReadOnly]

@@ -87,10 +87,10 @@ public class DialogueManager : ExposableMonobehaviour
         // create a player to play through the dialogue
         m_dialoguePlayer = new DialoguePlayer(m_loadedDialogue);
 
-        m_dialoguePlayer.OnDialogueStarted += OnDialogueStarted;
         m_dialoguePlayer.OnDialogueEnded += OnDialogueEnded;
         StateManager.instance.SetCurrentState(GameState.Conversation);
         m_dialoguePlayer.Play();
+        OnDialogueStarted(m_dialoguePlayer);
     }
 
     private void OnDialogueStarted(DialoguePlayer sender)
@@ -103,7 +103,6 @@ public class DialogueManager : ExposableMonobehaviour
         ClearChoices();
         ClearHistory();
         onDialogueEnd?.Invoke();
-        m_dialoguePlayer.OnDialogueStarted -= OnDialogueStarted;
         m_dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
         m_dialoguePlayer = null;
         StateManager.instance.SetCurrentState(GameState.Exploration);

@@ -44,6 +44,7 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
+    public abstract void Attack(Creature target);
 
     private void Start()
     {

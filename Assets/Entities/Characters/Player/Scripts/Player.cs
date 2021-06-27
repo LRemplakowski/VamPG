@@ -24,4 +24,10 @@ public class Player : Creature
         ClearAllActions();
         AddActionToQueue(new Interact(target, this));
     }
+
+    public override void Attack(Creature target)
+    {
+        ClearAllActions();
+        AddActionToQueue(new Attack(target, this));
+    }
 }

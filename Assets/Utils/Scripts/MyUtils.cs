@@ -84,4 +84,138 @@ namespace MyUtils
             return s;
         }
     }
+
+    public static class Roll
+    {
+        public class Outcome
+        {
+            public readonly int successes;
+            public readonly bool isCritical, isMessy, isBestialFailure;
+
+            public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure)
+            {
+                this.successes = successes;
+                this.isCritical = isCritical;
+                this.isMessy = isMessy;
+                this.isBestialFailure = isBestialFailure;
+            }
+
+            public Outcome(int successes, bool isCritical)
+            {
+                this.successes = successes;
+                this.isCritical = isCritical;
+                isMessy = false;
+                isBestialFailure = false;
+            }
+        }
+
+        public static Outcome d10(int normalDice, int hungerDice)
+        {
+            System.Random r = new System.Random();
+            int[] normals = new int[normalDice];
+            for (int i = 0; i < normals.Length; i++)
+            {
+                normals[i] = r.Next(1, 11);
+            }
+            int[] hunger = new int[hungerDice];
+            for (int i = 0; i < hunger.Length; i++)
+            {
+                hunger[i] = r.Next(1, 11);
+            }
+
+            int successes = Array.FindAll(normals, n => n >= 6).Length + Array.FindAll(hunger, h => h >= 6).Length;
+            int tens = Array.FindAll(normals, n => n == 10).Length;
+            int hungerTens = Array.FindAll(hunger, h => h == 10).Length;
+            bool isCritical = false;
+            if (tens + hungerTens >= 2)
+            {
+                successes += (tens + hungerTens) / 2;
+                isCritical = true;
+            }
+            bool isMessy = isCritical && hungerTens > 0;
+            Debug.Log("d10:"
+                + "\nnormal dice: " + DiceRollToString(normals)
+                + "\nhunger dice: " + DiceRollToString(hunger)
+                + "\nsuccesses: " + successes 
+                + "\ntens: " + tens 
+                + "\nhungerTens: " + hungerTens 
+                + "\nisCritical? " + isCritical 
+                + "\nisMessy?" + isMessy);
+            return new Outcome(successes, isCritical, isMessy, false);
+        }
+
+        public static Outcome d10(int normalDice, int hungerDice, int dc)
+        {
+            System.Random r = new System.Random();
+            int[] normals = new int[normalDice];
+            for (int i = 0; i < normals.Length; i++)
+            {
+                normals[i] = r.Next(1, 11);
+            }
+            int[] hunger = new int[hungerDice];
+            for (int i = 0; i < hunger.Length; i++)
+            {
+                hunger[i] = r.Next(1, 11);
+            }
+
+            int successes = Array.FindAll(normals, n => n >= 6).Length + Array.FindAll(hunger, h => h >= 6).Length;
+            int tens = Array.FindAll(normals, n => n == 10).Length;
+            int hungerOnes = Array.FindAll(hunger, h => h == 1).Length;
+            int hungerTens = Array.FindAll(hunger, h => h == 10).Length;
+            bool isCritical = false;
+            if (tens + hungerTens >= 2)
+            {
+                successes += (tens + hungerTens) / 2;
+                isCritical = true;
+            }
+            bool isMessy = isCritical && hungerTens > 0;
+            bool isBestial = hungerOnes > 0 && successes < dc;
+            Debug.Log("d10:"
+                + "\nnormal dice: " + DiceRollToString(normals)
+                + "\nhunger dice: " + DiceRollToString(hunger)
+                + "\nsuccesses: " + successes
+                + "\nDC: " + dc
+                + "\ntens: " + tens
+                + "\nhungerTens: " + hungerTens
+                + "\nisCritical? " + isCritical
+                + "\nisMessy?" + isMessy
+                + "\nisBestial? " + isBestial);
+            return new Outcome(successes, isCritical, isMessy, isBestial);
+        }
+
+        public static Outcome d10(int dice)
+        {
+            System.Random r = new System.Random();
+            int[] roll = new int[dice];
+            for (int i = 0; i < roll.Length; i++)
+            {
+                roll[i] = r.Next(1, 11);
+            }
+
+            int successes = Array.FindAll(roll, n => n >= 6).Length;
+            int tens = Array.FindAll(roll, n => n == 10).Length;
+            bool isCritical = false;
+            if (tens >= 2)
+            {
+                successes += tens / 2;
+                isCritical = true;
+            }
+            Debug.Log("d10:"
+                + "\ndice: " + DiceRollToString(roll)
+                + "\nsuccesses: " + successes
+                + "\ntens: " + tens
+                + "\nisCritical? " + isCritical);
+            return new Outcome(successes, isCritical);
+        }
+
+        private static string DiceRollToString(int[] roll)
+        {
+            string result = "";
+            foreach(int i in roll)
+            {
+                result = result + i + ", ";
+            }
+            return result;
+        }
+    }
 }

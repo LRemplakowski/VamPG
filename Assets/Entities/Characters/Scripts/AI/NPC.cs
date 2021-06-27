@@ -13,6 +13,15 @@ public class NPC : Creature
         set => _faction = value;
     }
 
+    [SerializeField]
+    private Transform _lineTarget;
+
+    public Transform LineTarget
+    {
+        get => _lineTarget;
+        private set => _lineTarget = value;
+    }
+
     public override void Move(Vector3 moveTarget)
     {
         ClearAllActions();
@@ -24,5 +33,11 @@ public class NPC : Creature
         ClearAllActions();
         CurrentGridPosition = moveTarget;
         AddActionToQueue(new Move(agent, moveTarget.transform.position));
+    }
+
+    public override void Attack(Creature target)
+    {
+        ClearAllActions();
+        AddActionToQueue(new Attack(target, this));
     }
 }

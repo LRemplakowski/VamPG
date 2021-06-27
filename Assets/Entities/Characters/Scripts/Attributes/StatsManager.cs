@@ -9,27 +9,25 @@ public class StatsManager : ExposableMonobehaviour
     [SerializeField, ReadOnly]
     private Creature owner;
 
+    [SerializeField, ReadOnly]
+    private int currentHealth, currentWillpower;
+
     public void Start()
     {
         owner = GetComponentInParent<Creature>();
-    }
-
-    public void OnEnable()
-    {
-        characterStats.GetTracker(TrackerType.Health).onTrackerNegativeOrZero += Die;
-    }
-
-    public void OnDisable()
-    {
-        characterStats.GetTracker(TrackerType.Health).onTrackerNegativeOrZero -= Die;
+        currentHealth = characterStats.GetTracker(TrackerType.Health).GetValue();
+        currentWillpower = characterStats.GetTracker(TrackerType.Willpower).GetValue();
     }
 
     public void TakeDamage(int damage)
     {
         Tracker health = characterStats.GetTracker(TrackerType.Health);
-        int newHealth = health.GetCurrentValue();
+        int newHealth = currentHealth;
         newHealth -= damage;
-        health.SetCurrentValue(newHealth);
+        Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + currentHealth + "\nHealth after attack: " + newHealth);
+        currentHealth = newHealth < 0 ? 0 : newHealth;
+        if (currentHealth <= 0)
+            Die();
     }
 
     public virtual void Die()
@@ -49,6 +47,31 @@ public class StatsManager : ExposableMonobehaviour
 
     public float GetAttackRange()
     {
-        return 30.0f;
+        return 10.0f;
+    }
+
+    public bool IsDead()
+    {
+        return currentHealth <= 0;
+    }
+
+    public int GetDefensePool()
+    {
+        return characterStats.GetAttribute(AttributeType.Dexterity).GetValue() + characterStats.GetSkill(SkillType.Atheltics).GetValue();
+    }
+
+    public int GetAttackPool()
+    {
+        return characterStats.GetAttribute(GetWeaponAttribute()).GetValue() + characterStats.GetSkill(GetWeaponSkill()).GetValue();
+    }
+
+    private AttributeType GetWeaponAttribute()
+    {
+        return AttributeType.Composure;
+    }
+
+    private SkillType GetWeaponSkill()
+    {
+        return SkillType.Firearms;
     }
 }

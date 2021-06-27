@@ -70,7 +70,7 @@ public class DialogueManager : ExposableMonobehaviour
 
     private void Start()
     {
-        StartDialogue(DialogueFile);
+        //StartDialogue(DialogueFile);
     }
 
     // Update is called once per frame

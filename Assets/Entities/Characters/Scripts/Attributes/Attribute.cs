@@ -6,10 +6,10 @@ public class Attribute : BaseStat
 {
     [SerializeField, Range(1, 10)]
     private int baseValue = 1;
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private AttributeType attributeType;
 
-    protected override void SetBaseValueImpl(int value)
+    protected override void SetValueImpl(int value)
     {
         this.baseValue = value;
     }
@@ -24,6 +24,22 @@ public class Attribute : BaseStat
         modifiers.ForEach(m => finalValue += m.Value);
         return finalValue;
     }
+
+    public override int GetValue(bool includeModifiers)
+    {
+        int finalValue = baseValue;
+        if (includeModifiers)
+            modifiers.ForEach(m => finalValue += m.Value);
+        return finalValue;
+    }
+
+    public override int GetValue(List<ModifierType> modifierTypes)
+    {
+        int finalValue = baseValue;
+        modifiers.ForEach(m => finalValue += modifierTypes.Contains(m.Type) ? m.Value : 0);
+        return finalValue;
+    }
+
     public AttributeType GetAttributeType()
     {
         return this.attributeType;

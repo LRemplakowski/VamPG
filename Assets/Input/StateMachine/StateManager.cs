@@ -27,11 +27,11 @@ public class StateManager : ExposableMonobehaviour
 
     public void SetCurrentState(GameState newState)
     {
+        currentState = newState;
         if (onGameStateChanged != null)
         {
             onGameStateChanged.Invoke(newState, currentState);
         }
-        currentState = newState;
     }
 
     public void SetCurrentState(int stateID)

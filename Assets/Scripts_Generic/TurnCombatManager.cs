@@ -27,12 +27,17 @@ public class TurnCombatManager : ExposableMonobehaviour
         {
             instance = this;
         }
+        else if (instance != this)
+        {
+            Destroy(this);
+        }
     }
     #endregion
 
     #region Enable&Disable
     private void OnEnable()
     {
+        StateManager.instance.onGameStateChanged -= MaybeStartOrEndCombat;
         StateManager.instance.onGameStateChanged += MaybeStartOrEndCombat;
         onActiveActorChanged += NewRound;
     }
@@ -50,9 +55,10 @@ public class TurnCombatManager : ExposableMonobehaviour
         get => _currentActiveActor; 
         set
         {
-            if (onActiveActorChanged != null)
-                onActiveActorChanged.Invoke(value, _currentActiveActor);
+            Creature previous = _currentActiveActor;
             _currentActiveActor = value;
+            if (onActiveActorChanged != null)
+                onActiveActorChanged.Invoke(value, previous);
         }
     }
     [SerializeField]
@@ -68,6 +74,22 @@ public class TurnCombatManager : ExposableMonobehaviour
     public List<Creature> GetCreaturesInCombat()
     {
         return new List<Creature>(creaturesInCombat);
+    }
+
+    private void Update()
+    {
+        if (StateManager.instance.GetCurrentState().Equals(GameState.Combat))
+        {
+            foreach (Creature c in creaturesInCombat)
+            {
+                if (!c.GetComponent<StatsManager>().IsDead() && c.IsOfType(typeof(NPC)))
+                {
+                    if ((c as NPC).Faction.Equals(Faction.Hostile))
+                        return;
+                }
+            }
+            StateManager.instance.SetCurrentState(GameState.Exploration);
+        }
     }
 
     public void SetCurrentActiveActor(int index)
@@ -92,6 +114,7 @@ public class TurnCombatManager : ExposableMonobehaviour
 
     public void NextRound()
     {
+        roundCounter++;
         int index = GetCreaturesInCombat().IndexOf(CurrentActiveActor);
         SetCurrentActiveActor(++index < creaturesInCombat.Length ? index : 0);
     }
@@ -100,25 +123,43 @@ public class TurnCombatManager : ExposableMonobehaviour
     {
         if (newState == GameState.Combat)
         {
-            roundCounter = 0;
-            _gridInstance = GameManager.GetGridController();
-            creaturesInCombat = FindObjectsOfType<Creature>();
-            if (onCombatStart != null)
-            {
-                onCombatStart.Invoke();
-            }
-            roundCounter = 1;
-            CurrentActiveActor = GameManager.GetPlayer();
+            StartCoroutine(InitializeCombat());
         }
         else if (oldState == GameState.Combat)
         {
             roundCounter = 0;
-            if (onCombatRoundEnd != null && _currentActiveActor != null)
-                onCombatRoundEnd.Invoke(_currentActiveActor);
+            if (onCombatRoundEnd != null && CurrentActiveActor != null)
+                onCombatRoundEnd.Invoke(CurrentActiveActor);
             _currentActiveActor = null;
             if (onCombatEnd != null)
                 onCombatEnd.Invoke();
         }
+    }
+
+    private IEnumerator InitializeCombat()
+    {
+        roundCounter = 0;
+        _gridInstance = GameManager.GetGridController();
+        creaturesInCombat = FindObjectsOfType<Creature>();
+        if (onCombatStart != null)
+        {
+            onCombatStart.Invoke();
+        }
+        yield return new WaitUntil(() => AllCreaturesMoved());
+        roundCounter = 1;
+        Debug.Log("before changing actor");
+        CurrentActiveActor = GameManager.GetPlayer();
+        StopCoroutine(InitializeCombat());
+    }
+
+    private bool AllCreaturesMoved()
+    {
+        foreach (Creature c in creaturesInCombat)
+        {
+            if (!c.GetComponent<CombatBehaviour>().HasMoved)
+                return false; 
+        }
+        return true;
     }
 
     public bool IsBeforeFirstRound()
@@ -133,11 +174,16 @@ public class TurnCombatManager : ExposableMonobehaviour
 
     public bool IsActiveActorPlayer()
     {
-        return _currentActiveActor.IsOfType(typeof(Player));
+        return _currentActiveActor ? CurrentActiveActor.IsOfType(typeof(Player)) : false;
     }
 
     public bool IsActiveActorNPC()
     {
-        return _currentActiveActor.IsOfType(typeof(NPC));
+        return _currentActiveActor ? CurrentActiveActor.IsOfType(typeof(NPC)) : false;
+    }
+
+    public int GetRound()
+    {
+        return roundCounter;
     }
 }

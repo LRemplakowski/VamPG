@@ -6,9 +6,15 @@ public abstract class EntityAction
 {
     protected abstract Creature Owner { get; set; }
     protected List<Condition> conditions = new List<Condition>();
-
+    
+    /// <summary>
+    /// Rozpoczęcie akcji. Wywoływane kiedy akcja trafia na początek kolejki akcji.
+    /// </summary>
     public abstract void Begin();
 
+    /// <summary>
+    /// Przerwanie akcji. Wywoływane kiedy warunki ukończenia akcji zostaną spełnione lub zewnętrznie przez inną klasę.
+    /// </summary>
     public abstract void Abort();
 
     public virtual bool IsFinished()

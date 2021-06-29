@@ -3,27 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager)), RequireComponent(typeof(CombatBehaviour))]
+    [RequireComponent(typeof(NavMeshAgent)), 
+    RequireComponent(typeof(StatsManager)), 
+    RequireComponent(typeof(CombatBehaviour)), 
+    RequireComponent(typeof(CreatureAnimator)),
+    RequireComponent(typeof(Rigidbody)),
+    RequireComponent(typeof(CapsuleCollider)),
+    RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
+    RequireComponent(typeof(StatsManager)),
+    RequireComponent(typeof(Animator))]
 public abstract class Creature : Entity
 {
-    public enum Sex
-    {
-        M, 
-        F
-    }
-
     public Sex GetSex()
     {
         return sex;
     }
 
+    public CreatureType GetCreatureType()
+    {
+        return creatureType;
+    }
+
     private const float lookTowardsRotationSpeed = 5.0f;
     [SerializeField]
-    private Sex sex = Sex.F;
-    public NavMeshAgent agent;
-    public Inventory inventory;
+    protected Sex sex = Sex.F;
+    [SerializeField]
+    protected CreatureType creatureType = CreatureType.Mortal;
+    [SerializeField]
+    protected NavMeshAgent agent;
+    [SerializeField]
+    protected Inventory inventory;
     [SerializeField, ReadOnly]
-    private GridElement _currentGridPosition;
+    protected GridElement _currentGridPosition;
     [ExposeProperty]
     public GridElement CurrentGridPosition 
     {
@@ -44,10 +55,12 @@ public abstract class Creature : Entity
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
+    public abstract void Attack(Creature target);
 
-    private void Start()
+    protected virtual void Start()
     {
-        inventory = GetComponent<Inventory>();
+        if (!inventory)
+            inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
         agent = GetComponent<NavMeshAgent>();
         ActionQueue = new Queue<EntityAction>();
         ActionQueue.Enqueue(new Idle(this));
@@ -105,4 +118,9 @@ public abstract class Creature : Entity
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, movementRange);
     }
+
+    public Inventory GetInventory()
+    {
+        return inventory;
+    }    
 }

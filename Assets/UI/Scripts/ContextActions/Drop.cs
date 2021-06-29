@@ -8,6 +8,6 @@ public class Drop : ContextAction
     {
         Debug.Log("Dropping item "+item.name);
         item.DropOnGround(GameManager.GetPlayer().transform.position);
-        GameManager.GetPlayer().inventory.Remove(item);
+        GameManager.GetPlayer().GetInventory().Remove(item);
     }
 }

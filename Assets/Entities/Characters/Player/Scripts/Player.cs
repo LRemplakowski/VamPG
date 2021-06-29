@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(PlayerCombatBehaviour))]
+[RequireComponent(typeof(PlayerCombatBehaviour)), RequireComponent(typeof(PlayerControlScript))]
 public class Player : Creature
 {
     public override void Move(Vector3 moveTarget)
@@ -23,5 +23,11 @@ public class Player : Creature
     {
         ClearAllActions();
         AddActionToQueue(new Interact(target, this));
+    }
+
+    public override void Attack(Creature target)
+    {
+        ClearAllActions();
+        AddActionToQueue(new Attack(target, this));
     }
 }

@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : ExposableMonobehaviour
+[CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory/Inventory")]
+public class Inventory : ScriptableObject
 {
+    public delegate void OnItemChanged();
+    public OnItemChanged onItemChangedCallback;
+
     public int size = 20;
     public List<InventoryItem> items = new List<InventoryItem>();
 
@@ -20,11 +24,23 @@ public class Inventory : ExposableMonobehaviour
 
             items.Add(item);
         }
+        Debug.Log("PlayerInventory: Check for callback");
+        if (onItemChangedCallback != null)
+        {
+            Debug.Log("Invoking inventory callback");
+            onItemChangedCallback.Invoke();
+        }
+        else
+        {
+            Debug.Log("Inventory callback not found");
+        }
         return true;
     }
 
     public virtual void Remove(InventoryItem item)
     {
         items.Remove(item);
+        if (onItemChangedCallback != null)
+            onItemChangedCallback.Invoke();
     }
 }

@@ -1,29 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(NPC))]
 public class NPCombatBehaviour : CombatBehaviour
 {
-    protected override void OnCombatRoundBegin(Creature newActor)
+    protected override bool EvaluateEndTurnCondition()
     {
-        if (newActor.Equals(owner))
-        {
-            Debug.LogWarning("active actor changed in combat behaviour!");
-            List<GridElement> elementsInRange = TurnCombatManager.instance.GridInstance.GetElementsInRangeOfActor(owner);
-            Debug.LogWarning("elements in range count: " + elementsInRange.Count);
-            HasMoved = false;
-            coverDetector.StartLookingForCover(elementsInRange);
-        }
+        return HasMoved && HasActed;
     }
 
-    protected override void OnCombatStart()
+    protected override void OnCombatRoundBeginImpl(Creature newActor)
+    {
+        HasActed = false;
+        HasMoved = false;
+        Debug.LogWarning("active actor changed in combat behaviour!");
+        List<GridElement> elementsInRange = TurnCombatManager.instance.GridInstance.GetElementsInRangeOfActor(owner);
+        Debug.LogWarning("elements in range count: " + elementsInRange.Count);
+        coverDetector.StartLookingForCover(elementsInRange);
+    }
+
+    protected override void OnCombatRoundEndImpl(Creature currentActor)
+    {
+        Debug.Log("combat round ended for " + owner);
+    }
+
+    protected override void OnCombatStartImpl()
     {
         GridController gridController = GameManager.GetGridController();
         GridElement g = gridController.GetNearestGridElement(this.transform.position);
         owner.Move(g);
     }
 
-    protected override void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover)
+    protected override void OnLookForCoverFinishedImpl(Dictionary<GridElement, List<Cover>> positionsNearCover)
     {
         Debug.LogWarning("Positions near cover: " + positionsNearCover.Count);
         int random = Random.Range(0, positionsNearCover.Count);
@@ -39,18 +48,14 @@ public class NPCombatBehaviour : CombatBehaviour
         }
     }
 
-    protected override void OnMovementFinished(Creature who)
+    protected override void OnMovementFinishedImpl(Creature who)
     {
-        if (!who.Equals(owner))
-            return;
-        if (who.Equals(TurnCombatManager.instance.CurrentActiveActor))
-            TurnCombatManager.instance.NextRound();
+        HasMoved = true;
+        HasActed = true;
     }
 
-    protected override void OnMovementStarted(Creature who)
+    protected override void OnMovementStartedImpl(Creature who)
     {
-        if (!who.Equals(owner))
-            return;
-        HasMoved = true;
+
     }
 }

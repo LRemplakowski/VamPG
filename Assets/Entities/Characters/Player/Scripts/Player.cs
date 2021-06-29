@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(PlayerCombatBehaviour))]
+[RequireComponent(typeof(PlayerCombatBehaviour)), RequireComponent(typeof(PlayerControlScript))]
 public class Player : Creature
 {
     public override void Move(Vector3 moveTarget)

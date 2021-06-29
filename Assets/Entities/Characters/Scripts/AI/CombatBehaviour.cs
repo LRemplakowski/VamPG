@@ -14,14 +14,31 @@ public abstract class CombatBehaviour : ExposableMonobehaviour
     #region Enable&Disable
     protected void OnEnable()
     {
-        Debug.Log("fired for " + this.gameObject.name);
         coverDetector = GetComponentInChildren<CoverDetector>();
+        if (!coverDetector)
+            coverDetector = GenerateDefaultCoverDetector();
         TurnCombatManager.instance.onCombatStart += OnCombatStart;
         coverDetector.onLookForCoverFinished += OnLookForCoverFinished;
         TurnCombatManager.instance.onCombatRoundBegin += OnCombatRoundBegin;
         TurnCombatManager.instance.onCombatRoundEnd += OnCombatRoundEnd;
         Move.onMovementStarted += OnMovementStarted;
         Move.onMovementFinished += OnMovementFinished;
+    }
+
+    private CoverDetector GenerateDefaultCoverDetector()
+    {
+        GameObject cd = new GameObject("Default Cover Detector");
+        cd.transform.parent = this.transform;
+        cd.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        SphereCollider sc = cd.AddComponent<SphereCollider>();
+        sc.radius = 1;
+        sc.center = new Vector3(0, 1, 0);
+        sc.isTrigger = true;
+        Rigidbody rb = cd.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.None;
+        rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        return cd.AddComponent<CoverDetector>();
     }
 
     protected void OnDisable()

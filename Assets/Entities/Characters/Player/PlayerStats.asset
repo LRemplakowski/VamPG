@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7bf0bab113f7492419d66371d74a0a02, type: 3}
-  m_Name: SampleStats
+  m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  _isGeneric: 1
+  _isGeneric: 0
   health:
-    maxValue: 5
-    _currentValue: 5
+    maxValue: 10
+    _currentValue: 10
     trackerType: 0
   willpower:
-    maxValue: 5
-    _currentValue: 5
+    maxValue: 10
+    _currentValue: 10
     trackerType: 1
   humanity:
     maxValue: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
       baseValue: 1
       attributeType: 0
     dexterity:
-      baseValue: 5
+      baseValue: 1
       attributeType: 1
     stamina:
       baseValue: 1
@@ -48,7 +48,7 @@ MonoBehaviour:
       baseValue: 1
       attributeType: 4
     composure:
-      baseValue: 10
+      baseValue: 1
       attributeType: 5
     intelligence:
       baseValue: 1
@@ -61,7 +61,7 @@ MonoBehaviour:
       attributeType: 8
   skills:
     athletics:
-      baseValue: 2
+      baseValue: 0
       skillType: 0
     brawl:
       baseValue: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
       baseValue: 0
       skillType: 3
     firearms:
-      baseValue: 5
+      baseValue: 0
       skillType: 4
     larceny:
       baseValue: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
       skillType: 26
   disciplines:
     animalism:
-      baseValue: 0
+      baseValue: 1
       disciplineType: 0
       knownPowers:
       - {fileID: 0}

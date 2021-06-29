@@ -17,9 +17,19 @@ public class DialogueCondition
 
     public static bool PlayerSex(string sex)
     {
-        if (Enum.TryParse(sex, out Creature.Sex result))
+        if (Enum.TryParse(sex, out Sex result))
         {
             return GameManager.GetPlayer().GetSex().Equals(result);
+        }
+        else
+            return false;
+    }
+
+    public static bool PlayerType(string type)
+    {
+        if (Enum.TryParse(type, out CreatureType result))
+        {
+            return GameManager.GetPlayer().GetCreatureType().Equals(result);
         }
         else
             return false;

@@ -40,4 +40,19 @@ public class NPC : Creature
         ClearAllActions();
         AddActionToQueue(new Attack(target, this));
     }
+
+    protected override void Start()
+    {
+        base.Start();
+        if (!LineTarget)
+            LineTarget = CreateDefaultLineTarget();
+    }
+
+    private Transform CreateDefaultLineTarget()
+    {
+        GameObject lt = new GameObject("Default Line Target");
+        lt.transform.parent = this.transform;
+        lt.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z);
+        return lt.transform;
+    }
 }

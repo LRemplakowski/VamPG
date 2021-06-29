@@ -76,6 +76,22 @@ public class TurnCombatManager : ExposableMonobehaviour
         return new List<Creature>(creaturesInCombat);
     }
 
+    private void Update()
+    {
+        if (StateManager.instance.GetCurrentState().Equals(GameState.Combat))
+        {
+            foreach (Creature c in creaturesInCombat)
+            {
+                if (!c.GetComponent<StatsManager>().IsDead() && c.IsOfType(typeof(NPC)))
+                {
+                    if ((c as NPC).Faction.Equals(Faction.Hostile))
+                        return;
+                }
+            }
+            StateManager.instance.SetCurrentState(GameState.Exploration);
+        }
+    }
+
     public void SetCurrentActiveActor(int index)
     {
         Creature c = null;

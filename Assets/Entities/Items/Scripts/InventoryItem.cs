@@ -30,6 +30,6 @@ public class InventoryItem : ScriptableObject
 
     public void RemoveFromInventory()
     {
-        GameManager.GetPlayer().inventory.Remove(this);
+        GameManager.GetPlayer().GetInventory().Remove(this);
     }
 }

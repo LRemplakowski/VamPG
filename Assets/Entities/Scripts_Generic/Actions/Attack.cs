@@ -22,6 +22,7 @@ public class Attack : HostileAction
         Debug.Log(Owner.gameObject.name + " attacks " + Target.gameObject.name);
         int targetDefensePool = Target.GetComponent<StatsManager>().GetDefensePool();
         int attackerAttackPool = Owner.GetComponent<StatsManager>().GetAttackPool();
+        
         Roll.Outcome defenseRoll = Roll.d10(targetDefensePool, 0);
         Roll.Outcome attackRoll = Roll.d10(attackerAttackPool, 1, defenseRoll.successes);
         int damage = attackRoll.successes - defenseRoll.successes;

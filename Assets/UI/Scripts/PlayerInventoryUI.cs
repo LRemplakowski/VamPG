@@ -8,14 +8,14 @@ public class PlayerInventoryUI : UIWindow
     [HideInInspector]
     public InventoryItem selected;
 
-    private PlayerInventory playerInventory;
+    private Inventory playerInventory;
     private InventorySlot[] slots;
 
     private void Start()
     {
         if(playerInventory == null)
         {
-            playerInventory = player.GetComponent<PlayerInventory>();
+            playerInventory = player.GetInventory();
         }
         playerInventory.onItemChangedCallback += UpdateUI;
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();

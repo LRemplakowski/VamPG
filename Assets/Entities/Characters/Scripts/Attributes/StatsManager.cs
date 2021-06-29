@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class StatsManager : ExposableMonobehaviour
 {
-    public CharacterStats characterStats;
+    [SerializeField]
+    protected CharacterStats characterStats;
 
     [SerializeField, ReadOnly]
-    private Creature owner;
+    protected Creature owner;
 
-    [SerializeField, ReadOnly]
-    private int currentHealth, currentWillpower;
-
-    public void Start()
+    public virtual void Start()
     {
         owner = GetComponentInParent<Creature>();
-        currentHealth = characterStats.GetTracker(TrackerType.Health).GetValue();
-        currentWillpower = characterStats.GetTracker(TrackerType.Willpower).GetValue();
+        if (!characterStats)
+            characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
+        if (characterStats.IsGeneric)
+            characterStats = characterStats.CopyAssetInstance(characterStats);
     }
 
     public void TakeDamage(int damage)
     {
         Tracker health = characterStats.GetTracker(TrackerType.Health);
-        int newHealth = currentHealth;
+        int newHealth = health.CurrentValue;
         newHealth -= damage;
-        Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + currentHealth + "\nHealth after attack: " + newHealth);
-        currentHealth = newHealth < 0 ? 0 : newHealth;
-        if (currentHealth <= 0)
+        Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + health.CurrentValue + "\nHealth after attack: " + newHealth);
+        health.CurrentValue = newHealth < 0 ? 0 : newHealth;
+        if (health.CurrentValue <= 0)
             Die();
     }
 
@@ -52,8 +52,9 @@ public class StatsManager : ExposableMonobehaviour
 
     public bool IsDead()
     {
-        return currentHealth <= 0;
-    }
+        bool isDead = characterStats.GetTracker(TrackerType.Health).CurrentValue <= 0;
+        return isDead;
+    }  
 
     public int GetDefensePool()
     {

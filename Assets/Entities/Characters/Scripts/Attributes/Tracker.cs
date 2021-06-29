@@ -5,14 +5,29 @@ using UnityEngine;
 [System.Serializable]
 public class Tracker : BaseStat
 {
-    [SerializeField, Range(1, 100)]
-    private int baseValue = 1;
+    [SerializeField]
+    private int maxValue = 1;
+    [SerializeField]
+    private int _currentValue;
+    public int CurrentValue
+    {
+        get => _currentValue;
+        set
+        {
+            int previous = _currentValue;
+            _currentValue = value;
+            if (onCurrentValueChanged != null)
+                onCurrentValueChanged.Invoke(_currentValue, previous);
+        }
+    }
+    public delegate void OnCurrentValueChanged(int newValue, int previousValue);
+    public OnCurrentValueChanged onCurrentValueChanged;
     [SerializeField]
     private TrackerType trackerType;
 
-    protected override void SetBaseValueImpl(int value)
+    protected override void SetValueImpl(int value)
     {
-        this.baseValue = value;
+        this.maxValue = value;
     }
 
     public Tracker(TrackerType trackerType)
@@ -22,12 +37,24 @@ public class Tracker : BaseStat
 
     public override int GetValue()
     {
-        int finalValue = baseValue;
-        foreach (Modifier m in modifiers)
-        {
-            finalValue += m.Value;
-        }
-        return finalValue;  
+        int finalValue = maxValue;
+        modifiers.ForEach(m => finalValue += m.Value);
+        return finalValue;
+    }
+
+    public override int GetValue(bool includeModifiers)
+    {
+        int finalValue = maxValue;
+        if (includeModifiers)
+            modifiers.ForEach(m => finalValue += m.Value);
+        return finalValue;
+    }
+
+    public override int GetValue(List<ModifierType> modifierTypes)
+    {
+        int finalValue = maxValue;
+        modifiers.ForEach(m => finalValue += modifierTypes.Contains(m.Type) ? m.Value : 0);
+        return finalValue;
     }
 
     public TrackerType GetTrackerType()

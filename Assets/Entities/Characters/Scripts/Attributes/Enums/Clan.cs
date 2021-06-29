@@ -1,0 +1,19 @@
+﻿public enum Clan
+{
+    Assamite,
+    Brujah,
+    Gangrel,
+    Hecata,
+    Lasombra,
+    Malkavian,
+    Ministry,
+    Nosferatu,
+    Ravnos,
+    Toreador,
+    Tremere,
+    Tzimisce,
+    Ventrue,
+    Caitiff,
+    ThinBlood,
+    Invalid
+}

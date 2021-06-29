@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraControlScript : MonoBehaviour
+public class CameraControlScript : ExposableMonobehaviour
 {
     private Transform target;
     public Vector3 offset;
@@ -17,11 +17,9 @@ public class CameraControlScript : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log("Camera OnMove");
         if (!(context.performed || context.canceled))
             return;
         Vector2 value = context.ReadValue<Vector2>();
-        Debug.Log(value.x + " " + value.y);
         //Camera is offset relative to world X & Y axis, hence we adjust direction based on input
         if(value.x == 0 && value.y == 0)
         {

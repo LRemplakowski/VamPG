@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public abstract class UIWindow : MonoBehaviour
+public abstract class UIWindow : ExposableMonobehaviour
 {
     public static Player player;
 

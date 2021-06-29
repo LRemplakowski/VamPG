@@ -9,7 +9,15 @@ public class GridElement : ExposableMonobehaviour
     [SerializeField]
     public Vector2Int GridPosition { get; set; }
     [SerializeField]
-    public Status Visited { get; set; }
+    private Status _visited;
+    public Status Visited 
+    {
+        get => _visited; 
+        set
+        {
+            _visited = value;
+        }
+    }
 
     private bool _isMouseOver = false;
     public bool MouseOver {
@@ -23,10 +31,12 @@ public class GridElement : ExposableMonobehaviour
 
     public Material hover, idle;
     private MeshRenderer meshRenderer;
+    private Transform visualTransform;
 
     public void Awake()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
+        visualTransform = GetComponentInChildren<Transform>();
     }
 
     private void SetHoverHighlight(bool hovered)
@@ -55,6 +65,7 @@ public class GridElement : ExposableMonobehaviour
     {
         NotVisited = -1,
         Visited = 1,
-        StartingPoint = 0
+        Occupied = 0,
+        ProvidesCover = -2
     }
 }

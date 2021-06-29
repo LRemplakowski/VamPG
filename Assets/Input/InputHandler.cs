@@ -1,7 +1,7 @@
 ﻿
 using System;
 using UnityEngine;
-public abstract class InputHandler : MonoBehaviour
+public abstract class InputHandler : ExposableMonobehaviour
 {
     //This method should be called in case of any and all events handled by classes inheriting from InputHandler.
     //This method wraps around all methods that have to be called in case of ANY GUI event.

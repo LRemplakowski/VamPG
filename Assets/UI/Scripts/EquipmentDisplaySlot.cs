@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipmentDisplaySlot : MonoBehaviour
+public class EquipmentDisplaySlot : ExposableMonobehaviour
 {
     public Image equippedIcon;
     public CustomContextMenu contextMenu;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(PlayerCombatBehaviour))]
 public class Player : Creature
 {
     public override void Move(Vector3 moveTarget)
@@ -14,8 +15,8 @@ public class Player : Creature
     public override void Move(GridElement moveTarget)
     {
         ClearAllActions();
-        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
         CurrentGridPosition = moveTarget;
+        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
     }
 
     public void InteractWith(IInteractable target)

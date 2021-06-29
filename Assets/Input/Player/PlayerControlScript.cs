@@ -22,7 +22,6 @@ public class PlayerControlScript : InputHandler
             return;
         if (EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("Pointer over game object");
             return;
         }
         ManageInput(HandleWorldClick);
@@ -37,9 +36,14 @@ public class PlayerControlScript : InputHandler
             {
                 case GameState.Combat:
                     {
-                        if (GridElement.IsInstance(hit.collider.gameObject) && hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.StartingPoint)
+                        if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                            return;
+                        else if (hit.collider.GetComponent<GridElement>())
                         {
-                            player.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                            if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
+                            {
+                                TurnCombatManager.instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                            } 
                         }
                         break;
                     }
@@ -98,6 +102,8 @@ public class PlayerControlScript : InputHandler
                     }  
                 case GameState.Combat:
                     {
+                        if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                            return;
                         if (lastHit != hit.collider)
                         {
                             if (GridElement.IsInstance(lastHit.gameObject))

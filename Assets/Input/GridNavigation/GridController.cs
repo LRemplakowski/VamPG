@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,38 +19,40 @@ public class GridController : ExposableMonobehaviour
 
     [SerializeField]
     private float scale = 1f;
-    [SerializeField, Range(0, 10)]
+    [SerializeField]
+    private float spacing = 0f;
+    [SerializeField, Range(0, 20)]
     private int numOfLevels = 0;
 
     private NavMeshAgent playerAgent;
 
-    private bool _highlightGrid;
-    [SerializeField, ExposeProperty]
-    public bool HighlightGrid
-    {
-        get => _highlightGrid;
-        set
-        {
-            _highlightGrid = value;
-            if (_highlightGrid)
-            {
-                SetElementsInRangeActive();
-                HighlightGrid = false;
-            }
-        }
-    }
+    //private bool _highlightGrid;
+    //[SerializeField, ExposeProperty]
+    //public bool HighlightGrid
+    //{
+    //    get => _highlightGrid;
+    //    set
+    //    {
+    //        _highlightGrid = value;
+    //        if (_highlightGrid)
+    //        {
+    //            SetElementsInRangeActive();
+    //            HighlightGrid = false;
+    //        }
+    //    }
+    //}
 
-    private void OnEnable()
-    {
-        Move.onMovementFinished += SetElementsInRangeActive;
-        Move.onMovementStarted += ClearActiveElements;
-    }
+    //#region Enable&Disable
+    //private void OnEnable()
+    //{
+    //    Move.onMovementStarted += OnMovementStarted;
+    //}
 
-    private void OnDisable()
-    {
-        Move.onMovementFinished -= SetElementsInRangeActive;
-        Move.onMovementStarted -= ClearActiveElements;
-    }
+    //private void OnDisable()
+    //{
+    //    Move.onMovementStarted -= OnMovementStarted;
+    //}
+    //#endregion
 
     public void Start()
     {
@@ -59,7 +60,14 @@ public class GridController : ExposableMonobehaviour
         bottomLeft = transform.position;
         playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
         GenerateGrid();
-        TempMovePlayerToNearestGridElement();
+        //TempMovePlayerToNearestGridElement();
+    }
+
+    private void OnMovementStarted(Creature who)
+    {
+        if (who.IsOfType(typeof(Player)))
+            if(who.GetComponent<PlayerCombatBehaviour>().HasMoved)
+                ClearActiveElements();
     }
 
     private void GenerateGrid()
@@ -70,16 +78,16 @@ public class GridController : ExposableMonobehaviour
             {
                 if (numOfLevels > 0)
                 {
-                    for (int z=0; z < numOfLevels/scale * 2; z++)
+                    for (int z=0; z < numOfLevels * 10; z++)
                     {
-                        Vector3 pos = new Vector3(bottomLeft.x + (x * scale), bottomLeft.y + (z * scale / 2), bottomLeft.z + (y * scale));
+                        Vector3 pos = new Vector3(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y + (0.1f * z), bottomLeft.z + (y * scale) + (y * spacing));
                         if (MaybeCreateGridElement(pos, x, y))
                             break;
                     }
                 }
                 else
                 {
-                    Vector3 pos = new Vector3(bottomLeft.x + (x * scale), bottomLeft.y, bottomLeft.z + (y * scale));
+                    Vector3 pos = new Vector3(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y, bottomLeft.z + (y * scale) + (x * spacing));
                     MaybeCreateGridElement(pos, x, y);
                 }
             }
@@ -88,9 +96,9 @@ public class GridController : ExposableMonobehaviour
 
     private bool MaybeCreateGridElement(Vector3 pos, int column, int row)
     {
-        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, playerAgent.radius/2, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, .3f, NavMesh.AllAreas))
         {
-            GridElement g = Instantiate(gridElementPrefab, hit.position, Quaternion.identity);
+            GridElement g = Instantiate(gridElementPrefab, new Vector3(pos.x, hit.position.y, pos.z), Quaternion.identity);
             g.transform.parent = this.transform;
             g.transform.localScale = new Vector3(scale, scale, scale);
             g.GridPosition = new Vector2Int(column, row);
@@ -102,28 +110,27 @@ public class GridController : ExposableMonobehaviour
         return false;
     }
 
-    private void TempMovePlayerToNearestGridElement()
+    public GridElement GetNearestGridElement(Vector3 position)
     {
         float distance = float.MaxValue;
         GridElement nearest = null;
-        Player player = GameManager.GetPlayer();
         foreach (GridElement g in gridElements)
         {
             if (g == null)
                 continue;
-            float newDistance = Vector3.Distance(player.transform.position, g.transform.position);
+            float newDistance = Vector3.Distance(position, g.transform.position);
             if (newDistance < distance)
             {
                 nearest = g;
                 distance = newDistance;
             }
         }
-        if (nearest != null)
-            player.Move(nearest);
-    }
+        return nearest;
+    }    
 
     public void ClearActiveElements()
     {
+        Debug.Log("clearing active elements");
         foreach (GridElement g in activeElements)
         {
             g.Visited = GridElement.Status.NotVisited;
@@ -132,25 +139,45 @@ public class GridController : ExposableMonobehaviour
         activeElements.Clear();
     }
 
-    private void SetElementsInRangeActive()
+    public void SetStatusForElements(GridElement.Status status, List<GridElement> elements)
     {
-        Creature currentActiveActor = GameManager.GetCurrentActiveActor();
-        if (currentActiveActor != null)
+        foreach (GridElement g in elements)
         {
-            GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;
-            if (currentGridPosition != null)
+            g.Visited = status;
+        }
+    }
+
+    public void ActivateElementsInRangeOfActor(Creature actor)
+    {
+        GridElement currentGridPosition = actor.CurrentGridPosition;
+        Debug.Log(currentGridPosition);
+        if (currentGridPosition != null)
+        {
+            int actorRange = actor.GetComponent<StatsManager>().GetCombatSpeed();
+            NavMeshAgent actorAgent = actor.GetComponent<NavMeshAgent>();
+            currentGridPosition.Visited = GridElement.Status.Occupied;
+            List<GridElement> elementsInRange = FindReachableGridElements(actorAgent, currentGridPosition, actorRange);
+            Debug.Log("Elements in range: "+elementsInRange.Count);
+            foreach (GridElement g in elementsInRange)
             {
-                int actorRange = currentActiveActor.GetComponent<StatsManager>().GetCombatSpeed();
-                NavMeshAgent actorAgent = currentActiveActor.GetComponent<NavMeshAgent>();
-                FindReachableGridElements(actorAgent, currentGridPosition, actorRange);
+                g.gameObject.SetActive(true);
+                activeElements.Add(g);
             }
         }
     }
 
-    private void FindReachableGridElements(NavMeshAgent agent, GridElement startElement, int movementRange)
+    public List<GridElement> GetElementsInRangeOfActor(Creature c)
     {
-        startElement.Visited = GridElement.Status.StartingPoint;
-        activeElements.Add(startElement);
+        NavMeshAgent agent = c.GetComponent<NavMeshAgent>();
+        GridElement actorPosition = c.CurrentGridPosition;
+        int actorRange = c.GetComponent<StatsManager>().GetCombatSpeed();
+        List<GridElement> result = FindReachableGridElements(agent, actorPosition, actorRange);
+        return result;
+    }
+
+    private List<GridElement> FindReachableGridElements(NavMeshAgent agent, GridElement startElement, int movementRange)
+    {
+        List<GridElement> elementsInRange = new List<GridElement>();
         for (int x = startElement.GridPosition.x - ((int)(movementRange / scale) + 1); x < startElement.GridPosition.x + ((int)(movementRange / scale) + 1); x++)
         {
             if (x < 0)
@@ -164,14 +191,13 @@ public class GridController : ExposableMonobehaviour
                 if (y >= gridElements.GetLength(1))
                     break;
                 GridElement currentElement = gridElements[x, y];
-                if (currentElement != null && IsGridElementWithinRange(currentElement, movementRange, agent) && currentElement.Visited == GridElement.Status.NotVisited)
+                if (currentElement != null && IsGridElementWithinRange(currentElement, movementRange, agent) && currentElement.Visited != GridElement.Status.Occupied)
                 {
-                    currentElement.gameObject.SetActive(true);
-                    currentElement.Visited = GridElement.Status.Visited;
-                    activeElements.Add(currentElement);
+                    elementsInRange.Add(currentElement);
                 }
             }
         }
+        return elementsInRange;
     }
 
     private bool IsGridElementWithinRange(GridElement endPoint, int movementRange, NavMeshAgent agent)
@@ -200,6 +226,66 @@ public class GridController : ExposableMonobehaviour
         return pathLength;
     }
 
+    public GridElement GetGridElement(int x, int y)
+    {
+        if (IsPositionInElementsArray(x, y))
+        {
+            return gridElements[x, y];
+        }
+        return null;
+    }
+
+    public GridElement[,] GetGridElements(Vector2Int bottomLeft, Vector2Int topRight)
+    {
+        int width = topRight.x - bottomLeft.x;
+        int height = topRight.y - bottomLeft.y;
+        if (IsPositionInElementsArray(bottomLeft) && IsPositionInElementsArray(topRight) && width > 0 && height > 0)
+        {
+            GridElement[,] result = new GridElement[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = gridElements[bottomLeft.x + x, bottomLeft.y + y];
+                }
+            }
+            return result;
+        }
+        return new GridElement[0, 0];
+    }
+
+    private bool IsPositionInElementsArray(int x, int y)
+    {
+        return x < gridElements.GetLength(0) && x >= 0 && y < gridElements.GetLength(1) && y >= 0;
+    }
+
+    private bool IsPositionInElementsArray(Vector2Int position)
+    {
+        return position.x < gridElements.GetLength(0) && position.x >= 0 && position.y < gridElements.GetLength(1) && position.y >= 0;
+    }
+
+    public void Dev_SetWholeGridActive()
+    {
+        ClearActiveElements();
+        Creature currentActiveActor = TurnCombatManager.instance.CurrentActiveActor;
+        if (currentActiveActor != null)
+        {
+            GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;
+            if (currentGridPosition != null)
+            {
+                NavMeshAgent actorAgent = currentActiveActor.GetComponent<NavMeshAgent>();
+                currentGridPosition.Visited = GridElement.Status.Occupied;
+                activeElements.Add(currentGridPosition);
+                List<GridElement> reachable = FindReachableGridElements(actorAgent, currentGridPosition, gridElements.Length);
+                foreach (GridElement g in reachable)
+                {
+                    g.gameObject.SetActive(true);
+                    activeElements.Add(g);
+                }
+            }
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
@@ -207,7 +293,7 @@ public class GridController : ExposableMonobehaviour
         {
             for (int j = 0; j < columns; j++)
             {
-                Gizmos.DrawWireCube(new Vector3(transform.position.x + j*scale, transform.position.y + 0.5f * scale, transform.position.z + i*scale), new Vector3(1*scale, 1*scale, 1*scale));
+                Gizmos.DrawWireCube(new Vector3(transform.position.x + j*scale + j*spacing, transform.position.y + 0.5f * scale, transform.position.z + i*scale + i*spacing), new Vector3(1*scale, 1*scale, 1*scale));
             }
         }
     }

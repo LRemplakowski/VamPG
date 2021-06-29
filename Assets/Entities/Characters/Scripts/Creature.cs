@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory))]
+[RequireComponent(typeof(NavMeshAgent)), RequireComponent(typeof(Inventory)), RequireComponent(typeof(StatsManager)), RequireComponent(typeof(CombatBehaviour))]
 public abstract class Creature : Entity
 {
-    private const float lookTowardsRotationSpeed = 5.0f;
+    public enum Sex
+    {
+        M, 
+        F
+    }
 
+    public Sex GetSex()
+    {
+        return sex;
+    }
+
+    private const float lookTowardsRotationSpeed = 5.0f;
+    [SerializeField]
+    private Sex sex = Sex.F;
     public NavMeshAgent agent;
     public Inventory inventory;
     [SerializeField, ReadOnly]
@@ -18,9 +30,12 @@ public abstract class Creature : Entity
         get => _currentGridPosition;
         set
         {
-            Debug.Log("Previous pos: " + _currentGridPosition);
+            if (_currentGridPosition)
+            {
+                _currentGridPosition.Visited = GridElement.Status.NotVisited;
+            }
+            value.Visited = GridElement.Status.Occupied;
             _currentGridPosition = value;
-            Debug.Log("New pos: " + _currentGridPosition);
         }
     }
 
@@ -76,7 +91,7 @@ public abstract class Creature : Entity
         }
         if (ActionQueue.Peek().IsFinished())
         {
-            Debug.Log("Action finished!\n" + ActionQueue.Peek());
+            //Debug.Log("Action finished!\n" + ActionQueue.Peek());
             ActionQueue.Dequeue();
             if (ActionQueue.Count == 0) 
                 ActionQueue.Enqueue(new Idle(this));

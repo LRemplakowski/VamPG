@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot : ExposableMonobehaviour
 {
     public Image itemIcon;
     public CustomContextMenu contextMenu;

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
-public abstract class ContextAction : MonoBehaviour
+public abstract class ContextAction : ExposableMonobehaviour
 {
     public static InventoryItem item;
 

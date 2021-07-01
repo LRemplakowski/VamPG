@@ -15,6 +15,48 @@ public class DisciplinePowerEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("secondaryLevel"));
         EditorGUILayout.Space();
 
+        SerializedProperty target = serializedObject.FindProperty("_target");
+        EditorGUILayout.PropertyField(target);
+        SerializedProperty hasDiciplinePool = serializedObject.FindProperty("hasDiciplinePool");
+        EditorGUILayout.PropertyField(hasDiciplinePool);
+        bool hasDisciplinePoolValue = hasDiciplinePool.boolValue;
+        if (hasDisciplinePoolValue)
+        {
+            EditorGUI.indentLevel++;
+            SerializedProperty disciplinePool = serializedObject.FindProperty("disciplinePool");
+            DisplayRollField(disciplinePool, true);
+            DisplayRollField(disciplinePool, false);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("disciplineRollDifficulty"));
+            EditorGUI.indentLevel--;
+            EditorGUILayout.Space();
+        }
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("range"));
+        SerializedProperty hasAttackPool = serializedObject.FindProperty("hasAttackPool");
+        EditorGUILayout.PropertyField(hasAttackPool);
+        bool hasAttackPoolValue = hasAttackPool.boolValue;
+        if (hasAttackPoolValue)
+        {
+            EditorGUI.indentLevel++;
+            SerializedProperty attackPool = serializedObject.FindProperty("attackPool");
+            DisplayRollField(attackPool, true);
+            DisplayRollField(attackPool, false);
+            EditorGUILayout.Space();
+            EditorGUI.indentLevel--;
+        }
+        SerializedProperty hasDefenseField = serializedObject.FindProperty("hasDefensePool");
+        EditorGUILayout.PropertyField(hasDefenseField);
+        bool hasDefenseRoll = hasDefenseField.boolValue;
+        if (hasDefenseRoll)
+        {
+            EditorGUI.indentLevel++;
+            SerializedProperty defensePool = serializedObject.FindProperty("defensePool");
+            DisplayRollField(defensePool, true);
+            DisplayRollField(defensePool, false);
+            EditorGUILayout.Space();
+            EditorGUI.indentLevel--;
+        }
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("targetableCreatureType"));
+
         SerializedProperty effects = serializedObject.FindProperty("effects");
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Number of effects:");
@@ -108,53 +150,8 @@ public class DisciplinePowerEditor : Editor
 
     private void DisplayCommonPropertyFields(SerializedProperty effect, SerializedProperty effectProperty)
     {
-        SerializedProperty hasDiciplinePool = effect.FindPropertyRelative("hasDiciplinePool");
-        EditorGUILayout.PropertyField(hasDiciplinePool);
-        bool hasDisciplinePoolValue = hasDiciplinePool.boolValue;
-        if (hasDisciplinePoolValue)
-        {
-            EditorGUI.indentLevel++;
-            SerializedProperty disciplinePool = effect.FindPropertyRelative("disciplinePool");
-            DisplayRollField(disciplinePool, true);
-            DisplayRollField(disciplinePool, false);
-            EditorGUILayout.PropertyField(effect.FindPropertyRelative("disciplineRollDifficulty"));
-            EditorGUI.indentLevel--;
-            EditorGUILayout.Space();
-        }
-        SerializedProperty target = effect.FindPropertyRelative("target");
-        EditorGUILayout.PropertyField(target);
-        Target t = (Target)target.enumValueIndex;
-        if (!t.Equals(Target.Self) && !t.Equals(Target.Invalid))
-        {
-            EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(effect.FindPropertyRelative("range"));
-            SerializedProperty hasAttackPool = effect.FindPropertyRelative("hasAttackPool");
-            EditorGUILayout.PropertyField(hasAttackPool);
-            bool hasAttackPoolValue = hasAttackPool.boolValue;
-            if (hasAttackPoolValue)
-            {
-                EditorGUI.indentLevel++;
-                SerializedProperty attackPool = effect.FindPropertyRelative("attackPool");
-                DisplayRollField(attackPool, true);
-                DisplayRollField(attackPool, false);
-                EditorGUILayout.Space();
-                EditorGUI.indentLevel--;
-            }
-            SerializedProperty hasDefenseField = effect.FindPropertyRelative("hasDefensePool");
-            EditorGUILayout.PropertyField(hasDefenseField);
-            bool hasDefenseRoll = hasDefenseField.boolValue;
-            if (hasDefenseRoll)
-            {
-                EditorGUI.indentLevel++;
-                SerializedProperty defensePool = effect.FindPropertyRelative("defensePool");
-                DisplayRollField(defensePool, true);
-                DisplayRollField(defensePool, false);
-                EditorGUILayout.Space();
-                EditorGUI.indentLevel--;
-            }
-            EditorGUI.indentLevel--;
-            EditorGUILayout.PropertyField(effect.FindPropertyRelative("targetableCreatureType"));
-        }
+        SerializedProperty affectedCreature = effect.FindPropertyRelative("_affectedCreature");
+        EditorGUILayout.PropertyField(affectedCreature);
         SerializedProperty duration = effect.FindPropertyRelative("duration");
         EditorGUILayout.PropertyField(duration);
         Duration d = (Duration)duration.enumValueIndex;

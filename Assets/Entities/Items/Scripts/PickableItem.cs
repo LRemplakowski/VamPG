@@ -16,7 +16,7 @@ public class PickableItem : InteractableEntity
     private void PickUp()
     {
         Debug.Log("Picking up " + gameObject);
-        if(TargetedBy.inventory.Add(item))
+        if(TargetedBy.GetInventory().Add(item))
         {
             Destroy(gameObject);
         }

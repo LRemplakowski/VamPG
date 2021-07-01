@@ -60,14 +60,6 @@ public class GridController : ExposableMonobehaviour
         bottomLeft = transform.position;
         playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
         GenerateGrid();
-        //TempMovePlayerToNearestGridElement();
-    }
-
-    private void OnMovementStarted(Creature who)
-    {
-        if (who.IsOfType(typeof(Player)))
-            if(who.GetComponent<PlayerCombatBehaviour>().HasMoved)
-                ClearActiveElements();
     }
 
     private void GenerateGrid()

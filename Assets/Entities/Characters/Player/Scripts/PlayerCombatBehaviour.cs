@@ -7,7 +7,12 @@ public class PlayerCombatBehaviour : CombatBehaviour
 {
     private GridController gridController;
 
-    protected override void OnCombatStart()
+    protected override bool EvaluateEndTurnCondition()
+    {
+        return HasMoved && HasActed;
+    }
+
+    protected override void OnCombatStartImpl()
     {
         gridController = TurnCombatManager.instance.GridInstance;
         GridElement nearest = gridController.GetNearestGridElement(this.gameObject.transform.position);
@@ -15,33 +20,32 @@ public class PlayerCombatBehaviour : CombatBehaviour
         owner.Move(nearest);
     }
 
-    protected override void OnCombatRoundBegin(Creature newActor)
+    protected override void OnCombatRoundBeginImpl(Creature newActor)
     {
-        if (!newActor.Equals(owner))
-            return;
-        Debug.Log("PlayerCombatBehaviour >> OnCombatRoundBegin >> newActor[" + newActor + "]");
         StartCoroutine(HighlightGridAfterNextUpdate());
         HasMoved = false;
+        HasActed = false;
     }
 
-    protected override void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover)
+    protected override void OnCombatRoundEndImpl(Creature currentActor)
+    {
+        Debug.Log("Player-controlled character round ends!");
+    }
+
+    protected override void OnLookForCoverFinishedImpl(Dictionary<GridElement, List<Cover>> positionsNearCover)
     {
 
     }
 
-    protected override void OnMovementStarted(Creature who)
+    protected override void OnMovementStartedImpl(Creature who)
     {
-        if (!who.Equals(owner))
-            return;
+        Debug.Log("PlayerCombatBehaviour >> OnMovementStarted >> who[" + who + "]");
+        gridController.ClearActiveElements();   
+    }
+
+    protected override void OnMovementFinishedImpl(Creature who)
+    {
         HasMoved = true;
-        gridController.ClearActiveElements();
-    }
-
-    protected override void OnMovementFinished(Creature who)
-    {
-        Debug.Log("dupa");
-        if (!who.Equals(owner))
-            return;
         Debug.Log("PlayerCombatBehaviour >> OnMovementFinished >> who[" + who + "]");
         //TurnCombatManager.instance.NextRound();
     }

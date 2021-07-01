@@ -79,7 +79,7 @@ public class EquipmentManager : ExposableMonobehaviour
                 Destroy(currentMeshes[slotIndex].gameObject);
 
             EquipmentPiece oldItem = currentEquipment[slotIndex];
-            GameManager.GetPlayer().inventory.Add(oldItem);
+            GameManager.GetPlayer().GetInventory().Add(oldItem);
 
             SetEquipmentBlendShapes(oldItem, BLEND_SHAPES_MIN_WEIGHT);
 

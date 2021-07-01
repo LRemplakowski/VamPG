@@ -9,20 +9,24 @@ public abstract class BaseStat
 
     protected List<Modifier> modifiers = new List<Modifier>();
 
-    public virtual void SetBaseValue(int value)
+    public virtual void SetValue(int value)
     {
-        SetBaseValueImpl(value);
+        SetValueImpl(value);
         if (onValueChange != null)
             onValueChange.Invoke();
     }
 
-    protected abstract void SetBaseValueImpl(int value);
+    protected abstract void SetValueImpl(int value);
 
     public abstract int GetValue();
 
-    public virtual void AddModifier(int value, ModifierType type)
+    public abstract int GetValue(bool includeModifiers);
+
+    public abstract int GetValue(List<ModifierType> modifierTypes);
+
+    public virtual void AddModifier(int value, ModifierType type, string name)
     {
-        modifiers.Add(new Modifier(value, type));
+        modifiers.Add(new Modifier(value, type, name));
         if (onValueChange != null)
             onValueChange.Invoke();
     }
@@ -32,6 +36,11 @@ public abstract class BaseStat
         modifiers.Add(modifier);
         if (onValueChange != null)
             onValueChange.Invoke();
+    }
+
+    public virtual void AddModifiers(List<Modifier> modifiers)
+    {
+        modifiers.ForEach(m => this.modifiers.Add(m));
     }
 
     public virtual void RemoveModifiersOfType(ModifierType type)
@@ -46,5 +55,10 @@ public abstract class BaseStat
         modifiers.Remove(modifier);
         if (onValueChange != null)
             onValueChange.Invoke();
+    }
+
+    public virtual List<Modifier> GetModifiers()
+    {
+        return modifiers;
     }
 }

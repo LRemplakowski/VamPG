@@ -12,6 +12,8 @@ public class PlayerControlScript : InputHandler
     private Player player;
     private Vector2 mousePosition;
     private Collider lastHit;
+    [SerializeField]
+    private LineRenderer lineOrigin;
 
     public LayerMask defaultRaycastMask;
 
@@ -36,15 +38,7 @@ public class PlayerControlScript : InputHandler
             {
                 case GameState.Combat:
                     {
-                        if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
-                            return;
-                        else if (hit.collider.GetComponent<GridElement>())
-                        {
-                            if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
-                            {
-                                TurnCombatManager.instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
-                            } 
-                        }
+                        HandleCombatMouseClick(hit);
                         break;
                     }
                 case GameState.Exploration:
@@ -69,13 +63,46 @@ public class PlayerControlScript : InputHandler
         }
     }
 
+    private void HandleCombatMouseClick(RaycastHit hit)
+    {
+        ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
+        switch (selectedBarAction.actionType)
+        {
+            case BarAction.MOVE:
+                Debug.Log("Mouse clicked in move mode!");
+                if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                    return;
+                else if (hit.collider.GetComponent<GridElement>())
+                {
+                    if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
+                    {
+                        TurnCombatManager.instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                    }
+                }
+                break;
+            case BarAction.ATTACK:
+                Debug.Log("Mouse clicked in attack mode!");
+                if (!TurnCombatManager.instance.IsActiveActorPlayer() || player.GetComponent<CombatBehaviour>().HasActed)
+                    return;
+                NPC enemy = hit.collider.GetComponent<NPC>();
+                if (enemy)
+                {
+                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetAttackRange())
+                    {
+                        TurnCombatManager.instance.CurrentActiveActor.Attack(enemy);
+                    }
+                }
+                break;
+        }
+    }
+
     public void OnMousePosition(InputAction.CallbackContext context)
     {
         if (context.phase != InputActionPhase.Performed)
             return;
         mousePosition = context.ReadValue<Vector2>();
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
         {
             //Debug.Log("Ray hit");
             if (lastHit == null)
@@ -102,20 +129,7 @@ public class PlayerControlScript : InputHandler
                     }  
                 case GameState.Combat:
                     {
-                        if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
-                            return;
-                        if (lastHit != hit.collider)
-                        {
-                            if (GridElement.IsInstance(lastHit.gameObject))
-                            {
-                                lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
-                            }
-                            lastHit = hit.collider;
-                        }
-                        if (GridElement.IsInstance(lastHit.gameObject))
-                        {
-                            lastHit.gameObject.GetComponent<GridElement>().MouseOver = true;
-                        }
+                        HandleCombatMousePosition(hit);
                         break;
                     }
                 case GameState.Conversation:
@@ -128,10 +142,59 @@ public class PlayerControlScript : InputHandler
         }
     }
 
+    private void HandleCombatMousePosition(RaycastHit hit)
+    {
+        ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
+        switch (selectedBarAction.actionType)
+        {
+            case BarAction.MOVE:
+                if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                    return;
+                if (lastHit != hit.collider)
+                {
+                    if (GridElement.IsInstance(lastHit.gameObject))
+                    {
+                        lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
+                    }
+                    lastHit = hit.collider;
+                }
+                if (GridElement.IsInstance(lastHit.gameObject))
+                {
+                    lastHit.gameObject.GetComponent<GridElement>().MouseOver = true;
+                }
+                break;
+            case BarAction.ATTACK:
+                if (!TurnCombatManager.instance.IsActiveActorPlayer() || player.GetComponent<CombatBehaviour>().HasActed)
+                    return;
+                if (lastHit != hit.collider)
+                {
+                    lineOrigin.enabled = false;
+                    lastHit = hit.collider;
+                }
+                NPC creature = lastHit.GetComponent<NPC>();
+                if (creature)
+                {
+                    Vector3 origin = lineOrigin.transform.position;
+                    Vector3 end = creature.LineTarget.position;
+                    lineOrigin.positionCount = 2;
+                    lineOrigin.SetPosition(0, lineOrigin.transform.position);
+                    lineOrigin.SetPosition(1, creature.LineTarget.position);
+                    //Debug.LogError((GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end)) + "; range == " + GetComponent<StatsManager>().GetAttackRange() + "; distance = " + Vector3.Distance(origin, end));
+                    Color color = GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end) ? Color.green : Color.red;
+                    lineOrigin.startColor = color;
+                    lineOrigin.endColor = color;
+                    lineOrigin.enabled = true;
+                }
+                break;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         player = this.GetComponent<Player>();
+        if (lineOrigin == null)
+            lineOrigin = GetComponentInChildren<LineRenderer>(true);
     }
 
 }

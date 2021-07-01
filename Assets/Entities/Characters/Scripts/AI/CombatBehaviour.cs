@@ -1,24 +1,44 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Creature))]
+[RequireComponent(typeof(Creature)), RequireComponent(typeof(StatsManager))]
 public abstract class CombatBehaviour : ExposableMonobehaviour
 {
     protected CoverDetector coverDetector;
 
     public bool HasMoved { get; set; }
+    public bool HasActed { get; set; }
 
     #region Enable&Disable
     protected void OnEnable()
     {
-        Debug.Log("fired for " + this.gameObject.name);
         coverDetector = GetComponentInChildren<CoverDetector>();
+        if (!coverDetector)
+            coverDetector = GenerateDefaultCoverDetector();
         TurnCombatManager.instance.onCombatStart += OnCombatStart;
         coverDetector.onLookForCoverFinished += OnLookForCoverFinished;
         TurnCombatManager.instance.onCombatRoundBegin += OnCombatRoundBegin;
+        TurnCombatManager.instance.onCombatRoundEnd += OnCombatRoundEnd;
         Move.onMovementStarted += OnMovementStarted;
         Move.onMovementFinished += OnMovementFinished;
+    }
+
+    private CoverDetector GenerateDefaultCoverDetector()
+    {
+        GameObject cd = new GameObject("Default Cover Detector");
+        cd.transform.parent = this.transform;
+        cd.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
+        SphereCollider sc = cd.AddComponent<SphereCollider>();
+        sc.radius = 1;
+        sc.center = new Vector3(0, 1, 0);
+        sc.isTrigger = true;
+        Rigidbody rb = cd.AddComponent<Rigidbody>();
+        rb.isKinematic = true;
+        rb.interpolation = RigidbodyInterpolation.None;
+        rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        return cd.AddComponent<CoverDetector>();
     }
 
     protected void OnDisable()
@@ -26,26 +46,115 @@ public abstract class CombatBehaviour : ExposableMonobehaviour
         TurnCombatManager.instance.onCombatStart -= OnCombatStart;
         coverDetector.onLookForCoverFinished -= OnLookForCoverFinished;
         TurnCombatManager.instance.onCombatRoundBegin -= OnCombatRoundBegin;
+        TurnCombatManager.instance.onCombatRoundEnd -= OnCombatRoundEnd;
         Move.onMovementFinished -= OnMovementFinished;
         Move.onMovementStarted -= OnMovementStarted;
     }
     #endregion
 
     protected Creature owner;
+    protected StatsManager stats;
 
     protected void Start()
     {
         owner = GetComponent<Creature>();
+        stats = GetComponent<StatsManager>();
     }
 
-    protected abstract void OnCombatStart();
+    private bool ShouldIgnoreEvent(Creature caller)
+    {
+        return !(caller.Equals(owner) && StateManager.instance.GetCurrentState().Equals(GameState.Combat));
+    }
 
-    protected abstract void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover);
+    private void OnCombatStart()
+    {
+        OnCombatStartImpl();
+    }
 
-    protected abstract void OnCombatRoundBegin(Creature newActor);
+    /// <summary>
+    /// Wywoływane przed pierwszą turą walki.
+    /// </summary>
+    protected abstract void OnCombatStartImpl();
 
-    protected abstract void OnMovementStarted(Creature who);
+    private void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover)
+    {
+        OnLookForCoverFinishedImpl(positionsNearCover);
+    }
 
-    protected abstract void OnMovementFinished(Creature who);
+    /// <summary>
+    /// Wywoływane kiedy <see cref="CoverDetector"/> przypisany do GameObjectu skończy szukać pól mogących dawać osłonę.
+    /// </summary>
+    protected abstract void OnLookForCoverFinishedImpl(Dictionary<GridElement, List<Cover>> positionsNearCover);
+
+    private void OnCombatRoundBegin(Creature newActor)
+    {
+        if (ShouldIgnoreEvent(newActor))
+            return;
+        if (stats.IsDead())
+        {
+            TurnCombatManager.instance.NextRound();
+            return;
+        }
+        Debug.Log("CombatBehaviour >> OnCombatRoundBegin >> newActor[" + newActor + "]");
+        OnCombatRoundBeginImpl(newActor);
+        StartCoroutine(MaybeEndTurn());
+    }
+
+    /// <summary>
+    /// Wywoływane na początku każdej tury GameObjectu do którego przypisany jest ten skrypt.
+    /// </summary>
+    protected abstract void OnCombatRoundBeginImpl(Creature newActor);
+
+    private void OnCombatRoundEnd(Creature currentActor)
+    {
+        if (ShouldIgnoreEvent(currentActor))
+            return;
+        OnCombatRoundEndImpl(currentActor);
+        HasMoved = false;
+        HasActed = false;
+    }
+
+    /// <summary>
+    /// Wywoływane na końcu każdej tury GameObjectu do którego przypisany jest ten skrypt.
+    /// </summary>
+    protected abstract void OnCombatRoundEndImpl(Creature currentActor);
+
+    private void OnMovementStarted(Creature mover)
+    {
+        if (ShouldIgnoreEvent(mover))
+            return;
+        OnMovementStartedImpl(mover);
+    }
+
+    /// <summary>
+    /// Wywoływane kiedy GameObject do którego przypisany jest ten skrypt ropzpocznie akcję <see cref="Move"/>.
+    /// </summary>
+    protected abstract void OnMovementStartedImpl(Creature who);
+
+    private void OnMovementFinished(Creature mover)
+    {
+        if (ShouldIgnoreEvent(mover))
+            return;
+        OnMovementFinishedImpl(mover);
+    }
+
+    /// <summary>
+    /// Wywoływane kiedy GameObject do którego przypisany jest ten skrypt zakończy akcję <see cref="Move"/>.
+    /// </summary>
+    protected abstract void OnMovementFinishedImpl(Creature who);
+
+    private IEnumerator MaybeEndTurn()
+    {
+        yield return new WaitUntil(() => EvaluateEndTurnCondition() && !TurnCombatManager.instance.IsBeforeFirstRound());
+        Debug.Log("Ending turn for " + owner);
+        TurnCombatManager.instance.NextRound();
+        StopCoroutine(this.MaybeEndTurn());
+    }
+
+    /// <summary>
+    /// Warunek sprawdzany co klatkę, po wykonaniu funkcji Update.
+    /// Kiedy ta funkcja zwróci TRUE runda GameObjectu do którego przypisany jest ten skrypt dobiegnie końca.
+    /// </summary>
+    protected abstract bool EvaluateEndTurnCondition();
 }
 

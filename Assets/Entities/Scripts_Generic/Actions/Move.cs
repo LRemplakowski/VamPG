@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class Move : EntityAction
 {
-    private NavMeshAgent navMeshAgent;
+    private readonly NavMeshAgent navMeshAgent;
     private Vector3 destination;
     public delegate void OnMovementFinished(Creature who);
     public static OnMovementFinished onMovementFinished;
@@ -47,8 +47,6 @@ public class Move : EntityAction
         bool finished = base.IsFinished();
         if (finished)
         {
-            if (onMovementFinished != null)
-                onMovementFinished.Invoke(this.Owner);
             return true;
         }
         else

@@ -18,6 +18,17 @@ MonoBehaviour:
   secondaryLevel: 0
   _target: 0
   range: 1
+  hasDiciplinePool: 1
+  disciplinePool:
+    firstPool: 0
+    secondPool: 2
+    attribute: 7
+    secondAttribute: 0
+    skill: 0
+    secondSkill: 0
+    discipline: 0
+    secondDiscipline: 2
+  disciplineRollDifficulty: 0
   hasAttackPool: 0
   attackPool:
     firstPool: 0
@@ -28,32 +39,21 @@ MonoBehaviour:
     secondSkill: 0
     discipline: 0
     secondDiscipline: 0
-  hasDiciplinePool: 0
-  disciplinePool:
-    firstPool: 0
-    secondPool: 0
-    attribute: 0
-    secondAttribute: 0
-    skill: 0
-    secondSkill: 0
-    discipline: 0
-    secondDiscipline: 0
-  disciplineRollDifficulty: 0
-  hasDefensePool: 0
+  hasDefensePool: 1
   defensePool:
     firstPool: 0
-    secondPool: 0
-    attribute: 0
+    secondPool: 1
+    attribute: 7
     secondAttribute: 0
     skill: 0
-    secondSkill: 0
+    secondSkill: 23
     discipline: 0
     secondDiscipline: 0
-  targetableCreatureType: 2
+  targetableCreatureType: 0
   effects:
   - isExpanded: 1
     effectType: 3
-    _affectedCreature: 0
+    _affectedCreature: 1
     duration: 1
     rounds: 0
     attributeEffect:
@@ -80,7 +80,7 @@ MonoBehaviour:
     scriptEffect:
       script: {fileID: 0}
   - isExpanded: 1
-    effectType: 0
+    effectType: 3
     _affectedCreature: 0
     duration: 1
     rounds: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
     trackerEffect:
       propertyModifier: 2
       affectedProperty: 3
-      affectedValue: 0
+      affectedValue: 1
       modifierType: 0
       modifierValue: 0
     scriptEffect:

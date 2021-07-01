@@ -2,5 +2,6 @@
 {
     Mortal,
     Ghul,
-    Vampire
+    Vampire,
+    Invalid
 }

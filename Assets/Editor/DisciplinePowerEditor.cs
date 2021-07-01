@@ -51,19 +51,15 @@ public class DisciplinePowerEditor : Editor
             switch (effectCategory)
             {
                 case EffectType.Attribute:
-                    EditorGUILayout.PropertyField(effect.FindPropertyRelative("target"));
                     DisplayAttribute(effect, "attributeEffect");
                     break;
                 case EffectType.Skill:
-                    EditorGUILayout.PropertyField(effect.FindPropertyRelative("target"));
                     DisplayAttribute(effect, "skillEffect");
                     break;
                 case EffectType.Discipline:
-                    EditorGUILayout.PropertyField(effect.FindPropertyRelative("target"));
                     DisplayAttribute(effect, "disciplineEffect");
                     break;
                 case EffectType.Tracker:
-                    EditorGUILayout.PropertyField(effect.FindPropertyRelative("target"));
                     DisplayTracker(effect);
                     break;
                 case EffectType.ScriptDriven:
@@ -76,90 +72,17 @@ public class DisciplinePowerEditor : Editor
         EditorGUILayout.Space();
     }
 
-    private void DisplayScriptEffect(SerializedProperty effect)
-    {
-
-    }
-
     private void DisplayTracker(SerializedProperty effect)
     {
         SerializedProperty effectProperty = effect.FindPropertyRelative("trackerEffect");
-        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("affectedProperty"));
         EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("affectedValue"));
-        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierType"));
-        SerializedProperty attributeModifierField = effectProperty.FindPropertyRelative("propertyModifier");
-        EditorGUILayout.PropertyField(attributeModifierField);
-        EffectModifier attributeModifier = (EffectModifier)attributeModifierField.enumValueIndex;
-        EditorGUILayout.Space();
-        EditorGUI.indentLevel++;
-        switch (attributeModifier)
-        {
-            case EffectModifier.LevelBased:
-                break;
-            case EffectModifier.RollBased:
-                SerializedProperty dicePool = effectProperty.FindPropertyRelative("disciplineRoll");
-                DisplayRollField(dicePool, true);
-                DisplayRollField(dicePool, false);
-                break;
-            case EffectModifier.StaticValue:
-                EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierValue"));
-                break;
-        }
-        EditorGUI.indentLevel--;
-        EditorGUILayout.Space();
-        SerializedProperty hasDefenseField = effectProperty.FindPropertyRelative("hasDefenseRoll");
-        EditorGUILayout.PropertyField(hasDefenseField);
-        bool hasDefenseRoll = hasDefenseField.boolValue;
-        if (hasDefenseRoll)
-        {
-            EditorGUILayout.Space();
-            EditorGUI.indentLevel++;
-            SerializedProperty defensePool = effectProperty.FindPropertyRelative("defenseRoll");
-            DisplayRollField(defensePool, true);
-            DisplayRollField(defensePool, false);
-            EditorGUI.indentLevel--;
-        }
-        EditorGUILayout.Space();
+        DisplayCommonPropertyFields(effect, effectProperty);
     }
 
     private void DisplayAttribute(SerializedProperty effect, string effectPropertyName)
     {
         SerializedProperty effectProperty = effect.FindPropertyRelative(effectPropertyName);
-        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("affectedProperty"));
-        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierType"));
-        SerializedProperty attributeModifierField = effectProperty.FindPropertyRelative("propertyModifier");
-        EditorGUILayout.PropertyField(attributeModifierField);
-        EffectModifier attributeModifier = (EffectModifier)attributeModifierField.enumValueIndex;
-        EditorGUILayout.Space();
-        EditorGUI.indentLevel++;
-        switch (attributeModifier)
-        {
-            case EffectModifier.LevelBased:
-                break;
-            case EffectModifier.RollBased:
-                SerializedProperty dicePool = effectProperty.FindPropertyRelative("disciplineRoll");
-                DisplayRollField(dicePool, true);
-                DisplayRollField(dicePool, false);
-                break;
-            case EffectModifier.StaticValue:
-                EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierValue"));
-                break;
-        }
-        EditorGUI.indentLevel--;
-        EditorGUILayout.Space();
-        SerializedProperty hasDefenseField = effectProperty.FindPropertyRelative("hasDefenseRoll");
-        EditorGUILayout.PropertyField(hasDefenseField);
-        bool hasDefenseRoll = hasDefenseField.boolValue;
-        if (hasDefenseRoll)
-        {
-            EditorGUILayout.Space();
-            EditorGUI.indentLevel++;
-            SerializedProperty defensePool = effectProperty.FindPropertyRelative("defenseRoll");
-            DisplayRollField(defensePool, true);
-            DisplayRollField(defensePool, false);
-            EditorGUI.indentLevel--;
-        }
-        EditorGUILayout.Space();
+        DisplayCommonPropertyFields(effect, effectProperty);
     }
 
     private void DisplayRollField(SerializedProperty dicePool, bool first)
@@ -178,6 +101,85 @@ public class DisciplinePowerEditor : Editor
                 break;
             case FieldType.Discipline:
                 EditorGUILayout.PropertyField(dicePool.FindPropertyRelative(first ? "discipline" : "secondDiscipline"));
+                break;
+        }
+        EditorGUI.indentLevel--;
+    }
+
+    private void DisplayCommonPropertyFields(SerializedProperty effect, SerializedProperty effectProperty)
+    {
+        SerializedProperty hasDiciplinePool = effect.FindPropertyRelative("hasDiciplinePool");
+        EditorGUILayout.PropertyField(hasDiciplinePool);
+        bool hasDisciplinePoolValue = hasDiciplinePool.boolValue;
+        if (hasDisciplinePoolValue)
+        {
+            EditorGUI.indentLevel++;
+            SerializedProperty disciplinePool = effect.FindPropertyRelative("disciplinePool");
+            DisplayRollField(disciplinePool, true);
+            DisplayRollField(disciplinePool, false);
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(effect.FindPropertyRelative("disciplineRollDifficulty"));
+            EditorGUI.indentLevel--;
+            EditorGUILayout.Space();
+        }
+        SerializedProperty target = effect.FindPropertyRelative("target");
+        EditorGUILayout.PropertyField(target);
+        Target t = (Target)target.enumValueIndex;
+        if (!t.Equals(Target.Self) && !t.Equals(Target.Invalid))
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(effect.FindPropertyRelative("range"));
+            SerializedProperty hasAttackPool = effect.FindPropertyRelative("hasAttackPool");
+            EditorGUILayout.PropertyField(hasAttackPool);
+            bool hasAttackPoolValue = hasAttackPool.boolValue;
+            if (hasAttackPoolValue)
+            {
+                EditorGUI.indentLevel++;
+                SerializedProperty attackPool = effect.FindPropertyRelative("attackPool");
+                DisplayRollField(attackPool, true);
+                DisplayRollField(attackPool, false);
+                EditorGUILayout.Space();
+                EditorGUI.indentLevel--;
+            }
+            SerializedProperty hasDefenseField = effect.FindPropertyRelative("hasDefensePool");
+            EditorGUILayout.PropertyField(hasDefenseField);
+            bool hasDefenseRoll = hasDefenseField.boolValue;
+            if (hasDefenseRoll)
+            {
+                EditorGUI.indentLevel++;
+                SerializedProperty defensePool = effect.FindPropertyRelative("defensePool");
+                DisplayRollField(defensePool, true);
+                DisplayRollField(defensePool, false);
+                EditorGUILayout.Space();
+                EditorGUI.indentLevel--;
+            }
+            EditorGUI.indentLevel--;
+            EditorGUILayout.PropertyField(effect.FindPropertyRelative("targetableCreatureType"));
+        }
+        SerializedProperty duration = effect.FindPropertyRelative("duration");
+        EditorGUILayout.PropertyField(duration);
+        Duration d = (Duration)duration.enumValueIndex;
+        if (d.Equals(Duration.Rounds))
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(effect.FindPropertyRelative("rounds"));
+            EditorGUI.indentLevel--;
+        }
+
+        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("affectedProperty"));
+        EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierType"));
+        SerializedProperty attributeModifierField = effectProperty.FindPropertyRelative("propertyModifier");
+        EditorGUILayout.PropertyField(attributeModifierField);
+        EffectModifier attributeModifier = (EffectModifier)attributeModifierField.enumValueIndex;
+        EditorGUI.indentLevel++;
+        switch (attributeModifier)
+        {
+            case EffectModifier.LevelBased:
+                break;
+            case EffectModifier.RollBased:
+                break;
+            case EffectModifier.StaticValue:
+                EditorGUILayout.PropertyField(effectProperty.FindPropertyRelative("modifierValue"));
                 break;
         }
         EditorGUI.indentLevel--;

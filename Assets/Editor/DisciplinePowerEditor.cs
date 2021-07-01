@@ -17,6 +17,7 @@ public class DisciplinePowerEditor : Editor
 
         SerializedProperty target = serializedObject.FindProperty("_target");
         EditorGUILayout.PropertyField(target);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("range"));
         SerializedProperty hasDiciplinePool = serializedObject.FindProperty("hasDiciplinePool");
         EditorGUILayout.PropertyField(hasDiciplinePool);
         bool hasDisciplinePoolValue = hasDiciplinePool.boolValue;
@@ -30,7 +31,6 @@ public class DisciplinePowerEditor : Editor
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();
         }
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("range"));
         SerializedProperty hasAttackPool = serializedObject.FindProperty("hasAttackPool");
         EditorGUILayout.PropertyField(hasAttackPool);
         bool hasAttackPoolValue = hasAttackPool.boolValue;

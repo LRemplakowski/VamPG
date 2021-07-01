@@ -3,47 +3,62 @@
 [System.Serializable, CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
 public class DisciplinePower : ScriptableObject
 {
-    [SerializeField, Tooltip("Drzewo dyscyplin do którego należy dyscyplina.")]
+    private const string typeTooltip = "Drzewo dyscyplin do którego należy dyscyplina.";
+    private const string levelTooltip = "Minimalny poziom potrzebny do wykupienia dyscypliny. Ma znaczenie tylko dla rozwoju postaci.";
+    private const string secondaryTypeTooltip = "Wymagany przy amalgamatach.";
+    private const string secondaryLevelTooltip = "Wymagany przy amalgamatach. Używany tylko jeśli Secondary Type nie jest Invalid. Ma znaczenie tylko przy rozwoju postaci.";
+    private const string _targetTooltip = "Cel na jaki wpływa dyscyplina.";
+    private const string rangeTooltip = "Zasięg w jakim może być użyta dyscyplina.";
+    private const string hasDisciplinePoolString = "Czy moc posiada dice pool niezbędny do skutecznej aktywacji.";
+    private const string disciplineRollDifficultyTooltip = "ST jakie musi przerzucić użytkownik by skutecznie aktywować dyscyplinę.";
+    private const string hasAttackPoolTooltip = "Czy moc posiada odrębną pule kości dla ataku. Ma znaczenie tylko dla mocy o celu innym niż Self.";
+    private const string defensePoolTooltip = "Czy moc posiada pulę kości dla broniącego się celu. " 
+        + "Ma znaczenie tylko dla mocy o celu innym niż Self. " 
+        + "Ta pula kości będzie sporna z Attack Pool lub, jeśli moc go nie posiada, Discipline Pool. " 
+        + "Właściwość zostanie zignorowana jeśli dyscyplina nie ma żadnej z tych puli kości.";
+    private const string targetableCreatureTypeTooltip = "Rodzaj istot na jakie może wpływać moc. Ma znaczenie tylko dla dyscyplin o celu innym niż Self.";
+
+    [SerializeField, Tooltip(typeTooltip)]
     private DisciplineType type = DisciplineType.Invalid;
     public DisciplineType Type { get => type; }
-    [SerializeField, Range(1, 5), Tooltip("Minimalny poziom potrzebny do wykupienia dyscypliny.")]
+    [SerializeField, Range(1, 5), Tooltip(levelTooltip)]
     private int level = 1;
     public int Level { get => level; }
-    [SerializeField, Tooltip("Wymagany przy amalgamatach.")]
+    [SerializeField, Tooltip(secondaryTypeTooltip)]
     private DisciplineType secondaryType = DisciplineType.Invalid;
     public DisciplineType SecondaryType { get => secondaryType; }
-    [SerializeField, Range(0, 5), Tooltip("Wymagany przy amalgamatach. Używany tylko jeśli Secondary Type nie jest Invalid.")]
+    [SerializeField, Range(0, 5), Tooltip(secondaryLevelTooltip)]
     private int secondaryLevel;
     public int SecondaryLevel { get => secondaryLevel; }
 
-    [SerializeField]
+    [SerializeField, Tooltip(_targetTooltip)]
     private Target _target = Target.Self;
     public Target Target { get => _target; }
-    [SerializeField]
+    [SerializeField, Tooltip(rangeTooltip)]
     private Range range = Range.Ranged;
     public Range Range { get => range; }
-    [SerializeField]
-    private bool hasAttackPool = false;
-    public bool HasAttackPool { get => hasAttackPool; }
-    [SerializeField]
-    private DicePool attackPool = new DicePool();
-    public DicePool AttackPool { get => attackPool; }
-    [SerializeField]
+    [SerializeField, Tooltip(hasDisciplinePoolString)]
     private bool hasDiciplinePool = false;
     public bool HasDisciplinePool { get => hasDiciplinePool; }
     [SerializeField]
     private DicePool disciplinePool = new DicePool();
     public DicePool DisciplinePool { get => disciplinePool; }
-    [SerializeField]
+    [SerializeField, Tooltip(disciplineRollDifficultyTooltip)]
     private int disciplineRollDifficulty = 0;
     public int DisciplineRollDifficulty { get => disciplineRollDifficulty; }
+    [SerializeField, Tooltip(hasAttackPoolTooltip)]
+    private bool hasAttackPool = false;
+    public bool HasAttackPool { get => hasAttackPool; }
     [SerializeField]
+    private DicePool attackPool = new DicePool();
+    public DicePool AttackPool { get => attackPool; }
+    [SerializeField, Tooltip(defensePoolTooltip)]
     private bool hasDefensePool = false;
     public bool HasDefensePool { get => hasDefensePool; }
     [SerializeField]
     private DicePool defensePool = new DicePool();
     public DicePool DefensePool { get => defensePool; }
-    [SerializeField]
+    [SerializeField, Tooltip(targetableCreatureTypeTooltip)]
     private TargetableCreatureType targetableCreatureType = TargetableCreatureType.Any;
     public TargetableCreatureType TargetableCreatureType { get => targetableCreatureType; }
 
@@ -61,11 +76,14 @@ public class DisciplinePower : ScriptableObject
         [SerializeField]
         private bool isExpanded = false;
 
+        private const string effectTypeTooltip = "Typ efektu. Na jaką właściwość ma wpływać lub czy ma być obsługiwany osobnym skryptem.";
+        private const string affectedCreatureTooltip = "Na kogo ma wpłynąć efekt. Nie ma znaczenia jeśli cel mocy jest Self.";
+
         //Discipline variables
-        [SerializeField]
+        [SerializeField, Tooltip(effectTypeTooltip)]
         private EffectType effectType;
         public EffectType EffectType { get => effectType; }
-        [SerializeField]
+        [SerializeField, Tooltip(affectedCreatureTooltip)]
         private AffectedCreature _affectedCreature = AffectedCreature.Self;
         public AffectedCreature AffectedCreature { get => _affectedCreature; }
         [SerializeField]

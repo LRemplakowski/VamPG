@@ -117,7 +117,6 @@ public class DisciplinePowerEditor : Editor
             SerializedProperty disciplinePool = effect.FindPropertyRelative("disciplinePool");
             DisplayRollField(disciplinePool, true);
             DisplayRollField(disciplinePool, false);
-            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(effect.FindPropertyRelative("disciplineRollDifficulty"));
             EditorGUI.indentLevel--;
             EditorGUILayout.Space();

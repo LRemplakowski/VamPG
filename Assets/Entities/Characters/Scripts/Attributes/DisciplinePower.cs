@@ -90,65 +90,130 @@ public class DisciplinePower : ScriptableObject
         [System.Serializable]
         public class AttributeEffect : Effect
         {
-            public EffectModifier propertyModifier;
-            public AttributeType affectedProperty;
-            public ModifierType modifierType;
-            public int modifierValue;
-            public bool hasDefenseRoll = false;
-            public DicePool defenseRoll = new DicePool();
+            [SerializeField]
+            private EffectModifier propertyModifier;
+            public EffectModifier PropertyModifier { get => propertyModifier; }
+            [SerializeField]
+            private AttributeType affectedProperty;
+            public AttributeType AffectedProperty { get => affectedProperty; }
+            [SerializeField]
+            private ModifierType modifierType;
+            public ModifierType ModifierType { get => modifierType; }
+            [SerializeField]
+            private int modifierValue;
+            public int ModifierValue { get => modifierValue; }
+            [SerializeField]
+            private bool hasDefenseRoll = false;
+            public bool HasDefenseRoll { get => hasDefenseRoll; }
+            [SerializeField]
+            private DicePool defenseRoll = new DicePool();
+            public DicePool DefenseRoll { get => defenseRoll; }
         }
 
         public SkillEffect skillEffect = new SkillEffect();
         [System.Serializable]
         public class SkillEffect : Effect
         {
-            public EffectModifier propertyModifier;
-            public SkillType affectedProperty;
-            public ModifierType modifierType;
-            public int modifierValue;
-            public bool hasDefenseRoll = false;
-            public DicePool defenseRoll = new DicePool();
+            [SerializeField]
+            private EffectModifier propertyModifier;
+            public EffectModifier PropertyModifier { get => propertyModifier; }
+            [SerializeField]
+            private SkillType affectedProperty;
+            public SkillType AffectedProperty { get => affectedProperty; }
+            [SerializeField]
+            private ModifierType modifierType;
+            public ModifierType ModifierType { get => modifierType; }
+            [SerializeField]
+            private int modifierValue;
+            public int ModifierValue { get => modifierValue; }
+            [SerializeField]
+            private bool hasDefenseRoll = false;
+            public bool HasDefenseRoll { get => hasDefenseRoll; }
+            [SerializeField]
+            private DicePool defenseRoll = new DicePool();
+            public DicePool DefenseRoll { get => defenseRoll; }
         }
 
         public DisciplineEffect disciplineEffect = new DisciplineEffect();
         [System.Serializable]
         public class DisciplineEffect : Effect
         {
-            public EffectModifier propertyModifier;
-            public DisciplineType affectedProperty;
-            public ModifierType modifierType;
-            public int modifierValue;
-            public bool hasDefenseRoll = false;
-            public DicePool defenseRoll = new DicePool();
+            [SerializeField]
+            private EffectModifier propertyModifier;
+            public EffectModifier PropertyModifier { get => propertyModifier; }
+            [SerializeField]
+            private DisciplineType affectedProperty;
+            public DisciplineType AffectedProperty { get => affectedProperty; }
+            [SerializeField]
+            private ModifierType modifierType;
+            public ModifierType ModifierType { get => modifierType; }
+            [SerializeField]
+            private int modifierValue;
+            public int ModifierValue { get => modifierValue; }
+            [SerializeField]
+            private bool hasDefenseRoll = false;
+            public bool HasDefenseRoll { get => hasDefenseRoll; }
+            [SerializeField]
+            private DicePool defenseRoll = new DicePool();
+            public DicePool DefenseRoll { get => defenseRoll; }
         }
 
         public TrackerEffect trackerEffect = new TrackerEffect();
         [System.Serializable]
         public class TrackerEffect : Effect
         {
-            public EffectModifier propertyModifier;
-            public TrackerType affectedProperty;
-            public AffectedValue affectedValue;
-            public ModifierType modifierType;
-            public int modifierValue;
-            public bool hasDefenseRoll = false;
-            public DicePool defenseRoll = new DicePool();
+            [SerializeField]
+            private EffectModifier propertyModifier;
+            public EffectModifier PropertyModifier { get => propertyModifier; }
+            [SerializeField]
+            private TrackerType affectedProperty;
+            public TrackerType AffectedProperty { get => affectedProperty; }
+            [SerializeField]
+            private AffectedValue affectedValue;
+            public AffectedValue AffectedValue { get => affectedValue; }
+            [SerializeField]
+            private ModifierType modifierType;
+            public ModifierType ModifierType { get => modifierType; }
+            [SerializeField]
+            private int modifierValue;
+            public int ModifierValue { get => modifierValue; }
+            [SerializeField]
+            private bool hasDefenseRoll = false;
+            public bool HasDefenseRoll { get => hasDefenseRoll; }
+            [SerializeField]
+            private DicePool defenseRoll = new DicePool();
+            public DicePool DefenseRoll { get => defenseRoll; }
+
         }
 
         public ScriptEffect scriptEffect = new ScriptEffect();
         [System.Serializable]
         public class ScriptEffect : Effect
         {
-            public DisciplineScript script;
+            [SerializeField]
+            private DisciplineScript script;
+            public DisciplineScript Script { get => script; }
         }
 
         [System.Serializable]
         public class DicePool
         {
-            public FieldType firstPool, secondPool;
-            public AttributeType attribute, secondAttribute;
-            public SkillType skill, secondSkill;
-            public DisciplineType discipline, secondDiscipline;
+            [SerializeField]
+            private FieldType firstPool, secondPool;
+            public FieldType FirstPool { get => firstPool; }
+            public FieldType SecondPool { get => secondPool; }
+            [SerializeField]
+            private AttributeType attribute, secondAttribute;
+            public AttributeType Attribute { get => attribute; }
+            public AttributeType SecondAttribute { get => secondAttribute; }
+            [SerializeField]
+            private SkillType skill, secondSkill;
+            public SkillType Skill { get => skill; }
+            public SkillType SecondSkill { get => secondSkill; }
+            [SerializeField]
+            private DisciplineType discipline, secondDiscipline;
+            public DisciplineType Discipline { get => discipline; }
+            public DisciplineType SecondDiscipline { get => secondDiscipline; }
         }
 
     }

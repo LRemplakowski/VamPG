@@ -3,6 +3,19 @@ using UnityEngine;
 
 public static class Spellbook
 {
+    public static bool HandleEffects(DisciplinePower discipline, Creature caster)
+    {
+        switch (discipline.Target)
+        {
+            case Target.Self:
+                HandleSelfTargeted(discipline, caster);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
     public static bool HandleEffects(DisciplinePower discipline, Creature caster, Creature target)
     {
         switch (discipline.Target)
@@ -22,7 +35,7 @@ public static class Spellbook
         return true;
     }
 
-    public static bool Cast(DisciplinePower discipline, Creature caster, Vector3 originPoint)
+    public static bool HandleEffects(DisciplinePower discipline, Creature caster, Vector3 originPoint)
     {
         switch (discipline.Target)
         {

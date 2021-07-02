@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,6 +13,14 @@ public class Discipline : BaseStat
 
     [SerializeField]
     private DisciplinePower[] knownPowers = new DisciplinePower[5];
+
+    public DisciplinePower GetPower(int index)
+    {
+        DisciplinePower p = knownPowers[index];
+        return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
+    }
+
+    public List<DisciplinePower> GetKnownPowers() => new List<DisciplinePower>(knownPowers);
 
     public Discipline(DisciplineType disciplineType)
     {

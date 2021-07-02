@@ -22,7 +22,7 @@ public class Tracker : BaseStat
     }
     public delegate void OnCurrentValueChanged(int newValue, int previousValue);
     public OnCurrentValueChanged onCurrentValueChanged;
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private TrackerType trackerType;
 
     protected override void SetValueImpl(int value)

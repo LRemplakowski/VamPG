@@ -13,6 +13,22 @@ public class Discipline : BaseStat
     [SerializeField]
     private DisciplinePower[] knownPowers = new DisciplinePower[5];
 
+    public DisciplinePower GetPower(int index)
+    {
+        DisciplinePower p;
+        try
+        {
+            p = knownPowers[index];
+            return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            return ScriptableObject.CreateInstance<DisciplinePower>();
+        }
+    }
+
+    public List<DisciplinePower> GetKnownPowers() => new List<DisciplinePower>(knownPowers);
+
     public Discipline(DisciplineType disciplineType)
     {
         this.disciplineType = disciplineType;

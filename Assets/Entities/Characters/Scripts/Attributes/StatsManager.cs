@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyUtils;
 
 public class StatsManager : ExposableMonobehaviour
 {
@@ -74,5 +75,40 @@ public class StatsManager : ExposableMonobehaviour
     private SkillType GetWeaponSkill()
     {
         return SkillType.Firearms;
+    }
+
+    public DisciplinePower GetDisciplinePower(string scriptName)
+    {
+        return characterStats.GetDisciplinePower(scriptName);
+    }
+
+    public Roll.Outcome GetSkillRoll(AttributeType attribute, SkillType skill)
+    {
+        Attribute a = characterStats.GetAttribute(attribute);
+        Skill s = characterStats.GetSkill(skill);
+        int normalDice = a.GetValue() + s.GetValue();
+        int hungerDice = 0;
+        if (owner.GetCreatureType().Equals(CreatureType.Vampire))
+        {
+            hungerDice = characterStats.GetTracker(TrackerType.Hunger).CurrentValue;
+            normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
+        }
+
+        return Roll.d10(normalDice, hungerDice);
+    }
+
+    public Roll.Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc)
+    {
+        Attribute a = characterStats.GetAttribute(attribute);
+        Skill s = characterStats.GetSkill(skill);
+        int normalDice = a.GetValue() + s.GetValue();
+        int hungerDice = 0;
+        if (owner.GetCreatureType().Equals(CreatureType.Vampire))
+        {
+            hungerDice = characterStats.GetTracker(TrackerType.Hunger).CurrentValue;
+            normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
+        }
+
+        return Roll.d10(normalDice, hungerDice, dc);
     }
 }

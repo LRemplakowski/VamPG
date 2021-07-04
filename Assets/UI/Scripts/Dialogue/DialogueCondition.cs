@@ -34,4 +34,27 @@ public class DialogueCondition
         else
             return false;
     }
+
+    public static bool PlayerHasDisciplinePower(string powerName)
+    {
+        DisciplinePower p = GameManager.GetPlayer().GetComponent<StatsManager>().GetDisciplinePower(powerName);
+        return !p.Type.Equals(DisciplineType.Invalid);
+    }
+
+    //TODO implement
+    public static bool PartyHasDisciplinePower(string powerName)
+    {
+        return true;
+    }
+
+    public static bool PlayerPassedSkillCheck(string attributeType, string skillType, int dc)
+    {
+        StatsManager playerStatsManager = GameManager.GetPlayer().GetComponent<StatsManager>();
+        if (Enum.TryParse(attributeType, out AttributeType attribute) && Enum.TryParse(skillType, out SkillType skill))
+        {
+            Roll.Outcome outcome = playerStatsManager.GetSkillRoll(attribute, skill);
+            return outcome.successes >= dc;
+        }
+        return false;
+    }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,7 +71,7 @@ public class CharacterStats : ScriptableObject
         [SerializeField]
         public Skill 
             //PHYSICAL
-            athletics = new Skill(SkillType.Atheltics),
+            athletics = new Skill(SkillType.Athletics),
             brawl = new Skill(SkillType.Brawl),
             craft = new Skill(SkillType.Craft),
             drive = new Skill(SkillType.Drive),
@@ -104,7 +105,7 @@ public class CharacterStats : ScriptableObject
         {
             return type switch
             {
-                SkillType.Atheltics => athletics,
+                SkillType.Athletics => athletics,
                 SkillType.Brawl => brawl,
                 SkillType.Craft => craft,
                 SkillType.Drive => drive,
@@ -207,7 +208,7 @@ public class CharacterStats : ScriptableObject
     {
         return type switch
         {
-            SkillType.Atheltics => skills.athletics,
+            SkillType.Athletics => skills.athletics,
             SkillType.Brawl => skills.brawl,
             SkillType.Craft => skills.craft,
             SkillType.Drive => skills.drive,
@@ -255,6 +256,24 @@ public class CharacterStats : ScriptableObject
             DisciplineType.Protean => disciplines.protean,
             _ => new Discipline(DisciplineType.Invalid),
         };
+    }
+
+    public DisciplinePower GetDisciplinePower(DisciplineType disciplineType, int powerIndex)
+    {
+        return GetDiscipline(disciplineType).GetPower(powerIndex);
+    }
+
+    public DisciplinePower GetDisciplinePower(string scriptName)
+    {
+        foreach (Discipline d in disciplines.GetDisciplines())
+        {
+            foreach (DisciplinePower p in d.GetKnownPowers())
+            {
+                if (p.ScriptName.Equals(scriptName))
+                    return p;
+            }
+        }
+        return CreateInstance<DisciplinePower>();
     }
 
     /// <summary>

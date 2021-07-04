@@ -3,7 +3,25 @@
 [System.Serializable, CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
 public class DisciplinePower : ScriptableObject
 {
-    [SerializeField, Tooltip("Drzewo dyscyplin do którego należy dyscyplina.")]
+    private const string typeTooltip = "Drzewo dyscyplin do którego należy dyscyplina.";
+    private const string levelTooltip = "Minimalny poziom potrzebny do wykupienia dyscypliny. Ma znaczenie tylko dla rozwoju postaci.";
+    private const string secondaryTypeTooltip = "Wymagany przy amalgamatach.";
+    private const string secondaryLevelTooltip = "Wymagany przy amalgamatach. Używany tylko jeśli Secondary Type nie jest Invalid. Ma znaczenie tylko przy rozwoju postaci.";
+    private const string _targetTooltip = "Cel na jaki wpływa dyscyplina.";
+    private const string rangeTooltip = "Zasięg w jakim może być użyta dyscyplina.";
+    private const string hasDisciplinePoolString = "Czy moc posiada dice pool niezbędny do skutecznej aktywacji.";
+    private const string disciplineRollDifficultyTooltip = "ST jakie musi przerzucić użytkownik by skutecznie aktywować dyscyplinę.";
+    private const string hasAttackPoolTooltip = "Czy moc posiada odrębną pule kości dla ataku. Ma znaczenie tylko dla mocy o celu innym niż Self.";
+    private const string defensePoolTooltip = "Czy moc posiada pulę kości dla broniącego się celu. " 
+        + "Ma znaczenie tylko dla mocy o celu innym niż Self. " 
+        + "Ta pula kości będzie sporna z Attack Pool lub, jeśli moc go nie posiada, Discipline Pool. " 
+        + "Właściwość zostanie zignorowana jeśli dyscyplina nie ma żadnej z tych puli kości.";
+    private const string targetableCreatureTypeTooltip = "Rodzaj istot na jakie może wpływać moc. Ma znaczenie tylko dla dyscyplin o celu innym niż Self.";
+
+    [SerializeField]
+    private string _scriptName;
+    public string ScriptName { get; }
+    [SerializeField, Tooltip(typeTooltip)]
     private DisciplineType type = DisciplineType.Invalid;
     public DisciplineType Type { get => type; }
     [SerializeField, Range(1, 5), Tooltip("Minimalny poziom potrzebny do wykupienia dyscypliny.")]

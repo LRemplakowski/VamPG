@@ -18,7 +18,7 @@ namespace MyUtils
                 }
                 else
                 {
-                    Debug.LogError("kurwa");
+                    Debug.LogError("Invalid method name in Execution Node!");
                 }
             }
             catch (Exception e)
@@ -40,7 +40,7 @@ namespace MyUtils
                 }
                 else
                 {
-                    Debug.LogError("kurwa");
+                    Debug.LogError("Invalid method name in Condition Node!");
                     returnValue = false;
                 }
             }
@@ -91,21 +91,25 @@ namespace MyUtils
         {
             public readonly int successes;
             public readonly bool isCritical, isMessy, isBestialFailure;
+            public readonly List<int> normalDice = new List<int>(), hungerDice = new List<int>();
 
-            public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure)
+            public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure, List<int> normalDice, List<int> hungerDice)
             {
                 this.successes = successes;
                 this.isCritical = isCritical;
                 this.isMessy = isMessy;
                 this.isBestialFailure = isBestialFailure;
+                this.normalDice = normalDice;
+                this.hungerDice = hungerDice;
             }
 
-            public Outcome(int successes, bool isCritical)
+            public Outcome(int successes, bool isCritical, List<int> normalDice)
             {
                 this.successes = successes;
                 this.isCritical = isCritical;
                 isMessy = false;
                 isBestialFailure = false;
+                this.normalDice = normalDice;
             }
         }
 
@@ -141,7 +145,7 @@ namespace MyUtils
                 + "\nhungerTens: " + hungerTens 
                 + "\nisCritical? " + isCritical 
                 + "\nisMessy?" + isMessy);
-            return new Outcome(successes, isCritical, isMessy, false);
+            return new Outcome(successes, isCritical, isMessy, false, new List<int>(normals), new List<int>(hunger));
         }
 
         public static Outcome d10(int normalDice, int hungerDice, int dc)
@@ -180,7 +184,7 @@ namespace MyUtils
                 + "\nisCritical? " + isCritical
                 + "\nisMessy?" + isMessy
                 + "\nisBestial? " + isBestial);
-            return new Outcome(successes, isCritical, isMessy, isBestial);
+            return new Outcome(successes, isCritical, isMessy, isBestial, new List<int>(normals), new List<int>(hunger));
         }
 
         public static Outcome d10(int dice)
@@ -205,7 +209,7 @@ namespace MyUtils
                 + "\nsuccesses: " + successes
                 + "\ntens: " + tens
                 + "\nisCritical? " + isCritical);
-            return new Outcome(successes, isCritical);
+            return new Outcome(successes, isCritical, new List<int>(roll));
         }
 
         private static string DiceRollToString(int[] roll)

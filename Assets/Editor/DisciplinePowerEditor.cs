@@ -9,6 +9,14 @@ public class DisciplinePowerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        SerializedProperty scriptName = serializedObject.FindProperty("_scriptName");
+        string scriptNameValue = scriptName.stringValue;
+        if (scriptNameValue.Equals(""))
+        {
+            scriptNameValue = serializedObject.targetObject.name;
+            scriptName.stringValue = scriptNameValue;
+        }
+        EditorGUILayout.PropertyField(scriptName);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("type"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("level")); 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("secondaryType"));

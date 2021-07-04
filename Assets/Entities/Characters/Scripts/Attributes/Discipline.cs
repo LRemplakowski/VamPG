@@ -16,8 +16,16 @@ public class Discipline : BaseStat
 
     public DisciplinePower GetPower(int index)
     {
-        DisciplinePower p = knownPowers[index];
-        return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
+        DisciplinePower p;
+        try
+        {
+            p = knownPowers[index];
+            return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            return ScriptableObject.CreateInstance<DisciplinePower>();
+        }
     }
 
     public List<DisciplinePower> GetKnownPowers() => new List<DisciplinePower>(knownPowers);

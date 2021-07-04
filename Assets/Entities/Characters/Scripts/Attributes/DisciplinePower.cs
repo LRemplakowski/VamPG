@@ -18,6 +18,9 @@ public class DisciplinePower : ScriptableObject
         + "Właściwość zostanie zignorowana jeśli dyscyplina nie ma żadnej z tych puli kości.";
     private const string targetableCreatureTypeTooltip = "Rodzaj istot na jakie może wpływać moc. Ma znaczenie tylko dla dyscyplin o celu innym niż Self.";
 
+    [SerializeField]
+    private string _scriptName;
+    public string ScriptName { get; }
     [SerializeField, Tooltip(typeTooltip)]
     private DisciplineType type = DisciplineType.Invalid;
     public DisciplineType Type { get => type; }

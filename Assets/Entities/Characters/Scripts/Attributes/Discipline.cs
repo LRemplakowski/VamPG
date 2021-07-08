@@ -21,7 +21,7 @@ public class Discipline : BaseStat
             p = knownPowers[index];
             return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
         }
-        catch (IndexOutOfRangeException e)
+        catch
         {
             return ScriptableObject.CreateInstance<DisciplinePower>();
         }

@@ -39,7 +39,7 @@ public class StatsManager : ExposableMonobehaviour
     public int GetCombatSpeed()
     {
         Attribute dexterity = characterStats.GetAttribute(AttributeType.Dexterity);
-        Skill athletics = characterStats.GetSkill(SkillType.Atheltics);
+        Skill athletics = characterStats.GetSkill(SkillType.Athletics);
         if (dexterity.GetAttributeType() != AttributeType.Invalid && athletics.GetSkillType() != SkillType.Invalid)
             return (dexterity.GetValue() + athletics.GetValue());
         else
@@ -59,7 +59,7 @@ public class StatsManager : ExposableMonobehaviour
 
     public int GetDefensePool()
     {
-        return characterStats.GetAttribute(AttributeType.Dexterity).GetValue() + characterStats.GetSkill(SkillType.Atheltics).GetValue();
+        return characterStats.GetAttribute(AttributeType.Dexterity).GetValue() + characterStats.GetSkill(SkillType.Athletics).GetValue();
     }
 
     public int GetAttackPool()

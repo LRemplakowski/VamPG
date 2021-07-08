@@ -1,59 +1,18 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Player))]
-public class PlayerCombatBehaviour : CombatBehaviour
+public class PlayerCombatBehaviour : MonoBehaviour
 {
-    private GridController gridController;
-
-    protected override bool EvaluateEndTurnCondition()
+    // Start is called before the first frame update
+    void Start()
     {
-        return HasMoved && HasActed;
+        
     }
 
-    protected override void OnCombatStartImpl()
+    // Update is called once per frame
+    void Update()
     {
-        gridController = TurnCombatManager.instance.GridInstance;
-        GridElement nearest = gridController.GetNearestGridElement(this.gameObject.transform.position);
-        HasMoved = false;
-        owner.Move(nearest);
-    }
-
-    protected override void OnCombatRoundBeginImpl(Creature newActor)
-    {
-        StartCoroutine(HighlightGridAfterNextUpdate());
-        HasMoved = false;
-        HasActed = false;
-    }
-
-    protected override void OnCombatRoundEndImpl(Creature currentActor)
-    {
-        Debug.Log("Player-controlled character round ends!");
-    }
-
-    protected override void OnLookForCoverFinishedImpl(Dictionary<GridElement, List<Cover>> positionsNearCover)
-    {
-
-    }
-
-    protected override void OnMovementStartedImpl(Creature who)
-    {
-        Debug.Log("PlayerCombatBehaviour >> OnMovementStarted >> who[" + who + "]");
-        gridController.ClearActiveElements();   
-    }
-
-    protected override void OnMovementFinishedImpl(Creature who)
-    {
-        HasMoved = true;
-        Debug.Log("PlayerCombatBehaviour >> OnMovementFinished >> who[" + who + "]");
-        //TurnCombatManager.instance.NextRound();
-    }
-
-    private IEnumerator HighlightGridAfterNextUpdate()
-    {
-        yield return new WaitForFixedUpdate();
-        gridController.ActivateElementsInRangeOfActor(owner);
-        StopCoroutine(HighlightGridAfterNextUpdate());
+        
     }
 }

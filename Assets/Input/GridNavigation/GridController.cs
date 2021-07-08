@@ -102,6 +102,32 @@ public class GridController : ExposableMonobehaviour
         return false;
     }
 
+    public List<GridElement> GetAdjacentGridElements(GridElement element)
+    {
+        List<GridElement> adjacents = new List<GridElement>();
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i != 0 && j != 0)
+                {
+                    try
+                    {
+                        int x = element.GridPosition.x + i;
+                        int y = element.GridPosition.y + j;
+                        GridElement g = gridElements[x, y];
+                        adjacents.Add(g);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        return adjacents;
+    }
+
     public GridElement GetNearestGridElement(Vector3 position)
     {
         float distance = float.MaxValue;

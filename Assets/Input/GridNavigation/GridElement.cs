@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 [System.Serializable]
 public class GridElement : ExposableMonobehaviour
 {
-    [SerializeField]
     public Vector2Int GridPosition { get; set; }
     [SerializeField]
     private Status _visited;
@@ -66,6 +65,5 @@ public class GridElement : ExposableMonobehaviour
         NotVisited = -1,
         Visited = 1,
         Occupied = 0,
-        ProvidesCover = -2
     }
 }

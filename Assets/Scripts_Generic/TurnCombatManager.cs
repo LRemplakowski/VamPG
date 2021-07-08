@@ -147,7 +147,6 @@ public class TurnCombatManager : ExposableMonobehaviour
         }
         yield return new WaitUntil(() => AllCreaturesMoved());
         roundCounter = 1;
-        Debug.Log("before changing actor");
         CurrentActiveActor = GameManager.GetPlayer();
         StopCoroutine(InitializeCombat());
     }

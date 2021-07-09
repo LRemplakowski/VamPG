@@ -74,6 +74,11 @@ public class NPCombatBehaviour : CombatBehaviour
 
     }
 
+    private IEnumerator DecideRoundActions()
+    {
+        yield return new WaitWhile(() => true);
+    }
+
     public AIAction DetermineActionToTake()
     {
         return (AIAction)UnityEngine.Random.Range(0, Enum.GetValues(typeof(AIAction)).Length);

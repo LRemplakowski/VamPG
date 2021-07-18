@@ -171,14 +171,9 @@ public class TurnCombatManager : ExposableMonobehaviour
         return roundCounter == 1;
     }
 
-    public bool IsActiveActorPlayer()
+    public bool IsActiveActorPlayerControlled()
     {
-        return _currentActiveActor ? CurrentActiveActor.IsOfType(typeof(Player)) : false;
-    }
-
-    public bool IsActiveActorNPC()
-    {
-        return _currentActiveActor ? CurrentActiveActor.IsOfType(typeof(NPC)) : false;
+        return _currentActiveActor ? CurrentActiveActor.GetComponent<CombatBehaviour>().PlayerControlled : false;
     }
 
     public int GetRound()

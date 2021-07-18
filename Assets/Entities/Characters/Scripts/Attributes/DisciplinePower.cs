@@ -75,9 +75,11 @@ public class DisciplinePower : ScriptableObject
     [System.Serializable]
     public class EffectWrapper
     {
+        #pragma warning disable 0414
         //Editor variables
         [SerializeField]
         private bool isExpanded = false;
+        #pragma warning restore 0414
 
         private const string effectTypeTooltip = "Typ efektu. Na jaką właściwość ma wpływać lub czy ma być obsługiwany osobnym skryptem.";
         private const string affectedCreatureTooltip = "Na kogo ma wpłynąć efekt. Nie ma znaczenia jeśli cel mocy jest Self.";

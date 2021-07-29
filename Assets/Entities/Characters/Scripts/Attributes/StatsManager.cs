@@ -7,6 +7,7 @@ public class StatsManager : ExposableMonobehaviour
 {
     [SerializeField]
     protected CharacterStats characterStats;
+    public CharacterStats Stats { get => characterStats; }
 
     [SerializeField, ReadOnly]
     protected Creature owner;
@@ -51,10 +52,9 @@ public class StatsManager : ExposableMonobehaviour
         return 10.0f;
     }
 
-    public bool IsDead()
+    public bool IsAlive()
     {
-        bool isDead = characterStats.GetTracker(TrackerType.Health).CurrentValue <= 0;
-        return isDead;
+        return characterStats.GetTracker(TrackerType.Health).CurrentValue > 0;
     }  
 
     public int GetDefensePool()
@@ -110,5 +110,10 @@ public class StatsManager : ExposableMonobehaviour
         }
 
         return Roll.d10(normalDice, hungerDice, dc);
+    }
+
+    public List<Attribute> GetAttributes()
+    {
+        return characterStats.GetAttributes();
     }
 }

@@ -6,16 +6,16 @@ using UnityEngine.SceneManagement;
 
 public class TurnCombatManager : ExposableMonobehaviour
 {
-    public delegate void OnCombatStart();
-    public OnCombatStart onCombatStart;
+    public delegate void OnCombatStart(List<Creature> creaturesInCombat);
+    public static OnCombatStart onCombatStart;
     public delegate void OnCombatEnd();
-    public OnCombatEnd onCombatEnd;
+    public static OnCombatEnd onCombatEnd;
     public delegate void OnActiveActorChanged(Creature newActor, Creature previousActor);
-    public OnActiveActorChanged onActiveActorChanged;
+    public static OnActiveActorChanged onActiveActorChanged;
     public delegate void OnCombatRoundBegin(Creature currentActor);
-    public OnCombatRoundBegin onCombatRoundBegin;
+    public static OnCombatRoundBegin onCombatRoundBegin;
     public delegate void OnCombatRoundEnd(Creature currentActor);
-    public OnCombatRoundEnd onCombatRoundEnd;
+    public static OnCombatRoundEnd onCombatRoundEnd;
 
     private int roundCounter;
 
@@ -29,7 +29,7 @@ public class TurnCombatManager : ExposableMonobehaviour
         }
         else if (instance != this)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
     #endregion
@@ -82,13 +82,15 @@ public class TurnCombatManager : ExposableMonobehaviour
         {
             foreach (Creature c in creaturesInCombat)
             {
-                if (!c.GetComponent<StatsManager>().IsDead() && c.IsOfType(typeof(NPC)))
+                if (c.GetComponent<StatsManager>().IsAlive() && c.Faction.Equals(Faction.Hostile))
                 {
-                    if ((c as NPC).Faction.Equals(Faction.Hostile))
-                        return;
+                    break;
+                }
+                else
+                {
+                    StateManager.instance.SetCurrentState(GameState.Exploration);
                 }
             }
-            StateManager.instance.SetCurrentState(GameState.Exploration);
         }
     }
 
@@ -143,7 +145,7 @@ public class TurnCombatManager : ExposableMonobehaviour
         creaturesInCombat = FindObjectsOfType<Creature>();
         if (onCombatStart != null)
         {
-            onCombatStart.Invoke();
+            onCombatStart.Invoke(new List<Creature>(creaturesInCombat));
         }
         yield return new WaitUntil(() => AllCreaturesMoved());
         roundCounter = 1;
@@ -173,7 +175,7 @@ public class TurnCombatManager : ExposableMonobehaviour
 
     public bool IsActiveActorPlayerControlled()
     {
-        return _currentActiveActor ? CurrentActiveActor.GetComponent<CombatBehaviour>().PlayerControlled : false;
+        return _currentActiveActor ? CurrentActiveActor.GetComponent<CombatBehaviour>().IsPlayerControlled : false;
     }
 
     public int GetRound()

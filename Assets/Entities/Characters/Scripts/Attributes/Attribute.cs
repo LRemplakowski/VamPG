@@ -9,6 +9,9 @@ public class Attribute : BaseStat
     [SerializeField, ReadOnly]
     private AttributeType attributeType;
 
+    public int Value { get => GetValue(); }
+    public AttributeType AttributeType { get => attributeType; }
+
     protected override void SetValueImpl(int value)
     {
         this.baseValue = value;

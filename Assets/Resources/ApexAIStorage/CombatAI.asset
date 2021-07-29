@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1719459976, guid: 6012f3241c1c1f7409c44769fc0a1db7, type: 3}
+  m_Name: CombatAI
+  m_EditorClassIdentifier: 
+  description: 
+  version: 16779010
+  aiId: f49fbd97-4d3d-488a-87e3-29f8b01248d5
+  configuration: '{"@type":"Apex.AI.UtilityAI, ApexAI","_rootSelectorId":5f5adbfaa6f94f51871d125d671c3f05,"_id":f49fbd974d3d488a87e329f8b01248d5,"_selectors":[{"@type":"Apex.AI.PrioritySelector,
+    ApexAI","_id":5f5adbfaa6f94f51871d125d671c3f05,"_qualifiers":[{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"Apex.AI.SelectorAction, ApexAI","_selectorId":fe502e0d96624e9e849c4624ebc82505},"threshold":1,"_scorers":[{"@type":"AI.Scorers.Option.IsGameInCombatState,
+    Assembly-CSharp","not":false,"score":100},{"@type":"AI.Scorers.Option.IsOwnerAlive,
+    Assembly-CSharp","not":false,"score":100},{"@type":"AI.Scorers.Option.IsPlayerControlled,
+    Assembly-CSharp","not":true,"score":100}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"}}},{"@type":"Apex.AI.PrioritySelector,
+    ApexAI","_id":fe502e0d96624e9e849c4624ebc82505,"_qualifiers":[{"@type":"Apex.AI.CompositeScoreQualifier,
+    ApexAI","action":{"@type":"AI.Actions.SetBestAttackTarget, Assembly-CSharp","_scorers":[]},"_scorers":[{"@type":"AI.Scorers.Option.HasTarget,
+    Assembly-CSharp","not":true,"score":100},{"@type":"AI.Scorers.Option.IsTargetAlive,
+    Assembly-CSharp","not":true,"score":100}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    ApexAI"}}]}'
+  editorConfiguration: '{"offset":{"@x":10,"@y":99},"zoom":0.89999998,"SelectorView":{"ViewArea":{"@left":82,"@top":225,"@width":180,"@height":144},"Name":"Is
+    eligible?","Description":"Determine if AI for given creature should be processed.","QualifierView":{"Name":"Alive
+    and in combat","Description":"If alive, player-controlled and in combat, process
+    AI.","ActionView":{"@connectorType":"Selector"}},"DefaultQualifier":{"Name":"Idle","ActionView":{"Name":"Do
+    nothing"}}},"SelectorView":{"ViewArea":{"@left":370,"@top":135,"@width":180,"@height":144},"Name":"Pick
+    new target or position","QualifierView":{"Name":"Maybe pick new target","ActionView":{}},"DefaultQualifier":{}}}'

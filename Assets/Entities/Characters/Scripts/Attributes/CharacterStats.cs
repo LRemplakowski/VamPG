@@ -319,4 +319,9 @@ public class CharacterStats : ScriptableObject
 
         return newInstance;
     }
+
+    public List<Attribute> GetAttributes()
+    {
+        return attributes.GetAttributeList();
+    }
 }

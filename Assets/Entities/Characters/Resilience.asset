@@ -12,47 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6881cc8924343944a6474dd610c91f3, type: 3}
   m_Name: Resilience
   m_EditorClassIdentifier: 
+  _scriptName: Resilience
   type: 5
   level: 1
   secondaryType: 11
   secondaryLevel: 0
+  _target: 0
+  range: 1
+  hasDiciplinePool: 0
+  disciplinePool:
+    firstPool: 0
+    secondPool: 0
+    attribute: 0
+    secondAttribute: 0
+    skill: 0
+    secondSkill: 0
+    discipline: 0
+    secondDiscipline: 0
+  disciplineRollDifficulty: 0
+  hasAttackPool: 0
+  attackPool:
+    firstPool: 0
+    secondPool: 0
+    attribute: 0
+    secondAttribute: 0
+    skill: 0
+    secondSkill: 0
+    discipline: 0
+    secondDiscipline: 0
+  hasDefensePool: 0
+  defensePool:
+    firstPool: 0
+    secondPool: 0
+    attribute: 0
+    secondAttribute: 0
+    skill: 0
+    secondSkill: 0
+    discipline: 0
+    secondDiscipline: 0
+  targetableCreatureType: 2
   effects:
   - isExpanded: 1
     effectType: 3
-    target: 0
-    range: 0
-    hasAttackPool: 1
-    attackPool:
-      firstPool: 2
-      secondPool: 0
-      attribute: 0
-      secondAttribute: 0
-      skill: 0
-      secondSkill: 0
-      discipline: 0
-      secondDiscipline: 0
-    hasDiciplinePool: 0
-    disciplinePool:
-      firstPool: 0
-      secondPool: 0
-      attribute: 0
-      secondAttribute: 0
-      skill: 0
-      secondSkill: 0
-      discipline: 0
-      secondDiscipline: 0
-    disciplineRollDifficulty: 0
-    hasDefensePool: 1
-    defensePool:
-      firstPool: 0
-      secondPool: 0
-      attribute: 0
-      secondAttribute: 0
-      skill: 0
-      secondSkill: 0
-      discipline: 0
-      secondDiscipline: 0
-    targetableCreatureType: 2
+    _affectedCreature: 0
     duration: 0
     rounds: 5
     attributeEffect:
@@ -60,61 +62,21 @@ MonoBehaviour:
       affectedProperty: 0
       modifierType: 0
       modifierValue: 0
-      hasDefenseRoll: 0
-      defenseRoll:
-        firstPool: 0
-        secondPool: 0
-        attribute: 0
-        secondAttribute: 0
-        skill: 0
-        secondSkill: 0
-        discipline: 0
-        secondDiscipline: 0
     skillEffect:
       propertyModifier: 0
       affectedProperty: 0
       modifierType: 0
       modifierValue: 0
-      hasDefenseRoll: 0
-      defenseRoll:
-        firstPool: 0
-        secondPool: 0
-        attribute: 0
-        secondAttribute: 0
-        skill: 0
-        secondSkill: 0
-        discipline: 0
-        secondDiscipline: 0
     disciplineEffect:
       propertyModifier: 0
       affectedProperty: 0
       modifierType: 0
       modifierValue: 0
-      hasDefenseRoll: 0
-      defenseRoll:
-        firstPool: 0
-        secondPool: 0
-        attribute: 0
-        secondAttribute: 0
-        skill: 0
-        secondSkill: 0
-        discipline: 0
-        secondDiscipline: 0
     trackerEffect:
       propertyModifier: 1
       affectedProperty: 0
       affectedValue: 0
       modifierType: 0
       modifierValue: 0
-      hasDefenseRoll: 0
-      defenseRoll:
-        firstPool: 0
-        secondPool: 0
-        attribute: 0
-        secondAttribute: 0
-        skill: 0
-        secondSkill: 0
-        discipline: 0
-        secondDiscipline: 0
     scriptEffect:
       script: {fileID: 0}

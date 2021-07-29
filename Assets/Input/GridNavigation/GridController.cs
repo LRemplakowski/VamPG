@@ -193,6 +193,14 @@ public class GridController : ExposableMonobehaviour
         return result;
     }
 
+    public List<Vector3> GetGridPositionsInRangeOfActor(Creature actor)
+    {
+        List<GridElement> elements = GetElementsInRangeOfActor(actor);
+        List<Vector3> result = new List<Vector3>();
+        elements.ForEach(e => result.Add(e.transform.position));
+        return result;
+    }
+
     private List<GridElement> FindReachableGridElements(NavMeshAgent agent, GridElement startElement, int movementRange)
     {
         List<GridElement> elementsInRange = new List<GridElement>();

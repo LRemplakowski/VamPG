@@ -9,6 +9,9 @@ public class Skill : BaseStat
     [SerializeField, ReadOnly]
     private SkillType skillType;
 
+    public float Value { get => GetValue(); }
+    public SkillType SkillType { get => skillType; }
+
     protected override void SetValueImpl(int value)
     {
         this.baseValue = value;

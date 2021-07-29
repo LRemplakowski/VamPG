@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 [System.Serializable]
 public class GridElement : ExposableMonobehaviour
 {
+    public Vector3 WorldPosition { get; private set; }
     public Vector2Int GridPosition { get; set; }
     [SerializeField]
     private Status _visited;
@@ -36,6 +37,7 @@ public class GridElement : ExposableMonobehaviour
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         visualTransform = GetComponentInChildren<Transform>();
+        WorldPosition = transform.position;
     }
 
     private void SetHoverHighlight(bool hovered)

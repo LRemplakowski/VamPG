@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Apex.AI.Components;
 
-    [RequireComponent(typeof(NavMeshAgent)), 
-    RequireComponent(typeof(StatsManager)), 
-    RequireComponent(typeof(CombatBehaviour)), 
-    RequireComponent(typeof(CreatureAnimator)),
-    RequireComponent(typeof(Rigidbody)),
-    RequireComponent(typeof(CapsuleCollider)),
-    RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
-    RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NavMeshAgent)),
+RequireComponent(typeof(StatsManager)),
+RequireComponent(typeof(CombatBehaviour)),
+RequireComponent(typeof(CreatureAnimator)),
+RequireComponent(typeof(Rigidbody)),
+RequireComponent(typeof(CapsuleCollider)),
+RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
+RequireComponent(typeof(StatsManager)),
+RequireComponent(typeof(Animator)),
+RequireComponent(typeof(UtilityAIComponent))]
 public abstract class Creature : Entity
 {
-    public Sex GetSex()
-    {
-        return sex;
-    }
-
-    public CreatureType GetCreatureType()
-    {
-        return creatureType;
-    }
-
     private const float lookTowardsRotationSpeed = 5.0f;
+
+    [SerializeField]
+    private Faction _faction;
+    public Faction Faction
+    {
+        get => _faction;
+        set => _faction = value;
+    }
     [SerializeField]
     protected Sex sex = Sex.F;
     [SerializeField]
@@ -51,7 +51,7 @@ public abstract class Creature : Entity
     }
 
     [HideInInspector]
-    public Queue<EntityAction> ActionQueue { get; private set; }
+    private Queue<EntityAction> ActionQueue { get; set; }
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
@@ -122,5 +122,15 @@ public abstract class Creature : Entity
     public Inventory GetInventory()
     {
         return inventory;
-    }    
+    }
+
+    public Sex GetSex()
+    {
+        return sex;
+    }
+
+    public CreatureType GetCreatureType()
+    {
+        return creatureType;
+    }
 }

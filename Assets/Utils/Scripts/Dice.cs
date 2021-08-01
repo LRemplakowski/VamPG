@@ -1,118 +1,103 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MyUtils
+namespace Utils.Dice
 {
-    public static class MethodInvoker
+    public abstract class DicePool<T, U> where T : BaseStat where U : BaseStat
     {
-        public static void InvokeExecutional(object executor, string methodName, List<object> args)
+        public T First { get; protected set; }
+        public U Second { get; protected set; }
+
+        public int GetPoolSize()
         {
-            try
-            {
-                System.Type executorType = executor.GetType();
-                System.Reflection.MethodInfo methodInfo = executorType.GetMethod(methodName);
-                if (methodInfo != null)
-                {
-                    methodInfo.Invoke(executor, args.ToArray());
-                }
-                else
-                {
-                    Debug.LogError("Invalid method name in Execution Node!");
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            return First.GetValue() + Second.GetValue();
         }
 
-        public static void InvokeConditional(object evaluator, string methodName, List<object> args, out bool returnValue)
+        public int GetPoolSize(bool includeModifiers)
         {
-            try
-            {
-                System.Type evaluatorType = evaluator.GetType();
-                System.Reflection.MethodInfo methodInfo = evaluatorType.GetMethod(methodName);
-                if (methodInfo != null)
-                {
-                    var methodReturn = methodInfo.Invoke(evaluator, args.ToArray());
-                    returnValue = (bool)methodReturn;
-                }
-                else
-                {
-                    Debug.LogError("Invalid method name in Condition Node!");
-                    returnValue = false;
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                returnValue = false;
-            }
+            return First.GetValue(includeModifiers) + Second.GetValue(includeModifiers);
         }
 
-        public static void ParseMethod(string condition, out string methodName, out List<object> args)
+        public int GetPoolSize(List<ModifierType> modifierTypes)
         {
-            string[] split = condition.Split('.');
-            methodName = "";
-            args = new List<object>();
-            try
-            {
-                methodName = split[0];
-                for (int i = 1; i < split.Length; i++)
-                {
-                    args.Add(ObjectParser.ParseObject(split[i]));
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-            }
+            return First.GetValue(modifierTypes) + Second.GetValue(modifierTypes);
         }
     }
 
-    public static class ObjectParser
+    public sealed class TwoAttributePool : DicePool<Attribute, Attribute>
     {
-        public static object ParseObject(string s)
+        public TwoAttributePool(Attribute first, Attribute second)
         {
-            if (int.TryParse(s, out int i))
-                return i;
-            if (double.TryParse(s, out double d))
-                return d;
-            if (bool.TryParse(s, out bool b))
-                return b;
-            return s;
+            First = first;
+            Second = second;
+        }
+    }
+
+    public sealed class AttributeSkillPool : DicePool<Attribute, Skill>
+    {
+        public AttributeSkillPool(Attribute attribute, Skill skill)
+        {
+            First = attribute;
+            Second = skill;
+        }
+    }
+
+    public sealed class TwoSkillPool : DicePool<Skill, Skill>
+    {
+        public TwoSkillPool(Skill first, Skill second)
+        {
+            First = first;
+            Second = second;
+        }
+    }
+
+    public sealed class DisciplineAttributePool : DicePool<Discipline, Attribute>
+    {
+        public DisciplineAttributePool(Discipline discipline, Attribute attribute)
+        {
+            First = discipline;
+            Second = attribute;
+        }
+    }
+
+    public sealed class DisciplineSkillPool : DicePool<Discipline, Skill>
+    {
+        public DisciplineSkillPool(Discipline discipline, Skill skill)
+        {
+            First = discipline;
+            Second = skill;
+        }
+    }
+
+    public class Outcome
+    {
+        public readonly int successes;
+        public readonly bool isCritical, isMessy, isBestialFailure;
+        public readonly List<int> normalDice = new List<int>(), hungerDice = new List<int>();
+
+        public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure, List<int> normalDice, List<int> hungerDice)
+        {
+            this.successes = successes;
+            this.isCritical = isCritical;
+            this.isMessy = isMessy;
+            this.isBestialFailure = isBestialFailure;
+            this.normalDice = normalDice;
+            this.hungerDice = hungerDice;
+        }
+
+        public Outcome(int successes, bool isCritical, List<int> normalDice)
+        {
+            this.successes = successes;
+            this.isCritical = isCritical;
+            isMessy = false;
+            isBestialFailure = false;
+            this.normalDice = normalDice;
         }
     }
 
     public static class Roll
     {
-        public class Outcome
-        {
-            public readonly int successes;
-            public readonly bool isCritical, isMessy, isBestialFailure;
-            public readonly List<int> normalDice = new List<int>(), hungerDice = new List<int>();
-
-            public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure, List<int> normalDice, List<int> hungerDice)
-            {
-                this.successes = successes;
-                this.isCritical = isCritical;
-                this.isMessy = isMessy;
-                this.isBestialFailure = isBestialFailure;
-                this.normalDice = normalDice;
-                this.hungerDice = hungerDice;
-            }
-
-            public Outcome(int successes, bool isCritical, List<int> normalDice)
-            {
-                this.successes = successes;
-                this.isCritical = isCritical;
-                isMessy = false;
-                isBestialFailure = false;
-                this.normalDice = normalDice;
-            }
-        }
-
         public static Outcome d10(int normalDice, int hungerDice)
         {
             System.Random r = new System.Random();
@@ -140,10 +125,10 @@ namespace MyUtils
             Debug.Log("d10:"
                 + "\nnormal dice: " + DiceRollToString(normals)
                 + "\nhunger dice: " + DiceRollToString(hunger)
-                + "\nsuccesses: " + successes 
-                + "\ntens: " + tens 
-                + "\nhungerTens: " + hungerTens 
-                + "\nisCritical? " + isCritical 
+                + "\nsuccesses: " + successes
+                + "\ntens: " + tens
+                + "\nhungerTens: " + hungerTens
+                + "\nisCritical? " + isCritical
                 + "\nisMessy?" + isMessy);
             return new Outcome(successes, isCritical, isMessy, false, new List<int>(normals), new List<int>(hunger));
         }
@@ -215,7 +200,7 @@ namespace MyUtils
         private static string DiceRollToString(int[] roll)
         {
             string result = "";
-            foreach(int i in roll)
+            foreach (int i in roll)
             {
                 result = result + i + ", ";
             }

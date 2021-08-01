@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyUtils;
+using Utils.Dice;
 
 public class StatsManager : ExposableMonobehaviour
 {
@@ -12,23 +12,40 @@ public class StatsManager : ExposableMonobehaviour
     [SerializeField, ReadOnly]
     protected Creature owner;
 
+    [SerializeField, ReadOnly]
+    private int _health;
+    public int Health { get => _health; private set => _health = value; }
+    [SerializeField, ReadOnly]
+    private int _willpower;
+    public int Willpower { get => _willpower; private set => _willpower = value; }
+    [SerializeField, ReadOnly]
+    private int _humanity;
+    public int Humanity { get => _humanity; private set => _humanity = value; }
+    [SerializeField, ReadOnly]
+    private int _hunger;
+    public int Hunger { get => _hunger; private set => _hunger = value; }
+
     public virtual void Start()
     {
         owner = GetComponentInParent<Creature>();
         if (!characterStats)
             characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
         if (characterStats.IsGeneric)
-            characterStats = characterStats.CopyAssetInstance(characterStats);
+            characterStats = CharacterStats.CopyAssetInstance(characterStats);
+        Health = characterStats.GetTracker(TrackerType.Health).GetValue();
+        Willpower = characterStats.GetTracker(TrackerType.Willpower).GetValue();
+        Humanity = characterStats.GetTracker(TrackerType.Humanity).GetValue();
+        Hunger = characterStats.GetTracker(TrackerType.Hunger).GetValue();
     }
 
     public void TakeDamage(int damage)
     {
         Tracker health = characterStats.GetTracker(TrackerType.Health);
-        int newHealth = health.CurrentValue;
+        int newHealth = Health;
         newHealth -= damage;
-        Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + health.CurrentValue + "\nHealth after attack: " + newHealth);
-        health.CurrentValue = newHealth < 0 ? 0 : newHealth;
-        if (health.CurrentValue <= 0)
+        Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + Health + "\nHealth after attack: " + newHealth);
+        Health = newHealth < 0 ? 0 : newHealth;
+        if (Health <= 0)
             Die();
     }
 
@@ -47,24 +64,29 @@ public class StatsManager : ExposableMonobehaviour
             return 0;
     }
 
-    public float GetAttackRange()
+    public float GetWeaponMaxRange()
     {
         return 10.0f;
     }
 
-    public bool IsAlive()
+    public float GetWeaponEffectiveRange()
     {
-        return characterStats.GetTracker(TrackerType.Health).CurrentValue > 0;
-    }  
-
-    public int GetDefensePool()
-    {
-        return characterStats.GetAttribute(AttributeType.Dexterity).GetValue() + characterStats.GetSkill(SkillType.Athletics).GetValue();
+        return 5.0f;
     }
 
-    public int GetAttackPool()
+    public bool IsAlive()
     {
-        return characterStats.GetAttribute(GetWeaponAttribute()).GetValue() + characterStats.GetSkill(GetWeaponSkill()).GetValue();
+        return Health > 0;
+    }  
+
+    public AttributeSkillPool GetDefensePool()
+    {
+        return new AttributeSkillPool(characterStats.GetAttribute(AttributeType.Dexterity), characterStats.GetSkill(SkillType.Athletics));
+    }
+
+    public AttributeSkillPool GetAttackPool()
+    {
+        return new AttributeSkillPool(characterStats.GetAttribute(GetWeaponAttribute()), characterStats.GetSkill(GetWeaponSkill()));
     }
 
     private AttributeType GetWeaponAttribute()
@@ -82,7 +104,7 @@ public class StatsManager : ExposableMonobehaviour
         return characterStats.GetDisciplinePower(scriptName);
     }
 
-    public Roll.Outcome GetSkillRoll(AttributeType attribute, SkillType skill)
+    public Outcome GetSkillRoll(AttributeType attribute, SkillType skill)
     {
         Attribute a = characterStats.GetAttribute(attribute);
         Skill s = characterStats.GetSkill(skill);
@@ -90,14 +112,14 @@ public class StatsManager : ExposableMonobehaviour
         int hungerDice = 0;
         if (owner.GetCreatureType().Equals(CreatureType.Vampire))
         {
-            hungerDice = characterStats.GetTracker(TrackerType.Hunger).CurrentValue;
+            hungerDice = Hunger;
             normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
         }
 
         return Roll.d10(normalDice, hungerDice);
     }
 
-    public Roll.Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc)
+    public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc)
     {
         Attribute a = characterStats.GetAttribute(attribute);
         Skill s = characterStats.GetSkill(skill);
@@ -105,7 +127,7 @@ public class StatsManager : ExposableMonobehaviour
         int hungerDice = 0;
         if (owner.GetCreatureType().Equals(CreatureType.Vampire))
         {
-            hungerDice = characterStats.GetTracker(TrackerType.Hunger).CurrentValue;
+            hungerDice = Hunger;
             normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
         }
 

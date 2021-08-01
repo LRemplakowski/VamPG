@@ -1,64 +1,47 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
 public class CoverDetector : MonoBehaviour
 {
-    public delegate void OnLookForCoverFinished(Dictionary<GridElement, List<Cover>> positionsNearCover);
-    public OnLookForCoverFinished onLookForCoverFinished;
+    [SerializeField]
+    private float coverDetectionRadius = 1f;
+    [SerializeField]
+    private LayerMask coverLayerMask;
 
-    private Dictionary<GridElement, List<Cover>> elementsNearCover = new Dictionary<GridElement, List<Cover>>();
-    private List<Collider> coverSources = new List<Collider>();
+    private static CoverDetector instance;
 
-    private void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        Cover c = other.GetComponent<Cover>();
-        if (!c)
-            return;
-        if (c.GetCoverQuality() != CoverQuality.None)
+        if (!instance)
+            instance = this;
+    }
+
+    public static bool IsPositionNearCover(GridElement gridPos, out List<Cover> coverSources)
+    {
+        coverSources = new List<Cover>();
+        Vector3 sphereOrigin = new Vector3(gridPos.transform.position.x, gridPos.transform.position.y + instance.coverDetectionRadius + 0.1f, gridPos.transform.position.z);
+        Collider[] colliders = Physics.OverlapSphere(sphereOrigin, instance.coverDetectionRadius, instance.coverLayerMask);
+        foreach (Collider col in colliders)
         {
-            coverSources.Add(other);
+            Cover cover = col.GetComponent<Cover>();
+            if (cover)
+                coverSources.Add(cover);
         }
+        return true;
     }
 
-    private void OnTriggerExit(Collider other)
+    public Dictionary<GridElement, List<Cover>> LookForCover(List<GridElement> gridElements)
     {
-        if (coverSources.Contains(other))
-        {
-            coverSources.Remove(other);
-        }
-    }
-
-    public bool GetIsNearCover()
-    {
-        return coverSources.Count > 0;
-    }
-
-    public void StartLookingForCover(List<GridElement> gridElementsInRange)
-    {
-        elementsNearCover = new Dictionary<GridElement, List<Cover>>();
-        StartCoroutine(LookForCover(gridElementsInRange));
-    }
-
-    private IEnumerator LookForCover(List<GridElement> gridElements)
-    {
+        Dictionary<GridElement, List<Cover>> result = new Dictionary<GridElement, List<Cover>>();
         foreach (GridElement g in gridElements)
         {
-            transform.position = g.transform.position;
-            yield return new WaitForFixedUpdate();
-            if (GetIsNearCover())
+            if (IsPositionNearCover(g, out List<Cover> coverSources))
             {
-                List <Cover> coversNearGridPosition = new List<Cover>();
-                foreach (Collider c in coverSources)
-                {
-                    coversNearGridPosition.Add(c.GetComponent<Cover>());
-                }
-                elementsNearCover.Add(g, coversNearGridPosition);
+                result.Add(g, coverSources);
             }
         }
-        if (onLookForCoverFinished != null)
-            onLookForCoverFinished.Invoke(elementsNearCover);
-        StopCoroutine(LookForCover(gridElements));
+        return result;
     }
 }

@@ -112,6 +112,11 @@ public abstract class Creature : Entity
         }
     }
 
+    public EntityAction PickActionQueue()
+    {
+        return ActionQueue.Peek();
+    }
+
     private void OnDrawGizmos()
     {   
         float movementRange = GetComponent<StatsManager>().GetCombatSpeed();

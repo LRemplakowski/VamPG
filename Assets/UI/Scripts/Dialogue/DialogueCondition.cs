@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using MyUtils;
+using Utils.Dialogue;
+using Utils.Dice;
 
 public class DialogueCondition
 {
@@ -52,7 +53,7 @@ public class DialogueCondition
         StatsManager playerStatsManager = GameManager.GetPlayer().GetComponent<StatsManager>();
         if (Enum.TryParse(attributeType, out AttributeType attribute) && Enum.TryParse(skillType, out SkillType skill))
         {
-            Roll.Outcome outcome = playerStatsManager.GetSkillRoll(attribute, skill);
+            Outcome outcome = playerStatsManager.GetSkillRoll(attribute, skill);
             return outcome.successes >= dc;
         }
         return false;

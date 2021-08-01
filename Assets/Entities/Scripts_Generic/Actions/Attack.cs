@@ -1,4 +1,4 @@
-﻿using MyUtils;
+﻿using Utils.Dice;
 using UnityEngine;
 
 public class Attack : HostileAction
@@ -20,11 +20,11 @@ public class Attack : HostileAction
     public override void Begin()
     {
         Debug.Log(Owner.gameObject.name + " attacks " + Target.gameObject.name);
-        int targetDefensePool = Target.GetComponent<StatsManager>().GetDefensePool();
-        int attackerAttackPool = Owner.GetComponent<StatsManager>().GetAttackPool();
+        DicePool<Attribute, Skill> targetDefensePool = Target.GetComponent<StatsManager>().GetDefensePool();
+        DicePool<Attribute, Skill> attackerAttackPool = Owner.GetComponent<StatsManager>().GetAttackPool();
         
-        Roll.Outcome defenseRoll = Roll.d10(targetDefensePool, 0);
-        Roll.Outcome attackRoll = Roll.d10(attackerAttackPool, 1, defenseRoll.successes);
+        Outcome defenseRoll = Roll.d10(targetDefensePool.GetPoolSize(), 0);
+        Outcome attackRoll = Roll.d10(attackerAttackPool.GetPoolSize(), 1, defenseRoll.successes);
         int damage = attackRoll.successes - defenseRoll.successes;
         Debug.Log("Damage from attack: " + damage 
             + "\nAttacker roll: " + attackRoll.successes + ", isCritical? " + attackRoll.isCritical + ", isMessy? " + attackRoll.isMessy + ", isBestialFailure?" + attackRoll.isBestialFailure

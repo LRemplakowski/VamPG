@@ -87,7 +87,7 @@ public class PlayerControlScript : InputHandler
                 NPC enemy = hit.collider.GetComponent<NPC>();
                 if (enemy)
                 {
-                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetAttackRange())
+                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetWeaponMaxRange())
                     {
                         TurnCombatManager.instance.CurrentActiveActor.Attack(enemy);
                     }
@@ -180,7 +180,7 @@ public class PlayerControlScript : InputHandler
                     lineOrigin.SetPosition(0, lineOrigin.transform.position);
                     lineOrigin.SetPosition(1, creature.LineTarget.position);
                     //Debug.LogError((GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end)) + "; range == " + GetComponent<StatsManager>().GetAttackRange() + "; distance = " + Vector3.Distance(origin, end));
-                    Color color = GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end) ? Color.green : Color.red;
+                    Color color = GetComponent<StatsManager>().GetWeaponMaxRange() >= Vector3.Distance(origin, end) ? Color.green : Color.red;
                     lineOrigin.startColor = color;
                     lineOrigin.endColor = color;
                     lineOrigin.enabled = true;

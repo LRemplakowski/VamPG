@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1999026834}
   - component: {fileID: 1999026839}
   - component: {fileID: 558902298}
-  - component: {fileID: 1786648665}
+  - component: {fileID: 3925368765523124477}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
---- !u!114 &1786648665
+--- !u!114 &3925368765523124477
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,6 +157,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3376849770154862168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e3eccf39fe1bab4c9f142c66139b70f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4442963dba25bbc48804dab290be4ab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coverDetectionRadius: 1
+  coverLayerMask:
+    serializedVersion: 2
+    m_Bits: 0

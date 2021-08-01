@@ -10,13 +10,17 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
     private CreatureContext _context;
 
-    protected CoverDetector CoverDetector => GetComponentInChildren<CoverDetector>();
+    [SerializeField]
+    private Transform _raycastOrigin;
+    public Vector3 RaycastOrigin => _raycastOrigin.position;
+    [SerializeField]
+    private float defaultRaycastOriginY = 1.5f;
 
     public Creature Owner => GetComponent<Creature>();
 
-    public bool HasActed => _context.HasActed;
+    public bool HasActed { get; set; }
 
-    public bool HasMoved => _context.HasMoved;
+    public bool HasMoved { get; set; }
 
     public bool IsPlayerControlled => _context.IsPlayerControlled;
 
@@ -29,11 +33,18 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     #region Enable&Disable
     private void OnEnable()
     {
-        if (!CoverDetector)
-            GenerateDefaultCoverDetector();
+        if (!_raycastOrigin)
+        {
+            _raycastOrigin = new GameObject("RaycastOrigin").transform;
+            _raycastOrigin.parent = this.transform;
+            _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
+        }
+        Move.onMovementStarted += OnMovementStarted;
         Move.onMovementFinished += OnMovementFinished;
+        HostileAction.onAttackFinished += OnHostileActionFinished;
         TurnCombatManager.onCombatStart += OnCombatStart;
         TurnCombatManager.onCombatRoundBegin += OnCombatRoundBegin;
+        TurnCombatManager.onCombatRoundEnd += OnCombatRoundEnd;
     }
 
     private void OnDisable()
@@ -42,45 +53,59 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
         TurnCombatManager.onCombatStart -= OnCombatStart;
         TurnCombatManager.onCombatRoundBegin -= OnCombatRoundBegin;
     }
-
-    private CoverDetector GenerateDefaultCoverDetector()
-    {
-        GameObject coverDetector = new GameObject("Default Cover Detector");
-        coverDetector.transform.parent = this.transform;
-        coverDetector.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
-        SphereCollider sphereCollider = coverDetector.AddComponent<SphereCollider>();
-        sphereCollider.radius = 1;
-        sphereCollider.center = Vector3.up;
-        sphereCollider.isTrigger = true;
-        Rigidbody rigidbody = coverDetector.AddComponent<Rigidbody>();
-        rigidbody.isKinematic = true;
-        rigidbody.interpolation = RigidbodyInterpolation.None;
-        rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
-        return coverDetector.AddComponent<CoverDetector>();
-    }
     #endregion
 
+    private void OnMovementStarted(Creature who)
+    {
+        if (who.Equals(Owner) && IsPlayerControlled)
+        {
+            GameManager.GetGridController().ClearActiveElements();
+        }
+    }
 
     private void OnMovementFinished(Creature who)
     {
         if (who.Equals(Owner))
         {
-            _context.HasMoved = true;
+            HasMoved = true;
+        }
+    }
+
+    private void OnHostileActionFinished(Creature target, Creature performer)
+    {
+        if (performer.Equals(Owner))
+        {
+            HasActed = true;
         }
     }
 
     private void OnCombatStart(List<Creature> creaturesInCombat)
     {
-        _context.HasMoved = false;
-        _context.HasActed = false;
+        HasMoved = false;
+        HasActed = false;
+        GridElement nearest = GameManager.GetGridController().GetNearestGridElement(this.transform.position);
+        Owner.Move(nearest);
     }
 
     private void OnCombatRoundBegin(Creature currentActor)
     {
         if (currentActor.Equals(Owner))
         {
-            _context.HasMoved = false;
-            _context.HasActed = false;
+            HasMoved = false;
+            HasActed = false;
+
+            if (IsPlayerControlled)
+            {
+                GameManager.GetGridController().ActivateElementsInRangeOfActor(Owner);
+            }
+        }
+    }
+    
+    private void OnCombatRoundEnd(Creature currentActor)
+    {
+        if (currentActor.Equals(Owner) && IsPlayerControlled)
+        {
+            GameManager.GetGridController().ClearActiveElements();
         }
     }
 

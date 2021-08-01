@@ -1,9 +1,9 @@
-﻿using Apex.AI;
-using System.Collections.Generic;
-
-namespace AI.Actions
+﻿namespace AI.Actions
 {
-    public class SetBestAttackTarget : ActionWithOptions<Creature>
+    using Apex.AI;
+    using System.Collections.Generic;
+
+    public class SelectAttackTarget : ActionWithOptions<Creature>
     {
         public override void Execute(IAIContext context)
         {
@@ -21,7 +21,7 @@ namespace AI.Actions
                 potentialTargets.AddRange(c.EnemyCombatants);
             }
 
-            Creature target = this.GetBest(context, potentialTargets);
+            Creature target = this.GetBest(c, potentialTargets);
 
             if (target != null)
             {

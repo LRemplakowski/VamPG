@@ -14,12 +14,16 @@ public sealed class CreatureContext : IAIContext
 
     public Creature CurrentTarget { get; set; }
 
+    public GridElement CurrentMoveTarget { get; set; }
+
+    public List<Cover> CoverSourcesInCombatGrid => GameManager.GetGridController().CoverSourcesInGrid;
+
     public bool IsInCombat => StateManager.instance.GetCurrentState().Equals(GameState.Combat);
 
     public bool IsPlayerControlled => Owner.Faction.Equals(Faction.Player);
 
-    public bool HasMoved { get; set; }
-    public bool HasActed { get; set; }
+    public bool HasMoved => Behaviour.HasMoved;
+    public bool HasActed => Behaviour.HasActed;
 
     public CombatBehaviour Behaviour => Owner.GetComponent<CombatBehaviour>();
 
@@ -27,7 +31,7 @@ public sealed class CreatureContext : IAIContext
 
     public CharacterStats Stats => StatsManager.Stats;
 
-    public List<Vector3> PositionsInRange => GameManager.GetGridController().GetGridPositionsInRangeOfActor(Owner);
+    public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
 
     public List<Creature> OtherCombatants => TurnCombatManager.instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 

@@ -24,6 +24,11 @@ public class GridController : ExposableMonobehaviour
     [SerializeField, Range(0, 20)]
     private int numOfLevels = 0;
 
+    [SerializeField]
+    private LayerMask coverMask;
+
+    public List<Cover> CoverSourcesInGrid { get; private set; }
+
     private NavMeshAgent playerAgent;
 
     //private bool _highlightGrid;
@@ -60,6 +65,7 @@ public class GridController : ExposableMonobehaviour
         bottomLeft = transform.position;
         playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
         GenerateGrid();
+        CoverSourcesInGrid = FindCoverSourcesInGrid();
     }
 
     private void GenerateGrid()
@@ -310,6 +316,17 @@ public class GridController : ExposableMonobehaviour
                 }
             }
         }
+    }
+
+    private List<Cover> FindCoverSourcesInGrid()
+    {
+        Collider[] covers = Physics.OverlapBox(transform.position, new Vector3(rows * scale, numOfLevels * scale, columns * scale), Quaternion.identity, coverMask);
+        List<Cover> result = new List<Cover>();
+        foreach (Collider c in covers)
+        {
+            result.Add(c.GetComponent<Cover>());
+        }
+        return result;
     }
 
     private void OnDrawGizmosSelected()

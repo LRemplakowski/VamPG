@@ -119,7 +119,7 @@ namespace Utils.Dice
             bool isCritical = false;
             if (tens + hungerTens >= 2)
             {
-                successes += (tens + hungerTens) / 2;
+                successes += (tens + hungerTens) % 2 == 0 ? tens + hungerTens : tens + hungerTens - 1;
                 isCritical = true;
             }
             bool isMessy = isCritical && hungerTens > 0;
@@ -155,7 +155,7 @@ namespace Utils.Dice
             bool isCritical = false;
             if (tens + hungerTens >= 2)
             {
-                successes += (tens + hungerTens) / 2;
+                successes += (tens + hungerTens) % 2 == 0 ? tens + hungerTens : tens + hungerTens - 1;
                 isCritical = true;
             }
             bool isMessy = isCritical && hungerTens > 0;
@@ -187,7 +187,7 @@ namespace Utils.Dice
             bool isCritical = false;
             if (tens >= 2)
             {
-                successes += tens / 2;
+                successes += tens % 2 == 0 ? tens : tens - 1;
                 isCritical = true;
             }
             Debug.Log("d10:"

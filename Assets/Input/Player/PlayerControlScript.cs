@@ -45,10 +45,12 @@ public class PlayerControlScript : InputHandler
                     {
                         if (Entity.IsInteractable(hit.collider.gameObject))
                         {
+                            player.ClearAllActions();
                             player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
                         }
                         else
                         {
+                            player.ClearAllActions();
                             player.Move(hit.point);
                         }
                         break;
@@ -70,7 +72,7 @@ public class PlayerControlScript : InputHandler
         {
             case BarAction.MOVE:
                 Debug.Log("Mouse clicked in move mode!");
-                if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                     return;
                 else if (hit.collider.GetComponent<GridElement>())
                 {
@@ -82,12 +84,12 @@ public class PlayerControlScript : InputHandler
                 break;
             case BarAction.ATTACK:
                 Debug.Log("Mouse clicked in attack mode!");
-                if (!TurnCombatManager.instance.IsActiveActorPlayer() || player.GetComponent<CombatBehaviour>().HasActed)
+                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
                     return;
                 NPC enemy = hit.collider.GetComponent<NPC>();
                 if (enemy)
                 {
-                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetAttackRange())
+                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetWeaponMaxRange())
                     {
                         TurnCombatManager.instance.CurrentActiveActor.Attack(enemy);
                     }
@@ -148,7 +150,7 @@ public class PlayerControlScript : InputHandler
         switch (selectedBarAction.actionType)
         {
             case BarAction.MOVE:
-                if (!TurnCombatManager.instance.IsActiveActorPlayer() && !DevMoveActorToPosition.InputOverride)
+                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                     return;
                 if (lastHit != hit.collider)
                 {
@@ -164,7 +166,7 @@ public class PlayerControlScript : InputHandler
                 }
                 break;
             case BarAction.ATTACK:
-                if (!TurnCombatManager.instance.IsActiveActorPlayer() || player.GetComponent<CombatBehaviour>().HasActed)
+                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
                     return;
                 if (lastHit != hit.collider)
                 {
@@ -180,7 +182,10 @@ public class PlayerControlScript : InputHandler
                     lineOrigin.SetPosition(0, lineOrigin.transform.position);
                     lineOrigin.SetPosition(1, creature.LineTarget.position);
                     //Debug.LogError((GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end)) + "; range == " + GetComponent<StatsManager>().GetAttackRange() + "; distance = " + Vector3.Distance(origin, end));
-                    Color color = GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end) ? Color.green : Color.red;
+                    Color color = GetComponent<StatsManager>()
+                        .GetWeaponMaxRange() >= Vector3.Distance(player.CurrentGridPosition.transform.position, creature.CurrentGridPosition.transform.position) 
+                        ? Color.green 
+                        : Color.red;
                     lineOrigin.startColor = color;
                     lineOrigin.endColor = color;
                     lineOrigin.enabled = true;

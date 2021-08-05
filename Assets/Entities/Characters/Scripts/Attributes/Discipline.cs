@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,7 +9,7 @@ public class Discipline : BaseStat
     private int baseValue = 0;
 
     [SerializeField, ReadOnly]
-    private DisciplineType disciplineType;
+    private DisciplineType disciplineType = DisciplineType.Invalid;
 
     [SerializeField]
     private DisciplinePower[] knownPowers = new DisciplinePower[5];
@@ -21,8 +22,9 @@ public class Discipline : BaseStat
             p = knownPowers[index];
             return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
         }
-        catch
+        catch (ArgumentOutOfRangeException e)
         {
+            Debug.LogException(e);
             return ScriptableObject.CreateInstance<DisciplinePower>();
         }
     }

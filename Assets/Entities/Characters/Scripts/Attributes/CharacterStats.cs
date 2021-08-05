@@ -282,25 +282,21 @@ public class CharacterStats : ScriptableObject
     /// <typeparam name="T"></typeparam>
     /// <param name="asset"></param>
     /// <returns>Now¹ instancjê assetu.</returns>
-    public virtual T CopyAssetInstance<T>(T asset) where T : CharacterStats
+    public static T CopyAssetInstance<T>(T asset) where T : CharacterStats
     {
         T newInstance = CreateInstance(typeof(T)) as T;
         newInstance.IsGeneric = asset.IsGeneric;
 
         newInstance.health.SetValue(asset.health.GetValue(false));
-        newInstance.health.CurrentValue = asset.health.CurrentValue;
         newInstance.health.AddModifiers(asset.health.GetModifiers());
 
         newInstance.willpower.SetValue(asset.willpower.GetValue(false));
-        newInstance.willpower.CurrentValue = asset.health.CurrentValue;
         newInstance.willpower.AddModifiers(asset.willpower.GetModifiers());
 
         newInstance.hunger.SetValue(asset.hunger.GetValue(false));
-        newInstance.hunger.CurrentValue = asset.hunger.CurrentValue;
         newInstance.health.AddModifiers(asset.hunger.GetModifiers());
 
         newInstance.humanity.SetValue(asset.humanity.GetValue(false));
-        newInstance.humanity.CurrentValue = asset.humanity.CurrentValue;
         newInstance.humanity.AddModifiers(asset.humanity.GetModifiers());
 
         foreach (Attribute a in newInstance.attributes.GetAttributeList())
@@ -318,5 +314,10 @@ public class CharacterStats : ScriptableObject
         }
 
         return newInstance;
+    }
+
+    public List<Attribute> GetAttributes()
+    {
+        return attributes.GetAttributeList();
     }
 }

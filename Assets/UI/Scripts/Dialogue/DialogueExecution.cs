@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using MyUtils;
+using Utils.Dialogue;
 using UnityEngine;
 
 public class DialogueExecution

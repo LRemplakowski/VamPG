@@ -14,7 +14,7 @@ public class ActionBarUI : ExposableMonobehaviour
         if (instance == null)
             instance = this;
         else if (instance != this)
-            Destroy(this);
+            Destroy(this.gameObject);
     }
 
     // Start is called before the first frame update

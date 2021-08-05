@@ -1,0 +1,56 @@
+<linker>
+	<assembly fullname="ApexSerialization">
+		<type fullname="Apex.Serialization.ApexSerializationAttribute" preserve="all" />
+		<type fullname="Apex.Serialization.ApexSerializedTypeAttribute" preserve="all" />
+		<type fullname="Apex.Serialization.IInitializeAfterDeserialization" preserve="all" />
+		<type fullname="Apex.Serialization.IPrepareForSerialization" preserve="all" />
+		<type fullname="Apex.Serialization.ISerializer" preserve="all" />
+		<type fullname="Apex.Serialization.IStager" preserve="all" />
+		<type fullname="Apex.Serialization.IValueConverter" preserve="all" />
+		<type fullname="Apex.Serialization.SerializationExtensions" preserve="all" />
+		<type fullname="Apex.Serialization.SerializationMaster" preserve="all" />
+		<type fullname="Apex.Serialization.SerializationOverrideAttribute" preserve="all" />
+		<type fullname="Apex.Serialization.StageAttribute" preserve="all" />
+		<type fullname="Apex.Serialization.StageContainer" preserve="all" />
+		<type fullname="Apex.Serialization.StageElement" preserve="all" />
+		<type fullname="Apex.Serialization.StageItem" preserve="all" />
+		<type fullname="Apex.Serialization.StageList" preserve="all" />
+		<type fullname="Apex.Serialization.StageNull" preserve="all" />
+		<type fullname="Apex.Serialization.StageValue" preserve="all" />
+		<type fullname="Apex.Serialization.StringBuffer" preserve="all" />
+		
+		<type fullname="Apex.Serialization.Converters.BoolConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.CharConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.DateTimeConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.DoubleConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.EnumConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.FloatConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.GuidConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.LayerMaskConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.PrimitivesConverter" preserve="all" />
+		<type fullname="Apex.Serialization.Converters.StringConverter" preserve="all" />
+		
+		<type fullname="Apex.Serialization.Json.IJsonParser" preserve="all" />
+		<type fullname="Apex.Serialization.Json.IJsonWriter" preserve="all" />
+		<type fullname="Apex.Serialization.Json.JsonCompactWriter" preserve="all" />
+		<type fullname="Apex.Serialization.Json.JsonParser" preserve="all" />
+		<type fullname="Apex.Serialization.Json.JsonPrettyWriter" preserve="all" />
+		<type fullname="Apex.Serialization.Json.JsonSerializer" preserve="all" />
+		<type fullname="Apex.Serialization.Json.StagedToJson" preserve="all" />
+		<type fullname="Apex.Serialization.Json.StringHandler" preserve="all" />
+		
+		<type fullname="Apex.Serialization.Stagers.AnimationCurveSerializer" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.BoundsStager" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.ColorSerializer" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.DictionaryStager" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.ListStager" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.RectSerializer" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.Vector2Serializer" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.Vector3Serializer" preserve="all" />
+		<type fullname="Apex.Serialization.Stagers.Vector4Serializer" preserve="all" />
+	</assembly>
+
+	<assembly fullname="UnityEngine">
+		<type fullname="UnityEngine.AnimationCurve" preserve="all" />
+	</assembly>
+</linker>

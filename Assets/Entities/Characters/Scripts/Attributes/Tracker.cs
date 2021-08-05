@@ -7,22 +7,7 @@ public class Tracker : BaseStat
 {
     [SerializeField]
     private int maxValue = 1;
-    [SerializeField]
-    private int _currentValue;
-    public int CurrentValue
-    {
-        get => _currentValue;
-        set
-        {
-            int previous = _currentValue;
-            _currentValue = value;
-            if (onCurrentValueChanged != null)
-                onCurrentValueChanged.Invoke(_currentValue, previous);
-        }
-    }
-    public delegate void OnCurrentValueChanged(int newValue, int previousValue);
-    public OnCurrentValueChanged onCurrentValueChanged;
-    [SerializeField]
+    [SerializeField, ReadOnly]
     private TrackerType trackerType;
 
     protected override void SetValueImpl(int value)

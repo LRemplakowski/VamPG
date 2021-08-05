@@ -5,7 +5,7 @@ public abstract class HostileAction : EntityAction
     protected override Creature Owner { get; set; }
 
     public delegate void OnAttackFinished(Creature target, Creature performer);
-    public OnAttackFinished onAttackFinished;
+    public static OnAttackFinished onAttackFinished;
 
     public Creature Target { get; private set; }
     protected readonly HostileActionCondition condition;
@@ -23,6 +23,5 @@ public abstract class HostileAction : EntityAction
     public override void Abort()
     {
         onAttackFinished -= condition.OnHostileActionFinished;
-        Owner.GetComponent<CombatBehaviour>().HasActed = true;
     }
 }

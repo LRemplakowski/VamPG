@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1719459976, guid: 6012f3241c1c1f7409c44769fc0a1db7, type: 3}
+  m_Name: CombatAI
+  m_EditorClassIdentifier: 
+  description: 
+  version: 16779010
+  aiId: f49fbd97-4d3d-488a-87e3-29f8b01248d5
+  configuration: '{"@type":"Apex.AI.UtilityAI, ApexAI","_rootSelectorId":5f5adbfaa6f94f51871d125d671c3f05,"_id":f49fbd974d3d488a87e329f8b01248d5,"_selectors":[{"@type":"Apex.AI.PrioritySelector,
+    ApexAI","_id":5f5adbfaa6f94f51871d125d671c3f05,"_qualifiers":[{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"Apex.AI.SelectorAction, ApexAI","_selectorId":fe502e0d96624e9e849c4624ebc82505},"threshold":90,"_scorers":[{"@type":"AI.Scorers.Option.IsGameInCombatState,
+    Assembly-CSharp","not":false,"score":100},{"@type":"AI.Scorers.Option.IsOwnerAlive,
+    Assembly-CSharp","not":false,"score":100},{"@type":"AI.Scorers.Option.IsPlayerControlled,
+    Assembly-CSharp","not":true,"score":100},{"@type":"AI.Scorers.Option.IsMyTurn,
+    Assembly-CSharp","not":false,"score":100}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"AI.Actions.SkipToNextRound, Assembly-CSharp"},"threshold":100,"_scorers":[{"@type":"AI.Scorers.Option.IsGameInCombatState,
+    Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.IsPlayerControlled,
+    Assembly-CSharp","not":true,"score":101},{"@type":"AI.Scorers.Option.IsMyTurn,
+    Assembly-CSharp","not":false,"score":101}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"}}},{"@type":"Apex.AI.ScoreSelector,
+    ApexAI","_id":fe502e0d96624e9e849c4624ebc82505,"_qualifiers":[{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"Apex.AI.CompositeAction, ApexAI","_actions":[{"@type":"AI.Actions.SelectMoveTarget,
+    Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.ProximityToCoverSource,
+    Assembly-CSharp","score":100},{"@type":"AI.Scorers.Context.ProvidesCoverAgainstEnemies,
+    Assembly-CSharp","not":false,"score":100,"coverMask":8,"coveredFromCountMultiplier":1},{"@type":"AI.Scorers.Context.PositionHasTargetsInRange,
+    Assembly-CSharp","not":false,"score":50,"targetCountMultiplier":1}]},{"@type":"AI.Actions.MoveToTargetPosition,
+    Assembly-CSharp"}]},"_scorers":[{"@type":"AI.Scorers.Option.HasMoveAction, Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.IsInMove,
+    Assembly-CSharp","not":true,"score":101}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"Apex.AI.CompositeAction, ApexAI","_actions":[{"@type":"AI.Actions.SelectAttackTarget,
+    Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.IsInWeaponsRange, Assembly-CSharp","not":false,"score":100,"effectiveRangeMultiplier":2},{"@type":"AI.Scorers.Context.IsTargetAlive,
+    Assembly-CSharp","not":false,"score":10000},{"@type":"AI.Scorers.Context.IsCurrentTarget,
+    Assembly-CSharp","not":false,"score":50},{"@type":"AI.Scorers.Context.HasAttackPoolAdvantage,
+    Assembly-CSharp","not":false,"score":25,"multiplier":1},{"@type":"AI.Scorers.Context.TargetHasCover,
+    Assembly-CSharp","not":true,"score":50,"coverMask":8}]},{"@type":"AI.Actions.AttackCurrentTarget,
+    Assembly-CSharp"}]},"_scorers":[{"@type":"AI.Scorers.Option.HasCombatAction,
+    Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.HasTargetsInRange,
+    Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.IsAttacking,
+    Assembly-CSharp","not":true,"score":101}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"},"threshold":50,"_scorers":[{"@type":"AI.Scorers.Option.HasActionsQueued,
+    Assembly-CSharp","not":false,"score":51}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    ApexAI","action":{"@type":"AI.Actions.SkipToNextRound, Assembly-CSharp"}}}]}'
+  editorConfiguration: '{"offset":{"@x":-5,"@y":53},"zoom":0.89999998,"SelectorView":{"ViewArea":{"@left":67,"@top":179,"@width":180,"@height":198},"Name":"Is
+    eligible?","Description":"Determine if AI for given creature should be processed.","QualifierView":{"Name":"Alive
+    and in combat","Description":"If alive, player-controlled and in combat, process
+    AI.","ActionView":{"@connectorType":"Selector"}},"QualifierView":{"Name":"Is
+    dead?","ActionView":{}},"DefaultQualifier":{"Name":"Not in combat","ActionView":{"Name":"Do
+    nothing"}}},"SelectorView":{"ViewArea":{"@left":319,"@top":89,"@width":216,"@height":252},"Name":"Pick
+    new target or position","QualifierView":{"Name":"Maybe move","ActionView":{"@connectorType":"Composite","Name":"Move
+    actions"}},"QualifierView":{"Name":"Maybe attack","ActionView":{"@connectorType":"Composite","Name":"Attack
+    actions"}},"QualifierView":{"Name":"Is performing other action?","ActionView":{"Name":"Wait"}},"DefaultQualifier":{"Name":"Cannot
+    move or atack?","ActionView":{}}}}'

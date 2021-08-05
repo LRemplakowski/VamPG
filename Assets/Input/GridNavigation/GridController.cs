@@ -12,7 +12,7 @@ public class GridController : ExposableMonobehaviour
     [SerializeField, ReadOnly]
     private Vector3 bottomLeft;
 
-    [SerializeField, ReadOnly]
+    [SerializeField]
     private GridElement[,] gridElements;
 
     private List<GridElement> activeElements = new List<GridElement>();
@@ -24,42 +24,26 @@ public class GridController : ExposableMonobehaviour
     [SerializeField, Range(0, 20)]
     private int numOfLevels = 0;
 
-    private NavMeshAgent playerAgent;
+    [SerializeField]
+    private LayerMask coverMask;
 
-    //private bool _highlightGrid;
-    //[SerializeField, ExposeProperty]
-    //public bool HighlightGrid
-    //{
-    //    get => _highlightGrid;
-    //    set
-    //    {
-    //        _highlightGrid = value;
-    //        if (_highlightGrid)
-    //        {
-    //            SetElementsInRangeActive();
-    //            HighlightGrid = false;
-    //        }
-    //    }
-    //}
+    public List<Cover> CoverSourcesInGrid { get; private set; }
 
-    //#region Enable&Disable
-    //private void OnEnable()
-    //{
-    //    Move.onMovementStarted += OnMovementStarted;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    Move.onMovementStarted -= OnMovementStarted;
-    //}
-    //#endregion
+    private NavMeshAgent gridAgent;
 
     public void Start()
     {
         gridElements = new GridElement[columns, rows];
         bottomLeft = transform.position;
-        playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
+        gridAgent = GetComponent<NavMeshAgent>();
         GenerateGrid();
+        CoverSourcesInGrid = FindCoverSourcesInGrid();
+    }
+
+    [ContextMenu("Populate grid")]
+    public void PopulateGrid()
+    {
+        Debug.Log("Populating grid!");
     }
 
     private void GenerateGrid()
@@ -91,6 +75,7 @@ public class GridController : ExposableMonobehaviour
         if (NavMesh.SamplePosition(pos, out NavMeshHit hit, .3f, NavMesh.AllAreas))
         {
             GridElement g = Instantiate(gridElementPrefab, new Vector3(pos.x, hit.position.y, pos.z), Quaternion.identity);
+            g.name = column + ";" + row;
             g.transform.parent = this.transform;
             g.transform.localScale = new Vector3(scale, scale, scale);
             g.GridPosition = new Vector2Int(column, row);
@@ -100,6 +85,32 @@ public class GridController : ExposableMonobehaviour
             return true;
         }
         return false;
+    }
+
+    public List<GridElement> GetAdjacentGridElements(GridElement element)
+    {
+        List<GridElement> adjacents = new List<GridElement>();
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (i != 0 && j != 0)
+                {
+                    try
+                    {
+                        int x = element.GridPosition.x + i;
+                        int y = element.GridPosition.y + j;
+                        GridElement g = gridElements[x, y];
+                        adjacents.Add(g);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+        return adjacents;
     }
 
     public GridElement GetNearestGridElement(Vector3 position)
@@ -164,6 +175,14 @@ public class GridController : ExposableMonobehaviour
         GridElement actorPosition = c.CurrentGridPosition;
         int actorRange = c.GetComponent<StatsManager>().GetCombatSpeed();
         List<GridElement> result = FindReachableGridElements(agent, actorPosition, actorRange);
+        return result;
+    }
+
+    public List<Vector3> GetGridPositionsInRangeOfActor(Creature actor)
+    {
+        List<GridElement> elements = GetElementsInRangeOfActor(actor);
+        List<Vector3> result = new List<Vector3>();
+        elements.ForEach(e => result.Add(e.transform.position));
         return result;
     }
 
@@ -276,6 +295,17 @@ public class GridController : ExposableMonobehaviour
                 }
             }
         }
+    }
+
+    private List<Cover> FindCoverSourcesInGrid()
+    {
+        Collider[] covers = Physics.OverlapBox(transform.position, new Vector3(rows * scale, numOfLevels * scale, columns * scale), Quaternion.identity, coverMask);
+        List<Cover> result = new List<Cover>();
+        foreach (Collider c in covers)
+        {
+            result.Add(c.GetComponent<Cover>());
+        }
+        return result;
     }
 
     private void OnDrawGizmosSelected()

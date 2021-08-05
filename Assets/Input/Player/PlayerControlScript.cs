@@ -45,10 +45,12 @@ public class PlayerControlScript : InputHandler
                     {
                         if (Entity.IsInteractable(hit.collider.gameObject))
                         {
+                            player.ClearAllActions();
                             player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
                         }
                         else
                         {
+                            player.ClearAllActions();
                             player.Move(hit.point);
                         }
                         break;
@@ -180,7 +182,10 @@ public class PlayerControlScript : InputHandler
                     lineOrigin.SetPosition(0, lineOrigin.transform.position);
                     lineOrigin.SetPosition(1, creature.LineTarget.position);
                     //Debug.LogError((GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end)) + "; range == " + GetComponent<StatsManager>().GetAttackRange() + "; distance = " + Vector3.Distance(origin, end));
-                    Color color = GetComponent<StatsManager>().GetWeaponMaxRange() >= Vector3.Distance(origin, end) ? Color.green : Color.red;
+                    Color color = GetComponent<StatsManager>()
+                        .GetWeaponMaxRange() >= Vector3.Distance(player.CurrentGridPosition.transform.position, creature.CurrentGridPosition.transform.position) 
+                        ? Color.green 
+                        : Color.red;
                     lineOrigin.startColor = color;
                     lineOrigin.endColor = color;
                     lineOrigin.enabled = true;

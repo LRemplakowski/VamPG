@@ -4,14 +4,14 @@ namespace AI.Scorers.Option
     using Apex.Serialization;
     using UnityEngine;
 
-    public class IsCurrentEntityActionIdle : ContextualScorerBase<CreatureContext>
+    public class HasActionsQueued : ContextualScorerBase<CreatureContext>
     {
         [ApexSerialization]
         public bool not = false;
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.Owner.PeekActionFromQueue().GetType().Equals(typeof(Idle)) ? score : 0f;
+            return not ^ context.Owner.HasActionsInQueue() ? score : 0f;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace AI.Scorers.Option
             {
                 potentialTargets.AddRange(context.EnemyCombatants);
             }
-            return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.transform.position, target.transform.position) <= weaponsRange)) ? 
+            return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.CurrentGridPosition.transform.position, target.CurrentGridPosition.transform.position) <= weaponsRange)) ? 
                 score : 
                 0f;
         }

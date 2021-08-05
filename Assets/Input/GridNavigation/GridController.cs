@@ -12,7 +12,7 @@ public class GridController : ExposableMonobehaviour
     [SerializeField, ReadOnly]
     private Vector3 bottomLeft;
 
-    [SerializeField, ReadOnly]
+    [SerializeField]
     private GridElement[,] gridElements;
 
     private List<GridElement> activeElements = new List<GridElement>();
@@ -29,43 +29,21 @@ public class GridController : ExposableMonobehaviour
 
     public List<Cover> CoverSourcesInGrid { get; private set; }
 
-    private NavMeshAgent playerAgent;
-
-    //private bool _highlightGrid;
-    //[SerializeField, ExposeProperty]
-    //public bool HighlightGrid
-    //{
-    //    get => _highlightGrid;
-    //    set
-    //    {
-    //        _highlightGrid = value;
-    //        if (_highlightGrid)
-    //        {
-    //            SetElementsInRangeActive();
-    //            HighlightGrid = false;
-    //        }
-    //    }
-    //}
-
-    //#region Enable&Disable
-    //private void OnEnable()
-    //{
-    //    Move.onMovementStarted += OnMovementStarted;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    Move.onMovementStarted -= OnMovementStarted;
-    //}
-    //#endregion
+    private NavMeshAgent gridAgent;
 
     public void Start()
     {
         gridElements = new GridElement[columns, rows];
         bottomLeft = transform.position;
-        playerAgent = GameManager.GetPlayer().GetComponent<NavMeshAgent>();
+        gridAgent = GetComponent<NavMeshAgent>();
         GenerateGrid();
         CoverSourcesInGrid = FindCoverSourcesInGrid();
+    }
+
+    [ContextMenu("Populate grid")]
+    public void PopulateGrid()
+    {
+        Debug.Log("Populating grid!");
     }
 
     private void GenerateGrid()
@@ -97,6 +75,7 @@ public class GridController : ExposableMonobehaviour
         if (NavMesh.SamplePosition(pos, out NavMeshHit hit, .3f, NavMesh.AllAreas))
         {
             GridElement g = Instantiate(gridElementPrefab, new Vector3(pos.x, hit.position.y, pos.z), Quaternion.identity);
+            g.name = column + ";" + row;
             g.transform.parent = this.transform;
             g.transform.localScale = new Vector3(scale, scale, scale);
             g.GridPosition = new Vector2Int(column, row);

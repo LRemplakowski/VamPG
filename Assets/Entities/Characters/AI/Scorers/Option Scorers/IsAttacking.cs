@@ -4,14 +4,14 @@
     using Apex.Serialization;
     using UnityEngine;
 
-    public class HasNewMoveTarget : ContextualScorerBase<CreatureContext>
+    public class IsAttacking : ContextualScorerBase<CreatureContext>
     {
         [ApexSerialization]
         public bool not = false;
 
         public override float Score(CreatureContext context)
         {
-            return not ^ !context.Owner.CurrentGridPosition.Equals(context.CurrentMoveTarget) ? score : 0f;
+            return not ^ context.Owner.PeekActionFromQueue().GetType().IsAssignableFrom(typeof(HostileAction)) ? score : 0f;
         }
     }
 }

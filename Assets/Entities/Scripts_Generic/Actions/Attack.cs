@@ -20,11 +20,9 @@ public class Attack : HostileAction
     public override void Begin()
     {
         Debug.Log(Owner.gameObject.name + " attacks " + Target.gameObject.name);
-        DicePool<Attribute, Skill> targetDefensePool = Target.GetComponent<StatsManager>().GetDefensePool();
-        DicePool<Attribute, Skill> attackerAttackPool = Owner.GetComponent<StatsManager>().GetAttackPool();
         
-        Outcome defenseRoll = Roll.d10(targetDefensePool.GetPoolSize(), 0);
-        Outcome attackRoll = Roll.d10(attackerAttackPool.GetPoolSize(), 1, defenseRoll.successes);
+        Outcome defenseRoll = Target.GetComponent<StatsManager>().GetSkillRoll(AttributeType.Dexterity, SkillType.Athletics);
+        Outcome attackRoll = Owner.GetComponent<StatsManager>().GetAttackRoll(defenseRoll.successes);
         int damage = attackRoll.successes - defenseRoll.successes;
         Debug.Log("Damage from attack: " + damage 
             + "\nAttacker roll: " + attackRoll.successes + ", isCritical? " + attackRoll.isCritical + ", isMessy? " + attackRoll.isMessy + ", isBestialFailure?" + attackRoll.isBestialFailure

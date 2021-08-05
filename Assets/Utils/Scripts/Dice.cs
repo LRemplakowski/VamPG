@@ -98,9 +98,10 @@ namespace Utils.Dice
 
     public static class Roll
     {
+        private static System.Random r = new System.Random();
         public static Outcome d10(int normalDice, int hungerDice)
         {
-            System.Random r = new System.Random();
+            System.Random r = new System.Random((int) DateTime.Now.ToFileTime());
             int[] normals = new int[normalDice];
             for (int i = 0; i < normals.Length; i++)
             {

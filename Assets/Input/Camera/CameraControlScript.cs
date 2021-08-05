@@ -20,32 +20,11 @@ public class CameraControlScript : ExposableMonobehaviour
         if (!(context.performed || context.canceled))
             return;
         Vector2 value = context.ReadValue<Vector2>();
-        //Camera is offset relative to world X & Y axis, hence we adjust direction based on input
         if(value.x == 0 && value.y == 0)
         {
-            //Debug.Log("Vector 0");
             moveDirection = Vector3.zero;
         }
-        else if(value.y == 1 || value.y == -1)
-        {
-            //Debug.Log("Vector forward or backward");
-            moveDirection = new Vector3(-value.y, 0, -value.y);
-        }
-        else if(value.x == 1 || value.x == -1)
-        {
-            //Debug.Log("Move left or right");
-            moveDirection = new Vector3(-value.x, 0, value.x);
-        }
-        else if(value.x == value.y)
-        {
-            //Debug.Log("Move diagonal up right/down left");
-            moveDirection = new Vector3(-value.x+-value.y, 0, 0);
-        }
-        else
-        {
-            //Debug.Log("Move diagonal up left/down right");
-            moveDirection = new Vector3(0, 0, value.x + -value.y);
-        }
+        moveDirection = new Vector3(-value.x, 0, -value.y);
     }
 
     private void Start()

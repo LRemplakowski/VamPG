@@ -112,9 +112,14 @@ public abstract class Creature : Entity
         }
     }
 
-    public EntityAction PickActionQueue()
+    public EntityAction PeekActionFromQueue()
     {
         return ActionQueue.Peek();
+    }
+
+    public bool HasActionsInQueue()
+    {
+        return !ActionQueue.Peek().GetType().Equals(typeof(Idle)) || ActionQueue.Count > 1;
     }
 
     private void OnDrawGizmos()

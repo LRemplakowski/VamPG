@@ -134,6 +134,13 @@ public class StatsManager : ExposableMonobehaviour
         return Roll.d10(normalDice, hungerDice, dc);
     }
 
+    public Outcome GetAttackRoll(int dc)
+    {
+        AttributeType weaponAttribute = GetWeaponAttribute();
+        SkillType weaponSkill = GetWeaponSkill();
+        return GetSkillRoll(weaponAttribute, weaponSkill, dc);
+    }
+
     public List<Attribute> GetAttributes()
     {
         return characterStats.GetAttributes();

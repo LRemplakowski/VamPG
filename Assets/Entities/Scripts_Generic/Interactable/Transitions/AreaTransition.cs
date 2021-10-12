@@ -1,0 +1,60 @@
+﻿namespace Transitions
+{
+    using Transitions.Data;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+    using Utils.Scenes;
+
+    public class AreaTransition : InteractableEntity, ITransition
+    {
+        [SerializeField]
+        private string _sceneName;
+        public string SceneName
+        {
+            get => _sceneName;
+            private set => _sceneName = value;
+        }
+
+        [SerializeField]
+        private int _sceneIndex;
+        public int SceneIndex
+        {
+            get => _sceneIndex;
+            private set => _sceneIndex = value;
+        }
+
+        [SerializeField]
+        private TransitionType type;
+
+        public override void Interact()
+        {
+            Debug.Log("Interacting with area transition!");
+            switch (type)
+            {
+                case TransitionType.index:
+                    MoveToScene(new IndexTransition(SceneIndex));
+                    break;
+                case TransitionType.name:
+                    MoveToScene(new NameTransition(SceneName));
+                    break;
+            }
+            base.Interact();
+        }
+
+        public void MoveToScene(NameTransition data)
+        {
+            SceneLoader.Instance.LoadScene(data.get());
+        }
+
+        public void MoveToScene(IndexTransition data)
+        {
+            Debug.Log("Calling scene loader! " + data.get());
+            SceneLoader.Instance.LoadScene(data.get());
+        }
+    }
+
+    public enum TransitionType
+    {
+        index, name
+    }
+}

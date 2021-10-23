@@ -39,12 +39,13 @@ public class GameManager : ExposableMonobehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = FindObjectOfType<Player>();
         gridController = FindObjectOfType<GridController>();
     }
 
     public static Player GetPlayer()
     {
+        if (player == null)
+            player = FindObjectOfType<Player>();
         return player;
     }
 

@@ -8,7 +8,6 @@ public class CameraControlScript : ExposableMonobehaviour
     private Transform target;
     public Vector3 offset;
 
-
     //Movement variables
     private const float internalMoveTargetSpeed = 8.0f;
     private const float internalMoveSpeed = 4.0f;
@@ -24,7 +23,7 @@ public class CameraControlScript : ExposableMonobehaviour
         {
             moveDirection = Vector3.zero;
         }
-        moveDirection = new Vector3(-value.x, 0, -value.y);
+        moveDirection = new Vector3(value.x, 0, value.y);
     }
 
     private void Start()
@@ -36,7 +35,7 @@ public class CameraControlScript : ExposableMonobehaviour
 
     private void FixedUpdate()
     {
-        moveTarget -= moveDirection * Time.fixedDeltaTime * internalMoveTargetSpeed;
+        moveTarget += moveDirection * Time.fixedDeltaTime * internalMoveTargetSpeed;
     }
 
     private void LateUpdate()

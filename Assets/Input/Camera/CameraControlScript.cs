@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Singleton;
 
-public class CameraControlScript : Singleton<CameraControlScript>
+public class CameraControlScript : InitializedSingleton<CameraControlScript>
 {
     private Transform target;
     public Vector3 offset;
@@ -28,6 +28,11 @@ public class CameraControlScript : Singleton<CameraControlScript>
     }
 
     private void Start()
+    {
+        Initialize();
+    }
+
+    public override void Initialize()
     {
         target = GameManager.GetPlayer().transform;
         transform.position = target.position + offset;

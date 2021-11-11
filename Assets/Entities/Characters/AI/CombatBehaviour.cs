@@ -39,19 +39,20 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
             _raycastOrigin.parent = this.transform;
             _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
         }
-        Move.onMovementStarted += OnMovementStarted;
-        Move.onMovementFinished += OnMovementFinished;
         HostileAction.onAttackFinished += OnHostileActionFinished;
         TurnCombatManager.onCombatStart += OnCombatStart;
         TurnCombatManager.onCombatRoundBegin += OnCombatRoundBegin;
         TurnCombatManager.onCombatRoundEnd += OnCombatRoundEnd;
+        TurnCombatManager.onCombatEnd += OnCombatEnd;
     }
 
     private void OnDisable()
     {
-        Move.onMovementFinished -= OnMovementFinished;
+        HostileAction.onAttackFinished -= OnHostileActionFinished;
         TurnCombatManager.onCombatStart -= OnCombatStart;
         TurnCombatManager.onCombatRoundBegin -= OnCombatRoundBegin;
+        TurnCombatManager.onCombatRoundEnd -= OnCombatRoundEnd;
+        TurnCombatManager.onCombatEnd -= OnCombatEnd;
     }
     #endregion
 
@@ -81,10 +82,18 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     private void OnCombatStart(List<Creature> creaturesInCombat)
     {
+        Move.onMovementStarted += OnMovementStarted;
+        Move.onMovementFinished += OnMovementFinished;
         HasMoved = false;
         HasActed = false;
         GridElement nearest = GameManager.GetGridController().GetNearestGridElement(this.transform.position);
         Owner.Move(nearest);
+    }
+
+    private void OnCombatEnd()
+    {
+        Move.onMovementStarted -= OnMovementStarted;
+        Move.onMovementFinished -= OnMovementFinished;
     }
 
     private void OnCombatRoundBegin(Creature currentActor)

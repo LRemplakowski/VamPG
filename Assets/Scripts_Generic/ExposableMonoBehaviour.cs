@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
+[Serializable]
 public class ExposableMonobehaviour : MonoBehaviour 
 {
     public bool IsOfType(System.Type t)

@@ -19,14 +19,14 @@ public class DevStateChanger : ExposableMonobehaviour
             options.Add(new Dropdown.OptionData(((GameState)g).ToString()));
         }
         dropdown.AddOptions(options);
-        dropdown.SetValueWithoutNotify((int)StateManager.instance.GetCurrentState());
-        StateManager.instance.onGameStateChanged += OnStateChange;
+        dropdown.SetValueWithoutNotify((int)StateManager.Instance.GetCurrentState());
+        StateManager.OnGameStateChanged += OnStateChange;
         dropdown.onValueChanged.AddListener(delegate { ChangeState(); });
     }
 
     private void OnDisable()
     {
-        StateManager.instance.onGameStateChanged -= OnStateChange;
+        StateManager.OnGameStateChanged -= OnStateChange;
         dropdown.onValueChanged.RemoveListener(delegate { ChangeState(); });
     }
 
@@ -43,6 +43,6 @@ public class DevStateChanger : ExposableMonobehaviour
 
     private void ChangeState()
     {
-        StateManager.instance.SetCurrentState(dropdown.value);
+        StateManager.Instance.SetCurrentState(dropdown.value);
     }
 }

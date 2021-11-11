@@ -18,7 +18,7 @@ public sealed class CreatureContext : IAIContext
 
     public List<Cover> CoverSourcesInCombatGrid => GameManager.GetGridController().CoverSourcesInGrid;
 
-    public bool IsInCombat => StateManager.instance.GetCurrentState().Equals(GameState.Combat);
+    public bool IsInCombat => StateManager.Instance.GetCurrentState().Equals(GameState.Combat);
 
     public bool IsPlayerControlled => Owner.Faction.Equals(Faction.Player);
 
@@ -33,17 +33,17 @@ public sealed class CreatureContext : IAIContext
 
     public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => TurnCombatManager.instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
+    public List<Creature> OtherCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => TurnCombatManager.instance.GetCreaturesInCombat().FindAll(c => c.Faction.Equals(Faction.Player));
+    public List<Creature> PlayerControlledCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => c.Faction.Equals(Faction.Player));
 
     public List<Creature> FriendlyCombatants => TurnCombatManager
-        .instance
+        .Instance
         .GetCreaturesInCombat()
         .FindAll(c => c.Faction.Equals(Faction.Friendly));
 
     public List<Creature> EnemyCombatants => TurnCombatManager
-        .instance
+        .Instance
         .GetCreaturesInCombat()
         .FindAll(c => c.Faction.Equals(Faction.Hostile));
 }

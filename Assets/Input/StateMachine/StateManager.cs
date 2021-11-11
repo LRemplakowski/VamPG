@@ -1,24 +1,15 @@
 using UnityEngine;
+using Utils.Singleton;
 
 [System.Serializable]
-public class StateManager : ExposableMonobehaviour
+public class StateManager : Singleton<StateManager>
 {
-    #region Instance
-    public static StateManager instance;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
-    #endregion
 
     [SerializeField]
     private GameState currentState;
 
-    public delegate void OnGameStateChanged(GameState newState, GameState oldState);
-    public OnGameStateChanged onGameStateChanged;
+    public delegate void GameStateChanged(GameState newState, GameState oldState);
+    public static event GameStateChanged OnGameStateChanged;
 
     public GameState GetCurrentState()
     {
@@ -28,9 +19,9 @@ public class StateManager : ExposableMonobehaviour
     public void SetCurrentState(GameState newState)
     {
         currentState = newState;
-        if (onGameStateChanged != null)
+        if (OnGameStateChanged != null)
         {
-            onGameStateChanged.Invoke(newState, currentState);
+            OnGameStateChanged.Invoke(newState, currentState);
         }
     }
 

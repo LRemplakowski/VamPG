@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Singleton;
 
-public class CameraControlScript : ExposableMonobehaviour
+public class CameraControlScript : Singleton<CameraControlScript>
 {
     private Transform target;
     public Vector3 offset;
-
 
     //Movement variables
     private const float internalMoveTargetSpeed = 8.0f;
@@ -24,7 +24,7 @@ public class CameraControlScript : ExposableMonobehaviour
         {
             moveDirection = Vector3.zero;
         }
-        moveDirection = new Vector3(-value.x, 0, -value.y);
+        moveDirection = new Vector3(value.x, 0, value.y);
     }
 
     private void Start()
@@ -36,7 +36,7 @@ public class CameraControlScript : ExposableMonobehaviour
 
     private void FixedUpdate()
     {
-        moveTarget -= moveDirection * Time.fixedDeltaTime * internalMoveTargetSpeed;
+        moveTarget += moveDirection * Time.fixedDeltaTime * internalMoveTargetSpeed;
     }
 
     private void LateUpdate()

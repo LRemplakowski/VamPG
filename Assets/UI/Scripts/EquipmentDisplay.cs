@@ -11,7 +11,7 @@ public class EquipmentDisplay : ExposableMonobehaviour
     private void Awake()
     {
         displaySlots = GetComponentsInChildren<EquipmentDisplaySlot>(true);
-        equipmentManager = EquipmentManager.instance;
+        equipmentManager = EquipmentManager.Instance;
     }
 
     private void OnEnable()

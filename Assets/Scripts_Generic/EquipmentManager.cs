@@ -1,20 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils.Singleton;
 
-public class EquipmentManager : ExposableMonobehaviour
+public class EquipmentManager : InitializedSingleton<EquipmentManager>
 {
-    #region Instance
-    public static EquipmentManager instance;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-    }
-    #endregion
-
     public SkinnedMeshRenderer targetMesh;
 
     private EquipmentPiece[] currentEquipment;
@@ -39,6 +29,11 @@ public class EquipmentManager : ExposableMonobehaviour
         {
             targetMesh = GameManager.GetPlayer().GetComponentInChildren<SkinnedMeshRenderer>();
         }
+    }
+
+    public override void Initialize()
+    {
+        targetMesh = GameManager.GetPlayer().GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
     public EquipmentPiece GetItemInSlot(EquipmentSlot slot)

@@ -6,7 +6,7 @@
     {
         public override void Execute(CreatureContext context)
         {
-            TurnCombatManager.instance.NextRound();
+            TurnCombatManager.Instance.NextRound();
         }
     }
 }

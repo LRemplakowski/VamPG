@@ -278,7 +278,7 @@ public class GridController : ExposableMonobehaviour
     public void Dev_SetWholeGridActive()
     {
         ClearActiveElements();
-        Creature currentActiveActor = TurnCombatManager.instance.CurrentActiveActor;
+        Creature currentActiveActor = TurnCombatManager.Instance.CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;

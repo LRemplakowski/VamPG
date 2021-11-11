@@ -12,9 +12,19 @@ public class GUIDragElementHandler : InputHandler
     private Canvas canvas;
     private RectTransform rectTransform;
 
-    private void Awake()
+    public override void Awake()
     {
-        if(window == null)
+
+    }
+
+    private void Start()
+    {
+        Initialize();
+    }
+
+    public override void Initialize()
+    {
+        if (window == null)
         {
             window = GetComponentInParent<UIWindow>();
         }

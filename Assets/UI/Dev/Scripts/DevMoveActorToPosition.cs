@@ -26,7 +26,7 @@ public class DevMoveActorToPosition : MonoBehaviour
     public void OnButtonClick()
     {
         InputOverride = true;
-        TurnCombatManager.instance.GridInstance.Dev_SetWholeGridActive();
+        TurnCombatManager.Instance.GridInstance.Dev_SetWholeGridActive();
     }
 
     private void OnMovementStarted(Creature who)

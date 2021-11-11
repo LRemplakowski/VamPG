@@ -18,16 +18,9 @@ public class GUIWindowsManager : InputHandler
         set => _activeWindows = value;
     }
 
-    private void Awake()
+    public override void Awake()
     {
-        Canvas canvas = FindObjectOfType<Canvas>();
-        if (inventoryUI == null)
-            inventoryUI = canvas.GetComponentInChildren<PlayerInventoryUI>(true);
-        if (characterSheetUI == null)
-            characterSheetUI = canvas.GetComponentInChildren<CharacterSheetUI>(true);
-        if (dialogueUI == null)
-            dialogueUI = canvas.GetComponentInChildren<DialogueWindowUI>(true);
-        windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
+        base.Awake();
     }
 
     #region Enable&Disable
@@ -43,6 +36,23 @@ public class GUIWindowsManager : InputHandler
         DialogueManager.onDialogueEnd -= ToggleDialogue;
     }
     #endregion
+
+    private void Start()
+    {
+        Initialize();
+    }
+
+    public override void Initialize()
+    {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (inventoryUI == null)
+            inventoryUI = canvas.GetComponentInChildren<PlayerInventoryUI>(true);
+        if (characterSheetUI == null)
+            characterSheetUI = canvas.GetComponentInChildren<CharacterSheetUI>(true);
+        if (dialogueUI == null)
+            dialogueUI = canvas.GetComponentInChildren<DialogueWindowUI>(true);
+        windows = new List<UIWindow>(FindObjectOfType<Canvas>().GetComponentsInChildren<UIWindow>(true));
+    }
 
     private void ToggleInventory()
     {

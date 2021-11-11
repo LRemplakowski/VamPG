@@ -1,35 +1,42 @@
 ﻿namespace Transitions.Data
 { 
-    public abstract class TransitionData<T>
+    public abstract class TransitionData
     {
-        public abstract T get();
+        public readonly TransitionType transitionType;
+
+        public TransitionData(TransitionType transitionType)
+        {
+            this.transitionType = transitionType;
+        }
+
+        public abstract object get();
     }
 
-    public class IndexTransition : TransitionData<int>
+    public class IndexTransition : TransitionData
     {
         private readonly int sceneIndex;
         
-        public IndexTransition(int sceneIndex)
+        public IndexTransition(int sceneIndex) : base(TransitionType.index)
         {
             this.sceneIndex = sceneIndex;
         }
 
-        public override int get()
+        public override object get()
         {
             return sceneIndex;
         }
     }
 
-    public class NameTransition : TransitionData<string>
+    public class NameTransition : TransitionData
     {
         private readonly string sceneName;
 
-        public NameTransition(string sceneName)
+        public NameTransition(string sceneName) : base(TransitionType.name)
         {
             this.sceneName = sceneName;
         }
 
-        public override string get()
+        public override object get()
         {
             return sceneName;
         }

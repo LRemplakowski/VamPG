@@ -12,8 +12,8 @@ public class EquipmentPiece : InventoryItem
     public override void Use()
     {
         base.Use();
-        Debug.Log("Item: " + this + "\nEquipment manager instance: " + EquipmentManager.instance);
-        EquipmentManager.instance.Equip(this);
+        Debug.Log("Item: " + this + "\nEquipment manager instance: " + EquipmentManager.Instance);
+        EquipmentManager.Instance.Equip(this);
         RemoveFromInventory();
     }
 }

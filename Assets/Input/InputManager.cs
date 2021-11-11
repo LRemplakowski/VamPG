@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Singleton;
 
 [System.Serializable]
-public class InputManager : ExposableMonobehaviour
+public class InputManager : InitializedSingleton<InputManager>
 {
     [SerializeField]
     private static PlayerInput _input;
@@ -15,7 +16,13 @@ public class InputManager : ExposableMonobehaviour
         set => _input = value;
     }
 
-    private void Awake()
+    public override void Awake()
+    {
+        base.Awake();
+        Input = FindObjectOfType<PlayerInput>(true);
+    }
+
+    public override void Initialize()
     {
         Input = FindObjectOfType<PlayerInput>(true);
     }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6260562477123989387}
   - component: {fileID: 6260562477123989388}
   - component: {fileID: 6260562477123989385}
+  - component: {fileID: 396648841}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -163,7 +164,7 @@ MonoBehaviour:
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_TargetAssemblyTypeName: GUIWindowsManager, Assembly-CSharp
         m_MethodName: OnInventory
         m_Mode: 0
         m_Arguments:
@@ -216,7 +217,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: GUIWindowsManager, Assembly-CSharp
-        m_MethodName: OnCharacterSheet
+        m_MethodName: OnInventory
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -233,3 +234,15 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &396648841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6260562477123989389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c45d9b3829de72498ac3b2684db041c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

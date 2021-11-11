@@ -23,7 +23,7 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
     private void Start()
     {
         dropdown = GetComponent<Dropdown>();
-        activeSceneCreatures = TurnCombatManager.instance.GetCreaturesInCombat();
+        activeSceneCreatures = TurnCombatManager.Instance.GetCreaturesInCombat();
         dropdown.ClearOptions();
         List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
         foreach (Creature c in activeSceneCreatures)
@@ -31,13 +31,13 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
             options.Add(new Dropdown.OptionData(c.gameObject.ToString()));
         }
         dropdown.AddOptions(options);
-        if (TurnCombatManager.instance.CurrentActiveActor != null)
-            dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(TurnCombatManager.instance.CurrentActiveActor));
+        if (TurnCombatManager.Instance.CurrentActiveActor != null)
+            dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(TurnCombatManager.Instance.CurrentActiveActor));
     }
 
     private void OnActiveActorChanged(Creature newActor, Creature oldActor)
     {
-        activeSceneCreatures = TurnCombatManager.instance.GetCreaturesInCombat();
+        activeSceneCreatures = TurnCombatManager.Instance.GetCreaturesInCombat();
         dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(newActor));
     }
 }

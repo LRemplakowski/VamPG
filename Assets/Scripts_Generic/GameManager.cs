@@ -2,42 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils.Singleton;
 
-public class GameManager : ExposableMonobehaviour
+public class GameManager : InitializedSingleton<GameManager>
 {
     private static Player player;
     private static GridController gridController;
 
-    #region Singleton
-    private static GameManager instance;
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        Singleton();
-    }
-    private void Singleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-    }
-    private void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-    #endregion
-
     // Start is called before the first frame update
     void Start()
+    {
+        gridController = FindObjectOfType<GridController>();
+    }
+
+    public override void Initialize()
     {
         gridController = FindObjectOfType<GridController>();
     }
@@ -57,5 +35,5 @@ public class GameManager : ExposableMonobehaviour
     public static string GetLanguage()
     {
         return "PL";
-    }    
+    }
 }

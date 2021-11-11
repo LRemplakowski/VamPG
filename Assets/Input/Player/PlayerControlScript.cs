@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 
-[RequireComponent(typeof(Player))]
 public class PlayerControlScript : InputHandler
 {
     private const int raycastRange = 100;
@@ -16,6 +15,19 @@ public class PlayerControlScript : InputHandler
     private LineRenderer lineOrigin;
 
     public LayerMask defaultRaycastMask;
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        Initialize();
+    }
+
+    public override void Initialize()
+    {
+        player = FindObjectOfType<Player>();
+        if (lineOrigin == null)
+            lineOrigin = player.GetComponentInChildren<LineRenderer>(true);
+    }
 
     public void OnClick(InputAction.CallbackContext context)
     {
@@ -34,7 +46,7 @@ public class PlayerControlScript : InputHandler
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
         {
-            switch (StateManager.instance.GetCurrentState())
+            switch (StateManager.Instance.GetCurrentState())
             {
                 case GameState.Combat:
                     {
@@ -72,26 +84,26 @@ public class PlayerControlScript : InputHandler
         {
             case BarAction.MOVE:
                 Debug.Log("Mouse clicked in move mode!");
-                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                     return;
                 else if (hit.collider.GetComponent<GridElement>())
                 {
                     if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
                     {
-                        TurnCombatManager.instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                        TurnCombatManager.Instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
                     }
                 }
                 break;
             case BarAction.ATTACK:
                 Debug.Log("Mouse clicked in attack mode!");
-                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
+                if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
                     return;
                 NPC enemy = hit.collider.GetComponent<NPC>();
                 if (enemy)
                 {
                     if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(this.transform.position, enemy.transform.position) <= GetComponent<StatsManager>().GetWeaponMaxRange())
                     {
-                        TurnCombatManager.instance.CurrentActiveActor.Attack(enemy);
+                        TurnCombatManager.Instance.CurrentActiveActor.Attack(enemy);
                     }
                 }
                 break;
@@ -111,7 +123,7 @@ public class PlayerControlScript : InputHandler
             {
                 lastHit = hit.collider;
             }
-            switch (StateManager.instance.GetCurrentState())
+            switch (StateManager.Instance.GetCurrentState())
             {
                 case GameState.Exploration:
                     {
@@ -150,7 +162,7 @@ public class PlayerControlScript : InputHandler
         switch (selectedBarAction.actionType)
         {
             case BarAction.MOVE:
-                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                     return;
                 if (lastHit != hit.collider)
                 {
@@ -166,7 +178,7 @@ public class PlayerControlScript : InputHandler
                 }
                 break;
             case BarAction.ATTACK:
-                if (!TurnCombatManager.instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
+                if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
                     return;
                 if (lastHit != hit.collider)
                 {
@@ -193,13 +205,4 @@ public class PlayerControlScript : InputHandler
                 break;
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        player = this.GetComponent<Player>();
-        if (lineOrigin == null)
-            lineOrigin = GetComponentInChildren<LineRenderer>(true);
-    }
-
 }

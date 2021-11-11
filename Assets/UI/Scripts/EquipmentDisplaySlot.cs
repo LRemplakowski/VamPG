@@ -42,7 +42,7 @@ public class EquipmentDisplaySlot : ExposableMonobehaviour
     public void UnequipItem()
     {
         if(item != null)
-            EquipmentManager.instance.Unequip((int)item.slot);
+            EquipmentManager.Instance.Unequip((int)item.slot);
     }
 
     public void DisplayItem(EquipmentPiece item)

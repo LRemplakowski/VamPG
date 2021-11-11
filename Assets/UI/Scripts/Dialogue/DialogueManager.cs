@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DD;
 using System;
+using Utils.Singleton;
 
-public class DialogueManager : ExposableMonobehaviour
+public class DialogueManager : Singleton<DialogueManager>
 {
     public VerticalLayoutGroup dialogueText;
     public VerticalLayoutGroup optionsContent;
@@ -30,15 +31,6 @@ public class DialogueManager : ExposableMonobehaviour
     public static OnDialogueBegin onDialogueBegin;
     public delegate void OnDialogueEnd();
     public static OnDialogueEnd onDialogueEnd;
-
-    #region Instance
-    public static DialogueManager Instance { get; private set; }
-    private void Awake()
-    {
-        if (!Instance)
-            Instance = this;
-    }
-    #endregion
 
     #region Enable&Disable
     private void OnEnable()
@@ -68,10 +60,6 @@ public class DialogueManager : ExposableMonobehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        //StartDialogue(DialogueFile);
-    }
 
     // Update is called once per frame
     void Update()
@@ -88,7 +76,7 @@ public class DialogueManager : ExposableMonobehaviour
         m_dialoguePlayer = new DialoguePlayer(m_loadedDialogue);
 
         m_dialoguePlayer.OnDialogueEnded += OnDialogueEnded;
-        StateManager.instance.SetCurrentState(GameState.Conversation);
+        StateManager.Instance.SetCurrentState(GameState.Conversation);
         m_dialoguePlayer.Play();
         OnDialogueStarted(m_dialoguePlayer);
     }
@@ -105,7 +93,7 @@ public class DialogueManager : ExposableMonobehaviour
         onDialogueEnd?.Invoke();
         m_dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
         m_dialoguePlayer = null;
-        StateManager.instance.SetCurrentState(GameState.Exploration);
+        StateManager.Instance.SetCurrentState(GameState.Exploration);
     }
 
     private void OnExecuteScript(DialoguePlayer sender, string script)

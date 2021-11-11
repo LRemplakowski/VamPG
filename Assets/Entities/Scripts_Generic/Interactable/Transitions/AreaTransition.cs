@@ -1,9 +1,8 @@
 ﻿namespace Transitions
 {
     using Transitions.Data;
+    using Transitions.Fade;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
-    using Utils.Scenes;
 
     public class AreaTransition : InteractableEntity, ITransition
     {
@@ -41,15 +40,9 @@
             base.Interact();
         }
 
-        public void MoveToScene(NameTransition data)
+        public void MoveToScene(TransitionData data)
         {
-            SceneLoader.Instance.LoadScene(data.get());
-        }
-
-        public void MoveToScene(IndexTransition data)
-        {
-            Debug.Log("Calling scene loader! " + data.get());
-            SceneLoader.Instance.LoadScene(data.get());
+            TransitionManager.Instance.PerformTransition(data);
         }
     }
 

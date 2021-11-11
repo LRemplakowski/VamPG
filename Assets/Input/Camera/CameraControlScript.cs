@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils.Singleton;
 
-public class CameraControlScript : ExposableMonobehaviour
+public class CameraControlScript : Singleton<CameraControlScript>
 {
     private Transform target;
     public Vector3 offset;

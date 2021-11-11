@@ -7,12 +7,12 @@ public class DevGUIManager : ExposableMonobehaviour
     #region Enable&Disable
     private void OnEnable()
     {
-        StateManager.instance.onGameStateChanged += MaybeShowOrHideDevTurnCombatGUI;
+        StateManager.OnGameStateChanged += MaybeShowOrHideDevTurnCombatGUI;
     }
 
     private void OnDisable()
     {
-        StateManager.instance.onGameStateChanged -= MaybeShowOrHideDevTurnCombatGUI;
+        StateManager.OnGameStateChanged -= MaybeShowOrHideDevTurnCombatGUI;
     }
     #endregion
 
@@ -21,7 +21,7 @@ public class DevGUIManager : ExposableMonobehaviour
     private void Start()
     {
         devTurnCombatGUI = GetComponentInChildren<DevTurnCombatGUI>();
-        devTurnCombatGUI.gameObject.SetActive(StateManager.instance.GetCurrentState() == GameState.Combat);
+        devTurnCombatGUI.gameObject.SetActive(StateManager.Instance.GetCurrentState() == GameState.Combat);
     }
 
     public void MaybeShowOrHideDevTurnCombatGUI(GameState newState, GameState oldState)

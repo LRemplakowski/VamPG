@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utils.Singleton;
 
-public class TurnCombatManager : ExposableMonobehaviour
+public class TurnCombatManager : Singleton<TurnCombatManager>
 {
     public delegate void OnCombatStart(List<Creature> creaturesInCombat);
     public static OnCombatStart onCombatStart;
@@ -19,31 +20,16 @@ public class TurnCombatManager : ExposableMonobehaviour
 
     private int roundCounter;
 
-    #region Instance
-    public static TurnCombatManager instance;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-    }
-    #endregion
-
     #region Enable&Disable
     private void OnEnable()
     {
-        StateManager.instance.onGameStateChanged -= MaybeStartOrEndCombat;
-        StateManager.instance.onGameStateChanged += MaybeStartOrEndCombat;
+        StateManager.OnGameStateChanged -= MaybeStartOrEndCombat;
+        StateManager.OnGameStateChanged += MaybeStartOrEndCombat;
         onActiveActorChanged += NewRound;
     }
     private void OnDisable()
     {
-        StateManager.instance.onGameStateChanged -= MaybeStartOrEndCombat;
+        StateManager.OnGameStateChanged -= MaybeStartOrEndCombat;
         onActiveActorChanged -= NewRound;
     }
     #endregion
@@ -78,7 +64,7 @@ public class TurnCombatManager : ExposableMonobehaviour
 
     private void Update()
     {
-        if (StateManager.instance.GetCurrentState().Equals(GameState.Combat))
+        if (StateManager.Instance.GetCurrentState().Equals(GameState.Combat))
         {
             foreach (Creature c in creaturesInCombat)
             {
@@ -88,7 +74,7 @@ public class TurnCombatManager : ExposableMonobehaviour
                 }
                 else
                 {
-                    StateManager.instance.SetCurrentState(GameState.Exploration);
+                    StateManager.Instance.SetCurrentState(GameState.Exploration);
                 }
             }
         }

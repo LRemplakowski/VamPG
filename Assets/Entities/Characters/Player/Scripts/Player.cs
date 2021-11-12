@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Utils.Singleton;
 
 public class Player : Creature
 {
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     public override void Move(Vector3 moveTarget)
     {
         AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget));

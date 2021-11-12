@@ -1,7 +1,7 @@
 ﻿namespace Transitions
 {
     using Transitions.Data;
-    using Transitions.Fade;
+    using Transitions.Manager;
     using UnityEngine;
 
     public class AreaTransition : InteractableEntity, ITransition

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Transitions.Fade;
+using Transitions.Manager;
 
 public class LoadingScreenController : MonoBehaviour
 {

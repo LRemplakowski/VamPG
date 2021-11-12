@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button)), RequireComponent(typeof(TextMeshProUGUI)), RequireComponent(typeof(GUIClickController))]
+[RequireComponent(typeof(Button)), RequireComponent(typeof(TextMeshProUGUI))]
 
 public class DialogueChoiceButton : ExposableMonobehaviour
 {
@@ -15,8 +15,6 @@ public class DialogueChoiceButton : ExposableMonobehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GUIClickController controller = GetComponent<GUIClickController>();
-        controller.onLeft.AddListener(OnClick);
         manager = DialogueManager.Instance;
     }
 

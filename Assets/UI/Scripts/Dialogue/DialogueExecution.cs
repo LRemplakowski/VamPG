@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using Utils.Dialogue;
 using UnityEngine;
+using Transitions.Manager;
+using Transitions.Data;
 
 public class DialogueExecution
 {
     private static readonly DialogueExecution instance = new DialogueExecution();
+
+    private DialogueExecution()
+    {
+
+    }
 
     public static void Execute(string execution)
     {
@@ -17,5 +24,15 @@ public class DialogueExecution
     public static void TestMethod(string message)
     {
         Debug.Log(message);
+    }
+
+    public static void NameTransition(string sceneName)
+    {
+        TransitionManager.Instance.PerformTransition(new NameTransition(sceneName));
+    }
+
+    public static void IndexTransition(int sceneIndex)
+    {
+        TransitionManager.Instance.PerformTransition(new IndexTransition(sceneIndex));
     }
 }

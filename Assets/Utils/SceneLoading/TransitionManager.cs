@@ -6,7 +6,7 @@ using UnityEngine;
 using Utils.Scenes;
 using Utils.Singleton;
 
-namespace Transitions.Fade
+namespace Transitions.Manager
 {
     public class TransitionManager : Singleton<TransitionManager>
     {

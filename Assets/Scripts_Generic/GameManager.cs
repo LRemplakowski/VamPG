@@ -23,7 +23,7 @@ public class GameManager : InitializedSingleton<GameManager>
     public static Player GetPlayer()
     {
         if (player == null)
-            player = FindObjectOfType<Player>();
+            player = FindObjectOfType<Player>(true);
         return player;
     }
 

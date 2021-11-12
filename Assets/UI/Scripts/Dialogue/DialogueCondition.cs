@@ -8,6 +8,11 @@ public class DialogueCondition
 {
     private static readonly DialogueCondition instance = new DialogueCondition();
 
+    private DialogueCondition()
+    {
+
+    }
+
     public static bool Evaluate(string condition)
     {
         MethodInvoker.ParseMethod(condition, out string methodName, out List<object> args);

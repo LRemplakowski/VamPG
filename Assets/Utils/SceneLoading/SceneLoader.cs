@@ -25,6 +25,7 @@
         {
             SceneManager.SetActiveScene(scene);
             SceneInitializer.InitializeSingletons();
+                
         }
 
         private IEnumerator LoadScene(int sceneIndex)

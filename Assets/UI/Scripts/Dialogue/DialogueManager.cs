@@ -7,12 +7,14 @@ using DD;
 using System;
 using Utils.Singleton;
 
-public class DialogueManager : Singleton<DialogueManager>
+public class DialogueManager : InitializedSingleton<DialogueManager>
 {
-    public VerticalLayoutGroup dialogueText;
-    public VerticalLayoutGroup optionsContent;
-    public GameObject dialogueLine;
-    public GameObject dialogueChoice;
+    [SerializeField]
+    private VerticalLayoutGroup historyContent, optionsContent;
+    [SerializeField]
+    private GameObject dialogueLine, dialogueChoice;
+    [SerializeField]
+    private DialogueWindowUI dialogueWindow;
 
     private List<GameObject> choices = new List<GameObject>();
     private List<GameObject> history = new List<GameObject>();
@@ -60,6 +62,20 @@ public class DialogueManager : Singleton<DialogueManager>
     }
     #endregion
 
+    private void Start()
+    {
+        Initialize();
+    }
+
+    public override void Initialize()
+    {
+        if (dialogueWindow == null)
+        {
+            dialogueWindow = FindObjectOfType<DialogueWindowUI>(true);
+            historyContent = dialogueWindow.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
+            optionsContent = dialogueWindow.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
+        }
+    }
 
     // Update is called once per frame
     void Update()
@@ -70,6 +86,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
     public void StartDialogue(TextAsset dialogueFile)
     {
+        dialogueWindow.gameObject.SetActive(true);
         // load the dialogue
         m_loadedDialogue = Dialogue.FromAsset(dialogueFile);
         // create a player to play through the dialogue
@@ -93,6 +110,7 @@ public class DialogueManager : Singleton<DialogueManager>
         onDialogueEnd?.Invoke();
         m_dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
         m_dialoguePlayer = null;
+        dialogueWindow.gameObject.SetActive(false);
         StateManager.Instance.SetCurrentState(GameState.Exploration);
     }
 
@@ -129,7 +147,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private void AddNewLine(string author, string message)
     {
-        TextMeshProUGUI t = Instantiate(dialogueLine, dialogueText.transform).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI t = Instantiate(dialogueLine, historyContent.transform).GetComponent<TextMeshProUGUI>();
         t.text = author + ": " + message;
         history.Add(t.gameObject);
     }

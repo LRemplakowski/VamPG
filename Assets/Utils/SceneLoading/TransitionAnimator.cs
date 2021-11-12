@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Transitions.Fade
+namespace Transitions.Manager
 {
     [Serializable]
     public class TransitionAnimator : ExposableMonobehaviour

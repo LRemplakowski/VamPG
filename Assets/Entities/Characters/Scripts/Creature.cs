@@ -50,19 +50,36 @@ public abstract class Creature : Entity
         }
     }
 
-    [HideInInspector]
-    private Queue<EntityAction> ActionQueue { get; set; }
+    private Queue<EntityAction> _actionQueue;
+    private Queue<EntityAction> ActionQueue 
+    {
+        get
+        {
+            if (_actionQueue == null)
+            {
+                _actionQueue = new Queue<EntityAction>();
+                AddActionToQueue(new Idle(this));
+            }    
+            return _actionQueue;
+        }
+    }
 
     public abstract void Move(Vector3 moveTarget);
     public abstract void Move(GridElement moveTarget);
     public abstract void Attack(Creature target);
+
+    public void ForceCreatureToPosition(Vector3 position)
+    {
+        ClearAllActions();
+        Debug.LogWarning("Forcing creature to position: " + position);
+        agent.Warp(position);
+    }
 
     protected virtual void Start()
     {
         if (!inventory)
             inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
         agent = GetComponent<NavMeshAgent>();
-        ActionQueue = new Queue<EntityAction>();
         ActionQueue.Enqueue(new Idle(this));
     }
 
@@ -73,7 +90,9 @@ public abstract class Creature : Entity
 
     public void ClearAllActions()
     {
-        ActionQueue.Peek().Abort();
+        EntityAction currentAction = ActionQueue.Peek();
+        if (currentAction != null)
+            currentAction.Abort();
         ActionQueue.Clear();
         ActionQueue.Enqueue(new Idle(this));
     }

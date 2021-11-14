@@ -53,7 +53,7 @@ public class CameraControlScript : InitializedSingleton<CameraControlScript>
         transform.position = target.position;
         moveTarget = transform.position;
         cameraTransform.localPosition = offset;
-        cameraTransform.LookAt(target);
+        cameraTransform.LookAt(rotationTarget);
     }
 
     private void FixedUpdate()

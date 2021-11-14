@@ -43,7 +43,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""LeftClick"",
                     ""type"": ""Button"",
                     ""id"": ""4e1d31c1-b9cf-4651-bf23-29b3b50e4313"",
                     ""expectedControlType"": ""Button"",
@@ -51,12 +51,20 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""MousePosition"",
-                    ""type"": ""Value"",
-                    ""id"": ""45c46636-5c1a-48a0-b7d3-0e840788d914"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""7be2fee1-49a6-4393-80b6-67696fbeb487"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""LeftMouseHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""64b8147b-c7fb-4cd3-a9aa-4f4ab66528f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold""
                 },
                 {
                     ""name"": ""CharacterSheet"",
@@ -87,6 +95,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""type"": ""Button"",
                     ""id"": ""8d5b08d9-3a82-43e7-9a70-274ccee14ac5"",
                     ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""45c46636-5c1a-48a0-b7d3-0e840788d914"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -220,18 +236,7 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""85d5a619-97a1-4824-b4c6-f559fcf12df2"",
-                    ""path"": ""<Mouse>/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""MousePosition"",
+                    ""action"": ""LeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -309,6 +314,39 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""MouseScrollHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37bbd8c4-b0a5-4fe9-a3a2-9d99e3121d01"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""85d5a619-97a1-4824-b4c6-f559fcf12df2"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e91f4d24-2ca0-491f-9d32-fd7c09705aa7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftMouseHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -467,12 +505,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         m_Player_CameraMove = m_Player.FindAction("CameraMove", throwIfNotFound: true);
         m_Player_CameraZoom = m_Player.FindAction("CameraZoom", throwIfNotFound: true);
         m_Player_CameraRotate = m_Player.FindAction("CameraRotate", throwIfNotFound: true);
-        m_Player_Click = m_Player.FindAction("Click", throwIfNotFound: true);
-        m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
+        m_Player_LeftClick = m_Player.FindAction("LeftClick", throwIfNotFound: true);
+        m_Player_RightClick = m_Player.FindAction("RightClick", throwIfNotFound: true);
+        m_Player_LeftMouseHold = m_Player.FindAction("LeftMouseHold", throwIfNotFound: true);
         m_Player_CharacterSheet = m_Player.FindAction("CharacterSheet", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Escape = m_Player.FindAction("Escape", throwIfNotFound: true);
         m_Player_MouseScrollHold = m_Player.FindAction("MouseScrollHold", throwIfNotFound: true);
+        m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -531,12 +571,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_CameraMove;
     private readonly InputAction m_Player_CameraZoom;
     private readonly InputAction m_Player_CameraRotate;
-    private readonly InputAction m_Player_Click;
-    private readonly InputAction m_Player_MousePosition;
+    private readonly InputAction m_Player_LeftClick;
+    private readonly InputAction m_Player_RightClick;
+    private readonly InputAction m_Player_LeftMouseHold;
     private readonly InputAction m_Player_CharacterSheet;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Escape;
     private readonly InputAction m_Player_MouseScrollHold;
+    private readonly InputAction m_Player_MousePosition;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -544,12 +586,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         public InputAction @CameraMove => m_Wrapper.m_Player_CameraMove;
         public InputAction @CameraZoom => m_Wrapper.m_Player_CameraZoom;
         public InputAction @CameraRotate => m_Wrapper.m_Player_CameraRotate;
-        public InputAction @Click => m_Wrapper.m_Player_Click;
-        public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
+        public InputAction @LeftClick => m_Wrapper.m_Player_LeftClick;
+        public InputAction @RightClick => m_Wrapper.m_Player_RightClick;
+        public InputAction @LeftMouseHold => m_Wrapper.m_Player_LeftMouseHold;
         public InputAction @CharacterSheet => m_Wrapper.m_Player_CharacterSheet;
         public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         public InputAction @Escape => m_Wrapper.m_Player_Escape;
         public InputAction @MouseScrollHold => m_Wrapper.m_Player_MouseScrollHold;
+        public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -568,12 +612,15 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @CameraRotate.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
                 @CameraRotate.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCameraRotate;
-                @Click.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                @Click.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                @Click.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnClick;
-                @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
-                @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
-                @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @LeftClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftClick;
+                @LeftClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftClick;
+                @LeftClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftClick;
+                @RightClick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                @RightClick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                @RightClick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRightClick;
+                @LeftMouseHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftMouseHold;
+                @LeftMouseHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftMouseHold;
+                @LeftMouseHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftMouseHold;
                 @CharacterSheet.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
                 @CharacterSheet.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
                 @CharacterSheet.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCharacterSheet;
@@ -586,6 +633,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @MouseScrollHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseScrollHold;
                 @MouseScrollHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseScrollHold;
                 @MouseScrollHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMouseScrollHold;
+                @MousePosition.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
+                @MousePosition.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMousePosition;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -599,12 +649,15 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @CameraRotate.started += instance.OnCameraRotate;
                 @CameraRotate.performed += instance.OnCameraRotate;
                 @CameraRotate.canceled += instance.OnCameraRotate;
-                @Click.started += instance.OnClick;
-                @Click.performed += instance.OnClick;
-                @Click.canceled += instance.OnClick;
-                @MousePosition.started += instance.OnMousePosition;
-                @MousePosition.performed += instance.OnMousePosition;
-                @MousePosition.canceled += instance.OnMousePosition;
+                @LeftClick.started += instance.OnLeftClick;
+                @LeftClick.performed += instance.OnLeftClick;
+                @LeftClick.canceled += instance.OnLeftClick;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
+                @LeftMouseHold.started += instance.OnLeftMouseHold;
+                @LeftMouseHold.performed += instance.OnLeftMouseHold;
+                @LeftMouseHold.canceled += instance.OnLeftMouseHold;
                 @CharacterSheet.started += instance.OnCharacterSheet;
                 @CharacterSheet.performed += instance.OnCharacterSheet;
                 @CharacterSheet.canceled += instance.OnCharacterSheet;
@@ -617,6 +670,9 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
                 @MouseScrollHold.started += instance.OnMouseScrollHold;
                 @MouseScrollHold.performed += instance.OnMouseScrollHold;
                 @MouseScrollHold.canceled += instance.OnMouseScrollHold;
+                @MousePosition.started += instance.OnMousePosition;
+                @MousePosition.performed += instance.OnMousePosition;
+                @MousePosition.canceled += instance.OnMousePosition;
             }
         }
     }
@@ -728,12 +784,14 @@ public class @PlayerInputMapping : IInputActionCollection, IDisposable
         void OnCameraMove(InputAction.CallbackContext context);
         void OnCameraZoom(InputAction.CallbackContext context);
         void OnCameraRotate(InputAction.CallbackContext context);
-        void OnClick(InputAction.CallbackContext context);
-        void OnMousePosition(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
+        void OnLeftMouseHold(InputAction.CallbackContext context);
         void OnCharacterSheet(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
         void OnMouseScrollHold(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

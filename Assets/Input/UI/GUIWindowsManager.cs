@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using DD;
 
-public class GUIWindowsManager : InputHandler
+public class GUIWindowsManager : InputHandler<GUIWindowsManager>
 {
     public PlayerInventoryUI inventoryUI;
     public CharacterSheetUI characterSheetUI;

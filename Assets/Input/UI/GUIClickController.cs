@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-public class GUIClickController : InputHandler, IPointerClickHandler, IPointerDownHandler, IDragHandler
+public class GUIClickController : InputHandler<GUIClickController>, IPointerClickHandler, IPointerDownHandler, IDragHandler
 {
     public UnityEvent onLeft;
     public UnityEvent onRightHold;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GUIDragElementHandler : InputHandler
+public class GUIDragElementHandler : InputHandler<GUIDragElementHandler>
 {
     public UIWindow window;
 

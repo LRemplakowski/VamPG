@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Entities.Characters.Formation
+namespace Systems.Formation
 {
     public class FormationElement : MonoBehaviour
     {

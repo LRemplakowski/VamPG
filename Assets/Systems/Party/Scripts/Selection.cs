@@ -70,19 +70,15 @@ namespace InsaneSystems.RTSSelection
        
         void DoMultiselection(Vector2 screenStartPoint, Vector2 screenEndPoint)
         {
-            Debug.LogError("doing multi selection, AllSelectables count: " + AllSelectables.Count);
             var selectionRect = new Rect { min = screenStartPoint, max = screenEndPoint };
             
             foreach (ISelectable selectable in AllSelectables)
             {
-                Debug.LogError("foreach in multi selection");
                 var collider = selectable.GetCollider();
                 var position = selectable.GetTransform().position;
 
                 if (IsColliderBoundsInScreenRect(position, collider, selectionRect))
                     AddToSelection(selectable);
-                else
-                    Debug.LogError("Collider " + collider.gameObject + "not in selection rect!");
             }
         }
 

@@ -1,11 +1,13 @@
 using InsaneSystems.RTSSelection;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Formation.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-namespace Entities.Characters.Formation
+namespace Systems.Formation
 {
     public class FormationController : InputHandler<FormationController>
     {
@@ -14,6 +16,7 @@ namespace Entities.Characters.Formation
         //[SerializeField]
         //private FormationSlot slotPrefab;
         private List<FormationElement> formationElements = new List<FormationElement>();
+        public FormationData FormationData { get; set; }
 
         private Vector2 mousePosition;
         private const int raycastRange = 100;
@@ -90,9 +93,20 @@ namespace Entities.Characters.Formation
 
         private void AlignElements()
         {
-            for (int i = 0; i < formationElements.Count; i++)
+            try
             {
-                formationElements[i].transform.localPosition = new Vector3(i + 1f, 0.1f, 0);
+                for (int i = 0; i < formationElements.Count; i++)
+                {
+                    formationElements[i].transform.localPosition = FormationData.positions[i];
+                }
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Debug.LogException(e);
+                foreach (FormationElement element in formationElements)
+                {
+                    element.transform.position = Vector3.zero;
+                }
             }
         }
 

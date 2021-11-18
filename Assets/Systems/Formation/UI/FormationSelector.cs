@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Systems.Formation.UI;
 using UnityEngine;
 using TMPro;
+using Systems.Management;
 
 namespace Systems.Formation.UI
 {
@@ -10,9 +11,11 @@ namespace Systems.Formation.UI
     {
         [SerializeField]
         private PredefinedFormation[] formations = new PredefinedFormation[0];
+        FormationController formationController;
 
         private void Start()
         {
+            formationController = FindObjectOfType<FormationController>();
             TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
             dropdown.ClearOptions();
             dropdown.AddOptions(GetOptions());
@@ -33,7 +36,7 @@ namespace Systems.Formation.UI
 
         public void OnSelectionChanged(int index)
         {
-            FormationController.Instance.FormationData = formations[index].GetData();
+            formationController.FormationData = formations[index].GetData();
         }
     }
 }

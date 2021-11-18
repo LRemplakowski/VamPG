@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class EquipmentDisplay : ExposableMonobehaviour
@@ -11,17 +12,17 @@ public class EquipmentDisplay : ExposableMonobehaviour
     private void Awake()
     {
         displaySlots = GetComponentsInChildren<EquipmentDisplaySlot>(true);
-        equipmentManager = EquipmentManager.Instance;
+        equipmentManager = ReferenceManager.GetManager<EquipmentManager>();
     }
 
     private void OnEnable()
     {
-        equipmentManager.onEquipmentChanged += UpdateDisplay;
+        EquipmentManager.onEquipmentChanged += UpdateDisplay;
     }
 
     private void OnDisable()
     {
-        equipmentManager.onEquipmentChanged -= UpdateDisplay;
+        EquipmentManager.onEquipmentChanged -= UpdateDisplay;
     }
 
     public void UpdateDisplay(EquipmentPiece newItem, EquipmentPiece oldItem)

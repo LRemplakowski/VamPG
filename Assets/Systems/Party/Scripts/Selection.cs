@@ -157,10 +157,8 @@ namespace InsaneSystems.RTSSelection
         {
             if (selectedObjects.Contains(selectable))
             {
-                Debug.LogError("selectable already in selectedObjects!");
                 return;
             }
-            Debug.LogError("adding object to selection");
             selectedObjects.Add(selectable);
             selectable.Select();
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class DialogueChoiceButton : ExposableMonobehaviour
     // Start is called before the first frame update
     void Start()
     {
-        manager = DialogueManager.Instance;
+        manager = ReferenceManager.GetManager<DialogueManager>();
     }
 
     public void OnClick()

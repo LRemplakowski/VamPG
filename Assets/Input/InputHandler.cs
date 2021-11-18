@@ -1,9 +1,10 @@
 ﻿
 using System;
+using Systems.Management;
 using UnityEngine;
 using Utils.Singleton;
 
-public abstract class InputHandler<U> : InitializedSingleton<U> where U : Component
+public abstract class InputHandler : Manager
 {
     //This method should be called in case of any and all events handled by classes inheriting from InputHandler.
     //This method wraps around all methods that have to be called in case of ANY GUI event.

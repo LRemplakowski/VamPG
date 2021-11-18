@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 
 namespace Systems.Formation
 {
-    public class FormationController : InputHandler<FormationController>
+    public class FormationController : InputHandler
     {
         [SerializeField]
         private FormationElement formationElementPrefab;
@@ -45,7 +45,7 @@ namespace Systems.Formation
             Initialize();
         }
 
-        public override void Initialize()
+        public void Initialize()
         {
             formationElements = new List<FormationElement>();
         }

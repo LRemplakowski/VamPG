@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GUIDragElementHandler : InputHandler<GUIDragElementHandler>
+public class GUIDragElementHandler : InputHandler
 {
     public UIWindow window;
 
@@ -12,17 +12,12 @@ public class GUIDragElementHandler : InputHandler<GUIDragElementHandler>
     private Canvas canvas;
     private RectTransform rectTransform;
 
-    public override void Awake()
-    {
-
-    }
-
     private void Start()
     {
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         if (window == null)
         {

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Transitions.Manager;
+using Systems.Management;
 
 public class LoadingScreenController : MonoBehaviour
 {
@@ -54,7 +55,7 @@ public class LoadingScreenController : MonoBehaviour
 
     public void OnContinue()
     {
-        TransitionManager.Instance.PerformTransition(null);
+        ReferenceManager.GetManager<TransitionManager>().PerformTransition(null);
     }
 
 }

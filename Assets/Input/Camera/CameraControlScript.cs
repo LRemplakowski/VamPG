@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Singleton;
 
-public class CameraControlScript : InitializedSingleton<CameraControlScript>
+public class CameraControlScript : ExposableMonobehaviour
 {
     private Transform target;
     [SerializeField]
@@ -45,7 +45,7 @@ public class CameraControlScript : InitializedSingleton<CameraControlScript>
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         if (cameraTransform == null)
             cameraTransform = GetComponentInChildren<Camera>().transform;

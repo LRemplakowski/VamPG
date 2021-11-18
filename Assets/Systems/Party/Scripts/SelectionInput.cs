@@ -6,7 +6,7 @@ namespace InsaneSystems.RTSSelection
 {
     /// <summary> In this class handled all player selection input. </summary>
     [RequireComponent(typeof(Selection))]
-    public class SelectionInput : InputHandler<SelectionInput>
+    public class SelectionInput : InputHandler
     {
         [SerializeField] Selection selection;
         [SerializeField] UI.SelectionRect selectionRect;
@@ -16,7 +16,12 @@ namespace InsaneSystems.RTSSelection
 
         int selectionButton;
 
-        public override void Initialize()
+        private void Start()
+        {
+            Initialize();
+        }
+
+        public void Initialize()
         {
             if (selectionRect == null)
                 selectionRect = FindObjectOfType<UI.SelectionRect>(true);
@@ -43,14 +48,12 @@ namespace InsaneSystems.RTSSelection
         private void HandleClick()
         {
             startMousePosition = new Vector3(mousePosition.x, mousePosition.y);
-            Debug.Log("start mouse position " + startMousePosition);
             selection.StartSelection();
             selectionRect.EnableRect(startMousePosition);
         }
 
         private void HandleClickRelease()
         {
-            Debug.LogError("HadnleClickRelease");
             selection.FinishSelection(startMousePosition, mousePosition);
             selectionRect.DisableRect();
         }

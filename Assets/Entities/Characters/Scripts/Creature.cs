@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
+using Entities.Characters.Data;
 
 [RequireComponent(typeof(NavMeshAgent)),
 RequireComponent(typeof(StatsManager)),
@@ -17,6 +18,9 @@ RequireComponent(typeof(UtilityAIComponent))]
 public abstract class Creature : Entity
 {
     private const float lookTowardsRotationSpeed = 5.0f;
+
+    [SerializeField]
+    private Sprite portrait;
 
     [SerializeField]
     private Faction _faction;
@@ -161,5 +165,15 @@ public abstract class Creature : Entity
     public CreatureType GetCreatureType()
     {
         return creatureType;
+    }
+
+    public CreatureUIData GetCreatureUIData()
+    {
+        HealthData healthData = GetComponent<StatsManager>().GetHealthData();
+        CreatureUIData.CreatureDataBuilder builder = new CreatureUIData.CreatureDataBuilder(gameObject.name, 
+            portrait, 
+            healthData, 
+            0);
+        return builder.Create();
     }
 }

@@ -35,7 +35,6 @@ namespace InsaneSystems.RTSSelection
 
         private void SwitchSelectionHighlight()
         {
-            Debug.Log("SwitchingSelectionHighlight");
             isSelected = !isSelected;
             if (highlight != null)
                 highlight.SetActive(isSelected);

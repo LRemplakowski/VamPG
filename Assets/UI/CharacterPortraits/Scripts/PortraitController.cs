@@ -24,7 +24,7 @@ namespace UI.CharacterPortraits
                 hungerTracker = GetComponentInChildren<HungerTrackerUI>();
         }
 
-        internal void InitPotrait(CreatureData data)
+        internal void InitPotrait(CreatureUIData data)
         {
             potraitIcon.SetIcon(data.portrait);
             healthTracker.SetHealthData(data.healthData);

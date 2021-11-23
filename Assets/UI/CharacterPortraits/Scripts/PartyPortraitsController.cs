@@ -9,13 +9,15 @@ namespace UI.CharacterPortraits
     {
         [SerializeField]
         private GameObject portraitPrefab;
-        private List<PortraitController> portraits;
+        private List<PortraitController> portraits = new List<PortraitController>();
 
-        public void AddPortrait(CreatureData data)
+        public void AddPortrait(CreatureUIData data)
         {
             GameObject portraitGO = Instantiate(portraitPrefab, this.transform);
             portraitGO.name = data.name + " Portrait";
             PortraitController portraitController = portraitGO.GetComponent<PortraitController>();
+            if (portraitController == null)
+                Debug.LogWarning("jebany null");
             portraitController.InitPotrait(data);
             portraits.Add(portraitController);
         }

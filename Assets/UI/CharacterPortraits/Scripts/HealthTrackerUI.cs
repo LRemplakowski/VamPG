@@ -56,14 +56,14 @@ namespace UI.CharacterPortraits
             }
         }
 
-        private void Start()
-        {
-            foreach (Transform t in transform.GetComponentsInChildren<Transform>())
-            {
-                if (!t.gameObject.Equals(this.gameObject))
-                    Destroy(t.gameObject);
-            }
-        }
+        //private void Start()
+        //{
+        //    foreach (Transform t in transform.GetComponentsInChildren<Transform>())
+        //    {
+        //        if (!t.gameObject.Equals(this.gameObject))
+        //            Destroy(t.gameObject);
+        //    }
+        //}
 
         internal void SetHealthData(HealthData data)
         {
@@ -76,18 +76,21 @@ namespace UI.CharacterPortraits
         [ContextMenu("Update health tracker")]
         private void UpdateHealthTracker()
         {
+            Debug.Log("MaxHealth = " + MaxHealth + "; healtBoxes.Count = " + healthBoxes.Count);
             if (MaxHealth > healthBoxes.Count)
             {
                 int difference = MaxHealth - healthBoxes.Count;
                 for (int i = 0; i < difference; i++)
                 {
-                    HealthBox box = Instantiate(healthBoxPrefab, this.transform).GetComponent<HealthBox>();
+                    Debug.Log("Health box added");
+                    HealthBox box = Instantiate(healthBoxPrefab, gameObject.transform).GetComponent<HealthBox>();
                     box.State = HealthBoxType.Healthy;
                     healthBoxes.Add(box);
                 }
             } 
             else if (MaxHealth < healthBoxes.Count)
             {
+                Debug.Log("removing health boxes");
                 int difference = healthBoxes.Count - MaxHealth;
                 RemoveHealthBoxes(difference);
             }

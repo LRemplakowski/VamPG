@@ -1,5 +1,6 @@
 ﻿namespace Transitions
 {
+    using Systems.Management;
     using Transitions.Data;
     using Transitions.Manager;
     using UnityEngine;
@@ -42,7 +43,7 @@
 
         public void MoveToScene(TransitionData data)
         {
-            TransitionManager.Instance.PerformTransition(data);
+            ReferenceManager.GetManager<TransitionManager>().PerformTransition(data);
         }
     }
 

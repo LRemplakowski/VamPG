@@ -6,8 +6,9 @@ using UnityEngine.UI;
 using DD;
 using System;
 using Utils.Singleton;
+using Systems.Management;
 
-public class DialogueManager : InitializedSingleton<DialogueManager>
+public class DialogueManager : Manager
 {
     [SerializeField]
     private VerticalLayoutGroup historyContent, optionsContent;
@@ -67,7 +68,7 @@ public class DialogueManager : InitializedSingleton<DialogueManager>
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         if (dialogueWindow == null)
         {
@@ -93,7 +94,7 @@ public class DialogueManager : InitializedSingleton<DialogueManager>
         m_dialoguePlayer = new DialoguePlayer(m_loadedDialogue);
 
         m_dialoguePlayer.OnDialogueEnded += OnDialogueEnded;
-        StateManager.Instance.SetCurrentState(GameState.Conversation);
+        StateManager.SetCurrentState(GameState.Conversation);
         m_dialoguePlayer.Play();
         OnDialogueStarted(m_dialoguePlayer);
     }
@@ -111,7 +112,7 @@ public class DialogueManager : InitializedSingleton<DialogueManager>
         m_dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
         m_dialoguePlayer = null;
         dialogueWindow.gameObject.SetActive(false);
-        StateManager.Instance.SetCurrentState(GameState.Exploration);
+        StateManager.SetCurrentState(GameState.Exploration);
     }
 
     private void OnExecuteScript(DialoguePlayer sender, string script)

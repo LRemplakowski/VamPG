@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Utils.Singleton;
 
-public class TurnCombatManager : Singleton<TurnCombatManager>
+public class TurnCombatManager : Manager
 {
     public delegate void OnCombatStart(List<Creature> creaturesInCombat);
     public static OnCombatStart onCombatStart;
@@ -64,7 +62,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
 
     private void Update()
     {
-        if (StateManager.Instance.GetCurrentState().Equals(GameState.Combat))
+        if (StateManager.GetCurrentState().Equals(GameState.Combat))
         {
             foreach (Creature c in creaturesInCombat)
             {
@@ -74,7 +72,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
                 }
                 else
                 {
-                    StateManager.Instance.SetCurrentState(GameState.Exploration);
+                    StateManager.SetCurrentState(GameState.Exploration);
                 }
             }
         }

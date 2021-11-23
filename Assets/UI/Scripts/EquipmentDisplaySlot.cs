@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,7 +43,7 @@ public class EquipmentDisplaySlot : ExposableMonobehaviour
     public void UnequipItem()
     {
         if(item != null)
-            EquipmentManager.Instance.Unequip((int)item.slot);
+            ReferenceManager.GetManager<EquipmentManager>().Unequip((int)item.slot);
     }
 
     public void DisplayItem(EquipmentPiece item)

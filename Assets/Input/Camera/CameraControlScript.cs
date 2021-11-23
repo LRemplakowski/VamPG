@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils.Singleton;
 
-public class CameraControlScript : InitializedSingleton<CameraControlScript>
+public class CameraControlScript : ExposableMonobehaviour
 {
     private Transform target;
     [SerializeField]
@@ -45,7 +45,7 @@ public class CameraControlScript : InitializedSingleton<CameraControlScript>
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         if (cameraTransform == null)
             cameraTransform = GetComponentInChildren<Camera>().transform;
@@ -53,7 +53,7 @@ public class CameraControlScript : InitializedSingleton<CameraControlScript>
         transform.position = target.position;
         moveTarget = transform.position;
         cameraTransform.localPosition = offset;
-        cameraTransform.LookAt(target);
+        cameraTransform.LookAt(rotationTarget);
     }
 
     private void FixedUpdate()

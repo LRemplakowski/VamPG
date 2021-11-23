@@ -1,22 +1,21 @@
+using Systems.Management;
 using UnityEngine;
 using Utils.Singleton;
 
-[System.Serializable]
-public class StateManager : Singleton<StateManager>
+public static class StateManager
 {
-
     [SerializeField]
-    private GameState currentState;
+    private static GameState currentState;
 
     public delegate void GameStateChanged(GameState newState, GameState oldState);
     public static event GameStateChanged OnGameStateChanged;
 
-    public GameState GetCurrentState()
+    public static GameState GetCurrentState()
     {
         return currentState;
     }
 
-    public void SetCurrentState(GameState newState)
+    public static void SetCurrentState(GameState newState)
     {
         currentState = newState;
         if (OnGameStateChanged != null)
@@ -25,7 +24,7 @@ public class StateManager : Singleton<StateManager>
         }
     }
 
-    public void SetCurrentState(int stateID)
+    public static void SetCurrentState(int stateID)
     {
         GameState newState = (GameState)stateID;
         SetCurrentState(newState);

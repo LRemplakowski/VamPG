@@ -10,11 +10,6 @@ public class GUIClickController : InputHandler, IPointerClickHandler, IPointerDo
 
     public static Vector2 mousePosition;
 
-    public override void Initialize()
-    {
-
-    }
-
     public void OnDrag(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Left)

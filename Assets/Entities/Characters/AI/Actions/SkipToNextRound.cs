@@ -1,12 +1,13 @@
 ﻿namespace AI.Actions
 {
     using Apex.AI;
+    using Systems.Management;
 
     public class SkipToNextRound : ActionBase<CreatureContext>
     {
         public override void Execute(CreatureContext context)
         {
-            TurnCombatManager.Instance.NextRound();
+            ReferenceManager.GetManager<TurnCombatManager>().NextRound();
         }
     }
 }

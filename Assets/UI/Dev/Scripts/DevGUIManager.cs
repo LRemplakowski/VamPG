@@ -21,7 +21,7 @@ public class DevGUIManager : ExposableMonobehaviour
     private void Start()
     {
         devTurnCombatGUI = GetComponentInChildren<DevTurnCombatGUI>();
-        devTurnCombatGUI.gameObject.SetActive(StateManager.Instance.GetCurrentState() == GameState.Combat);
+        devTurnCombatGUI.gameObject.SetActive(StateManager.GetCurrentState() == GameState.Combat);
     }
 
     public void MaybeShowOrHideDevTurnCombatGUI(GameState newState, GameState oldState)

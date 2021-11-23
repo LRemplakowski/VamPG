@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 using Utils.Singleton;
 
-public class EquipmentManager : InitializedSingleton<EquipmentManager>
+public class EquipmentManager : Manager
 {
     public SkinnedMeshRenderer targetMesh;
 
@@ -11,7 +12,7 @@ public class EquipmentManager : InitializedSingleton<EquipmentManager>
     private SkinnedMeshRenderer[] currentMeshes;
 
     public delegate void OnEquipmentChanged(EquipmentPiece newItem, EquipmentPiece oldItem);
-    public OnEquipmentChanged onEquipmentChanged;
+    public static event OnEquipmentChanged onEquipmentChanged;
 
     public const float BLEND_SHAPES_MIN_WEIGHT = 0.0f;
     public const float BLEND_SHAPES_MAX_WEIGHT = 100.0f;
@@ -31,7 +32,7 @@ public class EquipmentManager : InitializedSingleton<EquipmentManager>
         }
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         targetMesh = GameManager.GetPlayer().GetComponentInChildren<SkinnedMeshRenderer>();
     }

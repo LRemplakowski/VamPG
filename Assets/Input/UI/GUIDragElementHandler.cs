@@ -12,17 +12,12 @@ public class GUIDragElementHandler : InputHandler
     private Canvas canvas;
     private RectTransform rectTransform;
 
-    public override void Awake()
-    {
-
-    }
-
     private void Start()
     {
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         if (window == null)
         {

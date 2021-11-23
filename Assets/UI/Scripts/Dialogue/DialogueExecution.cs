@@ -4,6 +4,7 @@ using Utils.Dialogue;
 using UnityEngine;
 using Transitions.Manager;
 using Transitions.Data;
+using Systems.Management;
 
 public class DialogueExecution
 {
@@ -28,11 +29,11 @@ public class DialogueExecution
 
     public static void NameTransition(string sceneName)
     {
-        TransitionManager.Instance.PerformTransition(new NameTransition(sceneName));
+        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new NameTransition(sceneName));
     }
 
     public static void IndexTransition(int sceneIndex)
     {
-        TransitionManager.Instance.PerformTransition(new IndexTransition(sceneIndex));
+        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new IndexTransition(sceneIndex));
     }
 }

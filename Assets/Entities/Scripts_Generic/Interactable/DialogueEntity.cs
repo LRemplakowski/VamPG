@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class DialogueEntity : InteractableEntity
@@ -9,7 +10,7 @@ public class DialogueEntity : InteractableEntity
 
     public override void Interact()
     {
-        DialogueManager.Instance.StartDialogue(entityDialogue);
+        ReferenceManager.GetManager<DialogueManager>().StartDialogue(entityDialogue);
         base.Interact();
     }
 }

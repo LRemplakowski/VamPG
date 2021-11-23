@@ -33,14 +33,12 @@ namespace Transitions.Manager
 
         public void NotifyFadedOut()
         {
-            if (OnFadedOut != null)
-                OnFadedOut.Invoke();
+            OnFadedOut?.Invoke();
         }
 
         public void NotifyFadedIn()
         {
-            if (OnFadedIn != null)
-                OnFadedIn.Invoke();
+            OnFadedIn?.Invoke();
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using Utils.Singleton;
 
 [System.Serializable]
-public class InputManager : InitializedSingleton<InputManager>
+public class InputManager : ExposableMonobehaviour
 {
     [SerializeField]
     private static PlayerInput _input;
@@ -16,13 +16,12 @@ public class InputManager : InitializedSingleton<InputManager>
         set => _input = value;
     }
 
-    public override void Awake()
+    private void Start()
     {
-        base.Awake();
-        Input = FindObjectOfType<PlayerInput>(true);
+        Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         Input = FindObjectOfType<PlayerInput>(true);
     }

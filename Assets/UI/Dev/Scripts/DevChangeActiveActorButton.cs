@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class DevChangeActiveActorButton : ExposableMonobehaviour
 {
     public void NextActor()
     {
-        TurnCombatManager turnCombatManager = TurnCombatManager.Instance;
+        TurnCombatManager turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
         List<Creature> actors = turnCombatManager.GetCreaturesInCombat();
         int currentIndex = actors.IndexOf(turnCombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);
@@ -15,7 +16,7 @@ public class DevChangeActiveActorButton : ExposableMonobehaviour
 
     public void PreviousActor()
     {
-        TurnCombatManager turnCombatManager = TurnCombatManager.Instance;
+        TurnCombatManager turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
         List<Creature> actors = turnCombatManager.GetCreaturesInCombat();
         int currentIndex = actors.IndexOf(turnCombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);

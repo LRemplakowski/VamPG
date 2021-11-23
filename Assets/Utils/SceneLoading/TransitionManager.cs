@@ -1,14 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Transitions.Data;
-using UnityEngine;
 using Utils.Scenes;
-using Utils.Singleton;
 
 namespace Transitions.Manager
 {
-    public class TransitionManager : Singleton<TransitionManager>
+    public class TransitionManager : Systems.Management.Manager
     {
         private TransitionAnimator _animator;
         private TransitionAnimator Animator

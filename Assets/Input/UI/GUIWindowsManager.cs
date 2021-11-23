@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using DD;
 
 public class GUIWindowsManager : InputHandler
 {
@@ -16,11 +15,6 @@ public class GUIWindowsManager : InputHandler
     {
         get => _activeWindows;
         set => _activeWindows = value;
-    }
-
-    public override void Awake()
-    {
-        base.Awake();
     }
 
     #region Enable&Disable
@@ -42,7 +36,7 @@ public class GUIWindowsManager : InputHandler
         Initialize();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         Canvas canvas = FindObjectOfType<Canvas>();
         if (inventoryUI == null)

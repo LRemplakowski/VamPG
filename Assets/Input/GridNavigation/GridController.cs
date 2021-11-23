@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -278,7 +279,7 @@ public class GridController : ExposableMonobehaviour
     public void Dev_SetWholeGridActive()
     {
         ClearActiveElements();
-        Creature currentActiveActor = TurnCombatManager.Instance.CurrentActiveActor;
+        Creature currentActiveActor = ReferenceManager.GetManager<TurnCombatManager>().CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;

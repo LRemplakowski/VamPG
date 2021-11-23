@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils.Singleton;
 
-public class GameManager : InitializedSingleton<GameManager>
+public class GameManager : Manager
 {
     private static Player player;
     private static GridController gridController;
@@ -15,7 +16,7 @@ public class GameManager : InitializedSingleton<GameManager>
         gridController = FindObjectOfType<GridController>();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         gridController = FindObjectOfType<GridController>();
     }

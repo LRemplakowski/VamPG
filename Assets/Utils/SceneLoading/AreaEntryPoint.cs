@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class AreaEntryPoint : MonoBehaviour
@@ -8,6 +9,6 @@ public class AreaEntryPoint : MonoBehaviour
     void Start()
     {
         GameManager.GetPlayer().ForceCreatureToPosition(this.transform.position);
-        CameraControlScript.Instance.Initialize();
+        FindObjectOfType<CameraControlScript>().Initialize();
     }
 }

@@ -30,7 +30,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Click",
+                    "name": "LeftClick",
                     "type": "Button",
                     "id": "4e1d31c1-b9cf-4651-bf23-29b3b50e4313",
                     "expectedControlType": "Button",
@@ -38,12 +38,20 @@
                     "interactions": ""
                 },
                 {
-                    "name": "MousePosition",
-                    "type": "Value",
-                    "id": "45c46636-5c1a-48a0-b7d3-0e840788d914",
-                    "expectedControlType": "Vector2",
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "7be2fee1-49a6-4393-80b6-67696fbeb487",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "LeftMouseHold",
+                    "type": "Button",
+                    "id": "64b8147b-c7fb-4cd3-a9aa-4f4ab66528f3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold"
                 },
                 {
                     "name": "CharacterSheet",
@@ -74,6 +82,14 @@
                     "type": "Button",
                     "id": "8d5b08d9-3a82-43e7-9a70-274ccee14ac5",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MousePosition",
+                    "type": "Value",
+                    "id": "45c46636-5c1a-48a0-b7d3-0e840788d914",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 }
@@ -207,18 +223,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Click",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "85d5a619-97a1-4824-b4c6-f559fcf12df2",
-                    "path": "<Mouse>/position",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MousePosition",
+                    "action": "LeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -296,6 +301,39 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "MouseScrollHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37bbd8c4-b0a5-4fe9-a3a2-9d99e3121d01",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "85d5a619-97a1-4824-b4c6-f559fcf12df2",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e91f4d24-2ca0-491f-9d32-fd7c09705aa7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftMouseHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

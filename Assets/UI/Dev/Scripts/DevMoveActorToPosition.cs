@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class DevMoveActorToPosition : MonoBehaviour
@@ -26,7 +27,7 @@ public class DevMoveActorToPosition : MonoBehaviour
     public void OnButtonClick()
     {
         InputOverride = true;
-        TurnCombatManager.Instance.GridInstance.Dev_SetWholeGridActive();
+        ReferenceManager.GetManager<TurnCombatManager>().GridInstance.Dev_SetWholeGridActive();
     }
 
     private void OnMovementStarted(Creature who)

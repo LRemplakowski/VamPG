@@ -1,3 +1,5 @@
+using Entities.Characters.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -144,5 +146,11 @@ public class StatsManager : ExposableMonobehaviour
     public List<Attribute> GetAttributes()
     {
         return characterStats.GetAttributes();
+    }
+
+    internal HealthData GetHealthData()
+    {
+        HealthData.HealthDataBuilder builder = new HealthData.HealthDataBuilder(Stats.GetTracker(TrackerType.Health).GetValue());
+        return builder.Create();
     }
 }

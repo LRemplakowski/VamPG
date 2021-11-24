@@ -20,7 +20,7 @@ ScriptedImporter:
       <presetinput identifier=\"$outputsize\" uid=\"227664572\" type=\"8\" value=\"9,9\"
       />\n  <presetinput identifier=\"paint_chipping_spread\" uid=\"1705166546\"
       type=\"0\" value=\"0.32\" />\n  <presetinput identifier=\"paint_color\" uid=\"1705166540\"
-      type=\"2\" value=\"0.388928,0.471698,0.416518\" />\n  <presetinput identifier=\"paint_cracks_intensity\"
+      type=\"2\" value=\"0.415094,0.299129,0.220861\" />\n  <presetinput identifier=\"paint_cracks_intensity\"
       uid=\"1705166536\" type=\"0\" value=\"0\" />\n  <presetinput identifier=\"wood_color\"
       uid=\"1705166528\" type=\"2\" value=\"0.537736,0.419204,0.286116\" />\n  <presetinput
       identifier=\"cut\" uid=\"1705166520\" type=\"4\" value=\"1\" />\n  <presetinput
@@ -30,11 +30,12 @@ ScriptedImporter:
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _OCCLUSIONMAP _SPECGLOSSMAP
+      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
+        _OCCLUSIONMAP _SPECGLOSSMAP
       lightmapFlags: 4
       enableInstancingVariants: 0
       doubleSidedGI: 0
-      customRenderQueue: -1
+      customRenderQueue: 2000
       texEnvs:
       - name: _BaseMap
         texture: {fileID: 3382950345858763478, guid: e3eb55539c995814ca1d8f57fae084d7, type: 3}

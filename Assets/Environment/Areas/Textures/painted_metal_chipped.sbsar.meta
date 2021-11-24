@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2ba7cbad987436a478c3b26ab034e2f5
+guid: 008e26dd69bb62840805fe83e034e3a9
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -11,39 +11,34 @@ ScriptedImporter:
   version: 29
   projectContext: 2
   mGraphInstanceData:
-  - graphLabel: Damaged Berlin Wall Concrete Slab
-    prototypeName: Damaged Berlin Wall Concrete Slab
+  - graphLabel: Painted Metal Chipped
+    prototypeName: Painted Metal Chipped
     graphDescIndex: 0
     generateAllOutputs: 0
     generateMipMaps: 1
-    preset: " <sbspreset pkgurl=\"pkg://damaged_berlin_wall_concrete_slab\" label=\"\"
-      >\n  <presetinput identifier=\"$outputsize\" uid=\"2085887472\" type=\"8\"
-      value=\"9,9\" />\n  <presetinput identifier=\"concrete_color\" uid=\"337898419\"
-      type=\"2\" value=\"0.568016,0.613208,0.563457\" />\n  <presetinput identifier=\"concrete_roughness\"
-      uid=\"337890012\" type=\"0\" value=\"0.623\" />\n  <presetinput identifier=\"concrete_damage_spread\"
-      uid=\"337890083\" type=\"0\" value=\"0.541\" />\n  <presetinput identifier=\"rebar_roughness\"
-      uid=\"337846428\" type=\"0\" value=\"0.21\" />\n  <presetinput identifier=\"paint_roughness\"
-      uid=\"337849583\" type=\"0\" value=\"0.4\" />\n  <presetinput identifier=\"text_visible\"
-      uid=\"337788708\" type=\"4\" value=\"0\" />\n  <presetinput identifier=\"text_input\"
-      uid=\"337502848\" type=\"6\" value=\"NO FUTURE\" />\n  <presetinput identifier=\"graffiti_density\"
-      uid=\"337508596\" type=\"0\" value=\"0\" />\n  <presetinput identifier=\"rebar_pattern_density\"
-      uid=\"362780533\" type=\"0\" value=\"0.038\" />\n </sbspreset>\n"
+    preset: " <sbspreset pkgurl=\"pkg://painted_metal_chipped\" label=\"\" >\n  <presetinput
+      identifier=\"$outputsize\" uid=\"1069901063\" type=\"8\" value=\"9,9\" />\n 
+      <presetinput identifier=\"paint_color\" uid=\"1221607560\" type=\"3\" value=\"0.40566,0.40566,0.40566,1\"
+      />\n  <presetinput identifier=\"paint_glossiness\" uid=\"1328495472\" type=\"0\"
+      value=\"0.5\" />\n  <presetinput identifier=\"paint_cracks\" uid=\"1328338978\"
+      type=\"0\" value=\"0.817\" />\n  <presetinput identifier=\"rust_amount\" uid=\"1328338727\"
+      type=\"0\" value=\"0.622\" />\n  <presetinput identifier=\"roughness\" uid=\"1278512579\"
+      type=\"0\" value=\"0\" />\n </sbspreset>\n"
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
-        _OCCLUSIONMAP _SPECGLOSSMAP
+      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _OCCLUSIONMAP _SPECGLOSSMAP
       lightmapFlags: 4
       enableInstancingVariants: 0
       doubleSidedGI: 0
-      customRenderQueue: 2000
+      customRenderQueue: -1
       texEnvs:
       - name: _BaseMap
-        texture: {fileID: 63847406978190482, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+        texture: {fileID: 5550574168147266655, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _BumpMap
-        texture: {fileID: -1791017387230179714, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+        texture: {fileID: -8849547152631479533, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _DetailAlbedoMap
@@ -67,11 +62,11 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _MetallicGlossMap
-        texture: {fileID: 2606791161848713018, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+        texture: {fileID: -5452945424443718405, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _OcclusionMap
-        texture: {fileID: 6953178167190654328, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+        texture: {fileID: 2629784292817667804, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _ParallaxMap
@@ -79,7 +74,7 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _SpecGlossMap
-        texture: {fileID: 6772391000638382392, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+        texture: {fileID: -6986638402403659368, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: unity_Lightmaps
@@ -220,6 +215,15 @@ ScriptedImporter:
       bImage: 1
       bNumerical: 0
       bLinear: 1
+    - outputName: ambientOcclusion
+      identifier: ambientocclusion
+      usageName: ambientOcclusion
+      channelStr: ambientOcclusion
+      label: Ambient Occlusion
+      usage: 5
+      bImage: 1
+      bNumerical: 0
+      bLinear: 1
     - outputName: height
       identifier: height
       usageName: height
@@ -229,12 +233,12 @@ ScriptedImporter:
       bImage: 1
       bNumerical: 0
       bLinear: 1
-    - outputName: ambientOcclusion
-      identifier: ambientocclusion
-      usageName: ambientOcclusion
-      channelStr: ambientOcclusion
-      label: Ambient Occlusion
-      usage: 5
+    - outputName: mask
+      identifier: mask
+      usageName: mask
+      channelStr: mask
+      label: Mask
+      usage: 6
       bImage: 1
       bNumerical: 0
       bLinear: 1
@@ -274,50 +278,59 @@ ScriptedImporter:
       - sourceName: smoothness
         from: 0
         to: 3
-    - targetName: height
-      components:
-      - sourceName: height
-        from: 0
-        to: 3
     - targetName: ambientOcclusion
       components:
       - sourceName: ambientOcclusion
         from: 0
         to: 3
+    - targetName: height
+      components:
+      - sourceName: height
+        from: 0
+        to: 3
+    - targetName: mask
+      components:
+      - sourceName: mask
+        from: 0
+        to: 3
     textureParameters:
-    - textureName: Damaged Berlin Wall Concrete Slab - diffuse
+    - textureName: Painted Metal Chipped - diffuse
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - baseColor
+    - textureName: Painted Metal Chipped - baseColor
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - normal
+    - textureName: Painted Metal Chipped - normal
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - specular
+    - textureName: Painted Metal Chipped - specular
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - glossiness
+    - textureName: Painted Metal Chipped - glossiness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - roughness
+    - textureName: Painted Metal Chipped - roughness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - metallic
+    - textureName: Painted Metal Chipped - metallic
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - height
+    - textureName: Painted Metal Chipped - ambientOcclusion
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Berlin Wall Concrete Slab - ambientOcclusion
+    - textureName: Painted Metal Chipped - height
+      wrapMode: 0
+      filterMode: 1
+      aniso: 1
+    - textureName: Painted Metal Chipped - mask
       wrapMode: 0
       filterMode: 1
       aniso: 1
@@ -332,10 +345,10 @@ ScriptedImporter:
       textureFormatMode: 0
       normalCompressed: 0
       bGenerateOnLoad: 1
-    material: {fileID: 6311305431756626042, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+    material: {fileID: 1643280576490151606, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
     generatedTextures:
-    - {fileID: 63847406978190482, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
-    - {fileID: -1791017387230179714, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
-    - {fileID: 6772391000638382392, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
-    - {fileID: 2606791161848713018, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
-    - {fileID: 6953178167190654328, guid: 2ba7cbad987436a478c3b26ab034e2f5, type: 3}
+    - {fileID: 5550574168147266655, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
+    - {fileID: -8849547152631479533, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
+    - {fileID: -6986638402403659368, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
+    - {fileID: -5452945424443718405, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}
+    - {fileID: 2629784292817667804, guid: 008e26dd69bb62840805fe83e034e3a9, type: 3}

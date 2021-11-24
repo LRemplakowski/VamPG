@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d339ad9d5f2f624db6dc53ddb1c90ca
+guid: 044d64e2331a2254eb426234021f1184
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -11,18 +11,20 @@ ScriptedImporter:
   version: 29
   projectContext: 2
   mGraphInstanceData:
-  - graphLabel: Damaged Dirty Painted Plaster Wall
-    prototypeName: Damaged Dirty Painted Plaster Wall
+  - graphLabel: Cracked Rusty Enamel Metal
+    prototypeName: Cracked Rusty Enamel Metal
     graphDescIndex: 0
     generateAllOutputs: 0
     generateMipMaps: 1
-    preset: " <sbspreset pkgurl=\"pkg://damaged_dirty_painted_plaster_wall\" label=\"\"
-      >\n  <presetinput identifier=\"$outputsize\" uid=\"1247359253\" type=\"8\"
-      value=\"9,9\" />\n  <presetinput identifier=\"$randomseed\" uid=\"489367367\"
-      type=\"4\" value=\"8809\" />\n  <presetinput identifier=\"color\" uid=\"1018275039\"
-      type=\"2\" value=\"0.443396,0.427273,0.399057\" />\n  <presetinput identifier=\"color_weight\"
-      uid=\"574313215\" type=\"0\" value=\"0\" />\n  <presetinput identifier=\"roughness\"
-      uid=\"1018275043\" type=\"0\" value=\"0.285\" />\n </sbspreset>\n"
+    preset: " <sbspreset pkgurl=\"pkg://cracked_rusty_enamel_metal\" label=\"\" >\n 
+      <presetinput identifier=\"$outputsize\" uid=\"3130030420\" type=\"8\" value=\"9,9\"
+      />\n  <presetinput identifier=\"paint_color\" uid=\"3530890188\" type=\"2\"
+      value=\"0.849057,0.849057,0.849057\" />\n  <presetinput identifier=\"paint_roughness\"
+      uid=\"3530606247\" type=\"0\" value=\"0.5\" />\n  <presetinput identifier=\"rust_spread\"
+      uid=\"3530881596\" type=\"0\" value=\"0.35\" />\n  <presetinput identifier=\"paint_chipping_density\"
+      uid=\"3535812075\" type=\"0\" value=\"0.1\" />\n  <presetinput identifier=\"paint_cracking_thickness\"
+      uid=\"3530799906\" type=\"0\" value=\"0.45\" />\n  <presetinput identifier=\"dirt_speck_spread\"
+      uid=\"3530871793\" type=\"0\" value=\"0.4\" />\n </sbspreset>\n"
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
@@ -33,11 +35,11 @@ ScriptedImporter:
       customRenderQueue: -1
       texEnvs:
       - name: _BaseMap
-        texture: {fileID: -6652217652685049563, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 204780093699397284, guid: 044d64e2331a2254eb426234021f1184, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _BumpMap
-        texture: {fileID: -528318576079225037, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: -6095015488433538117, guid: 044d64e2331a2254eb426234021f1184, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _DetailAlbedoMap
@@ -61,11 +63,11 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _MetallicGlossMap
-        texture: {fileID: 916390112862840179, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 81394803657670617, guid: 044d64e2331a2254eb426234021f1184, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _OcclusionMap
-        texture: {fileID: -885185254649185283, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 2490289173301890691, guid: 044d64e2331a2254eb426234021f1184, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _ParallaxMap
@@ -73,7 +75,7 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _SpecGlossMap
-        texture: {fileID: -2227117024119362201, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: -4269960128069927715, guid: 044d64e2331a2254eb426234021f1184, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: unity_Lightmaps
@@ -214,15 +216,6 @@ ScriptedImporter:
       bImage: 1
       bNumerical: 0
       bLinear: 1
-    - outputName: specularLevel
-      identifier: specularlevel
-      usageName: specularLevel
-      channelStr: specularLevel
-      label: Specular Level
-      usage: 12
-      bImage: 1
-      bNumerical: 0
-      bLinear: 1
     - outputName: height
       identifier: height
       usageName: height
@@ -277,11 +270,6 @@ ScriptedImporter:
       - sourceName: smoothness
         from: 0
         to: 3
-    - targetName: specularLevel
-      components:
-      - sourceName: specularLevel
-        from: 0
-        to: 3
     - targetName: height
       components:
       - sourceName: height
@@ -293,43 +281,39 @@ ScriptedImporter:
         from: 0
         to: 3
     textureParameters:
-    - textureName: Damaged Dirty Painted Plaster Wall - diffuse
+    - textureName: Cracked Rusty Enamel Metal - diffuse
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - baseColor
+    - textureName: Cracked Rusty Enamel Metal - baseColor
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - normal
+    - textureName: Cracked Rusty Enamel Metal - normal
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - specular
+    - textureName: Cracked Rusty Enamel Metal - specular
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - glossiness
+    - textureName: Cracked Rusty Enamel Metal - glossiness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - roughness
+    - textureName: Cracked Rusty Enamel Metal - roughness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - metallic
+    - textureName: Cracked Rusty Enamel Metal - metallic
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - specularLevel
+    - textureName: Cracked Rusty Enamel Metal - height
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - height
-      wrapMode: 0
-      filterMode: 1
-      aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - ambientOcclusion
+    - textureName: Cracked Rusty Enamel Metal - ambientOcclusion
       wrapMode: 0
       filterMode: 1
       aniso: 1
@@ -344,10 +328,10 @@ ScriptedImporter:
       textureFormatMode: 0
       normalCompressed: 0
       bGenerateOnLoad: 1
-    material: {fileID: -6443275760691591029, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+    material: {fileID: -1580212547290697332, guid: 044d64e2331a2254eb426234021f1184, type: 3}
     generatedTextures:
-    - {fileID: -6652217652685049563, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -528318576079225037, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -2227117024119362201, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: 916390112862840179, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -885185254649185283, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+    - {fileID: 204780093699397284, guid: 044d64e2331a2254eb426234021f1184, type: 3}
+    - {fileID: -6095015488433538117, guid: 044d64e2331a2254eb426234021f1184, type: 3}
+    - {fileID: -4269960128069927715, guid: 044d64e2331a2254eb426234021f1184, type: 3}
+    - {fileID: 81394803657670617, guid: 044d64e2331a2254eb426234021f1184, type: 3}
+    - {fileID: 2490289173301890691, guid: 044d64e2331a2254eb426234021f1184, type: 3}

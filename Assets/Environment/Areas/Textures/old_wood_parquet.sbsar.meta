@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1d339ad9d5f2f624db6dc53ddb1c90ca
+guid: 29f610e0f4449734c92ea3fd06f8eacc
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -11,33 +11,33 @@ ScriptedImporter:
   version: 29
   projectContext: 2
   mGraphInstanceData:
-  - graphLabel: Damaged Dirty Painted Plaster Wall
-    prototypeName: Damaged Dirty Painted Plaster Wall
+  - graphLabel: Old Wood Parquet
+    prototypeName: Old Wood Parquet
     graphDescIndex: 0
     generateAllOutputs: 0
     generateMipMaps: 1
-    preset: " <sbspreset pkgurl=\"pkg://damaged_dirty_painted_plaster_wall\" label=\"\"
-      >\n  <presetinput identifier=\"$outputsize\" uid=\"1247359253\" type=\"8\"
-      value=\"9,9\" />\n  <presetinput identifier=\"$randomseed\" uid=\"489367367\"
-      type=\"4\" value=\"8809\" />\n  <presetinput identifier=\"color\" uid=\"1018275039\"
-      type=\"2\" value=\"0.443396,0.427273,0.399057\" />\n  <presetinput identifier=\"color_weight\"
-      uid=\"574313215\" type=\"0\" value=\"0\" />\n  <presetinput identifier=\"roughness\"
-      uid=\"1018275043\" type=\"0\" value=\"0.285\" />\n </sbspreset>\n"
+    preset: " <sbspreset pkgurl=\"pkg://old_wood_parquet\" label=\"\" >\n  <presetinput
+      identifier=\"$outputsize\" uid=\"3597628867\" type=\"8\" value=\"9,9\" />\n 
+      <presetinput identifier=\"color\" uid=\"3171928074\" type=\"2\" value=\"0.641509,0.443574,0.30502\"
+      />\n  <presetinput identifier=\"planks_tiling\" uid=\"3171923291\" type=\"4\"
+      value=\"1\" />\n  <presetinput identifier=\"platforms_tiling\" uid=\"3171896274\"
+      type=\"4\" value=\"4\" />\n </sbspreset>\n"
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _OCCLUSIONMAP _SPECGLOSSMAP
+      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
+        _OCCLUSIONMAP _SPECGLOSSMAP
       lightmapFlags: 4
       enableInstancingVariants: 0
       doubleSidedGI: 0
-      customRenderQueue: -1
+      customRenderQueue: 2000
       texEnvs:
       - name: _BaseMap
-        texture: {fileID: -6652217652685049563, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 4849103061822780796, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _BumpMap
-        texture: {fileID: -528318576079225037, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 7684878975658445749, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _DetailAlbedoMap
@@ -61,11 +61,11 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _MetallicGlossMap
-        texture: {fileID: 916390112862840179, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 3880244781274965024, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _OcclusionMap
-        texture: {fileID: -885185254649185283, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: -4664606026610576435, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _ParallaxMap
@@ -73,7 +73,7 @@ ScriptedImporter:
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: _SpecGlossMap
-        texture: {fileID: -2227117024119362201, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+        texture: {fileID: 740066675161190711, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
         scale: {x: 1, y: 1}
         offset: {x: 0, y: 0}
       - name: unity_Lightmaps
@@ -214,15 +214,6 @@ ScriptedImporter:
       bImage: 1
       bNumerical: 0
       bLinear: 1
-    - outputName: specularLevel
-      identifier: specularlevel
-      usageName: specularLevel
-      channelStr: specularLevel
-      label: Specular Level
-      usage: 12
-      bImage: 1
-      bNumerical: 0
-      bLinear: 1
     - outputName: height
       identifier: height
       usageName: height
@@ -277,11 +268,6 @@ ScriptedImporter:
       - sourceName: smoothness
         from: 0
         to: 3
-    - targetName: specularLevel
-      components:
-      - sourceName: specularLevel
-        from: 0
-        to: 3
     - targetName: height
       components:
       - sourceName: height
@@ -293,43 +279,39 @@ ScriptedImporter:
         from: 0
         to: 3
     textureParameters:
-    - textureName: Damaged Dirty Painted Plaster Wall - diffuse
+    - textureName: Old Wood Parquet - diffuse
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - baseColor
+    - textureName: Old Wood Parquet - baseColor
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - normal
+    - textureName: Old Wood Parquet - normal
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - specular
+    - textureName: Old Wood Parquet - specular
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - glossiness
+    - textureName: Old Wood Parquet - glossiness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - roughness
+    - textureName: Old Wood Parquet - roughness
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - metallic
+    - textureName: Old Wood Parquet - metallic
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - specularLevel
+    - textureName: Old Wood Parquet - height
       wrapMode: 0
       filterMode: 1
       aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - height
-      wrapMode: 0
-      filterMode: 1
-      aniso: 1
-    - textureName: Damaged Dirty Painted Plaster Wall - ambientOcclusion
+    - textureName: Old Wood Parquet - ambientOcclusion
       wrapMode: 0
       filterMode: 1
       aniso: 1
@@ -344,10 +326,10 @@ ScriptedImporter:
       textureFormatMode: 0
       normalCompressed: 0
       bGenerateOnLoad: 1
-    material: {fileID: -6443275760691591029, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+    material: {fileID: 1489680635545268421, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
     generatedTextures:
-    - {fileID: -6652217652685049563, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -528318576079225037, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -2227117024119362201, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: 916390112862840179, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
-    - {fileID: -885185254649185283, guid: 1d339ad9d5f2f624db6dc53ddb1c90ca, type: 3}
+    - {fileID: 4849103061822780796, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
+    - {fileID: 7684878975658445749, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
+    - {fileID: 740066675161190711, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
+    - {fileID: 3880244781274965024, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}
+    - {fileID: -4664606026610576435, guid: 29f610e0f4449734c92ea3fd06f8eacc, type: 3}

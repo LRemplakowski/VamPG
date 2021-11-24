@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6518873272773660681
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  lift:
+    m_OverrideState: 0
+    m_Value: {x: 0.99673104, y: 0.9934619, z: 1, w: 0}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.93065304, z: 0.982663, w: 0}
+  gain:
+    m_OverrideState: 0
+    m_Value: {x: 0.9641337, y: 0.813923, z: 1, w: 0}
+--- !u!114 &-2483982742575870997
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 558a8e2b6826cf840aae193990ba9f2e, type: 3}
+  m_Name: ShadowsMidtonesHighlights
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  shadows:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 0.9229473, z: 0.8944751, w: 0}
+  midtones:
+    m_OverrideState: 0
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
+  highlights:
+    m_OverrideState: 0
+    m_Value: {x: 0.88666314, y: 1, z: 0.9372262, w: 0}
+  shadowsStart:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  shadowsEnd:
+    m_OverrideState: 0
+    m_Value: 0.3
+    min: 0
+  highlightsStart:
+    m_OverrideState: 0
+    m_Value: 0.55
+    min: 0
+  highlightsEnd:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
 --- !u!114 &-1743733682626356662
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -78,6 +140,8 @@ MonoBehaviour:
   - {fileID: 8882727552874855021}
   - {fileID: -1743733682626356662}
   - {fileID: 4131539610863389590}
+  - {fileID: -6518873272773660681}
+  - {fileID: -2483982742575870997}
 --- !u!114 &4131539610863389590
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -94,15 +158,15 @@ MonoBehaviour:
   m_AdvancedMode: 0
   threshold:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0.95
     min: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 2
     min: 0
   scatter:
     m_OverrideState: 1
-    m_Value: 0.7
+    m_Value: 0.5
     min: 0
     max: 1
   clamp:
@@ -128,7 +192,7 @@ MonoBehaviour:
     m_Value: {fileID: 0}
   dirtIntensity:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 110.65
     min: 0
 --- !u!114 &8882727552874855021
 MonoBehaviour:

@@ -4,6 +4,8 @@ namespace AI.Scorers.Context
     using Apex.Serialization;
     using UnityEngine;
     using System.Collections.Generic;
+    using Entities.Characters;
+    using Entities.Cover;
 
     public class TargetHasCover : OptionScorerBase<Creature, CreatureContext>
     {

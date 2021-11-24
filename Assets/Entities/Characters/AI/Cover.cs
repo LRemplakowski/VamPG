@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cover : Entity
+namespace Entities.Cover
 {
-    [SerializeField]
-    private CoverQuality coverQuality;
-
-    public CoverQuality GetCoverQuality()
+    public class Cover : Entity
     {
-        return coverQuality;
-    }
+        [SerializeField]
+        private CoverQuality coverQuality;
+
+        public CoverQuality GetCoverQuality()
+        {
+            return coverQuality;
+        }
+    } 
 }

@@ -1,5 +1,6 @@
 ﻿namespace Transitions
 {
+    using Entities.Interactable;
     using Systems.Management;
     using Transitions.Data;
     using Transitions.Manager;

@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Entities.Characters;
 using Systems.Management;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using Utils.Singleton;
 
 public class GameManager : Manager
 {

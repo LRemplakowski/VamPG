@@ -1,29 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Entities.Characters.Actions;
 using UnityEngine;
 using UnityEngine.AI;
-using Utils.Singleton;
 
-public class Player : Creature
+namespace Entities.Characters
 {
-    public override void Move(Vector3 moveTarget)
+    public class Player : Creature
     {
-        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget));
-    }
+        public override void Move(Vector3 moveTarget)
+        {
+            AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget));
+        }
 
-    public override void Move(GridElement moveTarget)
-    {
-        CurrentGridPosition = moveTarget;
-        AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
-    }
+        public override void Move(GridElement moveTarget)
+        {
+            CurrentGridPosition = moveTarget;
+            AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
+        }
 
-    public void InteractWith(IInteractable target)
-    {
-        AddActionToQueue(new Interact(target, this));
-    }
+        public void InteractWith(IInteractable target)
+        {
+            AddActionToQueue(new Interact(target, this));
+        }
 
-    public override void Attack(Creature target)
-    {
-        AddActionToQueue(new Attack(target, this));
-    }
+        public override void Attack(Creature target)
+        {
+            AddActionToQueue(new Attack(target, this));
+        }
+    } 
 }

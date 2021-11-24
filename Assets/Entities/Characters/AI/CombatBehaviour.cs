@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Apex.AI;
 using Apex.AI.Components;
+using Entities.Characters;
+using Entities.Characters.Actions;
 
 [RequireComponent(typeof(StatsManager))]
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using Systems.Management;
+using Entities.Characters;
+using Entities;
 
 public class CharacterInputHandler : InputHandler
 {

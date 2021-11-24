@@ -2,6 +2,7 @@
 {
     using Apex.AI;
     using Apex.Serialization;
+    using Entities.Characters.Actions;
     using UnityEngine;
 
     public class IsInMove : ContextualScorerBase<CreatureContext>
@@ -11,7 +12,7 @@
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.Owner.PeekActionFromQueue().GetType().Equals(typeof(Move)) ? score : 0f;
+            return not ^ context.Owner.PeekActionFromQueue().GetType().IsAssignableFrom(typeof(Move)) ? score : 0f;
         }
     }
 }

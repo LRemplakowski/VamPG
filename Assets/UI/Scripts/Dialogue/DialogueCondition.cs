@@ -1,3 +1,4 @@
+using Entities.Characters;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

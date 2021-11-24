@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Characters;
+using System;
 using UnityEngine;
 
 namespace InsaneSystems.RTSSelection

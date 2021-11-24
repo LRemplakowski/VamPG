@@ -1,5 +1,6 @@
 using Apex.AI;
 using Apex.Serialization;
+using Entities.Characters;
 using System.Collections.Generic;
 using UnityEngine;
 

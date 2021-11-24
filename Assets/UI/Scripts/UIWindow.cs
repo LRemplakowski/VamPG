@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Entities.Characters;
+
 public abstract class UIWindow : ExposableMonobehaviour
 {
     public static Player player;

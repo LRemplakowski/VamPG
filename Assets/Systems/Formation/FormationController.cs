@@ -1,3 +1,4 @@
+using Entities.Characters;
 using InsaneSystems.RTSSelection;
 using System;
 using System.Collections;

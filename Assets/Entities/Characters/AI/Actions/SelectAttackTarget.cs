@@ -1,6 +1,7 @@
 ﻿namespace AI.Actions
 {
     using Apex.AI;
+    using Entities.Characters;
     using System.Collections.Generic;
 
     public class SelectAttackTarget : ActionWithOptions<Creature>

@@ -3,6 +3,8 @@ using Apex.AI;
 using Apex;
 using System.Collections.Generic;
 using Systems.Management;
+using Entities.Characters;
+using Entities.Cover;
 
 public sealed class CreatureContext : IAIContext
 {

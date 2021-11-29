@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using Entities.Characters;
+using System.Collections;
 using System.Collections.Generic;
+using Systems.Management;
 using UnityEngine;
 
 public class PlayerInventoryUI : UIWindow
@@ -15,9 +17,10 @@ public class PlayerInventoryUI : UIWindow
     {
         if(playerInventory == null)
         {
-            playerInventory = player.GetInventory();
+            playerInventory = FindObjectOfType<Player>().GetInventory();
         }
-        playerInventory.onItemChangedCallback += UpdateUI;
+        if (playerInventory != null)
+            playerInventory.onItemChangedCallback += UpdateUI;
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         UpdateUI();
     }

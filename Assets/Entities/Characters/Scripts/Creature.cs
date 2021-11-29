@@ -14,9 +14,9 @@ namespace Entities.Characters
     RequireComponent(typeof(CreatureAnimator)),
     RequireComponent(typeof(Rigidbody)),
     RequireComponent(typeof(CapsuleCollider)),
+    RequireComponent(typeof(Animator)),
     RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(Animator)),
     RequireComponent(typeof(UtilityAIComponent))]
     public abstract class Creature : Entity
     {

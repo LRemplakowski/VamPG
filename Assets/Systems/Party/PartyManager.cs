@@ -1,17 +1,15 @@
 ﻿using Entities.Characters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Entities.Characters.Data;
+using Systems.Management;
 using UI.CharacterPortraits;
 using UnityEngine;
 
 namespace Systems.Party
 {
-    public class PartyManager : ExposableMonobehaviour
+    public class PartyManager : Manager
     {
-        private Creature[] PartyMembers { get; set; }
+        private Creature[] CurrentPartyMembers { get; set; }
+        private Creature[] ReservePartyMembers { get; set; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
 
@@ -20,7 +18,7 @@ namespace Systems.Party
             CreatePartyList();
             if (partyPortraits == null)
                 partyPortraits = FindObjectOfType<PartyPortraitsController>();
-            foreach (Creature c in PartyMembers)
+            foreach (Creature c in CurrentPartyMembers)
             {
                 partyPortraits.AddPortrait(c.GetCreatureUIData());
             }
@@ -28,7 +26,27 @@ namespace Systems.Party
 
         private void CreatePartyList()
         {
-            PartyMembers = FindObjectsOfType<Player>();
+            CurrentPartyMembers = FindObjectsOfType<Player>();
+        }
+
+        public CreatureUIData[] GetCurrentMembersData()
+        {
+            CreatureUIData[] currentMembersData = new CreatureUIData[CurrentPartyMembers.Length];
+            for (int i = 0; i < currentMembersData.Length; i++)
+            {
+                currentMembersData[i] = CurrentPartyMembers[i].GetCreatureUIData();
+            }
+            return currentMembersData;
+        }
+
+        public CreatureUIData[] GetReserveMembersData()
+        {
+            CreatureUIData[] reserveMembersData = new CreatureUIData[ReservePartyMembers.Length];
+            for (int i = 0; i < reserveMembersData.Length; i++)
+            {
+                reserveMembersData[i] = ReservePartyMembers[i].GetCreatureUIData();
+            }
+            return reserveMembersData;
         }
     }
 }

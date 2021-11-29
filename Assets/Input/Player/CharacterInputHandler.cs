@@ -30,6 +30,8 @@ public class CharacterInputHandler : InputHandler
     public void Initialize()
     {
         player = FindObjectOfType<Player>();
+        if (player == null)
+            return;
         if (lineOrigin == null)
             lineOrigin = player.GetComponentInChildren<LineRenderer>(true);
         turnCombatManager = FindObjectOfType<TurnCombatManager>();

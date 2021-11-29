@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UMA.CharacterSystem;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Entities.Characters
 {
@@ -13,9 +7,23 @@ namespace Entities.Characters
         [SerializeField]
         private CreatureAsset data;
 
+        private void Reset()
+        {
+            if (data == null)
+                data = Resources.Load<CreatureAsset>("DEBUG/default");
+            CreatureInitializer.InitializeCreature(gameObject, data, Vector3.zero);
+        }
+
         private void Start()
         {
-            DynamicCharacterAvatar dca = GetComponent<DynamicCharacterAvatar>();
+            CreatureInitializer.InitializeCreature(this.gameObject, data, Vector3.zero);
+        }
+
+        [ContextMenu("Initialize Creature from Data")]
+        private void InitializeInEditor()
+        {
+            if (data)
+                CreatureInitializer.InitializeCreature(gameObject, data, Vector3.zero);
         }
     }
 }

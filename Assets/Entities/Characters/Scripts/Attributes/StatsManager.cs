@@ -10,8 +10,8 @@ namespace Entities.Characters
     public class StatsManager : ExposableMonobehaviour
     {
         [SerializeField]
-        protected CharacterStats characterStats;
-        public CharacterStats Stats { get => characterStats; }
+        protected CharacterStats _characterStats;
+        public CharacterStats Stats { get => _characterStats; internal set => _characterStats = value; }
 
         [SerializeField, ReadOnly]
         protected Creature owner;
@@ -32,19 +32,19 @@ namespace Entities.Characters
         private void Awake()
         {
             owner = GetComponentInParent<Creature>();
-            if (!characterStats)
-                characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
-            if (characterStats.IsGeneric)
-                characterStats = CharacterStats.CopyAssetInstance(characterStats);
-            Health = characterStats.GetTracker(TrackerType.Health).GetValue();
-            Willpower = characterStats.GetTracker(TrackerType.Willpower).GetValue();
-            Humanity = characterStats.GetTracker(TrackerType.Humanity).GetValue();
-            Hunger = characterStats.GetTracker(TrackerType.Hunger).GetValue();
+            if (!_characterStats)
+                _characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
+            if (_characterStats.IsGeneric)
+                _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
+            Health = _characterStats.GetTracker(TrackerType.Health).GetValue();
+            Willpower = _characterStats.GetTracker(TrackerType.Willpower).GetValue();
+            Humanity = _characterStats.GetTracker(TrackerType.Humanity).GetValue();
+            Hunger = _characterStats.GetTracker(TrackerType.Hunger).GetValue();
         }
 
         public void TakeDamage(int damage)
         {
-            Tracker health = characterStats.GetTracker(TrackerType.Health);
+            Tracker health = _characterStats.GetTracker(TrackerType.Health);
             int newHealth = Health;
             newHealth -= damage;
             Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + Health + "\nHealth after attack: " + newHealth);
@@ -60,8 +60,8 @@ namespace Entities.Characters
 
         public int GetCombatSpeed()
         {
-            Attribute dexterity = characterStats.GetAttribute(AttributeType.Dexterity);
-            Skill athletics = characterStats.GetSkill(SkillType.Athletics);
+            Attribute dexterity = _characterStats.GetAttribute(AttributeType.Dexterity);
+            Skill athletics = _characterStats.GetSkill(SkillType.Athletics);
             if (dexterity.GetAttributeType() != AttributeType.Invalid && athletics.GetSkillType() != SkillType.Invalid)
                 return (dexterity.GetValue() + athletics.GetValue());
             else
@@ -85,12 +85,12 @@ namespace Entities.Characters
 
         public AttributeSkillPool GetDefensePool()
         {
-            return new AttributeSkillPool(characterStats.GetAttribute(AttributeType.Dexterity), characterStats.GetSkill(SkillType.Athletics));
+            return new AttributeSkillPool(_characterStats.GetAttribute(AttributeType.Dexterity), _characterStats.GetSkill(SkillType.Athletics));
         }
 
         public AttributeSkillPool GetAttackPool()
         {
-            return new AttributeSkillPool(characterStats.GetAttribute(GetWeaponAttribute()), characterStats.GetSkill(GetWeaponSkill()));
+            return new AttributeSkillPool(_characterStats.GetAttribute(GetWeaponAttribute()), _characterStats.GetSkill(GetWeaponSkill()));
         }
 
         private AttributeType GetWeaponAttribute()
@@ -105,13 +105,13 @@ namespace Entities.Characters
 
         public DisciplinePower GetDisciplinePower(string scriptName)
         {
-            return characterStats.GetDisciplinePower(scriptName);
+            return _characterStats.GetDisciplinePower(scriptName);
         }
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill)
         {
-            Attribute a = characterStats.GetAttribute(attribute);
-            Skill s = characterStats.GetSkill(skill);
+            Attribute a = _characterStats.GetAttribute(attribute);
+            Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (owner.GetCreatureType().Equals(CreatureType.Vampire))
@@ -125,8 +125,8 @@ namespace Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc)
         {
-            Attribute a = characterStats.GetAttribute(attribute);
-            Skill s = characterStats.GetSkill(skill);
+            Attribute a = _characterStats.GetAttribute(attribute);
+            Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (owner.GetCreatureType().Equals(CreatureType.Vampire))
@@ -147,7 +147,7 @@ namespace Entities.Characters
 
         public List<Attribute> GetAttributes()
         {
-            return characterStats.GetAttributes();
+            return _characterStats.GetAttributes();
         }
 
         internal HealthData GetHealthData()

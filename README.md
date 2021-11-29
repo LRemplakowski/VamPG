@@ -9,3 +9,4 @@
  - UMA Dynamic Character Avatar system
  - Blender
  - Photoshop
+ - Substance Painter/Designer

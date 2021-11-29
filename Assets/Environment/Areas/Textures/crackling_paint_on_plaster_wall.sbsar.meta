@@ -18,19 +18,15 @@ ScriptedImporter:
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://crackling_paint_on_plaster_wall\" label=\"\"
       >\n  <presetinput identifier=\"$outputsize\" uid=\"4232135705\" type=\"8\"
-      value=\"9,9\" />\n  <presetinput identifier=\"$randomseed\" uid=\"2872267339\"
-      type=\"4\" value=\"399\" />\n  <presetinput identifier=\"color_1\" uid=\"2326385107\"
-      type=\"2\" value=\"0.528302,0.522131,0.515344\" />\n  <presetinput identifier=\"color_2\"
-      uid=\"2329204534\" type=\"2\" value=\"0.783019,0.783019,0.783019\" />\n </sbspreset>\n"
+      value=\"9,9\" />\n </sbspreset>\n"
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _BASEMAP _BUMPMAP _METALLICGLOSSMAP _METALLICSPECGLOSSMAP _NORMALMAP
-        _OCCLUSIONMAP _SPECGLOSSMAP
+      shaderKeywords: _OCCLUSIONMAP _SPECGLOSSMAP
       lightmapFlags: 4
       enableInstancingVariants: 0
       doubleSidedGI: 0
-      customRenderQueue: 2000
+      customRenderQueue: -1
       texEnvs:
       - name: _BaseMap
         texture: {fileID: 8028902363116662229, guid: 377993533d782364f93f743c2e107c67, type: 3}

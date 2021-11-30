@@ -18,11 +18,26 @@ ScriptedImporter:
     generateMipMaps: 1
     preset: " <sbspreset pkgurl=\"pkg://damaged_berlin_wall_concrete_slab\" label=\"\"
       >\n  <presetinput identifier=\"$outputsize\" uid=\"2085887472\" type=\"8\"
-      value=\"9,9\" />\n </sbspreset>\n"
+      value=\"9,9\" />\n  <presetinput identifier=\"concrete_color\" uid=\"337898419\"
+      type=\"2\" value=\"0.560484,0.603774,0.560484\" />\n  <presetinput identifier=\"concrete_damage_spread\"
+      uid=\"337890083\" type=\"0\" value=\"0.533\" />\n  <presetinput identifier=\"crack_spreading\"
+      uid=\"339737232\" type=\"0\" value=\"0.471\" />\n  <presetinput identifier=\"crack_scale\"
+      uid=\"339721760\" type=\"0\" value=\"0.822\" />\n  <presetinput identifier=\"rebar_color\"
+      uid=\"337846462\" type=\"2\" value=\"0.349057,0.189017,0.189017\" />\n  <presetinput
+      identifier=\"rebar_roughness\" uid=\"337846428\" type=\"0\" value=\"0.61\"
+      />\n  <presetinput identifier=\"paint_color_1\" uid=\"337849445\" type=\"2\"
+      value=\"0.611765,0.678431,0.611765\" />\n  <presetinput identifier=\"paint_color_2\"
+      uid=\"337849410\" type=\"2\" value=\"0.611765,0.678431,0.611765\" />\n  <presetinput
+      identifier=\"paint_color_3\" uid=\"337849510\" type=\"2\" value=\"0.611765,0.678431,0.611765\"
+      />\n  <presetinput identifier=\"paint_color_4\" uid=\"337849475\" type=\"2\"
+      value=\"0.611765,0.678431,0.611765\" />\n  <presetinput identifier=\"paint_roughness\"
+      uid=\"337849583\" type=\"0\" value=\"1\" />\n  <presetinput identifier=\"text_visible\"
+      uid=\"337788708\" type=\"4\" value=\"0\" />\n  <presetinput identifier=\"graffiti_density\"
+      uid=\"337508596\" type=\"0\" value=\"0\" />\n </sbspreset>\n"
     shaderName: Universal Render Pipeline/Lit
     materialProperties:
       shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-      shaderKeywords: _OCCLUSIONMAP _SPECGLOSSMAP
+      shaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP _SPECGLOSSMAP
       lightmapFlags: 4
       enableInstancingVariants: 0
       doubleSidedGI: 0

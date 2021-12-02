@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using Utils.Singleton;
+﻿using UnityEngine;
 
 namespace InsaneSystems.RTSSelection
 {
@@ -10,6 +8,18 @@ namespace InsaneSystems.RTSSelection
         private GameObject highlight;
 
         bool isSelected = false;
+
+        private void Reset()
+        {
+            if (highlight == null)
+                highlight = Instantiate(Resources.Load("DEBUG/HoverHighlight"), this.transform) as GameObject;
+        }
+
+        private void Awake()
+        {
+            if (highlight == null)
+                highlight = Instantiate(Resources.Load("DEBUG/HoverHighlight"), this.transform) as GameObject;
+        }
 
         private void OnEnable()
         {

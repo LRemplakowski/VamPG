@@ -11,6 +11,7 @@ namespace Entities.Characters
         {
             if (data == null)
                 data = Resources.Load<CreatureAsset>("DEBUG/default");
+            gameObject.name = data.name;
             CreatureInitializer.InitializeCreature(gameObject, data, Vector3.zero);
         }
 

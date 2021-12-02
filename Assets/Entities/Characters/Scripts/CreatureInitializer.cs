@@ -7,11 +7,35 @@ namespace Entities.Characters
     {
         public static void InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
         {
-            Creature creature = creatureObject.AddComponent<Player>();
+            creatureObject.transform.position = position;
+            Creature creature = InitializeCreatureScript(creatureObject, asset);
             DynamicCharacterAvatar dca = creatureObject.GetComponent<DynamicCharacterAvatar>();
             InitializeUmaAvatar(dca, asset);
             StatsManager stats = creatureObject.GetComponent<StatsManager>();
             InitializeStatsManager(stats, asset);
+            CapsuleCollider collider = creatureObject.GetComponent<CapsuleCollider>();
+            InitializeCollider(collider);
+        }
+
+        private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
+        {
+            Creature creature = creatureObject.GetComponent<Creature>();
+            if (creature == null)
+            {
+                if (asset.CreatureFaction.Equals(Faction.Player))
+                    creature = creatureObject.AddComponent<Player>();
+                else
+                    creature = creatureObject.AddComponent<NPC>();
+            }
+            else if (creature.IsOfType(typeof(NPC)) && asset.CreatureFaction.Equals(Faction.Player) || creature.IsOfType(typeof(Player)) && !asset.CreatureFaction.Equals(Faction.Player))
+            {
+                Object.DestroyImmediate(creature);
+                if (asset.CreatureFaction.Equals(Faction.Player))
+                    creature = creatureObject.AddComponent<Player>();
+                else
+                    creature = creatureObject.AddComponent<NPC>();
+            }
+            return creature;
         }
 
         private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureAsset asset)
@@ -31,6 +55,13 @@ namespace Entities.Characters
         private static void InitializeStatsManager(StatsManager statsManager, CreatureAsset asset)
         {
             statsManager.Stats = asset.StatsAsset;
+        }
+
+        private static void InitializeCollider(CapsuleCollider collider)
+        {
+            collider.height = 1.8f;
+            collider.center = new Vector3(0, .9f, 0);
+            collider.radius = 0.35f;
         }
     }
 }

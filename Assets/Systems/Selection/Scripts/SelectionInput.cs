@@ -31,10 +31,6 @@ namespace InsaneSystems.RTSSelection
 
         public void OnLeftClick(InputAction.CallbackContext context)
         {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
             if (context.performed)
             {
                 ManageInput(HandleClick);

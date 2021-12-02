@@ -3,13 +3,18 @@ using Entities.Characters.Data;
 using Systems.Management;
 using UI.CharacterPortraits;
 using UnityEngine;
+using Systems.Journal;
 
 namespace Systems.Party
 {
     public class PartyManager : Manager
     {
-        private Creature[] CurrentPartyMembers { get; set; }
-        private Creature[] ReservePartyMembers { get; set; }
+        [SerializeField, ReadOnly]
+        private Creature[] _currentPartyMembers;
+        private Creature[] CurrentPartyMembers { get => _currentPartyMembers; set => _currentPartyMembers = value; }
+        [SerializeField, ReadOnly]
+        private Creature[] _reservePartyMembers;
+        private Creature[] ReservePartyMembers { get => _reservePartyMembers; set => _reservePartyMembers = value; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
 
@@ -26,7 +31,13 @@ namespace Systems.Party
 
         private void CreatePartyList()
         {
-            CurrentPartyMembers = FindObjectsOfType<Player>();
+            JournalManager journal = ReferenceManager.GetManager<JournalManager>();
+            CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
+            CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
+            for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)
+            {
+                CurrentPartyMembers[i] = journal.ActiveCompanions[i].GetComponent<Creature>();
+            }
         }
 
         public CreatureUIData[] GetCurrentMembersData()

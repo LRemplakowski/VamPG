@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Transitions.Manager
@@ -21,8 +19,24 @@ namespace Transitions.Manager
                 animator = GetComponent<Animator>();
         }
 
+        private void OnEnable()
+        {
+            OnFadedIn += DisableOnFadedIn;
+        }
+
+        private void OnDisable()
+        {
+            OnFadedIn -= DisableOnFadedIn;
+        }
+
+        private void DisableOnFadedIn()
+        {
+            gameObject.SetActive(false);
+        }
+
         internal void FadeOut()
         {
+            gameObject.SetActive(true);
             animator.SetTrigger("Start");
         }
 

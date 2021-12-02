@@ -16,50 +16,39 @@ namespace Transitions.Manager
             }
         }
 
-
         private TransitionData currentTransition;
 
         private LoadingScreenController loadingScreenController;
 
-        #region Enable & Disable
-        private void OnEnable()
+        private void Start()
         {
-            TransitionAnimator.OnFadedIn += OnFadedIn;
-            TransitionAnimator.OnFadedOut += OnFadedOut;
+            if (loadingScreenController == null)
+                loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
         }
-
-        private void OnDisable()
-        {
-            TransitionAnimator.OnFadedIn -= OnFadedIn;
-            TransitionAnimator.OnFadedOut -= OnFadedOut;
-        }
-        #endregion
 
         public void PerformTransition(TransitionData data)
         {
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
             currentTransition = data;
-            SetTransitionPanelActive(true);
+            TransitionAnimator.OnFadedIn += OnFadedIn;
+            TransitionAnimator.OnFadedOut += OnFadedOut;
             Animator.FadeOut();
         }
         private void OnFadedIn()
         {
-            SetTransitionPanelActive(false);
+            TransitionAnimator.OnFadedIn -= OnFadedIn;
+            TransitionAnimator.OnFadedOut -= OnFadedOut;
         }
 
         private void OnFadedOut()
         {
-            loadingScreenController.gameObject.SetActive(!loadingScreenController.gameObject.activeSelf);
+            if (loadingScreenController)
+                loadingScreenController.gameObject.SetActive(!loadingScreenController.gameObject.activeSelf);
             if (currentTransition != null)
                 SceneLoader.Instance.LoadScene(currentTransition);
             Animator.FadeIn();
             currentTransition = null;
-        }
-
-        public void SetTransitionPanelActive(bool active)
-        {
-            Animator.gameObject.SetActive(active);
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Entities.Characters.Actions;
+using InsaneSystems.RTSSelection;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Entities.Characters
 {
+    [RequireComponent(typeof(Selectable))]
+    [RequireComponent(typeof(SelectionEffect))]
     public class Player : Creature
     {
         public override void Move(Vector3 moveTarget)

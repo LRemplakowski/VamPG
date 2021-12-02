@@ -33,7 +33,7 @@ namespace Entities.Characters
             set => _faction = value;
         }
         [SerializeField]
-        protected Sex sex = Sex.F;
+        protected BodyType sex = BodyType.F;
         [SerializeField]
         protected CreatureType creatureType = CreatureType.Mortal;
         [SerializeField]
@@ -160,7 +160,7 @@ namespace Entities.Characters
             return inventory;
         }
 
-        public Sex GetSex()
+        public BodyType GetSex()
         {
             return sex;
         }

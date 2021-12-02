@@ -7,7 +7,6 @@ using Apex.AI.Components;
 using Entities.Characters;
 using Entities.Characters.Actions;
 
-[RequireComponent(typeof(StatsManager))]
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
     private CreatureContext _context;

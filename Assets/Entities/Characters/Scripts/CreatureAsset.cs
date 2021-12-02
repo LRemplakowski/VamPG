@@ -21,6 +21,9 @@ namespace Entities.Characters
         [SerializeField]
         private RuntimeAnimatorController _animatorController;
         public RuntimeAnimatorController AnimatorController { get => _animatorController; }
+        [SerializeField]
+        private Faction _creaturefaction;
+        public Faction CreatureFaction { get => _creaturefaction; }
         
 
         private void OnEnable()

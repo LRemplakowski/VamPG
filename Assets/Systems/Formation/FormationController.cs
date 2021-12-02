@@ -87,7 +87,7 @@ namespace Systems.Formation
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
             {
                 AlignElements();
-                transform.position = hit.point;
+                transform.position = new Vector3(hit.point.x, 0, hit.point.z);
                 isDirty = true;
             }
         }

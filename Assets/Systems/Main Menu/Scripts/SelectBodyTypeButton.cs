@@ -1,7 +1,7 @@
 using Transitions.Manager;
 using UnityEngine;
 
-namespace Systems.MainMenu.UI
+namespace SunsetSystems.MainMenu.UI
 {
     public class SelectBodyTypeButton : MonoBehaviour
     {

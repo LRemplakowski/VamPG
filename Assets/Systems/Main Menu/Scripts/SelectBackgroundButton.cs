@@ -1,8 +1,8 @@
-using Systems.Journal;
+using SunsetSystems.Journal;
 using Transitions.Manager;
 using UnityEngine;
 
-namespace Systems.MainMenu.UI
+namespace SunsetSystems.MainMenu.UI
 {
     public class SelectBackgroundButton : MonoBehaviour
     {

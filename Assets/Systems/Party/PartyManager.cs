@@ -1,11 +1,11 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
-using Systems.Management;
+using SunsetSystems.Management;
 using UI.CharacterPortraits;
 using UnityEngine;
-using Systems.Journal;
+using SunsetSystems.Journal;
 
-namespace Systems.Party
+namespace SunsetSystems.Party
 {
     public class PartyManager : Manager
     {

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-namespace Systems.Formation.Data
+namespace SunsetSystems.Formation.Data
 {
     [System.Serializable]
     public class FormationData

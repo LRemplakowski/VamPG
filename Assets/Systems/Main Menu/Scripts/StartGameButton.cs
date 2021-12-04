@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Transitions.Manager;
 using UnityEngine;
 
-namespace Systems.MainMenu.UI
+namespace SunsetSystems.MainMenu.UI
 {
     public class StartGameButton : MonoBehaviour
     {

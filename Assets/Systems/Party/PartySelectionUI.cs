@@ -1,10 +1,10 @@
 using Entities.Characters.Data;
 using System.Collections;
 using System.Collections.Generic;
-using Systems.Management;
+using SunsetSystems.Management;
 using UnityEngine;
 
-namespace Systems.Party.UI
+namespace SunsetSystems.Party.UI
 {
     public class PartySelectionUI : UIWindow
     {

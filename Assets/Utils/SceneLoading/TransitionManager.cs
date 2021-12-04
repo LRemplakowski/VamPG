@@ -3,7 +3,7 @@ using Utils.Scenes;
 
 namespace Transitions.Manager
 {
-    public class TransitionManager : Systems.Management.Manager
+    public class TransitionManager : SunsetSystems.Management.Manager
     {
         private TransitionAnimator _animator;
         private TransitionAnimator Animator

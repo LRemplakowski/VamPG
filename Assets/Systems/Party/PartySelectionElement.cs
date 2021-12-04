@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Entities.Characters.Data;
 
-namespace Systems.Party.UI
+namespace SunsetSystems.Party.UI
 {
     public class PartySelectionElement : MonoBehaviour
     {

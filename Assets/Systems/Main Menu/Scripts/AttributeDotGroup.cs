@@ -8,8 +8,9 @@ namespace SunsetSystems.MainMenu.UI
         private AttributeType associatedAttribute = AttributeType.Invalid;
         private GameInitializer gameInitializer;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             if (!gameInitializer)
                 gameInitializer = FindObjectOfType<GameInitializer>();
         }

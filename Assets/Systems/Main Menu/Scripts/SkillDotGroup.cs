@@ -8,16 +8,18 @@ namespace SunsetSystems.MainMenu.UI
         private SkillType associatedSkill = SkillType.Invalid;
         private GameInitializer gameInitializer;
 
-        private void Start()
+        protected override void Start()
         {
             if (!gameInitializer)
                 gameInitializer = FindObjectOfType<GameInitializer>();
+            base.Start();
         }
 
         public override void OnClick(int fullCount)
         {
             base.OnClick(fullCount);
-            gameInitializer.SetSkillValue(associatedSkill, FullDots);
+            if (gameInitializer)
+                gameInitializer.SetSkillValue(associatedSkill, FullDots);
         }
     }
 }

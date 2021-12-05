@@ -32,6 +32,12 @@ namespace SunsetSystems.MainMenu.UI
             unassignedDots.onDotGroupDataChanged -= this.RemoveDots;
         }
 
+        protected virtual void Start()
+        {
+            FullDots = minDots;
+            EmptyDots = maxDots - minDots;
+        }
+
         public virtual void OnClick(int fullCount)
         {
             if (unassignedDots.HasEnabledDotGroupWithCount(fullCount - minDots) || fullCount == minDots)

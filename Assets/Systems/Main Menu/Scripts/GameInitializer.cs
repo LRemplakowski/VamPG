@@ -13,6 +13,8 @@ namespace SunsetSystems.MainMenu
         private BodyType selectedBodyType;
         [SerializeField]
         private CharacterStats stats;
+        [SerializeField]
+        private int startSceneIndex;
 
         private void Reset()
         {

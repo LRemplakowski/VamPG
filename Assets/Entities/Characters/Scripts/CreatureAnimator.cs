@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Characters;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,9 @@ public class CreatureAnimator : ExposableMonobehaviour
 {
     const float movementAnimationSmoothTime = 0.1f;
 
+    [SerializeField, ReadOnly]
     private Animator animator;
+    [SerializeField, ReadOnly]
     private NavMeshAgent agent;
 
     private void OnEnable()
@@ -23,7 +26,7 @@ public class CreatureAnimator : ExposableMonobehaviour
         TurnCombatManager.onCombatEnd -= OnCombatEnd;
     }
 
-    private void Awake()
+    private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         agent = GetComponent<NavMeshAgent>();

@@ -1,14 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
-using Systems.Management;
+using Entities.Characters;
+using SunsetSystems.Management;
 using UnityEngine;
 
 public class AreaEntryPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        GameManager.GetPlayer().ForceCreatureToPosition(this.transform.position);
+        MainCharacter.onMainCharacterInitialized += OnMainInitialized;
+    }
+
+    private void OnDisable()
+    {
+        MainCharacter.onMainCharacterInitialized -= OnMainInitialized;
+    }
+
+    private void OnMainInitialized()
+    {
+        GameManager.GetMainCharacter().ForceCreatureToPosition(this.transform.position);
         FindObjectOfType<CameraControlScript>().Initialize();
     }
 }

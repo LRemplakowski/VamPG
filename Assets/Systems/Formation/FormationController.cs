@@ -1,13 +1,14 @@
+using Entities.Characters;
 using InsaneSystems.RTSSelection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Systems.Formation.Data;
+using SunsetSystems.Formation.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-namespace Systems.Formation
+namespace SunsetSystems.Formation
 {
     public class FormationController : InputHandler
     {
@@ -80,13 +81,15 @@ namespace Systems.Formation
 
         public void OnRightClick(InputAction.CallbackContext context)
         {
-            if (!context.performed || EventSystem.current.IsPointerOverGameObject())
+            if (!context.performed)
                 return;
+            Debug.LogWarning("Handling mouse click");
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
             {
+                Debug.LogWarning("Raycast hit!");
                 AlignElements();
-                transform.position = hit.point;
+                transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
                 isDirty = true;
             }
         }
@@ -99,6 +102,7 @@ namespace Systems.Formation
                 {
                     formationElements[i].transform.localPosition = FormationData.positions[i];
                 }
+                Debug.LogError("Formation positions set!");
             }
             catch (IndexOutOfRangeException e)
             {

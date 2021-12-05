@@ -1,33 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entities.Characters;
+using Entities.Characters.Data;
+using SunsetSystems.Management;
 using UI.CharacterPortraits;
 using UnityEngine;
+using SunsetSystems.Journal;
 
-namespace Systems.Party
+namespace SunsetSystems.Party
 {
-    public class PartyManager : ExposableMonobehaviour
+    public class PartyManager : Manager
     {
-        private Creature[] PartyMembers { get; set; }
+        [SerializeField, ReadOnly]
+        private Creature[] _currentPartyMembers;
+        private Creature[] CurrentPartyMembers { get => _currentPartyMembers; set => _currentPartyMembers = value; }
+        [SerializeField, ReadOnly]
+        private Creature[] _reservePartyMembers;
+        private Creature[] ReservePartyMembers { get => _reservePartyMembers; set => _reservePartyMembers = value; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
+        [SerializeField]
+        private JournalManager journal;
 
-        private void Start()
+        private void Initialize()
         {
             CreatePartyList();
             if (partyPortraits == null)
                 partyPortraits = FindObjectOfType<PartyPortraitsController>();
-            foreach (Creature c in PartyMembers)
+            foreach (Creature c in CurrentPartyMembers)
             {
                 partyPortraits.AddPortrait(c.GetCreatureUIData());
             }
         }
 
+        private void OnEnable()
+        {
+            MainCharacter.onMainCharacterInitialized += Initialize;
+        }
+
+        private void OnDisable()
+        {
+            MainCharacter.onMainCharacterInitialized -= Initialize;
+        }
+
         private void CreatePartyList()
         {
-            PartyMembers = FindObjectsOfType<Player>();
+            if (journal == null)
+                journal = ReferenceManager.GetManager<JournalManager>();
+            CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
+            CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
+            for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)
+            {
+                CurrentPartyMembers[i] = journal.ActiveCompanions[i].GetComponent<Creature>();
+            }
+        }
+
+        public CreatureUIData[] GetCurrentMembersData()
+        {
+            CreatureUIData[] currentMembersData = new CreatureUIData[CurrentPartyMembers.Length];
+            for (int i = 0; i < currentMembersData.Length; i++)
+            {
+                currentMembersData[i] = CurrentPartyMembers[i].GetCreatureUIData();
+            }
+            return currentMembersData;
+        }
+
+        public CreatureUIData[] GetReserveMembersData()
+        {
+            CreatureUIData[] reserveMembersData = new CreatureUIData[ReservePartyMembers.Length];
+            for (int i = 0; i < reserveMembersData.Length; i++)
+            {
+                reserveMembersData[i] = ReservePartyMembers[i].GetCreatureUIData();
+            }
+            return reserveMembersData;
         }
     }
 }

@@ -3,22 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PickableItem : InteractableEntity
+namespace Entities.Interactable
 {
-    public InventoryItem item;
-
-    public override void Interact()
+    public class PickableItem : InteractableEntity
     {
-        PickUp();
-        base.Interact();
-    }
+        public InventoryItem item;
 
-    private void PickUp()
-    {
-        Debug.Log("Picking up " + gameObject);
-        if(TargetedBy.GetInventory().Add(item))
+        public override void Interact()
         {
-            Destroy(gameObject);
+            PickUp();
+            base.Interact();
         }
-    }
+
+        private void PickUp()
+        {
+            Debug.Log("Picking up " + gameObject);
+            if (TargetedBy.GetInventory().Add(item))
+            {
+                Destroy(gameObject);
+            }
+        }
+    } 
 }

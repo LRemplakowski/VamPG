@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Apex.AI;
 using Apex.AI.Components;
+using Entities.Characters;
+using Entities.Characters.Actions;
 
-[RequireComponent(typeof(StatsManager))]
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
     private CreatureContext _context;
@@ -24,14 +25,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     public bool IsPlayerControlled => _context.IsPlayerControlled;
 
-
-    private void Awake()
-    {
-        _context = new CreatureContext(Owner);
-    }
-
-    #region Enable&Disable
-    private void OnEnable()
+    private void Reset()
     {
         if (!_raycastOrigin)
         {
@@ -39,6 +33,22 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
             _raycastOrigin.parent = this.transform;
             _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
         }
+    }
+
+    private void Awake()
+    {
+        _context = new CreatureContext(Owner);
+        if (!_raycastOrigin)
+        {
+            _raycastOrigin = new GameObject("RaycastOrigin").transform;
+            _raycastOrigin.parent = this.transform;
+            _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
+        }
+    }
+
+    #region Enable&Disable
+    private void OnEnable()
+    {
         HostileAction.onAttackFinished += OnHostileActionFinished;
         TurnCombatManager.onCombatStart += OnCombatStart;
         TurnCombatManager.onCombatRoundBegin += OnCombatRoundBegin;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Entities.Characters;
+using UnityEngine;
 
 public abstract class DisciplineScript : ScriptableObject
 {

@@ -4,6 +4,7 @@ namespace AI.Scorers.Context
     using Apex.Serialization;
     using Utils.Dice;
     using System;
+    using Entities.Characters;
 
     public class HasAttackPoolAdvantage : OptionScorerBase<Creature, CreatureContext>
     {

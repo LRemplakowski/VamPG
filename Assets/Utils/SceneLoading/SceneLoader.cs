@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections;
-    using Systems.Management;
     using Transitions.Data;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -10,7 +9,10 @@
 
     public class SceneLoader : Singleton<SceneLoader>
     {
+        [SerializeField]
         private LoadingScreenController loadingScreenController;
+
+        public static TransitionData CachedTransitionData { get; private set; }
 
         private void OnEnable()
         {
@@ -24,6 +26,8 @@
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
+            if (loadingScreenController == null)
+                loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
             SceneManager.SetActiveScene(scene);
             SceneInitializer.InitializeSingletons();
                 
@@ -57,6 +61,7 @@
 
         public void LoadScene(TransitionData data)
         {
+            CachedTransitionData = data;
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
             switch (data.transitionType)

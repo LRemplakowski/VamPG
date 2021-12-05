@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Entities.Characters;
 using UnityEngine;
 
 public static class Spellbook

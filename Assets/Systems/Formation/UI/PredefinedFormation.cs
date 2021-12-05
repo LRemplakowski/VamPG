@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Systems.Formation.Data;
+using SunsetSystems.Formation.Data;
 using UnityEngine;
 
-namespace Systems.Formation.UI
+namespace SunsetSystems.Formation.UI
 {
     [CreateAssetMenu(fileName = "New Predefined Formation", menuName = "Systems/Formations/Predefined Formation")]
     public class PredefinedFormation : ScriptableObject

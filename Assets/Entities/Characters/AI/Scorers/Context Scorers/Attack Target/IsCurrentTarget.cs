@@ -2,6 +2,7 @@ namespace AI.Scorers.Context
 {
     using Apex.AI;
     using Apex.Serialization;
+    using Entities.Characters;
 
     public class IsCurrentTarget : OptionScorerBase<Creature, CreatureContext>
     {

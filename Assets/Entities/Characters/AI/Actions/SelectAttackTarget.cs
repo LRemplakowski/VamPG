@@ -1,6 +1,7 @@
 ﻿namespace AI.Actions
 {
     using Apex.AI;
+    using Entities.Characters;
     using System.Collections.Generic;
 
     public class SelectAttackTarget : ActionWithOptions<Creature>
@@ -11,7 +12,7 @@
             Creature self = c.Owner;
 
             List<Creature> potentialTargets = new List<Creature>();
-            if (self.Faction.Equals(Faction.Hostile))
+            if (self.Data.Faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(c.FriendlyCombatants);
                 potentialTargets.AddRange(c.PlayerControlledCombatants);

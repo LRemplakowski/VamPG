@@ -17,7 +17,7 @@ public class PlayerInventoryUI : UIWindow
     {
         if(playerInventory == null)
         {
-            playerInventory = FindObjectOfType<Player>().GetInventory();
+            playerInventory = FindObjectOfType<PlayerControlledCharacter>().GetInventory();
         }
         if (playerInventory != null)
             playerInventory.onItemChangedCallback += UpdateUI;

@@ -26,7 +26,7 @@
             if (CoverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
             {
                 List<Creature> enemies = new List<Creature>();
-                if (context.Owner.Faction.Equals(Faction.Hostile))
+                if (context.Owner.Data.Faction.Equals(Faction.Hostile))
                 {
                     enemies.AddRange(context.PlayerControlledCombatants);
                     enemies.AddRange(context.FriendlyCombatants);

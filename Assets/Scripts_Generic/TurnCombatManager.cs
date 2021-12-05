@@ -67,7 +67,7 @@ public class TurnCombatManager : Manager
         {
             foreach (Creature c in creaturesInCombat)
             {
-                if (c.GetComponent<StatsManager>().IsAlive() && c.Faction.Equals(Faction.Hostile))
+                if (c.GetComponent<StatsManager>().IsAlive() && c.Data.Faction.Equals(Faction.Hostile))
                 {
                     break;
                 }
@@ -134,7 +134,7 @@ public class TurnCombatManager : Manager
         }
         yield return new WaitUntil(() => AllCreaturesMoved());
         roundCounter = 1;
-        CurrentActiveActor = GameManager.GetPlayer();
+        CurrentActiveActor = GameManager.GetMainCharacter();
         StopCoroutine(InitializeCombat());
     }
 

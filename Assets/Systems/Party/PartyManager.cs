@@ -17,8 +17,10 @@ namespace SunsetSystems.Party
         private Creature[] ReservePartyMembers { get => _reservePartyMembers; set => _reservePartyMembers = value; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
+        [SerializeField]
+        private JournalManager journal;
 
-        private void Start()
+        private void Initialize()
         {
             CreatePartyList();
             if (partyPortraits == null)
@@ -29,9 +31,20 @@ namespace SunsetSystems.Party
             }
         }
 
+        private void OnEnable()
+        {
+            MainCharacter.onMainCharacterInitialized += Initialize;
+        }
+
+        private void OnDisable()
+        {
+            MainCharacter.onMainCharacterInitialized -= Initialize;
+        }
+
         private void CreatePartyList()
         {
-            JournalManager journal = ReferenceManager.GetManager<JournalManager>();
+            if (journal == null)
+                journal = ReferenceManager.GetManager<JournalManager>();
             CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
             CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
             for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)

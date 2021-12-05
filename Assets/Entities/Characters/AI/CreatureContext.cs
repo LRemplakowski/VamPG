@@ -23,7 +23,7 @@ public sealed class CreatureContext : IAIContext
 
     public bool IsInCombat => StateManager.GetCurrentState().Equals(GameState.Combat);
 
-    public bool IsPlayerControlled => Owner.Faction.Equals(Faction.Player);
+    public bool IsPlayerControlled => Owner.Data.Faction.Equals(Faction.PlayerControlled);
 
     public bool HasMoved => Behaviour.HasMoved;
     public bool HasActed => Behaviour.HasActed;
@@ -38,13 +38,13 @@ public sealed class CreatureContext : IAIContext
 
     public List<Creature> OtherCombatants => ReferenceManager.GetManager<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => ReferenceManager.GetManager<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => c.Faction.Equals(Faction.Player));
+    public List<Creature> PlayerControlledCombatants => ReferenceManager.GetManager<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
 
     public List<Creature> FriendlyCombatants => ReferenceManager.GetManager<TurnCombatManager>()
         .GetCreaturesInCombat()
-        .FindAll(c => c.Faction.Equals(Faction.Friendly));
+        .FindAll(c => c.Data.Faction.Equals(Faction.Friendly));
 
     public List<Creature> EnemyCombatants => ReferenceManager.GetManager<TurnCombatManager>()
         .GetCreaturesInCombat()
-        .FindAll(c => c.Faction.Equals(Faction.Hostile));
+        .FindAll(c => c.Data.Faction.Equals(Faction.Hostile));
 }

@@ -15,7 +15,7 @@ namespace AI.Scorers.Option
         {
             float weaponsRange = context.StatsManager.GetWeaponMaxRange();
             List<Creature> potentialTargets = new List<Creature>();
-            if (context.Owner.Faction.Equals(Faction.Hostile))
+            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(context.FriendlyCombatants);
                 potentialTargets.AddRange(context.PlayerControlledCombatants);

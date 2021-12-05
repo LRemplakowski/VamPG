@@ -23,20 +23,6 @@ namespace Entities.Characters
         private const float lookTowardsRotationSpeed = 5.0f;
 
         [SerializeField]
-        private Sprite portrait;
-
-        [SerializeField]
-        private Faction _faction;
-        public Faction Faction
-        {
-            get => _faction;
-            set => _faction = value;
-        }
-        [SerializeField]
-        protected BodyType sex = BodyType.F;
-        [SerializeField]
-        protected CreatureType creatureType = CreatureType.Mortal;
-        [SerializeField]
         protected NavMeshAgent agent;
         [SerializeField]
         protected Inventory inventory;
@@ -56,6 +42,8 @@ namespace Entities.Characters
                 _currentGridPosition = value;
             }
         }
+
+        public CreatureData Data { get => GetComponent<CreatureData>(); }
 
         private Queue<EntityAction> _actionQueue;
         private Queue<EntityAction> ActionQueue
@@ -160,21 +148,11 @@ namespace Entities.Characters
             return inventory;
         }
 
-        public BodyType GetSex()
-        {
-            return sex;
-        }
-
-        public CreatureType GetCreatureType()
-        {
-            return creatureType;
-        }
-
         public CreatureUIData GetCreatureUIData()
         {
             HealthData healthData = GetComponent<StatsManager>().GetHealthData();
-            CreatureUIData.CreatureDataBuilder builder = new CreatureUIData.CreatureDataBuilder(gameObject.name,
-                portrait,
+            CreatureUIData.CreatureDataBuilder builder = new CreatureUIData.CreatureDataBuilder(Data.FullName,
+                Data.Portrait,
                 healthData,
                 0);
             return builder.Create();

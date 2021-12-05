@@ -7,7 +7,7 @@ namespace Entities.Characters
 {
     [RequireComponent(typeof(Selectable))]
     [RequireComponent(typeof(SelectionEffect))]
-    public class Player : Creature
+    public class PlayerControlledCharacter : Creature
     {
         public override void Move(Vector3 moveTarget)
         {

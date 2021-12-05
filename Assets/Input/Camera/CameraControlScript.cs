@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Entities.Characters;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -40,20 +41,28 @@ public class CameraControlScript : ExposableMonobehaviour
         rotationDirection = -context.ReadValue<Vector2>().x;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        Initialize();
+        MainCharacter.onMainCharacterInitialized += Initialize;
+    }
+
+    private void OnDisable()
+    {
+        MainCharacter.onMainCharacterInitialized -= Initialize;
     }
 
     public void Initialize()
     {
         if (cameraTransform == null)
             cameraTransform = GetComponentInChildren<Camera>().transform;
-        target = GameManager.GetPlayer().transform;
-        transform.position = target.position;
-        moveTarget = transform.position;
-        cameraTransform.localPosition = offset;
-        cameraTransform.LookAt(rotationTarget);
+        target = GameManager.GetMainCharacter().transform;
+        if (target)
+        {
+            transform.position = target.position;
+            moveTarget = transform.position;
+            cameraTransform.localPosition = offset;
+            cameraTransform.LookAt(rotationTarget);
+        }
     }
 
     private void FixedUpdate()

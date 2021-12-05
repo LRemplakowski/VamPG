@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Management;
 using UnityEngine;
+using System;
 
 namespace SunsetSystems.Journal
 {
@@ -20,6 +21,20 @@ namespace SunsetSystems.Journal
         [SerializeField]
         private PlayerCharacterBackground playerBackground;
 
-        
+        private void OnEnable()
+        {
+            MainCharacter.onMainCharacterInitialized += Initialize;
+        }
+
+        private void OnDisable()
+        {
+            MainCharacter.onMainCharacterInitialized -= Initialize;
+        }
+
+        private void Initialize()
+        {
+            _playerCharacterData = FindObjectOfType<MainCharacter>().GetComponent<CreatureData>();
+            
+        }
     }
 }

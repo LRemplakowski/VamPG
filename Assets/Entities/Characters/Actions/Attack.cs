@@ -13,7 +13,7 @@
         public override void Abort()
         {
             base.Abort();
-            if (Owner.IsOfType(typeof(Player)))
+            if (Owner.IsOfType(typeof(PlayerControlledCharacter)))
             {
                 Owner.GetComponentInChildren<LineRenderer>().enabled = false;
             }

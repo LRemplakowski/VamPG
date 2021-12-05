@@ -1,6 +1,7 @@
 ﻿namespace Transitions
 {
     using Entities.Interactable;
+    using SunsetSystems.Journal;
     using SunsetSystems.Management;
     using Transitions.Data;
     using Transitions.Manager;
@@ -10,22 +11,24 @@
     {
         [SerializeField]
         private string _sceneName;
-        public string SceneName
-        {
-            get => _sceneName;
-            private set => _sceneName = value;
-        }
+        public string SceneName { get => _sceneName; }
 
         [SerializeField]
         private int _sceneIndex;
-        public int SceneIndex
-        {
-            get => _sceneIndex;
-            private set => _sceneIndex = value;
-        }
+        public int SceneIndex { get => _sceneIndex; }
 
         [SerializeField]
         private TransitionType type;
+        [SerializeField]
+        private string targetEntryPointTag;
+
+        private JournalManager journal;
+
+        private void Start()
+        {
+            if (!journal)
+                journal = ReferenceManager.GetManager<JournalManager>();
+        }
 
         public override void Interact()
         {
@@ -33,10 +36,10 @@
             switch (type)
             {
                 case TransitionType.index:
-                    MoveToScene(new IndexTransition(SceneIndex));
+                    MoveToScene(new IndexTransition(SceneIndex, targetEntryPointTag, new Entities.Characters.CreatureAsset[0]));
                     break;
                 case TransitionType.name:
-                    MoveToScene(new NameTransition(SceneName));
+                    MoveToScene(new NameTransition(SceneName, targetEntryPointTag, new Entities.Characters.CreatureAsset[0]));
                     break;
             }
             base.Interact();

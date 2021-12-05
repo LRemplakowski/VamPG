@@ -26,7 +26,7 @@ public class DialogueCondition
     {
         if (Enum.TryParse(sex, out BodyType result))
         {
-            return GameManager.GetPlayer().GetSex().Equals(result);
+            return GameManager.GetMainCharacter().Data.BodyType.Equals(result);
         }
         else
             return false;
@@ -36,7 +36,7 @@ public class DialogueCondition
     {
         if (Enum.TryParse(type, out CreatureType result))
         {
-            return GameManager.GetPlayer().GetCreatureType().Equals(result);
+            return GameManager.GetMainCharacter().Data.CreatureType.Equals(result);
         }
         else
             return false;
@@ -44,7 +44,7 @@ public class DialogueCondition
 
     public static bool PlayerHasDisciplinePower(string powerName)
     {
-        DisciplinePower p = GameManager.GetPlayer().GetComponent<StatsManager>().GetDisciplinePower(powerName);
+        DisciplinePower p = GameManager.GetMainCharacter().GetComponent<StatsManager>().GetDisciplinePower(powerName);
         return !p.Type.Equals(DisciplineType.Invalid);
     }
 
@@ -56,7 +56,7 @@ public class DialogueCondition
 
     public static bool PlayerPassedSkillCheck(string attributeType, string skillType, int dc)
     {
-        StatsManager playerStatsManager = GameManager.GetPlayer().GetComponent<StatsManager>();
+        StatsManager playerStatsManager = GameManager.GetMainCharacter().GetComponent<StatsManager>();
         if (Enum.TryParse(attributeType, out AttributeType attribute) && Enum.TryParse(skillType, out SkillType skill))
         {
             Outcome outcome = playerStatsManager.GetSkillRoll(attribute, skill);

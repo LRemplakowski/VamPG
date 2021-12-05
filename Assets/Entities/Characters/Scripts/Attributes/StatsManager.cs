@@ -114,7 +114,7 @@ namespace Entities.Characters
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
-            if (owner.GetCreatureType().Equals(CreatureType.Vampire))
+            if (owner.Data.CreatureType.Equals(CreatureType.Vampire))
             {
                 hungerDice = Hunger;
                 normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
@@ -129,7 +129,7 @@ namespace Entities.Characters
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
-            if (owner.GetCreatureType().Equals(CreatureType.Vampire))
+            if (owner.Data.CreatureType.Equals(CreatureType.Vampire))
             {
                 hungerDice = Hunger;
                 normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;

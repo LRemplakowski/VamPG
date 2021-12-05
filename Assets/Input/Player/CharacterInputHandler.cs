@@ -11,7 +11,7 @@ public class CharacterInputHandler : InputHandler
 {
     private const int raycastRange = 100;
 
-    private Player player;
+    private PlayerControlledCharacter player;
     private Vector2 mousePosition;
     private Collider lastHit;
     [SerializeField]
@@ -29,7 +29,7 @@ public class CharacterInputHandler : InputHandler
 
     public void Initialize()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<PlayerControlledCharacter>();
         if (player == null)
             return;
         if (lineOrigin == null)
@@ -109,7 +109,7 @@ public class CharacterInputHandler : InputHandler
                 NPC enemy = hit.collider.GetComponent<NPC>();
                 if (enemy)
                 {
-                    if (enemy.Faction.Equals(Faction.Hostile) && Vector3.Distance(player.transform.position, enemy.transform.position) <= player.GetComponent<StatsManager>().GetWeaponMaxRange())
+                    if (enemy.Data.Faction.Equals(Faction.Hostile) && Vector3.Distance(player.transform.position, enemy.transform.position) <= player.GetComponent<StatsManager>().GetWeaponMaxRange())
                     {
                         turnCombatManager.CurrentActiveActor.Attack(enemy);
                     }

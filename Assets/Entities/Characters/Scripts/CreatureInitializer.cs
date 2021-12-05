@@ -22,20 +22,34 @@ namespace Entities.Characters
             Creature creature = creatureObject.GetComponent<Creature>();
             if (creature == null)
             {
-                if (asset.CreatureFaction.Equals(Faction.Player))
-                    creature = creatureObject.AddComponent<Player>();
-                else
-                    creature = creatureObject.AddComponent<NPC>();
+                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
             }
-            else if (creature.IsOfType(typeof(NPC)) && asset.CreatureFaction.Equals(Faction.Player) || creature.IsOfType(typeof(Player)) && !asset.CreatureFaction.Equals(Faction.Player))
+            else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
             {
                 Object.DestroyImmediate(creature);
-                if (asset.CreatureFaction.Equals(Faction.Player))
-                    creature = creatureObject.AddComponent<Player>();
-                else
-                    creature = creatureObject.AddComponent<NPC>();
+                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
             }
             return creature;
+        }
+
+        private static void AddMatchingCreatureScript(GameObject creatureObject, Faction faction, out Creature creature)
+        {
+            creature = faction switch
+            {
+                Faction.MainCharacter => creatureObject.AddComponent<MainCharacter>(),
+                Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
+                _ => creatureObject.AddComponent<NPC>(),
+            };
+        }
+
+        private static bool IsCreatureScriptMismatch(Creature creature, Faction faction)
+        {
+            return faction switch
+            {
+                Faction.PlayerControlled => creature.IsOfType(typeof(PlayerControlledCharacter)),
+                Faction.MainCharacter => creature.IsOfType(typeof(MainCharacter)),
+                _ => creature.IsOfType(typeof(NPC)),
+            };
         }
 
         private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureAsset asset)

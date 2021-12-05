@@ -34,7 +34,7 @@ namespace Utils.Singleton
             }
             else
             {
-                Destroy(this);
+                Destroy(this.gameObject);
             }
         }
     }

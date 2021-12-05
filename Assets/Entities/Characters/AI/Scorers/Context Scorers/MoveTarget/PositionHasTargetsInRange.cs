@@ -19,7 +19,7 @@
         {
             bool hasTargets = false;
             List<Creature> targets = new List<Creature>();
-            if (context.Owner.Faction.Equals(Faction.Hostile))
+            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
             {
                 targets.AddRange(context.FriendlyCombatants);
                 targets.AddRange(context.PlayerControlledCombatants);

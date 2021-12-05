@@ -3,7 +3,7 @@ using SunsetSystems.Management;
 
 public class GameManager : Manager
 {
-    private static Player player;
+    private static PlayerControlledCharacter player;
     private static GridController gridController;
 
     // Start is called before the first frame update
@@ -17,10 +17,10 @@ public class GameManager : Manager
         gridController = FindObjectOfType<GridController>();
     }
 
-    public static Player GetPlayer()
+    public static Creature GetMainCharacter()
     {
         if (player == null)
-            player = FindObjectOfType<Player>(true);
+            player = FindObjectOfType<MainCharacter>(true);
         return player;
     }
 

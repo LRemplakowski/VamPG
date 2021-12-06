@@ -1,3 +1,4 @@
+using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.SaveLoad;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,23 +7,24 @@ using static DebugTest.DebugSaveable;
 
 namespace DebugTest
 {
+    [RequireComponent(typeof(UniqueId))]
     public class DebugSaveable : MonoBehaviour, ISaveable
     {
         public int someInt = 0;
         public float someFloat = 1.0f;
         public Vector3 someVector = Vector3.one;
-        [SerializeField, ReadOnly]
-        private string uniqueId;
+        private UniqueId unique;
 
-        private void Awake()
+        private void Start()
         {
-            uniqueId = gameObject.GetInstanceID().ToString();
+            if (unique == null)
+                unique = GetComponent<UniqueId>();
         }
 
 
         public SerializedData GetData()
         {
-            DebugSerializedData.DataBuilder builder = new DebugSerializedData.DataBuilder(uniqueId)
+            DebugSerializedData.DataBuilder builder = new DebugSerializedData.DataBuilder(unique.Id)
             {
                 serializedInt = someInt,
                 serializedFloat = someFloat,
@@ -37,7 +39,6 @@ namespace DebugTest
             someInt = debugData.serializedInt;
             someFloat = debugData.serializedFloat;
             someVector = debugData.serializedVector3;
-            uniqueId = debugData.Key;
         }
 
         [System.Serializable]

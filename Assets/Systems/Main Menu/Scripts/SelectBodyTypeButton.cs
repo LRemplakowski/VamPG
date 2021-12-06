@@ -1,4 +1,4 @@
-using Transitions.Manager;
+using SunsetSystems.Journal;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI

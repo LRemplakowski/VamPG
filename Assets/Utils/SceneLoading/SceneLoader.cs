@@ -30,7 +30,7 @@
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
             SceneManager.SetActiveScene(scene);
             SceneInitializer.InitializeSingletons();
-                
+            SceneInitializer.InitializePlayableCharacters();
         }
 
         private IEnumerator LoadScene(int sceneIndex)

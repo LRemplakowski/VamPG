@@ -7,7 +7,7 @@ namespace Transitions.Data
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
 
-        public TransitionData(TransitionType transitionType, string targetEntryPointTag, CreatureAsset[] currentParty)
+        public TransitionData(TransitionType transitionType, string targetEntryPointTag)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
@@ -20,8 +20,8 @@ namespace Transitions.Data
     {
         private readonly int sceneIndex;
         
-        public IndexTransition(int sceneIndex, string targetEntryPointTag, CreatureAsset[] currentParty) 
-            : base(TransitionType.index, targetEntryPointTag, currentParty)
+        public IndexTransition(int sceneIndex, string targetEntryPointTag) 
+            : base(TransitionType.index, targetEntryPointTag)
         {
             this.sceneIndex = sceneIndex;
         }
@@ -36,8 +36,8 @@ namespace Transitions.Data
     {
         private readonly string sceneName;
 
-        public NameTransition(string sceneName, string targetEntryPointTag, CreatureAsset[] currentParty) 
-            : base(TransitionType.name, targetEntryPointTag, currentParty)
+        public NameTransition(string sceneName, string targetEntryPointTag) 
+            : base(TransitionType.name, targetEntryPointTag)
         {
             this.sceneName = sceneName;
         }

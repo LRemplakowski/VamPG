@@ -22,24 +22,16 @@
         [SerializeField]
         private string targetEntryPointTag;
 
-        private JournalManager journal;
-
-        private void Start()
-        {
-            if (!journal)
-                journal = ReferenceManager.GetManager<JournalManager>();
-        }
-
         public override void Interact()
         {
             Debug.Log("Interacting with area transition!");
             switch (type)
             {
                 case TransitionType.index:
-                    MoveToScene(new IndexTransition(SceneIndex, targetEntryPointTag, new Entities.Characters.CreatureAsset[0]));
+                    MoveToScene(new IndexTransition(SceneIndex, targetEntryPointTag));
                     break;
                 case TransitionType.name:
-                    MoveToScene(new NameTransition(SceneName, targetEntryPointTag, new Entities.Characters.CreatureAsset[0]));
+                    MoveToScene(new NameTransition(SceneName, targetEntryPointTag));
                     break;
             }
             base.Interact();

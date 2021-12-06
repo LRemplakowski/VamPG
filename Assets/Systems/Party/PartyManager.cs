@@ -1,9 +1,9 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
+using SunsetSystems.Journal;
 using SunsetSystems.Management;
 using UI.CharacterPortraits;
 using UnityEngine;
-using SunsetSystems.Journal;
 
 namespace SunsetSystems.Party
 {
@@ -17,8 +17,6 @@ namespace SunsetSystems.Party
         private Creature[] ReservePartyMembers { get => _reservePartyMembers; set => _reservePartyMembers = value; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
-        [SerializeField]
-        private JournalManager journal;
 
         private void Initialize()
         {
@@ -43,8 +41,7 @@ namespace SunsetSystems.Party
 
         private void CreatePartyList()
         {
-            if (journal == null)
-                journal = ReferenceManager.GetManager<JournalManager>();
+            GameJournal journal = GameJournal.Instance;
             CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
             CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
             for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)

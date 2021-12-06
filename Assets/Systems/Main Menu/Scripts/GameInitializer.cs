@@ -52,13 +52,11 @@ namespace SunsetSystems.Journal
         public void SetAttribueValue(AttributeType attribute, int value)
         {
             stats.GetAttribute(attribute).SetValue(value);
-            Debug.LogWarning("Attribute: " + attribute + "; current value: " + stats.GetAttribute(attribute).GetValue() + "; expected value: " + value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
             stats.GetSkill(skill).SetValue(value);
-            Debug.LogWarning("Skill: " + skill + "; current value: " + stats.GetSkill(skill).GetValue() + "; expected value: " + value);
         }
 
         public void SetCharacterName(string characterName)

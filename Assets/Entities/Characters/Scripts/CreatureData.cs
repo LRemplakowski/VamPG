@@ -73,6 +73,7 @@ namespace Entities.Characters
             }
         }
 
+#if UNITY_EDITOR
         private void Reset()
         {
             if (data == null)
@@ -82,11 +83,25 @@ namespace Entities.Characters
             gameObject.name = data.name;
             InitializeData();
         }
+#endif
 
         private void Start()
         {
-            _dataInstance = CreatureAsset.CopyInstance(data);
-            InitializeData();
+            CreateCreature();
+        }
+
+        public void CreateCreature()
+        {
+            if (data)
+            {
+                _dataInstance = CreatureAsset.CopyInstance(data);
+                InitializeData();
+            }
+        }
+
+        public void SetData(CreatureAsset data)
+        {
+            this.data = data;
         }
 
         private void InitializeData()

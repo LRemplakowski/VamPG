@@ -9,31 +9,31 @@ namespace Entities.Characters
     {
         [SerializeField]
         private string _creatureName = "New Creature";
-        public string CreatureName { get => _creatureName; internal set => _creatureName = value; }
+        public string CreatureName { get => _creatureName; set => _creatureName = value; }
         [SerializeField]
         private string _creatureLastName = "";
-        public string CreatureLastName { get => _creatureLastName; internal set => _creatureLastName = value; }
+        public string CreatureLastName { get => _creatureLastName; set => _creatureLastName = value; }
         [SerializeField]
         private Sprite _portrait;
-        public Sprite Portrait { get => _portrait; internal set => _portrait = value; }
+        public Sprite Portrait { get => _portrait; set => _portrait = value; }
         [SerializeField]
         private CharacterStats _statsAsset;
-        public CharacterStats StatsAsset { get => _statsAsset; internal set => _statsAsset = value; }
+        public CharacterStats StatsAsset { get => _statsAsset; set => _statsAsset = value; }
         [SerializeField]
         private string _umaPresetFilename = "default";
-        public string UmaPresetFilename { get => _umaPresetFilename; internal set => _umaPresetFilename = value; }
+        public string UmaPresetFilename { get => _umaPresetFilename; set => _umaPresetFilename = value; }
         [SerializeField]
         private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController { get => _animatorController; internal set => _animatorController = value; }
+        public RuntimeAnimatorController AnimatorController { get => _animatorController; set => _animatorController = value; }
         [SerializeField]
         private Faction _creatureFaction;
-        public Faction CreatureFaction { get => _creatureFaction; internal set => _creatureFaction = value; }
+        public Faction CreatureFaction { get => _creatureFaction; set => _creatureFaction = value; }
         [SerializeField]
         private BodyType _bodyType;
-        public BodyType BodyType { get => _bodyType; internal set => _bodyType = value; }
+        public BodyType BodyType { get => _bodyType; set => _bodyType = value; }
         [SerializeField]
         private CreatureType _creatureType;
-        public CreatureType CreatureType { get => _creatureType; internal set => _creatureType = value; }
+        public CreatureType CreatureType { get => _creatureType; set => _creatureType = value; }
 
 
         private void OnEnable()

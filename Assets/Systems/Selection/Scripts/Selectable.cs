@@ -7,13 +7,7 @@ namespace InsaneSystems.RTSSelection
     public class Selectable : MonoBehaviour, ISelectable
     {
         public event Action OnSelected, OnUnselected;
-        [SerializeField, ReadOnly]
-        private new Collider collider;
-
-        private void Awake()
-        {
-            collider = GetComponent<Collider>();
-        }
+        private Collider Collider { get => GetComponent<Collider>(); }
 
         void OnDestroy() => Selection.AllSelectables.Remove(this);
         
@@ -21,7 +15,7 @@ namespace InsaneSystems.RTSSelection
         public void Unselect() => OnUnselected?.Invoke();
 
         public Transform GetTransform() => transform;
-        public Collider GetCollider() => collider;
+        public Collider GetCollider() => Collider;
         public Creature GetCreature() => GetComponent<Creature>();
     }
 }

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using Entities.Characters;
-using SunsetSystems.Journal;
 using Transitions.Data;
 using Transitions.Manager;
 using UnityEngine;
+using Utils.ResourceLoader;
 
-namespace SunsetSystems.MainMenu
+namespace SunsetSystems.Journal
 {
     public class GameInitializer : MonoBehaviour
     {
@@ -68,8 +68,34 @@ namespace SunsetSystems.MainMenu
 
         public void InitializeGame()
         {
-            TransitionData data = new IndexTransition(startSceneIndex, startingEntryPointTag, new CreatureAsset[0]);
+            CreatureAsset mainCharacterAsset = GetMatchingCreatureAsset();
+            mainCharacterAsset.CreatureName = characterName;
+            mainCharacterAsset.StatsAsset = stats;
+            GameJournal.Instance.PartyAssets = new PartyAssetsWrapper(mainCharacterAsset);
+            TransitionData data = new IndexTransition(startSceneIndex, startingEntryPointTag);
             transitionManager.PerformTransition(data);
+        }
+
+        private CreatureAsset GetMatchingCreatureAsset()
+        {
+            return selectedBodyType switch
+            {
+                BodyType.M => selectedBackground switch
+                {
+                    PlayerCharacterBackground.Agent => ResourceLoader.GetMaleAgentAsset(),
+                    PlayerCharacterBackground.Convict => ResourceLoader.GetMaleConvictAsset(),
+                    PlayerCharacterBackground.Journalist => ResourceLoader.GetMaleJournalistAsset(),
+                    _ => ResourceLoader.GetDefaultCreatureAsset(),
+                },
+                BodyType.F => selectedBackground switch
+                {
+                    PlayerCharacterBackground.Agent => ResourceLoader.GetFemaleAgentAsset(),
+                    PlayerCharacterBackground.Convict => ResourceLoader.GetFemaleConvictAsset(),
+                    PlayerCharacterBackground.Journalist => ResourceLoader.GetFemaleJournalistAsset(),
+                    _ => ResourceLoader.GetDefaultCreatureAsset(),
+                },
+                _ => ResourceLoader.GetDefaultCreatureAsset(),
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SunsetSystems.Journal;
+using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI
 {

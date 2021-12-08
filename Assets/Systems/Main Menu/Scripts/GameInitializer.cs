@@ -4,6 +4,7 @@ using Entities.Characters;
 using Transitions.Data;
 using Transitions.Manager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils.ResourceLoader;
 
 namespace SunsetSystems.Journal
@@ -66,11 +67,12 @@ namespace SunsetSystems.Journal
 
         public void InitializeGame()
         {
-            CreatureAsset mainCharacterAsset = GetMatchingCreatureAsset();
+            CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
             mainCharacterAsset.CreatureName = characterName;
             mainCharacterAsset.StatsAsset = stats;
-            GameJournal.Instance.PartyAssets = new PartyAssetsWrapper(mainCharacterAsset);
-            TransitionData data = new IndexTransition(startSceneIndex, startingEntryPointTag);
+            GameJournal journal = FindObjectOfType<GameJournal>();
+            journal.MainCharacterAsset = mainCharacterAsset;
+            TransitionData data = new IndexTransition(startSceneIndex, startingEntryPointTag, LoadSceneMode.Additive);
             transitionManager.PerformTransition(data);
         }
 

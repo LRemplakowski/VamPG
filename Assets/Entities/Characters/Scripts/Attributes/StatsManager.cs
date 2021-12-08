@@ -34,8 +34,7 @@ namespace Entities.Characters
             owner = GetComponentInParent<Creature>();
             if (!_characterStats)
                 _characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
-            if (_characterStats.IsGeneric)
-                _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
+            _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
             Health = _characterStats.GetTracker(TrackerType.Health).GetValue();
             Willpower = _characterStats.GetTracker(TrackerType.Willpower).GetValue();
             Humanity = _characterStats.GetTracker(TrackerType.Humanity).GetValue();

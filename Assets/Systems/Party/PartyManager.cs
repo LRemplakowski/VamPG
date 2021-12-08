@@ -41,7 +41,7 @@ namespace SunsetSystems.Party
 
         private void CreatePartyList()
         {
-            GameJournal journal = GameJournal.Instance;
+            GameJournal journal = FindObjectOfType<GameJournal>();
             CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
             CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
             for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)

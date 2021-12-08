@@ -16,7 +16,7 @@ namespace Utils.Scenes
     {
         internal static void InitializeSingletons()
         {
-            GameObject.FindObjectsOfType<MonoBehaviour>(true).OfType<IInitializable>().ToList().ForEach(o => o.Initialize());
+            UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(true).OfType<IInitializable>().ToList().ForEach(o => o.Initialize());
         }
 
         internal static void InitializePlayableCharacters()
@@ -43,7 +43,9 @@ namespace Utils.Scenes
                 entryPoint = UnityEngine.Object.FindObjectOfType<AreaEntryPoint>();
             }
 
-            GameJournal.Instance.InitializeParty(entryPoint != null ? entryPoint.transform.position : Vector3.zero);
+            GameJournal journal = UnityEngine.Object.FindObjectOfType<GameJournal>();
+            if (journal)
+                journal.InitializeParty(entryPoint != null ? entryPoint.transform.position : Vector3.zero);
         }
     }
 }

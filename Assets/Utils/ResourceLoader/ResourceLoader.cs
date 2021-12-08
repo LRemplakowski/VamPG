@@ -58,5 +58,10 @@ namespace Utils.ResourceLoader
         {
             return GetAsset<CreatureAsset>(CHARACTER_DEBUG);
         }
+
+        public static RuntimeAnimatorController GetAnimatorController(string resourceName)
+        {
+            return GetAsset<RuntimeAnimatorController>(resourceName);
+        }
     }
 }

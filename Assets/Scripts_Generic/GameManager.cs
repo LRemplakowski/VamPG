@@ -1,5 +1,6 @@
 ﻿using Entities.Characters;
 using SunsetSystems.Management;
+using UnityEngine;
 
 public class GameManager : Manager
 {

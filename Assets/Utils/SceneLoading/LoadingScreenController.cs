@@ -55,7 +55,7 @@ public class LoadingScreenController : MonoBehaviour
 
     public void OnContinue()
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(null);
+        TransitionManager.Instance.PerformTransition(null);
     }
 
 }

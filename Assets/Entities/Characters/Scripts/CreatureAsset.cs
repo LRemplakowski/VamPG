@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UMA.CharacterSystem;
 using System;
+using Utils.ResourceLoader;
 
 namespace Entities.Characters
 {
@@ -23,8 +24,12 @@ namespace Entities.Characters
         private string _umaPresetFilename = "default";
         public string UmaPresetFilename { get => _umaPresetFilename; set => _umaPresetFilename = value; }
         [SerializeField]
+        private string animatorControllerResourceName = "";
         private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController { get => _animatorController; set => _animatorController = value; }
+        public RuntimeAnimatorController AnimatorController 
+        { 
+            get => _animatorController; 
+        }
         [SerializeField]
         private Faction _creatureFaction;
         public Faction CreatureFaction { get => _creatureFaction; set => _creatureFaction = value; }
@@ -46,9 +51,16 @@ namespace Entities.Characters
                 _animatorController = Resources.Load<RuntimeAnimatorController>("Animation/AnimationControllers/female_anims");
         }
 
-        internal static CreatureAsset CopyInstance(CreatureAsset data)
+        private void Awake()
         {
+            if (_animatorController == null)
+                _animatorController = ResourceLoader.GetAnimatorController(animatorControllerResourceName);
+        }
+
+        internal static CreatureAsset CopyInstance(CreatureAsset data)
+        { 
             CreatureAsset copy = CreateInstance<CreatureAsset>();
+            copy.name = data.name + " (Clone)";
             copy._creatureName = data._creatureName;
             copy._creatureLastName = data._creatureLastName;
             copy._portrait = data._portrait;

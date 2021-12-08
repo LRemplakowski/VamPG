@@ -39,7 +39,7 @@
 
         public void MoveToScene(TransitionData data)
         {
-            ReferenceManager.GetManager<TransitionManager>().PerformTransition(data);
+            TransitionManager.Instance.PerformTransition(data);
         }
     }
 

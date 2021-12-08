@@ -1,7 +1,9 @@
 ﻿namespace Utils.Scenes
 {
+    using Glitchers;
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using Transitions.Data;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -28,7 +30,21 @@
         {
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
-            SceneManager.SetActiveScene(scene);
+            Debug.Log("LoadSceneMode: " + loadSceneMode + "; AdditiveModeIntvalue: " + LoadSceneMode.Additive);
+            if (loadSceneMode == LoadSceneMode.Additive)
+            {
+                Debug.LogError("Load scene mode additive enter");
+                Scene previousScene = SceneManager.GetActiveScene();
+                List<IMoveBetweenScenes> moveables = FindInterfaces.Find<IMoveBetweenScenes>();
+                Debug.LogError(moveables.Count + " objects to move");
+                foreach (IMoveBetweenScenes moveable in moveables)
+                {
+                    Debug.LogError("moving object " + moveable.GetGameObject() + " to scene " + scene.name);
+                    SceneManager.MoveGameObjectToScene(moveable.GetGameObject(), scene);
+                }
+                SceneManager.SetActiveScene(scene);
+                SceneManager.UnloadSceneAsync(previousScene);
+            }
             SceneInitializer.InitializeSingletons();
             SceneInitializer.InitializePlayableCharacters();
         }
@@ -36,14 +52,14 @@
         private IEnumerator LoadScene(int sceneIndex)
         {
             Debug.Log("Loading scene " + sceneIndex);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex);
+            AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex, CachedTransitionData.loadSceneMode);
             return HandleLoadingOperation(op);
         }
 
         private IEnumerator LoadScene(string sceneName)
         {
             Debug.Log("Loading scene " + sceneName);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, CachedTransitionData.loadSceneMode);
             return HandleLoadingOperation(op);
         }
 
@@ -68,13 +84,11 @@
             {
                 case Transitions.TransitionType.index:
                     int index = (int)data.get();
-                    if (index != SceneManager.GetActiveScene().buildIndex)
-                        StartCoroutine(LoadScene(index));
+                    StartCoroutine(LoadScene(index));
                     break;
                 case Transitions.TransitionType.name:
                     string name = (string)data.get();
-                    if (!name.Equals(SceneManager.GetActiveScene().name))
-                        StartCoroutine(LoadScene((string)data.get()));
+                    StartCoroutine(LoadScene(name));
                     break;
                 default:
                     Debug.LogException(new ArgumentException("Unhandled area transition type!"));

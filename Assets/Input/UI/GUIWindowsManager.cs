@@ -11,10 +11,10 @@ public class GUIWindowsManager : InputHandler
     public DialogueWindowUI dialogueUI;
     private List<UIWindow> windows = new List<UIWindow>();
     private int _activeWindows = 0;
-    private int ActiveWindows
+    public int ActiveWindows
     {
         get => _activeWindows;
-        set => _activeWindows = value;
+        private set => _activeWindows = value;
     }
 
     #region Enable&Disable

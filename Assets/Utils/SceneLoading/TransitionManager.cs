@@ -1,9 +1,10 @@
 using Transitions.Data;
 using Utils.Scenes;
+using Utils.Singleton;
 
 namespace Transitions.Manager
 {
-    public class TransitionManager : SunsetSystems.Management.Manager
+    public class TransitionManager : Singleton<TransitionManager>
     {
         private TransitionAnimator _animator;
         private TransitionAnimator Animator
@@ -35,6 +36,7 @@ namespace Transitions.Manager
             TransitionAnimator.OnFadedOut += OnFadedOut;
             Animator.FadeOut();
         }
+
         private void OnFadedIn()
         {
             TransitionAnimator.OnFadedIn -= OnFadedIn;

@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Utils.Singleton;
 
-public class PersistingCanvas : MonoBehaviour
+public class PersistingCanvas : Singleton<PersistingCanvas>
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        DontDestroyOnLoad(this);
-    }
+
 }

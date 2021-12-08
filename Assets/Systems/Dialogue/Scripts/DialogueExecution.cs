@@ -29,11 +29,11 @@ public class DialogueExecution
 
     public static void NameTransition(string sceneName)
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new NameTransition(sceneName, ""));
+        TransitionManager.Instance.PerformTransition(new NameTransition(sceneName, ""));
     }
 
     public static void IndexTransition(int sceneIndex)
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new IndexTransition(sceneIndex, ""));
+        TransitionManager.Instance.PerformTransition(new IndexTransition(sceneIndex, ""));
     }
 }

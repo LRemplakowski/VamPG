@@ -1,4 +1,4 @@
-using SunsetSystems.Journal;
+using SunsetSystems.GameData;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI

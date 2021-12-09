@@ -1,4 +1,4 @@
-using SunsetSystems.Journal;
+using SunsetSystems.GameData;
 using Transitions.Manager;
 using UnityEngine;
 

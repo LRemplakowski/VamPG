@@ -8,9 +8,8 @@ using Utils.Singleton;
 public class InputManager : ExposableMonobehaviour
 {
     [SerializeField]
-    private static PlayerInput _input;
-    [SerializeField, ExposeProperty]
-    public static PlayerInput Input
+    private PlayerInput _input;
+    public PlayerInput Input
     {
         get => _input;
         set => _input = value;

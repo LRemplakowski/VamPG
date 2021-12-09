@@ -7,19 +7,11 @@ namespace Transitions.Data
     {
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
-        public readonly LoadSceneMode loadSceneMode;
 
         public TransitionData(TransitionType transitionType, string targetEntryPointTag)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
-            loadSceneMode = LoadSceneMode.Additive;
-        }
-
-        public TransitionData(TransitionType transitionType, string targetEntryPointTag, LoadSceneMode loadSceneMode) 
-            : this(transitionType, targetEntryPointTag)
-        {
-            this.loadSceneMode = loadSceneMode;
         }
 
         public abstract object get();
@@ -31,12 +23,6 @@ namespace Transitions.Data
         
         public IndexTransition(int sceneIndex, string targetEntryPointTag) 
             : base(TransitionType.index, targetEntryPointTag)
-        {
-            this.sceneIndex = sceneIndex;
-        }
-
-        public IndexTransition(int sceneIndex, string targetEntryPointTag, LoadSceneMode loadSceneMode) 
-            : base(TransitionType.index, targetEntryPointTag, loadSceneMode)
         {
             this.sceneIndex = sceneIndex;
         }
@@ -53,12 +39,6 @@ namespace Transitions.Data
 
         public NameTransition(string sceneName, string targetEntryPointTag) 
             : base(TransitionType.name, targetEntryPointTag)
-        {
-            this.sceneName = sceneName;
-        }
-
-        public NameTransition(string sceneName, string targetEntryPointTag, LoadSceneMode loadSceneMode)
-    : base(TransitionType.name, targetEntryPointTag, loadSceneMode)
         {
             this.sceneName = sceneName;
         }

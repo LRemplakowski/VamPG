@@ -1,4 +1,5 @@
 using Transitions.Data;
+using UnityEngine;
 using Utils.Scenes;
 using Utils.Singleton;
 
@@ -6,6 +7,7 @@ namespace Transitions.Manager
 {
     public class TransitionManager : Singleton<TransitionManager>
     {
+        [SerializeField]
         private TransitionAnimator _animator;
         private TransitionAnimator Animator
         {

@@ -11,7 +11,15 @@ namespace Entities.Characters
     {
         [SerializeField]
         protected CharacterStats _characterStats;
-        public CharacterStats Stats { get => _characterStats; internal set => _characterStats = value; }
+        public CharacterStats Stats 
+        { 
+            get => _characterStats; 
+            internal set
+            {
+                _characterStats = value;
+                InitializeTrackers();
+            }
+        }
 
         [SerializeField, ReadOnly]
         protected Creature owner;
@@ -35,6 +43,11 @@ namespace Entities.Characters
             if (!_characterStats)
                 _characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
             _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
+            InitializeTrackers();
+        }
+
+        private void InitializeTrackers()
+        {
             Health = _characterStats.GetTracker(TrackerType.Health).GetValue();
             Willpower = _characterStats.GetTracker(TrackerType.Willpower).GetValue();
             Humanity = _characterStats.GetTracker(TrackerType.Humanity).GetValue();

@@ -1,7 +1,7 @@
 ﻿namespace Transitions
 {
     using Entities.Interactable;
-    using SunsetSystems.Journal;
+    using SunsetSystems.GameData;
     using SunsetSystems.Management;
     using Transitions.Data;
     using Transitions.Manager;

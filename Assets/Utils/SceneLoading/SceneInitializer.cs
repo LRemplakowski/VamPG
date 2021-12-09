@@ -1,29 +1,29 @@
-﻿using SunsetSystems.Journal;
-using System;
-using System.Collections.Generic;
+﻿using SunsetSystems.GameData;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Transitions.Data;
-using Transitions.Manager;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Utils.Singleton;
 
 namespace Utils.Scenes
 {
     internal static class SceneInitializer
     {
-        internal static void InitializeSingletons()
+        private static GameData journal;
+        public static void InitializeScene(SceneInitializationData data)
         {
-            UnityEngine.Object.FindObjectsOfType<MonoBehaviour>(true).OfType<IInitializable>().ToList().ForEach(o => o.Initialize());
+            journal = Object.FindObjectOfType<GameData>();
+            InitializeSingletons();
+            journal.InjectJournalData(data.journalData);
+            InitializePlayableCharacters(data.areaEntryTag);
         }
 
-        internal static void InitializePlayableCharacters()
+        private static void InitializeSingletons()
+        {
+            Object.FindObjectsOfType<MonoBehaviour>(true).OfType<IInitializable>().ToList().ForEach(o => o.Initialize());
+        }
+
+        private static void InitializePlayableCharacters(string tag)
         {
             AreaEntryPoint entryPoint = null;
-            TransitionData data = SceneLoader.CachedTransitionData;
-            string tag = data != null ? data.targetEntryPointTag : "";
             if (!tag.Equals(""))
             {
                 GameObject obj = null;
@@ -40,12 +40,46 @@ namespace Utils.Scenes
             }
             if (entryPoint == null)
             {
-                entryPoint = UnityEngine.Object.FindObjectOfType<AreaEntryPoint>();
+                entryPoint = Object.FindObjectOfType<AreaEntryPoint>();
             }
 
-            GameJournal journal = UnityEngine.Object.FindObjectOfType<GameJournal>();
             if (journal)
                 journal.InitializeParty(entryPoint != null ? entryPoint.transform.position : Vector3.zero);
+        }
+    }
+
+    public class SceneInitializationData
+    {
+        public readonly string areaEntryTag;
+        public readonly GameDataContainer journalData;
+
+        private SceneInitializationData(string areaEntryTag, GameDataContainer journalData)
+        {
+            this.areaEntryTag = areaEntryTag;
+            this.journalData = journalData;
+        }
+
+        public class SceneInitializationDataBuilder
+        {
+            private string areaEntryTag;
+            private GameDataContainer journalData;
+
+            public SceneInitializationDataBuilder SetAreaEntryTag(string areaEntryTag)
+            {
+                this.areaEntryTag = areaEntryTag;
+                return this;
+            }
+
+            public SceneInitializationDataBuilder SetJournalData(GameDataContainer journalData)
+            {
+                this.journalData = journalData;
+                return this;
+            }
+
+            public SceneInitializationData Build()
+            {
+                return new SceneInitializationData(areaEntryTag, journalData);
+            }
         }
     }
 }

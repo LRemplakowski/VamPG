@@ -1,7 +1,7 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
-using SunsetSystems.Journal;
 using SunsetSystems.Management;
+using System;
 using UI.CharacterPortraits;
 using UnityEngine;
 
@@ -12,9 +12,6 @@ namespace SunsetSystems.Party
         [SerializeField, ReadOnly]
         private Creature[] _currentPartyMembers;
         private Creature[] CurrentPartyMembers { get => _currentPartyMembers; set => _currentPartyMembers = value; }
-        [SerializeField, ReadOnly]
-        private Creature[] _reservePartyMembers;
-        private Creature[] ReservePartyMembers { get => _reservePartyMembers; set => _reservePartyMembers = value; }
         [SerializeField]
         private PartyPortraitsController partyPortraits;
 
@@ -41,13 +38,8 @@ namespace SunsetSystems.Party
 
         private void CreatePartyList()
         {
-            GameJournal journal = FindObjectOfType<GameJournal>();
-            CurrentPartyMembers = new Creature[journal.ActiveCompanions.Length + 1];
-            CurrentPartyMembers[0] = journal.PlayerCharacterData.GetComponent<Creature>();
-            for (int i = 1; i < journal.ActiveCompanions.Length + 1; i++)
-            {
-                CurrentPartyMembers[i] = journal.ActiveCompanions[i].GetComponent<Creature>();
-            }
+            CurrentPartyMembers = FindObjectsOfType<PlayerControlledCharacter>();
+            Array.Sort(CurrentPartyMembers);
         }
 
         public CreatureUIData[] GetCurrentMembersData()
@@ -58,16 +50,6 @@ namespace SunsetSystems.Party
                 currentMembersData[i] = CurrentPartyMembers[i].GetCreatureUIData();
             }
             return currentMembersData;
-        }
-
-        public CreatureUIData[] GetReserveMembersData()
-        {
-            CreatureUIData[] reserveMembersData = new CreatureUIData[ReservePartyMembers.Length];
-            for (int i = 0; i < reserveMembersData.Length; i++)
-            {
-                reserveMembersData[i] = ReservePartyMembers[i].GetCreatureUIData();
-            }
-            return reserveMembersData;
         }
     }
 }

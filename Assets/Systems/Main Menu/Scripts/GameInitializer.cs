@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils.ResourceLoader;
 
-namespace SunsetSystems.Journal
+namespace SunsetSystems.GameData
 {
     public class GameInitializer : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace SunsetSystems.Journal
         [SerializeField]
         private CharacterStats stats;
         [SerializeField]
-        private int startSceneIndex;
+        private string startSceneName;
         [SerializeField]
         private string startingEntryPointTag;
         [SerializeField]
@@ -70,9 +70,9 @@ namespace SunsetSystems.Journal
             CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
             mainCharacterAsset.CreatureName = characterName;
             mainCharacterAsset.StatsAsset = stats;
-            GameJournal journal = FindObjectOfType<GameJournal>();
+            GameData journal = FindObjectOfType<GameData>();
             journal.MainCharacterAsset = mainCharacterAsset;
-            TransitionData data = new IndexTransition(startSceneIndex, startingEntryPointTag, LoadSceneMode.Additive);
+            TransitionData data = new NameTransition(startSceneName, startingEntryPointTag);
             transitionManager.PerformTransition(data);
         }
 

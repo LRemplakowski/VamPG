@@ -79,6 +79,17 @@ namespace SunsetSystems.Formation
             formationElements.Clear();
         }
 
+        public static List<Vector3> GetPositionsFromPoint (Vector3 point)
+        {
+            List<Vector3> positions = new List<Vector3>();
+            //TODO: Placeholder, zmieniæ to kurde
+            for (int i = 0; i < 6; i++)
+            {
+                positions.Add(point);
+            }
+            return positions;
+        }
+
         public void OnRightClick(InputAction.CallbackContext context)
         {
             if (!context.performed)

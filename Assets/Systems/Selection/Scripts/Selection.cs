@@ -20,14 +20,10 @@ namespace InsaneSystems.RTSSelection
 
         private Vector2 mousePosition;
 
-        void Awake()
+        private void Start()
         {
             cachedCamera = Camera.main;
             AllSelectables.Clear();
-        }
-
-        private void Start()
-        {
             foreach (Creature creature in FindObjectsOfType<Creature>())
             {
                 ISelectable selectable = creature.GetComponent<ISelectable>();

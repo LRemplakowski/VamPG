@@ -48,7 +48,10 @@ namespace Entities.Characters
 
         private void InitializeTrackers()
         {
+            _characterStats.GetTracker(TrackerType.Health).SetValue(_characterStats.GetAttribute(AttributeType.Stamina).GetValue() + 3);
             Health = _characterStats.GetTracker(TrackerType.Health).GetValue();
+            int wp = _characterStats.GetAttribute(AttributeType.Composure).GetValue() + _characterStats.GetAttribute(AttributeType.Resolve).GetValue();
+            _characterStats.GetTracker(TrackerType.Willpower).SetValue(wp);
             Willpower = _characterStats.GetTracker(TrackerType.Willpower).GetValue();
             Humanity = _characterStats.GetTracker(TrackerType.Humanity).GetValue();
             Hunger = _characterStats.GetTracker(TrackerType.Hunger).GetValue();

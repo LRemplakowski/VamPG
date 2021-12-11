@@ -7,12 +7,12 @@ namespace Utils.Scenes
 {
     internal static class SceneInitializer
     {
-        private static GameData journal;
+        private static GameData gameData;
         public static void InitializeScene(SceneInitializationData data)
         {
-            journal = Object.FindObjectOfType<GameData>();
+            gameData = Object.FindObjectOfType<GameData>();
             InitializeSingletons();
-            journal.InjectJournalData(data.journalData);
+            gameData.InjectJournalData(data.journalData);
             InitializePlayableCharacters(data.areaEntryTag);
         }
 
@@ -43,8 +43,8 @@ namespace Utils.Scenes
                 entryPoint = Object.FindObjectOfType<AreaEntryPoint>();
             }
 
-            if (journal)
-                journal.InitializeParty(entryPoint != null ? entryPoint.transform.position : Vector3.zero);
+            if (gameData)
+                gameData.InitializeParty(entryPoint != null ? entryPoint.transform.position : Vector3.zero);
         }
     }
 

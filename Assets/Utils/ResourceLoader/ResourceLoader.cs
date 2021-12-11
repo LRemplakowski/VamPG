@@ -19,6 +19,8 @@ namespace Utils.ResourceLoader
         /// </summary>
         private const string CHARACTER_DEBUG = "DEBUG/default";
 
+        private const string ANIMATOR_CONTROLLERS_PATH = "Animation/AnimationControllers/";
+
         private static T GetAsset<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
@@ -61,7 +63,12 @@ namespace Utils.ResourceLoader
 
         public static RuntimeAnimatorController GetAnimatorController(string resourceName)
         {
-            return GetAsset<RuntimeAnimatorController>(resourceName);
+            return GetAsset<RuntimeAnimatorController>(ANIMATOR_CONTROLLERS_PATH + resourceName);
+        }
+
+        public static RuntimeAnimatorController GetFallbackAnimator()
+        {
+            return GetAsset<RuntimeAnimatorController>(ANIMATOR_CONTROLLERS_PATH + "female_anims");
         }
     }
 }

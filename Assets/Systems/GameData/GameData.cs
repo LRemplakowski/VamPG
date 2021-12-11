@@ -13,7 +13,9 @@ namespace SunsetSystems.GameData
     {
         [SerializeField]
         private CreatureData creaturePrefab;
+        [ES3NonSerializable]
         private CreatureData mainCharData;
+        [ES3NonSerializable]
         private List<CreatureData> companionsData = new List<CreatureData>();
         [SerializeField]
         private CreatureAsset _mainCharacterAsset;
@@ -25,6 +27,8 @@ namespace SunsetSystems.GameData
         private List<CreatureAsset> _recruitedCompanionAssets = new List<CreatureAsset>();
         public List<CreatureAsset> RecruitedCompanionAssets { get => _recruitedCompanionAssets; }
 
+        private bool isPartyInitialized = false;
+
         public void InitializeParty(Vector3 position)
         {
             List<Vector3> positions = FormationController.GetPositionsFromPoint(position);
@@ -33,13 +37,15 @@ namespace SunsetSystems.GameData
 
         public void InitializeParty(List<Vector3> positions)
         {
-            if (_mainCharacterAsset != null)
+            if (_mainCharacterAsset != null && !isPartyInitialized)
             {
                 mainCharData = InitializePartyMember(MainCharacterAsset, positions[0]);
                 for (int i = 0; i < ActiveCompanionAssets.Count; i++)
                 {
                     companionsData.Add(InitializePartyMember(ActiveCompanionAssets[i], positions[i + 1]));
                 }
+
+                isPartyInitialized = true;
             }
         }
 

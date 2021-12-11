@@ -25,6 +25,7 @@ namespace Entities.Characters
         public string UmaPresetFilename { get => _umaPresetFilename; set => _umaPresetFilename = value; }
         [SerializeField]
         private string animatorControllerResourceName = "";
+        [SerializeField, ReadOnly, ES3NonSerializable]
         private RuntimeAnimatorController _animatorController;
         public RuntimeAnimatorController AnimatorController 
         { 
@@ -47,14 +48,19 @@ namespace Entities.Characters
                 _portrait = Resources.Load<Sprite>("DEBUG/missing");
             if (_statsAsset == null)
                 _statsAsset = Resources.Load<CharacterStats>("DEBUG/DebugStats");
-            if (_animatorController == null)
-                _animatorController = Resources.Load<RuntimeAnimatorController>("Animation/AnimationControllers/female_anims");
         }
 
         private void Awake()
         {
-            if (_animatorController == null)
+            FindAnimatorController();
+        }
+
+        private void FindAnimatorController()
+        {
+            if (_animatorController == null && !animatorControllerResourceName.Equals(""))
                 _animatorController = ResourceLoader.GetAnimatorController(animatorControllerResourceName);
+            if (_animatorController == null)
+                _animatorController = ResourceLoader.GetFallbackAnimator();
         }
 
         internal static CreatureAsset CopyInstance(CreatureAsset data)
@@ -65,11 +71,14 @@ namespace Entities.Characters
             copy._creatureLastName = data._creatureLastName;
             copy._portrait = data._portrait;
             copy._statsAsset = CharacterStats.CopyAssetInstance(data._statsAsset);
-            copy._umaPresetFilename = data._umaPresetFilename;
+            copy.animatorControllerResourceName = data.animatorControllerResourceName;
             copy._animatorController = data._animatorController;
+            copy._umaPresetFilename = data._umaPresetFilename;
             copy._creatureFaction = data._creatureFaction;
             copy._bodyType = data._bodyType;
             copy._creatureType = data._creatureType;
+            copy.OnEnable();
+            copy.Awake();
             return copy;
         }
     }

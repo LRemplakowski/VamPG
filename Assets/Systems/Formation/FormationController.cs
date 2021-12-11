@@ -61,6 +61,7 @@ namespace SunsetSystems.Formation
             ClearFormation();
             foreach (ISelectable selectable in selectables)
             {
+                Debug.Log("creating formation element for " + selectable.GetCreature());
                 CreateFormationElement(selectable.GetCreature());
             }
         }

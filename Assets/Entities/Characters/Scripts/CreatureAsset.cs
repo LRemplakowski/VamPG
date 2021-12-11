@@ -72,13 +72,11 @@ namespace Entities.Characters
             copy._portrait = data._portrait;
             copy._statsAsset = CharacterStats.CopyAssetInstance(data._statsAsset);
             copy.animatorControllerResourceName = data.animatorControllerResourceName;
-            copy._animatorController = data._animatorController;
+            copy.FindAnimatorController();
             copy._umaPresetFilename = data._umaPresetFilename;
             copy._creatureFaction = data._creatureFaction;
             copy._bodyType = data._bodyType;
             copy._creatureType = data._creatureType;
-            copy.OnEnable();
-            copy.Awake();
             return copy;
         }
     }

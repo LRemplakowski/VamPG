@@ -104,6 +104,7 @@ namespace Entities.Characters
         {
             if (_dataInstance)
             {
+                gameObject.name = _dataInstance.CreatureName + " " + _dataInstance.CreatureLastName;
                 CreatureInitializer.InitializeCreature(gameObject, _dataInstance, gameObject.transform.position);
                 _portrait = _dataInstance.Portrait;
                 _faction = _dataInstance.CreatureFaction;

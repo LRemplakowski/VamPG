@@ -30,12 +30,14 @@ namespace Entities.Characters.Actions
         public override void Abort()
         {
             navMeshAgent.isStopped = true;
+            Debug.Log("Aborting move action!");
             if (onMovementFinished != null)
                 onMovementFinished.Invoke(this.Owner);
         }
 
         public override void Begin()
         {
+            Debug.Log("Moving to destination " + conditions[0]);
             navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
             if (onMovementStarted != null)

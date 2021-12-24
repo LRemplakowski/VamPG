@@ -7,6 +7,7 @@ using SunsetSystems.Formation.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Formation
 {
@@ -100,8 +101,9 @@ namespace SunsetSystems.Formation
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
             {
                 Debug.LogWarning("Raycast hit!");
+                NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                transform.position = navHit.position;
                 AlignElements();
-                transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
                 isDirty = true;
             }
         }
@@ -113,8 +115,9 @@ namespace SunsetSystems.Formation
                 for (int i = 0; i < formationElements.Count; i++)
                 {
                     formationElements[i].transform.localPosition = FormationData.positions[i];
+                    NavMesh.SamplePosition(formationElements[i].transform.position, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                    formationElements[i].transform.position = navHit.position;
                 }
-                Debug.LogError("Formation positions set!");
             }
             catch (IndexOutOfRangeException e)
             {
@@ -140,27 +143,6 @@ namespace SunsetSystems.Formation
                 isDirty = false;
             }  
         }
-
-        //[ContextMenu("Generate grid")]
-        //private void CreateFormationGrid()
-        //{
-        //    ClearFormationGrid();
-        //    formationGrid = new FormationSlot[x, y];
-        //    for (int i = 0; i < x; i++)
-        //    {
-        //        for (int j = 0; j < y; j++)
-        //        {
-        //            formationGrid[i, j] = Instantiate(slotPrefab, this.transform);
-        //        }
-        //    }
-        //}
-
-        //[ContextMenu("Clear grid")]
-        //private void ClearFormationGrid()
-        //{
-        //    foreach (FormationSlot slot in GetComponentsInChildren<FormationSlot>())
-        //        DestroyImmediate(slot.gameObject);
-        //}
     }
 }
 

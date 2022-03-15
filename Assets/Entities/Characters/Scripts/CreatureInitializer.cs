@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using UMA.CharacterSystem;
+using UnityEngine.AI;
+using System;
 
 namespace Entities.Characters
 {
@@ -15,6 +17,10 @@ namespace Entities.Characters
             InitializeStatsManager(stats, asset);
             CapsuleCollider collider = creatureObject.GetComponent<CapsuleCollider>();
             InitializeCollider(collider);
+            Rigidbody rigidbody = creatureObject.GetComponent<Rigidbody>();
+            InitializeRigidbody(rigidbody);
+            NavMeshAgent navMeshAgent = creatureObject.GetComponent<NavMeshAgent>();
+            InitializeNavMeshAgent(navMeshAgent);
         }
 
         private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
@@ -26,7 +32,7 @@ namespace Entities.Characters
             }
             else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
             {
-                Object.DestroyImmediate(creature);
+                UnityEngine.Object.DestroyImmediate(creature);
                 AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
             }
             return creature;
@@ -76,6 +82,18 @@ namespace Entities.Characters
             collider.height = 1.8f;
             collider.center = new Vector3(0, .9f, 0);
             collider.radius = 0.35f;
+        }
+
+        private static void InitializeRigidbody(Rigidbody rigidbody)
+        {
+            rigidbody.isKinematic = true;
+        }
+
+        private static void InitializeNavMeshAgent(NavMeshAgent navMeshAgent)
+        {
+            navMeshAgent.speed = 4.0f;
+            navMeshAgent.angularSpeed = 360.0f;
+            navMeshAgent.acceleration = 8.0f;
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Entities.Characters.Actions
 
         public override void Abort()
         {
+            navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
             Debug.Log("Aborting move action!");
             if (onMovementFinished != null)
@@ -38,6 +39,7 @@ namespace Entities.Characters.Actions
         public override void Begin()
         {
             Debug.Log("Moving to destination " + conditions[0]);
+            navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
             if (onMovementStarted != null)

@@ -39,6 +39,7 @@ namespace InsaneSystems.RTSSelection
         {
             if (highlight == null)
                 highlight = GetComponentInChildren<Highlight>(true).gameObject;
+            highlight.transform.localPosition = new Vector3(0, .05f, 0);
         }
 
         void OnSelected() => SwitchSelectionHighlight();

@@ -15,22 +15,15 @@ namespace SunsetSystems.Formation
     {
         [SerializeField]
         private FormationElement formationElementPrefab;
-        //[SerializeField]
-        //private FormationSlot slotPrefab;
-        private List<FormationElement> formationElements = new List<FormationElement>();
-        public FormationData FormationData { get; set; }
+        public static FormationData FormationData { get; set; }
 
         private Vector2 mousePosition;
         private const int raycastRange = 100;
 
-        private bool isDirty = false;
         [SerializeField]
         private LayerMask defaultRaycastMask;
 
-        //[SerializeField]
-        //private int x = 100, y = 100;
-
-        //private FormationSlot[,] formationGrid;
+        private static List<ISelectable> currentSelection;
 
         private void OnEnable()
         {
@@ -42,54 +35,27 @@ namespace SunsetSystems.Formation
             Selection.OnSelectionFinished -= OnSelectionFinished;
         }
 
-        private void Start()
-        {
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-            formationElements = new List<FormationElement>();
-        }
-
         private void OnSelectionFinished(List<ISelectable> selectedObjects)
         {
-            CreateFormation(selectedObjects);
+            currentSelection = selectedObjects;
         }
 
-        private void CreateFormation(List<ISelectable> selectables)
-        {
-            ClearFormation();
-            foreach (ISelectable selectable in selectables)
-            {
-                Debug.Log("creating formation element for " + selectable.GetCreature());
-                CreateFormationElement(selectable.GetCreature());
-            }
-        }
-
-        private void CreateFormationElement(Creature creature)
-        {
-            FormationElement formationElement = Instantiate(formationElementPrefab, this.transform);
-            formationElement.character = creature;
-            formationElement.transform.position = new Vector3(creature.transform.position.x, 0.1f, creature.transform.position.z);
-            formationElements.Add(formationElement);
-        }
-
-        private void ClearFormation()
-        {
-            formationElements.ForEach(e => Destroy(e.gameObject));
-            formationElements.Clear();
-        }
-
-        public static List<Vector3> GetPositionsFromPoint (Vector3 point)
+        public static List<Vector3> GetPositionsFromPoint(Vector3 point)
         {
             List<Vector3> positions = new List<Vector3>();
-            //TODO: Placeholder, zmieniæ to kurde
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < currentSelection.Count; i++)
             {
-                positions.Add(point);
+                Vector3 positionOffset = FormationData.positions[i];
+                Vector3 position = point + positionOffset;
+                positions.Add(position);
             }
             return positions;
+        }
+
+        public static Vector3 GetPositionInFormation(Vector3 formationPoint, int index)
+        {
+            Vector3 position = new Vector3(formationPoint.x + FormationData.positions[index].x, 0, formationPoint.z + FormationData.positions[index].z);
+            return position;
         }
 
         public void OnRightClick(InputAction.CallbackContext context)
@@ -101,47 +67,33 @@ namespace SunsetSystems.Formation
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
             {
                 Debug.LogWarning("Raycast hit!");
-                NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
-                transform.position = navHit.position;
-                AlignElements();
-                isDirty = true;
+                MoveCurrentSelectionToPositions(hit);
             }
         }
 
-        private void AlignElements()
+        private void MoveCurrentSelectionToPositions(RaycastHit hit)
         {
-            try
+            Vector3 samplingPoint;
+            for (int i = 0; i < currentSelection.Count; i++)
             {
-                for (int i = 0; i < formationElements.Count; i++)
-                {
-                    formationElements[i].transform.localPosition = FormationData.positions[i];
-                    NavMesh.SamplePosition(formationElements[i].transform.position, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
-                    formationElements[i].transform.position = navHit.position;
-                }
+                Vector3 positionOffset = FormationData.positions[i];
+                samplingPoint = hit.point + positionOffset;
+                NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                MoveSelectableToPosition(currentSelection[i], navHit.position);
             }
-            catch (IndexOutOfRangeException e)
-            {
-                Debug.LogException(e);
-                foreach (FormationElement element in formationElements)
-                {
-                    element.transform.position = Vector3.zero;
-                }
-            }
+        }
+
+        private void MoveSelectableToPosition(ISelectable selectable, Vector3 position)
+        {
+            Creature creature = selectable.GetCreature();
+            creature.ClearAllActions();
+            creature.Move(position);
         }
 
         public void OnMousePosition(InputAction.CallbackContext context)
         {
             if (context.performed)
                 mousePosition = context.ReadValue<Vector2>();
-        }
-
-        private void FixedUpdate()
-        {
-            if (isDirty)
-            {
-                formationElements.ForEach(e => e.MoveOwnerToElement());
-                isDirty = false;
-            }  
         }
     }
 }

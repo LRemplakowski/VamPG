@@ -39,7 +39,6 @@ namespace SunsetSystems.Party
         private void CreatePartyList()
         {
             CurrentPartyMembers = FindObjectsOfType<PlayerControlledCharacter>();
-            Array.Sort(CurrentPartyMembers);
         }
 
         public CreatureUIData[] GetCurrentMembersData()

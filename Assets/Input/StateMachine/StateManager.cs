@@ -1,6 +1,6 @@
 using SunsetSystems.Management;
 using UnityEngine;
-using Utils.Singleton;
+
 
 public static class StateManager
 {

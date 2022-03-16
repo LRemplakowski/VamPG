@@ -29,11 +29,11 @@ public class DialogueExecution
 
     public static void NameTransition(string sceneName)
     {
-        TransitionManager.Instance.PerformTransition(new NameTransition(sceneName, ""));
+        UnityEngine.Object.FindObjectOfType<TransitionManager>().PerformTransition(new NameTransition(sceneName, ""));
     }
 
     public static void IndexTransition(int sceneIndex)
     {
-        TransitionManager.Instance.PerformTransition(new IndexTransition(sceneIndex, ""));
+        UnityEngine.Object.FindObjectOfType<TransitionManager>().PerformTransition(new IndexTransition(sceneIndex, ""));
     }
 }

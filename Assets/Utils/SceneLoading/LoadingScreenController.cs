@@ -17,6 +17,8 @@ public class LoadingScreenController : MonoBehaviour
     [SerializeField]
     private Button continueButton;
 
+    private TransitionManager transitionManager;
+
     private void OnEnable()
     {
         if (loadingBar == null)
@@ -38,6 +40,11 @@ public class LoadingScreenController : MonoBehaviour
         loadingBar.onValueChanged.RemoveListener(MaybeReplaceBarWithButton);
     }
 
+    private void Start()
+    {
+        transitionManager = FindObjectOfType<TransitionManager>();
+    }
+
     public void SetLoadingProgress(float value)
     {
         loadingBar.value = value;
@@ -55,7 +62,7 @@ public class LoadingScreenController : MonoBehaviour
 
     public void OnContinue()
     {
-        TransitionManager.Instance.PerformTransition(null);
+        transitionManager.PerformTransition(null);
     }
 
 }

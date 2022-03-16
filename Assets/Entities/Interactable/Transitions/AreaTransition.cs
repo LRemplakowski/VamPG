@@ -22,6 +22,13 @@
         [SerializeField]
         private string targetEntryPointTag;
 
+        private TransitionManager transitionManager;
+
+        private void Start()
+        {
+            transitionManager = FindObjectOfType<TransitionManager>();
+        }
+
         public override void Interact()
         {
             Debug.Log("Interacting with area transition!");
@@ -39,7 +46,7 @@
 
         public void MoveToScene(TransitionData data)
         {
-            TransitionManager.Instance.PerformTransition(data);
+            transitionManager.PerformTransition(data);
         }
     }
 

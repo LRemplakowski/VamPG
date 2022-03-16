@@ -9,8 +9,7 @@ public class PauseMenu : MonoBehaviour
     private Canvas pauseMenuCanvas;
     [SerializeField]
     private GUIWindowsManager windowsManager;
-    private static bool _isGamePaused;
-    public static bool IsGamePaused { get => _isGamePaused; }
+    public static bool IsGamePaused { get; private set; }
 
     private void Awake()
     {
@@ -24,7 +23,7 @@ public class PauseMenu : MonoBehaviour
         if (windowsManager.ActiveWindows <= 0)
         {
             Time.timeScale = 0;
-            _isGamePaused = true;
+            IsGamePaused = true;
             gameObject.SetActive(true);
         }
     }
@@ -32,7 +31,7 @@ public class PauseMenu : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale = 1.0f;
-        _isGamePaused = false;
+        IsGamePaused = false;
         gameObject.SetActive(false);
     }
 }

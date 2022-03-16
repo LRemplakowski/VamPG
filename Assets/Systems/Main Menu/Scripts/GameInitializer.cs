@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Entities.Characters;
 using Transitions.Data;
 using Transitions.Manager;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Utils.ResourceLoader;
 
@@ -11,6 +13,9 @@ namespace SunsetSystems.GameData
 {
     public class GameInitializer : MonoBehaviour
     {
+        private const string MAIN_MENU = "MainMenuParent";
+        private const string GAMEPLAY_UI = "GameParent";
+
         [SerializeField, ReadOnly]
         private PlayerCharacterBackground selectedBackground;
         [SerializeField, ReadOnly]
@@ -25,6 +30,10 @@ namespace SunsetSystems.GameData
         private string startingEntryPointTag;
         [SerializeField]
         private TransitionManager transitionManager;
+        [SerializeField]
+        private GameObject mainMenuParent;
+        [SerializeField]
+        private GameObject gameplayUiParent;
 
         private void Reset()
         {
@@ -38,6 +47,10 @@ namespace SunsetSystems.GameData
                 stats = ScriptableObject.CreateInstance<CharacterStats>();
             if (!transitionManager)
                 transitionManager = FindObjectOfType<TransitionManager>();
+            if (!mainMenuParent)
+                mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
+            if (!gameplayUiParent)
+                gameplayUiParent = GameObject.FindGameObjectWithTag(GAMEPLAY_UI);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
@@ -74,6 +87,31 @@ namespace SunsetSystems.GameData
             journal.MainCharacterAsset = mainCharacterAsset;
             TransitionData data = new NameTransition(startSceneName, startingEntryPointTag);
             transitionManager.PerformTransition(data);
+            SubscribeOnFadedOutMethods();
+        }
+
+        private void SubscribeOnFadedOutMethods()
+        {
+            TransitionAnimator.OnFadedOut += EnableGamplayUI;
+            TransitionAnimator.OnFadedOut += DisableMainMenuUI;
+            TransitionAnimator.OnFadedOut += SwitchInputActionMap;
+        }
+
+        private void SwitchInputActionMap()
+        {
+            InputManager.ToggleActionMap(InputMap.Player);
+        }
+
+        private void EnableGamplayUI()
+        {
+            gameplayUiParent.SetActive(true);
+            TransitionAnimator.OnFadedOut -= EnableGamplayUI;
+        }
+
+        private void DisableMainMenuUI()
+        {
+            mainMenuParent.SetActive(false);
+            TransitionAnimator.OnFadedOut -= DisableMainMenuUI;
         }
 
         private CreatureAsset GetMatchingCreatureAsset()

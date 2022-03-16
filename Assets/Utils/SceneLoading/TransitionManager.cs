@@ -1,11 +1,10 @@
 using Transitions.Data;
 using UnityEngine;
 using Utils.Scenes;
-using Utils.Singleton;
 
 namespace Transitions.Manager
 {
-    public class TransitionManager : Singleton<TransitionManager>
+    public class TransitionManager : MonoBehaviour
     {
         [SerializeField]
         private TransitionAnimator _animator;
@@ -20,13 +19,15 @@ namespace Transitions.Manager
         }
 
         private TransitionData currentTransition;
-
         private LoadingScreenController loadingScreenController;
+        private SceneLoader sceneLoader;
 
         private void Start()
         {
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
+            if (sceneLoader == null)
+                sceneLoader = FindObjectOfType<SceneLoader>(true);
         }
 
         public void PerformTransition(TransitionData data)
@@ -50,7 +51,7 @@ namespace Transitions.Manager
             if (loadingScreenController)
                 loadingScreenController.gameObject.SetActive(!loadingScreenController.gameObject.activeSelf);
             if (currentTransition != null)
-                SceneLoader.Instance.LoadScene(currentTransition);
+                sceneLoader.LoadScene(currentTransition);
             Animator.FadeIn();
             currentTransition = null;
         }

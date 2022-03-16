@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SunsetSystems.Management;
 using UnityEngine;
-using Utils.Singleton;
+
 
 public class EquipmentManager : Manager
 {

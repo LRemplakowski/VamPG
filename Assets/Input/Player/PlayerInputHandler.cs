@@ -7,7 +7,7 @@ using SunsetSystems.Management;
 using Entities.Characters;
 using Entities;
 
-public class CharacterInputHandler : InputHandler
+public class PlayerInputHandler : InputHandler
 {
     private const int raycastRange = 100;
 

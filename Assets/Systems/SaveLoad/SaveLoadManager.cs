@@ -9,6 +9,7 @@ namespace SunsetSystems.SaveLoad
 {
     public static class SaveLoadManager
     {
+        private const string SCENE_INDEX_ID = "SceneIndex";
 
         public static void Save()
         {
@@ -17,13 +18,13 @@ namespace SunsetSystems.SaveLoad
             {
                 saveable.SaveRuntimeData();
             }
-            ES3.Save("SceneIndex", SceneManager.GetActiveScene().buildIndex);
+            ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex);
         }
 
         public static void Load()
         {
-            int sceneIndex = ES3.Load<int>("SceneIndex");
-            TransitionManager.Instance.PerformTransition(new IndexTransition(sceneIndex, ""));
+            int sceneIndex = ES3.Load<int>(SCENE_INDEX_ID);
+            Object.FindObjectOfType<TransitionManager>().PerformTransition(new IndexTransition(sceneIndex, ""));
             SceneManager.sceneLoaded += LoadObjects;
         }
 

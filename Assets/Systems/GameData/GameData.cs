@@ -1,121 +1,106 @@
-using CleverCrow.Fluid.UniqueIds;
 using Entities.Characters;
 using SunsetSystems.SaveLoad;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using SunsetSystems.Management;
-using SunsetSystems.Formation;
 
 namespace SunsetSystems.GameData
 {
-    public class GameData : Manager, ISaveRuntimeData
+    public class GameData : MonoBehaviour, ISaveRuntimeData
     {
-        [SerializeField]
-        private CreatureData creaturePrefab;
         [ES3NonSerializable]
-        private CreatureData mainCharData;
+        private CreatureData _mainCharData;
+        public CreatureData MainCharDataComponent { get => _mainCharData; set => _mainCharData = value; }
         [ES3NonSerializable]
-        private List<CreatureData> companionsData = new List<CreatureData>();
+        private List<CreatureData> _companionsData = new List<CreatureData>();
+        public List<CreatureData> ActivePartyDataComponents { get => _companionsData; }
         [SerializeField]
         private CreatureAsset _mainCharacterAsset;
         public CreatureAsset MainCharacterAsset { get => _mainCharacterAsset; set => _mainCharacterAsset = value; }
         [SerializeField]
-        private List<CreatureAsset> _activeCompanionAssets = new List<CreatureAsset>();
-        public List<CreatureAsset> ActiveCompanionAssets { get => _activeCompanionAssets; }
+        private List<CreatureAsset> _activePartyAssets = new List<CreatureAsset>();
+        public List<CreatureAsset> ActivePartyAssets { get => _activePartyAssets; }
         [SerializeField]
-        private List<CreatureAsset> _recruitedCompanionAssets = new List<CreatureAsset>();
-        public List<CreatureAsset> RecruitedCompanionAssets { get => _recruitedCompanionAssets; }
-
-        private bool isPartyInitialized = false;
-
-        public void InitializeParty(Vector3 position)
-        {
-            List<Vector3> positions = FormationController.GetPositionsFromPoint(position);
-            InitializeParty(positions);
-        }
-
-        public void InitializeParty(List<Vector3> positions)
-        {
-            if (_mainCharacterAsset != null && !isPartyInitialized)
-            {
-                mainCharData = InitializePartyMember(MainCharacterAsset, positions[0]);
-                for (int i = 0; i < ActiveCompanionAssets.Count; i++)
-                {
-                    companionsData.Add(InitializePartyMember(ActiveCompanionAssets[i], positions[i + 1]));
-                }
-
-                isPartyInitialized = true;
-            }
-        }
-
-        private CreatureData InitializePartyMember(CreatureAsset asset, Vector3 position)
-        {
-            CreatureData creature = Instantiate(creaturePrefab, position, Quaternion.identity);
-            creature.SetData(asset);
-            creature.CreateCreature();
-            return creature;
-        }
+        private List<CreatureAsset> _inactivePartyAssets = new List<CreatureAsset>();
+        public List<CreatureAsset> InactivePartyAssets { get => _inactivePartyAssets; }
 
         public void SaveRuntimeData()
         {
             string id = typeof(GameData).Name;
-            ES3.Save(id + "_mainCharData", _mainCharacterAsset);
-            ES3.Save(id + "_mainCharacterStats", _mainCharacterAsset.StatsAsset);
-            ES3.Save(id + "_activeCompanionsData", ActiveCompanionAssets);
-            List<CharacterStats> activeCompanionsStats = new List<CharacterStats>();
-            foreach (CreatureAsset companion in ActiveCompanionAssets)
-                activeCompanionsStats.Add(companion.StatsAsset);
-            ES3.Save(id + "_activeCompanionsStats", activeCompanionsStats);
-            ES3.Save(id + "_recruitedCompanionsData", RecruitedCompanionAssets);
-            List<CharacterStats> recruitedCompanionsStats = new List<CharacterStats>();
-            foreach (CreatureAsset companion in RecruitedCompanionAssets)
-                recruitedCompanionsStats.Add(companion.StatsAsset);
-            ES3.Save(id + "_recruitedCompanionsStats", recruitedCompanionsStats);
+            SaveMainCharacter(id);
+            SaveActiveCompanions(id);
+            SaveActivePartyPositions(id);
+            SaveRecruitedCompanions(id);
+        }
 
+        private void SaveActivePartyPositions(string id)
+        {
             List<Vector3> partyPositions = new List<Vector3>();
-            partyPositions.Add(mainCharData.transform.position);
-            foreach (CreatureData companion in companionsData)
+            partyPositions.Add(_mainCharData.transform.position);
+            foreach (CreatureData companion in _companionsData)
             {
                 partyPositions.Add(companion.transform.position);
             }
             ES3.Save(id + "_activePartyPositions", partyPositions);
         }
 
+        private void SaveRecruitedCompanions(string id)
+        {
+            ES3.Save(id + "_recruitedCompanionsData", InactivePartyAssets);
+            List<CharacterStats> recruitedCompanionsStats = new List<CharacterStats>();
+            foreach (CreatureAsset companion in InactivePartyAssets)
+                recruitedCompanionsStats.Add(companion.StatsAsset);
+            ES3.Save(id + "_recruitedCompanionsStats", recruitedCompanionsStats);
+        }
+
+        private void SaveActiveCompanions(string id)
+        {
+            ES3.Save(id + "_activeCompanionsData", ActivePartyAssets);
+            List<CharacterStats> activeCompanionsStats = new List<CharacterStats>();
+            foreach (CreatureAsset companion in ActivePartyAssets)
+                activeCompanionsStats.Add(companion.StatsAsset);
+            ES3.Save(id + "_activeCompanionsStats", activeCompanionsStats);
+        }
+
+        private void SaveMainCharacter(string id)
+        {
+            ES3.Save(id + "_mainCharData", _mainCharacterAsset);
+            ES3.Save(id + "_mainCharacterStats", _mainCharacterAsset.StatsAsset);
+        }
+
         public void LoadRuntimeData()
         {
             string id = typeof(GameData).Name;
             MainCharacterAsset = ES3.Load<CreatureAsset>(id + "_mainCharData");
-            _activeCompanionAssets = ES3.Load<List<CreatureAsset>>(id + "_activeCompanionsData");
+            _activePartyAssets = ES3.Load<List<CreatureAsset>>(id + "_activeCompanionsData");
             List<CharacterStats> activeStats = ES3.Load<List<CharacterStats>>(id + "_activeCompanionsStats");
-            for (int i = 0; i < ActiveCompanionAssets.Count; i++)
+            for (int i = 0; i < ActivePartyAssets.Count; i++)
             {
-                ActiveCompanionAssets[i].StatsAsset = activeStats[i];
+                ActivePartyAssets[i].StatsAsset = activeStats[i];
             }
-            _recruitedCompanionAssets = ES3.Load<List<CreatureAsset>>(id + "_recruitedCompanionsData");
+            _inactivePartyAssets = ES3.Load<List<CreatureAsset>>(id + "_recruitedCompanionsData");
             List<CharacterStats> recruitedStats = ES3.Load<List<CharacterStats>>(id + "_recruitedCompanionsStats");
-            for (int i = 0; i < RecruitedCompanionAssets.Count; i++)
+            for (int i = 0; i < InactivePartyAssets.Count; i++)
             {
-                RecruitedCompanionAssets[i].StatsAsset = recruitedStats[i];
+                InactivePartyAssets[i].StatsAsset = recruitedStats[i];
             }
             List<Vector3> positions = ES3.Load<List<Vector3>>(id + "_activePartyPositions");
-            InitializeParty(positions);
         }
 
         public GameDataContainer GetCurrentJournalData()
         {
             return new GameDataContainer.GameDataContainerBuilder()
                 .SetMainCharacterAsset(MainCharacterAsset)
-                .SetActiveCompanionAssets(ActiveCompanionAssets)
-                .SetRecruitedCompanionAssets(RecruitedCompanionAssets)
+                .SetActiveCompanionAssets(ActivePartyAssets)
+                .SetRecruitedCompanionAssets(InactivePartyAssets)
                 .Build();
         }
 
         public void InjectJournalData(GameDataContainer data)
         {
             _mainCharacterAsset = data.mainCharacterAsset;
-            _activeCompanionAssets = new List<CreatureAsset>(data.ActiveCompanionAssets);
-            _recruitedCompanionAssets = new List<CreatureAsset>(data.RecruitedCompanionAssets);
+            _activePartyAssets = new List<CreatureAsset>(data.ActiveCompanionAssets);
+            _inactivePartyAssets = new List<CreatureAsset>(data.RecruitedCompanionAssets);
         }
     }
 

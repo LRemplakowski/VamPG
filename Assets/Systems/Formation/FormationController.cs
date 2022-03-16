@@ -23,7 +23,7 @@ namespace SunsetSystems.Formation
         [SerializeField]
         private LayerMask defaultRaycastMask;
 
-        private static List<ISelectable> currentSelection;
+        private static List<ISelectable> currentSelection = new List<ISelectable>();
 
         private void OnEnable()
         {
@@ -43,7 +43,7 @@ namespace SunsetSystems.Formation
         public static List<Vector3> GetPositionsFromPoint(Vector3 point)
         {
             List<Vector3> positions = new List<Vector3>();
-            for (int i = 0; i < currentSelection.Count; i++)
+            for (int i = 0; i < 6; i++)
             {
                 Vector3 positionOffset = FormationData.positions[i];
                 Vector3 position = point + positionOffset;

@@ -6,13 +6,12 @@
     using Transitions.Data;
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using Utils.Singleton;
 
-    public class SceneLoader : Singleton<SceneLoader>
+    public class SceneLoader : MonoBehaviour
     {
         [SerializeField]
         private LoadingScreenController loadingScreenController;
-        private SceneInitializationData.SceneInitializationDataBuilder sceneInitializationDataBuilder;
+        private Scene previousScene;
 
         public TransitionData CachedTransitionData { get; private set; }
 
@@ -26,25 +25,31 @@
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
+        private void Awake()
+        {
+            previousScene = SceneManager.GetSceneAt(0);
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
-            if (sceneInitializationDataBuilder != null)
-                SceneInitializer.InitializeScene(sceneInitializationDataBuilder.Build());
+            if (previousScene != SceneManager.GetSceneAt(0))
+                SceneManager.UnloadSceneAsync(previousScene);
+            previousScene = scene;
         }
 
         private IEnumerator LoadScene(int sceneIndex)
         {
             Debug.Log("Loading scene " + sceneIndex);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex);
+            AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
             return HandleLoadingOperation(op);
         }
 
         private IEnumerator LoadScene(string sceneName)
         {
             Debug.Log("Loading scene " + sceneName);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
+            AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             return HandleLoadingOperation(op);
         }
 
@@ -65,9 +70,6 @@
             CachedTransitionData = data;
             if (loadingScreenController == null)
                 loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
-            sceneInitializationDataBuilder = new SceneInitializationData.SceneInitializationDataBuilder()
-                .SetAreaEntryTag(data.targetEntryPointTag)
-                .SetJournalData(FindObjectOfType<GameData>().GetCurrentJournalData());
             switch (data.transitionType)
             {
                 case Transitions.TransitionType.index:
@@ -79,8 +81,7 @@
                     StartCoroutine(LoadScene(name));
                     break;
                 default:
-                    Debug.LogException(new ArgumentException("Unhandled area transition type!"));
-                    break;
+                    throw new ArgumentException("Unhandled area transition type!");
             }
         }
     }

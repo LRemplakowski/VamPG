@@ -1,6 +1,6 @@
 using Entities.Characters;
 using UnityEngine;
-
+using Utils.Resources;
 
 namespace Utils.Scenes
 {
@@ -10,6 +10,8 @@ namespace Utils.Scenes
         protected CreatureData creaturePrefab;
         [SerializeField, ReadOnly]
         protected bool isPartyInitialized;
+
+        private void Reset() => creaturePrefab = ResourceLoader.GetEmptyCreaturePrefab();
 
         public abstract void StartScene();
     }

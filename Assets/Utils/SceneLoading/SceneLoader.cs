@@ -37,6 +37,10 @@
             if (previousScene != SceneManager.GetSceneAt(0))
                 SceneManager.UnloadSceneAsync(previousScene);
             previousScene = scene;
+            SceneManager.SetActiveScene(scene);
+            AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
+            if (sceneLogic)
+                sceneLogic.StartScene();
         }
 
         private IEnumerator LoadScene(int sceneIndex)

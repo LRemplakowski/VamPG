@@ -7,7 +7,7 @@ using Transitions.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Utils.ResourceLoader;
+using Utils.Resources;
 
 namespace SunsetSystems.GameData
 {

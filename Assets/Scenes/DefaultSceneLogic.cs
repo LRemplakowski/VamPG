@@ -9,7 +9,6 @@ namespace Utils.Scenes
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
-
         public override void StartScene()
         {
             GameData gameData = FindObjectOfType<GameData>();

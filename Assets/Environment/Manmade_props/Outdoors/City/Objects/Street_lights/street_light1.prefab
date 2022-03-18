@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4667601913815399423}
   - {fileID: 5194903249482789245}
@@ -153,12 +154,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4645370169273102755, guid: 1b6205817d2ba4e4f86bd5c73ec7abd4, type: 3}
+      propertyPath: m_Range
+      value: 7.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6911247891894587435, guid: 1b6205817d2ba4e4f86bd5c73ec7abd4, type: 3}
       propertyPath: m_Name
       value: street_light_source_6m
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b6205817d2ba4e4f86bd5c73ec7abd4, type: 3}
+--- !u!1 &866080204732028102 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6911247891894587435, guid: 1b6205817d2ba4e4f86bd5c73ec7abd4, type: 3}
+  m_PrefabInstance: {fileID: 6047560297479636205}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3623123875718193970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 866080204732028102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!4 &5194903249482789245 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2014587841458615696, guid: 1b6205817d2ba4e4f86bd5c73ec7abd4, type: 3}

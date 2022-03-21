@@ -71,6 +71,11 @@ namespace Entities.Characters
                 _creatureType = value;
             }
         }
+        public Creature CreatureComponent
+        {
+            get;
+            private set;
+        }
 
 #if UNITY_EDITOR
         private void Reset()
@@ -105,7 +110,7 @@ namespace Entities.Characters
             if (_dataInstance)
             {
                 gameObject.name = _dataInstance.CreatureName + " " + _dataInstance.CreatureLastName;
-                CreatureInitializer.InitializeCreature(gameObject, _dataInstance, gameObject.transform.position);
+                CreatureComponent = CreatureInitializer.InitializeCreature(gameObject, _dataInstance, gameObject.transform.position);
                 _portrait = _dataInstance.Portrait;
                 _faction = _dataInstance.CreatureFaction;
                 _firstName = _dataInstance.CreatureName;

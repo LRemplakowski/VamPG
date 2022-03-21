@@ -15,7 +15,7 @@ namespace SunsetSystems.Party
         [SerializeField]
         private PartyPortraitsController partyPortraits;
 
-        private void Initialize()
+        public void Initialize()
         {
             CreatePartyList();
             if (partyPortraits == null)
@@ -26,14 +26,9 @@ namespace SunsetSystems.Party
             }
         }
 
-        private void OnEnable()
+        private void Start()
         {
-            MainCharacter.onMainCharacterInitialized += Initialize;
-        }
-
-        private void OnDisable()
-        {
-            MainCharacter.onMainCharacterInitialized -= Initialize;
+            Initialize();
         }
 
         private void CreatePartyList()

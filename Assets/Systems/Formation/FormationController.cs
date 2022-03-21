@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
+using SunsetSystems.Formation.UI;
 
 namespace SunsetSystems.Formation
 {
@@ -16,6 +17,8 @@ namespace SunsetSystems.Formation
         [SerializeField]
         private FormationElement formationElementPrefab;
         public static FormationData FormationData { get; set; }
+        [SerializeField]
+        private PredefinedFormation defaultFormation;
 
         private Vector2 mousePosition;
         private const int raycastRange = 100;
@@ -33,6 +36,12 @@ namespace SunsetSystems.Formation
         private void OnDisable()
         {
             Selection.OnSelectionFinished -= OnSelectionFinished;
+        }
+
+        private void Awake()
+        {
+            if (FormationData == null)
+                FormationData = defaultFormation.GetData();
         }
 
         private void OnSelectionFinished(List<ISelectable> selectedObjects)

@@ -1,6 +1,8 @@
 using Entities.Characters;
 using SunsetSystems.Formation;
 using SunsetSystems.GameData;
+using SunsetSystems.Management;
+using SunsetSystems.Party;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,11 +13,16 @@ namespace Utils.Scenes
     {
         public override void StartScene()
         {
+            Debug.Log("Starting scene");
             GameData gameData = FindObjectOfType<GameData>();
             CreatureAsset mainCharAsset = gameData.MainCharacterAsset;
             List<CreatureAsset> activeParty = gameData.ActivePartyAssets;
+            List<Vector3> partyPositions = gameData.ActivePartySavedPositions;
             AreaEntryPoint entryPoint = FindAreaEntryPoint("");
-            InitializeParty(entryPoint.transform.position, mainCharAsset, activeParty);
+            if (partyPositions != null && partyPositions.Count > 0)
+                InitializeParty(partyPositions, mainCharAsset, activeParty);
+            else
+                InitializeParty(entryPoint.transform.position, mainCharAsset, activeParty);
         }
 
         protected void InitializeParty(Vector3 position, CreatureAsset mainChar)
@@ -35,6 +42,7 @@ namespace Utils.Scenes
 
         protected void InitializeParty(List<Vector3> positions, CreatureAsset mainChar, List<CreatureAsset> party)
         {
+            Debug.Log("Initializing party");
             CreatureData mainCharData = null;
             List<CreatureData> partyData = new List<CreatureData>();
             if (mainChar != null && !isPartyInitialized)
@@ -48,18 +56,18 @@ namespace Utils.Scenes
                 isPartyInitialized = true;
             }
             GameData gameData = FindObjectOfType<GameData>();
-            gameData.MainCharDataComponent = mainCharData;
-            gameData.ActivePartyDataComponents.Clear();
-            gameData.ActivePartyDataComponents.AddRange(partyData);
+            gameData.MainCharacterData = mainCharData;
+            gameData.ActivePartyData.Clear();
+            gameData.ActivePartyData.AddRange(partyData);
+            FindObjectOfType<CameraControlScript>().ForceToPosition(positions[0]);
 
         }
 
         protected CreatureData InitializePartyMember(CreatureAsset asset, Vector3 position)
         {
-            CreatureData creature = Instantiate(creaturePrefab, position, Quaternion.identity);
-            creature.SetData(asset);
-            creature.CreateCreature();
-            return creature;
+            CreatureData creatureData = Instantiate(creaturePrefab, position, Quaternion.identity);
+            creatureData.SetData(asset);
+            return creatureData;
         }
 
         private AreaEntryPoint FindAreaEntryPoint(string tag)

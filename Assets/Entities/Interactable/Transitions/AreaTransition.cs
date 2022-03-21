@@ -6,6 +6,7 @@
     using Transitions.Data;
     using Transitions.Manager;
     using UnityEngine;
+    using Utils.Scenes;
 
     public class AreaTransition : InteractableEntity, ITransition
     {
@@ -22,11 +23,13 @@
         [SerializeField]
         private string targetEntryPointTag;
 
-        private TransitionManager transitionManager;
+        private SceneLoader sceneLoader;
+        private FadeScreenAnimator fadeScreenAnimator;
 
         private void Start()
         {
-            transitionManager = FindObjectOfType<TransitionManager>();
+            sceneLoader = FindObjectOfType<SceneLoader>();
+            fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>();
         }
 
         public override void Interact()
@@ -35,18 +38,20 @@
             switch (type)
             {
                 case TransitionType.index:
-                    MoveToScene(new IndexTransition(SceneIndex, targetEntryPointTag));
+                    MoveToScene(new IndexLoadingData(SceneIndex, targetEntryPointTag));
                     break;
                 case TransitionType.name:
-                    MoveToScene(new NameTransition(SceneName, targetEntryPointTag));
+                    MoveToScene(new NameLoadingData(SceneName, targetEntryPointTag));
                     break;
             }
             base.Interact();
         }
 
-        public void MoveToScene(TransitionData data)
+        public async void MoveToScene(SceneLoadingData data)
         {
-            transitionManager.PerformTransition(data);
+            await fadeScreenAnimator.FadeOut(.5f);
+            _ = sceneLoader.LoadGameScene(data);
+            _ = fadeScreenAnimator.FadeIn(.5f);
         }
     }
 

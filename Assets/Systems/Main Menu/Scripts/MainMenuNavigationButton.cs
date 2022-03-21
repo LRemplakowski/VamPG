@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,49 +10,32 @@ namespace SunsetSystems.MainMenu.UI
 {
     public class MainMenuNavigationButton : MonoBehaviour
     {
-        protected TransitionAnimator transitionAnimator;
+        protected FadeScreenAnimator transitionAnimator;
         [SerializeField]
         protected GameObject currentGUIScreen;
         [SerializeField]
         protected GameObject targetGUIScreen;
         protected MainMenuNavigationButton[] navButtons;
 
-        #region Enable&Disable
-        private void OnEnable()
-        {
-            TransitionAnimator.OnFadedOut += OnFadedOut;
-        }
-
-        private void OnDisable()
-        {
-            TransitionAnimator.OnFadedOut -= OnFadedOut;
-        }
-        #endregion
-
         protected virtual void Start()
         {
             if (transitionAnimator == null)
-                transitionAnimator = FindObjectOfType<TransitionAnimator>(true);
+                transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
             navButtons = FindObjectsOfType<MainMenuNavigationButton>();
         }
 
-        public virtual void OnClick()
+        public async virtual void OnClick()
         {
-            Array.ForEach(Array.FindAll(navButtons, b => !b.Equals(this)), b => b.OnDisable());
-            transitionAnimator.FadeOut();
+            await transitionAnimator.FadeOut(.5f);
+            await DoLoadTargetGUIScreen();
         }
 
-        protected virtual void OnFadedOut()
-        {
-            DoLoadTargetGUIScreen();
-        }
-
-        protected void DoLoadTargetGUIScreen()
+        protected async Task DoLoadTargetGUIScreen()
         {
             if (targetGUIScreen)
                 targetGUIScreen.SetActive(true);
             currentGUIScreen.SetActive(false);
-            transitionAnimator.FadeIn();
+            await transitionAnimator.FadeIn(.5f);
         }
     }
 }

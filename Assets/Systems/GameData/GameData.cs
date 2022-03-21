@@ -1,19 +1,23 @@
+using CleverCrow.Fluid.UniqueIds;
 using Entities.Characters;
 using SunsetSystems.SaveLoad;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using Utils.Scenes;
 
 namespace SunsetSystems.GameData
 {
     public class GameData : MonoBehaviour, ISaveRuntimeData
     {
-        [ES3NonSerializable]
-        private CreatureData _mainCharData;
-        public CreatureData MainCharDataComponent { get => _mainCharData; set => _mainCharData = value; }
-        [ES3NonSerializable]
-        private List<CreatureData> _companionsData = new List<CreatureData>();
-        public List<CreatureData> ActivePartyDataComponents { get => _companionsData; }
+        [ES3NonSerializable, SerializeField]
+        private CreatureData _mainCharacterData;
+        public CreatureData MainCharacterData { get => _mainCharacterData; set => _mainCharacterData = value; }
+        [ES3NonSerializable, SerializeField]
+        private List<CreatureData> _activePartyData = new List<CreatureData>();
+        public List<CreatureData> ActivePartyData { get => _activePartyData; }
+        [ES3NonSerializable, SerializeField]
+        public List<Vector3> ActivePartySavedPositions { get; private set; }
         [SerializeField]
         private CreatureAsset _mainCharacterAsset;
         public CreatureAsset MainCharacterAsset { get => _mainCharacterAsset; set => _mainCharacterAsset = value; }
@@ -26,7 +30,8 @@ namespace SunsetSystems.GameData
 
         public void SaveRuntimeData()
         {
-            string id = typeof(GameData).Name;
+            Debug.Log("Saving runtime data");
+            string id = GetComponent<UniqueId>().Id;
             SaveMainCharacter(id);
             SaveActiveCompanions(id);
             SaveActivePartyPositions(id);
@@ -36,8 +41,8 @@ namespace SunsetSystems.GameData
         private void SaveActivePartyPositions(string id)
         {
             List<Vector3> partyPositions = new List<Vector3>();
-            partyPositions.Add(_mainCharData.transform.position);
-            foreach (CreatureData companion in _companionsData)
+            partyPositions.Add(_mainCharacterData.transform.position);
+            foreach (CreatureData companion in _activePartyData)
             {
                 partyPositions.Add(companion.transform.position);
             }
@@ -70,8 +75,10 @@ namespace SunsetSystems.GameData
 
         public void LoadRuntimeData()
         {
-            string id = typeof(GameData).Name;
+            Debug.Log("Loading runtime data");
+            string id = GetComponent<UniqueId>().Id;
             MainCharacterAsset = ES3.Load<CreatureAsset>(id + "_mainCharData");
+            MainCharacterAsset.StatsAsset = ES3.Load<CharacterStats>(id + "_mainCharacterStats");
             _activePartyAssets = ES3.Load<List<CreatureAsset>>(id + "_activeCompanionsData");
             List<CharacterStats> activeStats = ES3.Load<List<CharacterStats>>(id + "_activeCompanionsStats");
             for (int i = 0; i < ActivePartyAssets.Count; i++)
@@ -84,7 +91,7 @@ namespace SunsetSystems.GameData
             {
                 InactivePartyAssets[i].StatsAsset = recruitedStats[i];
             }
-            List<Vector3> positions = ES3.Load<List<Vector3>>(id + "_activePartyPositions");
+            ActivePartySavedPositions = ES3.Load<List<Vector3>>(id + "_activePartyPositions");
         }
 
         public GameDataContainer GetCurrentJournalData()

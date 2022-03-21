@@ -40,14 +40,11 @@ public class CameraControlScript : ExposableMonobehaviour
         rotationDirection = -context.ReadValue<Vector2>().x;
     }
 
-    private void OnEnable()
+    public void ForceToPosition(Vector3 position)
     {
-        MainCharacter.onMainCharacterInitialized += Initialize;
-    }
-
-    private void OnDisable()
-    {
-        MainCharacter.onMainCharacterInitialized -= Initialize;
+        transform.position = position;
+        moveTarget = transform.position;
+        Debug.Log("Forcing camera to position " + position);
     }
 
     public void Initialize()

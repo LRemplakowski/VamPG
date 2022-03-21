@@ -1,14 +1,14 @@
 using SunsetSystems.Management;
+using System;
 using UnityEngine;
 
 
 public static class StateManager
 {
     [SerializeField]
-    private static GameState currentState;
+    private static GameState currentState = GameState.MainMenu;
 
-    public delegate void GameStateChanged(GameState newState, GameState oldState);
-    public static event GameStateChanged OnGameStateChanged;
+    public static event Action<GameState, GameState> OnGameStateChanged;
 
     public static GameState GetCurrentState()
     {

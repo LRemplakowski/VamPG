@@ -7,44 +7,47 @@ using UnityEngine.InputSystem;
 [System.Serializable]
 public class InputManager : ExposableMonobehaviour
 {
-    //public static PlayerInputMapping actions;
-    //public static event Action<InputActionMap> ActionMapChange;
+    private static PlayerInput _playerInput;
 
-    //private void Awake()
-    //{
-    //    actions = new PlayerInputMapping();
-    //}
+    private void Awake()
+    {
+        StateManager.OnGameStateChanged += SwitchInputOnStateChange;
+    }
 
-    //private void Start()
-    //{
-    //    ToggleActionMap(actions.MainMenu);
-    //}
+    private void OnDestroy()
+    {
+        StateManager.OnGameStateChanged -= SwitchInputOnStateChange;
+    }
 
-    //public static void ToggleActionMap(InputActionMap actionMap)
-    //{
-    //    if (actionMap.enabled)
-    //        return;
-
-    //    actions.Disable();
-    //    ActionMapChange?.Invoke(actionMap);
-    //    actionMap.Enable();
-    //}
-
-    private static PlayerInput playerInput;
+    private void SwitchInputOnStateChange(GameState newState, GameState previousState)
+    {
+        switch (newState)
+        {
+            case GameState.GamePaused:
+                ToggleActionMap(InputMap.UI);
+                break;
+            case GameState.MainMenu:
+                ToggleActionMap(InputMap.UI);
+                break;
+            default:
+                ToggleActionMap(InputMap.Player);
+                break;
+        }
+    }
 
     private void Start()
     {
-        playerInput = GetComponent<PlayerInput>();
+        _playerInput = GetComponent<PlayerInput>();
     }
 
     public static void ToggleActionMap(InputMap inputMap)
     {
-        playerInput.SwitchCurrentActionMap(inputMap.ToString());
+        _playerInput.SwitchCurrentActionMap(inputMap.ToString());        
     }
 }
 
 public enum InputMap
 {
     Player,
-    MainMenu
+    UI
 }

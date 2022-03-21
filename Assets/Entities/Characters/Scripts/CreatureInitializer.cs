@@ -7,7 +7,7 @@ namespace Entities.Characters
 {
     public class CreatureInitializer
     {
-        public static void InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
+        public static Creature InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
         {
             creatureObject.transform.position = position;
             Creature creature = InitializeCreatureScript(creatureObject, asset);
@@ -21,6 +21,7 @@ namespace Entities.Characters
             InitializeRigidbody(rigidbody);
             NavMeshAgent navMeshAgent = creatureObject.GetComponent<NavMeshAgent>();
             InitializeNavMeshAgent(navMeshAgent);
+            return creature;
         }
 
         private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
@@ -42,7 +43,6 @@ namespace Entities.Characters
         {
             creature = faction switch
             {
-                Faction.MainCharacter => creatureObject.AddComponent<MainCharacter>(),
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
                 _ => creatureObject.AddComponent<NPC>(),
             };
@@ -53,7 +53,6 @@ namespace Entities.Characters
             return faction switch
             {
                 Faction.PlayerControlled => creature.IsOfType(typeof(PlayerControlledCharacter)),
-                Faction.MainCharacter => creature.IsOfType(typeof(MainCharacter)),
                 _ => creature.IsOfType(typeof(NPC)),
             };
         }

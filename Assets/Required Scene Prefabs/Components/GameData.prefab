@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4379266968532198767}
   - component: {fileID: 4379266968532198752}
   - component: {fileID: -8423706176951602673}
+  - component: {fileID: 527002100523556692}
   m_Layer: 0
   m_Name: GameData
   m_TagString: Untagged
@@ -45,10 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321ee071600bf1248931d3d46a74c18a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creaturePrefab: {fileID: 3542484201101525821, guid: ee7bd9e6fce07c443aac20c84351a5b0, type: 3}
   _mainCharacterAsset: {fileID: 0}
-  _activeCompanionAssets: []
-  _recruitedCompanionAssets: []
+  _activePartyAssets: []
+  _inactivePartyAssets: []
 --- !u!114 &-8423706176951602673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +68,20 @@ MonoBehaviour:
     - {fileID: 4379266968532198767}
     - {fileID: 4379266968532198752}
     - {fileID: 11500000, guid: 321ee071600bf1248931d3d46a74c18a, type: 3}
-    - {fileID: 3542484201101525821, guid: ee7bd9e6fce07c443aac20c84351a5b0, type: 3}
-    - {fileID: 11500000, guid: 299360a0a2810c94d9b078d013b991b7, type: 3}
     - {fileID: -8423706176951602673}
-    _Values: 847f091823290e735372d23474e6b2148c1758b7b039b577c3a3e5ec2e205f1289fd1af77ad93c431cc4d5dd987d28330ffcfb492f6b4f41
+    - {fileID: 527002100523556692}
+    - {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+    _Values: 847f091823290e735372d23474e6b2148c1758b7b039b577c3a3e5ec2e205f120ffcfb492f6b4f41a050479456c1ea32cf017be49ecab714
+--- !u!114 &527002100523556692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4379266968532198753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 

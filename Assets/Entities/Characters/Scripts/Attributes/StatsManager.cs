@@ -59,9 +59,7 @@ namespace Entities.Characters
 
         public void TakeDamage(int damage)
         {
-            Tracker health = _characterStats.GetTracker(TrackerType.Health);
-            int newHealth = Health;
-            newHealth -= damage;
+            int newHealth = Health - damage;
             Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + Health + "\nHealth after attack: " + newHealth);
             Health = newHealth < 0 ? 0 : newHealth;
             if (Health <= 0)

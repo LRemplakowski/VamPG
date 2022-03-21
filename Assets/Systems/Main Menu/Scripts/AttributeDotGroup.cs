@@ -7,13 +7,13 @@ namespace SunsetSystems.MainMenu.UI
     {
         [SerializeField]
         private AttributeType associatedAttribute = AttributeType.Invalid;
-        private GameInitializer gameInitializer;
+        private GameStarter gameInitializer;
 
         protected override void Start()
         {
             base.Start();
             if (!gameInitializer)
-                gameInitializer = FindObjectOfType<GameInitializer>();
+                gameInitializer = FindObjectOfType<GameStarter>();
         }
 
         public override void OnClick(int fullCount)

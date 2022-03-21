@@ -13,6 +13,11 @@ namespace Utils.Scenes
 
         private void Reset() => creaturePrefab = ResourceLoader.GetEmptyCreaturePrefab();
 
+        private void Start()
+        {
+            FindObjectOfType<ES3ReferenceMgr>().RefreshDependencies();
+        }
+
         public abstract void StartScene();
     }
 }

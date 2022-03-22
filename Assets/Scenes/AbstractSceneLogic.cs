@@ -1,8 +1,8 @@
 using Entities.Characters;
 using UnityEngine;
-using Utils.Resources;
+using SunsetSystems.Resources;
 
-namespace Utils.Scenes
+namespace SunsetSystems.Scenes
 {
     public abstract class AbstractSceneLogic : MonoBehaviour
     {

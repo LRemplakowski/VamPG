@@ -1,4 +1,4 @@
-using SunsetSystems.GameData;
+using SunsetSystems.Data;
 using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;

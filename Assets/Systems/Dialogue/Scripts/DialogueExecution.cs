@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Utils.Dialogue;
+using SunsetSystems.Dialogue;
 using UnityEngine;
 using Transitions.Manager;
 using Transitions.Data;
 using SunsetSystems.Management;
-using Utils.Scenes;
+using SunsetSystems.Scenes;
 
 public class DialogueExecution
 {

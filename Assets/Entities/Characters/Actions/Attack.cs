@@ -1,6 +1,6 @@
 ﻿namespace Entities.Characters.Actions
 {
-    using Utils.Dice;
+    using SunsetSystems.Dice;
     using UnityEngine;
 
     public class Attack : HostileAction

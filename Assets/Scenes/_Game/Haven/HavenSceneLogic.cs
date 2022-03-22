@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.Scenes
+namespace SunsetSystems.Scenes
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UMA.CharacterSystem;
 using System;
-using Utils.Resources;
+using SunsetSystems.Resources;
 
 namespace Entities.Characters
 {

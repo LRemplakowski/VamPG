@@ -1,7 +1,7 @@
 ﻿using Entities.Characters;
 using UnityEngine;
 
-namespace Utils.Resources
+namespace SunsetSystems.Resources
 {
     public static class ResourceLoader
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 public static class StateManager
 {
     [SerializeField]
-    private static GameState currentState = GameState.MainMenu;
+    private static GameState currentState = GameState.Menu;
 
     public static event Action<GameState, GameState> OnGameStateChanged;
 
@@ -17,16 +17,13 @@ public static class StateManager
 
     public static void SetCurrentState(GameState newState)
     {
+        OnGameStateChanged?.Invoke(newState, currentState);
+        Debug.Log("Setting new state: " + newState.ToString());
         currentState = newState;
-        if (OnGameStateChanged != null)
-        {
-            OnGameStateChanged.Invoke(newState, currentState);
-        }
     }
 
     public static void SetCurrentState(int stateID)
     {
-        GameState newState = (GameState)stateID;
-        SetCurrentState(newState);
+        SetCurrentState((GameState)stateID);
     }
 }

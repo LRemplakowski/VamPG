@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 public class LoadingScreenController : MonoBehaviour
 {
+    private const string LOADING_SCREEN_TAG = "LoadingScreen";
+
     [SerializeField]
     private Slider loadingBar;
     [SerializeField]
@@ -47,10 +49,16 @@ public class LoadingScreenController : MonoBehaviour
         transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
     }
 
+    public void SetUnloadingProgress(float value)
+    {
+        loadingBar.value = value / 2;
+        loadingBarText.text = value * 50f + " %";
+    }
+
     public void SetLoadingProgress(float value)
     {
-        loadingBar.value = value;
-        loadingBarText.text = value * 100f + " %";
+        loadingBar.value = (value / 2) + .5f;
+        loadingBarText.text = ((value * 50f) + 50f) + " %";
     }
 
     private void MaybeReplaceBarWithButton(float value)

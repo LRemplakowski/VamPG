@@ -2,8 +2,8 @@ using Entities.Characters;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.Dialogue;
-using Utils.Dice;
+using SunsetSystems.Dialogue;
+using SunsetSystems.Dice;
 
 public class DialogueCondition
 {

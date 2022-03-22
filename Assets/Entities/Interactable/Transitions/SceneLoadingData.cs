@@ -1,5 +1,4 @@
-﻿using Entities.Characters;
-using UnityEngine.SceneManagement;
+﻿using System;
 
 namespace Transitions.Data
 { 
@@ -7,11 +6,13 @@ namespace Transitions.Data
     {
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
+        public readonly Action preLoadingAction;
 
-        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag)
+        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, Action preLoadingAction)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
+            this.preLoadingAction = preLoadingAction;
         }
 
         public abstract object Get();
@@ -20,12 +21,16 @@ namespace Transitions.Data
     public class IndexLoadingData : SceneLoadingData
     {
         private readonly int sceneIndex;
-        
-        public IndexLoadingData(int sceneIndex, string targetEntryPointTag) 
-            : base(TransitionType.index, targetEntryPointTag)
+
+        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, Action preLoadingAction)
+            : base(TransitionType.index, targetEntryPointTag, preLoadingAction)
         {
             this.sceneIndex = sceneIndex;
         }
+
+        public IndexLoadingData(int sceneIndex, string targetEntryPointTag)
+            : this(sceneIndex, targetEntryPointTag, null)
+        { }
 
         public override object Get()
         {
@@ -37,11 +42,15 @@ namespace Transitions.Data
     {
         private readonly string sceneName;
 
-        public NameLoadingData(string sceneName, string targetEntryPointTag) 
-            : base(TransitionType.name, targetEntryPointTag)
+        public NameLoadingData(string sceneName, string targetEntryPointTag, Action preLoadingAction)
+            : base(TransitionType.name, targetEntryPointTag, preLoadingAction)
         {
             this.sceneName = sceneName;
         }
+
+        public NameLoadingData(string sceneName, string targetEntryPointTag) 
+            : this(sceneName, targetEntryPointTag, null)
+        { }
 
         public override object Get()
         {

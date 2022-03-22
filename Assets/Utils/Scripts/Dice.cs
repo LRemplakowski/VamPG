@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.Dice
+namespace SunsetSystems.Dice
 {
     public abstract class DicePool<T, U> where T : BaseStat where U : BaseStat
     {

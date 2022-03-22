@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using Transitions.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils.Scenes;
+using SunsetSystems.Scenes;
 
 namespace SunsetSystems.SaveLoad
 {
     public static class SaveLoadManager
     {
         private const string SCENE_INDEX_ID = "SceneIndex";
-        public static event Action OnRuntimeDataLoaded;
 
         public static void Save()
         {
@@ -25,14 +24,7 @@ namespace SunsetSystems.SaveLoad
             ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex);
         }
 
-        public static async Task Load()
-        {
-            int sceneIndex = ES3.Load<int>(SCENE_INDEX_ID);
-            await UnityEngine.Object.FindObjectOfType<SceneLoader>().LoadSavedScene(new IndexLoadingData(sceneIndex, ""));
-            await LoadObjects();
-        }
-
-        private static async Task LoadObjects()
+        internal static async Task LoadObjects()
         {
             List<ISaveRuntimeData> saveables = FindInterfaces.Find<ISaveRuntimeData>();
             Debug.Log("Loadables found: " + saveables.Count);
@@ -41,7 +33,11 @@ namespace SunsetSystems.SaveLoad
                 saveable.LoadRuntimeData();
                 await Task.Yield();
             }
-            OnRuntimeDataLoaded?.Invoke();
+        }
+
+        internal static int GetSavedSceneIndex()
+        {
+            return ES3.Load<int>(SCENE_INDEX_ID);
         }
     }
 

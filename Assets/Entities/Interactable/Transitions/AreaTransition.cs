@@ -1,12 +1,12 @@
 ﻿namespace Transitions
 {
     using Entities.Interactable;
-    using SunsetSystems.GameData;
+    using SunsetSystems.Data;
     using SunsetSystems.Management;
     using Transitions.Data;
     using Transitions.Manager;
     using UnityEngine;
-    using Utils.Scenes;
+    using SunsetSystems.Scenes;
 
     public class AreaTransition : InteractableEntity, ITransition
     {

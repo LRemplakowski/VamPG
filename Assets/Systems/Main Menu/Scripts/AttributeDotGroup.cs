@@ -1,4 +1,4 @@
-﻿using SunsetSystems.GameData;
+﻿using SunsetSystems.Data;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI

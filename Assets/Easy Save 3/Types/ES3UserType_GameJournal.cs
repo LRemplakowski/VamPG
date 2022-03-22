@@ -9,19 +9,19 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_GameJournal() : base(typeof(SunsetSystems.GameData.GameData)){ Instance = this; priority = 1;}
+		public ES3UserType_GameJournal() : base(typeof(SunsetSystems.Data.GameRuntimeData)){ Instance = this; priority = 1;}
 
 
 		protected override void WriteComponent(object obj, ES3Writer writer)
 		{
-			var instance = (SunsetSystems.GameData.GameData)obj;
+			var instance = (SunsetSystems.Data.GameRuntimeData)obj;
 			
 			writer.WritePrivateFieldByRef("creaturePrefab", instance);
 		}
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
 		{
-			var instance = (SunsetSystems.GameData.GameData)obj;
+			var instance = (SunsetSystems.Data.GameRuntimeData)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -43,7 +43,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_GameJournalArray() : base(typeof(SunsetSystems.GameData.GameData[]), ES3UserType_GameJournal.Instance)
+		public ES3UserType_GameJournalArray() : base(typeof(SunsetSystems.Data.GameRuntimeData[]), ES3UserType_GameJournal.Instance)
 		{
 			Instance = this;
 		}

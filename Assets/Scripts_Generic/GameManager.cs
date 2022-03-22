@@ -1,5 +1,5 @@
 ﻿using Entities.Characters;
-using SunsetSystems.GameData;
+using SunsetSystems.Data;
 using SunsetSystems.Management;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ public class GameManager : Manager
     public static Creature GetMainCharacter()
     {
         if (player == null)
-            player = FindObjectOfType<GameData>().MainCharacterData.CreatureComponent;
+            player = FindObjectOfType<GameRuntimeData>().MainCharacterData.CreatureComponent;
         return player;
     }
 

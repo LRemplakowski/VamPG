@@ -8,9 +8,11 @@ using UnityEngine.InputSystem;
 public class InputManager : ExposableMonobehaviour
 {
     private static PlayerInput _playerInput;
+    private static InputMap _currentInputMap;
 
     private void Awake()
     {
+        _playerInput = GetComponent<PlayerInput>();
         StateManager.OnGameStateChanged += SwitchInputOnStateChange;
     }
 
@@ -26,23 +28,29 @@ public class InputManager : ExposableMonobehaviour
             case GameState.GamePaused:
                 ToggleActionMap(InputMap.UI);
                 break;
-            case GameState.MainMenu:
+            case GameState.Menu:
+                ToggleActionMap(InputMap.UI);
+                break;
+            case GameState.Exploration:
+                ToggleActionMap(InputMap.Player);
+                break;
+            case GameState.Combat:
+                ToggleActionMap(InputMap.Player);
+                break;
+            case GameState.Conversation:
                 ToggleActionMap(InputMap.UI);
                 break;
             default:
-                ToggleActionMap(InputMap.Player);
+                ToggleActionMap(InputMap.UI);
                 break;
         }
     }
 
-    private void Start()
+    public static void ToggleActionMap(InputMap newInputMap)
     {
-        _playerInput = GetComponent<PlayerInput>();
-    }
-
-    public static void ToggleActionMap(InputMap inputMap)
-    {
-        _playerInput.SwitchCurrentActionMap(inputMap.ToString());        
+        Debug.Log("Switching input map to: " + newInputMap.ToString());
+        _playerInput.SwitchCurrentActionMap(newInputMap.ToString());
+        _currentInputMap = newInputMap;
     }
 }
 

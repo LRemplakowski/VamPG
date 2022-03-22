@@ -8,14 +8,21 @@ namespace Transitions.Manager
     [Serializable]
     public class FadeScreenAnimator : ExposableMonobehaviour
     {
+        [SerializeField]
         private Image fadePanel;
 
-        private void Start()
+        private void Awake()
         {
             if (fadePanel == null)
                 fadePanel = GetComponent<Image>();
             _ = FadeIn(.5f);
         }
+
+        internal async Task FadeOut(float fadeTime, Action action)
+        {
+            action.Invoke();
+            await FadeOut(fadeTime);
+        }    
 
         internal async Task FadeOut(float fadeTime)
         {

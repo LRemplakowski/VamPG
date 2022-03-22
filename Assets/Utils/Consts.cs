@@ -1,4 +1,4 @@
-﻿namespace Utils
+﻿namespace SunsetSystems
 {
     public static class Consts
     {

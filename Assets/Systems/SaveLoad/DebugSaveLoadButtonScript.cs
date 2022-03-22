@@ -1,20 +1,21 @@
-using SunsetSystems.GameData;
+using SunsetSystems.Data;
 using SunsetSystems.SaveLoad;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;
+using SunsetSystems.Scenes;
 
 public class DebugSaveLoadButtonScript : MonoBehaviour
 {
     [SerializeField]
-    private FadeScreenAnimator fadeScreenAnimator;
+    private SceneLoader _sceneLoader;
 
     private void Start()
     {
-        if (!fadeScreenAnimator)
-            fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+        if (!_sceneLoader)
+            _sceneLoader = FindObjectOfType<SceneLoader>();
     }
 
     public void DoSave()
@@ -27,12 +28,15 @@ public class DebugSaveLoadButtonScript : MonoBehaviour
     {
         Debug.Log("DoLoad button");
         PauseMenu menu = GetComponentInParent<PauseMenu>();
-        await fadeScreenAnimator.FadeOut(.5f);
         if (StateManager.GetCurrentState().Equals(GameState.GamePaused))
             menu.ResumeGame();
-        else if (StateManager.GetCurrentState().Equals(GameState.MainMenu))
-            FindObjectOfType<GameStarter>().SwitchUIAndInputToGameplayMode();
-        await fadeScreenAnimator.FadeIn(.5f);
-        _ = SaveLoadManager.Load();
+        else if (StateManager.GetCurrentState().Equals(GameState.Menu))
+            FindObjectOfType<GameStarter>().SwitchUiToGameplayMode();
+        await _sceneLoader.LoadSavedScene();
     }
+
+    public void EnableLoading()
+    {
+        Debug.Log("ActionTest");
+    }    
 }

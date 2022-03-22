@@ -1,4 +1,4 @@
-﻿namespace SunsetSystems.GameData
+﻿namespace SunsetSystems.Data
 {
     public enum PlayerCharacterBackground
     {

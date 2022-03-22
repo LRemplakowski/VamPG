@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.Dice;
+using SunsetSystems.Dice;
 
 namespace Entities.Characters
 {

@@ -4,11 +4,11 @@ using SunsetSystems.SaveLoad;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using Utils.Scenes;
+using SunsetSystems.Scenes;
 
-namespace SunsetSystems.GameData
+namespace SunsetSystems.Data
 {
-    public class GameData : MonoBehaviour, ISaveRuntimeData
+    public class GameRuntimeData : MonoBehaviour, ISaveRuntimeData
     {
         [ES3NonSerializable, SerializeField]
         private CreatureData _mainCharacterData;

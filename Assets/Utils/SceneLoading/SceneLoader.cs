@@ -1,6 +1,6 @@
-﻿namespace Utils.Scenes
+﻿namespace SunsetSystems.Scenes
 {
-    using SunsetSystems.GameData;
+    using SunsetSystems.Data;
     using System;
     using System.Collections;
     using Transitions.Data;
@@ -13,10 +13,10 @@
     public class SceneLoader : MonoBehaviour
     {
         [SerializeField]
-        private LoadingScreenController loadingScreenController;
+        private LoadingScreenController _loadingScreenController;
         [SerializeField]
-        private FadeScreenAnimator fadeScreenAnimator;
-        private Scene previousScene;
+        private FadeScreenAnimator _fadeScreenAnimator;
+        private Scene _previousScene;
 
         public SceneLoadingData CachedTransitionData { get; private set; }
 
@@ -32,56 +32,77 @@
 
         private void Awake()
         {
-            previousScene = SceneManager.GetSceneAt(0);
+            _previousScene = SceneManager.GetSceneAt(0);
         }
 
         private void Start()
         {
-            if (loadingScreenController == null)
-                loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
-            if (fadeScreenAnimator == null)
-                fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+            if (_loadingScreenController == null)
+                _loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
+            if (_fadeScreenAnimator == null)
+                _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            if (previousScene != SceneManager.GetSceneAt(0))
-                SceneManager.UnloadSceneAsync(previousScene);
-            previousScene = scene;
+            if (_previousScene != SceneManager.GetSceneAt(0))
+                SceneManager.UnloadSceneAsync(_previousScene);
+            _previousScene = scene;
             SceneManager.SetActiveScene(scene);
         }
 
         internal async Task LoadGameScene(SceneLoadingData data)
         {
-            await LoadScene(data);
+            await _fadeScreenAnimator.FadeOut(.5f);
+            _loadingScreenController.gameObject.SetActive(true);
+            await _fadeScreenAnimator.FadeIn(.5f);
+            await LoadNewScene(data);
             InitializeSceneLogic();
         }
 
-        internal async Task LoadSavedScene(SceneLoadingData data)
+        internal async Task LoadSavedScene()
         {
-            await LoadScene(data);
-            SaveLoadManager.OnRuntimeDataLoaded += InitializeSceneLogic;
+            await _fadeScreenAnimator.FadeOut(.5f);
+            _loadingScreenController.gameObject.SetActive(true);
+            await _fadeScreenAnimator.FadeIn(.5f);
+            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "");
+            await LoadNewScene(data);
+            await SaveLoadManager.LoadObjects();
+            InitializeSceneLogic();
         }
 
-        private async Task LoadScene(SceneLoadingData data)
+        private Task UnloadPreviousScene()
+        {
+            AsyncOperation op = SceneManager.UnloadSceneAsync(_previousScene.buildIndex);
+            return HandleUnloadingOperation(op);
+        }
+
+        private async Task HandleUnloadingOperation(AsyncOperation unloading)
+        {
+            while (!unloading.isDone)
+            {
+                float progress = Mathf.Clamp01(unloading.progress / 0.9f);
+                _loadingScreenController.SetUnloadingProgress(progress);
+                await Task.Yield();
+            }
+        }
+
+        private async Task LoadNewScene(SceneLoadingData data)
         {
             CachedTransitionData = data;
-            EnableLoadingScreen();
+            if (data.preLoadingAction != null)
+                data.preLoadingAction.Invoke();
+            if (_previousScene.buildIndex != 0)
+                await UnloadPreviousScene();
             await DoSceneLoading();
-        }
-
-        private void EnableLoadingScreen()
-        {
-            loadingScreenController.gameObject.SetActive(true);
         }
         
         private void InitializeSceneLogic()
         {
             AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
-            Debug.Log("Scene logic found? " + sceneLogic != null);
+            Debug.Log("Scene logic found? " + (sceneLogic != null));
             if (sceneLogic)
                 sceneLogic.StartScene();
-            SaveLoadManager.OnRuntimeDataLoaded -= InitializeSceneLogic;
         }
 
         private Task AsyncLoadSceneByIndex(int sceneIndex)
@@ -103,7 +124,7 @@
             while (!loadingOp.isDone)
             {
                 float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
-                loadingScreenController.SetLoadingProgress(progress);
+                _loadingScreenController.SetLoadingProgress(progress);
                 Debug.Log(progress);
                 await Task.Yield();
             }
@@ -121,7 +142,7 @@
             await AsyncLoadSceneByName(name);
         }
 
-        public async Task DoSceneLoading()
+        private async Task DoSceneLoading()
         {
             Debug.Log("Do start scene loading");
             switch (CachedTransitionData.transitionType)

@@ -3,6 +3,6 @@
     Exploration,
     Combat,
     Conversation,
-    MainMenu,
+    Menu,
     GamePaused
 }

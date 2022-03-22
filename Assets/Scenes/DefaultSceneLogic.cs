@@ -1,23 +1,22 @@
 using Entities.Characters;
 using SunsetSystems.Formation;
-using SunsetSystems.GameData;
-using SunsetSystems.Management;
-using SunsetSystems.Party;
-using System.Collections;
+using SunsetSystems.Data;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.Scenes
+namespace SunsetSystems.Scenes
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
+        private GameRuntimeData _gameRuntimeData;
+
         public override void StartScene()
         {
             Debug.Log("Starting scene");
-            GameData gameData = FindObjectOfType<GameData>();
-            CreatureAsset mainCharAsset = gameData.MainCharacterAsset;
-            List<CreatureAsset> activeParty = gameData.ActivePartyAssets;
-            List<Vector3> partyPositions = gameData.ActivePartySavedPositions;
+            _gameRuntimeData = FindObjectOfType<GameRuntimeData>();
+            CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
+            List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
+            List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
             AreaEntryPoint entryPoint = FindAreaEntryPoint("");
             if (partyPositions != null && partyPositions.Count > 0)
                 InitializeParty(partyPositions, mainCharAsset, activeParty);
@@ -55,10 +54,9 @@ namespace Utils.Scenes
 
                 isPartyInitialized = true;
             }
-            GameData gameData = FindObjectOfType<GameData>();
-            gameData.MainCharacterData = mainCharData;
-            gameData.ActivePartyData.Clear();
-            gameData.ActivePartyData.AddRange(partyData);
+            _gameRuntimeData.MainCharacterData = mainCharData;
+            _gameRuntimeData.ActivePartyData.Clear();
+            _gameRuntimeData.ActivePartyData.AddRange(partyData);
             FindObjectOfType<CameraControlScript>().ForceToPosition(positions[0]);
 
         }

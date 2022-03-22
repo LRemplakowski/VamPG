@@ -8,10 +8,10 @@ using Transitions.Manager;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using Utils.Resources;
-using Utils.Scenes;
+using SunsetSystems.Resources;
+using SunsetSystems.Scenes;
 
-namespace SunsetSystems.GameData
+namespace SunsetSystems.Data
 {
     public class GameStarter : MonoBehaviour
     {
@@ -89,26 +89,16 @@ namespace SunsetSystems.GameData
             CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
             mainCharacterAsset.CreatureName = characterName;
             mainCharacterAsset.StatsAsset = stats;
-            GameData journal = FindObjectOfType<GameData>();
+            GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = mainCharacterAsset;
-            SceneLoadingData data = new NameLoadingData(startSceneName, startingEntryPointTag);
-            await fadeScreenAnimator.FadeOut(.5f);
-            SwitchUIAndInputToGameplayMode();
-            await fadeScreenAnimator.FadeIn(.5f);
-            _ = sceneLoader.LoadGameScene(data);
-            StateManager.SetCurrentState(GameState.Exploration);
+            SceneLoadingData data = new NameLoadingData(startSceneName, startingEntryPointTag, SwitchUiToGameplayMode);
+            await sceneLoader.LoadGameScene(data);
         }
 
-        public void SwitchUIAndInputToGameplayMode()
+        public void SwitchUiToGameplayMode()
         {
             EnableGamplayUI();
             DisableMainMenuUI();
-            SwitchInputActionMap();
-        }
-
-        private void SwitchInputActionMap()
-        {
-            InputManager.ToggleActionMap(InputMap.Player);
         }
 
         private void EnableGamplayUI()

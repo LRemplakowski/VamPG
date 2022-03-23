@@ -1,15 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Entities.Characters;
 using Transitions.Data;
 using Transitions.Manager;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using SunsetSystems.Resources;
 using SunsetSystems.Scenes;
+using System.Threading.Tasks;
 
 namespace SunsetSystems.Data
 {

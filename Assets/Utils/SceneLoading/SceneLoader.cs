@@ -54,21 +54,29 @@
         internal async Task LoadGameScene(SceneLoadingData data)
         {
             await _fadeScreenAnimator.FadeOut(.5f);
+            Debug.Log("enabling loading screen");
             _loadingScreenController.gameObject.SetActive(true);
             await _fadeScreenAnimator.FadeIn(.5f);
             await LoadNewScene(data);
             InitializeSceneLogic();
         }
 
-        internal async Task LoadSavedScene()
+        internal async Task LoadSavedScene(Action preLoadingAction)
         {
             await _fadeScreenAnimator.FadeOut(.5f);
+            Debug.Log("enabling loading screen");
             _loadingScreenController.gameObject.SetActive(true);
+            await Task.Yield();
             await _fadeScreenAnimator.FadeIn(.5f);
-            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "");
+            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", preLoadingAction);
             await LoadNewScene(data);
             await SaveLoadManager.LoadObjects();
             InitializeSceneLogic();
+        }
+
+        internal async Task LoadSavedScene()
+        {
+            await LoadSavedScene(null);
         }
 
         private Task UnloadPreviousScene()
@@ -90,6 +98,7 @@
         private async Task LoadNewScene(SceneLoadingData data)
         {
             CachedTransitionData = data;
+            Debug.Log("Performing pre-loading action");
             if (data.preLoadingAction != null)
                 data.preLoadingAction.Invoke();
             if (_previousScene.buildIndex != 0)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;
 using SunsetSystems.Scenes;
+using System;
 
 public class DebugSaveLoadButtonScript : MonoBehaviour
 {
@@ -28,11 +29,12 @@ public class DebugSaveLoadButtonScript : MonoBehaviour
     {
         Debug.Log("DoLoad button");
         PauseMenu menu = GetComponentInParent<PauseMenu>();
+        Action action = null;
         if (StateManager.GetCurrentState().Equals(GameState.GamePaused))
             menu.ResumeGame();
         else if (StateManager.GetCurrentState().Equals(GameState.Menu))
-            FindObjectOfType<GameStarter>().SwitchUiToGameplayMode();
-        await _sceneLoader.LoadSavedScene();
+            action = FindObjectOfType<GameStarter>().SwitchUiToGameplayMode;
+        await _sceneLoader.LoadSavedScene(action);
     }
 
     public void EnableLoading()

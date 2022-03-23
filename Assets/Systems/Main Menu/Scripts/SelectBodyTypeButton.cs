@@ -1,11 +1,12 @@
-using SunsetSystems.Journal;
+using SunsetSystems.Data;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI
 {
     public class SelectBodyTypeButton : MainMenuNavigationButton
     {
-        private GameInitializer gameInitializer;
+        private GameStarter gameInitializer;
         [SerializeField]
         private BodyType associatedBodyType;
 
@@ -13,7 +14,7 @@ namespace SunsetSystems.MainMenu.UI
         {
             base.Start();
             if (gameInitializer == null)
-                gameInitializer = FindObjectOfType<GameInitializer>();
+                gameInitializer = FindObjectOfType<GameStarter>();
         }
 
         public override void OnClick()

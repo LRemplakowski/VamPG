@@ -8,7 +8,7 @@ public class DevChangeActiveActorButton : ExposableMonobehaviour
 {
     public void NextActor()
     {
-        TurnCombatManager turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
+        TurnCombatManager turnCombatManager = References.Get<TurnCombatManager>();
         List<Creature> actors = turnCombatManager.GetCreaturesInCombat();
         int currentIndex = actors.IndexOf(turnCombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);
@@ -17,7 +17,7 @@ public class DevChangeActiveActorButton : ExposableMonobehaviour
 
     public void PreviousActor()
     {
-        TurnCombatManager turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
+        TurnCombatManager turnCombatManager = References.Get<TurnCombatManager>();
         List<Creature> actors = turnCombatManager.GetCreaturesInCombat();
         int currentIndex = actors.IndexOf(turnCombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);

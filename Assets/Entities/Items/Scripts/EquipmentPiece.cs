@@ -13,7 +13,7 @@ public class EquipmentPiece : InventoryItem
     public override void Use()
     {
         base.Use();
-        ReferenceManager.GetManager<EquipmentManager>().Equip(this);
+        References.Get<EquipmentManager>().Equip(this);
         RemoveFromInventory();
     }
 }

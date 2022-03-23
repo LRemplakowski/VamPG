@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.Dialogue
+namespace SunsetSystems.Dialogue
 {
     public static class MethodInvoker
     {

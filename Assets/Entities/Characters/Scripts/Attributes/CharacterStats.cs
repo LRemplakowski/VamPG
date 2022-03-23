@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Stats", menuName = "Character/Stats")]
 public class CharacterStats : ScriptableObject
 {
-    [SerializeField, Tooltip("Czy dane statystyki s¹ generyczne, czy przeznaczone dla unikalnej postaci?")]
+    [SerializeField, Tooltip("Czy dane statystyki sÄ… generyczne, czy przeznaczone dla unikalnej postaci?")]
     private bool _isGeneric;
     /// <summary>
-    /// Czy dane statystyki s¹ generyczne, czy przeznaczone dla unikalnej postaci. Generyczne statystyki powinny byæ skopiowane do nowej instacji assetu, ¿eby nie modyfikowaæ instancji bazowej.
+    /// Czy dane statystyki sÄ… generyczne, czy przeznaczone dla unikalnej postaci. Generyczne statystyki powinny byÄ‡ skopiowane do nowej instacji assetu, Å¼eby nie modyfikowaÄ‡ instancji bazowej.
     /// </summary>
     public bool IsGeneric 
     {
@@ -34,7 +34,7 @@ public class CharacterStats : ScriptableObject
     [SerializeField]
     protected Attributes attributes = new Attributes();
     [System.Serializable]
-    protected class Attributes
+    public class Attributes
     {
         [SerializeField]
         public Attribute
@@ -66,7 +66,7 @@ public class CharacterStats : ScriptableObject
     [SerializeField]
     protected Skills skills = new Skills();
     [System.Serializable]
-    protected class Skills
+    public class Skills
     {
         [SerializeField]
         public Skill 
@@ -150,7 +150,7 @@ public class CharacterStats : ScriptableObject
     [SerializeField]
     protected Disciplines disciplines = new Disciplines();
     [System.Serializable]
-    protected class Disciplines
+    public class Disciplines
     {
         [SerializeField]
         public Discipline
@@ -275,16 +275,22 @@ public class CharacterStats : ScriptableObject
         }
         return CreateInstance<DisciplinePower>();
     }
+    public List<Attribute> GetAttributes()
+    {
+        return attributes.GetAttributeList();
+    }
+
 
     /// <summary>
     /// Kopiuje pola z przekazanego assetu do nowej instancji tego samego typu.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="asset"></param>
-    /// <returns>Now¹ instancjê assetu.</returns>
+    /// <returns>NowÄ… instancjÄ™ assetu.</returns>
     public static T CopyAssetInstance<T>(T asset) where T : CharacterStats
     {
         T newInstance = CreateInstance(typeof(T)) as T;
+        newInstance.name = asset.name + " (Copy)";
         newInstance.IsGeneric = asset.IsGeneric;
 
         newInstance.health.SetValue(asset.health.GetValue(false));
@@ -316,8 +322,4 @@ public class CharacterStats : ScriptableObject
         return newInstance;
     }
 
-    public List<Attribute> GetAttributes()
-    {
-        return attributes.GetAttributeList();
-    }
 }

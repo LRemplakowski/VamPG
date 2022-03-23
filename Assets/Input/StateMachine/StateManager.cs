@@ -1,14 +1,14 @@
 using SunsetSystems.Management;
+using System;
 using UnityEngine;
-using Utils.Singleton;
+
 
 public static class StateManager
 {
     [SerializeField]
-    private static GameState currentState;
+    private static GameState currentState = GameState.Menu;
 
-    public delegate void GameStateChanged(GameState newState, GameState oldState);
-    public static event GameStateChanged OnGameStateChanged;
+    public static event Action<GameState, GameState> OnGameStateChanged;
 
     public static GameState GetCurrentState()
     {
@@ -17,16 +17,13 @@ public static class StateManager
 
     public static void SetCurrentState(GameState newState)
     {
+        OnGameStateChanged?.Invoke(newState, currentState);
+        Debug.Log("Setting new state: " + newState.ToString());
         currentState = newState;
-        if (OnGameStateChanged != null)
-        {
-            OnGameStateChanged.Invoke(newState, currentState);
-        }
     }
 
     public static void SetCurrentState(int stateID)
     {
-        GameState newState = (GameState)stateID;
-        SetCurrentState(newState);
+        SetCurrentState((GameState)stateID);
     }
 }

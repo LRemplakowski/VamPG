@@ -2,5 +2,7 @@
 {
     Exploration,
     Combat,
-    Conversation
+    Conversation,
+    Menu,
+    GamePaused
 }

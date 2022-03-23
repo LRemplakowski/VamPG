@@ -1,4 +1,5 @@
-using SunsetSystems.Journal;
+using SunsetSystems.Data;
+using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ namespace SunsetSystems.MainMenu.UI
 {
     public class SelectBackgroundButton : MainMenuNavigationButton
     {
-        private GameInitializer gameInitializer;
+        private GameStarter gameInitializer;
         [SerializeField]
         private PlayerCharacterBackground associatedBackground;
 
@@ -14,7 +15,7 @@ namespace SunsetSystems.MainMenu.UI
         {
             base.Start();
             if (gameInitializer == null)
-                gameInitializer = FindObjectOfType<GameInitializer>();
+                gameInitializer = FindObjectOfType<GameStarter>();
         }
         public override void OnClick()
         {

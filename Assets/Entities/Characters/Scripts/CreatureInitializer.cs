@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UMA.CharacterSystem;
+using UnityEngine.AI;
+using System;
 
 namespace Entities.Characters
 {
     public class CreatureInitializer
     {
-        public static void InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
+        public static Creature InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
         {
             creatureObject.transform.position = position;
             Creature creature = InitializeCreatureScript(creatureObject, asset);
@@ -15,6 +17,11 @@ namespace Entities.Characters
             InitializeStatsManager(stats, asset);
             CapsuleCollider collider = creatureObject.GetComponent<CapsuleCollider>();
             InitializeCollider(collider);
+            Rigidbody rigidbody = creatureObject.GetComponent<Rigidbody>();
+            InitializeRigidbody(rigidbody);
+            NavMeshAgent navMeshAgent = creatureObject.GetComponent<NavMeshAgent>();
+            InitializeNavMeshAgent(navMeshAgent);
+            return creature;
         }
 
         private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
@@ -26,7 +33,7 @@ namespace Entities.Characters
             }
             else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
             {
-                Object.DestroyImmediate(creature);
+                UnityEngine.Object.DestroyImmediate(creature);
                 AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
             }
             return creature;
@@ -36,7 +43,6 @@ namespace Entities.Characters
         {
             creature = faction switch
             {
-                Faction.MainCharacter => creatureObject.AddComponent<MainCharacter>(),
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
                 _ => creatureObject.AddComponent<NPC>(),
             };
@@ -47,7 +53,6 @@ namespace Entities.Characters
             return faction switch
             {
                 Faction.PlayerControlled => creature.IsOfType(typeof(PlayerControlledCharacter)),
-                Faction.MainCharacter => creature.IsOfType(typeof(MainCharacter)),
                 _ => creature.IsOfType(typeof(NPC)),
             };
         }
@@ -76,6 +81,18 @@ namespace Entities.Characters
             collider.height = 1.8f;
             collider.center = new Vector3(0, .9f, 0);
             collider.radius = 0.35f;
+        }
+
+        private static void InitializeRigidbody(Rigidbody rigidbody)
+        {
+            rigidbody.isKinematic = true;
+        }
+
+        private static void InitializeNavMeshAgent(NavMeshAgent navMeshAgent)
+        {
+            navMeshAgent.speed = 4.0f;
+            navMeshAgent.angularSpeed = 360.0f;
+            navMeshAgent.acceleration = 8.0f;
         }
     }
 }

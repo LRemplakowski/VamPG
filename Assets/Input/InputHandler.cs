@@ -2,7 +2,7 @@
 using System;
 using SunsetSystems.Management;
 using UnityEngine;
-using Utils.Singleton;
+
 
 public abstract class InputHandler : Manager
 {

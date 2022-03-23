@@ -1,5 +1,6 @@
 ﻿namespace Entities.Characters.Actions.Conditions
 {
+    using UnityEngine;
     using UnityEngine.AI;
 
     public class Destination : Condition
@@ -20,6 +21,7 @@
         private bool AtEndOfPath()
         {
             hasPath |= agent.hasPath;
+            Debug.Log("Remaining distance: " + agent.remainingDistance + "; HasPath? " + hasPath);
             if (hasPath && agent.remainingDistance <= agent.stoppingDistance + ActionConsts.COMPLETION_MARGIN)
             {
                 // Arrived

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Transitions.Manager;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace SunsetSystems.MainMenu.UI
 {
     public class StartGameButton : MonoBehaviour
     {
-        private TransitionAnimator transitionAnimator;
+        private FadeScreenAnimator transitionAnimator;
         [SerializeField]
         private GameObject backgroundSelectionObject;
         [SerializeField]
@@ -17,37 +18,21 @@ namespace SunsetSystems.MainMenu.UI
         private void Start()
         {
             if (transitionAnimator == null)
-                transitionAnimator = FindObjectOfType<TransitionAnimator>(true);
+                transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
         }
 
-        #region Enable&Disable
-        private void OnEnable()
+        public async Task StartGame()
         {
-            TransitionAnimator.OnFadedOut += OnFadedOut;
+            await transitionAnimator.FadeOut(.5f);
+            await DoLoadCharacterCreationPanel();
         }
 
-        private void OnDisable()
-        {
-            TransitionAnimator.OnFadedOut -= OnFadedOut;
-        }
-        #endregion
-
-        private void OnFadedOut()
-        {
-            DoLoadCharacterCreationPanel();
-        }
-
-        public void StartGame()
-        {
-            transitionAnimator.FadeOut();
-        }
-
-        private void DoLoadCharacterCreationPanel()
+        private async Task DoLoadCharacterCreationPanel()
         {
             if (backgroundSelectionObject)
                 backgroundSelectionObject.SetActive(true);
             mainMenuParent.SetActive(false);
-            transitionAnimator.FadeIn();
+            await transitionAnimator.FadeIn(.5f);
         }
     }
 }

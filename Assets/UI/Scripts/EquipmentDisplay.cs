@@ -12,7 +12,7 @@ public class EquipmentDisplay : ExposableMonobehaviour
     private void Awake()
     {
         displaySlots = GetComponentsInChildren<EquipmentDisplaySlot>(true);
-        equipmentManager = ReferenceManager.GetManager<EquipmentManager>();
+        equipmentManager = References.Get<EquipmentManager>();
     }
 
     private void OnEnable()

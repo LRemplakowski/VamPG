@@ -36,15 +36,15 @@ public sealed class CreatureContext : IAIContext
 
     public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => ReferenceManager.GetManager<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
+    public List<Creature> OtherCombatants => References.Get<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => ReferenceManager.GetManager<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
+    public List<Creature> PlayerControlledCombatants => References.Get<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
 
-    public List<Creature> FriendlyCombatants => ReferenceManager.GetManager<TurnCombatManager>()
+    public List<Creature> FriendlyCombatants => References.Get<TurnCombatManager>()
         .GetCreaturesInCombat()
         .FindAll(c => c.Data.Faction.Equals(Faction.Friendly));
 
-    public List<Creature> EnemyCombatants => ReferenceManager.GetManager<TurnCombatManager>()
+    public List<Creature> EnemyCombatants => References.Get<TurnCombatManager>()
         .GetCreaturesInCombat()
         .FindAll(c => c.Data.Faction.Equals(Faction.Hostile));
 }

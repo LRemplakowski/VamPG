@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DD;
 using System;
-using Utils.Singleton;
+
 using SunsetSystems.Management;
 
 public class DialogueManager : Manager

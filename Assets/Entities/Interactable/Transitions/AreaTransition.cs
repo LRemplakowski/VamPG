@@ -1,11 +1,12 @@
 ﻿namespace Transitions
 {
     using Entities.Interactable;
-    using SunsetSystems.Journal;
+    using SunsetSystems.Data;
     using SunsetSystems.Management;
     using Transitions.Data;
     using Transitions.Manager;
     using UnityEngine;
+    using SunsetSystems.Scenes;
 
     public class AreaTransition : InteractableEntity, ITransition
     {
@@ -22,24 +23,35 @@
         [SerializeField]
         private string targetEntryPointTag;
 
+        private SceneLoader sceneLoader;
+        private FadeScreenAnimator fadeScreenAnimator;
+
+        private void Start()
+        {
+            sceneLoader = FindObjectOfType<SceneLoader>();
+            fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>();
+        }
+
         public override void Interact()
         {
             Debug.Log("Interacting with area transition!");
             switch (type)
             {
                 case TransitionType.index:
-                    MoveToScene(new IndexTransition(SceneIndex, targetEntryPointTag));
+                    MoveToScene(new IndexLoadingData(SceneIndex, targetEntryPointTag));
                     break;
                 case TransitionType.name:
-                    MoveToScene(new NameTransition(SceneName, targetEntryPointTag));
+                    MoveToScene(new NameLoadingData(SceneName, targetEntryPointTag));
                     break;
             }
             base.Interact();
         }
 
-        public void MoveToScene(TransitionData data)
+        public async void MoveToScene(SceneLoadingData data)
         {
-            ReferenceManager.GetManager<TransitionManager>().PerformTransition(data);
+            await fadeScreenAnimator.FadeOut(.5f);
+            _ = sceneLoader.LoadGameScene(data);
+            _ = fadeScreenAnimator.FadeIn(.5f);
         }
     }
 

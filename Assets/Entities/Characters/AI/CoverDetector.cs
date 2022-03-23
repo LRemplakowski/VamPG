@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Management;
 using UnityEngine;
-using Utils.Singleton;
 
 public class CoverDetector : Manager
 {

@@ -7,6 +7,8 @@ using SunsetSystems.Formation.Data;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.AI;
+using SunsetSystems.Formation.UI;
 
 namespace SunsetSystems.Formation
 {
@@ -14,22 +16,17 @@ namespace SunsetSystems.Formation
     {
         [SerializeField]
         private FormationElement formationElementPrefab;
-        //[SerializeField]
-        //private FormationSlot slotPrefab;
-        private List<FormationElement> formationElements = new List<FormationElement>();
-        public FormationData FormationData { get; set; }
+        public static FormationData FormationData { get; set; }
+        [SerializeField]
+        private PredefinedFormation defaultFormation;
 
         private Vector2 mousePosition;
         private const int raycastRange = 100;
 
-        private bool isDirty = false;
         [SerializeField]
         private LayerMask defaultRaycastMask;
 
-        //[SerializeField]
-        //private int x = 100, y = 100;
-
-        //private FormationSlot[,] formationGrid;
+        private static List<ISelectable> currentSelection = new List<ISelectable>();
 
         private void OnEnable()
         {
@@ -41,42 +38,33 @@ namespace SunsetSystems.Formation
             Selection.OnSelectionFinished -= OnSelectionFinished;
         }
 
-        private void Start()
+        private void Awake()
         {
-            Initialize();
-        }
-
-        public void Initialize()
-        {
-            formationElements = new List<FormationElement>();
+            if (FormationData == null)
+                FormationData = defaultFormation.GetData();
         }
 
         private void OnSelectionFinished(List<ISelectable> selectedObjects)
         {
-            CreateFormation(selectedObjects);
+            currentSelection = selectedObjects;
         }
 
-        private void CreateFormation(List<ISelectable> selectables)
+        public static List<Vector3> GetPositionsFromPoint(Vector3 point)
         {
-            ClearFormation();
-            foreach (ISelectable selectable in selectables)
+            List<Vector3> positions = new List<Vector3>();
+            for (int i = 0; i < 6; i++)
             {
-                CreateFormationElement(selectable.GetCreature());
+                Vector3 positionOffset = FormationData.positions[i];
+                Vector3 position = point + positionOffset;
+                positions.Add(position);
             }
+            return positions;
         }
 
-        private void CreateFormationElement(Creature creature)
+        public static Vector3 GetPositionInFormation(Vector3 formationPoint, int index)
         {
-            FormationElement formationElement = Instantiate(formationElementPrefab, this.transform);
-            formationElement.character = creature;
-            formationElement.transform.position = new Vector3(creature.transform.position.x, 0.1f, creature.transform.position.z);
-            formationElements.Add(formationElement);
-        }
-
-        private void ClearFormation()
-        {
-            formationElements.ForEach(e => Destroy(e.gameObject));
-            formationElements.Clear();
+            Vector3 position = new Vector3(formationPoint.x + FormationData.positions[index].x, 0, formationPoint.z + FormationData.positions[index].z);
+            return position;
         }
 
         public void OnRightClick(InputAction.CallbackContext context)
@@ -88,30 +76,27 @@ namespace SunsetSystems.Formation
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
             {
                 Debug.LogWarning("Raycast hit!");
-                AlignElements();
-                transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
-                isDirty = true;
+                MoveCurrentSelectionToPositions(hit);
             }
         }
 
-        private void AlignElements()
+        private void MoveCurrentSelectionToPositions(RaycastHit hit)
         {
-            try
+            Vector3 samplingPoint;
+            for (int i = 0; i < currentSelection.Count; i++)
             {
-                for (int i = 0; i < formationElements.Count; i++)
-                {
-                    formationElements[i].transform.localPosition = FormationData.positions[i];
-                }
-                Debug.LogError("Formation positions set!");
+                Vector3 positionOffset = FormationData.positions[i];
+                samplingPoint = hit.point + positionOffset;
+                NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                MoveSelectableToPosition(currentSelection[i], navHit.position);
             }
-            catch (IndexOutOfRangeException e)
-            {
-                Debug.LogException(e);
-                foreach (FormationElement element in formationElements)
-                {
-                    element.transform.position = Vector3.zero;
-                }
-            }
+        }
+
+        private void MoveSelectableToPosition(ISelectable selectable, Vector3 position)
+        {
+            Creature creature = selectable.GetCreature();
+            creature.ClearAllActions();
+            creature.Move(position);
         }
 
         public void OnMousePosition(InputAction.CallbackContext context)
@@ -119,36 +104,6 @@ namespace SunsetSystems.Formation
             if (context.performed)
                 mousePosition = context.ReadValue<Vector2>();
         }
-
-        private void FixedUpdate()
-        {
-            if (isDirty)
-            {
-                formationElements.ForEach(e => e.MoveOwnerToElement());
-                isDirty = false;
-            }  
-        }
-
-        //[ContextMenu("Generate grid")]
-        //private void CreateFormationGrid()
-        //{
-        //    ClearFormationGrid();
-        //    formationGrid = new FormationSlot[x, y];
-        //    for (int i = 0; i < x; i++)
-        //    {
-        //        for (int j = 0; j < y; j++)
-        //        {
-        //            formationGrid[i, j] = Instantiate(slotPrefab, this.transform);
-        //        }
-        //    }
-        //}
-
-        //[ContextMenu("Clear grid")]
-        //private void ClearFormationGrid()
-        //{
-        //    foreach (FormationSlot slot in GetComponentsInChildren<FormationSlot>())
-        //        DestroyImmediate(slot.gameObject);
-        //}
     }
 }
 

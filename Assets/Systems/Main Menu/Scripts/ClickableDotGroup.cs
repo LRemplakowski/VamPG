@@ -24,12 +24,12 @@ namespace SunsetSystems.MainMenu.UI
         {
             if (unassignedDots == null)
                 unassignedDots = GameObject.FindGameObjectWithTag(unassginedDotsTag).GetComponent<UnassignedDots>();
-            unassignedDots.onDotGroupDataChanged += this.RemoveDots;
+            unassignedDots.OnDotGroupDataChanged += this.RemoveDots;
         }
 
         private void OnDisable()
         {
-            unassignedDots.onDotGroupDataChanged -= this.RemoveDots;
+            unassignedDots.OnDotGroupDataChanged -= this.RemoveDots;
         }
 
         protected virtual void Start()

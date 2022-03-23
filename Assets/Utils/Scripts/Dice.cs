@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utils.Dice
+namespace SunsetSystems.Dice
 {
     public abstract class DicePool<T, U> where T : BaseStat where U : BaseStat
     {
@@ -99,7 +99,9 @@ namespace Utils.Dice
     public static class Roll
     {
         private static System.Random r = new System.Random();
+#pragma warning disable IDE1006 // Style nazewnictwa
         public static Outcome d10(int normalDice, int hungerDice)
+#pragma warning restore IDE1006 // Style nazewnictwa
         {
             System.Random r = new System.Random((int) DateTime.Now.ToFileTime());
             int[] normals = new int[normalDice];
@@ -134,7 +136,9 @@ namespace Utils.Dice
             return new Outcome(successes, isCritical, isMessy, false, new List<int>(normals), new List<int>(hunger));
         }
 
+#pragma warning disable IDE1006 // Style nazewnictwa
         public static Outcome d10(int normalDice, int hungerDice, int dc)
+#pragma warning restore IDE1006 // Style nazewnictwa
         {
             System.Random r = new System.Random();
             int[] normals = new int[normalDice];
@@ -173,7 +177,9 @@ namespace Utils.Dice
             return new Outcome(successes, isCritical, isMessy, isBestial, new List<int>(normals), new List<int>(hunger));
         }
 
+#pragma warning disable IDE1006 // Style nazewnictwa
         public static Outcome d10(int dice)
+#pragma warning restore IDE1006 // Style nazewnictwa
         {
             System.Random r = new System.Random();
             int[] roll = new int[dice];

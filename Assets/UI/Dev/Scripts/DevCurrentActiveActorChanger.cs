@@ -26,7 +26,7 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
     private void Start()
     {
         dropdown = GetComponent<Dropdown>();
-        turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
+        turnCombatManager = References.Get<TurnCombatManager>();
         activeSceneCreatures = turnCombatManager.GetCreaturesInCombat();
         dropdown.ClearOptions();
         List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();

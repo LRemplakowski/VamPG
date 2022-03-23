@@ -16,7 +16,7 @@ public class RoundCounter : MonoBehaviour
     {
         text = GetComponent<TextMeshProUGUI>();
         text.text = "";
-        turnCombatManager = ReferenceManager.GetManager<TurnCombatManager>();
+        turnCombatManager = References.Get<TurnCombatManager>();
     }
 
     // Update is called once per frame

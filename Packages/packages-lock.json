@@ -14,6 +14,97 @@
       "dependencies": {},
       "hash": "0b23ba86d64d38c666d57327e1623b08db03b533"
     },
+    "com.fluid.adnc-utilities": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.database": {
+      "version": "2.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.fluid.simple-singleton": "1.0.0",
+        "com.fluid.unity-event-plus": "1.0.0"
+      },
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.dialogue": {
+      "version": "2.5.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.fluid.database": "2.0.0",
+        "com.fluid.unity-event-plus": "1.1.0",
+        "com.fluid.simple-spellcheck": "1.1.0",
+        "com.fluid.find-and-replace": "1.0.1"
+      },
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.find-and-replace": {
+      "version": "1.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.quest-journal": {
+      "version": "1.0.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.fluid.adnc-utilities": "1.0.0",
+        "com.fluid.simple-settings": "1.0.1",
+        "com.fluid.simple-singleton": "1.0.0"
+      },
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.simple-settings": {
+      "version": "1.0.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.simple-singleton": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.simple-spellcheck": {
+      "version": "1.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.stats": {
+      "version": "1.1.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.fluid.adnc-utilities": "1.0.0"
+      },
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.unique-id": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
+    "com.fluid.unity-event-plus": {
+      "version": "1.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
     "com.github.siccity.xnode": {
       "version": "https://github.com/siccity/xNode.git",
       "depth": 0,
@@ -37,11 +128,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.15.4",
+      "version": "1.15.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
         "com.unity.services.core": "1.0.1"
       },
       "url": "https://packages.unity.com"
@@ -73,7 +163,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -82,7 +172,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -99,13 +189,6 @@
     },
     "com.unity.mathematics": {
       "version": "1.2.5",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -203,7 +286,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.3",
+      "version": "1.7.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {

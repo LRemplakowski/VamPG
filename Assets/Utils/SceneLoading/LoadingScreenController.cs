@@ -5,9 +5,13 @@ using UnityEngine.UI;
 using TMPro;
 using Transitions.Manager;
 using SunsetSystems.Management;
+using System;
+using System.Threading.Tasks;
 
 public class LoadingScreenController : MonoBehaviour
 {
+    private const string LOADING_SCREEN_TAG = "LoadingScreen";
+
     [SerializeField]
     private Slider loadingBar;
     [SerializeField]
@@ -16,6 +20,8 @@ public class LoadingScreenController : MonoBehaviour
     private TextMeshProUGUI loadingBarText;
     [SerializeField]
     private Button continueButton;
+
+    private FadeScreenAnimator transitionAnimator;
 
     private void OnEnable()
     {
@@ -28,34 +34,43 @@ public class LoadingScreenController : MonoBehaviour
         if (continueButton == null)
             continueButton = GetComponentInChildren<Button>();
         loadingBar.value = 0f;
-        //loadingBar.gameObject.SetActive(true);
         continueButton.gameObject.SetActive(false);
-        loadingBar.onValueChanged.AddListener(MaybeReplaceBarWithButton);
+        StateManager.SetCurrentState(GameState.GamePaused);
     }
 
-    private void OnDisable()
+    private void Start()
     {
-        loadingBar.onValueChanged.RemoveListener(MaybeReplaceBarWithButton);
+        transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+    }
+
+    public void SetUnloadingProgress(float value)
+    {
+        loadingBar.value = value / 2;
+        loadingBarText.text = value * 50f + " %";
     }
 
     public void SetLoadingProgress(float value)
     {
-        loadingBar.value = value;
-        loadingBarText.text = value * 100f + " %";
+        loadingBar.value = (value / 2) + .5f;
+        loadingBarText.text = ((value * 50f) + 50f) + " %";
     }
 
-    private void MaybeReplaceBarWithButton(float value)
+    public void EnableContinue()
     {
-        if (value >= 1.0f)
-        {
-            //loadingBar.gameObject.SetActive(false);
-            continueButton.gameObject.SetActive(true);
-        }
+        Debug.Log("enabling continue button");
+        continueButton.gameObject.SetActive(true);
     }
 
-    public void OnContinue()
+    public async void OnContinue()
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(null);
+        await transitionAnimator.FadeOut(.5f);
+        await DisableLoadingScreen();
     }
 
+    private async Task DisableLoadingScreen()
+    {
+        this.gameObject.SetActive(false);
+        await transitionAnimator.FadeIn(.5f);
+        StateManager.SetCurrentState(GameState.Exploration);
+    }
 }

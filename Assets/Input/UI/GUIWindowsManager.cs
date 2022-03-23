@@ -10,11 +10,12 @@ public class GUIWindowsManager : InputHandler
     public CharacterSheetUI characterSheetUI;
     public DialogueWindowUI dialogueUI;
     private List<UIWindow> windows = new List<UIWindow>();
+    [SerializeField, ReadOnly]
     private int _activeWindows = 0;
-    private int ActiveWindows
+    public int ActiveWindows
     {
         get => _activeWindows;
-        set => _activeWindows = value;
+        private set => _activeWindows = value;
     }
 
     #region Enable&Disable
@@ -38,7 +39,7 @@ public class GUIWindowsManager : InputHandler
 
     public void Initialize()
     {
-        Canvas canvas = FindObjectOfType<Canvas>();
+        Canvas canvas = FindObjectOfType<Canvas>(true);
         if (inventoryUI == null)
             inventoryUI = canvas.GetComponentInChildren<PlayerInventoryUI>(true);
         if (characterSheetUI == null)

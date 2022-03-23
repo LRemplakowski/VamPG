@@ -2,7 +2,7 @@ namespace AI.Scorers.Context
 {
     using Apex.AI;
     using Apex.Serialization;
-    using Utils.Dice;
+    using SunsetSystems.Dice;
     using System;
     using Entities.Characters;
 

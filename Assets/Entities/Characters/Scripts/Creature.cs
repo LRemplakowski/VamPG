@@ -100,6 +100,7 @@ namespace Entities.Characters
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookTowardsRotationSpeed);
             float dot = Quaternion.Dot(transform.rotation, lookRotation);
+            Debug.Log("Rotating towards target " + dot);
             return dot >= 0.999f || dot <= -0.999f;
         }
 

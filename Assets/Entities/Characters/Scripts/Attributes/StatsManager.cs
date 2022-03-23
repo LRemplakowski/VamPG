@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Utils.Dice;
+using SunsetSystems.Dice;
 
 namespace Entities.Characters
 {
@@ -11,7 +11,15 @@ namespace Entities.Characters
     {
         [SerializeField]
         protected CharacterStats _characterStats;
-        public CharacterStats Stats { get => _characterStats; internal set => _characterStats = value; }
+        public CharacterStats Stats 
+        { 
+            get => _characterStats; 
+            internal set
+            {
+                _characterStats = value;
+                InitializeTrackers();
+            }
+        }
 
         [SerializeField, ReadOnly]
         protected Creature owner;
@@ -34,9 +42,16 @@ namespace Entities.Characters
             owner = GetComponentInParent<Creature>();
             if (!_characterStats)
                 _characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
-            if (_characterStats.IsGeneric)
-                _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
+            _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
+            InitializeTrackers();
+        }
+
+        private void InitializeTrackers()
+        {
+            _characterStats.GetTracker(TrackerType.Health).SetValue(_characterStats.GetAttribute(AttributeType.Stamina).GetValue() + 3);
             Health = _characterStats.GetTracker(TrackerType.Health).GetValue();
+            int wp = _characterStats.GetAttribute(AttributeType.Composure).GetValue() + _characterStats.GetAttribute(AttributeType.Resolve).GetValue();
+            _characterStats.GetTracker(TrackerType.Willpower).SetValue(wp);
             Willpower = _characterStats.GetTracker(TrackerType.Willpower).GetValue();
             Humanity = _characterStats.GetTracker(TrackerType.Humanity).GetValue();
             Hunger = _characterStats.GetTracker(TrackerType.Hunger).GetValue();
@@ -44,9 +59,7 @@ namespace Entities.Characters
 
         public void TakeDamage(int damage)
         {
-            Tracker health = _characterStats.GetTracker(TrackerType.Health);
-            int newHealth = Health;
-            newHealth -= damage;
+            int newHealth = Health - damage;
             Debug.Log(owner.gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + Health + "\nHealth after attack: " + newHealth);
             Health = newHealth < 0 ? 0 : newHealth;
             if (Health <= 0)

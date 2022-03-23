@@ -1,12 +1,17 @@
 ﻿using Entities.Characters;
+using Glitchers;
+using SunsetSystems.Management;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils;
+using Utils.Threading;
 
 namespace InsaneSystems.RTSSelection
 {
-    public class Selection : MonoBehaviour
+    public class Selection : Manager, IInitialized
     {
         public static readonly List<ISelectable> AllSelectables = new List<ISelectable>();
 
@@ -20,20 +25,19 @@ namespace InsaneSystems.RTSSelection
 
         private Vector2 mousePosition;
 
-        void Awake()
+        public Task Initialize()
         {
-            cachedCamera = Camera.main;
-            AllSelectables.Clear();
-        }
-
-        private void Start()
-        {
-            foreach (Creature creature in FindObjectsOfType<Creature>())
+            return Task.Run(async () => 
             {
-                ISelectable selectable = creature.GetComponent<ISelectable>();
-                if (selectable != null)
-                    AllSelectables.Add(selectable);
-            }
+                Dispatcher.Instance.Invoke(async() => 
+                {
+                    cachedCamera = Camera.main;
+                    AllSelectables.Clear();
+                    AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
+                    await Task.Yield();
+                });
+                await Task.Yield();
+            });
         }
 
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.

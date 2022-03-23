@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8785984311732754596}
   - component: {fileID: 205334753066275511}
   - component: {fileID: 3591898802990983945}
-  - component: {fileID: 8361792477901779624}
   - component: {fileID: 5519115789257546217}
   m_Layer: 5
   m_Name: FadePanel
@@ -30,6 +29,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -77,25 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &8361792477901779624
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3610719525485595107}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d5bfca60128485b4c9dbd235c0e42969, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &5519115789257546217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,6 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3610719525485595107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9643a9e763108fd4497a9ed4f2108b15, type: 3}
+  m_Script: {fileID: 11500000, guid: 164fdde4d6de4264bb44a8037e5e5ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fadePanel: {fileID: 3591898802990983945}

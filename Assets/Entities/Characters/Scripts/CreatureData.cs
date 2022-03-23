@@ -4,9 +4,8 @@ namespace Entities.Characters
 {
     public class CreatureData : ExposableMonobehaviour
     {
-        private CreatureAsset _dataInstance;
         [SerializeField]
-        private CreatureAsset data;
+        private CreatureAsset _dataInstance;
         [SerializeField, ReadOnly]
         private string _firstName, _lastName;
         public string FirstName 
@@ -72,15 +71,18 @@ namespace Entities.Characters
                 _creatureType = value;
             }
         }
+        public Creature CreatureComponent
+        {
+            get;
+            private set;
+        }
 
 #if UNITY_EDITOR
         private void Reset()
         {
-            if (data == null)
-                data = Resources.Load<CreatureAsset>("DEBUG/default");
             if (_dataInstance == null)
-                _dataInstance = data;
-            gameObject.name = data.name;
+                _dataInstance = Resources.Load<CreatureAsset>("DEBUG/default");
+            gameObject.name = _dataInstance.name;
             InitializeData();
         }
 #endif
@@ -92,23 +94,23 @@ namespace Entities.Characters
 
         public void CreateCreature()
         {
-            if (data)
+            if (_dataInstance)
             {
-                _dataInstance = CreatureAsset.CopyInstance(data);
                 InitializeData();
             }
         }
 
         public void SetData(CreatureAsset data)
         {
-            this.data = data;
+            this._dataInstance = data;
         }
 
         private void InitializeData()
         {
             if (_dataInstance)
             {
-                CreatureInitializer.InitializeCreature(gameObject, _dataInstance, gameObject.transform.position);
+                gameObject.name = _dataInstance.CreatureName + " " + _dataInstance.CreatureLastName;
+                CreatureComponent = CreatureInitializer.InitializeCreature(gameObject, _dataInstance, gameObject.transform.position);
                 _portrait = _dataInstance.Portrait;
                 _faction = _dataInstance.CreatureFaction;
                 _firstName = _dataInstance.CreatureName;
@@ -121,7 +123,6 @@ namespace Entities.Characters
         [ContextMenu("Initialize Creature from Data")]
         private void InitializeInEditor()
         {
-            _dataInstance = data;
             gameObject.name = _dataInstance.name;
             InitializeData();
         }

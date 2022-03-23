@@ -1,7 +1,7 @@
 ﻿using Entities.Characters;
 using UnityEngine;
 
-namespace Utils.ResourceLoader
+namespace SunsetSystems.Resources
 {
     public static class ResourceLoader
     {
@@ -18,10 +18,13 @@ namespace Utils.ResourceLoader
         /// Character debug fallback
         /// </summary>
         private const string CHARACTER_DEBUG = "DEBUG/default";
+        private const string EMPTY_CREATURE_PREFAB = "DEBUG/CreatureData";
+
+        private const string ANIMATOR_CONTROLLERS_PATH = "Animation/AnimationControllers/";
 
         private static T GetAsset<T>(string path) where T : Object
         {
-            return Resources.Load<T>(path);
+            return UnityEngine.Resources.Load<T>(path);
         }
 
         public static CreatureAsset GetMaleAgentAsset()
@@ -57,6 +60,21 @@ namespace Utils.ResourceLoader
         public static CreatureAsset GetDefaultCreatureAsset()
         {
             return GetAsset<CreatureAsset>(CHARACTER_DEBUG);
+        }
+
+        public static CreatureData GetEmptyCreaturePrefab()
+        {
+            return GetAsset<CreatureData>(EMPTY_CREATURE_PREFAB);
+        }
+
+        public static RuntimeAnimatorController GetAnimatorController(string resourceName)
+        {
+            return GetAsset<RuntimeAnimatorController>(ANIMATOR_CONTROLLERS_PATH + resourceName);
+        }
+
+        public static RuntimeAnimatorController GetFallbackAnimator()
+        {
+            return GetAsset<RuntimeAnimatorController>(ANIMATOR_CONTROLLERS_PATH + "female_anims");
         }
     }
 }

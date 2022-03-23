@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UMA.CharacterSystem;
 using System;
+using SunsetSystems.Resources;
 
 namespace Entities.Characters
 {
@@ -23,8 +24,13 @@ namespace Entities.Characters
         private string _umaPresetFilename = "default";
         public string UmaPresetFilename { get => _umaPresetFilename; set => _umaPresetFilename = value; }
         [SerializeField]
+        private string animatorControllerResourceName = "";
+        [SerializeField, ReadOnly, ES3NonSerializable]
         private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController { get => _animatorController; set => _animatorController = value; }
+        public RuntimeAnimatorController AnimatorController 
+        { 
+            get => _animatorController; 
+        }
         [SerializeField]
         private Faction _creatureFaction;
         public Faction CreatureFaction { get => _creatureFaction; set => _creatureFaction = value; }
@@ -42,19 +48,32 @@ namespace Entities.Characters
                 _portrait = Resources.Load<Sprite>("DEBUG/missing");
             if (_statsAsset == null)
                 _statsAsset = Resources.Load<CharacterStats>("DEBUG/DebugStats");
+        }
+
+        private void Awake()
+        {
+            FindAnimatorController();
+        }
+
+        private void FindAnimatorController()
+        {
+            if (_animatorController == null && !animatorControllerResourceName.Equals(""))
+                _animatorController = ResourceLoader.GetAnimatorController(animatorControllerResourceName);
             if (_animatorController == null)
-                _animatorController = Resources.Load<RuntimeAnimatorController>("Animation/AnimationControllers/female_anims");
+                _animatorController = ResourceLoader.GetFallbackAnimator();
         }
 
         internal static CreatureAsset CopyInstance(CreatureAsset data)
-        {
+        { 
             CreatureAsset copy = CreateInstance<CreatureAsset>();
+            copy.name = data.name + " (Clone)";
             copy._creatureName = data._creatureName;
             copy._creatureLastName = data._creatureLastName;
             copy._portrait = data._portrait;
             copy._statsAsset = CharacterStats.CopyAssetInstance(data._statsAsset);
+            copy.animatorControllerResourceName = data.animatorControllerResourceName;
+            copy.FindAnimatorController();
             copy._umaPresetFilename = data._umaPresetFilename;
-            copy._animatorController = data._animatorController;
             copy._creatureFaction = data._creatureFaction;
             copy._bodyType = data._bodyType;
             copy._creatureType = data._creatureType;

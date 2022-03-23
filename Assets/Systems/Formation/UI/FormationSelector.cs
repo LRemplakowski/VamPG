@@ -11,11 +11,9 @@ namespace SunsetSystems.Formation.UI
     {
         [SerializeField]
         private PredefinedFormation[] formations = new PredefinedFormation[0];
-        FormationController formationController;
 
         private void Start()
         {
-            formationController = FindObjectOfType<FormationController>();
             TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
             dropdown.ClearOptions();
             dropdown.AddOptions(GetOptions());
@@ -27,8 +25,10 @@ namespace SunsetSystems.Formation.UI
             List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
             foreach (PredefinedFormation formation in formations)
             {
-                TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData();
-                data.image = formation.GetSprite();
+                TMP_Dropdown.OptionData data = new TMP_Dropdown.OptionData
+                {
+                    image = formation.GetSprite()
+                };
                 options.Add(data);
             }
             return options;
@@ -36,7 +36,7 @@ namespace SunsetSystems.Formation.UI
 
         public void OnSelectionChanged(int index)
         {
-            formationController.FormationData = formations[index].GetData();
+            FormationController.FormationData = formations[index].GetData();
         }
     }
 }

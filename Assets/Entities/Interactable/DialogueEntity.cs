@@ -12,7 +12,7 @@ namespace Entities.Interactable
 
         public override void Interact()
         {
-            ReferenceManager.GetManager<DialogueManager>().StartDialogue(entityDialogue);
+            References.Get<DialogueManager>().StartDialogue(entityDialogue);
             base.Interact();
         }
     } 

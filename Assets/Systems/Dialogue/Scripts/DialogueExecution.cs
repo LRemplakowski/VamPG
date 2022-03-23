@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Utils.Dialogue;
+using SunsetSystems.Dialogue;
 using UnityEngine;
 using Transitions.Manager;
 using Transitions.Data;
 using SunsetSystems.Management;
+using SunsetSystems.Scenes;
 
 public class DialogueExecution
 {
@@ -27,13 +28,21 @@ public class DialogueExecution
         Debug.Log(message);
     }
 
-    public static void NameTransition(string sceneName)
+    public async static void NameTransition(string sceneName)
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new NameTransition(sceneName, ""));
+        FadeScreenAnimator fadeScreenAnimator = UnityEngine.Object.FindObjectOfType<FadeScreenAnimator>(true);
+        SceneLoader sceneLoader = UnityEngine.Object.FindObjectOfType<SceneLoader>();
+        await fadeScreenAnimator.FadeOut(.5f);
+        _ = sceneLoader.LoadGameScene(new NameLoadingData(sceneName, ""));
+        _ = fadeScreenAnimator.FadeIn(.5f);
     }
 
-    public static void IndexTransition(int sceneIndex)
+    public async static void IndexTransition(int sceneIndex)
     {
-        ReferenceManager.GetManager<TransitionManager>().PerformTransition(new IndexTransition(sceneIndex, ""));
+        FadeScreenAnimator fadeScreenAnimator = UnityEngine.Object.FindObjectOfType<FadeScreenAnimator>(true);
+        SceneLoader sceneLoader = UnityEngine.Object.FindObjectOfType<SceneLoader>();
+        await fadeScreenAnimator.FadeOut(.5f);
+        _ = sceneLoader.LoadGameScene(new IndexLoadingData(sceneIndex, ""));
+        _ = fadeScreenAnimator.FadeIn(.5f);
     }
 }

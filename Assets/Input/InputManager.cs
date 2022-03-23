@@ -1,28 +1,61 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utils.Singleton;
 
 [System.Serializable]
 public class InputManager : ExposableMonobehaviour
 {
-    [SerializeField]
-    private static PlayerInput _input;
-    [SerializeField, ExposeProperty]
-    public static PlayerInput Input
+    private static PlayerInput _playerInput;
+    private static InputMap _currentInputMap;
+
+    private void Awake()
     {
-        get => _input;
-        set => _input = value;
+        _playerInput = GetComponent<PlayerInput>();
+        StateManager.OnGameStateChanged += SwitchInputOnStateChange;
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        Initialize();
+        StateManager.OnGameStateChanged -= SwitchInputOnStateChange;
     }
 
-    public void Initialize()
+    private void SwitchInputOnStateChange(GameState newState, GameState previousState)
     {
-        Input = FindObjectOfType<PlayerInput>(true);
+        switch (newState)
+        {
+            case GameState.GamePaused:
+                ToggleActionMap(InputMap.UI);
+                break;
+            case GameState.Menu:
+                ToggleActionMap(InputMap.UI);
+                break;
+            case GameState.Exploration:
+                ToggleActionMap(InputMap.Player);
+                break;
+            case GameState.Combat:
+                ToggleActionMap(InputMap.Player);
+                break;
+            case GameState.Conversation:
+                ToggleActionMap(InputMap.UI);
+                break;
+            default:
+                ToggleActionMap(InputMap.UI);
+                break;
+        }
     }
+
+    public static void ToggleActionMap(InputMap newInputMap)
+    {
+        Debug.Log("Switching input map to: " + newInputMap.ToString());
+        _playerInput.SwitchCurrentActionMap(newInputMap.ToString());
+        _currentInputMap = newInputMap;
+    }
+}
+
+public enum InputMap
+{
+    Player,
+    UI
 }

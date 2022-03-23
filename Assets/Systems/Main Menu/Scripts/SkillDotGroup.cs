@@ -1,4 +1,4 @@
-﻿using SunsetSystems.Journal;
+﻿using SunsetSystems.Data;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI
@@ -7,12 +7,12 @@ namespace SunsetSystems.MainMenu.UI
     {
         [SerializeField]
         private SkillType associatedSkill = SkillType.Invalid;
-        private GameInitializer gameInitializer;
+        private GameStarter gameInitializer;
 
         protected override void Start()
         {
             if (!gameInitializer)
-                gameInitializer = FindObjectOfType<GameInitializer>();
+                gameInitializer = FindObjectOfType<GameStarter>();
             base.Start();
         }
 

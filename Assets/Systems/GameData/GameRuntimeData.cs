@@ -4,11 +4,11 @@ using SunsetSystems.SaveLoad;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using SunsetSystems.Scenes;
+using Utils.Singleton;
 
 namespace SunsetSystems.Data
 {
-    public class GameRuntimeData : MonoBehaviour, ISaveRuntimeData
+    public class GameRuntimeData : Singleton<GameRuntimeData>, ISaveRuntimeData
     {
         [ES3NonSerializable, SerializeField]
         private CreatureData _mainCharacterData;
@@ -16,7 +16,7 @@ namespace SunsetSystems.Data
         [ES3NonSerializable, SerializeField]
         private List<CreatureData> _activePartyData = new List<CreatureData>();
         public List<CreatureData> ActivePartyData { get => _activePartyData; }
-        [ES3NonSerializable, SerializeField]
+        [ES3NonSerializable]
         public List<Vector3> ActivePartySavedPositions { get; private set; }
         [SerializeField]
         private CreatureAsset _mainCharacterAsset;
@@ -108,6 +108,14 @@ namespace SunsetSystems.Data
             _mainCharacterAsset = data.mainCharacterAsset;
             _activePartyAssets = new List<CreatureAsset>(data.ActiveCompanionAssets);
             _inactivePartyAssets = new List<CreatureAsset>(data.RecruitedCompanionAssets);
+        }
+
+        public static List<Creature> GetActivePartyCreatures()
+        {
+            List<Creature> result = new List<Creature>();
+            result.Add(Instance.MainCharacterData.CreatureComponent);
+            Instance.ActivePartyData.ForEach(c => result.Add(c.CreatureComponent));
+            return result;
         }
     }
 

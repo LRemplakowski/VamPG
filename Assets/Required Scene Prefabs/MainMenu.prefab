@@ -1814,7 +1814,7 @@ GameObject:
   - component: {fileID: 1529137790642077370}
   - component: {fileID: 1529137790642077371}
   - component: {fileID: 1529137790642077368}
-  - component: {fileID: 1529137790642077365}
+  - component: {fileID: 8198243889649141067}
   m_Layer: 5
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -1925,7 +1925,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1529137790642077365}
+      - m_Target: {fileID: 8198243889649141067}
         m_TargetAssemblyTypeName: SunsetSystems.MainMenu.UI.MainMenuNavigationButton,
           Assembly-CSharp
         m_MethodName: OnClick
@@ -1938,7 +1938,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1529137790642077365
+--- !u!114 &8198243889649141067
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1947,11 +1947,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1529137790642077374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec1ce869019442844ae3ecc7658fb701, type: 3}
+  m_Script: {fileID: 11500000, guid: ed1774d856f40dc4997020d63967b006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentGUIScreen: {fileID: 1529137792327800352}
   targetGUIScreen: {fileID: 1529137792386563028}
+  unassignedAttributes: {fileID: 1529137792037131671}
+  unassignedSkills: {fileID: 1529137792122775761}
+  button: {fileID: 1529137790642077368}
 --- !u!1 &1529137790647164186
 GameObject:
   m_ObjectHideFlags: 0
@@ -25157,6 +25160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e867976a842c1841a223271681ffc83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _sceneLoader: {fileID: 0}
 --- !u!1 &1529137791695411785
 GameObject:
   m_ObjectHideFlags: 0
@@ -42188,9 +42192,10 @@ MonoBehaviour:
   stats: {fileID: 0}
   startSceneName: Haven
   startingEntryPointTag: GameStartPoint
-  transitionManager: {fileID: 0}
+  sceneLoader: {fileID: 0}
   mainMenuParent: {fileID: 1529137792174263840}
   gameplayUiParent: {fileID: 0}
+  fadeScreenAnimator: {fileID: 0}
 --- !u!1 &1529137792501404175
 GameObject:
   m_ObjectHideFlags: 0

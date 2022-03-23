@@ -90,6 +90,15 @@ namespace SunsetSystems.Data
             await sceneLoader.LoadGameScene(data);
         }
 
+        public async void InitializeGameDebug()
+        {
+            CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
+            GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
+            journal.MainCharacterAsset = debugAsset;
+            SceneLoadingData data = new NameLoadingData(startSceneName, startingEntryPointTag, SwitchUiToGameplayMode);
+            await sceneLoader.LoadGameScene(data);
+        }
+
         public void SwitchUiToGameplayMode()
         {
             EnableGamplayUI();

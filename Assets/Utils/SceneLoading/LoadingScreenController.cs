@@ -35,13 +35,7 @@ public class LoadingScreenController : MonoBehaviour
             continueButton = GetComponentInChildren<Button>();
         loadingBar.value = 0f;
         continueButton.gameObject.SetActive(false);
-        loadingBar.onValueChanged.AddListener(MaybeReplaceBarWithButton);
         StateManager.SetCurrentState(GameState.GamePaused);
-    }
-
-    private void OnDisable()
-    {
-        loadingBar.onValueChanged.RemoveListener(MaybeReplaceBarWithButton);
     }
 
     private void Start()
@@ -61,12 +55,10 @@ public class LoadingScreenController : MonoBehaviour
         loadingBarText.text = ((value * 50f) + 50f) + " %";
     }
 
-    private void MaybeReplaceBarWithButton(float value)
+    public void EnableContinue()
     {
-        if (value >= 1.0f)
-        {
-            continueButton.gameObject.SetActive(true);
-        }
+        Debug.Log("enabling continue button");
+        continueButton.gameObject.SetActive(true);
     }
 
     public async void OnContinue()

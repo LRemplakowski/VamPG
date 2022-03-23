@@ -45,8 +45,6 @@
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            if (_previousScene != SceneManager.GetSceneAt(0))
-                SceneManager.UnloadSceneAsync(_previousScene);
             _previousScene = scene;
             SceneManager.SetActiveScene(scene);
         }
@@ -58,7 +56,8 @@
             _loadingScreenController.gameObject.SetActive(true);
             await _fadeScreenAnimator.FadeIn(.5f);
             await LoadNewScene(data);
-            InitializeSceneLogic();
+            await InitializeSceneLogic();
+            _loadingScreenController.EnableContinue();
         }
 
         internal async Task LoadSavedScene(Action preLoadingAction)
@@ -71,7 +70,8 @@
             SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", preLoadingAction);
             await LoadNewScene(data);
             await SaveLoadManager.LoadObjects();
-            InitializeSceneLogic();
+            await InitializeSceneLogic();
+            _loadingScreenController.EnableContinue();
         }
 
         internal async Task LoadSavedScene()
@@ -106,12 +106,12 @@
             await DoSceneLoading();
         }
         
-        private void InitializeSceneLogic()
+        private async Task InitializeSceneLogic()
         {
             AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
             Debug.Log("Scene logic found? " + (sceneLogic != null));
             if (sceneLogic)
-                sceneLogic.StartScene();
+                await sceneLogic.StartSceneAsync();
         }
 
         private Task AsyncLoadSceneByIndex(int sceneIndex)

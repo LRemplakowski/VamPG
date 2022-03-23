@@ -1,6 +1,7 @@
 using Entities.Characters;
 using UnityEngine;
 using SunsetSystems.Resources;
+using System.Threading.Tasks;
 
 namespace SunsetSystems.Scenes
 {
@@ -8,8 +9,6 @@ namespace SunsetSystems.Scenes
     {
         [SerializeField]
         protected CreatureData creaturePrefab;
-        [SerializeField, ReadOnly]
-        protected bool isPartyInitialized;
 
         private void Reset() => creaturePrefab = ResourceLoader.GetEmptyCreaturePrefab();
 
@@ -18,6 +17,6 @@ namespace SunsetSystems.Scenes
             FindObjectOfType<ES3ReferenceMgr>().RefreshDependencies();
         }
 
-        public abstract void StartScene();
+        public abstract Task StartSceneAsync();
     }
 }

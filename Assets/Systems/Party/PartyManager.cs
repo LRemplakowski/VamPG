@@ -1,7 +1,7 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
+using SunsetSystems.Data;
 using SunsetSystems.Management;
-using System;
 using UI.CharacterPortraits;
 using UnityEngine;
 
@@ -20,20 +20,16 @@ namespace SunsetSystems.Party
             CreatePartyList();
             if (partyPortraits == null)
                 partyPortraits = FindObjectOfType<PartyPortraitsController>();
+            partyPortraits.Clear();
             foreach (Creature c in CurrentPartyMembers)
             {
                 partyPortraits.AddPortrait(c.GetCreatureUIData());
             }
         }
 
-        private void Start()
-        {
-            Initialize();
-        }
-
         private void CreatePartyList()
         {
-            CurrentPartyMembers = FindObjectsOfType<PlayerControlledCharacter>();
+            CurrentPartyMembers = GameRuntimeData.GetActivePartyCreatures().ToArray();
         }
 
         public CreatureUIData[] GetCurrentMembersData()

@@ -3,62 +3,70 @@ using SunsetSystems.Formation;
 using SunsetSystems.Data;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Scenes
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
+        [SerializeField]
         private GameRuntimeData _gameRuntimeData;
+        [SerializeField]
+        private PartyManager _partyManager;
 
-        public override void StartScene()
+        public async override Task StartSceneAsync()
         {
             Debug.Log("Starting scene");
-            _gameRuntimeData = FindObjectOfType<GameRuntimeData>();
+            if (!_gameRuntimeData)
+                _gameRuntimeData = FindObjectOfType<GameRuntimeData>();
             CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
             List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
             List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
             AreaEntryPoint entryPoint = FindAreaEntryPoint("");
             if (partyPositions != null && partyPositions.Count > 0)
-                InitializeParty(partyPositions, mainCharAsset, activeParty);
+                await InstantiateParty(partyPositions, mainCharAsset, activeParty);
             else
-                InitializeParty(entryPoint.transform.position, mainCharAsset, activeParty);
+                await InitializeParty(entryPoint.transform.position, mainCharAsset, activeParty);
+            if (!_partyManager)
+                _partyManager = FindObjectOfType<PartyManager>();
+            await Task.Yield();
+            _partyManager.Initialize();
         }
 
-        protected void InitializeParty(Vector3 position, CreatureAsset mainChar)
+        protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar)
         {
             List<Vector3> positions = new List<Vector3>
             {
                 position
             };
-            InitializeParty(positions, mainChar, new List<CreatureAsset>());
+            await InstantiateParty(positions, mainChar, new List<CreatureAsset>());
         }
 
-        protected void InitializeParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
+        protected async Task InitializeParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
         {
             List<Vector3> positions = FormationController.GetPositionsFromPoint(position);
-            InitializeParty(positions, mainChar, party);
+            await InstantiateParty(positions, mainChar, party);
         }
 
-        protected void InitializeParty(List<Vector3> positions, CreatureAsset mainChar, List<CreatureAsset> party)
+        protected async Task InstantiateParty(List<Vector3> positions, CreatureAsset mainChar, List<CreatureAsset> party)
         {
             Debug.Log("Initializing party");
             CreatureData mainCharData = null;
             List<CreatureData> partyData = new List<CreatureData>();
-            if (mainChar != null && !isPartyInitialized)
+            if (mainChar != null)
             {
                 mainCharData = InitializePartyMember(mainChar, positions[0]);
                 for (int i = 0; i < party.Count; i++)
                 {
                     partyData.Add(InitializePartyMember(party[i], positions[i + 1]));
+                    await Task.Yield();
                 }
-
-                isPartyInitialized = true;
             }
             _gameRuntimeData.MainCharacterData = mainCharData;
             _gameRuntimeData.ActivePartyData.Clear();
             _gameRuntimeData.ActivePartyData.AddRange(partyData);
             FindObjectOfType<CameraControlScript>().ForceToPosition(positions[0]);
-
         }
 
         protected CreatureData InitializePartyMember(CreatureAsset asset, Vector3 position)

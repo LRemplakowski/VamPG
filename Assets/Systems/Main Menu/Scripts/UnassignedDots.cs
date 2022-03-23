@@ -14,8 +14,7 @@ namespace SunsetSystems.MainMenu.UI
 
         private bool isDirty = false;
 
-        internal delegate void OnDotGroupDataChanged();
-        internal event OnDotGroupDataChanged onDotGroupDataChanged;
+        internal event Action OnDotGroupDataChanged;
 
         private void Awake()
         {
@@ -24,12 +23,12 @@ namespace SunsetSystems.MainMenu.UI
 
         private void OnEnable()
         {
-            onDotGroupDataChanged += EnableAllDotGroups;
+            OnDotGroupDataChanged += EnableAllDotGroups;
         }
 
         private void OnDisable()
         {
-            onDotGroupDataChanged -= EnableAllDotGroups;
+            OnDotGroupDataChanged -= EnableAllDotGroups;
         }
 
         private void EnableAllDotGroups()
@@ -42,6 +41,11 @@ namespace SunsetSystems.MainMenu.UI
         {
             if (isDirty)
                 RebuildGroups();
+        }
+
+        public bool HasAvailableDotGroups()
+        {
+            return Array.Exists(groupsData, d => d.isAvailable);
         }
 
         public bool HasEnabledDotGroupWithCount(int dotCount)
@@ -114,7 +118,7 @@ namespace SunsetSystems.MainMenu.UI
         internal void SetGroupsData(DotGroupData[] groupsData)
         {
             this.groupsData = groupsData.Clone() as DotGroupData[];
-            onDotGroupDataChanged?.Invoke();
+            OnDotGroupDataChanged?.Invoke();
             isDirty = true;
         }
     }

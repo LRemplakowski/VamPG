@@ -7,7 +7,7 @@
     {
         public override void Execute(CreatureContext context)
         {
-            ReferenceManager.GetManager<TurnCombatManager>().NextRound();
+            References.Get<TurnCombatManager>().NextRound();
         }
     }
 }

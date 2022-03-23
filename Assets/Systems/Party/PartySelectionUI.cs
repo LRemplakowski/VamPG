@@ -21,7 +21,7 @@ namespace SunsetSystems.Party.UI
         void OnEnable()
         {
             if (partyManager == null)
-                partyManager = ReferenceManager.GetManager<PartyManager>();
+                partyManager = References.Get<PartyManager>();
             DestroyChildren(selectedMembersParent);
             DestroyChildren(availableMembersParent);
             FillMemberUI(selectedMembersParent, selectedMembers);

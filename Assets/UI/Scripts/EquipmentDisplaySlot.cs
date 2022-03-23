@@ -43,7 +43,7 @@ public class EquipmentDisplaySlot : ExposableMonobehaviour
     public void UnequipItem()
     {
         if(item != null)
-            ReferenceManager.GetManager<EquipmentManager>().Unequip((int)item.slot);
+            References.Get<EquipmentManager>().Unequip((int)item.slot);
     }
 
     public void DisplayItem(EquipmentPiece item)

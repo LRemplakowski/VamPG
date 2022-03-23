@@ -16,7 +16,7 @@ public class DialogueChoiceButton : ExposableMonobehaviour
     // Start is called before the first frame update
     void Start()
     {
-        manager = ReferenceManager.GetManager<DialogueManager>();
+        manager = References.Get<DialogueManager>();
     }
 
     public void OnClick()

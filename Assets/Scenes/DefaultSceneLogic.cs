@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 using SunsetSystems.Party;
+using InsaneSystems.RTSSelection;
+using SunsetSystems.Management;
+using Utils;
 
 namespace SunsetSystems.Scenes
 {
@@ -14,6 +17,8 @@ namespace SunsetSystems.Scenes
         private GameRuntimeData _gameRuntimeData;
         [SerializeField]
         private PartyManager _partyManager;
+        [SerializeField]
+        private Selection _selectionBehaviour;
 
         public async override Task StartSceneAsync()
         {
@@ -27,11 +32,11 @@ namespace SunsetSystems.Scenes
             if (partyPositions != null && partyPositions.Count > 0)
                 await InstantiateParty(partyPositions, mainCharAsset, activeParty);
             else
-                await InitializeParty(entryPoint.transform.position, mainCharAsset, activeParty);
-            if (!_partyManager)
-                _partyManager = FindObjectOfType<PartyManager>();
-            await Task.Yield();
-            _partyManager.Initialize();
+                await InstantiateParty(entryPoint.transform.position, mainCharAsset, activeParty);
+            foreach (IInitialized initable in References.GetAll<IInitialized>())
+            {
+                await initable.Initialize();
+            }
         }
 
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar)
@@ -43,7 +48,7 @@ namespace SunsetSystems.Scenes
             await InstantiateParty(positions, mainChar, new List<CreatureAsset>());
         }
 
-        protected async Task InitializeParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
+        protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
         {
             List<Vector3> positions = FormationController.GetPositionsFromPoint(position);
             await InstantiateParty(positions, mainChar, party);

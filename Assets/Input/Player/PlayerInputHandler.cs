@@ -6,6 +6,11 @@ using UnityEngine.EventSystems;
 using SunsetSystems.Management;
 using Entities.Characters;
 using Entities;
+using SunsetSystems.Formation;
+using InsaneSystems.RTSSelection;
+using UnityEngine.AI;
+using SunsetSystems.Formation.Data;
+using SunsetSystems.Formation.UI;
 
 public class PlayerInputHandler : InputHandler
 {
@@ -21,13 +26,31 @@ public class PlayerInputHandler : InputHandler
 
     private TurnCombatManager turnCombatManager;
 
-    // Start is called before the first frame update
-    private void Start()
+    public static FormationData FormationData { get; set; }
+    [SerializeField]
+    private PredefinedFormation defaultFormation;
+
+
+    private static List<ISelectable> currentSelection = new List<ISelectable>();
+
+    private void OnEnable()
     {
-        Initialize();
+        Selection.OnSelectionFinished += OnSelectionFinished;
     }
 
-    public void Initialize()
+    private void OnDisable()
+    {
+        Selection.OnSelectionFinished -= OnSelectionFinished;
+    }
+
+    private void Awake()
+    {
+        if (FormationData == null)
+            FormationData = defaultFormation.GetData();
+    }
+
+    // Start is called before the first frame update
+    private void Start()
     {
         player = FindObjectOfType<PlayerControlledCharacter>();
         if (player == null)
@@ -37,7 +60,7 @@ public class PlayerInputHandler : InputHandler
         turnCombatManager = FindObjectOfType<TurnCombatManager>();
     }
 
-    public void OnClick(InputAction.CallbackContext context)
+    public void OnRightClick(InputAction.CallbackContext context)
     {
         //Debug.Log(player);
         if (context.phase != InputActionPhase.Performed)
@@ -63,15 +86,15 @@ public class PlayerInputHandler : InputHandler
                     }
                 case GameState.Exploration:
                     {
+                        PlayerControlledCharacter currentLead = currentSelection[0].GetCreature() as PlayerControlledCharacter;
                         if (Entity.IsInteractable(hit.collider.gameObject))
                         {
-                            player.ClearAllActions();
-                            player.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
+                            currentLead.ClearAllActions();
+                            currentLead.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
                         }
                         else
                         {
-                            player.ClearAllActions();
-                            player.Move(hit.point);
+                            MoveCurrentSelectionToPositions(hit);
                         }
                         break;
                     }
@@ -196,12 +219,9 @@ public class PlayerInputHandler : InputHandler
                 NPC creature = lastHit.GetComponent<NPC>();
                 if (creature)
                 {
-                    Vector3 origin = lineOrigin.transform.position;
-                    Vector3 end = creature.LineTarget.position;
                     lineOrigin.positionCount = 2;
                     lineOrigin.SetPosition(0, lineOrigin.transform.position);
                     lineOrigin.SetPosition(1, creature.LineTarget.position);
-                    //Debug.LogError((GetComponent<StatsManager>().GetAttackRange() >= Vector3.Distance(origin, end)) + "; range == " + GetComponent<StatsManager>().GetAttackRange() + "; distance = " + Vector3.Distance(origin, end));
                     Color color = player.GetComponent<StatsManager>()
                         .GetWeaponMaxRange() >= Vector3.Distance(player.CurrentGridPosition.transform.position, creature.CurrentGridPosition.transform.position) 
                         ? Color.green 
@@ -212,5 +232,29 @@ public class PlayerInputHandler : InputHandler
                 }
                 break;
         }
+    }
+
+    private void OnSelectionFinished(List<ISelectable> selectedObjects)
+    {
+        currentSelection = selectedObjects;
+    }
+
+    private void MoveCurrentSelectionToPositions(RaycastHit hit)
+    {
+        Vector3 samplingPoint;
+        for (int i = 0; i < currentSelection.Count; i++)
+        {
+            Vector3 positionOffset = FormationData.positions[i];
+            samplingPoint = hit.point + positionOffset;
+            NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+            MoveSelectableToPosition(currentSelection[i], navHit.position);
+        }
+    }
+
+    private void MoveSelectableToPosition(ISelectable selectable, Vector3 position)
+    {
+        Creature creature = selectable.GetCreature();
+        creature.ClearAllActions();
+        creature.Move(position);
     }
 }

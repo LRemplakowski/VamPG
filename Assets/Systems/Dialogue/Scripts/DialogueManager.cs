@@ -87,7 +87,7 @@ public class DialogueManager : Manager
 
     public void StartDialogue(TextAsset dialogueFile)
     {
-        dialogueWindow.gameObject.SetActive(true);
+        Debug.Log("Starting dialogue");
         // load the dialogue
         m_loadedDialogue = Dialogue.FromAsset(dialogueFile);
         // create a player to play through the dialogue

@@ -30,19 +30,6 @@ public class PlayerInputHandler : InputHandler
     [SerializeField]
     private PredefinedFormation defaultFormation;
 
-
-    private static List<ISelectable> currentSelection = new List<ISelectable>();
-
-    private void OnEnable()
-    {
-        Selection.OnSelectionFinished += OnSelectionFinished;
-    }
-
-    private void OnDisable()
-    {
-        Selection.OnSelectionFinished -= OnSelectionFinished;
-    }
-
     private void Awake()
     {
         if (FormationData == null)
@@ -86,7 +73,10 @@ public class PlayerInputHandler : InputHandler
                     }
                 case GameState.Exploration:
                     {
-                        PlayerControlledCharacter currentLead = currentSelection[0].GetCreature() as PlayerControlledCharacter;
+                        PlayerControlledCharacter currentLead = References
+                            .Get<Selection>()
+                            .GetAllSelected()[0]
+                            .GetCreature() as PlayerControlledCharacter;
                         if (Entity.IsInteractable(hit.collider.gameObject))
                         {
                             currentLead.ClearAllActions();
@@ -234,20 +224,16 @@ public class PlayerInputHandler : InputHandler
         }
     }
 
-    private void OnSelectionFinished(List<ISelectable> selectedObjects)
-    {
-        currentSelection = selectedObjects;
-    }
-
     private void MoveCurrentSelectionToPositions(RaycastHit hit)
     {
         Vector3 samplingPoint;
-        for (int i = 0; i < currentSelection.Count; i++)
+        List<ISelectable> allSelected = References.Get<Selection>().GetAllSelected();
+        for (int i = 0; i < allSelected.Count; i++)
         {
             Vector3 positionOffset = FormationData.positions[i];
             samplingPoint = hit.point + positionOffset;
             NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
-            MoveSelectableToPosition(currentSelection[i], navHit.position);
+            MoveSelectableToPosition(allSelected[i], navHit.position);
         }
     }
 
@@ -256,5 +242,17 @@ public class PlayerInputHandler : InputHandler
         Creature creature = selectable.GetCreature();
         creature.ClearAllActions();
         creature.Move(position);
+    }
+
+    public static List<Vector3> GetPositionsFromPoint(Vector3 point)
+    {
+        List<Vector3> positions = new List<Vector3>();
+        for (int i = 0; i < 6; i++)
+        {
+            Vector3 positionOffset = FormationData.positions[i];
+            Vector3 position = point + positionOffset;
+            positions.Add(position);
+        }
+        return positions;
     }
 }

@@ -36,7 +36,7 @@ namespace SunsetSystems.Formation.UI
 
         public void OnSelectionChanged(int index)
         {
-            FormationController.FormationData = formations[index].GetData();
+            PlayerInputHandler.FormationData = formations[index].GetData();
         }
     }
 }

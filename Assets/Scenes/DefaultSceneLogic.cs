@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using Entities.Characters;
 using SunsetSystems.Formation;
 using SunsetSystems.Data;
@@ -11,14 +13,10 @@ using Utils;
 
 namespace SunsetSystems.Scenes
 {
-    public class DefaultSceneLogic : AbstractSceneLogic
-    {
-        [SerializeField]
+    public abstract class DefaultSceneLogic : AbstractSceneLogic
+    { 
+        [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;
-        [SerializeField]
-        private PartyManager _partyManager;
-        [SerializeField]
-        private Selection _selectionBehaviour;
 
         public async override Task StartSceneAsync()
         {
@@ -103,6 +101,16 @@ namespace SunsetSystems.Scenes
                 entryPoint = FindObjectOfType<AreaEntryPoint>();
             }
             return entryPoint;
+        }
+
+        public sealed override void LoadRuntimeData()
+        {
+            ES3.LoadInto(unique.Id, this);
+        }
+
+        public sealed override void SaveRuntimeData()
+        {
+            ES3.Save(unique.Id, this);
         }
     }
 }

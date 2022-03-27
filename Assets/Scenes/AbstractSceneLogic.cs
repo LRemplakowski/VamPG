@@ -24,7 +24,9 @@ namespace SunsetSystems.Scenes
 
         protected virtual void Start()
         {
-            FindObjectOfType<ES3ReferenceMgr>().RefreshDependencies();
+            ES3ReferenceMgr es3 = FindObjectOfType<ES3ReferenceMgr>();
+            if (es3)
+                es3.RefreshDependencies();
         }
 
         public abstract Task StartSceneAsync();

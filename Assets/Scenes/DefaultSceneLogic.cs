@@ -1,15 +1,11 @@
-using System;
-using System.Reflection;
 using Entities.Characters;
-using SunsetSystems.Formation;
 using SunsetSystems.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
-using SunsetSystems.Party;
-using InsaneSystems.RTSSelection;
 using SunsetSystems.Management;
 using Utils;
+using SunsetSystems.Input.CameraControl;
 
 namespace SunsetSystems.Scenes
 {
@@ -35,15 +31,6 @@ namespace SunsetSystems.Scenes
             {
                 await initable.Initialize();
             }
-        }
-
-        protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar)
-        {
-            List<Vector3> positions = new List<Vector3>
-            {
-                position
-            };
-            await InstantiateParty(positions, mainChar, new List<CreatureAsset>());
         }
 
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)

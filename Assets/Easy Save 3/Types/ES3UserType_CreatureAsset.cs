@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("_creatureName", "_creatureLastName", "_portrait", "_statsAsset", "_umaPresetFilename", "animatorControllerResourceName", "_creatureFaction", "_bodyType", "_creatureType")]
+	[ES3PropertiesAttribute("_creatureName", "_creatureLastName", "_portrait", "_umaPresetFilename", "animatorControllerResourceName", "_creatureFaction", "_bodyType", "_creatureType")]
 	public class ES3UserType_CreatureAsset : ES3ScriptableObjectType
 	{
 		public static ES3Type Instance = null;
@@ -19,7 +19,6 @@ namespace ES3Types
 			writer.WritePrivateField("_creatureName", instance);
 			writer.WritePrivateField("_creatureLastName", instance);
 			writer.WritePrivateFieldByRef("_portrait", instance);
-			writer.WritePrivateFieldByRef("_statsAsset", instance);
 			writer.WritePrivateField("_umaPresetFilename", instance);
 			writer.WritePrivateField("animatorControllerResourceName", instance);
 			writer.WritePrivateField("_creatureFaction", instance);
@@ -43,9 +42,6 @@ namespace ES3Types
 					break;
 					case "_portrait":
 					reader.SetPrivateField("_portrait", reader.Read<UnityEngine.Sprite>(), instance);
-					break;
-					case "_statsAsset":
-					reader.SetPrivateField("_statsAsset", reader.Read<CharacterStats>(), instance);
 					break;
 					case "_umaPresetFilename":
 					reader.SetPrivateField("_umaPresetFilename", reader.Read<System.String>(), instance);

@@ -1,6 +1,4 @@
 ﻿using Entities.Characters;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Entities.Interactable
@@ -66,7 +64,7 @@ namespace Entities.Interactable
         public void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, _interactionDistance);
+            Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
         }
     } 
 }

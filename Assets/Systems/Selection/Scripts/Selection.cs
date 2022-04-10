@@ -24,6 +24,11 @@ namespace InsaneSystems.RTSSelection
 
         Camera cachedCamera;
 
+        private void Start()
+        {
+            _ = Initialize();
+        }
+
         public Task Initialize()
         {
             return Task.Run(async () =>

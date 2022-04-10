@@ -4,50 +4,97 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PauseMenu : MonoBehaviour
+namespace SunsetSystems.UI.Pause
 {
-    [SerializeField]
-    private Canvas pauseMenuCanvas;
-    [SerializeField]
-    private GUIWindowsManager windowsManager;
-    public static bool IsGamePaused { get; private set; }
-    private GameState cachedPreviousState;
-
-    private void Awake()
+    public class PauseMenu : MonoBehaviour
     {
-        if (pauseMenuCanvas == null)
-            pauseMenuCanvas = GetComponent<Canvas>();
-        if (windowsManager == null)
-            windowsManager = FindObjectOfType<GUIWindowsManager>();
-        StateManager.OnGameStateChanged += CachePreviousState;
-    }
+        [SerializeField]
+        private Canvas pauseMenuCanvas;
+        [SerializeField]
+        private GUIWindowsManager windowsManager;
+        [SerializeField]
+        private PauseUISelector inventory, journal, settings;
+        public static bool IsGamePaused { get; private set; }
+        private GameState cachedPreviousState;
 
-    private void OnDestroy()
-    {
-        StateManager.OnGameStateChanged -= CachePreviousState;
-    }
-
-    private void CachePreviousState(GameState newState, GameState previousState)
-    {
-        cachedPreviousState = previousState;
-    }
-
-    public void PauseGame()
-    {
-        if (windowsManager.ActiveWindows <= 0)
+        private void Awake()
         {
-            Time.timeScale = 0;
+            if (pauseMenuCanvas == null)
+                pauseMenuCanvas = GetComponent<Canvas>();
+            if (windowsManager == null)
+                windowsManager = FindObjectOfType<GUIWindowsManager>();
+            StateManager.OnGameStateChanged += CachePreviousState;
+        }
+
+        private void OnDestroy()
+        {
+            StateManager.OnGameStateChanged -= CachePreviousState;
+        }
+
+        private void CachePreviousState(GameState newState, GameState previousState)
+        {
+            cachedPreviousState = previousState;
+        }
+
+        public void PauseGame()
+        {
+            HandleOpenPauseGUI();
+            OpenMenuScreen(PauseMenuScreen.Settings);
+        }
+
+        public void OpenInventoryScreen()
+        {
+            HandleOpenPauseGUI();
+            OpenMenuScreen(PauseMenuScreen.Inventory);
+        }
+
+        public void OpenJournalScreen()
+        {
+            HandleOpenPauseGUI();
+            OpenMenuScreen(PauseMenuScreen.Journal);
+        }
+
+        private void OpenMenuScreen(PauseMenuScreen screen)
+        {
+            switch (screen)
+            {
+                case PauseMenuScreen.Settings:
+                    settings.SelectGUIScreen();
+                    break;
+                case PauseMenuScreen.Inventory:
+                    inventory.SelectGUIScreen();
+                    break;
+                case PauseMenuScreen.CharacterSheet:
+                    break;
+                case PauseMenuScreen.Journal:
+                    journal.SelectGUIScreen();
+                    break;
+                case PauseMenuScreen.Map:
+                    break;
+            }
+        }
+
+        private void HandleOpenPauseGUI()
+        {
             IsGamePaused = true;
             gameObject.SetActive(true);
             StateManager.SetCurrentState(GameState.GamePaused);
         }
+
+        public void ResumeGame()
+        {
+            IsGamePaused = false;
+            gameObject.SetActive(false);
+            StateManager.SetCurrentState(cachedPreviousState);
+        }
     }
 
-    public void ResumeGame()
+    public enum PauseMenuScreen
     {
-        Time.timeScale = 1.0f;
-        IsGamePaused = false;
-        gameObject.SetActive(false);
-        StateManager.SetCurrentState(cachedPreviousState);
+        Settings,
+        Inventory,
+        CharacterSheet,
+        Journal,
+        Map
     }
 }

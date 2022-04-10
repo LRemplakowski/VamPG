@@ -7,6 +7,7 @@ using Transitions.Manager;
 using UnityEngine;
 using SunsetSystems.Scenes;
 using System;
+using SunsetSystems.UI.Pause;
 
 public class DebugSaveLoadButtonScript : MonoBehaviour
 {

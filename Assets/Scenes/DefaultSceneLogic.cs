@@ -1,24 +1,18 @@
 using Entities.Characters;
-using SunsetSystems.Formation;
 using SunsetSystems.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
-using SunsetSystems.Party;
-using InsaneSystems.RTSSelection;
 using SunsetSystems.Management;
 using Utils;
+using SunsetSystems.Input.CameraControl;
 
 namespace SunsetSystems.Scenes
 {
-    public class DefaultSceneLogic : AbstractSceneLogic
-    {
-        [SerializeField]
+    public abstract class DefaultSceneLogic : AbstractSceneLogic
+    { 
+        [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;
-        [SerializeField]
-        private PartyManager _partyManager;
-        [SerializeField]
-        private Selection _selectionBehaviour;
 
         public async override Task StartSceneAsync()
         {
@@ -39,18 +33,9 @@ namespace SunsetSystems.Scenes
             }
         }
 
-        protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar)
-        {
-            List<Vector3> positions = new List<Vector3>
-            {
-                position
-            };
-            await InstantiateParty(positions, mainChar, new List<CreatureAsset>());
-        }
-
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
         {
-            List<Vector3> positions = FormationController.GetPositionsFromPoint(position);
+            List<Vector3> positions = PlayerInputHandler.GetPositionsFromPoint(position);
             await InstantiateParty(positions, mainChar, party);
         }
 
@@ -103,6 +88,16 @@ namespace SunsetSystems.Scenes
                 entryPoint = FindObjectOfType<AreaEntryPoint>();
             }
             return entryPoint;
+        }
+
+        public sealed override void LoadRuntimeData()
+        {
+            ES3.LoadInto(unique.Id, this);
+        }
+
+        public sealed override void SaveRuntimeData()
+        {
+            ES3.Save(unique.Id, this);
         }
     }
 }

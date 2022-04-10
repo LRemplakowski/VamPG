@@ -1,5 +1,4 @@
-﻿using Entities.Characters;
-using Glitchers;
+﻿using Glitchers;
 using SunsetSystems.Management;
 using System;
 using System.Collections.Generic;
@@ -15,7 +14,9 @@ namespace InsaneSystems.RTSSelection
     {
         public static readonly List<ISelectable> AllSelectables = new List<ISelectable>();
 
-        public static event Action<List<ISelectable>> OnSelectionStarted, OnSelectionFinished;
+        public event Action OnSelectionStarted, OnSelectionFinished;
+
+        private Vector2 mousePosition;
 
         public bool AddModeEnabled { get; set; }
         
@@ -23,18 +24,20 @@ namespace InsaneSystems.RTSSelection
 
         Camera cachedCamera;
 
-        private Vector2 mousePosition;
+        private void Start()
+        {
+            _ = Initialize();
+        }
 
         public Task Initialize()
         {
-            return Task.Run(async () => 
+            return Task.Run(async () =>
             {
-                Dispatcher.Instance.Invoke(async() => 
+                Dispatcher.Instance.Invoke(() =>
                 {
                     cachedCamera = Camera.main;
                     AllSelectables.Clear();
                     AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
-                    await Task.Yield();
                 });
                 await Task.Yield();
             });
@@ -60,7 +63,7 @@ namespace InsaneSystems.RTSSelection
         /// <summary> Set new camera using this method if your game have some camera changing mechanics, and new camera should work with selection too. </summary>
         public void SetCustomActionCamera(Camera customCamera) => cachedCamera = customCamera;
         
-        public void StartSelection() => OnSelectionStarted?.Invoke(selectedObjects);
+        public void StartSelection() => OnSelectionStarted?.Invoke();
         
         public void FinishSelection(Vector2 screenStartPoint, Vector2 screenEndPoint)
         {
@@ -70,18 +73,20 @@ namespace InsaneSystems.RTSSelection
             DoMultiselection(screenStartPoint, screenEndPoint);
             DoSingleSelection();
             
-            OnSelectionFinished?.Invoke(selectedObjects);
+            OnSelectionFinished?.Invoke();
         }
        
         void DoMultiselection(Vector2 screenStartPoint, Vector2 screenEndPoint)
         {
             var selectionRect = new Rect { min = screenStartPoint, max = screenEndPoint };
             
-            foreach (ISelectable selectable in AllSelectables)
+            for (int i = 0; i < AllSelectables.Count; i++)
             {
+                var selectable = AllSelectables[i];
+
                 var collider = selectable.GetCollider();
                 var position = selectable.GetTransform().position;
-
+                
                 if (IsColliderBoundsInScreenRect(position, collider, selectionRect))
                     AddToSelection(selectable);
             }
@@ -161,9 +166,8 @@ namespace InsaneSystems.RTSSelection
         void AddToSelection(ISelectable selectable)
         {
             if (selectedObjects.Contains(selectable))
-            {
                 return;
-            }
+            
             selectedObjects.Add(selectable);
             selectable.Select();
         }

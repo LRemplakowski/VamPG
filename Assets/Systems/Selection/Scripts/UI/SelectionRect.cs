@@ -36,12 +36,13 @@ namespace InsaneSystems.RTSSelection.UI
 
         void Update()
         {
-            var midPoint = Vector2.Lerp(startPoint, mousePosition, 0.5f);
+            var actualMousePosition = mousePosition;
+            var midPoint = Vector2.Lerp(startPoint, actualMousePosition, 0.5f);
 
             selfTransform.transform.position = midPoint;
 
-            var rectXSize = Mathf.Abs(mousePosition.x - startPoint.x);
-            var rectYSize = Mathf.Abs(mousePosition.y - startPoint.y);
+            var rectXSize = Mathf.Abs(actualMousePosition.x - startPoint.x);
+            var rectYSize = Mathf.Abs(actualMousePosition.y - startPoint.y);
             
             selfTransform.sizeDelta = new Vector2(rectXSize, rectYSize);
         }

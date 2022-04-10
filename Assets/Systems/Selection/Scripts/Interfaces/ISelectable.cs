@@ -13,6 +13,7 @@ namespace InsaneSystems.RTSSelection
 
         Transform GetTransform();
         Collider GetCollider();
+
         Creature GetCreature();
     }
 }

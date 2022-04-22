@@ -7,10 +7,11 @@ namespace SunsetSystems.Input.CameraControl
     public class BoundingBox : MonoBehaviour
     {
         [SerializeField]
-        private Vector3 boundingBoxSize = new Vector3(1, 1, 1);
+        private Vector3 _boundingBoxSize = new Vector3(1, 1, 1);
         [SerializeField]
-        private Vector3 offset;
-        private Color gizmoColor = Color.red;
+        private Vector3 _offset;
+        [SerializeField]
+        private Color _gizmoColor = Color.red;
 
         public bool IsPositionWithinBounds(Vector3 position)
         {
@@ -20,35 +21,72 @@ namespace SunsetSystems.Input.CameraControl
             return xBound && yBound && zBound;
         }
 
+        public Vector3 ClampPositionToBounds(Vector3 position)
+        {
+            return new Vector3
+            {
+                x = Mathf.Clamp(position.x, GetMinX(), GetMaxX()),
+                y = Mathf.Clamp(position.y, GetMinY(), GetMaxY()),
+                z = Mathf.Clamp(position.z, GetMinZ(), GetMaxZ())
+            };
+        }
+
         private bool IsXWithinBounds(float posX)
         {
-            Vector3 boxCeneter = transform.position + offset;
-            float minX = boxCeneter.x - Mathf.Abs(boundingBoxSize.x / 2);
-            float maxX = boxCeneter.x + Mathf.Abs(boundingBoxSize.x / 2);
+            float minX = GetMinX();
+            float maxX = GetMaxX();
             return posX >= minX && posX <= maxX;
         }
 
         private bool IsYWithinBounds(float posY)
         {
-            Vector3 boxCeneter = transform.position + offset;
-            float minY = boxCeneter.y - Mathf.Abs(boundingBoxSize.y / 2);
-            float maxY = boxCeneter.y + Mathf.Abs(boundingBoxSize.y / 2);
+            float minY = GetMinY();
+            float maxY = GetMaxY();
             return posY >= minY && posY <= maxY;
         }
 
         private bool IsZWithinBounds(float posZ)
         {
-            Vector3 boxCenter = transform.position + offset;
-            float minZ = boxCenter.z - Mathf.Abs(boundingBoxSize.z / 2);
-            float maxZ = boxCenter.z + Mathf.Abs(boundingBoxSize.z / 2);
+            float minZ = GetMinZ();
+            float maxZ = GetMaxZ();
             return posZ >= minZ && posZ <= maxZ;
+        }
+
+        private float GetMaxX()
+        {
+            return transform.position.x + _offset.x + Mathf.Abs(_boundingBoxSize.x / 2);
+        }
+
+        private float GetMinX()
+        {
+            return transform.position.x + _offset.x - Mathf.Abs(_boundingBoxSize.x / 2);
+        }
+
+        private float GetMaxY()
+        {
+            return transform.position.y + _offset.y + Mathf.Abs(_boundingBoxSize.y / 2);
+        }
+
+        private float GetMinY()
+        {
+            return transform.position.y + _offset.y - Mathf.Abs(_boundingBoxSize.y / 2);
+        }
+
+        private float GetMaxZ()
+        {
+            return transform.position.z + _offset.z + Mathf.Abs(_boundingBoxSize.z / 2);
+        }
+
+        private float GetMinZ()
+        {
+            return transform.position.z + _offset.z - Mathf.Abs(_boundingBoxSize.z / 2);
         }
 
         private void OnDrawGizmosSelected()
         {
-            Vector3 boundingBoxCenter = transform.position + offset;
-            Gizmos.color = gizmoColor;
-            Gizmos.DrawWireCube(boundingBoxCenter, boundingBoxSize);
+            Vector3 boundingBoxCenter = transform.position + _offset;
+            Gizmos.color = _gizmoColor;
+            Gizmos.DrawWireCube(boundingBoxCenter, _boundingBoxSize);
         }
     }
 }

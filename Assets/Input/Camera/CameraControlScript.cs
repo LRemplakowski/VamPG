@@ -75,7 +75,7 @@ namespace SunsetSystems.Input.CameraControl
             if (moveDirection.x != 0)
                 moveTarget += transform.right * moveDirection.x * Time.fixedDeltaTime * internalMoveTargetSpeed;
             if (currentBoundingBox)
-                moveTarget = currentBoundingBox.IsPositionWithinBounds(moveTarget) ? moveTarget : transform.position;
+                moveTarget = currentBoundingBox.IsPositionWithinBounds(moveTarget) ? moveTarget : currentBoundingBox.ClampPositionToBounds(moveTarget);
         }
 
         private void LateUpdate()

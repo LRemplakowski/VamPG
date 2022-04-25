@@ -1,12 +1,9 @@
-﻿namespace Transitions
+﻿namespace SunsetSystems.Loading
 {
     using Entities.Interactable;
     using SunsetSystems.Data;
-    using SunsetSystems.Management;
-    using Transitions.Data;
-    using Transitions.Manager;
+    using SunsetSystems.Loading;
     using UnityEngine;
-    using SunsetSystems.Scenes;
 
     public class AreaTransition : InteractableEntity, ITransition
     {
@@ -19,29 +16,29 @@
         public int SceneIndex { get => _sceneIndex; }
 
         [SerializeField]
-        private TransitionType type;
+        private TransitionType _type;
         [SerializeField]
-        private string targetEntryPointTag;
+        private string _targetEntryPointTag;
 
-        private SceneLoader sceneLoader;
-        private FadeScreenAnimator fadeScreenAnimator;
+        private SceneLoader _sceneLoader;
+        private FadeScreenAnimator _fadeScreenAnimator;
 
         private void Start()
         {
-            sceneLoader = FindObjectOfType<SceneLoader>();
-            fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>();
+            _sceneLoader = FindObjectOfType<SceneLoader>();
+            _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>();
         }
 
         public override void Interact()
         {
             Debug.Log("Interacting with area transition!");
-            switch (type)
+            switch (_type)
             {
                 case TransitionType.index:
-                    MoveToScene(new IndexLoadingData(SceneIndex, targetEntryPointTag));
+                    MoveToScene(new IndexLoadingData(SceneIndex, _targetEntryPointTag));
                     break;
                 case TransitionType.name:
-                    MoveToScene(new NameLoadingData(SceneName, targetEntryPointTag));
+                    MoveToScene(new NameLoadingData(SceneName, _targetEntryPointTag));
                     break;
             }
             base.Interact();
@@ -49,9 +46,9 @@
 
         public async void MoveToScene(SceneLoadingData data)
         {
-            await fadeScreenAnimator.FadeOut(.5f);
-            _ = sceneLoader.LoadGameScene(data);
-            _ = fadeScreenAnimator.FadeIn(.5f);
+            await _fadeScreenAnimator.FadeOut(.5f);
+            _ = _sceneLoader.LoadGameScene(data);
+            _ = _fadeScreenAnimator.FadeIn(.5f);
         }
     }
 

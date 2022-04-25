@@ -7,14 +7,14 @@ using SunsetSystems.Management;
 using Utils;
 using SunsetSystems.Input.CameraControl;
 
-namespace SunsetSystems.Scenes
+namespace SunsetSystems.Loading
 {
-    public abstract class DefaultSceneLogic : AbstractSceneLogic
-    { 
+    internal abstract class DefaultSceneLogic : AbstractSceneLogic
+    {
         [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;
 
-        public async override Task StartSceneAsync()
+        public async override Task StartSceneAsync(string entryPointTag)
         {
             Debug.Log("Starting scene");
             if (!_gameRuntimeData)
@@ -22,15 +22,24 @@ namespace SunsetSystems.Scenes
             CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
             List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
             List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
-            AreaEntryPoint entryPoint = FindAreaEntryPoint("");
             if (partyPositions != null && partyPositions.Count > 0)
+            {
                 await InstantiateParty(partyPositions, mainCharAsset, activeParty);
+            }
             else
+            {
+                AreaEntryPoint entryPoint = FindAreaEntryPoint(entryPointTag);
                 await InstantiateParty(entryPoint.transform.position, mainCharAsset, activeParty);
+            }
             foreach (IInitialized initable in References.GetAll<IInitialized>())
             {
                 await initable.Initialize();
             }
+        }
+
+        public async override Task StartSceneAsync()
+        {
+            await StartSceneAsync("");
         }
 
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
@@ -43,7 +52,7 @@ namespace SunsetSystems.Scenes
         {
             Debug.Log("Initializing party");
             CreatureData mainCharData = null;
-            List<CreatureData> partyData = new List<CreatureData>();
+            List<CreatureData> partyData = new();
             if (mainChar != null)
             {
                 mainCharData = InitializePartyMember(mainChar, positions[0]);
@@ -71,17 +80,8 @@ namespace SunsetSystems.Scenes
             AreaEntryPoint entryPoint = null;
             if (!tag.Equals(""))
             {
-                GameObject obj = null;
-                try
-                {
-                    obj = GameObject.FindGameObjectWithTag(tag);
-                }
-                catch (UnityException e)
-                {
-                    Debug.LogException(e);
-                }
-                if (obj)
-                    entryPoint = obj.GetComponent<AreaEntryPoint>();
+                if (this.TryFindFirstWithTag(tag, out GameObject result))
+                    entryPoint = result.GetComponent<AreaEntryPoint>();
             }
             if (entryPoint == null)
             {

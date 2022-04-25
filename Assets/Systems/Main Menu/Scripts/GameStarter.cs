@@ -1,93 +1,92 @@
 using Entities.Characters;
-using Transitions.Data;
-using Transitions.Manager;
+using SunsetSystems.Loading;
 using UnityEngine;
 using SunsetSystems.Resources;
-using SunsetSystems.Scenes;
-using System.Threading.Tasks;
+using SunsetSystems.GameplayMenu;
 
 namespace SunsetSystems.Data
 {
     public class GameStarter : MonoBehaviour
     {
         private const string MAIN_MENU = "MainMenuParent";
-        private const string GAMEPLAY_UI = "GameParent";
 
         [SerializeField, ReadOnly]
-        private PlayerCharacterBackground selectedBackground;
+        private PlayerCharacterBackground _selectedBackground;
         [SerializeField, ReadOnly]
-        private BodyType selectedBodyType;
+        private BodyType _selectedBodyType;
         [SerializeField, ReadOnly]
-        private string characterName = "Alex";
+        private string _characterName = "Alex";
         [SerializeField]
-        private CharacterStats stats;
+        private CharacterStats _stats;
         [SerializeField]
-        private string startSceneName;
+        private string _startSceneName;
         [SerializeField]
-        private string startingEntryPointTag;
+        private string _initialEntryPointTag;
         [SerializeField]
-        private SceneLoader sceneLoader;
+        private string _initialBoundingBoxTag;
         [SerializeField]
-        private GameObject mainMenuParent;
+        private SceneLoader _sceneLoader;
         [SerializeField]
-        private GameObject gameplayUiParent;
+        private GameObject _mainMenuParent;
         [SerializeField]
-        private FadeScreenAnimator fadeScreenAnimator;
+        private GameplayMenuManager _gameplayUiParent;
+        [SerializeField]
+        private FadeScreenAnimator _fadeScreenAnimator;
 
         private void Reset()
         {
-            if (!stats)
-                stats = ScriptableObject.CreateInstance<CharacterStats>();
+            if (!_stats)
+                _stats = ScriptableObject.CreateInstance<CharacterStats>();
         }
 
         private void Start()
         {
-            if (!stats)
-                stats = ScriptableObject.CreateInstance<CharacterStats>();
-            if (!sceneLoader)
-                sceneLoader = FindObjectOfType<SceneLoader>();
-            if (!mainMenuParent)
-                mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
-            if (!gameplayUiParent)
-                gameplayUiParent = GameObject.FindGameObjectWithTag(GAMEPLAY_UI);
-            if (!fadeScreenAnimator)
-                fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+            if (!_stats)
+                _stats = ScriptableObject.CreateInstance<CharacterStats>();
+            if (!_sceneLoader)
+                _sceneLoader = FindObjectOfType<SceneLoader>();
+            if (!_mainMenuParent)
+                _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
+            if (!_gameplayUiParent)
+                _gameplayUiParent = FindObjectOfType<GameplayMenuManager>(true);
+            if (!_fadeScreenAnimator)
+                _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
         {
-            this.selectedBackground = selectedBackground;
+            this._selectedBackground = selectedBackground;
         }
 
         public void SelectBodyType(BodyType selectedBodyType)
         {
-            this.selectedBodyType = selectedBodyType;
+            this._selectedBodyType = selectedBodyType;
         }
 
         public void SetAttribueValue(AttributeType attribute, int value)
         {
-            stats.GetAttribute(attribute).SetValue(value);
+            _stats.GetAttribute(attribute).SetValue(value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
-            stats.GetSkill(skill).SetValue(value);
+            _stats.GetSkill(skill).SetValue(value);
         }
 
         public void SetCharacterName(string characterName)
         {
-            this.characterName = characterName;
+            this._characterName = characterName;
         }
 
         public async void InitializeGame()
         {
             CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
-            mainCharacterAsset.CreatureName = characterName;
-            mainCharacterAsset.StatsAsset = stats;
+            mainCharacterAsset.CreatureName = _characterName;
+            mainCharacterAsset.StatsAsset = _stats;
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = mainCharacterAsset;
-            SceneLoadingData data = new NameLoadingData(startSceneName, startingEntryPointTag, SwitchUiToGameplayMode);
-            await sceneLoader.LoadGameScene(data);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, SwitchUiToGameplayMode);
+            await _sceneLoader.LoadGameScene(data);
         }
 
         public async void InitializeGameDebug()
@@ -95,38 +94,28 @@ namespace SunsetSystems.Data
             CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = debugAsset;
-            SceneLoadingData data = new NameLoadingData(startSceneName, startingEntryPointTag, SwitchUiToGameplayMode);
-            await sceneLoader.LoadGameScene(data);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, SwitchUiToGameplayMode);
+            await _sceneLoader.LoadGameScene(data);
         }
 
         public void SwitchUiToGameplayMode()
         {
-            EnableGamplayUI();
-            DisableMainMenuUI();
-        }
-
-        private void EnableGamplayUI()
-        {
-            gameplayUiParent.SetActive(true);
-        }
-
-        private void DisableMainMenuUI()
-        {
-            mainMenuParent.SetActive(false);
+            _gameplayUiParent.SetGameplayUiActive(true);
+            _mainMenuParent.SetActive(false);
         }
 
         private CreatureAsset GetMatchingCreatureAsset()
         {
-            return selectedBodyType switch
+            return _selectedBodyType switch
             {
-                BodyType.M => selectedBackground switch
+                BodyType.M => _selectedBackground switch
                 {
                     PlayerCharacterBackground.Agent => ResourceLoader.GetMaleAgentAsset(),
                     PlayerCharacterBackground.Convict => ResourceLoader.GetMaleConvictAsset(),
                     PlayerCharacterBackground.Journalist => ResourceLoader.GetMaleJournalistAsset(),
                     _ => ResourceLoader.GetDefaultCreatureAsset(),
                 },
-                BodyType.F => selectedBackground switch
+                BodyType.F => _selectedBackground switch
                 {
                     PlayerCharacterBackground.Agent => ResourceLoader.GetFemaleAgentAsset(),
                     PlayerCharacterBackground.Convict => ResourceLoader.GetFemaleConvictAsset(),

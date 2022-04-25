@@ -1,18 +1,19 @@
-﻿using System;
+﻿using SunsetSystems.Loading;
+using System;
 
-namespace Transitions.Data
+namespace SunsetSystems.Data
 { 
     public abstract class SceneLoadingData
     {
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
-        public readonly Action preLoadingAction;
+        public readonly Action[] preLoadingActions;
 
-        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, Action preLoadingAction)
+        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, params Action[] preLoadingActions)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
-            this.preLoadingAction = preLoadingAction;
+            this.preLoadingActions = preLoadingActions;
         }
 
         public abstract object Get();
@@ -22,8 +23,8 @@ namespace Transitions.Data
     {
         private readonly int sceneIndex;
 
-        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, Action preLoadingAction)
-            : base(TransitionType.index, targetEntryPointTag, preLoadingAction)
+        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, params Action[] preLoadingActions)
+            : base(TransitionType.index, targetEntryPointTag, preLoadingActions)
         {
             this.sceneIndex = sceneIndex;
         }
@@ -42,8 +43,8 @@ namespace Transitions.Data
     {
         private readonly string sceneName;
 
-        public NameLoadingData(string sceneName, string targetEntryPointTag, Action preLoadingAction)
-            : base(TransitionType.name, targetEntryPointTag, preLoadingAction)
+        public NameLoadingData(string sceneName, string targetEntryPointTag, params Action[] preLoadingActions)
+            : base(TransitionType.name, targetEntryPointTag, preLoadingActions)
         {
             this.sceneName = sceneName;
         }

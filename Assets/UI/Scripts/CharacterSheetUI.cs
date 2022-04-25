@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CharacterSheetUI : UIWindow
+﻿public class CharacterSheetUI : UIWindow
 {
     private EquipmentDisplay equipmentDisplay;
 

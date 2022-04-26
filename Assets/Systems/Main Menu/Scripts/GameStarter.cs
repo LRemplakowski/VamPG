@@ -85,7 +85,7 @@ namespace SunsetSystems.Data
             mainCharacterAsset.StatsAsset = _stats;
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = mainCharacterAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, SwitchUiToGameplayMode);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
             await _sceneLoader.LoadGameScene(data);
         }
 
@@ -94,7 +94,7 @@ namespace SunsetSystems.Data
             CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = debugAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, SwitchUiToGameplayMode);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
             await _sceneLoader.LoadGameScene(data);
         }
 

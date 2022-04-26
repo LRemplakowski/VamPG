@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Input.CameraControl
 {
+    [RequireComponent(typeof(Tagger))]
     public class BoundingBox : MonoBehaviour
     {
         [SerializeField]

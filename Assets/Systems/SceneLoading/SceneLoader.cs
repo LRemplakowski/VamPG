@@ -52,7 +52,7 @@ namespace SunsetSystems.Loading
             _loadingScreenController.gameObject.SetActive(true);
             await _fadeScreenAnimator.FadeIn(.5f);
             await LoadNewScene(data);
-            await InitializeSceneLogic();
+            await InitializeSceneLogic(data);
             _loadingScreenController.EnableContinue();
         }
 
@@ -63,10 +63,10 @@ namespace SunsetSystems.Loading
             _loadingScreenController.gameObject.SetActive(true);
             await Task.Yield();
             await _fadeScreenAnimator.FadeIn(.5f);
-            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", preLoadingAction);
+            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             await LoadNewScene(data);
             await SaveLoadManager.LoadObjects();
-            await InitializeSceneLogic();
+            await InitializeSceneLogic(data);
             _loadingScreenController.EnableContinue();
         }
 
@@ -105,13 +105,13 @@ namespace SunsetSystems.Loading
                 await UnloadPreviousScene();
             await DoSceneLoading();
         }
-        
-        private async Task InitializeSceneLogic()
+
+        private async Task InitializeSceneLogic(SceneLoadingData data)
         {
             AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
             Debug.Log("Scene logic found? " + (sceneLogic != null));
             if (sceneLogic)
-                await sceneLogic.StartSceneAsync();
+                await sceneLogic.StartSceneAsync(data);
         }
 
         private Task AsyncLoadSceneByIndex(int sceneIndex)
@@ -156,10 +156,10 @@ namespace SunsetSystems.Loading
             Debug.Log("Do start scene loading");
             switch (CachedTransitionData.transitionType)
             {
-                case TransitionType.index:
+                case TransitionType.indexTransition:
                     await DoLoadingByIndex();
                     break;
-                case TransitionType.name:
+                case TransitionType.nameTransition:
                     await DoLoadingByName();
                     break;
                 default:

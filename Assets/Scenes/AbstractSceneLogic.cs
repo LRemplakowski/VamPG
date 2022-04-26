@@ -4,6 +4,7 @@ using SunsetSystems.Resources;
 using System.Threading.Tasks;
 using SunsetSystems.Loading;
 using CleverCrow.Fluid.UniqueIds;
+using SunsetSystems.Data;
 
 namespace SunsetSystems.Loading
 {
@@ -34,9 +35,7 @@ namespace SunsetSystems.Loading
                 es3.RefreshDependencies();
         }
 
-        public abstract Task StartSceneAsync(string entryPointTag);
-
-        public abstract Task StartSceneAsync();
+        public abstract Task StartSceneAsync(SceneLoadingData data);
 
         public abstract void SaveRuntimeData();
 

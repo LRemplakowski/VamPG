@@ -1,10 +1,20 @@
-﻿using UnityEngine;
+﻿using CleverCrow.Fluid.UniqueIds;
+using SunsetSystems.Constants;
+using SunsetSystems.Loading;
+using SunsetSystems.Utils;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input.CameraControl
 {
-    public class CameraControlScript : ExposableMonobehaviour
+    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(Tagger))]
+    public class CameraControlScript : ExposableMonobehaviour, ISaveRuntimeData
     {
+#pragma warning disable CS0414
+        [SerializeField, ReadOnly]
+        private string _cameraFocusTag = TagConstants.CAMERA_FOCUS;
+#pragma warning restore CS0414
         private Transform _target;
         [SerializeField]
         private Transform _cameraTransform;
@@ -12,6 +22,7 @@ namespace SunsetSystems.Input.CameraControl
         private Transform _rotationTarget;
         [SerializeField]
         private BoundingBox _currentBoundingBox;
+        public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
         [SerializeField]
         private Vector3 _offset;
 
@@ -22,6 +33,26 @@ namespace SunsetSystems.Input.CameraControl
         private Vector3 _moveTarget;
         private Vector3 _moveDirection;
         private float _rotationDirection;
+
+        //Save/Load variables
+        private UniqueId Unique => GetComponent<UniqueId>();
+        private const string BOUNDING_BOX = "_boundingBox";
+        private const string POSITION = "_position";
+
+        private void Awake()
+        {
+            if (!_cameraTransform)
+                _cameraTransform = GetComponentInChildren<Camera>().transform;
+            if (!_rotationTarget && this.TryFindFirstWithTag(TagConstants.CAMERA_FOCUS, out GameObject result))
+                _rotationTarget = result.transform;
+            if (_target)
+            {
+                transform.position = _target.position;
+                _moveTarget = transform.position;
+                _cameraTransform.localPosition = _offset;
+                _cameraTransform.LookAt(_rotationTarget);
+            }
+        }
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -49,27 +80,13 @@ namespace SunsetSystems.Input.CameraControl
             Debug.Log("Forcing camera to position " + position);
         }
 
-        public void Initialize()
-        {
-            if (_cameraTransform == null)
-                _cameraTransform = GetComponentInChildren<Camera>().transform;
-            _target = GameManager.GetMainCharacter().transform;
-            if (_target)
-            {
-                transform.position = _target.position;
-                _moveTarget = transform.position;
-                _cameraTransform.localPosition = _offset;
-                _cameraTransform.LookAt(_rotationTarget);
-            }
-        }
-
         private void FixedUpdate()
         {
             _internalMoveTargetSpeed = _cameraMoveSpeed + 1f;
             if (_moveDirection.z != 0)
-                _moveTarget += transform.forward * _moveDirection.z * Time.fixedDeltaTime * _internalMoveTargetSpeed;
+                _moveTarget += _internalMoveTargetSpeed * _moveDirection.z * Time.fixedDeltaTime * transform.forward;
             if (_moveDirection.x != 0)
-                _moveTarget += transform.right * _moveDirection.x * Time.fixedDeltaTime * _internalMoveTargetSpeed;
+                _moveTarget += _internalMoveTargetSpeed * _moveDirection.x * Time.fixedDeltaTime * transform.right;
             if (_currentBoundingBox)
                 _moveTarget = _currentBoundingBox.IsPositionWithinBounds(_moveTarget) ? _moveTarget : _currentBoundingBox.ClampPositionToBounds(_moveTarget);
         }
@@ -77,7 +94,19 @@ namespace SunsetSystems.Input.CameraControl
         private void LateUpdate()
         {
             transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * _cameraMoveSpeed);
-            transform.Rotate(Vector3.up * Time.deltaTime * _cameraRotationSpeed * _rotationDirection);
+            transform.Rotate(_cameraRotationSpeed * _rotationDirection * Time.deltaTime * Vector3.up);
+        }
+
+        public void SaveRuntimeData()
+        {
+            ES3.Save<BoundingBox>(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
+            ES3.Save<Vector3>(Unique.Id + POSITION, transform.position);
+        }
+
+        public void LoadRuntimeData()
+        {
+            _currentBoundingBox = ES3.Load<BoundingBox>(Unique.Id + BOUNDING_BOX);
+            ForceToPosition(ES3.Load<Vector3>(Unique.Id + POSITION));
         }
     }
 }

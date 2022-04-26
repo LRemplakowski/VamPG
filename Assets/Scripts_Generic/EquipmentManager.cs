@@ -57,7 +57,7 @@ public class EquipmentManager : Manager
 
         SetEquipmentBlendShapes(newItem, BLEND_SHAPES_MAX_WEIGHT);
 
-        if(targetMesh != null)
+        if (targetMesh != null)
         {
             SkinnedMeshRenderer newMesh = Instantiate<SkinnedMeshRenderer>(newItem.meshRenderer, targetMesh.transform);
 
@@ -69,7 +69,7 @@ public class EquipmentManager : Manager
 
     public EquipmentPiece Unequip(int slotIndex)
     {
-        if(currentEquipment[slotIndex] != null)
+        if (currentEquipment[slotIndex] != null)
         {
             if (currentMeshes[slotIndex] != null)
                 Destroy(currentMeshes[slotIndex].gameObject);
@@ -92,7 +92,7 @@ public class EquipmentManager : Manager
 
     public void UnequipAll()
     {
-        for(int i = 0; i < currentEquipment.Length; i++)
+        for (int i = 0; i < currentEquipment.Length; i++)
         {
             Unequip(i);
         }
@@ -101,9 +101,9 @@ public class EquipmentManager : Manager
     private void SetEquipmentBlendShapes(EquipmentPiece item, float weight)
     {
         Debug.LogWarning("SetEquipmentBlendShapes called!");
-        foreach(EquipmentMeshRegion blendShape in item.coveredMeshRegions)
+        foreach (EquipmentMeshRegion blendShape in item.coveredMeshRegions)
         {
-            Debug.LogWarning("Initial blendShape = " + targetMesh.GetBlendShapeWeight((int) blendShape));
+            Debug.LogWarning("Initial blendShape = " + targetMesh.GetBlendShapeWeight((int)blendShape));
             Debug.LogWarning("Changing blend shape " + blendShape + " for item " + item + " to " + weight);
             targetMesh.SetBlendShapeWeight((int)blendShape, weight);
             Debug.LogWarning(targetMesh.GetBlendShapeWeight((int)blendShape));

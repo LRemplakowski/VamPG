@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using SunsetSystems;
+using SunsetSystems.Constants;
 
 namespace UI.CharacterPortraits
 {
@@ -22,7 +21,7 @@ namespace UI.CharacterPortraits
                     Destroy(t.gameObject);
             }
 
-            for (int i = 0; i < Consts.MAX_HUNGER; i++)
+            for (int i = 0; i < GameConstants.MAX_HUNGER; i++)
             {
                 GameObject dotGO = Instantiate(hungerDotPrefab, this.transform);
                 dotGO.name = "hungerDot" + i;
@@ -33,7 +32,7 @@ namespace UI.CharacterPortraits
 
         internal void SetCurrentHunger(int hunger)
         {
-            hunger = Mathf.Clamp(hunger, Consts.MIN_HUNGER, Consts.MAX_HUNGER);
+            hunger = Mathf.Clamp(hunger, GameConstants.MIN_HUNGER, GameConstants.MAX_HUNGER);
 
             foreach (Image hungerDot in hungerSprites)
             {

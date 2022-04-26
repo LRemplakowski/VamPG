@@ -5,25 +5,25 @@ using UnityEngine;
 
 public class GameManager : Manager
 {
-    private static Creature player;
-    private static GridController gridController;
+    private static Creature _player;
+    private static GridController _gridController;
 
     // Start is called before the first frame update
     void Start()
     {
-        gridController = FindObjectOfType<GridController>();
+        _gridController = FindObjectOfType<GridController>();
     }
 
     public static Creature GetMainCharacter()
     {
-        if (player == null)
-            player = FindObjectOfType<GameRuntimeData>().MainCharacterData.CreatureComponent;
-        return player;
+        if (_player == null)
+            _player = GameRuntimeData.Instance.MainCharacterData.CreatureComponent;
+        return _player;
     }
 
     public static GridController GetGridController()
     {
-        return gridController;
+        return _gridController;
     }
 
     public static string GetLanguage()

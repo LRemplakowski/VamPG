@@ -1,3 +1,4 @@
+using SunsetSystems.Utils;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 namespace SunsetSystems.Loading
 {
     [Serializable]
+    [RequireComponent(typeof(Tagger))]
     public class FadeScreenAnimator : ExposableMonobehaviour
     {
         [SerializeField]
@@ -22,7 +24,7 @@ namespace SunsetSystems.Loading
         {
             action.Invoke();
             await FadeOut(fadeTime);
-        }    
+        }
 
         internal async Task FadeOut(float fadeTime)
         {

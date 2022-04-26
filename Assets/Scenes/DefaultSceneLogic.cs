@@ -13,23 +13,33 @@ namespace SunsetSystems.Loading
     {
         [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;
+        [SerializeField, ES3NonSerializable]
+        private CameraControlScript _cameraControlScript;
 
-        public async override Task StartSceneAsync(string entryPointTag)
+        public async override Task StartSceneAsync(SceneLoadingData data)
         {
             Debug.Log("Starting scene");
             if (!_gameRuntimeData)
                 _gameRuntimeData = FindObjectOfType<GameRuntimeData>();
+            if (!_cameraControlScript)
+                _cameraControlScript = FindObjectOfType<CameraControlScript>();
+            string entryPointTag = data != null ? data.targetEntryPointTag : "";
+            string cameraBoundingBoxTag = data != null ? data.cameraBoundingBoxTag : "";
             CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
             List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
             List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
             if (partyPositions != null && partyPositions.Count > 0)
             {
                 await InstantiateParty(partyPositions, mainCharAsset, activeParty);
+                Vector3 cameraPosition = partyPositions[0];
+                HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
             else
             {
                 AreaEntryPoint entryPoint = FindAreaEntryPoint(entryPointTag);
                 await InstantiateParty(entryPoint.transform.position, mainCharAsset, activeParty);
+                Vector3 cameraPosition = entryPoint.transform.position;
+                HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
             foreach (IInitialized initable in References.GetAll<IInitialized>())
             {
@@ -37,9 +47,12 @@ namespace SunsetSystems.Loading
             }
         }
 
-        public async override Task StartSceneAsync()
+        private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)
         {
-            await StartSceneAsync("");
+            if (this.TryFindFirstWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
+                if (boundingBoxGO.TryGetComponent(out BoundingBox boundingBox))
+                    _cameraControlScript.CurrentBoundingBox = boundingBox;
+            _cameraControlScript.ForceToPosition(cameraPosition);
         }
 
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
@@ -65,7 +78,6 @@ namespace SunsetSystems.Loading
             _gameRuntimeData.MainCharacterData = mainCharData;
             _gameRuntimeData.ActivePartyData.Clear();
             _gameRuntimeData.ActivePartyData.AddRange(partyData);
-            FindObjectOfType<CameraControlScript>().ForceToPosition(positions[0]);
         }
 
         protected CreatureData InitializePartyMember(CreatureAsset asset, Vector3 position)

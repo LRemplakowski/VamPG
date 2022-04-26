@@ -45,7 +45,15 @@ namespace Entities.Interactable
             set => _interactionTransform = value;
         }
 
-        public void Awake()
+        public void OnValidate()
+        {
+            if (InteractionTransform == null)
+            {
+                InteractionTransform = this.transform;
+            }
+        }
+
+        private void Awake()
         {
             if (InteractionTransform == null)
             {
@@ -66,5 +74,5 @@ namespace Entities.Interactable
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
         }
-    } 
+    }
 }

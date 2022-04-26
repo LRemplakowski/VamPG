@@ -1,9 +1,7 @@
 using Entities.Characters.Data;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using SunsetSystems;
+using SunsetSystems.Constants;
 
 namespace UI.CharacterPortraits
 {
@@ -13,7 +11,7 @@ namespace UI.CharacterPortraits
         private GameObject healthBoxPrefab;
         private List<HealthBox> healthBoxes = new List<HealthBox>();
 
-        [SerializeField, Range(0, Consts.MAXIMUM_POSSIBLE_HEALTH)]
+        [SerializeField, Range(0, GameConstants.MAXIMUM_POSSIBLE_HEALTH)]
         private int _maxHealth;
         [SerializeField]
         private int _superficialDamage, _aggravatedDamage;
@@ -87,7 +85,7 @@ namespace UI.CharacterPortraits
                     box.State = HealthBoxType.Healthy;
                     healthBoxes.Add(box);
                 }
-            } 
+            }
             else if (MaxHealth < healthBoxes.Count)
             {
                 Debug.Log("removing health boxes");
@@ -104,8 +102,8 @@ namespace UI.CharacterPortraits
                 if (box.State == HealthBoxType.Healthy)
                     box.State = HealthBoxType.Aggravated;
             }
-            int superficialBoxes = MaxHealth - AggravatedDamage >= SuperficialDamage ? 
-                SuperficialDamage : 
+            int superficialBoxes = MaxHealth - AggravatedDamage >= SuperficialDamage ?
+                SuperficialDamage :
                 MaxHealth - AggravatedDamage;
             for (int i = AggravatedDamage; i < superficialBoxes + AggravatedDamage; i++)
             {

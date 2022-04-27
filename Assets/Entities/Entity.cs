@@ -11,5 +11,5 @@ namespace Entities
         {
             return entity.GetComponent<IInteractable>() != null;
         }
-    } 
+    }
 }

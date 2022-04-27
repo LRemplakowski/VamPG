@@ -2775,6 +2775,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1369304078}
   - component: {fileID: 1369304077}
+  - component: {fileID: 1369304079}
   m_Layer: 0
   m_Name: BoundingBox
   m_TagString: Untagged
@@ -2810,8 +2811,21 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1369304079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369304076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: HavenApartmentBoundingBox
 --- !u!1001 &1426263835
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3115,8 +3129,14 @@ MonoBehaviour:
   _interactionTransform: {fileID: 1544786638}
   _sceneName: 
   _sceneIndex: 2
-  type: 0
-  targetEntryPointTag: 
+  _type: 0
+  _targetEntryPointTag: 
+  _targetBoundingBoxTag: 
+  _targetEntryPoint: {fileID: 0}
+  _targetBoundingBox: {fileID: 0}
+  _sceneLoader: {fileID: 0}
+  _fadeScreenAnimator: {fileID: 0}
+  _cameraControlScript: {fileID: 0}
 --- !u!65 &1544786640
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3257,6 +3277,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4711254041863113222, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_TagString
+      value: GameStartPoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 6222528550176411148, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
+      propertyPath: tag
       value: GameStartPoint
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4057,8 +4081,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   creaturePrefab: {fileID: 3542484201101525821, guid: ee7bd9e6fce07c443aac20c84351a5b0, type: 3}
-  unique: {fileID: 0}
+  unique: {fileID: 2042823494}
   _gameRuntimeData: {fileID: 0}
+  _cameraControlScript: {fileID: 0}
   someInt: 5
   someString: foo
   someFloat: 12
@@ -4890,19 +4915,39 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 428861387840191069, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1355886668565726269, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566012951089984014, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566012951089984014, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_CarveOnlyStationary
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1678679589554275760, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017628703917645578, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017628703917645578, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2017628703917645578, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2675184149678432181, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_RootOrder
@@ -4950,15 +4995,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7222387525516564521, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7670181507958668773, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8003529549933775920, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_Name
@@ -4966,7 +5011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}

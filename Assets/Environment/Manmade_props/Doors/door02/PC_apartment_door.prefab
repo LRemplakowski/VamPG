@@ -40,7 +40,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5333186893748465256}
-  m_Layer: 0
+  - component: {fileID: 3338932014632279863}
+  - component: {fileID: 3198304015770628069}
+  - component: {fileID: 7612416932428136423}
+  m_Layer: 8
   m_Name: PC_apartment_door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,6 +68,55 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3338932014632279863
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669574892900375537}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.046, y: 1.94, z: 1.01}
+  m_Center: {x: 0.023, y: 0.97, z: 0}
+--- !u!95 &3198304015770628069
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669574892900375537}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0c3b06e65c0b0c546ac5dc0124b20598, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7612416932428136423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669574892900375537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverHighlight: {fileID: 2675184149678432181}
+  _interactionDistance: 1.5
+  _interactionTransform: {fileID: 5333186893748465256}
+  animator: {fileID: 3198304015770628069}
 --- !u!1001 &1984600761582614753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -122,7 +174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
@@ -131,21 +183,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
   m_PrefabInstance: {fileID: 1984600761582614753}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &6033491926662584761
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678679589554275760}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5920491894086289674, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
---- !u!208 &17865344448384582
+--- !u!208 &1566012951089984014
 NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,43 +199,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.023, y: 0, z: -0.505}
   m_TimeToStationary: 0.5
---- !u!95 &4387530411024830181
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678679589554275760}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0c3b06e65c0b0c546ac5dc0124b20598, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2557294069228784828
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678679589554275760}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _hoverHighlight: {fileID: 2675184149678432181}
-  _interactionDistance: 0.75
-  _interactionTransform: {fileID: 70275548971246268}
-  animator: {fileID: 4387530411024830181}
-  obstacle: {fileID: 17865344448384582}
 --- !u!4 &2017628703917645578 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}

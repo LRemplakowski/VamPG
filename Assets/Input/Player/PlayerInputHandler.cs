@@ -19,14 +19,16 @@ public class PlayerInputHandler : InputHandler
     private Collider lastHit;
     [SerializeField]
     private LineRenderer lineOrigin;
-
-    public LayerMask defaultRaycastMask;
+    [SerializeField]
+    private LayerMask defaultRaycastMask;
 
     private TurnCombatManager turnCombatManager;
 
     public static FormationData FormationData { get; set; }
     [SerializeField]
     private PredefinedFormation defaultFormation;
+    [SerializeField]
+    private float _followerStoppingDistance = 1.0f;
 
     private void Awake()
     {
@@ -34,7 +36,6 @@ public class PlayerInputHandler : InputHandler
             FormationData = defaultFormation.GetData();
     }
 
-    // Start is called before the first frame update
     private void Start()
     {
         player = FindObjectOfType<PlayerControlledCharacter>();
@@ -47,7 +48,6 @@ public class PlayerInputHandler : InputHandler
 
     public void OnRightClick(InputAction.CallbackContext context)
     {
-        //Debug.Log(player);
         if (context.phase != InputActionPhase.Performed)
             return;
         if (EventSystem.current.IsPointerOverGameObject())
@@ -75,10 +75,10 @@ public class PlayerInputHandler : InputHandler
                             .Get<Selection>()
                             .GetAllSelected()[0]
                             .GetCreature() as PlayerControlledCharacter;
-                        if (Entity.IsInteractable(hit.collider.gameObject))
+                        if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                         {
                             currentLead.ClearAllActions();
-                            currentLead.InteractWith(hit.collider.gameObject.GetComponent<IInteractable>());
+                            currentLead.InteractWith(interactable);
                         }
                         else
                         {
@@ -102,7 +102,6 @@ public class PlayerInputHandler : InputHandler
         switch (selectedBarAction.actionType)
         {
             case BarAction.MOVE:
-                Debug.Log("Mouse clicked in move mode!");
                 if (!turnCombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                     return;
                 else if (hit.collider.GetComponent<GridElement>())
@@ -114,7 +113,6 @@ public class PlayerInputHandler : InputHandler
                 }
                 break;
             case BarAction.ATTACK:
-                Debug.Log("Mouse clicked in attack mode!");
                 if (!turnCombatManager.IsActiveActorPlayerControlled() || player.GetComponent<CombatBehaviour>().HasActed)
                     return;
                 NPC enemy = hit.collider.GetComponent<NPC>();
@@ -138,7 +136,6 @@ public class PlayerInputHandler : InputHandler
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
         {
-            //Debug.Log("Ray hit");
             if (lastHit == null)
             {
                 lastHit = hit.collider;
@@ -227,25 +224,25 @@ public class PlayerInputHandler : InputHandler
     {
         Vector3 samplingPoint;
         List<ISelectable> allSelected = References.Get<Selection>().GetAllSelected();
+        float stoppingDistance = 0f;
         for (int i = 0; i < allSelected.Count; i++)
         {
-            Vector3 positionOffset = FormationData.positions[i];
-            samplingPoint = hit.point + positionOffset;
+            samplingPoint = hit.point;
             NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
-            MoveSelectableToPosition(allSelected[i], navHit.position);
+            stoppingDistance += (i % 2) * _followerStoppingDistance;
+            MoveSelectableToPosition(allSelected[i], navHit.position, stoppingDistance);
         }
     }
 
-    private void MoveSelectableToPosition(ISelectable selectable, Vector3 position)
+    private void MoveSelectableToPosition(ISelectable selectable, Vector3 position, float stoppingDistance)
     {
         Creature creature = selectable.GetCreature();
-        creature.ClearAllActions();
-        creature.Move(position);
+        creature.Move(position, stoppingDistance);
     }
 
     public static List<Vector3> GetPositionsFromPoint(Vector3 point)
     {
-        List<Vector3> positions = new List<Vector3>();
+        List<Vector3> positions = new();
         for (int i = 0; i < 6; i++)
         {
             Vector3 positionOffset = FormationData.positions[i];

@@ -23,9 +23,9 @@ namespace Entities.Characters
         private const float lookTowardsRotationSpeed = 5.0f;
 
         [SerializeField]
-        protected NavMeshAgent agent;
+        protected NavMeshAgent _agent;
         [SerializeField]
-        protected Inventory inventory;
+        protected Inventory _inventory;
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
         [ExposeProperty]
@@ -59,6 +59,7 @@ namespace Entities.Characters
             }
         }
 
+        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
         public abstract void Move(Vector3 moveTarget);
         public abstract void Move(GridElement moveTarget);
         public abstract void Attack(Creature target);
@@ -67,14 +68,14 @@ namespace Entities.Characters
         {
             ClearAllActions();
             Debug.LogWarning("Forcing creature to position: " + position);
-            agent.Warp(position);
+            _agent.Warp(position);
         }
 
         protected virtual void Start()
         {
-            if (!inventory)
-                inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
-            agent = GetComponent<NavMeshAgent>();
+            if (!_inventory)
+                _inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
+            _agent = GetComponent<NavMeshAgent>();
             ActionQueue.Enqueue(new Idle(this));
         }
 
@@ -146,7 +147,7 @@ namespace Entities.Characters
 
         public Inventory GetInventory()
         {
-            return inventory;
+            return _inventory;
         }
 
         public CreatureUIData GetCreatureUIData()
@@ -158,5 +159,5 @@ namespace Entities.Characters
                 0);
             return builder.Create();
         }
-    } 
+    }
 }

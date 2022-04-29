@@ -1,28 +1,24 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace SunsetSystems.UI.Pause
 {
     public class PauseMenu : MonoBehaviour
     {
         [SerializeField]
-        private Canvas pauseMenuCanvas;
+        private Canvas _pauseMenuCanvas;
         [SerializeField]
-        private GUIWindowsManager windowsManager;
+        private GUIWindowsManager _windowsManager;
         [SerializeField]
-        private PauseUISelector inventory, journal, settings;
+        private PauseUISelector _inventory, _journal, _settings;
         public static bool IsGamePaused { get; private set; }
-        private GameState cachedPreviousState;
+        private GameState _cachedPreviousState;
 
         private void Awake()
         {
-            if (pauseMenuCanvas == null)
-                pauseMenuCanvas = GetComponent<Canvas>();
-            if (windowsManager == null)
-                windowsManager = FindObjectOfType<GUIWindowsManager>();
+            if (_pauseMenuCanvas == null)
+                _pauseMenuCanvas = GetComponent<Canvas>();
+            if (_windowsManager == null)
+                _windowsManager = FindObjectOfType<GUIWindowsManager>();
             StateManager.OnGameStateChanged += CachePreviousState;
         }
 
@@ -33,7 +29,7 @@ namespace SunsetSystems.UI.Pause
 
         private void CachePreviousState(GameState newState, GameState previousState)
         {
-            cachedPreviousState = previousState;
+            _cachedPreviousState = previousState;
         }
 
         public void PauseGame()
@@ -59,15 +55,15 @@ namespace SunsetSystems.UI.Pause
             switch (screen)
             {
                 case PauseMenuScreen.Settings:
-                    settings.SelectGUIScreen();
+                    _settings.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.Inventory:
-                    inventory.SelectGUIScreen();
+                    _inventory.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.CharacterSheet:
                     break;
                 case PauseMenuScreen.Journal:
-                    journal.SelectGUIScreen();
+                    _journal.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.Map:
                     break;
@@ -85,7 +81,7 @@ namespace SunsetSystems.UI.Pause
         {
             IsGamePaused = false;
             gameObject.SetActive(false);
-            StateManager.SetCurrentState(cachedPreviousState);
+            StateManager.SetCurrentState(_cachedPreviousState);
         }
     }
 

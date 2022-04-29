@@ -1,7 +1,6 @@
 ﻿using Entities.Characters.Actions;
 using InsaneSystems.RTSSelection;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Entities.Characters
 {
@@ -9,15 +8,22 @@ namespace Entities.Characters
     [RequireComponent(typeof(SelectionEffect))]
     public class PlayerControlledCharacter : Creature
     {
+        public override void Move(Vector3 moveTarget, float stoppingDistance)
+        {
+            ClearAllActions();
+            _agent.stoppingDistance = stoppingDistance;
+            AddActionToQueue(new Move(_agent, moveTarget));
+        }
+
         public override void Move(Vector3 moveTarget)
         {
-            AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget));
+            Move(moveTarget, 0f);
         }
 
         public override void Move(GridElement moveTarget)
         {
             CurrentGridPosition = moveTarget;
-            AddActionToQueue(new Move(GetComponent<NavMeshAgent>(), moveTarget.transform.position));
+            Move(moveTarget.transform.position);
         }
 
         public void InteractWith(IInteractable target)
@@ -29,5 +35,5 @@ namespace Entities.Characters
         {
             AddActionToQueue(new Attack(target, this));
         }
-    } 
+    }
 }

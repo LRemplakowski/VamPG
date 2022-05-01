@@ -2,9 +2,10 @@ namespace SunsetSystems.Inventory.Data
 {
 	public enum ItemCategory
 	{
+		CLOTHING,
 		WEAPON,
 		CONSUMABLE,
-		QUESTITEM,
-		CLOTHING
+		QUEST_ITEM,
+		JUNK
 	}
 }

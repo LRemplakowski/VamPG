@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Linq;
 
 namespace SunsetSystems.Utils.Generation
 {
@@ -28,6 +27,7 @@ namespace SunsetSystems.Utils.Generation
             {
                 contentBuilder.Append(nameSpaceTab + "\t");
                 string valueName = names[i];
+                valueName = valueName.Replace(" ", "_");
                 valueName = valueName.RemoveSpecialCharacters();
                 valueName = valueName.ToUpper();
                 contentBuilder.Append(valueName);
@@ -61,6 +61,7 @@ namespace SunsetSystems.Utils.Generation
             {
                 contentBuilder.Append(nameSpaceTab + "\t");
                 string valueName = names[i];
+                valueName = valueName.Replace(" ", "_");
                 valueName = valueName.RemoveSpecialCharacters();
                 valueName = valueName.ToUpper();
                 contentBuilder.Append(valueName);
@@ -76,9 +77,9 @@ namespace SunsetSystems.Utils.Generation
             File.WriteAllText(finalPath, contents);
         }
 
-        public async static Task GenerateScriptAsync(ClassBuilder builder)
+        public async static Task GenerateScriptAsync(ClassData data)
         {
-            ClassData data = builder.Build();
+            ;
             StringBuilder contentBuilder = new();
             foreach (string usingDirective in data.usingDirectives)
             {
@@ -93,6 +94,10 @@ namespace SunsetSystems.Utils.Generation
                 contentBuilder.Append("namespace " + nameSpace + "\n");
                 contentBuilder.Append("{\n");
                 nameSpaceTab = "\t";
+            }
+            if (data.classAttributes.Length > 0)
+            {
+                contentBuilder.Append(nameSpaceTab + data.classAttributes + "\n");
             }
             contentBuilder.Append(nameSpaceTab + "public class " + data.className);
             if (data.generatedClassGenerics.Count > 0)
@@ -128,35 +133,46 @@ namespace SunsetSystems.Utils.Generation
                 contentBuilder.Append("\n");
             }
             contentBuilder.Append(nameSpaceTab + "{\n");
-            foreach (string key in data.privateFields.Keys)
+            foreach (FieldData fieldData in data.privateFieldsData)
             {
-                if (data.privateFields.TryGetValue(key, out string fieldType))
+                if (fieldData.fieldAttributes.Count > 0)
                 {
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    contentBuilder.Append(data.privateFieldAttribute + "\n");
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    string fieldName = key;
-                    fieldName = fieldName.ToCamelCase();
-                    fieldType = fieldType.RemoveSpecialCharacters();
-                    contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
-                    await Task.Yield();
+                    contentBuilder.Append(nameSpaceTab + "\t[");
+                    foreach (string attribute in fieldData.fieldAttributes)
+                    {
+                        contentBuilder.Append(attribute + ", ");
+                    }
+                    contentBuilder.Remove(contentBuilder.Length - 2, 2);
+                    contentBuilder.Append("]\n");
                 }
+                contentBuilder.Append(nameSpaceTab + "\t");
+                string fieldName = fieldData.fieldName;
+                string fieldType = fieldData.fieldType;
+                fieldName = fieldName.ToCamelCase();
+                fieldType = fieldType.RemoveSpecialCharacters();
+                contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                await Task.Yield();
             }
-            foreach (string key in data.publicFields.Keys)
+            foreach (FieldData fieldData in data.publicFieldsData)
             {
-                if (data.publicFields.TryGetValue(key, out string fieldType))
+                if (fieldData.fieldAttributes.Count > 0)
                 {
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    contentBuilder.Append(data.publicFieldAttribute + "\n");
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    string fieldName = key;
-                    fieldName = fieldName.ToCamelCase();
-                    fieldType = fieldType.RemoveSpecialCharacters();
-                    contentBuilder.Append("public " + fieldType + " " + fieldName + ";\n");
-                    await Task.Yield();
+                    contentBuilder.Append(nameSpaceTab + "\t[");
+                    foreach (string attribute in fieldData.fieldAttributes)
+                    {
+                        contentBuilder.Append(attribute + ", ");
+                    }
+                    contentBuilder.Remove(contentBuilder.Length - 2, 2);
+                    contentBuilder.Append("]\n");
                 }
+                contentBuilder.Append(nameSpaceTab + "\t");
+                string fieldName = fieldData.fieldName;
+                string fieldType = fieldData.fieldType;
+                fieldName = fieldName.ToCamelCase();
+                fieldType = fieldType.RemoveSpecialCharacters();
+                contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                await Task.Yield();
             }
-            contentBuilder.Remove(contentBuilder.Length - 2, 1);
             contentBuilder.Append(nameSpaceTab + "}\n");
             if (nameSpace.Length > 0)
                 contentBuilder.Append("}\n");
@@ -165,9 +181,9 @@ namespace SunsetSystems.Utils.Generation
             await File.WriteAllTextAsync(finalPath, contents);
         }
 
-        public static void GenerateScript(ClassBuilder builder)
+        public static void GenerateScript(ClassData data)
         {
-            ClassData data = builder.Build();
+            ;
             StringBuilder contentBuilder = new();
             foreach (string usingDirective in data.usingDirectives)
             {
@@ -181,6 +197,10 @@ namespace SunsetSystems.Utils.Generation
                 contentBuilder.Append("namespace " + nameSpace + "\n");
                 contentBuilder.Append("{\n");
                 nameSpaceTab = "\t";
+            }
+            if (data.classAttributes.Length > 0)
+            {
+                contentBuilder.Append(nameSpaceTab + data.classAttributes + "\n");
             }
             contentBuilder.Append(nameSpaceTab + "public class " + data.className);
             if (data.generatedClassGenerics.Count > 0)
@@ -214,33 +234,44 @@ namespace SunsetSystems.Utils.Generation
                 contentBuilder.Append("\n");
             }
             contentBuilder.Append(nameSpaceTab + "{\n");
-            foreach (string key in data.privateFields.Keys)
+            foreach (FieldData fieldData in data.privateFieldsData)
             {
-                if (data.privateFields.TryGetValue(key, out string fieldType))
+                if (fieldData.fieldAttributes.Count > 0)
                 {
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    contentBuilder.Append(data.privateFieldAttribute + "\n");
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    string fieldName = key;
-                    fieldName = fieldName.ToCamelCase();
-                    fieldType = fieldType.RemoveSpecialCharacters();
-                    contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                    contentBuilder.Append(nameSpaceTab + "\t[");
+                    foreach (string attribute in fieldData.fieldAttributes)
+                    {
+                        contentBuilder.Append(attribute + ", ");
+                    }
+                    contentBuilder.Remove(contentBuilder.Length - 2, 2);
+                    contentBuilder.Append("]\n");
                 }
+                contentBuilder.Append(nameSpaceTab + "\t");
+                string fieldName = fieldData.fieldName;
+                string fieldType = fieldData.fieldType;
+                fieldName = fieldName.ToCamelCase();
+                fieldType = fieldType.RemoveSpecialCharacters();
+                contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
             }
-            foreach (string key in data.publicFields.Keys)
+            foreach (FieldData fieldData in data.publicFieldsData)
             {
-                if (data.publicFields.TryGetValue(key, out string fieldType))
+                if (fieldData.fieldAttributes.Count > 0)
                 {
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    contentBuilder.Append(data.publicFieldAttribute + "\n");
-                    contentBuilder.Append(nameSpaceTab + "\t");
-                    string fieldName = key;
-                    fieldName = fieldName.ToCamelCase();
-                    fieldType = fieldType.RemoveSpecialCharacters();
-                    contentBuilder.Append("public " + fieldType + " " + fieldName + ";\n");
+                    contentBuilder.Append(nameSpaceTab + "\t[");
+                    foreach (string attribute in fieldData.fieldAttributes)
+                    {
+                        contentBuilder.Append(attribute + ", ");
+                    }
+                    contentBuilder.Remove(contentBuilder.Length - 2, 2);
+                    contentBuilder.Append("]\n");
                 }
+                contentBuilder.Append(nameSpaceTab + "\t");
+                string fieldName = fieldData.fieldName;
+                string fieldType = fieldData.fieldType;
+                fieldName = fieldName.ToCamelCase();
+                fieldType = fieldType.RemoveSpecialCharacters();
+                contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
             }
-            contentBuilder.Remove(contentBuilder.Length - 2, 1);
             contentBuilder.Append(nameSpaceTab + "}\n");
             if (nameSpace.Length > 0)
                 contentBuilder.Append("}\n");
@@ -249,47 +280,19 @@ namespace SunsetSystems.Utils.Generation
             File.WriteAllText(finalPath, contents);
         }
 
-        private static string RemoveSpecialCharacters(this string str)
+        public class ClassData
         {
-            StringBuilder sb = new();
-            foreach (char c in str)
-            {
-                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
-                {
-                    sb.Append(c);
-                }
-            }
-            return sb.ToString();
-        }
-
-        private static string ToCamelCase(this string str)
-        {
-            string[] words = str.Split(new[] { "_", " " }, StringSplitOptions.RemoveEmptyEntries);
-            string leadWord = Regex.Replace(words[0], @"([A-Z])([A-Z]+|[a-z0-9]+)($|[A-Z]\w*)",
-                m =>
-                {
-                    return m.Groups[1].Value.ToLower() + m.Groups[2].Value.ToLower() + m.Groups[3].Value;
-                });
-            string[] tailWords = words.Skip(1)
-                .Select(word => char.ToUpper(word[0]) + word.Substring(1))
-                .ToArray();
-            return $"{leadWord}{string.Join(string.Empty, tailWords)}";
-        }
-
-        internal class ClassData
-        {
-            public readonly string baseClass, className, dataPath, nameSpace, privateFieldAttribute, publicFieldAttribute;
-            public IReadOnlyDictionary<string, string> privateFields, publicFields;
-            public IReadOnlyList<string> usingDirectives, baseClassGenerics, generatedClassGenerics;
+            public readonly string baseClass, className, dataPath, nameSpace, privateFieldAttributes, publicFieldAttributes, classAttributes;
+            public readonly IReadOnlyList<FieldData> privateFieldsData, publicFieldsData;
+            public readonly IReadOnlyList<string> usingDirectives, baseClassGenerics, generatedClassGenerics;
             public ClassData(string baseClass,
                 string className,
                 string dataPath,
                 string nameSpace,
-                Dictionary<string, string> privateFields,
-                Dictionary<string, string> publicFields,
+                List<FieldData> privateFieldsData,
+                List<FieldData> publicFieldsData,
                 List<string> usingDirectives,
-                string privateFieldAttribute,
-                string publicFieldAttribute,
+                string classAttributes,
                 List<string> baseClassGenerics,
                 List<string> generatedClassGenerics)
             {
@@ -297,30 +300,40 @@ namespace SunsetSystems.Utils.Generation
                 this.className = className;
                 this.dataPath = dataPath;
                 this.nameSpace = nameSpace;
-                this.privateFields = privateFields;
-                this.publicFields = publicFields;
+                this.privateFieldsData = privateFieldsData;
+                this.publicFieldsData = publicFieldsData;
                 this.usingDirectives = usingDirectives;
-                this.privateFieldAttribute = privateFieldAttribute;
-                this.publicFieldAttribute = publicFieldAttribute;
+                this.classAttributes = classAttributes;
                 this.baseClassGenerics = baseClassGenerics;
                 this.generatedClassGenerics = generatedClassGenerics;
             }
         }
 
+        public class FieldData
+        {
+            public readonly string fieldName, fieldType;
+            public readonly IReadOnlyList<string> fieldAttributes;
+
+            public FieldData(string fieldName, string fieldType, List<string> fieldAttributes)
+            {
+                this.fieldName = fieldName;
+                this.fieldType = fieldType;
+                this.fieldAttributes = fieldAttributes;
+            }
+        }
+
         public class ClassBuilder
         {
-            public string BaseClass { get; set; }
+            private string _nameSpace;
+            private string _baseClass;
             private readonly string _className;
             private readonly string _dataPath;
-            private readonly Dictionary<string, string> _privateFields = new();
-            private readonly Dictionary<string, string> _publicFields = new();
+            private readonly List<FieldData> _privateFields = new();
+            private readonly List<FieldData> _publicFields = new();
             private readonly List<string> _usingDirectives = new();
-            public string PrivateFieldAttribute { get; set; }
-            public string PublicFieldAttributes { get; set; }
+            private string _classAttributes;
             private readonly List<string> _baseClassGenerics = new();
             private readonly List<string> _generatedClassGenerics = new();
-
-            public string NameSpace { get; set; }
 
             public ClassBuilder(string _className, string _dataPath)
             {
@@ -328,83 +341,93 @@ namespace SunsetSystems.Utils.Generation
                 this._dataPath = _dataPath;
             }
 
-            public bool TryAddPrivateField(string name, Type type)
+            public ClassBuilder SetNameSpace(string _nameSpace)
             {
-                bool successful = false;
-                if (!_publicFields.ContainsKey(name))
-                    successful = _privateFields.TryAdd(name, type.Name);
+                this._nameSpace = _nameSpace;
+                return this;
+            }
+
+            public ClassBuilder SetBaseClass(string _baseClass)
+            {
+                this._baseClass = _baseClass;
+                return this;
+            }
+
+            public ClassBuilder SetClassAttributes(string _classAttributes)
+            {
+                this._classAttributes = _classAttributes;
+                return this;
+            }
+
+            public ClassBuilder AddPrivateField(FieldData data)
+            {
+                if (_publicFields.Find(d => d.fieldName.Equals(data.fieldName)) == null && _privateFields.Find(d => d.fieldName.Equals(data.fieldName)) == null)
+                    _privateFields.Add(data);
+                else
+                    Debug.LogError("There is already a public field with the name " + data.fieldName + "!");
+                return this;
+            }
+
+            public ClassBuilder AddPrivateField(string name, string type, params string[] attributes)
+            {
+                Debug.Log("Adding private field " + name + " of type " + type);
+                if (_publicFields.Find(data => data.fieldName.Equals(name)) == null && _privateFields.Find(data => data.fieldName.Equals(name)) == null)
+                    _privateFields.Add(new(name, type, attributes.ToList()));
                 else
                     Debug.LogError("There is already a public field with the name " + name + "!");
-                return successful;
+                return this;
             }
 
-            public bool TryAddPublicField(string name, Type type)
+            public ClassBuilder AddPublicField(FieldData data)
             {
-                bool successful = false;
-                if (!_privateFields.ContainsKey(name))
-                    successful = _publicFields.TryAdd(name, type.Name);
+                if (_publicFields.Find(d => d.fieldName.Equals(data.fieldName)) == null && _privateFields.Find(d => d.fieldName.Equals(data.fieldName)) == null)
+                    _publicFields.Add(data);
                 else
-                    Debug.LogError("There is already a private field with the name " + name + "!");
-                return successful;
+                    Debug.LogError("There is already a public field with the name " + data.fieldName + "!");
+                return this;
             }
 
-            public bool TryAddUsingDirective(string nameSpace)
+            public ClassBuilder AddPublicField(string name, string type, params string[] attributes)
             {
-                bool successful = false;
+                Debug.Log("Adding private field " + name + " of type " + type);
+                if (_privateFields.Find(data => data.fieldName.Equals(name)) == null && _publicFields.Find(data => data.fieldName.Equals(name)) == null)
+                    _publicFields.Add(new(name, type, attributes.ToList()));
+                else
+                    Debug.LogError("There is already a public field with the name " + name + "!");
+                return this;
+            }
+
+            public ClassBuilder AddUsingDirective(string nameSpace)
+            {
                 if (!_usingDirectives.Contains(nameSpace))
                 {
                     _usingDirectives.Add(nameSpace);
-                    successful = true;
                 }
-                return successful;
+                return this;
             }
 
-            public bool TryRemovePrivateField(string name)
-            {
-                return _privateFields.Remove(name);
-            }
-
-            public bool TryRemovePublicField(string name)
-            {
-                return _publicFields.Remove(name);
-            }
-
-            public bool TryRemoveUsingDirective(string nameSpace)
-            {
-                return _usingDirectives.Remove(nameSpace);
-            }
-
-            public void AddBaseClassGeneric(Type generic)
+            public ClassBuilder AddBaseClassGeneric(Type generic)
             {
                 _baseClassGenerics.Add(generic.Name);
+                return this;
             }
 
-            public void AddGeneratedClassGeneric(Type generic)
+            public ClassBuilder AddGeneratedClassGeneric(Type generic)
             {
                 _generatedClassGenerics.Add(generic.Name);
+                return this;
             }
 
-            public bool TryRemoveBaseClassGeneric(Type generic)
+            public ClassData Build()
             {
-                return _baseClassGenerics.Remove(generic.Name);
-            }
-
-            public bool TryRemoveGeneratedClassGeneric(Type generic)
-            {
-                return _generatedClassGenerics.Remove(generic.Name);
-            }
-
-            internal ClassData Build()
-            {
-                return new ClassData(BaseClass,
+                return new ClassData(_baseClass,
                     _className,
                     _dataPath,
-                    NameSpace,
+                    _nameSpace,
                     _privateFields,
                     _publicFields,
                     _usingDirectives,
-                    PrivateFieldAttribute,
-                    PublicFieldAttributes,
+                    _classAttributes,
                     _baseClassGenerics,
                     _generatedClassGenerics);
             }

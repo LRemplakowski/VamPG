@@ -11,9 +11,9 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private Sprite _defaultIcon;
         [SerializeField]
-        private ItemCategory[] _acceptedCategories = new ItemCategory[0];
-        private ItemCategory[] _uniqueCategories;
-        public List<ItemCategory> ItemCategories => _uniqueCategories.ToList();
+        private ItemType[] _acceptedCategories = new ItemType[0];
+        private ItemType[] _uniqueCategories;
+        public List<ItemType> ItemCategories => _uniqueCategories.ToList();
 
         private void OnValidate()
         {

@@ -12,27 +12,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2b4c92236c48f41a26b1dbe3e25b7d, type: 3}
   m_Name: Inventory Config
   m_EditorClassIdentifier: 
-  _categoryDataPath: /Systems/Inventory/Scripts/
-  _categoryEnumName: ItemCategory
-  _categoryList:
-  - Weapon
-  - Consumable
-  - Quest Item
-  - Clothing
-  _slotCategories:
-  - {fileID: 11400000, guid: c35a2a5418e40c44ab5756d188d1019f, type: 2}
-  - {fileID: 11400000, guid: 618981ab1d547a948b58092967ef1b27, type: 2}
-  - {fileID: 11400000, guid: b13484680f9fe984e8f1fbc400f0ad6a, type: 2}
-  - {fileID: 11400000, guid: 9d73a1874ad8ada45a04ce9043aecb96, type: 2}
-  _itemAttributeDataPath: /Systems/Inventory/Config/Item Attributes/
-  _attributeList:
-  - _name: Item Name
-    _valueType: 2
-  - _name: Armor
-    _valueType: 0
-  - _name: Equipable
-    _valueType: 3
-  - _name: Usable
-    _valueType: 4
-  - _name: Damage
-    _valueType: 1
+  _sortingCategories:
+    dataPath: /Systems/Inventory/Scripts/
+    enumName: ItemCategory
+    categoryList:
+    - Clothing
+    - Weapon
+    - Consumable
+    - Quest Item
+    - Junk
+  _equipmentSlots:
+    slotCategories:
+    - {fileID: 11400000, guid: 618981ab1d547a948b58092967ef1b27, type: 2}
+    - {fileID: 11400000, guid: 9d73a1874ad8ada45a04ce9043aecb96, type: 2}
+    - {fileID: 11400000, guid: c35a2a5418e40c44ab5756d188d1019f, type: 2}
+    - {fileID: 11400000, guid: b13484680f9fe984e8f1fbc400f0ad6a, type: 2}
+  _itemAttributes:
+    dataPath: /Systems/Inventory/Config/Item Attributes/
+    templates:
+    - name: Armor
+      valueType: 0
+    - name: Weight
+      valueType: 1
+    - name: Item Name
+      valueType: 2
+    - name: Item Description
+      valueType: 2
+    - name: Damage
+      valueType: 0
+    - name: Usable
+      valueType: 4
+  _itemTypes:
+    dataPath: /Systems/Inventory/Scripts/
+    enumName: ItemType
+    typeTemplates:
+    - name: Weapon Ranged
+      itemTypeAttributes:
+      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
+      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
+      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
+      - {fileID: 11400000, guid: 245ae6e1a57f0374fa8256fa0c20742f, type: 2}
+    - name: Weapon Melee
+      itemTypeAttributes:
+      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
+      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
+      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
+      - {fileID: 11400000, guid: 245ae6e1a57f0374fa8256fa0c20742f, type: 2}
+    - name: Consumable
+      itemTypeAttributes:
+      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
+      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
+      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
+      - {fileID: 11400000, guid: 22c1e7380ecae9e43b410cab095ad80e, type: 2}

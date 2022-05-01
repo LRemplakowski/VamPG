@@ -7,13 +7,13 @@ namespace SunsetSystems.Inventory.Data
 	[CreateAssetMenu(fileName = "New Weapon Melee", menuName = "Inventory/Items/Weapon Melee")]
 	public class WeaponMelee : BaseItem
 	{
-		[SerializeField, ]
+		[SerializeField]
 		private string itemName;
-		[SerializeField, ]
+		[SerializeField, TextArea]
 		private string itemDescription;
-		[SerializeField, ]
+		[SerializeField]
 		private float weight;
-		[SerializeField, ]
-		private int damage;
+		[SerializeField, Range(0f, 10f)]
+		private float damage;
 	}
 }

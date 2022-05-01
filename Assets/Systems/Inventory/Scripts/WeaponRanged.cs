@@ -7,13 +7,13 @@ namespace SunsetSystems.Inventory.Data
 	[CreateAssetMenu(fileName = "New Weapon Ranged", menuName = "Inventory/Items/Weapon Ranged")]
 	public class WeaponRanged : BaseItem
 	{
-		[SerializeField, ]
+		[SerializeField]
 		private string itemName;
-		[SerializeField, ]
+		[SerializeField, TextArea]
 		private string itemDescription;
-		[SerializeField, ]
+		[SerializeField]
 		private float weight;
-		[SerializeField, ]
-		private int damage;
+		[SerializeField, Range(0f, 10f)]
+		private float damage;
 	}
 }

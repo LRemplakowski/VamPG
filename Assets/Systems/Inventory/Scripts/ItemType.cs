@@ -2,8 +2,8 @@ namespace SunsetSystems.Inventory.Data
 {
 	public enum ItemType
 	{
-		WEAPONRANGED,
-		WEAPONMELEE,
+		WEAPON_RANGED,
+		WEAPON_MELEE,
 		CONSUMABLE
 	}
 }

@@ -32,35 +32,53 @@ MonoBehaviour:
     templates:
     - name: Armor
       valueType: 0
+      useTextArea: 0
+      minimalValue: 0
+      maximalValue: 10
     - name: Weight
       valueType: 1
+      useTextArea: 0
+      minimalValue: 0
+      maximalValue: 0
     - name: Item Name
       valueType: 2
+      useTextArea: 0
+      minimalValue: 0
+      maximalValue: 0
     - name: Item Description
       valueType: 2
+      useTextArea: 1
+      minimalValue: 0
+      maximalValue: 0
     - name: Damage
-      valueType: 0
+      valueType: 1
+      useTextArea: 0
+      minimalValue: 0
+      maximalValue: 10
     - name: Usable
       valueType: 4
+      useTextArea: 1
+      minimalValue: 0
+      maximalValue: 0
   _itemTypes:
     dataPath: /Systems/Inventory/Scripts/
     enumName: ItemType
     typeTemplates:
     - name: Weapon Ranged
       itemTypeAttributes:
-      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
-      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
-      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
       - {fileID: 11400000, guid: 245ae6e1a57f0374fa8256fa0c20742f, type: 2}
     - name: Weapon Melee
       itemTypeAttributes:
-      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
-      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
-      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
       - {fileID: 11400000, guid: 245ae6e1a57f0374fa8256fa0c20742f, type: 2}
     - name: Consumable
       itemTypeAttributes:
-      - {fileID: 11400000, guid: fcdc1096268708d4fa42452a45fc0b0a, type: 2}
-      - {fileID: 11400000, guid: 3d66cc5d6c17beb42ab780ea1c535521, type: 2}
-      - {fileID: 11400000, guid: e62fdaf561ea98844856161381efbd88, type: 2}
-      - {fileID: 11400000, guid: 22c1e7380ecae9e43b410cab095ad80e, type: 2}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}

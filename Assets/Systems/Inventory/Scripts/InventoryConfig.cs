@@ -75,10 +75,38 @@ namespace SunsetSystems.Inventory
             ClearItemAttributes();
             foreach (ItemAttributeTemplate template in ItemAttributeTemplates)
             {
-                CreateItemAttributeAsset(template.name, template.valueType, "Assets" + ItemAttributeDataPath);
+                CreateItemAttributeAsset(template, "Assets" + ItemAttributeDataPath);
                 await Task.Yield();
             }
             AssetDatabase.SaveAssets();
+        }
+
+        private void CreateItemAttributeAsset(ItemAttributeTemplate template, string dataPath)
+        {
+            ItemAttribute attribute = CreateInstance<ItemAttribute>();
+            attribute._fieldName = template.name;
+            attribute._fieldType = GetTypeStringFromValueTypeEnum(template.valueType);
+            attribute._fieldAttributes.Add(GetAttributeFromValueType(template.valueType));
+            if (IsEligibleForTextArea(template))
+                attribute._fieldAttributes.Add("TextArea");
+            if (IsEligibleForValueRange(template))
+                if (template.valueType.Equals(ValueType.Integer))
+                    attribute._fieldAttributes.Add("Range(" + template.minimalValue + ", " + template.maximalValue + ")");
+                else
+                    attribute._fieldAttributes.Add("Range(" + template.minimalValue + "f, " + template.maximalValue + "f)");
+            string assetPath = dataPath + template.name + ".asset";
+            AssetDatabase.CreateAsset(attribute, assetPath);
+            _itemAttributePaths.Add(assetPath);
+        }
+
+        private bool IsEligibleForTextArea(ItemAttributeTemplate template)
+        {
+            return template.valueType.Equals(ValueType.String) && template.useTextArea;
+        }
+
+        private bool IsEligibleForValueRange(ItemAttributeTemplate template)
+        {
+            return (template.valueType.Equals(ValueType.Integer) || template.valueType.Equals(ValueType.Float)) && (template.maximalValue > template.minimalValue);
         }
 
         public async Task GenerateItemTypesAsync()
@@ -87,7 +115,7 @@ namespace SunsetSystems.Inventory
             ClearItemTypes();
             foreach (ItemTypeTemplate template in ItemTypeTemplates)
             {
-                _itemTypeNames.Add(template.name.RemoveSpecialCharacters());
+                _itemTypeNames.Add(template.name);
                 await GenerateItemTypeClassAsync(template);
             }
             CodeGenerator.GenerateEnum(_itemTypeNames, Application.dataPath + ItemTypeDataPath, ItemTypeEnumName, "SunsetSystems.Inventory.Data");
@@ -103,7 +131,7 @@ namespace SunsetSystems.Inventory
                 ValueType.Float => "float",
                 ValueType.String => "string",
                 ValueType.Bool => "bool",
-                ValueType.Script => "ScriptableObject[]",
+                ValueType.Script => "Object[]",
                 _ => throw new ArgumentException("Value type " + valueType + " is not recognized!"),
             };
         }
@@ -162,21 +190,11 @@ namespace SunsetSystems.Inventory
             _itemTypePaths.Clear();
         }
 
-        private void CreateItemAttributeAsset(string assetName, ValueType valueType, string dataPath)
-        {
-            ItemAttribute attribute = CreateInstance<ItemAttribute>();
-            attribute._fieldName = assetName;
-            attribute._fieldType = GetTypeStringFromValueTypeEnum(valueType);
-            attribute._fieldAttributes.Add(GetAttributeFromValueType(valueType));
-            string assetPath = dataPath + assetName + ".asset";
-            AssetDatabase.CreateAsset(attribute, assetPath);
-            _itemAttributePaths.Add(assetPath);
-        }
-
         [Serializable]
         private class SortingCategories
         {
             public string dataPath;
+            [ReadOnly]
             public string enumName;
             public string[] categoryList = new string[0];
         }
@@ -199,6 +217,10 @@ namespace SunsetSystems.Inventory
         {
             public string name = "Item Attribute";
             public ValueType valueType;
+            [Tooltip("Used by string attributes, presents them as multi-line text area instead of single-line string.")]
+            public bool useTextArea;
+            [Tooltip("Used by float and integer attributes, restricts the values those attributes can take.")]
+            public int minimalValue, maximalValue;
         }
 
         [Serializable]
@@ -211,6 +233,7 @@ namespace SunsetSystems.Inventory
         private class ItemTypes
         {
             public string dataPath;
+            [ReadOnly]
             public string enumName;
             public ItemTypeTemplate[] typeTemplates = new ItemTypeTemplate[0];
         }

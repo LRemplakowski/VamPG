@@ -27,7 +27,7 @@ namespace SunsetSystems.Utils.Generation
             {
                 contentBuilder.Append(nameSpaceTab + "\t");
                 string valueName = names[i];
-                valueName = valueName.Replace(" ", "_");
+                valueName = valueName.Replace(' ', '_');
                 valueName = valueName.RemoveSpecialCharacters();
                 valueName = valueName.ToUpper();
                 contentBuilder.Append(valueName);
@@ -140,7 +140,8 @@ namespace SunsetSystems.Utils.Generation
                     contentBuilder.Append(nameSpaceTab + "\t[");
                     foreach (string attribute in fieldData.fieldAttributes)
                     {
-                        contentBuilder.Append(attribute + ", ");
+                        if (attribute.Trim().Length > 0)
+                            contentBuilder.Append(attribute + ", ");
                     }
                     contentBuilder.Remove(contentBuilder.Length - 2, 2);
                     contentBuilder.Append("]\n");
@@ -160,7 +161,8 @@ namespace SunsetSystems.Utils.Generation
                     contentBuilder.Append(nameSpaceTab + "\t[");
                     foreach (string attribute in fieldData.fieldAttributes)
                     {
-                        contentBuilder.Append(attribute + ", ");
+                        if (attribute.Trim().Length > 0)
+                            contentBuilder.Append(attribute + ", ");
                     }
                     contentBuilder.Remove(contentBuilder.Length - 2, 2);
                     contentBuilder.Append("]\n");
@@ -241,7 +243,8 @@ namespace SunsetSystems.Utils.Generation
                     contentBuilder.Append(nameSpaceTab + "\t[");
                     foreach (string attribute in fieldData.fieldAttributes)
                     {
-                        contentBuilder.Append(attribute + ", ");
+                        if (attribute.Trim().Length > 0)
+                            contentBuilder.Append(attribute + ", ");
                     }
                     contentBuilder.Remove(contentBuilder.Length - 2, 2);
                     contentBuilder.Append("]\n");
@@ -260,7 +263,8 @@ namespace SunsetSystems.Utils.Generation
                     contentBuilder.Append(nameSpaceTab + "\t[");
                     foreach (string attribute in fieldData.fieldAttributes)
                     {
-                        contentBuilder.Append(attribute + ", ");
+                        if (attribute.Trim().Length > 0)
+                            contentBuilder.Append(attribute + ", ");
                     }
                     contentBuilder.Remove(contentBuilder.Length - 2, 2);
                     contentBuilder.Append("]\n");

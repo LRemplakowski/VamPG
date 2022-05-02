@@ -1,6 +1,6 @@
 using SunsetSystems.Data;
 using System.Threading.Tasks;
-using Transitions.Manager;
+using SunsetSystems.Loading;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu.UI

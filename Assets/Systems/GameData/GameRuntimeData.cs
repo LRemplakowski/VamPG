@@ -1,6 +1,6 @@
 using CleverCrow.Fluid.UniqueIds;
 using Entities.Characters;
-using SunsetSystems.SaveLoad;
+using SunsetSystems.Loading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace SunsetSystems.Data
         private CreatureData _mainCharacterData;
         public CreatureData MainCharacterData { get => _mainCharacterData; set => _mainCharacterData = value; }
         [ES3NonSerializable, SerializeField]
-        private List<CreatureData> _activePartyData = new List<CreatureData>();
+        private List<CreatureData> _activePartyData = new();
         public List<CreatureData> ActivePartyData { get => _activePartyData; }
         [ES3NonSerializable]
         public List<Vector3> ActivePartySavedPositions { get; private set; }
@@ -22,10 +22,10 @@ namespace SunsetSystems.Data
         private CreatureAsset _mainCharacterAsset;
         public CreatureAsset MainCharacterAsset { get => _mainCharacterAsset; set => _mainCharacterAsset = value; }
         [SerializeField]
-        private List<CreatureAsset> _activePartyAssets = new List<CreatureAsset>();
+        private List<CreatureAsset> _activePartyAssets = new();
         public List<CreatureAsset> ActivePartyAssets { get => _activePartyAssets; }
         [SerializeField]
-        private List<CreatureAsset> _inactivePartyAssets = new List<CreatureAsset>();
+        private List<CreatureAsset> _inactivePartyAssets = new();
         public List<CreatureAsset> InactivePartyAssets { get => _inactivePartyAssets; }
 
         public void SaveRuntimeData()
@@ -40,8 +40,10 @@ namespace SunsetSystems.Data
 
         private void SaveActivePartyPositions(string id)
         {
-            List<Vector3> partyPositions = new List<Vector3>();
-            partyPositions.Add(_mainCharacterData.transform.position);
+            List<Vector3> partyPositions = new()
+            {
+                _mainCharacterData.transform.position
+            };
             foreach (CreatureData companion in _activePartyData)
             {
                 partyPositions.Add(companion.transform.position);
@@ -52,7 +54,7 @@ namespace SunsetSystems.Data
         private void SaveRecruitedCompanions(string id)
         {
             ES3.Save(id + "_recruitedCompanionsData", InactivePartyAssets);
-            List<CharacterStats> recruitedCompanionsStats = new List<CharacterStats>();
+            List<CharacterStats> recruitedCompanionsStats = new();
             foreach (CreatureAsset companion in InactivePartyAssets)
                 recruitedCompanionsStats.Add(companion.StatsAsset);
             ES3.Save(id + "_recruitedCompanionsStats", recruitedCompanionsStats);
@@ -61,7 +63,7 @@ namespace SunsetSystems.Data
         private void SaveActiveCompanions(string id)
         {
             ES3.Save(id + "_activeCompanionsData", ActivePartyAssets);
-            List<CharacterStats> activeCompanionsStats = new List<CharacterStats>();
+            List<CharacterStats> activeCompanionsStats = new();
             foreach (CreatureAsset companion in ActivePartyAssets)
                 activeCompanionsStats.Add(companion.StatsAsset);
             ES3.Save(id + "_activeCompanionsStats", activeCompanionsStats);
@@ -112,8 +114,10 @@ namespace SunsetSystems.Data
 
         public static List<Creature> GetActivePartyCreatures()
         {
-            List<Creature> result = new List<Creature>();
-            result.Add(Instance.MainCharacterData.CreatureComponent);
+            List<Creature> result = new List<Creature>
+            {
+                Instance.MainCharacterData.CreatureComponent
+            };
             Instance.ActivePartyData.ForEach(c => result.Add(c.CreatureComponent));
             return result;
         }
@@ -160,7 +164,7 @@ namespace SunsetSystems.Data
 
             public GameDataContainer Build()
             {
-                GameDataContainer data = new GameDataContainer(mainCharacterAsset, activeCompanionAssets, recruitedCompanionAssets);
+                GameDataContainer data = new(mainCharacterAsset, activeCompanionAssets, recruitedCompanionAssets);
                 return data;
             }
         }

@@ -1,6 +1,6 @@
-﻿namespace Transitions
+﻿namespace SunsetSystems
 {
-    using Transitions.Data;
+    using SunsetSystems.Data;
 
     public interface ITransition
     {

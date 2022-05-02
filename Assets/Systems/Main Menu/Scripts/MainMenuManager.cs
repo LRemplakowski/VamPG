@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Constants;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu
@@ -13,7 +12,7 @@ namespace SunsetSystems.MainMenu
         void Start()
         {
             if (debugUi)
-                debugUi.SetActive(Consts.DEBUG_MODE);
+                debugUi.SetActive(GameConstants.DEBUG_MODE);
         }
     }
 }

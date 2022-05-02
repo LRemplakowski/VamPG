@@ -1,18 +1,21 @@
-﻿using System;
+﻿using SunsetSystems.Loading;
+using System;
 
-namespace Transitions.Data
-{ 
+namespace SunsetSystems.Data
+{
     public abstract class SceneLoadingData
     {
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
-        public readonly Action preLoadingAction;
+        public readonly string cameraBoundingBoxTag;
+        public readonly Action[] preLoadingActions;
 
-        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, Action preLoadingAction)
+        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, string cameraBoundingBoxTag, params Action[] preLoadingActions)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
-            this.preLoadingAction = preLoadingAction;
+            this.cameraBoundingBoxTag = cameraBoundingBoxTag;
+            this.preLoadingActions = preLoadingActions;
         }
 
         public abstract object Get();
@@ -22,14 +25,14 @@ namespace Transitions.Data
     {
         private readonly int sceneIndex;
 
-        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, Action preLoadingAction)
-            : base(TransitionType.index, targetEntryPointTag, preLoadingAction)
+        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, string cameraBoundingBoxTag, params Action[] preLoadingActions)
+            : base(TransitionType.indexTransition, targetEntryPointTag, cameraBoundingBoxTag, preLoadingActions)
         {
             this.sceneIndex = sceneIndex;
         }
 
-        public IndexLoadingData(int sceneIndex, string targetEntryPointTag)
-            : this(sceneIndex, targetEntryPointTag, null)
+        public IndexLoadingData(int sceneIndex, string targetEntryPointTag, string cameraBoundingBoxTag)
+            : this(sceneIndex, targetEntryPointTag, cameraBoundingBoxTag, null)
         { }
 
         public override object Get()
@@ -42,14 +45,14 @@ namespace Transitions.Data
     {
         private readonly string sceneName;
 
-        public NameLoadingData(string sceneName, string targetEntryPointTag, Action preLoadingAction)
-            : base(TransitionType.name, targetEntryPointTag, preLoadingAction)
+        public NameLoadingData(string sceneName, string targetEntryPointTag, string cameraBoundingBoxTag, params Action[] preLoadingActions)
+            : base(TransitionType.nameTransition, targetEntryPointTag, cameraBoundingBoxTag, preLoadingActions)
         {
             this.sceneName = sceneName;
         }
 
-        public NameLoadingData(string sceneName, string targetEntryPointTag) 
-            : this(sceneName, targetEntryPointTag, null)
+        public NameLoadingData(string sceneName, string targetEntryPointTag, string cameraBoundingBoxTag)
+            : this(sceneName, targetEntryPointTag, cameraBoundingBoxTag, null)
         { }
 
         public override object Get()

@@ -1,33 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Dialogue;
 using SunsetSystems.Management;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button)), RequireComponent(typeof(TextMeshProUGUI))]
-
-public class DialogueChoiceButton : ExposableMonobehaviour
+namespace SunsetSystems.Dialogue
 {
-    private DialogueManager manager;
-    [ReadOnly]
-    public int choiceID;
-
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(Button)), RequireComponent(typeof(TextMeshProUGUI))]
+    public class DialogueChoiceButton : ExposableMonobehaviour
     {
-        manager = References.Get<DialogueManager>();
-    }
+        private DialogueManager _manager;
+        [ReadOnly]
+        public int choiceID;
 
-    public void OnClick()
-    {
-        Debug.Log("Choice selected: " + GetComponent<TextMeshProUGUI>().text + "\nChoice ID: " + choiceID);
-        if (GetComponent<Button>().interactable)
-            manager.SelectChoice(choiceID);
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            _manager = References.Get<DialogueManager>();
+        }
 
-    private void OnDestroy()
-    {
-        Debug.LogWarning("Destroying choice: " + GetComponent<TextMeshProUGUI>().text);
+        public void OnClick()
+        {
+            Debug.Log("Choice selected: " + GetComponent<TextMeshProUGUI>().text + "\nChoice ID: " + choiceID);
+            if (GetComponent<Button>().interactable)
+                _manager.SelectChoice(choiceID);
+        }
+
+        private void OnDestroy()
+        {
+            Debug.LogWarning("Destroying choice: " + GetComponent<TextMeshProUGUI>().text);
+        }
     }
 }

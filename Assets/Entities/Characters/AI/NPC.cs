@@ -16,17 +16,22 @@ namespace Entities.Characters
             private set => _lineTarget = value;
         }
 
-        public override void Move(Vector3 moveTarget)
+        public override void Move(Vector3 moveTarget, float stoppingDistance)
         {
             ClearAllActions();
-            AddActionToQueue(new Move(agent, moveTarget));
+            _agent.stoppingDistance = stoppingDistance;
+            AddActionToQueue(new Move(_agent, moveTarget));
+        }
+
+        public override void Move(Vector3 moveTarget)
+        {
+            Move(moveTarget, 0f);
         }
 
         public override void Move(GridElement moveTarget)
         {
-            ClearAllActions();
             CurrentGridPosition = moveTarget;
-            AddActionToQueue(new Move(agent, moveTarget.transform.position));
+            Move(moveTarget.transform.position);
         }
 
         public override void Attack(Creature target)
@@ -49,5 +54,5 @@ namespace Entities.Characters
             lt.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z);
             return lt.transform;
         }
-    } 
+    }
 }

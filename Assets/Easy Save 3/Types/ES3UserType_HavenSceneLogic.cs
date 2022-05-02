@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_HavenSceneLogic() : base(typeof(SunsetSystems.Scenes.HavenSceneLogic)){ Instance = this; priority = 1;}
+		public ES3UserType_HavenSceneLogic() : base(typeof(SunsetSystems.Loading.HavenSceneLogic)){ Instance = this; priority = 1;}
 
 
 		protected override void WriteComponent(object obj, ES3Writer writer)
 		{
-			var instance = (SunsetSystems.Scenes.HavenSceneLogic)obj;
+			var instance = (SunsetSystems.Loading.HavenSceneLogic)obj;
 			
 			writer.WriteProperty("someInt", instance.someInt, ES3Type_int.Instance);
 			writer.WriteProperty("someString", instance.someString, ES3Type_string.Instance);
@@ -24,7 +24,7 @@ namespace ES3Types
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
 		{
-			var instance = (SunsetSystems.Scenes.HavenSceneLogic)obj;
+			var instance = (SunsetSystems.Loading.HavenSceneLogic)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -55,7 +55,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_HavenSceneLogicArray() : base(typeof(SunsetSystems.Scenes.HavenSceneLogic[]), ES3UserType_HavenSceneLogic.Instance)
+		public ES3UserType_HavenSceneLogicArray() : base(typeof(SunsetSystems.Loading.HavenSceneLogic[]), ES3UserType_HavenSceneLogic.Instance)
 		{
 			Instance = this;
 		}

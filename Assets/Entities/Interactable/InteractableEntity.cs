@@ -1,6 +1,4 @@
 ﻿using Entities.Characters;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Entities.Interactable
@@ -47,7 +45,15 @@ namespace Entities.Interactable
             set => _interactionTransform = value;
         }
 
-        public void Awake()
+        public void OnValidate()
+        {
+            if (InteractionTransform == null)
+            {
+                InteractionTransform = this.transform;
+            }
+        }
+
+        private void Awake()
         {
             if (InteractionTransform == null)
             {
@@ -66,7 +72,7 @@ namespace Entities.Interactable
         public void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, _interactionDistance);
+            Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
         }
-    } 
+    }
 }

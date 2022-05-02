@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using SunsetSystems.Dialogue;
 using SunsetSystems.Management;
 using UnityEngine;
 

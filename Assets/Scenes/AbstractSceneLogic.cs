@@ -2,13 +2,14 @@ using Entities.Characters;
 using UnityEngine;
 using SunsetSystems.Resources;
 using System.Threading.Tasks;
-using SunsetSystems.SaveLoad;
+using SunsetSystems.Loading;
 using CleverCrow.Fluid.UniqueIds;
+using SunsetSystems.Data;
 
-namespace SunsetSystems.Scenes
+namespace SunsetSystems.Loading
 {
     [RequireComponent(typeof(UniqueId))]
-    public abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
+    internal abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
     {
         [SerializeField]
         protected CreatureData creaturePrefab;
@@ -17,19 +18,24 @@ namespace SunsetSystems.Scenes
 
         private void Reset() => creaturePrefab = ResourceLoader.GetEmptyCreaturePrefab();
 
-        protected virtual void Awake()
+        protected void OnValidate()
         {
             unique = GetComponent<UniqueId>();
         }
 
-        protected virtual void Start()
+        protected void Awake()
+        {
+            unique = GetComponent<UniqueId>();
+        }
+
+        protected void Start()
         {
             ES3ReferenceMgr es3 = FindObjectOfType<ES3ReferenceMgr>();
             if (es3)
                 es3.RefreshDependencies();
         }
 
-        public abstract Task StartSceneAsync();
+        public abstract Task StartSceneAsync(SceneLoadingData data);
 
         public abstract void SaveRuntimeData();
 

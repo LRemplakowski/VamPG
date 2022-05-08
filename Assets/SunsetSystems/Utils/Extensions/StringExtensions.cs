@@ -12,7 +12,7 @@ namespace SunsetSystems.Utils
             StringBuilder sb = new();
             foreach (char c in str)
             {
-                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_')
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_' || c == '[' || c == ']')
                 {
                     sb.Append(c);
                 }
@@ -29,9 +29,18 @@ namespace SunsetSystems.Utils
                     return m.Groups[1].Value.ToLower() + m.Groups[2].Value.ToLower() + m.Groups[3].Value;
                 });
             string[] tailWords = words.Skip(1)
-                .Select(word => char.ToUpper(word[0]) + word.Substring(1))
+                .Select(word => char.ToUpper(word[0]) + word[1..])
                 .ToArray();
             return $"{leadWord}{string.Join(string.Empty, tailWords)}";
+        }
+
+        public static string ToPascalCase(this string str)
+        {
+            string[] words = str.Split(new[] { "_", " " }, StringSplitOptions.RemoveEmptyEntries);
+            words = words
+                .Select(word => char.ToUpper(word[0]) + word[1..])
+                .ToArray();
+            return $"{string.Join(string.Empty, words)}";
         }
     }
 }

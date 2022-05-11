@@ -42,4 +42,12 @@ public static class Extensions
         result = value[0];
         return found;
     }
+
+    public static void DestroyChildren(this Transform transform)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            UnityEngine.Object.Destroy(transform.GetChild(i));
+        }
+    }
 }

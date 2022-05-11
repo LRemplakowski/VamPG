@@ -19,6 +19,7 @@ namespace SunsetSystems.Resources
         /// </summary>
         private const string CHARACTER_DEBUG = "DEBUG/default";
         private const string EMPTY_CREATURE_PREFAB = "DEBUG/CreatureData";
+        private const string FALLBACK_ICON_PATH = "DEBUG/missing";
 
         private const string ANIMATOR_CONTROLLERS_PATH = "Animation/AnimationControllers/";
 
@@ -75,6 +76,11 @@ namespace SunsetSystems.Resources
         public static RuntimeAnimatorController GetFallbackAnimator()
         {
             return GetAsset<RuntimeAnimatorController>(ANIMATOR_CONTROLLERS_PATH + "female_anims");
+        }
+
+        public static Sprite GetFallbackIcon()
+        {
+            return GetAsset<Sprite>(FALLBACK_ICON_PATH);
         }
     }
 }

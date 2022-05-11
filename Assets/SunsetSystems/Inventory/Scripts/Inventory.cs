@@ -9,41 +9,97 @@ namespace SunsetSystems.Inventory
     public class Inventory : MonoBehaviour
     {
         [SerializeField]
-        private ItemCategory[] _acceptedItemTypes = new ItemCategory[0];
+        private List<ItemCategory> _acceptedItemTypes = new();
         [SerializeField]
-        private List<BaseItem> _contents = new();
-        public IReadOnlyList<BaseItem> Contents => _contents;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
+        private List<InventoryEntry> _contents = new();
+        public IReadOnlyList<InventoryEntry> Contents => _contents;
 
         private void OnValidate()
         {
             if (_acceptedItemTypes.Count() > 0)
             {
-                _contents.FindAll(item => item != null).FindAll(item => !_acceptedItemTypes.Contains(item.ItemCategory)).ForEach(item => _contents.Remove(item));
+                _contents
+                    .FindAll(entry => entry != null && entry._item != null)
+                    .FindAll(entry => !_acceptedItemTypes.Contains(entry._item.ItemCategory))
+                    .ForEach(item => _contents.Remove(item));
             }
         }
 
-        public void AddItem(BaseItem item)
+        public void AddItems(List<InventoryEntry> itemEntries)
         {
-            if (IsItemTypeAccepted(item.ItemCategory))
+            itemEntries.ForEach(entry => AddItem(entry));
+        }
+
+        public void AddItem(InventoryEntry itemEntry)
+        {
+            if (itemEntry == null || itemEntry._item == null)
+                return;
+            if (IsItemTypeAccepted(itemEntry._item.ItemCategory))
             {
-                _contents.Add(item);
+                if (DoesInventoryContainItem(itemEntry._item))
+                {
+                    _contents.Find(existing => existing._item.ID.Equals(itemEntry._item.ID))._stackSize += itemEntry._stackSize;
+                }
+                else
+                {
+                    _contents.Add(itemEntry);
+                }
             }
         }
 
-        public void RemoveItem(BaseItem item)
+        private bool DoesInventoryContainItem(BaseItem item)
         {
-            _contents.Remove(item);
+            return _contents.Any(entry => entry._item.ID.Equals(item.ID));
+        }
+
+        public bool TryRemoveItems(List<InventoryEntry> itemEntries)
+        {
+            return itemEntries.All(itemEntry => TryRemoveItem(itemEntry));
+        }
+
+        public bool TryRemoveItem(InventoryEntry entry)
+        {
+            if (DoesInventoryContainItem(entry._item))
+            {
+                InventoryEntry existing = _contents.Find(existingEntry => existingEntry._item.ID.Equals(entry._item.ID));
+                if (existing._stackSize >= entry._stackSize)
+                {
+                    existing._stackSize -= entry._stackSize;
+                    if (existing._stackSize <= 0)
+                        _contents.Remove(existing);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool IsItemTypeAccepted(ItemCategory itemType)
         {
             return _acceptedItemTypes.Count() == 0 || _acceptedItemTypes.Contains(itemType);
+        }
+    }
+
+    [Serializable]
+    public class InventoryEntry
+    {
+        [SerializeField]
+        public BaseItem _item;
+        [SerializeField]
+        public int _stackSize;
+
+        public InventoryEntry(BaseItem item) : this(item, 1) { }
+
+        public InventoryEntry(BaseItem item, int stackSize)
+        {
+            this._item = item;
+            this._stackSize = stackSize;
         }
     }
 }

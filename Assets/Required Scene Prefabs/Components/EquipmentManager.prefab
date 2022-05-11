@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6853376446303020011}
-  - component: {fileID: 6853376446303020010}
+  - component: {fileID: 1646633759516437671}
+  - component: {fileID: 7263973717548093724}
   m_Layer: 0
   m_Name: EquipmentManager
   m_TagString: Untagged
@@ -27,11 +28,12 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6853376446303020010
+--- !u!114 &1646633759516437671
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,7 +42,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 6853376446303020008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8d277d1ccba0034a9f4a937d41ea3e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 13c699ef0925a624cba652aabf2cbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMesh: {fileID: 0}
+  <PlayerInventory>k__BackingField: {fileID: 7263973717548093724}
+--- !u!114 &7263973717548093724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6853376446303020008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b641a3f5f4e6ff24caa28af855c43a5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _acceptedItemTypes: 
+  _contents: []

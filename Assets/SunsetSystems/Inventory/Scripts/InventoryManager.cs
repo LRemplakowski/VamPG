@@ -1,14 +1,19 @@
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Management;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory
 {
-    public class InventoryManager : MonoBehaviour
+    [RequireComponent(typeof(Inventory))]
+    public class InventoryManager : Manager
     {
-        public void TransferItem(BaseItem item, Inventory from, Inventory target)
+        [field: SerializeField]
+        public Inventory PlayerInventory { get; private set; }
+
+        private void Awake()
         {
-            from.RemoveItem(item);
-            target.AddItem(item);
+            if (!PlayerInventory)
+                PlayerInventory = GetComponent<Inventory>();
         }
     }
 }

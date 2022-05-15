@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace SunsetSystems.Inventory
 {
-    [RequireComponent(typeof(Inventory))]
+    [RequireComponent(typeof(ItemStorage))]
     public class InventoryManager : Manager
     {
         [field: SerializeField]
-        public Inventory PlayerInventory { get; private set; }
+        public ItemStorage PlayerInventory { get; private set; }
 
         private void Awake()
         {
             if (!PlayerInventory)
-                PlayerInventory = GetComponent<Inventory>();
+                PlayerInventory = GetComponent<ItemStorage>();
         }
     }
 }

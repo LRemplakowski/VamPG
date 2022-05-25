@@ -25,18 +25,18 @@ namespace SunsetSystems.Dice
         }
     }
 
-    public sealed class TwoAttributePool : DicePool<Attribute, Attribute>
+    public sealed class TwoAttributePool : DicePool<CreatureAttribute, CreatureAttribute>
     {
-        public TwoAttributePool(Attribute first, Attribute second)
+        public TwoAttributePool(CreatureAttribute first, CreatureAttribute second)
         {
             First = first;
             Second = second;
         }
     }
 
-    public sealed class AttributeSkillPool : DicePool<Attribute, Skill>
+    public sealed class AttributeSkillPool : DicePool<CreatureAttribute, Skill>
     {
-        public AttributeSkillPool(Attribute attribute, Skill skill)
+        public AttributeSkillPool(CreatureAttribute attribute, Skill skill)
         {
             First = attribute;
             Second = skill;
@@ -52,9 +52,9 @@ namespace SunsetSystems.Dice
         }
     }
 
-    public sealed class DisciplineAttributePool : DicePool<Discipline, Attribute>
+    public sealed class DisciplineAttributePool : DicePool<Discipline, CreatureAttribute>
     {
-        public DisciplineAttributePool(Discipline discipline, Attribute attribute)
+        public DisciplineAttributePool(Discipline discipline, CreatureAttribute attribute)
         {
             First = discipline;
             Second = attribute;

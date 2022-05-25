@@ -37,23 +37,23 @@ public class CharacterStats : ScriptableObject
     public class Attributes
     {
         [SerializeField]
-        public Attribute
+        public CreatureAttribute
             //PHYSICAL
-            strength = new Attribute(AttributeType.Strength),
-            dexterity = new Attribute(AttributeType.Dexterity),
-            stamina = new Attribute(AttributeType.Stamina),
+            strength = new CreatureAttribute(AttributeType.Strength),
+            dexterity = new CreatureAttribute(AttributeType.Dexterity),
+            stamina = new CreatureAttribute(AttributeType.Stamina),
             //SOCIAL
-            charisma = new Attribute(AttributeType.Charisma),
-            manipulation = new Attribute(AttributeType.Manipulation),
-            composure = new Attribute(AttributeType.Composure),
+            charisma = new CreatureAttribute(AttributeType.Charisma),
+            manipulation = new CreatureAttribute(AttributeType.Manipulation),
+            composure = new CreatureAttribute(AttributeType.Composure),
             //MENTAL
-            intelligence = new Attribute(AttributeType.Intelligence),
-            wits = new Attribute(AttributeType.Wits),
-            resolve = new Attribute(AttributeType.Resolve);
+            intelligence = new CreatureAttribute(AttributeType.Intelligence),
+            wits = new CreatureAttribute(AttributeType.Wits),
+            resolve = new CreatureAttribute(AttributeType.Resolve);
 
-        public List<Attribute> GetAttributeList()
+        public List<CreatureAttribute> GetAttributeList()
         {
-            return new List<Attribute>() 
+            return new List<CreatureAttribute>() 
             { 
                 strength, dexterity, stamina,
                 charisma, manipulation, composure,
@@ -187,7 +187,7 @@ public class CharacterStats : ScriptableObject
         };
     }
 
-    public Attribute GetAttribute(AttributeType type)
+    public CreatureAttribute GetAttribute(AttributeType type)
     {
         return type switch
         {
@@ -200,7 +200,7 @@ public class CharacterStats : ScriptableObject
             AttributeType.Intelligence => attributes.intelligence,
             AttributeType.Wits => attributes.wits,
             AttributeType.Resolve => attributes.resolve,
-            _ => new Attribute(AttributeType.Invalid),
+            _ => new CreatureAttribute(AttributeType.Invalid),
         };
     }
 
@@ -275,7 +275,7 @@ public class CharacterStats : ScriptableObject
         }
         return CreateInstance<DisciplinePower>();
     }
-    public List<Attribute> GetAttributes()
+    public List<CreatureAttribute> GetAttributes()
     {
         return attributes.GetAttributeList();
     }
@@ -305,9 +305,9 @@ public class CharacterStats : ScriptableObject
         newInstance.humanity.SetValue(asset.humanity.GetValue(false));
         newInstance.humanity.AddModifiers(asset.humanity.GetModifiers());
 
-        foreach (Attribute a in newInstance.attributes.GetAttributeList())
+        foreach (CreatureAttribute a in newInstance.attributes.GetAttributeList())
         {
-            Attribute other = asset.GetAttribute(a.GetAttributeType());
+            CreatureAttribute other = asset.GetAttribute(a.GetAttributeType());
             a.SetValue(other.GetValue(false));
             a.AddModifiers(other.GetModifiers());
         }

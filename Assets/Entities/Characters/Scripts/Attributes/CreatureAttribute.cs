@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Attribute : BaseStat
+public class CreatureAttribute : BaseStat
 {
     [SerializeField, Range(1, 10)]
     private int baseValue = 1;
@@ -17,7 +17,7 @@ public class Attribute : BaseStat
         this.baseValue = value;
     }
 
-    public Attribute(AttributeType attributeType)
+    public CreatureAttribute(AttributeType attributeType)
     {
         this.attributeType = attributeType;
     }

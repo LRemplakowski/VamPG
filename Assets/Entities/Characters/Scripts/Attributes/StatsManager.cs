@@ -73,7 +73,7 @@ namespace Entities.Characters
 
         public int GetCombatSpeed()
         {
-            Attribute dexterity = _characterStats.GetAttribute(AttributeType.Dexterity);
+            CreatureAttribute dexterity = _characterStats.GetAttribute(AttributeType.Dexterity);
             Skill athletics = _characterStats.GetSkill(SkillType.Athletics);
             if (dexterity.GetAttributeType() != AttributeType.Invalid && athletics.GetSkillType() != SkillType.Invalid)
                 return (dexterity.GetValue() + athletics.GetValue());
@@ -123,7 +123,7 @@ namespace Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill)
         {
-            Attribute a = _characterStats.GetAttribute(attribute);
+            CreatureAttribute a = _characterStats.GetAttribute(attribute);
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
@@ -138,7 +138,7 @@ namespace Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc)
         {
-            Attribute a = _characterStats.GetAttribute(attribute);
+            CreatureAttribute a = _characterStats.GetAttribute(attribute);
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
@@ -158,7 +158,7 @@ namespace Entities.Characters
             return GetSkillRoll(weaponAttribute, weaponSkill, dc);
         }
 
-        public List<Attribute> GetAttributes()
+        public List<CreatureAttribute> GetAttributes()
         {
             return _characterStats.GetAttributes();
         }

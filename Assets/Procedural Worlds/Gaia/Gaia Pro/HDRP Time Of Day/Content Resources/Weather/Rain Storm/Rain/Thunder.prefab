@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6418214180310159793
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3880778584453553471}
+  - component: {fileID: 9028587140864086235}
+  m_Layer: 0
+  m_Name: Thunder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3880778584453553471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418214180310159793}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9028587140864086235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6418214180310159793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ab9eff1c049b545bea6f0d9f2aa24a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BaseSettings:
+    m_player: {fileID: 0}
+    m_weatherProfile: {fileID: 0}
+    m_audioSource: {fileID: 0}
+    m_state: 0
+    m_syncWind: 0
+    m_currentMaxVolume: 0.5
+    m_duration: 0
+  VisualEffects: []
+  WindZone: {fileID: 0}
+  m_thunderData:
+    m_shadows: 2
+    m_thunderLight: {r: 1, g: 1, b: 1, a: 1}
+    m_temperature: 18000
+    m_intesity: 700000
+    m_nightTimeIntensityMultiplier: 0.005
+    m_thunderStrikeCountMinMax: {x: 1, y: 9}
+    m_pauseBetweenStrike: 0.01
+    m_volume: 0.55
+    m_thunderStrikeSounds:
+    - {fileID: 8300000, guid: dc283af747681ee4794161710c5b602e, type: 3}
+    - {fileID: 8300000, guid: b6ba6cc2153006d4eaa9f93aa5034038, type: 3}
+    - {fileID: 8300000, guid: 429bdc89fd97a02408815e1d80633b99, type: 3}
+    - {fileID: 8300000, guid: 8602cae033cf1e84eb9391d554092fc9, type: 3}
+    - {fileID: 8300000, guid: 81b5d0c5c1fca2f4eb3b3bd0ee1dd0d6, type: 3}
+    - {fileID: 8300000, guid: 0220a319de39d854a905fd763546e63e, type: 3}
+    - {fileID: 8300000, guid: 5622221f80167c341a7526654fef5744, type: 3}
+  m_thunderStrikeTime: {x: 10, y: 20}

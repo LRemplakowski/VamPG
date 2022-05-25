@@ -614,7 +614,10 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Standalone: SUBSTANCE_PLUGIN_ENABLED
+    Android: CROSS_PLATFORM_INPUT;MOBILE_INPUT
+    Standalone: SUBSTANCE_PLUGIN_ENABLED;FLORA_PRESENT;GAIA_2_PRESENT;GAIA_PRO_PRESENT;GAIA_MESH_PRESENT;CROSS_PLATFORM_INPUT;GENA_PRO;GeNa_URP
+    Windows Store Apps: MOBILE_INPUT
+    iPhone: CROSS_PLATFORM_INPUT;MOBILE_INPUT
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
@@ -661,6 +664,7 @@ PlayerSettings:
   metroFTAName: 
   metroFTAFileTypes: []
   metroProtocolName: 
+  vcxProjDefaultLanguage: 
   XboxOneProductId: 
   XboxOneUpdateKey: 
   XboxOneSandboxId: 

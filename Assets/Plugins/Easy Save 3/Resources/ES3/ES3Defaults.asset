@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     _location: 0
-    path: SaveFile.json
+    path: SaveFile.es3
     encryptionType: 0
     compressionType: 0
     encryptionPassword: password
@@ -25,12 +25,13 @@ MonoBehaviour:
     saveChildren: 1
     typeChecking: 1
     safeReflection: 1
-    memberReferenceMode: 1
+    memberReferenceMode: 0
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
     - UMA_Core
     - Assembly-CSharp-firstpass
+    - YarnSpinner.Unity
     - Assembly-CSharp
     - com.fluid.stats
     - BrianMacIntosh.DialogueDesigner.Runtime
@@ -42,11 +43,13 @@ MonoBehaviour:
     - com.fluid.adnc-utilities
     - com.fluid.database
     - XNode
+    - ProceduralWorlds.Flora.Runtime
     - com.fluid.simple-settings
     - com.fluid.unique-id
     - Substance.EditorHelper
     - Bunny83.SimpleJSON
     - com.fluid.unity-event-plus
+    - CommandsInAnAssemblyDefinition
     - com.fluid.simple-spellcheck
     - com.fluid.simple-singleton
     - FbxBuildTestAssets
@@ -55,16 +58,18 @@ MonoBehaviour:
     - UMA_Core_Editor
     - com.fluid.dialogue.Editor
     - com.fluid.stats.Editor
+    - ProceduralWorlds.Flora.Editor
     - com.fluid.simple-spellcheck.Editor
     - PPv2URPConverters
     - com.fluid.quest-journal.Editor
     - com.fluid.unique-id.Editor
+    - YarnSpinner.Unity.Editor
     - XNodeEditor
     - com.fluid.find-and-replace.Editor
     - UMA_Examples_Editor
     - Autodesk.Fbx.Editor
     - Addressable_Editor
-    showAdvancedSettings: 1
+    showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
   addAllPrefabsToManager: 1

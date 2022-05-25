@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_Attribute() : base(typeof(Attribute)){ Instance = this; priority = 1; }
+		public ES3UserType_Attribute() : base(typeof(CreatureAttribute)){ Instance = this; priority = 1; }
 
 
 		protected override void WriteObject(object obj, ES3Writer writer)
 		{
-			var instance = (Attribute)obj;
+			var instance = (CreatureAttribute)obj;
 			
 			writer.WritePrivateField("baseValue", instance);
 			writer.WritePrivateField("attributeType", instance);
@@ -22,7 +22,7 @@ namespace ES3Types
 
 		protected override void ReadObject<T>(ES3Reader reader, object obj)
 		{
-			var instance = (Attribute)obj;
+			var instance = (CreatureAttribute)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
@@ -43,7 +43,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new Attribute(AttributeType.Invalid);
+			var instance = new CreatureAttribute(AttributeType.Invalid);
 			ReadObject<T>(reader, instance);
 			return instance;
 		}
@@ -54,7 +54,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_AttributeArray() : base(typeof(Attribute[]), ES3UserType_Attribute.Instance)
+		public ES3UserType_AttributeArray() : base(typeof(CreatureAttribute[]), ES3UserType_Attribute.Instance)
 		{
 			Instance = this;
 		}

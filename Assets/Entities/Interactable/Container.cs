@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.UI;
 
 namespace Entities.Interactable
 {
@@ -10,6 +11,7 @@ namespace Entities.Interactable
     {
         [SerializeField]
         private ItemStorage _myInventory;
+        private ContainerGUI _containerGUI;
 
         private void Awake()
         {
@@ -19,8 +21,19 @@ namespace Entities.Interactable
 
         public override void Interact()
         {
-
+            OpenContainerUI();
             base.Interact();
+        }
+
+        private void OpenContainerUI()
+        {
+            if (this.TryFindFirstWithTag(TagConstants.CONTAINER_GUI, out GameObject guiGO))
+            {
+                if (guiGO.TryGetComponent(out _containerGUI))
+                {
+                    _containerGUI.OpenContainerGUI(_myInventory, "TEST");
+                }
+            }
         }
     }
 }

@@ -15,5 +15,13 @@ namespace SunsetSystems.Inventory
             if (!PlayerInventory)
                 PlayerInventory = GetComponent<ItemStorage>();
         }
+
+        public void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
+        {
+            if (from.TryRemoveItem(item))
+            {
+                to.AddItem(item);
+            }
+        }
     }
 }

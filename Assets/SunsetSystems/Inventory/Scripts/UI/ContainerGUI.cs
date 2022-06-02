@@ -12,23 +12,23 @@ namespace SunsetSystems.Inventory.UI
         [SerializeField]
         private TextMeshProUGUI _title;
         [SerializeField]
-        private GameObject _entriesParent;
+        private GameObject _contentParent;
 
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
-
+            gameObject.SetActive(false);
         }
 
-        public void OpenContainerGUI(List<InventoryEntry> entries, Vector3 containerPosition)
+        public void OpenContainerGUI(ItemStorage container, string title)
         {
-            Vector3 screenPoint = Camera.main.WorldToScreenPoint(containerPosition);
+            Vector3 screenPoint = Camera.main.WorldToScreenPoint(container.transform.position);
             this.transform.position = screenPoint;
-            _entriesParent.transform.DestroyChildren();
-            foreach (InventoryEntry entry in entries)
+            _title.text = title;
+            _contentParent.transform.DestroyChildren();
+            foreach (InventoryEntry entry in container.Contents)
             {
-                ContainerEntry guiElement = Instantiate(_containerEntryPrefab, _entriesParent.transform);
-                guiElement.Entry = entry;
+                ContainerEntry guiElement = Instantiate(_containerEntryPrefab, _contentParent.transform);
+                guiElement.SetEntryContent(entry, container);
             }
             gameObject.SetActive(true);
         }

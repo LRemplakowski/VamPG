@@ -6,26 +6,38 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Inventory.UI
 {
+    [RequireComponent(typeof(Button))]
     internal class ContainerEntry : MonoBehaviour
     {
         [SerializeField]
         private Image _icon;
         [SerializeField]
         private TextMeshProUGUI _text;
+        [SerializeField]
+        private InventoryManager _inventoryManager;
+        private InventoryEntry _content;
+        private ItemStorage _storage;
 
-        private InventoryEntry _entry;
-        public InventoryEntry Entry
+        private void Start()
         {
-            get
+            if (this.TryFindFirstWithTag(TagConstants.INVENTORY_MANAGER, out GameObject inventoryManagerGO))
             {
-                return _entry;
+                inventoryManagerGO.TryGetComponent(out _inventoryManager);
             }
-            set
-            {
-                _entry = value;
-                _icon.sprite = value._item.Icon;
-                _text.text = value._item.ItemName;
-            }
+        }
+
+        public void SetEntryContent(InventoryEntry content, ItemStorage storage)
+        {
+            _content = content;
+            _storage = storage;
+            _text.text = content._item.ItemName;
+            _icon.sprite = content._item.Icon;
+        }
+
+        public void OnClick()
+        {
+            _inventoryManager.TransferItem(_storage, _inventoryManager.PlayerInventory, _content);
+            Destroy(gameObject);
         }
     }
 }

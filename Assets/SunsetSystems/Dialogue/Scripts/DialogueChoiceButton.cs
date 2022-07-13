@@ -1,5 +1,4 @@
 using SunsetSystems.Dialogue;
-using SunsetSystems.Management;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,7 @@ namespace SunsetSystems.Dialogue
         // Start is called before the first frame update
         void Start()
         {
-            _manager = References.Get<DialogueManager>();
+            _manager = DialogueManager.Instance;
         }
 
         public void OnClick()

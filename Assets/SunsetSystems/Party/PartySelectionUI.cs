@@ -1,7 +1,4 @@
 using Entities.Characters.Data;
-using System.Collections;
-using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
 namespace SunsetSystems.Party.UI
@@ -15,13 +12,9 @@ namespace SunsetSystems.Party.UI
         [SerializeField, ReadOnly]
         private CreatureUIData[] selectedMembers, availableMembers;
 
-        private PartyManager partyManager;
-
         // Start is called before the first frame update
         void OnEnable()
         {
-            if (partyManager == null)
-                partyManager = References.Get<PartyManager>();
             DestroyChildren(selectedMembersParent);
             DestroyChildren(availableMembersParent);
             FillMemberUI(selectedMembersParent, selectedMembers);

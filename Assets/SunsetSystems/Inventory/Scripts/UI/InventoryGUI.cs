@@ -1,5 +1,4 @@
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.Management;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,11 +15,13 @@ namespace SunsetSystems.Inventory.UI
 
         public void AddItems(List<BaseItem> items)
         {
-            items.ForEach(item => AddItem(item));
+            items?.ForEach(item => AddItem(item));
         }
 
         public void AddItem(BaseItem item)
         {
+            if (item == null)
+                return;
             InventoryItemDisplay itemDisplay = Instantiate(_displayPrefab, _itemListContentParent.transform);
             itemDisplay.item = item;
         }
@@ -32,7 +33,7 @@ namespace SunsetSystems.Inventory.UI
 
         private void OnEnable()
         {
-            AddItems(References.Get<InventoryManager>().PlayerInventory.Contents as List<BaseItem>);
+            AddItems(InventoryManager.Instance.PlayerInventory.Contents as List<BaseItem>);
         }
 
         private void OnDisable()

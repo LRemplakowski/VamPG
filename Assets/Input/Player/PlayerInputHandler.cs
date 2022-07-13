@@ -2,15 +2,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using SunsetSystems.Management;
 using Entities.Characters;
 using Entities;
 using InsaneSystems.RTSSelection;
 using UnityEngine.AI;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
+using SunsetSystems.Utils;
 
-public class PlayerInputHandler : InputHandler
+public class PlayerInputHandler : Singleton<PlayerInputHandler>
 {
     private const int raycastRange = 100;
 
@@ -21,6 +21,8 @@ public class PlayerInputHandler : InputHandler
     private LineRenderer lineOrigin;
     [SerializeField]
     private LayerMask defaultRaycastMask;
+    [SerializeField]
+    private PlayerInput playerInput;
 
     private TurnCombatManager turnCombatManager;
 
@@ -30,8 +32,16 @@ public class PlayerInputHandler : InputHandler
     [SerializeField]
     private float _followerStoppingDistance = 1.0f;
 
-    private void Awake()
+    public delegate void OnLeftClickHandler();
+    public event OnLeftClickHandler OnLeftClickEvent;
+    public delegate void OnRightClickHandler();
+    public event OnRightClickHandler OnRightClickEvent;
+    public delegate void OnMousePositionHandler(Vector2 mousePosition);
+    public event OnMousePositionHandler OnMousePositionEvent;
+
+    protected override void Awake()
     {
+        base.Awake();
         if (FormationData == null)
             FormationData = defaultFormation.GetData();
     }
@@ -46,15 +56,37 @@ public class PlayerInputHandler : InputHandler
         turnCombatManager = FindObjectOfType<TurnCombatManager>();
     }
 
+    public void OnLeftClick(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+        Pointer device = playerInput.GetDevice<Pointer>();
+        if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
+            return;
+        OnLeftClickEvent?.Invoke();
+    }
+
+    private bool IsRaycastHittingUIObject(Vector2 position)
+    {
+        if (m_PointerData == null)
+            m_PointerData = new PointerEventData(EventSystem.current);
+        m_PointerData.position = position;
+        EventSystem.current.RaycastAll(m_PointerData, m_RaycastResults);
+        return m_RaycastResults.Count > 0;
+    }
+
+    private PointerEventData m_PointerData;
+    private List<RaycastResult> m_RaycastResults = new();
+
     public void OnRightClick(InputAction.CallbackContext context)
     {
-        if (context.phase != InputActionPhase.Performed)
+        if (!context.performed)
             return;
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
+        Pointer device = playerInput.GetDevice<Pointer>();
+        if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
             return;
-        }
-        ManageInput(HandleWorldClick);
+        OnRightClickEvent?.Invoke();
+        HandleWorldClick();
     }
 
     private void HandleWorldClick()
@@ -71,10 +103,16 @@ public class PlayerInputHandler : InputHandler
                     }
                 case GameState.Exploration:
                     {
-                        PlayerControlledCharacter currentLead = References
-                            .Get<Selection>()
-                            .GetAllSelected()[0]
-                            .GetCreature() as PlayerControlledCharacter;
+                        List<ISelectable> selectables = Selection.Instance.GetAllSelected();
+                        PlayerControlledCharacter currentLead;
+                        if (selectables.Count > 0)
+                        {
+                            currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
+                        }
+                        else
+                        {
+                            break;
+                        }
                         if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                         {
                             currentLead.ClearAllActions();
@@ -130,9 +168,10 @@ public class PlayerInputHandler : InputHandler
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
-        if (context.phase != InputActionPhase.Performed)
+        if (!context.performed)
             return;
         mousePosition = context.ReadValue<Vector2>();
+        OnMousePositionEvent?.Invoke(mousePosition);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
         {
@@ -223,7 +262,7 @@ public class PlayerInputHandler : InputHandler
     private void MoveCurrentSelectionToPositions(RaycastHit hit)
     {
         Vector3 samplingPoint;
-        List<ISelectable> allSelected = References.Get<Selection>().GetAllSelected();
+        List<ISelectable> allSelected = Selection.Instance.GetAllSelected();
         float stoppingDistance = 0f;
         for (int i = 0; i < allSelected.Count; i++)
         {

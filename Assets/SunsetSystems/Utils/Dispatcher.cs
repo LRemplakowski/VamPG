@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Utils.Singleton;
+using SunsetSystems.Utils;
 
 namespace Utils.Threading
 {
     public class Dispatcher : Singleton<Dispatcher>
     {
-        private List<Action> pending = new List<Action>();
+        private readonly List<Action> pending = new();
 
         public void Invoke(Action fn)
         {

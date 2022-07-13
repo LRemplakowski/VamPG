@@ -1,9 +1,14 @@
 ﻿using System.Threading.Tasks;
 
-namespace Utils
+namespace SunsetSystems.Utils
 {
     interface IInitialized
     {
-        Task Initialize();
+        async Task InitializeAsync()
+        {
+            await new Task(Initialize);
+        }
+
+        void Initialize();
     }
 }

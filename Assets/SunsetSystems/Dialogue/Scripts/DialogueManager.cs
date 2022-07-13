@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DD;
-using SunsetSystems.Management;
+using SunsetSystems.Utils;
 
 namespace SunsetSystems.Dialogue
 {
-    public class DialogueManager : Manager
+    public class DialogueManager : Singleton<DialogueManager>
     {
         [SerializeField]
         private VerticalLayoutGroup _historyContent, _optionsContent;

@@ -1,16 +1,15 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
 using SunsetSystems.Data;
-using SunsetSystems.Management;
 using System.Threading.Tasks;
 using UI.CharacterPortraits;
 using UnityEngine;
-using Utils;
+using SunsetSystems.Utils;
 using Utils.Threading;
 
 namespace SunsetSystems.Party
 {
-    public class PartyManager : Manager, IInitialized
+    public class PartyManager : InitializedSingleton<PartyManager>
     {
         [SerializeField, ReadOnly]
         private Creature[] _currentPartyMembers;
@@ -18,23 +17,19 @@ namespace SunsetSystems.Party
         [SerializeField]
         private PartyPortraitsController partyPortraits;
 
-        public Task Initialize()
+        public override void Initialize()
         {
-            return Task.Run(async () =>
+            Dispatcher.Instance.Invoke(async () =>
             {
-                Dispatcher.Instance.Invoke(async () => 
+                CreatePartyList();
+                if (partyPortraits == null)
+                    partyPortraits = FindObjectOfType<PartyPortraitsController>();
+                partyPortraits.Clear();
+                foreach (Creature c in CurrentPartyMembers)
                 {
-                    CreatePartyList();
-                    if (partyPortraits == null)
-                        partyPortraits = FindObjectOfType<PartyPortraitsController>();
-                    partyPortraits.Clear();
-                    foreach (Creature c in CurrentPartyMembers)
-                    {
-                        partyPortraits.AddPortrait(c.GetCreatureUIData());
-                        await Task.Yield();
-                    }
-                });
-                await Task.Yield();
+                    partyPortraits.AddPortrait(c.GetCreatureUIData());
+                    await Task.Yield();
+                }
             });
         }
 

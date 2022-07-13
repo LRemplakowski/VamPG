@@ -26,16 +26,23 @@ namespace SunsetSystems.Inventory.UI
             }
         }
 
+        private void OnDestroy()
+        {
+
+        }
+
         public void SetEntryContent(InventoryEntry content, ItemStorage storage)
         {
             _content = content;
             _storage = storage;
             _text.text = content._item.ItemName;
             _icon.sprite = content._item.Icon;
+            gameObject.name = content._item.ItemName;
         }
 
         public void OnClick()
         {
+            Debug.Log("Container Entry clicked!");
             _inventoryManager.TransferItem(_storage, _inventoryManager.PlayerInventory, _content);
             Destroy(gameObject);
         }

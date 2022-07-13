@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using SunsetSystems.Management;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class RoundCounter : MonoBehaviour
@@ -16,7 +15,7 @@ public class RoundCounter : MonoBehaviour
     {
         text = GetComponent<TextMeshProUGUI>();
         text.text = "";
-        turnCombatManager = References.Get<TurnCombatManager>();
+        turnCombatManager = TurnCombatManager.Instance;
     }
 
     // Update is called once per frame

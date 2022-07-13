@@ -3,9 +3,9 @@ using SunsetSystems.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
-using SunsetSystems.Management;
-using Utils;
+using SunsetSystems.Utils;
 using SunsetSystems.Input.CameraControl;
+using Glitchers;
 
 namespace SunsetSystems.Loading
 {
@@ -41,9 +41,9 @@ namespace SunsetSystems.Loading
                 Vector3 cameraPosition = entryPoint.transform.position;
                 HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
-            foreach (IInitialized initable in References.GetAll<IInitialized>())
+            foreach (IInitialized initable in FindInterfaces.Find<IInitialized>())
             {
-                await initable.Initialize();
+                await initable.InitializeAsync();
             }
         }
 

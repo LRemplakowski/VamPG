@@ -1,10 +1,10 @@
 using Entities.Characters;
+using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
-public class TurnCombatManager : Manager
+public class TurnCombatManager : Singleton<TurnCombatManager>
 {
     public delegate void OnCombatStart(List<Creature> creaturesInCombat);
     public static OnCombatStart onCombatStart;
@@ -35,9 +35,9 @@ public class TurnCombatManager : Manager
 
     [SerializeField, ReadOnly]
     private Creature _currentActiveActor;
-    public Creature CurrentActiveActor 
+    public Creature CurrentActiveActor
     {
-        get => _currentActiveActor; 
+        get => _currentActiveActor;
         set
         {
             Creature previous = _currentActiveActor;
@@ -48,10 +48,10 @@ public class TurnCombatManager : Manager
     }
     [SerializeField]
     private GridController _gridInstance;
-    public GridController GridInstance 
+    public GridController GridInstance
     {
         get => _gridInstance;
-        set => _gridInstance = value; 
+        set => _gridInstance = value;
     }
 
     private Creature[] creaturesInCombat;
@@ -143,7 +143,7 @@ public class TurnCombatManager : Manager
         foreach (Creature c in creaturesInCombat)
         {
             if (!c.GetComponent<CombatBehaviour>().HasMoved)
-                return false; 
+                return false;
         }
         return true;
     }

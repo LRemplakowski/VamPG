@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Equipment", menuName = "Inventory/Equipment")]
@@ -13,7 +12,7 @@ public class EquipmentPiece : InventoryItem
     public override void Use()
     {
         base.Use();
-        References.Get<EquipmentManager>().Equip(this);
+        EquipmentManager.Instance.Equip(this);
         RemoveFromInventory();
     }
 }

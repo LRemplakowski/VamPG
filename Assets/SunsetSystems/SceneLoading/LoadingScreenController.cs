@@ -50,7 +50,7 @@ namespace SunsetSystems.Loading
         public void SetLoadingProgress(float value)
         {
             loadingBar.value = (value / 2) + .5f;
-            loadingBarText.text = ((value * 50f) + 50f) + " %";
+            loadingBarText.text = (value * 50f) + 50f + " %";
         }
 
         public void EnableContinue()

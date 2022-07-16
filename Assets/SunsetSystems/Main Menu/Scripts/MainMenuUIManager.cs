@@ -1,9 +1,10 @@
 using SunsetSystems.Constants;
+using SunsetSystems.Data;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu
 {
-    public class MainMenuManager : MonoBehaviour
+    public class MainMenuUIManager : MonoBehaviour
     {
         [SerializeField]
         private GameObject debugUi;
@@ -13,6 +14,11 @@ namespace SunsetSystems.MainMenu
         {
             if (debugUi)
                 debugUi.SetActive(GameConstants.DEBUG_MODE);
+        }
+
+        public void StartGameDebug()
+        {
+            GameStarter.Instance.InitializeGameDebug();
         }
     }
 }

@@ -2,6 +2,7 @@ using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils.Threading;
@@ -11,22 +12,42 @@ namespace SunsetSystems.Bootstraper
     public class SunsetBootstraper : Singleton<SunsetBootstraper>
     {
         [SerializeField]
-        private List<int> bootstrapSceneIndexes;
+        private List<SceneAsset> bootstrapScenes = new();
 
 #if UNITY_EDITOR
-        protected async void Start()
+        protected async override void Awake()
         {
             base.Awake();
-            foreach (int index in bootstrapSceneIndexes)
+            List<string> bootstrapScenePaths = new();
+            bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
+            await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));
+            await Task.WhenAll(LoadScenesByPathAsync(LoadedScenesCache.CachedScenes));
+        }
+
+        private List<Task> LoadScenesByPathAsync(List<string> paths)
+        {
+            List<Task> tasks = new();
+            LoadSceneParameters parameters = new();
+            parameters.loadSceneMode = LoadSceneMode.Additive;
+            parameters.localPhysicsMode = LocalPhysicsMode.Physics3D;
+            foreach (string path in paths)
             {
-                SceneManager.LoadScene(index, LoadSceneMode.Additive);
-                await Task.Yield();
+                tasks.Add(Task.Run(() =>
+                {
+                    Dispatcher.Instance.Invoke(async () =>
+                    {
+                        if (!SceneManager.GetSceneByPath(path).isLoaded)
+                        {
+                            AsyncOperation op = EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
+                            while (!op.isDone)
+                            {
+                                await Task.Yield();
+                            }
+                        }
+                    });
+                }));
             }
-            foreach (Scene scene in LoadedScenesCache.CachedScenes)
-            {
-                SceneManager.LoadScene(scene.buildIndex);
-                await Task.Yield();
-            }
+            return tasks;
         }
 #endif
     }

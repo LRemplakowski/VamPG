@@ -73,8 +73,8 @@ namespace SunsetSystems.Dialogue
             if (_dialogueWindow == null)
             {
                 _dialogueWindow = FindObjectOfType<DialogueWindowUI>(true);
-                _historyContent = _dialogueWindow.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
-                _optionsContent = _dialogueWindow.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
+                _historyContent = _dialogueWindow?.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
+                _optionsContent = _dialogueWindow?.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
             }
         }
 

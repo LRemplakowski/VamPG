@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SunsetSystems.GameplayMenu
 {
-    public class GameplayMenuManager : MonoBehaviour
+    public class GameplayUIManager : MonoBehaviour
     {
         [SerializeField]
         private Canvas _gameplayCanvas;

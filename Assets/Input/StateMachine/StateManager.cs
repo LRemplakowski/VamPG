@@ -1,3 +1,4 @@
+using SunsetSystems.Loading;
 using System;
 using UnityEngine;
 
@@ -8,6 +9,22 @@ public static class StateManager
     private static GameState currentState = GameState.Menu;
 
     public static event Action<GameState, GameState> OnGameStateChanged;
+
+    static StateManager()
+    {
+        LoadingScreenController.LoadingScreenEnabled += SetStatePaused;
+        LoadingScreenController.LoadingScreenDisabled += SetStateExploration;
+    }
+
+    private static void SetStatePaused()
+    {
+        SetCurrentState(GameState.GamePaused);
+    }
+
+    private static void SetStateExploration()
+    {
+        SetCurrentState(GameState.Exploration);
+    }
 
     public static GameState GetCurrentState()
     {

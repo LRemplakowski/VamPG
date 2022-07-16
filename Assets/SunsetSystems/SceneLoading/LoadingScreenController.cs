@@ -21,6 +21,10 @@ namespace SunsetSystems.Loading
 
         private FadeScreenAnimator transitionAnimator;
 
+        public delegate void LoadingScreenHandler();
+        public static event LoadingScreenHandler LoadingScreenEnabled;
+        public static event LoadingScreenHandler LoadingScreenDisabled;
+
         private void OnEnable()
         {
             if (loadingBar == null)
@@ -33,6 +37,7 @@ namespace SunsetSystems.Loading
                 continueButton = GetComponentInChildren<Button>();
             loadingBar.value = 0f;
             continueButton.gameObject.SetActive(false);
+            LoadingScreenEnabled?.Invoke();
             StateManager.SetCurrentState(GameState.GamePaused);
         }
 
@@ -69,6 +74,7 @@ namespace SunsetSystems.Loading
         {
             this.gameObject.SetActive(false);
             await transitionAnimator.FadeIn(.5f);
+            LoadingScreenDisabled?.Invoke();
             StateManager.SetCurrentState(GameState.Exploration);
         }
     }

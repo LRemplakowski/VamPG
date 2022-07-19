@@ -4,9 +4,9 @@ using TMPro;
 using SunsetSystems.Loading;
 using System.Threading.Tasks;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Loading.UI
 {
-    public class LoadingScreenController : MonoBehaviour
+    internal class LoadingScreenController : MonoBehaviour
     {
         private const string LOADING_SCREEN_TAG = "LoadingScreen";
 
@@ -18,7 +18,7 @@ namespace SunsetSystems.Loading
         private TextMeshProUGUI loadingBarText;
         [SerializeField]
         private Button continueButton;
-
+        [SerializeField]
         private FadeScreenAnimator transitionAnimator;
 
         public delegate void LoadingScreenHandler();
@@ -38,7 +38,6 @@ namespace SunsetSystems.Loading
             loadingBar.value = 0f;
             continueButton.gameObject.SetActive(false);
             LoadingScreenEnabled?.Invoke();
-            StateManager.SetCurrentState(GameState.GamePaused);
         }
 
         private void Start()
@@ -67,15 +66,14 @@ namespace SunsetSystems.Loading
         public async void OnContinue()
         {
             await transitionAnimator.FadeOut(.5f);
-            await DisableLoadingScreen();
+            DisableLoadingScreen();
+            await transitionAnimator.FadeIn(.5f);
         }
 
-        private async Task DisableLoadingScreen()
+        private void DisableLoadingScreen()
         {
             this.gameObject.SetActive(false);
-            await transitionAnimator.FadeIn(.5f);
             LoadingScreenDisabled?.Invoke();
-            StateManager.SetCurrentState(GameState.Exploration);
         }
     }
 }

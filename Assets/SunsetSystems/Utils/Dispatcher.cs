@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SunsetSystems.Utils;
 using UnityEngine;
 
-namespace Utils.Threading
+namespace SunsetSystems.Utils.Threading
 {
     public class Dispatcher : Singleton<Dispatcher>
     {

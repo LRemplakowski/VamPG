@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UI.CharacterPortraits;
 using UnityEngine;
 using SunsetSystems.Utils;
-using Utils.Threading;
+using SunsetSystems.Utils.Threading;
 
 namespace SunsetSystems.Party
 {

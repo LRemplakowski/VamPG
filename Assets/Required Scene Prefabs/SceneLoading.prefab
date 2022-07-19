@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 768502804347099128}
+  - component: {fileID: 2415109080703624055}
+  - component: {fileID: 441154271281022998}
   m_Layer: 0
   m_Name: SceneLoading
   m_TagString: Untagged
@@ -32,6 +34,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2415109080703624055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768502804347099129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: SceneLoadingUI
+--- !u!114 &441154271281022998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768502804347099129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da38f82770228064b84430ba24c448ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadingScreen: {fileID: 7375460757584895516}
+  fadeScreen: {fileID: 5061363920299642800}
 --- !u!1001 &768502804193098889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127,6 +156,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6242281449392313288, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242281449392313288, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1639188792, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
@@ -135,3 +172,25 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 68120811604673967, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
   m_PrefabInstance: {fileID: 768502804193098889}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5061363920299642800 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5519115790258959161, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
+  m_PrefabInstance: {fileID: 768502804193098889}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164fdde4d6de4264bb44a8037e5e5ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7375460757584895516 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7849953653874778773, guid: 307cbc0324227864b8b05c4af78926fd, type: 3}
+  m_PrefabInstance: {fileID: 768502804193098889}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79993df268653eb459a87d2686498b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

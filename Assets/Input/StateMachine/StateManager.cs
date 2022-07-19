@@ -10,22 +10,6 @@ public static class StateManager
 
     public static event Action<GameState, GameState> OnGameStateChanged;
 
-    static StateManager()
-    {
-        LoadingScreenController.LoadingScreenEnabled += SetStatePaused;
-        LoadingScreenController.LoadingScreenDisabled += SetStateExploration;
-    }
-
-    private static void SetStatePaused()
-    {
-        SetCurrentState(GameState.GamePaused);
-    }
-
-    private static void SetStateExploration()
-    {
-        SetCurrentState(GameState.Exploration);
-    }
-
     public static GameState GetCurrentState()
     {
         return currentState;

@@ -31,8 +31,6 @@ namespace SunsetSystems.Data
         private GameObject _mainMenuParent;
         [SerializeField]
         private GameplayUIManager _gameplayUiParent;
-        [SerializeField]
-        private FadeScreenAnimator _fadeScreenAnimator;
 
         private void Reset()
         {
@@ -50,8 +48,6 @@ namespace SunsetSystems.Data
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
             if (!_gameplayUiParent)
                 _gameplayUiParent = FindObjectOfType<GameplayUIManager>(true);
-            if (!_fadeScreenAnimator)
-                _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)

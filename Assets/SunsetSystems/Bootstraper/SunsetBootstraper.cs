@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Utils.Threading;
+using SunsetSystems.Utils.Threading;
 
 namespace SunsetSystems.Bootstraper
 {

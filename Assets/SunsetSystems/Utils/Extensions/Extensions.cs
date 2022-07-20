@@ -1,6 +1,7 @@
 ﻿using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public static class Extensions
@@ -21,11 +22,33 @@ public static class Extensions
 
     }
 
+    public static List<T> FindAllWithTag<T>(this GameObject go, string tag) where T : Component
+    {
+        List<T> result = new();
+        if (go.TryFindAllWithTag(tag, out List<GameObject> found))
+        {
+            foreach (GameObject f in found)
+            {
+                if (f.TryGetComponent<T>(out T component))
+                    result.Add(component);
+            }
+        }
+        return result;
+    }
+
     public static bool TryFindFirstWithTag(this GameObject go, string tag, out GameObject result)
     {
         bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
-        result = value[0];
+        result = value?[0];
         return found;
+    }
+
+    public static T FindFirstWithTag<T>(this GameObject go, string tag) where T : Component
+    {
+        T result = null;
+        if (go.TryFindFirstWithTag(tag, out GameObject found))
+            result = found.GetComponent<T>();
+        return result;
     }
 
     public static bool TryFindAllWithTag(this Component co, string tag, out List<GameObject> result)
@@ -33,13 +56,42 @@ public static class Extensions
         bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
         result = value;
         return found;
+    }
 
+    public static List<T> FindAllWithTag<T>(this Component co, string tag) where T : Component
+    {
+        List<T> result = new();
+        if (co.TryFindAllWithTag(tag, out List<GameObject> found))
+        {
+            foreach (GameObject f in found)
+            {
+                if (f.TryGetComponent<T>(out T component))
+                    result.Add(component);
+            }
+        }
+        return result;
     }
 
     public static bool TryFindFirstWithTag(this Component co, string tag, out GameObject result)
     {
         bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
-        result = value[0];
+        result = value?[0];
         return found;
+    }
+
+    public static T FindFirstWithTag<T>(this Component co, string tag) where T : Component
+    {
+        T result = null;
+        if (co.TryFindFirstWithTag(tag, out GameObject found))
+            result = found.GetComponent<T>();
+        return result;
+    }
+
+    public static void DestroyChildren(this Transform transform)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            UnityEngine.Object.Destroy(transform.GetChild(i));
+        }
     }
 }

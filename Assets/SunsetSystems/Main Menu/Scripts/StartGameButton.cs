@@ -1,15 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using SunsetSystems.Loading;
 using UnityEngine;
+using SunsetSystems.Utils.Threading;
 
 namespace SunsetSystems.MainMenu.UI
 {
     public class StartGameButton : MonoBehaviour
     {
-        private FadeScreenAnimator transitionAnimator;
+        [SerializeField]
+        private SceneLoadingUIManager fadeUI;
         [SerializeField]
         private GameObject backgroundSelectionObject;
         [SerializeField]
@@ -17,22 +16,29 @@ namespace SunsetSystems.MainMenu.UI
 
         private void Start()
         {
-            if (transitionAnimator == null)
-                transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+            if (fadeUI == null)
+                fadeUI = this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
-        public async Task StartGame()
+        public async void StartGame()
         {
-            await transitionAnimator.FadeOut(.5f);
-            await DoLoadCharacterCreationPanel();
+            await Task.Run(() =>
+            {
+                Dispatcher.Instance.Invoke(async () =>
+                {
+                    await fadeUI.DoFadeOutAsync(.5f);
+                    DoLoadCharacterCreationPanel();
+                    await fadeUI.DoFadeInAsync(.5f);
+                });
+            });
         }
 
-        private async Task DoLoadCharacterCreationPanel()
+        private void DoLoadCharacterCreationPanel()
         {
             if (backgroundSelectionObject)
                 backgroundSelectionObject.SetActive(true);
             mainMenuParent.SetActive(false);
-            await transitionAnimator.FadeIn(.5f);
+
         }
     }
 }

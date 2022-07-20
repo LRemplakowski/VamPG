@@ -2,7 +2,6 @@ using Entities.Characters;
 using Entities.Characters.Actions;
 using Entities.Cover;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -52,13 +51,13 @@ public class GridController : ExposableMonobehaviour
 
     private void GenerateGrid()
     {
-        for (int x=0; x < columns; x++)
+        for (int x = 0; x < columns; x++)
         {
-            for (int y=0; y < rows; y++)
+            for (int y = 0; y < rows; y++)
             {
                 if (numOfLevels > 0)
                 {
-                    for (int z=0; z < numOfLevels * 10; z++)
+                    for (int z = 0; z < numOfLevels * 10; z++)
                     {
                         Vector3 pos = new Vector3(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y + (0.1f * z), bottomLeft.z + (y * scale) + (y * spacing));
                         if (MaybeCreateGridElement(pos, x, y))
@@ -133,7 +132,7 @@ public class GridController : ExposableMonobehaviour
             }
         }
         return nearest;
-    }    
+    }
 
     public void ClearActiveElements()
     {
@@ -164,7 +163,7 @@ public class GridController : ExposableMonobehaviour
             NavMeshAgent actorAgent = actor.GetComponent<NavMeshAgent>();
             currentGridPosition.Visited = GridElement.Status.Occupied;
             List<GridElement> elementsInRange = FindReachableGridElements(actorAgent, currentGridPosition, actorRange);
-            Debug.Log("Elements in range: "+elementsInRange.Count);
+            Debug.Log("Elements in range: " + elementsInRange.Count);
             foreach (GridElement g in elementsInRange)
             {
                 g.gameObject.SetActive(true);
@@ -282,7 +281,7 @@ public class GridController : ExposableMonobehaviour
     public void Dev_SetWholeGridActive()
     {
         ClearActiveElements();
-        Creature currentActiveActor = References.Get<TurnCombatManager>().CurrentActiveActor;
+        Creature currentActiveActor = TurnCombatManager.Instance.CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;
@@ -319,7 +318,7 @@ public class GridController : ExposableMonobehaviour
         {
             for (int j = 0; j < columns; j++)
             {
-                Gizmos.DrawWireCube(new Vector3(transform.position.x + j*scale + j*spacing, transform.position.y + 0.5f * scale, transform.position.z + i*scale + i*spacing), new Vector3(1*scale, 1*scale, 1*scale));
+                Gizmos.DrawWireCube(new Vector3(transform.position.x + j * scale + j * spacing, transform.position.y + 0.5f * scale, transform.position.z + i * scale + i * spacing), new Vector3(1 * scale, 1 * scale, 1 * scale));
             }
         }
     }

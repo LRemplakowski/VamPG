@@ -1,22 +1,16 @@
 using Entities.Cover;
+using SunsetSystems.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
-public class CoverDetector : Manager
+public class CoverDetector : Singleton<CoverDetector>
 {
     [SerializeField]
     private float coverDetectionRadius = 1f;
     [SerializeField]
     private LayerMask coverLayerMask;
-    private static CoverDetector instance;
-
-    private void Start()
-    {
-        instance = this;
-    }
 
     public static bool IsPositionNearCover(GridElement gridPos, out List<Cover> coverSources)
     {

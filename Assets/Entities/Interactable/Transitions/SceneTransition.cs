@@ -29,14 +29,14 @@
         [SerializeField]
         private SceneLoader _sceneLoader;
         [SerializeField]
-        private FadeScreenAnimator _fadeScreenAnimator;
+        private SceneLoadingUIManager _fadeUI;
         [SerializeField]
         private CameraControlScript _cameraControlScript;
 
         private void Start()
         {
             _sceneLoader = FindObjectOfType<SceneLoader>();
-            _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+            _fadeUI = this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
         public override void Interact()
@@ -67,7 +67,7 @@
 
         public async void MoveToArea()
         {
-            await _fadeScreenAnimator.FadeOut(.5f);
+            await _fadeUI.DoFadeOutAsync(.5f);
             List<Creature> party = GameRuntimeData.GetActivePartyCreatures();
             List<Vector3> positions = PlayerInputHandler.GetPositionsFromPoint(_targetEntryPoint.transform.position);
             for (int i = 0; i < party.Count; i++)
@@ -81,7 +81,7 @@
             _cameraControlScript.CurrentBoundingBox = _targetBoundingBox;
             _cameraControlScript.ForceToPosition(_targetEntryPoint.transform.position);
             await Task.Delay(500);
-            await _fadeScreenAnimator.FadeIn(.5f);
+            await _fadeUI.DoFadeInAsync(.5f);
         }
     }
 

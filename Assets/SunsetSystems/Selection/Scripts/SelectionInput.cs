@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SunsetSystems.Utils;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -6,11 +7,11 @@ namespace InsaneSystems.RTSSelection
 {
     /// <summary> In this class handled all player selection input. </summary>
     [RequireComponent(typeof(Selection))]
-    public class SelectionInput : InputHandler
+    public class SelectionInput : InitializedSingleton<SelectionInput>
     {
         [SerializeField] Selection selection;
         [SerializeField] UI.SelectionRect selectionRect;
-   
+
         Vector3 startMousePosition;
         Vector2 mousePosition;
 
@@ -21,7 +22,7 @@ namespace InsaneSystems.RTSSelection
             Initialize();
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             if (selectionRect == null)
                 selectionRect = FindObjectOfType<UI.SelectionRect>(true);
@@ -33,11 +34,11 @@ namespace InsaneSystems.RTSSelection
         {
             if (context.performed)
             {
-                ManageInput(HandleClick);
+                HandleClick();
             }
             else if (context.canceled)
             {
-                ManageInput(HandleClickRelease);
+                HandleClickRelease();
             }
         }
 
@@ -59,6 +60,6 @@ namespace InsaneSystems.RTSSelection
             if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
-        }    
+        }
     }
 }

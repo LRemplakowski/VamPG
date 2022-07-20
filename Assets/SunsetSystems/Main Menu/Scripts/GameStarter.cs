@@ -3,10 +3,11 @@ using SunsetSystems.Loading;
 using UnityEngine;
 using SunsetSystems.Resources;
 using SunsetSystems.GameplayMenu;
+using SunsetSystems.Utils;
 
 namespace SunsetSystems.Data
 {
-    public class GameStarter : MonoBehaviour
+    public class GameStarter : Singleton<GameStarter>
     {
         private const string MAIN_MENU = "MainMenuParent";
 
@@ -29,9 +30,7 @@ namespace SunsetSystems.Data
         [SerializeField]
         private GameObject _mainMenuParent;
         [SerializeField]
-        private GameplayMenuManager _gameplayUiParent;
-        [SerializeField]
-        private FadeScreenAnimator _fadeScreenAnimator;
+        private GameplayUIManager _gameplayUiParent;
 
         private void Reset()
         {
@@ -48,9 +47,7 @@ namespace SunsetSystems.Data
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
             if (!_gameplayUiParent)
-                _gameplayUiParent = FindObjectOfType<GameplayMenuManager>(true);
-            if (!_fadeScreenAnimator)
-                _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+                _gameplayUiParent = FindObjectOfType<GameplayUIManager>(true);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
@@ -80,6 +77,7 @@ namespace SunsetSystems.Data
 
         public async void InitializeGame()
         {
+            Start();
             CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
             mainCharacterAsset.CreatureName = _characterName;
             mainCharacterAsset.StatsAsset = _stats;
@@ -91,6 +89,7 @@ namespace SunsetSystems.Data
 
         public async void InitializeGameDebug()
         {
+            Start();
             CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = debugAsset;

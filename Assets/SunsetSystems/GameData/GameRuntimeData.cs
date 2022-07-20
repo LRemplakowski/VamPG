@@ -4,7 +4,7 @@ using SunsetSystems.Loading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
-using Utils.Singleton;
+using SunsetSystems.Utils;
 
 namespace SunsetSystems.Data
 {

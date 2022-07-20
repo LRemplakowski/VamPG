@@ -2,13 +2,12 @@
 using Apex.AI;
 using Apex;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using Entities.Characters;
 using Entities.Cover;
 
 public sealed class CreatureContext : IAIContext
 {
-    public CreatureContext(Creature owner) 
+    public CreatureContext(Creature owner)
     {
         Owner = owner;
     }
@@ -36,15 +35,15 @@ public sealed class CreatureContext : IAIContext
 
     public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => References.Get<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
+    public List<Creature> OtherCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => References.Get<TurnCombatManager>().GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
+    public List<Creature> PlayerControlledCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
 
-    public List<Creature> FriendlyCombatants => References.Get<TurnCombatManager>()
+    public List<Creature> FriendlyCombatants => TurnCombatManager.Instance
         .GetCreaturesInCombat()
         .FindAll(c => c.Data.Faction.Equals(Faction.Friendly));
 
-    public List<Creature> EnemyCombatants => References.Get<TurnCombatManager>()
+    public List<Creature> EnemyCombatants => TurnCombatManager.Instance
         .GetCreaturesInCombat()
         .FindAll(c => c.Data.Faction.Equals(Faction.Hostile));
 }

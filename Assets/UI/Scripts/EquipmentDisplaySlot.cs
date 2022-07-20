@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,17 +37,17 @@ public class EquipmentDisplaySlot : ExposableMonobehaviour
     public void OnLeftClick()
     {
         UnequipItem();
-    }    
+    }
 
     public void UnequipItem()
     {
-        if(item != null)
-            References.Get<EquipmentManager>().Unequip((int)item.slot);
+        if (item != null)
+            EquipmentManager.Instance.Unequip((int)item.slot);
     }
 
     public void DisplayItem(EquipmentPiece item)
     {
-        if(item != null)
+        if (item != null)
         {
             Debug.Log(item + " assigned to slot " + equipmentSlot);
             this.item = item;

@@ -61,7 +61,9 @@ namespace Entities.Interactable
             }
         }
 
-        //If overriden, base should be called always, after any override logic.
+        ///<summary>
+        ///If overriden, base should be called always, after any override logic.
+        /// </summary>
         public virtual void Interact()
         {
             Debug.Log(TargetedBy + " interacted with object " + gameObject);

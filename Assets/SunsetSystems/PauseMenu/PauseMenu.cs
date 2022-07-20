@@ -7,8 +7,6 @@ namespace SunsetSystems.UI.Pause
         [SerializeField]
         private Canvas _pauseMenuCanvas;
         [SerializeField]
-        private GUIWindowsManager _windowsManager;
-        [SerializeField]
         private PauseUISelector _inventory, _journal, _settings;
         public static bool IsGamePaused { get; private set; }
         private GameState _cachedPreviousState;
@@ -17,8 +15,6 @@ namespace SunsetSystems.UI.Pause
         {
             if (_pauseMenuCanvas == null)
                 _pauseMenuCanvas = GetComponent<Canvas>();
-            if (_windowsManager == null)
-                _windowsManager = FindObjectOfType<GUIWindowsManager>();
             StateManager.OnGameStateChanged += CachePreviousState;
         }
 

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using SunsetSystems.Utils;
 using SunsetSystems.Input.CameraControl;
 using Glitchers;
+using SunsetSystems.Utils.Threading;
 
 namespace SunsetSystems.Loading
 {
-    internal abstract class DefaultSceneLogic : AbstractSceneLogic
+    internal class DefaultSceneLogic : AbstractSceneLogic
     {
         [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;
@@ -41,11 +42,26 @@ namespace SunsetSystems.Loading
                 Vector3 cameraPosition = entryPoint.transform.position;
                 HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
-            foreach (IInitialized initable in FindInterfaces.Find<IInitialized>())
-            {
-                await initable.InitializeAsync();
-            }
+            await Task.WhenAll(InitializeObjects(FindInterfaces.Find<IInitialized>()));
+            Debug.Log("Finished initializing objects!");
             PlayerInputHandler.Instance.SetPlayerInputActive(true);
+
+            static List<Task> InitializeObjects(List<IInitialized> objectsToInitialize)
+            {
+                List<Task> initializationTasks = new();
+                foreach (IInitialized initializable in objectsToInitialize)
+                {
+                    Debug.Log("Starting initialization for object " + initializable.ToString());
+                    initializationTasks.Add(Task.Run(() =>
+                    {
+                        Dispatcher.Instance.Invoke(async () =>
+                        {
+                            await initializable.InitializeAsync();
+                        });
+                    }));
+                }
+                return initializationTasks;
+            }
         }
 
         private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)

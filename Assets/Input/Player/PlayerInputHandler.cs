@@ -61,11 +61,13 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     {
         if (active)
         {
+            Debug.Log("Enabling player input");
             playerInput.ActivateInput();
             playerInput.SwitchCurrentActionMap("Player");
         }
         else
         {
+            Debug.Log("Disabling player input");
             playerInput.DeactivateInput();
             playerInput.SwitchCurrentActionMap("UI");
         }

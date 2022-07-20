@@ -17,6 +17,7 @@ namespace SunsetSystems.Bootstraper
         static LoadedScenesCache()
         {
             EditorSceneManager.sceneOpened += OnSceneOpened;
+            EditorSceneManager.sceneClosed += OnSceneClosed;
         }
 
         private static void OnSceneOpened(Scene scene, OpenSceneMode mode)
@@ -31,6 +32,12 @@ namespace SunsetSystems.Bootstraper
                 if (sceneAtIndex.buildIndex != GAME_SCENE_INDEX && sceneAtIndex.buildIndex != UI_SCENE_INDEX)
                     _cachedScenes.Add(scene.path);
             }
+        }
+
+        private static void OnSceneClosed(Scene scene)
+        {
+            if (scene.buildIndex != GAME_SCENE_INDEX && scene.buildIndex != UI_SCENE_INDEX)
+                _cachedScenes.Remove(scene.path);
         }
     }
 #endif

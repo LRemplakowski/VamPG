@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Dialogue;
-using SunsetSystems.Management;
 using UnityEngine;
 
 namespace Entities.Interactable
@@ -13,8 +12,8 @@ namespace Entities.Interactable
 
         public override void Interact()
         {
-            References.Get<DialogueManager>().StartDialogue(entityDialogue);
+            DialogueManager.Instance.StartDialogue(entityDialogue);
             base.Interact();
         }
-    } 
+    }
 }

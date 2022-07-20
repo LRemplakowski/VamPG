@@ -424,12 +424,12 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""RightHold"",
-                    ""type"": ""Button"",
+                    ""name"": ""RightClick"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""be1d8881-715b-4137-bef3-3ee94d4fba5b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
@@ -474,7 +474,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""RightHold"",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -563,7 +563,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
         m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
-        m_UI_RightHold = m_UI.FindAction("RightHold", throwIfNotFound: true);
+        m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -747,7 +747,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Click;
     private readonly InputAction m_UI_Point;
     private readonly InputAction m_UI_Escape;
-    private readonly InputAction m_UI_RightHold;
+    private readonly InputAction m_UI_RightClick;
     public struct UIActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -755,7 +755,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputAction @Escape => m_Wrapper.m_UI_Escape;
-        public InputAction @RightHold => m_Wrapper.m_UI_RightHold;
+        public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -774,9 +774,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @Escape.started -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
                 @Escape.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
                 @Escape.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnEscape;
-                @RightHold.started -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
-                @RightHold.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
-                @RightHold.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnRightHold;
+                @RightClick.started -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
+                @RightClick.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
+                @RightClick.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnRightClick;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -790,9 +790,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
-                @RightHold.started += instance.OnRightHold;
-                @RightHold.performed += instance.OnRightHold;
-                @RightHold.canceled += instance.OnRightHold;
+                @RightClick.started += instance.OnRightClick;
+                @RightClick.performed += instance.OnRightClick;
+                @RightClick.canceled += instance.OnRightClick;
             }
         }
     }
@@ -862,6 +862,6 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         void OnClick(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
-        void OnRightHold(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
     }
 }

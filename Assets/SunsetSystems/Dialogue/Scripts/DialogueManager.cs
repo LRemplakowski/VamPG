@@ -3,11 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DD;
-using SunsetSystems.Management;
+using SunsetSystems.Utils;
 
 namespace SunsetSystems.Dialogue
 {
-    public class DialogueManager : Manager
+    public class DialogueManager : Singleton<DialogueManager>
     {
         [SerializeField]
         private VerticalLayoutGroup _historyContent, _optionsContent;
@@ -73,8 +73,8 @@ namespace SunsetSystems.Dialogue
             if (_dialogueWindow == null)
             {
                 _dialogueWindow = FindObjectOfType<DialogueWindowUI>(true);
-                _historyContent = _dialogueWindow.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
-                _optionsContent = _dialogueWindow.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
+                _historyContent = _dialogueWindow?.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
+                _optionsContent = _dialogueWindow?.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
             }
         }
 

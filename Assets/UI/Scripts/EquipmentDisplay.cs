@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
 public class EquipmentDisplay : ExposableMonobehaviour
@@ -12,7 +11,7 @@ public class EquipmentDisplay : ExposableMonobehaviour
     private void Awake()
     {
         displaySlots = GetComponentsInChildren<EquipmentDisplaySlot>(true);
-        equipmentManager = References.Get<EquipmentManager>();
+        equipmentManager = EquipmentManager.Instance;
     }
 
     private void OnEnable()
@@ -28,7 +27,7 @@ public class EquipmentDisplay : ExposableMonobehaviour
     public void UpdateDisplay(EquipmentPiece newItem, EquipmentPiece oldItem)
     {
         //Debug.Log("Update display: "+newItem);
-        foreach(EquipmentDisplaySlot s in displaySlots)
+        foreach (EquipmentDisplaySlot s in displaySlots)
         {
             EquipmentPiece item = equipmentManager.GetItemInSlot(s.equipmentSlot);
             s.DisplayItem(item);

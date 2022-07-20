@@ -3,16 +3,16 @@ using SunsetSystems.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using SunsetSystems.Utils.Threading;
+using SunsetSystems.Utils;
+using SunsetSystems.Constants;
 
 namespace SunsetSystems.Loading
 {
-    public class SceneLoader : MonoBehaviour
+    public class SceneLoader : Singleton<SceneLoader>
     {
-        [SerializeField]
-        private LoadingScreenController _loadingScreenController;
-        [SerializeField]
-        private FadeScreenAnimator _fadeScreenAnimator;
         private Scene _previousScene;
+        private SceneLoadingUIManager LoadingScreenUI => this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
         public SceneLoadingData CachedTransitionData { get; private set; }
 
@@ -26,17 +26,10 @@ namespace SunsetSystems.Loading
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        private void Awake()
+        protected override void Awake()
         {
-            _previousScene = SceneManager.GetSceneAt(0);
-        }
-
-        private void Start()
-        {
-            if (_loadingScreenController == null)
-                _loadingScreenController = FindObjectOfType<LoadingScreenController>(true);
-            if (_fadeScreenAnimator == null)
-                _fadeScreenAnimator = FindObjectOfType<FadeScreenAnimator>(true);
+            base.Awake();
+            _previousScene = new Scene();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
@@ -47,27 +40,44 @@ namespace SunsetSystems.Loading
 
         internal async Task LoadGameScene(SceneLoadingData data)
         {
-            await _fadeScreenAnimator.FadeOut(.5f);
-            Debug.Log("enabling loading screen");
-            _loadingScreenController.gameObject.SetActive(true);
-            await _fadeScreenAnimator.FadeIn(.5f);
+            await LoadingScreenUI.DoFadeOutAsync(.5f);
+            LoadingScreenUI.EnableAndResetLoadingScreen();
+            await UnityAwaiters.NextFrame();
+            await LoadingScreenUI.DoFadeInAsync(.5f);
+            // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
+            // Checking for -1 buildIndex works around this issue.
+            if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
+            {
+                await UnloadScene(_previousScene.buildIndex);
+            }
             await LoadNewScene(data);
             await InitializeSceneLogic(data);
-            _loadingScreenController.EnableContinue();
+            await LoadingScreenUI.DoFadeOutAsync(.5f);
+            LoadingScreenUI.DisableLoadingScreen();
+            await UnityAwaiters.NextFrame();
+            await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
         internal async Task LoadSavedScene(Action preLoadingAction)
         {
-            await _fadeScreenAnimator.FadeOut(.5f);
-            Debug.Log("enabling loading screen");
-            _loadingScreenController.gameObject.SetActive(true);
-            await Task.Yield();
-            await _fadeScreenAnimator.FadeIn(.5f);
+            await LoadingScreenUI.DoFadeOutAsync(.5f);
+            LoadingScreenUI.EnableAndResetLoadingScreen();
+            await UnityAwaiters.NextFrame();
+            await LoadingScreenUI.DoFadeInAsync(.5f);
+            // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
+            // Checking for -1 buildIndex works around this issue.
+            if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
+            {
+                await UnloadScene(_previousScene.buildIndex);
+            }
             SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             await LoadNewScene(data);
             await SaveLoadManager.LoadObjects();
             await InitializeSceneLogic(data);
-            _loadingScreenController.EnableContinue();
+            await LoadingScreenUI.DoFadeOutAsync(.5f);
+            LoadingScreenUI.DisableLoadingScreen();
+            await UnityAwaiters.NextFrame();
+            await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
         internal async Task LoadSavedScene()
@@ -75,18 +85,22 @@ namespace SunsetSystems.Loading
             await LoadSavedScene(null);
         }
 
-        private Task UnloadPreviousScene()
+        private Task UnloadScene(int sceneIndex)
         {
-            AsyncOperation op = SceneManager.UnloadSceneAsync(_previousScene.buildIndex);
-            return HandleUnloadingOperation(op);
+            return Task.Run(() =>
+            {
+                Dispatcher.Instance.Invoke(async () =>
+                {
+                    AsyncOperation op = SceneManager.UnloadSceneAsync(sceneIndex);
+                    await HandleUnloadingOperation(op);
+                });
+            });
         }
 
         private async Task HandleUnloadingOperation(AsyncOperation unloading)
         {
             while (!unloading.isDone)
             {
-                float progress = Mathf.Clamp01(unloading.progress / 0.9f);
-                _loadingScreenController.SetUnloadingProgress(progress);
                 await Task.Yield();
             }
         }
@@ -98,20 +112,24 @@ namespace SunsetSystems.Loading
             if (data.preLoadingActions != null)
                 foreach (Action action in data.preLoadingActions)
                 {
-                    action.Invoke();
+                    action?.Invoke();
                     await Task.Yield();
                 }
-            if (_previousScene.buildIndex != 0)
-                await UnloadPreviousScene();
             await DoSceneLoading();
         }
 
         private async Task InitializeSceneLogic(SceneLoadingData data)
         {
-            AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
-            Debug.Log("Scene logic found? " + (sceneLogic != null));
-            if (sceneLogic)
-                await sceneLogic.StartSceneAsync(data);
+            await Task.Run(() =>
+            {
+                Dispatcher.Instance.Invoke(async () =>
+                {
+                    AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
+                    Debug.Log("Scene logic found? " + (sceneLogic != null).ToString());
+                    if (sceneLogic)
+                        await sceneLogic.StartSceneAsync(data);
+                });
+            });
         }
 
         private Task AsyncLoadSceneByIndex(int sceneIndex)
@@ -133,7 +151,7 @@ namespace SunsetSystems.Loading
             while (!loadingOp.isDone)
             {
                 float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
-                _loadingScreenController.SetLoadingProgress(progress);
+                LoadingScreenUI.UpadteLoadingBar(progress);
                 Debug.Log(progress);
                 await Task.Yield();
             }

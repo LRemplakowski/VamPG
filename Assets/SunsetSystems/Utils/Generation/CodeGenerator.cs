@@ -22,7 +22,7 @@ namespace SunsetSystems.Utils.Generation
                 nameSpaceTab = "\t";
             }
             contentBuilder.Append(nameSpaceTab + "public enum " + enumName + "\n");
-            contentBuilder.Append(nameSpaceTab + "{\n");
+            contentBuilder.Append(nameSpaceTab + "{ \n");
             for (int i = 0; i < names.Count; i++)
             {
                 contentBuilder.Append(nameSpaceTab + "\t");
@@ -56,7 +56,7 @@ namespace SunsetSystems.Utils.Generation
                 nameSpaceTab = "\t";
             }
             contentBuilder.Append(nameSpaceTab + "public enum " + enumName + "\n");
-            contentBuilder.Append(nameSpaceTab + "{\n");
+            contentBuilder.Append(nameSpaceTab + "{ \n");
             for (int i = 0; i < names.Count; i++)
             {
                 contentBuilder.Append(nameSpaceTab + "\t");
@@ -152,6 +152,12 @@ namespace SunsetSystems.Utils.Generation
                 fieldName = fieldName.ToCamelCase();
                 fieldType = fieldType.RemoveSpecialCharacters();
                 contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                if (fieldData.createGetter)
+                {
+                    contentBuilder.Append(nameSpaceTab + "\t");
+                    string propertyName = fieldName.ToPascalCase();
+                    contentBuilder.Append("public " + fieldType + " " + propertyName + " { get => " + fieldName + "; }\n");
+                }
                 await Task.Yield();
             }
             foreach (FieldData fieldData in data.publicFieldsData)
@@ -173,6 +179,12 @@ namespace SunsetSystems.Utils.Generation
                 fieldName = fieldName.ToCamelCase();
                 fieldType = fieldType.RemoveSpecialCharacters();
                 contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                if (fieldData.createGetter)
+                {
+                    contentBuilder.Append(nameSpaceTab + "\t");
+                    string propertyName = fieldName.ToPascalCase();
+                    contentBuilder.Append("public " + fieldType + " " + propertyName + " { get => " + fieldName + "; }\n");
+                }
                 await Task.Yield();
             }
             contentBuilder.Append(nameSpaceTab + "}\n");
@@ -255,6 +267,12 @@ namespace SunsetSystems.Utils.Generation
                 fieldName = fieldName.ToCamelCase();
                 fieldType = fieldType.RemoveSpecialCharacters();
                 contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                if (fieldData.createGetter)
+                {
+                    contentBuilder.Append(nameSpaceTab + "\t");
+                    string propertyName = fieldName.ToPascalCase();
+                    contentBuilder.Append("public " + fieldType + " " + propertyName + " { get => " + fieldName + "; }\n");
+                }
             }
             foreach (FieldData fieldData in data.publicFieldsData)
             {
@@ -275,6 +293,12 @@ namespace SunsetSystems.Utils.Generation
                 fieldName = fieldName.ToCamelCase();
                 fieldType = fieldType.RemoveSpecialCharacters();
                 contentBuilder.Append("private " + fieldType + " " + fieldName + ";\n");
+                if (fieldData.createGetter)
+                {
+                    contentBuilder.Append(nameSpaceTab + "\t");
+                    string propertyName = fieldName.ToPascalCase();
+                    contentBuilder.Append("public " + fieldType + " " + propertyName + " { get => " + fieldName + "; }\n");
+                }
             }
             contentBuilder.Append(nameSpaceTab + "}\n");
             if (nameSpace.Length > 0)
@@ -317,25 +341,27 @@ namespace SunsetSystems.Utils.Generation
         {
             public readonly string fieldName, fieldType;
             public readonly IReadOnlyList<string> fieldAttributes;
+            public readonly bool createGetter;
 
-            public FieldData(string fieldName, string fieldType, List<string> fieldAttributes)
+            public FieldData(string fieldName, string fieldType, List<string> fieldAttributes, bool createGetter)
             {
                 this.fieldName = fieldName;
                 this.fieldType = fieldType;
                 this.fieldAttributes = fieldAttributes;
+                this.createGetter = createGetter;
             }
         }
 
         public class ClassBuilder
         {
-            private string _nameSpace;
-            private string _baseClass;
+            private string _nameSpace = "";
+            private string _baseClass = "";
             private readonly string _className;
             private readonly string _dataPath;
             private readonly List<FieldData> _privateFields = new();
             private readonly List<FieldData> _publicFields = new();
             private readonly List<string> _usingDirectives = new();
-            private string _classAttributes;
+            private string _classAttributes = "";
             private readonly List<string> _baseClassGenerics = new();
             private readonly List<string> _generatedClassGenerics = new();
 
@@ -368,17 +394,16 @@ namespace SunsetSystems.Utils.Generation
                 if (_publicFields.Find(d => d.fieldName.Equals(data.fieldName)) == null && _privateFields.Find(d => d.fieldName.Equals(data.fieldName)) == null)
                     _privateFields.Add(data);
                 else
-                    Debug.LogError("There is already a public field with the name " + data.fieldName + "!");
+                    Debug.LogError("There is already a field with the name " + data.fieldName + "!");
                 return this;
             }
 
-            public ClassBuilder AddPrivateField(string name, string type, params string[] attributes)
+            public ClassBuilder AddPrivateField(string name, string type, bool createGetter, params string[] attributes)
             {
-                Debug.Log("Adding private field " + name + " of type " + type);
                 if (_publicFields.Find(data => data.fieldName.Equals(name)) == null && _privateFields.Find(data => data.fieldName.Equals(name)) == null)
-                    _privateFields.Add(new(name, type, attributes.ToList()));
+                    _privateFields.Add(new(name, type, attributes.ToList(), createGetter));
                 else
-                    Debug.LogError("There is already a public field with the name " + name + "!");
+                    Debug.LogError("There is already a field with the name " + name + "!");
                 return this;
             }
 
@@ -387,17 +412,16 @@ namespace SunsetSystems.Utils.Generation
                 if (_publicFields.Find(d => d.fieldName.Equals(data.fieldName)) == null && _privateFields.Find(d => d.fieldName.Equals(data.fieldName)) == null)
                     _publicFields.Add(data);
                 else
-                    Debug.LogError("There is already a public field with the name " + data.fieldName + "!");
+                    Debug.LogError("There is already a field with the name " + data.fieldName + "!");
                 return this;
             }
 
-            public ClassBuilder AddPublicField(string name, string type, params string[] attributes)
+            public ClassBuilder AddPublicField(string name, string type, bool createGetter, params string[] attributes)
             {
-                Debug.Log("Adding private field " + name + " of type " + type);
                 if (_privateFields.Find(data => data.fieldName.Equals(name)) == null && _publicFields.Find(data => data.fieldName.Equals(name)) == null)
-                    _publicFields.Add(new(name, type, attributes.ToList()));
+                    _publicFields.Add(new(name, type, attributes.ToList(), createGetter));
                 else
-                    Debug.LogError("There is already a public field with the name " + name + "!");
+                    Debug.LogError("There is already a field with the name " + name + "!");
                 return this;
             }
 

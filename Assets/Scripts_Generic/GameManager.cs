@@ -1,9 +1,8 @@
 ﻿using Entities.Characters;
 using SunsetSystems.Data;
-using SunsetSystems.Management;
-using UnityEngine;
+using SunsetSystems.Utils;
 
-public class GameManager : Manager
+public class GameManager : Singleton<GameManager>
 {
     private static Creature _player;
     private static GridController _gridController;

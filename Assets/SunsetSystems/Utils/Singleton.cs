@@ -1,10 +1,10 @@
-﻿﻿using UnityEngine;
+﻿using UnityEngine;
 
-namespace Utils.Singleton
+namespace SunsetSystems.Utils
 {
-    public class Singleton<T> : ExposableMonobehaviour where T : Component
+    public abstract class Singleton<T> : ExposableMonobehaviour where T : Component
     {
-        private static T instance;
+        protected static T instance;
         public static T Instance
         {
             get
@@ -14,7 +14,7 @@ namespace Utils.Singleton
                     instance = FindObjectOfType<T>();
                     if (instance == null)
                     {
-                        GameObject obj = new GameObject
+                        GameObject obj = new()
                         {
                             name = typeof(T).Name
                         };
@@ -25,7 +25,7 @@ namespace Utils.Singleton
             }
         }
 
-        public virtual void Awake()
+        protected virtual void Awake()
         {
             if (instance == null)
             {

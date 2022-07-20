@@ -16,7 +16,7 @@ namespace Entities.Characters.Actions
         {
             Owner = attacker;
             Target = target;
-            HostileActionCondition condition = new HostileActionCondition(target, attacker);
+            HostileActionCondition condition = new(target, attacker);
             onAttackFinished += condition.OnHostileActionFinished;
             conditions.Add(condition);
             this.condition = condition;
@@ -26,5 +26,5 @@ namespace Entities.Characters.Actions
         {
             onAttackFinished -= condition.OnHostileActionFinished;
         }
-    } 
+    }
 }

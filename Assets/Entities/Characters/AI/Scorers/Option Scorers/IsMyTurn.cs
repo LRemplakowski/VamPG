@@ -1,6 +1,5 @@
 ﻿using Apex.AI;
 using Apex.Serialization;
-using SunsetSystems.Management;
 
 namespace AI.Scorers.Option
 {
@@ -11,7 +10,7 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.Owner.Equals(References.Get<TurnCombatManager>().CurrentActiveActor) ? score : 0f;
+            return not ^ context.Owner.Equals(TurnCombatManager.Instance.CurrentActiveActor) ? score : 0f;
         }
     }
 }

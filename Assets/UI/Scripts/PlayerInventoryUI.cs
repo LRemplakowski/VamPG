@@ -1,7 +1,6 @@
 ﻿using Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 
 public class PlayerInventoryUI : UIWindow
@@ -15,7 +14,7 @@ public class PlayerInventoryUI : UIWindow
 
     private void Start()
     {
-        if(playerInventory == null)
+        if (playerInventory == null)
         {
             playerInventory = FindObjectOfType<PlayerControlledCharacter>().GetInventory();
         }
@@ -28,9 +27,9 @@ public class PlayerInventoryUI : UIWindow
     private void UpdateUI()
     {
         Debug.Log("Updating inventory!");
-        for(int i=0; i < slots.Length; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            if(i < playerInventory.items.Count)
+            if (i < playerInventory.items.Count)
             {
                 slots[i].AddItem(playerInventory.items[i]);
             }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SunsetSystems.Formation.UI;
 using UnityEngine;
 using TMPro;
-using SunsetSystems.Management;
 
 namespace SunsetSystems.Formation.UI
 {

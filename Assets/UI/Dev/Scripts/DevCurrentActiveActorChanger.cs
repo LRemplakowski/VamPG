@@ -1,7 +1,6 @@
 using Entities.Characters;
 using System;
 using System.Collections.Generic;
-using SunsetSystems.Management;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,7 +25,7 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
     private void Start()
     {
         dropdown = GetComponent<Dropdown>();
-        turnCombatManager = References.Get<TurnCombatManager>();
+        turnCombatManager = TurnCombatManager.Instance;
         activeSceneCreatures = turnCombatManager.GetCreaturesInCombat();
         dropdown.ClearOptions();
         List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();

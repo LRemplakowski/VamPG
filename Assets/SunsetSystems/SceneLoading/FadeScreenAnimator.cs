@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Loading.UI
 {
-    [Serializable]
-    [RequireComponent(typeof(Tagger))]
-    public class FadeScreenAnimator : ExposableMonobehaviour
+    internal class FadeScreenAnimator : ExposableMonobehaviour
     {
         [SerializeField]
         private Image fadePanel;

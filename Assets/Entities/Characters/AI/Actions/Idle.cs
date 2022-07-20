@@ -1,5 +1,4 @@
 ﻿using Apex.AI;
-using SunsetSystems.Management;
 using UnityEngine;
 
 namespace AI.Actions
@@ -8,8 +7,8 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            if (StateManager.GetCurrentState().Equals(GameState.Combat) && 
-                context.Owner.Equals(References.Get<TurnCombatManager>().CurrentActiveActor) && 
+            if (StateManager.GetCurrentState().Equals(GameState.Combat) &&
+                context.Owner.Equals(TurnCombatManager.Instance.CurrentActiveActor) &&
                 !context.IsPlayerControlled)
             {
                 Debug.LogWarning("idle in combat! creature: " + context.Owner);

@@ -4,9 +4,9 @@ using TMPro;
 using SunsetSystems.Loading;
 using System.Threading.Tasks;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Loading.UI
 {
-    public class LoadingScreenController : MonoBehaviour
+    internal class LoadingScreenController : MonoBehaviour
     {
         private const string LOADING_SCREEN_TAG = "LoadingScreen";
 
@@ -18,8 +18,12 @@ namespace SunsetSystems.Loading
         private TextMeshProUGUI loadingBarText;
         [SerializeField]
         private Button continueButton;
-
+        [SerializeField]
         private FadeScreenAnimator transitionAnimator;
+
+        public delegate void LoadingScreenHandler();
+        public static event LoadingScreenHandler LoadingScreenEnabled;
+        public static event LoadingScreenHandler LoadingScreenDisabled;
 
         private void OnEnable()
         {
@@ -33,7 +37,7 @@ namespace SunsetSystems.Loading
                 continueButton = GetComponentInChildren<Button>();
             loadingBar.value = 0f;
             continueButton.gameObject.SetActive(false);
-            StateManager.SetCurrentState(GameState.GamePaused);
+            LoadingScreenEnabled?.Invoke();
         }
 
         private void Start()
@@ -50,7 +54,7 @@ namespace SunsetSystems.Loading
         public void SetLoadingProgress(float value)
         {
             loadingBar.value = (value / 2) + .5f;
-            loadingBarText.text = ((value * 50f) + 50f) + " %";
+            loadingBarText.text = (value * 50f) + 50f + " %";
         }
 
         public void EnableContinue()
@@ -62,14 +66,14 @@ namespace SunsetSystems.Loading
         public async void OnContinue()
         {
             await transitionAnimator.FadeOut(.5f);
-            await DisableLoadingScreen();
+            DisableLoadingScreen();
+            await transitionAnimator.FadeIn(.5f);
         }
 
-        private async Task DisableLoadingScreen()
+        private void DisableLoadingScreen()
         {
             this.gameObject.SetActive(false);
-            await transitionAnimator.FadeIn(.5f);
-            StateManager.SetCurrentState(GameState.Exploration);
+            LoadingScreenDisabled?.Invoke();
         }
     }
 }

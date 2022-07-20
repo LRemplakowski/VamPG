@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Glitchers
 {
@@ -16,7 +13,6 @@ namespace Glitchers
         public static List<T> Find<T>()
         {
             var interfaces = Object.FindObjectsOfType<MonoBehaviour>().OfType<T>().ToList();
-            Debug.Log("Found interfaces? " + interfaces != null);
             Debug.Log("Interfaces found: " + interfaces.Count);
             return interfaces;
         }

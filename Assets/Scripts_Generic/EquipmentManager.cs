@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SunsetSystems.Management;
+﻿using SunsetSystems.Utils;
 using UnityEngine;
 
 
-public class EquipmentManager : Manager
+public class EquipmentManager : Singleton<EquipmentManager>
 {
     public SkinnedMeshRenderer targetMesh;
 

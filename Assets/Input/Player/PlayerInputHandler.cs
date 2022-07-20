@@ -33,12 +33,12 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     [SerializeField]
     private float _followerStoppingDistance = 1.0f;
 
-    public delegate void OnLeftClickHandler();
-    public event OnLeftClickHandler OnLeftClickEvent;
-    public delegate void OnRightClickHandler();
-    public event OnRightClickHandler OnRightClickEvent;
-    public delegate void OnMousePositionHandler(Vector2 mousePosition);
-    public event OnMousePositionHandler OnMousePositionEvent;
+    public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
+    public static event OnLeftClickHandler OnLeftClickEvent;
+    public delegate void OnRightClickHandler(InputAction.CallbackContext context);
+    public static event OnRightClickHandler OnRightClickEvent;
+    public delegate void OnMousePositionHandler(InputAction.CallbackContext context);
+    public static event OnMousePositionHandler OnMousePositionEvent;
 
     protected override void Awake()
     {
@@ -75,12 +75,12 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     public void OnLeftClick(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
         Pointer device = playerInput.GetDevice<Pointer>();
         if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
             return;
-        OnLeftClickEvent?.Invoke();
+        OnLeftClickEvent?.Invoke(context);
+        if (!context.performed)
+            return;
     }
 
     private bool IsRaycastHittingUIObject(Vector2 position)
@@ -97,12 +97,12 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     public void OnRightClick(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
         Pointer device = playerInput.GetDevice<Pointer>();
         if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
             return;
-        OnRightClickEvent?.Invoke();
+        OnRightClickEvent?.Invoke(context);
+        if (!context.performed)
+            return;
         HandleWorldClick();
     }
 
@@ -185,10 +185,10 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
+        OnMousePositionEvent?.Invoke(context);
         if (!context.performed)
             return;
         mousePosition = context.ReadValue<Vector2>();
-        OnMousePositionEvent?.Invoke(mousePosition);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
         {

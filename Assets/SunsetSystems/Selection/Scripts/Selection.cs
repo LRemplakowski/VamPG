@@ -22,20 +22,26 @@ namespace InsaneSystems.RTSSelection
 
         Camera cachedCamera;
 
+        private void OnEnable()
+        {
+            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+        }
+
+        private void OnDisable()
+        {
+            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+        }
+
         private void Start()
         {
-            IInitialized init = this;
-            _ = init.InitializeAsync();
+            Initialize();
         }
 
         public override void Initialize()
         {
-            Dispatcher.Instance.Invoke(() =>
-            {
-                cachedCamera = Camera.main;
-                AllSelectables.Clear();
-                AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
-            });
+            cachedCamera = Camera.main;
+            AllSelectables.Clear();
+            AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
 
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.

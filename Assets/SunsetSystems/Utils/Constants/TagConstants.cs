@@ -10,4 +10,6 @@
     public const string SCENE_LOADING_UI = "SCENE_LOADING_UI";
     public const string MAIN_MENU_UI = "MAIN_MENU_UI";
     public const string GAMEPLAY_UI = "GAMEPLAY_UI";
+
+    public const string SELECTION_RECT = "SELECTION_RECT";
 }

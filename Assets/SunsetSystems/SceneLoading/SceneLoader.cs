@@ -42,7 +42,7 @@ namespace SunsetSystems.Loading
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
-            await NextFrame();
+            await UnityAwaiters.NextFrame();
             await LoadingScreenUI.DoFadeInAsync(.5f);
             // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
             // Checking for -1 buildIndex works around this issue.
@@ -54,7 +54,7 @@ namespace SunsetSystems.Loading
             await InitializeSceneLogic(data);
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
-            await NextFrame();
+            await UnityAwaiters.NextFrame();
             await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
@@ -62,7 +62,7 @@ namespace SunsetSystems.Loading
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
-            await NextFrame();
+            await UnityAwaiters.NextFrame();
             await LoadingScreenUI.DoFadeInAsync(.5f);
             // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
             // Checking for -1 buildIndex works around this issue.
@@ -76,7 +76,7 @@ namespace SunsetSystems.Loading
             await InitializeSceneLogic(data);
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
-            await NextFrame();
+            await UnityAwaiters.NextFrame();
             await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
@@ -182,15 +182,6 @@ namespace SunsetSystems.Loading
                     break;
                 default:
                     throw new ArgumentException("Invalid transition type!");
-            }
-        }
-
-        private async Task NextFrame()
-        {
-            int current = Time.frameCount;
-            while (current == Time.frameCount)
-            {
-                await Task.Yield();
             }
         }
     }

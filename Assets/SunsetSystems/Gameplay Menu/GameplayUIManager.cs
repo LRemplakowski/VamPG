@@ -1,8 +1,10 @@
+using SunsetSystems.Utils;
 using System;
 using UnityEngine;
 
 namespace SunsetSystems.GameplayMenu
 {
+    [RequireComponent(typeof(Tagger))]
     public class GameplayUIManager : MonoBehaviour
     {
         [SerializeField]

@@ -45,6 +45,7 @@ namespace SunsetSystems.Loading
             {
                 await initable.InitializeAsync();
             }
+            PlayerInputHandler.Instance.SetPlayerInputActive(true);
         }
 
         private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)

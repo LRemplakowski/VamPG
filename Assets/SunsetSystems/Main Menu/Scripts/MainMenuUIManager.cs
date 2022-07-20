@@ -1,9 +1,11 @@
 using SunsetSystems.Constants;
 using SunsetSystems.Data;
+using SunsetSystems.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.MainMenu
 {
+    [RequireComponent(typeof(Tagger))]
     public class MainMenuUIManager : MonoBehaviour
     {
         [SerializeField]

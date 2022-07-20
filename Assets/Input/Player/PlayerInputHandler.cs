@@ -10,6 +10,7 @@ using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
 
+[RequireComponent(typeof(Tagger))]
 public class PlayerInputHandler : Singleton<PlayerInputHandler>
 {
     private const int raycastRange = 100;
@@ -54,6 +55,20 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         if (lineOrigin == null)
             lineOrigin = player.GetComponentInChildren<LineRenderer>(true);
         turnCombatManager = FindObjectOfType<TurnCombatManager>();
+    }
+
+    public void SetPlayerInputActive(bool active)
+    {
+        if (active)
+        {
+            playerInput.ActivateInput();
+            playerInput.SwitchCurrentActionMap("Player");
+        }
+        else
+        {
+            playerInput.DeactivateInput();
+            playerInput.SwitchCurrentActionMap("UI");
+        }
     }
 
     public void OnLeftClick(InputAction.CallbackContext context)

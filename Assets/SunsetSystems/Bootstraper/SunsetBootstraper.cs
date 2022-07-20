@@ -13,6 +13,7 @@ namespace SunsetSystems.Bootstraper
     {
         [SerializeField]
         private List<SceneAsset> bootstrapScenes = new();
+        private static bool didLoadGameplayScene = false;
 
 #if UNITY_EDITOR
         protected async override void Awake()
@@ -21,7 +22,17 @@ namespace SunsetSystems.Bootstraper
             List<string> bootstrapScenePaths = new();
             bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
             await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));
+            didLoadGameplayScene = LoadedScenesCache.CachedScenes.Count > 0;
             await Task.WhenAll(LoadScenesByPathAsync(LoadedScenesCache.CachedScenes));
+            await Task.Delay(1000);
+            if (didLoadGameplayScene)
+            {
+                PlayerInputHandler.Instance.SetPlayerInputActive(true);
+                if (this.TryFindFirstWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
+                    mainMenu.SetActive(false);
+                else
+                    Debug.LogWarning("No Main Menu UI parent found!");
+            }
         }
 
         private List<Task> LoadScenesByPathAsync(List<string> paths)

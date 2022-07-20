@@ -34294,7 +34294,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1529137792174263843}
   - component: {fileID: 2573954928845595407}
-  m_Layer: 0
+  - component: {fileID: 7512620380234193935}
+  m_Layer: 5
   m_Name: MainMenu
   m_TagString: MainMenuParent
   m_Icon: {fileID: 0}
@@ -34330,6 +34331,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugUi: {fileID: 4405565065794023946}
+--- !u!114 &7512620380234193935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529137792174263840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: MAIN_MENU_UI
 --- !u!1 &1529137792175950795
 GameObject:
   m_ObjectHideFlags: 0
@@ -37387,7 +37401,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 31
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &1529137792273878195
 MonoBehaviour:

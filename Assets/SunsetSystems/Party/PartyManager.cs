@@ -1,51 +1,40 @@
 ﻿using Entities.Characters;
 using Entities.Characters.Data;
 using SunsetSystems.Data;
-using System.Threading.Tasks;
 using UI.CharacterPortraits;
 using UnityEngine;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.Threading;
+using System.Collections.Generic;
 
 namespace SunsetSystems.Party
 {
     public class PartyManager : InitializedSingleton<PartyManager>
     {
         [SerializeField, ReadOnly]
-        private Creature[] _currentPartyMembers;
-        private Creature[] CurrentPartyMembers { get => _currentPartyMembers; set => _currentPartyMembers = value; }
-        [SerializeField]
-        private PartyPortraitsController partyPortraits;
+        private List<Creature> _currentPartyMembers;
+        private List<Creature> CurrentPartyMembers { get => _currentPartyMembers; set => _currentPartyMembers = value; }
+        private PartyPortraitsController _partyPortraits;
+        private PartyPortraitsController PartyPortraits
+        {
+            get
+            {
+                if (!_partyPortraits)
+                    _partyPortraits = this.FindFirstWithTag<PartyPortraitsController>(TagConstants.PARTY_PORTRAITS_CONTROLLER);
+                return _partyPortraits;
+            }
+        }
 
         public override void Initialize()
         {
-            Dispatcher.Instance.Invoke(async () =>
-            {
-                CreatePartyList();
-                if (partyPortraits == null)
-                    partyPortraits = FindObjectOfType<PartyPortraitsController>();
-                partyPortraits.Clear();
-                foreach (Creature c in CurrentPartyMembers)
-                {
-                    partyPortraits.AddPortrait(c.GetCreatureUIData());
-                    await Task.Yield();
-                }
-            });
+            CreatePartyList();
+            PartyPortraits.Clear();
+            Debug.Log("Party members count: " + CurrentPartyMembers.Count);
+            CurrentPartyMembers.ForEach(c => PartyPortraits.AddPortrait(c.GetCreatureUIData()));
         }
 
         private void CreatePartyList()
         {
-            CurrentPartyMembers = GameRuntimeData.GetActivePartyCreatures().ToArray();
-        }
-
-        public CreatureUIData[] GetCurrentMembersData()
-        {
-            CreatureUIData[] currentMembersData = new CreatureUIData[CurrentPartyMembers.Length];
-            for (int i = 0; i < currentMembersData.Length; i++)
-            {
-                currentMembersData[i] = CurrentPartyMembers[i].GetCreatureUIData();
-            }
-            return currentMembersData;
+            CurrentPartyMembers = GameRuntimeData.GetActivePartyCreatures();
         }
     }
 }

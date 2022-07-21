@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using SunsetSystems.Utils.Threading;
+using System.Threading.Tasks;
 
 namespace SunsetSystems.Utils
 {
@@ -6,7 +7,13 @@ namespace SunsetSystems.Utils
     {
         async Task InitializeAsync()
         {
-            await new Task(Initialize);
+            await Task.Run(() =>
+            {
+                Dispatcher.Instance.Invoke(() =>
+                {
+                    Initialize();
+                });
+            });
         }
 
         void Initialize();

@@ -32,11 +32,6 @@ namespace InsaneSystems.RTSSelection
             PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
         }
 
-        private void Start()
-        {
-            Initialize();
-        }
-
         public override void Initialize()
         {
             cachedCamera = Camera.main;

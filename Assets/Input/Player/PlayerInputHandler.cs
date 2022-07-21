@@ -24,6 +24,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     private LayerMask defaultRaycastMask;
     [SerializeField]
     private PlayerInput playerInput;
+    private bool usePlayerInput = false;
 
     private TurnCombatManager turnCombatManager;
 
@@ -57,17 +58,28 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         turnCombatManager = FindObjectOfType<TurnCombatManager>();
     }
 
+    private void Update()
+    {
+        if (EventSystem.current)
+            usePlayerInput = !IsRaycastHittingUIObject(playerInput.GetDevice<Pointer>().position.ReadValue());
+        Debug.LogWarning("Use Player Input? " + usePlayerInput.ToString() + "; Is Player Input Active? " + playerInput.inputIsActive.ToString());
+        if (usePlayerInput != playerInput.inputIsActive)
+        {
+            SetPlayerInputActive(usePlayerInput);
+        }
+    }
+
     public void SetPlayerInputActive(bool active)
     {
         if (active)
         {
-            Debug.Log("Enabling player input");
+            Debug.LogWarning("Enabling player input");
             playerInput.ActivateInput();
             playerInput.SwitchCurrentActionMap("Player");
         }
         else
         {
-            Debug.Log("Disabling player input");
+            Debug.LogWarning("Disabling player input");
             playerInput.DeactivateInput();
             playerInput.SwitchCurrentActionMap("UI");
         }
@@ -89,6 +101,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
             m_PointerData = new PointerEventData(EventSystem.current);
         m_PointerData.position = position;
         EventSystem.current.RaycastAll(m_PointerData, m_RaycastResults);
+        Debug.LogWarning("Is raycast hitting UI object? " + (m_RaycastResults.Count > 0).ToString());
         return m_RaycastResults.Count > 0;
     }
 
@@ -103,10 +116,11 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         OnRightClickEvent?.Invoke(context);
         if (!context.performed)
             return;
-        HandleWorldClick();
+        Debug.Log("Right click!");
+        HandleWorldRightClick();
     }
 
-    private void HandleWorldClick()
+    private void HandleWorldRightClick()
     {
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
@@ -146,6 +160,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
                         break;
                     }
                 default:
+                    Debug.Log("Default click behaviour");
                     break;
             }
         }

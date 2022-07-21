@@ -44,7 +44,7 @@ namespace SunsetSystems.Loading
             }
             await Task.WhenAll(InitializeObjects(FindInterfaces.Find<IInitialized>()));
             Debug.Log("Finished initializing objects!");
-            PlayerInputHandler.Instance.SetPlayerInputActive(true);
+            StateManager.SetCurrentState(GameState.Exploration);
 
             static List<Task> InitializeObjects(List<IInitialized> objectsToInitialize)
             {
@@ -52,12 +52,9 @@ namespace SunsetSystems.Loading
                 foreach (IInitialized initializable in objectsToInitialize)
                 {
                     Debug.Log("Starting initialization for object " + initializable.ToString());
-                    initializationTasks.Add(Task.Run(() =>
+                    initializationTasks.Add(Task.Run(async () =>
                     {
-                        Dispatcher.Instance.Invoke(async () =>
-                        {
-                            await initializable.InitializeAsync();
-                        });
+                        await initializable.InitializeAsync();
                     }));
                 }
                 return initializationTasks;

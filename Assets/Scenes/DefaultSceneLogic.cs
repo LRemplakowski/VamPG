@@ -71,7 +71,7 @@ namespace SunsetSystems.Loading
 
         protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
         {
-            List<Vector3> positions = PlayerInputHandler.GetPositionsFromPoint(position);
+            List<Vector3> positions = new() { position, position, position, position, position, position };
             await InstantiateParty(positions, mainChar, party);
         }
 

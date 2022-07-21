@@ -1,9 +1,11 @@
+using SunsetSystems.Utils;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.UI
 {
+    [RequireComponent(typeof(Tagger))]
     public class ContainerGUI : UIWindow
     {
         [SerializeField]
@@ -13,9 +15,6 @@ namespace SunsetSystems.Inventory.UI
         [SerializeField]
         private GameObject _contentParent;
         private readonly List<ContainerEntry> _entries = new();
-
-        public delegate void ContainerOpenedEvent();
-        public static event ContainerOpenedEvent OnContainerOpened;
 
         private void Start()
         {
@@ -32,14 +31,28 @@ namespace SunsetSystems.Inventory.UI
             {
                 ContainerEntry guiElement = Instantiate(_containerEntryPrefab, _contentParent.transform);
                 guiElement.SetEntryContent(entry, container);
+                guiElement.ContainerEntryDestroyed += OnEntryDestroyed;
                 _entries.Add(guiElement);
             }
-            OnContainerOpened?.Invoke();
+            gameObject.SetActive(true);
+        }
+
+        public void CloseContainerGUI()
+        {
+            gameObject.SetActive(false);
+        }
+
+        private void OnEntryDestroyed(ContainerEntry entry)
+        {
+            _entries.Remove(entry);
+            entry.ContainerEntryDestroyed -= OnEntryDestroyed;
         }
 
         private void ClearEntries()
         {
-            _entries.ForEach(e => Destroy(e.gameObject));
+            foreach (ContainerEntry entry in _entries)
+                if (entry)
+                    Destroy(entry.gameObject);
             _entries.Clear();
         }
     }

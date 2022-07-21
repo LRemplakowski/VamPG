@@ -22,22 +22,19 @@ namespace SunsetSystems.Bootstraper
 
         private static void OnSceneOpened(Scene scene, OpenSceneMode mode)
         {
-            if (scene.buildIndex == GAME_SCENE_INDEX || scene.buildIndex == UI_SCENE_INDEX)
-                return;
             _cachedScenes.Clear();
 
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 Scene sceneAtIndex = SceneManager.GetSceneAt(i);
                 if (sceneAtIndex.buildIndex != GAME_SCENE_INDEX && sceneAtIndex.buildIndex != UI_SCENE_INDEX)
-                    _cachedScenes.Add(scene.path);
+                    _cachedScenes.Add(sceneAtIndex.path);
             }
         }
 
         private static void OnSceneClosed(Scene scene)
         {
-            if (scene.buildIndex != GAME_SCENE_INDEX && scene.buildIndex != UI_SCENE_INDEX)
-                _cachedScenes.Remove(scene.path);
+            _cachedScenes.Remove(scene.path);
         }
     }
 #endif

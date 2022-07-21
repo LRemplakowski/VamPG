@@ -5,9 +5,8 @@ namespace Entities.Interactable
 {
     public abstract class InteractableEntity : Entity, IInteractable
     {
-        [HideInInspector, SerializeField]
-        private GameObject _hoverHighlight;
-        [ExposeProperty]
+        [SerializeField]
+        protected GameObject _hoverHighlight;
         public GameObject HoverHighlight
         {
             get => _hoverHighlight;
@@ -25,9 +24,8 @@ namespace Entities.Interactable
             }
         }
 
-        [HideInInspector, SerializeField]
-        private float _interactionDistance = 1.0f;
-        [ExposeProperty]
+        [SerializeField]
+        protected float _interactionDistance = 1.0f;
         public float InteractionDistance
         {
             get => _interactionDistance;
@@ -36,9 +34,8 @@ namespace Entities.Interactable
         public Creature TargetedBy { get; set; }
         public bool Interacted { get; set; }
 
-        [HideInInspector, SerializeField]
-        private Transform _interactionTransform;
-        [ExposeProperty]
+        [SerializeField]
+        protected Transform _interactionTransform;
         public Transform InteractionTransform
         {
             get => _interactionTransform;

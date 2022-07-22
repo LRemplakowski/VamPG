@@ -2,10 +2,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using Entities.Characters;
-using Entities;
-using InsaneSystems.RTSSelection;
-using UnityEngine.AI;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
@@ -16,6 +12,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     [SerializeField]
     private PlayerInput playerInput;
     private bool usePlayerInput = false;
+    private bool isMouseDragging = false;
     private Pointer PointerDevice => playerInput.GetDevice<Pointer>();
 
     public static FormationData FormationData { get; set; }
@@ -36,9 +33,14 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     private void Update()
     {
+
+    }
+
+    private void LateUpdate()
+    {
         if (EventSystem.current != null && PointerDevice != null)
             usePlayerInput = !IsRaycastHittingUIObject(PointerDevice.position.ReadValue());
-        if (usePlayerInput != playerInput.inputIsActive)
+        if (usePlayerInput != playerInput.inputIsActive || isMouseDragging)
         {
             SetPlayerInputActive(usePlayerInput);
         }
@@ -66,6 +68,7 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
             return;
         OnLeftClickEvent?.Invoke(context);
+        isMouseDragging = !context.canceled;
     }
 
     private bool IsRaycastHittingUIObject(Vector2 position)
@@ -91,5 +94,22 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     public void OnMousePosition(InputAction.CallbackContext context)
     {
         OnMousePositionEvent?.Invoke(context);
+    }
+
+    public void OnInventory(InputAction.CallbackContext context)
+    {
+        if (!context.performed)
+            return;
+
+    }
+
+    public void OnEscape(InputAction.CallbackContext context)
+    {
+
+    }
+
+    public void OnCharacterSheet(InputAction.CallbackContext context)
+    {
+
     }
 }

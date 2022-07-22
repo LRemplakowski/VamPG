@@ -3,6 +3,7 @@ using UnityEngine;
 using SunsetSystems.Loading;
 using System;
 using SunsetSystems.UI.Pause;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Loading
 {
@@ -26,11 +27,11 @@ namespace SunsetSystems.Loading
         public async void DoLoad()
         {
             Debug.Log("DoLoad button");
-            PauseMenu menu = GetComponentInParent<PauseMenu>();
+            PauseMenuUI menu = GetComponentInParent<PauseMenuUI>();
             Action action = null;
-            if (StateManager.GetCurrentState().Equals(GameState.GamePaused))
+            if (GameManager.Instance.IsCurrentState(GameState.GamePaused))
                 menu.ResumeGame();
-            else if (StateManager.GetCurrentState().Equals(GameState.Menu))
+            else if (GameManager.Instance.IsCurrentState(GameState.Menu))
                 action = FindObjectOfType<GameStarter>().SwitchUiToGameplayMode;
             await _sceneLoader.LoadSavedScene(action);
         }

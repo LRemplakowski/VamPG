@@ -46,13 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0dea9b76bb330241af066117b9ddc98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineOrigin: {fileID: 0}
-  defaultRaycastMask:
-    serializedVersion: 2
-    m_Bits: 256
   playerInput: {fileID: 2117800365}
   defaultFormation: {fileID: 11400000, guid: 8a3156f0cf41aa541b96069d156db0cd, type: 2}
-  _followerStoppingDistance: 1.5
 --- !u!114 &2117800365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,10 +135,10 @@ MonoBehaviour:
     m_ActionName: UI/Point[/Mouse/position]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SunsetSystems.UI.Pause.PauseMenu, Assembly-CSharp
-        m_MethodName: OpenInventoryScreen
-        m_Mode: 1
+      - m_Target: {fileID: 4976087323729879728}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnInventory
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -176,10 +171,10 @@ MonoBehaviour:
     m_ActionName: UI/RightHold[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: PauseGame
-        m_Mode: 1
+      - m_Target: {fileID: 4976087323729879728}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnEscape
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -191,7 +186,19 @@ MonoBehaviour:
     m_ActionId: cb12a3a9-ae32-40ce-8347-9952e1df95aa
     m_ActionName: Player/Escape[/Keyboard/escape]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4976087323729879728}
+        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+        m_MethodName: OnCharacterSheet
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: bc103939-7778-4ea1-9f4f-f7e5275e5908
     m_ActionName: Player/CharacterSheet[/Keyboard/c]
   - m_PersistentCalls:

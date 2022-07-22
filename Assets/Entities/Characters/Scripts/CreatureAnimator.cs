@@ -16,14 +16,14 @@ public class CreatureAnimator : ExposableMonobehaviour
 
     private void OnEnable()
     {
-        TurnCombatManager.onCombatStart += OnCombatStart;
-        TurnCombatManager.onCombatEnd += OnCombatEnd;
+        TurnCombatManager.NotifyCombatStart += OnCombatStart;
+        TurnCombatManager.NotifyCombatEnd += OnCombatEnd;
     }
 
     private void OnDisable()
     {
-        TurnCombatManager.onCombatStart -= OnCombatStart;
-        TurnCombatManager.onCombatEnd -= OnCombatEnd;
+        TurnCombatManager.NotifyCombatStart -= OnCombatStart;
+        TurnCombatManager.NotifyCombatEnd -= OnCombatEnd;
     }
 
     private void Start()

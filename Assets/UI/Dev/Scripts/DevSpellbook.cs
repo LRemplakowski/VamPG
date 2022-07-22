@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Entities.Characters;
+using SunsetSystems.Game;
 
 public class DevSpellbook : ExposableMonobehaviour
 {
     public CharacterStats devStatsAsset;
     public TMP_Dropdown dropdown;
-    List<DisciplinePower> powers = new List<DisciplinePower>();
+    List<DisciplinePower> powers = new();
 
     private void Start()
     {
         dropdown.ClearOptions();
         List<DisciplinePower> bsPowers = devStatsAsset.GetDiscipline(DisciplineType.BloodSorcery).GetKnownPowers();
         List<DisciplinePower> fPowers = devStatsAsset.GetDiscipline(DisciplineType.Fortitude).GetKnownPowers();
-        List<TMP_Dropdown.OptionData> options = new List<TMP_Dropdown.OptionData>();
+        List<TMP_Dropdown.OptionData> options = new();
         bsPowers.ForEach(dp =>
         {
             options.Add(new TMP_Dropdown.OptionData(dp.name));
             powers.Add(dp);
             Debug.Log(dp);
         });
-        fPowers.ForEach(dp => 
+        fPowers.ForEach(dp =>
         {
             options.Add(new TMP_Dropdown.OptionData(dp.name));
             powers.Add(dp);
@@ -37,11 +38,11 @@ public class DevSpellbook : ExposableMonobehaviour
         bool cast = false;
         if (dp.Target.Equals(Target.Self))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), GameManager.GetMainCharacter());
+            cast = Spellbook.HandleEffects(dp, GameManager.Instance.GetMainCharacter(), GameManager.Instance.GetMainCharacter());
         }
         if (dp.Target.Equals(Target.Hostile))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), FindObjectOfType<NPC>());
+            cast = Spellbook.HandleEffects(dp, GameManager.Instance.GetMainCharacter(), FindObjectOfType<NPC>());
         }
         Debug.Log("Did cast? " + cast);
     }

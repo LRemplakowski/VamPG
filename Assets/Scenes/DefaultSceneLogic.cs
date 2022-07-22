@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SunsetSystems.Utils;
 using SunsetSystems.Input.CameraControl;
 using Glitchers;
-using SunsetSystems.Utils.Threading;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Loading
 {
@@ -44,7 +44,7 @@ namespace SunsetSystems.Loading
             }
             await Task.WhenAll(InitializeObjects(FindInterfaces.Find<IInitialized>()));
             Debug.Log("Finished initializing objects!");
-            StateManager.SetCurrentState(GameState.Exploration);
+            GameManager.Instance.OverrideState(GameState.Exploration);
 
             static List<Task> InitializeObjects(List<IInitialized> objectsToInitialize)
             {

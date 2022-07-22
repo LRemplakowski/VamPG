@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Dice;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Dialogue
 {
@@ -27,7 +28,7 @@ namespace SunsetSystems.Dialogue
         {
             if (Enum.TryParse(sex, out BodyType result))
             {
-                return GameManager.GetMainCharacter().Data.BodyType.Equals(result);
+                return GameManager.Instance.GetMainCharacter().Data.BodyType.Equals(result);
             }
             else
                 return false;
@@ -37,7 +38,7 @@ namespace SunsetSystems.Dialogue
         {
             if (Enum.TryParse(type, out CreatureType result))
             {
-                return GameManager.GetMainCharacter().Data.CreatureType.Equals(result);
+                return GameManager.Instance.GetMainCharacter().Data.CreatureType.Equals(result);
             }
             else
                 return false;
@@ -45,7 +46,7 @@ namespace SunsetSystems.Dialogue
 
         public static bool PlayerHasDisciplinePower(string powerName)
         {
-            DisciplinePower p = GameManager.GetMainCharacter().GetComponent<StatsManager>().GetDisciplinePower(powerName);
+            DisciplinePower p = GameManager.Instance.GetMainCharacter().GetComponent<StatsManager>().GetDisciplinePower(powerName);
             return !p.Type.Equals(DisciplineType.Invalid);
         }
 
@@ -57,7 +58,7 @@ namespace SunsetSystems.Dialogue
 
         public static bool PlayerPassedSkillCheck(string attributeType, string skillType, int dc)
         {
-            StatsManager playerStatsManager = GameManager.GetMainCharacter().GetComponent<StatsManager>();
+            StatsManager playerStatsManager = GameManager.Instance.GetMainCharacter().GetComponent<StatsManager>();
             if (Enum.TryParse(attributeType, out AttributeType attribute) && Enum.TryParse(skillType, out SkillType skill))
             {
                 Outcome outcome = playerStatsManager.GetSkillRoll(attribute, skill);

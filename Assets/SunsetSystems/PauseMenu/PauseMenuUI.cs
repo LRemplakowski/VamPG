@@ -2,30 +2,17 @@ using UnityEngine;
 
 namespace SunsetSystems.UI.Pause
 {
-    public class PauseMenu : MonoBehaviour
+    public class PauseMenuUI : MonoBehaviour
     {
         [SerializeField]
         private Canvas _pauseMenuCanvas;
         [SerializeField]
         private PauseUISelector _inventory, _journal, _settings;
-        public static bool IsGamePaused { get; private set; }
-        private GameState _cachedPreviousState;
 
         private void Awake()
         {
             if (_pauseMenuCanvas == null)
                 _pauseMenuCanvas = GetComponent<Canvas>();
-            StateManager.OnGameStateChanged += CachePreviousState;
-        }
-
-        private void OnDestroy()
-        {
-            StateManager.OnGameStateChanged -= CachePreviousState;
-        }
-
-        private void CachePreviousState(GameState newState, GameState previousState)
-        {
-            _cachedPreviousState = previousState;
         }
 
         public void PauseGame()
@@ -68,16 +55,12 @@ namespace SunsetSystems.UI.Pause
 
         private void HandleOpenPauseGUI()
         {
-            IsGamePaused = true;
             gameObject.SetActive(true);
-            StateManager.SetCurrentState(GameState.GamePaused);
         }
 
         public void ResumeGame()
         {
-            IsGamePaused = false;
             gameObject.SetActive(false);
-            StateManager.SetCurrentState(_cachedPreviousState);
         }
     }
 

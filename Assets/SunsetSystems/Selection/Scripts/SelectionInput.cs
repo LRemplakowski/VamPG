@@ -1,4 +1,5 @@
 ﻿using SunsetSystems.Utils;
+using SunsetSystems.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -69,6 +70,7 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClickRelease()
         {
+            Debug.Log("selection finished call");
             selection.FinishSelection(startMousePosition, mousePosition);
             SelectionRect.DisableRect();
         }

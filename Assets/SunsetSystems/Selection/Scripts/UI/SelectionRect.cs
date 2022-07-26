@@ -24,14 +24,11 @@ namespace InsaneSystems.RTSSelection.UI
 
             if (!wasActivated)
                 DisableRect();
-        }
-
-        private void OnEnable()
-        {
             PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
         }
 
-        private void OnDisable()
+
+        private void OnDestroy()
         {
             PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
         }

@@ -3,6 +3,7 @@ using Entities.Characters;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
+using SunsetSystems.Utils.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +38,8 @@ namespace SunsetSystems.Input
 
         private void OnRightClick(InputAction.CallbackContext context)
         {
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition))
+                return;
             if (context.performed)
                 HandleWorldRightClick();
         }

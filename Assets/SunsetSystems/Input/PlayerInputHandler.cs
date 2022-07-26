@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
+using InsaneSystems.RTSSelection;
+using System;
+using SunsetSystems.Utils.UI;
 
 [RequireComponent(typeof(Tagger))]
 public class PlayerInputHandler : Singleton<PlayerInputHandler>
@@ -12,12 +15,13 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     [SerializeField]
     private PlayerInput playerInput;
     private bool usePlayerInput = false;
-    private bool isMouseDragging = false;
     private Pointer PointerDevice => playerInput.GetDevice<Pointer>();
 
     public static FormationData FormationData { get; set; }
     [SerializeField]
     private PredefinedFormation defaultFormation;
+
+    private bool ongoingSelection = false;
 
     public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
     public static event OnLeftClickHandler OnLeftClickEvent;
@@ -31,16 +35,35 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         base.Awake();
     }
 
-    private void Update()
+    private void Start()
     {
-
+        Selection.OnSelectionStarted += OnSelectionStarted;
+        Selection.OnSelectionFinished += OnSelectionFinished;
     }
 
-    private void LateUpdate()
+    private void OnDestroy()
     {
+        Selection.OnSelectionStarted -= OnSelectionStarted;
+        Selection.OnSelectionFinished -= OnSelectionFinished;
+    }
+
+    private void OnSelectionStarted()
+    {
+        ongoingSelection = true;
+    }
+
+    private void OnSelectionFinished()
+    {
+        ongoingSelection = false;
+    }
+
+    private void Update()
+    {
+        if (ongoingSelection)
+            return;
         if (EventSystem.current != null && PointerDevice != null)
-            usePlayerInput = !IsRaycastHittingUIObject(PointerDevice.position.ReadValue());
-        if (usePlayerInput != playerInput.inputIsActive || isMouseDragging)
+            usePlayerInput = !InputHelper.IsRaycastHittingUIObject(PointerDevice.position.ReadValue());
+        if (usePlayerInput != playerInput.inputIsActive)
         {
             SetPlayerInputActive(usePlayerInput);
         }
@@ -64,35 +87,18 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     public void OnLeftClick(InputAction.CallbackContext context)
     {
-        Pointer device = playerInput.GetDevice<Pointer>();
-        if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
-            return;
         OnLeftClickEvent?.Invoke(context);
-        isMouseDragging = !context.canceled;
     }
-
-    private bool IsRaycastHittingUIObject(Vector2 position)
-    {
-        if (m_PointerData == null)
-            m_PointerData = new PointerEventData(EventSystem.current);
-        m_PointerData.position = position;
-        EventSystem.current.RaycastAll(m_PointerData, m_RaycastResults);
-        return m_RaycastResults.Count > 0;
-    }
-
-    private PointerEventData m_PointerData;
-    private List<RaycastResult> m_RaycastResults = new();
 
     public void OnRightClick(InputAction.CallbackContext context)
     {
-        Pointer device = playerInput.GetDevice<Pointer>();
-        if (device != null && IsRaycastHittingUIObject(device.position.ReadValue()))
-            return;
         OnRightClickEvent?.Invoke(context);
     }
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
+        Debug.LogWarning("context mouse position: " + context.ReadValue<Vector2>().ToString());
+        Debug.LogWarning("device mouse position: " + PointerDevice.position.ReadValue());
         OnMousePositionEvent?.Invoke(context);
     }
 
@@ -100,7 +106,6 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
     {
         if (!context.performed)
             return;
-
     }
 
     public void OnEscape(InputAction.CallbackContext context)

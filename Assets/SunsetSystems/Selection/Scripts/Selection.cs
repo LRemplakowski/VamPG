@@ -12,13 +12,13 @@ namespace InsaneSystems.RTSSelection
     {
         public static readonly List<ISelectable> AllSelectables = new();
 
-        public event Action OnSelectionStarted, OnSelectionFinished;
+        public static event Action OnSelectionStarted, OnSelectionFinished;
 
         private Vector2 mousePosition;
 
         public bool AddModeEnabled { get; set; }
 
-        readonly List<ISelectable> selectedObjects = new List<ISelectable>();
+        readonly List<ISelectable> selectedObjects = new();
 
         Camera cachedCamera;
 

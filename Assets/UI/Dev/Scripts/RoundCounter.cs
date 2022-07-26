@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using SunsetSystems.Game;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class RoundCounter : MonoBehaviour
@@ -21,7 +22,7 @@ public class RoundCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (StateManager.GetCurrentState().Equals(GameState.Combat))
+        if (GameManager.Instance.IsCurrentState(GameState.Combat))
             text.text = turnCombatManager.GetRound().ToString();
     }
 }

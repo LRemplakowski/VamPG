@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Utils;
+﻿using SunsetSystems.Game;
+using SunsetSystems.Utils;
 using UnityEngine;
 
 
@@ -26,13 +27,13 @@ public class EquipmentManager : Singleton<EquipmentManager>
     {
         if (targetMesh == null)
         {
-            targetMesh = GameManager.GetMainCharacter().GetComponentInChildren<SkinnedMeshRenderer>();
+            targetMesh = GameManager.Instance.GetMainCharacter().GetComponentInChildren<SkinnedMeshRenderer>();
         }
     }
 
     public void Initialize()
     {
-        targetMesh = GameManager.GetMainCharacter().GetComponentInChildren<SkinnedMeshRenderer>();
+        targetMesh = GameManager.Instance.GetMainCharacter().GetComponentInChildren<SkinnedMeshRenderer>();
     }
 
     public EquipmentPiece GetItemInSlot(EquipmentSlot slot)
@@ -73,7 +74,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
                 Destroy(currentMeshes[slotIndex].gameObject);
 
             EquipmentPiece oldItem = currentEquipment[slotIndex];
-            GameManager.GetMainCharacter().GetInventory().Add(oldItem);
+            GameManager.Instance.GetMainCharacter().GetInventory().Add(oldItem);
 
             SetEquipmentBlendShapes(oldItem, BLEND_SHAPES_MIN_WEIGHT);
 

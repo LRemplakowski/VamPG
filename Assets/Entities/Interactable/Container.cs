@@ -21,11 +21,11 @@ namespace Entities.Interactable
 
         public override void Interact()
         {
-            OpenContainerUI();
+            OpenContainer();
             base.Interact();
         }
 
-        private void OpenContainerUI()
+        private void OpenContainer()
         {
             if (this.TryFindFirstWithTag(TagConstants.CONTAINER_GUI, out GameObject guiGO))
             {

@@ -12,30 +12,31 @@ namespace InsaneSystems.RTSSelection
     {
         public static readonly List<ISelectable> AllSelectables = new();
 
-        public event Action OnSelectionStarted, OnSelectionFinished;
+        public static event Action OnSelectionStarted, OnSelectionFinished;
 
         private Vector2 mousePosition;
 
         public bool AddModeEnabled { get; set; }
 
-        readonly List<ISelectable> selectedObjects = new List<ISelectable>();
+        readonly List<ISelectable> selectedObjects = new();
 
         Camera cachedCamera;
 
-        private void Start()
+        private void OnEnable()
         {
-            IInitialized init = this;
-            _ = init.InitializeAsync();
+            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+        }
+
+        private void OnDisable()
+        {
+            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
         }
 
         public override void Initialize()
         {
-            Dispatcher.Instance.Invoke(() =>
-            {
-                cachedCamera = Camera.main;
-                AllSelectables.Clear();
-                AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
-            });
+            cachedCamera = Camera.main;
+            AllSelectables.Clear();
+            AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
 
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.

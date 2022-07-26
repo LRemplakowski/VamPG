@@ -6,6 +6,7 @@ using Apex.AI;
 using Apex.AI.Components;
 using Entities.Characters;
 using Entities.Characters.Actions;
+using SunsetSystems.Game;
 
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
@@ -50,19 +51,19 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     private void OnEnable()
     {
         HostileAction.onAttackFinished += OnHostileActionFinished;
-        TurnCombatManager.onCombatStart += OnCombatStart;
-        TurnCombatManager.onCombatRoundBegin += OnCombatRoundBegin;
-        TurnCombatManager.onCombatRoundEnd += OnCombatRoundEnd;
-        TurnCombatManager.onCombatEnd += OnCombatEnd;
+        TurnCombatManager.NotifyCombatStart += OnCombatStart;
+        TurnCombatManager.NotifyCombatRoundBegin += OnCombatRoundBegin;
+        TurnCombatManager.NotifyCombatRoundEnd += OnCombatRoundEnd;
+        TurnCombatManager.NotifyCombatEnd += OnCombatEnd;
     }
 
     private void OnDisable()
     {
         HostileAction.onAttackFinished -= OnHostileActionFinished;
-        TurnCombatManager.onCombatStart -= OnCombatStart;
-        TurnCombatManager.onCombatRoundBegin -= OnCombatRoundBegin;
-        TurnCombatManager.onCombatRoundEnd -= OnCombatRoundEnd;
-        TurnCombatManager.onCombatEnd -= OnCombatEnd;
+        TurnCombatManager.NotifyCombatStart -= OnCombatStart;
+        TurnCombatManager.NotifyCombatRoundBegin -= OnCombatRoundBegin;
+        TurnCombatManager.NotifyCombatRoundEnd -= OnCombatRoundEnd;
+        TurnCombatManager.NotifyCombatEnd -= OnCombatEnd;
     }
     #endregion
 
@@ -70,7 +71,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
-            GameManager.GetGridController().ClearActiveElements();
+            GameManager.Instance.GetGridController().ClearActiveElements();
         }
     }
 
@@ -96,7 +97,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
         Move.onMovementFinished += OnMovementFinished;
         HasMoved = false;
         HasActed = false;
-        GridElement nearest = GameManager.GetGridController().GetNearestGridElement(this.transform.position);
+        GridElement nearest = GameManager.Instance.GetGridController().GetNearestGridElement(this.transform.position);
         Owner.Move(nearest);
     }
 
@@ -115,16 +116,16 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
             if (IsPlayerControlled)
             {
-                GameManager.GetGridController().ActivateElementsInRangeOfActor(Owner);
+                GameManager.Instance.GetGridController().ActivateElementsInRangeOfActor(Owner);
             }
         }
     }
-    
+
     private void OnCombatRoundEnd(Creature currentActor)
     {
         if (currentActor.Equals(Owner) && IsPlayerControlled)
         {
-            GameManager.GetGridController().ClearActiveElements();
+            GameManager.Instance.GetGridController().ClearActiveElements();
         }
     }
 

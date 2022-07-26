@@ -3,46 +3,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static SunsetSystems.Game.StateManager;
 
-[RequireComponent(typeof(Dropdown))]
-public class DevStateChanger : ExposableMonobehaviour
+namespace SunsetSystems.Game
 {
-    private Dropdown dropdown;
-
-    private void OnEnable()
+    [RequireComponent(typeof(Dropdown))]
+    public class DevStateChanger : ExposableMonobehaviour
     {
-        dropdown = GetComponent<Dropdown>();
-        dropdown.ClearOptions();
-        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-        foreach (int g in Enum.GetValues(typeof(GameState)))
+        private Dropdown dropdown;
+
+        private void OnEnable()
         {
-            options.Add(new Dropdown.OptionData(((GameState)g).ToString()));
+            dropdown = GetComponent<Dropdown>();
+            dropdown.ClearOptions();
+            List<Dropdown.OptionData> options = new();
+            foreach (int g in Enum.GetValues(typeof(GameState)))
+            {
+                options.Add(new Dropdown.OptionData(((GameState)g).ToString()));
+            }
+            dropdown.AddOptions(options);
+            dropdown.SetValueWithoutNotify((int)GameManager.Instance.GetCurrentState());
+            dropdown.onValueChanged.AddListener(delegate { ChangeState(); });
         }
-        dropdown.AddOptions(options);
-        dropdown.SetValueWithoutNotify((int)StateManager.GetCurrentState());
-        StateManager.OnGameStateChanged += OnStateChange;
-        dropdown.onValueChanged.AddListener(delegate { ChangeState(); });
-    }
 
-    private void OnDisable()
-    {
-        StateManager.OnGameStateChanged -= OnStateChange;
-        dropdown.onValueChanged.RemoveListener(delegate { ChangeState(); });
-    }
+        private void OnDisable()
+        {
+            dropdown.onValueChanged.RemoveListener(delegate { ChangeState(); });
+        }
 
-    private void OnStateChange(GameState newState, GameState oldState)
-    {
-        if (dropdown.value != (int)newState)
-            UpdateDisplayedState(newState);
-    }
+        private void OnStateChange(GameState newState, GameState oldState)
+        {
+            if (dropdown.value != (int)newState)
+                UpdateDisplayedState(newState);
+        }
 
-    private void UpdateDisplayedState(GameState state)
-    {
-        dropdown.SetValueWithoutNotify((int)state);
-    }
+        private void UpdateDisplayedState(GameState state)
+        {
+            dropdown.SetValueWithoutNotify((int)state);
+        }
 
-    private void ChangeState()
-    {
-        StateManager.SetCurrentState(dropdown.value);
+        private void ChangeState()
+        {
+            GameManager.Instance.OverrideState((GameState)dropdown.value);
+        }
     }
 }

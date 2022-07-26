@@ -49,6 +49,7 @@ namespace SunsetSystems.Bootstraper
                     {
                         if (!SceneManager.GetSceneByPath(path).isLoaded)
                         {
+                            Debug.Log("Loading scene: " + path);
                             AsyncOperation op = EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
                             while (!op.isDone)
                             {

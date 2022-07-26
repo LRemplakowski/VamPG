@@ -18,17 +18,15 @@ namespace SunsetSystems.Inventory.UI
         private InventoryEntry _content;
         private ItemStorage _storage;
 
+        public delegate void ContainerEntryDestroyedHandler(ContainerEntry entry);
+        public event ContainerEntryDestroyedHandler ContainerEntryDestroyed;
+
         private void Start()
         {
             if (this.TryFindFirstWithTag(TagConstants.INVENTORY_MANAGER, out GameObject inventoryManagerGO))
             {
                 inventoryManagerGO.TryGetComponent(out _inventoryManager);
             }
-        }
-
-        private void OnDestroy()
-        {
-
         }
 
         public void SetEntryContent(InventoryEntry content, ItemStorage storage)
@@ -44,6 +42,7 @@ namespace SunsetSystems.Inventory.UI
         {
             Debug.Log("Container Entry clicked!");
             _inventoryManager.TransferItem(_storage, _inventoryManager.PlayerInventory, _content);
+            ContainerEntryDestroyed?.Invoke(this);
             Destroy(gameObject);
         }
     }

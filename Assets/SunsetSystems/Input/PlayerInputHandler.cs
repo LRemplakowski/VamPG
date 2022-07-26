@@ -97,8 +97,6 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     public void OnMousePosition(InputAction.CallbackContext context)
     {
-        Debug.LogWarning("context mouse position: " + context.ReadValue<Vector2>().ToString());
-        Debug.LogWarning("device mouse position: " + PointerDevice.position.ReadValue());
         OnMousePositionEvent?.Invoke(context);
     }
 

@@ -20,7 +20,7 @@ namespace InsaneSystems.RTSSelection
 
         readonly List<ISelectable> selectedObjects = new();
 
-        Camera cachedCamera;
+        private Camera MainCamera => Camera.main;
 
         private void OnEnable()
         {
@@ -34,7 +34,6 @@ namespace InsaneSystems.RTSSelection
 
         public override void Initialize()
         {
-            cachedCamera = Camera.main;
             AllSelectables.Clear();
             AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
@@ -55,9 +54,6 @@ namespace InsaneSystems.RTSSelection
 
         /// <summary> Returns all selected objects as List of ISelectable. If you need to get specific selectable type, not interface, use GetAllSelectedOfType.</summary>
         public List<ISelectable> GetAllSelected() => selectedObjects;
-
-        /// <summary> Set new camera using this method if your game have some camera changing mechanics, and new camera should work with selection too. </summary>
-        public void SetCustomActionCamera(Camera customCamera) => cachedCamera = customCamera;
 
         public void StartSelection() => OnSelectionStarted?.Invoke();
 
@@ -107,7 +103,7 @@ namespace InsaneSystems.RTSSelection
             var screenPoints = new Vector3[points.Length];
 
             for (var i = 0; i < points.Length; i++)
-                screenPoints[i] = cachedCamera.WorldToScreenPoint(points[i]);
+                screenPoints[i] = MainCamera.WorldToScreenPoint(points[i]);
 
             var colliderRect = new Rect();
 
@@ -146,7 +142,7 @@ namespace InsaneSystems.RTSSelection
 
         void DoSingleSelection()
         {
-            var ray = cachedCamera.ScreenPointToRay(mousePosition);
+            var ray = MainCamera.ScreenPointToRay(mousePosition);
 
             if (Physics.Raycast(ray, out var hit, 1000))
             {

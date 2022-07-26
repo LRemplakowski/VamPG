@@ -51,7 +51,7 @@
                     MoveToScene(new NameLoadingData(_sceneName, _targetEntryPointTag, _targetBoundingBoxTag));
                     break;
                 case TransitionType.internalTransition:
-                    MoveToArea();
+                    _ = MoveToArea();
                     break;
             }
             base.Interact();
@@ -65,15 +65,14 @@
             });
         }
 
-        public async void MoveToArea()
+        public async Task MoveToArea()
         {
             await _fadeUI.DoFadeOutAsync(.5f);
             List<Creature> party = GameRuntimeData.GetActivePartyCreatures();
-            List<Vector3> positions = PlayerInputHandler.GetPositionsFromPoint(_targetEntryPoint.transform.position);
             for (int i = 0; i < party.Count; i++)
             {
                 party[i].ClearAllActions();
-                party[i].ForceCreatureToPosition(positions[i]);
+                party[i].ForceCreatureToPosition(_targetEntryPoint.transform.position);
                 await Task.Yield();
             }
             if (!_cameraControlScript)

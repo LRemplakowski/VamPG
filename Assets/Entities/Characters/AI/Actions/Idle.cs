@@ -1,4 +1,5 @@
 ﻿using Apex.AI;
+using SunsetSystems.Game;
 using UnityEngine;
 
 namespace AI.Actions
@@ -7,7 +8,7 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            if (StateManager.GetCurrentState().Equals(GameState.Combat) &&
+            if (GameManager.Instance.IsCurrentState(GameState.Combat) &&
                 context.Owner.Equals(TurnCombatManager.Instance.CurrentActiveActor) &&
                 !context.IsPlayerControlled)
             {

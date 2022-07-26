@@ -33,6 +33,10 @@ namespace SunsetSystems.Bootstraper
                 else
                     Debug.LogWarning("No Main Menu UI parent found!");
             }
+            else
+            {
+                Debug.Log("There were no cached scenes to load!");
+            }
         }
 
         private List<Task> LoadScenesByPathAsync(List<string> paths)
@@ -49,6 +53,7 @@ namespace SunsetSystems.Bootstraper
                     {
                         if (!SceneManager.GetSceneByPath(path).isLoaded)
                         {
+                            Debug.Log("Loading scene: " + path);
                             AsyncOperation op = EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
                             while (!op.isDone)
                             {

@@ -1,4 +1,5 @@
 using Entities.Characters;
+using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,31 +8,17 @@ using UnityEngine;
 public class TurnCombatManager : Singleton<TurnCombatManager>
 {
     public delegate void OnCombatStart(List<Creature> creaturesInCombat);
-    public static OnCombatStart onCombatStart;
+    public static event OnCombatStart NotifyCombatStart;
     public delegate void OnCombatEnd();
-    public static OnCombatEnd onCombatEnd;
+    public static event OnCombatEnd NotifyCombatEnd;
     public delegate void OnActiveActorChanged(Creature newActor, Creature previousActor);
-    public static OnActiveActorChanged onActiveActorChanged;
+    public static event OnActiveActorChanged NotifyActiveActorChanged;
     public delegate void OnCombatRoundBegin(Creature currentActor);
-    public static OnCombatRoundBegin onCombatRoundBegin;
+    public static event OnCombatRoundBegin NotifyCombatRoundBegin;
     public delegate void OnCombatRoundEnd(Creature currentActor);
-    public static OnCombatRoundEnd onCombatRoundEnd;
+    public static event OnCombatRoundEnd NotifyCombatRoundEnd;
 
     private int roundCounter;
-
-    #region Enable&Disable
-    private void OnEnable()
-    {
-        StateManager.OnGameStateChanged -= MaybeStartOrEndCombat;
-        StateManager.OnGameStateChanged += MaybeStartOrEndCombat;
-        onActiveActorChanged += NewRound;
-    }
-    private void OnDisable()
-    {
-        StateManager.OnGameStateChanged -= MaybeStartOrEndCombat;
-        onActiveActorChanged -= NewRound;
-    }
-    #endregion
 
     [SerializeField, ReadOnly]
     private Creature _currentActiveActor;
@@ -42,8 +29,8 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
         {
             Creature previous = _currentActiveActor;
             _currentActiveActor = value;
-            if (onActiveActorChanged != null)
-                onActiveActorChanged.Invoke(value, previous);
+            if (NotifyActiveActorChanged != null)
+                NotifyActiveActorChanged.Invoke(value, previous);
         }
     }
     [SerializeField]
@@ -63,7 +50,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
 
     private void Update()
     {
-        if (StateManager.GetCurrentState().Equals(GameState.Combat))
+        if (GameManager.Instance.IsCurrentState(GameState.Combat))
         {
             foreach (Creature c in creaturesInCombat)
             {
@@ -73,7 +60,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
                 }
                 else
                 {
-                    StateManager.SetCurrentState(GameState.Exploration);
+                    NotifyCombatEnd?.Invoke();
                 }
             }
         }
@@ -89,13 +76,13 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
 
     private void NewRound(Creature newActor, Creature previousActor)
     {
-        if (previousActor != null && onCombatRoundEnd != null)
+        if (previousActor != null && NotifyCombatRoundEnd != null)
         {
-            onCombatRoundEnd.Invoke(previousActor);
+            NotifyCombatRoundEnd.Invoke(previousActor);
         }
-        if (newActor != null && onCombatRoundBegin != null)
+        if (newActor != null && NotifyCombatRoundBegin != null)
         {
-            onCombatRoundBegin.Invoke(newActor);
+            NotifyCombatRoundBegin.Invoke(newActor);
         }
     }
 
@@ -115,26 +102,26 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
         else if (oldState == GameState.Combat)
         {
             roundCounter = 0;
-            if (onCombatRoundEnd != null && CurrentActiveActor != null)
-                onCombatRoundEnd.Invoke(CurrentActiveActor);
+            if (NotifyCombatRoundEnd != null && CurrentActiveActor != null)
+                NotifyCombatRoundEnd.Invoke(CurrentActiveActor);
             _currentActiveActor = null;
-            if (onCombatEnd != null)
-                onCombatEnd.Invoke();
+            if (NotifyCombatEnd != null)
+                NotifyCombatEnd.Invoke();
         }
     }
 
     private IEnumerator InitializeCombat()
     {
         roundCounter = 0;
-        _gridInstance = GameManager.GetGridController();
+        _gridInstance = GameManager.Instance.GetGridController();
         creaturesInCombat = FindObjectsOfType<Creature>();
-        if (onCombatStart != null)
+        if (NotifyCombatStart != null)
         {
-            onCombatStart.Invoke(new List<Creature>(creaturesInCombat));
+            NotifyCombatStart.Invoke(new List<Creature>(creaturesInCombat));
         }
         yield return new WaitUntil(() => AllCreaturesMoved());
         roundCounter = 1;
-        CurrentActiveActor = GameManager.GetMainCharacter();
+        CurrentActiveActor = GameManager.Instance.GetMainCharacter();
         StopCoroutine(InitializeCombat());
     }
 

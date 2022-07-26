@@ -1,15 +1,16 @@
 using Entities.Characters.Data;
-using System.Collections;
+using SunsetSystems.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI.CharacterPortraits
 {
+    [RequireComponent(typeof(Tagger))]
     public class PartyPortraitsController : MonoBehaviour
     {
         [SerializeField]
         private GameObject portraitPrefab;
-        private List<PortraitController> portraits = new List<PortraitController>();
+        private readonly List<PortraitController> portraits = new();
 
         internal void AddPortrait(CreatureUIData data)
         {

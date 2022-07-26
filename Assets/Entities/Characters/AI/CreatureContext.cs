@@ -4,6 +4,7 @@ using Apex;
 using System.Collections.Generic;
 using Entities.Characters;
 using Entities.Cover;
+using SunsetSystems.Game;
 
 public sealed class CreatureContext : IAIContext
 {
@@ -18,9 +19,9 @@ public sealed class CreatureContext : IAIContext
 
     public GridElement CurrentMoveTarget { get; set; }
 
-    public List<Cover> CoverSourcesInCombatGrid => GameManager.GetGridController().CoverSourcesInGrid;
+    public List<Cover> CoverSourcesInCombatGrid => GameManager.Instance.GetGridController().CoverSourcesInGrid;
 
-    public bool IsInCombat => StateManager.GetCurrentState().Equals(GameState.Combat);
+    public bool IsInCombat => GameManager.Instance.IsCurrentState(GameState.Combat);
 
     public bool IsPlayerControlled => Owner.Data.Faction.Equals(Faction.PlayerControlled);
 
@@ -33,7 +34,7 @@ public sealed class CreatureContext : IAIContext
 
     public CharacterStats Stats => StatsManager.Stats;
 
-    public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
+    public List<GridElement> PositionsInRange => GameManager.Instance.GetGridController().GetElementsInRangeOfActor(Owner);
 
     public List<Creature> OtherCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
 

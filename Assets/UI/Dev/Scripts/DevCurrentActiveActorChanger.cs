@@ -10,11 +10,11 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
     #region Enable&Disable
     private void OnEnable()
     {
-        TurnCombatManager.onActiveActorChanged += OnActiveActorChanged;
+        TurnCombatManager.NotifyActiveActorChanged += OnActiveActorChanged;
     }
     private void OnDisable()
     {
-        TurnCombatManager.onActiveActorChanged -= OnActiveActorChanged;
+        TurnCombatManager.NotifyActiveActorChanged -= OnActiveActorChanged;
     }
     #endregion
 

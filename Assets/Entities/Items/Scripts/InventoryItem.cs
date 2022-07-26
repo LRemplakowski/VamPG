@@ -1,4 +1,5 @@
 ﻿using Entities.Interactable;
+using SunsetSystems.Game;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
@@ -11,7 +12,7 @@ public class InventoryItem : ScriptableObject
 
     public void DropOnGround(Vector3 position)
     {
-        if(placeablePrefab != null)
+        if (placeablePrefab != null)
         {
             PickableItem dropped = Instantiate(placeablePrefab, position, Quaternion.identity);
             dropped.item = this;
@@ -31,6 +32,6 @@ public class InventoryItem : ScriptableObject
 
     public void RemoveFromInventory()
     {
-        GameManager.GetMainCharacter().GetInventory().Remove(this);
+        GameManager.Instance.GetMainCharacter().GetInventory().Remove(this);
     }
 }

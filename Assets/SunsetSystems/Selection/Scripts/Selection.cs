@@ -12,30 +12,30 @@ namespace InsaneSystems.RTSSelection
     {
         public static readonly List<ISelectable> AllSelectables = new();
 
-        public event Action OnSelectionStarted, OnSelectionFinished;
+        public static event Action OnSelectionStarted, OnSelectionFinished;
 
         private Vector2 mousePosition;
 
         public bool AddModeEnabled { get; set; }
 
-        readonly List<ISelectable> selectedObjects = new List<ISelectable>();
+        readonly List<ISelectable> selectedObjects = new();
 
-        Camera cachedCamera;
+        private Camera MainCamera => Camera.main;
 
-        private void Start()
+        private void OnEnable()
         {
-            IInitialized init = this;
-            _ = init.InitializeAsync();
+            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+        }
+
+        private void OnDisable()
+        {
+            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
         }
 
         public override void Initialize()
         {
-            Dispatcher.Instance.Invoke(() =>
-            {
-                cachedCamera = Camera.main;
-                AllSelectables.Clear();
-                AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
-            });
+            AllSelectables.Clear();
+            AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
 
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.
@@ -54,9 +54,6 @@ namespace InsaneSystems.RTSSelection
 
         /// <summary> Returns all selected objects as List of ISelectable. If you need to get specific selectable type, not interface, use GetAllSelectedOfType.</summary>
         public List<ISelectable> GetAllSelected() => selectedObjects;
-
-        /// <summary> Set new camera using this method if your game have some camera changing mechanics, and new camera should work with selection too. </summary>
-        public void SetCustomActionCamera(Camera customCamera) => cachedCamera = customCamera;
 
         public void StartSelection() => OnSelectionStarted?.Invoke();
 
@@ -106,7 +103,7 @@ namespace InsaneSystems.RTSSelection
             var screenPoints = new Vector3[points.Length];
 
             for (var i = 0; i < points.Length; i++)
-                screenPoints[i] = cachedCamera.WorldToScreenPoint(points[i]);
+                screenPoints[i] = MainCamera.WorldToScreenPoint(points[i]);
 
             var colliderRect = new Rect();
 
@@ -145,7 +142,7 @@ namespace InsaneSystems.RTSSelection
 
         void DoSingleSelection()
         {
-            var ray = cachedCamera.ScreenPointToRay(mousePosition);
+            var ray = MainCamera.ScreenPointToRay(mousePosition);
 
             if (Physics.Raycast(ray, out var hit, 1000))
             {

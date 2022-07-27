@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
 using InsaneSystems.RTSSelection;
-using System;
 using SunsetSystems.Utils.UI;
 
 [RequireComponent(typeof(Tagger))]

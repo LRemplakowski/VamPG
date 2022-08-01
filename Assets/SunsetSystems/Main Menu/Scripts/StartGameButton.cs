@@ -17,7 +17,7 @@ namespace SunsetSystems.MainMenu.UI
         private void Start()
         {
             if (fadeUI == null)
-                fadeUI = this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+                fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
         public async void StartGame()

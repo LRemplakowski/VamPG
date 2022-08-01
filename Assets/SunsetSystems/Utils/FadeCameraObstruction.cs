@@ -22,7 +22,7 @@ public class FadeCameraObstruction : MonoBehaviour
         myCamera = GetComponent<Camera>();
         if (cameraFocus != null)
         {
-            raycastRange = Vector3.Distance(transform.position, cameraFocus.position);
+            raycastRange = Vector3.Distance(transform.position, cameraFocus.position) - 1f;
         }
     }
 

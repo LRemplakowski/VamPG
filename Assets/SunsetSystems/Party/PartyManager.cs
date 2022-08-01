@@ -19,7 +19,7 @@ namespace SunsetSystems.Party
             get
             {
                 if (!_partyPortraits)
-                    _partyPortraits = this.FindFirstWithTag<PartyPortraitsController>(TagConstants.PARTY_PORTRAITS_CONTROLLER);
+                    _partyPortraits = this.FindFirstComponentWithTag<PartyPortraitsController>(TagConstants.PARTY_PORTRAITS_CONTROLLER);
                 return _partyPortraits;
             }
         }

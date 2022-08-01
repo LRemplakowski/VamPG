@@ -3,7 +3,6 @@
     public const string PLAYER_INPUT_HANDLER = "PLAYER_INPUT_HANDLER";
     public const string CAMERA_CONTROL = "CameraControl";
     public const string CAMERA_FOCUS = "CameraFocus";
-    public const string GAME_UI_CANVAS = "GAME_UI_CANVAS";
     public const string CONTAINER_GUI = "CONTAINER_GUI";
     public const string INVENTORY_MANAGER = "InventoryManager";
 

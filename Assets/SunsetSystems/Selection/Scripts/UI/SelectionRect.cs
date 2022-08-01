@@ -24,13 +24,13 @@ namespace InsaneSystems.RTSSelection.UI
 
             if (!wasActivated)
                 DisableRect();
-            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
 
         private void OnDestroy()
         {
-            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         public void EnableRect(Vector3 atScreenPoint)
@@ -56,7 +56,7 @@ namespace InsaneSystems.RTSSelection.UI
             selfTransform.sizeDelta = new Vector2(rectXSize, rectYSize);
         }
 
-        public void OnMousePosition(InputAction.CallbackContext context)
+        public void OnPointerPosition(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed)
                 return;

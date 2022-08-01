@@ -26,17 +26,17 @@ namespace SunsetSystems.Input
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnRightClickEvent += OnRightClick;
-            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+            PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnRightClickEvent -= OnRightClick;
-            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+            PlayerInputHandler.OnSecondaryAction -= OnSecondaryAction;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
-        private void OnRightClick(InputAction.CallbackContext context)
+        private void OnSecondaryAction(InputAction.CallbackContext context)
         {
             if (InputHelper.IsRaycastHittingUIObject(mousePosition))
                 return;
@@ -122,7 +122,7 @@ namespace SunsetSystems.Input
             }
         }
 
-        private void OnMousePosition(InputAction.CallbackContext context)
+        private void OnPointerPosition(InputAction.CallbackContext context)
         {
             if (!context.performed)
                 return;

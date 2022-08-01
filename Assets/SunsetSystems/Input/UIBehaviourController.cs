@@ -1,21 +1,52 @@
+using SunsetSystems.UI;
+using SunsetSystems.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
 {
+    [RequireComponent(typeof(Tagger))]
     public class UIBehaviourController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        [SerializeField]
+        private GameplayUIManager gameplayUIParent;
 
+        private void OnEnable()
+        {
+            PlayerInputHandler.OnInventory += OnInventory;
+            PlayerInputHandler.OnCharacterSheet += OnCharacterSheet;
+            PlayerInputHandler.OnEscape += OnEscape;
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnDisable()
         {
+            PlayerInputHandler.OnInventory -= OnInventory;
+            PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
+            PlayerInputHandler.OnEscape -= OnEscape;
+        }
 
+        private void Start()
+        {
+            if (!gameplayUIParent)
+                gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
+        }
+
+        private void OnEscape(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnCharacterSheet(InputAction.CallbackContext conext)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnInventory(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

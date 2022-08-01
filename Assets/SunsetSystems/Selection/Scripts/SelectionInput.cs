@@ -20,7 +20,7 @@ namespace InsaneSystems.RTSSelection
             {
                 if (!_selectionRect)
                 {
-                    _selectionRect = this.FindFirstWithTag<UI.SelectionRect>(TagConstants.SELECTION_RECT);
+                    _selectionRect = this.FindFirstComponentWithTag<UI.SelectionRect>(TagConstants.SELECTION_RECT);
                 }
                 return _selectionRect;
             }
@@ -33,14 +33,14 @@ namespace InsaneSystems.RTSSelection
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnLeftClickEvent += OnLeftClick;
-            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+            PlayerInputHandler.OnPrimaryAction += OnPrimaryAction;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnLeftClickEvent -= OnLeftClick;
-            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+            PlayerInputHandler.OnPrimaryAction -= OnPrimaryAction;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         private void Start()
@@ -49,7 +49,7 @@ namespace InsaneSystems.RTSSelection
                 selection = GetComponent<Selection>();
         }
 
-        public void OnLeftClick(InputAction.CallbackContext context)
+        public void OnPrimaryAction(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
@@ -75,7 +75,7 @@ namespace InsaneSystems.RTSSelection
             SelectionRect.DisableRect();
         }
 
-        public void OnMousePosition(InputAction.CallbackContext context)
+        public void OnPointerPosition(InputAction.CallbackContext context)
         {
             if (!context.performed)
                 return;

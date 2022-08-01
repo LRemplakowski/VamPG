@@ -24,12 +24,12 @@ namespace InsaneSystems.RTSSelection
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         public override void Initialize()
@@ -181,7 +181,7 @@ namespace InsaneSystems.RTSSelection
                     selectedObjects.RemoveAt(i);
         }
 
-        public void OnMousePosition(InputAction.CallbackContext context)
+        public void OnPointerPosition(InputAction.CallbackContext context)
         {
             if (context.phase != InputActionPhase.Performed)
                 return;

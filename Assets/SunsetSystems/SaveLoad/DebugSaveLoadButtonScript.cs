@@ -32,7 +32,7 @@ namespace SunsetSystems.Loading
             if (GameManager.Instance.IsCurrentState(GameState.GamePaused))
                 menu.ResumeGame();
             else if (GameManager.Instance.IsCurrentState(GameState.Menu))
-                action = FindObjectOfType<GameStarter>().SwitchUiToGameplayMode;
+                action = FindObjectOfType<GameStarter>().DisableMainMenu;
             await _sceneLoader.LoadSavedScene(action);
         }
 

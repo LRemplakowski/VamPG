@@ -183,7 +183,7 @@ namespace InsaneSystems.RTSSelection
 
         public void OnPointerPosition(InputAction.CallbackContext context)
         {
-            if (context.phase != InputActionPhase.Performed)
+            if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
         }

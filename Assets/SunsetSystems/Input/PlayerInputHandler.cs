@@ -6,9 +6,10 @@ using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Utils.UI;
+using UnityEngine.InputSystem.UI;
 
 [RequireComponent(typeof(Tagger))]
-public class PlayerInputHandler : Singleton<PlayerInputHandler>
+public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 {
     [SerializeField]
     private PlayerInput playerInput;
@@ -63,6 +64,11 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         ongoingSelection = false;
     }
 
+    public override void Initialize()
+    {
+        playerInput.uiInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
+    }
+
     private void Update()
     {
         if (ongoingSelection)
@@ -81,13 +87,11 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         {
             Debug.LogWarning("Enabling player input");
             playerInput.ActivateInput();
-            playerInput.SwitchCurrentActionMap("Player");
         }
         else
         {
             Debug.LogWarning("Disabling player input");
             playerInput.DeactivateInput();
-            playerInput.SwitchCurrentActionMap("UI");
         }
     }
 

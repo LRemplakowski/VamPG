@@ -2,8 +2,8 @@ using SunsetSystems.Data;
 using UnityEngine;
 using SunsetSystems.Loading;
 using System;
-using SunsetSystems.UI.Pause;
 using SunsetSystems.Game;
+using SunsetSystems.UI;
 
 namespace SunsetSystems.Loading
 {

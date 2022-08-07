@@ -87,7 +87,7 @@ public static class Extensions
 
     public static void DestroyChildren(this Transform transform)
     {
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = transform.childCount; i > 0; --i)
         {
             UnityEngine.Object.Destroy(transform.GetChild(i));
         }

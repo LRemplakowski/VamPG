@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Utils;
+﻿using InsaneSystems.RTSSelection.UI;
+using SunsetSystems.Utils;
 using SunsetSystems.Utils.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,22 +13,10 @@ namespace InsaneSystems.RTSSelection
     {
         [SerializeField]
         Selection selection;
-        [field: SerializeField]
-        private UI.SelectionRect _selectionRect;
-        UI.SelectionRect SelectionRect
-        {
-            get
-            {
-                if (!_selectionRect)
-                {
-                    _selectionRect = this.FindFirstComponentWithTag<UI.SelectionRect>(TagConstants.SELECTION_RECT);
-                }
-                return _selectionRect;
-            }
-        }
+        SelectionRect SelectionRect => this.FindFirstComponentWithTag<SelectionRect>(TagConstants.SELECTION_RECT);
 
-        Vector2 startMousePosition;
-        Vector2 mousePosition;
+        Vector2 startMousePosition = new();
+        Vector2 mousePosition = new();
 
         int selectionButton;
 

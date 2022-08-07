@@ -10,8 +10,8 @@ namespace InsaneSystems.RTSSelection.UI
     {
         [SerializeField] RectTransform selfTransform;
 
-        Vector2 startPoint;
-        private Vector2 mousePosition;
+        Vector2 startPoint = new();
+        private Vector2 mousePosition = new();
 
         bool wasActivated;
 

@@ -12,7 +12,7 @@ namespace SunsetSystems.Loading
     public class SceneLoader : Singleton<SceneLoader>
     {
         private Scene _previousScene;
-        private SceneLoadingUIManager LoadingScreenUI => this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+        private SceneLoadingUIManager LoadingScreenUI => this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
         public SceneLoadingData CachedTransitionData { get; private set; }
 

@@ -36,7 +36,7 @@
         private void Start()
         {
             _sceneLoader = FindObjectOfType<SceneLoader>();
-            _fadeUI = this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
         public override void Interact()

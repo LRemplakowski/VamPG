@@ -2,7 +2,7 @@ using Entities.Characters;
 using SunsetSystems.Loading;
 using UnityEngine;
 using SunsetSystems.Resources;
-using SunsetSystems.GameplayMenu;
+using SunsetSystems.UI;
 using SunsetSystems.Utils;
 
 namespace SunsetSystems.Data
@@ -29,8 +29,6 @@ namespace SunsetSystems.Data
         private SceneLoader _sceneLoader;
         [SerializeField]
         private GameObject _mainMenuParent;
-        [SerializeField]
-        private GameplayUIManager _gameplayUiParent;
 
         private void Reset()
         {
@@ -46,8 +44,6 @@ namespace SunsetSystems.Data
                 _sceneLoader = FindObjectOfType<SceneLoader>();
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
-            if (!_gameplayUiParent)
-                _gameplayUiParent = FindObjectOfType<GameplayUIManager>(true);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
@@ -83,7 +79,7 @@ namespace SunsetSystems.Data
             mainCharacterAsset.StatsAsset = _stats;
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = mainCharacterAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }
 
@@ -93,13 +89,12 @@ namespace SunsetSystems.Data
             CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
             journal.MainCharacterAsset = debugAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }
 
-        public void SwitchUiToGameplayMode()
+        public void DisableMainMenu()
         {
-            _gameplayUiParent.SetGameplayUiActive(true);
             _mainMenuParent.SetActive(false);
         }
 

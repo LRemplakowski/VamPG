@@ -5,7 +5,7 @@ using System;
 
 namespace Entities.Characters
 {
-    public class CreatureInitializer
+    public static class CreatureInitializer
     {
         public static Creature InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
         {

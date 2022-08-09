@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
 using InsaneSystems.RTSSelection;
-using System;
 using SunsetSystems.Utils.UI;
+using UnityEngine.InputSystem.UI;
 
 [RequireComponent(typeof(Tagger))]
-public class PlayerInputHandler : Singleton<PlayerInputHandler>
+public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 {
     [SerializeField]
     private PlayerInput playerInput;
@@ -23,12 +22,20 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
 
     private bool ongoingSelection = false;
 
+    // Mouse input
     public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
-    public static event OnLeftClickHandler OnLeftClickEvent;
+    public static event OnLeftClickHandler OnPrimaryAction;
     public delegate void OnRightClickHandler(InputAction.CallbackContext context);
-    public static event OnRightClickHandler OnRightClickEvent;
+    public static event OnRightClickHandler OnSecondaryAction;
     public delegate void OnMousePositionHandler(InputAction.CallbackContext context);
-    public static event OnMousePositionHandler OnMousePositionEvent;
+    public static event OnMousePositionHandler OnPointerPosition;
+    // Keyboard input
+    public delegate void OnInventoryHandler(InputAction.CallbackContext context);
+    public static event OnInventoryHandler OnInventory;
+    public delegate void OnEscapeHandler(InputAction.CallbackContext context);
+    public static event OnEscapeHandler OnEscape;
+    public delegate void OnCharacterSheetHandler(InputAction.CallbackContext conext);
+    public static event OnCharacterSheetHandler OnCharacterSheet;
 
     protected override void Awake()
     {
@@ -57,6 +64,11 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         ongoingSelection = false;
     }
 
+    public override void Initialize()
+    {
+        playerInput.uiInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
+    }
+
     private void Update()
     {
         if (ongoingSelection)
@@ -75,44 +87,41 @@ public class PlayerInputHandler : Singleton<PlayerInputHandler>
         {
             Debug.LogWarning("Enabling player input");
             playerInput.ActivateInput();
-            playerInput.SwitchCurrentActionMap("Player");
         }
         else
         {
             Debug.LogWarning("Disabling player input");
             playerInput.DeactivateInput();
-            playerInput.SwitchCurrentActionMap("UI");
         }
     }
 
-    public void OnLeftClick(InputAction.CallbackContext context)
+    public void PrimaryAction(InputAction.CallbackContext context)
     {
-        OnLeftClickEvent?.Invoke(context);
+        OnPrimaryAction?.Invoke(context);
     }
 
-    public void OnRightClick(InputAction.CallbackContext context)
+    public void SecondaryAction(InputAction.CallbackContext context)
     {
-        OnRightClickEvent?.Invoke(context);
+        OnSecondaryAction?.Invoke(context);
     }
 
-    public void OnMousePosition(InputAction.CallbackContext context)
+    public void PointerPosition(InputAction.CallbackContext context)
     {
-        OnMousePositionEvent?.Invoke(context);
+        OnPointerPosition?.Invoke(context);
     }
 
-    public void OnInventory(InputAction.CallbackContext context)
+    public void InventoryAction(InputAction.CallbackContext context)
     {
-        if (!context.performed)
-            return;
+        OnInventory?.Invoke(context);
     }
 
-    public void OnEscape(InputAction.CallbackContext context)
+    public void EscapeAction(InputAction.CallbackContext context)
     {
-
+        OnEscape?.Invoke(context);
     }
 
-    public void OnCharacterSheet(InputAction.CallbackContext context)
+    public void CharacterSheetAction(InputAction.CallbackContext context)
     {
-
+        OnCharacterSheet?.Invoke(context);
     }
 }

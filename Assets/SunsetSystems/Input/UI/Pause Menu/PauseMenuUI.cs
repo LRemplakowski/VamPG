@@ -1,6 +1,7 @@
+using SunsetSystems.UI.Pause;
 using UnityEngine;
 
-namespace SunsetSystems.UI.Pause
+namespace SunsetSystems.UI
 {
     public class PauseMenuUI : MonoBehaviour
     {

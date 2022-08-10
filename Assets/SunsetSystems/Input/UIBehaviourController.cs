@@ -1,7 +1,12 @@
 using SunsetSystems.Game;
+using SunsetSystems.Inventory.UI;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
+using SunsetSystems.Utils.UI;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
@@ -13,12 +18,14 @@ namespace SunsetSystems.Input
         private GameplayUIManager gameplayUIParent;
         [SerializeField]
         private GameManager gameManager;
+        private Vector2 pointerPosition;
 
         private void OnEnable()
         {
             PlayerInputHandler.OnInventory += OnInventory;
             PlayerInputHandler.OnCharacterSheet += OnCharacterSheet;
             PlayerInputHandler.OnEscape += OnEscape;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
@@ -26,6 +33,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnInventory -= OnInventory;
             PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
             PlayerInputHandler.OnEscape -= OnEscape;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         private void Start()
@@ -43,9 +51,13 @@ namespace SunsetSystems.Input
 
         private void OnEscape(InputAction.CallbackContext context)
         {
-            Debug.Log(context.phase.ToString());
             if (!context.performed)
                 return;
+            if (gameplayUIParent.ContainerGUI.gameObject.activeInHierarchy)
+            {
+                gameplayUIParent.ContainerGUI.CloseContainerGUI();
+                return;
+            }
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
             if (GameManager.IsCurrentState(GameState.GamePaused))
             {
@@ -80,6 +92,11 @@ namespace SunsetSystems.Input
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
             pauseUI.gameObject.SetActive(true);
             pauseUI.OpenInventoryScreen();
+        }
+
+        private void OnPointerPosition(InputAction.CallbackContext context)
+        {
+            pointerPosition = context.ReadValue<Vector2>();
         }
     }
 }

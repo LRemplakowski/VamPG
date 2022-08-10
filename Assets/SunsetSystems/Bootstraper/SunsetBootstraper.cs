@@ -27,7 +27,6 @@ namespace SunsetSystems.Bootstraper
             await Task.Delay(1000);
             if (didLoadGameplayScene)
             {
-                PlayerInputHandler.Instance.SetPlayerInputActive(true);
                 if (this.TryFindFirstGameObjectWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
                     mainMenu.SetActive(false);
                 else

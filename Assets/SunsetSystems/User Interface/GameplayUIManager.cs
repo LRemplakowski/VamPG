@@ -1,3 +1,4 @@
+using SunsetSystems.Inventory.UI;
 using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using System;
@@ -12,5 +13,7 @@ namespace SunsetSystems.UI
         public InGameUI InGameUI { get; private set; }
         [field: SerializeField]
         public PauseMenuUI PauseMenuUI { get; private set; }
+        [field: SerializeField]
+        public ContainerGUI ContainerGUI { get; private set; }
     }
 }

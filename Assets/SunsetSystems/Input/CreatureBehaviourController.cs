@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
@@ -38,7 +39,7 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition))
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
                 return;
             if (context.performed)
                 HandleWorldRightClick();

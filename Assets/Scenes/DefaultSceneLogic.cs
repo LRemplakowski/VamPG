@@ -44,7 +44,7 @@ namespace SunsetSystems.Loading
             }
             await Task.WhenAll(InitializeObjects(FindInterfaces.Find<IInitialized>()));
             Debug.Log("Finished initializing objects!");
-            GameManager.Instance.OverrideState(GameState.Exploration);
+            GameManager.CurrentState = GameState.Exploration;
 
             static List<Task> InitializeObjects(List<IInitialized> objectsToInitialize)
             {
@@ -63,7 +63,7 @@ namespace SunsetSystems.Loading
 
         private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)
         {
-            if (this.TryFindFirstWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
+            if (this.TryFindFirstGameObjectWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
                 if (boundingBoxGO.TryGetComponent(out BoundingBox boundingBox))
                     _cameraControlScript.CurrentBoundingBox = boundingBox;
             _cameraControlScript.ForceToPosition(cameraPosition);
@@ -106,7 +106,7 @@ namespace SunsetSystems.Loading
             AreaEntryPoint entryPoint = null;
             if (!tag.Equals(""))
             {
-                if (this.TryFindFirstWithTag(tag, out GameObject result))
+                if (this.TryFindFirstGameObjectWithTag(tag, out GameObject result))
                     entryPoint = result.GetComponent<AreaEntryPoint>();
             }
             if (entryPoint == null)

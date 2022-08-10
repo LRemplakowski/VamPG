@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static SunsetSystems.Game.StateManager;
 
 namespace SunsetSystems.Game
 {
@@ -22,7 +20,7 @@ namespace SunsetSystems.Game
                 options.Add(new Dropdown.OptionData(((GameState)g).ToString()));
             }
             dropdown.AddOptions(options);
-            dropdown.SetValueWithoutNotify((int)GameManager.Instance.GetCurrentState());
+            dropdown.SetValueWithoutNotify((int)GameManager.CurrentState);
             dropdown.onValueChanged.AddListener(delegate { ChangeState(); });
         }
 
@@ -44,7 +42,7 @@ namespace SunsetSystems.Game
 
         private void ChangeState()
         {
-            GameManager.Instance.OverrideState((GameState)dropdown.value);
+            GameManager.CurrentState = (GameState)dropdown.value;
         }
     }
 }

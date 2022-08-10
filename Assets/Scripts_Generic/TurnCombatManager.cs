@@ -50,7 +50,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
 
     private void Update()
     {
-        if (GameManager.Instance.IsCurrentState(GameState.Combat))
+        if (GameManager.IsCurrentState(GameState.Combat))
         {
             foreach (Creature c in creaturesInCombat)
             {
@@ -113,7 +113,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
     private IEnumerator InitializeCombat()
     {
         roundCounter = 0;
-        _gridInstance = GameManager.Instance.GetGridController();
+        _gridInstance = GameManager.GetGridController();
         creaturesInCombat = FindObjectsOfType<Creature>();
         if (NotifyCombatStart != null)
         {
@@ -121,7 +121,7 @@ public class TurnCombatManager : Singleton<TurnCombatManager>
         }
         yield return new WaitUntil(() => AllCreaturesMoved());
         roundCounter = 1;
-        CurrentActiveActor = GameManager.Instance.GetMainCharacter();
+        CurrentActiveActor = GameManager.GetMainCharacter();
         StopCoroutine(InitializeCombat());
     }
 

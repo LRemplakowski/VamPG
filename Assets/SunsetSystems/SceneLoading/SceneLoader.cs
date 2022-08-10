@@ -108,7 +108,6 @@ namespace SunsetSystems.Loading
         private async Task LoadNewScene(SceneLoadingData data)
         {
             CachedTransitionData = data;
-            Debug.Log("Performing pre-loading action");
             if (data.preLoadingActions != null)
                 foreach (Action action in data.preLoadingActions)
                 {
@@ -152,7 +151,6 @@ namespace SunsetSystems.Loading
             {
                 float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
                 LoadingScreenUI.UpadteLoadingBar(progress);
-                Debug.Log(progress);
                 await Task.Yield();
             }
         }
@@ -171,7 +169,6 @@ namespace SunsetSystems.Loading
 
         private async Task DoSceneLoading()
         {
-            Debug.Log("Do start scene loading");
             switch (CachedTransitionData.transitionType)
             {
                 case TransitionType.indexTransition:

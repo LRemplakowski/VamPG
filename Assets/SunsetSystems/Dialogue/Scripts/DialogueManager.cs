@@ -95,7 +95,7 @@ namespace SunsetSystems.Dialogue
             _dialoguePlayer = new DialoguePlayer(_loadedDialogue);
 
             _dialoguePlayer.OnDialogueEnded += OnDialogueEnded;
-            GameManager.Instance.OverrideState(GameState.Conversation);
+            GameManager.CurrentState = GameState.Conversation;
             _dialoguePlayer.Play();
             OnDialogueStarted(_dialoguePlayer);
         }
@@ -113,7 +113,7 @@ namespace SunsetSystems.Dialogue
             _dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
             _dialoguePlayer = null;
             _dialogueWindow.gameObject.SetActive(false);
-            GameManager.Instance.OverrideState(GameState.Exploration);
+            GameManager.CurrentState = GameState.Exploration;
         }
 
         private void OnExecuteScript(DialoguePlayer sender, string script)
@@ -130,7 +130,7 @@ namespace SunsetSystems.Dialogue
         {
             ClearChoices();
             Debug.LogWarning("nodeCharacter: " + node.Character);
-            AddNewLine(node.Character, node.GetText(GameManager.Instance.GetLanguage()));
+            AddNewLine(node.Character, node.GetText(GameManager.GetLanguage()));
             ShowMessageNodeChoice choiceNode = node as ShowMessageNodeChoice;
             if (choiceNode)
             {
@@ -178,9 +178,9 @@ namespace SunsetSystems.Dialogue
                 {
                     Choice c = choiceNode.Choices[i];
                     if (c.IsCondition)
-                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.Instance.GetLanguage()), i, DialogueCondition.Evaluate(c.Condition));
+                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.GetLanguage()), i, DialogueCondition.Evaluate(c.Condition));
                     else
-                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.Instance.GetLanguage()), i);
+                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.GetLanguage()), i);
                 }
             }
         }

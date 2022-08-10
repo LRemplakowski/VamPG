@@ -7,6 +7,7 @@ using SunsetSystems.Utils;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Utils.UI;
 using UnityEngine.InputSystem.UI;
+using SunsetSystems.Game;
 
 [RequireComponent(typeof(Tagger))]
 public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
@@ -15,6 +16,9 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     private PlayerInput playerInput;
     private bool usePlayerInput = false;
     private Pointer PointerDevice => playerInput.GetDevice<Pointer>();
+
+    [SerializeField]
+    private GameManager gameManager;
 
     public static FormationData FormationData { get; set; }
     [SerializeField]
@@ -46,6 +50,11 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     {
         Selection.OnSelectionStarted += OnSelectionStarted;
         Selection.OnSelectionFinished += OnSelectionFinished;
+
+        if (!gameManager)
+            this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
+        if (!playerInput)
+            playerInput = GetComponent<PlayerInput>();
     }
 
     private void OnDestroy()
@@ -71,14 +80,14 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 
     private void Update()
     {
-        if (ongoingSelection)
-            return;
-        if (EventSystem.current != null && PointerDevice != null)
-            usePlayerInput = !InputHelper.IsRaycastHittingUIObject(PointerDevice.position.ReadValue());
-        if (usePlayerInput != playerInput.inputIsActive)
-        {
-            SetPlayerInputActive(usePlayerInput);
-        }
+        //if (ongoingSelection)
+        //    return;
+        //if (EventSystem.current != null && PointerDevice != null)
+        //    usePlayerInput = !InputHelper.IsRaycastHittingUIObject(PointerDevice.position.ReadValue()) || GameManager.IsCurrentState(GameState.GamePaused);
+        //if (usePlayerInput != playerInput.inputIsActive)
+        //{
+        //    SetPlayerInputActive(usePlayerInput);
+        //}
     }
 
     public void SetPlayerInputActive(bool active)

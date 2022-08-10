@@ -29,9 +29,9 @@ namespace SunsetSystems.Loading
             Debug.Log("DoLoad button");
             PauseMenuUI menu = GetComponentInParent<PauseMenuUI>();
             Action action = null;
-            if (GameManager.Instance.IsCurrentState(GameState.GamePaused))
+            if (GameManager.IsCurrentState(GameState.GamePaused))
                 menu.gameObject.SetActive(false);
-            else if (GameManager.Instance.IsCurrentState(GameState.Menu))
+            else if (GameManager.IsCurrentState(GameState.Menu))
                 action = FindObjectOfType<GameStarter>().DisableMainMenu;
             await _sceneLoader.LoadSavedScene(action);
         }

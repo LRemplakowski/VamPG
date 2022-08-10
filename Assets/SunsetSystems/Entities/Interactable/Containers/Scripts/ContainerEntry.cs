@@ -23,7 +23,7 @@ namespace SunsetSystems.Inventory.UI
 
         private void Start()
         {
-            if (this.TryFindFirstWithTag(TagConstants.INVENTORY_MANAGER, out GameObject inventoryManagerGO))
+            if (this.TryFindFirstGameObjectWithTag(TagConstants.INVENTORY_MANAGER, out GameObject inventoryManagerGO))
             {
                 inventoryManagerGO.TryGetComponent(out _inventoryManager);
             }

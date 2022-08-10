@@ -13,7 +13,7 @@ public static class Extensions
             return Array.Exists(array, element => element != null);
     }
 
-    public static bool TryFindAllWithTag(this GameObject go, string tag, out List<GameObject> result)
+    public static bool TryFindAllGameObjectsWithTag(this GameObject go, string tag, out List<GameObject> result)
     {
         bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
         result = value;
@@ -23,7 +23,7 @@ public static class Extensions
     public static List<T> FindAllComponentsWithTag<T>(this GameObject go, string tag) where T : Component
     {
         List<T> result = new();
-        if (go.TryFindAllWithTag(tag, out List<GameObject> found))
+        if (go.TryFindAllGameObjectsWithTag(tag, out List<GameObject> found))
         {
             foreach (GameObject f in found)
             {
@@ -34,22 +34,30 @@ public static class Extensions
         return result;
     }
 
-    public static bool TryFindFirstWithTag(this GameObject go, string tag, out GameObject result)
+    public static bool TryFindFirstGameObjectWithTag(this GameObject go, string tag, out GameObject result)
     {
-        bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
-        result = value?[0];
+        bool found = false;
+        result = null;
+        if (Tagger.tags.TryGetValue(tag, out List<GameObject> value))
+        {
+            if (value.Count > 0)
+                result = value[0];
+            else
+                return false;
+            found = result != null;
+        }
         return found;
     }
 
     public static T FindFirstComponentWithTag<T>(this GameObject go, string tag) where T : Component
     {
         T result = null;
-        if (go.TryFindFirstWithTag(tag, out GameObject found))
+        if (go.TryFindFirstGameObjectWithTag(tag, out GameObject found))
             result = found.GetComponent<T>();
         return result;
     }
 
-    public static bool TryFindAllWithTag(this Component co, string tag, out List<GameObject> result)
+    public static bool TryFindAllGameObjectsWithTag(this Component co, string tag, out List<GameObject> result)
     {
         bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
         result = value;
@@ -59,7 +67,7 @@ public static class Extensions
     public static List<T> FindAllComponentsWithTag<T>(this Component co, string tag) where T : Component
     {
         List<T> result = new();
-        if (co.TryFindAllWithTag(tag, out List<GameObject> found))
+        if (co.TryFindAllGameObjectsWithTag(tag, out List<GameObject> found))
         {
             foreach (GameObject f in found)
             {
@@ -70,17 +78,25 @@ public static class Extensions
         return result;
     }
 
-    public static bool TryFindFirstWithTag(this Component co, string tag, out GameObject result)
+    public static bool TryFindFirstGameObjectWithTag(this Component co, string tag, out GameObject result)
     {
-        bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
-        result = value?[0];
+        bool found = false;
+        result = null;
+        if (Tagger.tags.TryGetValue(tag, out List<GameObject> value))
+        {
+            if (value.Count > 0)
+                result = value[0];
+            else
+                return false;
+            found = result != null;
+        }
         return found;
     }
 
     public static T FindFirstComponentWithTag<T>(this Component co, string tag) where T : Component
     {
         T result = null;
-        if (co.TryFindFirstWithTag(tag, out GameObject found))
+        if (co.TryFindFirstGameObjectWithTag(tag, out GameObject found))
             result = found.GetComponent<T>();
         return result;
     }

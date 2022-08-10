@@ -27,7 +27,7 @@ namespace Entities.Interactable
 
         private void OpenContainer()
         {
-            if (this.TryFindFirstWithTag(TagConstants.CONTAINER_GUI, out GameObject guiGO))
+            if (this.TryFindFirstGameObjectWithTag(TagConstants.CONTAINER_GUI, out GameObject guiGO))
             {
                 if (guiGO.TryGetComponent(out _containerGUI))
                 {

@@ -1,14 +1,13 @@
 using SunsetSystems.Game;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
 {
     [RequireComponent(typeof(Tagger))]
-    public class UIBehaviourController : MonoBehaviour
+    public class UIBehaviourController : MonoBehaviour, IInitialized
     {
         [SerializeField]
         private GameplayUIManager gameplayUIParent;
@@ -31,6 +30,11 @@ namespace SunsetSystems.Input
 
         private void Start()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             if (!gameplayUIParent)
                 gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
             if (!gameManager)
@@ -39,15 +43,20 @@ namespace SunsetSystems.Input
 
         private void OnEscape(InputAction.CallbackContext context)
         {
+            Debug.Log(context.phase.ToString());
             if (!context.performed)
                 return;
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
-            if (pauseUI.gameObject.activeSelf)
+            if (GameManager.IsCurrentState(GameState.GamePaused))
             {
+                Debug.Log("Resuming game");
+                GameManager.CurrentState = GameState.Exploration;
                 pauseUI.gameObject.SetActive(false);
             }
             else
             {
+                Debug.Log("Pausing game");
+                GameManager.CurrentState = GameState.GamePaused;
                 pauseUI.gameObject.SetActive(true);
                 pauseUI.OpenSettingsScreen();
             }
@@ -57,6 +66,7 @@ namespace SunsetSystems.Input
         {
             if (!context.performed)
                 return;
+            GameManager.CurrentState = GameState.GamePaused;
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
             pauseUI.gameObject.SetActive(true);
             pauseUI.OpenCharacterSheetScreen();
@@ -66,6 +76,7 @@ namespace SunsetSystems.Input
         {
             if (!context.performed)
                 return;
+            GameManager.CurrentState = GameState.GamePaused;
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
             pauseUI.gameObject.SetActive(true);
             pauseUI.OpenInventoryScreen();

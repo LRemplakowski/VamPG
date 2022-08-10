@@ -28,7 +28,7 @@ namespace SunsetSystems.Bootstraper
             if (didLoadGameplayScene)
             {
                 PlayerInputHandler.Instance.SetPlayerInputActive(true);
-                if (this.TryFindFirstWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
+                if (this.TryFindFirstGameObjectWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
                     mainMenu.SetActive(false);
                 else
                     Debug.LogWarning("No Main Menu UI parent found!");

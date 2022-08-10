@@ -8,7 +8,7 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            if (GameManager.Instance.IsCurrentState(GameState.Combat) &&
+            if (GameManager.IsCurrentState(GameState.Combat) &&
                 context.Owner.Equals(TurnCombatManager.Instance.CurrentActiveActor) &&
                 !context.IsPlayerControlled)
             {

@@ -40,7 +40,7 @@ namespace InsaneSystems.RTSSelection
 
         public void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !InputHelper.IsRaycastHittingUIObject(mousePosition))
             {
                 HandleClick();
             }
@@ -59,7 +59,6 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClickRelease()
         {
-            Debug.Log("selection finished call");
             selection.FinishSelection(startMousePosition, mousePosition);
             SelectionRect.DisableRect();
         }

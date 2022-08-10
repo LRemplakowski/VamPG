@@ -32,6 +32,6 @@ public class InventoryItem : ScriptableObject
 
     public void RemoveFromInventory()
     {
-        GameManager.Instance.GetMainCharacter().GetInventory().Remove(this);
+        GameManager.GetMainCharacter().GetInventory().Remove(this);
     }
 }

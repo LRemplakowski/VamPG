@@ -71,7 +71,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
-            GameManager.Instance.GetGridController().ClearActiveElements();
+            GameManager.GetGridController().ClearActiveElements();
         }
     }
 
@@ -97,7 +97,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
         Move.onMovementFinished += OnMovementFinished;
         HasMoved = false;
         HasActed = false;
-        GridElement nearest = GameManager.Instance.GetGridController().GetNearestGridElement(this.transform.position);
+        GridElement nearest = GameManager.GetGridController().GetNearestGridElement(this.transform.position);
         Owner.Move(nearest);
     }
 
@@ -116,7 +116,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
             if (IsPlayerControlled)
             {
-                GameManager.Instance.GetGridController().ActivateElementsInRangeOfActor(Owner);
+                GameManager.GetGridController().ActivateElementsInRangeOfActor(Owner);
             }
         }
     }
@@ -125,7 +125,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     {
         if (currentActor.Equals(Owner) && IsPlayerControlled)
         {
-            GameManager.Instance.GetGridController().ClearActiveElements();
+            GameManager.GetGridController().ClearActiveElements();
         }
     }
 

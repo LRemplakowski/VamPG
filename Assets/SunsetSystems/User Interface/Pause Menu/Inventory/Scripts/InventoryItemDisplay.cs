@@ -1,11 +1,9 @@
 using SunsetSystems.Inventory.Data;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.UserInterface
 {
     public class InventoryItemDisplay : MonoBehaviour
     {

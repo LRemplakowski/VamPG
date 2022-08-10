@@ -1,9 +1,9 @@
+using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.UserInterface
 {
     public class InventoryGUI : MonoBehaviour
     {

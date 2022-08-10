@@ -3,12 +3,14 @@
     public const string PLAYER_INPUT_HANDLER = "PLAYER_INPUT_HANDLER";
     public const string CAMERA_CONTROL = "CameraControl";
     public const string CAMERA_FOCUS = "CameraFocus";
-    public const string CONTAINER_GUI = "CONTAINER_GUI";
     public const string INVENTORY_MANAGER = "InventoryManager";
+    public const string GAME_MANAGER = "GAME_MANAGER";
 
     public const string SCENE_LOADING_UI = "SCENE_LOADING_UI";
     public const string MAIN_MENU_UI = "MAIN_MENU_UI";
     public const string GAMEPLAY_UI = "GAMEPLAY_UI";
+    public const string CONTAINER_GUI = "CONTAINER_GUI";
+    public const string UI_BEHAVIOUR_CONTROLLER = "UI_BEHAVIOUR_CONTROLLER";
 
     public const string SELECTION_RECT = "SELECTION_RECT";
     public const string PARTY_PORTRAITS_CONTROLLER = "PARTY_PORTRAITS_CONTROLLER";

@@ -1,8 +1,7 @@
+using SunsetSystems.Game;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +12,8 @@ namespace SunsetSystems.Input
     {
         [SerializeField]
         private GameplayUIManager gameplayUIParent;
+        [SerializeField]
+        private GameManager gameManager;
 
         private void OnEnable()
         {
@@ -32,21 +33,42 @@ namespace SunsetSystems.Input
         {
             if (!gameplayUIParent)
                 gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
+            if (!gameManager)
+                gameManager = this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
         }
 
         private void OnEscape(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            if (!context.performed)
+                return;
+            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
+            if (pauseUI.gameObject.activeSelf)
+            {
+                pauseUI.gameObject.SetActive(false);
+            }
+            else
+            {
+                pauseUI.gameObject.SetActive(true);
+                pauseUI.OpenSettingsScreen();
+            }
         }
 
-        private void OnCharacterSheet(InputAction.CallbackContext conext)
+        private void OnCharacterSheet(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            if (!context.performed)
+                return;
+            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
+            pauseUI.gameObject.SetActive(true);
+            pauseUI.OpenCharacterSheetScreen();
         }
 
         private void OnInventory(InputAction.CallbackContext context)
         {
-            throw new NotImplementedException();
+            if (!context.performed)
+                return;
+            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
+            pauseUI.gameObject.SetActive(true);
+            pauseUI.OpenInventoryScreen();
         }
     }
 }

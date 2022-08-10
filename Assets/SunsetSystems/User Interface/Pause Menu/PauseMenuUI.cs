@@ -1,4 +1,5 @@
 using SunsetSystems.UI.Pause;
+using SunsetSystems.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.UI
@@ -6,31 +7,38 @@ namespace SunsetSystems.UI
     public class PauseMenuUI : MonoBehaviour
     {
         [SerializeField]
-        private Canvas _pauseMenuCanvas;
+        private Canvas pauseMenuCanvas;
         [SerializeField]
-        private PauseUISelector _inventory, _journal, _settings;
+        private PauseUISelector inventory, journal, settings, characterSheet;
 
         private void Awake()
         {
-            if (_pauseMenuCanvas == null)
-                _pauseMenuCanvas = GetComponent<Canvas>();
+            if (!pauseMenuCanvas)
+                pauseMenuCanvas = GetComponent<Canvas>();
         }
 
-        public void PauseGame()
+        private void Start()
         {
-            HandleOpenPauseGUI();
+            gameObject.SetActive(false);
+        }
+
+        public void OpenSettingsScreen()
+        {
             OpenMenuScreen(PauseMenuScreen.Settings);
+        }
+
+        public void OpenCharacterSheetScreen()
+        {
+            OpenMenuScreen(PauseMenuScreen.CharacterSheet);
         }
 
         public void OpenInventoryScreen()
         {
-            HandleOpenPauseGUI();
             OpenMenuScreen(PauseMenuScreen.Inventory);
         }
 
         public void OpenJournalScreen()
         {
-            HandleOpenPauseGUI();
             OpenMenuScreen(PauseMenuScreen.Journal);
         }
 
@@ -39,29 +47,20 @@ namespace SunsetSystems.UI
             switch (screen)
             {
                 case PauseMenuScreen.Settings:
-                    _settings.SelectGUIScreen();
+                    settings.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.Inventory:
-                    _inventory.SelectGUIScreen();
+                    inventory.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.CharacterSheet:
+                    characterSheet.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.Journal:
-                    _journal.SelectGUIScreen();
+                    journal.SelectGUIScreen();
                     break;
                 case PauseMenuScreen.Map:
                     break;
             }
-        }
-
-        private void HandleOpenPauseGUI()
-        {
-            gameObject.SetActive(true);
-        }
-
-        public void ResumeGame()
-        {
-            gameObject.SetActive(false);
         }
     }
 

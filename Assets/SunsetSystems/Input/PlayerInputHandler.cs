@@ -4,23 +4,21 @@ using UnityEngine.EventSystems;
 using SunsetSystems.Formation.Data;
 using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
-using InsaneSystems.RTSSelection;
-using SunsetSystems.Utils.UI;
 using UnityEngine.InputSystem.UI;
+using SunsetSystems.Game;
 
 [RequireComponent(typeof(Tagger))]
 public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 {
     [SerializeField]
     private PlayerInput playerInput;
-    private bool usePlayerInput = false;
-    private Pointer PointerDevice => playerInput.GetDevice<Pointer>();
+
+    [SerializeField]
+    private GameManager gameManager;
 
     public static FormationData FormationData { get; set; }
     [SerializeField]
     private PredefinedFormation defaultFormation;
-
-    private bool ongoingSelection = false;
 
     // Mouse input
     public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
@@ -44,55 +42,15 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 
     private void Start()
     {
-        Selection.OnSelectionStarted += OnSelectionStarted;
-        Selection.OnSelectionFinished += OnSelectionFinished;
-    }
-
-    private void OnDestroy()
-    {
-        Selection.OnSelectionStarted -= OnSelectionStarted;
-        Selection.OnSelectionFinished -= OnSelectionFinished;
-    }
-
-    private void OnSelectionStarted()
-    {
-        ongoingSelection = true;
-    }
-
-    private void OnSelectionFinished()
-    {
-        ongoingSelection = false;
+        if (!gameManager)
+            this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
+        if (!playerInput)
+            playerInput = GetComponent<PlayerInput>();
     }
 
     public override void Initialize()
     {
         playerInput.uiInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
-    }
-
-    private void Update()
-    {
-        if (ongoingSelection)
-            return;
-        if (EventSystem.current != null && PointerDevice != null)
-            usePlayerInput = !InputHelper.IsRaycastHittingUIObject(PointerDevice.position.ReadValue());
-        if (usePlayerInput != playerInput.inputIsActive)
-        {
-            SetPlayerInputActive(usePlayerInput);
-        }
-    }
-
-    public void SetPlayerInputActive(bool active)
-    {
-        if (active)
-        {
-            Debug.LogWarning("Enabling player input");
-            playerInput.ActivateInput();
-        }
-        else
-        {
-            Debug.LogWarning("Disabling player input");
-            playerInput.DeactivateInput();
-        }
     }
 
     public void PrimaryAction(InputAction.CallbackContext context)

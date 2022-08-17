@@ -22,7 +22,7 @@ public class RoundCounter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.IsCurrentState(GameState.Combat))
+        if (GameManager.IsCurrentState(GameState.Combat))
             text.text = turnCombatManager.GetRound().ToString();
     }
 }

@@ -8,7 +8,7 @@ namespace SunsetSystems.Game
     {
         private static Creature _player;
         private static GridController _gridController;
-        private readonly StateManager stateManager = new();
+        public static GameState CurrentState { get; set; }
 
         // Start is called before the first frame update
         void Start()
@@ -16,36 +16,35 @@ namespace SunsetSystems.Game
             _gridController = FindObjectOfType<GridController>();
         }
 
-        public Creature GetMainCharacter()
+        public static Creature GetMainCharacter()
         {
             if (_player == null)
                 _player = GameRuntimeData.Instance.MainCharacterData.CreatureComponent;
             return _player;
         }
 
-        public GridController GetGridController()
+        public static GridController GetGridController()
         {
             return _gridController;
         }
 
-        public string GetLanguage()
+        public static string GetLanguage()
         {
             return "PL";
         }
 
-        public bool IsCurrentState(GameState state)
+        public static bool IsCurrentState(GameState state)
         {
-            return stateManager.CurrentState.Equals(state);
+            return CurrentState.Equals(state);
         }
+    }
 
-        public GameState GetCurrentState()
-        {
-            return stateManager.CurrentState;
-        }
-
-        public void OverrideState(GameState newState)
-        {
-            stateManager.CurrentState = newState;
-        }
+    public enum GameState
+    {
+        Exploration,
+        Combat,
+        Conversation,
+        Menu,
+        GamePaused
     }
 }

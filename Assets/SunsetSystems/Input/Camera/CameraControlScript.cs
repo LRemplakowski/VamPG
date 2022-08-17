@@ -43,7 +43,7 @@ namespace SunsetSystems.Input.CameraControl
         {
             if (!_cameraTransform)
                 _cameraTransform = GetComponentInChildren<Camera>().transform;
-            if (!_rotationTarget && this.TryFindFirstWithTag(TagConstants.CAMERA_FOCUS, out GameObject result))
+            if (!_rotationTarget && this.TryFindFirstGameObjectWithTag(TagConstants.CAMERA_FOCUS, out GameObject result))
                 _rotationTarget = result.transform;
             if (_target)
             {

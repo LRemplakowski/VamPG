@@ -38,11 +38,11 @@ public class DevSpellbook : ExposableMonobehaviour
         bool cast = false;
         if (dp.Target.Equals(Target.Self))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.Instance.GetMainCharacter(), GameManager.Instance.GetMainCharacter());
+            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), GameManager.GetMainCharacter());
         }
         if (dp.Target.Equals(Target.Hostile))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.Instance.GetMainCharacter(), FindObjectOfType<NPC>());
+            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), FindObjectOfType<NPC>());
         }
         Debug.Log("Did cast? " + cast);
     }

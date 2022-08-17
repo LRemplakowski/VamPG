@@ -1,6 +1,7 @@
 ﻿using InsaneSystems.RTSSelection.UI;
 using SunsetSystems.Utils;
 using SunsetSystems.Utils.UI;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -40,7 +41,7 @@ namespace InsaneSystems.RTSSelection
 
         public void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
             {
                 HandleClick();
             }
@@ -59,7 +60,6 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClickRelease()
         {
-            Debug.Log("selection finished call");
             selection.FinishSelection(startMousePosition, mousePosition);
             SelectionRect.DisableRect();
         }

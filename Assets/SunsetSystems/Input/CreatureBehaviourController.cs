@@ -1,10 +1,9 @@
-using Entities;
 using Entities.Characters;
 using InsaneSystems.RTSSelection;
+using SunsetSystems.Combat;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using SunsetSystems.Utils.UI;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -97,18 +96,18 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
                     else if (hit.collider.GetComponent<GridElement>())
                     {
                         if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
                         {
-                            TurnCombatManager.Instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                            CombatManager.Instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
                         }
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
                         return;
                     NPC enemy = hit.collider.GetComponent<NPC>();
                     if (enemy)
@@ -116,7 +115,7 @@ namespace SunsetSystems.Input
                         if (enemy.Data.Faction.Equals(Faction.Hostile) &&
                             Vector3.Distance(GameManager.GetMainCharacter().transform.position, enemy.transform.position) <= GameManager.GetMainCharacter().GetComponent<StatsManager>().GetWeaponMaxRange())
                         {
-                            TurnCombatManager.Instance.CurrentActiveActor.Attack(enemy);
+                            CombatManager.Instance.CurrentActiveActor.Attack(enemy);
                         }
                     }
                     break;
@@ -179,7 +178,7 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
                     if (lastHit != hit.collider)
                     {
@@ -195,7 +194,7 @@ namespace SunsetSystems.Input
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!TurnCombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
                         return;
                     if (lastHit != hit.collider)
                     {

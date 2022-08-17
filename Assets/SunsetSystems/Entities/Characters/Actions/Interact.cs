@@ -1,7 +1,8 @@
 ﻿using Entities.Characters.Actions.Conditions;
-using System.Collections;
+using SunsetSystems.Utils.Threading;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Entities.Characters.Actions
 {
@@ -9,6 +10,8 @@ namespace Entities.Characters.Actions
     {
         private readonly IInteractable target;
         private Move moveToTarget;
+        private Task moveTask;
+        private readonly CancellationTokenSource tokenSource = new();
 
         protected override Creature Owner
         {
@@ -25,40 +28,47 @@ namespace Entities.Characters.Actions
 
         public override void Abort()
         {
-            Owner.StopCoroutine(InteractIfCloseEnough());
-            Owner.StopCoroutine(Owner.FaceTarget(target.InteractionTransform));
+            tokenSource.Cancel();
             if (moveToTarget != null)
                 moveToTarget.Abort();
             target.Interacted = false;
         }
 
-        public override void Begin()
+        public async override void Begin()
         {
             Debug.Log("Starting interaction with " + target);
             float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
             if (distance > target.InteractionDistance)
             {
-                moveToTarget = new Move(Owner.gameObject.GetComponent<NavMeshAgent>(), target.InteractionTransform.position);
+                moveToTarget = new Move(Owner, target.InteractionTransform.position);
                 moveToTarget.Begin();
-                Owner.StartCoroutine(InteractIfCloseEnough());
+                await Task.Run<Task>(InteractIfCloseEnough, tokenSource.Token);
             }
             else
             {
-                Owner.StartCoroutine(Owner.FaceTarget(target.InteractionTransform));
+                await Owner.FaceTarget(target.InteractionTransform);
                 target.TargetedBy = Owner;
                 target.Interact();
             }
         }
 
-        private IEnumerator InteractIfCloseEnough()
+        private async Task InteractIfCloseEnough()
         {
-            yield return new WaitUntil(() => Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) <= target.InteractionDistance);
+            while (Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) <= target.InteractionDistance)
+            {
+                await Task.Yield();
+            }
             moveToTarget.Abort();
-            yield return new WaitUntil(() => Owner.RotateTowardsTarget(target.InteractionTransform));
+            await Task.Run(() =>
+            {
+                Dispatcher.Instance.Invoke(async () =>
+                {
+                    await Owner.FaceTarget(target.InteractionTransform);
+                });
+            }, tokenSource.Token);
 
             target.TargetedBy = Owner;
             target.Interact();
-            Owner.StopCoroutine(InteractIfCloseEnough());
         }
-    } 
+    }
 }

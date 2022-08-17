@@ -4,4 +4,8 @@ using UnityEngine;
 
 public class DialogueWindowUI : UIWindow
 {
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 }

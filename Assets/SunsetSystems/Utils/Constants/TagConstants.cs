@@ -5,6 +5,8 @@
     public const string CAMERA_FOCUS = "CameraFocus";
     public const string INVENTORY_MANAGER = "InventoryManager";
     public const string GAME_MANAGER = "GAME_MANAGER";
+    public const string COMBAT_MANAGER = "COMBAT_MANAGER";
+    public const string GAME_RUNTIME_DATA = "GAME_RUNTIME_DATA";
 
     public const string SCENE_LOADING_UI = "SCENE_LOADING_UI";
     public const string MAIN_MENU_UI = "MAIN_MENU_UI";

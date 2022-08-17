@@ -11,8 +11,8 @@ namespace Entities.Characters
         public override void Move(Vector3 moveTarget, float stoppingDistance)
         {
             ClearAllActions();
-            _agent.stoppingDistance = stoppingDistance;
-            AddActionToQueue(new Move(_agent, moveTarget));
+            Agent.stoppingDistance = stoppingDistance;
+            AddActionToQueue(new Move(this, moveTarget));
         }
 
         public override void Move(Vector3 moveTarget)

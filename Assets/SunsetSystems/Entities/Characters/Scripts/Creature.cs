@@ -5,10 +5,12 @@ using UnityEngine.AI;
 using Apex.AI.Components;
 using Entities.Characters.Data;
 using Entities.Characters.Actions;
+using System.Threading.Tasks;
 
 namespace Entities.Characters
 {
     [RequireComponent(typeof(NavMeshAgent)),
+    RequireComponent(typeof(NavMeshObstacle)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(CombatBehaviour)),
     RequireComponent(typeof(CreatureAnimator)),
@@ -22,10 +24,24 @@ namespace Entities.Characters
     {
         private const float lookTowardsRotationSpeed = 5.0f;
 
-        [SerializeField]
-        protected NavMeshAgent _agent;
-        [SerializeField]
-        protected Inventory _inventory;
+        [field: SerializeField]
+        public NavMeshAgent Agent { get; protected set; }
+
+        [field: SerializeField]
+        public NavMeshObstacle NavMeshObstacle { get; protected set; }
+
+        [field: SerializeField]
+        public Inventory Inventory { get; protected set; }
+
+        [field: SerializeField]
+        public StatsManager StatsManager { get; protected set; }
+
+        [field: SerializeField]
+        public CreatureData Data { get; protected set; }
+
+        [field: SerializeField]
+        public CombatBehaviour CombatBehaviour { get; private set; }
+
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
         [ExposeProperty]
@@ -43,8 +59,6 @@ namespace Entities.Characters
             }
         }
 
-        public CreatureData Data { get => GetComponent<CreatureData>(); }
-
         private Queue<EntityAction> _actionQueue;
         private Queue<EntityAction> ActionQueue
         {
@@ -59,24 +73,49 @@ namespace Entities.Characters
             }
         }
 
-        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
-        public abstract void Move(Vector3 moveTarget);
-        public abstract void Move(GridElement moveTarget);
-        public abstract void Attack(Creature target);
+        public bool IsAlive => StatsManager.IsAlive();
+
+        private void Awake()
+        {
+            if (!Inventory)
+                Inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
+            if (!StatsManager)
+                StatsManager = GetComponent<StatsManager>();
+            if (!Data)
+                Data = GetComponent<CreatureData>();
+            if (!Agent)
+                Agent = GetComponent<NavMeshAgent>();
+            if (!CombatBehaviour)
+                CombatBehaviour = GetComponent<CombatBehaviour>();
+            Agent.enabled = false;
+        }
+
+        protected virtual void Start()
+        {
+            ActionQueue.Enqueue(new Idle(this));
+        }
+
+        public void Update()
+        {
+            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            {
+                ActionQueue.Dequeue();
+                ActionQueue.Peek().Begin();
+            }
+            if (ActionQueue.Peek().IsFinished())
+            {
+                ActionQueue.Dequeue();
+                if (ActionQueue.Count == 0)
+                    ActionQueue.Enqueue(new Idle(this));
+                ActionQueue.Peek().Begin();
+            }
+        }
 
         public void ForceCreatureToPosition(Vector3 position)
         {
             ClearAllActions();
             Debug.LogWarning("Forcing creature to position: " + position);
-            _agent.Warp(position);
-        }
-
-        protected virtual void Start()
-        {
-            if (!_inventory)
-                _inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
-            _agent = GetComponent<NavMeshAgent>();
-            ActionQueue.Enqueue(new Idle(this));
+            Agent.Warp(position);
         }
 
         public void AddActionToQueue(EntityAction action)
@@ -105,26 +144,11 @@ namespace Entities.Characters
             return dot >= 0.999f || dot <= -0.999f;
         }
 
-        public IEnumerator FaceTarget(Transform target)
+        public async Task FaceTarget(Transform target)
         {
-            yield return new WaitUntil(() => RotateTowardsTarget(target));
-            StopCoroutine(FaceTarget(target));
-        }
-
-        public void Update()
-        {
-            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            while (!RotateTowardsTarget(target))
             {
-                ActionQueue.Dequeue();
-                ActionQueue.Peek().Begin();
-            }
-            if (ActionQueue.Peek().IsFinished())
-            {
-                //Debug.Log("Action finished!\n" + ActionQueue.Peek());
-                ActionQueue.Dequeue();
-                if (ActionQueue.Count == 0)
-                    ActionQueue.Enqueue(new Idle(this));
-                ActionQueue.Peek().Begin();
+                await Task.Yield();
             }
         }
 
@@ -147,17 +171,22 @@ namespace Entities.Characters
 
         public Inventory GetInventory()
         {
-            return _inventory;
+            return Inventory;
         }
 
         public CreatureUIData GetCreatureUIData()
         {
-            HealthData healthData = GetComponent<StatsManager>().GetHealthData();
-            CreatureUIData.CreatureDataBuilder builder = new CreatureUIData.CreatureDataBuilder(Data.FullName,
+            HealthData healthData = StatsManager.GetHealthData();
+            CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
                 Data.Portrait,
                 healthData,
                 0);
             return builder.Create();
         }
+
+        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
+        public abstract void Move(Vector3 moveTarget);
+        public abstract void Move(GridElement moveTarget);
+        public abstract void Attack(Creature target);
     }
 }

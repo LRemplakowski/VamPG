@@ -11,9 +11,9 @@ namespace Entities.Characters
     {
         [SerializeField]
         protected CharacterStats _characterStats;
-        public CharacterStats Stats 
-        { 
-            get => _characterStats; 
+        public CharacterStats Stats
+        {
+            get => _characterStats;
             internal set
             {
                 _characterStats = value;
@@ -79,6 +79,11 @@ namespace Entities.Characters
                 return (dexterity.GetValue() + athletics.GetValue());
             else
                 return 0;
+        }
+
+        public int GetInitiative()
+        {
+            return 0;
         }
 
         public float GetWeaponMaxRange()
@@ -165,8 +170,8 @@ namespace Entities.Characters
 
         internal HealthData GetHealthData()
         {
-            HealthData.HealthDataBuilder builder = new HealthData.HealthDataBuilder(Stats.GetTracker(TrackerType.Health).GetValue());
+            HealthData.HealthDataBuilder builder = new(Stats.GetTracker(TrackerType.Health).GetValue());
             return builder.Create();
         }
-    } 
+    }
 }

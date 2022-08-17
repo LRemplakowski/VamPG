@@ -19,8 +19,8 @@ namespace Entities.Characters
         public override void Move(Vector3 moveTarget, float stoppingDistance)
         {
             ClearAllActions();
-            _agent.stoppingDistance = stoppingDistance;
-            AddActionToQueue(new Move(_agent, moveTarget));
+            Agent.stoppingDistance = stoppingDistance;
+            AddActionToQueue(new Move(this, moveTarget));
         }
 
         public override void Move(Vector3 moveTarget)
@@ -49,7 +49,7 @@ namespace Entities.Characters
 
         private Transform CreateDefaultLineTarget()
         {
-            GameObject lt = new GameObject("Default Line Target");
+            GameObject lt = new("Default Line Target");
             lt.transform.parent = this.transform;
             lt.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1.5f, this.transform.position.z);
             return lt.transform;

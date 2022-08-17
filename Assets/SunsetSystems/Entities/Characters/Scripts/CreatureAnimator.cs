@@ -1,6 +1,5 @@
 ﻿using Entities.Characters;
-using System;
-using System.Collections;
+using SunsetSystems.Combat;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,14 +15,14 @@ public class CreatureAnimator : ExposableMonobehaviour
 
     private void OnEnable()
     {
-        TurnCombatManager.NotifyCombatStart += OnCombatStart;
-        TurnCombatManager.NotifyCombatEnd += OnCombatEnd;
+        CombatManager.CombatBegin += OnCombatStart;
+        CombatManager.CombatEnd += OnCombatEnd;
     }
 
     private void OnDisable()
     {
-        TurnCombatManager.NotifyCombatStart -= OnCombatStart;
-        TurnCombatManager.NotifyCombatEnd -= OnCombatEnd;
+        CombatManager.CombatBegin -= OnCombatStart;
+        CombatManager.CombatEnd -= OnCombatEnd;
     }
 
     private void Start()

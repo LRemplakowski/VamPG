@@ -11,7 +11,15 @@ using SunsetSystems.Combat;
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
     private CreatureContext _context;
-    private CombatManager cachedCombatManager;
+    private CreatureContext Context
+    {
+        get
+        {
+            if (_context == null)
+                _context = new(this.Owner, CombatManager.Instance);
+            return _context;
+        }
+    }
 
     [SerializeField]
     private Transform _raycastOrigin;
@@ -25,7 +33,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     public bool HasMoved { get; set; }
 
-    public bool IsPlayerControlled => _context.IsPlayerControlled;
+    public bool IsPlayerControlled => Context.IsPlayerControlled;
 
     private void Reset()
     {
@@ -45,49 +53,52 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
             _raycastOrigin.parent = this.transform;
             _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
         }
-        Owner = GetComponent<Creature>();
+        CombatManager.CombatBegin += OnCombatStart;
+        CombatManager.CombatEnd += OnCombatEnd;
     }
 
     #region Enable&Disable
     private void OnEnable()
     {
         HostileAction.onAttackFinished += OnHostileActionFinished;
-        CombatManager.CombatBegin += OnCombatStart;
         CombatManager.CombatRoundBegin += OnCombatRoundBegin;
         CombatManager.CombatRoundEnd += OnCombatRoundEnd;
-        CombatManager.CombatEnd += OnCombatEnd;
     }
 
     private void OnDisable()
     {
         HostileAction.onAttackFinished -= OnHostileActionFinished;
-        CombatManager.CombatBegin -= OnCombatStart;
         CombatManager.CombatRoundBegin -= OnCombatRoundBegin;
         CombatManager.CombatRoundEnd -= OnCombatRoundEnd;
-        CombatManager.CombatEnd -= OnCombatEnd;
     }
     #endregion
 
+    private void OnDestroy()
+    {
+        CombatManager.CombatBegin -= OnCombatStart;
+        CombatManager.CombatEnd -= OnCombatEnd;
+    }
+
     private void Start()
     {
-        if (!cachedCombatManager)
-            cachedCombatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
-        _context = new CreatureContext(Owner, cachedCombatManager);
+        if (!Owner)
+            Owner = GetComponent<Creature>();
+        enabled = false;
     }
 
     private void Update()
     {
         if (GameManager.IsCurrentState(GameState.Combat))
-            if (!IsPlayerControlled && cachedCombatManager.CurrentActiveActor.Equals(this.Owner))
+            if (!IsPlayerControlled && Owner.Equals(CombatManager.Instance.CurrentActiveActor))
                 if (HasMoved && HasActed)
-                    cachedCombatManager.NextRound();
+                    CombatManager.Instance.NextRound();
     }
 
     private void OnMovementStarted(Creature who)
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
-            cachedCombatManager.CurrentEncounter.MyGrid.ClearActiveElements();
+            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
         }
     }
 
@@ -109,43 +120,48 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     private void OnCombatStart(List<Creature> creaturesInCombat)
     {
-        Move.onMovementStarted += OnMovementStarted;
-        Move.onMovementFinished += OnMovementFinished;
-        HasMoved = false;
-        HasActed = false;
+        if (creaturesInCombat.Contains(Owner))
+        {
+            enabled = true;
+            Move.onMovementStarted += OnMovementStarted;
+            Move.onMovementFinished += OnMovementFinished;
+            HasMoved = false;
+            HasActed = false;
+        }
     }
 
     private void OnCombatEnd()
     {
+        enabled = false;
         Move.onMovementStarted -= OnMovementStarted;
         Move.onMovementFinished -= OnMovementFinished;
     }
 
     private void OnCombatRoundBegin(Creature currentActor)
     {
-        if (currentActor.Equals(Owner))
+        if (Owner.Equals(currentActor))
         {
             HasMoved = false;
             HasActed = false;
 
             if (IsPlayerControlled)
             {
-                cachedCombatManager.CurrentEncounter.MyGrid.ActivateElementsInRangeOfActor(Owner);
+                CombatManager.Instance.CurrentEncounter.MyGrid.ActivateElementsInRangeOfActor(Owner);
             }
         }
     }
 
     private void OnCombatRoundEnd(Creature currentActor)
     {
-        if (currentActor.Equals(Owner) && IsPlayerControlled)
+        if (Owner.Equals(currentActor) && IsPlayerControlled)
         {
-            cachedCombatManager.CurrentEncounter.MyGrid.ClearActiveElements();
+            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
         }
     }
 
     public IAIContext GetContext(Guid aiId)
     {
-        return _context;
+        return Context;
     }
 }
 

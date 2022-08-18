@@ -4,6 +4,7 @@ using Entities.Characters;
 using Entities.Cover;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
+using UnityEngine;
 
 public sealed class CreatureContext : IAIContext
 {
@@ -25,7 +26,28 @@ public sealed class CreatureContext : IAIContext
 
     public bool IsInCombat => GameManager.IsCurrentState(GameState.Combat);
 
-    public bool IsPlayerControlled => Owner.Data.Faction.Equals(Faction.PlayerControlled);
+    public bool IsPlayerControlled => GetIsPlayerController();
+
+    private bool GetIsPlayerController()
+    {
+        if (Owner)
+        {
+            if (Owner.Data)
+            {
+                return Owner.Data.Faction.Equals(Faction.PlayerControlled);
+            }
+            else
+            {
+                Debug.LogError("Data of creature " + Owner.gameObject.name + " does not exist!");
+                return false;
+            }
+        }
+        else
+        {
+            Debug.LogError("Context has null Owner!");
+            return false;
+        }
+    }
 
     public bool HasMoved => Behaviour.HasMoved;
     public bool HasActed => Behaviour.HasActed;

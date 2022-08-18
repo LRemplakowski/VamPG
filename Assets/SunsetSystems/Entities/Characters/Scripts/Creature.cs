@@ -87,7 +87,11 @@ namespace Entities.Characters
                 Agent = GetComponent<NavMeshAgent>();
             if (!CombatBehaviour)
                 CombatBehaviour = GetComponent<CombatBehaviour>();
+            if (!NavMeshObstacle)
+                NavMeshObstacle = GetComponent<NavMeshObstacle>();
             Agent.enabled = false;
+            NavMeshObstacle.enabled = true;
+
         }
 
         protected virtual void Start()

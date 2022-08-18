@@ -103,7 +103,7 @@ namespace SunsetSystems.Combat
             Actors.AddRange(encounter.Creatures);
             Actors.AddRange(GetPlayerParty());
             CombatBegin?.Invoke(Actors);
-            await MoveAllCreaturesToNearestGridPosition();
+            await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             NextRound();
 
             List<Creature> GetPlayerParty()
@@ -126,19 +126,25 @@ namespace SunsetSystems.Combat
             CombatEnd?.Invoke();
         }
 
-        private async Task MoveAllCreaturesToNearestGridPosition()
+        private static async Task MoveAllCreaturesToNearestGridPosition(List<Creature> actors, Encounter currentEncounter)
         {
             List<Task> moveTasks = new();
-            foreach (Creature c in Actors)
+            foreach (Creature c in actors)
             {
                 moveTasks.Add(Task.Run(async () =>
                 {
                     Dispatcher.Instance.Invoke(() =>
                     {
-                        c.Move(CurrentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
+                        c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
                     });
                     while (!c.CombatBehaviour.HasMoved)
-                        await Task.Yield();
+                    {
+                        Dispatcher.Instance.Invoke(() =>
+                        {
+                            Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
+                        });
+                        await Task.Delay(1000);
+                    }
                 }));
             }
             await Task.WhenAll(moveTasks);

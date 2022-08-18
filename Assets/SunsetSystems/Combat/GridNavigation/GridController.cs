@@ -24,8 +24,6 @@ public class GridController : ExposableMonobehaviour
     private float scale = 1f;
     [SerializeField]
     private float spacing = 0f;
-    [SerializeField, Range(0, 20)]
-    private int numOfLevels = 0;
 
     [SerializeField]
     private LayerMask coverMask;
@@ -35,6 +33,7 @@ public class GridController : ExposableMonobehaviour
     public void Start()
     {
         gridElements = new GridElement[columns, rows];
+        transform.DestroyChildren();
         GenerateGrid();
         CoverSourcesInGrid = FindCoverSourcesInGrid();
     }
@@ -42,7 +41,9 @@ public class GridController : ExposableMonobehaviour
     [ContextMenu("Populate grid")]
     public void PopulateGrid()
     {
-        Debug.Log("Populating grid!");
+        this.transform.DestroyChildrenImmediate();
+        gridElements = new GridElement[columns, rows];
+        GenerateGrid();
     }
 
     private void GenerateGrid()
@@ -51,39 +52,31 @@ public class GridController : ExposableMonobehaviour
         {
             for (int y = 0; y < rows; y++)
             {
-                if (numOfLevels > 0)
-                {
-                    for (int z = 0; z < numOfLevels * 10; z++)
-                    {
-                        Vector3 pos = new(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y + (0.1f * z), bottomLeft.z + (y * scale) + (y * spacing));
-                        if (MaybeCreateGridElement(pos, x, y))
-                            break;
-                    }
-                }
-                else
-                {
-                    Vector3 pos = new(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y, bottomLeft.z + (y * scale) + (x * spacing));
-                    MaybeCreateGridElement(pos, x, y);
-                }
+                Vector3 pos = new(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y, bottomLeft.z + (y * scale) + (y * spacing));
+                Debug.Log("Attempting to create Grid Element at position " + pos.ToString());
+                MaybeCreateGridElement(pos, x, y);
             }
         }
     }
 
-    private bool MaybeCreateGridElement(Vector3 pos, int column, int row)
+    private void MaybeCreateGridElement(Vector3 pos, int column, int row)
     {
-        if (NavMesh.SamplePosition(pos, out NavMeshHit hit, .3f, NavMesh.AllAreas))
+        bool foundNavMeshHit = NavMesh.SamplePosition(pos, out NavMeshHit hit, float.MaxValue, NavMesh.AllAreas);
+        Debug.Log("Found nav mesh hit? " + foundNavMeshHit.ToString());
+        if (foundNavMeshHit)
         {
-            GridElement g = Instantiate(gridElementPrefab, new Vector3(pos.x, hit.position.y, pos.z), Quaternion.identity);
+            GridElement g = Instantiate(gridElementPrefab);
             g.name = column + ";" + row;
             g.transform.parent = this.transform;
+            g.transform.localPosition = new Vector3(pos.x, hit.position.y, pos.z);
             g.transform.localScale = new Vector3(scale, scale, scale);
             g.GridPosition = new Vector2Int(column, row);
             gridElements[column, row] = g;
             g.gameObject.SetActive(false);
             g.Visited = GridElement.Status.NotVisited;
-            return true;
+            Debug.Log("Created grid element " + g.gameObject.name);
         }
-        return false;
+        Debug.Log("Sample position failed");
     }
 
     public List<GridElement> GetAdjacentGridElements(GridElement element)
@@ -298,7 +291,7 @@ public class GridController : ExposableMonobehaviour
 
     private List<Cover> FindCoverSourcesInGrid()
     {
-        Collider[] covers = Physics.OverlapBox(transform.position, new Vector3(rows * scale, numOfLevels * scale, columns * scale), Quaternion.identity, coverMask);
+        Collider[] covers = Physics.OverlapBox(transform.position, new Vector3(rows * scale, 100f, columns * scale), Quaternion.identity, coverMask);
         List<Cover> result = new();
         foreach (Collider c in covers)
         {

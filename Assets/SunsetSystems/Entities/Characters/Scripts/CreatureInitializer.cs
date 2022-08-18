@@ -33,6 +33,7 @@ namespace Entities.Characters
             }
             else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
             {
+                Debug.LogWarning("Destroying creature script!");
                 UnityEngine.Object.DestroyImmediate(creature);
                 AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
             }
@@ -52,8 +53,8 @@ namespace Entities.Characters
         {
             return faction switch
             {
-                Faction.PlayerControlled => creature.IsOfType(typeof(PlayerControlledCharacter)),
-                _ => creature.IsOfType(typeof(NPC)),
+                Faction.PlayerControlled => !creature.GetType().IsAssignableFrom(typeof(PlayerControlledCharacter)),
+                _ => !creature.GetType().IsAssignableFrom(typeof(NPC)),
             };
         }
 

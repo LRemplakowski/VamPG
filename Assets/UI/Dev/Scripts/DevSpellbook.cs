@@ -21,13 +21,11 @@ public class DevSpellbook : ExposableMonobehaviour
         {
             options.Add(new TMP_Dropdown.OptionData(dp.name));
             powers.Add(dp);
-            Debug.Log(dp);
         });
         fPowers.ForEach(dp =>
         {
             options.Add(new TMP_Dropdown.OptionData(dp.name));
             powers.Add(dp);
-            Debug.Log(dp);
         });
         dropdown.options = options;
     }

@@ -6,17 +6,17 @@ using UnityEngine;
 public class Inventory : ScriptableObject
 {
     public delegate void OnItemChanged();
-    public OnItemChanged onItemChangedCallback;
+    public event OnItemChanged OnItemChangedCallback;
 
     public int size = 20;
-    public List<InventoryItem> items = new List<InventoryItem>();
+    public List<InventoryItem> items = new();
 
     public virtual bool Add(InventoryItem item)
     {
-        if(!item.isDefaultItem)
+        if (!item.isDefaultItem)
         {
             Debug.Log("Inventory size: " + size + "\nCurrent item count: " + items.Count);
-            if(items.Count >= size)
+            if (items.Count >= size)
             {
                 Debug.Log("Not enough room");
                 return false;
@@ -24,23 +24,14 @@ public class Inventory : ScriptableObject
 
             items.Add(item);
         }
-        Debug.Log("PlayerInventory: Check for callback");
-        if (onItemChangedCallback != null)
-        {
-            Debug.Log("Invoking inventory callback");
-            onItemChangedCallback.Invoke();
-        }
-        else
-        {
-            Debug.Log("Inventory callback not found");
-        }
+        OnItemChangedCallback?.Invoke();
         return true;
     }
 
     public virtual void Remove(InventoryItem item)
     {
         items.Remove(item);
-        if (onItemChangedCallback != null)
-            onItemChangedCallback.Invoke();
+        if (OnItemChangedCallback != null)
+            OnItemChangedCallback.Invoke();
     }
 }

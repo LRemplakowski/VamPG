@@ -2,6 +2,7 @@ using Entities.Characters;
 using Entities.Characters.Actions;
 using Entities.Cover;
 using SunsetSystems.Combat;
+using SunsetSystems.Resources;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -27,6 +28,8 @@ public class GridController : ExposableMonobehaviour
 
     [SerializeField]
     private LayerMask coverMask;
+    [SerializeField]
+    private NavMeshAgent gridAgentHelper;
 
     public List<Cover> CoverSourcesInGrid { get; private set; }
 
@@ -36,6 +39,8 @@ public class GridController : ExposableMonobehaviour
         transform.DestroyChildren();
         GenerateGrid();
         CoverSourcesInGrid = FindCoverSourcesInGrid();
+        if (!gridAgentHelper)
+            gridAgentHelper = Instantiate(ResourceLoader.GetGridHelperAgentPrefab(), transform.position, Quaternion.identity, transform);
     }
 
     [ContextMenu("Populate grid")]
@@ -53,7 +58,6 @@ public class GridController : ExposableMonobehaviour
             for (int y = 0; y < rows; y++)
             {
                 Vector3 pos = new(bottomLeft.x + (x * scale) + (x * spacing), bottomLeft.y, bottomLeft.z + (y * scale) + (y * spacing));
-                Debug.Log("Attempting to create Grid Element at position " + pos.ToString());
                 MaybeCreateGridElement(pos, x, y);
             }
         }
@@ -62,7 +66,6 @@ public class GridController : ExposableMonobehaviour
     private void MaybeCreateGridElement(Vector3 pos, int column, int row)
     {
         bool foundNavMeshHit = NavMesh.SamplePosition(pos, out NavMeshHit hit, float.MaxValue, NavMesh.AllAreas);
-        Debug.Log("Found nav mesh hit? " + foundNavMeshHit.ToString());
         if (foundNavMeshHit)
         {
             GridElement g = Instantiate(gridElementPrefab);
@@ -74,9 +77,11 @@ public class GridController : ExposableMonobehaviour
             gridElements[column, row] = g;
             g.gameObject.SetActive(false);
             g.Visited = GridElement.Status.NotVisited;
-            Debug.Log("Created grid element " + g.gameObject.name);
         }
-        Debug.Log("Sample position failed");
+        else
+        {
+            Debug.LogError("Creating grid element failed! " + column + ";" + row);
+        }
     }
 
     public List<GridElement> GetAdjacentGridElements(GridElement element)
@@ -149,9 +154,9 @@ public class GridController : ExposableMonobehaviour
         if (currentGridPosition != null)
         {
             int actorRange = actor.GetComponent<StatsManager>().GetCombatSpeed();
-            NavMeshAgent actorAgent = actor.GetComponent<NavMeshAgent>();
+            gridAgentHelper.transform.position = actor.transform.position;
             currentGridPosition.Visited = GridElement.Status.Occupied;
-            List<GridElement> elementsInRange = FindReachableGridElements(actorAgent, currentGridPosition, actorRange);
+            List<GridElement> elementsInRange = FindReachableGridElements(currentGridPosition, actorRange);
             Debug.Log("Elements in range: " + elementsInRange.Count);
             foreach (GridElement g in elementsInRange)
             {
@@ -163,10 +168,10 @@ public class GridController : ExposableMonobehaviour
 
     public List<GridElement> GetElementsInRangeOfActor(Creature c)
     {
-        NavMeshAgent agent = c.GetComponent<NavMeshAgent>();
+        gridAgentHelper.transform.position = c.transform.position;
         GridElement actorPosition = c.CurrentGridPosition;
         int actorRange = c.GetComponent<StatsManager>().GetCombatSpeed();
-        List<GridElement> result = FindReachableGridElements(agent, actorPosition, actorRange);
+        List<GridElement> result = FindReachableGridElements(actorPosition, actorRange);
         return result;
     }
 
@@ -178,7 +183,7 @@ public class GridController : ExposableMonobehaviour
         return result;
     }
 
-    private List<GridElement> FindReachableGridElements(NavMeshAgent agent, GridElement startElement, int movementRange)
+    private List<GridElement> FindReachableGridElements(GridElement startElement, int movementRange)
     {
         List<GridElement> elementsInRange = new();
         for (int x = startElement.GridPosition.x - ((int)(movementRange / scale) + 1); x < startElement.GridPosition.x + ((int)(movementRange / scale) + 1); x++)
@@ -194,7 +199,7 @@ public class GridController : ExposableMonobehaviour
                 if (y >= gridElements.GetLength(1))
                     break;
                 GridElement currentElement = gridElements[x, y];
-                if (currentElement != null && IsGridElementWithinRange(currentElement, movementRange, agent) && currentElement.Visited != GridElement.Status.Occupied)
+                if (currentElement != null && IsGridElementWithinRange(currentElement, movementRange, startElement.transform.position) && currentElement.Visited != GridElement.Status.Occupied)
                 {
                     elementsInRange.Add(currentElement);
                 }
@@ -203,12 +208,13 @@ public class GridController : ExposableMonobehaviour
         return elementsInRange;
     }
 
-    private bool IsGridElementWithinRange(GridElement endPoint, int movementRange, NavMeshAgent agent)
+    private bool IsGridElementWithinRange(GridElement endPoint, int movementRange, Vector3 fromPosition)
     {
         if (endPoint == null)
             return false;
         NavMeshPath pathToElement = new();
-        agent.CalculatePath(endPoint.transform.position, pathToElement);
+        gridAgentHelper.transform.position = fromPosition;
+        gridAgentHelper.CalculatePath(endPoint.transform.position, pathToElement);
         if (pathToElement.status == NavMeshPathStatus.PathComplete)
         {
             return CalculatePathLength(pathToElement.corners) <= movementRange + ActionConsts.COMPLETION_MARGIN;
@@ -276,10 +282,10 @@ public class GridController : ExposableMonobehaviour
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;
             if (currentGridPosition != null)
             {
-                NavMeshAgent actorAgent = currentActiveActor.GetComponent<NavMeshAgent>();
+                gridAgentHelper.transform.position = currentActiveActor.transform.position;
                 currentGridPosition.Visited = GridElement.Status.Occupied;
                 activeElements.Add(currentGridPosition);
-                List<GridElement> reachable = FindReachableGridElements(actorAgent, currentGridPosition, gridElements.Length);
+                List<GridElement> reachable = FindReachableGridElements(currentGridPosition, gridElements.Length);
                 foreach (GridElement g in reachable)
                 {
                     g.gameObject.SetActive(true);

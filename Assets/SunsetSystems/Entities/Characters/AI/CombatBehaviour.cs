@@ -7,6 +7,7 @@ using Entities.Characters;
 using Entities.Characters.Actions;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
+using SunsetSystems.Resources;
 
 public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 {
@@ -26,6 +27,8 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     public Vector3 RaycastOrigin => _raycastOrigin.position;
     [SerializeField]
     private float defaultRaycastOriginY = 1.5f;
+    [field: SerializeField]
+    public LineRenderer LineRenderer { get; private set; }
 
     public Creature Owner { get; private set; }
 
@@ -52,6 +55,11 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
             _raycastOrigin = new GameObject("RaycastOrigin").transform;
             _raycastOrigin.parent = this.transform;
             _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
+        }
+        if (!LineRenderer)
+        {
+            LineRenderer = Instantiate(ResourceLoader.GetTargetingLineRendererPrefab(), RaycastOrigin, Quaternion.identity, transform);
+            LineRenderer.enabled = false;
         }
         CombatManager.CombatBegin += OnCombatStart;
         CombatManager.CombatEnd += OnCombatEnd;

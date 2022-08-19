@@ -18,8 +18,6 @@ namespace SunsetSystems.Input
         private Collider lastHit;
         private const int raycastRange = 100;
         [SerializeField]
-        private LineRenderer lineOrigin;
-        [SerializeField]
         private LayerMask defaultRaycastMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
@@ -196,24 +194,25 @@ namespace SunsetSystems.Input
                 case BarAction.ATTACK:
                     if (!CombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
                         return;
+                    LineRenderer lineRenderer = CombatManager.Instance.CurrentActiveActor.CombatBehaviour.LineRenderer;
                     if (lastHit != hit.collider)
                     {
-                        lineOrigin.enabled = false;
+                        lineRenderer.enabled = false;
                         lastHit = hit.collider;
                     }
                     NPC creature = lastHit.GetComponent<NPC>();
                     if (creature)
                     {
-                        lineOrigin.positionCount = 2;
-                        lineOrigin.SetPosition(0, lineOrigin.transform.position);
-                        lineOrigin.SetPosition(1, creature.LineTarget.position);
+                        lineRenderer.positionCount = 2;
+                        lineRenderer.SetPosition(0, lineRenderer.transform.position);
+                        lineRenderer.SetPosition(1, creature.LineTarget.position);
                         Color color = GameManager.GetMainCharacter().GetComponent<StatsManager>()
                             .GetWeaponMaxRange() >= Vector3.Distance(GameManager.GetMainCharacter().CurrentGridPosition.transform.position, creature.CurrentGridPosition.transform.position)
                             ? Color.green
                             : Color.red;
-                        lineOrigin.startColor = color;
-                        lineOrigin.endColor = color;
-                        lineOrigin.enabled = true;
+                        lineRenderer.startColor = color;
+                        lineRenderer.endColor = color;
+                        lineRenderer.enabled = true;
                     }
                     break;
             }

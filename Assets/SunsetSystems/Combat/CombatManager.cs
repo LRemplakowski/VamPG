@@ -85,14 +85,18 @@ namespace SunsetSystems.Combat
 
         public void NextRound()
         {
-            Creature previousActor = CurrentActiveActor;
+            if (CurrentActiveActor)
+            {
+                CombatRoundEnd?.Invoke(CurrentActiveActor);
+                Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " finished round " + roundCounter + "!");
+            }
+            roundCounter++;
             if (!CurrentActiveActor)
                 CurrentActiveActor = DecideFirstActor(Actors);
-            CombatRoundEnd?.Invoke(previousActor);
-            roundCounter++;
-            CombatRoundBegin.Invoke(CurrentActiveActor);
             int index = Actors.IndexOf(CurrentActiveActor);
             SetCurrentActiveActor(++index < Actors.Count ? index : 0);
+            CombatRoundBegin.Invoke(CurrentActiveActor);
+            Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + roundCounter + "!");
         }
 
         public async Task BeginEncounter(Encounter encounter)

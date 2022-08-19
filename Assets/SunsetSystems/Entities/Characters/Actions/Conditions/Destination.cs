@@ -21,7 +21,6 @@
         private bool AtEndOfPath()
         {
             hasPath |= agent.hasPath;
-            Debug.Log("Remaining distance: " + agent.remainingDistance + "; HasPath? " + hasPath);
             if (hasPath && agent.remainingDistance <= agent.stoppingDistance + ActionConsts.COMPLETION_MARGIN)
             {
                 // Arrived
@@ -39,5 +38,5 @@
                 "Agent has path? " + agent.hasPath;
             return condition;
         }
-    } 
+    }
 }

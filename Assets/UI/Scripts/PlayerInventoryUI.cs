@@ -19,7 +19,7 @@ public class PlayerInventoryUI : UIWindow
             playerInventory = FindObjectOfType<PlayerControlledCharacter>().GetInventory();
         }
         if (playerInventory != null)
-            playerInventory.onItemChangedCallback += UpdateUI;
+            playerInventory.OnItemChangedCallback += UpdateUI;
         slots = itemsParent.GetComponentsInChildren<InventorySlot>();
         UpdateUI();
     }

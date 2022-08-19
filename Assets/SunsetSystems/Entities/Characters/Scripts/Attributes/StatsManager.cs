@@ -39,11 +39,15 @@ namespace Entities.Characters
 
         private void Awake()
         {
-            owner = GetComponentInParent<Creature>();
             if (!_characterStats)
                 _characterStats = ScriptableObject.CreateInstance(typeof(CharacterStats)) as CharacterStats;
             _characterStats = CharacterStats.CopyAssetInstance(_characterStats);
             InitializeTrackers();
+        }
+
+        private void Start()
+        {
+            owner = GetComponent<Creature>();
         }
 
         private void InitializeTrackers()
@@ -132,7 +136,7 @@ namespace Entities.Characters
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
-            if (owner.Data.CreatureType.Equals(CreatureType.Vampire))
+            if (CreatureType.Vampire.Equals(owner.Data.CreatureType))
             {
                 hungerDice = Hunger;
                 normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;
@@ -147,7 +151,7 @@ namespace Entities.Characters
             Skill s = _characterStats.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
-            if (owner.Data.CreatureType.Equals(CreatureType.Vampire))
+            if (CreatureType.Vampire.Equals(owner.Data.CreatureType))
             {
                 hungerDice = Hunger;
                 normalDice = hungerDice <= normalDice ? normalDice - hungerDice : 0;

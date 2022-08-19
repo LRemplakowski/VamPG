@@ -163,7 +163,7 @@ namespace Entities.Characters
 
         public bool HasActionsInQueue()
         {
-            return !ActionQueue.Peek().GetType().Equals(typeof(Idle)) || ActionQueue.Count > 1;
+            return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
         private void OnDrawGizmos()

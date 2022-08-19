@@ -35,7 +35,6 @@ namespace Entities.Characters.Actions
             navMeshAgent.isStopped = true;
             navMeshAgent.enabled = false;
             navMeshObstacle.enabled = true;
-            Debug.Log("Aborting move action!");
             if (onMovementFinished != null)
                 onMovementFinished.Invoke(this.Owner);
         }
@@ -44,7 +43,6 @@ namespace Entities.Characters.Actions
         {
             navMeshObstacle.enabled = false;
             navMeshAgent.enabled = true;
-            Debug.Log("Moving to destination " + conditions[0]);
             navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;

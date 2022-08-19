@@ -62,14 +62,14 @@ namespace Entities.Characters
         {
             dca.loadFileOnStart = true;
             dca.loadFilename = asset.UmaPresetFilename;
-            dca.loadPath = "UMAPresets";
+            dca.loadPath = "UMAPresets/";
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
             dca.raceAnimationControllers.defaultAnimationController = asset.AnimatorController;
             dca.DoLoad();
 
             dca.saveFilename = asset.UmaPresetFilename;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
-            dca.savePath = "UMAPresets";
+            dca.savePath = "UMAPresets/";
         }
 
         private static void InitializeStatsManager(StatsManager statsManager, CreatureAsset asset)

@@ -36,7 +36,6 @@ namespace Entities.Characters.Actions
 
         public async override void Begin()
         {
-            Debug.Log("Starting interaction with " + target);
             float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
             if (distance > target.InteractionDistance)
             {

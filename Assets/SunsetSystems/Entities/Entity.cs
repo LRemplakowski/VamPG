@@ -1,15 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Entities
 {
     [RequireComponent(typeof(Collider))]
     public abstract class Entity : ExposableMonobehaviour
     {
-        public static bool IsInteractable(GameObject entity)
+        public static bool IsInteractable(GameObject entity, out IInteractable interactable)
         {
-            return entity.GetComponent<IInteractable>() != null;
+            interactable = entity.GetComponent<IInteractable>();
+            return interactable != null;
         }
     }
 }

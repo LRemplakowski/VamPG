@@ -9,7 +9,7 @@ public class DevChangeActiveActorButton : ExposableMonobehaviour
     {
         CombatManager combatManager = CombatManager.Instance;
         List<Creature> actors = combatManager.Actors;
-        int currentIndex = actors.IndexOf(combatManager.CurrentActiveActor);
+        int currentIndex = actors.IndexOf(CombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);
         combatManager.SetCurrentActiveActor(currentIndex >= actors.Count - 1 ? 0 : currentIndex + 1);
     }
@@ -18,7 +18,7 @@ public class DevChangeActiveActorButton : ExposableMonobehaviour
     {
         CombatManager combatManager = CombatManager.Instance;
         List<Creature> actors = combatManager.Actors;
-        int currentIndex = actors.IndexOf(combatManager.CurrentActiveActor);
+        int currentIndex = actors.IndexOf(CombatManager.CurrentActiveActor);
         Debug.Log("current actor index: " + currentIndex + ", actors count: " + actors.Count);
         combatManager.SetCurrentActiveActor(currentIndex <= 0 ? actors.Count - 1 : currentIndex - 1);
     }

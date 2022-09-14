@@ -18,7 +18,7 @@
         public override float Score(CreatureContext context, GridElement option)
         {
             bool hasTargets = false;
-            List<Creature> targets = new List<Creature>();
+            List<Creature> targets = new();
             if (context.Owner.Data.Faction.Equals(Faction.Hostile))
             {
                 targets.AddRange(context.FriendlyCombatants);

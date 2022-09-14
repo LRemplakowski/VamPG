@@ -72,7 +72,7 @@ public class GridController : ExposableMonobehaviour
             g.name = column + ";" + row;
             g.transform.parent = this.transform;
             g.transform.localPosition = new Vector3(pos.x, hit.position.y, pos.z);
-            g.transform.localScale = new Vector3(scale, scale, scale);
+            g.SetScale(scale);
             g.GridPosition = new Vector2Int(column, row);
             gridElements[column, row] = g;
             g.gameObject.SetActive(false);
@@ -276,7 +276,7 @@ public class GridController : ExposableMonobehaviour
     public void Dev_SetWholeGridActive()
     {
         ClearActiveElements();
-        Creature currentActiveActor = CombatManager.Instance.CurrentActiveActor;
+        Creature currentActiveActor = CombatManager.CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;

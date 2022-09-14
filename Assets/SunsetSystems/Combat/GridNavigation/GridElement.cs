@@ -10,9 +10,9 @@ public class GridElement : ExposableMonobehaviour
     public Vector2Int GridPosition { get; set; }
     [SerializeField]
     private Status _visited;
-    public Status Visited 
+    public Status Visited
     {
-        get => _visited; 
+        get => _visited;
         set
         {
             _visited = value;
@@ -20,7 +20,8 @@ public class GridElement : ExposableMonobehaviour
     }
 
     private bool _isMouseOver = false;
-    public bool MouseOver {
+    public bool MouseOver
+    {
         get => _isMouseOver;
         set
         {
@@ -30,13 +31,16 @@ public class GridElement : ExposableMonobehaviour
     }
 
     public Material hover, idle;
+    [SerializeField]
     private MeshRenderer meshRenderer;
+    [SerializeField]
     private Transform visualTransform;
+    private const float VISUAL_TRANSFORM_DEFAULT_SCALE = 0.1f;
 
     public void Awake()
     {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        visualTransform = GetComponentInChildren<Transform>();
+        meshRenderer ??= GetComponentInChildren<MeshRenderer>();
+        visualTransform ??= GetComponentInChildren<Transform>();
         WorldPosition = transform.position;
     }
 
@@ -52,6 +56,11 @@ public class GridElement : ExposableMonobehaviour
         }
     }
 
+    public void SetScale(float scale)
+    {
+        visualTransform.localScale = scale * VISUAL_TRANSFORM_DEFAULT_SCALE * Vector3.one;
+    }
+
     public static bool IsInstance(GameObject gameObject)
     {
         return gameObject.GetComponent<GridElement>() != null;
@@ -59,7 +68,7 @@ public class GridElement : ExposableMonobehaviour
 
     public override string ToString()
     {
-        return "GridElement(X: "+GridPosition.x+", Y: "+GridPosition.y+", isActive:"+gameObject.activeSelf+", visited: "+Visited+")";
+        return "GridElement(X: " + GridPosition.x + ", Y: " + GridPosition.y + ", isActive:" + gameObject.activeSelf + ", visited: " + Visited + ")";
     }
 
     public enum Status

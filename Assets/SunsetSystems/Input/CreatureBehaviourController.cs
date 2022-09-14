@@ -4,6 +4,7 @@ using SunsetSystems.Combat;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using SunsetSystems.Utils.UI;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,12 +25,14 @@ namespace SunsetSystems.Input
 
         private void OnEnable()
         {
+            //PlayerInputHandler.OnPrimaryAction += OnPrimaryAction;
             PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
+            //PlayerInputHandler.OnPrimaryAction -= OnPrimaryAction;
             PlayerInputHandler.OnSecondaryAction -= OnSecondaryAction;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
@@ -37,7 +40,10 @@ namespace SunsetSystems.Input
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
             if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
+            {
+                Debug.Log("Raycast hit UI object!");
                 return;
+            }
             if (context.performed)
                 HandleWorldRightClick();
         }
@@ -94,30 +100,39 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
                         return;
-                    else if (hit.collider.GetComponent<GridElement>())
+                    GridElement gridElement = hit.collider.GetComponent<GridElement>();
+                    if (gridElement)
                     {
-                        if (hit.collider.gameObject.GetComponent<GridElement>().Visited != GridElement.Status.Occupied)
+                        if (gridElement.Visited != GridElement.Status.Occupied)
                         {
-                            CombatManager.Instance.CurrentActiveActor.Move(hit.collider.gameObject.GetComponent<GridElement>());
+                            CombatManager.CurrentActiveActor.Move(gridElement);
                         }
+                    }
+                    else
+                    {
+                        Debug.Log($"Combat mouse click hit {hit.collider.gameObject.name} but found no GridElement!");
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
                     NPC enemy = hit.collider.GetComponent<NPC>();
                     if (enemy)
                     {
-                        if (enemy.Data.Faction.Equals(Faction.Hostile) &&
-                            Vector3.Distance(GameManager.GetMainCharacter().transform.position, enemy.transform.position) <= GameManager.GetMainCharacter().GetComponent<StatsManager>().GetWeaponMaxRange())
+                        if (enemy.Data.Faction.Equals(Faction.Hostile) && IsInRange(enemy))
                         {
-                            CombatManager.Instance.CurrentActiveActor.Attack(enemy);
+                            CombatManager.CurrentActiveActor.Attack(enemy);
                         }
                     }
                     break;
             }
+        }
+
+        private static bool IsInRange(NPC enemy)
+        {
+            return Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position) <= CombatManager.CurrentActiveActor.StatsManager.GetWeaponMaxRange();
         }
 
         private void OnPointerPosition(InputAction.CallbackContext context)
@@ -141,18 +156,7 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Exploration:
                         {
-                            if (lastHit != hit.collider)
-                            {
-                                if (lastHit.gameObject.TryGetComponent(out IInteractable previousInteractable))
-                                {
-                                    previousInteractable.IsHoveredOver = false;
-                                }
-                                lastHit = hit.collider;
-                            }
-                            if (lastHit.gameObject.TryGetComponent(out IInteractable currentInteractable))
-                            {
-                                currentInteractable.IsHoveredOver = true;
-                            }
+                            HandleExplorationMousePosition(hit);
                             break;
                         }
                     case GameState.Combat:
@@ -168,15 +172,39 @@ namespace SunsetSystems.Input
                         break;
                 }
             }
-        }
 
-        private void HandleCombatMousePosition(RaycastHit hit)
-        {
-            ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
-            switch (selectedBarAction.actionType)
+            void HandleExplorationMousePosition(RaycastHit hit)
             {
-                case BarAction.MOVE:
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                if (lastHit != hit.collider)
+                {
+                    if (lastHit.gameObject.TryGetComponent(out IInteractable previousInteractable))
+                    {
+                        previousInteractable.IsHoveredOver = false;
+                    }
+                    lastHit = hit.collider;
+                }
+                if (lastHit.gameObject.TryGetComponent(out IInteractable currentInteractable))
+                {
+                    currentInteractable.IsHoveredOver = true;
+                }
+            }
+
+            void HandleCombatMousePosition(RaycastHit hit)
+            {
+                ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
+                switch (selectedBarAction.actionType)
+                {
+                    case BarAction.MOVE:
+                        HandleMoveActionMousePosition();
+                        break;
+                    case BarAction.ATTACK:
+                        HandleAttackActionMousePosition();
+                        break;
+                }
+
+                void HandleMoveActionMousePosition()
+                {
+                    if (!CombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
                     if (lastHit != hit.collider)
                     {
@@ -190,11 +218,13 @@ namespace SunsetSystems.Input
                     {
                         lastHit.gameObject.GetComponent<GridElement>().MouseOver = true;
                     }
-                    break;
-                case BarAction.ATTACK:
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || GameManager.GetMainCharacter().GetComponent<CombatBehaviour>().HasActed)
+                }
+
+                void HandleAttackActionMousePosition()
+                {
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
-                    LineRenderer lineRenderer = CombatManager.Instance.CurrentActiveActor.CombatBehaviour.LineRenderer;
+                    LineRenderer lineRenderer = CombatManager.CurrentActiveActor.CombatBehaviour.LineRenderer;
                     if (lastHit != hit.collider)
                     {
                         lineRenderer.enabled = false;
@@ -206,15 +236,14 @@ namespace SunsetSystems.Input
                         lineRenderer.positionCount = 2;
                         lineRenderer.SetPosition(0, lineRenderer.transform.position);
                         lineRenderer.SetPosition(1, creature.LineTarget.position);
-                        Color color = GameManager.GetMainCharacter().GetComponent<StatsManager>()
-                            .GetWeaponMaxRange() >= Vector3.Distance(GameManager.GetMainCharacter().CurrentGridPosition.transform.position, creature.CurrentGridPosition.transform.position)
+                        Color color = IsInRange(creature)
                             ? Color.green
                             : Color.red;
                         lineRenderer.startColor = color;
                         lineRenderer.endColor = color;
                         lineRenderer.enabled = true;
                     }
-                    break;
+                }
             }
         }
 

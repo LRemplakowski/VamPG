@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8855683420710169354}
   m_RootOrder: 0
@@ -110,6 +111,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8855683420032644450}
   m_Father: {fileID: 0}
@@ -130,6 +132,8 @@ MonoBehaviour:
   _visited: 0
   hover: {fileID: 2100000, guid: 570f29504937004488250e869f52e02c, type: 2}
   idle: {fileID: 2100000, guid: 7d1802b748ddc534ab292e0e34a5aa17, type: 2}
+  meshRenderer: {fileID: 8855683420032644452}
+  visualTransform: {fileID: 8855683420032644450}
 --- !u!65 &5102847773910339246
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -141,5 +145,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.15, z: 0}

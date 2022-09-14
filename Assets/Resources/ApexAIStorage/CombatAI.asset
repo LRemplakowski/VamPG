@@ -28,33 +28,52 @@ MonoBehaviour:
     Assembly-CSharp","not":false,"score":101}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
     ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"}}},{"@type":"Apex.AI.ScoreSelector,
     ApexAI","_id":fe502e0d96624e9e849c4624ebc82505,"_qualifiers":[{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
-    ApexAI","action":{"@type":"Apex.AI.CompositeAction, ApexAI","_actions":[{"@type":"AI.Actions.SelectMoveTarget,
-    Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.ProximityToCoverSource,
-    Assembly-CSharp","score":100},{"@type":"AI.Scorers.Context.ProvidesCoverAgainstEnemies,
-    Assembly-CSharp","not":false,"score":100,"coverMask":8,"coveredFromCountMultiplier":1},{"@type":"AI.Scorers.Context.PositionHasTargetsInRange,
-    Assembly-CSharp","not":false,"score":50,"targetCountMultiplier":1}]},{"@type":"AI.Actions.MoveToTargetPosition,
-    Assembly-CSharp"}]},"_scorers":[{"@type":"AI.Scorers.Option.HasMoveAction, Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.IsInMove,
+    ApexAI","action":{"@type":"AI.Actions.SelectMoveTarget, Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.IsPositionAvailable,
+    Assembly-CSharp","not":true,"score":-10000},{"@type":"AI.Scorers.Context.PositionHasTargetsInRange,
+    Assembly-CSharp","not":false,"score":100,"targetCountMultiplier":1},{"@type":"AI.Scorers.Context.ProvidesCoverAgainstEnemies,
+    Assembly-CSharp","not":false,"score":100,"coverMask":8,"coveredFromCountMultiplier":1},{"@type":"AI.Scorers.Context.ProximityToCoverSource,
+    Assembly-CSharp","score":20}]},"threshold":100,"_scorers":[{"@type":"AI.Scorers.Option.IsInMove,
+    Assembly-CSharp","not":true,"score":101},{"@type":"AI.Scorers.Option.HasMoveTarget,
     Assembly-CSharp","not":true,"score":101}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
-    ApexAI","action":{"@type":"Apex.AI.CompositeAction, ApexAI","_actions":[{"@type":"AI.Actions.SelectAttackTarget,
-    Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.IsInWeaponsRange, Assembly-CSharp","not":false,"score":100,"effectiveRangeMultiplier":2},{"@type":"AI.Scorers.Context.IsTargetAlive,
-    Assembly-CSharp","not":false,"score":10000},{"@type":"AI.Scorers.Context.IsCurrentTarget,
-    Assembly-CSharp","not":false,"score":50},{"@type":"AI.Scorers.Context.HasAttackPoolAdvantage,
-    Assembly-CSharp","not":false,"score":25,"multiplier":1},{"@type":"AI.Scorers.Context.TargetHasCover,
-    Assembly-CSharp","not":true,"score":50,"coverMask":8}]},{"@type":"AI.Actions.AttackCurrentTarget,
-    Assembly-CSharp"}]},"_scorers":[{"@type":"AI.Scorers.Option.HasCombatAction,
-    Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.HasTargetsInRange,
+    ApexAI","action":{"@type":"AI.Actions.SelectAttackTarget, Assembly-CSharp","_scorers":[{"@type":"AI.Scorers.Context.IsTargetAlive,
+    Assembly-CSharp","not":true,"score":-10000},{"@type":"AI.Scorers.Context.HasAttackPoolAdvantage,
+    Assembly-CSharp","not":false,"score":100,"multiplier":1},{"@type":"AI.Scorers.Context.TargetHasCover,
+    Assembly-CSharp","not":true,"score":10,"coverMask":8},{"@type":"AI.Scorers.Context.IsInWeaponsRange,
+    Assembly-CSharp","not":false,"score":100,"effectiveRangeMultiplier":2},{"@type":"AI.Scorers.Context.IsCurrentTarget,
+    Assembly-CSharp","not":false,"score":10}]},"threshold":100,"_scorers":[{"@type":"AI.Scorers.Option.HasTargetsInRange,
     Assembly-CSharp","not":false,"score":101},{"@type":"AI.Scorers.Option.IsAttacking,
+    Assembly-CSharp","not":true,"score":101},{"@type":"AI.Scorers.Option.HasAttackTarget,
+    Assembly-CSharp","not":true,"score":101},{"@type":"AI.Scorers.Option.IsCurrentTargetAlive,
+    Assembly-CSharp","not":true,"score":101},{"@type":"AI.Scorers.Option.IsCurrentTargetInRange,
     Assembly-CSharp","not":true,"score":101}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
     ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"},"threshold":50,"_scorers":[{"@type":"AI.Scorers.Option.HasActionsQueued,
-    Assembly-CSharp","not":false,"score":51}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    Assembly-CSharp","not":false,"score":5100}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
+    ApexAI","action":{"@type":"Apex.AI.SelectorAction, ApexAI","_selectorId":dfc79711e1884becacea63300952f125}}},{"@type":"Apex.AI.ScoreSelector,
+    ApexAI","_id":dfc79711e1884becacea63300952f125,"_qualifiers":[{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"AI.Actions.AttackCurrentTarget, Assembly-CSharp"},"threshold":1,"_scorers":[{"@type":"AI.Scorers.Option.HasAttackTarget,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.HasCombatAction,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.IsCurrentTargetInRange,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.IsCurrentTargetAlive,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.RandomValueScorer,
+    Assembly-CSharp","minScoreMultiplier":12,"maxScoreMultiplier":2,"score":1}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"AI.Actions.MoveToTargetPosition, Assembly-CSharp"},"threshold":1,"_scorers":[{"@type":"AI.Scorers.Option.HasMoveAction,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.HasMoveTarget,
+    Assembly-CSharp","not":false,"score":2},{"@type":"AI.Scorers.Option.IsInMove,
+    Assembly-CSharp","not":true,"score":2},{"@type":"AI.Scorers.Option.RandomValueScorer,
+    Assembly-CSharp","minScoreMultiplier":12,"maxScoreMultiplier":2,"score":1}]},{"@type":"Apex.AI.CompositeAllOrNothingQualifier,
+    ApexAI","action":{"@type":"AI.Actions.Idle, Assembly-CSharp"},"threshold":50,"_scorers":[{"@type":"AI.Scorers.Option.HasActionsQueued,
+    Assembly-CSharp","not":false,"score":510}]}],"_defaultQualifier":{"@type":"Apex.AI.DefaultQualifier,
     ApexAI","action":{"@type":"AI.Actions.SkipToNextRound, Assembly-CSharp"}}}]}'
-  editorConfiguration: '{"offset":{"@x":-5,"@y":53},"zoom":0.89999998,"SelectorView":{"ViewArea":{"@left":67,"@top":179,"@width":180,"@height":198},"Name":"Is
+  editorConfiguration: '{"offset":{"@x":59,"@y":60},"zoom":1,"SelectorView":{"ViewArea":{"@left":139,"@top":200,"@width":200,"@height":220},"Name":"Is
     eligible?","Description":"Determine if AI for given creature should be processed.","QualifierView":{"Name":"Alive
     and in combat","Description":"If alive, player-controlled and in combat, process
     AI.","ActionView":{"@connectorType":"Selector"}},"QualifierView":{"Name":"Is
     dead?","ActionView":{}},"DefaultQualifier":{"Name":"Not in combat","ActionView":{"Name":"Do
-    nothing"}}},"SelectorView":{"ViewArea":{"@left":319,"@top":89,"@width":216,"@height":252},"Name":"Pick
-    new target or position","QualifierView":{"Name":"Maybe move","ActionView":{"@connectorType":"Composite","Name":"Move
-    actions"}},"QualifierView":{"Name":"Maybe attack","ActionView":{"@connectorType":"Composite","Name":"Attack
-    actions"}},"QualifierView":{"Name":"Is performing other action?","ActionView":{"Name":"Wait"}},"DefaultQualifier":{"Name":"Cannot
-    move or atack?","ActionView":{}}}}'
+    nothing"}}},"SelectorView":{"ViewArea":{"@left":479,"@top":140,"@width":240,"@height":280},"Name":"Pick
+    new target or position","QualifierView":{"Name":"Should select move target?","ActionView":{"Name":"Select
+    move target"}},"QualifierView":{"Name":"Should select attack target?","ActionView":{"Name":"Select
+    attack target"}},"QualifierView":{"Name":"Is performing other action?","ActionView":{"Name":"Wait"}},"DefaultQualifier":{"Name":"Both
+    targets selected?","ActionView":{"@connectorType":"Selector"}}},"SelectorView":{"ViewArea":{"@left":859,"@top":260,"@width":200,"@height":280},"Name":"Perform
+    actions","QualifierView":{"Name":"Can attack?","ActionView":{}},"QualifierView":{"Name":"Can
+    move?","ActionView":{}},"QualifierView":{"Name":"Is performing other action?","ActionView":{}},"DefaultQualifier":{"Name":"Cannot
+    move or attack?","ActionView":{}}}}'

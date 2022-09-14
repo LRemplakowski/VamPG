@@ -11,6 +11,7 @@ namespace Entities.Characters
         {
             creatureObject.transform.position = position;
             Creature creature = InitializeCreatureScript(creatureObject, asset);
+            creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");
             DynamicCharacterAvatar dca = creatureObject.GetComponent<DynamicCharacterAvatar>();
             InitializeUmaAvatar(dca, asset);
             StatsManager stats = creatureObject.GetComponent<StatsManager>();

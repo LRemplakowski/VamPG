@@ -26,9 +26,8 @@ namespace SunsetSystems.Combat
 
         private int roundCounter;
 
-        [SerializeField, ReadOnly]
-        private Creature _currentActiveActor;
-        public Creature CurrentActiveActor
+        private static Creature _currentActiveActor;
+        public static Creature CurrentActiveActor
         {
             get => _currentActiveActor;
             private set
@@ -164,9 +163,9 @@ namespace SunsetSystems.Combat
             return roundCounter == 1;
         }
 
-        public bool IsActiveActorPlayerControlled()
+        public static bool IsActiveActorPlayerControlled()
         {
-            return _currentActiveActor ? CurrentActiveActor.GetComponent<CombatBehaviour>().IsPlayerControlled : false;
+            return _currentActiveActor ? CurrentActiveActor.CombatBehaviour.IsPlayerControlled : false;
         }
 
         public int GetRound()

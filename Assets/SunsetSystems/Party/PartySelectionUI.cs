@@ -1,4 +1,5 @@
 using Entities.Characters.Data;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace SunsetSystems.Party.UI

@@ -18,15 +18,12 @@ namespace SunsetSystems.Data
         public List<CreatureData> ActivePartyData { get => _activePartyData; }
         [ES3NonSerializable]
         public List<Vector3> ActivePartySavedPositions { get; private set; }
-        [SerializeField]
-        private CreatureAsset _mainCharacterAsset;
-        public CreatureAsset MainCharacterAsset { get => _mainCharacterAsset; set => _mainCharacterAsset = value; }
-        [SerializeField]
-        private List<CreatureAsset> _activePartyAssets = new();
-        public List<CreatureAsset> ActivePartyAssets { get => _activePartyAssets; }
-        [SerializeField]
-        private List<CreatureAsset> _inactivePartyAssets = new();
-        public List<CreatureAsset> InactivePartyAssets { get => _inactivePartyAssets; }
+        [field: SerializeField]
+        public CreatureAsset MainCharacterAsset { get; set; }
+        [field: SerializeField]
+        public List<CreatureAsset> ActiveMemberAssets { get; private set; }
+        [field: SerializeField]
+        public List<CreatureAsset> RecruitedMemberAssets { get; private set; }
 
         public void SaveRuntimeData()
         {
@@ -53,26 +50,26 @@ namespace SunsetSystems.Data
 
         private void SaveRecruitedCompanions(string id)
         {
-            ES3.Save(id + "_recruitedCompanionsData", InactivePartyAssets);
+            ES3.Save(id + "_recruitedCompanionsData", RecruitedMemberAssets);
             List<CharacterStats> recruitedCompanionsStats = new();
-            foreach (CreatureAsset companion in InactivePartyAssets)
+            foreach (CreatureAsset companion in RecruitedMemberAssets)
                 recruitedCompanionsStats.Add(companion.StatsAsset);
             ES3.Save(id + "_recruitedCompanionsStats", recruitedCompanionsStats);
         }
 
         private void SaveActiveCompanions(string id)
         {
-            ES3.Save(id + "_activeCompanionsData", ActivePartyAssets);
+            ES3.Save(id + "_activeCompanionsData", ActiveMemberAssets);
             List<CharacterStats> activeCompanionsStats = new();
-            foreach (CreatureAsset companion in ActivePartyAssets)
+            foreach (CreatureAsset companion in ActiveMemberAssets)
                 activeCompanionsStats.Add(companion.StatsAsset);
             ES3.Save(id + "_activeCompanionsStats", activeCompanionsStats);
         }
 
         private void SaveMainCharacter(string id)
         {
-            ES3.Save(id + "_mainCharData", _mainCharacterAsset);
-            ES3.Save(id + "_mainCharacterStats", _mainCharacterAsset.StatsAsset);
+            ES3.Save(id + "_mainCharData", MainCharacterAsset);
+            ES3.Save(id + "_mainCharacterStats", MainCharacterAsset.StatsAsset);
         }
 
         public void LoadRuntimeData()
@@ -81,17 +78,17 @@ namespace SunsetSystems.Data
             string id = GetComponent<UniqueId>().Id;
             MainCharacterAsset = ES3.Load<CreatureAsset>(id + "_mainCharData");
             MainCharacterAsset.StatsAsset = ES3.Load<CharacterStats>(id + "_mainCharacterStats");
-            _activePartyAssets = ES3.Load<List<CreatureAsset>>(id + "_activeCompanionsData");
+            ActiveMemberAssets = ES3.Load<List<CreatureAsset>>(id + "_activeCompanionsData");
             List<CharacterStats> activeStats = ES3.Load<List<CharacterStats>>(id + "_activeCompanionsStats");
-            for (int i = 0; i < ActivePartyAssets.Count; i++)
+            for (int i = 0; i < ActiveMemberAssets.Count; i++)
             {
-                ActivePartyAssets[i].StatsAsset = activeStats[i];
+                ActiveMemberAssets[i].StatsAsset = activeStats[i];
             }
-            _inactivePartyAssets = ES3.Load<List<CreatureAsset>>(id + "_recruitedCompanionsData");
+            RecruitedMemberAssets = ES3.Load<List<CreatureAsset>>(id + "_recruitedCompanionsData");
             List<CharacterStats> recruitedStats = ES3.Load<List<CharacterStats>>(id + "_recruitedCompanionsStats");
-            for (int i = 0; i < InactivePartyAssets.Count; i++)
+            for (int i = 0; i < RecruitedMemberAssets.Count; i++)
             {
-                InactivePartyAssets[i].StatsAsset = recruitedStats[i];
+                RecruitedMemberAssets[i].StatsAsset = recruitedStats[i];
             }
             ActivePartySavedPositions = ES3.Load<List<Vector3>>(id + "_activePartyPositions");
         }
@@ -100,16 +97,16 @@ namespace SunsetSystems.Data
         {
             return new GameDataContainer.GameDataContainerBuilder()
                 .SetMainCharacterAsset(MainCharacterAsset)
-                .SetActiveCompanionAssets(ActivePartyAssets)
-                .SetRecruitedCompanionAssets(InactivePartyAssets)
+                .SetActiveCompanionAssets(ActiveMemberAssets)
+                .SetRecruitedCompanionAssets(RecruitedMemberAssets)
                 .Build();
         }
 
         public void InjectJournalData(GameDataContainer data)
         {
-            _mainCharacterAsset = data.mainCharacterAsset;
-            _activePartyAssets = new List<CreatureAsset>(data.ActiveCompanionAssets);
-            _inactivePartyAssets = new List<CreatureAsset>(data.RecruitedCompanionAssets);
+            MainCharacterAsset = data.mainCharacterAsset;
+            ActiveMemberAssets = new List<CreatureAsset>(data.ActiveCompanionAssets);
+            RecruitedMemberAssets = new List<CreatureAsset>(data.RecruitedCompanionAssets);
         }
 
         public static List<Creature> GetActivePartyCreatures()

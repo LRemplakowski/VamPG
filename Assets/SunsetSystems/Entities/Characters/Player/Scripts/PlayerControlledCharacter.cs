@@ -1,5 +1,6 @@
 ﻿using Entities.Characters.Actions;
 using InsaneSystems.RTSSelection;
+using SunsetSystems.Inventory;
 using UnityEngine;
 
 namespace Entities.Characters
@@ -8,6 +9,16 @@ namespace Entities.Characters
     [RequireComponent(typeof(SelectionEffect))]
     public class PlayerControlledCharacter : Creature
     {
+        protected override void Start()
+        {
+            base.Start();
+            bool equipmentAdded = InventoryManager.TryAddCoterieMemberEquipment(this);
+            if (equipmentAdded)
+                Debug.Log("Successfully added equipment of " + gameObject.name + " to InventoryManager!");
+            else
+                Debug.LogError("Equipment entry of " + gameObject.name + " already exists in InventoryManager!");
+        }
+
         public override void Move(Vector3 moveTarget, float stoppingDistance)
         {
             ClearAllActions();

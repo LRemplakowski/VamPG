@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UMA.CharacterSystem;
-using System;
 using SunsetSystems.Resources;
+using NaughtyAttributes;
 
 namespace Entities.Characters
 {
@@ -27,9 +26,9 @@ namespace Entities.Characters
         private string animatorControllerResourceName = "";
         [SerializeField, ReadOnly, ES3NonSerializable]
         private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController 
-        { 
-            get => _animatorController; 
+        public RuntimeAnimatorController AnimatorController
+        {
+            get => _animatorController;
         }
         [SerializeField]
         private Faction _creatureFaction;
@@ -64,7 +63,7 @@ namespace Entities.Characters
         }
 
         internal static CreatureAsset CopyInstance(CreatureAsset data)
-        { 
+        {
             CreatureAsset copy = CreateInstance<CreatureAsset>();
             copy.name = data.name + " (Clone)";
             copy._creatureName = data._creatureName;

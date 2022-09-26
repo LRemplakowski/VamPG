@@ -11,10 +11,6 @@ namespace SunsetSystems.Input.CameraControl
     [RequireComponent(typeof(Tagger))]
     public class CameraControlScript : ExposableMonobehaviour, ISaveRuntimeData
     {
-#pragma warning disable CS0414
-        [SerializeField, ReadOnly]
-        private string _cameraFocusTag = TagConstants.CAMERA_FOCUS;
-#pragma warning restore CS0414
         private Transform _target;
         [SerializeField]
         private Transform _cameraTransform;

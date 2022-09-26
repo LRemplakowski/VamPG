@@ -6,19 +6,18 @@ namespace SunsetSystems.Equipment
     [System.Serializable]
     public class EquipmentSlot : IEquipmentSlot
     {
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private string _name;
-        public string Name => _name;
         [SerializeField]
         private ItemCategory _acceptedCategory;
         public ItemCategory AcceptedCategory { get => _acceptedCategory; }
         [SerializeField]
         private EquipableItem _equippedItem;
 
-        public EquipmentSlot(ItemCategory accepptedCategory)
+        public EquipmentSlot(ItemCategory _acceptedCategory)
         {
-            this._acceptedCategory = accepptedCategory;
-            this._name = accepptedCategory.ToString();
+            this._acceptedCategory = _acceptedCategory;
+            _name = _acceptedCategory.ToString();
         }
 
         public EquipableItem GetEquippedItem()

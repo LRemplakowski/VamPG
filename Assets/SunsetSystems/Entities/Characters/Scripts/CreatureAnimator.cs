@@ -1,4 +1,5 @@
 ﻿using Entities.Characters;
+using NaughtyAttributes;
 using SunsetSystems.Combat;
 using System.Collections.Generic;
 using UnityEngine;

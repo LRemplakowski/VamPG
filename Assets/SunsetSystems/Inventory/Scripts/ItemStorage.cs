@@ -12,7 +12,7 @@ namespace SunsetSystems.Inventory
         private List<ItemCategory> _acceptedItemTypes = new();
         [SerializeField]
         private List<InventoryEntry> _contents = new();
-        public IReadOnlyList<InventoryEntry> Contents => _contents;
+        public List<InventoryEntry> Contents => _contents;
 
         private void OnValidate()
         {

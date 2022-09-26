@@ -4,6 +4,7 @@ using UnityEngine;
 using SunsetSystems.Resources;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
+using NaughtyAttributes;
 
 namespace SunsetSystems.Data
 {

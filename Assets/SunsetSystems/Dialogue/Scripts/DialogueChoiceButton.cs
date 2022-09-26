@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using SunsetSystems.Dialogue;
 using TMPro;
 using UnityEngine;

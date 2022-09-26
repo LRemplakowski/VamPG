@@ -16,6 +16,16 @@ namespace SunsetSystems.Inventory.UI
         private GameObject _contentParent;
         private readonly List<ContainerEntry> _entries = new();
 
+        private void OnEnable()
+        {
+            ContainerEntry.ContainerEntryDestroyed += OnEntryDestroyed;
+        }
+
+        private void OnDisable()
+        {
+            ContainerEntry.ContainerEntryDestroyed -= OnEntryDestroyed;
+        }
+
         private void Start()
         {
             gameObject.SetActive(false);
@@ -31,7 +41,6 @@ namespace SunsetSystems.Inventory.UI
             {
                 ContainerEntry guiElement = Instantiate(_containerEntryPrefab, _contentParent.transform);
                 guiElement.SetEntryContent(entry, container);
-                guiElement.ContainerEntryDestroyed += OnEntryDestroyed;
                 _entries.Add(guiElement);
             }
             gameObject.SetActive(true);
@@ -45,7 +54,6 @@ namespace SunsetSystems.Inventory.UI
         private void OnEntryDestroyed(ContainerEntry entry)
         {
             _entries.Remove(entry);
-            entry.ContainerEntryDestroyed -= OnEntryDestroyed;
         }
 
         private void ClearEntries()

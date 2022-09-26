@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 
 namespace Entities.Characters
 {
@@ -8,17 +9,17 @@ namespace Entities.Characters
         private CreatureAsset _dataInstance;
         [SerializeField, ReadOnly]
         private string _firstName, _lastName;
-        public string FirstName 
-        { 
-            get => _dataInstance.CreatureName; 
+        public string FirstName
+        {
+            get => _dataInstance.CreatureName;
             set
             {
                 _dataInstance.CreatureName = value;
                 _firstName = value;
             }
         }
-        public string LastName 
-        { 
+        public string LastName
+        {
             get => _dataInstance.CreatureLastName;
             set
             {
@@ -29,9 +30,9 @@ namespace Entities.Characters
         public string FullName { get => FirstName + " " + LastName; }
         [SerializeField, ReadOnly]
         private Sprite _portrait;
-        public Sprite Portrait 
-        { 
-            get => _portrait; 
+        public Sprite Portrait
+        {
+            get => _portrait;
             set
             {
                 _dataInstance.Portrait = value;
@@ -40,9 +41,9 @@ namespace Entities.Characters
         }
         [SerializeField, ReadOnly]
         private Faction _faction;
-        public Faction Faction 
-        { 
-            get => _faction; 
+        public Faction Faction
+        {
+            get => _faction;
             set
             {
                 _dataInstance.CreatureFaction = value;
@@ -51,9 +52,9 @@ namespace Entities.Characters
         }
         [SerializeField, ReadOnly]
         private BodyType _bodyType = BodyType.F;
-        public BodyType BodyType 
-        { 
-            get => _bodyType; 
+        public BodyType BodyType
+        {
+            get => _bodyType;
             set
             {
                 _dataInstance.BodyType = value;
@@ -62,15 +63,16 @@ namespace Entities.Characters
         }
         [SerializeField, ReadOnly]
         private CreatureType _creatureType;
-        public CreatureType CreatureType 
-        { 
-            get => _creatureType; 
+        public CreatureType CreatureType
+        {
+            get => _creatureType;
             set
             {
                 _dataInstance.CreatureType = value;
                 _creatureType = value;
             }
         }
+        [field: SerializeField]
         public Creature CreatureComponent
         {
             get;

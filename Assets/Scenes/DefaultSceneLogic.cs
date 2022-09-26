@@ -27,7 +27,7 @@ namespace SunsetSystems.Loading
             string entryPointTag = data != null ? data.targetEntryPointTag : "";
             string cameraBoundingBoxTag = data != null ? data.cameraBoundingBoxTag : "";
             CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
-            List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
+            List<CreatureAsset> activeParty = _gameRuntimeData.ActiveMemberAssets;
             List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
             if (partyPositions != null && partyPositions.Count > 0)
             {

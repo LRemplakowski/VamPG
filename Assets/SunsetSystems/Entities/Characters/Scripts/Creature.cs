@@ -7,6 +7,8 @@ using Entities.Characters.Data;
 using Entities.Characters.Actions;
 using System.Threading.Tasks;
 using SunsetSystems.Utils.Threading;
+using SunsetSystems.Equipment;
+using NaughtyAttributes;
 
 namespace Entities.Characters
 {
@@ -32,9 +34,6 @@ namespace Entities.Characters
         public NavMeshObstacle NavMeshObstacle { get; protected set; }
 
         [field: SerializeField]
-        public Inventory Inventory { get; protected set; }
-
-        [field: SerializeField]
         public StatsManager StatsManager { get; protected set; }
 
         [field: SerializeField]
@@ -45,7 +44,6 @@ namespace Entities.Characters
 
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
-        [ExposeProperty]
         public GridElement CurrentGridPosition
         {
             get => _currentGridPosition;
@@ -78,8 +76,6 @@ namespace Entities.Characters
 
         private void Awake()
         {
-            if (!Inventory)
-                Inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
             if (!StatsManager)
                 StatsManager = GetComponent<StatsManager>();
             if (!Data)
@@ -92,7 +88,6 @@ namespace Entities.Characters
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
             Agent.enabled = false;
             NavMeshObstacle.enabled = true;
-
         }
 
         protected virtual void Start()
@@ -171,11 +166,6 @@ namespace Entities.Characters
             float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, movementRange);
-        }
-
-        public Inventory GetInventory()
-        {
-            return Inventory;
         }
 
         public CreatureUIData GetCreatureUIData()

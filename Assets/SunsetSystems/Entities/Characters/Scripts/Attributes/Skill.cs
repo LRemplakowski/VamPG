@@ -1,10 +1,11 @@
+using NaughtyAttributes;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class Skill : BaseStat
 {
-    [SerializeField, Range(0,5)]
+    [SerializeField, Range(0, 5)]
     private int baseValue;
     [SerializeField, ReadOnly]
     private SkillType skillType;

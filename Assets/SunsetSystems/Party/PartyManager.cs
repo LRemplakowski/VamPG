@@ -5,6 +5,7 @@ using UI.CharacterPortraits;
 using UnityEngine;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 namespace SunsetSystems.Party
 {

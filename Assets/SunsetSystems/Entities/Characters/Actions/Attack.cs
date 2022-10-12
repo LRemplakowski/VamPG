@@ -23,8 +23,8 @@
         {
             Debug.Log(Owner.gameObject.name + " attacks " + Target.gameObject.name);
 
-            Outcome defenseRoll = Target.GetComponent<StatsManager>().GetSkillRoll(AttributeType.Dexterity, SkillType.Athletics);
-            Outcome attackRoll = Owner.GetComponent<StatsManager>().GetAttackRoll(defenseRoll.successes);
+            Outcome defenseRoll = Target.GetComponent<StatsManager>().GetSkillRoll(AttributeType.Dexterity, SkillType.Athletics, Target.IsVampire);
+            Outcome attackRoll = Owner.GetComponent<StatsManager>().GetAttackRoll(defenseRoll.successes, Owner.IsVampire);
             int damage = attackRoll.successes - defenseRoll.successes;
             Debug.Log("Damage from attack: " + damage
                 + "\nAttacker roll: " + attackRoll.successes + ", isCritical? " + attackRoll.isCritical + ", isMessy? " + attackRoll.isMessy + ", isBestialFailure?" + attackRoll.isBestialFailure

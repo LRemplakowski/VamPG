@@ -29,44 +29,39 @@ namespace SunsetSystems.Resources
             return UnityEngine.Resources.Load<T>(path);
         }
 
-        public static CreatureAsset GetMaleAgentAsset()
+        public static CreatureConfig GetMaleAgentAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_MALE_AGENT_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_MALE_AGENT_PATH);
         }
 
-        public static CreatureAsset GetMaleConvictAsset()
+        public static CreatureConfig GetMaleConvictAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_MALE_CONVICT_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_MALE_CONVICT_PATH);
         }
 
-        public static CreatureAsset GetMaleJournalistAsset()
+        public static CreatureConfig GetMaleJournalistAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_MALE_JOURNALIST_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_MALE_JOURNALIST_PATH);
         }
 
-        public static CreatureAsset GetFemaleAgentAsset()
+        public static CreatureConfig GetFemaleAgentAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_FEMALE_AGENT_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_FEMALE_AGENT_PATH);
         }
 
-        public static CreatureAsset GetFemaleConvictAsset()
+        public static CreatureConfig GetFemaleConvictAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_FEMALE_CONVICT_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_FEMALE_CONVICT_PATH);
         }
 
-        public static CreatureAsset GetFemaleJournalistAsset()
+        public static CreatureConfig GetFemaleJournalistAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_FEMALE_JOURNALIST_PATH);
+            return GetAsset<CreatureConfig>(CHARACTER_FEMALE_JOURNALIST_PATH);
         }
 
-        public static CreatureAsset GetDefaultCreatureAsset()
+        public static CreatureConfig GetDefaultCreatureAsset()
         {
-            return GetAsset<CreatureAsset>(CHARACTER_DEBUG);
-        }
-
-        public static CreatureData GetEmptyCreaturePrefab()
-        {
-            return GetAsset<CreatureData>(EMPTY_CREATURE_PREFAB);
+            return GetAsset<CreatureConfig>(CHARACTER_DEBUG);
         }
 
         public static RuntimeAnimatorController GetAnimatorController(string resourceName)

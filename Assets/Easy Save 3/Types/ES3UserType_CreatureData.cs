@@ -35,10 +35,10 @@ namespace ES3Types
 				{
 					
 					case "_dataInstance":
-					reader.SetPrivateField("_dataInstance", reader.Read<Entities.Characters.CreatureAsset>(), instance);
+					reader.SetPrivateField("_dataInstance", reader.Read<Entities.Characters.CreatureConfig>(), instance);
 					break;
 					case "data":
-					reader.SetPrivateField("data", reader.Read<Entities.Characters.CreatureAsset>(), instance);
+					reader.SetPrivateField("data", reader.Read<Entities.Characters.CreatureConfig>(), instance);
 					break;
 					case "_firstName":
 					reader.SetPrivateField("_firstName", reader.Read<System.String>(), instance);

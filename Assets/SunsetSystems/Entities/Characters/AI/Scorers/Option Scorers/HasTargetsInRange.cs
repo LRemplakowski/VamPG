@@ -14,8 +14,8 @@ namespace AI.Scorers.Option
         public override float Score(CreatureContext context)
         {
             float weaponsRange = context.StatsManager.GetWeaponMaxRange();
-            List<Creature> potentialTargets = new List<Creature>();
-            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
+            List<Creature> potentialTargets = new();
+            if (context.Owner.Data.faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(context.FriendlyCombatants);
                 potentialTargets.AddRange(context.PlayerControlledCombatants);
@@ -24,8 +24,8 @@ namespace AI.Scorers.Option
             {
                 potentialTargets.AddRange(context.EnemyCombatants);
             }
-            return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.CurrentGridPosition.transform.position, target.CurrentGridPosition.transform.position) <= weaponsRange)) ? 
-                score : 
+            return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.CurrentGridPosition.transform.position, target.CurrentGridPosition.transform.position) <= weaponsRange)) ?
+                score :
                 0f;
         }
     }

@@ -4,10 +4,11 @@ using UnityEngine;
 using TMPro;
 using Entities.Characters;
 using SunsetSystems.Game;
+using SunsetSystems.Entities.Data;
 
 public class DevSpellbook : ExposableMonobehaviour
 {
-    public CharacterStats devStatsAsset;
+    public StatsConfig devStatsAsset;
     public TMP_Dropdown dropdown;
     List<DisciplinePower> powers = new();
 
@@ -36,11 +37,11 @@ public class DevSpellbook : ExposableMonobehaviour
         bool cast = false;
         if (dp.Target.Equals(Target.Self))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), GameManager.GetMainCharacter());
+            //cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), GameManager.GetMainCharacter());
         }
         if (dp.Target.Equals(Target.Hostile))
         {
-            cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), FindObjectOfType<NPC>());
+            //cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), FindObjectOfType<NPC>());
         }
         Debug.Log("Did cast? " + cast);
     }

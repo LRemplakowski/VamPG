@@ -2,7 +2,7 @@ using SunsetSystems.Game;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.UI;
+using SunsetSystems.Utils.Input;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

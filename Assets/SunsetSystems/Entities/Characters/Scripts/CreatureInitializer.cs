@@ -7,15 +7,16 @@ namespace Entities.Characters
 {
     public static class CreatureInitializer
     {
-        public static Creature InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
+        public static Creature InitializeCreature(CreatureData data, Vector3 position)
         {
+            GameObject creatureObject = new();
             creatureObject.transform.position = position;
-            Creature creature = InitializeCreatureScript(creatureObject, asset);
+            Creature creature = InitializeCreatureScript(creatureObject, data);
             creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");
             DynamicCharacterAvatar dca = creatureObject.GetComponent<DynamicCharacterAvatar>();
-            InitializeUmaAvatar(dca, asset);
+            InitializeUmaAvatar(dca, data);
             StatsManager stats = creatureObject.GetComponent<StatsManager>();
-            InitializeStatsManager(stats, asset);
+            InitializeStatsManager(stats, data);
             CapsuleCollider collider = creatureObject.GetComponent<CapsuleCollider>();
             InitializeCollider(collider);
             Rigidbody rigidbody = creatureObject.GetComponent<Rigidbody>();
@@ -25,19 +26,20 @@ namespace Entities.Characters
             return creature;
         }
 
-        private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
+        private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureData data)
         {
             Creature creature = creatureObject.GetComponent<Creature>();
             if (creature == null)
             {
-                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
             }
-            else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
+            else if (IsCreatureScriptMismatch(creature, data.faction))
             {
                 Debug.LogWarning("Destroying creature script!");
                 UnityEngine.Object.DestroyImmediate(creature);
-                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
             }
+            creature.Data.Inject(data);
             return creature;
         }
 
@@ -59,23 +61,23 @@ namespace Entities.Characters
             };
         }
 
-        private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureAsset asset)
+        private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureData data)
         {
             dca.loadFileOnStart = true;
-            dca.loadFilename = asset.UmaPresetFilename;
+            dca.loadFilename = data.umaPresetFileName;
             dca.loadPath = "UMAPresets/";
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
-            dca.raceAnimationControllers.defaultAnimationController = asset.AnimatorController;
+            dca.raceAnimationControllers.defaultAnimationController = data.animatorControllerAsset;
             dca.DoLoad();
 
-            dca.saveFilename = asset.UmaPresetFilename;
+            dca.saveFilename = data.umaPresetFileName;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
             dca.savePath = "UMAPresets/";
         }
 
-        private static void InitializeStatsManager(StatsManager statsManager, CreatureAsset asset)
+        private static void InitializeStatsManager(StatsManager statsManager, CreatureData data)
         {
-            statsManager.Stats = asset.StatsAsset;
+            statsManager.Initialize(data.stats);
         }
 
         private static void InitializeCollider(CapsuleCollider collider)

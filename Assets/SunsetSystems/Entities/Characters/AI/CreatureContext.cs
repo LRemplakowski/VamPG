@@ -5,6 +5,7 @@ using Entities.Cover;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using UnityEngine;
+using SunsetSystems.Entities.Data;
 
 public sealed class CreatureContext : IAIContext
 {
@@ -32,15 +33,7 @@ public sealed class CreatureContext : IAIContext
     {
         if (Owner)
         {
-            if (Owner.Data)
-            {
-                return Owner.Data.Faction.Equals(Faction.PlayerControlled);
-            }
-            else
-            {
-                Debug.LogError("Data of creature " + Owner.gameObject.name + " does not exist!");
-                return false;
-            }
+            return Owner.Data.faction.Equals(Faction.PlayerControlled);
         }
         else
         {
@@ -56,19 +49,19 @@ public sealed class CreatureContext : IAIContext
 
     public StatsManager StatsManager => Owner.GetComponent<StatsManager>();
 
-    public CharacterStats Stats => StatsManager.Stats;
+    public StatsData Stats => StatsManager.Data;
 
     public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
     public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
+    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Data.faction.Equals(Faction.PlayerControlled));
 
     public List<Creature> FriendlyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.Faction.Equals(Faction.Friendly));
+        .FindAll(c => c.Data.faction.Equals(Faction.Friendly));
 
     public List<Creature> EnemyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.Faction.Equals(Faction.Hostile));
+        .FindAll(c => c.Data.faction.Equals(Faction.Hostile));
 }

@@ -12,11 +12,11 @@
             Creature self = c.Owner;
 
             List<Creature> potentialTargets = new List<Creature>();
-            if (self.Data.Faction.Equals(Faction.Hostile))
+            if (self.Data.faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(c.FriendlyCombatants);
                 potentialTargets.AddRange(c.PlayerControlledCombatants);
-            } 
+            }
             else
             {
                 potentialTargets.AddRange(c.EnemyCombatants);

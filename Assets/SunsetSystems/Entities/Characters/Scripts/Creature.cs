@@ -7,8 +7,8 @@ using Entities.Characters.Data;
 using Entities.Characters.Actions;
 using System.Threading.Tasks;
 using SunsetSystems.Utils.Threading;
-using SunsetSystems.Equipment;
 using NaughtyAttributes;
+using SunsetSystems.Loading;
 
 namespace Entities.Characters
 {
@@ -23,10 +23,14 @@ namespace Entities.Characters
     RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(UtilityAIComponent))]
-    public abstract class Creature : Entity
+    public abstract class Creature : Entity, ISaveRuntimeData
     {
-        private const float lookTowardsRotationSpeed = 5.0f;
+        private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
+        public CreatureData Data { get; } = new();
+
+        [SerializeField]
+        private CreatureConfig config;
         [field: SerializeField]
         public NavMeshAgent Agent { get; protected set; }
 
@@ -35,9 +39,6 @@ namespace Entities.Characters
 
         [field: SerializeField]
         public StatsManager StatsManager { get; protected set; }
-
-        [field: SerializeField]
-        public CreatureData Data { get; protected set; }
 
         [field: SerializeField]
         public CombatBehaviour CombatBehaviour { get; private set; }
@@ -73,13 +74,13 @@ namespace Entities.Characters
         }
 
         public bool IsAlive => StatsManager.IsAlive();
+        public bool IsVampire => Data.creatureType.Equals(CreatureType.Vampire);
 
-        private void Awake()
+        #region Unity messages
+        protected virtual void Awake()
         {
             if (!StatsManager)
                 StatsManager = GetComponent<StatsManager>();
-            if (!Data)
-                Data = GetComponent<CreatureData>();
             if (!Agent)
                 Agent = GetComponent<NavMeshAgent>();
             if (!CombatBehaviour)
@@ -88,11 +89,17 @@ namespace Entities.Characters
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
             Agent.enabled = false;
             NavMeshObstacle.enabled = true;
+            LoadRuntimeData();
         }
 
         protected virtual void Start()
         {
             ActionQueue.Enqueue(new Idle(this));
+        }
+
+        protected virtual void OnDestroy()
+        {
+            SaveRuntimeData();
         }
 
         public void Update()
@@ -110,7 +117,9 @@ namespace Entities.Characters
                 ActionQueue.Peek().Begin();
             }
         }
+        #endregion
 
+        #region Actions and control
         public void ForceCreatureToPosition(Vector3 position)
         {
             ClearAllActions();
@@ -138,7 +147,7 @@ namespace Entities.Characters
                 return true;
             Vector3 direction = (target.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookTowardsRotationSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
             float dot = Quaternion.Dot(transform.rotation, lookRotation);
             return dot >= 0.999f || dot <= -0.999f;
         }
@@ -161,6 +170,12 @@ namespace Entities.Characters
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
+        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
+        public abstract void Move(Vector3 moveTarget);
+        public abstract void Move(GridElement moveTarget);
+        public abstract void Attack(Creature target);
+        #endregion
+
         private void OnDrawGizmos()
         {
             float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
@@ -172,15 +187,20 @@ namespace Entities.Characters
         {
             HealthData healthData = StatsManager.GetHealthData();
             CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
-                Data.Portrait,
+                Data.portrait,
                 healthData,
                 0);
             return builder.Create();
         }
 
-        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
-        public abstract void Move(Vector3 moveTarget);
-        public abstract void Move(GridElement moveTarget);
-        public abstract void Attack(Creature target);
+        public void SaveRuntimeData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void LoadRuntimeData()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

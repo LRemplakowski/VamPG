@@ -18,8 +18,8 @@ namespace SunsetSystems.Inventory
         private ItemStorage _playerInventory;
         public static ItemStorage PlayerInventory => Instance._playerInventory;
         [SerializeField, ES3Serializable]
-        private CoterieEquipmentDictionary _coterieEquipmentData = new();
-        private UniqueId unique;
+        private SerializableStringEquipmentDataDictionary _coterieEquipmentData = new();
+        private UniqueId _unique;
 
         public static event Action<Creature, EquipableItem> ItemEquipped, ItemUnequipped;
 
@@ -30,7 +30,7 @@ namespace SunsetSystems.Inventory
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent(typeof(ItemStorage)) as ItemStorage;
-            unique ??= GetComponent<UniqueId>();
+            _unique ??= GetComponent<UniqueId>();
         }
 
         public static bool TryAddCoterieMemberEquipment(Creature character)
@@ -98,12 +98,12 @@ namespace SunsetSystems.Inventory
 
         public void SaveRuntimeData()
         {
-            ES3.Save(unique.Id, _coterieEquipmentData);
+            ES3.Save(_unique.Id, _coterieEquipmentData);
         }
 
         public void LoadRuntimeData()
         {
-            _coterieEquipmentData = ES3.Load<CoterieEquipmentDictionary>(unique.Id);
+            _coterieEquipmentData = ES3.Load<SerializableStringEquipmentDataDictionary>(_unique.Id);
         }
     }
 
@@ -128,7 +128,7 @@ namespace SunsetSystems.Inventory
     }
 
     [Serializable]
-    public class CoterieEquipmentDictionary : SerializableDictionary<string, EquipmentData>
+    public class SerializableStringEquipmentDataDictionary : SerializableDictionary<string, EquipmentData>
     {
 
     }

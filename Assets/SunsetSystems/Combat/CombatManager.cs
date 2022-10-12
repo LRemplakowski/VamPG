@@ -1,6 +1,7 @@
 using Entities.Characters;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
+using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using SunsetSystems.Utils.Threading;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace SunsetSystems.Combat
                     return;
                 foreach (Creature c in Actors)
                 {
-                    if (c.IsAlive && c.Data.Faction.Equals(Faction.Hostile))
+                    if (c.IsAlive && c.Data.faction.Equals(Faction.Hostile))
                     {
                         break;
                     }
@@ -104,18 +105,10 @@ namespace SunsetSystems.Combat
             roundCounter = 0;
             Actors = new();
             Actors.AddRange(encounter.Creatures);
-            Actors.AddRange(GetPlayerParty());
+            Actors.AddRange(PartyManager.ActiveParty);
             CombatBegin?.Invoke(Actors);
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             NextRound();
-
-            List<Creature> GetPlayerParty()
-            {
-                List<Creature> playerParty = new();
-                playerParty.Add(RuntimeData.MainCharacterData.CreatureComponent);
-                RuntimeData.ActivePartyData.ForEach(creatureData => playerParty.Add(creatureData.CreatureComponent));
-                return playerParty;
-            }
         }
 
         private Creature DecideFirstActor(List<Creature> creatures)

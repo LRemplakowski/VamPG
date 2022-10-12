@@ -12,11 +12,7 @@ namespace SunsetSystems.Loading
     internal abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
     {
         [SerializeField]
-        protected CreatureData creaturePrefab;
-        [SerializeField]
         protected UniqueId unique;
-
-        private void Reset() => creaturePrefab = ResourceLoader.GetEmptyCreaturePrefab();
 
         protected void OnValidate()
         {

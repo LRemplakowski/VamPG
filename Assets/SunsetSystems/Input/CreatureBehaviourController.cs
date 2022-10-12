@@ -3,7 +3,7 @@ using InsaneSystems.RTSSelection;
 using SunsetSystems.Combat;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.UI;
+using SunsetSystems.Utils.Input;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -121,7 +121,7 @@ namespace SunsetSystems.Input
                     NPC enemy = hit.collider.GetComponent<NPC>();
                     if (enemy)
                     {
-                        if (enemy.Data.Faction.Equals(Faction.Hostile) && IsInRange(enemy))
+                        if (enemy.Data.faction.Equals(Faction.Hostile) && IsInRange(enemy))
                         {
                             CombatManager.CurrentActiveActor.Attack(enemy);
                         }

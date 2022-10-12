@@ -6,7 +6,7 @@ using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Inventory.Editor
 {
-    [CustomPropertyDrawer(typeof(CoterieEquipmentDictionary))]
+    [CustomPropertyDrawer(typeof(SerializableStringEquipmentDataDictionary))]
     public class CoterieEquipmentDictionaryProperty : SerializableDictionaryPropertyDrawer
     {
 

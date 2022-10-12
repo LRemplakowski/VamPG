@@ -1,5 +1,6 @@
 ﻿using Entities.Characters;
 using SunsetSystems.Data;
+using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using UnityEngine;
 
@@ -16,13 +17,6 @@ namespace SunsetSystems.Game
         void Start()
         {
             _gridController = FindObjectOfType<GridController>();
-        }
-
-        public static Creature GetMainCharacter()
-        {
-            if (_player == null)
-                _player = GameRuntimeData.Instance.MainCharacterData.CreatureComponent;
-            return _player;
         }
 
         public static string GetLanguage()

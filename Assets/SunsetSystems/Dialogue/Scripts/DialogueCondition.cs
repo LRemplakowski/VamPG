@@ -1,9 +1,8 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Dice;
-using SunsetSystems.Game;
 using SunsetSystems.Party;
 
 namespace SunsetSystems.Dialogue

@@ -1,10 +1,10 @@
-﻿using Entities.Characters.Actions.Conditions;
+﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Utils.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Entities.Characters.Actions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Interact : EntityAction
     {

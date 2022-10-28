@@ -1,5 +1,5 @@
-﻿using Entities.Characters;
-using Entities.Interactable;
+﻿using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Data;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Party;

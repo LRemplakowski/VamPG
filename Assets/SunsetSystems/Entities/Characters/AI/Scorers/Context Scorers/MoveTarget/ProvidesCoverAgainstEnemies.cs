@@ -4,8 +4,8 @@
     using Apex.Serialization;
     using UnityEngine;
     using System.Collections.Generic;
-    using Entities.Characters;
-    using Entities.Cover;
+    using SunsetSystems.Entities.Characters;
+    using SunsetSystems.Entities.Cover;
 
     public class ProvidesCoverAgainstEnemies : OptionScorerBase<GridElement, CreatureContext>
     {

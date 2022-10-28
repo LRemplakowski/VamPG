@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SunsetSystems.Dialogue;
 using UnityEngine;
 
-namespace Entities.Interactable
+namespace SunsetSystems.Entities.Interactable
 {
     public class DialogueEntity : InteractableEntity
     {

@@ -1,7 +1,7 @@
-using Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Actions;
 using UnityEngine;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     public class NPC : Creature
     {

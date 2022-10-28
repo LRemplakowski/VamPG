@@ -1,4 +1,4 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Combat;
 using System.Collections.Generic;
 using UnityEngine;

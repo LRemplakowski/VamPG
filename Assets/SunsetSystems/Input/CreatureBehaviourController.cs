@@ -1,4 +1,4 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Combat;
 using SunsetSystems.Game;

@@ -2,7 +2,7 @@ namespace AI.Scorers.Option
 {
     using Apex.AI;
     using Apex.Serialization;
-    using Entities.Cover;
+    using SunsetSystems.Entities.Cover;
     using System.Collections.Generic;
     using UnityEngine;
 

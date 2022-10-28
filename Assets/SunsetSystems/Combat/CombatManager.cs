@@ -1,4 +1,4 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Party;

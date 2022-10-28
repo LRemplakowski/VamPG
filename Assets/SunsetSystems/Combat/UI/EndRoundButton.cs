@@ -1,7 +1,4 @@
-using Entities.Characters;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 using UnityEngine.UI;
 

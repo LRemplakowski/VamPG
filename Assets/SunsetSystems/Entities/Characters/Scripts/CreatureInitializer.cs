@@ -3,7 +3,7 @@ using UMA.CharacterSystem;
 using UnityEngine.AI;
 using System;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     public static class CreatureInitializer
     {

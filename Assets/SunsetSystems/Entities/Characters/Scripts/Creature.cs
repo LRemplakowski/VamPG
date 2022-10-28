@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
 using Entities.Characters.Data;
-using Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using SunsetSystems.Utils.Threading;
 using NaughtyAttributes;
 using SunsetSystems.Loading;
+using UMA.CharacterSystem;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     [RequireComponent(typeof(NavMeshAgent)),
     RequireComponent(typeof(NavMeshObstacle)),
@@ -20,7 +21,7 @@ namespace Entities.Characters
     RequireComponent(typeof(Rigidbody)),
     RequireComponent(typeof(CapsuleCollider)),
     RequireComponent(typeof(Animator)),
-    RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
+    RequireComponent(typeof(DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(UtilityAIComponent))]
     public abstract class Creature : Entity, ISaveRuntimeData
@@ -97,7 +98,7 @@ namespace Entities.Characters
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        protected virtual void OnDestroy()
+        public virtual void OnDestroy()
         {
             SaveRuntimeData();
         }
@@ -195,12 +196,12 @@ namespace Entities.Characters
 
         public void SaveRuntimeData()
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
 
         public void LoadRuntimeData()
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
     }
 }

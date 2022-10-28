@@ -1,5 +1,5 @@
 using CleverCrow.Fluid.UniqueIds;
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Loading;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

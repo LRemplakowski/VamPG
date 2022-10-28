@@ -1,6 +1,6 @@
-﻿using Entities.Characters.Actions.Conditions;
+﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
 
-namespace Entities.Characters.Actions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     public abstract class HostileAction : EntityAction
     {

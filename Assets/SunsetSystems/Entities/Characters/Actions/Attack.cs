@@ -1,4 +1,4 @@
-﻿namespace Entities.Characters.Actions
+﻿namespace SunsetSystems.Entities.Characters.Actions
 {
     using SunsetSystems.Dice;
     using UnityEngine;
@@ -13,7 +13,7 @@
         public override void Abort()
         {
             base.Abort();
-            if (Owner.IsOfType(typeof(PlayerControlledCharacter)))
+            if (Owner is PlayerControlledCharacter)
             {
                 Owner.GetComponentInChildren<LineRenderer>().enabled = false;
             }

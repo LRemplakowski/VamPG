@@ -1,4 +1,4 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Loading;
 using UnityEngine;
 using SunsetSystems.Resources;
@@ -65,7 +65,7 @@ namespace SunsetSystems.Data
         {
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
-            PartyManager.RecruitCharacter(new(mainCharacterAsset));
+            PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }

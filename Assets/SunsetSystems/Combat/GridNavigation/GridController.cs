@@ -1,6 +1,6 @@
-using Entities.Characters;
-using Entities.Characters.Actions;
-using Entities.Cover;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Cover;
 using SunsetSystems.Combat;
 using SunsetSystems.Resources;
 using System.Collections.Generic;

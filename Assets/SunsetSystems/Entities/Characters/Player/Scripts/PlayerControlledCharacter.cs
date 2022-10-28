@@ -1,9 +1,9 @@
-﻿using Entities.Characters.Actions;
+﻿using SunsetSystems.Entities.Characters.Actions;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     [RequireComponent(typeof(Selectable))]
     [RequireComponent(typeof(SelectionEffect))]

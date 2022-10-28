@@ -1,5 +1,5 @@
 using CleverCrow.Fluid.UniqueIds;
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using NaughtyAttributes;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;

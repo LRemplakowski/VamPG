@@ -1,8 +1,8 @@
-﻿using Entities.Characters.Actions.Conditions;
+﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entities.Characters.Actions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Move : EntityAction
     {

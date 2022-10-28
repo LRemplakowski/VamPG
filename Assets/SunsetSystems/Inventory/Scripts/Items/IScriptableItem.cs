@@ -1,4 +1,4 @@
-using Entities;
+using SunsetSystems.Entities;
 
 namespace SunsetSystems.Inventory
 {

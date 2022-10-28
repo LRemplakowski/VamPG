@@ -3,7 +3,7 @@ using System;
 using UnityEditor.Animations;
 using UnityEngine;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
     public struct CreatureData

@@ -1,4 +1,4 @@
-﻿using Entities.Characters;
+﻿using SunsetSystems.Entities.Characters;
 using UI.CharacterPortraits;
 using UnityEngine;
 using SunsetSystems.Utils;
@@ -13,12 +13,13 @@ namespace SunsetSystems.Party
     {
         [field: SerializeField]
         private SerializableStringCreatureInstanceDictionary _activeParty;
-        public static Creature MainCharacter => Instance._activeParty[Instance.ActiveCoterieMemberKeys[0]];
+        public static Creature MainCharacter => Instance._activeParty[_mainCharacterKey];
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
-        [field: SerializeField]
-        public List<string> ActiveCoterieMemberKeys { get; private set; } = new();
+        private static HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
         private SerializableStringCreatureAssetDictionary _recruitedCharacters;
+
+        private static string _mainCharacterKey;
 
         private PartyPortraitsController _partyPortraits;
         private PartyPortraitsController PartyPortraits
@@ -36,7 +37,7 @@ namespace SunsetSystems.Party
             CreatePartyList();
             PartyPortraits.Clear();
             Debug.Log("Party members count: " + _activeParty.Count);
-            foreach (string key in ActiveCoterieMemberKeys)
+            foreach (string key in _activeCoterieMemberKeys)
             {
                 PartyPortraits.AddPortrait(_activeParty[key].GetCreatureUIData());
             }
@@ -44,23 +45,22 @@ namespace SunsetSystems.Party
 
         public static void InitializePartyAtPosition(Vector3 position)
         {
-
+            foreach (string key in _activeCoterieMemberKeys)
+            {
+                CreatureData data = Instance._recruitedCharacters[key];
+                InitializePartyMember(data, position);
+            }
         }
 
         public static void InitializePartyAtPositions(List<Vector3> positions)
         {
-            for (int i = 0; i < Instance.ActiveCoterieMemberKeys.Count; i++)
+            int index = 0;
+            foreach (string key in _activeCoterieMemberKeys)
             {
-                Vector3 position = Vector3.zero;
-                try
-                {
-                    position = positions?[i] ?? Vector3.zero;
-                }
-                catch (ArgumentOutOfRangeException e)
-                {
-                    Debug.LogException(e);
-                }
-                InitializePartyMember(Instance._recruitedCharacters[Instance.ActiveCoterieMemberKeys[i]], position);
+                CreatureData data = Instance._recruitedCharacters[key];
+                Vector3 position = positions[index];
+                InitializePartyMember(data, position);
+                index++;
             }
         }
 
@@ -72,6 +72,31 @@ namespace SunsetSystems.Party
         public static void RecruitCharacter(CreatureData creatureData)
         {
             Instance._recruitedCharacters.Add(creatureData.FullName, creatureData);
+        }
+
+        public static void RecruitMainCharacter(CreatureData mainCharacterData)
+        {
+            RecruitCharacter(mainCharacterData);
+            _mainCharacterKey = mainCharacterData.FullName;
+            if (TryAddMemberToActiveRoster(_mainCharacterKey) == false)
+                Debug.LogError("Trying to recruit Main Character but Main Character already exists!");            
+        }
+
+        public static bool TryAddMemberToActiveRoster(string memberName)
+        {
+            if (Instance._recruitedCharacters.ContainsKey(memberName) == false)
+                Debug.LogError("Trying to add character to roster but character " + memberName + " is not yet recruited!");
+            return _activeCoterieMemberKeys.Add(memberName);
+        }
+
+        public static bool TryRemoveMemberFromActiveRoster(string memberName)
+        {
+            if (memberName.Equals(_mainCharacterKey))
+            {
+                Debug.LogError("Cannot remove Main Character from active roster!");
+                return false;
+            }
+            return _activeCoterieMemberKeys.Remove(memberName);
         }
 
         private void CreatePartyList()

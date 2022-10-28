@@ -4,7 +4,7 @@ using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
 
-namespace Entities.Interactable
+namespace SunsetSystems.Entities.Interactable
 {
     [RequireComponent(typeof(ItemStorage))]
     public class Container : InteractableEntity

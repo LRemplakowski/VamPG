@@ -1,4 +1,4 @@
-﻿using Entities.Characters;
+﻿using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
 public abstract class DisciplineScript : ScriptableObject

@@ -1,5 +1,5 @@
-using Entities.Characters;
-using Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Combat;
 using UnityEngine;
 

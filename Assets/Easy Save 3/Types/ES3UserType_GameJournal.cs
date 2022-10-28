@@ -28,7 +28,7 @@ namespace ES3Types
 				{
 					
 					case "creaturePrefab":
-					reader.SetPrivateField("creaturePrefab", reader.Read<Entities.Characters.CreatureData>(), instance);
+					reader.SetPrivateField("creaturePrefab", reader.Read<SunsetSystems.Entities.Characters.CreatureData>(), instance);
 					break;
 					default:
 						reader.Skip();

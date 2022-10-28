@@ -5,7 +5,7 @@ using SunsetSystems.Dice;
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {

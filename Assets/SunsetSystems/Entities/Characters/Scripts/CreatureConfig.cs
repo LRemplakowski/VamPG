@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using SunsetSystems.Resources;
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Resources;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
     public class CreatureConfig : ScriptableObject
@@ -46,9 +46,9 @@ namespace Entities.Characters
         private void OnEnable()
         {
             if (_portrait == null)
-                _portrait = Resources.Load<Sprite>("DEBUG/missing");
+                _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
             if (_statsConfig == null)
-                _statsConfig = Resources.Load<StatsConfig>("DEBUG/DebugStats");
+                _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
         }
 
         private void Awake()

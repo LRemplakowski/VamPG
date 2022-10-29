@@ -21,5 +21,15 @@ namespace SunsetSystems.Entities.Data
             this.skills = statsAsset.skills;
             this.disciplines = statsAsset.disciplines;
         }
+
+        public StatsData(StatsData data)
+        {
+            this.trackers = data.trackers;
+            this.clan = data.clan;
+            this.generation = data.generation;
+            this.attributes = data.attributes;
+            this.skills = data.skills;
+            this.disciplines = data.disciplines;
+        }
     }
 }

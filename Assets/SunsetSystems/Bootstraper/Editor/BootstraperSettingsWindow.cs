@@ -7,34 +7,37 @@ namespace SunsetSystems.Bootstraper.Editor
     public class BootstraperSettingsWindow : EditorWindow
     {
         private const string START_SCENE_PATH = "START_SCENE_PATH";
+        private static SceneAsset cachedStartScene;
+        private static bool enableBootstrap;
 
         private void OnGUI()
         {
             EditorGUI.BeginChangeCheck();
-            EditorSceneManager.playModeStartScene = (SceneAsset)EditorGUILayout.ObjectField(new GUIContent("Start Scene"), EditorSceneManager.playModeStartScene, typeof(SceneAsset), false);
+            cachedStartScene = (SceneAsset)EditorGUILayout.ObjectField(new GUIContent("Start Scene"), cachedStartScene, typeof(SceneAsset), false);
+            enableBootstrap = EditorGUILayout.Toggle(new GUIContent("Enable Bootstrapping"), enableBootstrap);
             if (EditorGUI.EndChangeCheck())
             {
                 HandleStartSceneCaching();
             }
-
         }
 
         [InitializeOnLoadMethod]
         private static void HandleStartSceneCaching()
         {
-            if (!EditorSceneManager.playModeStartScene)
+            if (!cachedStartScene)
             {
                 string path = EditorPrefs.GetString(START_SCENE_PATH, "");
                 if (!path.Equals(""))
                 {
-                    EditorSceneManager.playModeStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
+                    cachedStartScene = AssetDatabase.LoadAssetAtPath<SceneAsset>(path);
                 }
             }
-            if (EditorSceneManager.playModeStartScene)
+            if (cachedStartScene)
             {
-                string path = AssetDatabase.GetAssetOrScenePath(EditorSceneManager.playModeStartScene);
+                string path = AssetDatabase.GetAssetOrScenePath(cachedStartScene);
                 EditorPrefs.SetString(START_SCENE_PATH, path);
             }
+            EditorSceneManager.playModeStartScene = enableBootstrap ? cachedStartScene : null;
         }
 
         [MenuItem("Boostrapper/Settings")]

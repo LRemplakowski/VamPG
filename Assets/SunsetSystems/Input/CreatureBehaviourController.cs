@@ -118,7 +118,7 @@ namespace SunsetSystems.Input
                 case BarAction.ATTACK:
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
-                    NPC enemy = hit.collider.GetComponent<NPC>();
+                    DefaultNPC enemy = hit.collider.GetComponent<DefaultNPC>();
                     if (enemy)
                     {
                         if (enemy.Data.faction.Equals(Faction.Hostile) && IsInRange(enemy))
@@ -130,7 +130,7 @@ namespace SunsetSystems.Input
             }
         }
 
-        private static bool IsInRange(NPC enemy)
+        private static bool IsInRange(DefaultNPC enemy)
         {
             return Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position) <= CombatManager.CurrentActiveActor.StatsManager.GetWeaponMaxRange();
         }
@@ -230,7 +230,7 @@ namespace SunsetSystems.Input
                         lineRenderer.enabled = false;
                         lastHit = hit.collider;
                     }
-                    NPC creature = lastHit.GetComponent<NPC>();
+                    DefaultNPC creature = lastHit.GetComponent<DefaultNPC>();
                     if (creature)
                     {
                         lineRenderer.positionCount = 2;

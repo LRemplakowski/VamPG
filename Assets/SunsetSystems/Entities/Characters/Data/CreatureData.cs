@@ -31,9 +31,18 @@ namespace SunsetSystems.Entities.Characters
             stats = new(config.StatsAsset);
         }
 
-        public void Inject(CreatureData data)
+        public CreatureData(CreatureData data)
         {
-            this = data;
+            firstName = data.firstName;
+            lastName = data.lastName;
+            portrait = data.portrait;
+            faction = data.faction;
+            bodyType = data.bodyType;
+            creatureType = data.creatureType;
+            Debug.LogError(data.umaPresetFileName);
+            umaPresetFileName = new(data.umaPresetFileName);
+            animatorControllerAsset = data.animatorControllerAsset;
+            stats = new(data.stats);
         }
     }
 }

@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
 using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
-using SunsetSystems.Utils.Threading;
 using NaughtyAttributes;
 using SunsetSystems.Loading;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
+using UnityEditor;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -18,18 +17,31 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(NavMeshObstacle)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(CombatBehaviour)),
-    RequireComponent(typeof(CreatureAnimator)),
+    RequireComponent(typeof(CreatureAnimationController)),
     RequireComponent(typeof(Rigidbody)),
     RequireComponent(typeof(CapsuleCollider)),
     RequireComponent(typeof(Animator)),
     RequireComponent(typeof(DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(UtilityAIComponent))]
+    [RequireComponent(typeof(CapsuleCollider))]
     public abstract class Creature : Entity, ISaveRuntimeData
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
-        public CreatureData Data { get; private set; } = new();
+        [Button("Rebuild Creature")]
+        private void RebuildCreature()
+        {
+            if (config == null)
+            {
+                Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
+                return;
+            }
+            Data = new(config);
+            CreatureInitializer.InitializeCreature(this);
+        }
+
+        public CreatureData Data { get; set; } = new();
 
         [SerializeField]
         private CreatureConfig config;
@@ -94,13 +106,16 @@ namespace SunsetSystems.Entities.Characters
                 CombatBehaviour = GetComponent<CombatBehaviour>();
             if (!NavMeshObstacle)
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
-            Agent.enabled = false;
-            NavMeshObstacle.enabled = true;
+            if (Agent)
+                Agent.enabled = false;
+            if (NavMeshObstacle)
+                NavMeshObstacle.enabled = true;
             if (config)
                 Data = new(config);
-            StatsManager.Initialize(Data.stats);
+            if (StatsManager)
+                StatsManager.Initialize(Data.stats);
             LoadRuntimeData();
-        }
+        }   
 
         protected virtual void Start()
         {
@@ -186,9 +201,9 @@ namespace SunsetSystems.Entities.Characters
         public abstract void Attack(Creature target);
         #endregion
 
-        private void OnDrawGizmos()
+        protected virtual void OnDrawGizmos()
         {
-            float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
+            float movementRange = StatsManager?.GetCombatSpeed() ?? 0f;
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, movementRange);
         }

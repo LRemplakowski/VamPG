@@ -15,8 +15,8 @@ namespace SunsetSystems.Entities.Data
         public StatsData(StatsConfig statsAsset)
         {
             this.trackers = statsAsset.trackers;
-            this.clan = Clan.Invalid;
-            this.generation = 12;
+            this.clan = statsAsset.clan;
+            this.generation = statsAsset.generation;
             this.attributes = statsAsset.attributes;
             this.skills = statsAsset.skills;
             this.disciplines = statsAsset.disciplines;

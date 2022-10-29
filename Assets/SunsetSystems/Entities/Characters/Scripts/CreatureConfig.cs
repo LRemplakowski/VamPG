@@ -9,10 +9,10 @@ namespace SunsetSystems.Entities.Characters
     public class CreatureConfig : ScriptableObject
     {
         [SerializeField]
-        private string _name = "New Creature";
+        private string _name = "New";
         public string Name { get => _name; }
         [SerializeField]
-        private string _lastName = "";
+        private string _lastName = "Creature";
         public string LastName { get => _lastName; }
         public string FullName { get => Name + " " + LastName; }
         [SerializeField]

@@ -58,12 +58,9 @@ namespace SunsetSystems.Entities.Characters.Actions
                 await Task.Yield();
             }
             moveToTarget.Abort();
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                Dispatcher.Instance.Invoke(async () =>
-                {
-                    await Owner.FaceTarget(target.InteractionTransform);
-                });
+                await Owner.FaceTarget(target.InteractionTransform);
             }, tokenSource.Token);
 
             target.TargetedBy = Owner;

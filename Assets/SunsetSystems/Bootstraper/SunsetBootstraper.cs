@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SunsetSystems.Utils.Threading;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Bootstraper
 {
@@ -46,20 +47,14 @@ namespace SunsetSystems.Bootstraper
             parameters.localPhysicsMode = LocalPhysicsMode.Physics3D;
             foreach (string path in paths)
             {
-                tasks.Add(Task.Run(() =>
+                tasks.Add(Task.Run(async () =>
                 {
-                    Dispatcher.Instance.Invoke(async () =>
+                    await new WaitForUpdate();
+                    if (!SceneManager.GetSceneByPath(path).isLoaded)
                     {
-                        if (!SceneManager.GetSceneByPath(path).isLoaded)
-                        {
-                            Debug.Log("Loading scene: " + path);
-                            AsyncOperation op = EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
-                            while (!op.isDone)
-                            {
-                                await Task.Yield();
-                            }
-                        }
-                    });
+                        Debug.Log("Loading scene: " + path);
+                        await EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
+                    }
                 }));
             }
             return tasks;

@@ -10,6 +10,7 @@ using SunsetSystems.Utils.Threading;
 using NaughtyAttributes;
 using SunsetSystems.Loading;
 using UMA.CharacterSystem;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -28,7 +29,7 @@ namespace SunsetSystems.Entities.Characters
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
-        public CreatureData Data { get; } = new();
+        public CreatureData Data { get; private set; } = new();
 
         [SerializeField]
         private CreatureConfig config;
@@ -78,6 +79,11 @@ namespace SunsetSystems.Entities.Characters
         public bool IsVampire => Data.creatureType.Equals(CreatureType.Vampire);
 
         #region Unity messages
+        private void OnValidate()
+        {
+            Awake();
+        }
+
         protected virtual void Awake()
         {
             if (!StatsManager)
@@ -90,6 +96,9 @@ namespace SunsetSystems.Entities.Characters
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
             Agent.enabled = false;
             NavMeshObstacle.enabled = true;
+            if (config)
+                Data = new(config);
+            StatsManager.Initialize(Data.stats);
             LoadRuntimeData();
         }
 
@@ -157,7 +166,7 @@ namespace SunsetSystems.Entities.Characters
         {
             while (!RotateTowardsTarget(target))
             {
-                await UnityAwaiters.NextFrame();
+                await new WaitForUpdate();
             }
         }
 

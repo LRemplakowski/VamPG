@@ -74,7 +74,7 @@ namespace SunsetSystems.Data
         {
             Start();
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
-            PartyManager.RecruitCharacter(new(debugAsset));
+            PartyManager.RecruitMainCharacter(new(debugAsset));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }

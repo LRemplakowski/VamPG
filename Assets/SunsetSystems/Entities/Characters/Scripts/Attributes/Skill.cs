@@ -23,25 +23,10 @@ public class Skill : BaseStat
         this.skillType = skillType;
     }
 
-    public override int GetValue()
+    public override int GetValue(ModifierType modifierTypesFlag)
     {
         int finalValue = baseValue;
-        modifiers.ForEach(m => finalValue += m.Value);
-        return finalValue;
-    }
-
-    public override int GetValue(bool includeModifiers)
-    {
-        int finalValue = baseValue;
-        if (includeModifiers)
-            modifiers.ForEach(m => finalValue += m.Value);
-        return finalValue;
-    }
-
-    public override int GetValue(List<ModifierType> modifierTypes)
-    {
-        int finalValue = baseValue;
-        modifiers.ForEach(m => finalValue += modifierTypes.Contains(m.Type) ? m.Value : 0);
+        Modifiers?.ForEach(m => finalValue += (modifierTypesFlag & m.Type) > 0 ? m.Value : 0);
         return finalValue;
     }
 

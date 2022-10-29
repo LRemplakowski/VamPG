@@ -9,7 +9,8 @@ namespace SunsetSystems.Entities.Characters
     {
         public static Creature InitializeCreature(CreatureData data, Vector3 position)
         {
-            GameObject creatureObject = new();
+            GameObject creatureObject = UnityEngine.Object.Instantiate(new GameObject());
+            creatureObject.name = data.FullName;
             creatureObject.transform.position = position;
             Creature creature = InitializeCreatureScript(creatureObject, data);
             creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");

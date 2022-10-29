@@ -34,7 +34,6 @@ namespace SunsetSystems.Party
 
         public override void Initialize()
         {
-            CreatePartyList();
             PartyPortraits.Clear();
             Debug.Log("Party members count: " + _activeParty.Count);
             foreach (string key in _activeCoterieMemberKeys)
@@ -48,7 +47,7 @@ namespace SunsetSystems.Party
             foreach (string key in _activeCoterieMemberKeys)
             {
                 CreatureData data = Instance._recruitedCharacters[key];
-                InitializePartyMember(data, position);
+                Instance._activeParty.Add(key, InitializePartyMember(data, position));
             }
         }
 
@@ -59,7 +58,7 @@ namespace SunsetSystems.Party
             {
                 CreatureData data = Instance._recruitedCharacters[key];
                 Vector3 position = positions[index];
-                InitializePartyMember(data, position);
+                Instance._activeParty.Add(key, InitializePartyMember(data, position));
                 index++;
             }
         }
@@ -97,11 +96,6 @@ namespace SunsetSystems.Party
                 return false;
             }
             return _activeCoterieMemberKeys.Remove(memberName);
-        }
-
-        private void CreatePartyList()
-        {
-
         }
 
         public void SaveRuntimeData()

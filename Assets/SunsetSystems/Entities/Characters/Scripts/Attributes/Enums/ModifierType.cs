@@ -1,4 +1,9 @@
-﻿public enum ModifierType
+﻿using System;
+
+[Flags]
+public enum ModifierType
 {
-    SURGE
+    ALL = int.MaxValue,
+    NONE = 0,
+    SURGE = 1,
 }

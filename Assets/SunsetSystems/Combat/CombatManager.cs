@@ -3,11 +3,11 @@ using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Party;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Combat
 {
@@ -95,7 +95,7 @@ namespace SunsetSystems.Combat
                 CurrentActiveActor = DecideFirstActor(Actors);
             int index = Actors.IndexOf(CurrentActiveActor);
             SetCurrentActiveActor(++index < Actors.Count ? index : 0);
-            CombatRoundBegin.Invoke(CurrentActiveActor);
+            CombatRoundBegin?.Invoke(CurrentActiveActor);
             Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + roundCounter + "!");
         }
 
@@ -129,16 +129,12 @@ namespace SunsetSystems.Combat
             {
                 moveTasks.Add(Task.Run(async () =>
                 {
-                    Dispatcher.Instance.Invoke(() =>
+                    await new WaitForUpdate();
+                    c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
+                    await new WaitForUpdate();
+                    while (c != null && !c.Agent.isActiveAndEnabled && !c.Agent.isStopped)
                     {
-                        c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
-                    });
-                    while (!c.CombatBehaviour.HasMoved)
-                    {
-                        Dispatcher.Instance.Invoke(() =>
-                        {
-                            Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
-                        });
+                        Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
                         await Task.Delay(1000);
                     }
                 }));

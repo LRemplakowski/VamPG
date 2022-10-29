@@ -27,20 +27,7 @@ public sealed class CreatureContext : IAIContext
 
     public bool IsInCombat => GameManager.IsCurrentState(GameState.Combat);
 
-    public bool IsPlayerControlled => GetIsPlayerController();
-
-    private bool GetIsPlayerController()
-    {
-        if (Owner)
-        {
-            return Owner.Data.faction.Equals(Faction.PlayerControlled);
-        }
-        else
-        {
-            Debug.LogError("Context has null Owner!");
-            return false;
-        }
-    }
+    public bool IsPlayerControlled => Owner is PlayerControlledCharacter;
 
     public bool HasMoved => Behaviour.HasMoved;
     public bool HasActed => Behaviour.HasActed;

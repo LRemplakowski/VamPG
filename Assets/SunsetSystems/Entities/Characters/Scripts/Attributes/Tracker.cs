@@ -2,12 +2,15 @@ using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [System.Serializable]
 public class Tracker : BaseStat
 {
     [SerializeField]
     private int maxValue = 1;
+    [SerializeField]
+    private int superficialDamage, aggravatedDamage;
     [SerializeField, ReadOnly]
     private TrackerType trackerType;
 
@@ -21,25 +24,10 @@ public class Tracker : BaseStat
         this.trackerType = trackerType;
     }
 
-    public override int GetValue()
+    public override int GetValue(ModifierType modifierTypesFlag)
     {
-        int finalValue = maxValue;
-        modifiers.ForEach(m => finalValue += m.Value);
-        return finalValue;
-    }
-
-    public override int GetValue(bool includeModifiers)
-    {
-        int finalValue = maxValue;
-        if (includeModifiers)
-            modifiers.ForEach(m => finalValue += m.Value);
-        return finalValue;
-    }
-
-    public override int GetValue(List<ModifierType> modifierTypes)
-    {
-        int finalValue = maxValue;
-        modifiers.ForEach(m => finalValue += modifierTypes.Contains(m.Type) ? m.Value : 0);
+        int finalValue = maxValue - superficialDamage - aggravatedDamage;
+        Modifiers?.ForEach(m => finalValue += (modifierTypesFlag & m.Type) > 0 ? m.Value : 0);
         return finalValue;
     }
 

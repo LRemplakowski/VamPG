@@ -4,26 +4,19 @@ using UnityEngine;
 using SunsetSystems.Dice;
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
+using System.Linq;
 
 namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {
-        [SerializeField]
-        protected StatsConfig _characterStats;
         [field: SerializeField]
-        public StatsData Data { get; private set; }
+        public StatsData Data { get; private set; } = new();
 
         public Tracker Health => Data.trackers.GetTracker(TrackerType.Health);
         public Tracker Willpower => Data.trackers.GetTracker(TrackerType.Willpower);
         public Tracker Hunger => Data.trackers.GetTracker(TrackerType.Hunger);
         public Tracker Humanity => Data.trackers.GetTracker(TrackerType.Humanity);
-
-        private void Awake()
-        {
-            if (!_characterStats)
-                _characterStats = ScriptableObject.CreateInstance(typeof(StatsConfig)) as StatsConfig;
-        }
 
         public void Initialize(StatsData data)
         {
@@ -46,12 +39,12 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            CreatureAttribute dexterity = _characterStats.GetAttribute(AttributeType.Dexterity);
-            Skill athletics = _characterStats.GetSkill(SkillType.Athletics);
-            if (dexterity.GetAttributeType() != AttributeType.Invalid && athletics.GetSkillType() != SkillType.Invalid)
-                return (dexterity.GetValue() + athletics.GetValue());
-            else
+            CreatureAttribute dexterity = Data.attributes.GetAttribute(AttributeType.Dexterity);
+            Skill athletics = Data.skills.GetSkill(SkillType.Athletics);
+            if (dexterity == null && athletics == null)
                 return 0;
+            else
+                return dexterity.GetValue() + athletics.GetValue();
         }
 
         public int GetInitiative()
@@ -71,17 +64,17 @@ namespace SunsetSystems.Entities.Characters
 
         public bool IsAlive()
         {
-            return Health.GetValue() > 0;
+            return Health?.GetValue() > 0;
         }
 
         public AttributeSkillPool GetDefensePool()
         {
-            return new AttributeSkillPool(_characterStats.GetAttribute(AttributeType.Dexterity), _characterStats.GetSkill(SkillType.Athletics));
+            return new AttributeSkillPool(Data.attributes.GetAttribute(AttributeType.Dexterity), Data.skills.GetSkill(SkillType.Athletics));
         }
 
         public AttributeSkillPool GetAttackPool()
         {
-            return new AttributeSkillPool(_characterStats.GetAttribute(GetWeaponAttribute()), _characterStats.GetSkill(GetWeaponSkill()));
+            return new AttributeSkillPool(Data.attributes.GetAttribute(GetWeaponAttribute()), Data.skills.GetSkill(GetWeaponSkill()));
         }
 
         private AttributeType GetWeaponAttribute()
@@ -96,13 +89,19 @@ namespace SunsetSystems.Entities.Characters
 
         public DisciplinePower GetDisciplinePower(string scriptName)
         {
-            return _characterStats.GetDisciplinePower(scriptName);
+            foreach (Discipline discipline in Data.disciplines.GetDisciplines())
+            {
+                DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ScriptName.Equals(scriptName));
+                if (power != null)
+                    return power;
+            }
+            return null;
         }
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)
         {
-            CreatureAttribute a = _characterStats.GetAttribute(attribute);
-            Skill s = _characterStats.GetSkill(skill);
+            CreatureAttribute a = Data.attributes.GetAttribute(attribute);
+            Skill s = Data.skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -116,8 +115,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc, bool useHunger = false)
         {
-            CreatureAttribute a = _characterStats.GetAttribute(attribute);
-            Skill s = _characterStats.GetSkill(skill);
+            CreatureAttribute a = Data.attributes.GetAttribute(attribute);
+            Skill s = Data.skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -138,7 +137,7 @@ namespace SunsetSystems.Entities.Characters
 
         public List<CreatureAttribute> GetAttributes()
         {
-            return _characterStats.GetAttributes();
+            return Data.attributes.GetAttributeList();
         }
 
         internal HealthData GetHealthData()

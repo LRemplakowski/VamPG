@@ -19,9 +19,9 @@ namespace SunsetSystems.Dice
             return First.GetValue(includeModifiers) + Second.GetValue(includeModifiers);
         }
 
-        public int GetPoolSize(List<ModifierType> modifierTypes)
+        public int GetPoolSize(ModifierType modifierTypesFlag)
         {
-            return First.GetValue(modifierTypes) + Second.GetValue(modifierTypes);
+            return First.GetValue(modifierTypesFlag) + Second.GetValue(modifierTypesFlag);
         }
     }
 

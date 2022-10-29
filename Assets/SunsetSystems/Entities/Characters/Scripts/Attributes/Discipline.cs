@@ -37,25 +37,10 @@ public class Discipline : BaseStat
         this.disciplineType = disciplineType;
     }
 
-    public override int GetValue()
-    {
-        int value = baseValue;
-        modifiers.ForEach(m => value += m.Value);
-        return value;
-    }
-
-    public override int GetValue(bool includeModifiers)
-    {
-        int value = baseValue;
-        if (includeModifiers)
-            modifiers.ForEach(m => value += m.Value);
-        return value;
-    }
-
-    public override int GetValue(List<ModifierType> modifierTypes)
+    public override int GetValue(ModifierType modifierTypesFlag)
     {
         int finalValue = baseValue;
-        modifiers.ForEach(m => finalValue += modifierTypes.Contains(m.Type) ? m.Value : 0);
+        Modifiers.ForEach(m => finalValue += (modifierTypesFlag & m.Type) > 0 ? m.Value : 0);
         return finalValue;
     }
 

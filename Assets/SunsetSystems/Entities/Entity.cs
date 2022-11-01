@@ -1,15 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Entities
+namespace SunsetSystems.Entities
 {
-    [RequireComponent(typeof(Collider))]
-    public abstract class Entity : ExposableMonobehaviour
+    public abstract class Entity : MonoBehaviour
     {
-        public static bool IsInteractable(GameObject entity)
-        {
-            return entity.GetComponent<IInteractable>() != null;
-        }
+
     }
 }

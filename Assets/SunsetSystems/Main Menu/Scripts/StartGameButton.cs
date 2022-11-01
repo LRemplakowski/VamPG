@@ -22,14 +22,11 @@ namespace SunsetSystems.MainMenu.UI
 
         public async void StartGame()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                Dispatcher.Instance.Invoke(async () =>
-                {
-                    await fadeUI.DoFadeOutAsync(.5f);
-                    DoLoadCharacterCreationPanel();
-                    await fadeUI.DoFadeInAsync(.5f);
-                });
+                await fadeUI.DoFadeOutAsync(.5f);
+                DoLoadCharacterCreationPanel();
+                await fadeUI.DoFadeInAsync(.5f);
             });
         }
 
@@ -38,7 +35,6 @@ namespace SunsetSystems.MainMenu.UI
             if (backgroundSelectionObject)
                 backgroundSelectionObject.SetActive(true);
             mainMenuParent.SetActive(false);
-
         }
     }
 }

@@ -10,6 +10,8 @@ namespace SunsetSystems.Loading
     {
         private const string SCENE_INDEX_ID = "SceneIndex";
 
+        public static readonly HashSet<ISaveRuntimeData> DataSet = new();
+
         public static void Save()
         {
             List<ISaveRuntimeData> saveables = FindInterfaces.Find<ISaveRuntimeData>();
@@ -43,5 +45,16 @@ namespace SunsetSystems.Loading
         void SaveRuntimeData();
 
         void LoadRuntimeData();
+
+        void Start()
+        {
+            Debug.Log("dupa");
+            SaveLoadManager.DataSet.Add(this);
+        }
+
+        void OnDestroy()
+        {
+            SaveLoadManager.DataSet.Remove(this);
+        }
     }
 }

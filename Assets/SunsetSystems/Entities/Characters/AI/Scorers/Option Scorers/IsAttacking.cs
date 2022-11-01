@@ -2,7 +2,7 @@
 {
     using Apex.AI;
     using Apex.Serialization;
-    using Entities.Characters.Actions;
+    using SunsetSystems.Entities.Characters.Actions;
     using UnityEngine;
 
     public class IsAttacking : ContextualScorerBase<CreatureContext>

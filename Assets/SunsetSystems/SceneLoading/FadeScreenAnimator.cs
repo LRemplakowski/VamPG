@@ -1,3 +1,4 @@
+using Redcode.Awaiting;
 using SunsetSystems.Utils;
 using System;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace SunsetSystems.Loading.UI
                 color = Color.Lerp(color, Color.black, lerpTime / fadeTime);
                 lerpTime += Time.deltaTime;
                 fadePanel.color = color;
-                await Task.Yield();
+                await new WaitForUpdate();
             }
             fadePanel.color = Color.black;
         }
@@ -54,7 +55,7 @@ namespace SunsetSystems.Loading.UI
                 color = Color.Lerp(color, Color.clear, lerpTime / fadeTime);
                 lerpTime += Time.deltaTime;
                 fadePanel.color = color;
-                await Task.Yield();
+                await new WaitForUpdate();
             }
             fadePanel.color = Color.clear;
             gameObject.SetActive(false);

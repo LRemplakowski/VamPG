@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Utils.Threading;
+﻿using Redcode.Awaiting;
+using SunsetSystems.Utils.Threading;
 using System.Threading.Tasks;
 
 namespace SunsetSystems.Utils
@@ -7,12 +8,10 @@ namespace SunsetSystems.Utils
     {
         async Task InitializeAsync()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                Dispatcher.Instance.Invoke(() =>
-                {
-                    Initialize();
-                });
+                await new WaitForUpdate();
+                Initialize();
             });
         }
 

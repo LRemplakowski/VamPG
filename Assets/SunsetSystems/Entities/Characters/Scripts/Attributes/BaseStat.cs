@@ -7,7 +7,7 @@ public abstract class BaseStat
     public delegate void OnValueChange();
     public OnValueChange onValueChange;
 
-    protected List<Modifier> modifiers = new List<Modifier>();
+    protected List<Modifier> Modifiers { get; } = new();
 
     public virtual void SetValue(int value)
     {
@@ -18,47 +18,56 @@ public abstract class BaseStat
 
     protected abstract void SetValueImpl(int value);
 
-    public abstract int GetValue();
+    public int GetValue()
+    {
+        return GetValue(true);
+    }
 
-    public abstract int GetValue(bool includeModifiers);
+    public int GetValue(bool includeModifiers)
+    {
+        if (includeModifiers)
+            return GetValue(ModifierType.ALL);
+        else
+            return GetValue(ModifierType.NONE);
+    }
 
-    public abstract int GetValue(List<ModifierType> modifierTypes);
+    public abstract int GetValue(ModifierType modifierTypesFlag);
 
     public virtual void AddModifier(int value, ModifierType type, string name)
     {
-        modifiers.Add(new Modifier(value, type, name));
+        Modifiers.Add(new Modifier(value, type, name));
         if (onValueChange != null)
             onValueChange.Invoke();
     }
 
     public virtual void AddModifier(Modifier modifier)
     {
-        modifiers.Add(modifier);
+        Modifiers.Add(modifier);
         if (onValueChange != null)
             onValueChange.Invoke();
     }
 
     public virtual void AddModifiers(List<Modifier> modifiers)
     {
-        modifiers.ForEach(m => this.modifiers.Add(m));
+        modifiers.ForEach(m => this.Modifiers.Add(m));
     }
 
     public virtual void RemoveModifiersOfType(ModifierType type)
     {
-        modifiers.RemoveAll(m => m.Type.Equals(type));
+        Modifiers.RemoveAll(m => (m.Type & ModifierType.ALL) > 0);
         if (onValueChange != null)
             onValueChange.Invoke();
     }
 
     public virtual void RemoveModifier(Modifier modifier)
     {
-        modifiers.Remove(modifier);
+        Modifiers.Remove(modifier);
         if (onValueChange != null)
             onValueChange.Invoke();
     }
 
     public virtual List<Modifier> GetModifiers()
     {
-        return modifiers;
+        return Modifiers;
     }
 }

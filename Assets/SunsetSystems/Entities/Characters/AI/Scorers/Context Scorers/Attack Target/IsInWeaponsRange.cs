@@ -2,7 +2,7 @@ namespace AI.Scorers.Context
 {
     using Apex.AI;
     using Apex.Serialization;
-    using Entities.Characters;
+    using SunsetSystems.Entities.Characters;
     using UnityEngine;
 
     public class IsInWeaponsRange : OptionScorerBase<Creature, CreatureContext>

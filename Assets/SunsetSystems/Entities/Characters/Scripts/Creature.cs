@@ -1,34 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
 using Entities.Characters.Data;
-using Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Actions;
+using System.Threading.Tasks;
+using NaughtyAttributes;
+using SunsetSystems.Loading;
+using UMA.CharacterSystem;
+using Redcode.Awaiting;
+using UnityEditor;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     [RequireComponent(typeof(NavMeshAgent)),
+    RequireComponent(typeof(NavMeshObstacle)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(CombatBehaviour)),
-    RequireComponent(typeof(CreatureAnimator)),
+    RequireComponent(typeof(CreatureAnimationController)),
     RequireComponent(typeof(Rigidbody)),
     RequireComponent(typeof(CapsuleCollider)),
     RequireComponent(typeof(Animator)),
-    RequireComponent(typeof(UMA.CharacterSystem.DynamicCharacterAvatar)),
+    RequireComponent(typeof(DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(UtilityAIComponent))]
-    public abstract class Creature : Entity
+    [RequireComponent(typeof(CapsuleCollider))]
+    public abstract class Creature : Entity, ISaveRuntimeData
     {
-        private const float lookTowardsRotationSpeed = 5.0f;
+        private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
+
+        [Button("Rebuild Creature")]
+        private void RebuildCreature()
+        {
+            if (config == null)
+            {
+                Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
+                return;
+            }
+            Data = new(config);
+            CreatureInitializer.InitializeCreature(this);
+        }
+
+        public CreatureData Data { get; set; } = new();
 
         [SerializeField]
-        protected NavMeshAgent _agent;
-        [SerializeField]
-        protected Inventory _inventory;
+        private CreatureConfig config;
+        [field: SerializeField]
+        public NavMeshAgent Agent { get; protected set; }
+
+        [field: SerializeField]
+        public NavMeshObstacle NavMeshObstacle { get; protected set; }
+
+        [field: SerializeField]
+        public StatsManager StatsManager { get; protected set; }
+
+        [field: SerializeField]
+        public CombatBehaviour CombatBehaviour { get; private set; }
+
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
-        [ExposeProperty]
         public GridElement CurrentGridPosition
         {
             get => _currentGridPosition;
@@ -42,8 +72,6 @@ namespace Entities.Characters
                 _currentGridPosition = value;
             }
         }
-
-        public CreatureData Data { get => GetComponent<CreatureData>(); }
 
         private Queue<EntityAction> _actionQueue;
         private Queue<EntityAction> ActionQueue
@@ -59,24 +87,69 @@ namespace Entities.Characters
             }
         }
 
-        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
-        public abstract void Move(Vector3 moveTarget);
-        public abstract void Move(GridElement moveTarget);
-        public abstract void Attack(Creature target);
+        public bool IsAlive => StatsManager.IsAlive();
+        public bool IsVampire => Data.creatureType.Equals(CreatureType.Vampire);
 
+        #region Unity messages
+        private void OnValidate()
+        {
+            Awake();
+        }
+
+        protected virtual void Awake()
+        {
+            if (!StatsManager)
+                StatsManager = GetComponent<StatsManager>();
+            if (!Agent)
+                Agent = GetComponent<NavMeshAgent>();
+            if (!CombatBehaviour)
+                CombatBehaviour = GetComponent<CombatBehaviour>();
+            if (!NavMeshObstacle)
+                NavMeshObstacle = GetComponent<NavMeshObstacle>();
+            if (Agent)
+                Agent.enabled = false;
+            if (NavMeshObstacle)
+                NavMeshObstacle.enabled = true;
+            if (config)
+                Data = new(config);
+            if (StatsManager)
+                StatsManager.Initialize(Data.stats);
+            LoadRuntimeData();
+        }   
+
+        protected virtual void Start()
+        {
+            ActionQueue.Enqueue(new Idle(this));
+        }
+
+        public virtual void OnDestroy()
+        {
+            SaveRuntimeData();
+        }
+
+        public void Update()
+        {
+            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            {
+                ActionQueue.Dequeue();
+                ActionQueue.Peek().Begin();
+            }
+            if (ActionQueue.Peek().IsFinished())
+            {
+                ActionQueue.Dequeue();
+                if (ActionQueue.Count == 0)
+                    ActionQueue.Enqueue(new Idle(this));
+                ActionQueue.Peek().Begin();
+            }
+        }
+        #endregion
+
+        #region Actions and control
         public void ForceCreatureToPosition(Vector3 position)
         {
             ClearAllActions();
             Debug.LogWarning("Forcing creature to position: " + position);
-            _agent.Warp(position);
-        }
-
-        protected virtual void Start()
-        {
-            if (!_inventory)
-                _inventory = ScriptableObject.CreateInstance(typeof(Inventory)) as Inventory;
-            _agent = GetComponent<NavMeshAgent>();
-            ActionQueue.Enqueue(new Idle(this));
+            Agent.Warp(position);
         }
 
         public void AddActionToQueue(EntityAction action)
@@ -99,32 +172,16 @@ namespace Entities.Characters
                 return true;
             Vector3 direction = (target.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookTowardsRotationSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
             float dot = Quaternion.Dot(transform.rotation, lookRotation);
-            Debug.Log("Rotating towards target " + dot);
             return dot >= 0.999f || dot <= -0.999f;
         }
 
-        public IEnumerator FaceTarget(Transform target)
+        public async Task FaceTarget(Transform target)
         {
-            yield return new WaitUntil(() => RotateTowardsTarget(target));
-            StopCoroutine(FaceTarget(target));
-        }
-
-        public void Update()
-        {
-            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            while (!RotateTowardsTarget(target))
             {
-                ActionQueue.Dequeue();
-                ActionQueue.Peek().Begin();
-            }
-            if (ActionQueue.Peek().IsFinished())
-            {
-                //Debug.Log("Action finished!\n" + ActionQueue.Peek());
-                ActionQueue.Dequeue();
-                if (ActionQueue.Count == 0)
-                    ActionQueue.Enqueue(new Idle(this));
-                ActionQueue.Peek().Begin();
+                await new WaitForUpdate();
             }
         }
 
@@ -135,29 +192,40 @@ namespace Entities.Characters
 
         public bool HasActionsInQueue()
         {
-            return !ActionQueue.Peek().GetType().Equals(typeof(Idle)) || ActionQueue.Count > 1;
+            return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
-        private void OnDrawGizmos()
+        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
+        public abstract void Move(Vector3 moveTarget);
+        public abstract void Move(GridElement moveTarget);
+        public abstract void Attack(Creature target);
+        #endregion
+
+        protected virtual void OnDrawGizmos()
         {
-            float movementRange = GetComponent<StatsManager>().GetCombatSpeed();
+            float movementRange = StatsManager?.GetCombatSpeed() ?? 0f;
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, movementRange);
         }
 
-        public Inventory GetInventory()
-        {
-            return _inventory;
-        }
-
         public CreatureUIData GetCreatureUIData()
         {
-            HealthData healthData = GetComponent<StatsManager>().GetHealthData();
-            CreatureUIData.CreatureDataBuilder builder = new CreatureUIData.CreatureDataBuilder(Data.FullName,
-                Data.Portrait,
+            HealthData healthData = StatsManager.GetHealthData();
+            CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
+                Data.portrait,
                 healthData,
                 0);
             return builder.Create();
+        }
+
+        public void SaveRuntimeData()
+        {
+            //throw new System.NotImplementedException();
+        }
+
+        public void LoadRuntimeData()
+        {
+            //throw new System.NotImplementedException();
         }
     }
 }

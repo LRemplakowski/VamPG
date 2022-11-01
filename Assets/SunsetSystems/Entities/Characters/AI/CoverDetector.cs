@@ -1,4 +1,4 @@
-using Entities.Cover;
+using SunsetSystems.Entities.Cover;
 using SunsetSystems.Utils;
 using System;
 using System.Collections;
@@ -19,8 +19,7 @@ public class CoverDetector : Singleton<CoverDetector>
         Collider[] colliders = Physics.OverlapSphere(sphereOrigin, instance.coverDetectionRadius, instance.coverLayerMask);
         foreach (Collider col in colliders)
         {
-            Cover cover = col.GetComponent<Cover>();
-            if (cover)
+            if (col.TryGetComponent(out Cover cover))
                 coverSources.Add(cover);
         }
         return true;

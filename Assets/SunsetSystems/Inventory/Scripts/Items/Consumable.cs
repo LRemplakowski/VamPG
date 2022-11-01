@@ -13,7 +13,7 @@ namespace SunsetSystems.Inventory.Data
 
         private void Awake()
         {
-            _itemCategory = ItemCategory.CONSUMABLE;
+            ItemCategory = ItemCategory.CONSUMABLE;
         }
 
         private void OnValidate()

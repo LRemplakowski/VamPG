@@ -1,7 +1,6 @@
-using Entities.Characters;
-using Entities.Characters.Actions;
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Combat;
 using UnityEngine;
 
 public class DevMoveActorToPosition : MonoBehaviour
@@ -28,7 +27,7 @@ public class DevMoveActorToPosition : MonoBehaviour
     public void OnButtonClick()
     {
         InputOverride = true;
-        TurnCombatManager.Instance.GridInstance.Dev_SetWholeGridActive();
+        CombatManager.Instance.CurrentEncounter.MyGrid.Dev_SetWholeGridActive();
     }
 
     private void OnMovementStarted(Creature who)

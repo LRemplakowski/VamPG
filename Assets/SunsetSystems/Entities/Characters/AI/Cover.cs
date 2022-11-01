@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Entities.Cover
+namespace SunsetSystems.Entities.Cover
 {
     public class Cover : Entity
     {

@@ -1,6 +1,6 @@
-﻿namespace Entities.Characters.Actions
+﻿namespace SunsetSystems.Entities.Characters.Actions
 {
-    using Entities.Characters.Actions.Conditions;
+    using SunsetSystems.Entities.Characters.Actions.Conditions;
     using System.Collections.Generic;
     using UnityEngine;
 

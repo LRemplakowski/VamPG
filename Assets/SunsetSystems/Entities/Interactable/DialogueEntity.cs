@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SunsetSystems.Dialogue;
 using UnityEngine;
 
-namespace Entities.Interactable
+namespace SunsetSystems.Entities.Interactable
 {
     public class DialogueEntity : InteractableEntity
     {
@@ -12,7 +12,6 @@ namespace Entities.Interactable
 
         public override void Interact()
         {
-            DialogueManager.Instance.StartDialogue(entityDialogue);
             base.Interact();
         }
     }

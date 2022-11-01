@@ -9,23 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bf0bab113f7492419d66371d74a0a02, type: 3}
+  m_Script: {fileID: 11500000, guid: 9da18720c486bee45b08ab77ecde326a, type: 3}
   m_Name: DebugStats
   m_EditorClassIdentifier: 
-  _isGeneric: 1
-  health:
-    maxValue: 20
-    trackerType: 0
-  willpower:
-    maxValue: 20
-    trackerType: 1
-  humanity:
-    maxValue: 20
-    trackerType: 2
-  hunger:
-    maxValue: 0
-    trackerType: 3
-  clan: 13
+  trackers:
+    health:
+      maxValue: 20
+      trackerType: 0
+    willpower:
+      maxValue: 20
+      trackerType: 1
+    hunger:
+      maxValue: 5
+      trackerType: 3
+    humanity:
+      maxValue: 10
+      trackerType: 2
+  clan: 15
   generation: 1
   attributes:
     strength:

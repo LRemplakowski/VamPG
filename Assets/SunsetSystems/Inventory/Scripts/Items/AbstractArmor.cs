@@ -2,10 +2,14 @@ using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class AbstractArmor : EquipableItem
+    public abstract class AbstractArmor : EquipableItem, IArmor
     {
         [SerializeField]
-        private int _armor = 0;
-        public int Armor => _armor;
+        protected int armorRating = 0;
+
+        public int GetArmorRating()
+        {
+            return armorRating;
+        }
     }
 }

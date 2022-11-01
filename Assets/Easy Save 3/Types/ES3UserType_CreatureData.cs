@@ -9,12 +9,12 @@ namespace ES3Types
 	{
 		public static ES3Type Instance = null;
 
-		public ES3UserType_CreatureData() : base(typeof(Entities.Characters.CreatureData)){ Instance = this; priority = 1;}
+		public ES3UserType_CreatureData() : base(typeof(SunsetSystems.Entities.Characters.CreatureData)){ Instance = this; priority = 1;}
 
 
 		protected override void WriteComponent(object obj, ES3Writer writer)
 		{
-			var instance = (Entities.Characters.CreatureData)obj;
+			var instance = (SunsetSystems.Entities.Characters.CreatureData)obj;
 			
 			writer.WritePrivateFieldByRef("_dataInstance", instance);
 			writer.WritePrivateFieldByRef("data", instance);
@@ -28,17 +28,17 @@ namespace ES3Types
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
 		{
-			var instance = (Entities.Characters.CreatureData)obj;
+			var instance = (SunsetSystems.Entities.Characters.CreatureData)obj;
 			foreach(string propertyName in reader.Properties)
 			{
 				switch(propertyName)
 				{
 					
 					case "_dataInstance":
-					reader.SetPrivateField("_dataInstance", reader.Read<Entities.Characters.CreatureAsset>(), instance);
+					reader.SetPrivateField("_dataInstance", reader.Read<SunsetSystems.Entities.Characters.CreatureConfig>(), instance);
 					break;
 					case "data":
-					reader.SetPrivateField("data", reader.Read<Entities.Characters.CreatureAsset>(), instance);
+					reader.SetPrivateField("data", reader.Read<SunsetSystems.Entities.Characters.CreatureConfig>(), instance);
 					break;
 					case "_firstName":
 					reader.SetPrivateField("_firstName", reader.Read<System.String>(), instance);
@@ -71,7 +71,7 @@ namespace ES3Types
 	{
 		public static ES3Type Instance;
 
-		public ES3UserType_CreatureDataArray() : base(typeof(Entities.Characters.CreatureData[]), ES3UserType_CreatureData.Instance)
+		public ES3UserType_CreatureDataArray() : base(typeof(SunsetSystems.Entities.Characters.CreatureData[]), ES3UserType_CreatureData.Instance)
 		{
 			Instance = this;
 		}

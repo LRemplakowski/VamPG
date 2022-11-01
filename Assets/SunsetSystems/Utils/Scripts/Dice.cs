@@ -19,9 +19,9 @@ namespace SunsetSystems.Dice
             return First.GetValue(includeModifiers) + Second.GetValue(includeModifiers);
         }
 
-        public int GetPoolSize(List<ModifierType> modifierTypes)
+        public int GetPoolSize(ModifierType modifierTypesFlag)
         {
-            return First.GetValue(modifierTypes) + Second.GetValue(modifierTypes);
+            return First.GetValue(modifierTypesFlag) + Second.GetValue(modifierTypesFlag);
         }
     }
 
@@ -74,7 +74,7 @@ namespace SunsetSystems.Dice
     {
         public readonly int successes;
         public readonly bool isCritical, isMessy, isBestialFailure;
-        public readonly List<int> normalDice = new List<int>(), hungerDice = new List<int>();
+        public readonly List<int> normalDice = new(), hungerDice = new();
 
         public Outcome(int successes, bool isCritical, bool isMessy, bool isBestialFailure, List<int> normalDice, List<int> hungerDice)
         {
@@ -98,12 +98,11 @@ namespace SunsetSystems.Dice
 
     public static class Roll
     {
-        private static System.Random r = new System.Random();
+        private static readonly System.Random r = new();
 #pragma warning disable IDE1006 // Style nazewnictwa
         public static Outcome d10(int normalDice, int hungerDice)
 #pragma warning restore IDE1006 // Style nazewnictwa
         {
-            System.Random r = new System.Random((int) DateTime.Now.ToFileTime());
             int[] normals = new int[normalDice];
             for (int i = 0; i < normals.Length; i++)
             {
@@ -121,7 +120,7 @@ namespace SunsetSystems.Dice
             bool isCritical = false;
             if (tens + hungerTens >= 2)
             {
-                successes += (tens + hungerTens) % 2 == 0 ? tens + hungerTens : tens + hungerTens - 1;
+                successes += tens + hungerTens - ((tens + hungerTens) % 2);
                 isCritical = true;
             }
             bool isMessy = isCritical && hungerTens > 0;
@@ -140,7 +139,6 @@ namespace SunsetSystems.Dice
         public static Outcome d10(int normalDice, int hungerDice, int dc)
 #pragma warning restore IDE1006 // Style nazewnictwa
         {
-            System.Random r = new System.Random();
             int[] normals = new int[normalDice];
             for (int i = 0; i < normals.Length; i++)
             {
@@ -159,7 +157,7 @@ namespace SunsetSystems.Dice
             bool isCritical = false;
             if (tens + hungerTens >= 2)
             {
-                successes += (tens + hungerTens) % 2 == 0 ? tens + hungerTens : tens + hungerTens - 1;
+                successes += tens + hungerTens - ((tens + hungerTens) % 2);
                 isCritical = true;
             }
             bool isMessy = isCritical && hungerTens > 0;
@@ -181,7 +179,6 @@ namespace SunsetSystems.Dice
         public static Outcome d10(int dice)
 #pragma warning restore IDE1006 // Style nazewnictwa
         {
-            System.Random r = new System.Random();
             int[] roll = new int[dice];
             for (int i = 0; i < roll.Length; i++)
             {

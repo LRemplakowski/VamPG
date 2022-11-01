@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entities.Interactable
+namespace SunsetSystems.Entities.Interactable
 {
     public class Doors : InteractableEntity
     {

@@ -1,6 +1,6 @@
 ﻿using InsaneSystems.RTSSelection.UI;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.UI;
+using SunsetSystems.Utils.Input;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;

@@ -7126,9 +7126,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56c6edb17218abd469257d07a2bc5559, type: 3}
-  m_Name: VampireMaleDNAConverterController
+  m_Name: VampireFemaleDNAConverterController
   m_EditorClassIdentifier: 
-  _dnaAsset: {fileID: 11400000, guid: 0d7238c39c194fc45bb37aa38775b8f7, type: 2}
+  _dnaAsset: {fileID: 11400000, guid: 2791a354677d14240842576e04058e9f, type: 2}
   _plugins:
   - {fileID: 3550015910844203395}
   - {fileID: -7187440192932486338}
@@ -7196,6 +7196,7 @@ MonoBehaviour:
   - {fileID: 6317175492415593936}
   - {fileID: -6029575002552261704}
   - {fileID: 8997161660639172847}
+  - {fileID: 6205333345416414976}
   _overallModifiers:
     _adjustScale: 1
     _adjustHeight: 0
@@ -7204,7 +7205,7 @@ MonoBehaviour:
     _updateBounds: 0
     _tightenBounds: 0
     _adjustBounds: 0
-    _scale: 0.0087
+    _scale: 0.0085
     _bone: Position
     _scaleBoneHash: -1084586333
     _headRatio: 7.5
@@ -7212,7 +7213,7 @@ MonoBehaviour:
     _radiusAdjust: {x: 0.23, y: 0}
     _massAdjust: {x: 46, y: 26, z: 26}
     _boundsAdjust: {x: 0, y: 0, z: 0}
-  _displayValue: VampireMorphs
+  _displayValue: VampireMorphsFemale
 --- !u!114 &6711046901068034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9727,6 +9728,64 @@ MonoBehaviour:
       _max: 0.1
     _umaDNA:
       dnaTypeHash: 1840390732
+--- !u!114 &6205333345416414976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bb2689319b4d5a418829cf43a059e3a, type: 3}
+  m_Name: LocalHeight
+  m_EditorClassIdentifier: 
+  masterWeight:
+    _masterWeightType: 0
+    _globalWeight: 1
+    _DNAForWeight:
+      _calcOption: 0
+      _dnaName: 
+      _dnaNameHash: 0
+      _evaluator:
+        _name: Raw
+        _graph:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.5
+            value: 0.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      _multiplier: 1
+      _initialized: 1
+  _converterController: {fileID: 11400000}
+  _skeletonModifiers: []
 --- !u!114 &6231858879526457340
 MonoBehaviour:
   m_ObjectHideFlags: 0

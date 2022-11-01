@@ -1,12 +1,13 @@
-﻿using Entities.Characters.Actions.Conditions;
+﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Entities.Characters.Actions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Move : EntityAction
     {
         private readonly NavMeshAgent navMeshAgent;
+        private readonly NavMeshObstacle navMeshObstacle;
         private Vector3 destination;
         public delegate void OnMovementFinished(Creature who);
         public static OnMovementFinished onMovementFinished;
@@ -19,10 +20,11 @@ namespace Entities.Characters.Actions
             set;
         }
 
-        public Move(NavMeshAgent navMeshAgent, Vector3 destination)
+        public Move(Creature owner, Vector3 destination)
         {
-            this.navMeshAgent = navMeshAgent;
-            Owner = navMeshAgent.gameObject.GetComponent<Creature>();
+            this.Owner = owner;
+            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
+            this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
         }
@@ -31,14 +33,16 @@ namespace Entities.Characters.Actions
         {
             navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
-            Debug.Log("Aborting move action!");
+            navMeshAgent.enabled = false;
+            navMeshObstacle.enabled = true;
             if (onMovementFinished != null)
                 onMovementFinished.Invoke(this.Owner);
         }
 
         public override void Begin()
         {
-            Debug.Log("Moving to destination " + conditions[0]);
+            navMeshObstacle.enabled = false;
+            navMeshAgent.enabled = true;
             navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
@@ -58,5 +62,5 @@ namespace Entities.Characters.Actions
                 return false;
             }
         }
-    } 
+    }
 }

@@ -1,6 +1,7 @@
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.UserInterface
@@ -11,7 +12,6 @@ namespace SunsetSystems.UserInterface
         private InventoryItemDisplay _displayPrefab;
         [SerializeField]
         private GameObject _itemListContentParent;
-
 
         public void AddItems(List<BaseItem> items)
         {
@@ -33,7 +33,7 @@ namespace SunsetSystems.UserInterface
 
         private void OnEnable()
         {
-            AddItems(InventoryManager.Instance.PlayerInventory.Contents as List<BaseItem>);
+            AddItems(InventoryManager.PlayerInventory.Contents.Select(entry => entry._item).ToList());
         }
 
         private void OnDisable()

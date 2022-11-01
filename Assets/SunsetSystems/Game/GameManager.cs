@@ -1,9 +1,12 @@
-﻿using Entities.Characters;
+﻿using SunsetSystems.Entities.Characters;
 using SunsetSystems.Data;
+using SunsetSystems.Party;
 using SunsetSystems.Utils;
+using UnityEngine;
 
 namespace SunsetSystems.Game
 {
+    [RequireComponent(typeof(Tagger))]
     public class GameManager : Singleton<GameManager>
     {
         private static Creature _player;
@@ -14,18 +17,6 @@ namespace SunsetSystems.Game
         void Start()
         {
             _gridController = FindObjectOfType<GridController>();
-        }
-
-        public static Creature GetMainCharacter()
-        {
-            if (_player == null)
-                _player = GameRuntimeData.Instance.MainCharacterData.CreatureComponent;
-            return _player;
-        }
-
-        public static GridController GetGridController()
-        {
-            return _gridController;
         }
 
         public static string GetLanguage()

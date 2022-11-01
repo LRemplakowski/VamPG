@@ -1,13 +1,14 @@
-﻿namespace SunsetSystems.Loading
-{
-    using Entities.Characters;
-    using Entities.Interactable;
-    using SunsetSystems.Data;
-    using SunsetSystems.Input.CameraControl;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using UnityEngine;
+﻿using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interactable;
+using SunsetSystems.Data;
+using SunsetSystems.Input.CameraControl;
+using SunsetSystems.Party;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
+namespace SunsetSystems.Loading
+{
     public class SceneTransition : InteractableEntity, ITransition
     {
         [SerializeField]
@@ -68,7 +69,7 @@
         public async Task MoveToArea()
         {
             await _fadeUI.DoFadeOutAsync(.5f);
-            List<Creature> party = GameRuntimeData.GetActivePartyCreatures();
+            List<Creature> party = PartyManager.ActiveParty;
             for (int i = 0; i < party.Count; i++)
             {
                 party[i].ClearAllActions();

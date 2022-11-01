@@ -1,6 +1,6 @@
 using Apex.AI;
 using Apex.Serialization;
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
 namespace AI.Scorers.Option

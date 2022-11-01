@@ -4,8 +4,8 @@
     using Apex.Serialization;
     using UnityEngine;
     using System.Collections.Generic;
-    using Entities.Characters;
-    using Entities.Cover;
+    using SunsetSystems.Entities.Characters;
+    using SunsetSystems.Entities.Cover;
 
     public class ProvidesCoverAgainstEnemies : OptionScorerBase<GridElement, CreatureContext>
     {
@@ -25,8 +25,8 @@
 
             if (CoverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
             {
-                List<Creature> enemies = new List<Creature>();
-                if (context.Owner.Data.Faction.Equals(Faction.Hostile))
+                List<Creature> enemies = new();
+                if (context.Owner.Data.faction.Equals(Faction.Hostile))
                 {
                     enemies.AddRange(context.PlayerControlledCombatants);
                     enemies.AddRange(context.FriendlyCombatants);
@@ -56,7 +56,7 @@
                     }
                 }
             }
-            
+
             if (not)
             {
                 return providesCover ? 0f : score / (count * coveredFromCountMultiplier);

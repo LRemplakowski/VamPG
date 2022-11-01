@@ -1,4 +1,4 @@
-﻿namespace Entities.Characters.Actions
+﻿namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Idle : EntityAction
     {

@@ -13,21 +13,11 @@ namespace SunsetSystems.Inventory.UI
         private Image _icon;
         [SerializeField]
         private TextMeshProUGUI _text;
-        [SerializeField]
-        private InventoryManager _inventoryManager;
         private InventoryEntry _content;
         private ItemStorage _storage;
 
         public delegate void ContainerEntryDestroyedHandler(ContainerEntry entry);
-        public event ContainerEntryDestroyedHandler ContainerEntryDestroyed;
-
-        private void Start()
-        {
-            if (this.TryFindFirstGameObjectWithTag(TagConstants.INVENTORY_MANAGER, out GameObject inventoryManagerGO))
-            {
-                inventoryManagerGO.TryGetComponent(out _inventoryManager);
-            }
-        }
+        public static event ContainerEntryDestroyedHandler ContainerEntryDestroyed;
 
         public void SetEntryContent(InventoryEntry content, ItemStorage storage)
         {
@@ -41,7 +31,7 @@ namespace SunsetSystems.Inventory.UI
         public void OnClick()
         {
             Debug.Log("Container Entry clicked!");
-            _inventoryManager.TransferItem(_storage, _inventoryManager.PlayerInventory, _content);
+            InventoryManager.TransferItem(_storage, InventoryManager.PlayerInventory, _content);
             ContainerEntryDestroyed?.Invoke(this);
             Destroy(gameObject);
         }

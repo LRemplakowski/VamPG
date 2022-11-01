@@ -1,16 +1,20 @@
-﻿using UnityEngine;
-using Apex.AI;
-using Apex;
+﻿using Apex.AI;
 using System.Collections.Generic;
-using Entities.Characters;
-using Entities.Cover;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Cover;
 using SunsetSystems.Game;
+using SunsetSystems.Combat;
+using UnityEngine;
+using SunsetSystems.Entities.Data;
 
 public sealed class CreatureContext : IAIContext
 {
-    public CreatureContext(Creature owner)
+    private readonly CombatManager combatManager;
+
+    public CreatureContext(Creature owner, CombatManager combatManager)
     {
         Owner = owner;
+        this.combatManager = combatManager;
     }
 
     public Creature Owner { get; private set; }
@@ -19,11 +23,11 @@ public sealed class CreatureContext : IAIContext
 
     public GridElement CurrentMoveTarget { get; set; }
 
-    public List<Cover> CoverSourcesInCombatGrid => GameManager.GetGridController().CoverSourcesInGrid;
+    public List<Cover> CoverSourcesInCombatGrid => combatManager.CurrentEncounter.MyGrid.CoverSourcesInGrid;
 
     public bool IsInCombat => GameManager.IsCurrentState(GameState.Combat);
 
-    public bool IsPlayerControlled => Owner.Data.Faction.Equals(Faction.PlayerControlled);
+    public bool IsPlayerControlled => Owner is PlayerControlledCharacter;
 
     public bool HasMoved => Behaviour.HasMoved;
     public bool HasActed => Behaviour.HasActed;
@@ -32,19 +36,19 @@ public sealed class CreatureContext : IAIContext
 
     public StatsManager StatsManager => Owner.GetComponent<StatsManager>();
 
-    public CharacterStats Stats => StatsManager.Stats;
+    public StatsData Stats => StatsManager.Data;
 
-    public List<GridElement> PositionsInRange => GameManager.GetGridController().GetElementsInRangeOfActor(Owner);
+    public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => !c.Equals(Owner));
+    public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => TurnCombatManager.Instance.GetCreaturesInCombat().FindAll(c => c.Data.Faction.Equals(Faction.PlayerControlled));
+    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Data.faction.Equals(Faction.PlayerControlled));
 
-    public List<Creature> FriendlyCombatants => TurnCombatManager.Instance
-        .GetCreaturesInCombat()
-        .FindAll(c => c.Data.Faction.Equals(Faction.Friendly));
+    public List<Creature> FriendlyCombatants => CombatManager.Instance
+        .Actors
+        .FindAll(c => c.Data.faction.Equals(Faction.Friendly));
 
-    public List<Creature> EnemyCombatants => TurnCombatManager.Instance
-        .GetCreaturesInCombat()
-        .FindAll(c => c.Data.Faction.Equals(Faction.Hostile));
+    public List<Creature> EnemyCombatants => CombatManager.Instance
+        .Actors
+        .FindAll(c => c.Data.faction.Equals(Faction.Hostile));
 }

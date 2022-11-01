@@ -1,7 +1,7 @@
-﻿using Entities.Characters;
+﻿using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
-namespace Entities.Interactable
+namespace SunsetSystems.Entities.Interactable
 {
     public abstract class InteractableEntity : Entity, IInteractable
     {

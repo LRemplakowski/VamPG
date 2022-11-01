@@ -1,8 +1,9 @@
+using SunsetSystems.Entities;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.UI;
+using SunsetSystems.Utils.Input;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,9 @@ namespace SunsetSystems.Input
         private GameplayUIManager gameplayUIParent;
         [SerializeField]
         private GameManager gameManager;
+        [SerializeField]
+        private LayerMask defaultRaycastMask;
+
         private Vector2 pointerPosition;
 
         private void OnEnable()
@@ -39,6 +43,23 @@ namespace SunsetSystems.Input
         private void Start()
         {
             Initialize();
+        }
+
+        private void Update()
+        {
+            Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
+            if (gameplayUIParent != null && Physics.Raycast(ray, out RaycastHit hit, 100f, defaultRaycastMask))
+            {
+                INameplateReciever nameplateReciever = hit.collider.GetComponent<INameplateReciever>();
+                if (nameplateReciever is not null)
+                {
+                    gameplayUIParent.HandleNameplateHover(nameplateReciever);
+                }
+                else
+                {
+                    gameplayUIParent.DisableNameplate();
+                }
+            }
         }
 
         public void Initialize()
@@ -96,6 +117,8 @@ namespace SunsetSystems.Input
 
         private void OnPointerPosition(InputAction.CallbackContext context)
         {
+            if (!context.performed)
+                return;
             pointerPosition = context.ReadValue<Vector2>();
         }
     }

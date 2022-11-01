@@ -1,6 +1,4 @@
-using Entities.Characters;
-using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
 namespace SunsetSystems.Formation

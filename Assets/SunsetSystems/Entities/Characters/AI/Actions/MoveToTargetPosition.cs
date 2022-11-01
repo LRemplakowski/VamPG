@@ -13,6 +13,7 @@
             {
                 Debug.Log("Moving to " + targetPosition);
                 context.Owner.Move(targetPosition);
+                context.CurrentMoveTarget = null;
             }
             else
             {

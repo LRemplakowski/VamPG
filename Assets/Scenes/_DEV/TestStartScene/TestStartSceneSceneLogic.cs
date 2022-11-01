@@ -11,7 +11,6 @@ namespace SunsetSystems.Loading
         public async override Task StartSceneAsync(SceneLoadingData data)
         {
             await base.StartSceneAsync(data);
-            Debug.Log("TestStartScene");
         }
     }
 }

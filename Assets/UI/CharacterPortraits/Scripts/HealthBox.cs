@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace UI.CharacterPortraits
 
         private void UpdateHealthBox()
         {
-            switch(State)
+            switch (State)
             {
                 case HealthBoxType.Healthy:
                     image.sprite = healthy;

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace SunsetSystems.Utils.UI
+namespace SunsetSystems.Utils.Input
 {
     public static class InputHelper
     {

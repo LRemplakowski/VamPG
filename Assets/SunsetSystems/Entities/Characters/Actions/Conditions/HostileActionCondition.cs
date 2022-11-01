@@ -1,4 +1,4 @@
-﻿namespace Entities.Characters.Actions.Conditions
+﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public class HostileActionCondition : Condition
     {

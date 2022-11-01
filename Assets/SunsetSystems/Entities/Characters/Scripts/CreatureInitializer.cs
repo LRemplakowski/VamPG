@@ -2,40 +2,90 @@
 using UMA.CharacterSystem;
 using UnityEngine.AI;
 using System;
+using Apex.AI.Components;
+using System.Threading.Tasks;
 
-namespace Entities.Characters
+namespace SunsetSystems.Entities.Characters
 {
     public static class CreatureInitializer
     {
-        public static Creature InitializeCreature(GameObject creatureObject, CreatureAsset asset, Vector3 position)
+        public static Creature InitializeCreature(CreatureData data, Vector3 position)
         {
-            creatureObject.transform.position = position;
-            Creature creature = InitializeCreatureScript(creatureObject, asset);
-            DynamicCharacterAvatar dca = creatureObject.GetComponent<DynamicCharacterAvatar>();
-            InitializeUmaAvatar(dca, asset);
-            StatsManager stats = creatureObject.GetComponent<StatsManager>();
-            InitializeStatsManager(stats, asset);
-            CapsuleCollider collider = creatureObject.GetComponent<CapsuleCollider>();
-            InitializeCollider(collider);
-            Rigidbody rigidbody = creatureObject.GetComponent<Rigidbody>();
-            InitializeRigidbody(rigidbody);
-            NavMeshAgent navMeshAgent = creatureObject.GetComponent<NavMeshAgent>();
-            InitializeNavMeshAgent(navMeshAgent);
-            return creature;
+            return InitializeCreature(data, position, null, Quaternion.identity);
         }
 
-        private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureAsset asset)
+        public static Creature InitializeCreature(CreatureData data, Vector3 position, Transform parent, Quaternion rotation)
+        {
+            PrepareGameObject(data, position, parent, rotation, out GameObject creatureObject, out Creature creature);
+            PrepareComponents(data, creatureObject);
+            return creature;
+
+            static void PrepareGameObject(CreatureData data, Vector3 position, Transform parent, Quaternion rotation, out GameObject creatureObject, out Creature creature)
+            {
+                creatureObject = new();
+                creatureObject.transform.parent = parent;
+                creatureObject.name = data.FullName;
+                creatureObject.transform.SetPositionAndRotation(position, rotation);
+                creature = InitializeCreatureScript(creatureObject, data);
+                creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");
+            }
+        }
+
+        public static void InitializeCreature(Creature creature)
+        {
+            creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");
+            PrepareComponents(creature.Data, creature.gameObject);
+        }
+
+        private static void PrepareComponents(CreatureData data, GameObject creatureObject)
+        {
+            DynamicCharacterAvatar dca;
+            StatsManager stats;
+            CapsuleCollider collider;
+            Rigidbody rigidbody;
+            NavMeshAgent navMeshAgent;
+            NavMeshObstacle navMeshObstacle;
+            CombatBehaviour combatBehaviour;
+            Animator animator;
+            CreatureAnimationController animationController;
+            UtilityAIComponent utilityAIComponent;
+
+            animator = creatureObject.GetComponent<Animator>() ?? creatureObject.AddComponent<Animator>();
+            InitializeAnimator(animator);
+            animationController = creatureObject.GetComponent<CreatureAnimationController>() ?? creatureObject.AddComponent<CreatureAnimationController>();
+            InitializeAnimationController(animationController);
+            dca = creatureObject.GetComponent<DynamicCharacterAvatar>() ?? creatureObject.AddComponent<DynamicCharacterAvatar>();
+            InitializeUmaAvatar(dca, data);
+            stats = creatureObject.GetComponent<StatsManager>() ?? creatureObject.AddComponent<StatsManager>();
+            InitializeStatsManager(stats, data);
+            collider = creatureObject.GetComponent<CapsuleCollider>() ?? creatureObject.AddComponent<CapsuleCollider>();
+            InitializeCollider(collider);
+            rigidbody = creatureObject.GetComponent<Rigidbody>() ?? creatureObject.AddComponent<Rigidbody>();
+            InitializeRigidbody(rigidbody);
+            navMeshAgent = creatureObject.GetComponent<NavMeshAgent>() ?? creatureObject.AddComponent<NavMeshAgent>();
+            InitializeNavMeshAgent(navMeshAgent);
+            navMeshObstacle = creatureObject.GetComponent<NavMeshObstacle>() ?? creatureObject.AddComponent<NavMeshObstacle>();
+            InitializeNavMeshObstacle(navMeshObstacle);
+            combatBehaviour = creatureObject.GetComponent<CombatBehaviour>() ?? creatureObject.AddComponent<CombatBehaviour>();
+            InitializeCombatBehaviour(combatBehaviour);
+            utilityAIComponent = creatureObject.GetComponent<UtilityAIComponent>() ?? creatureObject.AddComponent<UtilityAIComponent>();
+            InitializeUtilityAI(utilityAIComponent);
+        }
+
+        private static Creature InitializeCreatureScript(GameObject creatureObject, CreatureData data)
         {
             Creature creature = creatureObject.GetComponent<Creature>();
             if (creature == null)
             {
-                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
             }
-            else if (IsCreatureScriptMismatch(creature, asset.CreatureFaction))
+            else if (IsCreatureScriptMismatch(creature, data.faction))
             {
+                Debug.LogWarning("Destroying creature script!");
                 UnityEngine.Object.DestroyImmediate(creature);
-                AddMatchingCreatureScript(creatureObject, asset.CreatureFaction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
             }
+            creature.Data = data;
             return creature;
         }
 
@@ -44,7 +94,7 @@ namespace Entities.Characters
             creature = faction switch
             {
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
-                _ => creatureObject.AddComponent<NPC>(),
+                _ => creatureObject.AddComponent<DefaultNPC>(),
             };
         }
 
@@ -52,28 +102,27 @@ namespace Entities.Characters
         {
             return faction switch
             {
-                Faction.PlayerControlled => creature.IsOfType(typeof(PlayerControlledCharacter)),
-                _ => creature.IsOfType(typeof(NPC)),
+                Faction.PlayerControlled => !creature.GetType().IsAssignableFrom(typeof(PlayerControlledCharacter)),
+                _ => !creature.GetType().IsAssignableFrom(typeof(DefaultNPC)),
             };
         }
 
-        private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureAsset asset)
+        private static void InitializeUmaAvatar(DynamicCharacterAvatar dca, CreatureData data)
         {
-            dca.loadFileOnStart = true;
-            dca.loadFilename = asset.UmaPresetFilename;
-            dca.loadPath = "UMAPresets";
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
-            dca.raceAnimationControllers.defaultAnimationController = asset.AnimatorController;
-            dca.DoLoad();
-
-            dca.saveFilename = asset.UmaPresetFilename;
+            dca.loadPath = "UMAPresets/";
+            dca.loadFilename = data.umaPresetFileName;
+            dca.loadFileOnStart = true;
+            dca.raceAnimationControllers.defaultAnimationController = data.animatorControllerAsset;
+            dca.saveFilename = data.umaPresetFileName;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
-            dca.savePath = "UMAPresets";
+            dca.savePath = "UMAPresets/";
+            dca.DoLoad();
         }
 
-        private static void InitializeStatsManager(StatsManager statsManager, CreatureAsset asset)
+        private static void InitializeStatsManager(StatsManager statsManager, CreatureData data)
         {
-            statsManager.Stats = asset.StatsAsset;
+            statsManager.Initialize(data.stats);
         }
 
         private static void InitializeCollider(CapsuleCollider collider)
@@ -93,6 +142,31 @@ namespace Entities.Characters
             navMeshAgent.speed = 4.0f;
             navMeshAgent.angularSpeed = 360.0f;
             navMeshAgent.acceleration = 8.0f;
+        }
+
+        private static void InitializeNavMeshObstacle(NavMeshObstacle navMeshObstacle)
+        {
+
+        }
+
+        private static void InitializeCombatBehaviour(CombatBehaviour combatBehaviour)
+        {
+            
+        }
+
+        private static void InitializeUtilityAI(UtilityAIComponent utilityAIComponent)
+        {
+
+        }
+
+        private static void InitializeAnimationController(CreatureAnimationController animationController)
+        {
+
+        }
+
+        private static void InitializeAnimator(Animator animator)
+        {
+
         }
     }
 }

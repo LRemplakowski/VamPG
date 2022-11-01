@@ -1,4 +1,4 @@
-﻿namespace Entities.Characters.Actions.Conditions
+﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public class InteractionComplete : Condition
     {
@@ -12,6 +12,7 @@
         {
             if (target.Interacted == true)
             {
+                target.Interacted = false;
                 return true;
             }
             return false;

@@ -2,7 +2,7 @@
 {
     using Apex.AI;
     using Apex.Serialization;
-    using Entities.Characters;
+    using SunsetSystems.Entities.Characters;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -18,8 +18,8 @@
         public override float Score(CreatureContext context, GridElement option)
         {
             bool hasTargets = false;
-            List<Creature> targets = new List<Creature>();
-            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
+            List<Creature> targets = new();
+            if (context.Owner.Data.faction.Equals(Faction.Hostile))
             {
                 targets.AddRange(context.FriendlyCombatants);
                 targets.AddRange(context.PlayerControlledCombatants);

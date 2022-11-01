@@ -1,4 +1,5 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Combat;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,37 +11,37 @@ public class DevCurrentActiveActorChanger : ExposableMonobehaviour
     #region Enable&Disable
     private void OnEnable()
     {
-        TurnCombatManager.NotifyActiveActorChanged += OnActiveActorChanged;
+        CombatManager.ActiveActorChanged += OnActiveActorChanged;
     }
     private void OnDisable()
     {
-        TurnCombatManager.NotifyActiveActorChanged -= OnActiveActorChanged;
+        CombatManager.ActiveActorChanged -= OnActiveActorChanged;
     }
     #endregion
 
     private List<Creature> activeSceneCreatures;
     private Dropdown dropdown;
-    private TurnCombatManager turnCombatManager;
+    private CombatManager combatManager;
 
     private void Start()
     {
         dropdown = GetComponent<Dropdown>();
-        turnCombatManager = TurnCombatManager.Instance;
-        activeSceneCreatures = turnCombatManager.GetCreaturesInCombat();
+        combatManager = CombatManager.Instance;
+        activeSceneCreatures = combatManager.Actors;
         dropdown.ClearOptions();
-        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+        List<Dropdown.OptionData> options = new();
         foreach (Creature c in activeSceneCreatures)
         {
             options.Add(new Dropdown.OptionData(c.gameObject.ToString()));
         }
         dropdown.AddOptions(options);
-        if (turnCombatManager.CurrentActiveActor != null)
-            dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(turnCombatManager.CurrentActiveActor));
+        if (CombatManager.CurrentActiveActor != null)
+            dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(CombatManager.CurrentActiveActor));
     }
 
     private void OnActiveActorChanged(Creature newActor, Creature oldActor)
     {
-        activeSceneCreatures = turnCombatManager.GetCreaturesInCombat();
+        activeSceneCreatures = combatManager.Actors;
         dropdown.SetValueWithoutNotify(activeSceneCreatures.IndexOf(newActor));
     }
 }

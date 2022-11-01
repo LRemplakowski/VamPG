@@ -111,7 +111,6 @@ namespace SunsetSystems.Entities.Characters
         {
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
             dca.loadPath = "UMAPresets/";
-            Debug.Log(data.umaPresetFileName);
             dca.loadFilename = data.umaPresetFileName;
             dca.loadFileOnStart = true;
             dca.raceAnimationControllers.defaultAnimationController = data.animatorControllerAsset;

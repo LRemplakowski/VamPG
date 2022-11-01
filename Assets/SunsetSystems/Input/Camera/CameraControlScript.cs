@@ -2,6 +2,7 @@
 using SunsetSystems.Constants;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
+using System.EnterpriseServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +22,8 @@ namespace SunsetSystems.Input.CameraControl
         public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
         [SerializeField]
         private Vector3 _offset;
+        [SerializeField]
+        private LayerMask _groundRaycastMask;
 
         //Movement variables
         private float _internalMoveTargetSpeed;
@@ -35,19 +38,30 @@ namespace SunsetSystems.Input.CameraControl
         private const string BOUNDING_BOX = "_boundingBox";
         private const string POSITION = "_position";
 
-        private void Awake()
+        private void Start()
         {
             if (!_cameraTransform)
                 _cameraTransform = GetComponentInChildren<Camera>().transform;
-            if (!_rotationTarget && this.TryFindFirstGameObjectWithTag(TagConstants.CAMERA_FOCUS, out GameObject result))
-                _rotationTarget = result.transform;
+            if (!_rotationTarget)
+                _rotationTarget = transform;
             if (_target)
-            {
                 transform.position = _target.position;
-                _moveTarget = transform.position;
-                _cameraTransform.localPosition = _offset;
-                _cameraTransform.LookAt(_rotationTarget);
-            }
+            _moveTarget = transform.position;
+            RealignCamera();
+        }
+
+        private void OnValidate()
+        {
+            if (!_cameraTransform)
+                _cameraTransform = GetComponentInChildren<Camera>().transform;
+            RealignCamera();
+        }
+
+        [ContextMenu("Realign camera")]
+        private void RealignCamera()
+        {
+            _cameraTransform.localPosition = _offset;
+            _cameraTransform.LookAt(_rotationTarget);
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -83,6 +97,11 @@ namespace SunsetSystems.Input.CameraControl
                 _moveTarget += _internalMoveTargetSpeed * _moveDirection.z * Time.fixedDeltaTime * transform.forward;
             if (_moveDirection.x != 0)
                 _moveTarget += _internalMoveTargetSpeed * _moveDirection.x * Time.fixedDeltaTime * transform.right;
+            Ray ray = new(transform.position + (Vector3.up * _offset.y), -Vector3.up);
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f, _groundRaycastMask, QueryTriggerInteraction.Collide))
+            {
+                _moveTarget = new(_moveTarget.x, hitInfo.point.y, _moveTarget.z);
+            }
             if (_currentBoundingBox)
                 _moveTarget = _currentBoundingBox.IsPositionWithinBounds(_moveTarget) ? _moveTarget : _currentBoundingBox.ClampPositionToBounds(_moveTarget);
         }
@@ -95,8 +114,8 @@ namespace SunsetSystems.Input.CameraControl
 
         public void SaveRuntimeData()
         {
-            ES3.Save<BoundingBox>(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
-            ES3.Save<Vector3>(Unique.Id + POSITION, transform.position);
+            ES3.Save(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
+            ES3.Save(Unique.Id + POSITION, transform.position);
         }
 
         public void LoadRuntimeData()

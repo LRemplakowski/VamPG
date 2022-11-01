@@ -13,6 +13,7 @@ namespace SunsetSystems.UI
         private void Start()
         {
             textComponent ??= GetComponentInChildren<TextMeshProUGUI>();
+            gameObject.SetActive(false);
         }
 
         public void SetNameplateText(string text)

@@ -4,6 +4,7 @@ using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using System;
 using UnityEngine;
+using Yarn.Unity;
 
 namespace SunsetSystems.UI
 {
@@ -17,7 +18,9 @@ namespace SunsetSystems.UI
         [field: SerializeField]
         public ContainerGUI ContainerGUI { get; private set; }
         [field: SerializeField]
-        private HoverNameplate HoverNameplate { get; set; }
+        public HoverNameplate HoverNameplate { get; private set; }
+        [field: SerializeField]
+        public DialogueViewBase DialogueGUI { get; private set; }
 
         public void HandleNameplateHover(INameplateReciever nameplateReciever)
         {

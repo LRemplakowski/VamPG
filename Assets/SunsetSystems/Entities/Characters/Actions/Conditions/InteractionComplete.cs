@@ -12,6 +12,7 @@
         {
             if (target.Interacted == true)
             {
+                target.Interacted = false;
                 return true;
             }
             return false;

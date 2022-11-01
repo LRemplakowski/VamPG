@@ -12,7 +12,6 @@ namespace SunsetSystems.Entities.Interactable
 
         public override void Interact()
         {
-            DialogueManager.Instance.StartDialogue(entityDialogue);
             base.Interact();
         }
     }

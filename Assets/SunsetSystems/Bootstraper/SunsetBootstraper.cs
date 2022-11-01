@@ -16,10 +16,14 @@ namespace SunsetSystems.Bootstraper
         private List<SceneAsset> bootstrapScenes = new();
         private static bool didLoadGameplayScene = false;
 
+        public static bool EnableBootstrap { get; set; }
+
 #if UNITY_EDITOR
         protected async override void Awake()
         {
             base.Awake();
+            if (!EnableBootstrap)
+                return;
             List<string> bootstrapScenePaths = new();
             bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
             await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));

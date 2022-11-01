@@ -48,7 +48,7 @@ namespace SunsetSystems.Input
         private void Update()
         {
             Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f, defaultRaycastMask))
+            if (gameplayUIParent != null && Physics.Raycast(ray, out RaycastHit hit, 100f, defaultRaycastMask))
             {
                 INameplateReciever nameplateReciever = hit.collider.GetComponent<INameplateReciever>();
                 if (nameplateReciever is not null)

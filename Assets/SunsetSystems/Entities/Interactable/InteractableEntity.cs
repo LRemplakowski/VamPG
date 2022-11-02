@@ -20,12 +20,13 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _isHoveredOver = value;
-                HoverHighlight.SetActive(IsHoveredOver);
+                if (HoverHighlight != null)
+                    HoverHighlight.SetActive(IsHoveredOver);
             }
         }
 
         [SerializeField]
-        protected float _interactionDistance = 1.0f;
+        protected float _interactionDistance = 2.0f;
         public float InteractionDistance
         {
             get => _interactionDistance;

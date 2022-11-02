@@ -1,29 +1,37 @@
 using NaughtyAttributes;
+using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [FilePath("Assets/SunsetSystems/Quests/QuestDatabase.asset", FilePathAttribute.Location.ProjectFolder)]
-    public class QuestDatabase : ScriptableSingleton<QuestDatabase>
+    [CreateAssetMenu(fileName = "Quest Database", menuName = "Sunset Journal/Database")]
+    public class QuestDatabase : ScriptableObjectSingleton<QuestDatabase>
     {
         [SerializeField]
         private StringQuestDictionary _questRegistry = new();
+
+        public bool TryGetQuest(string questID, out Quest quest)
+        {
+            return _questRegistry.TryGetValue(questID, out quest);
+        }
 
         public bool RegisterQuest(Quest quest)
         {
             if (_questRegistry.ContainsKey(quest.ID))
             {
-                Debug.LogError("Quest " + quest.ID + " is already registered in the database!");
+                Debug.LogWarning("Quest " + quest.ID + " is already registered in the database!");
                 return false;
             }
             _questRegistry.Add(quest.ID, quest);
             return true;
         }
+
+        public bool IsRegistered(Quest quest)
+        {
+            return _questRegistry.ContainsKey(quest.ID);
+        }    
 
         private void OnValidate()
         {

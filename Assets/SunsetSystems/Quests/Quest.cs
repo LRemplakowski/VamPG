@@ -1,8 +1,6 @@
 using NaughtyAttributes;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -12,29 +10,28 @@ namespace SunsetSystems.Journal
     {
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
-        [field: SerializeField]
+        [field: SerializeField, AllowNesting]
         public QuestData Data { get; private set; }
 
-        public event Action OnQuestStarted;
-        public event Action OnObjectiveChanged;
-        public event Action OnQuestCompleted;
+        public event Action<Quest> OnQuestStarted;
+        public event Action<Quest> OnQuestCompleted;
 
-        private void Awake()
+        private void OnEnable()
         {
             if (string.IsNullOrEmpty(ID))
                 ID = Guid.NewGuid().ToString();
-            if (QuestDatabase.instance == null)
-            {
-                Debug.LogError("There is no quest database!");
-                return;
-            }
-            QuestDatabase.instance.RegisterQuest(this);
+            if (QuestDatabase.Instance.IsRegistered(this) == false)
+                QuestDatabase.Instance.RegisterQuest(this);
         }
 
-        private void OnValidate()
+        public void Begin()
         {
-            if (string.IsNullOrEmpty(ID))
-                ID = Guid.NewGuid().ToString();
+            OnQuestStarted?.Invoke(this);
+        }
+
+        public void Complete()
+        {
+            OnQuestCompleted?.Invoke(this);
         }
     }
 
@@ -42,5 +39,9 @@ namespace SunsetSystems.Journal
     public struct QuestData
     {
         public string Name;
+        [TextArea(10, 15)]
+        public string Description;
+        [ReorderableList, AllowNesting]
+        public List<Objective> Objectives;
     }
 }

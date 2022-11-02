@@ -1273,7 +1273,7 @@ Transform:
   m_GameObject: {fileID: 254784860}
   m_LocalRotation: {x: 0.50518125, y: -0.4947676, z: 0.50517774, w: 0.49476507}
   m_LocalPosition: {x: -3.2078884, y: 17.209927, z: 1.2456388}
-  m_LocalScale: {x: 0, y: 0.00000011920929, z: 0}
+  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1271959961}
@@ -3653,7 +3653,7 @@ GameObject:
   - component: {fileID: 957763342}
   - component: {fileID: 957763340}
   m_Layer: 0
-  m_Name: New Dynamic Character Avatar
+  m_Name: Dominic_Evans
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3743,7 +3743,32 @@ MonoBehaviour:
   forceRebindAnimator: 0
   preloadWardrobeRecipes:
     loadDefaultRecipes: 1
-    recipes: []
+    recipes:
+    - _recipeName: suit01_Recipe
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: aviators01_Recipe
+      _compatibleRaces:
+      - VampireMale
+      - VampireFemale
+    - _recipeName: hair01_Recipe
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: shirt01_Recipe
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: suit pants_Recipe
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: tie_loose_Recipe
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: Dominic_facial_hair_overlay
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: chopper_shoes01_Recipe
+      _compatibleRaces:
+      - VampireMale
   raceAnimationControllers:
     defaultAnimationController: {fileID: 9100000, guid: eb280940c811fab4a9e3ddf09381c343, type: 2}
     animators: []
@@ -3805,6 +3830,24 @@ MonoBehaviour:
       _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
       Raw: 0
       valuesConverted: 0
+    - name: Shared Color 1
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
   predefinedDNA:
     PreloadValues: []
   loadPathType: 0
@@ -3837,7 +3880,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957763339}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7631,7 +7674,7 @@ Transform:
   m_GameObject: {fileID: 1931111182}
   m_LocalRotation: {x: 0.50518125, y: -0.4947676, z: 0.50517774, w: 0.49476507}
   m_LocalPosition: {x: -3.20789, y: 17.209942, z: -1.3067356}
-  m_LocalScale: {x: 0, y: 0.00000011920929, z: 0}
+  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1271959961}

@@ -2,6 +2,7 @@
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Inventory;
 using UnityEngine;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Entities.Characters
 {

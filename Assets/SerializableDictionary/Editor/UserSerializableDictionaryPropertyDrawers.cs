@@ -8,7 +8,8 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(StringColorArrayDictionary))]
 [CustomPropertyDrawer(typeof(StringFloatDictionary))]
 [CustomPropertyDrawer(typeof(StringBoolDictionary))]
-public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer {}
+[CustomPropertyDrawer(typeof(StringQuestDictionary))]
+public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 
 [CustomPropertyDrawer(typeof(ColorArrayStorage))]
-public class AnySerializableDictionaryStoragePropertyDrawer: SerializableDictionaryStoragePropertyDrawer {}
+public class AnySerializableDictionaryStoragePropertyDrawer : SerializableDictionaryStoragePropertyDrawer { }

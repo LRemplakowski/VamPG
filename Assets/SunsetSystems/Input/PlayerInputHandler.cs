@@ -30,6 +30,8 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     // Keyboard input
     public delegate void OnInventoryHandler(InputAction.CallbackContext context);
     public static event OnInventoryHandler OnInventory;
+    public delegate void OnJournalHandler(InputAction.CallbackContext context);
+    public static event OnJournalHandler OnJournal;
     public delegate void OnEscapeHandler(InputAction.CallbackContext context);
     public static event OnEscapeHandler OnEscape;
     public delegate void OnCharacterSheetHandler(InputAction.CallbackContext conext);
@@ -71,6 +73,11 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     public void InventoryAction(InputAction.CallbackContext context)
     {
         OnInventory?.Invoke(context);
+    }
+
+    public void JournalAction(InputAction.CallbackContext context)
+    {
+        OnJournal?.Invoke(context);
     }
 
     public void EscapeAction(InputAction.CallbackContext context)

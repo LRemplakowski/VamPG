@@ -30,6 +30,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnCharacterSheet += OnCharacterSheet;
             PlayerInputHandler.OnEscape += OnEscape;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
+            PlayerInputHandler.OnJournal += OnJournal;
         }
 
         private void OnDisable()
@@ -38,6 +39,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
             PlayerInputHandler.OnEscape -= OnEscape;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
+            PlayerInputHandler.OnJournal -= OnJournal;
         }
 
         private void Start()
@@ -79,8 +81,34 @@ namespace SunsetSystems.Input
                 gameplayUIParent.ContainerGUI.CloseContainerGUI();
                 return;
             }
+            SwitchPauseAndOpenScreen(PauseMenuScreen.Settings);
+        }
+
+        private void OnCharacterSheet(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+            SwitchPauseAndOpenScreen(PauseMenuScreen.CharacterSheet);
+        }
+
+        private void OnInventory(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+            SwitchPauseAndOpenScreen(PauseMenuScreen.Inventory);
+        }
+
+        private void OnJournal(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+            SwitchPauseAndOpenScreen(PauseMenuScreen.Journal);
+        }
+
+        private void SwitchPauseAndOpenScreen(PauseMenuScreen screen)
+        {
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
-            if (GameManager.IsCurrentState(GameState.GamePaused))
+            if (GameManager.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
             {
                 Debug.Log("Resuming game");
                 GameManager.CurrentState = GameState.Exploration;
@@ -91,28 +119,8 @@ namespace SunsetSystems.Input
                 Debug.Log("Pausing game");
                 GameManager.CurrentState = GameState.GamePaused;
                 pauseUI.gameObject.SetActive(true);
-                pauseUI.OpenSettingsScreen();
+                pauseUI.OpenMenuScreen(screen);
             }
-        }
-
-        private void OnCharacterSheet(InputAction.CallbackContext context)
-        {
-            if (!context.performed)
-                return;
-            GameManager.CurrentState = GameState.GamePaused;
-            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
-            pauseUI.gameObject.SetActive(true);
-            pauseUI.OpenCharacterSheetScreen();
-        }
-
-        private void OnInventory(InputAction.CallbackContext context)
-        {
-            if (!context.performed)
-                return;
-            GameManager.CurrentState = GameState.GamePaused;
-            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
-            pauseUI.gameObject.SetActive(true);
-            pauseUI.OpenInventoryScreen();
         }
 
         private void OnPointerPosition(InputAction.CallbackContext context)

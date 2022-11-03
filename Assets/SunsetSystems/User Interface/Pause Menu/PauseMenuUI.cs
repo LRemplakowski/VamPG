@@ -10,6 +10,8 @@ namespace SunsetSystems.UI
         private Canvas pauseMenuCanvas;
         [SerializeField]
         private PauseUISelector inventory, journal, settings, characterSheet;
+        
+        public PauseMenuScreen CurrentActiveScreen { get; private set; }
 
         private void Awake()
         {
@@ -22,27 +24,7 @@ namespace SunsetSystems.UI
             gameObject.SetActive(false);
         }
 
-        public void OpenSettingsScreen()
-        {
-            OpenMenuScreen(PauseMenuScreen.Settings);
-        }
-
-        public void OpenCharacterSheetScreen()
-        {
-            OpenMenuScreen(PauseMenuScreen.CharacterSheet);
-        }
-
-        public void OpenInventoryScreen()
-        {
-            OpenMenuScreen(PauseMenuScreen.Inventory);
-        }
-
-        public void OpenJournalScreen()
-        {
-            OpenMenuScreen(PauseMenuScreen.Journal);
-        }
-
-        private void OpenMenuScreen(PauseMenuScreen screen)
+        public void OpenMenuScreen(PauseMenuScreen screen)
         {
             switch (screen)
             {
@@ -61,6 +43,7 @@ namespace SunsetSystems.UI
                 case PauseMenuScreen.Map:
                     break;
             }
+            CurrentActiveScreen = screen;
         }
     }
 

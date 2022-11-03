@@ -20,6 +20,10 @@ public class ObjectColorDictionary : SerializableDictionary<UnityEngine.Object, 
 public class StringQuestDictionary : SerializableDictionary<string, Quest> { }
 
 [Serializable]
+public class StringQuestDataDictionary : SerializableDictionary<string, QuestData> { }
+
+
+[Serializable]
 public class ColorArrayStorage : SerializableDictionary.Storage<Color[]> { }
 
 [Serializable]

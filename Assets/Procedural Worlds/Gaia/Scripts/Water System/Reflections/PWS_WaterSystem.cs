@@ -1253,7 +1253,7 @@ namespace Gaia
                 return true;
             }
 
-            Debug.LogWarning("Water System: The player was null or no camera was found in your scene.");
+            //Debug.LogWarning("Water System: The player was null or no camera was found in your scene.");
             return false;
         }
         /// <summary>

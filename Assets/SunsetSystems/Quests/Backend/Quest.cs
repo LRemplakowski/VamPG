@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,20 +7,23 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Quest", menuName = "Sunset Journal/Quest")]
-    public class Quest : ScriptableObject
+    public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField, AllowNesting]
-        public QuestData Data { get; private set; }
+        public QuestData QuestData { get; private set; }
 
-        public event Action<Quest> OnQuestStarted;
-        public event Action<Quest> OnQuestCompleted;
+        public Quest Data => this;
+
+        public static event Action<Quest> QuestStarted;
+        public static event Action<Quest> QuestCompleted;
+        public static event Action<Quest, Objective> ObjectiveChanged;
 
         public void LinkAndInitializeObjectives()
         {
-            List<Objective> objectives = Data.Objectives;
-            if (objectives.Count <= 0)
+            List<Objective> objectives = QuestData.Objectives;
+            if (objectives == null || objectives.Count <= 0)
                 return;
             for (int i = objectives.Count - 1; i > 0; i--)
             {
@@ -34,7 +38,8 @@ namespace SunsetSystems.Journal
             last.IsLast = true;
             last.IsFirst = false;
             Objective first = objectives[0];
-            first.ID = "Objective 0";
+            if (string.IsNullOrEmpty(first.ID))
+                first.ID = "Objective 0";
             if (last.Equals(first))
             {
                 last.IsFirst = true;
@@ -61,12 +66,30 @@ namespace SunsetSystems.Journal
 
         public void Begin()
         {
-            OnQuestStarted?.Invoke(this);
+            QuestStarted?.Invoke(this);
+            QuestData.FirstObjective.OnObjectiveCompleted += OnObjectiveChanged;
+            QuestData.FirstObjective.MakeActive();
+        }
+
+        private void OnObjectiveChanged(Objective objective)
+        {
+            ObjectiveChanged?.Invoke(this, objective);
+            if (objective == null)
+                return;
+            objective.OnObjectiveCompleted -= OnObjectiveChanged;
+            if (objective.NextObjective == null)
+            {
+                Complete();
+            }
+            else
+            {
+                objective.NextObjective.OnObjectiveCompleted += OnObjectiveChanged;
+            }
         }
 
         public void Complete()
         {
-            OnQuestCompleted?.Invoke(this);
+            QuestCompleted?.Invoke(this);
         }
     }
 
@@ -79,6 +102,8 @@ namespace SunsetSystems.Journal
         public string Description;
         [ReorderableList, AllowNesting]
         public List<Objective> Objectives;
+        public Objective FirstObjective => Objectives?[0];
+        public Objective LastObjective => Objectives?[^1];
     }
 
     public enum QuestCategory

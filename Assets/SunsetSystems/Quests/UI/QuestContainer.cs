@@ -16,7 +16,7 @@ namespace SunsetSystems.Journal.UI
         {
             this._quest = _quest;
             this._questView = _questView;
-            _questTitle.text = _quest.Data.Name;
+            _questTitle.text = _quest.QuestData.Name;
         }
 
         public void DisplayQuest()

@@ -45,6 +45,7 @@ namespace SunsetSystems.Journal.UI
 
         private void OnDisable()
         {
+            gameObject.SetActive(false);
             _containerPool.ForEach(c => c.gameObject.SetActive(false));
         }
     }

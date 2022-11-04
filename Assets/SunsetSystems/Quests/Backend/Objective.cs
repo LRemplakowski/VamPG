@@ -11,30 +11,31 @@ namespace SunsetSystems.Journal
         public string ID;
         [TextArea(5, 10)]
         public string Description;
-        public event Action OnBeginTracking;
-        public event Action OnStopTracking;
-        public event Action OnCompleted;
+        public event Action<Objective> OnObjectiveActive;
+        public event Action<Objective> OnObjectiveInactive;
+        public event Action<Objective> OnObjectiveCompleted;
 
         [ReadOnly]
         public bool IsFirst, IsLast;
 
         public Objective NextObjective;
 
-        public void StartTracking()
+        public void MakeActive()
         {
-            OnBeginTracking?.Invoke();
+            OnObjectiveActive?.Invoke(this);
         }
 
-        public void StopTracking()
+        public void MakeInactive()
         {
-            OnStopTracking?.Invoke();
+            OnObjectiveInactive?.Invoke(this);
         }
 
         public void Complete()
         {
-            OnCompleted?.Invoke();
+            MakeInactive();
+            OnObjectiveCompleted?.Invoke(this);
             if (NextObjective != null)
-                NextObjective.StartTracking();
+                NextObjective.MakeActive();
         }
     }
 }

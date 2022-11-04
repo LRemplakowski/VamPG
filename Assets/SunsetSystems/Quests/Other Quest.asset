@@ -13,8 +13,20 @@ MonoBehaviour:
   m_Name: Other Quest
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 9cdfc15b-6308-4b75-89ab-8761877c2135
-  <Data>k__BackingField:
-    Name: Some shit name
+  <QuestData>k__BackingField:
+    Name: Do stuff
     Category: 0
-    Description: Wolololo
-    Objectives: []
+    Description: You need to do stuff because stuff needs doing!
+    Objectives:
+    - ID: STUFF_START
+      Description: Do that stuff
+      IsFirst: 1
+      IsLast: 0
+    - ID: NEED_MORE_STUFF
+      Description: Now do that stuff
+      IsFirst: 0
+      IsLast: 0
+    - ID: ALL_THE_STUFF
+      Description: Almost done, more stuff!
+      IsFirst: 0
+      IsLast: 1

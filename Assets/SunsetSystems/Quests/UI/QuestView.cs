@@ -10,7 +10,7 @@ namespace SunsetSystems
         
         public void DisplayQuest(Quest quest)
         {
-            Debug.Log("Displaying quest " + quest.Data.Name);
+            Debug.Log("Displaying quest " + quest.QuestData.Name);
         }    
     }
 }

@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Linq;
 
 namespace SunsetSystems.Input
 {
@@ -39,10 +40,18 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
             {
-                Debug.Log("Raycast hit UI object!");
-                return;
+                if (hits.Any(hit => {
+                        CanvasGroup group = hit.gameObject.GetComponent<CanvasGroup>();
+                        if (group)
+                            return group.blocksRaycasts;
+                        return false;
+                    }))
+                {
+                    Debug.Log("Raycast hit UI object!");
+                    return;
+                }
             }
             if (context.performed)
                 HandleWorldRightClick();

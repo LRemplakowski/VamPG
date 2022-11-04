@@ -11,6 +11,8 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Linq;
+using NaughtyAttributes;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Input
 {
@@ -23,9 +25,15 @@ namespace SunsetSystems.Input
         private LayerMask defaultRaycastMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
+        [SerializeField]
+        private bool _useSelection;
+        [SerializeField]
+        private Selection _selection;
 
         private void OnEnable()
         {
+            if (_selection)
+                _selection.gameObject.SetActive(_useSelection);
             //PlayerInputHandler.OnPrimaryAction += OnPrimaryAction;
             PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
@@ -71,25 +79,10 @@ namespace SunsetSystems.Input
                         }
                     case GameState.Exploration:
                         {
-                            List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                            PlayerControlledCharacter currentLead;
-                            if (selectables.Count > 0)
-                            {
-                                currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
-                            }
+                            if (_useSelection)
+                                HandleSelectionExplorationInput();
                             else
-                            {
-                                break;
-                            }
-                            if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                            {
-                                currentLead.ClearAllActions();
-                                currentLead.InteractWith(interactable);
-                            }
-                            else
-                            {
-                                MoveCurrentSelectionToPositions(hit);
-                            }
+                                HandleNoSelectionExplorationInput();
                             break;
                         }
                     case GameState.Conversation:
@@ -100,6 +93,34 @@ namespace SunsetSystems.Input
                         Debug.Log("Default click behaviour");
                         break;
                 }
+            }
+
+            void HandleSelectionExplorationInput()
+            {
+                List<ISelectable> selectables = Selection.Instance.GetAllSelected();
+                PlayerControlledCharacter currentLead;
+                if (selectables.Count > 0)
+                {
+                    currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
+                }
+                else
+                {
+                    return;
+                }
+                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                {
+                    currentLead.ClearAllActions();
+                    currentLead.InteractWith(interactable);
+                }
+                else
+                {
+                    MoveCurrentSelectionToPositions(hit);
+                }
+            }
+
+            void HandleNoSelectionExplorationInput()
+            {
+                PlayerControlledCharacter currentLead = PartyManager.MainCharacter as PlayerControlledCharacter;
             }
         }
 

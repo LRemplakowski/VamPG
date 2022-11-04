@@ -1,7 +1,9 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+﻿using Redcode.Awaiting;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Utils.Threading;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -39,9 +41,23 @@ namespace SunsetSystems.Entities.Characters.Actions
             float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
             if (distance > target.InteractionDistance)
             {
-                moveToTarget = new Move(Owner, target.InteractionTransform.position);
+                await new WaitForUpdate();
+                moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
                 moveToTarget.Begin();
-                await Task.Run<Task>(InteractIfCloseEnough, tokenSource.Token);
+                while (!moveToTarget.IsFinished())
+                {
+                    Debug.Log("Closing distance to interaction target!");
+                    if (tokenSource.Token.IsCancellationRequested)
+                    {
+                        Debug.Log("Cancelling task!");
+                        return;
+                    }
+                    await new WaitForUpdate();
+                }
+                moveToTarget = null;
+                await Owner.FaceTarget(target.InteractionTransform);
+                target.TargetedBy = Owner;
+                target.Interact();
             }
             else
             {
@@ -53,16 +69,15 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private async Task InteractIfCloseEnough()
         {
-            while (Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) <= target.InteractionDistance)
+            await new WaitForUpdate();
+            moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
+            moveToTarget.Begin();
+            while (!moveToTarget.IsFinished())
             {
-                await Task.Yield();
+                Debug.Log("Closing distance to interaction target!");
+                await new WaitForUpdate();
             }
-            moveToTarget.Abort();
-            await Task.Run(async () =>
-            {
-                await Owner.FaceTarget(target.InteractionTransform);
-            }, tokenSource.Token);
-
+            await Owner.FaceTarget(target.InteractionTransform);
             target.TargetedBy = Owner;
             target.Interact();
         }

@@ -120,7 +120,26 @@ namespace SunsetSystems.Input
 
             void HandleNoSelectionExplorationInput()
             {
-                PlayerControlledCharacter currentLead = PartyManager.MainCharacter as PlayerControlledCharacter;
+                PlayerControlledCharacter mainCharacter = PartyManager.MainCharacter as PlayerControlledCharacter;
+                if (mainCharacter == null)
+                    return;
+                // Main Character should always take the lead since it's a first entry in ActiveParty list
+                List<Creature> creatures = new();
+                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                {
+                    Debug.Log("Interacting with " + interactable.ToString());
+                    mainCharacter.ClearAllActions();
+                    mainCharacter.InteractWith(interactable);
+                    creatures.Add(null);
+                }
+                else
+                {
+                    Debug.Log("Moving to position " + hit.point.ToString());
+                    creatures.Add(PartyManager.MainCharacter);
+                }
+                if (PartyManager.ActiveParty.Count > 1)
+                    creatures.AddRange(PartyManager.Companions);
+                MoveCreaturesToPosition(creatures, hit.point);
             }
         }
 
@@ -277,23 +296,22 @@ namespace SunsetSystems.Input
             }
         }
 
-        private void MoveSelectableToPosition(ISelectable selectable, Vector3 position, float stoppingDistance)
-        {
-            Creature creature = selectable.GetCreature();
-            creature.Move(position, stoppingDistance);
-        }
-
         private void MoveCurrentSelectionToPositions(RaycastHit hit)
         {
-            Vector3 samplingPoint;
-            List<ISelectable> allSelected = Selection.Instance.GetAllSelected();
+            List<Creature> allSelected = Selection.Instance.GetAllSelected().Select(s => s.GetCreature()) as List<Creature>;
+            MoveCreaturesToPosition(allSelected, hit.point);
+        }
+
+        private void MoveCreaturesToPosition(List<Creature> creatures, Vector3 samplingPoint)
+        {
             float stoppingDistance = 0f;
-            for (int i = 0; i < allSelected.Count; i++)
+            for (int i = 0; i < creatures.Count; i++)
             {
-                samplingPoint = hit.point;
-                NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
                 stoppingDistance += (i % 2) * _followerStoppingDistance;
-                MoveSelectableToPosition(allSelected[i], navHit.position, stoppingDistance);
+                Creature creature = creatures[i];
+                if (creature != null)
+                    creature.Move(hit.position, stoppingDistance);
             }
         }
     }

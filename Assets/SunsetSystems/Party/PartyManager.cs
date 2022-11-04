@@ -15,6 +15,7 @@ namespace SunsetSystems.Party
         private SerializableStringCreatureInstanceDictionary _activeParty;
         public static Creature MainCharacter => Instance._activeParty[_mainCharacterKey];
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
+        public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != _mainCharacterKey).Select(kv => kv.Value) as List<Creature>;
         private static HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
         private SerializableStringCreatureDataDictionary _creatureDataCache;

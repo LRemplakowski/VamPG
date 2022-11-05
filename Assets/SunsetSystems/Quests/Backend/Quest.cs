@@ -12,7 +12,9 @@ namespace SunsetSystems.Journal
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField, AllowNesting]
-        public QuestData QuestData { get; private set; }
+        public QuestData Info { get; private set; }
+        [field: SerializeField, AllowNesting]
+        public List<RewardData> Rewards { get; private set; }
 
         public Quest Data => this;
 
@@ -22,7 +24,7 @@ namespace SunsetSystems.Journal
 
         public void LinkAndInitializeObjectives()
         {
-            List<Objective> objectives = QuestData.Objectives;
+            List<Objective> objectives = Info.Objectives;
             if (objectives == null || objectives.Count <= 0)
                 return;
             for (int i = objectives.Count - 1; i > 0; i--)
@@ -67,8 +69,8 @@ namespace SunsetSystems.Journal
         public void Begin()
         {
             QuestStarted?.Invoke(this);
-            QuestData.FirstObjective.OnObjectiveCompleted += OnObjectiveChanged;
-            QuestData.FirstObjective.MakeActive();
+            Info.FirstObjective.OnObjectiveCompleted += OnObjectiveChanged;
+            Info.FirstObjective.MakeActive();
         }
 
         private void OnObjectiveChanged(Objective objective)
@@ -89,6 +91,7 @@ namespace SunsetSystems.Journal
 
         public void Complete()
         {
+            Rewards.ForEach(rewardData => (rewardData.Reward as IRewardable).ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
         }
     }
@@ -104,6 +107,14 @@ namespace SunsetSystems.Journal
         public List<Objective> Objectives;
         public Objective FirstObjective => Objectives?[0];
         public Objective LastObjective => Objectives?[^1];
+    }
+
+    [Serializable]
+    public struct RewardData
+    {
+        public int Amount;
+        [RequireInterface(typeof(IRewardable))]
+        public UnityEngine.Object Reward;
     }
 
     public enum QuestCategory

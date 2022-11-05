@@ -12,7 +12,6 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         private readonly IInteractable target;
         private Move moveToTarget;
-        private Task moveTask;
         private readonly CancellationTokenSource tokenSource = new();
 
         protected override Creature Owner
@@ -46,10 +45,9 @@ namespace SunsetSystems.Entities.Characters.Actions
                 moveToTarget.Begin();
                 while (!moveToTarget.IsFinished())
                 {
-                    Debug.Log("Closing distance to interaction target!");
                     if (tokenSource.Token.IsCancellationRequested)
                     {
-                        Debug.Log("Cancelling task!");
+                        Debug.Log("Cancelling interaction task!!");
                         return;
                     }
                     await new WaitForUpdate();
@@ -65,21 +63,6 @@ namespace SunsetSystems.Entities.Characters.Actions
                 target.TargetedBy = Owner;
                 target.Interact();
             }
-        }
-
-        private async Task InteractIfCloseEnough()
-        {
-            await new WaitForUpdate();
-            moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
-            moveToTarget.Begin();
-            while (!moveToTarget.IsFinished())
-            {
-                Debug.Log("Closing distance to interaction target!");
-                await new WaitForUpdate();
-            }
-            await Owner.FaceTarget(target.InteractionTransform);
-            target.TargetedBy = Owner;
-            target.Interact();
         }
     }
 }

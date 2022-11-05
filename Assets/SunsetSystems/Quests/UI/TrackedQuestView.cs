@@ -14,7 +14,7 @@ namespace SunsetSystems.Journal.UI
 
         public void UpdateView(IGameDataProvider<Quest> dataProvider)
         {
-            _title.text = dataProvider.Data.QuestData.Name;
+            _title.text = dataProvider.Data.Info.Name;
             _objective.text = default;
             if (QuestJournal.Instance.GetCurrentObjective(dataProvider.Data.ID, out Objective objective))
             {

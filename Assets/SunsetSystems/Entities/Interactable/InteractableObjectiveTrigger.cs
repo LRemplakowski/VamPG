@@ -13,13 +13,23 @@ namespace SunsetSystems.Entities.Interactable
         private Quest _associatedQuest;
         [SerializeField, Dropdown("Objectives")]
         private string _objectiveID;
-        private Objective Objective => _associatedQuest.QuestData.Objectives.Find(o => o.ID.Equals(_objectiveID));
+        private Objective Objective => _associatedQuest.Info.Objectives.Find(o => o.ID.Equals(_objectiveID));
         private bool ObjectiveActive = false;
 
         private void Awake()
         {
             Objective.OnObjectiveActive += OnObjectiveActive;
             Objective.OnObjectiveInactive += OnObjectiveInactive;
+        }
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(_objectiveID))
+            {
+                Debug.LogWarning($"Null or empty objective ID in GameObject {gameObject.name}! Resetting!");
+                if (_associatedQuest)
+                    _objectiveID = _associatedQuest.Info.FirstObjective?.ID;
+            }
         }
 
         private void OnObjectiveActive(Objective objective)
@@ -55,7 +65,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_associatedQuest == null)
                 return new string[0];
-            return _associatedQuest.QuestData.Objectives.Select(o => o.ID).ToArray();
+            return _associatedQuest.Info.Objectives.Select(o => o.ID).ToArray();
         }
     }
 }

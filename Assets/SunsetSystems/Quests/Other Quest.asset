@@ -13,20 +13,22 @@ MonoBehaviour:
   m_Name: Other Quest
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 9cdfc15b-6308-4b75-89ab-8761877c2135
-  <QuestData>k__BackingField:
-    Name: Do stuff
+  <Info>k__BackingField:
+    Name: Interact with cubes
     Category: 0
-    Description: You need to do stuff because stuff needs doing!
+    Description: Interact with the cubes next to me, in order from closest to furthest
+      from me.
     Objectives:
-    - ID: STUFF_START
-      Description: Do that stuff
+    - ID: FIRST_CUBE
+      Description: Interact with cube closest to the one that started the quest
       IsFirst: 1
       IsLast: 0
-    - ID: NEED_MORE_STUFF
-      Description: Now do that stuff
+    - ID: SECOND_CUBE
+      Description: Interact with the middle cube
       IsFirst: 0
       IsLast: 0
-    - ID: ALL_THE_STUFF
-      Description: Almost done, more stuff!
+    - ID: LAST_CUBE
+      Description: Almost done, interact with the last one
       IsFirst: 0
       IsLast: 1
+  <Rewards>k__BackingField: []

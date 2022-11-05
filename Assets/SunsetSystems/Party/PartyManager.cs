@@ -33,6 +33,13 @@ namespace SunsetSystems.Party
             }
         }
 
+        protected override void Awake()
+        {
+            _mainCharacterKey = string.Empty;
+            _activeParty = new();
+            _creatureDataCache = new();
+        }
+
         public override void Initialize()
         {
             PartyPortraits.Clear();

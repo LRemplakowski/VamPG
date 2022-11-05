@@ -173,24 +173,13 @@ namespace SunsetSystems.Entities.Characters
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
             float dot = Quaternion.Dot(transform.rotation, lookRotation);
-            Vector3 rotationTarget = Vector3.Lerp(transform.forward, (target.position - transform.position).normalized, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
-            transform.LookAt(rotationTarget);
-            dot = Vector3.Dot(transform.forward, rotationTarget);
             return dot >= 0.999f || dot <= -0.999f;
         }
 
         public async Task FaceTarget(Transform target)
         {
-            float rotation = 0f;
-            float dot = 0f;
-            Vector3 originalForward = transform.forward;
-            Vector3 expectedForward = (target.position - transform.position).normalized;
-            while (dot >= 0.999f || dot <= -0.999f)
+            while (!RotateTowardsTarget(target))
             {
-                rotation += Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED;
-                transform.LookAt(Vector3.Lerp(originalForward, expectedForward, rotation));
-                dot = Vector3.Dot(transform.forward, expectedForward);
-                Debug.Log("Rotating towards target, dot product: " + dot);
                 await new WaitForUpdate();
             }
         }

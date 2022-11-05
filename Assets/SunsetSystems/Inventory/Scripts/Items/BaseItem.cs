@@ -1,11 +1,12 @@
 using NaughtyAttributes;
+using SunsetSystems.Journal;
 using SunsetSystems.Resources;
 using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : ScriptableObject
+    public abstract class BaseItem : ScriptableObject, IRewardable
     {
         [field: SerializeField]
         public string ItemName { get; protected set; }
@@ -41,6 +42,11 @@ namespace SunsetSystems.Inventory.Data
                 EditorUtility.SetDirty(this);
             }
 #endif
+        }
+
+        public void ApplyReward(int amount)
+        {
+            InventoryManager.PlayerInventory.AddItem(new InventoryEntry(this, amount));
         }
     }
 }

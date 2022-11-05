@@ -15,9 +15,9 @@ namespace SunsetSystems.Journal
         private List<Quest> _trackedQuests = new();
 
         public List<Quest> ActiveQuests => _activeQuests.Values.ToList();
-        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.QuestData.Category.Equals(QuestCategory.Main)).ToList();
-        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.QuestData.Category.Equals(QuestCategory.Side)).ToList();
-        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.QuestData.Category.Equals(QuestCategory.Case)).ToList();
+        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Main)).ToList();
+        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Side)).ToList();
+        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Case)).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
         public static event Action<List<Quest>> OnTrackedQuestsChanged;
@@ -40,7 +40,7 @@ namespace SunsetSystems.Journal
         {
             _activeQuests.Add(quest.ID, quest);
             _trackedQuests.Add(quest);
-            _currentObjectives.Add(quest.ID, quest.QuestData.FirstObjective);
+            _currentObjectives.Add(quest.ID, quest.Info.FirstObjective);
             OnTrackedQuestsChanged?.Invoke(_trackedQuests);
         }
 
@@ -62,7 +62,7 @@ namespace SunsetSystems.Journal
         private void OnQuestCompleted(Quest quest)
         {
             if (MoveToCompleteQuests(quest.ID) == false)
-                Debug.LogError("Failed to complete quest " + quest.QuestData.Name + "! Quest ID: " + quest.ID);
+                Debug.LogError("Failed to complete quest " + quest.Info.Name + "! Quest ID: " + quest.ID);
             OnTrackedQuestsChanged?.Invoke(_trackedQuests);
         }
 
@@ -70,12 +70,12 @@ namespace SunsetSystems.Journal
         {
             if (_completedQuests.ContainsKey(questID))
             {
-                Debug.Log("Quest " + _completedQuests[questID].QuestData.Name + " has already been completed!");
+                Debug.Log("Quest " + _completedQuests[questID].Info.Name + " has already been completed!");
                 return false;
             }
             if (_activeQuests.ContainsKey(questID))
             {
-                Debug.Log("Quest " + _activeQuests[questID].QuestData.Name + " has already been started!");
+                Debug.Log("Quest " + _activeQuests[questID].Info.Name + " has already been started!");
                 return false;
             }
             if (QuestDatabase.Instance.TryGetQuest(questID, out Quest quest))

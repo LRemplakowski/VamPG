@@ -62,10 +62,10 @@ namespace SunsetSystems.Input
                 }
             }
             if (context.performed)
-                HandleWorldRightClick();
+                HandleSecondaryAction();
         }
 
-        private void HandleWorldRightClick()
+        private void HandleSecondaryAction()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
@@ -74,7 +74,7 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Combat:
                         {
-                            HandleCombatMouseClick(hit);
+                            HandleCombatSecondaryAction(hit);
                             break;
                         }
                     case GameState.Exploration:
@@ -127,7 +127,6 @@ namespace SunsetSystems.Input
                 List<Creature> creatures = new();
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                 {
-                    Debug.Log("Interacting with " + interactable.ToString());
                     mainCharacter.ClearAllActions();
                     mainCharacter.InteractWith(interactable);
                     creatures.Add(null);
@@ -139,11 +138,12 @@ namespace SunsetSystems.Input
                 }
                 if (PartyManager.ActiveParty.Count > 1)
                     creatures.AddRange(PartyManager.Companions);
+                Debug.Log("Count = " + PartyManager.ActiveParty.Count);
                 MoveCreaturesToPosition(creatures, hit.point);
             }
         }
 
-        private void HandleCombatMouseClick(RaycastHit hit)
+        private void HandleCombatSecondaryAction(RaycastHit hit)
         {
             ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
             switch (selectedBarAction.actionType)
@@ -189,10 +189,10 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
-            HandleMousePosition();
+            HandlePointerPosition();
         }
 
-        private void HandleMousePosition()
+        private void HandlePointerPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
@@ -205,12 +205,12 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Exploration:
                         {
-                            HandleExplorationMousePosition(hit);
+                            HandleExplorationPointerPosition(hit);
                             break;
                         }
                     case GameState.Combat:
                         {
-                            HandleCombatMousePosition(hit);
+                            HandleCombatPointerPosition(hit);
                             break;
                         }
                     case GameState.Conversation:
@@ -222,7 +222,7 @@ namespace SunsetSystems.Input
                 }
             }
 
-            void HandleExplorationMousePosition(RaycastHit hit)
+            void HandleExplorationPointerPosition(RaycastHit hit)
             {
                 if (lastHit != hit.collider)
                 {
@@ -238,20 +238,20 @@ namespace SunsetSystems.Input
                 }
             }
 
-            void HandleCombatMousePosition(RaycastHit hit)
+            void HandleCombatPointerPosition(RaycastHit hit)
             {
                 ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
                 switch (selectedBarAction.actionType)
                 {
                     case BarAction.MOVE:
-                        HandleMoveActionMousePosition();
+                        HandleMoveActionPointerPosition();
                         break;
                     case BarAction.ATTACK:
-                        HandleAttackActionMousePosition();
+                        HandleAttackActionPointerPosition();
                         break;
                 }
 
-                void HandleMoveActionMousePosition()
+                void HandleMoveActionPointerPosition()
                 {
                     if (!CombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
@@ -269,7 +269,7 @@ namespace SunsetSystems.Input
                     }
                 }
 
-                void HandleAttackActionMousePosition()
+                void HandleAttackActionPointerPosition()
                 {
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;

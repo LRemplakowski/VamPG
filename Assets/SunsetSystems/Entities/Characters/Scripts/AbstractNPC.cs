@@ -21,7 +21,6 @@ namespace SunsetSystems.Entities.Characters
 
         public override void Move(Vector3 moveTarget, float stoppingDistance)
         {
-            ClearAllActions();
             Agent.stoppingDistance = stoppingDistance;
             AddActionToQueue(new Move(this, moveTarget));
         }
@@ -39,7 +38,6 @@ namespace SunsetSystems.Entities.Characters
 
         public override void Attack(Creature target)
         {
-            ClearAllActions();
             AddActionToQueue(new Attack(target, this));
         }
 

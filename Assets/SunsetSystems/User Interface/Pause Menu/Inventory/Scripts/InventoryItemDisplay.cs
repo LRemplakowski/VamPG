@@ -1,29 +1,34 @@
+using NaughtyAttributes;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.UI.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SunsetSystems.UserInterface
 {
-    public class InventoryItemDisplay : MonoBehaviour
+    public class InventoryItemDisplay : MonoBehaviour, IUserInterfaceView<BaseItem, InventoryItemDisplay>
     {
-        [SerializeField]
-        internal BaseItem item;
-        [SerializeField]
+        [SerializeField, ReadOnly]
+        private BaseItem _item;
+        [SerializeField, ReadOnly]
         private Image _icon;
-        [SerializeField]
-        private TextMeshProUGUI _name, _category, _value;
 
-        // Update is called once per frame
-        void Update()
+
+        public void UpdateView(IGameDataProvider<BaseItem> dataProvider)
         {
-            if (item != null)
+            ResetView();
+            if (dataProvider != null)
             {
-                _icon.sprite = item.Icon;
-                _name.text = item.ItemName;
-                _category.text = item.ItemCategory.ToString();
-                _value.text = "0 $";
+                _item = dataProvider.Data;
+                _icon.sprite = _item.Icon;
             }
+        }
+
+        private void ResetView()
+        {
+            _icon.sprite = null;
+            _item = null;
         }
     }
 }

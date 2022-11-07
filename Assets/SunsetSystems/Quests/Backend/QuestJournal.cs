@@ -66,6 +66,11 @@ namespace SunsetSystems.Journal
             OnTrackedQuestsChanged?.Invoke(_trackedQuests);
         }
 
+        public bool IsQuestCompleted(string questID)
+        {
+            return _completedQuests.ContainsKey(questID);
+        }
+
         public bool BeginQuest(string questID)
         {
             if (_completedQuests.ContainsKey(questID))

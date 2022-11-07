@@ -16,14 +16,16 @@ namespace SunsetSystems.Entities.Interactable
         private Objective Objective => _associatedQuest.Info.Objectives.Find(o => o.ID.Equals(_objectiveID));
         private bool ObjectiveActive = false;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             Objective.OnObjectiveActive += OnObjectiveActive;
             Objective.OnObjectiveInactive += OnObjectiveInactive;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
             if (string.IsNullOrEmpty(_objectiveID))
             {
                 Debug.LogWarning($"Null or empty objective ID in GameObject {gameObject.name}! Resetting!");
@@ -47,7 +49,7 @@ namespace SunsetSystems.Entities.Interactable
             return ObjectiveActive;
         }
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
             if (CheckCompletion(Objective))
             {
@@ -58,7 +60,6 @@ namespace SunsetSystems.Entities.Interactable
             {
                 Debug.Log($"Objective {_objectiveID} is not active!");
             }
-            base.Interact();
         }
 
         public string[] Objectives()

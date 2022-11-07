@@ -25,11 +25,7 @@ namespace SunsetSystems.Entities.Characters
 
         public void TakeDamage(int damage)
         {
-            //int newHealth = Health - damage;
-            //Debug.Log(gameObject.name + " takes " + damage + " damage!" + "\nCurrent health: " + Health + "\nHealth after attack: " + newHealth);
-            //Health = newHealth < 0 ? 0 : newHealth;
-            //if (Health <= 0)
-            //    Die();
+            Debug.Log("Taking damage! " + damage);
         }
 
         public virtual void Die()
@@ -49,7 +45,7 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetInitiative()
         {
-            return 0;
+            return 1;
         }
 
         public float GetWeaponMaxRange()
@@ -64,7 +60,7 @@ namespace SunsetSystems.Entities.Characters
 
         public bool IsAlive()
         {
-            return Health?.GetValue() > 0;
+            return true;
         }
 
         public AttributeSkillPool GetDefensePool()

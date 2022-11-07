@@ -1,30 +1,33 @@
+using SunsetSystems.UI.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SunsetSystems.Journal.UI
 {
-    public class QuestContainer : MonoBehaviour
+    public class QuestContainer : MonoBehaviour, IUserInterfaceView<Quest, QuestContainer>
     {
         private Quest _quest;
-        private QuestView _questView;
         [SerializeField]
         private TextMeshProUGUI _questTitle;
+        [SerializeField]
+        private Button _button;
 
-        public void Initialize(Quest _quest, QuestView _questView)
+        public static event Action<Quest> QuestSelectorButtonClicked;
+
+        public void OnButtonClicked()
         {
-            this._quest = _quest;
-            this._questView = _questView;
-            _questTitle.text = _quest.Info.Name;
+            QuestSelectorButtonClicked?.Invoke(_quest);
         }
 
-        public void DisplayQuest()
+        public void UpdateView(IGameDataProvider<Quest> dataProvider)
         {
-            if (_quest != null && _questView != null)
-            {
-                _questView.DisplayQuest(_quest);
-            }
+            _quest = dataProvider.Data;
+            _questTitle.text = _quest.Info.Name;
+            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.ID);
         }
     }
 }

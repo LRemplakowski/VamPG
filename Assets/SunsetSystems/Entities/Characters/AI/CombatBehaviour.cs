@@ -96,7 +96,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     private void Update()
     {
-        if (GameManager.IsCurrentState(GameState.Combat))
+        if (GameManager.IsCurrentState(GameState.Combat) && Owner != null && CombatManager.CurrentActiveActor != null)
             if (!IsPlayerControlled && Owner.Equals(CombatManager.CurrentActiveActor))
                 if (HasMoved && HasActed)
                     CombatManager.Instance.NextRound();

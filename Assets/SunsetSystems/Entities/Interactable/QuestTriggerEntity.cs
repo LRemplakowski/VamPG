@@ -11,10 +11,9 @@ namespace SunsetSystems.Entities.Interactable
         private Quest _myQuest;
         public Quest MyQuest => _myQuest;
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
             (this as IQuestTrigger).TriggerQuest();
-            base.Interact();
         }
     }
 }

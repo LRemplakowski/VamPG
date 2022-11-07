@@ -19,6 +19,7 @@ namespace SunsetSystems.UI.Utils
                 Debug.LogWarning("UI Update Reciever recieved an empty or null collection!");
                 return;
             }
+            ViewParent.gameObject.SetActive(true);
             for (int i = 0; i < data.Count; i++)
             {
                 IGameDataProvider<T> dataProvider = data[i];

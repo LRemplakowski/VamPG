@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using SunsetSystems.Dialogue;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -10,9 +7,9 @@ namespace SunsetSystems.Entities.Interactable
         [SerializeField]
         private TextAsset entityDialogue;
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
-            base.Interact();
+
         }
     }
 }

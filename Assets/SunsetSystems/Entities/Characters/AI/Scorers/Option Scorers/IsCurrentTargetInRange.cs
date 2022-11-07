@@ -11,6 +11,8 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
+            if (context.CurrentTarget == null)
+                return 0;
             Vector3 myPos = context.Owner.transform.position;
             Vector3 targetPos = context.CurrentTarget.transform.position;
 

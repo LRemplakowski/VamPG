@@ -41,6 +41,9 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private CreatureType _creatureType;
         public CreatureType CreatureType { get => _creatureType; }
+        [SerializeField]
+        private bool _useEquipmentPreset;
+        public bool UseEquipmentPreset => _useEquipmentPreset;
 
 
         private void OnEnable()

@@ -20,17 +20,44 @@ namespace SunsetSystems.Journal.UI
 
         public QuestContainer ViewPrefab => _questContainerPrefab;
 
-        public void ListQuests(IList<Quest> quests)
+        public void ListQuests(List<Quest> quests)
         {
-            if (quests == null || quests.Count() <= 0)
+            UpdateViews(new List<IGameDataProvider<Quest>>(quests));
+        }
+
+        public void UpdateViews(IList<IGameDataProvider<Quest>> data)
+        {
+            DisableViews();
+            if (data == null || data.Count <= 0)
             {
-                Debug.LogWarning("Quest listing recieved an empty or null collection!");
-                DisableViews();
+                Debug.LogWarning("UI Update Reciever recieved an empty or null collection!");
                 return;
             }
-            List<IGameDataProvider<Quest>> data = new();
-            data.AddRange(quests);
-            (this as IUserInterfaceUpdateReciever<Quest, QuestContainer>).UpdateViews(data);
+            ViewParent.gameObject.SetActive(true);
+            for (int i = 0; i < data.Count; i++)
+            {
+                IGameDataProvider<Quest> dataProvider = data[i];
+                if (dataProvider == null)
+                {
+                    Debug.LogError("Null DataProvider while creating view!");
+                    continue;
+                }
+
+                IUserInterfaceView<Quest, QuestContainer> view;
+                if (ViewPool.Count > i)
+                {
+                    Debug.Log("Getting view from pool!");
+                    view = ViewPool[i];
+                }
+                else
+                {
+                    Debug.Log("Instantiating new view!");
+                    view = Instantiate(ViewPrefab, ViewParent);
+                    ViewPool.Add(view);
+                }
+                view.UpdateView(dataProvider);
+                (view as MonoBehaviour).gameObject.SetActive(true);
+            }
             gameObject.SetActive(true);
         }
 

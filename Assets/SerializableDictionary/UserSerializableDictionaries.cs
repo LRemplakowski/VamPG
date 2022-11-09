@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using SunsetSystems.Journal;
+using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.UI;
 
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> { }
@@ -28,3 +30,15 @@ public class ColorArrayStorage : SerializableDictionary.Storage<Color[]> { }
 
 [Serializable]
 public class StringColorArrayDictionary : SerializableDictionary<string, Color[], ColorArrayStorage> { }
+
+[Serializable]
+public class StringEquipmentSlotDictionary : SerializableDictionary<string, EquipmentSlot> { }
+
+[Serializable]
+public class StringEquipmentDataDictionary : SerializableDictionary<string, EquipmentData> { }
+
+[Serializable]
+public class StringVector3Dictionary : SerializableDictionary<string, Vector3> { }
+
+[Serializable]
+public class StringEquipmentSlotDisplayDictionary : SerializableDictionary<string, EquipmentSlotDisplay> { }

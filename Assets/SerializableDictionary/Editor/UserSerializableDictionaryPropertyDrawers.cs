@@ -10,6 +10,10 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(StringBoolDictionary))]
 [CustomPropertyDrawer(typeof(StringQuestDictionary))]
 [CustomPropertyDrawer(typeof(StringQuestDataDictionary))]
+[CustomPropertyDrawer(typeof(StringEquipmentDataDictionary))]
+[CustomPropertyDrawer(typeof(StringEquipmentSlotDictionary))]
+[CustomPropertyDrawer(typeof(StringVector3Dictionary))]
+[CustomPropertyDrawer(typeof(StringEquipmentSlotDisplayDictionary))]
 public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 
 [CustomPropertyDrawer(typeof(ColorArrayStorage))]

@@ -1,23 +1,31 @@
+using Adnc.Utility;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.UI.Utils;
 using UnityEngine;
 
-namespace SunsetSystems.Equipment
+namespace SunsetSystems.Inventory
 {
     [System.Serializable]
-    public class EquipmentSlot : IEquipmentSlot
+    public class EquipmentSlot : IEquipmentSlot, IGameDataProvider<EquipmentSlot>
     {
-        [SerializeField, HideInInspector]
-        private string _name;
+        [field: SerializeField, ReadOnly]
+        public string Name { get; private set; }
+        [field: SerializeField, ReadOnly]
+        public string ID { get; private set; }
         [SerializeField]
         private ItemCategory _acceptedCategory;
         public ItemCategory AcceptedCategory { get => _acceptedCategory; }
+
+        public EquipmentSlot Data => this;
+
         [SerializeField]
         private EquipableItem _equippedItem;
 
-        public EquipmentSlot(ItemCategory _acceptedCategory)
+        public EquipmentSlot(ItemCategory acceptedCategory, string name, string id)
         {
-            this._acceptedCategory = _acceptedCategory;
-            _name = _acceptedCategory.ToString();
+            this._acceptedCategory = acceptedCategory;
+            this.Name = name;
+            this.ID = id;
         }
 
         public EquipableItem GetEquippedItem()

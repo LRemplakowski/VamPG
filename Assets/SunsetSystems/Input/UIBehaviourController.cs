@@ -6,6 +6,7 @@ using SunsetSystems.Utils;
 using SunsetSystems.Utils.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -31,6 +32,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape += OnEscape;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
             PlayerInputHandler.OnJournal += OnJournal;
+            PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
         }
 
         private void OnDisable()
@@ -39,7 +41,8 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
             PlayerInputHandler.OnEscape -= OnEscape;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
-            PlayerInputHandler.OnJournal -= OnJournal;
+            PlayerInputHandler.OnJournal -= OnJournal; 
+            PlayerInputHandler.OnSecondaryAction -= OnSecondaryAction;
         }
 
         private void Start()
@@ -70,6 +73,20 @@ namespace SunsetSystems.Input
                 gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
             if (!gameManager)
                 gameManager = this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
+        }
+
+        private void OnSecondaryAction(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+            if (InputHelper.IsRaycastHittingUIObject(pointerPosition, out List<RaycastResult> hits))
+            {
+                IContextMenuTarget contextMenuTarget;
+                if (hits.Any(h => (contextMenuTarget = h.gameObject.GetComponent<IContextMenuTarget>()) is not null))
+                {
+
+                }
+            }
         }
 
         private void OnEscape(InputAction.CallbackContext context)

@@ -17,6 +17,7 @@ namespace SunsetSystems.Entities.Characters
         public string umaPresetFileName;
         public RuntimeAnimatorController animatorControllerAsset;
         public StatsData stats;
+        public bool useEquipmentPreset;
 
         public CreatureData(CreatureConfig config)
         {
@@ -29,6 +30,7 @@ namespace SunsetSystems.Entities.Characters
             umaPresetFileName = config.UmaPresetFilename;
             animatorControllerAsset = config.AnimatorController;
             stats = new(config.StatsAsset);
+            useEquipmentPreset = config.UseEquipmentPreset;
         }
 
         public CreatureData(CreatureData data)
@@ -43,6 +45,7 @@ namespace SunsetSystems.Entities.Characters
             umaPresetFileName = new(data.umaPresetFileName);
             animatorControllerAsset = data.animatorControllerAsset;
             stats = new(data.stats);
+            useEquipmentPreset = data.useEquipmentPreset;
         }
     }
 }

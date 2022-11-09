@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SunsetSystems.UI.Utils
 {
-    public interface IUserInterfaceUpdateReciever<T,U> where U : MonoBehaviour, IUserInterfaceView<T,U> where T : IGameDataProvider<T>
+    public interface IUserInterfaceUpdateReciever<T>
     {
         void DisableViews();
 

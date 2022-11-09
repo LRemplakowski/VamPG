@@ -1,14 +1,16 @@
 using NaughtyAttributes;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SunsetSystems.UI
 {
-    public class InventoryItemDisplay : MonoBehaviour, IUserInterfaceView<InventoryEntry, InventoryItemDisplay>
+    public class InventoryItemDisplay : Button, IUserInterfaceView<InventoryEntry>
     {
         [SerializeField, ReadOnly]
         private InventoryEntry _itemEntry;
@@ -16,12 +18,6 @@ namespace SunsetSystems.UI
         private Image _icon;
         [SerializeField]
         private TextMeshProUGUI _stackSize;
-
-
-        private void OnEnable()
-        {
-            ResetView();
-        }
 
         public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
@@ -31,7 +27,7 @@ namespace SunsetSystems.UI
                 _itemEntry = dataProvider.Data;
                 _icon.sprite = _itemEntry._item.Icon;
                 _icon.gameObject.SetActive(true);
-                if (_itemEntry._stackSize > 0)
+                if (_itemEntry._item.Stackable)
                 {
                     _stackSize.gameObject.SetActive(true);
                     _stackSize.text = _itemEntry._stackSize.ToString();
@@ -40,19 +36,40 @@ namespace SunsetSystems.UI
                 {
                     _stackSize.gameObject.SetActive(false);
                 }
+                interactable = true;
             }
         }
 
-        private void OnClick()
+        public void OnClick()
         {
             //TODO: Handle equip item in double click or right click context menu
             Debug.Log($"Equipping item {_itemEntry._item.ItemName}!");
+            if (_itemEntry._item is EquipableItem item)
+            {
+                InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item);
+            }
         }
 
         private void ResetView()
         {
             _icon.gameObject.SetActive(false);
             _itemEntry = null;
+            _stackSize.gameObject.SetActive(false);
+            interactable = false;
+        }
+
+        public void OpentContextMenu()
+        {
+            //TODO: Actually make a context menu for an item instead of just equipping it
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+            if (eventData.button.Equals(PointerEventData.InputButton.Right) && interactable)
+            {
+                OpentContextMenu();
+            }
         }
     }
 }

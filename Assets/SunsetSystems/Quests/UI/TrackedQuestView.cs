@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Journal.UI
 {
-    public class TrackedQuestView : MonoBehaviour, IUserInterfaceView<Quest, TrackedQuestView>
+    public class TrackedQuestView : MonoBehaviour, IUserInterfaceView<Quest>
     {
         [SerializeField]
         private Image _icon;

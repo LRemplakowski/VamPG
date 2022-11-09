@@ -147,7 +147,6 @@ GameObject:
   - component: {fileID: 4749504656167190990}
   - component: {fileID: 5881373051898320047}
   - component: {fileID: 4917625337047452797}
-  - component: {fileID: 8072146705161502216}
   m_Layer: 5
   m_Name: Item Display
   m_TagString: Untagged
@@ -227,23 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 463fcaacd6150e245aeaecee4f0995b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemEntry:
-    _item: {fileID: 0}
-    _stackSize: 0
-  _icon: {fileID: 3697030120680710090}
-  _stackSize: {fileID: 9120389528801355665}
---- !u!114 &8072146705161502216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1521776819800376536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -271,11 +253,28 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 5881373051898320047}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4917625337047452797}
+        m_TargetAssemblyTypeName: SunsetSystems.UI.InventoryItemDisplay, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _itemEntry:
+    _item: {fileID: 0}
+    _stackSize: 0
+  _icon: {fileID: 3697030120680710090}
+  _stackSize: {fileID: 9120389528801355665}
 --- !u!1 &5076687957975597337
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,7 +292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3708396543906207944
 RectTransform:
   m_ObjectHideFlags: 0

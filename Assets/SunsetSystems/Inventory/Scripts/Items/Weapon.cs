@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
@@ -5,11 +6,13 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Weapon", menuName = "Sunset Inventory/Items/Weapon")]
     public class Weapon : EquipableItem, IWeapon
     {
-        [SerializeField]
-        protected int damageModifier = 0;
-        [SerializeField]
-        protected DamageType damageType;
-        [SerializeField]
+        public int damageModifier = 0;
+        public DamageType damageType;
+        public WeaponType weaponType;
+        public AttributeType associatedAttribute;
+        public SkillType associatedSkill;
+        private bool ShowRange => weaponType == WeaponType.Ranged;
+        [SerializeField, ShowIf("ShowRange")]
         protected int optimalRange = 0, rangeFalloff = 0;
 
         private void Awake()
@@ -34,5 +37,10 @@ namespace SunsetSystems.Inventory.Data
             data.damageType = damageType;
             return data;
         }
+    }
+
+    public enum WeaponType
+    {
+        Melee, Ranged
     }
 }

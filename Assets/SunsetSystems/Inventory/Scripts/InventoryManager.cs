@@ -24,7 +24,7 @@ namespace SunsetSystems.Inventory
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
 
-        public static event Action<Creature, EquipableItem> ItemEquipped, ItemUnequipped;
+        public static event Action<string, EquipableItem> ItemEquipped, ItemUnequipped;
 
         protected override void Awake()
         {
@@ -55,29 +55,33 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public static bool TryGetEquipmentData(Creature character, out EquipmentData data)
+        public static bool TryGetEquipmentData(string characterKey, out EquipmentData data)
         {
-            return Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out data);
+            return Instance._coterieEquipmentData.TryGetValue(characterKey, out data);
         }
 
-        public static bool TryEquipItemInSlot(Creature character, string slotID, EquipableItem item)
+        public static bool TryEquipItemInSlot(string characterID, string slotID, EquipableItem item)
         {
-            if (Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out EquipmentData equipmentData) == false)
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
                 EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
                 if (slot.GetEquippedItem() != null)
                 {
-                    if (TryUnequipItemFromSlot(character, slotID) == false)
+                    if (TryUnequipItemFromSlot(characterID, slotID) == false)
                     {
-                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + character.gameObject.name + "!");
+                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + characterID + "!");
                         return false;
                     }
                 }
                 bool success = slot.TryEquipItem(item);
                 if (success)
-                    ItemEquipped?.Invoke(character, item);
+                {
+                    PlayerInventory.TryRemoveItem(new(item));
+                    ItemEquipped?.Invoke(characterID, item);
+                }
+
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -86,9 +90,21 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public static bool TryUnequipItemFromSlot(Creature character, string slotID)
+        public static bool TryEquipItem(string characterKey, EquipableItem item)
         {
-            if (Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out EquipmentData equipmentData) == false)
+            if (TryGetEquipmentData(characterKey, out EquipmentData data))
+            {
+                List<string> slotIDs = EquipmentData.GetSlotIDsFromItemCategory(item.ItemCategory);
+                if (slotIDs.Count <= 0)
+                    return false;
+                return TryEquipItemInSlot(characterKey, slotIDs[0], item);
+            }
+            return false;
+        }
+
+        public static bool TryUnequipItemFromSlot(string characterKey, string slotID)
+        {
+            if (Instance._coterieEquipmentData.TryGetValue(characterKey, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
@@ -96,7 +112,11 @@ namespace SunsetSystems.Inventory
                 EquipableItem item = slot.GetEquippedItem();
                 bool success = slot.TryUnequipItem(item);
                 if (success)
-                    ItemUnequipped?.Invoke(character, item);
+                {
+                    PlayerInventory.AddItem(new(item));
+                    ItemUnequipped?.Invoke(characterKey, item);
+                }
+
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -159,6 +179,43 @@ namespace SunsetSystems.Inventory
             data.equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
             data.equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
             return data;
+        }
+
+        public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)
+        {
+            List<string> result = new();
+            switch (category)
+            {
+                case ItemCategory.OTHER:
+                    break;
+                case ItemCategory.WEAPON:
+                    result.Add(SLOT_WEAPON_PRIMARY);
+                    result.Add(SLOT_WEAPON_SECONDARY);
+                    break;
+                case ItemCategory.CLOTHING:
+                    result.Add(SLOT_CHEST);
+                    break;
+                case ItemCategory.OUTER_CLOTHING:
+                    break;
+                case ItemCategory.HEADWEAR:
+                    break;
+                case ItemCategory.FACEWEAR:
+                    break;
+                case ItemCategory.GLOVES:
+                    result.Add(SLOT_HANDS);
+                    break;
+                case ItemCategory.SHOES:
+                    result.Add(SLOT_BOOTS);
+                    break;
+                case ItemCategory.TROUSERS:
+                    break;
+                case ItemCategory.CONSUMABLE:
+                    break;
+                case ItemCategory.TRINKET:
+                    result.Add(SLOT_TRINKET);
+                    break;
+            }
+            return result;
         }
     }
 }

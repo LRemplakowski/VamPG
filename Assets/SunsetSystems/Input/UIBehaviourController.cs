@@ -32,7 +32,6 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape += OnEscape;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
             PlayerInputHandler.OnJournal += OnJournal;
-            PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
         }
 
         private void OnDisable()
@@ -42,7 +41,6 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape -= OnEscape;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
             PlayerInputHandler.OnJournal -= OnJournal; 
-            PlayerInputHandler.OnSecondaryAction -= OnSecondaryAction;
         }
 
         private void Start()
@@ -84,7 +82,7 @@ namespace SunsetSystems.Input
                 IContextMenuTarget contextMenuTarget;
                 if (hits.Any(h => (contextMenuTarget = h.gameObject.GetComponent<IContextMenuTarget>()) is not null))
                 {
-
+                    Debug.Log("Secondary action in UI!");
                 }
             }
         }

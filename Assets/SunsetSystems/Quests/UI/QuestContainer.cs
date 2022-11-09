@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Journal.UI
 {
-    public class QuestContainer : MonoBehaviour, IUserInterfaceView<Quest, QuestContainer>
+    public class QuestContainer : MonoBehaviour, IUserInterfaceView<Quest>
     {
         private Quest _quest;
         [SerializeField]

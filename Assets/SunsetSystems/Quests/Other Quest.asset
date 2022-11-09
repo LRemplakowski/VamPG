@@ -22,13 +22,11 @@ MonoBehaviour:
     - ID: FIRST_CUBE
       Description: Interact with cube closest to the one that started the quest
       IsFirst: 1
-      IsLast: 0
-    - ID: SECOND_CUBE
-      Description: Interact with the middle cube
-      IsFirst: 0
-      IsLast: 0
-    - ID: LAST_CUBE
-      Description: Almost done, interact with the last one
-      IsFirst: 0
       IsLast: 1
-  <Rewards>k__BackingField: []
+  <Rewards>k__BackingField:
+  - Amount: 1
+    Reward: {fileID: 11400000, guid: 0cc6e476df459a5428d8ed6746ba9ade, type: 2}
+  - Amount: 1
+    Reward: {fileID: 11400000, guid: 9473c7124bd30fe4cb13e2a1422685a1, type: 2}
+  - Amount: 1
+    Reward: {fileID: 11400000, guid: 5a9d982118b449b4ca9962133080abf2, type: 2}

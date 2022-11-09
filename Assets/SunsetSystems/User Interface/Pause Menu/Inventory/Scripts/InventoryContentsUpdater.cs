@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Inventory.UI
 {
-    public class InventoryContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<InventoryEntry, InventoryItemDisplay>
+    public class InventoryContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<InventoryEntry>
     {
         [SerializeField]
         private InventoryItemDisplay _viewPrefab;
@@ -22,10 +22,12 @@ namespace SunsetSystems.Inventory.UI
 
         public Transform ViewParent => transform;
 
-        private readonly List<IUserInterfaceView<InventoryEntry, InventoryItemDisplay>> _viewPool = new();
-        public List<IUserInterfaceView<InventoryEntry, InventoryItemDisplay>> ViewPool => _viewPool;
+        private readonly List<InventoryItemDisplay> _viewPool = new();
+        public List<InventoryItemDisplay> ViewPool => _viewPool;
 
-        private void Start()
+        private bool initializedOnce = false;
+
+        private void Initialize()
         {
             ViewPool.AddRange(GetComponentsInChildren<InventoryItemDisplay>());
             for (int i = ViewPool.Count; i < ColumnConstraint * _minimumVisibleRows; i++)
@@ -33,11 +35,13 @@ namespace SunsetSystems.Inventory.UI
                 InventoryItemDisplay display = Instantiate(_viewPrefab, ViewParent);
                 ViewPool.Add(display);
             }
-            DisableViews();
+            initializedOnce = true;
         }
 
         public void UpdateViews(IList<IGameDataProvider<InventoryEntry>> data)
         {
+            if (!initializedOnce)
+                Initialize();
             DisableViews();
             if (data == null || data.Count <= 0)
             {
@@ -54,20 +58,18 @@ namespace SunsetSystems.Inventory.UI
                     continue;
                 }
 
-                IUserInterfaceView<InventoryEntry, InventoryItemDisplay> view;
+                InventoryItemDisplay view;
                 if (ViewPool.Count > i)
                 {
-                    Debug.Log("Getting view from pool!");
                     view = ViewPool[i];
                 }
                 else
                 {
-                    Debug.Log("Instantiating new view!");
                     view = Instantiate(ViewPrefab, ViewParent);
                     ViewPool.Add(view);
                 }
                 view.UpdateView(dataProvider);
-                (view as MonoBehaviour).gameObject.SetActive(true);
+                view.gameObject.SetActive(true);
             }
         }
 
@@ -86,14 +88,14 @@ namespace SunsetSystems.Inventory.UI
         {
             for (int i = 0; i < ViewPool.Count; i++)
             {
-                IUserInterfaceView<InventoryEntry, InventoryItemDisplay> itemDisplay = ViewPool[i];
+                InventoryItemDisplay itemDisplay = ViewPool[i];
                 itemDisplay.UpdateView(null);
                 if (i < _minimumVisibleRows * ColumnConstraint)
                 {
-                    (itemDisplay as MonoBehaviour).gameObject.SetActive(true);
+                    itemDisplay.gameObject.SetActive(true);
                     continue;
                 }
-                (itemDisplay as MonoBehaviour).gameObject.SetActive(false);
+                itemDisplay.gameObject.SetActive(false);
             }
         }
     }

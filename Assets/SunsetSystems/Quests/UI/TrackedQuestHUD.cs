@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal.UI
 {
-    public class TrackedQuestHUD : MonoBehaviour, IUserInterfaceUpdateReciever<Quest, TrackedQuestView>
+    public class TrackedQuestHUD : MonoBehaviour, IUserInterfaceUpdateReciever<Quest>
     {
         [SerializeField]
         private TrackedQuestView _trackedQuestViewPrefab;
 
-        public List<IUserInterfaceView<Quest, TrackedQuestView>> ViewPool { get; } = new();
+        public List<TrackedQuestView> ViewPool { get; } = new();
         public TrackedQuestView ViewPrefab => _trackedQuestViewPrefab;
         public Transform ViewParent => transform;
 
@@ -57,7 +57,7 @@ namespace SunsetSystems.Journal.UI
                     continue;
                 }
 
-                IUserInterfaceView<Quest, TrackedQuestView> view;
+                TrackedQuestView view;
                 if (ViewPool.Count > i)
                 {
                     Debug.Log("Getting view from pool!");

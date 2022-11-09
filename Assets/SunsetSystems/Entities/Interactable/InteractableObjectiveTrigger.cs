@@ -16,11 +16,13 @@ namespace SunsetSystems.Entities.Interactable
         private Objective Objective => _associatedQuest.Info.Objectives.Find(o => o.ID.Equals(_objectiveID));
         private bool ObjectiveActive = false;
 
-        protected override void Awake()
+        protected void Start()
         {
-            base.Awake();
-            Objective.OnObjectiveActive += OnObjectiveActive;
-            Objective.OnObjectiveInactive += OnObjectiveInactive;
+            if (Objective != null)
+            {
+                Objective.OnObjectiveActive += OnObjectiveActive;
+                Objective.OnObjectiveInactive += OnObjectiveInactive;
+            }
         }
 
         protected override void OnValidate()

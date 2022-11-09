@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal.UI
 {
-    public class QuestListing : MonoBehaviour, IUserInterfaceUpdateReciever<Quest, QuestContainer>
+    public class QuestListing : MonoBehaviour, IUserInterfaceUpdateReciever<Quest>
     {
         [SerializeField, Required]
         private QuestContainer _questContainerPrefab;
@@ -16,7 +16,7 @@ namespace SunsetSystems.Journal.UI
 
         public Transform ViewParent => transform;
 
-        public List<IUserInterfaceView<Quest, QuestContainer>> ViewPool { get; } = new();
+        public List<QuestContainer> ViewPool { get; } = new();
 
         public QuestContainer ViewPrefab => _questContainerPrefab;
 
@@ -43,7 +43,7 @@ namespace SunsetSystems.Journal.UI
                     continue;
                 }
 
-                IUserInterfaceView<Quest, QuestContainer> view;
+                QuestContainer view;
                 if (ViewPool.Count > i)
                 {
                     Debug.Log("Getting view from pool!");
@@ -56,7 +56,7 @@ namespace SunsetSystems.Journal.UI
                     ViewPool.Add(view);
                 }
                 view.UpdateView(dataProvider);
-                (view as MonoBehaviour).gameObject.SetActive(true);
+                view.gameObject.SetActive(true);
             }
             gameObject.SetActive(true);
         }

@@ -48,21 +48,16 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
+            if (!context.performed)
             if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
             {
-                if (hits.Any(hit => {
-                        CanvasGroup group = hit.gameObject.GetComponent<CanvasGroup>();
-                        if (group)
-                            return group.blocksRaycasts;
-                        return false;
-                    }))
+                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
                 {
                     Debug.Log("Raycast hit UI object!");
                     return;
                 }
             }
-            if (context.performed)
-                HandleSecondaryAction();
+            HandleSecondaryAction();
         }
 
         private void HandleSecondaryAction()
@@ -90,7 +85,6 @@ namespace SunsetSystems.Input
                             break;
                         }
                     default:
-                        Debug.Log("Default click behaviour");
                         break;
                 }
             }
@@ -133,12 +127,10 @@ namespace SunsetSystems.Input
                 }
                 else
                 {
-                    Debug.Log("Moving to position " + hit.point.ToString());
                     creatures.Add(PartyManager.MainCharacter);
                 }
                 if (PartyManager.ActiveParty.Count > 1)
                     creatures.AddRange(PartyManager.Companions);
-                Debug.Log("Count = " + PartyManager.ActiveParty.Count);
                 MoveCreaturesToPosition(creatures, hit.point);
             }
         }

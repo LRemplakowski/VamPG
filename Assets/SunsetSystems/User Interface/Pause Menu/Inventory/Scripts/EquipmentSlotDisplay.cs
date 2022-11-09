@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Inventory.UI
 {
-    public class EquipmentSlotDisplay : MonoBehaviour, IUserInterfaceView<EquipmentSlot, EquipmentSlotDisplay>
+    public class EquipmentSlotDisplay : Button, IUserInterfaceView<EquipmentSlot>
     {
         [SerializeField, ReadOnly]
         private EquipmentSlot _cachedSlotData;
@@ -26,6 +26,14 @@ namespace SunsetSystems.Inventory.UI
             else
             {
                 _itemIcon.gameObject.SetActive(false);
+            }
+        }
+
+        public void UnequipItemFromSlot()
+        {
+            if (_cachedSlotData != null && _cachedSlotData.GetEquippedItem() != null)
+            {
+                InventoryManager.TryUnequipItemFromSlot(CharacterSelector.SelectedCharacterKey, _cachedSlotData.ID);
             }
         }
     }

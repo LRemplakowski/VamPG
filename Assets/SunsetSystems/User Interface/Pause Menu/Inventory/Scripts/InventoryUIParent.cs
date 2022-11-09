@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
@@ -21,8 +22,8 @@ namespace SunsetSystems.UI
         private void OnEnable()
         {
             string characterKey = CharacterSelector.SelectedCharacterKey;
-            UpdateEquipment(characterKey, null);
-            UpdateInventory(characterKey, null);
+            UpdateEquipment(characterKey);
+            UpdateInventory(characterKey);
 
             InventoryManager.ItemEquipped += UpdateInventory;
             InventoryManager.ItemEquipped += UpdateEquipment;
@@ -38,7 +39,7 @@ namespace SunsetSystems.UI
             InventoryManager.ItemUnequipped -= UpdateEquipment;
         }
 
-        private void UpdateEquipment(string characterKey, EquipableItem item)
+        private void UpdateEquipment(string characterKey)
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
@@ -48,13 +49,16 @@ namespace SunsetSystems.UI
             }
         }
 
-        private void UpdateInventory(string characterKey, EquipableItem item)
+        private void UpdateInventory(string characterKey)
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
                 List<IGameDataProvider<EquipmentSlot>> slots = new();
                 InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data);
-                slots.AddRange(data.equipmentSlots.Values);
+                foreach (string key in data.equipmentSlots.Keys)
+                {
+                    slots.Add(data.equipmentSlots[key]);
+                }
                 _equipmentContentsUpdater.UpdateViews(slots);
             }
         }

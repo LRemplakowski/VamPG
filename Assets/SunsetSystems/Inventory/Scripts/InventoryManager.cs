@@ -1,7 +1,5 @@
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Entities.Characters;
-using NaughtyAttributes;
-using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
@@ -24,7 +22,7 @@ namespace SunsetSystems.Inventory
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
 
-        public static event Action<string, EquipableItem> ItemEquipped, ItemUnequipped;
+        public static event Action<string> ItemEquipped, ItemUnequipped;
 
         protected override void Awake()
         {
@@ -79,9 +77,13 @@ namespace SunsetSystems.Inventory
                 if (success)
                 {
                     PlayerInventory.TryRemoveItem(new(item));
-                    ItemEquipped?.Invoke(characterID, item);
+                    equipmentData.equipmentSlots[slotID] = slot;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
+                    ItemEquipped?.Invoke(characterID);
                 }
-
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -102,9 +104,9 @@ namespace SunsetSystems.Inventory
             return false;
         }
 
-        public static bool TryUnequipItemFromSlot(string characterKey, string slotID)
+        public static bool TryUnequipItemFromSlot(string characterID, string slotID)
         {
-            if (Instance._coterieEquipmentData.TryGetValue(characterKey, out EquipmentData equipmentData) == false)
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
@@ -114,9 +116,13 @@ namespace SunsetSystems.Inventory
                 if (success)
                 {
                     PlayerInventory.AddItem(new(item));
-                    ItemUnequipped?.Invoke(characterKey, item);
+                    equipmentData.equipmentSlots[slot.ID] = slot;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
+                    ItemUnequipped?.Invoke(characterID);
                 }
-
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -152,70 +158,6 @@ namespace SunsetSystems.Inventory
         {
             public StringEquipmentDataDictionary EquipmentData;
             public ItemStorage PlayerInventory;
-        }
-    }
-
-    [Serializable]
-    public struct EquipmentData
-    {
-        public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
-        public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
-        public const string SLOT_CHEST = "SLOT_CHEST";
-        public const string SLOT_BOOTS = "SLOT_BOOTS";
-        public const string SLOT_HANDS = "SLOT_HANDS";
-        public const string SLOT_TRINKET = "SLOT_TRINKET";
-
-        [ReadOnly]
-        public StringEquipmentSlotDictionary equipmentSlots;
-
-        public static EquipmentData Initialize()
-        {
-            EquipmentData data = new();
-            data.equipmentSlots = new();
-            data.equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
-            data.equipmentSlots.Add(SLOT_WEAPON_SECONDARY, new EquipmentSlot(ItemCategory.WEAPON, "Secondary Weapon", SLOT_WEAPON_SECONDARY));
-            data.equipmentSlots.Add(SLOT_CHEST, new EquipmentSlot(ItemCategory.CLOTHING, "Chest", SLOT_CHEST));
-            data.equipmentSlots.Add(SLOT_BOOTS, new EquipmentSlot(ItemCategory.SHOES, "Boots", SLOT_BOOTS));
-            data.equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
-            data.equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
-            return data;
-        }
-
-        public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)
-        {
-            List<string> result = new();
-            switch (category)
-            {
-                case ItemCategory.OTHER:
-                    break;
-                case ItemCategory.WEAPON:
-                    result.Add(SLOT_WEAPON_PRIMARY);
-                    result.Add(SLOT_WEAPON_SECONDARY);
-                    break;
-                case ItemCategory.CLOTHING:
-                    result.Add(SLOT_CHEST);
-                    break;
-                case ItemCategory.OUTER_CLOTHING:
-                    break;
-                case ItemCategory.HEADWEAR:
-                    break;
-                case ItemCategory.FACEWEAR:
-                    break;
-                case ItemCategory.GLOVES:
-                    result.Add(SLOT_HANDS);
-                    break;
-                case ItemCategory.SHOES:
-                    result.Add(SLOT_BOOTS);
-                    break;
-                case ItemCategory.TROUSERS:
-                    break;
-                case ItemCategory.CONSUMABLE:
-                    break;
-                case ItemCategory.TRINKET:
-                    result.Add(SLOT_TRINKET);
-                    break;
-            }
-            return result;
         }
     }
 }

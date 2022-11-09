@@ -5,6 +5,7 @@ using SunsetSystems.Dice;
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using System.Linq;
+using SunsetSystems.Spellbook;
 
 namespace SunsetSystems.Entities.Characters
 {

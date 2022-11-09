@@ -23,8 +23,9 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(Animator)),
     RequireComponent(typeof(DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(UtilityAIComponent))]
-    [RequireComponent(typeof(CapsuleCollider))]
+    RequireComponent(typeof(UtilityAIComponent)),
+    RequireComponent(typeof(CapsuleCollider)),
+    RequireComponent(typeof(WardrobeManager))]
     public abstract class Creature : Entity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
@@ -41,6 +42,7 @@ namespace SunsetSystems.Entities.Characters
             CreatureInitializer.InitializeCreature(this);
         }
 
+        [field: SerializeField]
         public CreatureData Data { get; set; } = new();
 
         [SerializeField]

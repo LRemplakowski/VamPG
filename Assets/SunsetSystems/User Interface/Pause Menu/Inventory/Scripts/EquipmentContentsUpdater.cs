@@ -1,3 +1,4 @@
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.UI.Utils;
 using System.Collections;
 using System.Collections.Generic;

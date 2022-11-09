@@ -5,6 +5,7 @@ using UnityEngine;
 using SunsetSystems.Journal;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
+using SunsetSystems.Entities.Characters;
 
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> { }

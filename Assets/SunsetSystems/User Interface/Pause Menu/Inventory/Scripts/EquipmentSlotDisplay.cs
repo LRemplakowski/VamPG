@@ -31,7 +31,7 @@ namespace SunsetSystems.Inventory.UI
 
         public void UnequipItemFromSlot()
         {
-            if (_cachedSlotData != null && _cachedSlotData.GetEquippedItem() != null)
+            if (_cachedSlotData.GetEquippedItem() != null)
             {
                 InventoryManager.TryUnequipItemFromSlot(CharacterSelector.SelectedCharacterKey, _cachedSlotData.ID);
             }

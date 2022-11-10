@@ -1,4 +1,4 @@
-using SunsetSystems.Equipment;
+using SunsetSystems.Inventory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Party.Editor
 {
-    [CustomPropertyDrawer(typeof(SerializableStringCreatureAssetDictionary))]
+    [CustomPropertyDrawer(typeof(StringCreatureDataDictionary))]
     public class SerializableStringCreatureAssetDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer
     {
 

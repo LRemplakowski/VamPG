@@ -1,13 +1,12 @@
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Entities.Characters;
-using NaughtyAttributes;
-using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Inventory
 {
@@ -16,12 +15,14 @@ namespace SunsetSystems.Inventory
     {
         [SerializeField]
         private ItemStorage _playerInventory;
+        [SerializeField]
+        private int _money;
         public static ItemStorage PlayerInventory => Instance._playerInventory;
         [SerializeField, ES3Serializable]
-        private SerializableStringEquipmentDataDictionary _coterieEquipmentData = new();
+        private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
 
-        public static event Action<Creature, EquipableItem> ItemEquipped, ItemUnequipped;
+        public static event Action<string> ItemEquipped, ItemUnequipped;
 
         protected override void Awake()
         {
@@ -29,38 +30,60 @@ namespace SunsetSystems.Inventory
             if (!_playerInventory)
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
-                _playerInventory = gameObject.AddComponent(typeof(ItemStorage)) as ItemStorage;
+                _playerInventory = gameObject.AddComponent<ItemStorage>();
             _unique ??= GetComponent<UniqueId>();
         }
 
-        public static bool TryAddCoterieMemberEquipment(Creature character)
+        private void OnEnable()
         {
-            return Instance._coterieEquipmentData.TryAdd(character.Data.FullName, new());
+            PartyManager.OnPartyMemberRecruited += AddCoterieMemberEquipment;
         }
 
-        public static bool TryGetEquipmentData(Creature character, out EquipmentData data)
+        public static void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)
         {
-            return Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out data);
+            if (creatureData.useEquipmentPreset)
+            {
+                throw new NotImplementedException("Equipment presets not implemented!");
+            }
+            else
+            {
+                bool success = Instance._coterieEquipmentData.TryAdd(creatureID, EquipmentData.Initialize());
+                if (!success)
+                    Debug.LogWarning($"Trying to add coterie member equipment, but equipment data for {creatureID} already exists!");
+            }
         }
 
-        public static bool TryEquipItemInSlot(Creature character, int slotID, EquipableItem item)
+        public static bool TryGetEquipmentData(string characterKey, out EquipmentData data)
         {
-            if (Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out EquipmentData equipmentData) == false)
+            return Instance._coterieEquipmentData.TryGetValue(characterKey, out data);
+        }
+
+        public static bool TryEquipItemInSlot(string characterID, string slotID, EquipableItem item)
+        {
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
                 EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
                 if (slot.GetEquippedItem() != null)
                 {
-                    if (TryUnequipItemFromSlot(character, slotID) == false)
+                    if (TryUnequipItemFromSlot(characterID, slotID) == false)
                     {
-                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + character.gameObject.name + "!");
+                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + characterID + "!");
                         return false;
                     }
                 }
                 bool success = slot.TryEquipItem(item);
                 if (success)
-                    ItemEquipped?.Invoke(character, item);
+                {
+                    PlayerInventory.TryRemoveItem(new(item));
+                    equipmentData.equipmentSlots[slotID] = slot;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
+                    ItemEquipped?.Invoke(characterID);
+                }
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -69,9 +92,21 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public static bool TryUnequipItemFromSlot(Creature character, int slotID)
+        public static bool TryEquipItem(string characterKey, EquipableItem item)
         {
-            if (Instance._coterieEquipmentData.TryGetValue(character.Data.FullName, out EquipmentData equipmentData) == false)
+            if (TryGetEquipmentData(characterKey, out EquipmentData data))
+            {
+                List<string> slotIDs = EquipmentData.GetSlotIDsFromItemCategory(item.ItemCategory);
+                if (slotIDs.Count <= 0)
+                    return false;
+                return TryEquipItemInSlot(characterKey, slotIDs[0], item);
+            }
+            return false;
+        }
+
+        public static bool TryUnequipItemFromSlot(string characterID, string slotID)
+        {
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
@@ -79,7 +114,15 @@ namespace SunsetSystems.Inventory
                 EquipableItem item = slot.GetEquippedItem();
                 bool success = slot.TryUnequipItem(item);
                 if (success)
-                    ItemUnequipped?.Invoke(character, item);
+                {
+                    PlayerInventory.AddItem(new(item));
+                    equipmentData.equipmentSlots[slot.ID] = slot;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
+                    ItemUnequipped?.Invoke(characterID);
+                }
                 return success;
             }
             catch (IndexOutOfRangeException)
@@ -98,38 +141,23 @@ namespace SunsetSystems.Inventory
 
         public void SaveRuntimeData()
         {
-            ES3.Save(_unique.Id, _coterieEquipmentData);
+            InventorySaveData saveData = new();
+            saveData.EquipmentData = _coterieEquipmentData;
+            saveData.PlayerInventory = _playerInventory;
+            ES3.Save(_unique.Id, saveData);
         }
 
         public void LoadRuntimeData()
         {
-            _coterieEquipmentData = ES3.Load<SerializableStringEquipmentDataDictionary>(_unique.Id);
+            InventorySaveData saveData = ES3.Load<InventorySaveData>(_unique.Id);
+            this._coterieEquipmentData = saveData.EquipmentData;
+            this._playerInventory = saveData.PlayerInventory;
         }
-    }
 
-    [Serializable]
-    public class EquipmentData
-    {
-        [ReadOnly]
-        public List<EquipmentSlot> equipmentSlots;
-
-        public EquipmentData()
+        private struct InventorySaveData
         {
-            equipmentSlots = new();
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.WEAPON));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.WEAPON));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.HEADWEAR));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.FACEWEAR));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.CLOTHING));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.OUTER_CLOTHING));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.TROUSERS));
-            equipmentSlots.Add(new EquipmentSlot(ItemCategory.SHOES));
+            public StringEquipmentDataDictionary EquipmentData;
+            public ItemStorage PlayerInventory;
         }
-    }
-
-    [Serializable]
-    public class SerializableStringEquipmentDataDictionary : SerializableDictionary<string, EquipmentData>
-    {
-
     }
 }

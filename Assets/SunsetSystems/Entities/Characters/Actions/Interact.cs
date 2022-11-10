@@ -1,7 +1,9 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+﻿using Redcode.Awaiting;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Utils.Threading;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -10,7 +12,6 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         private readonly IInteractable target;
         private Move moveToTarget;
-        private Task moveTask;
         private readonly CancellationTokenSource tokenSource = new();
 
         protected override Creature Owner
@@ -39,9 +40,22 @@ namespace SunsetSystems.Entities.Characters.Actions
             float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
             if (distance > target.InteractionDistance)
             {
-                moveToTarget = new Move(Owner, target.InteractionTransform.position);
+                await new WaitForUpdate();
+                moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
                 moveToTarget.Begin();
-                await Task.Run<Task>(InteractIfCloseEnough, tokenSource.Token);
+                while (!moveToTarget.IsFinished())
+                {
+                    if (tokenSource.Token.IsCancellationRequested)
+                    {
+                        Debug.Log("Cancelling interaction task!!");
+                        return;
+                    }
+                    await new WaitForUpdate();
+                }
+                moveToTarget = null;
+                await Owner.FaceTarget(target.InteractionTransform);
+                target.TargetedBy = Owner;
+                target.Interact();
             }
             else
             {
@@ -49,22 +63,6 @@ namespace SunsetSystems.Entities.Characters.Actions
                 target.TargetedBy = Owner;
                 target.Interact();
             }
-        }
-
-        private async Task InteractIfCloseEnough()
-        {
-            while (Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) <= target.InteractionDistance)
-            {
-                await Task.Yield();
-            }
-            moveToTarget.Abort();
-            await Task.Run(async () =>
-            {
-                await Owner.FaceTarget(target.InteractionTransform);
-            }, tokenSource.Token);
-
-            target.TargetedBy = Owner;
-            target.Interact();
         }
     }
 }

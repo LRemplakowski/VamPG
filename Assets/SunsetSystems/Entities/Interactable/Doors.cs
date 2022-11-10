@@ -10,16 +10,15 @@ namespace SunsetSystems.Entities.Interactable
         [SerializeField]
         private Animator animator;
 
-        private void Start()
+        protected void Start()
         {
             if (!animator)
                 animator = GetComponentInChildren<Animator>();
         }
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
-            animator.SetTrigger("DoorSwitch");
-            base.Interact();
+            animator?.SetTrigger("DoorSwitch");
         }
     }
 }

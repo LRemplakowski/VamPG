@@ -10,6 +10,7 @@ using SunsetSystems.Loading;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEditor;
+using UnityEngine.Animations.Rigging;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -23,9 +24,11 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(Animator)),
     RequireComponent(typeof(DynamicCharacterAvatar)),
     RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(UtilityAIComponent))]
-    [RequireComponent(typeof(CapsuleCollider))]
-    public abstract class Creature : Entity, ISaveRuntimeData
+    RequireComponent(typeof(UtilityAIComponent)),
+    RequireComponent(typeof(CapsuleCollider)),
+    RequireComponent(typeof(WardrobeManager)),
+    RequireComponent(typeof(RigBuilder))]
+    public abstract class Creature : Entity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
@@ -41,6 +44,7 @@ namespace SunsetSystems.Entities.Characters
             CreatureInitializer.InitializeCreature(this);
         }
 
+        [field: SerializeField]
         public CreatureData Data { get; set; } = new();
 
         [SerializeField]
@@ -114,8 +118,7 @@ namespace SunsetSystems.Entities.Characters
                 Data = new(config);
             if (StatsManager)
                 StatsManager.Initialize(Data.stats);
-            LoadRuntimeData();
-        }   
+        }
 
         protected virtual void Start()
         {
@@ -124,7 +127,7 @@ namespace SunsetSystems.Entities.Characters
 
         public virtual void OnDestroy()
         {
-            SaveRuntimeData();
+
         }
 
         public void Update()
@@ -216,16 +219,6 @@ namespace SunsetSystems.Entities.Characters
                 healthData,
                 0);
             return builder.Create();
-        }
-
-        public void SaveRuntimeData()
-        {
-            //throw new System.NotImplementedException();
-        }
-
-        public void LoadRuntimeData()
-        {
-            //throw new System.NotImplementedException();
         }
     }
 }

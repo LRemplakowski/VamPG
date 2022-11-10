@@ -13,6 +13,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public static OnMovementFinished onMovementFinished;
         public delegate void OnMovementStarted(Creature who);
         public static OnMovementStarted onMovementStarted;
+        private float stoppingDistance;
 
         protected override Creature Owner
         {
@@ -20,13 +21,19 @@ namespace SunsetSystems.Entities.Characters.Actions
             set;
         }
 
-        public Move(Creature owner, Vector3 destination)
+        public Move(Creature owner, Vector3 destination) : this(owner, destination, 0)
+        {
+            
+        }
+
+        public Move(Creature owner, Vector3 destination, float stoppingDistance)
         {
             this.Owner = owner;
             this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
             this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
+            this.stoppingDistance = stoppingDistance;
         }
 
         public override void Abort()
@@ -35,6 +42,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             navMeshAgent.isStopped = true;
             navMeshAgent.enabled = false;
             navMeshObstacle.enabled = true;
+            navMeshAgent.stoppingDistance = 0f;
             if (onMovementFinished != null)
                 onMovementFinished.Invoke(this.Owner);
         }
@@ -46,6 +54,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             navMeshAgent.ResetPath();
             navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
+            navMeshAgent.stoppingDistance = stoppingDistance;
             if (onMovementStarted != null)
                 onMovementStarted.Invoke(this.Owner);
         }

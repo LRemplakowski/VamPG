@@ -1,6 +1,5 @@
 ﻿using SunsetSystems.Entities.Data;
 using System;
-using UnityEditor.Animations;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
@@ -10,6 +9,7 @@ namespace SunsetSystems.Entities.Characters
     {
         public string firstName, lastName;
         public string FullName => firstName + " " + lastName;
+        public string ID => FullName;
         public Sprite portrait;
         public Faction faction;
         public BodyType bodyType;
@@ -17,6 +17,8 @@ namespace SunsetSystems.Entities.Characters
         public string umaPresetFileName;
         public RuntimeAnimatorController animatorControllerAsset;
         public StatsData stats;
+        public EquipmentData equipment;
+        public bool useEquipmentPreset;
 
         public CreatureData(CreatureConfig config)
         {
@@ -29,6 +31,8 @@ namespace SunsetSystems.Entities.Characters
             umaPresetFileName = config.UmaPresetFilename;
             animatorControllerAsset = config.AnimatorController;
             stats = new(config.StatsAsset);
+            equipment = new(config.EquipmentConfig);
+            useEquipmentPreset = config.UseEquipmentPreset;
         }
 
         public CreatureData(CreatureData data)
@@ -43,6 +47,8 @@ namespace SunsetSystems.Entities.Characters
             umaPresetFileName = new(data.umaPresetFileName);
             animatorControllerAsset = data.animatorControllerAsset;
             stats = new(data.stats);
+            equipment = new EquipmentData(data.equipment);
+            useEquipmentPreset = data.useEquipmentPreset;
         }
     }
 }

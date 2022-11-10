@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SunsetSystems.Spellbook;
 
 namespace SunsetSystems.Entities.Data
 {

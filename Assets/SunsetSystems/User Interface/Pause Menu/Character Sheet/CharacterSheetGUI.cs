@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SunsetSystems.UserInterface
+namespace SunsetSystems.UI
 {
     public class CharacterSheetGUI : MonoBehaviour
     {

@@ -5,6 +5,7 @@ using TMPro;
 using Entities.Characters;
 using SunsetSystems.Game;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Spellbook;
 
 public class DevSpellbook : ExposableMonobehaviour
 {
@@ -35,11 +36,11 @@ public class DevSpellbook : ExposableMonobehaviour
     {
         DisciplinePower dp = powers[dropdown.value];
         bool cast = false;
-        if (dp.Target.Equals(Target.Self))
+        if (dp.Target.Equals(SunsetSystems.Spellbook.Target.Self))
         {
             //cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), GameManager.GetMainCharacter());
         }
-        if (dp.Target.Equals(Target.Hostile))
+        if (dp.Target.Equals(SunsetSystems.Spellbook.Target.Hostile))
         {
             //cast = Spellbook.HandleEffects(dp, GameManager.GetMainCharacter(), FindObjectOfType<NPC>());
         }

@@ -22,11 +22,11 @@ namespace SunsetSystems.Bootstraper
         protected async override void Awake()
         {
             base.Awake();
-            if (!EnableBootstrap)
-                return;
             List<string> bootstrapScenePaths = new();
             bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
             await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));
+            if (!EnableBootstrap)
+                return;
             didLoadGameplayScene = LoadedScenesCache.CachedScenes.Count > 0;
             await Task.WhenAll(LoadScenesByPathAsync(LoadedScenesCache.CachedScenes));
             await Task.Delay(1000);

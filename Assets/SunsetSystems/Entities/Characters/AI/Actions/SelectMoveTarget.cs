@@ -15,7 +15,7 @@ namespace AI.Actions
 
             if (moveTarget != null)
             {
-                Debug.Log(moveTarget);
+                Debug.Log($"Selected move target: {moveTarget}");
                 c.CurrentMoveTarget = moveTarget;
             }
             else

@@ -1,10 +1,13 @@
-﻿public enum Target
+﻿namespace SunsetSystems.Spellbook
 {
-    Self,
-    Friendly,
-    Hostile,
-    AOE_Friendly,
-    AOE_Hostile,
-    Invalid
+    public enum Target
+    {
+        Self,
+        Friendly,
+        Hostile,
+        AOE_Friendly,
+        AOE_Hostile,
+        Invalid
+    }
 }
 

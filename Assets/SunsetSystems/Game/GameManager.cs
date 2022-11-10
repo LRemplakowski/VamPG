@@ -1,27 +1,30 @@
-﻿using SunsetSystems.Entities.Characters;
-using SunsetSystems.Data;
-using SunsetSystems.Party;
-using SunsetSystems.Utils;
+﻿using SunsetSystems.Utils;
 using UnityEngine;
+using System;
 
 namespace SunsetSystems.Game
 {
     [RequireComponent(typeof(Tagger))]
     public class GameManager : Singleton<GameManager>
     {
-        private static Creature _player;
-        private static GridController _gridController;
-        public static GameState CurrentState { get; set; }
+        public static event Action<GameState> OnGameStateChanged;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            _gridController = FindObjectOfType<GridController>();
+        public static GameState CurrentState 
+        { 
+            get
+            {
+                return CurrentState;
+            }
+            set
+            {
+                CurrentState = value;
+                OnGameStateChanged?.Invoke(value);
+            }
         }
 
         public static string GetLanguage()
         {
-            return "PL";
+            return "EN";
         }
 
         public static bool IsCurrentState(GameState state)

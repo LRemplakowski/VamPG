@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using SunsetSystems.UI.Utils;
 
 namespace SunsetSystems.Inventory
 {
@@ -87,7 +88,7 @@ namespace SunsetSystems.Inventory
     }
 
     [Serializable]
-    public class InventoryEntry
+    public class InventoryEntry : IGameDataProvider<InventoryEntry>
     {
         [SerializeField]
         public BaseItem _item;
@@ -101,5 +102,7 @@ namespace SunsetSystems.Inventory
             this._item = item;
             this._stackSize = stackSize;
         }
+
+        public InventoryEntry Data => this;
     }
 }

@@ -13,16 +13,15 @@ namespace SunsetSystems.Entities.Interactable
         private ItemStorage _myInventory;
         private ContainerGUI _containerGUI;
 
-        private void Awake()
+        protected override void Awake()
         {
             if (!_myInventory)
                 _myInventory = GetComponent<ItemStorage>();
         }
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
             OpenContainer();
-            base.Interact();
         }
 
         private void OpenContainer()

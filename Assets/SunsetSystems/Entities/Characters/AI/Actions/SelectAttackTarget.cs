@@ -3,6 +3,7 @@
     using Apex.AI;
     using SunsetSystems.Entities.Characters;
     using System.Collections.Generic;
+    using UnityEngine;
 
     public class SelectAttackTarget : ActionWithOptions<Creature>
     {
@@ -11,7 +12,7 @@
             CreatureContext c = context as CreatureContext;
             Creature self = c.Owner;
 
-            List<Creature> potentialTargets = new List<Creature>();
+            List<Creature> potentialTargets = new();
             if (self.Data.faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(c.FriendlyCombatants);
@@ -23,7 +24,7 @@
             }
 
             Creature target = this.GetBest(c, potentialTargets);
-
+            Debug.Log($"Selected target {target.Data.FullName}");
             if (target != null)
             {
                 c.CurrentTarget = target;

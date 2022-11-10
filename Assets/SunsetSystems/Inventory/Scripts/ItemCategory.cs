@@ -11,6 +11,7 @@ namespace SunsetSystems.Inventory.Data
         GLOVES,
         SHOES,
         TROUSERS,
-        CONSUMABLE
+        CONSUMABLE,
+        TRINKET
     }
 }

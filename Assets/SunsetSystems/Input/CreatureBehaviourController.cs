@@ -10,6 +10,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System.Linq;
+using NaughtyAttributes;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Input
 {
@@ -22,9 +25,15 @@ namespace SunsetSystems.Input
         private LayerMask defaultRaycastMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
+        [SerializeField]
+        private bool _useSelection;
+        [SerializeField]
+        private Selection _selection;
 
         private void OnEnable()
         {
+            if (_selection)
+                _selection.gameObject.SetActive(_useSelection);
             //PlayerInputHandler.OnPrimaryAction += OnPrimaryAction;
             PlayerInputHandler.OnSecondaryAction += OnSecondaryAction;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
@@ -39,16 +48,19 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
+            if (!context.performed)
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
             {
-                Debug.Log("Raycast hit UI object!");
-                return;
+                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
+                {
+                    Debug.Log("Raycast hit UI object!");
+                    return;
+                }
             }
-            if (context.performed)
-                HandleWorldRightClick();
+            HandleSecondaryAction();
         }
 
-        private void HandleWorldRightClick()
+        private void HandleSecondaryAction()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
@@ -57,30 +69,15 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Combat:
                         {
-                            HandleCombatMouseClick(hit);
+                            HandleCombatSecondaryAction(hit);
                             break;
                         }
                     case GameState.Exploration:
                         {
-                            List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                            PlayerControlledCharacter currentLead;
-                            if (selectables.Count > 0)
-                            {
-                                currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
-                            }
+                            if (_useSelection)
+                                HandleSelectionExplorationInput();
                             else
-                            {
-                                break;
-                            }
-                            if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                            {
-                                currentLead.ClearAllActions();
-                                currentLead.InteractWith(interactable);
-                            }
-                            else
-                            {
-                                MoveCurrentSelectionToPositions(hit);
-                            }
+                                HandleNoSelectionExplorationInput();
                             break;
                         }
                     case GameState.Conversation:
@@ -88,13 +85,57 @@ namespace SunsetSystems.Input
                             break;
                         }
                     default:
-                        Debug.Log("Default click behaviour");
                         break;
                 }
             }
+
+            void HandleSelectionExplorationInput()
+            {
+                List<ISelectable> selectables = Selection.Instance.GetAllSelected();
+                PlayerControlledCharacter currentLead;
+                if (selectables.Count > 0)
+                {
+                    currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
+                }
+                else
+                {
+                    return;
+                }
+                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                {
+                    currentLead.ClearAllActions();
+                    currentLead.InteractWith(interactable);
+                }
+                else
+                {
+                    MoveCurrentSelectionToPositions(hit);
+                }
+            }
+
+            void HandleNoSelectionExplorationInput()
+            {
+                PlayerControlledCharacter mainCharacter = PartyManager.MainCharacter as PlayerControlledCharacter;
+                if (mainCharacter == null)
+                    return;
+                // Main Character should always take the lead since it's a first entry in ActiveParty list
+                List<Creature> creatures = new();
+                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                {
+                    mainCharacter.ClearAllActions();
+                    mainCharacter.InteractWith(interactable);
+                    creatures.Add(null);
+                }
+                else
+                {
+                    creatures.Add(PartyManager.MainCharacter);
+                }
+                if (PartyManager.ActiveParty.Count > 1)
+                    creatures.AddRange(PartyManager.Companions);
+                MoveCreaturesToPosition(creatures, hit.point);
+            }
         }
 
-        private void HandleCombatMouseClick(RaycastHit hit)
+        private void HandleCombatSecondaryAction(RaycastHit hit)
         {
             ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
             switch (selectedBarAction.actionType)
@@ -140,10 +181,10 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
-            HandleMousePosition();
+            HandlePointerPosition();
         }
 
-        private void HandleMousePosition()
+        private void HandlePointerPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
@@ -156,12 +197,12 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Exploration:
                         {
-                            HandleExplorationMousePosition(hit);
+                            HandleExplorationPointerPosition(hit);
                             break;
                         }
                     case GameState.Combat:
                         {
-                            HandleCombatMousePosition(hit);
+                            HandleCombatPointerPosition(hit);
                             break;
                         }
                     case GameState.Conversation:
@@ -173,7 +214,7 @@ namespace SunsetSystems.Input
                 }
             }
 
-            void HandleExplorationMousePosition(RaycastHit hit)
+            void HandleExplorationPointerPosition(RaycastHit hit)
             {
                 if (lastHit != hit.collider)
                 {
@@ -189,20 +230,20 @@ namespace SunsetSystems.Input
                 }
             }
 
-            void HandleCombatMousePosition(RaycastHit hit)
+            void HandleCombatPointerPosition(RaycastHit hit)
             {
                 ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
                 switch (selectedBarAction.actionType)
                 {
                     case BarAction.MOVE:
-                        HandleMoveActionMousePosition();
+                        HandleMoveActionPointerPosition();
                         break;
                     case BarAction.ATTACK:
-                        HandleAttackActionMousePosition();
+                        HandleAttackActionPointerPosition();
                         break;
                 }
 
-                void HandleMoveActionMousePosition()
+                void HandleMoveActionPointerPosition()
                 {
                     if (!CombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
@@ -220,7 +261,7 @@ namespace SunsetSystems.Input
                     }
                 }
 
-                void HandleAttackActionMousePosition()
+                void HandleAttackActionPointerPosition()
                 {
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
@@ -247,23 +288,22 @@ namespace SunsetSystems.Input
             }
         }
 
-        private void MoveSelectableToPosition(ISelectable selectable, Vector3 position, float stoppingDistance)
-        {
-            Creature creature = selectable.GetCreature();
-            creature.Move(position, stoppingDistance);
-        }
-
         private void MoveCurrentSelectionToPositions(RaycastHit hit)
         {
-            Vector3 samplingPoint;
-            List<ISelectable> allSelected = Selection.Instance.GetAllSelected();
+            List<Creature> allSelected = Selection.Instance.GetAllSelected().Select(s => s.GetCreature()) as List<Creature>;
+            MoveCreaturesToPosition(allSelected, hit.point);
+        }
+
+        private void MoveCreaturesToPosition(List<Creature> creatures, Vector3 samplingPoint)
+        {
             float stoppingDistance = 0f;
-            for (int i = 0; i < allSelected.Count; i++)
+            for (int i = 0; i < creatures.Count; i++)
             {
-                samplingPoint = hit.point;
-                NavMesh.SamplePosition(samplingPoint, out NavMeshHit navHit, 2.0f, NavMesh.AllAreas);
+                NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
                 stoppingDistance += (i % 2) * _followerStoppingDistance;
-                MoveSelectableToPosition(allSelected[i], navHit.position, stoppingDistance);
+                Creature creature = creatures[i];
+                if (creature != null)
+                    creature.Move(hit.position, stoppingDistance);
             }
         }
     }

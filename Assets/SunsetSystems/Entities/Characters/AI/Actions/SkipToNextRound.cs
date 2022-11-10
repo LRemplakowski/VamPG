@@ -7,7 +7,8 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            CombatManager.Instance.NextRound();
+            context.Owner.CombatBehaviour.HasActed = true;
+            context.Owner.CombatBehaviour.HasMoved = true;
         }
     }
 }

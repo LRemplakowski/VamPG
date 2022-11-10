@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using SunsetSystems.Formation.Data;
-using SunsetSystems.Formation.UI;
 using SunsetSystems.Utils;
 using UnityEngine.InputSystem.UI;
 using SunsetSystems.Game;
@@ -12,13 +10,8 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
 {
     [SerializeField]
     private PlayerInput playerInput;
-
     [SerializeField]
     private GameManager gameManager;
-
-    public static FormationData FormationData { get; set; }
-    [SerializeField]
-    private PredefinedFormation defaultFormation;
 
     // Mouse input
     public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
@@ -30,6 +23,8 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     // Keyboard input
     public delegate void OnInventoryHandler(InputAction.CallbackContext context);
     public static event OnInventoryHandler OnInventory;
+    public delegate void OnJournalHandler(InputAction.CallbackContext context);
+    public static event OnJournalHandler OnJournal;
     public delegate void OnEscapeHandler(InputAction.CallbackContext context);
     public static event OnEscapeHandler OnEscape;
     public delegate void OnCharacterSheetHandler(InputAction.CallbackContext conext);
@@ -71,6 +66,11 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     public void InventoryAction(InputAction.CallbackContext context)
     {
         OnInventory?.Invoke(context);
+    }
+
+    public void JournalAction(InputAction.CallbackContext context)
+    {
+        OnJournal?.Invoke(context);
     }
 
     public void EscapeAction(InputAction.CallbackContext context)

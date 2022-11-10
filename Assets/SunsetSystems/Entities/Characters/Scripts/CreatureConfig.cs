@@ -2,6 +2,7 @@
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
+using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -21,6 +22,8 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private StatsConfig _statsConfig;
         public StatsConfig StatsAsset { get => _statsConfig; }
+        [field: SerializeField]
+        public InventoryConfig EquipmentConfig { get; private set; }
         [SerializeField]
         private string _umaPresetFilename = "default";
         public string UmaPresetFilename { get => _umaPresetFilename; }
@@ -41,6 +44,9 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private CreatureType _creatureType;
         public CreatureType CreatureType { get => _creatureType; }
+        [SerializeField]
+        private bool _useEquipmentPreset;
+        public bool UseEquipmentPreset => _useEquipmentPreset;
 
 
         private void OnEnable()

@@ -1,11 +1,13 @@
 using NaughtyAttributes;
+using SunsetSystems.Journal;
 using SunsetSystems.Resources;
+using SunsetSystems.UI.Utils;
 using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : ScriptableObject
+    public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>
     {
         [field: SerializeField]
         public string ItemName { get; protected set; }
@@ -21,6 +23,8 @@ namespace SunsetSystems.Inventory.Data
         public Sprite Icon { get; protected set; }
         [field: SerializeField]
         public bool Stackable { get; protected set; }
+
+        public BaseItem Data => this;
 
         private void OnValidate()
         {
@@ -41,6 +45,11 @@ namespace SunsetSystems.Inventory.Data
                 EditorUtility.SetDirty(this);
             }
 #endif
+        }
+
+        public void ApplyReward(int amount)
+        {
+            InventoryManager.PlayerInventory.AddItem(new InventoryEntry(this, amount));
         }
     }
 }

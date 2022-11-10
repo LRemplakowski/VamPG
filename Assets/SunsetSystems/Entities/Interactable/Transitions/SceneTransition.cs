@@ -40,7 +40,7 @@ namespace SunsetSystems.Loading
             _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
-        public override void Interact()
+        protected override void HandleInteraction()
         {
             Debug.Log("Interacting with area transition!");
             switch (_type)
@@ -55,7 +55,6 @@ namespace SunsetSystems.Loading
                     _ = MoveToArea();
                     break;
             }
-            base.Interact();
         }
 
         public void MoveToScene(SceneLoadingData data)

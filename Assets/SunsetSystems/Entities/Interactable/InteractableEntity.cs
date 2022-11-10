@@ -20,12 +20,13 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _isHoveredOver = value;
-                HoverHighlight.SetActive(IsHoveredOver);
+                if (HoverHighlight != null)
+                    HoverHighlight.SetActive(IsHoveredOver);
             }
         }
 
         [SerializeField]
-        protected float _interactionDistance = 1.0f;
+        protected float _interactionDistance = 2.0f;
         public float InteractionDistance
         {
             get => _interactionDistance;
@@ -42,7 +43,7 @@ namespace SunsetSystems.Entities.Interactable
             set => _interactionTransform = value;
         }
 
-        public void OnValidate()
+        protected virtual void OnValidate()
         {
             if (InteractionTransform == null)
             {
@@ -50,7 +51,7 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (InteractionTransform == null)
             {
@@ -58,15 +59,15 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
-        ///<summary>
-        ///If overriden, base should be called always, after any override logic.
-        /// </summary>
-        public virtual void Interact()
+        public void Interact()
         {
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
+            HandleInteraction();
             Interacted = true;
             TargetedBy = null;
         }
+
+        protected abstract void HandleInteraction();
 
         public void OnDrawGizmosSelected()
         {

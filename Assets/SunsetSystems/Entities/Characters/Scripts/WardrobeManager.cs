@@ -47,8 +47,6 @@ namespace SunsetSystems.Entities.Characters
 
         private void Initialize()
         {
-            UMAData data = GetComponent<UMAData>();
-            _rightClavicle = data.GetBoneGameObject("CC_Base_R_Clavicle").transform;
             _dca = GetComponent<DynamicCharacterAvatar>();
             _owner = GetComponent<Creature>();
             _characterID = GetComponent<Creature>().Data.ID;
@@ -70,7 +68,7 @@ namespace SunsetSystems.Entities.Characters
 
         private void HandleWeapon(EquipmentData data)
         {
-            if (GameManager.IsCurrentState(GameState.Combat) == false)
+            if (GameManager.IsCurrentState(GameState.Combat) == false && _displayWeapons == false)
             {
                 _animationController.DisableIK();
                 return;
@@ -81,6 +79,12 @@ namespace SunsetSystems.Entities.Characters
             {
                 _animationController.DisableIK();
                 return;
+            }
+            
+            if (_rightClavicle == null)
+            {
+                UMAData umaData = GetComponent<UMAData>();
+                _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
             }
 
             GameObject weapon = Instantiate(slotData.GetEquippedItem().Prefab, _rightClavicle);

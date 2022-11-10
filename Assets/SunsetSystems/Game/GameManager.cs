@@ -9,16 +9,17 @@ namespace SunsetSystems.Game
     {
         public static event Action<GameState> OnGameStateChanged;
 
+        private static GameState _gameState;
         public static GameState CurrentState 
         { 
             get
             {
-                return CurrentState;
+                return _gameState;
             }
             set
             {
-                CurrentState = value;
-                OnGameStateChanged?.Invoke(value);
+                _gameState = value;
+                OnGameStateChanged?.Invoke(_gameState);
             }
         }
 

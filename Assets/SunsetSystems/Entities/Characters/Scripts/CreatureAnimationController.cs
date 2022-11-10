@@ -25,6 +25,8 @@ public class CreatureAnimationController : MonoBehaviour
     private Transform rightHint, leftHint;
     private TwoBoneIKConstraint rightHandConstraint, leftHandConstraint;
 
+    private bool _initializedOnce = false;
+
     private void OnEnable()
     {
         CombatManager.CombatBegin += OnCombatStart;
@@ -43,10 +45,9 @@ public class CreatureAnimationController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         rigBuilder = GetComponent<RigBuilder>();
         rigBuilder.enabled = false;
-        rigBuilder.layers.Add(new(SetupRigLayer()));
     }
 
-    private Rig SetupRigLayer()
+    private Rig InitializeRigLayer()
     {
         Rig layer = Instantiate(new GameObject("RigLayer"), transform).AddComponent<Rig>();
         UMAData umaData = GetComponent<UMAData>();
@@ -63,8 +64,9 @@ public class CreatureAnimationController : MonoBehaviour
         Transform leftForearm = umaData.GetBoneGameObject(LEFT_FOREARM).transform;
         leftHandConstraint.data.mid = leftForearm;
         leftHandConstraint.data.tip = umaData.GetBoneGameObject(LEFT_HAND).transform;
-        leftHandConstraint.data.hint = rightHint = Instantiate(new GameObject(LEFT_HINT), leftForearm).transform;
+        leftHandConstraint.data.hint = leftHint = Instantiate(new GameObject(LEFT_HINT), leftForearm).transform;
 
+        _initializedOnce = true;
         return layer;
     }
 
@@ -86,6 +88,8 @@ public class CreatureAnimationController : MonoBehaviour
 
     public void EnableIK(AnimationDataProvider ikData)
     {
+        if (!_initializedOnce)
+            rigBuilder.layers.Add(new(InitializeRigLayer()));
         rightHandConstraint.data.target = ikData.RightHandIK;
         rightHint.localPosition = ikData.RightHintLocalPosition;
         leftHandConstraint.data.target = ikData.LeftHandIK;

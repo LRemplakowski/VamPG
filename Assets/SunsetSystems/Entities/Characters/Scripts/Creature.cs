@@ -10,6 +10,7 @@ using SunsetSystems.Loading;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEditor;
+using UnityEngine.Animations.Rigging;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -25,7 +26,8 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(StatsManager)),
     RequireComponent(typeof(UtilityAIComponent)),
     RequireComponent(typeof(CapsuleCollider)),
-    RequireComponent(typeof(WardrobeManager))]
+    RequireComponent(typeof(WardrobeManager)),
+    RequireComponent(typeof(RigBuilder))]
     public abstract class Creature : Entity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;

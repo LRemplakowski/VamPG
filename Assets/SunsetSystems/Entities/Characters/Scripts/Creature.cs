@@ -11,6 +11,7 @@ using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEditor;
 using UnityEngine.Animations.Rigging;
+using SunsetSystems.Animation;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -198,10 +199,10 @@ namespace SunsetSystems.Entities.Characters
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
-        public abstract void Move(Vector3 moveTarget, float stoppingDistance);
-        public abstract void Move(Vector3 moveTarget);
-        public abstract void Move(GridElement moveTarget);
-        public abstract void Attack(Creature target);
+        public abstract Move Move(Vector3 moveTarget, float stoppingDistance);
+        public abstract Move Move(Vector3 moveTarget);
+        public abstract Move Move(GridElement moveTarget);
+        public abstract Attack Attack(Creature target);
         #endregion
 
         protected virtual void OnDrawGizmos()

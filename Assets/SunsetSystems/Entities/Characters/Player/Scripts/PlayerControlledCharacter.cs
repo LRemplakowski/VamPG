@@ -10,21 +10,23 @@ namespace SunsetSystems.Entities.Characters
     [RequireComponent(typeof(SelectionEffect))]
     public class PlayerControlledCharacter : Creature
     {
-        public override void Move(Vector3 moveTarget, float stoppingDistance)
+        public override Move Move(Vector3 moveTarget, float stoppingDistance)
         {
             ClearAllActions();
-            AddActionToQueue(new Move(this, moveTarget, stoppingDistance));
+            Move moveAction = new(this, moveTarget, stoppingDistance);
+            AddActionToQueue(moveAction);
+            return moveAction;
         }
 
-        public override void Move(Vector3 moveTarget)
+        public override Move Move(Vector3 moveTarget)
         {
-            Move(moveTarget, 0f);
+            return Move(moveTarget, 0f);
         }
 
-        public override void Move(GridElement moveTarget)
+        public override Move Move(GridElement moveTarget)
         {
             CurrentGridPosition = moveTarget;
-            Move(moveTarget.transform.position);
+            return Move(moveTarget.transform.position);
         }
 
         public void InteractWith(IInteractable target)
@@ -32,9 +34,11 @@ namespace SunsetSystems.Entities.Characters
             AddActionToQueue(new Interact(target, this));
         }
 
-        public override void Attack(Creature target)
+        public override Attack Attack(Creature target)
         {
-            AddActionToQueue(new Attack(target, this));
+            Attack attackAction = new(target, this);
+            AddActionToQueue(attackAction);
+            return attackAction;
         }
     }
 }

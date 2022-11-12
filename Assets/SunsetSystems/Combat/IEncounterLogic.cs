@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
+
 namespace SunsetSystems.Combat
 {
     public interface IEncounterLogic
     {
-        void Perform();
+        Task Perform();
     }
 }

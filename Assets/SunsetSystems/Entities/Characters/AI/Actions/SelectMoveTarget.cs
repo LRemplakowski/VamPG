@@ -21,6 +21,7 @@ namespace AI.Actions
             else
             {
                 Debug.LogError("Selected move target null!");
+                c.Behaviour.HasMoved = true;
             }
         }
     }

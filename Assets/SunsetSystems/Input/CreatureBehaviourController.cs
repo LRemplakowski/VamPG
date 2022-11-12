@@ -13,6 +13,7 @@ using UnityEngine.InputSystem;
 using System.Linq;
 using NaughtyAttributes;
 using SunsetSystems.Party;
+using SunsetSystems.Entities;
 
 namespace SunsetSystems.Input
 {
@@ -49,6 +50,7 @@ namespace SunsetSystems.Input
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
             if (!context.performed)
+                return;
             if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
             {
                 if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
@@ -69,6 +71,7 @@ namespace SunsetSystems.Input
                 {
                     case GameState.Combat:
                         {
+                            Debug.Log("Secondary action in combat.");
                             HandleCombatSecondaryAction(hit);
                             break;
                         }
@@ -87,6 +90,10 @@ namespace SunsetSystems.Input
                     default:
                         break;
                 }
+            }
+            else
+            {
+                Debug.LogWarning("Raycast failed on input secondary action!");
             }
 
             void HandleSelectionExplorationInput()
@@ -142,13 +149,20 @@ namespace SunsetSystems.Input
             {
                 case BarAction.MOVE:
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
-                        return;
-                    GridElement gridElement = hit.collider.GetComponent<GridElement>();
-                    if (gridElement)
                     {
-                        if (gridElement.Visited != GridElement.Status.Occupied)
+                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
+                        return;
+                    }
+                    if (hit.collider.TryGetComponent(out GridElement gridElement))
+                    {
+                        if (gridElement.Visited is not GridElement.Status.Occupied)
                         {
+                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.ID} to grid element {gridElement.gameObject.name}!");
                             CombatManager.CurrentActiveActor.Move(gridElement);
+                        }
+                        else
+                        {
+                            Debug.Log($"Grid element {gridElement.gameObject.name} is already occupied!");
                         }
                     }
                     else
@@ -159,19 +173,23 @@ namespace SunsetSystems.Input
                 case BarAction.ATTACK:
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
-                    DefaultNPC enemy = hit.collider.GetComponent<DefaultNPC>();
+                    Creature enemy = hit.collider.GetComponent<Creature>();
                     if (enemy)
                     {
-                        if (enemy.Data.faction.Equals(Faction.Hostile) && IsInRange(enemy))
+                        if (enemy.Data.faction is Faction.Hostile && IsInRange(enemy))
                         {
+                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
                             CombatManager.CurrentActiveActor.Attack(enemy);
                         }
                     }
                     break;
+                default:
+                    Debug.LogError($"Invalid bar action in combat secondary action handler!");
+                    break;
             }
         }
 
-        private static bool IsInRange(DefaultNPC enemy)
+        private static bool IsInRange(Entity enemy)
         {
             return Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position) <= CombatManager.CurrentActiveActor.StatsManager.GetWeaponMaxRange();
         }

@@ -46,7 +46,7 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetInitiative()
         {
-            return 1;
+            return Data.attributes.GetAttribute(AttributeType.Dexterity).GetValue();
         }
 
         public float GetWeaponMaxRange()

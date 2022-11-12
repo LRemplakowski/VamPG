@@ -4,6 +4,7 @@ using UnityEngine.AI;
 using System;
 using Apex.AI.Components;
 using System.Threading.Tasks;
+using SunsetSystems.Animation;
 
 namespace SunsetSystems.Entities.Characters
 {

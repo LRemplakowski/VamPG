@@ -1,7 +1,9 @@
 using SunsetSystems.Animation;
+using SunsetSystems.Combat;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory;
 using System;
+using System.Collections.Generic;
 using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
@@ -24,32 +26,47 @@ namespace SunsetSystems.Entities.Characters
         {
             InventoryManager.ItemEquipped += UpdateWardrobe;
             InventoryManager.ItemUnequipped += UpdateWardrobe;
-            GameManager.OnGameStateChanged += OnGameStateChanged;
+            CombatManager.CombatBegin += OnCombatBegin;
+            CombatManager.CombatEnd += OnCombatEnd;
         }
 
         private void OnDisable()
         {
             InventoryManager.ItemEquipped -= UpdateWardrobe;
             InventoryManager.ItemUnequipped -= UpdateWardrobe;
-            GameManager.OnGameStateChanged -= OnGameStateChanged;
+            CombatManager.CombatBegin -= OnCombatBegin;
+            CombatManager.CombatEnd -= OnCombatEnd;
         }
 
-        private void OnGameStateChanged(GameState currentState)
+        private void OnCombatBegin(List<Creature> combatants)
         {
-            if (currentState.Equals(GameState.Combat))
-                _displayWeapons = true;
-            else
-                _displayWeapons = false;
             if (!_initializedOnce)
                 Initialize();
+            if (combatants.Contains(_owner))
+            {
+                _displayWeapons = true;
+                UpdateWardrobe(_characterID);
+            }
+            else
+            {
+                Debug.LogWarning($"{_characterID} is not in combatants list!");
+            }
+        }
+
+        private void OnCombatEnd()
+        {
+            if (!_initializedOnce)
+                Initialize();
+            _displayWeapons = false;
             UpdateWardrobe(_characterID);
         }
 
         private void Initialize()
         {
+            Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
             _dca = GetComponent<DynamicCharacterAvatar>();
             _owner = GetComponent<Creature>();
-            _characterID = GetComponent<Creature>().Data.ID;
+            _characterID = _owner.Data.ID;
             _initializedOnce = true;
             _animationController = GetComponent<CreatureAnimationController>();
         }    
@@ -68,9 +85,10 @@ namespace SunsetSystems.Entities.Characters
 
         private void HandleWeapon(EquipmentData data)
         {
-            if (GameManager.IsCurrentState(GameState.Combat) == false && _displayWeapons == false)
+            if (_displayWeapons == false)
             {
                 _animationController.DisableIK();
+                Debug.LogError($"Displaying weapons off for {gameObject.name}!");
                 return;
             }
 
@@ -78,6 +96,7 @@ namespace SunsetSystems.Entities.Characters
             if (slotData.GetEquippedItem() == null)
             {
                 _animationController.DisableIK();
+                Debug.LogError($"No weapon found in primary weapon slot for {gameObject.name}!");
                 return;
             }
             
@@ -87,22 +106,27 @@ namespace SunsetSystems.Entities.Characters
                 _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
             }
 
-            GameObject weapon = Instantiate(slotData.GetEquippedItem().Prefab, _rightClavicle);
+            Transform weapon = Instantiate(slotData.GetEquippedItem().Prefab).transform;
+            weapon.SetParent(_rightClavicle);
             _cachedWardrobeData.CurrentWeapon = weapon;
-            if (weapon.TryGetComponent(out AnimationDataProvider ikData))
+            if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
+            {
+                Debug.LogError($"Enabling weapon IK for {gameObject.name}!");
                 _animationController.EnableIK(ikData);
-
+                weapon.localPosition = ikData.PositionOffset;
+                weapon.localEulerAngles = ikData.RotationOffset;
+            }
         }
 
         private void RemoveWardrobe()
         {
             if (_cachedWardrobeData.CurrentWeapon != null)
-                Destroy(_cachedWardrobeData.CurrentWeapon);
+                Destroy(_cachedWardrobeData.CurrentWeapon.gameObject);
         }
 
         private struct WardrobeData
         {
-            public GameObject CurrentWeapon;
+            public Transform CurrentWeapon;
         }
     }
 }

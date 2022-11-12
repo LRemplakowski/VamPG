@@ -34,18 +34,18 @@ namespace SunsetSystems.Combat
         {
             Debug.LogWarning("Begin encounter, do encounter start logic.");
             if (encounterStartLogic)
-                encounterStartLogic.Perform();
+                await encounterStartLogic.Perform();
             GameManager.CurrentState = GameState.Combat;
             await combatManager.BeginEncounter(this);
         }
 
-        public void End()
+        public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
-            combatManager.EndEncounter(this);
+            await combatManager.EndEncounter(this);
             GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
-                encounterEndLogic.Perform();
+                await encounterEndLogic.Perform();
         }
     }
 }

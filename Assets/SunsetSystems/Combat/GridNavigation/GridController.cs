@@ -65,13 +65,13 @@ public class GridController : ExposableMonobehaviour
 
     private void MaybeCreateGridElement(Vector3 pos, int column, int row)
     {
-        bool foundNavMeshHit = NavMesh.SamplePosition(pos, out NavMeshHit hit, float.MaxValue, NavMesh.AllAreas);
+        bool foundNavMeshHit = NavMesh.SamplePosition(transform.TransformPoint(pos), out NavMeshHit hit, float.MaxValue, NavMesh.AllAreas);
         if (foundNavMeshHit)
         {
             GridElement g = Instantiate(gridElementPrefab);
             g.name = column + ";" + row;
             g.transform.parent = this.transform;
-            g.transform.localPosition = new Vector3(pos.x, hit.position.y, pos.z);
+            g.transform.position = hit.position;
             g.SetScale(scale);
             g.GridPosition = new Vector2Int(column, row);
             gridElements[column, row] = g;
@@ -133,8 +133,10 @@ public class GridController : ExposableMonobehaviour
         Debug.Log("clearing active elements");
         foreach (GridElement g in activeElements)
         {
-            g.Visited = GridElement.Status.NotVisited;
             g.gameObject.SetActive(false);
+            if (g.Visited == GridElement.Status.Occupied)
+                continue;
+            g.Visited = GridElement.Status.NotVisited;
         }
         activeElements.Clear();
     }
@@ -170,7 +172,7 @@ public class GridController : ExposableMonobehaviour
     {
         gridAgentHelper.transform.position = c.transform.position;
         GridElement actorPosition = c.CurrentGridPosition;
-        int actorRange = c.GetComponent<StatsManager>().GetCombatSpeed();
+        float actorRange = c.StatsManager.GetCombatSpeed() * scale;
         List<GridElement> result = FindReachableGridElements(actorPosition, actorRange);
         return result;
     }
@@ -183,16 +185,16 @@ public class GridController : ExposableMonobehaviour
         return result;
     }
 
-    private List<GridElement> FindReachableGridElements(GridElement startElement, int movementRange)
+    private List<GridElement> FindReachableGridElements(GridElement startElement, float movementRange)
     {
         List<GridElement> elementsInRange = new();
-        for (int x = startElement.GridPosition.x - ((int)(movementRange / scale) + 1); x < startElement.GridPosition.x + ((int)(movementRange / scale) + 1); x++)
+        for (int x = startElement.GridPosition.x - ((int)(movementRange / scale) + 1); x < startElement.GridPosition.x + ((movementRange / scale) + 1); x++)
         {
             if (x < 0)
                 continue;
             if (x >= gridElements.GetLength(0))
                 break;
-            for (int y = startElement.GridPosition.y - ((int)(movementRange / scale) + 1); y < startElement.GridPosition.y + ((int)(movementRange / scale) + 1); y++)
+            for (int y = startElement.GridPosition.y - ((int)(movementRange / scale) + 1); y < startElement.GridPosition.y + ((movementRange / scale) + 1); y++)
             {
                 if (y < 0)
                     continue;
@@ -208,7 +210,7 @@ public class GridController : ExposableMonobehaviour
         return elementsInRange;
     }
 
-    private bool IsGridElementWithinRange(GridElement endPoint, int movementRange, Vector3 fromPosition)
+    private bool IsGridElementWithinRange(GridElement endPoint, float movementRange, Vector3 fromPosition)
     {
         if (endPoint == null)
             return false;

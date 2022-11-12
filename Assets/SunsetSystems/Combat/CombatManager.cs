@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using Redcode.Awaiting;
+using SunsetSystems.Animation;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Combat
 {
@@ -25,7 +27,7 @@ namespace SunsetSystems.Combat
         public delegate void CombatRoundEndHandler(Creature currentActor);
         public static event CombatRoundEndHandler CombatRoundEnd;
 
-        private int roundCounter;
+        private int turnCounter;
 
         private static Creature _currentActiveActor;
         public static Creature CurrentActiveActor
@@ -35,10 +37,10 @@ namespace SunsetSystems.Combat
             {
                 Creature previous = _currentActiveActor;
                 _currentActiveActor = value;
-                if (ActiveActorChanged != null)
-                    ActiveActorChanged.Invoke(value, previous);
+                ActiveActorChanged?.Invoke(value, previous);
             }
         }
+        private Creature FirstActor;
 
         [field: SerializeField]
         public Encounter CurrentEncounter { get; private set; }
@@ -55,26 +57,6 @@ namespace SunsetSystems.Combat
                 RuntimeData = this.FindFirstComponentWithTag<GameRuntimeData>(TagConstants.GAME_RUNTIME_DATA);
         }
 
-        private void Update()
-        {
-            if (GameManager.IsCurrentState(GameState.Combat))
-            {
-                if (!CurrentEncounter)
-                    return;
-                foreach (Creature c in Actors)
-                {
-                    if (c.IsAlive && c.Data.faction.Equals(Faction.Hostile))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        CombatEnd?.Invoke();
-                    }
-                }
-            }
-        }
-
         public void SetCurrentActiveActor(int index)
         {
             Creature c = null;
@@ -88,25 +70,30 @@ namespace SunsetSystems.Combat
             if (CurrentActiveActor)
             {
                 CombatRoundEnd?.Invoke(CurrentActiveActor);
-                Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " finished round " + roundCounter + "!");
+                Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " finished round " + turnCounter + "!");
+                int index = Actors.IndexOf(CurrentActiveActor);
+                SetCurrentActiveActor(++index < Actors.Count ? index : 0);
             }
-            roundCounter++;
-            if (!CurrentActiveActor)
-                CurrentActiveActor = DecideFirstActor(Actors);
-            int index = Actors.IndexOf(CurrentActiveActor);
-            SetCurrentActiveActor(++index < Actors.Count ? index : 0);
+            else
+            {
+                FirstActor = DecideFirstActor(Actors);
+                CurrentActiveActor = FirstActor;
+            }
+            if (CurrentActiveActor == FirstActor)
+                turnCounter++;
             CombatRoundBegin?.Invoke(CurrentActiveActor);
-            Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + roundCounter + "!");
+            Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + turnCounter + "!");
         }
 
         public async Task BeginEncounter(Encounter encounter)
         {
             CurrentEncounter = encounter;
-            roundCounter = 0;
+            turnCounter = 0;
             Actors = new();
             Actors.AddRange(encounter.Creatures);
             Actors.AddRange(PartyManager.ActiveParty);
             CombatBegin?.Invoke(Actors);
+            Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(true));
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             NextRound();
         }
@@ -117,9 +104,12 @@ namespace SunsetSystems.Combat
             return creatures[0];
         }
 
-        public void EndEncounter(Encounter encounter)
+        public async Task EndEncounter(Encounter encounter)
         {
+            await Task.Yield();
             CombatEnd?.Invoke();
+            Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(false));
+            CurrentEncounter = null;
         }
 
         private static async Task MoveAllCreaturesToNearestGridPosition(List<Creature> actors, Encounter currentEncounter)
@@ -131,8 +121,7 @@ namespace SunsetSystems.Combat
                 {
                     await new WaitForUpdate();
                     c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
-                    await new WaitForUpdate();
-                    while (c != null && !c.Agent.isActiveAndEnabled && !c.Agent.isStopped)
+                    while (c.Agent.enabled)
                     {
                         Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
                         await Task.Delay(1000);
@@ -144,12 +133,12 @@ namespace SunsetSystems.Combat
 
         public bool IsBeforeFirstRound()
         {
-            return roundCounter <= 0;
+            return turnCounter <= 0;
         }
 
         public bool IsFirstRoundOfCombat()
         {
-            return roundCounter == 1;
+            return turnCounter == 1;
         }
 
         public static bool IsActiveActorPlayerControlled()
@@ -159,7 +148,7 @@ namespace SunsetSystems.Combat
 
         public int GetRound()
         {
-            return roundCounter;
+            return turnCounter;
         }
 
         public class CombatEventData

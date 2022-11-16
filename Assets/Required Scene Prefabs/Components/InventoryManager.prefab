@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1646633759516437671}
   - component: {fileID: 1607631363773462852}
   - component: {fileID: 2893370775059650719}
+  - component: {fileID: 8396374204626287291}
   m_Layer: 0
   m_Name: InventoryManager
   m_TagString: Untagged
@@ -46,7 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13c699ef0925a624cba652aabf2cbb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PlayerInventory>k__BackingField: {fileID: 1607631363773462852}
+  _playerInventory: {fileID: 1607631363773462852}
+  _money: 0
+  _coterieEquipmentData:
+    m_keys: []
+    m_values: []
 --- !u!114 &1607631363773462852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,3 +79,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tag: InventoryManager
+--- !u!114 &8396374204626287291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6853376446303020008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 

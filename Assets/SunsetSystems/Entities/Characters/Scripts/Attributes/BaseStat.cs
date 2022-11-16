@@ -9,6 +9,17 @@ public abstract class BaseStat
 
     protected List<Modifier> Modifiers { get; } = new();
 
+    public BaseStat(BaseStat existing)
+    {
+        Modifiers = new();
+        existing.Modifiers.ForEach(m  => Modifiers.Add(new(m.Value, m.Type, m.Name)));
+    }
+
+    public BaseStat()
+    {
+
+    }
+
     public virtual void SetValue(int value)
     {
         SetValueImpl(value);

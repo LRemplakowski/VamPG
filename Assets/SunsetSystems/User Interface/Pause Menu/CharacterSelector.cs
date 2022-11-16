@@ -7,13 +7,13 @@ namespace SunsetSystems
 {
     public class CharacterSelector : MonoBehaviour
     {
-        private static string _selectedCharacterKey;
+        private static string _selectedCharacterKey = default;
         public static string SelectedCharacterKey 
         { 
             get
             {
                 if (string.IsNullOrEmpty(_selectedCharacterKey))
-                    _selectedCharacterKey = PartyManager.MainCharacter.Data.ID;
+                    _selectedCharacterKey = PartyManager.ActiveParty[0].Data.ID;
                 return _selectedCharacterKey;
             }
         }

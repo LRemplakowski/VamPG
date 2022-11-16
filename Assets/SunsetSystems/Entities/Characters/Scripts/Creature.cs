@@ -6,10 +6,8 @@ using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using NaughtyAttributes;
-using SunsetSystems.Loading;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
-using UnityEditor;
 using UnityEngine.Animations.Rigging;
 using SunsetSystems.Animation;
 
@@ -36,20 +34,22 @@ namespace SunsetSystems.Entities.Characters
         [Button("Rebuild Creature")]
         private void RebuildCreature()
         {
-            if (config == null)
+            if (_config == null)
             {
                 Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
                 return;
             }
-            Data = new(config);
+            _data = new(_config);
             CreatureInitializer.InitializeCreature(this);
+            Awake();
         }
 
-        [field: SerializeField]
-        public CreatureData Data { get; set; } = new();
+        [SerializeField]
+        private CreatureData _data;
+        public ref CreatureData Data => ref _data;
 
         [SerializeField]
-        private CreatureConfig config;
+        private CreatureConfig _config;
         [field: SerializeField]
         public NavMeshAgent Agent { get; protected set; }
 
@@ -93,14 +93,9 @@ namespace SunsetSystems.Entities.Characters
         }
 
         public bool IsAlive => StatsManager.IsAlive();
-        public bool IsVampire => Data.creatureType.Equals(CreatureType.Vampire);
+        public bool IsVampire => Data.CreatureType.Equals(CreatureType.Vampire);
 
         #region Unity messages
-        private void OnValidate()
-        {
-            Awake();
-        }
-
         protected virtual void Awake()
         {
             if (!StatsManager)
@@ -115,10 +110,10 @@ namespace SunsetSystems.Entities.Characters
                 Agent.enabled = false;
             if (NavMeshObstacle)
                 NavMeshObstacle.enabled = true;
-            if (config)
-                Data = new(config);
+            if (_config)
+                _data = new(_config);
             if (StatsManager)
-                StatsManager.Initialize(Data.stats);
+                StatsManager.Initialize(this);
         }
 
         protected virtual void Start()
@@ -216,7 +211,7 @@ namespace SunsetSystems.Entities.Characters
         {
             HealthData healthData = StatsManager.GetHealthData();
             CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
-                Data.portrait,
+                Data.Portrait,
                 healthData,
                 0);
             return builder.Create();

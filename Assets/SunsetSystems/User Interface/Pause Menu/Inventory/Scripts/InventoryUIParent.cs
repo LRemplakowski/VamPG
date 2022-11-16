@@ -54,10 +54,12 @@ namespace SunsetSystems.UI
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
                 List<IGameDataProvider<EquipmentSlot>> slots = new();
-                InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data);
-                foreach (string key in data.equipmentSlots.Keys)
+                if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
                 {
-                    slots.Add(data.equipmentSlots[key]);
+                    foreach (string key in data.equipmentSlots.Keys)
+                    {
+                        slots.Add(data.equipmentSlots[key]);
+                    }
                 }
                 _equipmentContentsUpdater.UpdateViews(slots);
             }

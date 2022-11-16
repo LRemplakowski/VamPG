@@ -6,72 +6,63 @@ using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using System.Linq;
 using SunsetSystems.Spellbook;
+using System;
 
 namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {
-        [field: SerializeField]
-        public StatsData Data { get; private set; } = new();
+        [SerializeField, ReadOnly]
+        private Creature _owner;
+        private ref StatsData Data => ref _owner.Data.Stats;
 
-        public Tracker Health => Data.trackers.GetTracker(TrackerType.Health);
-        public Tracker Willpower => Data.trackers.GetTracker(TrackerType.Willpower);
-        public Tracker Hunger => Data.trackers.GetTracker(TrackerType.Hunger);
-        public Tracker Humanity => Data.trackers.GetTracker(TrackerType.Humanity);
+        public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
+        public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);
+        public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
+        public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
 
-        public void Initialize(StatsData data)
+        public event Action<Creature> OnCreatureDied;
+
+        public void Initialize(Creature owner)
         {
-            this.Data = data;
+            this._owner = owner;
         }
 
         public void TakeDamage(int damage)
         {
-            Debug.Log("Taking damage! " + damage);
+            Health.SuperficialDamage += damage;
+            if (Health.GetValue() <= 0)
+                Die();
         }
 
         public virtual void Die()
         {
-            Debug.Log("Character died!");
+            OnCreatureDied?.Invoke(_owner);
         }
 
         public int GetCombatSpeed()
         {
-            CreatureAttribute dexterity = Data.attributes.GetAttribute(AttributeType.Dexterity);
-            Skill athletics = Data.skills.GetSkill(SkillType.Athletics);
-            if (dexterity == null && athletics == null)
-                return 0;
-            else
-                return dexterity.GetValue() + athletics.GetValue();
+            return Data.Attributes.GetAttribute(AttributeType.Speed).GetValue();
         }
 
         public int GetInitiative()
         {
-            return Data.attributes.GetAttribute(AttributeType.Dexterity).GetValue();
-        }
-
-        public float GetWeaponMaxRange()
-        {
-            return 10.0f;
-        }
-
-        public float GetWeaponEffectiveRange()
-        {
-            return 5.0f;
+            return Data.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
         }
 
         public bool IsAlive()
         {
-            return true;
+            return Health.GetValue() > 0;
         }
 
         public AttributeSkillPool GetDefensePool()
         {
-            return new AttributeSkillPool(Data.attributes.GetAttribute(AttributeType.Dexterity), Data.skills.GetSkill(SkillType.Athletics));
+            return new AttributeSkillPool(Data.Attributes.GetAttribute(AttributeType.Dexterity), Data.Skills.GetSkill(SkillType.Athletics));
         }
 
         public AttributeSkillPool GetAttackPool()
         {
-            return new AttributeSkillPool(Data.attributes.GetAttribute(GetWeaponAttribute()), Data.skills.GetSkill(GetWeaponSkill()));
+            return new AttributeSkillPool(Data.Attributes.GetAttribute(GetWeaponAttribute()), Data.Skills.GetSkill(GetWeaponSkill()));
         }
 
         private AttributeType GetWeaponAttribute()
@@ -86,7 +77,7 @@ namespace SunsetSystems.Entities.Characters
 
         public DisciplinePower GetDisciplinePower(string scriptName)
         {
-            foreach (Discipline discipline in Data.disciplines.GetDisciplines())
+            foreach (Discipline discipline in Data.Disciplines.GetDisciplines())
             {
                 DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ScriptName.Equals(scriptName));
                 if (power != null)
@@ -97,8 +88,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)
         {
-            CreatureAttribute a = Data.attributes.GetAttribute(attribute);
-            Skill s = Data.skills.GetSkill(skill);
+            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
+            Skill s = Data.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -112,8 +103,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc, bool useHunger = false)
         {
-            CreatureAttribute a = Data.attributes.GetAttribute(attribute);
-            Skill s = Data.skills.GetSkill(skill);
+            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
+            Skill s = Data.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -134,13 +125,17 @@ namespace SunsetSystems.Entities.Characters
 
         public List<CreatureAttribute> GetAttributes()
         {
-            return Data.attributes.GetAttributeList();
+            return Data.Attributes.GetAttributeList();
         }
 
         internal HealthData GetHealthData()
         {
-            HealthData.HealthDataBuilder builder = new(Data.trackers.GetTracker(TrackerType.Health).GetValue());
+            HealthData.HealthDataBuilder builder = new(Data.Trackers.GetTracker(TrackerType.Health).GetValue());
             return builder.Create();
         }
+
+        public void ApplyEffect(Attrib
+            
+            uteEffect effect)
     }
 }

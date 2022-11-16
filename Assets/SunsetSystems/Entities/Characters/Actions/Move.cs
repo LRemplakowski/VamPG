@@ -21,11 +21,6 @@ namespace SunsetSystems.Entities.Characters.Actions
             set;
         }
 
-        public Move(Creature owner, Vector3 destination) : this(owner, destination, 0)
-        {
-            
-        }
-
         public Move(Creature owner, Vector3 destination, float stoppingDistance)
         {
             this.Owner = owner;

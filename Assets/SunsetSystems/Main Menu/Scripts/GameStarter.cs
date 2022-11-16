@@ -43,22 +43,22 @@ namespace SunsetSystems.Data
 
         public void SelectBodyType(BodyType selectedBodyType)
         {
-            this._playerCharacterData.bodyType = selectedBodyType;
+            this._playerCharacterData.BodyType = selectedBodyType;
         }
 
         public void SetAttribueValue(AttributeType attribute, int value)
         {
-            _playerCharacterData.stats.attributes.GetAttribute(attribute).SetValue(value);
+            _playerCharacterData.Stats.Attributes.GetAttribute(attribute).SetValue(value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
-            _playerCharacterData.stats.skills.GetSkill(skill).SetValue(value);
+            _playerCharacterData.Stats.Skills.GetSkill(skill).SetValue(value);
         }
 
         public void SetCharacterName(string characterName)
         {
-            this._playerCharacterData.firstName = characterName;
+            this._playerCharacterData.FirstName = characterName;
         }
 
         public async void InitializeGame()
@@ -86,7 +86,7 @@ namespace SunsetSystems.Data
 
         private CreatureConfig GetMatchingCreatureAsset()
         {
-            return _playerCharacterData.bodyType switch
+            return _playerCharacterData.BodyType switch
             {
                 BodyType.M => _selectedBackground switch
                 {

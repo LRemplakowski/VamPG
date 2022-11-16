@@ -9,5 +9,6 @@ public enum AttributeType
     Intelligence,
     Wits,
     Resolve,
+    Speed,
     Invalid
 }

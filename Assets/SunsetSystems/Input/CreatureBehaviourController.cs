@@ -176,7 +176,7 @@ namespace SunsetSystems.Input
                     Creature enemy = hit.collider.GetComponent<Creature>();
                     if (enemy)
                     {
-                        if (enemy.Data.faction is Faction.Hostile && IsInRange(enemy))
+                        if (enemy.Data.Faction is Faction.Hostile && IsInRange(enemy))
                         {
                             Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
                             CombatManager.CurrentActiveActor.Attack(enemy);
@@ -191,7 +191,9 @@ namespace SunsetSystems.Input
 
         private static bool IsInRange(Entity enemy)
         {
-            return Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position) <= CombatManager.CurrentActiveActor.StatsManager.GetWeaponMaxRange();
+            int maxRange = CombatManager.CurrentActiveActor.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
+            float distance = Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position);
+            return distance <= maxRange;
         }
 
         private void OnPointerPosition(InputAction.CallbackContext context)

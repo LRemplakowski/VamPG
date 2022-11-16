@@ -22,6 +22,8 @@ namespace SunsetSystems.Entities.Characters
         [ReadOnly]
         public StringEquipmentSlotDictionary equipmentSlots;
 
+        private string _selectedWeapon;
+
         public static EquipmentData Initialize()
         {
             EquipmentData data = new();
@@ -44,6 +46,7 @@ namespace SunsetSystems.Entities.Characters
         public EquipmentData(InventoryConfig config)
         {
             equipmentSlots = GetSlotsPreset();
+            _selectedWeapon = SLOT_WEAPON_PRIMARY;
             foreach (string key in config.Equipment.equipmentSlots.Keys)
             {
                 if (equipmentSlots.ContainsKey(key))
@@ -53,16 +56,35 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        public EquipmentData(EquipmentData data)
+        public void SetSelectedWeapon(SelectedWeapon weapon)
         {
-            equipmentSlots = GetSlotsPreset();
-            foreach (string key in data.equipmentSlots.Keys)
+            switch (weapon)
             {
-                if (equipmentSlots.ContainsKey(key))
-                {
-                    equipmentSlots[key] = data.equipmentSlots[key];
-                }
+                case SelectedWeapon.Primary:
+                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
+                    break;
+                case SelectedWeapon.Secondary:
+                    _selectedWeapon = SLOT_WEAPON_SECONDARY;
+                    break;
+                default:
+                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
+                    break;
             }
+        }
+
+        public Weapon GetSelectedWeapon()
+        {
+            return equipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
+        }
+
+        public Weapon GetPrimaryWeapon()
+        {
+            return equipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
+        }
+
+        public Weapon GetSecondaryWeapon()
+        {
+            return equipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
         }
 
         public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)
@@ -101,5 +123,10 @@ namespace SunsetSystems.Entities.Characters
             }
             return result;
         }
+    }
+
+    public enum SelectedWeapon
+    {
+        Primary, Secondary
     }
 }

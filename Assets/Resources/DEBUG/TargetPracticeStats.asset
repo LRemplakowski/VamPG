@@ -12,58 +12,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da18720c486bee45b08ab77ecde326a, type: 3}
   m_Name: TargetPracticeStats
   m_EditorClassIdentifier: 
-  trackers:
+  Trackers:
     health:
-      maxValue: 1
-      superficialDamage: 0
-      aggravatedDamage: 0
-      trackerType: 0
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 2
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 0
     willpower:
-      maxValue: 1
-      superficialDamage: 0
-      aggravatedDamage: 0
-      trackerType: 1
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 1
     hunger:
-      maxValue: 1
-      superficialDamage: 0
-      aggravatedDamage: 0
-      trackerType: 3
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 3
     humanity:
-      maxValue: 1
-      superficialDamage: 0
-      aggravatedDamage: 0
-      trackerType: 2
-  clan: 15
-  generation: 12
-  attributes:
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 2
+  Clan: 15
+  Generation: 12
+  BloodPotency: 0
+  Attributes:
     strength:
-      baseValue: 1
-      attributeType: 0
+      _baseValue: 1
+      _attributeType: 0
     dexterity:
-      baseValue: 1
-      attributeType: 1
+      _baseValue: 1
+      _attributeType: 1
     stamina:
-      baseValue: 1
-      attributeType: 2
+      _baseValue: 1
+      _attributeType: 2
     charisma:
-      baseValue: 1
-      attributeType: 3
+      _baseValue: 1
+      _attributeType: 3
     manipulation:
-      baseValue: 1
-      attributeType: 4
+      _baseValue: 1
+      _attributeType: 4
     composure:
-      baseValue: 1
-      attributeType: 5
+      _baseValue: 1
+      _attributeType: 5
     intelligence:
-      baseValue: 1
-      attributeType: 6
+      _baseValue: 1
+      _attributeType: 6
     wits:
-      baseValue: 1
-      attributeType: 7
+      _baseValue: 1
+      _attributeType: 7
     resolve:
-      baseValue: 1
-      attributeType: 8
-  skills:
+      _baseValue: 1
+      _attributeType: 8
+  Skills:
     athletics:
       baseValue: 0
       skillType: 0
@@ -145,7 +146,7 @@ MonoBehaviour:
     technology:
       baseValue: 0
       skillType: 26
-  disciplines:
+  Disciplines:
     animalism:
       baseValue: 0
       disciplineType: 0

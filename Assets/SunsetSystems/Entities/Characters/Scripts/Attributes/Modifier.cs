@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Modifier
+public struct Modifier
 {
     public ModifierType Type { get; private set; }
     public int Value { get; private set; }

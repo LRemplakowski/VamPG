@@ -13,9 +13,9 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            float weaponsRange = context.StatsManager.GetWeaponMaxRange();
+            float weaponsRange = context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
             List<Creature> potentialTargets = new();
-            if (context.Owner.Data.faction.Equals(Faction.Hostile))
+            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(context.FriendlyCombatants);
                 potentialTargets.AddRange(context.PlayerControlledCombatants);

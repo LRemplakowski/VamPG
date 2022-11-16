@@ -32,23 +32,23 @@ public sealed class CreatureContext : IAIContext
     public bool HasMoved => Behaviour.HasMoved;
     public bool HasActed => Behaviour.HasActed;
 
-    public CombatBehaviour Behaviour => Owner.GetComponent<CombatBehaviour>();
+    public CombatBehaviour Behaviour => Owner.CombatBehaviour;
 
-    public StatsManager StatsManager => Owner.GetComponent<StatsManager>();
+    public StatsManager StatsManager => Owner.StatsManager;
 
-    public StatsData Stats => StatsManager.Data;
+    public StatsData Stats => Owner.Data.Stats;
 
     public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
     public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Data.faction.Equals(Faction.PlayerControlled));
+    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c is PlayerControlledCharacter);
 
     public List<Creature> FriendlyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.faction.Equals(Faction.Friendly));
+        .FindAll(c => c.Data.Faction is Faction.Friendly);
 
     public List<Creature> EnemyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.faction.Equals(Faction.Hostile));
+        .FindAll(c => c.Data.Faction is Faction.Hostile);
 }

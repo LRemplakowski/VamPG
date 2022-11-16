@@ -2,6 +2,7 @@ using SunsetSystems.Animation;
 using SunsetSystems.Combat;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using System;
 using System.Collections.Generic;
 using UMA;
@@ -77,7 +78,7 @@ namespace SunsetSystems.Entities.Characters
                 Initialize();
             if (this._characterID.Equals(characterID))
             {
-                EquipmentData data = _owner.Data.equipment;
+                EquipmentData data = _owner.Data.Equipment;
                 RemoveWardrobe();
                 HandleWeapon(data);                
             }
@@ -88,15 +89,14 @@ namespace SunsetSystems.Entities.Characters
             if (_displayWeapons == false)
             {
                 _animationController.DisableIK();
-                Debug.LogError($"Displaying weapons off for {gameObject.name}!");
                 return;
             }
 
-            EquipmentSlot slotData = data.equipmentSlots[EquipmentData.SLOT_WEAPON_PRIMARY];
-            if (slotData.GetEquippedItem() == null)
+            Weapon selectedWeapons = data.GetSelectedWeapon();
+            if (selectedWeapons == null)
             {
+                Debug.LogWarning($"No weapon selected for {gameObject.name}!");
                 _animationController.DisableIK();
-                Debug.LogError($"No weapon found in primary weapon slot for {gameObject.name}!");
                 return;
             }
             
@@ -106,12 +106,12 @@ namespace SunsetSystems.Entities.Characters
                 _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
             }
 
-            Transform weapon = Instantiate(slotData.GetEquippedItem().Prefab).transform;
+            Transform weapon = Instantiate(selectedWeapons.Prefab).transform;
             weapon.SetParent(_rightClavicle);
             _cachedWardrobeData.CurrentWeapon = weapon;
             if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
             {
-                Debug.LogError($"Enabling weapon IK for {gameObject.name}!");
+                Debug.Log($"Enabling weapon IK for {gameObject.name}!");
                 _animationController.EnableIK(ikData);
                 weapon.localPosition = ikData.PositionOffset;
                 weapon.localEulerAngles = ikData.RotationOffset;

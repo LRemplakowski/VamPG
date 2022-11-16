@@ -3,38 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Spellbook;
+using System.Data.Linq.Mapping;
 
 namespace SunsetSystems.Entities.Data
 {
     [CreateAssetMenu(fileName = "New Stats", menuName = "Character/Stats")]
     public class StatsConfig : ScriptableObject
     {
-        public Trackers trackers = Trackers.Initialize();
-        public Clan clan = Clan.Invalid;
+        public Trackers Trackers = Trackers.Initialize();
+        public Clan Clan = Clan.Invalid;
         [Range(1, 16)]
-        public int generation = 12;
-        public Attributes attributes = Attributes.Initialize();
-        public Skills skills = Skills.Initialize();
-        public Disciplines disciplines = Disciplines.Initialize();
+        public int Generation = 12;
+        public int BloodPotency = 0;
+        public Attributes Attributes = Attributes.Initialize();
+        public Skills Skills = Skills.Initialize();
+        public Disciplines Disciplines = Disciplines.Initialize();
 
         public virtual Tracker GetTracker(TrackerType type)
         {
-            return trackers.GetTracker(type);
+            return Trackers.GetTracker(type);
         }
 
         public CreatureAttribute GetAttribute(AttributeType type)
         {
-            return attributes.GetAttribute(type);
+            return Attributes.GetAttribute(type);
         }
 
         public Skill GetSkill(SkillType type)
         {
-            return skills.GetSkill(type);
+            return Skills.GetSkill(type);
         }
 
         public Discipline GetDiscipline(DisciplineType type)
         {
-            return disciplines.GetDiscipline(type);
+            return Disciplines.GetDiscipline(type);
         }
 
         public DisciplinePower GetDisciplinePower(DisciplineType disciplineType, int powerIndex)
@@ -44,7 +46,7 @@ namespace SunsetSystems.Entities.Data
 
         public DisciplinePower GetDisciplinePower(string scriptName)
         {
-            foreach (Discipline d in disciplines.GetDisciplines())
+            foreach (Discipline d in Disciplines.GetDisciplines())
             {
                 foreach (DisciplinePower p in d.GetKnownPowers())
                 {
@@ -56,7 +58,7 @@ namespace SunsetSystems.Entities.Data
         }
         public List<CreatureAttribute> GetAttributes()
         {
-            return attributes.GetAttributeList();
+            return Attributes.GetAttributeList();
         }       
     }
 
@@ -73,6 +75,16 @@ namespace SunsetSystems.Entities.Data
             result.willpower = new(TrackerType.Willpower);
             result.hunger = new(TrackerType.Hunger);
             result.humanity = new(TrackerType.Humanity);
+            return result;
+        }
+
+        public static Trackers DeepCopy(Trackers existing)
+        {
+            Trackers result = new();
+            result.health = new(existing.health);
+            result.willpower = new(existing.willpower);
+            result.hunger = new(existing.hunger);
+            result.humanity = new(existing.humanity);
             return result;
         }
 
@@ -105,7 +117,8 @@ namespace SunsetSystems.Entities.Data
             //MENTAL
             intelligence,
             wits,
-            resolve;
+            resolve,
+            speed;
 
         public static Attributes Initialize()
         {
@@ -122,6 +135,24 @@ namespace SunsetSystems.Entities.Data
             result.intelligence = new CreatureAttribute(AttributeType.Intelligence);
             result.wits = new CreatureAttribute(AttributeType.Wits);
             result.resolve = new CreatureAttribute(AttributeType.Resolve);
+            result.speed = new CreatureAttribute(AttributeType.Speed);
+            result.speed.SetValue(5);
+            return result;
+        }
+
+        public static Attributes DeepCopy(Attributes existing)
+        {
+            Attributes result = new();
+            result.strength = new(existing.strength);
+            result.dexterity = new(existing.dexterity);
+            result.stamina = new(existing.stamina);
+            result.charisma = new(existing.charisma);
+            result.manipulation = new(existing.manipulation);
+            result.composure = new(existing.composure);
+            result.intelligence = new(existing.intelligence);
+            result.wits = new(existing.wits);
+            result.resolve = new(existing.resolve);
+            result.speed = new(existing.speed);
             return result;
         }
 

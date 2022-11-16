@@ -5,31 +5,34 @@ namespace SunsetSystems.Entities.Data
     [Serializable]
     public struct StatsData
     {
-        public Trackers trackers;
-        public Clan clan;
-        public int generation;
-        public Attributes attributes;
-        public Skills skills;
-        public Disciplines disciplines;
+        public Trackers Trackers;
+        public Clan Clan;
+        public int Generation;
+        public int BloodPotency;
+        public Attributes Attributes;
+        public Skills Skills;
+        public Disciplines Disciplines;
 
         public StatsData(StatsConfig statsAsset)
         {
-            this.trackers = statsAsset.trackers;
-            this.clan = statsAsset.clan;
-            this.generation = statsAsset.generation;
-            this.attributes = statsAsset.attributes;
-            this.skills = statsAsset.skills;
-            this.disciplines = statsAsset.disciplines;
+            this.Trackers = statsAsset.Trackers;
+            this.Clan = statsAsset.Clan;
+            this.Generation = statsAsset.Generation;
+            this.BloodPotency = statsAsset.BloodPotency;
+            this.Attributes = statsAsset.Attributes;
+            this.Skills = statsAsset.Skills;
+            this.Disciplines = statsAsset.Disciplines;
         }
 
         public StatsData(StatsData data)
         {
-            this.trackers = data.trackers;
-            this.clan = data.clan;
-            this.generation = data.generation;
-            this.attributes = data.attributes;
-            this.skills = data.skills;
-            this.disciplines = data.disciplines;
+            this.Trackers = data.Trackers;
+            this.Clan = data.Clan;
+            this.Generation = data.Generation;
+            this.BloodPotency = data.BloodPotency;
+            this.Attributes = data.Attributes;
+            this.Skills = data.Skills;
+            this.Disciplines = data.Disciplines;
         }
     }
 }

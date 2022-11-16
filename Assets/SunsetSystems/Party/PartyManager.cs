@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
 using NaughtyAttributes;
+using SunsetSystems.Inventory;
+using SunsetSystems.Experience;
 
 namespace SunsetSystems.Party
 {
@@ -22,6 +24,7 @@ namespace SunsetSystems.Party
         private static HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
         private StringCreatureDataDictionary _creatureDataCache;
+        public static List<CreatureData> AllCoterieMembers => new(Instance._creatureDataCache.Values);
 
         private static string _mainCharacterKey;
 
@@ -98,6 +101,8 @@ namespace SunsetSystems.Party
         public static void RecruitCharacter(CreatureData creatureData)
         {
             Instance._creatureDataCache.Add(creatureData.ID, creatureData);
+            InventoryManager.AddCoterieMemberEquipment(creatureData.ID, creatureData);
+            ExperienceManager.AddCreatureToExperienceManager(creatureData.ID);
             OnPartyMemberRecruited?.Invoke(creatureData.ID, creatureData);
         }
 

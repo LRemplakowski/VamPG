@@ -46,7 +46,8 @@ namespace SunsetSystems.UI
             Debug.Log($"Equipping item {_itemEntry._item.ItemName}!");
             if (_itemEntry._item is EquipableItem item)
             {
-                InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item);
+                if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
+                    Debug.LogError($"Failed to equip item {item.ItemName} for character {CharacterSelector.SelectedCharacterKey}!");
             }
         }
 

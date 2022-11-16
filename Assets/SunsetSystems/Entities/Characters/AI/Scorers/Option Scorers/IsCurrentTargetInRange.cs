@@ -16,7 +16,7 @@ namespace AI.Scorers.Option
             Vector3 myPos = context.Owner.transform.position;
             Vector3 targetPos = context.CurrentTarget.transform.position;
 
-            return not ^ Vector3.Distance(myPos, targetPos) <= context.StatsManager.GetWeaponMaxRange() ? score : 0f;
+            return not ^ Vector3.Distance(myPos, targetPos) <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange ? score : 0f;
         }
     }
 }

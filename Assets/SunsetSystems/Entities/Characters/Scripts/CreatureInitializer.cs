@@ -18,7 +18,7 @@ namespace SunsetSystems.Entities.Characters
         public static Creature InitializeCreature(CreatureData data, Vector3 position, Transform parent, Quaternion rotation)
         {
             PrepareGameObject(data, position, parent, rotation, out GameObject creatureObject, out Creature creature);
-            PrepareComponents(data, creatureObject);
+            PrepareComponents(data, creatureObject, creature);
             return creature;
 
             static void PrepareGameObject(CreatureData data, Vector3 position, Transform parent, Quaternion rotation, out GameObject creatureObject, out Creature creature)
@@ -35,10 +35,10 @@ namespace SunsetSystems.Entities.Characters
         public static void InitializeCreature(Creature creature)
         {
             creature.gameObject.layer = LayerMask.NameToLayer("ActionTarget");
-            PrepareComponents(creature.Data, creature.gameObject);
+            PrepareComponents(creature.Data, creature.gameObject, creature);
         }
 
-        private static void PrepareComponents(CreatureData data, GameObject creatureObject)
+        private static void PrepareComponents(CreatureData data, GameObject creatureObject, Creature owner)
         {
             DynamicCharacterAvatar dca;
             StatsManager stats;
@@ -58,7 +58,7 @@ namespace SunsetSystems.Entities.Characters
             dca = creatureObject.GetComponent<DynamicCharacterAvatar>() ?? creatureObject.AddComponent<DynamicCharacterAvatar>();
             InitializeUmaAvatar(dca, data);
             stats = creatureObject.GetComponent<StatsManager>() ?? creatureObject.AddComponent<StatsManager>();
-            InitializeStatsManager(stats, data);
+            InitializeStatsManager(stats, owner);
             collider = creatureObject.GetComponent<CapsuleCollider>() ?? creatureObject.AddComponent<CapsuleCollider>();
             InitializeCollider(collider);
             rigidbody = creatureObject.GetComponent<Rigidbody>() ?? creatureObject.AddComponent<Rigidbody>();
@@ -78,13 +78,13 @@ namespace SunsetSystems.Entities.Characters
             Creature creature = creatureObject.GetComponent<Creature>();
             if (creature == null)
             {
-                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.Faction, out creature);
             }
-            else if (IsCreatureScriptMismatch(creature, data.faction))
+            else if (IsCreatureScriptMismatch(creature, data.Faction))
             {
                 Debug.LogWarning("Destroying creature script!");
                 UnityEngine.Object.DestroyImmediate(creature);
-                AddMatchingCreatureScript(creatureObject, data.faction, out creature);
+                AddMatchingCreatureScript(creatureObject, data.Faction, out creature);
             }
             creature.Data = data;
             return creature;
@@ -112,18 +112,18 @@ namespace SunsetSystems.Entities.Characters
         {
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
             dca.loadPath = "UMAPresets/";
-            dca.loadFilename = data.umaPresetFileName;
+            dca.loadFilename = data.UmaPresetFileName;
             dca.loadFileOnStart = true;
-            dca.raceAnimationControllers.defaultAnimationController = data.animatorControllerAsset;
-            dca.saveFilename = data.umaPresetFileName;
+            dca.raceAnimationControllers.defaultAnimationController = data.AnimatorControllerAsset;
+            dca.saveFilename = data.UmaPresetFileName;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
             dca.savePath = "UMAPresets/";
             dca.DoLoad();
         }
 
-        private static void InitializeStatsManager(StatsManager statsManager, CreatureData data)
+        private static void InitializeStatsManager(StatsManager statsManager, Creature owner)
         {
-            statsManager.Initialize(data.stats);
+            statsManager.Initialize(owner);
         }
 
         private static void InitializeCollider(CapsuleCollider collider)

@@ -34,23 +34,13 @@ namespace SunsetSystems.Inventory
             _unique ??= GetComponent<UniqueId>();
         }
 
-        private void OnEnable()
-        {
-            PartyManager.OnPartyMemberRecruited += AddCoterieMemberEquipment;
-        }
-
         public static void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)
         {
-            if (creatureData.useEquipmentPreset)
-            {
-                throw new NotImplementedException("Equipment presets not implemented!");
-            }
+            bool success = Instance._coterieEquipmentData.TryAdd(creatureID, creatureData.Equipment);
+            if (!success)
+                Debug.LogWarning($"Trying to add coterie member equipment, but equipment data for {creatureID} already exists!");
             else
-            {
-                bool success = Instance._coterieEquipmentData.TryAdd(creatureID, EquipmentData.Initialize());
-                if (!success)
-                    Debug.LogWarning($"Trying to add coterie member equipment, but equipment data for {creatureID} already exists!");
-            }
+                Debug.Log($"Successfully added equipment entry for coterie member with ID {creatureID}");
         }
 
         public static bool TryGetEquipmentData(string characterKey, out EquipmentData data)
@@ -61,7 +51,10 @@ namespace SunsetSystems.Inventory
         public static bool TryEquipItemInSlot(string characterID, string slotID, EquipableItem item)
         {
             if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
+            {
+                Debug.LogError($"Could not find equipment data for creater with ID {characterID}! Is {characterID} registered as party member?");
                 return false;
+            }
             try
             {
                 EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
@@ -76,32 +69,34 @@ namespace SunsetSystems.Inventory
                 bool success = slot.TryEquipItem(item);
                 if (success)
                 {
+                    Debug.Log("Item equipped successfuly!");
                     PlayerInventory.TryRemoveItem(new(item));
                     equipmentData.equipmentSlots[slotID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
-                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    data.Equipment = Instance._coterieEquipmentData[characterID];
                     PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemEquipped?.Invoke(characterID);
                 }
+                else
+                {
+                    Debug.LogError($"Failed to equip item {item.ItemName} in slot {slot.Name}!");
+                }
                 return success;
             }
-            catch (IndexOutOfRangeException)
+            catch (IndexOutOfRangeException e)
             {
+                Debug.LogException(e);
                 return false;
             }
         }
 
         public static bool TryEquipItem(string characterKey, EquipableItem item)
         {
-            if (TryGetEquipmentData(characterKey, out EquipmentData data))
-            {
-                List<string> slotIDs = EquipmentData.GetSlotIDsFromItemCategory(item.ItemCategory);
-                if (slotIDs.Count <= 0)
-                    return false;
-                return TryEquipItemInSlot(characterKey, slotIDs[0], item);
-            }
-            return false;
+            List<string> slotIDs = EquipmentData.GetSlotIDsFromItemCategory(item.ItemCategory);
+            if (slotIDs.Count <= 0)
+                return false;
+            return TryEquipItemInSlot(characterKey, slotIDs[0], item);
         }
 
         public static bool TryUnequipItemFromSlot(string characterID, string slotID)
@@ -119,7 +114,7 @@ namespace SunsetSystems.Inventory
                     equipmentData.equipmentSlots[slot.ID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
-                    data.equipment = Instance._coterieEquipmentData[characterID];
+                    data.Equipment = Instance._coterieEquipmentData[characterID];
                     PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemUnequipped?.Invoke(characterID);
                 }

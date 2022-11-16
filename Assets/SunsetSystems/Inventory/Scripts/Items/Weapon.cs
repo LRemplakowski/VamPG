@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
@@ -6,12 +7,14 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Weapon", menuName = "Sunset Inventory/Items/Weapon")]
     public class Weapon : EquipableItem, IWeapon
     {
-        public int damageModifier = 0;
-        public DamageType damageType;
-        public WeaponType weaponType;
-        public AttributeType associatedAttribute;
-        public SkillType associatedSkill;
-        private bool ShowRange => weaponType == WeaponType.Ranged;
+        public int DamageModifier = 0;
+        public DamageType DamageType;
+        public WeaponType WeaponType;
+        public AttributeType AssociatedAttribute;
+        public SkillType AssociatedSkill;
+
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used in ShowIf Attribute")]
+        private bool ShowRange => WeaponType == WeaponType.Ranged;
         [SerializeField, ShowIf("ShowRange")]
         protected int optimalRange = 0, rangeFalloff = 0;
 
@@ -33,8 +36,8 @@ namespace SunsetSystems.Inventory.Data
         public DamageData GetDamageData()
         {
             DamageData data = new();
-            data.damageModifier = damageModifier;
-            data.damageType = damageType;
+            data.damageModifier = DamageModifier;
+            data.damageType = DamageType;
             return data;
         }
     }

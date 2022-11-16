@@ -7,48 +7,32 @@ namespace SunsetSystems.Entities.Characters
     [Serializable]
     public struct CreatureData
     {
-        public string firstName, lastName;
-        public string FullName => firstName + " " + lastName;
+        public string FirstName, LastName;
+        public string FullName => $"{FirstName} {LastName}";
         public string ID => FullName;
-        public Sprite portrait;
-        public Faction faction;
-        public BodyType bodyType;
-        public CreatureType creatureType;
-        public string umaPresetFileName;
-        public RuntimeAnimatorController animatorControllerAsset;
-        public StatsData stats;
-        public EquipmentData equipment;
-        public bool useEquipmentPreset;
+        public Sprite Portrait;
+        public Faction Faction;
+        public BodyType BodyType;
+        public CreatureType CreatureType;
+        public string UmaPresetFileName;
+        public RuntimeAnimatorController AnimatorControllerAsset;
+        public StatsData Stats;
+        public EquipmentData Equipment;
+        public bool UseEquipmentPreset;
 
         public CreatureData(CreatureConfig config)
         {
-            firstName = config.Name;
-            lastName = config.LastName;
-            portrait = config.Portrait;
-            faction = config.CreatureFaction;
-            bodyType = config.BodyType;
-            creatureType = config.CreatureType;
-            umaPresetFileName = config.UmaPresetFilename;
-            animatorControllerAsset = config.AnimatorController;
-            stats = new(config.StatsAsset);
-            equipment = new(config.EquipmentConfig);
-            useEquipmentPreset = config.UseEquipmentPreset;
-        }
-
-        public CreatureData(CreatureData data)
-        {
-            firstName = data.firstName;
-            lastName = data.lastName;
-            portrait = data.portrait;
-            faction = data.faction;
-            bodyType = data.bodyType;
-            creatureType = data.creatureType;
-            Debug.LogError(data.umaPresetFileName);
-            umaPresetFileName = new(data.umaPresetFileName);
-            animatorControllerAsset = data.animatorControllerAsset;
-            stats = new(data.stats);
-            equipment = new EquipmentData(data.equipment);
-            useEquipmentPreset = data.useEquipmentPreset;
+            FirstName = config.Name;
+            LastName = config.LastName;
+            Portrait = config.Portrait;
+            Faction = config.CreatureFaction;
+            BodyType = config.BodyType;
+            CreatureType = config.CreatureType;
+            UmaPresetFileName = config.UmaPresetFilename;
+            AnimatorControllerAsset = config.AnimatorController;
+            Stats = new(config.StatsAsset);
+            Equipment = new(config.EquipmentConfig);
+            UseEquipmentPreset = config.UseEquipmentPreset;
         }
     }
 }

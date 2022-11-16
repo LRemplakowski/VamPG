@@ -20,8 +20,8 @@ namespace AI.Scorers.Context
             Vector3 targetPos = option.transform.position;
             float distance = Vector3.Distance(myPos, targetPos);
 
-            return not ^ (distance <= context.StatsManager.GetWeaponMaxRange()) ?
-                (distance <= context.StatsManager.GetWeaponEffectiveRange() ? score * effectiveRangeMultiplier : score) :
+            return not ^ (distance <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange) ?
+                (distance <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().optimalRange ? score * effectiveRangeMultiplier : score) :
                 0f;
         }
     }

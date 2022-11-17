@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: 0.7068563, w: 0.70735717}
   m_LocalPosition: {x: 0, y: -0.051, z: -0.056}
   m_LocalScale: {x: 0.4, y: 0.5, z: 0.1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2627600621572058784}
   m_RootOrder: 0
@@ -51,10 +52,12 @@ MeshRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,6 +82,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4343398592255331069
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +95,7 @@ GameObject:
   - component: {fileID: 8573083474301079999}
   - component: {fileID: 8606917249786317059}
   - component: {fileID: 2296578694201986378}
+  - component: {fileID: 8765817004425203262}
   m_Layer: 0
   m_Name: Interior (Spot Light)
   m_TagString: Untagged
@@ -108,6 +113,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8815706805738973951}
   m_Father: {fileID: 0}
@@ -172,6 +178,7 @@ Light:
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
 --- !u!114 &8606917249786317059
@@ -186,11 +193,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe0c2e88ebc66ac4a8009588e4f6ee8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_skyMode: 0
+  m_overrideSystemActiveState: 0
   m_systemActive: 1
   m_lightShadowMode: 0
+  m_lightCullingMode: 0
+  m_lightCullingDistance: 70
+  m_lightEmissionCullingDistance: 250
+  m_cullingWaitForFrames: 100
   m_lightComponent: {fileID: 8573083474301079999}
-  m_ignoreEmissionObject: 0
   m_lightEmissionObject: {fileID: 542891994109362807}
+  m_emissionMaterial: {fileID: 0}
+  m_enableEmissioKeyWord: _EMISSION
+  m_emissionRenderType: 0
+  PreviewSyncLightCullingInEditor: 0
+  m_genaManagerExists: 0
+  m_lightComponentExists: 0
+  m_lightEmissionObjectExists: 0
+  m_lightEmissionMaterialExists: 0
+  m_playerExists: 0
+  m_gaiaProExists: 0
 --- !u!114 &2296578694201986378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,4 +225,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d703b7c4d5f49b9a12a9370960726b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_destroyAfterSpawn: 1
+  m_unpackPrefab: 0
   m_successRate: 0.7
+--- !u!114 &8765817004425203262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4343398592255331069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}

@@ -82,7 +82,7 @@ namespace SunsetSystems.Input.CameraControl
             return transform.position.z + _offset.z - Mathf.Abs(_boundingBoxSize.z / 2);
         }
 
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
             Vector3 boundingBoxCenter = transform.position + _offset;
             Gizmos.color = _gizmoColor;

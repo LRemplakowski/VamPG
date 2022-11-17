@@ -15,13 +15,13 @@ namespace SunsetSystems.Entities.Data
 
         public StatsData(StatsConfig statsAsset)
         {
-            this.Trackers = statsAsset.Trackers;
+            this.Trackers = Trackers.DeepCopy(statsAsset.Trackers);
             this.Clan = statsAsset.Clan;
             this.Generation = statsAsset.Generation;
             this.BloodPotency = statsAsset.BloodPotency;
-            this.Attributes = statsAsset.Attributes;
+            this.Attributes = Attributes.DeepCopy(statsAsset.Attributes);
             this.Skills = statsAsset.Skills;
-            this.Disciplines = statsAsset.Disciplines;
+            this.Disciplines = Disciplines.DeepCopy(statsAsset.Disciplines);
         }
 
         public StatsData(StatsData data)

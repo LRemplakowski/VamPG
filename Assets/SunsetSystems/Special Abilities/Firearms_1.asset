@@ -10,20 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6881cc8924343944a6474dd610c91f3, type: 3}
-  m_Name: Athletics_1
+  m_Name: Firearms_1
   m_EditorClassIdentifier: 
-  <PowerName>k__BackingField: Should I Stay Or Should I Go
-  <PowerDescription>k__BackingField: 'You have the ability to traverse obstacles
-    with ease.
+  <PowerName>k__BackingField: Another One Bites The Dust
+  <PowerDescription>k__BackingField: 'You have a basic knowledge of firearms and
+    bullet casings.
 
 
-    Effect: Increases movement range by 1.'
-  _scriptName: Athletics_1
-  type: 11
+    Effect: Uses gun to fire a shot with increased damage and
+    crit chance, but less accuracy.'
+  <BloodCost>k__BackingField: 1
+  <Cooldown>k__BackingField: 2
+  _scriptName: Firearms_1
+  type: 19
   level: 1
-  secondaryType: 11
+  secondaryType: 19
   secondaryLevel: 0
-  _target: 0
+  _target: 2
   range: 1
   hasDiciplinePool: 0
   disciplinePool:
@@ -58,15 +61,15 @@ MonoBehaviour:
     secondDiscipline: 0
   _targetableCreatureType: 2
   effects:
-  - effectType: 0
-    _affectedCreature: 0
-    duration: 0
+  - effectType: 4
+    _affectedCreature: 1
+    duration: 1
     rounds: 0
     attributeEffect:
       propertyModifier: 0
-      affectedProperty: 9
-      modifierType: 2
-      modifierValue: 1
+      affectedProperty: 0
+      modifierType: 0
+      modifierValue: 0
     skillEffect:
       propertyModifier: 0
       affectedProperty: 0
@@ -84,4 +87,4 @@ MonoBehaviour:
       modifierType: 0
       modifierValue: 0
     scriptEffect:
-      script: {fileID: 0}
+      _script: {fileID: 11400000, guid: 7952d55e40a4c4046b2e6b0b302d1c9b, type: 2}

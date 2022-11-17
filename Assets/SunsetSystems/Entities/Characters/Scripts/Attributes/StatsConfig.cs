@@ -17,49 +17,7 @@ namespace SunsetSystems.Entities.Data
         public int BloodPotency = 0;
         public Attributes Attributes = Attributes.Initialize();
         public Skills Skills = Skills.Initialize();
-        public Disciplines Disciplines = Disciplines.Initialize();
-
-        public virtual Tracker GetTracker(TrackerType type)
-        {
-            return Trackers.GetTracker(type);
-        }
-
-        public CreatureAttribute GetAttribute(AttributeType type)
-        {
-            return Attributes.GetAttribute(type);
-        }
-
-        public Skill GetSkill(SkillType type)
-        {
-            return Skills.GetSkill(type);
-        }
-
-        public Discipline GetDiscipline(DisciplineType type)
-        {
-            return Disciplines.GetDiscipline(type);
-        }
-
-        public DisciplinePower GetDisciplinePower(DisciplineType disciplineType, int powerIndex)
-        {
-            return GetDiscipline(disciplineType).GetPower(powerIndex);
-        }
-
-        public DisciplinePower GetDisciplinePower(string scriptName)
-        {
-            foreach (Discipline d in Disciplines.GetDisciplines())
-            {
-                foreach (DisciplinePower p in d.GetKnownPowers())
-                {
-                    if (p.ScriptName.Equals(scriptName))
-                        return p;
-                }
-            }
-            return CreateInstance<DisciplinePower>();
-        }
-        public List<CreatureAttribute> GetAttributes()
-        {
-            return Attributes.GetAttributeList();
-        }       
+        public Disciplines Disciplines = Disciplines.Initialize();   
     }
 
     [Serializable]
@@ -162,7 +120,7 @@ namespace SunsetSystems.Entities.Data
             {
                 strength, dexterity, stamina,
                 charisma, manipulation, composure,
-                intelligence, wits, resolve
+                intelligence, wits, resolve, speed
             };
         }
 
@@ -179,6 +137,7 @@ namespace SunsetSystems.Entities.Data
                 AttributeType.Intelligence => intelligence,
                 AttributeType.Wits => wits,
                 AttributeType.Resolve => resolve,
+                AttributeType.Speed => speed,
                 _ => new(AttributeType.Invalid),
             };
         }
@@ -317,7 +276,15 @@ namespace SunsetSystems.Entities.Data
             oblivion,
             potence,
             presence,
-            protean;
+            protean,
+            athletics,
+            firearms,
+            melee,
+            streetwise,
+            insight,
+            medicine,
+            larceny,
+            intimidation;
 
         public static Disciplines Initialize()
         {
@@ -333,6 +300,39 @@ namespace SunsetSystems.Entities.Data
             result.potence = new(DisciplineType.Potence);
             result.presence = new(DisciplineType.Presence);
             result.protean = new(DisciplineType.Protean);
+            result.athletics = new(DisciplineType.Athletics);
+            result.firearms = new(DisciplineType.Firearms);
+            result.melee = new(DisciplineType.Melee);
+            result.streetwise = new(DisciplineType.Streetwise);
+            result.insight = new(DisciplineType.Insight);
+            result.medicine = new(DisciplineType.Medicine);
+            result.larceny = new(DisciplineType.Larceny);
+            result.intimidation = new(DisciplineType.Intimidation);
+            return result;
+        }
+
+        public static Disciplines DeepCopy(Disciplines existing)
+        {
+            Disciplines result = new();
+            result.animalism = new(existing.animalism);
+            result.auspex = new(existing.auspex);
+            result.bloodSorcery = new(existing.bloodSorcery);
+            result.celerity = new(existing.celerity);
+            result.dominate = new(existing.dominate);
+            result.fortitude = new(existing.fortitude);
+            result.obfuscate = new(existing.obfuscate);
+            result.oblivion = new(existing.oblivion);
+            result.potence = new(existing.potence);
+            result.presence = new(existing.presence);
+            result.protean = new(existing.protean);
+            result.athletics = new(existing.athletics);
+            result.firearms = new(existing.firearms);
+            result.melee = new(existing.melee);
+            result.streetwise = new(existing.streetwise);
+            result.insight = new(existing.insight);
+            result.medicine = new(existing.medicine);
+            result.larceny = new(existing.larceny);
+            result.intimidation = new(existing.intimidation);
             return result;
         }
 
@@ -351,6 +351,14 @@ namespace SunsetSystems.Entities.Data
                 DisciplineType.Potence => potence,
                 DisciplineType.Presence => presence,
                 DisciplineType.Protean => protean,
+                DisciplineType.Athletics => athletics,
+                DisciplineType.Firearms => firearms,
+                DisciplineType.Melee => melee,
+                DisciplineType.Streetwise => streetwise,
+                DisciplineType.Insight => insight,
+                DisciplineType.Medicine => medicine,
+                DisciplineType.Larceny => larceny,
+                DisciplineType.Intimidation => intimidation,
                 _ => new(DisciplineType.Invalid),
             };
         }
@@ -367,7 +375,15 @@ namespace SunsetSystems.Entities.Data
             oblivion,
             potence,
             presence,
-            protean
+            protean,
+            athletics,
+            firearms,
+            melee,
+            streetwise,
+            insight,
+            medicine,
+            larceny,
+            intimidation
         };
     }
 }

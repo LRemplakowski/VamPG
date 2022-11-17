@@ -1,6 +1,7 @@
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Cover;
 using SunsetSystems.Inventory.Data;
+using System;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -9,6 +10,7 @@ namespace SunsetSystems.Combat
     {
         public const double BASE_HIT_CHANCE = 0.9d;
         public const double SHORT_RANGE_HIT_PENALTY = 0.5d;
+        public const double BASE_CRIT_CHANCE = 0.2d;
         public const double BASE_DODGE_CHANCE = 0.05d;
         public const double COVER_MODIFIER_LOW = 0.2d;
         public const double COVER_MODIFIER_HIGH = 0.5d;
@@ -17,22 +19,44 @@ namespace SunsetSystems.Combat
 
         public static AttackResult CalculateAttackResult(Creature attacker, Creature defender)
         {
+            return CalculateAttackResult(attacker, defender, new());
+        }
+
+        public static AttackResult CalculateAttackResult(Creature attacker, Creature defender, AttackModifier attackModifier)
+        {
             int damage = 0;
             int damageReduction = 0;
             int adjustedDamage = 0;
-            double attackerHitChance = CalculateHitChance(attacker);
-            double defenderDodgeChance = CalculateDodgeChance(defender, attacker);
+            double critChance = 0;
+            double critRoll = 0;
+            double attackerHitChance = CalculateHitChance(attacker, defender) + attackModifier.HitChanceMod;
+            double defenderDodgeChance = CalculateDodgeChance(defender, attacker) + attackModifier.DodgeChanceMod;
             bool hit = false;
+            bool crit = false;
             hit |= attackerHitChance - defenderDodgeChance >= 1d;
-            double hitRoll = _random.NextDouble();
+            double hitRoll = _random.NextDouble() + attackModifier.HitRollMod;
             hit |= hitRoll < attackerHitChance - defenderDodgeChance;
+            hit |= attackModifier.SuccessMod;
             if (hit)
             {
-                damage = CalculateAttackDamage(attacker);
-                damageReduction = CalculateDefenderDamageReduction(defender, attacker.Data.Equipment.GetSelectedWeapon().WeaponType);
-                adjustedDamage = damage > damageReduction ? damage - damageReduction : 1;
+                critChance = CalculateCritChance(attacker) + attackModifier.CritChanceMod;
+                damage = CalculateAttackDamage(attacker, defender) + attackModifier.DamageMod;
+                critRoll = _random.NextDouble() + attackModifier.CritRollMod;
+                crit |= critRoll < critChance;
+                crit |= attackModifier.CriticalMod;
+                if (crit)
+                    damage = Mathf.RoundToInt(damage * 1.5f);
+                damageReduction = CalculateDefenderDamageReduction(defender, attacker.Data.Equipment.GetSelectedWeapon().WeaponType) + attackModifier.DamageReductionMod;
+                adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
-            return new(attackerHitChance, defenderDodgeChance, hitRoll, damage, damageReduction, adjustedDamage, hit);
+            return new(attackerHitChance, defenderDodgeChance, hitRoll, critChance, critRoll, damage, damageReduction, adjustedDamage, hit, crit);
+        }
+
+        private static double CalculateCritChance(Creature attacker)
+        {
+            double result = BASE_CRIT_CHANCE;
+            result += attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Wits).GetValue() * 0.01d;
+            return result;
         }
 
         private static int CalculateDefenderDamageReduction(Creature defender, WeaponType attackType)
@@ -50,7 +74,7 @@ namespace SunsetSystems.Combat
             return damageReduction;
         }
 
-        private static int CalculateAttackDamage(Creature attacker)
+        private static int CalculateAttackDamage(Creature attacker, Creature defender)
         {
             int damage = 0;
             Weapon selectedWeapon = attacker.Data.Equipment.GetSelectedWeapon();
@@ -68,10 +92,13 @@ namespace SunsetSystems.Combat
             return damage;
         }
 
-        private static double CalculateHitChance(Creature attacker)
+        private static double CalculateHitChance(Creature attacker, Creature defender)
         {
-            double attributeModifier = attacker.Data.Stats.Attributes.GetAttribute(attacker.Data.Equipment.GetSelectedWeapon().AssociatedAttribute).GetValue();
-            double result = BASE_HIT_CHANCE + (attributeModifier * 0.01d);
+            double attributeModifier = attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Wits).GetValue();
+            double result = 0d;
+            if (attacker.Data.Equipment.GetSelectedWeapon().GetRangeData().shortRange >= Vector3.Distance(attacker.transform.position, defender.transform.position))
+                result -= SHORT_RANGE_HIT_PENALTY;
+            result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;
         }
 
@@ -96,21 +123,34 @@ namespace SunsetSystems.Combat
         }
     }
 
+    [Serializable]
+    public struct AttackModifier
+    {
+        public double HitChanceMod, DodgeChanceMod, HitRollMod;
+        public double CritChanceMod, CritRollMod;
+        public int DamageMod, DamageReductionMod, AdjustedDamageMod;
+        public bool SuccessMod, CriticalMod;
+    }
+
     public struct AttackResult
     {
         public readonly double AttackerHitChance, DefenderDodgeChance, HitRoll;
+        public readonly double CritChance, CritRoll;
         public readonly int Damage, DamageReduction, AdjustedDamage;
-        public readonly bool Successful;
+        public readonly bool Successful, Critical;
 
-        public AttackResult(double attackerHitChance, double defenderDodgeChance, double hitRoll, int damage, int damageReduction, int adjustedDamage, bool successful)
+        public AttackResult(double attackerHitChance, double defenderDodgeChance, double hitRoll, double critChance, double critRoll, int damage, int damageReduction, int adjustedDamage, bool successful, bool critical)
         {
             AttackerHitChance = attackerHitChance;
             DefenderDodgeChance = defenderDodgeChance;
             HitRoll = hitRoll;
+            CritChance = critChance;
+            CritRoll = critRoll;
             Damage = damage;
             DamageReduction = damageReduction;
             AdjustedDamage = adjustedDamage;
             Successful = successful;
+            Critical = critical;
         }
     }
 }

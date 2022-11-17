@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6881cc8924343944a6474dd610c91f3, type: 3}
-  m_Name: Athletics_1
+  m_Name: Athletics_2
   m_EditorClassIdentifier: 
-  <PowerName>k__BackingField: Should I Stay Or Should I Go
-  <PowerDescription>k__BackingField: 'You have the ability to traverse obstacles
-    with ease.
+  <PowerName>k__BackingField: Lucky Star
+  <PowerDescription>k__BackingField: 'Your physical conditioning and athletic ability
+    both increase.
 
 
-    Effect: Increases movement range by 1.'
-  _scriptName: Athletics_1
+    Effect: Allows you to gain 1-2 health at the end of your
+    turn.'
+  _scriptName: Athletics_2
   type: 11
   level: 1
-  secondaryType: 11
+  secondaryType: 19
   secondaryLevel: 0
   _target: 0
   range: 1
@@ -58,15 +59,15 @@ MonoBehaviour:
     secondDiscipline: 0
   _targetableCreatureType: 2
   effects:
-  - effectType: 0
+  - effectType: 4
     _affectedCreature: 0
     duration: 0
     rounds: 0
     attributeEffect:
       propertyModifier: 0
-      affectedProperty: 9
-      modifierType: 2
-      modifierValue: 1
+      affectedProperty: 0
+      modifierType: 0
+      modifierValue: 0
     skillEffect:
       propertyModifier: 0
       affectedProperty: 0
@@ -84,4 +85,4 @@ MonoBehaviour:
       modifierType: 0
       modifierValue: 0
     scriptEffect:
-      script: {fileID: 0}
+      _script: {fileID: 11400000, guid: ba3d0e5509fe4f84da0540d3d55cec70, type: 2}

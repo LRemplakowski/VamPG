@@ -1,6 +1,5 @@
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Data;
-using SunsetSystems.Game;
 using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Redcode.Awaiting;
 using SunsetSystems.Animation;
-using SunsetSystems.Entities.Characters.Actions;
+using System;
 
 namespace SunsetSystems.Combat
 {
@@ -26,6 +25,7 @@ namespace SunsetSystems.Combat
         public static event CombatRoundBeginHandler CombatRoundBegin;
         public delegate void CombatRoundEndHandler(Creature currentActor);
         public static event CombatRoundEndHandler CombatRoundEnd;
+        public static event Action OnFullTurnCompleted;
 
         private int turnCounter;
 
@@ -80,7 +80,10 @@ namespace SunsetSystems.Combat
                 CurrentActiveActor = FirstActor;
             }
             if (CurrentActiveActor == FirstActor)
+            {
                 turnCounter++;
+                OnFullTurnCompleted?.Invoke();
+            }
             CombatRoundBegin?.Invoke(CurrentActiveActor);
             Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + turnCounter + "!");
         }

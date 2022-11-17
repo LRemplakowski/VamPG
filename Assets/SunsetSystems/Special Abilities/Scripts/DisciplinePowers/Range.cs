@@ -2,5 +2,4 @@
 {
     Melee,
     Ranged,
-
 }

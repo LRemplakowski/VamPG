@@ -155,10 +155,10 @@ public class GridController : ExposableMonobehaviour
         Debug.Log(currentGridPosition);
         if (currentGridPosition != null)
         {
-            int actorRange = actor.GetComponent<StatsManager>().GetCombatSpeed();
             gridAgentHelper.transform.position = actor.transform.position;
             currentGridPosition.Visited = GridElement.Status.Occupied;
-            List<GridElement> elementsInRange = FindReachableGridElements(currentGridPosition, actorRange);
+            Debug.Log($"Grid Controll: Getting actor combat speed! Value = {actor.StatsManager.GetCombatSpeed()}");
+            List<GridElement> elementsInRange = FindReachableGridElements(currentGridPosition, actor.StatsManager.GetCombatSpeed());
             Debug.Log("Elements in range: " + elementsInRange.Count);
             foreach (GridElement g in elementsInRange)
             {
@@ -172,8 +172,7 @@ public class GridController : ExposableMonobehaviour
     {
         gridAgentHelper.transform.position = c.transform.position;
         GridElement actorPosition = c.CurrentGridPosition;
-        float actorRange = c.StatsManager.GetCombatSpeed() * scale;
-        List<GridElement> result = FindReachableGridElements(actorPosition, actorRange);
+        List<GridElement> result = FindReachableGridElements(actorPosition, c.StatsManager.GetCombatSpeed());
         return result;
     }
 
@@ -185,16 +184,16 @@ public class GridController : ExposableMonobehaviour
         return result;
     }
 
-    private List<GridElement> FindReachableGridElements(GridElement startElement, float movementRange)
+    private List<GridElement> FindReachableGridElements(GridElement startElement, int movementRange)
     {
         List<GridElement> elementsInRange = new();
-        for (int x = startElement.GridPosition.x - ((int)(movementRange / scale) + 1); x < startElement.GridPosition.x + ((movementRange / scale) + 1); x++)
+        for (int x = startElement.GridPosition.x - (movementRange + 1); x < startElement.GridPosition.x + (movementRange + 1); x++)
         {
             if (x < 0)
                 continue;
             if (x >= gridElements.GetLength(0))
                 break;
-            for (int y = startElement.GridPosition.y - ((int)(movementRange / scale) + 1); y < startElement.GridPosition.y + ((movementRange / scale) + 1); y++)
+            for (int y = startElement.GridPosition.y - (movementRange + 1); y < startElement.GridPosition.y + (movementRange + 1); y++)
             {
                 if (y < 0)
                     continue;
@@ -210,16 +209,17 @@ public class GridController : ExposableMonobehaviour
         return elementsInRange;
     }
 
-    private bool IsGridElementWithinRange(GridElement endPoint, float movementRange, Vector3 fromPosition)
+    private bool IsGridElementWithinRange(GridElement endPoint, int movementRange, Vector3 fromPosition)
     {
         if (endPoint == null)
             return false;
+        double scaleAdjustedMovementRange = (movementRange * scale) + 0.1d;
         NavMeshPath pathToElement = new();
         gridAgentHelper.transform.position = fromPosition;
         gridAgentHelper.CalculatePath(endPoint.transform.position, pathToElement);
         if (pathToElement.status == NavMeshPathStatus.PathComplete)
         {
-            return CalculatePathLength(pathToElement.corners) <= movementRange + ActionConsts.COMPLETION_MARGIN;
+            return CalculatePathLength(pathToElement.corners) <= scaleAdjustedMovementRange;
         }
         else
         {
@@ -232,7 +232,11 @@ public class GridController : ExposableMonobehaviour
         float pathLength = 0;
         for (int i = 1; i < pathNavpoints.Length; i++)
         {
-            pathLength += Vector3.Distance(pathNavpoints[i - 1], pathNavpoints[i]);
+            Vector3 previous = pathNavpoints[i - 1];
+            Vector3 current = pathNavpoints[i];
+            previous.y = 0;
+            current.y = 0;
+            pathLength += Vector3.Distance(previous, current);
         }
         return pathLength;
     }

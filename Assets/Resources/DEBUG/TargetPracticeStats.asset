@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Trackers:
     health:
-      _maxValue: 1
-      <SuperficialDamage>k__BackingField: 2
+      _maxValue: 5
+      <SuperficialDamage>k__BackingField: 0
       <AggravatedDamage>k__BackingField: 0
       _trackerType: 0
     willpower:
@@ -64,6 +64,9 @@ MonoBehaviour:
     resolve:
       _baseValue: 1
       _attributeType: 8
+    speed:
+      _baseValue: 5
+      _attributeType: 9
   Skills:
     athletics:
       baseValue: 0
@@ -246,3 +249,35 @@ MonoBehaviour:
       - {fileID: 0}
       - {fileID: 0}
       - {fileID: 0}
+    athletics:
+      baseValue: 0
+      disciplineType: 11
+      knownPowers: []
+    firearms:
+      baseValue: 0
+      disciplineType: 12
+      knownPowers: []
+    melee:
+      baseValue: 0
+      disciplineType: 13
+      knownPowers: []
+    streetwise:
+      baseValue: 0
+      disciplineType: 14
+      knownPowers: []
+    insight:
+      baseValue: 0
+      disciplineType: 15
+      knownPowers: []
+    medicine:
+      baseValue: 0
+      disciplineType: 16
+      knownPowers: []
+    larceny:
+      baseValue: 0
+      disciplineType: 17
+      knownPowers: []
+    intimidation:
+      baseValue: 0
+      disciplineType: 18
+      knownPowers: []

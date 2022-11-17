@@ -10,6 +10,7 @@ using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEngine.Animations.Rigging;
 using SunsetSystems.Animation;
+using SunsetSystems.Spellbook;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -26,7 +27,8 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(UtilityAIComponent)),
     RequireComponent(typeof(CapsuleCollider)),
     RequireComponent(typeof(WardrobeManager)),
-    RequireComponent(typeof(RigBuilder))]
+    RequireComponent(typeof(RigBuilder)),
+    RequireComponent(typeof(SpellbookManager))]
     public abstract class Creature : Entity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
@@ -61,6 +63,9 @@ namespace SunsetSystems.Entities.Characters
 
         [field: SerializeField]
         public CombatBehaviour CombatBehaviour { get; private set; }
+
+        [field: SerializeField]
+        public SpellbookManager SpellbookManager { get; private set; }
 
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
@@ -106,6 +111,8 @@ namespace SunsetSystems.Entities.Characters
                 CombatBehaviour = GetComponent<CombatBehaviour>();
             if (!NavMeshObstacle)
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
+            if (!SpellbookManager)
+                SpellbookManager = GetComponent<SpellbookManager>();
             if (Agent)
                 Agent.enabled = false;
             if (NavMeshObstacle)
@@ -114,6 +121,8 @@ namespace SunsetSystems.Entities.Characters
                 _data = new(_config);
             if (StatsManager)
                 StatsManager.Initialize(this);
+            if (SpellbookManager)
+                SpellbookManager.Initialize(this);
         }
 
         protected virtual void Start()

@@ -11,5 +11,13 @@
     Potence,
     Presence,
     Protean,
+    Athletics,
+    Firearms,
+    Melee,
+    Streetwise,
+    Insight,
+    Medicine,
+    Larceny,
+    Intimidation,
     Invalid
 }

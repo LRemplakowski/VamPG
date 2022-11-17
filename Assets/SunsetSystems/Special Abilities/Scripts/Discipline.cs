@@ -15,24 +15,28 @@ namespace SunsetSystems.Spellbook
         private DisciplineType disciplineType = DisciplineType.Invalid;
 
         [SerializeField]
-        private DisciplinePower[] knownPowers = new DisciplinePower[5];
+        private List<DisciplinePower> knownPowers = new();
+
+        public Discipline(Discipline existing) : base(existing)
+        {
+            knownPowers = new(existing.knownPowers);
+            disciplineType = existing.disciplineType;
+        }
 
         public DisciplinePower GetPower(int index)
         {
-            DisciplinePower p;
             try
             {
-                p = knownPowers[index];
-                return p ? p : ScriptableObject.CreateInstance<DisciplinePower>();
+                return knownPowers[index];
             }
             catch (ArgumentOutOfRangeException e)
             {
                 Debug.LogException(e);
-                return ScriptableObject.CreateInstance<DisciplinePower>();
+                return null;
             }
         }
 
-        public List<DisciplinePower> GetKnownPowers() => new List<DisciplinePower>(knownPowers);
+        public List<DisciplinePower> GetKnownPowers() => knownPowers;
 
         public Discipline(DisciplineType disciplineType)
         {

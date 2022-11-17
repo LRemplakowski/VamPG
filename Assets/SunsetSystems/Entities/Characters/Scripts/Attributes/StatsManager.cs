@@ -7,6 +7,7 @@ using SunsetSystems.Entities.Data;
 using System.Linq;
 using SunsetSystems.Spellbook;
 using System;
+using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -38,6 +39,14 @@ namespace SunsetSystems.Entities.Characters
         public virtual void Die()
         {
             OnCreatureDied?.Invoke(_owner);
+        }
+
+        internal void Heal(int amount)
+        {
+            int currentDamage = Health.SuperficialDamage;
+            currentDamage -= amount;
+            currentDamage = currentDamage < 0 ? 0 : currentDamage;
+            Health.SuperficialDamage = currentDamage;
         }
 
         public int GetCombatSpeed()
@@ -75,11 +84,11 @@ namespace SunsetSystems.Entities.Characters
             return SkillType.Firearms;
         }
 
-        public DisciplinePower GetDisciplinePower(string scriptName)
+        public DisciplinePower GetDisciplinePower(string powerID)
         {
             foreach (Discipline discipline in Data.Disciplines.GetDisciplines())
             {
-                DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ScriptName.Equals(scriptName));
+                DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ID.Equals(powerID));
                 if (power != null)
                     return power;
             }
@@ -134,8 +143,19 @@ namespace SunsetSystems.Entities.Characters
             return builder.Create();
         }
 
-        public void ApplyEffect(Attrib
-            
-            uteEffect effect)
+        public void ApplyEffect(AttributeEffect effect)
+        {
+            Data.Attributes.GetAttribute(effect.AffectedProperty).AddModifier(new(effect.ModifierValue, effect.ModifierType, effect.GetHashCode().ToString()));
+        }
+
+        public void ApplyEffect(SkillEffect effect)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyEffect(DisciplineEffect effect)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

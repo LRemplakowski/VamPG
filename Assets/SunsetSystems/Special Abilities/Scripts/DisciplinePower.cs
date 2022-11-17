@@ -1,5 +1,8 @@
-﻿using SunsetSystems.Entities;
+﻿using NaughtyAttributes;
+using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Spellbook
@@ -22,9 +25,17 @@ namespace SunsetSystems.Spellbook
             + "Właściwość zostanie zignorowana jeśli dyscyplina nie ma żadnej z tych puli kości.";
         private const string targetableCreatureTypeTooltip = "Rodzaj istot na jakie może wpływać moc. Ma znaczenie tylko dla dyscyplin o celu innym niż Self.";
 
-        [SerializeField]
-        private string _scriptName;
-        public string ScriptName { get; }
+        [field: SerializeField]
+        public string PowerName { get; private set; }
+        [field: SerializeField, ResizableTextArea]
+        public string PowerDescription { get; private set; }
+        [field: SerializeField]
+        public int BloodCost { get; private set; }
+        [field: SerializeField]
+        public int Cooldown { get; private set; }
+        [SerializeField, ReadOnly]
+        private string _id;
+        public string ID => _id;
         [SerializeField, Tooltip(typeTooltip)]
         private DisciplineType type = DisciplineType.Invalid;
         public DisciplineType Type { get => type; }
@@ -47,7 +58,7 @@ namespace SunsetSystems.Spellbook
         [SerializeField, Tooltip(hasDisciplinePoolString)]
         private bool hasDiciplinePool = false;
         public bool HasDisciplinePool { get => hasDiciplinePool; }
-        [SerializeField]
+        [SerializeField, ShowIf("HasDisciplinePool")]
         private DicePool disciplinePool = new DicePool();
         public DicePool DisciplinePool { get => disciplinePool; }
         [SerializeField, Tooltip(disciplineRollDifficultyTooltip)]
@@ -56,35 +67,35 @@ namespace SunsetSystems.Spellbook
         [SerializeField, Tooltip(hasAttackPoolTooltip)]
         private bool hasAttackPool = false;
         public bool HasAttackPool { get => hasAttackPool; }
-        [SerializeField]
+        [SerializeField, ShowIf("HasAttackPool")]
         private DicePool attackPool = new DicePool();
         public DicePool AttackPool { get => attackPool; }
         [SerializeField, Tooltip(defensePoolTooltip)]
-        private bool hasDefensePool = false;
-        public bool HasDefensePool { get => hasDefensePool; }
-        [SerializeField]
-        private DicePool defensePool = new DicePool();
-        public DicePool DefensePool { get => defensePool; }
+        private bool _hasDefensePool = false;
+        public bool HasDefensePool { get => _hasDefensePool; }
+        [SerializeField, ShowIf("HasDefensePool")]
+        private DicePool _defensePool = new DicePool();
+        public DicePool DefensePool { get => _defensePool; }
         [SerializeField, Tooltip(targetableCreatureTypeTooltip)]
-        private TargetableCreatureType targetableCreatureType = TargetableCreatureType.Any;
-        public TargetableCreatureType TargetableCreatureType { get => targetableCreatureType; }
+        private TargetableCreatureType _targetableCreatureType = TargetableCreatureType.Any;
+        public TargetableCreatureType TargetableCreatureType { get => _targetableCreatureType; }
 
-        public EffectWrapper[] GetEffects()
+        private void Awake()
+        {
+            if (string.IsNullOrEmpty(_id))
+                _id = Guid.NewGuid().ToString();
+        }
+
+        public List<EffectWrapper> GetEffects()
         {
             return effects;
         }
 
-        [SerializeField]
-        private EffectWrapper[] effects = new EffectWrapper[1];
+        [SerializeField, AllowNesting]
+        private List<EffectWrapper> effects = new();
         [System.Serializable]
         public class EffectWrapper
         {
-#pragma warning disable 0414
-            //Editor variables
-            [SerializeField]
-            private bool isExpanded = false;
-#pragma warning restore 0414
-
             private const string effectTypeTooltip = "Typ efektu. Na jaką właściwość ma wpływać lub czy ma być obsługiwany osobnym skryptem.";
             private const string affectedCreatureTooltip = "Na kogo ma wpłynąć efekt. Nie ma znaczenia jeśli cel mocy jest Self.";
 
@@ -104,7 +115,6 @@ namespace SunsetSystems.Spellbook
 
             public abstract class Effect 
             {
-                public abstract void Apply(Entity caster, Entity target);
             }
 
             public Effect GetEffect()
@@ -119,7 +129,8 @@ namespace SunsetSystems.Spellbook
                     _ => scriptEffect,
                 };
             }
-
+            
+            [ShowIf("effectType", EffectType.Attribute)]
             public AttributeEffect attributeEffect = new AttributeEffect();
             [System.Serializable]
             public class AttributeEffect : Effect
@@ -136,17 +147,10 @@ namespace SunsetSystems.Spellbook
                 [SerializeField]
                 private int modifierValue;
                 public int ModifierValue { get => modifierValue; }
-
-                public override void Apply(Entity caster, Entity target)
-                {
-                    if (target is Creature c)
-                    {
-                        
-                    }
-                }
             }
 
-            public SkillEffect skillEffect = new SkillEffect();
+            [ShowIf("effectType", EffectType.Skill)]
+            public SkillEffect skillEffect = new();
             [System.Serializable]
             public class SkillEffect : Effect
             {
@@ -162,14 +166,6 @@ namespace SunsetSystems.Spellbook
                 [SerializeField]
                 private int modifierValue;
                 public int ModifierValue { get => modifierValue; }
-
-                public override void Apply(Entity caster, Entity target)
-                {
-                    if (target is Creature c)
-                    {
-
-                    }
-                }
             }
 
             public DisciplineEffect disciplineEffect = new DisciplineEffect();
@@ -188,14 +184,6 @@ namespace SunsetSystems.Spellbook
                 [SerializeField]
                 private int modifierValue;
                 public int ModifierValue { get => modifierValue; }
-
-                public override void Apply(Entity caster, Entity target)
-                {
-                    if (target is Creature c)
-                    {
-
-                    }
-                }
             }
 
             public TrackerEffect trackerEffect = new TrackerEffect();
@@ -217,31 +205,15 @@ namespace SunsetSystems.Spellbook
                 [SerializeField]
                 private int modifierValue;
                 public int ModifierValue { get => modifierValue; }
-
-                public override void Apply(Entity caster, Entity target)
-                {
-                    if (target is Creature c)
-                    {
-
-                    }
-                }
             }
 
             public ScriptEffect scriptEffect = new();
             [System.Serializable]
             public class ScriptEffect : Effect
             {
-                [SerializeField]
-                private DisciplineScript script;
-                public DisciplineScript Script { get => script; }
-
-                public override void Apply(Entity caster, Entity target)
-                {
-                    if (target is Creature c)
-                    {
-
-                    }
-                }
+                [SerializeReference, RequireInterface(typeof(IDisciplineScript))]
+                private UnityEngine.Object _script;
+                public IDisciplineScript Script { get => _script as IDisciplineScript; }
             }
 
 

@@ -1,13 +1,17 @@
+using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public abstract class BaseStat
 {
     public delegate void OnValueChange();
     public OnValueChange onValueChange;
 
-    protected List<Modifier> Modifiers { get; } = new();
+    [field: SerializeField, ReadOnly]
+    protected List<Modifier> Modifiers { get; private set; } = new();
 
     public BaseStat(BaseStat existing)
     {

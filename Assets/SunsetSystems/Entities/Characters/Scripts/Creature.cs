@@ -142,7 +142,7 @@ namespace SunsetSystems.Entities.Characters
                 ActionQueue.Dequeue();
                 ActionQueue.Peek().Begin();
             }
-            if (ActionQueue.Peek().IsFinished())
+            else if (ActionQueue.Peek().IsFinished())
             {
                 ActionQueue.Dequeue();
                 if (ActionQueue.Count == 0)

@@ -14,10 +14,11 @@ using System.Linq;
 using NaughtyAttributes;
 using SunsetSystems.Party;
 using SunsetSystems.Entities;
+using SunsetSystems.Spellbook;
 
 namespace SunsetSystems.Input
 {
-    public class CreatureBehaviourController : Singleton<CreatureBehaviourController>
+    public class PlayerBehaviourController : Singleton<PlayerBehaviourController>
     {
         private Vector2 mousePosition;
         private Collider lastHit;
@@ -30,6 +31,8 @@ namespace SunsetSystems.Input
         private bool _useSelection;
         [SerializeField]
         private Selection _selection;
+
+        public static PlayerInputMode InputMode { get; set; }
 
         private void OnEnable()
         {
@@ -183,10 +186,36 @@ namespace SunsetSystems.Input
                         }
                     }
                     break;
+                case BarAction.SELECT_TARGET:
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                        return;
+                    Creature powerTarget = hit.collider.GetComponent<Creature>();
+                    if (powerTarget)
+                    {
+                        if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
+                        {
+                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is using power on enemy {powerTarget.Data.ID}!");
+                            SpellbookManager.PowerTarget = powerTarget;
+                        }
+                    }
+                    break;
                 default:
                     Debug.LogError($"Invalid bar action in combat secondary action handler!");
                     break;
             }
+        }
+
+        private bool VerifyTarget(Creature target, Spellbook.Target requiredTarget)
+        {
+            return requiredTarget switch
+            {
+                Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
+                Spellbook.Target.Friendly => target is PlayerControlledCharacter || target.Data.Faction is Faction.Friendly,
+                Spellbook.Target.Hostile => target.Data.Faction is Faction.Hostile,
+                Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
+                Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
+                _ => false,
+            };
         }
 
         private static bool IsInRange(Entity enemy)
@@ -326,5 +355,10 @@ namespace SunsetSystems.Input
                     creature.Move(hit.position, stoppingDistance);
             }
         }
+    }
+
+    public enum PlayerInputMode
+    {
+        Default, TargetSelection
     }
 }

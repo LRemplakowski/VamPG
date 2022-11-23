@@ -40,5 +40,11 @@ namespace SunsetSystems.Entities.Characters
             AddActionToQueue(attackAction);
             return attackAction;
         }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            PartyManager.UpdateCreatureData(this.Data);
+        }
     }
 }

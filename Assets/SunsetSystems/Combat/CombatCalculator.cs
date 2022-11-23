@@ -29,6 +29,14 @@ namespace SunsetSystems.Combat
             int adjustedDamage = 0;
             double critChance = 0;
             double critRoll = 0;
+
+            float heightDifference = attacker.transform.position.y - defender.transform.position.y;
+            if (heightDifference > attacker.Agent.height && attacker.SpellbookManager.GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+            {
+                attackModifier.HitChanceMod += .1d;
+                attackModifier.DamageMod += 2;
+            }
+
             double attackerHitChance = CalculateHitChance(attacker, defender) + attackModifier.HitChanceMod;
             double defenderDodgeChance = CalculateDodgeChance(defender, attacker) + attackModifier.DodgeChanceMod;
             bool hit = false;

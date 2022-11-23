@@ -1,6 +1,9 @@
 ﻿using NaughtyAttributes;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Resources;
+using SunsetSystems.UI;
+using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +11,7 @@ using UnityEngine;
 namespace SunsetSystems.Spellbook
 {
     [System.Serializable, CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
-    public class DisciplinePower : ScriptableObject
+    public class DisciplinePower : ScriptableObject, IGameDataProvider<DisciplinePower>
     {
         private const string typeTooltip = "Drzewo dyscyplin do którego należy dyscyplina.";
         private const string levelTooltip = "Minimalny poziom potrzebny do wykupienia dyscypliny. Ma znaczenie tylko dla rozwoju postaci.";
@@ -33,6 +36,8 @@ namespace SunsetSystems.Spellbook
         public int BloodCost { get; private set; }
         [field: SerializeField]
         public int Cooldown { get; private set; }
+        [field: SerializeField]
+        public Sprite Icon { get; private set; }
         [SerializeField, ReadOnly]
         private string _id;
         public string ID => _id;
@@ -80,10 +85,25 @@ namespace SunsetSystems.Spellbook
         private TargetableCreatureType _targetableCreatureType = TargetableCreatureType.Any;
         public TargetableCreatureType TargetableCreatureType { get => _targetableCreatureType; }
 
+        private TooltipContent _powerTooltip;
+        public TooltipContent Tooltip => _powerTooltip;
+        public DisciplinePower Data => this;
+
+        private void OnValidate()
+        {
+            _powerTooltip._title = this.PowerName;
+            _powerTooltip._description = this.PowerDescription;
+        }
+
         private void Awake()
         {
             if (string.IsNullOrEmpty(_id))
                 _id = Guid.NewGuid().ToString();
+        }
+
+        private void OnEnable()
+        {
+            Icon ??= ResourceLoader.GetFallbackIcon();
         }
 
         public List<EffectWrapper> GetEffects()

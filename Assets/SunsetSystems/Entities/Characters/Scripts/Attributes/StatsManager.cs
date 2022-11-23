@@ -36,6 +36,22 @@ namespace SunsetSystems.Entities.Characters
                 Die();
         }
 
+        public bool TryUseBlood(int amount)
+        {
+            if (amount > Hunger.GetValue())
+                return false;
+            Hunger.SuperficialDamage += amount;
+            return true;
+        }
+
+        public void RegainBlood(int amount)
+        {
+            if (amount > Hunger.SuperficialDamage)
+                Hunger.SuperficialDamage = 0;
+            else
+                Hunger.SuperficialDamage -= amount;
+        }
+
         public virtual void Die()
         {
             OnCreatureDied?.Invoke(_owner);
@@ -137,7 +153,7 @@ namespace SunsetSystems.Entities.Characters
             return Data.Attributes.GetAttributeList();
         }
 
-        internal HealthData GetHealthData()
+        public HealthData GetHealthData()
         {
             HealthData.HealthDataBuilder builder = new(Data.Trackers.GetTracker(TrackerType.Health).GetValue());
             return builder.Create();

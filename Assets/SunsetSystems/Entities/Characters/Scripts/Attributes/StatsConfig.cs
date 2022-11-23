@@ -14,7 +14,7 @@ namespace SunsetSystems.Entities.Data
         public Clan Clan = Clan.Invalid;
         [Range(1, 16)]
         public int Generation = 12;
-        public int BloodPotency = 0;
+        public int BloodPotency = 1;
         public Attributes Attributes = Attributes.Initialize();
         public Skills Skills = Skills.Initialize();
         public Disciplines Disciplines = Disciplines.Initialize();   
@@ -32,6 +32,7 @@ namespace SunsetSystems.Entities.Data
             result.health = new(TrackerType.Health);
             result.willpower = new(TrackerType.Willpower);
             result.hunger = new(TrackerType.Hunger);
+            result.hunger.SetValue(0);
             result.humanity = new(TrackerType.Humanity);
             return result;
         }

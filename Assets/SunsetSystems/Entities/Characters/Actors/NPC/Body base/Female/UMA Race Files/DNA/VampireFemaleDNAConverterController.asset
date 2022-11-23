@@ -4437,8 +4437,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators: []
           _aggregationMethod: 1
-      _min: -0.1
-      _max: 0.1
+      _min: -20
+      _max: 20
     _valuesZ:
       _val:
         _value: 0
@@ -4446,8 +4446,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators:
           - _calcOption: 0
-            _dnaName: FaceEyeLeftPositionZ
-            _dnaNameHash: -2067680195
+            _dnaName: FaceEyeWidth
+            _dnaNameHash: -759645007
             _evaluator:
               _name: Default
               _graph:
@@ -4483,7 +4483,7 @@ MonoBehaviour:
                 m_PreInfinity: 2
                 m_PostInfinity: 2
                 m_RotationOrder: 4
-            _multiplier: 2
+            _multiplier: 5
             _initialized: 1
           _aggregationMethod: 1
       _min: -1
@@ -4518,8 +4518,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators:
           - _calcOption: 0
-            _dnaName: FaceEyeLeftPositionZ
-            _dnaNameHash: -2067680195
+            _dnaName: FaceEyeWidth
+            _dnaNameHash: -759645007
             _evaluator:
               _name: DefaultInverted
               _graph:
@@ -4555,7 +4555,7 @@ MonoBehaviour:
                 m_PreInfinity: 2
                 m_PostInfinity: 2
                 m_RotationOrder: 4
-            _multiplier: 2
+            _multiplier: 5
             _initialized: 1
           _aggregationMethod: 1
       _min: -1
@@ -4639,8 +4639,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators:
           - _calcOption: 0
-            _dnaName: FaceNoseHumpDepth
-            _dnaNameHash: 802405970
+            _dnaName: FaceNoseBridgeDepth
+            _dnaNameHash: 415046588
             _evaluator:
               _name: Default
               _graph:
@@ -4760,8 +4760,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators:
           - _calcOption: 0
-            _dnaName: FaceEyePositionX
-            _dnaNameHash: -1924439956
+            _dnaName: FaceEyeHeight
+            _dnaNameHash: -492504651
             _evaluator:
               _name: Default
               _graph:
@@ -4797,7 +4797,7 @@ MonoBehaviour:
                 m_PreInfinity: 2
                 m_PostInfinity: 2
                 m_RotationOrder: 4
-            _multiplier: 1
+            _multiplier: 5
             _initialized: 1
           _aggregationMethod: 1
       _min: -0.5
@@ -4809,8 +4809,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators: []
           _aggregationMethod: 1
-      _min: -0.1
-      _max: 0.1
+      _min: -0.5
+      _max: 1
     _valuesZ:
       _val:
         _value: 0
@@ -4818,8 +4818,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators: []
           _aggregationMethod: 1
-      _min: -0.1
-      _max: 0.1
+      _min: -0.5
+      _max: 1
     _umaDNA:
       dnaTypeHash: 1840390732
   - _hashName: UMAadjustment.Reye
@@ -4832,8 +4832,8 @@ MonoBehaviour:
         _modifyingDNA:
           _dnaEvaluators:
           - _calcOption: 0
-            _dnaName: FaceEyePositionX
-            _dnaNameHash: -1924439956
+            _dnaName: FaceEyeHeight
+            _dnaNameHash: -492504651
             _evaluator:
               _name: Default
               _graph:
@@ -4869,7 +4869,7 @@ MonoBehaviour:
                 m_PreInfinity: 2
                 m_PostInfinity: 2
                 m_RotationOrder: 4
-            _multiplier: 1
+            _multiplier: 5
             _initialized: 1
           _aggregationMethod: 1
       _min: -0.5
@@ -5064,6 +5064,100 @@ MonoBehaviour:
       _max: 5
     _umaDNA:
       dnaTypeHash: 1840390732
+--- !u!114 &-3656850860476515299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4952de3305cd7194bb51aafa1b220607, type: 3}
+  m_Name: LocalColor
+  m_EditorClassIdentifier: 
+  masterWeight:
+    _masterWeightType: 0
+    _globalWeight: 1
+    _DNAForWeight:
+      _calcOption: 0
+      _dnaName: 
+      _dnaNameHash: 0
+      _evaluator:
+        _name: Raw
+        _graph:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 0.5
+            value: 0.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      _multiplier: 1
+      _initialized: 1
+  _converterController: {fileID: 11400000}
+  _colorSets:
+  - mode: 0
+    targetName: 
+    textureChannel: 0
+    modifyingDNA:
+      _dnaEvaluators: []
+      _aggregationMethod: 0
+    colorModifier:
+      R:
+        enable: 0
+        adjustmentType: 0
+        useDNAValue: 0
+        value: 0
+        adjustValue: 0
+        multiplier: 0
+      G:
+        enable: 0
+        adjustmentType: 0
+        useDNAValue: 0
+        value: 0
+        adjustValue: 0
+        multiplier: 0
+      B:
+        enable: 0
+        adjustmentType: 0
+        useDNAValue: 0
+        value: 0
+        adjustValue: 0
+        multiplier: 0
+      A:
+        enable: 0
+        adjustmentType: 0
+        useDNAValue: 0
+        value: 0
+        adjustValue: 0
+        multiplier: 0
+      _testDNAVal: 0
 --- !u!114 &-3633482224635545075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7197,6 +7291,7 @@ MonoBehaviour:
   - {fileID: -6029575002552261704}
   - {fileID: 8997161660639172847}
   - {fileID: 6205333345416414976}
+  - {fileID: -3656850860476515299}
   _overallModifiers:
     _adjustScale: 1
     _adjustHeight: 0

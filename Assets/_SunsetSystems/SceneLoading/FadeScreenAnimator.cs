@@ -19,42 +19,33 @@ namespace SunsetSystems.Loading.UI
             _ = FadeIn(.5f);
         }
 
-        internal async Task FadeOut(float fadeTime, Action action)
+        public async Task FadeOut(float fadeTime, Action action)
         {
             action.Invoke();
             await FadeOut(fadeTime);
         }
 
-        internal async Task FadeOut(float fadeTime)
+        public async Task FadeOut(float fadeTime)
         {
             gameObject.SetActive(true);
-            Color color = fadePanel.color;
-            color.a = 0;
-            fadePanel.color = color;
+            fadePanel.color = Color.clear;
             float lerpTime = 0;
             while (fadePanel.color.a <= 0.99f)
             {
-                color = fadePanel.color;
-                color = Color.Lerp(color, Color.black, lerpTime / fadeTime);
                 lerpTime += Time.deltaTime;
-                fadePanel.color = color;
+                fadePanel.color = Color.Lerp(Color.clear, Color.black, lerpTime / fadeTime);
                 await new WaitForUpdate();
             }
             fadePanel.color = Color.black;
         }
 
-        internal async Task FadeIn(float fadeTime)
+        public async Task FadeIn(float fadeTime)
         {
-            Color color = fadePanel.color;
-            color.a = 1f;
-            fadePanel.color = color;
             float lerpTime = 0;
             while (fadePanel.color.a >= 0.01f)
             {
-                color = fadePanel.color;
-                color = Color.Lerp(color, Color.clear, lerpTime / fadeTime);
                 lerpTime += Time.deltaTime;
-                fadePanel.color = color;
+                fadePanel.color = Color.Lerp(Color.black, Color.clear, lerpTime / fadeTime);
                 await new WaitForUpdate();
             }
             fadePanel.color = Color.clear;

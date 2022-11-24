@@ -46,9 +46,10 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        public static void InterruptCurrentLine()
+        public void InterruptCurrentLine()
         {
-            Instance._dialogueRunner.OnViewRequestedInterrupt();
+            if (_dialogueRunner.IsDialogueRunning)
+                _dialogueRunner.OnViewRequestedInterrupt();
         }
 
         public void DisableViews()

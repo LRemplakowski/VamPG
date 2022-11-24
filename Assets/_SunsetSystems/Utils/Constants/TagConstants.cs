@@ -17,4 +17,6 @@
 
     public const string SELECTION_RECT = "SELECTION_RECT";
     public const string PARTY_PORTRAITS_CONTROLLER = "PARTY_PORTRAITS_CONTROLLER";
+
+    public const string SCENE_LOGIC = "SCENE_LOGIC";
 }

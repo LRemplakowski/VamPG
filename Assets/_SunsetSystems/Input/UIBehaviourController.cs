@@ -153,7 +153,7 @@ namespace SunsetSystems.Input
         {
             if (!context.performed)
                 return;
-            DialogueManager.InterruptCurrentLine();
+            DialogueManager.Instance.InterruptCurrentLine();
         }
     }
 }

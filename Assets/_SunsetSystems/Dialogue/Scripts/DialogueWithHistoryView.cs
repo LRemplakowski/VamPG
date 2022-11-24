@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using Redcode.Awaiting;
+using SunsetSystems.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,11 @@ namespace SunsetSystems.Dialogue
         private bool _showUnavailableOptions;
         [SerializeField]
         private float _lineCompletionDelay = .5f;
+        [Space, Header("Portrait")]
+        [SerializeField]
+        private Image _photo;
+        [SerializeField]
+        private TextMeshProUGUI _photoText;
 
         private StringBuilder _stringBuilder = new();
         private int _cachedMaxVisibleCharacters = default;
@@ -87,21 +93,26 @@ namespace SunsetSystems.Dialogue
             onDismissalComplete?.Invoke();
         }
 
-        public override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+        public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             _cancellationTokenSource.Cancel();
+            await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.text.Length;
+            _lineHistoryTextLength = _lineHistory.text.Length;
+            _cachedMaxVisibleCharacters = _lineHistory.maxVisibleCharacters;
             onDialogueLineFinished?.Invoke();
         }
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             _clampScrollbarNextFrame = true;
+            UpdatePhoto(dialogueLine.CharacterName);
             _lineHistoryTextLength += dialogueLine.Text.Text.Length;
             _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
             _stringBuilder
                 .AppendLine("")
-                .Append(dialogueLine.Text.Text);
+                .AppendLine($"<color=><size=26>{dialogueLine.CharacterName}:</size>")
+                .AppendLine(dialogueLine.TextWithoutCharacterName.Text);
             _lineHistory.text = _stringBuilder.ToString();
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)
@@ -140,6 +151,18 @@ namespace SunsetSystems.Dialogue
                     }
                 }
             }
+        }
+
+        private void UpdatePhoto(string speakerID)
+        {
+            _photo.sprite = GetSpeakerPortrait(speakerID);
+            _photoText.text = speakerID;
+        }
+
+        private Sprite GetSpeakerPortrait(string speakerID)
+        {
+            Sprite result = ResourceLoader.GetFallbackIcon();
+            return result;
         }
 
         public void CheckForClampScrollbar()

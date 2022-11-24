@@ -458,6 +458,15 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkipDialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""10e81493-2520-40b5-bdbe-0e5abc3595f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -535,6 +544,17 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Journal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce30613c-955b-456c-a79e-7719f4593434"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""SkipDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -627,6 +647,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         m_UI_CharacterSheet = m_UI.FindAction("CharacterSheet", throwIfNotFound: true);
         m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
         m_UI_Journal = m_UI.FindAction("Journal", throwIfNotFound: true);
+        m_UI_SkipDialogue = m_UI.FindAction("SkipDialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -814,6 +835,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_CharacterSheet;
     private readonly InputAction m_UI_Inventory;
     private readonly InputAction m_UI_Journal;
+    private readonly InputAction m_UI_SkipDialogue;
     public struct UIActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -825,6 +847,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         public InputAction @CharacterSheet => m_Wrapper.m_UI_CharacterSheet;
         public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
         public InputAction @Journal => m_Wrapper.m_UI_Journal;
+        public InputAction @SkipDialogue => m_Wrapper.m_UI_SkipDialogue;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -855,6 +878,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @Journal.started -= m_Wrapper.m_UIActionsCallbackInterface.OnJournal;
                 @Journal.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnJournal;
                 @Journal.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnJournal;
+                @SkipDialogue.started -= m_Wrapper.m_UIActionsCallbackInterface.OnSkipDialogue;
+                @SkipDialogue.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnSkipDialogue;
+                @SkipDialogue.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnSkipDialogue;
             }
             m_Wrapper.m_UIActionsCallbackInterface = instance;
             if (instance != null)
@@ -880,6 +906,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @Journal.started += instance.OnJournal;
                 @Journal.performed += instance.OnJournal;
                 @Journal.canceled += instance.OnJournal;
+                @SkipDialogue.started += instance.OnSkipDialogue;
+                @SkipDialogue.performed += instance.OnSkipDialogue;
+                @SkipDialogue.canceled += instance.OnSkipDialogue;
             }
         }
     }
@@ -953,5 +982,6 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         void OnCharacterSheet(InputAction.CallbackContext context);
         void OnInventory(InputAction.CallbackContext context);
         void OnJournal(InputAction.CallbackContext context);
+        void OnSkipDialogue(InputAction.CallbackContext context);
     }
 }

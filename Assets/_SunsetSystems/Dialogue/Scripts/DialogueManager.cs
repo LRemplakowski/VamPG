@@ -46,6 +46,11 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
+        public static void InterruptCurrentLine()
+        {
+            Instance._dialogueRunner.OnViewRequestedInterrupt();
+        }
+
         public void DisableViews()
         {
             _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));

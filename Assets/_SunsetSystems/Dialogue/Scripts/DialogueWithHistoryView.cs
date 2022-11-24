@@ -101,9 +101,7 @@ namespace SunsetSystems.Dialogue
             _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
             _stringBuilder
                 .AppendLine("")
-                //.Append(LINE_INDENT_OPEN)
                 .Append(dialogueLine.Text.Text);
-                //.Append(LINE_INDENT_CLOSE);
             _lineHistory.text = _stringBuilder.ToString();
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)

@@ -1,3 +1,4 @@
+using SunsetSystems.Dialogue;
 using SunsetSystems.Entities;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory.UI;
@@ -10,6 +11,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Yarn.Unity;
 
 namespace SunsetSystems.Input
 {
@@ -32,6 +34,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape += OnEscape;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
             PlayerInputHandler.OnJournal += OnJournal;
+            PlayerInputHandler.OnSkipDialogue += OnSkipDialogue;
         }
 
         private void OnDisable()
@@ -40,7 +43,8 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
             PlayerInputHandler.OnEscape -= OnEscape;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
-            PlayerInputHandler.OnJournal -= OnJournal; 
+            PlayerInputHandler.OnJournal -= OnJournal;
+            PlayerInputHandler.OnSkipDialogue -= OnSkipDialogue;
         }
 
         private void Start()
@@ -143,6 +147,13 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             pointerPosition = context.ReadValue<Vector2>();
+        }
+
+        private void OnSkipDialogue(InputAction.CallbackContext context)
+        {
+            if (!context.performed)
+                return;
+            DialogueManager.InterruptCurrentLine();
         }
     }
 }

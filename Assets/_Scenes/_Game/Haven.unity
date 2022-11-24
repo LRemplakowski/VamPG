@@ -12013,7 +12013,9 @@ MonoBehaviour:
   OnInteractionTriggered:
     m_PersistentCalls:
       m_Calls: []
-  entityDialogue: {fileID: 4900000, guid: 9a22f287f3f13e34184b046a7fec4d02, type: 3}
+  _dialogueProject: {fileID: 0}
+  _entryNode: 
+  _fireOnce: 0
 --- !u!65 &2038798272
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18227,6 +18229,32 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4561ed69912e7f3449f45375f8141174, type: 3}
+--- !u!1 &3648448450239223757 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5184734425426506033, guid: 4561ed69912e7f3449f45375f8141174, type: 3}
+  m_PrefabInstance: {fileID: 3648448450239223756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3648448450239223758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3648448450239223757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hoverHighlight: {fileID: 0}
+  _interactionDistance: 1.6
+  _interactionTransform: {fileID: 8051448432210335394}
+  OnInteractionTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
+  _entryNode: PickUp
+  _fireOnce: 1
 --- !u!1001 &3964407379641947259
 PrefabInstance:
   m_ObjectHideFlags: 0

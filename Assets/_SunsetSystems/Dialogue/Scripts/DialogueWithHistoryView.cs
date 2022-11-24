@@ -111,7 +111,7 @@ namespace SunsetSystems.Dialogue
             _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
             _stringBuilder
                 .AppendLine("")
-                .AppendLine($"<color=><size=26>{dialogueLine.CharacterName}:</size>")
+                .AppendLine($"<color=\"red\"><size=26>{dialogueLine.CharacterName}:</size></color>")
                 .AppendLine(dialogueLine.TextWithoutCharacterName.Text);
             _lineHistory.text = _stringBuilder.ToString();
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);

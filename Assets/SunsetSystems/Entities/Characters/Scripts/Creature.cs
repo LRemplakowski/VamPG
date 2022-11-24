@@ -43,7 +43,6 @@ namespace SunsetSystems.Entities.Characters
             }
             _data = new(_config);
             CreatureInitializer.InitializeCreature(this);
-            Awake();
         }
 
         [SerializeField]

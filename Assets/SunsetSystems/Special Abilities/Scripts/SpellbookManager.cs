@@ -49,7 +49,7 @@ namespace SunsetSystems.Spellbook
             foreach (Discipline discipline in Disciplines.GetDisciplines())
             {
                 await new WaitForSeconds(1f);
-                List<DisciplinePower> passivePowers = discipline.GetKnownPowers().FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
+                List<DisciplinePower> passivePowers = discipline.GetKnownPowers()?.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
                 powers.AddRange(passivePowers);
             }
             await new WaitForUpdate();

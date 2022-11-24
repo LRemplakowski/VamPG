@@ -1,14 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using Redcode.Awaiting;
+using SunsetSystems.Data;
+using SunsetSystems.Dialogue;
+using SunsetSystems.Party;
+using System.Threading.Tasks;
 using UnityEngine;
+using Yarn.Unity;
 
 namespace SunsetSystems.Loading
 {
-    internal class HavenSceneLogic : DefaultSceneLogic
+    public class HavenSceneLogic : DefaultSceneLogic
     {
-        public int someInt = 5;
-        public string someString = "foo";
-        public float someFloat = 12.0f;
-        public bool someBool = false;
+        [SerializeField, ES3NonSerializable]
+        private YarnProject _sceneDialogues;
+        [SerializeField, ES3NonSerializable]
+        private string _wakeUpStartNode;
+
+        public async override Task StartSceneAsync(SceneLoadingData data)
+        {
+            await base.StartSceneAsync(data);
+            await new WaitForUpdate();
+            PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
+            await new WaitForSeconds(2);
+            DialogueManager.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+        }
     }
 }

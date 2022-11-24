@@ -22,5 +22,10 @@ namespace SunsetSystems.MainMenu
         {
             GameStarter.Instance.InitializeGameDebug();
         }
+
+        public void StartGameJam()
+        {
+            GameStarter.Instance.InitializeGameJam();
+        }
     }
 }

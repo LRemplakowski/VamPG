@@ -11,7 +11,7 @@ using SunsetSystems.Party;
 
 namespace SunsetSystems.Loading
 {
-    internal class DefaultSceneLogic : AbstractSceneLogic
+    public class DefaultSceneLogic : AbstractSceneLogic
     {
         [SerializeField, ES3NonSerializable]
         private GameRuntimeData _gameRuntimeData;

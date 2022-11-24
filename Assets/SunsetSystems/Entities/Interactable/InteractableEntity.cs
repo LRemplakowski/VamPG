@@ -1,5 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -43,6 +44,8 @@ namespace SunsetSystems.Entities.Interactable
             set => _interactionTransform = value;
         }
 
+        public UnityEvent OnInteractionTriggered;
+
         protected virtual void OnValidate()
         {
             if (InteractionTransform == null)
@@ -63,6 +66,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             HandleInteraction();
+            OnInteractionTriggered?.Invoke();
             Interacted = true;
             TargetedBy = null;
         }

@@ -32,8 +32,6 @@ namespace SunsetSystems.Input
         [SerializeField]
         private Selection _selection;
 
-        public static PlayerInputMode InputMode { get; set; }
-
         private void OnEnable()
         {
             if (_selection)

@@ -1,5 +1,6 @@
 ﻿using SunsetSystems.Entities.Data;
 using System;
+using UMA.CharacterSystem;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
@@ -15,6 +16,7 @@ namespace SunsetSystems.Entities.Characters
         public BodyType BodyType;
         public CreatureType CreatureType;
         public string UmaPresetFileName;
+        public TextAsset UmaPreset;
         public RuntimeAnimatorController AnimatorControllerAsset;
         public StatsData Stats;
         public EquipmentData Equipment;
@@ -29,6 +31,7 @@ namespace SunsetSystems.Entities.Characters
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
             UmaPresetFileName = config.UmaPresetFilename;
+            UmaPreset = config.UmaPreset;
             AnimatorControllerAsset = config.AnimatorController;
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);

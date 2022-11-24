@@ -9,7 +9,7 @@ using SunsetSystems.Data;
 namespace SunsetSystems.Loading
 {
     [RequireComponent(typeof(UniqueId))]
-    internal abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
+    public abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
     {
         [SerializeField]
         protected UniqueId unique;

@@ -306,16 +306,16 @@ namespace UMA
 		public event Action<UMAData> OnAnimatorStateRestored { add { if (AnimatorStateRestored == null) AnimatorStateRestored = new UMADataEvent(); AnimatorStateRestored.AddAction(value); } remove { AnimatorStateRestored.RemoveAction(value); } }
 		public event Action<UMAData> OnPreUpdateUMABody { add { if(PreUpdateUMABody == null) PreUpdateUMABody = new UMADataEvent(); PreUpdateUMABody.AddAction(value); } remove { PreUpdateUMABody.RemoveAction(value); } } //VES added
 
-		public UMADataEvent CharacterCreated;
-		public UMADataEvent CharacterDestroyed;
-		public UMADataEvent CharacterUpdated;
-		public UMADataEvent CharacterBeforeUpdated;
-		public UMADataEvent CharacterBeforeDnaUpdated;
-		public UMADataEvent CharacterDnaUpdated;
-		public UMADataEvent CharacterBegun;
-		public UMADataEvent AnimatorStateSaved;
-		public UMADataEvent AnimatorStateRestored;
-		public UMADataEvent PreUpdateUMABody;
+		public UMADataEvent CharacterCreated = new();
+		public UMADataEvent CharacterDestroyed = new();
+		public UMADataEvent CharacterUpdated = new();
+		public UMADataEvent CharacterBeforeUpdated = new();
+		public UMADataEvent CharacterBeforeDnaUpdated = new();
+		public UMADataEvent CharacterDnaUpdated = new();
+		public UMADataEvent CharacterBegun = new();
+		public UMADataEvent AnimatorStateSaved = new();
+		public UMADataEvent AnimatorStateRestored = new();
+		public UMADataEvent PreUpdateUMABody = new();
 
 		public GameObject umaRoot;
 
@@ -369,6 +369,16 @@ namespace UMA
 
 		void Awake()
 		{
+			CharacterCreated ??= new();
+			CharacterDestroyed ??= new();
+			CharacterUpdated ??= new();
+			CharacterBeforeUpdated ??= new();
+			CharacterBeforeDnaUpdated ??= new();
+			CharacterDnaUpdated ??= new();
+			CharacterBegun ??= new();
+			AnimatorStateSaved ??= new();
+			AnimatorStateRestored ??= new();
+			PreUpdateUMABody ??= new();
 			if (!umaGenerator)
             {
 				if (UMAContextBase.Instance != null)

@@ -49,6 +49,7 @@ namespace SunsetSystems.Party
             _mainCharacterKey = string.Empty;
             _activeParty = new();
             _creatureDataCache = new();
+            _activeCoterieMemberKeys = new();
             _unique ??= GetComponent<UniqueId>();
         }
 

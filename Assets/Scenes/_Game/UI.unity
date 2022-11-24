@@ -2932,6 +2932,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
+--- !u!114 &1413672761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2573954928845595407, guid: 0b1abba0124b7e04db91a721d14a9359, type: 3}
+  m_PrefabInstance: {fileID: 1529137791817623277}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7161597b81ba61c4f949be7d1bfc4f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &367674699342789914
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3057,6 +3068,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1529137791127379034, guid: 0b1abba0124b7e04db91a721d14a9359, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1413672761}
+    - target: {fileID: 1529137791127379034, guid: 0b1abba0124b7e04db91a721d14a9359, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: StartGameJam
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529137791127379034, guid: 0b1abba0124b7e04db91a721d14a9359, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SunsetSystems.MainMenu.MainMenuUIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1529137791127379035, guid: 0b1abba0124b7e04db91a721d14a9359, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

@@ -5,6 +5,7 @@ using System;
 using Apex.AI.Components;
 using System.Threading.Tasks;
 using SunsetSystems.Animation;
+using UMA;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -113,12 +114,14 @@ namespace SunsetSystems.Entities.Characters
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
             dca.loadPath = "UMAPresets/";
             dca.loadFilename = data.UmaPresetFileName;
-            dca.loadFileOnStart = true;
+            dca.loadFileOnStart = false;
             dca.raceAnimationControllers.defaultAnimationController = data.AnimatorControllerAsset;
             dca.saveFilename = data.UmaPresetFileName;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
             dca.savePath = "UMAPresets/";
+            dca.umaData = dca.GetComponent<UMAData>();
             dca.DoLoad();
+            //dca.InitializeFromPreset(data.UmaPreset.text);
         }
 
         private static void InitializeStatsManager(StatsManager statsManager, Creature owner)

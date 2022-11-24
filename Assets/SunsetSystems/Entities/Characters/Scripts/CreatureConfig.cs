@@ -3,6 +3,7 @@ using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
 using SunsetSystems.Inventory;
+using UMA.CharacterSystem;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -27,14 +28,13 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private string _umaPresetFilename = "default";
         public string UmaPresetFilename { get => _umaPresetFilename; }
+        [field: SerializeField]
+        public TextAsset UmaPreset { get; private set; }
         [SerializeField]
         private string animatorControllerResourceName = "";
         [SerializeField]
         private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController
-        {
-            get => _animatorController;
-        }
+        public RuntimeAnimatorController AnimatorController => _animatorController;
         [SerializeField]
         private Faction _creatureFaction;
         public Faction CreatureFaction { get => _creatureFaction; }
@@ -47,7 +47,6 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private bool _useEquipmentPreset;
         public bool UseEquipmentPreset => _useEquipmentPreset;
-
 
         private void OnEnable()
         {

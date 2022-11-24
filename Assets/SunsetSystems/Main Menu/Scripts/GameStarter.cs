@@ -79,6 +79,15 @@ namespace SunsetSystems.Data
             await _sceneLoader.LoadGameScene(data);
         }
 
+        public async void InitializeGameJam()
+        {
+            Start();
+            CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
+            PartyManager.RecruitMainCharacter(new(desiree));
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            await _sceneLoader.LoadGameScene(data);
+        }
+
         public void DisableMainMenu()
         {
             _mainMenuParent.SetActive(false);

@@ -44,8 +44,8 @@ namespace SunsetSystems.Dialogue
         private int _cachedMaxVisibleCharacters = default;
         private int _lineHistoryTextLength = default;
 
-        private const string LINE_INDENT_OPEN = "<line-indent=-20>";
-        private const string LINE_INDENT_CLOSE = "</line-indent>";
+        private const string ROLL_SUCCESS_TAG = "success";
+        private const string ROLL_FAIL_TAG = "failure";
 
         private CancellationTokenSource _cancellationTokenSource;
         private Task _cachedTypewriteTask;
@@ -110,7 +110,9 @@ namespace SunsetSystems.Dialogue
             _lineHistoryTextLength += dialogueLine.Text.Text.Length;
             _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
             _stringBuilder
-                .AppendLine("")
+                .AppendLine("");
+            AppendRollPrefix(dialogueLine);
+            _stringBuilder
                 .AppendLine($"<color=\"red\"><size=26>{dialogueLine.CharacterName}:</size></color>")
                 .AppendLine(dialogueLine.TextWithoutCharacterName.Text);
             _lineHistory.text = _stringBuilder.ToString();
@@ -151,6 +153,16 @@ namespace SunsetSystems.Dialogue
                     }
                 }
             }
+        }
+
+        private void AppendRollPrefix(LocalizedLine dialogueLine)
+        {
+            if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
+                return;
+            if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
+                _stringBuilder.Append($"(Success) ");
+            else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))
+                _stringBuilder.Append("$(Failure) ");
         }
 
         private void UpdatePhoto(string speakerID)

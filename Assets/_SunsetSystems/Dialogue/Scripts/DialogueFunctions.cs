@@ -1,8 +1,6 @@
+using SunsetSystems.Dice;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -15,10 +13,28 @@ namespace SunsetSystems.Dialogue
             return PartyManager.MainCharacter.Data.FullName;
         }
 
-        [YarnCommand("StartQuest")]
-        public static void StartQuest(string questID)
+        [YarnFunction("Roll")]
+        public static int GetRollResult(string attribute)
         {
-            QuestJournal.Instance.BeginQuest(questID);
+            AttributeType attributeType = GetAttributeTypeFromString(attribute);
+            int dice = 0;
+            dice += PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
+            Outcome rollOutcome = Roll.d10(dice);
+            return rollOutcome.successes;
+        }
+
+        private static AttributeType GetAttributeTypeFromString(string attributeTypeString)
+        {
+            return attributeTypeString switch
+            {
+                "charisma" => AttributeType.Charisma,
+                _ => throw new System.NotImplementedException(),
+            };
+        }
+
+        private static SkillType GetSkillTypeFromString(string skillTypeString)
+        {
+            return SkillType.Invalid;
         }
     }
 }

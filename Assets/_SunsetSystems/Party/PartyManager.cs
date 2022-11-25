@@ -18,15 +18,15 @@ namespace SunsetSystems.Party
     {
         [field: SerializeField]
         private StringCreatureInstanceDictionary _activeParty;
-        public static Creature MainCharacter => Instance._activeParty[_mainCharacterKey];
+        public static Creature MainCharacter => Instance._activeParty[Instance._mainCharacterKey];
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
-        public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != _mainCharacterKey).Select(kv => kv.Value) as List<Creature>;
-        private static HashSet<string> _activeCoterieMemberKeys = new();
+        public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value) as List<Creature>;
+        private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
         private StringCreatureDataDictionary _creatureDataCache;
         public static List<CreatureData> AllCoterieMembers => new(Instance._creatureDataCache.Values);
 
-        private static string _mainCharacterKey;
+        private string _mainCharacterKey;
 
         public static Action<string, CreatureData> OnPartyMemberRecruited;
 
@@ -75,7 +75,7 @@ namespace SunsetSystems.Party
 
         public static void InitializePartyAtPosition(Vector3 position)
         {
-            foreach (string key in _activeCoterieMemberKeys)
+            foreach (string key in Instance._activeCoterieMemberKeys)
             {
                 CreatureData data = Instance._creatureDataCache[key];
                 Instance._activeParty.Add(key, InitializePartyMember(data, position));
@@ -85,7 +85,7 @@ namespace SunsetSystems.Party
         public static void InitializePartyAtPositions(List<Vector3> positions)
         {
             int index = 0;
-            foreach (string key in _activeCoterieMemberKeys)
+            foreach (string key in Instance._activeCoterieMemberKeys)
             {
                 CreatureData data = Instance._creatureDataCache[key];
                 Vector3 position = positions[index];
@@ -110,8 +110,8 @@ namespace SunsetSystems.Party
         public static void RecruitMainCharacter(CreatureData mainCharacterData)
         {
             RecruitCharacter(mainCharacterData);
-            _mainCharacterKey = mainCharacterData.ID;
-            if (TryAddMemberToActiveRoster(_mainCharacterKey) == false)
+            Instance._mainCharacterKey = mainCharacterData.ID;
+            if (TryAddMemberToActiveRoster(Instance._mainCharacterKey) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
         }
 
@@ -119,22 +119,22 @@ namespace SunsetSystems.Party
         {
             if (Instance._creatureDataCache.ContainsKey(memberID) == false)
                 Debug.LogError("Trying to add character to roster but character " + memberID + " is not yet recruited!");
-            return _activeCoterieMemberKeys.Add(memberID);
+            return Instance._activeCoterieMemberKeys.Add(memberID);
         }
 
         public static bool TryRemoveMemberFromActiveRoster(string memberID)
         {
-            if (memberID.Equals(_mainCharacterKey))
+            if (memberID.Equals(Instance._mainCharacterKey))
             {
                 Debug.LogError("Cannot remove Main Character from active roster!");
                 return false;
             }
-            return _activeCoterieMemberKeys.Remove(memberID);
+            return Instance._activeCoterieMemberKeys.Remove(memberID);
         }
 
         public static void UpdateActivePartyData()
         {
-            foreach (string key in _activeCoterieMemberKeys)
+            foreach (string key in Instance._activeCoterieMemberKeys)
             {
                 Instance._activeParty[key].Data = Instance._creatureDataCache[key];
             }
@@ -142,7 +142,7 @@ namespace SunsetSystems.Party
 
         public static bool UpdateCreatureData(CreatureData data)
         {
-            if (_activeCoterieMemberKeys.Contains(data.ID))
+            if (Instance._activeCoterieMemberKeys.Contains(data.ID))
             {
                 Instance._creatureDataCache[data.ID] = data;
                 return true;

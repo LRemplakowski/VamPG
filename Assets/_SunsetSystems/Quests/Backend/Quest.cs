@@ -9,6 +9,8 @@ namespace SunsetSystems.Journal
     [CreateAssetMenu(fileName = "New Quest", menuName = "Sunset Journal/Quest")]
     public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
+        private const string COMPLETE_QUEST = "COMPLETE_QUEST";
+
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField, AllowNesting]
@@ -36,6 +38,20 @@ namespace SunsetSystems.Journal
                 if (string.IsNullOrEmpty(next.ID))
                     next.ID = $"Objective {i}";
             }
+            foreach (Objective objective in objectives)
+            {
+                if (string.IsNullOrWhiteSpace(objective.NextObjectiveID) == false)
+                {
+                    if (objective.NextObjectiveID.Equals(COMPLETE_QUEST))
+                    {
+                        objective.NextObjective = null;
+                    }
+                    else
+                    {
+                        objective.NextObjective = objectives.Find(o => o.ID.Equals(objective.NextObjectiveID));
+                    }
+                }
+            }
             Objective last = objectives[^1];
             last.IsLast = true;
             last.IsFirst = false;
@@ -55,16 +71,31 @@ namespace SunsetSystems.Journal
 
         private void OnValidate()
         {
+            if (string.IsNullOrWhiteSpace(ID))
+            {
+                AssignNewID();
+            }
             LinkAndInitializeObjectives();
+        }
+
+        private void Reset()
+        {
+            AssignNewID();
         }
 
         private void OnEnable()
         {
-            if (string.IsNullOrEmpty(ID))
-                ID = Guid.NewGuid().ToString();
-            if (QuestDatabase.Instance.IsRegistered(this) == false)
+            if (string.IsNullOrWhiteSpace(ID) == false && QuestDatabase.Instance.IsRegistered(this) == false)
                 QuestDatabase.Instance.RegisterQuest(this);
         }
+
+        private void AssignNewID()
+        {
+            ID = System.Guid.NewGuid().ToString();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        } 
 
         public void Begin()
         {

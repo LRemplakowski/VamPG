@@ -20,8 +20,19 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (Objective != null)
             {
+                Objective.OnObjectiveActive -= OnObjectiveActive;
+                Objective.OnObjectiveInactive -= OnObjectiveInactive;
                 Objective.OnObjectiveActive += OnObjectiveActive;
                 Objective.OnObjectiveInactive += OnObjectiveInactive;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (Objective != null)
+            {
+                Objective.OnObjectiveActive -= OnObjectiveActive;
+                Objective.OnObjectiveInactive -= OnObjectiveInactive;
             }
         }
 

@@ -24,6 +24,8 @@ namespace SunsetSystems.Resources
         private const string GRID_HELPER_AGENT_PATH = "Combat/GridNavAgent";
         private const string TARGETING_LINE_PATH = "Combat/TargetingLine";
 
+        private const string HOVER_HIGHLIGHT_MATERIAL = "hover_highlight_material";
+
         private static T GetAsset<T>(string path) where T : Object
         {
             return UnityEngine.Resources.Load<T>(path);
@@ -87,6 +89,11 @@ namespace SunsetSystems.Resources
         public static LineRenderer GetTargetingLineRendererPrefab()
         {
             return GetAsset<LineRenderer>(TARGETING_LINE_PATH);
+        }
+
+        public static Material GetHoverHighlightMaterial()
+        {
+            return GetAsset<Material>(HOVER_HIGHLIGHT_MATERIAL);
         }
     }
 }

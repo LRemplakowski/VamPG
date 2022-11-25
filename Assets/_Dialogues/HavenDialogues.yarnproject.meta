@@ -10,6 +10,7 @@ ScriptedImporter:
   script: {fileID: 11500000, guid: 053561912b1654d80a424bb0696a74ae, type: 3}
   sourceScripts:
   - {fileID: 6391573757903218779, guid: 585cfa8bfeed0ea4d8eb232b3e9b520b, type: 3}
+  - {fileID: 6391573757903218779, guid: 66b0e9e486981c84f9d503fac6326c62, type: 3}
   compileErrors: []
   serializedDeclarations: []
   defaultLanguage: pl-PL
@@ -21,6 +22,10 @@ ScriptedImporter:
   - Name: GetPCName
     ReturnType: -> String
     Parameters: []
+  - Name: GetRollResult
+    ReturnType: -> Int32
+    Parameters:
+    - attribute
   - Name: Random
     ReturnType: -> Single
     Parameters: []

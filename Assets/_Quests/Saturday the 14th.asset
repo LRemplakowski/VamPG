@@ -22,10 +22,21 @@ MonoBehaviour:
       digging up dirt for those same powerbrokers. When you can find work that is.
       You used to have it all: career, money, and a \u201Chappy\u201D marriage. Now
       the only company you keep is cockroaches as you struggle to make rent for your
-      crummy apartment in West Vegas. Things could be worse\u2026"
+      crummy apartment in West Vegas. Things could be worse..."
     Objectives:
     - ID: ANSWER_PHONE
       Description: Answer the phone
+      NextObjectiveID: 
       IsFirst: 1
+      IsLast: 0
+    - ID: GRAB_MEDS
+      Description: Grab meds from the Bathroom
+      NextObjectiveID: 
+      IsFirst: 0
+      IsLast: 0
+    - ID: ENTER_BATHROOM
+      Description: Enter the Bathroom
+      NextObjectiveID: 
+      IsFirst: 0
       IsLast: 1
   <Rewards>k__BackingField: []

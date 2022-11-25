@@ -1,4 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters;
+using SunsetSystems.Resources;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,13 +8,8 @@ namespace SunsetSystems.Entities.Interactable
 {
     public abstract class InteractableEntity : Entity, IInteractable
     {
-        [SerializeField]
-        protected GameObject _hoverHighlight;
-        public GameObject HoverHighlight
-        {
-            get => _hoverHighlight;
-            set => _hoverHighlight = value;
-        }
+        [field:SerializeField]
+        public GameObject HoverHighlight { get; set; }
 
         private bool _isHoveredOver;
         public bool IsHoveredOver
@@ -21,8 +18,7 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _isHoveredOver = value;
-                if (HoverHighlight != null)
-                    HoverHighlight.SetActive(IsHoveredOver);
+                HandleHoverHiglight();
             }
         }
 
@@ -77,6 +73,12 @@ namespace SunsetSystems.Entities.Interactable
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
+        }
+
+        private void HandleHoverHiglight()
+        {
+            if (HoverHighlight != null)
+                HoverHighlight.SetActive(IsHoveredOver);
         }
     }
 }

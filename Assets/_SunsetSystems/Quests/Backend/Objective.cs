@@ -11,6 +11,7 @@ namespace SunsetSystems.Journal
         public string ID;
         [TextArea(5, 10)]
         public string Description;
+        public string NextObjectiveID;
         public event Action<Objective> OnObjectiveActive;
         public event Action<Objective> OnObjectiveInactive;
         public event Action<Objective> OnObjectiveCompleted;
@@ -33,6 +34,13 @@ namespace SunsetSystems.Journal
         public void Complete()
         {
             MakeInactive();
+            OnObjectiveCompleted?.Invoke(this);
+            if (NextObjective != null)
+                NextObjective.MakeActive();
+        }
+
+        public void Complete(Objective nextOverride)
+        {
             OnObjectiveCompleted?.Invoke(this);
             if (NextObjective != null)
                 NextObjective.MakeActive();

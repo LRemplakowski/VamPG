@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3084778881610756377}
   - component: {fileID: 9087169805586272578}
   - component: {fileID: 5861990790950431285}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PW_Plants_Berry_Bushes_04_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 688271428585073298}
   m_RootOrder: 2
@@ -51,6 +52,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -93,7 +95,7 @@ GameObject:
   - component: {fileID: 8869301299147982925}
   - component: {fileID: 6101903457962912482}
   - component: {fileID: 6209735207364230426}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PW_Plants_Berry_Bushes_04_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -110,6 +112,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 688271428585073298}
   m_RootOrder: 1
@@ -133,6 +136,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -174,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 688271428585073298}
   - component: {fileID: 143734352618404950}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PW_Plants_Berry_Bushes_04
   m_TagString: PW - Nature
   m_Icon: {fileID: 0}
@@ -191,6 +195,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -108.239136, y: 0.105509534, z: -5.6507344}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1786081961172918970}
   - {fileID: 8869301299147982925}
@@ -241,7 +246,7 @@ GameObject:
   - component: {fileID: 1786081961172918970}
   - component: {fileID: 6605968775465084360}
   - component: {fileID: 1834844793942438688}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: PW_Plants_Berry_Bushes_04_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,6 +263,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 688271428585073298}
   m_RootOrder: 0
@@ -281,6 +287,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -319,73 +326,59 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 688271428585073298}
     m_Modifications:
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_Name
       value: PW_Plants_Berry_Bushes_04_LOD3
       objectReference: {fileID: 0}
-    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
-    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d,
-        type: 3}
+    - target: {fileID: 7735918650603304873, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 82
       objectReference: {fileID: 0}
@@ -393,13 +386,11 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
 --- !u!4 &60962223826199428 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 4981566910721909027, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
   m_PrefabInstance: {fileID: 5042483916784239271}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &759473154324705467 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 5724269364915712540, guid: 69822e8869492a94ea61776fbf81596d,
-    type: 3}
+  m_CorrespondingSourceObject: {fileID: 5724269364915712540, guid: 69822e8869492a94ea61776fbf81596d, type: 3}
   m_PrefabInstance: {fileID: 5042483916784239271}
   m_PrefabAsset: {fileID: 0}

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2778307842649892684}
   - component: {fileID: 692892902821970595}
+  - component: {fileID: 6222528550176411148}
   m_Layer: 0
   m_Name: AreaEntryPoint
   m_TagString: Untagged
@@ -27,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,3 +45,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eff51edd6eed4d4fb24b13aa1af1281, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6222528550176411148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4711254041863113222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: haven_entry_point

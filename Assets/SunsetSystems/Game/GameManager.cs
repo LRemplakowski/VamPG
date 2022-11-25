@@ -1,51 +1,45 @@
-﻿using Entities.Characters;
-using SunsetSystems.Data;
-using SunsetSystems.Utils;
+﻿using SunsetSystems.Utils;
+using UnityEngine;
+using System;
 
 namespace SunsetSystems.Game
 {
+    [RequireComponent(typeof(Tagger))]
     public class GameManager : Singleton<GameManager>
     {
-        private static Creature _player;
-        private static GridController _gridController;
-        private readonly StateManager stateManager = new();
+        public static event Action<GameState> OnGameStateChanged;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            _gridController = FindObjectOfType<GridController>();
+        private static GameState _gameState;
+        public static GameState CurrentState 
+        { 
+            get
+            {
+                return _gameState;
+            }
+            set
+            {
+                _gameState = value;
+                OnGameStateChanged?.Invoke(_gameState);
+            }
         }
 
-        public Creature GetMainCharacter()
+        public static string GetLanguage()
         {
-            if (_player == null)
-                _player = GameRuntimeData.Instance.MainCharacterData.CreatureComponent;
-            return _player;
+            return "EN";
         }
 
-        public GridController GetGridController()
+        public static bool IsCurrentState(GameState state)
         {
-            return _gridController;
+            return CurrentState.Equals(state);
         }
+    }
 
-        public string GetLanguage()
-        {
-            return "PL";
-        }
-
-        public bool IsCurrentState(GameState state)
-        {
-            return stateManager.CurrentState.Equals(state);
-        }
-
-        public GameState GetCurrentState()
-        {
-            return stateManager.CurrentState;
-        }
-
-        public void OverrideState(GameState newState)
-        {
-            stateManager.CurrentState = newState;
-        }
+    public enum GameState
+    {
+        Exploration,
+        Combat,
+        Conversation,
+        Menu,
+        GamePaused
     }
 }

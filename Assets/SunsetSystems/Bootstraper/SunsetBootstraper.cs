@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using SunsetSystems.Utils.Threading;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Bootstraper
 {
@@ -15,6 +16,8 @@ namespace SunsetSystems.Bootstraper
         private List<SceneAsset> bootstrapScenes = new();
         private static bool didLoadGameplayScene = false;
 
+        public static bool EnableBootstrap { get; set; }
+
 #if UNITY_EDITOR
         protected async override void Awake()
         {
@@ -22,13 +25,14 @@ namespace SunsetSystems.Bootstraper
             List<string> bootstrapScenePaths = new();
             bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
             await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));
+            if (!EnableBootstrap)
+                return;
             didLoadGameplayScene = LoadedScenesCache.CachedScenes.Count > 0;
             await Task.WhenAll(LoadScenesByPathAsync(LoadedScenesCache.CachedScenes));
             await Task.Delay(1000);
             if (didLoadGameplayScene)
             {
-                PlayerInputHandler.Instance.SetPlayerInputActive(true);
-                if (this.TryFindFirstWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
+                if (this.TryFindFirstGameObjectWithTag(TagConstants.MAIN_MENU_UI, out GameObject mainMenu))
                     mainMenu.SetActive(false);
                 else
                     Debug.LogWarning("No Main Menu UI parent found!");
@@ -47,20 +51,14 @@ namespace SunsetSystems.Bootstraper
             parameters.localPhysicsMode = LocalPhysicsMode.Physics3D;
             foreach (string path in paths)
             {
-                tasks.Add(Task.Run(() =>
+                tasks.Add(Task.Run(async () =>
                 {
-                    Dispatcher.Instance.Invoke(async () =>
+                    await new WaitForUpdate();
+                    if (!SceneManager.GetSceneByPath(path).isLoaded)
                     {
-                        if (!SceneManager.GetSceneByPath(path).isLoaded)
-                        {
-                            Debug.Log("Loading scene: " + path);
-                            AsyncOperation op = EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
-                            while (!op.isDone)
-                            {
-                                await Task.Yield();
-                            }
-                        }
-                    });
+                        Debug.Log("Loading scene: " + path);
+                        await EditorSceneManager.LoadSceneAsyncInPlayMode(path, parameters);
+                    }
                 }));
             }
             return tasks;

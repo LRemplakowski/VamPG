@@ -1,42 +1,42 @@
+using NaughtyAttributes;
+using SunsetSystems.Journal;
 using SunsetSystems.Resources;
+using SunsetSystems.UI.Utils;
 using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : ScriptableObject
+    public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>
     {
-        [SerializeField]
-        protected string _itemName;
-        public string ItemName { get => _itemName; }
+        [field: SerializeField]
+        public string ItemName { get; protected set; }
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
-        [SerializeField, ReadOnly]
-        protected ItemCategory _itemCategory;
-        public ItemCategory ItemCategory => _itemCategory;
-        [SerializeField, TextArea]
-        protected string _itemDescription;
-        public string ItemDescription { get => _itemDescription; }
-        [SerializeField]
-        protected GameObject _prefab;
-        public GameObject Prefab { get => _prefab; }
-        [SerializeField]
-        protected Sprite _icon;
-        public Sprite Icon { get => _icon; }
+        [field: SerializeField, ReadOnly]
+        public ItemCategory ItemCategory { get; protected set; }
+        [field: SerializeField, TextArea]
+        public string ItemDescription { get; protected set; }
         [field: SerializeField]
-        public bool Stackable { get; private set; }
+        public GameObject Prefab { get; protected set; }
+        [field: SerializeField]
+        public Sprite Icon { get; protected set; }
+        [field: SerializeField]
+        public bool Stackable { get; protected set; }
+
+        public BaseItem Data => this;
 
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            if (_itemName == "")
+            if (ItemName == "")
             {
-                _itemName = name;
+                ItemName = name;
                 EditorUtility.SetDirty(this);
             }
-            if (_icon == null)
+            if (Icon == null)
             {
-                _icon = ResourceLoader.GetFallbackIcon();
+                Icon = ResourceLoader.GetFallbackIcon();
                 EditorUtility.SetDirty(this);
             }
             if (ID == "")
@@ -45,6 +45,11 @@ namespace SunsetSystems.Inventory.Data
                 EditorUtility.SetDirty(this);
             }
 #endif
+        }
+
+        public void ApplyReward(int amount)
+        {
+            InventoryManager.PlayerInventory.AddItem(new InventoryEntry(this, amount));
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using SunsetSystems.Spellbook;
 
 namespace ES3Types
 {

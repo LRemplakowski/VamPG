@@ -7,7 +7,7 @@ namespace SunsetSystems.Inventory.Data
     {
         private void Awake()
         {
-            _itemCategory = ItemCategory.OUTER_CLOTHING;
+            ItemCategory = ItemCategory.OUTER_CLOTHING;
         }
     }
 }

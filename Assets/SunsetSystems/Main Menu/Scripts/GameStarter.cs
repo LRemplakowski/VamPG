@@ -1,9 +1,11 @@
-using Entities.Characters;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Loading;
 using UnityEngine;
 using SunsetSystems.Resources;
-using SunsetSystems.GameplayMenu;
+using SunsetSystems.UI;
 using SunsetSystems.Utils;
+using NaughtyAttributes;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Data
 {
@@ -11,14 +13,10 @@ namespace SunsetSystems.Data
     {
         private const string MAIN_MENU = "MainMenuParent";
 
-        [SerializeField, ReadOnly]
-        private PlayerCharacterBackground _selectedBackground;
-        [SerializeField, ReadOnly]
-        private BodyType _selectedBodyType;
-        [SerializeField, ReadOnly]
-        private string _characterName = "Alex";
         [SerializeField]
-        private CharacterStats _stats;
+        private CreatureData _playerCharacterData;
+        [SerializeField]
+        private PlayerCharacterBackground _selectedBackground;
         [SerializeField]
         private string _startSceneName;
         [SerializeField]
@@ -29,25 +27,13 @@ namespace SunsetSystems.Data
         private SceneLoader _sceneLoader;
         [SerializeField]
         private GameObject _mainMenuParent;
-        [SerializeField]
-        private GameplayUIManager _gameplayUiParent;
-
-        private void Reset()
-        {
-            if (!_stats)
-                _stats = ScriptableObject.CreateInstance<CharacterStats>();
-        }
 
         private void Start()
         {
-            if (!_stats)
-                _stats = ScriptableObject.CreateInstance<CharacterStats>();
             if (!_sceneLoader)
                 _sceneLoader = FindObjectOfType<SceneLoader>();
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
-            if (!_gameplayUiParent)
-                _gameplayUiParent = FindObjectOfType<GameplayUIManager>(true);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
@@ -57,55 +43,50 @@ namespace SunsetSystems.Data
 
         public void SelectBodyType(BodyType selectedBodyType)
         {
-            this._selectedBodyType = selectedBodyType;
+            this._playerCharacterData.bodyType = selectedBodyType;
         }
 
         public void SetAttribueValue(AttributeType attribute, int value)
         {
-            _stats.GetAttribute(attribute).SetValue(value);
+            _playerCharacterData.stats.attributes.GetAttribute(attribute).SetValue(value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
-            _stats.GetSkill(skill).SetValue(value);
+            _playerCharacterData.stats.skills.GetSkill(skill).SetValue(value);
         }
 
         public void SetCharacterName(string characterName)
         {
-            this._characterName = characterName;
+            this._playerCharacterData.firstName = characterName;
         }
 
         public async void InitializeGame()
         {
             Start();
-            CreatureAsset mainCharacterAsset = CreatureAsset.CopyInstance(GetMatchingCreatureAsset());
-            mainCharacterAsset.CreatureName = _characterName;
-            mainCharacterAsset.StatsAsset = _stats;
-            GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
-            journal.MainCharacterAsset = mainCharacterAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
+            CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
+            PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }
 
         public async void InitializeGameDebug()
         {
             Start();
-            CreatureAsset debugAsset = ResourceLoader.GetDefaultCreatureAsset();
-            GameRuntimeData journal = FindObjectOfType<GameRuntimeData>();
-            journal.MainCharacterAsset = debugAsset;
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, SwitchUiToGameplayMode);
+            CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
+            PartyManager.RecruitMainCharacter(new(debugAsset));
+            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             await _sceneLoader.LoadGameScene(data);
         }
 
-        public void SwitchUiToGameplayMode()
+        public void DisableMainMenu()
         {
-            _gameplayUiParent.SetGameplayUiActive(true);
             _mainMenuParent.SetActive(false);
         }
 
-        private CreatureAsset GetMatchingCreatureAsset()
+        private CreatureConfig GetMatchingCreatureAsset()
         {
-            return _selectedBodyType switch
+            return _playerCharacterData.bodyType switch
             {
                 BodyType.M => _selectedBackground switch
                 {

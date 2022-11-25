@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using SunsetSystems.Utils.Threading;
 using SunsetSystems.Utils;
 using SunsetSystems.Constants;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Loading
 {
     public class SceneLoader : Singleton<SceneLoader>
     {
         private Scene _previousScene;
-        private SceneLoadingUIManager LoadingScreenUI => this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+        private SceneLoadingUIManager LoadingScreenUI => this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
         public SceneLoadingData CachedTransitionData { get; private set; }
 
@@ -42,13 +43,13 @@ namespace SunsetSystems.Loading
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
-            await UnityAwaiters.NextFrame();
+            await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
             // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
             // Checking for -1 buildIndex works around this issue.
             if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
             {
-                await UnloadScene(_previousScene.buildIndex);
+                await SceneManager.LoadSceneAsync(_previousScene.buildIndex);
             }
             await LoadNewScene(data);
             await InitializeSceneLogic(data);
@@ -68,7 +69,7 @@ namespace SunsetSystems.Loading
             // Checking for -1 buildIndex works around this issue.
             if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
             {
-                await UnloadScene(_previousScene.buildIndex);
+                await SceneManager.LoadSceneAsync(_previousScene.buildIndex);
             }
             SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             await LoadNewScene(data);
@@ -85,30 +86,9 @@ namespace SunsetSystems.Loading
             await LoadSavedScene(null);
         }
 
-        private Task UnloadScene(int sceneIndex)
-        {
-            return Task.Run(() =>
-            {
-                Dispatcher.Instance.Invoke(async () =>
-                {
-                    AsyncOperation op = SceneManager.UnloadSceneAsync(sceneIndex);
-                    await HandleUnloadingOperation(op);
-                });
-            });
-        }
-
-        private async Task HandleUnloadingOperation(AsyncOperation unloading)
-        {
-            while (!unloading.isDone)
-            {
-                await Task.Yield();
-            }
-        }
-
         private async Task LoadNewScene(SceneLoadingData data)
         {
             CachedTransitionData = data;
-            Debug.Log("Performing pre-loading action");
             if (data.preLoadingActions != null)
                 foreach (Action action in data.preLoadingActions)
                 {
@@ -120,58 +100,38 @@ namespace SunsetSystems.Loading
 
         private async Task InitializeSceneLogic(SceneLoadingData data)
         {
-            await Task.Run(() =>
-            {
-                Dispatcher.Instance.Invoke(async () =>
-                {
-                    AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
-                    Debug.Log("Scene logic found? " + (sceneLogic != null).ToString());
-                    if (sceneLogic)
-                        await sceneLogic.StartSceneAsync(data);
-                });
-            });
-        }
-
-        private Task AsyncLoadSceneByIndex(int sceneIndex)
-        {
-            Debug.Log("Loading scene " + sceneIndex);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-            return HandleLoadingOperation(op);
-        }
-
-        private Task AsyncLoadSceneByName(string sceneName)
-        {
-            Debug.Log("Loading scene " + sceneName);
-            AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            return HandleLoadingOperation(op);
-        }
-
-        private async Task HandleLoadingOperation(AsyncOperation loadingOp)
-        {
-            while (!loadingOp.isDone)
-            {
-                float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
-                LoadingScreenUI.UpadteLoadingBar(progress);
-                Debug.Log(progress);
-                await Task.Yield();
-            }
+            AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
+            Debug.Log("Scene logic found? " + (sceneLogic != null).ToString());
+            if (sceneLogic)
+                await sceneLogic.StartSceneAsync(data);
         }
 
         private async Task DoLoadingByIndex()
         {
             int index = (int)CachedTransitionData.Get();
-            await AsyncLoadSceneByIndex(index);
+            AsyncOperation loadingOp = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
+            while (!loadingOp.isDone)
+            {
+                float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
+                LoadingScreenUI.UpadteLoadingBar(progress);
+                await Task.Yield();
+            }
         }
 
         private async Task DoLoadingByName()
         {
             string name = CachedTransitionData.Get() as string;
-            await AsyncLoadSceneByName(name);
+            AsyncOperation loadingOp = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+            while (!loadingOp.isDone)
+            {
+                float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
+                LoadingScreenUI.UpadteLoadingBar(progress);
+                await Task.Yield();
+            }
         }
 
         private async Task DoSceneLoading()
         {
-            Debug.Log("Do start scene loading");
             switch (CachedTransitionData.transitionType)
             {
                 case TransitionType.indexTransition:

@@ -20,7 +20,7 @@ namespace SunsetSystems.MainMenu.UI
         protected virtual void Start()
         {
             if (fadeUI == null)
-                if (this.TryFindFirstWithTag(TagConstants.SCENE_LOADING_UI, out GameObject fadeUIObject))
+                if (this.TryFindFirstGameObjectWithTag(TagConstants.SCENE_LOADING_UI, out GameObject fadeUIObject))
                     fadeUI = fadeUIObject.GetComponent<SceneLoadingUIManager>();
         }
 

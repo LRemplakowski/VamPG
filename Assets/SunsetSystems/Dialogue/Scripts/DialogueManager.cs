@@ -1,206 +1,54 @@
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-using DD;
 using SunsetSystems.Utils;
-using SunsetSystems.Game;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
+    [RequireComponent(typeof(Tagger))]
     public class DialogueManager : Singleton<DialogueManager>
     {
         [SerializeField]
-        private VerticalLayoutGroup _historyContent, _optionsContent;
-        [SerializeField]
-        private GameObject _dialogueLine, _dialogueChoice;
-        [SerializeField]
-        private DialogueWindowUI _dialogueWindow;
+        private DialogueRunner _dialogueRunner;
 
-        private List<GameObject> _choices = new List<GameObject>();
-        private List<GameObject> _history = new List<GameObject>();
-
-        // The dialogue to play
-        // Drop the conversation file asset in here using the Inspector
-        [SerializeField, Tooltip("The dialogue to play")]
-        private TextAsset _dialogueFile;
-
-        // The conversation, parsed and loaded at runtime
-        private DD.Dialogue _loadedDialogue;
-
-        // A player that can track progress through the dialogue
-        private DialoguePlayer _dialoguePlayer;
-
-        public delegate void OnDialogueBegin();
-        public static OnDialogueBegin onDialogueBegin;
-        public delegate void OnDialogueEnd();
-        public static OnDialogueEnd onDialogueEnd;
-
-        #region Enable&Disable
-        private void OnEnable()
+        protected override void Awake()
         {
-            // set up your unique code to display dialogues
-            DialoguePlayer.GlobalOnShowMessage += OnShowMessage;
-            DialoguePlayer.GlobalOnEvaluateCondition += OnEvaluateCondition;
-            DialoguePlayer.GlobalOnExecuteScript += OnExecuteScript;
-
-            // if you want to handle a particular dialogue differently, you can use these instead
-            //m_dialoguePlayer.OverrideOnShowMessage += OnShowMessageSpecial;
-            //m_dialoguePlayer.OverrideOnEvaluateCondition += OnEvaluateConditionSpecial;
-            //m_dialoguePlayer.OverrideOnExecuteScript += OnExecuteScriptSpecial;
+            _dialogueRunner ??= GetComponent<DialogueRunner>();
         }
 
-        private void OnDisable()
+        public static void RegisterView(DialogueViewBase view)
         {
-            // set up your unique code to display dialogues
-            DialoguePlayer.GlobalOnShowMessage -= OnShowMessage;
-            DialoguePlayer.GlobalOnEvaluateCondition -= OnEvaluateCondition;
-            DialoguePlayer.GlobalOnExecuteScript -= OnExecuteScript;
-
-            // if you want to handle a particular dialogue differently, you can use these instead
-            //m_dialoguePlayer.OverrideOnShowMessage += OnShowMessageSpecial;
-            //m_dialoguePlayer.OverrideOnEvaluateCondition += OnEvaluateConditionSpecial;
-            //m_dialoguePlayer.OverrideOnExecuteScript += OnExecuteScriptSpecial;
-        }
-        #endregion
-
-        private void Start()
-        {
-            Initialize();
+            List<DialogueViewBase> views = Instance._dialogueRunner.dialogueViews.ToList();
+            views.Add(view);
+            Instance._dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
-        public void Initialize()
+        public static void UnregisterView(DialogueViewBase view)
         {
-            if (_dialogueWindow == null)
+            List<DialogueViewBase> views = Instance?._dialogueRunner.dialogueViews.ToList();
+            views?.Remove(view);
+            Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
+        }
+
+        public static bool StartDialogue(string startNode, YarnProject project = null)
+        {
+            DialogueRunner cachedRunner = Instance._dialogueRunner;
+            if (project != null)
             {
-                _dialogueWindow = FindObjectOfType<DialogueWindowUI>(true);
-                _historyContent = _dialogueWindow?.GetComponentInChildren<DialogueHistory>(true).GetComponent<VerticalLayoutGroup>();
-                _optionsContent = _dialogueWindow?.GetComponentInChildren<DialogueOptions>(true).GetComponent<VerticalLayoutGroup>();
+                cachedRunner.SetProject(project);
             }
+            if (cachedRunner.IsDialogueRunning)
+                return false;
+            cachedRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(true));
+            cachedRunner.StartDialogue(startNode);
+            return true;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void DisableViews()
         {
-            if (_dialoguePlayer != null)
-                _dialoguePlayer.Update();
-        }
-
-        public void StartDialogue(TextAsset dialogueFile)
-        {
-            Debug.Log("Starting dialogue");
-            // load the dialogue
-            _loadedDialogue = DD.Dialogue.FromAsset(dialogueFile);
-            // create a player to play through the dialogue
-            _dialoguePlayer = new DialoguePlayer(_loadedDialogue);
-
-            _dialoguePlayer.OnDialogueEnded += OnDialogueEnded;
-            GameManager.Instance.OverrideState(GameState.Conversation);
-            _dialoguePlayer.Play();
-            OnDialogueStarted(_dialoguePlayer);
-        }
-
-        private void OnDialogueStarted(DialoguePlayer sender)
-        {
-            onDialogueBegin?.Invoke();
-        }
-
-        private void OnDialogueEnded(DialoguePlayer sender)
-        {
-            ClearChoices();
-            ClearHistory();
-            onDialogueEnd?.Invoke();
-            _dialoguePlayer.OnDialogueEnded -= OnDialogueEnded;
-            _dialoguePlayer = null;
-            _dialogueWindow.gameObject.SetActive(false);
-            GameManager.Instance.OverrideState(GameState.Exploration);
-        }
-
-        private void OnExecuteScript(DialoguePlayer sender, string script)
-        {
-            DialogueExecution.Execute(script);
-        }
-
-        private bool OnEvaluateCondition(DialoguePlayer sender, string script)
-        {
-            return DialogueCondition.Evaluate(script);
-        }
-
-        private void OnShowMessage(DialoguePlayer sender, ShowMessageNode node)
-        {
-            ClearChoices();
-            Debug.LogWarning("nodeCharacter: " + node.Character);
-            AddNewLine(node.Character, node.GetText(GameManager.Instance.GetLanguage()));
-            ShowMessageNodeChoice choiceNode = node as ShowMessageNodeChoice;
-            if (choiceNode)
-            {
-                AddNodeOptions(choiceNode);
-            }
-            else
-            {
-                _dialoguePlayer.AdvanceMessage(0);
-            }
-        }
-
-        public void SelectChoice(int choiceID)
-        {
-            _dialoguePlayer.AdvanceMessage(choiceID);
-        }
-
-        private void AddNewLine(string author, string message)
-        {
-            TextMeshProUGUI t = Instantiate(_dialogueLine, _historyContent.transform).GetComponent<TextMeshProUGUI>();
-            t.text = author + ": " + message;
-            _history.Add(t.gameObject);
-        }
-
-        private void AddNewChoice(string text, int id)
-        {
-            GameObject choiceLine = Instantiate(_dialogueChoice, _optionsContent.transform);
-            choiceLine.GetComponent<TextMeshProUGUI>().text = text;
-            choiceLine.GetComponent<DialogueChoiceButton>().choiceID = id;
-            _choices.Add(choiceLine);
-        }
-        private void AddNewChoice(string text, int id, bool enabled)
-        {
-            GameObject choiceLine = Instantiate(_dialogueChoice, _optionsContent.transform);
-            choiceLine.GetComponent<TextMeshProUGUI>().text = text;
-            choiceLine.GetComponent<DialogueChoiceButton>().choiceID = id;
-            choiceLine.GetComponent<Button>().interactable = enabled;
-            _choices.Add(choiceLine);
-        }
-
-        private void AddNodeOptions(ShowMessageNodeChoice choiceNode)
-        {
-            if (choiceNode != null)
-            {
-                for (int i = 0; i < choiceNode.Choices.Length; i++)
-                {
-                    Choice c = choiceNode.Choices[i];
-                    if (c.IsCondition)
-                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.Instance.GetLanguage()), i, DialogueCondition.Evaluate(c.Condition));
-                    else
-                        AddNewChoice(choiceNode.GetChoiceText(i, GameManager.Instance.GetLanguage()), i);
-                }
-            }
-        }
-
-        public void ClearChoices()
-        {
-            foreach (GameObject c in _choices)
-            {
-                Destroy(c);
-            }
-            _choices.Clear();
-        }
-
-        public void ClearHistory()
-        {
-            foreach (GameObject line in _history)
-            {
-                Destroy(line);
-            }
-            _history.Clear();
+            _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using SunsetSystems.Utils;
-using SunsetSystems.Utils.UI;
+﻿using InsaneSystems.RTSSelection.UI;
+using SunsetSystems.Utils;
+using SunsetSystems.Utils.Input;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -12,35 +14,23 @@ namespace InsaneSystems.RTSSelection
     {
         [SerializeField]
         Selection selection;
-        [field: SerializeField]
-        private UI.SelectionRect _selectionRect;
-        UI.SelectionRect SelectionRect
-        {
-            get
-            {
-                if (!_selectionRect)
-                {
-                    _selectionRect = this.FindFirstWithTag<UI.SelectionRect>(TagConstants.SELECTION_RECT);
-                }
-                return _selectionRect;
-            }
-        }
+        SelectionRect SelectionRect => this.FindFirstComponentWithTag<SelectionRect>(TagConstants.SELECTION_RECT);
 
-        Vector2 startMousePosition;
-        Vector2 mousePosition;
+        Vector2 startMousePosition = new();
+        Vector2 mousePosition = new();
 
         int selectionButton;
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnLeftClickEvent += OnLeftClick;
-            PlayerInputHandler.OnMousePositionEvent += OnMousePosition;
+            PlayerInputHandler.OnPrimaryAction += OnPrimaryAction;
+            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnLeftClickEvent -= OnLeftClick;
-            PlayerInputHandler.OnMousePositionEvent -= OnMousePosition;
+            PlayerInputHandler.OnPrimaryAction -= OnPrimaryAction;
+            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         private void Start()
@@ -49,9 +39,9 @@ namespace InsaneSystems.RTSSelection
                 selection = GetComponent<Selection>();
         }
 
-        public void OnLeftClick(InputAction.CallbackContext context)
+        public void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            if (context.performed)
+            if (context.performed && !InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> _))
             {
                 HandleClick();
             }
@@ -70,12 +60,11 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClickRelease()
         {
-            Debug.Log("selection finished call");
             selection.FinishSelection(startMousePosition, mousePosition);
             SelectionRect.DisableRect();
         }
 
-        public void OnMousePosition(InputAction.CallbackContext context)
+        public void OnPointerPosition(InputAction.CallbackContext context)
         {
             if (!context.performed)
                 return;

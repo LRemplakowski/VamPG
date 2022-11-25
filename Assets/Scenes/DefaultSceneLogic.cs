@@ -7,6 +7,7 @@ using SunsetSystems.Utils;
 using SunsetSystems.Input.CameraControl;
 using Glitchers;
 using SunsetSystems.Game;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Loading
 {
@@ -26,25 +27,23 @@ namespace SunsetSystems.Loading
                 _cameraControlScript = FindObjectOfType<CameraControlScript>();
             string entryPointTag = data != null ? data.targetEntryPointTag : "";
             string cameraBoundingBoxTag = data != null ? data.cameraBoundingBoxTag : "";
-            CreatureAsset mainCharAsset = _gameRuntimeData.MainCharacterAsset;
-            List<CreatureAsset> activeParty = _gameRuntimeData.ActivePartyAssets;
-            List<Vector3> partyPositions = _gameRuntimeData.ActivePartySavedPositions;
+            List<Vector3> partyPositions = new();
             if (partyPositions != null && partyPositions.Count > 0)
             {
-                await InstantiateParty(partyPositions, mainCharAsset, activeParty);
+                PartyManager.InitializePartyAtPositions(partyPositions);
                 Vector3 cameraPosition = partyPositions[0];
                 HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
             else
             {
                 AreaEntryPoint entryPoint = FindAreaEntryPoint(entryPointTag);
-                await InstantiateParty(entryPoint.transform.position, mainCharAsset, activeParty);
+                PartyManager.InitializePartyAtPosition(entryPoint.transform.position);
                 Vector3 cameraPosition = entryPoint.transform.position;
                 HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
             }
             await Task.WhenAll(InitializeObjects(FindInterfaces.Find<IInitialized>()));
             Debug.Log("Finished initializing objects!");
-            GameManager.Instance.OverrideState(GameState.Exploration);
+            GameManager.CurrentState = GameState.Exploration;
 
             static List<Task> InitializeObjects(List<IInitialized> objectsToInitialize)
             {
@@ -63,42 +62,10 @@ namespace SunsetSystems.Loading
 
         private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)
         {
-            if (this.TryFindFirstWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
+            if (this.TryFindFirstGameObjectWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
                 if (boundingBoxGO.TryGetComponent(out BoundingBox boundingBox))
                     _cameraControlScript.CurrentBoundingBox = boundingBox;
             _cameraControlScript.ForceToPosition(cameraPosition);
-        }
-
-        protected async Task InstantiateParty(Vector3 position, CreatureAsset mainChar, List<CreatureAsset> party)
-        {
-            List<Vector3> positions = new() { position, position, position, position, position, position };
-            await InstantiateParty(positions, mainChar, party);
-        }
-
-        protected async Task InstantiateParty(List<Vector3> positions, CreatureAsset mainChar, List<CreatureAsset> party)
-        {
-            Debug.Log("Initializing party");
-            CreatureData mainCharData = null;
-            List<CreatureData> partyData = new();
-            if (mainChar != null)
-            {
-                mainCharData = InitializePartyMember(mainChar, positions[0]);
-                for (int i = 0; i < party.Count; i++)
-                {
-                    partyData.Add(InitializePartyMember(party[i], positions[i + 1]));
-                    await Task.Yield();
-                }
-            }
-            _gameRuntimeData.MainCharacterData = mainCharData;
-            _gameRuntimeData.ActivePartyData.Clear();
-            _gameRuntimeData.ActivePartyData.AddRange(partyData);
-        }
-
-        protected CreatureData InitializePartyMember(CreatureAsset asset, Vector3 position)
-        {
-            CreatureData creatureData = Instantiate(creaturePrefab, position, Quaternion.identity);
-            creatureData.SetData(asset);
-            return creatureData;
         }
 
         private AreaEntryPoint FindAreaEntryPoint(string tag)
@@ -106,7 +73,7 @@ namespace SunsetSystems.Loading
             AreaEntryPoint entryPoint = null;
             if (!tag.Equals(""))
             {
-                if (this.TryFindFirstWithTag(tag, out GameObject result))
+                if (this.TryFindFirstGameObjectWithTag(tag, out GameObject result))
                     entryPoint = result.GetComponent<AreaEntryPoint>();
             }
             if (entryPoint == null)

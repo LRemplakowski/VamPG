@@ -17,19 +17,16 @@ namespace SunsetSystems.MainMenu.UI
         private void Start()
         {
             if (fadeUI == null)
-                fadeUI = this.FindFirstWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+                fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
         public async void StartGame()
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                Dispatcher.Instance.Invoke(async () =>
-                {
-                    await fadeUI.DoFadeOutAsync(.5f);
-                    DoLoadCharacterCreationPanel();
-                    await fadeUI.DoFadeInAsync(.5f);
-                });
+                await fadeUI.DoFadeOutAsync(.5f);
+                DoLoadCharacterCreationPanel();
+                await fadeUI.DoFadeInAsync(.5f);
             });
         }
 
@@ -38,7 +35,6 @@ namespace SunsetSystems.MainMenu.UI
             if (backgroundSelectionObject)
                 backgroundSelectionObject.SetActive(true);
             mainMenuParent.SetActive(false);
-
         }
     }
 }

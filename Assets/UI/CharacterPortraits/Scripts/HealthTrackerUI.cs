@@ -74,13 +74,11 @@ namespace UI.CharacterPortraits
         [ContextMenu("Update health tracker")]
         private void UpdateHealthTracker()
         {
-            Debug.Log("MaxHealth = " + MaxHealth + "; healtBoxes.Count = " + healthBoxes.Count);
             if (MaxHealth > healthBoxes.Count)
             {
                 int difference = MaxHealth - healthBoxes.Count;
                 for (int i = 0; i < difference; i++)
                 {
-                    Debug.Log("Health box added");
                     HealthBox box = Instantiate(healthBoxPrefab, gameObject.transform).GetComponent<HealthBox>();
                     box.State = HealthBoxType.Healthy;
                     healthBoxes.Add(box);
@@ -88,7 +86,6 @@ namespace UI.CharacterPortraits
             }
             else if (MaxHealth < healthBoxes.Count)
             {
-                Debug.Log("removing health boxes");
                 int difference = healthBoxes.Count - MaxHealth;
                 RemoveHealthBoxes(difference);
             }

@@ -1,0 +1,85 @@
+fileFormatVersion: 2
+guid: 3a300edd68167e04dba0756b00ca557a
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 053561912b1654d80a424bb0696a74ae, type: 3}
+  sourceScripts:
+  - {fileID: 6391573757903218779, guid: 585cfa8bfeed0ea4d8eb232b3e9b520b, type: 3}
+  - {fileID: 6391573757903218779, guid: 66b0e9e486981c84f9d503fac6326c62, type: 3}
+  - {fileID: 6391573757903218779, guid: 7083db8c2375ab04bb0e9f6abea46cc7, type: 3}
+  compileErrors: []
+  serializedDeclarations:
+  - name: $pcName
+    typeName: String
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: Desiree Bardot
+    description: Main characters name
+    isImplicit: 0
+    sourceYarnAsset: {instanceID: 0}
+  defaultLanguage: pl-PL
+  languagesToSourceAssets: []
+  useAddressableAssets: 0
+  searchAllAssembliesForActions: 1
+  assembliesToSearch: []
+  ListOfFunctions:
+  - Name: GetPCName
+    ReturnType: -> String
+    Parameters: []
+  - Name: GetRollResult
+    ReturnType: -> Int32
+    Parameters:
+    - attribute
+  - Name: Random
+    ReturnType: -> Single
+    Parameters: []
+  - Name: RandomRange
+    ReturnType: -> Single
+    Parameters:
+    - minInclusive
+    - maxInclusive
+  - Name: Dice
+    ReturnType: -> Int32
+    Parameters:
+    - sides
+  - Name: Round
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: RoundPlaces
+    ReturnType: -> Single
+    Parameters:
+    - num
+    - places
+  - Name: Floor
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: Ceil
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: Inc
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: Dec
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: Decimal
+    ReturnType: -> Single
+    Parameters:
+    - num
+  - Name: Int
+    ReturnType: -> Int32
+    Parameters:
+    - num
+  - Name: CoolFunction
+    ReturnType: -> Int32
+    Parameters: []

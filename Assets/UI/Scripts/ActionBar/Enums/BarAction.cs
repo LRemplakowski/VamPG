@@ -1,5 +1,6 @@
 ﻿public enum BarAction
 {
     MOVE,
-    ATTACK
+    ATTACK,
+    SELECT_TARGET
 }

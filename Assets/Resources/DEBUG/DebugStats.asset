@@ -12,132 +12,144 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da18720c486bee45b08ab77ecde326a, type: 3}
   m_Name: DebugStats
   m_EditorClassIdentifier: 
-  trackers:
+  Trackers:
     health:
-      maxValue: 20
-      trackerType: 0
+      _maxValue: 20
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 0
     willpower:
-      maxValue: 20
-      trackerType: 1
+      _maxValue: 20
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 1
     hunger:
-      maxValue: 5
-      trackerType: 3
+      _maxValue: 20
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 3
     humanity:
-      maxValue: 10
-      trackerType: 2
-  clan: 15
-  generation: 1
-  attributes:
+      _maxValue: 20
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 2
+  Clan: 15
+  Generation: 1
+  BloodPotency: 100
+  Attributes:
     strength:
-      baseValue: 10
-      attributeType: 0
+      _baseValue: 1
+      _attributeType: 0
     dexterity:
-      baseValue: 10
-      attributeType: 1
+      _baseValue: 1
+      _attributeType: 1
     stamina:
-      baseValue: 10
-      attributeType: 2
+      _baseValue: 1
+      _attributeType: 2
     charisma:
-      baseValue: 10
-      attributeType: 3
+      _baseValue: 1
+      _attributeType: 3
     manipulation:
-      baseValue: 10
-      attributeType: 4
+      _baseValue: 1
+      _attributeType: 4
     composure:
-      baseValue: 10
-      attributeType: 5
+      _baseValue: 1
+      _attributeType: 5
     intelligence:
-      baseValue: 10
-      attributeType: 6
+      _baseValue: 1
+      _attributeType: 6
     wits:
-      baseValue: 10
-      attributeType: 7
+      _baseValue: 1
+      _attributeType: 7
     resolve:
-      baseValue: 10
-      attributeType: 8
-  skills:
+      _baseValue: 1
+      _attributeType: 8
+    speed:
+      _baseValue: 5
+      _attributeType: 9
+  Skills:
     athletics:
-      baseValue: 5
+      baseValue: 0
       skillType: 0
     brawl:
-      baseValue: 5
+      baseValue: 0
       skillType: 1
     craft:
-      baseValue: 5
+      baseValue: 0
       skillType: 2
     drive:
-      baseValue: 5
+      baseValue: 0
       skillType: 3
     firearms:
-      baseValue: 5
+      baseValue: 0
       skillType: 4
     larceny:
-      baseValue: 5
+      baseValue: 0
       skillType: 5
     melee:
-      baseValue: 5
+      baseValue: 0
       skillType: 6
     stealth:
-      baseValue: 5
+      baseValue: 0
       skillType: 7
     survival:
-      baseValue: 5
+      baseValue: 0
       skillType: 8
     animalKen:
-      baseValue: 5
+      baseValue: 0
       skillType: 9
     etiquette:
-      baseValue: 5
+      baseValue: 0
       skillType: 10
     insight:
-      baseValue: 5
+      baseValue: 0
       skillType: 11
     intimidation:
-      baseValue: 5
+      baseValue: 0
       skillType: 12
     leadership:
-      baseValue: 5
+      baseValue: 0
       skillType: 13
     performance:
-      baseValue: 5
+      baseValue: 0
       skillType: 14
     persuasion:
-      baseValue: 5
+      baseValue: 0
       skillType: 15
     streetwise:
-      baseValue: 5
+      baseValue: 0
       skillType: 16
     subterfuge:
-      baseValue: 5
+      baseValue: 0
       skillType: 17
     academics:
-      baseValue: 5
+      baseValue: 0
       skillType: 18
     awarness:
-      baseValue: 5
+      baseValue: 0
       skillType: 19
     finance:
-      baseValue: 5
+      baseValue: 0
       skillType: 20
     investigation:
-      baseValue: 5
+      baseValue: 0
       skillType: 21
     medicine:
-      baseValue: 5
+      baseValue: 0
       skillType: 22
     occult:
-      baseValue: 5
+      baseValue: 0
       skillType: 23
     politics:
-      baseValue: 5
+      baseValue: 0
       skillType: 24
     science:
-      baseValue: 5
+      baseValue: 0
       skillType: 25
     technology:
-      baseValue: 5
+      baseValue: 0
       skillType: 26
-  disciplines:
+  Disciplines:
     animalism:
       baseValue: 0
       disciplineType: 0
@@ -237,3 +249,38 @@ MonoBehaviour:
       - {fileID: 0}
       - {fileID: 0}
       - {fileID: 0}
+    athletics:
+      baseValue: 0
+      disciplineType: 11
+      knownPowers:
+      - {fileID: 11400000, guid: 5f9fd2a2096e7da40bf4cba8beffc7cb, type: 2}
+      - {fileID: 11400000, guid: bee9a6a3a7504ef428d6bc78b3e3d59e, type: 2}
+    firearms:
+      baseValue: 0
+      disciplineType: 12
+      knownPowers:
+      - {fileID: 11400000, guid: 66514fc463c8e3347b10f1d517256ed6, type: 2}
+    melee:
+      baseValue: 0
+      disciplineType: 13
+      knownPowers: []
+    streetwise:
+      baseValue: 0
+      disciplineType: 14
+      knownPowers: []
+    insight:
+      baseValue: 0
+      disciplineType: 15
+      knownPowers: []
+    medicine:
+      baseValue: 0
+      disciplineType: 16
+      knownPowers: []
+    larceny:
+      baseValue: 0
+      disciplineType: 17
+      knownPowers: []
+    intimidation:
+      baseValue: 0
+      disciplineType: 18
+      knownPowers: []

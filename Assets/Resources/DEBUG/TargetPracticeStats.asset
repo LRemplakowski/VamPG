@@ -1,0 +1,283 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da18720c486bee45b08ab77ecde326a, type: 3}
+  m_Name: TargetPracticeStats
+  m_EditorClassIdentifier: 
+  Trackers:
+    health:
+      _maxValue: 5
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 0
+    willpower:
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 1
+    hunger:
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 3
+    humanity:
+      _maxValue: 1
+      <SuperficialDamage>k__BackingField: 0
+      <AggravatedDamage>k__BackingField: 0
+      _trackerType: 2
+  Clan: 15
+  Generation: 12
+  BloodPotency: 0
+  Attributes:
+    strength:
+      _baseValue: 1
+      _attributeType: 0
+    dexterity:
+      _baseValue: 1
+      _attributeType: 1
+    stamina:
+      _baseValue: 1
+      _attributeType: 2
+    charisma:
+      _baseValue: 1
+      _attributeType: 3
+    manipulation:
+      _baseValue: 1
+      _attributeType: 4
+    composure:
+      _baseValue: 1
+      _attributeType: 5
+    intelligence:
+      _baseValue: 1
+      _attributeType: 6
+    wits:
+      _baseValue: 1
+      _attributeType: 7
+    resolve:
+      _baseValue: 1
+      _attributeType: 8
+    speed:
+      _baseValue: 5
+      _attributeType: 9
+  Skills:
+    athletics:
+      baseValue: 0
+      skillType: 0
+    brawl:
+      baseValue: 0
+      skillType: 1
+    craft:
+      baseValue: 0
+      skillType: 2
+    drive:
+      baseValue: 0
+      skillType: 3
+    firearms:
+      baseValue: 0
+      skillType: 4
+    larceny:
+      baseValue: 0
+      skillType: 5
+    melee:
+      baseValue: 0
+      skillType: 6
+    stealth:
+      baseValue: 0
+      skillType: 7
+    survival:
+      baseValue: 0
+      skillType: 8
+    animalKen:
+      baseValue: 0
+      skillType: 9
+    etiquette:
+      baseValue: 0
+      skillType: 10
+    insight:
+      baseValue: 0
+      skillType: 11
+    intimidation:
+      baseValue: 0
+      skillType: 12
+    leadership:
+      baseValue: 0
+      skillType: 13
+    performance:
+      baseValue: 0
+      skillType: 14
+    persuasion:
+      baseValue: 0
+      skillType: 15
+    streetwise:
+      baseValue: 0
+      skillType: 16
+    subterfuge:
+      baseValue: 0
+      skillType: 17
+    academics:
+      baseValue: 0
+      skillType: 18
+    awarness:
+      baseValue: 0
+      skillType: 19
+    finance:
+      baseValue: 0
+      skillType: 20
+    investigation:
+      baseValue: 0
+      skillType: 21
+    medicine:
+      baseValue: 0
+      skillType: 22
+    occult:
+      baseValue: 0
+      skillType: 23
+    politics:
+      baseValue: 0
+      skillType: 24
+    science:
+      baseValue: 0
+      skillType: 25
+    technology:
+      baseValue: 0
+      skillType: 26
+  Disciplines:
+    animalism:
+      baseValue: 0
+      disciplineType: 0
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    auspex:
+      baseValue: 0
+      disciplineType: 1
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    bloodSorcery:
+      baseValue: 0
+      disciplineType: 2
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    celerity:
+      baseValue: 0
+      disciplineType: 3
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    dominate:
+      baseValue: 0
+      disciplineType: 4
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    fortitude:
+      baseValue: 0
+      disciplineType: 5
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    obfuscate:
+      baseValue: 0
+      disciplineType: 6
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    oblivion:
+      baseValue: 0
+      disciplineType: 7
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    potence:
+      baseValue: 0
+      disciplineType: 8
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    presence:
+      baseValue: 0
+      disciplineType: 9
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    protean:
+      baseValue: 0
+      disciplineType: 10
+      knownPowers:
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+      - {fileID: 0}
+    athletics:
+      baseValue: 0
+      disciplineType: 11
+      knownPowers: []
+    firearms:
+      baseValue: 0
+      disciplineType: 12
+      knownPowers: []
+    melee:
+      baseValue: 0
+      disciplineType: 13
+      knownPowers: []
+    streetwise:
+      baseValue: 0
+      disciplineType: 14
+      knownPowers: []
+    insight:
+      baseValue: 0
+      disciplineType: 15
+      knownPowers: []
+    medicine:
+      baseValue: 0
+      disciplineType: 16
+      knownPowers: []
+    larceny:
+      baseValue: 0
+      disciplineType: 17
+      knownPowers: []
+    intimidation:
+      baseValue: 0
+      disciplineType: 18
+      knownPowers: []

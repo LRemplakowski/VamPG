@@ -15,7 +15,7 @@ using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
-    public class DialogueWithHistoryView : DialogueViewBase
+    public class DialogueWithHistoryView : DialogueViewBase, IPortraitUpdateReciever
     {
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
@@ -35,6 +35,8 @@ namespace SunsetSystems.Dialogue
         [SerializeField]
         private float _lineCompletionDelay = .5f;
         [Space, Header("Portrait")]
+        [SerializeField]
+        private GameObject _photoParent;
         [SerializeField]
         private Image _photo;
         [SerializeField]
@@ -99,28 +101,29 @@ namespace SunsetSystems.Dialogue
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.text.Length;
             _lineHistoryTextLength = _lineHistory.text.Length;
-            _cachedMaxVisibleCharacters = _lineHistory.maxVisibleCharacters;
+            _cachedMaxVisibleCharacters = _lineHistory.text.Length;
             onDialogueLineFinished?.Invoke();
         }
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             _clampScrollbarNextFrame = true;
-            UpdatePhoto(dialogueLine.CharacterName);
-            _lineHistoryTextLength += dialogueLine.Text.Text.Length;
             _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
+            int stringBuilderTextLengthPreAppend = _stringBuilder.Length;
             _stringBuilder
-                .AppendLine("");
+                .AppendLine("")
+                .Append("<size=26>");
             AppendRollPrefix(dialogueLine);
             _stringBuilder
-                .AppendLine($"<color=\"red\"><size=26>{dialogueLine.CharacterName}:</size></color>")
+                .AppendLine($"<color=\"red\">{dialogueLine.CharacterName}:</size></color>")
                 .AppendLine(dialogueLine.TextWithoutCharacterName.Text);
+            _lineHistoryTextLength = _stringBuilder.Length;
             _lineHistory.text = _stringBuilder.ToString();
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)
             {
                 _cancellationTokenSource = new();
-                _cachedTypewriteTask = TypewriteLineText(_cancellationTokenSource.Token);
+                _cachedTypewriteTask = Task.Run(TypewriteLineText, _cancellationTokenSource.Token);
                 await _cachedTypewriteTask;
             }
             if (_cachedTypewriteTask != null && _cachedTypewriteTask.IsCanceled)
@@ -130,7 +133,7 @@ namespace SunsetSystems.Dialogue
             await new WaitForSeconds(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
 
-            async Task TypewriteLineText(CancellationToken token)
+            async void TypewriteLineText()
             {
                 await new WaitForUpdate();
                 if (_typeSpeed <= 0)
@@ -140,8 +143,6 @@ namespace SunsetSystems.Dialogue
 
                 while (_cachedMaxVisibleCharacters < _lineHistoryTextLength)
                 {
-                    if (token.IsCancellationRequested)
-                        return;
                     await new WaitForUpdate();
                     _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
                     accumulator += Time.deltaTime;
@@ -160,21 +161,24 @@ namespace SunsetSystems.Dialogue
             if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
                 return;
             if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
-                _stringBuilder.Append($"(Success) ");
+                _stringBuilder.Append("(Success) ");
             else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))
-                _stringBuilder.Append("$(Failure) ");
+                _stringBuilder.Append("(Failure) ");
         }
 
-        private void UpdatePhoto(string speakerID)
+        public void InitializeSpeakerPhoto(string speakerID)
         {
-            _photo.sprite = GetSpeakerPortrait(speakerID);
-            _photoText.text = speakerID;
-        }
-
-        private Sprite GetSpeakerPortrait(string speakerID)
-        {
-            Sprite result = ResourceLoader.GetFallbackIcon();
-            return result;
+            Sprite sprite = this.GetSpeakerPortrait(speakerID);
+            if (sprite != null)
+            {
+                _photo.sprite = this.GetSpeakerPortrait(speakerID);
+                _photoText.text = speakerID;
+                _photoParent.SetActive(true);
+            }
+            else
+            {
+                _photoParent.SetActive(false);
+            }
         }
 
         public void CheckForClampScrollbar()
@@ -252,5 +256,10 @@ namespace SunsetSystems.Dialogue
             _cancellationTokenSource.Cancel();
             requestInterrupt?.Invoke();
         }
+    }
+
+    public interface IPortraitUpdateReciever
+    {
+        void InitializeSpeakerPhoto(string speakerID);
     }
 }

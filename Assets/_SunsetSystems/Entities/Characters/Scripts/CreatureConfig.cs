@@ -4,19 +4,23 @@ using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
 using SunsetSystems.Inventory;
 using UMA.CharacterSystem;
+using SunsetSystems.Journal;
+using UnityEditor;
 
 namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
     public class CreatureConfig : ScriptableObject
     {
+        [field: SerializeField, ReadOnly]
+        public string DatabaseID { get; private set; }
         [SerializeField]
         private string _name = "New";
         public string Name { get => _name; }
         [SerializeField]
         private string _lastName = "Creature";
         public string LastName { get => _lastName; }
-        public string FullName { get => Name + " " + LastName; }
+        public string FullName { get => $"{Name} {LastName}"; }
         [SerializeField]
         private Sprite _portrait;
         public Sprite Portrait { get => _portrait; }
@@ -54,6 +58,29 @@ namespace SunsetSystems.Entities.Characters
                 _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
             if (_statsConfig == null)
                 _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
+                CreatureDatabase.Instance.RegisterConfig(this);
+        }
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(DatabaseID))
+            {
+                AssignNewID();
+            }
+        }
+
+        private void Reset()
+        {
+            AssignNewID();
+        }
+
+        private void AssignNewID()
+        {
+            DatabaseID = System.Guid.NewGuid().ToString();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
         private void Awake()

@@ -47,3 +47,6 @@ public class StringEquipmentSlotDisplayDictionary : SerializableDictionary<strin
 
 [Serializable]
 public class StringExperienceDataDictionary : SerializableDictionary<string, ExperienceData> { }
+
+[Serializable]
+public class StringCreatureConfigDictionary : SerializableDictionary<string, CreatureConfig> { }

@@ -10,6 +10,7 @@ using CleverCrow.Fluid.UniqueIds;
 using NaughtyAttributes;
 using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
+using SunsetSystems.Dialogue;
 
 namespace SunsetSystems.Party
 {
@@ -111,6 +112,7 @@ namespace SunsetSystems.Party
         {
             RecruitCharacter(mainCharacterData);
             Instance._mainCharacterKey = mainCharacterData.ID;
+            DialogueHelper.SetPCName(mainCharacterData.FullName);
             if (TryAddMemberToActiveRoster(Instance._mainCharacterKey) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
         }

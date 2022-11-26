@@ -25,6 +25,7 @@ namespace SunsetSystems.Resources
         private const string TARGETING_LINE_PATH = "Combat/TargetingLine";
 
         private const string HOVER_HIGHLIGHT_MATERIAL = "hover_highlight_material";
+        private const string PORTRAIT_DIRECTORY = "CharacterPortraits/";
 
         private static T GetAsset<T>(string path) where T : Object
         {
@@ -94,6 +95,11 @@ namespace SunsetSystems.Resources
         public static Material GetHoverHighlightMaterial()
         {
             return GetAsset<Material>(HOVER_HIGHLIGHT_MATERIAL);
+        }
+
+        public static Sprite GetPortrait(string portraitName)
+        {
+            return GetAsset<Sprite>($"{PORTRAIT_DIRECTORY}{portraitName}");
         }
     }
 }

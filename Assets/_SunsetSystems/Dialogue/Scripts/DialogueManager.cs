@@ -13,9 +13,31 @@ namespace SunsetSystems.Dialogue
         [SerializeField]
         private DialogueRunner _dialogueRunner;
 
+        private const string UPDATE_SPEAKER_PORTRAIT_TAG = "UPDATE_SPEAKER_PORTRAIT";
+
         protected override void Awake()
         {
             _dialogueRunner ??= GetComponent<DialogueRunner>();
+        }
+
+        private void OnEnable()
+        {
+            _dialogueRunner.onDialogueComplete.AddListener(ClearCachedVariables);
+        }
+
+        private void OnDisable()
+        {
+            _dialogueRunner.onDialogueComplete.RemoveListener(ClearCachedVariables);
+        }
+
+        private void ClearCachedVariables()
+        {
+            _dialogueRunner.VariableStorage.SetValue(DialogueHelper.SPEAKER_ID, string.Empty);
+        }
+
+        private void Start()
+        {
+            DialogueHelper.InitializePersistentVariableStorage(_dialogueRunner.VariableStorage as PersistentVariableStorage);
         }
 
         public static void RegisterView(DialogueViewBase view)
@@ -43,6 +65,10 @@ namespace SunsetSystems.Dialogue
                 return false;
             cachedRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(true));
             cachedRunner.StartDialogue(startNode);
+            if (cachedRunner.VariableStorage.TryGetValue(DialogueHelper.SPEAKER_ID, out string speakerID))
+            {
+                cachedRunner.dialogueViews.ToList().ForEach(view => (view as IPortraitUpdateReciever).InitializeSpeakerPhoto(speakerID));
+            }
             return true;
         }
 

@@ -16,11 +16,11 @@ namespace SunsetSystems.Utils
                     T[] all = UnityEngine.Resources.LoadAll<T>("");
                     if (all == null || all.Length <= 0)
                     {
-                        throw new System.NullReferenceException("No istance of " + nameof(T) + " singleton found!");
+                        throw new System.NullReferenceException("No istance of " + typeof(T).Name + " singleton found!");
                     }
                     else if (all.Length > 1)
                     {
-                        Debug.LogWarning("There is more than one istance of asset " + nameof(T));
+                        Debug.LogWarning("There is more than one istance of asset " + typeof(T).Name);
                     }
                     _instance = all[0];
                 }

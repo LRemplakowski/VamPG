@@ -8,17 +8,18 @@ namespace SunsetSystems.Entities.Interactable
     public class Doors : InteractableEntity
     {
         [SerializeField]
-        private Animator animator;
+        private Animator _animator;
 
-        protected void Start()
+        protected override void Start()
         {
-            if (!animator)
-                animator = GetComponentInChildren<Animator>();
+            if (!_animator)
+                _animator = GetComponentInChildren<Animator>();
         }
 
         protected override void HandleInteraction()
         {
-            animator?.SetTrigger("DoorSwitch");
+            Debug.Log("Switching door animation state!");
+            _animator?.SetTrigger("DoorSwitch");
         }
     }
 }

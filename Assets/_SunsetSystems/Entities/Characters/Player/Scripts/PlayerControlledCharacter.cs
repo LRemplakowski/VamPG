@@ -41,9 +41,8 @@ namespace SunsetSystems.Entities.Characters
             return attackAction;
         }
 
-        public override void OnDestroy()
+        private void OnDisable()
         {
-            base.OnDestroy();
             PartyManager.UpdateCreatureData(this.Data);
         }
     }

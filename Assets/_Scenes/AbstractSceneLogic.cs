@@ -14,17 +14,17 @@ namespace SunsetSystems.Loading
         [SerializeField]
         protected UniqueId unique;
 
-        protected void OnValidate()
+        protected virtual void OnValidate()
         {
             unique = GetComponent<UniqueId>();
         }
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             unique = GetComponent<UniqueId>();
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
             ES3ReferenceMgr es3 = FindObjectOfType<ES3ReferenceMgr>();
             if (es3)

@@ -40,6 +40,23 @@ namespace SunsetSystems.Entities.Interactable
             set => _interactionTransform = value;
         }
 
+        [SerializeField]
+        private bool _interactable = true;
+        public bool Interactable
+        {
+            get
+            {
+                return _interactable;
+            }
+            set
+            {
+                _interactable = value;
+                this.enabled = value;
+            }
+        }
+        [SerializeField]
+        private bool _interactableOnce = false;
+
         public UnityEvent OnInteractionTriggered;
 
         protected virtual void OnValidate()
@@ -58,13 +75,22 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
+        protected virtual void Start()
+        {
+            enabled = Interactable;
+        }
+
         public void Interact()
         {
+            if (!Interactable)
+                return;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             HandleInteraction();
             OnInteractionTriggered?.Invoke();
             Interacted = true;
             TargetedBy = null;
+            if (_interactableOnce)
+                this.enabled = false;
         }
 
         protected abstract void HandleInteraction();

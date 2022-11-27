@@ -8,7 +8,7 @@ namespace SunsetSystems.Journal
 
         void TriggerQuest()
         {
-            Debug.Log("Starting quest " + MyQuest.Info.Name);
+            Debug.Log("Starting quest " + MyQuest.Name);
             QuestJournal.Instance.BeginQuest(MyQuest.ID);
         }
     }

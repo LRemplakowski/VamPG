@@ -24,13 +24,6 @@ namespace SunsetSystems.Loading
             unique = GetComponent<UniqueId>();
         }
 
-        protected virtual void Start()
-        {
-            ES3ReferenceMgr es3 = FindObjectOfType<ES3ReferenceMgr>();
-            if (es3)
-                es3.RefreshDependencies();
-        }
-
         public abstract Task StartSceneAsync(SceneLoadingData data);
 
         public abstract void SaveRuntimeData();

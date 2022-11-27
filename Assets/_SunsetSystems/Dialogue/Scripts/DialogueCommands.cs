@@ -1,4 +1,6 @@
 using SunsetSystems.Journal;
+using System.Collections.Generic;
+using System.Linq;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -14,12 +16,9 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("CompleteObjective")]
         public static void CompleteObjective(string questID, string objectiveID)
         {
-            if (QuestJournal.Instance.GetCurrentObjective(questID, out Objective objective))
+            if (QuestJournal.Instance.GetCurrentObjectives(questID, out List<Objective> objectives))
             {
-                if (objective.ID.Equals(objectiveID))
-                {
-                    objective.Complete();
-                }
+                objectives.Find(o => o.ID.Equals(objectiveID))?.Complete();
             }
         }
     }

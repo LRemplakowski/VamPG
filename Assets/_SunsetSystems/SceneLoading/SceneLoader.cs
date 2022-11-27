@@ -33,6 +33,13 @@ namespace SunsetSystems.Loading
             _previousScene = new Scene();
         }
 
+        private void Start()
+        {
+#if !UNITY_EDITOR
+            SceneManager.LoadScene("UI", LoadSceneMode.Additive);
+#endif
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             _previousScene = scene;

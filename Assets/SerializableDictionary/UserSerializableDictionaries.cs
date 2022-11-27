@@ -50,3 +50,6 @@ public class StringExperienceDataDictionary : SerializableDictionary<string, Exp
 
 [Serializable]
 public class StringCreatureConfigDictionary : SerializableDictionary<string, CreatureConfig> { }
+
+[Serializable]
+public class StringObjectiveDictionary : SerializableDictionary<string, Objective> { }

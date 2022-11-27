@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -5,7 +6,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using SunsetSystems.Utils.Threading;
 using Redcode.Awaiting;
 
 namespace SunsetSystems.Bootstraper
@@ -18,7 +18,6 @@ namespace SunsetSystems.Bootstraper
 
         public static bool EnableBootstrap { get; set; }
 
-#if UNITY_EDITOR
         protected async override void Awake()
         {
             base.Awake();
@@ -63,6 +62,6 @@ namespace SunsetSystems.Bootstraper
             }
             return tasks;
         }
-#endif
     }
 }
+#endif

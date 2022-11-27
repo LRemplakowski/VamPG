@@ -12,6 +12,7 @@ namespace SunsetSystems.Entities.Interactable
 
         protected override void Start()
         {
+            base.Start();
             if (!_animator)
                 _animator = GetComponentInChildren<Animator>();
         }

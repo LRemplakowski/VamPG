@@ -43,7 +43,10 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnDisable()
         {
-            PartyManager.UpdateCreatureData(this.Data);
+            if (this.TryFindFirstGameObjectWithTag(TagConstants.PARTY_MANAGER, out GameObject partyManagerObject))
+            {
+                partyManagerObject.GetComponent<PartyManager>().UpdateCreatureData(this.Data);
+            }
         }
     }
 }

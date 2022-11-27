@@ -24,7 +24,7 @@ namespace SunsetSystems.Input
         private Collider lastHit;
         private const int raycastRange = 100;
         [SerializeField]
-        private LayerMask defaultRaycastMask;
+        private LayerMask _raycastTargetMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
         [SerializeField]
@@ -66,7 +66,7 @@ namespace SunsetSystems.Input
         private void HandleSecondaryAction()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask))
             {
                 switch (GameManager.CurrentState)
                 {
@@ -127,7 +127,10 @@ namespace SunsetSystems.Input
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
                 List<Creature> creatures = new();
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                IInteractable interactable = hit.collider.gameObject
+                        .GetComponents<IInteractable>()?
+                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                if (interactable != null)
                 {
                     mainCharacter.ClearAllActions();
                     mainCharacter.InteractWith(interactable);
@@ -228,13 +231,20 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
+            {
+                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
+                {
+                    return;
+                }
+            }
             HandlePointerPosition();
         }
 
         private void HandlePointerPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask, QueryTriggerInteraction.Ignore))
             {
                 if (lastHit == null)
                 {
@@ -263,17 +273,25 @@ namespace SunsetSystems.Input
 
             void HandleExplorationPointerPosition(RaycastHit hit)
             {
+                IInteractable interactable = null;
                 if (lastHit != hit.collider)
                 {
-                    if (lastHit.gameObject.TryGetComponent(out IInteractable previousInteractable))
+                    interactable = lastHit.gameObject
+                        .GetComponents<IInteractable>()?
+                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                    if (interactable != null)
                     {
-                        previousInteractable.IsHoveredOver = false;
+                        interactable.IsHoveredOver = false;
+                        interactable = null;
                     }
                     lastHit = hit.collider;
                 }
-                if (lastHit.gameObject.TryGetComponent(out IInteractable currentInteractable))
+                interactable = lastHit.gameObject
+                    .GetComponents<IInteractable>()?
+                    .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                if (interactable != null)
                 {
-                    currentInteractable.IsHoveredOver = true;
+                    interactable.IsHoveredOver = true;
                 }
             }
 

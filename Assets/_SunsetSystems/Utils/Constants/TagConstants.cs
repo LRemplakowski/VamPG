@@ -8,6 +8,7 @@
     public const string COMBAT_MANAGER = "COMBAT_MANAGER";
     public const string GAME_RUNTIME_DATA = "GAME_RUNTIME_DATA";
     public const string DIALOGUE_MANAGER = "DIALOGUE_MANAGER";
+    public const string PARTY_MANAGER = "PARTY_MANAGER";
 
     public const string SCENE_LOADING_UI = "SCENE_LOADING_UI";
     public const string MAIN_MENU_UI = "MAIN_MENU_UI";

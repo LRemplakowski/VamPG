@@ -1,0 +1,18 @@
+﻿title: gun
+tags:
+---
+Narrator: \[You pick up the 9mm Handgun Chad bought you to keep you safe. The metal is normally cool in your hands but now it suspiciously has no temperature.\]
+-> {$pcName}: \[Leave it for now.\]
+-> {$pcName}: \[Take it.\]
+    <<HandleGunTaken>>
+    <<set $hasGun to true>>
+-> {$pcName}: \[Firearms 1\] \[Clean the gun.\]
+    <<HandleGunTaken>>
+    <<set $hasGun to true>>
+    <<if Roll("firearms") >= 1>>
+    Desiree's Inner Monologue: Good as new. #success
+    <<else>>
+    Narrator: BANG. \[You got too comfortable and were careless. The gun discharges, putting a bullet hole in the ceiling.\]
+    Desiree's Inner Monologue: Definitely not getting my security deposit back.
+    <<endif>>
+===

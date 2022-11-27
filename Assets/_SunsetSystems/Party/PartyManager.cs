@@ -142,7 +142,7 @@ namespace SunsetSystems.Party
             }
         }
 
-        public static bool UpdateCreatureData(CreatureData data)
+        public bool UpdateCreatureData(CreatureData data)
         {
             if (Instance._activeCoterieMemberKeys.Contains(data.ID))
             {

@@ -34,8 +34,9 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private CameraControlScript _cameraControlScript;
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             _sceneLoader = FindObjectOfType<SceneLoader>();
             _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }

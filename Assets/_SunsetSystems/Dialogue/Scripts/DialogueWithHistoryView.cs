@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using Redcode.Awaiting;
 using SunsetSystems.Resources;
+using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,15 +43,10 @@ namespace SunsetSystems.Dialogue
         [SerializeField]
         private TextMeshProUGUI _photoText;
 
-        private StringBuilder _stringBuilder = new();
-        private int _cachedMaxVisibleCharacters = default;
-        private int _lineHistoryTextLength = default;
+        private StringBuilder _lineHistoryStringBuilder = new();
 
         private const string ROLL_SUCCESS_TAG = "success";
         private const string ROLL_FAIL_TAG = "failure";
-
-        private CancellationTokenSource _cancellationTokenSource;
-        private Task _cachedTypewriteTask;
 
         private Action<int> OnOptionSelected;
 
@@ -58,6 +54,9 @@ namespace SunsetSystems.Dialogue
         private UnityEvent OnDialogueStarted, OnDialogueFinished;
 
         private bool _clampScrollbarNextFrame;
+        private bool RequestedLineInterrupt { get; set; } = false;
+
+        private int _parsedTextLength = 0;
 
         private void Awake()
         {
@@ -77,11 +76,10 @@ namespace SunsetSystems.Dialogue
 
         public override void DialogueStarted()
         {
-            _lineHistoryTextLength = 0;
-            _cachedMaxVisibleCharacters = 0;
+            _parsedTextLength = 0;
             _lineHistory.text = string.Empty;
-            _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
-            _stringBuilder = new();
+            _lineHistory.maxVisibleCharacters = 0;
+            _lineHistoryStringBuilder = new();
 
             foreach (OptionView optionView in _optionViews)
             {
@@ -97,63 +95,61 @@ namespace SunsetSystems.Dialogue
 
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
-            _cancellationTokenSource.Cancel();
+            RequestedLineInterrupt = true;
             await new WaitForUpdate();
-            _lineHistory.maxVisibleCharacters = _lineHistory.text.Length;
-            _lineHistoryTextLength = _lineHistory.text.Length;
-            _cachedMaxVisibleCharacters = _lineHistory.text.Length;
+            _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             onDialogueLineFinished?.Invoke();
         }
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            RequestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
-            _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
-            int stringBuilderTextLengthPreAppend = _stringBuilder.Length;
-            _stringBuilder
-                .AppendLine("")
-                .Append("<size=26>");
-            AppendRollPrefix(dialogueLine);
-            _stringBuilder
-                .AppendLine($"<color=\"red\">{dialogueLine.CharacterName}:</size></color>")
-                .AppendLine(dialogueLine.TextWithoutCharacterName.Text);
-            _lineHistoryTextLength = _stringBuilder.Length;
-            _lineHistory.text = _stringBuilder.ToString();
+            string formattedLineText = BuildFormattedText(dialogueLine);
+            _parsedTextLength += dialogueLine.Text.Text.Length;
+            _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)
             {
-                _cancellationTokenSource = new();
-                _cachedTypewriteTask = Task.Run(TypewriteLineText, _cancellationTokenSource.Token);
-                await _cachedTypewriteTask;
+                await TypewriteText();
+                if (RequestedLineInterrupt)
+                    return;
             }
-            if (_cachedTypewriteTask != null && _cachedTypewriteTask.IsCanceled)
-                return;
-            _cachedTypewriteTask = null;
-            _lineHistory.maxVisibleCharacters = _lineHistory.text.Length;
             await new WaitForSeconds(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
+        }
 
-            async void TypewriteLineText()
+        private async Task TypewriteText()
+        {
+            await new WaitForUpdate();
+            if (_typeSpeed <= 0)
+                return;
+            float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
+            while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
                 await new WaitForUpdate();
-                if (_typeSpeed <= 0)
-                    return;
-                float accumulator = 0f;
-                float secondsPerLetter = 1 / _typeSpeed;
-
-                while (_cachedMaxVisibleCharacters < _lineHistoryTextLength)
-                {
-                    await new WaitForUpdate();
-                    _lineHistory.maxVisibleCharacters = _cachedMaxVisibleCharacters;
-                    accumulator += Time.deltaTime;
-
-                    while (accumulator >= secondsPerLetter)
-                    {
-                        _cachedMaxVisibleCharacters += 1;
-                        accumulator -= secondsPerLetter;
-                    }
-                }
+                if (RequestedLineInterrupt)
+                    break;
+                _lineHistory.maxVisibleCharacters = Mathf.RoundToInt(_currentVisibleCharacters);
+                _currentVisibleCharacters += Time.deltaTime * _typeSpeed;
             }
+            if (RequestedLineInterrupt)
+            {
+                _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
+                return;
+            }
+        }
+
+        private string BuildFormattedText(LocalizedLine line)
+        {
+            _lineHistoryStringBuilder
+                .AppendLine("")
+                .Append("<size=26>");
+            AppendRollPrefix(line);
+            _lineHistoryStringBuilder
+                .AppendLine($"<color=\"red\">{line.CharacterName}:</size></color>")
+                .AppendLine(line.TextWithoutCharacterName.Text);
+            return _lineHistoryStringBuilder.ToString();
         }
 
         private void AppendRollPrefix(LocalizedLine dialogueLine)
@@ -161,9 +157,9 @@ namespace SunsetSystems.Dialogue
             if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
                 return;
             if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
-                _stringBuilder.Append("(Success) ");
+                _lineHistoryStringBuilder.Append("(Success) ");
             else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))
-                _stringBuilder.Append("(Failure) ");
+                _lineHistoryStringBuilder.Append("(Failure) ");
         }
 
         public void InitializeSpeakerPhoto(string speakerID)
@@ -242,6 +238,9 @@ namespace SunsetSystems.Dialogue
             void OptionViewWasSelected(DialogueOption option)
             {
                 CleanupOptions();
+                string formattedLineText = BuildFormattedText(option.Line);
+                _lineHistory.text = formattedLineText;
+                _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
                 OnOptionSelected(option.DialogueOptionID);
             }
 
@@ -253,7 +252,7 @@ namespace SunsetSystems.Dialogue
 
         public override void UserRequestedViewAdvancement()
         {
-            _cancellationTokenSource.Cancel();
+            RequestedLineInterrupt = true;
             requestInterrupt?.Invoke();
         }
     }

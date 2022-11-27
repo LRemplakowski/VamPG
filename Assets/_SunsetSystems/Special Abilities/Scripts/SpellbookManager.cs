@@ -44,16 +44,16 @@ namespace SunsetSystems.Spellbook
 
         private async void ApplyPasivePowers()
         {
-            await new WaitForBackgroundThread();
-            List<DisciplinePower> powers = new();
-            foreach (Discipline discipline in Disciplines.GetDisciplines())
-            {
-                await new WaitForSeconds(1f);
-                List<DisciplinePower> passivePowers = discipline.GetKnownPowers()?.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
-                powers.AddRange(passivePowers);
-            }
-            await new WaitForUpdate();
-            powers.ForEach(p => Spellcaster.HandleEffects(p, _owner));
+            //await new WaitForBackgroundThread();
+            //List<DisciplinePower> powers = new();
+            //foreach (Discipline discipline in Disciplines.GetDisciplines())
+            //{
+            //    await new WaitForSeconds(1f);
+            //    List<DisciplinePower> passivePowers = discipline.GetKnownPowers()?.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
+            //    powers.AddRange(passivePowers);
+            //}
+            //await new WaitForUpdate();
+            //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner));
         }
 
         public void UsePower(DisciplinePower power, Creature target)

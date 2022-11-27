@@ -11,40 +11,28 @@ namespace SunsetSystems.Entities.Interactable
     {
         [SerializeReference, Required]
         private Quest _associatedQuest;
-        [SerializeField, Dropdown("Objectives")]
-        private string _objectiveID;
-        private Objective Objective => _associatedQuest.Info.Objectives.Find(o => o.ID.Equals(_objectiveID));
+        [SerializeField]
+        private Objective _objective;
         private bool ObjectiveActive = false;
 
         protected override void Start()
         {
             base.Start();
-            if (Objective != null)
+            if (_objective != null)
             {
-                Objective.OnObjectiveActive -= OnObjectiveActive;
-                Objective.OnObjectiveInactive -= OnObjectiveInactive;
-                Objective.OnObjectiveActive += OnObjectiveActive;
-                Objective.OnObjectiveInactive += OnObjectiveInactive;
+                _objective.OnObjectiveActive -= OnObjectiveActive;
+                _objective.OnObjectiveInactive -= OnObjectiveInactive;
+                _objective.OnObjectiveActive += OnObjectiveActive;
+                _objective.OnObjectiveInactive += OnObjectiveInactive;
             }
         }
 
         private void OnDestroy()
         {
-            if (Objective != null)
+            if (_objective != null)
             {
-                Objective.OnObjectiveActive -= OnObjectiveActive;
-                Objective.OnObjectiveInactive -= OnObjectiveInactive;
-            }
-        }
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-            if (string.IsNullOrEmpty(_objectiveID))
-            {
-                Debug.LogWarning($"Null or empty objective ID in GameObject {gameObject.name}! Resetting!");
-                if (_associatedQuest)
-                    _objectiveID = _associatedQuest.Info.FirstObjective?.ID;
+                _objective.OnObjectiveActive -= OnObjectiveActive;
+                _objective.OnObjectiveInactive -= OnObjectiveInactive;
             }
         }
 
@@ -65,22 +53,15 @@ namespace SunsetSystems.Entities.Interactable
 
         protected override void HandleInteraction()
         {
-            if (CheckCompletion(Objective))
+            if (CheckCompletion(_objective))
             {
-                Debug.Log($"Completed objective {_objectiveID}!");
-                Objective.Complete();
+                Debug.Log($"Completed objective {_objective}!");
+                _objective.Complete();
             }
             else
             {
-                Debug.Log($"Objective {_objectiveID} is not active!");
+                Debug.Log($"Objective {_objective} is not active!");
             }
-        }
-
-        public string[] Objectives()
-        {
-            if (_associatedQuest == null)
-                return new string[0];
-            return _associatedQuest.Info.Objectives.Select(o => o.ID).ToArray();
         }
     }
 }

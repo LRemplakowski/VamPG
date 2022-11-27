@@ -143,6 +143,15 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HighlightInteractables"",
+                    ""type"": ""Button"",
+                    ""id"": ""28bba3a0-357d-4bc6-9e21-3d9cdc1ecc33"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -409,6 +418,17 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""action"": ""SkipDialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e9e6e18-fe6c-468e-94df-a94c6f48cd27"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": ""Hold(duration=0.01)"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""HighlightInteractables"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -659,6 +679,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         m_Player_MouseScrollHold = m_Player.FindAction("MouseScrollHold", throwIfNotFound: true);
         m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
         m_Player_SkipDialogue = m_Player.FindAction("SkipDialogue", throwIfNotFound: true);
+        m_Player_HighlightInteractables = m_Player.FindAction("HighlightInteractables", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -741,6 +762,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MouseScrollHold;
     private readonly InputAction m_Player_MousePosition;
     private readonly InputAction m_Player_SkipDialogue;
+    private readonly InputAction m_Player_HighlightInteractables;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -758,6 +780,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         public InputAction @MouseScrollHold => m_Wrapper.m_Player_MouseScrollHold;
         public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputAction @SkipDialogue => m_Wrapper.m_Player_SkipDialogue;
+        public InputAction @HighlightInteractables => m_Wrapper.m_Player_HighlightInteractables;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -806,6 +829,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @SkipDialogue.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkipDialogue;
                 @SkipDialogue.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkipDialogue;
                 @SkipDialogue.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkipDialogue;
+                @HighlightInteractables.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
+                @HighlightInteractables.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
+                @HighlightInteractables.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -849,6 +875,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @SkipDialogue.started += instance.OnSkipDialogue;
                 @SkipDialogue.performed += instance.OnSkipDialogue;
                 @SkipDialogue.canceled += instance.OnSkipDialogue;
+                @HighlightInteractables.started += instance.OnHighlightInteractables;
+                @HighlightInteractables.performed += instance.OnHighlightInteractables;
+                @HighlightInteractables.canceled += instance.OnHighlightInteractables;
             }
         }
     }
@@ -1002,6 +1031,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         void OnMouseScrollHold(InputAction.CallbackContext context);
         void OnMousePosition(InputAction.CallbackContext context);
         void OnSkipDialogue(InputAction.CallbackContext context);
+        void OnHighlightInteractables(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

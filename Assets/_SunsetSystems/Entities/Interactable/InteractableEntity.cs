@@ -1,6 +1,7 @@
 ﻿using SunsetSystems.Entities.Characters;
 using SunsetSystems.Resources;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,8 @@ namespace SunsetSystems.Entities.Interactable
 {
     public abstract class InteractableEntity : Entity, IInteractable, INameplateReciever
     {
+        public static readonly List<IInteractable> InteractablesInScene = new();
+
         [SerializeField]
         private Collider _interactionCollider;
         [field: SerializeField]
@@ -101,12 +104,22 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
+        private void OnEnable()
+        {
+            InteractablesInScene.Add(this);
+        }
+
         protected virtual void Start()
         {
             enabled = Interactable;
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             _interactionCollider.enabled = Interactable;
+        }
+
+        protected virtual void OnDisable()
+        {
+            InteractablesInScene.Remove(this);
         }
 
         public void Interact()

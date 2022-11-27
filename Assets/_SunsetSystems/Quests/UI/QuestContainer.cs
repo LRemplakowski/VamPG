@@ -26,7 +26,7 @@ namespace SunsetSystems.Journal.UI
         public void UpdateView(IGameDataProvider<Quest> dataProvider)
         {
             _quest = dataProvider.Data;
-            _questTitle.text = _quest.Info.Name;
+            _questTitle.text = _quest.Name;
             _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.ID);
         }
     }

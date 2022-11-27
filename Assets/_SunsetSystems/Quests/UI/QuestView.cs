@@ -33,7 +33,7 @@ namespace SunsetSystems
                 Debug.LogError("Trying to display quest in Quest View but the quest is null!");
                 return;
             }
-            Debug.Log("Displaying quest " + quest.Info.Name);
+            Debug.Log("Displaying quest " + quest.Name);
             _cachedQuest = quest;
             UpdateQuestView();
         }
@@ -42,8 +42,8 @@ namespace SunsetSystems
         {
             if (_cachedQuest == null)
                 return;
-            _title.text = _cachedQuest.Info.Name;
-            _description.text = _cachedQuest.Info.Description;
+            _title.text = _cachedQuest.Name;
+            _description.text = _cachedQuest.Description;
         }
     }
 }

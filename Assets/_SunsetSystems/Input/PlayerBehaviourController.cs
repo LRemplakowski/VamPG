@@ -24,7 +24,7 @@ namespace SunsetSystems.Input
         private Collider lastHit;
         private const int raycastRange = 100;
         [SerializeField]
-        private LayerMask defaultRaycastMask;
+        private LayerMask _raycastTargetMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
         [SerializeField]
@@ -66,7 +66,7 @@ namespace SunsetSystems.Input
         private void HandleSecondaryAction()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask))
             {
                 switch (GameManager.CurrentState)
                 {
@@ -231,13 +231,20 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             mousePosition = context.ReadValue<Vector2>();
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
+            {
+                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
+                {
+                    return;
+                }
+            }
             HandlePointerPosition();
         }
 
         private void HandlePointerPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, defaultRaycastMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask, QueryTriggerInteraction.Ignore))
             {
                 if (lastHit == null)
                 {

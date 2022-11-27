@@ -31,6 +31,8 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     public static event OnCharacterSheetHandler OnCharacterSheet;
     public delegate void OnSkipDialogueHandler(InputAction.CallbackContext context);
     public static event OnSkipDialogueHandler OnSkipDialogue;
+    public delegate void OnHighlightInteractablesHandler(InputAction.CallbackContext context);
+    public static event OnHighlightInteractablesHandler OnHighlightInteractables;
 
     protected override void Awake()
     {
@@ -88,5 +90,10 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     public void SkipDialogueAction(InputAction.CallbackContext context)
     {
         OnSkipDialogue?.Invoke(context);
+    }
+
+    public void HighlightInteractablesAction(InputAction.CallbackContext context)
+    {
+        OnHighlightInteractables?.Invoke(context);
     }
 }

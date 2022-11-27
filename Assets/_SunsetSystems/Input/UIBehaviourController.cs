@@ -1,5 +1,6 @@
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities;
+using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.UI;
@@ -23,7 +24,7 @@ namespace SunsetSystems.Input
         [SerializeField]
         private GameManager gameManager;
         [SerializeField]
-        private LayerMask defaultRaycastMask;
+        private LayerMask _raycastTargetMask;
 
         private Vector2 pointerPosition;
 
@@ -35,6 +36,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
             PlayerInputHandler.OnJournal += OnJournal;
             PlayerInputHandler.OnSkipDialogue += OnSkipDialogue;
+            PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
         }
 
         private void OnDisable()
@@ -45,6 +47,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
             PlayerInputHandler.OnJournal -= OnJournal;
             PlayerInputHandler.OnSkipDialogue -= OnSkipDialogue;
+            PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
         }
 
         private void Start()
@@ -55,12 +58,27 @@ namespace SunsetSystems.Input
         private void Update()
         {
             Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
-            if (gameplayUIParent != null && Physics.Raycast(ray, out RaycastHit hit, 100f, defaultRaycastMask))
+            if (gameplayUIParent != null && Physics.Raycast(ray, out RaycastHit hit, 100f, _raycastTargetMask))
             {
-                INameplateReciever nameplateReciever = hit.collider.GetComponent<INameplateReciever>();
-                if (nameplateReciever is not null)
+                if (InputHelper.IsRaycastHittingUIObject(pointerPosition, out List<RaycastResult> hits))
                 {
-                    gameplayUIParent.HandleNameplateHover(nameplateReciever);
+                    if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
+                    {
+                        gameplayUIParent.DisableNameplate();
+                        return;
+                    }
+                }
+                INameplateReciever nameplateReciever = hit.collider.GetComponent<INameplateReciever>();
+                if (nameplateReciever is not null && (nameplateReciever as MonoBehaviour).enabled)
+                {
+                    if (nameplateReciever is IInteractable interactable && interactable.IsHoveredOver == false)
+                    {
+                        gameplayUIParent.DisableNameplate();
+                    }
+                    else
+                    {
+                        gameplayUIParent.HandleNameplateHover(nameplateReciever);
+                    }
                 }
                 else
                 {
@@ -154,6 +172,14 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             DialogueManager.Instance.InterruptCurrentLine();
+        }
+
+        private void OnHighlightInteractables(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+                InteractableEntity.InteractablesInScene.ForEach(interactable => interactable.IsHoveredOver = true);
+            else if (context.canceled)
+                InteractableEntity.InteractablesInScene.ForEach(interactable => interactable.IsHoveredOver = false);
         }
     }
 }

@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HighlightInteractables",
+                    "type": "Button",
+                    "id": "28bba3a0-357d-4bc6-9e21-3d9cdc1ecc33",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -385,6 +394,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "SkipDialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5e9e6e18-fe6c-468e-94df-a94c6f48cd27",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "Hold(duration=0.01)",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HighlightInteractables",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

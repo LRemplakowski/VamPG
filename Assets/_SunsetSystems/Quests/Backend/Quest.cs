@@ -2,6 +2,9 @@ using NaughtyAttributes;
 using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -13,8 +16,23 @@ namespace SunsetSystems.Journal
 
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
-        [field: SerializeField, AllowNesting]
-        public QuestData Info { get; private set; }
+        public string Name;
+        public QuestCategory Category;
+        [TextArea(10, 15)]
+        public string Description;
+        public List<Objective> InitialObjectives;
+#if UNITY_EDITOR
+        //[Button]
+        //private void AddObjective()
+        //{
+        //    Objective newObjective = CreateInstance<Objective>();
+        //    AssetDatabase.AddObjectToAsset(newObjective, this);
+        //    AssetDatabase.SaveAssets();
+        //    Objectives.Add(newObjective.ID, newObjective);
+        //    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(newObjective));
+        //    _objectiveAssetPaths.Add(AssetDatabase.GetAssetPath(newObjective));
+        //}
+#endif
         [field: SerializeField, AllowNesting]
         public List<RewardData> Rewards { get; private set; }
 
@@ -26,47 +44,38 @@ namespace SunsetSystems.Journal
 
         public void LinkAndInitializeObjectives()
         {
-            List<Objective> objectives = Info.Objectives;
-            if (objectives == null || objectives.Count <= 0)
-                return;
-            for (int i = objectives.Count - 1; i > 0; i--)
-            {
-                Objective next = objectives[i];
-                objectives[i - 1].NextObjective = next;
-                next.IsLast = false;
-                next.IsFirst = false;
-                if (string.IsNullOrEmpty(next.ID))
-                    next.ID = $"Objective {i}";
-            }
-            foreach (Objective objective in objectives)
-            {
-                if (string.IsNullOrWhiteSpace(objective.NextObjectiveID) == false)
-                {
-                    if (objective.NextObjectiveID.Equals(COMPLETE_QUEST))
-                    {
-                        objective.NextObjective = null;
-                    }
-                    else
-                    {
-                        objective.NextObjective = objectives.Find(o => o.ID.Equals(objective.NextObjectiveID));
-                    }
-                }
-            }
-            Objective last = objectives[^1];
-            last.IsLast = true;
-            last.IsFirst = false;
-            Objective first = objectives[0];
-            if (string.IsNullOrEmpty(first.ID))
-                first.ID = "Objective 0";
-            if (last.Equals(first))
-            {
-                last.IsFirst = true;
-            }
-            else
-            {
-                first.IsFirst = true;
-                first.IsLast = false;
-            }
+            //List<Objective> objectives = Objectives.ToList();
+            //if (objectives == null || objectives.Count <= 0)
+            //    return;
+            //foreach (Objective objective in objectives)
+            //{
+            //    if (string.IsNullOrWhiteSpace(objective.NextObjectiveID) == false)
+            //    {
+            //        if (objective.NextObjectiveID.Equals(COMPLETE_QUEST))
+            //        {
+            //            objective.NextObjective = null;
+            //        }
+            //        else
+            //        {
+            //            objective.NextObjective = objectives.Find(o => o.Name.Equals(objective.NextObjectiveID));
+            //        }
+            //    }
+            //}
+            //Objective last = objectives[^1];
+            //last.IsLast = true;
+            //last.IsFirst = false;
+            //Objective first = objectives[0];
+            //if (string.IsNullOrEmpty(first.Name))
+            //    first.Name = "Objective 0";
+            //if (last.Equals(first))
+            //{
+            //    last.IsFirst = true;
+            //}
+            //else
+            //{
+            //    first.IsFirst = true;
+            //    first.IsLast = false;
+            //}
         }
 
         private void OnValidate()
@@ -75,7 +84,12 @@ namespace SunsetSystems.Journal
             {
                 AssignNewID();
             }
-            LinkAndInitializeObjectives();
+            //if (EditorUtility.IsDirty(this))
+            //{
+            //    Objectives.Clear();
+            //    AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this)).ToList().ForEach(a => { if (a is Objective objective) Objectives.Add(objective); });
+            //}
+            //LinkAndInitializeObjectives();
         }
 
         private void Reset()
@@ -95,13 +109,16 @@ namespace SunsetSystems.Journal
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
-        } 
+        }
 
         public void Begin()
         {
             QuestStarted?.Invoke(this);
-            Info.FirstObjective.OnObjectiveCompleted += OnObjectiveChanged;
-            Info.FirstObjective.MakeActive();
+            foreach (Objective o in InitialObjectives)
+            {
+                o.OnObjectiveCompleted += OnObjectiveChanged;
+                o.MakeActive();
+            }
         }
 
         private void OnObjectiveChanged(Objective objective)
@@ -110,13 +127,14 @@ namespace SunsetSystems.Journal
             if (objective == null)
                 return;
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            if (objective.NextObjective == null)
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).OnObjectiveCompleted -= OnObjectiveChanged);
+            if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
                 Complete();
             }
             else
             {
-                objective.NextObjective.OnObjectiveCompleted += OnObjectiveChanged;
+                objective.NextObjectives.ForEach(o => (o as Objective).OnObjectiveCompleted += OnObjectiveChanged);
             }
         }
 
@@ -128,16 +146,15 @@ namespace SunsetSystems.Journal
     }
 
     [Serializable]
+    public class ObjectiveList : List<Objective>
+    {
+
+    }
+
+    [Serializable]
     public struct QuestData
     {
-        public string Name;
-        public QuestCategory Category;
-        [TextArea(10, 15)]
-        public string Description;
-        [ReorderableList, AllowNesting]
-        public List<Objective> Objectives;
-        public Objective FirstObjective => Objectives?[0];
-        public Objective LastObjective => Objectives?[^1];
+
     }
 
     [Serializable]

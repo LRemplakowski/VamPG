@@ -6,12 +6,13 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [Serializable]
-    public class Objective
+    [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
+    public class Objective : ScriptableObject
     {
-        public string ID;
+        [ReadOnly]
+        public string ID = "";
         [TextArea(5, 10)]
-        public string Description;
-        public string NextObjectiveID;
+        public string Description = "";
         public event Action<Objective> OnObjectiveActive;
         public event Action<Objective> OnObjectiveInactive;
         public event Action<Objective> OnObjectiveCompleted;
@@ -19,7 +20,29 @@ namespace SunsetSystems.Journal
         [ReadOnly]
         public bool IsFirst, IsLast;
 
-        public Objective NextObjective;
+        [RequireInterface(typeof(Objective))]
+        public List<UnityEngine.Object> ObjectivesToCancelOnCompletion;
+        [RequireInterface(typeof(Objective))]
+        public List<UnityEngine.Object> NextObjectives;
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(ID))
+                AssignNewID();
+        }
+
+        private void Reset()
+        {
+            AssignNewID();
+        }
+
+        private void AssignNewID()
+        {
+            ID = System.Guid.NewGuid().ToString();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        }
 
         public void MakeActive()
         {
@@ -35,15 +58,8 @@ namespace SunsetSystems.Journal
         {
             MakeInactive();
             OnObjectiveCompleted?.Invoke(this);
-            if (NextObjective != null)
-                NextObjective.MakeActive();
-        }
-
-        public void Complete(Objective nextOverride)
-        {
-            OnObjectiveCompleted?.Invoke(this);
-            if (NextObjective != null)
-                NextObjective.MakeActive();
+            ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
+            NextObjectives.ForEach(o => (o as Objective).MakeActive());
         }
     }
 }

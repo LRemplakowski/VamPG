@@ -10,14 +10,14 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
-        private Dictionary<string, Objective> _currentObjectives = new();
+        private Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
         [SerializeField]
         private List<Quest> _trackedQuests = new();
 
         public List<Quest> ActiveQuests => _activeQuests.Values.ToList();
-        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Main)).ToList();
-        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Side)).ToList();
-        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Info.Category.Equals(QuestCategory.Case)).ToList();
+        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Main)).ToList();
+        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Side)).ToList();
+        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Case)).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
         public static event Action<List<Quest>> OnTrackedQuestsChanged;
@@ -40,7 +40,9 @@ namespace SunsetSystems.Journal
         {
             _activeQuests.Add(quest.ID, quest);
             _trackedQuests.Add(quest);
-            _currentObjectives.Add(quest.ID, quest.Info.FirstObjective);
+            Dictionary<string, Objective> questObjectives = new();
+            quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
+            _currentObjectives.Add(quest.ID, questObjectives);
             OnTrackedQuestsChanged?.Invoke(_trackedQuests);
         }
 
@@ -48,13 +50,26 @@ namespace SunsetSystems.Journal
         {
             if (objective != null && quest != null)
             {
-                if (objective.NextObjective == null)
+                if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
                     // Do nothing, quest will finish and handle cleanup
                     return;
-                if (_currentObjectives.ContainsKey(quest.ID))
-                    _currentObjectives[quest.ID] = objective.NextObjective;
+                if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> currentObjectives))
+                {
+                    if (currentObjectives.ContainsKey(objective.ID))
+                    {
+                        currentObjectives.Clear();
+                        foreach (Objective newObjective in objective.NextObjectives)
+                        {
+                            currentObjectives.Add(newObjective.ID, newObjective);
+                        }
+                    }
+                }
                 else
-                    _currentObjectives.Add(quest.ID, objective);
+                {
+                    Dictionary<string, Objective> questObjectives = new();
+                    quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
+                    _currentObjectives.Add(quest.ID, questObjectives);
+                }
                 OnTrackedQuestsChanged?.Invoke(_trackedQuests);
             }
         }
@@ -62,7 +77,7 @@ namespace SunsetSystems.Journal
         private void OnQuestCompleted(Quest quest)
         {
             if (MoveToCompleteQuests(quest.ID) == false)
-                Debug.LogError("Failed to complete quest " + quest.Info.Name + "! Quest ID: " + quest.ID);
+                Debug.LogError("Failed to complete quest " + quest.Name + "! Quest ID: " + quest.ID);
             OnTrackedQuestsChanged?.Invoke(_trackedQuests);
         }
 
@@ -75,12 +90,12 @@ namespace SunsetSystems.Journal
         {
             if (_completedQuests.ContainsKey(questID))
             {
-                Debug.Log("Quest " + _completedQuests[questID].Info.Name + " has already been completed!");
+                Debug.Log("Quest " + _completedQuests[questID].Name + " has already been completed!");
                 return false;
             }
             if (_activeQuests.ContainsKey(questID))
             {
-                Debug.Log("Quest " + _activeQuests[questID].Info.Name + " has already been started!");
+                Debug.Log("Quest " + _activeQuests[questID].Name + " has already been started!");
                 return false;
             }
             if (QuestDatabase.Instance.TryGetQuest(questID, out Quest quest))
@@ -112,9 +127,15 @@ namespace SunsetSystems.Journal
             return false;
         }
 
-        public bool GetCurrentObjective(string questID, out Objective objective)
+        public bool GetCurrentObjectives(string questID, out List<Objective> objectives)
         {
-            return _currentObjectives.TryGetValue(questID, out objective);
+            objectives = null;
+            if (_currentObjectives.TryGetValue(questID, out Dictionary<string, Objective> currentObjectives))
+            {
+                objectives = currentObjectives.Values.ToList();
+                return true;
+            }
+            return false;
         }
     }
 }

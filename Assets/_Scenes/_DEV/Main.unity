@@ -1903,7 +1903,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &460102596
 GameObject:
@@ -2219,17 +2219,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
---- !u!114 &561659186 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6782112333398131215, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-  m_PrefabInstance: {fileID: 561659185}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fd2661724b5ab24ea2d5da16a31cb27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &564263453
 GameObject:
   m_ObjectHideFlags: 0
@@ -4690,6 +4679,10 @@ GameObject:
   - component: {fileID: 1211551371}
   - component: {fileID: 1211551370}
   - component: {fileID: 1211551369}
+  - component: {fileID: 1211551377}
+  - component: {fileID: 1211551376}
+  - component: {fileID: 1211551375}
+  - component: {fileID: 1211551374}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4729,7 +4722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcffb0a198605474c8a4d1c67c1515fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  context: {fileID: 561659186}
+  context: {fileID: 0}
   umaData: {fileID: 0}
   defaultRendererAsset: {fileID: 0}
   umaRecipe: {fileID: 11400000, guid: 1d97eb041589729479af9716fd5b42b3, type: 2}
@@ -4891,12 +4884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af099b1f4bd5a34b851456c4b291b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterStats: {fileID: 0}
-  owner: {fileID: 0}
-  _health: 0
-  _willpower: 0
-  _humanity: 0
-  _hunger: 0
+  _owner: {fileID: 0}
 --- !u!114 &1211551361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4925,6 +4913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   agent: {fileID: 0}
+  rigBuilder: {fileID: 0}
 --- !u!114 &1211551363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4938,7 +4927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 0}
-  defaultFormation: {fileID: 0}
+  gameManager: {fileID: 0}
 --- !u!114 &1211551364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4951,8 +4940,242 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9eaaaf37e2495140b380cbe19635418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _agent: {fileID: 0}
-  _inventory: {fileID: 0}
+  _data:
+    FirstName: 
+    LastName: 
+    Portrait: {fileID: 0}
+    Faction: 0
+    BodyType: 0
+    CreatureType: 0
+    UmaPresetFileName: 
+    UmaPreset: {fileID: 0}
+    AnimatorControllerAsset: {fileID: 0}
+    Stats:
+      Trackers:
+        health:
+          _maxValue: 0
+          <SuperficialDamage>k__BackingField: 0
+          <AggravatedDamage>k__BackingField: 0
+          _trackerType: 0
+        willpower:
+          _maxValue: 0
+          <SuperficialDamage>k__BackingField: 0
+          <AggravatedDamage>k__BackingField: 0
+          _trackerType: 0
+        hunger:
+          _maxValue: 0
+          <SuperficialDamage>k__BackingField: 0
+          <AggravatedDamage>k__BackingField: 0
+          _trackerType: 0
+        humanity:
+          _maxValue: 0
+          <SuperficialDamage>k__BackingField: 0
+          <AggravatedDamage>k__BackingField: 0
+          _trackerType: 0
+      Clan: 0
+      Generation: 0
+      BloodPotency: 0
+      Attributes:
+        strength:
+          _baseValue: 0
+          _attributeType: 0
+        dexterity:
+          _baseValue: 0
+          _attributeType: 0
+        stamina:
+          _baseValue: 0
+          _attributeType: 0
+        charisma:
+          _baseValue: 0
+          _attributeType: 0
+        manipulation:
+          _baseValue: 0
+          _attributeType: 0
+        composure:
+          _baseValue: 0
+          _attributeType: 0
+        intelligence:
+          _baseValue: 0
+          _attributeType: 0
+        wits:
+          _baseValue: 0
+          _attributeType: 0
+        resolve:
+          _baseValue: 0
+          _attributeType: 0
+        speed:
+          _baseValue: 0
+          _attributeType: 0
+      Skills:
+        athletics:
+          baseValue: 0
+          skillType: 0
+        brawl:
+          baseValue: 0
+          skillType: 0
+        craft:
+          baseValue: 0
+          skillType: 0
+        drive:
+          baseValue: 0
+          skillType: 0
+        firearms:
+          baseValue: 0
+          skillType: 0
+        larceny:
+          baseValue: 0
+          skillType: 0
+        melee:
+          baseValue: 0
+          skillType: 0
+        stealth:
+          baseValue: 0
+          skillType: 0
+        survival:
+          baseValue: 0
+          skillType: 0
+        animalKen:
+          baseValue: 0
+          skillType: 0
+        etiquette:
+          baseValue: 0
+          skillType: 0
+        insight:
+          baseValue: 0
+          skillType: 0
+        intimidation:
+          baseValue: 0
+          skillType: 0
+        leadership:
+          baseValue: 0
+          skillType: 0
+        performance:
+          baseValue: 0
+          skillType: 0
+        persuasion:
+          baseValue: 0
+          skillType: 0
+        streetwise:
+          baseValue: 0
+          skillType: 0
+        subterfuge:
+          baseValue: 0
+          skillType: 0
+        academics:
+          baseValue: 0
+          skillType: 0
+        awarness:
+          baseValue: 0
+          skillType: 0
+        finance:
+          baseValue: 0
+          skillType: 0
+        investigation:
+          baseValue: 0
+          skillType: 0
+        medicine:
+          baseValue: 0
+          skillType: 0
+        occult:
+          baseValue: 0
+          skillType: 0
+        politics:
+          baseValue: 0
+          skillType: 0
+        science:
+          baseValue: 0
+          skillType: 0
+        technology:
+          baseValue: 0
+          skillType: 0
+      Disciplines:
+        animalism:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        auspex:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        bloodSorcery:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        celerity:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        dominate:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        fortitude:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        obfuscate:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        oblivion:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        potence:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        presence:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        protean:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        athletics:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        firearms:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        melee:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        streetwise:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        insight:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        medicine:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        larceny:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+        intimidation:
+          baseValue: 0
+          disciplineType: 0
+          knownPowers: []
+    Equipment:
+      equipmentSlots:
+        m_keys: []
+        m_values: []
+    UseEquipmentPreset: 0
+  _config: {fileID: 0}
+  <Agent>k__BackingField: {fileID: 0}
+  <NavMeshObstacle>k__BackingField: {fileID: 0}
+  <StatsManager>k__BackingField: {fileID: 0}
+  <CombatBehaviour>k__BackingField: {fileID: 0}
+  <SpellbookManager>k__BackingField: {fileID: 0}
   _currentGridPosition: {fileID: 0}
 --- !u!195 &1211551365
 NavMeshAgent:
@@ -5024,7 +5247,7 @@ Transform:
   - {fileID: 322947990}
   - {fileID: 291618031}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1211551369
 MonoBehaviour:
@@ -5066,6 +5289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _raycastOrigin: {fileID: 291618031}
   defaultRaycastOriginY: 1.5
+  <LineRenderer>k__BackingField: {fileID: 0}
 --- !u!114 &1211551372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5091,6 +5315,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf08755107dffdd43a5a546e0eba8bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1211551374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211551355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a877a7204afd7d42a2140eb00ed8ea9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _owner: {fileID: 0}
+--- !u!114 &1211551375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211551355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RigLayers: []
+  m_Effectors: []
+--- !u!114 &1211551376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211551355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ff16ae132867894590b7c5a3bb9894d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!208 &1211551377
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211551355}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1220148300
 GameObject:
   m_ObjectHideFlags: 0
@@ -5218,7 +5497,7 @@ Transform:
   - {fileID: 773745698}
   - {fileID: 2056685891}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1277532433
 GameObject:
@@ -5469,6 +5748,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1941745494}
     m_Modifications:
+    - target: {fileID: 3283411345702994867, guid: b5bfd43f1ba22df458478924efada287, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3283411345702994867, guid: b5bfd43f1ba22df458478924efada287, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715397709382494777, guid: b5bfd43f1ba22df458478924efada287, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715397709382494777, guid: b5bfd43f1ba22df458478924efada287, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8173577918115451037, guid: b5bfd43f1ba22df458478924efada287, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5936,7 +6231,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1529498838
 MonoBehaviour:
@@ -7325,7 +7620,7 @@ RectTransform:
   - {fileID: 1413153619}
   - {fileID: 1329782903}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -7876,7 +8171,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 55.61, y: 77.2, z: 159.9}
 --- !u!1 &2039073881
 GameObject:
@@ -9170,6 +9465,22 @@ PrefabInstance:
     - target: {fileID: 7000871812692132219, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000871813110256234, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.000000059604645
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000871813110256234, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.000000044703484
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000871813110256234, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.46554875
+      objectReference: {fileID: 0}
+    - target: {fileID: 7000871813110256234, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.88502234
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}

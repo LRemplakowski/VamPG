@@ -47,7 +47,8 @@ namespace SunsetSystems.Dialogue
         // this option" handler.
         public void OnSubmit(BaseEventData eventData)
         {
-            InvokeOptionSelected();
+            if (interactable)
+                InvokeOptionSelected();
         }
 
         public void InvokeOptionSelected()
@@ -64,7 +65,8 @@ namespace SunsetSystems.Dialogue
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            InvokeOptionSelected();
+            if (interactable)
+                InvokeOptionSelected();
         }
 
         // If we mouse-over, we're telling the UI system that this element is

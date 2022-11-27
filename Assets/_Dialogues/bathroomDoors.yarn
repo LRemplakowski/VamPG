@@ -31,6 +31,8 @@ position: 248,2
     Desiree's Inner Monologue: Ow! What the fuck!?
     <<DestroyBathroomDoors>>
     <<endif>>
+    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "ENTER_BATHROOM">>
 -> {$pcName}: \[Unlock the door.\] <<if $hasBathroomDoorKey == true>>
     <<OpenBathroomDoors>>
+    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "ENTER_BATHROOM">>
 ===

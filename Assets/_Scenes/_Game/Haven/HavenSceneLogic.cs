@@ -2,10 +2,9 @@ using Redcode.Awaiting;
 using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities.Interactable;
+using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
-using SunsetSystems.Utils;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
@@ -20,14 +19,20 @@ namespace SunsetSystems.Loading
         private string _wakeUpStartNode;
         [SerializeField, ES3NonSerializable]
         private Transform _startPosition;
-        [Header("Scene start")]
+        [Header("Main room")]
         [SerializeField]
         private GameObject _desireeOnBed;
+        [SerializeField]
+        private GameObject _handgun;
+        [SerializeField]
+        private GameObject _crowbar;
+        [SerializeField]
+        private Weapon _handgunItem;
         [Header("Bathroom")]
         [SerializeField]
-        private Doors _havenDoors, _bathroomDoors;
-        [SerializeField]
         private DialogueEntity _bathroomDoorsDialogue;
+        [SerializeField]
+        private Doors _havenDoors, _bathroomDoors;
 
         protected override void Awake()
         {
@@ -79,11 +84,14 @@ namespace SunsetSystems.Loading
             {
                 HavenSceneLogic._bathroomDoorsDialogue.Interactable = false;
                 HavenSceneLogic._bathroomDoors.Interactable = true;
+                HavenSceneLogic._bathroomDoors.Interact();
             }
 
             [YarnCommand("DestroyBathroomDoors")]
             public static void DestroyBathroomDoors()
             {
+                HavenSceneLogic._bathroomDoors.Interactable = true;
+                HavenSceneLogic._bathroomDoors.Interact();
                 Destroy(HavenSceneLogic._bathroomDoors.gameObject);
             }
 
@@ -91,6 +99,19 @@ namespace SunsetSystems.Loading
             public static void ActivateApartmentDoorInteraction()
             {
                 HavenSceneLogic._havenDoors.Interactable = true;
+            }
+
+            [YarnCommand("HandleGunTaken")]
+            public static void HandleGunTaken()
+            {
+                HavenSceneLogic._handgun.gameObject.SetActive(false);
+                InventoryManager.PlayerInventory.AddItem(new(HavenSceneLogic._handgunItem));
+            }
+
+            [YarnCommand("HandleCrowbarTaken")]
+            public static void HandleCrwobarTaken()
+            {
+                HavenSceneLogic._crowbar.gameObject.SetActive(false);
             }
         }
     }

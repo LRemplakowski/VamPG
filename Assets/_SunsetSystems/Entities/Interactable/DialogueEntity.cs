@@ -8,8 +8,8 @@ namespace SunsetSystems.Entities.Interactable
     {
         [SerializeField]
         private YarnProject _dialogueProject;
-        [SerializeField]
-        private string _entryNode;
+        [field: SerializeField]
+        public string EntryNode { get; set; }
         [SerializeField]
         private bool _fireOnce;
         private bool _fired;
@@ -18,7 +18,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_fireOnce && _fired)
                 return;
-            DialogueManager.StartDialogue(_entryNode, _dialogueProject);
+            DialogueManager.StartDialogue(EntryNode, _dialogueProject);
             _fired = true;
         }
     }

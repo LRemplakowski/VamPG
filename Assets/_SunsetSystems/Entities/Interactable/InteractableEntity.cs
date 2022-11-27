@@ -6,9 +6,11 @@ using UnityEngine.Events;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public abstract class InteractableEntity : Entity, IInteractable
+    public abstract class InteractableEntity : Entity, IInteractable, INameplateReciever
     {
-        [field:SerializeField]
+        [SerializeField]
+        private Collider _interactionCollider;
+        [field: SerializeField]
         public GameObject HoverHighlight { get; set; }
 
         private bool _isHoveredOver;
@@ -30,7 +32,21 @@ namespace SunsetSystems.Entities.Interactable
             set => _interactionDistance = value;
         }
         public Creature TargetedBy { get; set; }
-        public bool Interacted { get; set; }
+
+        private bool _interacted;
+        public bool Interacted
+        {
+            get
+            {
+                return _interacted;
+            }
+            set
+            {
+                if (_interactableOnce || _interacted)
+                    return;
+                _interacted = value;
+            }
+        }
 
         [SerializeField]
         protected Transform _interactionTransform;
@@ -52,8 +68,16 @@ namespace SunsetSystems.Entities.Interactable
             {
                 _interactable = value;
                 this.enabled = value;
+                _interactionCollider.enabled = value;
             }
         }
+
+        [SerializeField]
+        private string _nameplateName;
+        public string NameplateText => _nameplateName;
+
+        public Vector3 NameplateWorldPosition => transform.position + Vector3.up;
+
         [SerializeField]
         private bool _interactableOnce = false;
 
@@ -65,6 +89,8 @@ namespace SunsetSystems.Entities.Interactable
             {
                 InteractionTransform = this.transform;
             }
+            if (_interactionCollider == null)
+                _interactionCollider = GetComponentInChildren<Collider>();
         }
 
         protected virtual void Awake()
@@ -78,11 +104,15 @@ namespace SunsetSystems.Entities.Interactable
         protected virtual void Start()
         {
             enabled = Interactable;
+            if (_interactionCollider == null)
+                _interactionCollider = GetComponentInChildren<Collider>();
+            _interactionCollider.enabled = Interactable;
         }
 
         public void Interact()
         {
-            if (!Interactable)
+            IsHoveredOver = false;
+            if (!Interactable || (_interactableOnce && Interacted))
                 return;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             HandleInteraction();
@@ -103,7 +133,7 @@ namespace SunsetSystems.Entities.Interactable
 
         private void HandleHoverHiglight()
         {
-            if (HoverHighlight != null)
+            if (HoverHighlight != null && Interactable)
                 HoverHighlight.SetActive(IsHoveredOver);
         }
     }

@@ -1,4 +1,4 @@
-using System;
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -15,7 +15,6 @@ namespace SunsetSystems.Bootstraper
         private static readonly List<string> _cachedScenes = new();
         public static List<string> CachedScenes => new(_cachedScenes);
         private static bool rebuildCache = true;
-#if UNITY_EDITOR
         static LoadedScenesCache()
         {
             EditorSceneManager.sceneOpened += OnSceneOpened;
@@ -46,6 +45,6 @@ namespace SunsetSystems.Bootstraper
                     _cachedScenes.Add(sceneAtIndex.path);
             }
         }
-#endif
     }
 }
+#endif

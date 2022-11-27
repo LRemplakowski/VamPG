@@ -127,7 +127,10 @@ namespace SunsetSystems.Input
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
                 List<Creature> creatures = new();
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                IInteractable interactable = hit.collider.gameObject
+                        .GetComponents<IInteractable>()?
+                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                if (interactable != null)
                 {
                     mainCharacter.ClearAllActions();
                     mainCharacter.InteractWith(interactable);
@@ -263,17 +266,25 @@ namespace SunsetSystems.Input
 
             void HandleExplorationPointerPosition(RaycastHit hit)
             {
+                IInteractable interactable = null;
                 if (lastHit != hit.collider)
                 {
-                    if (lastHit.gameObject.TryGetComponent(out IInteractable previousInteractable))
+                    interactable = lastHit.gameObject
+                        .GetComponents<IInteractable>()?
+                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                    if (interactable != null)
                     {
-                        previousInteractable.IsHoveredOver = false;
+                        interactable.IsHoveredOver = false;
+                        interactable = null;
                     }
                     lastHit = hit.collider;
                 }
-                if (lastHit.gameObject.TryGetComponent(out IInteractable currentInteractable))
+                interactable = lastHit.gameObject
+                    .GetComponents<IInteractable>()?
+                    .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
+                if (interactable != null)
                 {
-                    currentInteractable.IsHoveredOver = true;
+                    interactable.IsHoveredOver = true;
                 }
             }
 

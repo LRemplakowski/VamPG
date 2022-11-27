@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionBarUI : ExposableMonobehaviour
+public class ActionBarUI : MonoBehaviour
 {
     private SelectedBarAction selected;
     private static readonly SelectedBarAction DEFAULT = new SelectedBarAction(BarAction.MOVE);
@@ -35,6 +35,7 @@ public class ActionBarUI : ExposableMonobehaviour
         {
             BarAction.MOVE => new SelectedBarAction(BarAction.MOVE),
             BarAction.ATTACK => new SelectedBarAction(BarAction.ATTACK),
+            BarAction.SELECT_TARGET => new SelectedBarAction(BarAction.SELECT_TARGET),
             _ => DEFAULT,
         };
         selected = newSelected;

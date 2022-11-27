@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8148909507334410362}
   - component: {fileID: 8148909507334410365}
+  - component: {fileID: 9139583844708857982}
+  - component: {fileID: 4343234768053571982}
   m_Layer: 0
   m_Name: PartyManager
   m_TagString: Untagged
@@ -27,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,4 +46,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03155cba403fbca4698e0cf0e4624f9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  partyPortraits: {fileID: 0}
+  _activeParty:
+    m_keys: []
+    m_values: []
+  _creatureDataCache:
+    m_keys: []
+    m_values: []
+  _unique: {fileID: 9139583844708857982}
+--- !u!114 &9139583844708857982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148909507334410364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
+--- !u!114 &4343234768053571982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148909507334410364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tag: PARTY_MANAGER

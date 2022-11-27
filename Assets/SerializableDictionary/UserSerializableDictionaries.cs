@@ -6,6 +6,7 @@ using SunsetSystems.Journal;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Experience;
 
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> { }
@@ -43,3 +44,12 @@ public class StringVector3Dictionary : SerializableDictionary<string, Vector3> {
 
 [Serializable]
 public class StringEquipmentSlotDisplayDictionary : SerializableDictionary<string, EquipmentSlotDisplay> { }
+
+[Serializable]
+public class StringExperienceDataDictionary : SerializableDictionary<string, ExperienceData> { }
+
+[Serializable]
+public class StringCreatureConfigDictionary : SerializableDictionary<string, CreatureConfig> { }
+
+[Serializable]
+public class StringObjectiveDictionary : SerializableDictionary<string, Objective> { }

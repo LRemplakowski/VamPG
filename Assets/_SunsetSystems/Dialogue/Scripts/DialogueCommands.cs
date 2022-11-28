@@ -1,4 +1,5 @@
 using SunsetSystems.Journal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Yarn.Unity;
@@ -20,6 +21,12 @@ namespace SunsetSystems.Dialogue
             {
                 objectives.Find(o => o.ID.Equals(objectiveID))?.Complete();
             }
+        }
+
+        [YarnCommand("ModifyHunger")]
+        public static void ModifyHunger(string characterID, int value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

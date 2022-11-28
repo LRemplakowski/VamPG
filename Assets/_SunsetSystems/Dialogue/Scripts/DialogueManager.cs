@@ -1,3 +1,4 @@
+using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ namespace SunsetSystems.Dialogue
             {
                 cachedRunner.dialogueViews.ToList().ForEach(view => (view as IPortraitUpdateReciever).InitializeSpeakerPhoto(speakerID));
             }
+            GameManager.CurrentState = GameState.Conversation;
             return true;
         }
 
@@ -78,8 +80,9 @@ namespace SunsetSystems.Dialogue
                 _dialogueRunner.OnViewRequestedInterrupt();
         }
 
-        public void DisableViews()
+        public void CleanupAfterDialogue()
         {
+            GameManager.CurrentState = GameState.Exploration;
             _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));
         }
     }

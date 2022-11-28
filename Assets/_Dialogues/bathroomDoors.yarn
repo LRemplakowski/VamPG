@@ -6,7 +6,7 @@ Narrator: \[The door knob doesn't budge. It's locked. Of course from the inside 
 <<jump bathroomDoorDialogue>>
 <<endif>>
 Desiree's Inner Monologue: Where did I put that key?
-<<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "GRAB_MEDS">>
+<<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "759f72f2-7cd7-499a-a924-5c6dc77d3366">>
 <<set $bathroomDoorInteractedWith to true>>
 <<jump bathroomDoorDialogue>>
 ===
@@ -31,8 +31,8 @@ position: 248,2
     Desiree's Inner Monologue: Ow! What the fuck!?
     <<DestroyBathroomDoors>>
     <<endif>>
-    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "ENTER_BATHROOM">>
+    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "71935f6c-2bca-4c76-8237-f66cfe07a022">>
 -> {$pcName}: \[Unlock the door.\] <<if $hasBathroomDoorKey == true>>
     <<OpenBathroomDoors>>
-    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "ENTER_BATHROOM">>
+    <<CompleteObjective "05d2a735-8b59-48bb-904a-b11e8f5d8dc5" "71935f6c-2bca-4c76-8237-f66cfe07a022">>
 ===

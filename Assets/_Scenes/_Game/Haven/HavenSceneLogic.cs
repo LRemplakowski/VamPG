@@ -28,6 +28,10 @@ namespace SunsetSystems.Loading
         private GameObject _crowbar;
         [SerializeField]
         private Weapon _handgunItem;
+        [SerializeField]
+        private DialogueEntity _phone;
+        [SerializeField]
+        private string landlordDialogueEntryNode;
         [Header("Bathroom")]
         [SerializeField]
         private DialogueEntity _bathroomDoorsDialogue;
@@ -109,9 +113,16 @@ namespace SunsetSystems.Loading
             }
 
             [YarnCommand("HandleCrowbarTaken")]
-            public static void HandleCrwobarTaken()
+            public static void HandleCrowbarTaken()
             {
                 HavenSceneLogic._crowbar.gameObject.SetActive(false);
+            }
+
+            [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
+            public static void SetPhoneDialogueToLandlordDialogue()
+            {
+                HavenSceneLogic._phone.EntryNode = HavenSceneLogic.landlordDialogueEntryNode;
+                HavenSceneLogic._phone.ResetInteraction();
             }
         }
     }

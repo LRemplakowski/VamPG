@@ -149,5 +149,10 @@ namespace SunsetSystems.Entities.Interactable
             if (HoverHighlight != null && Interactable)
                 HoverHighlight.SetActive(IsHoveredOver);
         }
+
+        public void ResetInteraction()
+        {
+            _interacted = false;
+        }
     }
 }

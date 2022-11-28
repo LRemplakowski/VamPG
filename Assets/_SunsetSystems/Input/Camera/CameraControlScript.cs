@@ -1,5 +1,6 @@
 ﻿using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Constants;
+using SunsetSystems.Game;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
 using System.EnterpriseServices;
@@ -74,6 +75,8 @@ namespace SunsetSystems.Input.CameraControl
                 _moveDirection = Vector3.zero;
             }
             _moveDirection = new Vector3(value.x, 0, value.y);
+            if (GameManager.CurrentState == GameState.Conversation)
+                _moveDirection = Vector3.zero;
         }
 
         public void OnRotate(InputAction.CallbackContext context)
@@ -81,6 +84,8 @@ namespace SunsetSystems.Input.CameraControl
             if (!(context.performed || context.canceled))
                 return;
             _rotationDirection = -context.ReadValue<Vector2>().x;
+            if (GameManager.CurrentState == GameState.Conversation)
+                _rotationDirection = 0;
         }
 
         public void ForceToPosition(Vector3 position)

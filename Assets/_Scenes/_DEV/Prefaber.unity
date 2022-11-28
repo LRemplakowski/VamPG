@@ -9019,6 +9019,7 @@ MonoBehaviour:
     - _recipeName: hair_long_f01_Recipe
       _compatibleRaces:
       - VampireFemale
+      - VampireMale
     - _recipeName: mini_dress01_Recipe
       _compatibleRaces:
       - VampireFemale
@@ -9318,6 +9319,26 @@ MonoBehaviour:
       Raw: 0
       valuesConverted: 0
     - name: clothing_waist
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: headgear
       channelMask:
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
@@ -14587,7 +14608,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710980115}
-  m_LocalRotation: {x: -0.009375309, y: -0.036781717, z: 0.014788621, w: 0.9991699}
+  m_LocalRotation: {x: -0.00937531, y: -0.036781717, z: 0.014788622, w: 0.9991699}
   m_LocalPosition: {x: -0.05342067, y: -0.000000022351742, z: 0.000000056810677}
   m_LocalScale: {x: 0.9999998, y: 0.99999994, z: 0.99999917}
   m_ConstrainProportionsScale: 0
@@ -17539,6 +17560,9 @@ MonoBehaviour:
     - _recipeName: hair_Recipe
       _compatibleRaces:
       - VampireMale
+    - _recipeName: eye_color_m_Recipe
+      _compatibleRaces:
+      - VampireMale
   raceAnimationControllers:
     defaultAnimationController: {fileID: 9100000, guid: eb280940c811fab4a9e3ddf09381c343, type: 2}
     animators: []
@@ -17584,7 +17608,7 @@ MonoBehaviour:
       valuesConverted: 0
     - name: Eyes
       channelMask:
-      - {r: 0.7122642, g: 0.8831073, b: 1, a: 1}
+      - {r: 0.8537736, g: 0.9398585, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       channelAdditiveMask:
@@ -17624,6 +17648,46 @@ MonoBehaviour:
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothes_chest
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: headgear
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}
@@ -23337,6 +23401,7 @@ MonoBehaviour:
     - _recipeName: hair_long_f01_Recipe
       _compatibleRaces:
       - VampireFemale
+      - VampireMale
     - _recipeName: wide_belt01_Recipe
       _compatibleRaces:
       - VampireFemale
@@ -23349,6 +23414,7 @@ MonoBehaviour:
     - _recipeName: martens01_Recipe
       _compatibleRaces:
       - VampireFemale
+      - VampireMale
   raceAnimationControllers:
     defaultAnimationController: {fileID: 9100000, guid: 52d92d4ab84908c4e99c4af208ee2b68, type: 2}
     animators: []
@@ -23631,6 +23697,26 @@ MonoBehaviour:
       Raw: 0
       valuesConverted: 0
     - name: clothing_waist
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: headgear
       channelMask:
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
@@ -32920,6 +33006,7 @@ MonoBehaviour:
     - _recipeName: sneakers_Recipe
       _compatibleRaces:
       - VampireFemale
+      - VampireMale
     - _recipeName: mini_skirt_Recipe
       _compatibleRaces:
       - VampireFemale
@@ -32929,6 +33016,7 @@ MonoBehaviour:
     - _recipeName: afro_hair_Recipe
       _compatibleRaces:
       - VampireFemale
+      - VampireMale
     - _recipeName: female_facial_hair_recipe
       _compatibleRaces:
       - VampireFemale
@@ -33339,6 +33427,26 @@ MonoBehaviour:
     - name: Eyes
       channelMask:
       - {r: 0.33962262, g: 0.2664985, b: 0.25471696, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: headgear
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
@@ -73439,6 +73547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1341362727178656090, guid: 784c8835ff6ef444c909daf7e07b0800, type: 3}
+    - {fileID: 3912176740158611260, guid: 784c8835ff6ef444c909daf7e07b0800, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 784c8835ff6ef444c909daf7e07b0800, type: 3}
 --- !u!4 &6799230908704025688
 Transform:

@@ -16,12 +16,12 @@ namespace SunsetSystems.Journal.UI
 
         private void OnEnable()
         {
-            QuestJournal.OnTrackedQuestsChanged += UpdateTrackedQuests;
+            QuestJournal.OnActiveQuestsChanged += UpdateTrackedQuests;
         }
 
         private void OnDisable()
         {
-            QuestJournal.OnTrackedQuestsChanged -= UpdateTrackedQuests;
+            QuestJournal.OnActiveQuestsChanged -= UpdateTrackedQuests;
         }
 
         private void Start()

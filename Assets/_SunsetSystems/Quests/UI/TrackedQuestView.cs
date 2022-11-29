@@ -15,6 +15,8 @@ namespace SunsetSystems.Journal.UI
         private TextMeshProUGUI _title;
         [SerializeField]
         private TextMeshProUGUI _objectivePrefab;
+        [SerializeField]
+        private Transform _objectivePoolParent;
 
         private List<TextMeshProUGUI> _textPool = new();
 
@@ -28,7 +30,12 @@ namespace SunsetSystems.Journal.UI
                 {
                     TextMeshProUGUI textObject = GetTMPFromPool();
                     textObject.text = objective.Description;
+                    textObject.gameObject.SetActive(true);
                 }
+            }
+            else
+            {
+                Debug.LogError($"No objectives for quest {dataProvider.Data.Name}!");
             }
         }
 
@@ -39,7 +46,8 @@ namespace SunsetSystems.Journal.UI
                 if (text != null && text.IsActive() == false)
                     return text;
             }
-            TextMeshProUGUI newText = Instantiate(_objectivePrefab, transform);
+            Debug.Log("Foo");
+            TextMeshProUGUI newText = Instantiate(_objectivePrefab, _objectivePoolParent);
             newText.gameObject.SetActive(false);
             _textPool.Add(newText);
             return newText;

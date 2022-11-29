@@ -15,7 +15,6 @@ namespace SunsetSystems.Entities.Characters
         public Faction Faction;
         public BodyType BodyType;
         public CreatureType CreatureType;
-        public string UmaPresetFileName;
         public TextAsset UmaPreset;
         public RuntimeAnimatorController AnimatorControllerAsset;
         public StatsData Stats;
@@ -30,7 +29,6 @@ namespace SunsetSystems.Entities.Characters
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
-            UmaPresetFileName = config.UmaPresetFilename;
             UmaPreset = config.UmaPreset;
             AnimatorControllerAsset = config.AnimatorController;
             Stats = new(config.StatsAsset);

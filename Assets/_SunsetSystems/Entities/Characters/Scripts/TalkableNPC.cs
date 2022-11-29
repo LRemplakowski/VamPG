@@ -7,6 +7,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class TalkableNPC : AbstractNPC, IInteractable
     {
+        public override string NameplateText { get => _showNameplate && Interactable ? Data.FullName : string.Empty; }
         [SerializeField]
         protected GameObject _hoverHighlight;
         public GameObject HoverHighlight
@@ -46,6 +47,20 @@ namespace SunsetSystems.Entities.Characters
         }
 
         [SerializeField]
+        protected bool _interactable;
+        public bool Interactable 
+        { 
+            get
+            {
+                return _interactable;
+            } 
+            set
+            {
+                _interactable = value;
+            }
+        }
+
+        [SerializeField]
         private YarnProject dialogueProject;
         [SerializeField]
         private string _startNode;
@@ -69,7 +84,10 @@ namespace SunsetSystems.Entities.Characters
 
         public void Interact()
         {
-            DialogueManager.StartDialogue(_startNode, dialogueProject);
+            if (!Interactable)
+                return;
+            DialogueHelper.SetSpeakerID(Data.ID);
+            DialogueManager.Instance.StartDialogue(_startNode, dialogueProject);
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             Interacted = true;
             TargetedBy = null;

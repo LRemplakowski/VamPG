@@ -1,0 +1,44 @@
+﻿title: sink
+tags:
+---
+<<StartQuest "FIX_SINK">>
+<<if $vomited == true>>
+{$narrator}: \[You forgot the sink was already clogged and now chunks of red liquid float in the old, soapy dish water. A part of you worries it's blood, but it's not like you can afford a visit to the ER, so there's no use in worrying about it.\] #line:07ac79f 
+{$innerVoice}: Probably just wine. #line:0d75167 
+<<else>>
+{$narrator}: \[The sink is clogged. Again.\] #line:0c8ddc6 
+<<endif>>
+-> {$pcName}: \[Intelligence 2\] \[Repair it yourself.\] #line:046b80f 
+    <<jump sinkRepair>>
+-> {$pcName}: I better call the landlord. \[Walk away.\] #line:015067a 
+    <<SetPhoneDialogueToLandlordDialogue>>
+===
+title: sinkRepair
+---
+<<if Roll("Intelligence") >= 2 + $sinkRepairdModifier>>
+{$narrator}: \[Under the sink, as you open up the U-Pipe, cold blood squirts you in the face.\] #success #line:04431e1 
+<<else>>
+{$narrator}: \[The pipe breaks off into your hand, destroying the sink in the process. What is undeniably backed-up blood and whatever else was clogging the sink sprays you leaving you soaked.\] #failure #line:039abba 
+<<set $bloodsoaked to true>>
+<<endif>>
+{$narrator}: \[You find the source of the clog, the Bathroom Key and an eyeball.\] #line:0feb743 
+<<set $hasBathroomDoorKey to true>>
+<<set $police to true>>
+<<CompleteObjective "FIX_SINK" "REPAIR_SINK">>
+{$innerVoice}: What the fuck? #line:08dd418 
+-> {$pcName}: \[Throw the eye back in the sink.\] #line:006f161 
+    {$narrator}: \[A wet PLOP as it flops into the bloodstained sink.\] #line:0ed08e4 
+    <<jump needShower>>
+-> {$pcName}: \[Eat the eye.\] #line:0bd5b15 
+    {$narrator}: \[Before you can stop yourself, you fit the whole eyeball into your mouth. Chewing on it: a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.\] #line:0002fbf 
+    {$narrator}: \[You stare at your now empty, bloodstained palm. A part of you feels like bursting into tears.\] #line:04aaf45 
+    {$innerVoice}: ... #line:0a53d04 
+    {$innerVoice}: What is happening to me? #line:0bf3876 
+    {$innerVoice}: ... #line:0ecdb57 
+    <<jump needShower>>
+===
+title: needShower
+---
+{$pcName}: I need a shower. #line:0278713 
+-> {$pcName}: Continue. #line:0dd2bf7 
+===

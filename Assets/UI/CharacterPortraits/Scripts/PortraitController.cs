@@ -9,26 +9,16 @@ namespace UI.CharacterPortraits
     {
         [SerializeField]
         private PortraitIcon potraitIcon;
-        [SerializeField]
-        private HealthTrackerUI healthTracker;
-        [SerializeField]
-        private HungerTrackerUI hungerTracker;
 
         private void Start()
         {
             if (potraitIcon == null)
                 potraitIcon = GetComponentInChildren<PortraitIcon>();
-            if (healthTracker == null)
-                healthTracker = GetComponentInChildren<HealthTrackerUI>();
-            if (hungerTracker == null)
-                hungerTracker = GetComponentInChildren<HungerTrackerUI>();
         }
 
         internal void InitPotrait(CreatureUIData data)
         {
             potraitIcon.SetIcon(data.portrait);
-            healthTracker.SetHealthData(data.healthData);
-            hungerTracker.SetCurrentHunger(data.hunger);
         }    
     }
 }

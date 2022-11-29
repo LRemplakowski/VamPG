@@ -13,11 +13,13 @@ namespace SunsetSystems.Entities
     {
         [SerializeField]
         private StringCreatureConfigDictionary _creatureRegistry = new();
+        [SerializeField]
         private StringStringDictionary _accessorRegistry = new();
 
         public bool TryGetConfig(string creatureName, out CreatureConfig config)
         {
             config = null;
+            creatureName = creatureName.ToPascalCase();
             if (_accessorRegistry.ContainsKey(creatureName))
             {
                 return _creatureRegistry.TryGetValue(_accessorRegistry[creatureName], out config);
@@ -33,7 +35,7 @@ namespace SunsetSystems.Entities
                 return false;
             }
             _creatureRegistry.Add(config.DatabaseID, config);
-            _accessorRegistry.Add(config.FullName, config.DatabaseID);
+            _accessorRegistry.Add(config.FullName.ToPascalCase(), config.DatabaseID);
             return true;
         }
 
@@ -42,7 +44,7 @@ namespace SunsetSystems.Entities
             return _creatureRegistry.ContainsKey(config.DatabaseID);
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
             List<string> keysToDelete = new();
             foreach (string key in _creatureRegistry.Keys)
@@ -57,7 +59,7 @@ namespace SunsetSystems.Entities
                 if (keysToDelete.Contains(_accessorRegistry[key]))
                     accessorKeysToDelete.Add(key);
             }
-            accessorKeysToDelete.ForEach(key => _accessorRegistry.Remove(key));
+            accessorKeysToDelete.ForEach(key => _accessorRegistry.Remove(key.ToPascalCase()));
         }
 
         public void UnregisterConfig(CreatureConfig config)

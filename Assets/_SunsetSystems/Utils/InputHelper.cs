@@ -11,7 +11,7 @@ namespace SunsetSystems.Utils.Input
             if (m_PointerData == null)
                 m_PointerData = new PointerEventData(EventSystem.current);
             m_PointerData.position = position;
-            EventSystem.current.RaycastAll(m_PointerData, m_RaycastResults);
+            EventSystem.current?.RaycastAll(m_PointerData, m_RaycastResults);
             results = m_RaycastResults;
             return m_RaycastResults.Count > 0;
         }

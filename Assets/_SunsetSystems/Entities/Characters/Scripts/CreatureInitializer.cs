@@ -96,6 +96,7 @@ namespace SunsetSystems.Entities.Characters
             creature = faction switch
             {
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
+                Faction.Dialogue => creatureObject.AddComponent<TalkableNPC>(),
                 _ => creatureObject.AddComponent<DefaultNPC>(),
             };
         }
@@ -105,7 +106,7 @@ namespace SunsetSystems.Entities.Characters
             return faction switch
             {
                 Faction.PlayerControlled => !creature.GetType().IsAssignableFrom(typeof(PlayerControlledCharacter)),
-                _ => !creature.GetType().IsAssignableFrom(typeof(DefaultNPC)),
+                _ => !creature.GetType().IsAssignableFrom(typeof(AbstractNPC)),
             };
         }
 
@@ -113,10 +114,10 @@ namespace SunsetSystems.Entities.Characters
         {
             dca.loadPathType = DynamicCharacterAvatar.loadPathTypes.Resources;
             dca.loadPath = "UMAPresets/";
-            dca.loadFilename = data.UmaPresetFileName;
-            dca.loadFileOnStart = false;
+            dca.loadFilename = data.UmaPreset.name;
+            dca.loadFileOnStart = true;
             dca.raceAnimationControllers.defaultAnimationController = data.AnimatorControllerAsset;
-            dca.saveFilename = data.UmaPresetFileName;
+            dca.saveFilename = data.UmaPreset.name;
             dca.savePathType = DynamicCharacterAvatar.savePathTypes.Resources;
             dca.savePath = "UMAPresets/";
             dca.umaData = dca.GetComponent<UMAData>();
@@ -143,9 +144,9 @@ namespace SunsetSystems.Entities.Characters
 
         private static void InitializeNavMeshAgent(NavMeshAgent navMeshAgent)
         {
-            navMeshAgent.speed = 4.0f;
+            navMeshAgent.speed = 2f;
             navMeshAgent.angularSpeed = 360.0f;
-            navMeshAgent.acceleration = 8.0f;
+            navMeshAgent.acceleration = 10.0f;
         }
 
         private static void InitializeNavMeshObstacle(NavMeshObstacle navMeshObstacle)

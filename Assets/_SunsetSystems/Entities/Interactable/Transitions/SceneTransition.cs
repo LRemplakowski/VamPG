@@ -24,7 +24,7 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private string _targetBoundingBoxTag;
         [SerializeField]
-        private AreaEntryPoint _targetEntryPoint;
+        private Waypoint _targetEntryPoint;
         [SerializeField]
         private BoundingBox _targetBoundingBox;
         [SerializeField]

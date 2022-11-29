@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using NaughtyAttributes;
 using UnityEditor;
@@ -80,3 +81,4 @@ namespace SunsetSystems
         }
     }
 }
+#endif

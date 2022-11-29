@@ -7,6 +7,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class TalkableNPC : AbstractNPC, IInteractable
     {
+        public override string NameplateText { get => _showNameplate && Interactable ? Data.FullName : string.Empty; }
         [SerializeField]
         protected GameObject _hoverHighlight;
         public GameObject HoverHighlight

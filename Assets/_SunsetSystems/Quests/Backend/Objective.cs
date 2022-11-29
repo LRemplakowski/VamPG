@@ -36,7 +36,6 @@ namespace SunsetSystems.Journal
 
         public void Complete()
         {
-            MakeInactive();
             OnObjectiveCompleted?.Invoke(this);
             ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             NextObjectives.ForEach(o => (o as Objective).MakeActive());

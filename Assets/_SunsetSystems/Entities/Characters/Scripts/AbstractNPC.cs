@@ -8,10 +8,12 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private Transform _lineTarget;
 
-        public string NameplateText { get => Data.FullName; }
+        public virtual string NameplateText { get => _showNameplate ? Data.FullName : string.Empty; }
         public Vector3 NameplateWorldPosition => new(transform.position.x, transform.position.y + _nameplateOffset, transform.position.z);
         [SerializeField]
-        private float _nameplateOffset = 2.5f;
+        protected float _nameplateOffset = 2.5f;
+        [SerializeField]
+        protected bool _showNameplate = true;
 
         public Transform LineTarget
         {

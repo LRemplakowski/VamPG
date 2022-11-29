@@ -82,20 +82,22 @@ namespace SunsetSystems.Journal
             }
         }
 
+        //TODO Rework this to sub recursively in quest begin
         private void OnObjectiveChanged(Objective objective)
         {
+            Debug.Log($"Completed objective {objective.ID}!");
             ObjectiveCompleted?.Invoke(this, objective);
-            if (objective == null)
-                return;
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
             objective.OnObjectiveInactive -= OnObjectiveDeactivated;
             objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
+                Debug.Log($"Completed quest!");
                 Complete();
             }
             else
             {
+                Debug.Log("Tracking new set of objectives!");
                 foreach (UnityEngine.Object o in objective.NextObjectives)
                 {
                     Objective ob = o as Objective;

@@ -31,7 +31,6 @@ namespace SunsetSystems.Journal
             {
                 _questAccessorRegistry = new();
                 _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.Add(q.ReadableID, q.ID));
-                Debug.LogWarning("Quest " + quest.ReadableID + " is already registered in the database!");
                 return false;
             }
             _questRegistry.Add(quest.ID, quest);

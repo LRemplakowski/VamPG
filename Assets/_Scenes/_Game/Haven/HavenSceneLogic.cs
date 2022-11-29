@@ -42,7 +42,9 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private Waypoint _landlordSpawnWaypoint, _landlordSinkWaypoint, _pcLandlordVisitWaypoint, _pcLandlordSinkWaypoint;
         [SerializeField]
-        private DialogueEntity _apartmentDoorLandlordDialogue;
+        private DefaultInteractable _apartmentDoorLandlordInteraction;
+        [SerializeField]
+        private string _landlordVisitDialogueEntryNode;
         [SerializeField]
         private Vector3 _landlordEnterCameraPosition = default,
             _landlordEnterCameraRotation = default,
@@ -105,6 +107,7 @@ namespace SunsetSystems.Loading
             _ = _landlord.FaceTarget(_landlordSpawnWaypoint.FaceDirection);
             _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
+            DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -123,7 +126,7 @@ namespace SunsetSystems.Loading
             await fade.DoFadeInAsync(.5f);
         }
 
-        public void KillTheLandlord()
+        private void KillTheLandlord()
         {
             _landlord.StatsManager.Die();
         }
@@ -191,7 +194,7 @@ namespace SunsetSystems.Loading
             [YarnCommand("EnableApartmentDoorLandlordDialogue")]
             public static void EnableApartmentDoorLandlordDialogue()
             {
-                HavenSceneLogic._apartmentDoorLandlordDialogue.Interactable = true;
+                HavenSceneLogic._apartmentDoorLandlordInteraction.Interactable = true;
             }
 
             [YarnCommand("MoveLandlordAndPCToSinkPositions")]

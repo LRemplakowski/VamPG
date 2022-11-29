@@ -38,6 +38,12 @@ public interface IInteractable
         set;
     }
 
+    bool Interactable
+    {
+        get;
+        set;
+    }
+
     void Interact();
 
     void OnDrawGizmosSelected();

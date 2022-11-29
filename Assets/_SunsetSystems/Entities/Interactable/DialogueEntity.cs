@@ -13,7 +13,7 @@ namespace SunsetSystems.Entities.Interactable
 
         protected override void HandleInteraction()
         {
-            DialogueManager.StartDialogue(EntryNode, _dialogueProject);
+            DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
         }
     }
 }

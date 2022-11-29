@@ -19,6 +19,7 @@ namespace SunsetSystems.Animation
         private NavMeshAgent agent;
         [SerializeField, ReadOnly]
         private RigBuilder rigBuilder;
+        private StatsManager _statsManager;
 
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
         private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
@@ -35,6 +36,18 @@ namespace SunsetSystems.Animation
             rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.layers.Clear();
             rigBuilder.enabled = false;
+            _statsManager ??= GetComponent<StatsManager>();
+            _statsManager.OnCreatureDied += OnDeath;
+        }
+
+        private void OnDestroy()
+        {
+            _statsManager.OnCreatureDied -= OnDeath;
+        }
+
+        private void OnDeath(Creature deceased)
+        {
+            animator.SetTrigger("Die");
         }
 
         private Rig InitializeRigLayer()
@@ -73,7 +86,7 @@ namespace SunsetSystems.Animation
         private void Update()
         {
             float speedPercentage = agent.velocity.magnitude / agent.speed;
-            animator.SetFloat("Speed", speedPercentage);
+            animator.SetFloat("Speed", speedPercentage / 2);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)

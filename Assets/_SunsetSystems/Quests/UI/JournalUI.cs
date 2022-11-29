@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Journal.UI
@@ -16,6 +17,11 @@ namespace SunsetSystems.Journal.UI
             _sideQuests.ListQuests(QuestJournal.Instance.SideQuests);
             _caseQuests.ListQuests(QuestJournal.Instance.CaseQuests);
             _completedQuests.ListQuests(QuestJournal.Instance.CompletedQuests);
+        }
+
+        private void Start()
+        {
+            _mainQuests.ViewPool.FirstOrDefault(v => v.gameObject.activeInHierarchy)?.OnButtonClicked();
         }
     }
 }

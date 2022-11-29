@@ -7,17 +7,11 @@ namespace SunsetSystems.Dialogue
 {
     public static class DialogueFunctions
     {
-        [YarnFunction]
-        public static string GetPCName()
-        {
-            return PartyManager.MainCharacter.Data.FullName;
-        }
-
         [YarnFunction("Roll")]
-        public static int GetRollResult(string attribute)
+        public static int GetRollResult(string statName)
         {
             int dice = 0;
-            dice += GetStatValueFromString(attribute);
+            dice += GetStatValueFromString(statName);
             Outcome rollOutcome = Roll.d10(dice);
             return rollOutcome.successes;
         }
@@ -41,7 +35,15 @@ namespace SunsetSystems.Dialogue
         {
             return attributeTypeString switch
             {
+                "strength" => AttributeType.Strength,
+                "dexterity" => AttributeType.Dexterity,
+                "stamina" => AttributeType.Stamina,
                 "charisma" => AttributeType.Charisma,
+                "manipulation" => AttributeType.Manipulation,
+                "composure" => AttributeType.Composure,
+                "intelligence" => AttributeType.Intelligence,
+                "wits" => AttributeType.Wits,
+                "resolve" => AttributeType.Resolve,
                 _ => AttributeType.Invalid,
             };
         }
@@ -54,6 +56,12 @@ namespace SunsetSystems.Dialogue
                 "firearms" => SkillType.Firearms,
                 _ => SkillType.Invalid,
             };
+        }
+
+        [YarnFunction("neg")]
+        public static int NegativeValue(int value)
+        {
+            return -value;
         }
     }
 }

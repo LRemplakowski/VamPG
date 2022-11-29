@@ -56,11 +56,11 @@ namespace SunsetSystems.Party
 
         public override void Initialize()
         {
-            PartyPortraits.Clear();
+            PartyPortraits?.Clear();
             Debug.Log("Party members count: " + _activeParty.Count);
             foreach (string key in _activeCoterieMemberKeys)
             {
-                PartyPortraits.AddPortrait(_activeParty[key].GetCreatureUIData());
+                PartyPortraits?.AddPortrait(_activeParty[key].GetCreatureUIData());
             }
         }
 
@@ -110,6 +110,7 @@ namespace SunsetSystems.Party
 
         public static void RecruitMainCharacter(CreatureData mainCharacterData)
         {
+            DialogueHelper.VariableStorage.SetValue(DialogueVariableConfig.PC_ID, mainCharacterData.ID);
             RecruitCharacter(mainCharacterData);
             Instance._mainCharacterKey = mainCharacterData.ID;
             DialogueHelper.SetPCName(mainCharacterData.FullName);

@@ -6,23 +6,20 @@ namespace SunsetSystems.Dialogue
     {
         public static PersistentVariableStorage VariableStorage { get; private set; }
 
-        public const string SPEAKER_ID = "speakerID";
-        public const string PC_NAME = "pcName";
-
         public static void InitializePersistentVariableStorage(PersistentVariableStorage storage)
         {
             if (VariableStorage == null)
                 VariableStorage = storage;
         }
 
-        public static void SetSpeakerName(string name)
+        public static void SetSpeakerID(string name)
         {
-            VariableStorage.SetValue(SPEAKER_ID, name);
+            VariableStorage.SetValue(DialogueVariableConfig.SPEAKER_ID, name);
         }
 
         public static void SetPCName(string name)
         {
-            VariableStorage.SetValue(PC_NAME, name);
+            VariableStorage.SetValue(DialogueVariableConfig.PC_NAME, name);
         }
     }
 }

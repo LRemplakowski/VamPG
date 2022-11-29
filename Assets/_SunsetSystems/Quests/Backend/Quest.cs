@@ -10,29 +10,20 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Quest", menuName = "Sunset Journal/Quest")]
+    [Serializable]
     public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
         private const string COMPLETE_QUEST = "COMPLETE_QUEST";
 
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
+        [field: SerializeField]
+        public string ReadableID { get; private set; }
         public string Name;
         public QuestCategory Category;
         [TextArea(10, 15)]
         public string Description;
         public List<Objective> InitialObjectives;
-#if UNITY_EDITOR
-        //[Button]
-        //private void AddObjective()
-        //{
-        //    Objective newObjective = CreateInstance<Objective>();
-        //    AssetDatabase.AddObjectToAsset(newObjective, this);
-        //    AssetDatabase.SaveAssets();
-        //    Objectives.Add(newObjective.ID, newObjective);
-        //    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(newObjective));
-        //    _objectiveAssetPaths.Add(AssetDatabase.GetAssetPath(newObjective));
-        //}
-#endif
         [field: SerializeField, AllowNesting]
         public List<RewardData> Rewards { get; private set; }
 
@@ -40,56 +31,22 @@ namespace SunsetSystems.Journal
 
         public static event Action<Quest> QuestStarted;
         public static event Action<Quest> QuestCompleted;
-        public static event Action<Quest, Objective> ObjectiveChanged;
+        public static event Action<Quest, Objective> ObjectiveCompleted;
+        public static event Action<Quest, Objective> ObjectiveFailed;
 
-        public void LinkAndInitializeObjectives()
-        {
-            //List<Objective> objectives = Objectives.ToList();
-            //if (objectives == null || objectives.Count <= 0)
-            //    return;
-            //foreach (Objective objective in objectives)
-            //{
-            //    if (string.IsNullOrWhiteSpace(objective.NextObjectiveID) == false)
-            //    {
-            //        if (objective.NextObjectiveID.Equals(COMPLETE_QUEST))
-            //        {
-            //            objective.NextObjective = null;
-            //        }
-            //        else
-            //        {
-            //            objective.NextObjective = objectives.Find(o => o.Name.Equals(objective.NextObjectiveID));
-            //        }
-            //    }
-            //}
-            //Objective last = objectives[^1];
-            //last.IsLast = true;
-            //last.IsFirst = false;
-            //Objective first = objectives[0];
-            //if (string.IsNullOrEmpty(first.Name))
-            //    first.Name = "Objective 0";
-            //if (last.Equals(first))
-            //{
-            //    last.IsFirst = true;
-            //}
-            //else
-            //{
-            //    first.IsFirst = true;
-            //    first.IsLast = false;
-            //}
-        }
-
-        private void OnValidate()
+        private void Awake()
         {
             if (string.IsNullOrWhiteSpace(ID))
             {
                 AssignNewID();
             }
-            //if (EditorUtility.IsDirty(this))
-            //{
-            //    Objectives.Clear();
-            //    AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this)).ToList().ForEach(a => { if (a is Objective objective) Objectives.Add(objective); });
-            //}
-            //LinkAndInitializeObjectives();
+            QuestDatabase.Instance.RegisterQuest(this);
+        }
+
+        [ContextMenu("Force Validate")]
+        private void OnValidate()
+        {
+            QuestDatabase.Instance.RegisterQuest(this);
         }
 
         private void Reset()
@@ -99,8 +56,12 @@ namespace SunsetSystems.Journal
 
         private void OnEnable()
         {
-            if (string.IsNullOrWhiteSpace(ID) == false && QuestDatabase.Instance.IsRegistered(this) == false)
-                QuestDatabase.Instance.RegisterQuest(this);
+            QuestDatabase.Instance.RegisterQuest(this);
+        }
+
+        private void OnDestroy()
+        {
+            QuestDatabase.Instance.UnregisterQuest(this);
         }
 
         private void AssignNewID()
@@ -123,19 +84,32 @@ namespace SunsetSystems.Journal
 
         private void OnObjectiveChanged(Objective objective)
         {
-            ObjectiveChanged?.Invoke(this, objective);
+            ObjectiveCompleted?.Invoke(this, objective);
             if (objective == null)
                 return;
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).OnObjectiveCompleted -= OnObjectiveChanged);
+            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
                 Complete();
             }
             else
             {
-                objective.NextObjectives.ForEach(o => (o as Objective).OnObjectiveCompleted += OnObjectiveChanged);
+                foreach (UnityEngine.Object o in objective.NextObjectives)
+                {
+                    Objective ob = o as Objective;
+                    ob.OnObjectiveCompleted += OnObjectiveChanged;
+                    ob.OnObjectiveInactive += OnObjectiveDeactivated;
+                }
             }
+        }
+
+        private void OnObjectiveDeactivated(Objective objective)
+        {
+            objective.OnObjectiveCompleted -= OnObjectiveChanged;
+            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
+            ObjectiveFailed?.Invoke(this, objective);
         }
 
         public void Complete()

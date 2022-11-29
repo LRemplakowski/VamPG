@@ -95,6 +95,11 @@ namespace SunsetSystems.Input.CameraControl
             Debug.Log("Forcing camera to position " + position);
         }
 
+        public void ForceRotation(Vector3 eulerAngles)
+        {
+            transform.localEulerAngles = eulerAngles;
+        }
+
         private void FixedUpdate()
         {
             _internalMoveTargetSpeed = _cameraMoveSpeed + 1f;

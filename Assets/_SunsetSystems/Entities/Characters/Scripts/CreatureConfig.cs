@@ -2,10 +2,6 @@
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
-using SunsetSystems.Inventory;
-using UMA.CharacterSystem;
-using SunsetSystems.Journal;
-using UnityEditor;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -29,13 +25,8 @@ namespace SunsetSystems.Entities.Characters
         public StatsConfig StatsAsset { get => _statsConfig; }
         [field: SerializeField]
         public InventoryConfig EquipmentConfig { get; private set; }
-        [SerializeField]
-        private string _umaPresetFilename = "default";
-        public string UmaPresetFilename { get => _umaPresetFilename; }
         [field: SerializeField]
         public TextAsset UmaPreset { get; private set; }
-        [SerializeField]
-        private string animatorControllerResourceName = "";
         [SerializeField]
         private RuntimeAnimatorController _animatorController;
         public RuntimeAnimatorController AnimatorController => _animatorController;
@@ -90,8 +81,6 @@ namespace SunsetSystems.Entities.Characters
 
         private void FindAnimatorController()
         {
-            if (_animatorController == null && !animatorControllerResourceName.Equals(""))
-                _animatorController = ResourceLoader.GetAnimatorController(animatorControllerResourceName);
             if (_animatorController == null)
                 _animatorController = ResourceLoader.GetFallbackAnimator();
         }

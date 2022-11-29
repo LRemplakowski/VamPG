@@ -9,7 +9,6 @@ namespace SunsetSystems.Journal
     [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
     public class Objective : ScriptableObject
     {
-        [ReadOnly]
         public string ID = "";
         [TextArea(5, 10)]
         public string Description = "";
@@ -25,25 +24,6 @@ namespace SunsetSystems.Journal
         [RequireInterface(typeof(Objective))]
         public List<UnityEngine.Object> NextObjectives;
 
-        private void OnValidate()
-        {
-            if (string.IsNullOrWhiteSpace(ID))
-                AssignNewID();
-        }
-
-        private void Reset()
-        {
-            AssignNewID();
-        }
-
-        private void AssignNewID()
-        {
-            ID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
-        }
-
         public void MakeActive()
         {
             OnObjectiveActive?.Invoke(this);
@@ -56,7 +36,6 @@ namespace SunsetSystems.Journal
 
         public void Complete()
         {
-            MakeInactive();
             OnObjectiveCompleted?.Invoke(this);
             ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             NextObjectives.ForEach(o => (o as Objective).MakeActive());

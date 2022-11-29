@@ -6,7 +6,7 @@ namespace SunsetSystems.Utils
 {
     public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
     {
-        private static T _instance;
+        protected static T _instance;
         public static T Instance
         {
             get
@@ -26,6 +26,18 @@ namespace SunsetSystems.Utils
                 }
                 return _instance;
             }
+        }
+
+        private void Awake()
+        {
+            if (_instance == null)
+                _instance = this as T;
+        }
+
+        protected virtual void OnValidate()
+        {
+            if (_instance == null)
+                _instance = this as T;
         }
     }
 }

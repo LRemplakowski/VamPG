@@ -54,6 +54,7 @@ namespace SunsetSystems.Entities.Characters
 
         public virtual void Die()
         {
+            Health.SuperficialDamage = 10000;
             OnCreatureDied?.Invoke(_owner);
         }
 

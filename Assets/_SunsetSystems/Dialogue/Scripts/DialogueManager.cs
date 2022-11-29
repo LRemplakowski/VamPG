@@ -1,3 +1,4 @@
+using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace SunsetSystems.Dialogue
         private DialogueRunner _dialogueRunner;
 
         private const string UPDATE_SPEAKER_PORTRAIT_TAG = "UPDATE_SPEAKER_PORTRAIT";
+
+        private string _cachedSpeakerID;
 
         protected override void Awake()
         {
@@ -32,7 +35,7 @@ namespace SunsetSystems.Dialogue
 
         private void ClearCachedVariables()
         {
-            _dialogueRunner.VariableStorage.SetValue(DialogueHelper.SPEAKER_ID, string.Empty);
+            _dialogueRunner.VariableStorage.SetValue(DialogueVariableConfig.SPEAKER_ID, string.Empty);
         }
 
         private void Start()
@@ -54,23 +57,41 @@ namespace SunsetSystems.Dialogue
             Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
-        public static bool StartDialogue(string startNode, YarnProject project = null)
+        public bool StartDialogue(string startNode, YarnProject project = null)
         {
-            DialogueRunner cachedRunner = Instance._dialogueRunner;
             if (project != null)
             {
-                cachedRunner.SetProject(project);
+                _dialogueRunner.SetProject(project);
             }
-            if (cachedRunner.IsDialogueRunning)
+            if (_dialogueRunner.IsDialogueRunning)
                 return false;
-            cachedRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(true));
-            cachedRunner.StartDialogue(startNode);
-            if (cachedRunner.VariableStorage.TryGetValue(DialogueHelper.SPEAKER_ID, out string speakerID))
-            {
-                cachedRunner.dialogueViews.ToList().ForEach(view => (view as IPortraitUpdateReciever).InitializeSpeakerPhoto(speakerID));
-            }
+            _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(true));
+            _dialogueRunner.StartDialogue(startNode);
+            _dialogueRunner.VariableStorage.TryGetValue(DialogueVariableConfig.SPEAKER_ID, out _cachedSpeakerID);
+            SetSpeakerPortrait(_cachedSpeakerID);
+            GameManager.CurrentState = GameState.Conversation;
             return true;
         }
+
+        public void OverrideSpeakerPortrait(string speakerID)
+        {
+            SetSpeakerPortrait(speakerID);
+        }
+
+        public void ClearSpeakerPortraitOverride()
+        {
+            SetSpeakerPortrait(_cachedSpeakerID);
+        }
+
+        public void SetDefaultSpeakerPortrait(string speakerID)
+        {
+            _cachedSpeakerID = speakerID;
+            SetSpeakerPortrait(_cachedSpeakerID);
+        }
+        private void SetSpeakerPortrait(string speakerID)
+        {
+            _dialogueRunner.dialogueViews.ToList().ForEach(view => (view as IPortraitUpdateReciever)?.InitializeSpeakerPhoto(speakerID));
+        }    
 
         public void InterruptCurrentLine()
         {
@@ -78,9 +99,11 @@ namespace SunsetSystems.Dialogue
                 _dialogueRunner.OnViewRequestedInterrupt();
         }
 
-        public void DisableViews()
+        public void CleanupAfterDialogue()
         {
+            GameManager.CurrentState = GameState.Exploration;
             _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));
+            _cachedSpeakerID = "";
         }
     }
 }

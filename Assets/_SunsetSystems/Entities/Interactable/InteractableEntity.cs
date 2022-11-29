@@ -124,16 +124,16 @@ namespace SunsetSystems.Entities.Interactable
 
         public void Interact()
         {
-            IsHoveredOver = false;
-            if (!Interactable || (_interactableOnce && Interacted))
+            if (!Interactable)
                 return;
+            IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             HandleInteraction();
             OnInteractionTriggered?.Invoke();
             Interacted = true;
             TargetedBy = null;
             if (_interactableOnce)
-                this.enabled = false;
+                this.Interactable = false;
         }
 
         protected abstract void HandleInteraction();
@@ -148,6 +148,12 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (HoverHighlight != null && Interactable)
                 HoverHighlight.SetActive(IsHoveredOver);
+        }
+
+        public void ResetInteraction()
+        {
+            _interacted = false;
+            Interactable = true;
         }
     }
 }

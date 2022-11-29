@@ -47,6 +47,7 @@ namespace SunsetSystems.Dialogue
 
         private const string ROLL_SUCCESS_TAG = "success";
         private const string ROLL_FAIL_TAG = "failure";
+        private const string ALWAYS_SHOW_OPTION = "showAlways";
 
         private Action<int> OnOptionSelected;
 
@@ -165,15 +166,22 @@ namespace SunsetSystems.Dialogue
         public void InitializeSpeakerPhoto(string speakerID)
         {
             Sprite sprite = this.GetSpeakerPortrait(speakerID);
+            if (sprite == null)
+            {
+                if (DialogueHelper.VariableStorage.TryGetValue(DialogueVariableConfig.PC_NAME, out speakerID))
+                {
+                    sprite = this.GetSpeakerPortrait(speakerID);
+                }
+            }
             if (sprite != null)
             {
-                _photo.sprite = this.GetSpeakerPortrait(speakerID);
+                _photo.sprite = sprite;
                 _photoText.text = speakerID;
                 _photoParent.SetActive(true);
             }
             else
             {
-                _photoParent.SetActive(false);
+                Debug.LogError($"Cannot find portrait for creature with ID {speakerID} and no placeholder portrait found!");
             }
         }
 
@@ -205,8 +213,8 @@ namespace SunsetSystems.Dialogue
                 DialogueOption option = dialogueOptions[i];
                 if (option is null)
                     return;
-
-                if (option.IsAvailable == false && _showUnavailableOptions == false)
+                bool alwaysShowOption = option.Line.Metadata?.Contains(ALWAYS_SHOW_OPTION) ?? false;
+                if (option.IsAvailable == false && _showUnavailableOptions == false && alwaysShowOption == false)
                 {
                     continue;
                 }
@@ -235,12 +243,13 @@ namespace SunsetSystems.Dialogue
                 return optionView;
             }
 
-            void OptionViewWasSelected(DialogueOption option)
+            async void OptionViewWasSelected(DialogueOption option)
             {
                 CleanupOptions();
                 string formattedLineText = BuildFormattedText(option.Line);
                 _lineHistory.text = formattedLineText;
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
+                await new WaitForSeconds(_lineCompletionDelay);
                 OnOptionSelected(option.DialogueOptionID);
             }
 

@@ -58,7 +58,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7846262682864176721}
@@ -83,7 +83,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8910045900974868506}
@@ -159,31 +159,31 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8157774003480734344}
-    m_Position: {x: 410, y: -70, z: 0}
+    m_Position: {x: 410, y: -100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7846262682864176721}
-    m_Position: {x: 410, y: -30, z: 0}
+    m_Position: {x: 410, y: -50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1306015045917414750}
-    m_Position: {x: 409.5, y: 13.5, z: 0}
+    m_Position: {x: 410, y: 0, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6196583447618361209}
-    m_Position: {x: 410, y: 180, z: 0}
+    m_Position: {x: 410, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3692460212409231186}
-    m_Position: {x: 410, y: 140, z: 0}
+    m_Position: {x: 410, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 6862126288817433444}
     m_Position: {x: 410, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8910045900974868506}
-    m_Position: {x: 410, y: 60, z: 0}
+    m_Position: {x: 410, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5910854554322736587}
     m_Position: {x: 130, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2583585370812462187}
-    m_Position: {x: 410, y: 220, z: 0}
+    m_Position: {x: 410, y: 250, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -203,7 +203,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1306015045917414750}
@@ -265,7 +265,8 @@ AnimatorState:
   - {fileID: 6569525198788153357}
   - {fileID: -2428957113653229668}
   - {fileID: -2948220665423144393}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: -584899286441634258}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -289,7 +290,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 4
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6862126288817433444}
@@ -314,7 +315,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8157774003480734344}
@@ -366,7 +367,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 7
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2583585370812462187}
@@ -418,7 +419,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 6
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6196583447618361209}
@@ -456,6 +457,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-584899286441634258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ece2f60257a9054695e27e46e994d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stateCount: 8
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -465,7 +479,7 @@ AnimatorController:
   m_Name: sitting
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: sit_selector
+  - m_Name: selected_animation
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -608,7 +622,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: sit_selector
+    m_ConditionEvent: selected_animation
     m_EventTreshold: 5
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3692460212409231186}

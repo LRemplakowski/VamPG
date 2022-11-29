@@ -17,10 +17,21 @@ namespace SunsetSystems.Dialogue
         private StringStringDictionary _strings = new();
         [SerializeField]
         private StringBoolDictionary _bools = new();
+        [SerializeField]
+        private DialogueVariableConfig _variableInjectionConfig;
 
         private readonly Dictionary<string, object> _variables = new();
 
         private const string DIALOGUE_DATA_KEY = "DIALOGUE_DATA";
+
+        private void Awake()
+        {
+            if (_variableInjectionConfig != null)
+            {
+                DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
+                SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
+            }
+        }
 
         public override void Clear()
         {

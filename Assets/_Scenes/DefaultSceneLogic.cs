@@ -36,7 +36,7 @@ namespace SunsetSystems.Loading
             }
             else
             {
-                AreaEntryPoint entryPoint = FindAreaEntryPoint(entryPointTag);
+                Waypoint entryPoint = FindAreaEntryPoint(entryPointTag);
                 PartyManager.InitializePartyAtPosition(entryPoint.transform.position);
                 Vector3 cameraPosition = entryPoint.transform.position;
                 HandleCameraPositionAndBounds(cameraBoundingBoxTag, cameraPosition);
@@ -68,17 +68,17 @@ namespace SunsetSystems.Loading
             _cameraControlScript.ForceToPosition(cameraPosition);
         }
 
-        private AreaEntryPoint FindAreaEntryPoint(string tag)
+        private Waypoint FindAreaEntryPoint(string tag)
         {
-            AreaEntryPoint entryPoint = null;
+            Waypoint entryPoint = null;
             if (!tag.Equals(""))
             {
                 if (this.TryFindFirstGameObjectWithTag(tag, out GameObject result))
-                    entryPoint = result.GetComponent<AreaEntryPoint>();
+                    entryPoint = result.GetComponent<Waypoint>();
             }
             if (entryPoint == null)
             {
-                entryPoint = FindObjectOfType<AreaEntryPoint>();
+                entryPoint = FindObjectOfType<Waypoint>();
             }
             return entryPoint;
         }

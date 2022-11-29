@@ -10,67 +10,68 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
-        private Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
+        private readonly Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
         [SerializeField]
         private List<Quest> _trackedQuests = new();
-
         public List<Quest> ActiveQuests => _activeQuests.Values.ToList();
         public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Main)).ToList();
         public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Side)).ToList();
         public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Case)).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
-        public static event Action<List<Quest>> OnTrackedQuestsChanged;
+        public static event Action<List<Quest>> OnActiveQuestsChanged;
 
         private void OnEnable()
         {
             Quest.QuestStarted += OnQuestStarted;
             Quest.QuestCompleted += OnQuestCompleted;
-            Quest.ObjectiveChanged += OnQuestObjectiveChanged;
+            Quest.ObjectiveCompleted += OnQuestObjectiveCompleted;
+            Quest.ObjectiveFailed += OnQuestObjectiveFailed;
         }
 
         private void OnDisable()
         {
             Quest.QuestStarted -= OnQuestStarted;
             Quest.QuestCompleted -= OnQuestCompleted;
-            Quest.ObjectiveChanged -= OnQuestObjectiveChanged;
+            Quest.ObjectiveCompleted -= OnQuestObjectiveCompleted;
+            Quest.ObjectiveFailed -= OnQuestObjectiveFailed;
         }
 
         private void OnQuestStarted(Quest quest)
         {
-            _activeQuests.Add(quest.ID, quest);
-            _trackedQuests.Add(quest);
-            Dictionary<string, Objective> questObjectives = new();
-            quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
-            _currentObjectives.Add(quest.ID, questObjectives);
-            OnTrackedQuestsChanged?.Invoke(_trackedQuests);
+            OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
-        private void OnQuestObjectiveChanged(Quest quest, Objective objective)
+        private void OnQuestObjectiveCompleted(Quest quest, Objective objective)
         {
             if (objective != null && quest != null)
             {
                 if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
                     // Do nothing, quest will finish and handle cleanup
                     return;
-                if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> currentObjectives))
+                if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> questObjectives))
                 {
-                    if (currentObjectives.ContainsKey(objective.ID))
+                    questObjectives.Clear();
+                    foreach (Objective newObjective in objective.NextObjectives)
                     {
-                        currentObjectives.Clear();
-                        foreach (Objective newObjective in objective.NextObjectives)
-                        {
-                            currentObjectives.Add(newObjective.ID, newObjective);
-                        }
+                        questObjectives.Add(newObjective.ID, newObjective);
                     }
                 }
-                else
+                OnActiveQuestsChanged?.Invoke(_trackedQuests);
+            }
+        }
+
+        private void OnQuestObjectiveFailed(Quest quest, Objective objective)
+        {
+            if (objective != null && quest != null)
+            {
+                if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> questObjectives))
                 {
-                    Dictionary<string, Objective> questObjectives = new();
-                    quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
-                    _currentObjectives.Add(quest.ID, questObjectives);
+                    if (questObjectives.Remove(objective.ID))
+                        OnActiveQuestsChanged?.Invoke(_trackedQuests);
+                    else
+                        Debug.LogWarning($"Trying to fail objective {objective.ID} of quest {quest.Name} but it is not an active objective!");
                 }
-                OnTrackedQuestsChanged?.Invoke(_trackedQuests);
             }
         }
 
@@ -78,7 +79,7 @@ namespace SunsetSystems.Journal
         {
             if (MoveToCompleteQuests(quest.ID) == false)
                 Debug.LogError("Failed to complete quest " + quest.Name + "! Quest ID: " + quest.ID);
-            OnTrackedQuestsChanged?.Invoke(_trackedQuests);
+            OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
         public bool IsQuestCompleted(string questID)
@@ -100,6 +101,11 @@ namespace SunsetSystems.Journal
             }
             if (QuestDatabase.Instance.TryGetQuest(questID, out Quest quest))
             {
+                _activeQuests.Add(quest.ID, quest);
+                _trackedQuests.Add(quest);
+                Dictionary<string, Objective> questObjectives = new();
+                quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
+                _currentObjectives.Add(quest.ID, questObjectives);
                 quest.Begin();
                 return true;
             }
@@ -108,6 +114,15 @@ namespace SunsetSystems.Journal
                 Debug.LogError("There is no quest with ID " + questID + " in the database!");
                 return false;
             }
+        }
+
+        public bool BeginQuestByReadableID(string readableID)
+        {
+            if (QuestDatabase.Instance.TryGetQuestByReadableID(readableID, out Quest quest))
+            {
+                return BeginQuest(quest.ID);
+            }
+            return false;
         }
 
         private bool MoveToCompleteQuests(string questID)
@@ -134,6 +149,33 @@ namespace SunsetSystems.Journal
             {
                 objectives = currentObjectives.Values.ToList();
                 return true;
+            }
+            return false;
+        }
+
+        public bool TryGetTrackedObjective(string questID, string objectiveID, out Objective objective)
+        {
+            objective = default;
+            if (_currentObjectives.TryGetValue(questID, out Dictionary<string, Objective> questObjectives))
+            {
+                if (questObjectives.TryGetValue(objectiveID, out objective))
+                    return true;
+                else
+                    Debug.LogWarning($"Trying to get objective {objectiveID} for quest {questID} but that objective is not active!");
+            }
+            else
+            {
+                Debug.LogWarning($"Trying to get objectives for quest {questID} but quest is not active!");
+            }
+            return false;
+        }
+
+        public bool TryGetTrackedObjectiveByReadableID(string readableID, string objectiveID, out Objective objective)
+        {
+            objective = default;
+            if (QuestDatabase.Instance.TryGetQuestByReadableID(readableID, out Quest quest))
+            {
+                return TryGetTrackedObjective(quest.ID, objectiveID, out objective);
             }
             return false;
         }

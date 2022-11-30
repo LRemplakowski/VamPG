@@ -1,6 +1,25 @@
 ﻿title: trashCan
 tags:
 ---
-{$narrator}: \[Old takeout boxes and receipts.\] #line:04daf56 
+<<if visited("takeCover")==true>>
+<<jump trashCanAfterDominic>>
+<<else>>
+<<jump trashCanBeforeDominic>>
+<<endif>>
+===
+title: trashCanAfterDominic
+---
+[nomarkup][Sifting through your trash, you find a bar tab receipt for the nightclub Embassy. Looks like you had a "good" night."][/nomarkup]
+{$pcName}: I found our next spot. Club Embassy off the Strip.
+{$kieran}: \[He scratches his head.\] You're kidding. My sire sort of owns the place.
+{$pcName}: "Sort of?"
+{$kieran}: I'll tell you in the car. You're driving.
+<<if bloodsoaked ==true>>
+{$kieran}: You should change first. I'd recommend a shower, but well…
+<<endif>>
+===
+title: trashCanBeforeDominic
+---
+[nomarkup][Old takeout boxes and receipts.][/nomarkup] #line:04daf56 
 -> {$pcName}: Continue. #line:0c9cece 
 ===

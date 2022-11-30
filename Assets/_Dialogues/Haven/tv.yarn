@@ -1,6 +1,18 @@
 ﻿title: tv
 tags:
 ---
+<<if visited("takeCover")==true>>
+<<jump tvAfterDominic>>
+<<else>>
+<<jump tvBeforeDominic>>
+<<endif>>
+===
+title: tvAfterDominic
+---
+{$kieran}: You're seriously watching TV right now!? [Whispering to himself] Oh my god I'm gonna die.
+===
+title: tvBeforeDominic
+---
 {$narrator}: You don't have time to watch TV. #line:0b46f5f 
 -> {$pcName}: Continue. #line:087d535 
 ===

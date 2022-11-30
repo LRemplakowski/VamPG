@@ -1,0 +1,45 @@
+﻿title: embassyArrival
+tags:
+---
+{$narrator}: \[You arrive at Embassy. The city's best (and only) British rock club. An ominous red glow from the neon Union Jack illuminates the sidewalk.\]
+{$kieran}: As I was saying, before you decided to bombard me with whatever that is your generation considers music, Embassy is my sire, Kate's domain, but on the books the club is run by her ghoul Diana.
+-> {$pcName}: You're telling me "ghouls" are real too? <<if visited("vampiricWeaknesses") == false>>
+    <<jump vampiricWeaknesses>>
+-> {$pcName}: You don't like my music? <<if visited("musicTastes") == false>>
+    <<jump musicTastes>>
+-> {$pcName}: Let's go.
+    <<jump letsGo>>
+===
+title: vampiricWeaknesses
+position: 217,-136
+---
+{$kieran}: You'll find out a lot of things you thought were just fairy tales are real, and most of them are out to kill you.
+{$kieran}: Ghouls, not so much. When a mortal drinks of our blood, they become subservient to us. They can even live as long as us so long as they don't bite the hands that feeds them.
+-> {$pcName}: So we do live forever?
+    {$kieran}: If we're smart, but we're not gonna make it past tonight if we don't get a move on. I don't plan on dying anytime soon. Let alone by Dominic's hand.
+-> {$pcName}: What does it take to kill us?
+    {$kieran}: Sunlight, fire, decapitation, Dominic's jokes.
+    {$pcName}: Can I not eat garlic bread anymore? That doesn't seem like a life worth living.
+    {$kieran}: It won't kill you, but I doubt you'll find it as satiating as it used to be. Sorry. I miss cookies, myself.
+    [nomarkup][He gazes off into the distance. Despite your situation, this is the most forlorn you've seen him.][/nomarkup]
+    {$innerVoice}: Fuck! I didn't even think about desserts.
+<<jump embassyArrival>>
+===
+title: musicTastes
+position: 164,153
+---
+{$kieran}: No. Especially when I'm trying to educate you.
+-> {$pcName}: I was trying to calm down.
+    {$kieran}: Look, I know this is a lot to process, but you're gonna have to listen to me if you want to live to see another night.
+-> {$pcName}: I was trying to tune you out.
+    {$kieran}: You'll see how well that works out for you.
+{$kieran}: I'm trying to help, but like it or not we're in this boat together.
+<<jump embassyArrival>>
+===
+title: letsGo
+position: -52,-156
+---
+{$kieran}: We should head in through the back.
+{$pcName}: Why?
+{$kieran}: That's the special entrance for our kind. It's best if we remain inconspicuous.
+===

@@ -1,0 +1,86 @@
+﻿title: killKidnapper
+tags:
+position: 490,264
+---
+{$kieran}: Here I thought we could at least make it inside before running into problems.
+{$pcName}: Do you ever stop complaining?
+{$kieran}: When I'm not under the threat of death.
+[nomarkup][The man shuffles to his feet, stumbling.][/nomarkup]
+Drunk Guy: \[Slurring\] Oh my God! You killed them! I'm gonna call the cops!
+{$kieran}: Not even a thank you? 
+Drunk Guy: I'm a pacifist. I have a principled stance against violence of any kind.
+{$kieran}: How quaint.
+<<jump drunkardOptions>>
+===
+title: drunkardOptions
+position: 210,265
+---
+-> {$pcName}: (Steetwise) What do you think she would have done to you?<<if visited("streetwiseRoll") ==false>>
+    <<jump streetwiseRoll>>
+-> {$pcName}: (Intimidate) Do that and you're next.<<if visited("intimidationRoll") ==false>>
+    <<jump intimidationRoll>>
+-> {$kieran}: (Dominate) Let's forget this ever happened.<<if visited("dominateCloudMemory") ==false>>
+    <<jump dominateCloudMemory>>
+-> [nomarkup][Kill him.][/nomarkup]
+    <<jump killTheDrunkard>>
+===
+title: streetwiseRoll
+position: 40,-74
+---
+<<if Roll("streetwise")>=2>>
+Drunk Guy: You guys did save me. I guess I can let it slide. #success
+{$kieran}: We appreciate the gratitude.
+<<jump drunkardSuccess>>
+<<else>>
+Drunk Guy: Still doesn't make it right for you to kill them. That's why we have a criminal justice system. #failure
+{$innerVoice}: He's right but at the same time naive.
+<<jump drunkardOptions>>
+<<endif>>
+===
+title: intimidationRoll
+position: -109,-294
+---
+<<if Roll("intimidation")>=2>>
+Drunk Guy: I hope you're bluffing, but you did just kill three people in front of me. #success
+[nomarkup][You don't even need to say anything, the both of you just stare him down. Ever so slightly puffing your chest.][/nomarkup]
+<<jump drunkardSuccess>>
+<<else>>
+Drunk Guy: I'm not scared of death. I'd rather die than betray my beliefs. #failure
+{$kieran}: Great, a martyr.
+<<jump drunkardOptions>>
+<<endif>>
+===
+title: dominateCloudMemory
+position: 341,-14
+---
+<<if UseDiscipline("dominate")>=1>>
+[nomarkup][The man's eyes glaze over on Kieran's words.][/nomarkup] #success
+Drunk Guy: Huh, where am I?
+{$kieran}: You were just walking home.
+Drunk Guy: Thanks stranger, you're right. I miss my bed. Mmm, bed.
+<<jump drunkardSuccess>>
+<<else>>
+Drunk Guy: You're not going to gaslight me into forgetting murder. #failure
+{$kieran}: Looks like I'm losing my touch.
+<<jump drunkardOptions>>
+<<endif>>
+===
+title: killTheDrunkard
+position: -328,-137
+---
+Drunk Guy: Why are you looking at me like that? Stay away!
+[nomarkup][The man attempts to feel, but it's no use. Already in a weakened state, he goes down with one blow.][/nomarkup]
+{$kieran}: What a waste. What was even the point of saving him?
+<<jump kieranComment>>
+===
+title: drunkardSuccess
+position: -140,238
+---
+[nomarkup][The man limps away into the night.][/nomarkup]
+<<jump kieranComment>>
+===
+title: kieranComment
+position: -509,170
+---
+{$kieran}: We need to get rid of these bodies before anybody comes by. There's a dumpster in the back alley Kate uses for clean up.
+===

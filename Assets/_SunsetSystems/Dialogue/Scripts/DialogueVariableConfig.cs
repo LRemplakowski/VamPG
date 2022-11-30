@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,32 +9,10 @@ using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
-    [CreateAssetMenu(fileName = "new Dialogue Variable Config", menuName = "Sunset Dialogue/Variable Config")]
+    [CreateAssetMenu(fileName = "New Dialogue Variable Config", menuName = "Sunset Dialogue/Variable Config")]
     public class DialogueVariableConfig : ScriptableObject
     {
         [SerializeField]
-        private CreatureConfig _pcConfig;
-        [SerializeField]
-        private CreatureConfig _beastConfig;
-        [SerializeField]
-        private CreatureConfig _innerMonologueConfig;
-        [SerializeField]
-        private CreatureConfig _narratorConfig;
-        [SerializeField, Required]
-        private CreatureConfig _kieranConfig;
-        [SerializeField, Required]
-        private CreatureConfig _dominicConfig;
-
-        public const string SPEAKER_ID = "$speakerID";
-        public const string PC_NAME = "$pcName";
-        public const string BEAST = "$beast";
-        public const string INNER_VOICE = "$innerVoice";
-        public const string NARRATOR_VOICE = "$narrator";
-        public const string PC_ID = "$pcID";
-        public const string KIERAN = "$kieran";
-        public const string DOMINIC = "$sheriff";
-
-        [SerializeField, HideInInspector]
         private DialogueSaveData _injectionData = new();
 
         private void OnValidate()
@@ -47,20 +26,21 @@ namespace SunsetSystems.Dialogue
             injectionData._floats = new();
             injectionData._strings = new();
             injectionData._bools = new();
-
-            injectionData._strings.Add(PC_NAME, _pcConfig.FullName);
-            injectionData._strings.Add(BEAST, _beastConfig.FullName);
-            injectionData._strings.Add(INNER_VOICE, _innerMonologueConfig.FullName);
-            injectionData._strings.Add(NARRATOR_VOICE, _narratorConfig.FullName);
-            injectionData._strings.Add(KIERAN, _kieranConfig.FullName);
-            injectionData._strings.Add(DOMINIC, _dominicConfig.FullName);
-
+            List<string> configIDs = CreatureDatabase.Instance.AccessorKeys;
+            foreach (string configID in configIDs)
+            {
+                if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))
+                {
+                    injectionData._strings.Add(configID, config.FullName);
+                    injectionData._strings.Add(config.FullName, configID);
+                }
+            }
             return injectionData;
         }
 
-        public DialogueSaveData GetVariableInjectionData()
+        public ref DialogueSaveData GetVariableInjectionData()
         {
-            return _injectionData;
+            return ref _injectionData;
         }
     }
 }

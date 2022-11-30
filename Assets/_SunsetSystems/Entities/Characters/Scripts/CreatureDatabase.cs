@@ -10,20 +10,23 @@ using UnityEngine;
 namespace SunsetSystems.Entities
 {
     [CreateAssetMenu(fileName = "Creature Database", menuName = "Entities/Creature Database")]
-    public class CreatureDatabase : ScriptableObjectSingleton<CreatureDatabase>
+    public class CreatureDatabase : ScriptableObject
     {
         [SerializeField]
         private StringCreatureConfigDictionary _creatureRegistry = new();
         [SerializeField]
         private StringStringDictionary _accessorRegistry = new();
+        public List<string> AccessorKeys => _accessorRegistry.Keys.ToList();
 
-        public bool TryGetConfig(string creatureName, out CreatureConfig config)
+        public static CreatureDatabase Instance { get; private set; }
+
+        public bool TryGetConfig(string accessorID, out CreatureConfig config)
         {
             config = null;
-            creatureName = creatureName.ToPascalCase();
-            if (_accessorRegistry.ContainsKey(creatureName))
+            accessorID ??= "";
+            if (_accessorRegistry.ContainsKey(accessorID))
             {
-                return _creatureRegistry.TryGetValue(_accessorRegistry[creatureName], out config);
+                return _creatureRegistry.TryGetValue(_accessorRegistry[accessorID], out config);
             }
             return false;
         }
@@ -33,12 +36,12 @@ namespace SunsetSystems.Entities
             if (_creatureRegistry.ContainsKey(config.DatabaseID))
             {
                 _accessorRegistry = new();
-                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
                 return false;
             }
-            _creatureRegistry.Add(config.DatabaseID, config);
+            _creatureRegistry.TryAdd(config.DatabaseID, config);
             _accessorRegistry = new();
-            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
             return true;
         }
 
@@ -47,14 +50,13 @@ namespace SunsetSystems.Entities
             return _creatureRegistry.ContainsKey(config.DatabaseID);
         }
 
-        [Button]
-        public void ForceInstance()
+        private void OnEnable()
         {
-            _instance = this;
+            Instance = this;
         }
-
-        protected override void OnValidate()
+        protected void OnValidate()
         {
+            Instance = this;
             List<string> keysToDelete = new();
             foreach (string key in _creatureRegistry.Keys)
             {
@@ -63,7 +65,7 @@ namespace SunsetSystems.Entities
             }
             keysToDelete.ForEach(key => _creatureRegistry.Remove(key));
             _accessorRegistry = new();
-            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
         }
 
         public void UnregisterConfig(CreatureConfig config)
@@ -71,7 +73,7 @@ namespace SunsetSystems.Entities
             if (_creatureRegistry.Remove(config.DatabaseID))
             {
                 _accessorRegistry = new();
-                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
             }
         }
     }

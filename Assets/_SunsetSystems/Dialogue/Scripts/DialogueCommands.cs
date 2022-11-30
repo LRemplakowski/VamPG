@@ -59,24 +59,6 @@ namespace SunsetSystems.Dialogue
             character.StatsManager.RegainBlood(value);
         }
 
-        [YarnCommand("OverrideSpeakerPortrait")]
-        public static void OverrideDialoguePortrait(string ownerID)
-        {
-            DialogueManager.Instance.OverrideSpeakerPortrait(ownerID);
-        }
-
-        [YarnCommand("ClearPortraitOverride")]
-        public static void ClearDialoguePortraitOverride()
-        {
-            DialogueManager.Instance.ClearSpeakerPortraitOverride();
-        }
-
-        [YarnCommand("SetDefaultSpeakerPortrait")]
-        public static void SetDefaultSpeakerPortrait(string speakerID)
-        {
-            DialogueManager.Instance.SetDefaultSpeakerPortrait(speakerID);
-        }
-
         [YarnCommand("AddMoney")]
         public static void AddMoney(float value)
         {

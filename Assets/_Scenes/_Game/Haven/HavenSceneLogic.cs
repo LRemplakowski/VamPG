@@ -94,7 +94,6 @@ namespace SunsetSystems.Loading
             await new WaitForUpdate();
             PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
             await new WaitForSeconds(2);
-            DialogueHelper.VariableStorage.SetValue(DialogueVariableConfig.SPEAKER_ID, PartyManager.MainCharacter.Data.ID);
             await new WaitForUpdate();
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
         }
@@ -162,15 +161,23 @@ namespace SunsetSystems.Loading
             _landlord.StatsManager.Die();
         }
 
-        private async void BargeIn()
+        public async void BargeIn()
         {
-            
             await new WaitForUpdate();
             _havenDoors.Interactable = true;
             _havenDoors.Interact();
             _havenDoors.Interactable = false;
             _dominic.Move(_dominicWaypoint.transform.position);
+            _dominic.gameObject.SetActive(true);
             _kieran.Move(_kieranWaypoint.transform.position);
+            _kieran.gameObject.SetActive(true);
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
+            await new WaitForFixedUpdate();
+            _ = PartyManager.MainCharacter.FaceTarget(_dominic.transform);
+            _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
+            _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
         }
 
         private void DisableInteractionsBeforeDominic()
@@ -262,13 +269,6 @@ namespace SunsetSystems.Loading
             public static void AddBobbyPinToInventory()
             {
                 Debug.LogException(new NotImplementedException());
-            }
-
-            [YarnCommand("KieranDominicBargeIn")]
-            public static IEnumerable KieranDominicBargeIn()
-            {
-                Task _bargeInTask = Task.Run(HavenSceneLogic.BargeIn);
-                yield return new WaitUntil(() => _bargeInTask.IsCompleted);
             }
 
             [YarnCommand("DisableSinkInteraction")]

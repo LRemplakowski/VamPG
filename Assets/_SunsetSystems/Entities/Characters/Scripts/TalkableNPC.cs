@@ -86,7 +86,6 @@ namespace SunsetSystems.Entities.Characters
         {
             if (!Interactable)
                 return;
-            DialogueHelper.SetSpeakerID(Data.ID);
             DialogueManager.Instance.StartDialogue(_startNode, dialogueProject);
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             Interacted = true;

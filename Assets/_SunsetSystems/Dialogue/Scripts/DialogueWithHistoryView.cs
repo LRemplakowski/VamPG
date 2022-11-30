@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using Redcode.Awaiting;
 using SunsetSystems.Audio;
+using SunsetSystems.Party;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils;
 using System;
@@ -17,7 +18,7 @@ using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
-    public class DialogueWithHistoryView : DialogueViewBase, IPortraitUpdateReciever
+    public class DialogueWithHistoryView : DialogueViewBase
     {
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
@@ -106,6 +107,7 @@ namespace SunsetSystems.Dialogue
         {
             RequestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
+            UpdateSpeakerPhoto(dialogueLine.CharacterName);
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             string formattedLineText = BuildFormattedText(dialogueLine);
             _lineHistory.text = formattedLineText;
@@ -150,7 +152,7 @@ namespace SunsetSystems.Dialogue
                 .AppendLine("")
                 .Append("<size=26>");
             AppendRollPrefix(line);
-            if (line.CharacterName != null)
+            if (line.CharacterName != null && string.IsNullOrWhiteSpace(line.CharacterName) == false)
             {
                 _lineHistoryStringBuilder
                     .Append($"<color=\"red\">{line.CharacterName}:</color>");
@@ -171,24 +173,32 @@ namespace SunsetSystems.Dialogue
                 _lineHistoryStringBuilder.Append("(Failure) ");
         }
 
-        public void InitializeSpeakerPhoto(string speakerID)
+        private void UpdateSpeakerPhoto(string characterName)
         {
-            Sprite sprite = this.GetSpeakerPortrait(speakerID);
-            if (sprite == null)
+            string speakerID;
+            if (characterName == null || string.IsNullOrWhiteSpace(characterName))
             {
-                if (DialogueHelper.VariableStorage.TryGetValue(DialogueVariableConfig.PC_NAME, out speakerID))
+                speakerID = PartyManager.MainCharacter.Data.ID;
+                characterName = PartyManager.MainCharacter.Data.FullName;
+            }
+            else
+            {
+                if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
                 {
-                    sprite = this.GetSpeakerPortrait(speakerID);
+                    speakerID = PartyManager.MainCharacter.Data.ID;
+                    characterName = PartyManager.MainCharacter.Data.FullName;
                 }
             }
+            Sprite sprite = this.GetSpeakerPortrait(speakerID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;
-                _photoText.text = speakerID;
+                _photoText.text = characterName;
                 _photoParent.SetActive(true);
             }
             else
             {
+                _photoParent.SetActive(false);
                 Debug.LogError($"Cannot find portrait for creature with ID {speakerID} and no placeholder portrait found!");
             }
         }
@@ -253,6 +263,7 @@ namespace SunsetSystems.Dialogue
 
             async void OptionViewWasSelected(DialogueOption option)
             {
+                UpdateSpeakerPhoto(option.Line.CharacterName);
                 AudioManager.Instance.PlayTypewriterEnd();
                 await new WaitForUpdate();
                 CleanupOptions();

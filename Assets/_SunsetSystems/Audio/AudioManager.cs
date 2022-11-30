@@ -13,6 +13,11 @@ namespace SunsetSystems.Audio
         [SerializeField]
         private SoundtrackController _soundtrackController;
 
+        private void Start()
+        {
+            PlayMenuMusic();
+        }
+
         public void PlaySFXOneShot(string sfxName)
         {
             _sfxController.PlayOneShot(sfxName);
@@ -36,6 +41,16 @@ namespace SunsetSystems.Audio
         public void StopSFXPlayback()
         {
             _sfxController.StopSFX();
+        }
+
+        public void PlayMenuMusic()
+        {
+            _soundtrackController.PlayMenuPlaylist();
+        }
+
+        public void PlayGameplayMusic()
+        {
+            _soundtrackController.PlayGamePlaylist();
         }
     }
 }

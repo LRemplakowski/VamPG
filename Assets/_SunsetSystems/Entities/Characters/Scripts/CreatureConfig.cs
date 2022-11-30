@@ -2,6 +2,7 @@
 using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
+using SunsetSystems.Utils;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -16,7 +17,14 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private string _lastName = "Creature";
         public string LastName { get => _lastName; }
-        public string FullName { get => $"{Name} {LastName}"; }
+        public string FullName { get => $"{Name} {LastName}".Trim(); }
+        [SerializeField]
+        private bool _overrideReadableID;
+        [SerializeField, ReadOnly, HideIf("_overrideReadableID")]
+        private string _defaultReadableID;
+        [SerializeField, ShowIf("_overrideReadableID")]
+        private string _readableIDOverride;
+        public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [SerializeField]
         private Sprite _portrait;
         public Sprite Portrait { get => _portrait; }
@@ -55,7 +63,7 @@ namespace SunsetSystems.Entities.Characters
             {
                 AssignNewID();
             }
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
                 CreatureDatabase.Instance?.RegisterConfig(this);
         }
 
@@ -65,6 +73,7 @@ namespace SunsetSystems.Entities.Characters
             {
                 AssignNewID();
             }
+            _defaultReadableID = FullName.ToCamelCase();
             if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
                 CreatureDatabase.Instance?.RegisterConfig(this);
         }

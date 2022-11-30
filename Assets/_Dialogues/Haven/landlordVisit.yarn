@@ -8,13 +8,13 @@ tags:
 Kevin: Gah, what the hell is that smell? #line:021505f 
 {$pcName}: What do you mean? #line:0c52f8c 
 Kevin: You don't smell that? Smells like… nevermind. Let me take a look at the sink. #line:063cfd0 
-<<MoveLandlordAndPCToSinkPositions>>
-<<wait 1>>
 -> {$pcName}: Continue. #line:030d4d0 
     <<jump landlordSink>>
 ===
 title: landlordSink
 ---
+<<MoveLandlordAndPCToSinkPositions>>
+<<wait 1>>
 {$narrator}: \[Kevin bends over and takes a look at the pipes under the sink. You find yourself looking at him in a different way you can't nail down. You're not attracted to him, but he looks strangely – delicious.\] #line:06da74c 
 <<OverrideSpeakerPortrait {$beast}>>
 {$beast}: Feed. #line:0ce6fe3 

@@ -114,6 +114,7 @@ namespace SunsetSystems.Party
             RecruitCharacter(mainCharacterData);
             Instance._mainCharacterKey = mainCharacterData.ID;
             DialogueHelper.SetPCName(mainCharacterData.FullName);
+            InventoryManager.Instance.SetMoney(mainCharacterData.Money);
             if (TryAddMemberToActiveRoster(Instance._mainCharacterKey) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
         }

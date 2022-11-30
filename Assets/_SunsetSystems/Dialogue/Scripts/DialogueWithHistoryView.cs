@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using Redcode.Awaiting;
+using SunsetSystems.Audio;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils;
 using System;
@@ -57,8 +58,6 @@ namespace SunsetSystems.Dialogue
         private bool _clampScrollbarNextFrame;
         private bool RequestedLineInterrupt { get; set; } = false;
 
-        private int _parsedTextLength = 0;
-
         private void Awake()
         {
             _optionViews = new();
@@ -77,7 +76,6 @@ namespace SunsetSystems.Dialogue
 
         public override void DialogueStarted()
         {
-            _parsedTextLength = 0;
             _lineHistory.text = string.Empty;
             _lineHistory.maxVisibleCharacters = 0;
             _lineHistoryStringBuilder = new();
@@ -96,6 +94,8 @@ namespace SunsetSystems.Dialogue
 
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            AudioManager.Instance.StopSFXPlayback();
+            AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -106,25 +106,28 @@ namespace SunsetSystems.Dialogue
         {
             RequestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
+            _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             string formattedLineText = BuildFormattedText(dialogueLine);
-            _parsedTextLength += dialogueLine.Text.Text.Length;
             _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)
             {
-                await TypewriteText();
+                AudioManager.Instance.PlayTyperwriterLoop();
+                await TypewriteText(dialogueLine);
                 if (RequestedLineInterrupt)
                     return;
             }
+            AudioManager.Instance.PlayTypewriterEnd();
             await new WaitForSeconds(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
         }
 
-        private async Task TypewriteText()
+        private async Task TypewriteText(LocalizedLine line)
         {
             await new WaitForUpdate();
             if (_typeSpeed <= 0)
                 return;
+            _lineHistory.maxVisibleCharacters += line.CharacterName.Length;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
@@ -245,11 +248,13 @@ namespace SunsetSystems.Dialogue
 
             async void OptionViewWasSelected(DialogueOption option)
             {
+                AudioManager.Instance.PlayTypewriterEnd();
+                await new WaitForUpdate();
                 CleanupOptions();
                 string formattedLineText = BuildFormattedText(option.Line);
                 _lineHistory.text = formattedLineText;
+                await new WaitForUpdate();
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-                await new WaitForSeconds(_lineCompletionDelay);
                 OnOptionSelected(option.DialogueOptionID);
             }
 
@@ -261,6 +266,7 @@ namespace SunsetSystems.Dialogue
 
         public override void UserRequestedViewAdvancement()
         {
+            AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             requestInterrupt?.Invoke();
         }

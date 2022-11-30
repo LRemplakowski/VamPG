@@ -49,8 +49,14 @@ namespace SunsetSystems.Entities.Characters
                 _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
             if (_statsConfig == null)
                 _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
+            if (EquipmentConfig == null)
+                EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
+            if (string.IsNullOrWhiteSpace(DatabaseID))
+            {
+                AssignNewID();
+            }
             if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
-                CreatureDatabase.Instance.RegisterConfig(this);
+                CreatureDatabase.Instance?.RegisterConfig(this);
         }
 
         private void OnValidate()
@@ -59,6 +65,8 @@ namespace SunsetSystems.Entities.Characters
             {
                 AssignNewID();
             }
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
+                CreatureDatabase.Instance?.RegisterConfig(this);
         }
 
         private void Reset()

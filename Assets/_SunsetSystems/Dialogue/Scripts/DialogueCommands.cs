@@ -1,4 +1,5 @@
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
@@ -73,6 +74,19 @@ namespace SunsetSystems.Dialogue
         public static void SetDefaultSpeakerPortrait(string speakerID)
         {
             DialogueManager.Instance.SetDefaultSpeakerPortrait(speakerID);
+        }
+
+        [YarnCommand("AddMoney")]
+        public static void AddMoney(float value)
+        {
+            InventoryManager.Instance.AddMoney(value);
+        }
+
+        [YarnCommand("RemoveMoney")]
+        public static void RemoveMoney(float value)
+        {
+            if (InventoryManager.Instance.TryRemoveMoney(value) == false)
+                throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
         }
     }
 }

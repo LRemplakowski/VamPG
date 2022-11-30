@@ -146,7 +146,7 @@ namespace SunsetSystems.Entities.Characters
         {
             navMeshAgent.speed = 2f;
             navMeshAgent.angularSpeed = 360.0f;
-            navMeshAgent.acceleration = 10.0f;
+            navMeshAgent.acceleration = 6f;
         }
 
         private static void InitializeNavMeshObstacle(NavMeshObstacle navMeshObstacle)

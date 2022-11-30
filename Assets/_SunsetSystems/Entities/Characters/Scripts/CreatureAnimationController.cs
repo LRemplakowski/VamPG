@@ -29,6 +29,8 @@ namespace SunsetSystems.Animation
 
         private bool _initializedOnce = false;
 
+        private float _vLastFrame;
+
         private void Start()
         {
             animator = GetComponentInChildren<Animator>();
@@ -85,8 +87,11 @@ namespace SunsetSystems.Animation
 
         private void Update()
         {
-            float speedPercentage = agent.velocity.magnitude / agent.speed;
-            animator.SetFloat("Speed", speedPercentage / 2);
+            float deltaV = agent.velocity.magnitude - _vLastFrame;
+            float deltaTime = Time.deltaTime;
+            float accelerationNormalized = deltaV / Mathf.Abs(deltaV / deltaTime);
+            animator.SetFloat("Speed", agent.velocity.magnitude / agent.speed);
+            animator.SetFloat("acceleration", accelerationNormalized);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)

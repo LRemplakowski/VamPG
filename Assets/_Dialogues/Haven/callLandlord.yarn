@@ -47,6 +47,7 @@ Kevin: I'll have to charge you a… uh… a late night fee. $200. #line:07fb621
 -> {$pcName}: You're trying to rip me off! #line:0b814b2 
     Kevin: I'm a capitalist, miss. Take it or leave it. I'm going back to bed. #line:016a24d 
     -> {$pcName}: Fine. I'll take it. #line:0fee4e4 
+        <<RemoveMoney 200>>
         <<jump kevinConvinced>>
     -> {$pcName}: \[Hang up.\] #line:0431a6b 
         <<jump resetPhone>>

@@ -21,23 +21,19 @@ ScriptedImporter:
   - {fileID: 6391573757903218779, guid: aea960a010fc05c46b96156831570728, type: 3}
   - {fileID: 6391573757903218779, guid: 52a76cb6326d6d043a5719d6fc3a7a81, type: 3}
   - {fileID: 6391573757903218779, guid: 1dfc8f2743b708549a62f84ed9bb831e, type: 3}
+  - {fileID: 6391573757903218779, guid: 03b50600a92c7a042b9d1a3b078a2131, type: 3}
+  - {fileID: 6391573757903218779, guid: 10d45bda8e9b8b144bd085b668da1a95, type: 3}
   compileErrors:
-  - '34:22: Error: Can''t figure out the type of variable $pcID given its context.
+  - '10:29: Error: Can''t figure out the type of variable $sheriff given its context.
     Specify its type with a <<declare>> statement.
 
-    $pcID
+    $sheriff
 
 '
-  - '12:18: Error: Can''t figure out the type of variable $pcID given its context.
+  - '14:27: Error: Can''t figure out the type of variable $kieran given its context.
     Specify its type with a <<declare>> statement.
 
-    $pcID
-
-'
-  - '38:18: Error: Can''t figure out the type of variable $pcID given its context.
-    Specify its type with a <<declare>> statement.
-
-    $pcID
+    $kieran
 
 '
   serializedDeclarations:
@@ -73,12 +69,20 @@ ScriptedImporter:
     description: Inner voice
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
-  - name: $pcID
+  - name: $sheriff
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: 
-    description: unique pc id
+    defaultValueString: Sheriff
+    description: 
+    isImplicit: 0
+    sourceYarnAsset: {instanceID: 0}
+  - name: $kieran
+    typeName: String
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: Kieran
+    description: 
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
   defaultLanguage: pl-PL
@@ -91,6 +95,9 @@ ScriptedImporter:
     ReturnType: -> Int32
     Parameters:
     - statName
+  - Name: GetCurrentMoney
+    ReturnType: -> Single
+    Parameters: []
   - Name: NegativeValue
     ReturnType: -> Int32
     Parameters:

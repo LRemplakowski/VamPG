@@ -7,6 +7,8 @@ using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -22,17 +24,19 @@ namespace SunsetSystems.Loading
         private string _wakeUpStartNode;
         [SerializeField, ES3NonSerializable]
         private Transform _startPosition;
-        [Header("Main room")]
+        [Header("Prologue")]
         [SerializeField]
         private GameObject _desireeOnBed;
         [SerializeField]
         private GameObject _handgun;
         [SerializeField]
-        private GameObject _crowbar;
+        private GameObject _crowbar, _gun;
         [SerializeField]
         private Weapon _handgunItem;
         [SerializeField]
         private List<InteractableEntity> _interactablesToEnableAfterPhoneCall = new();
+        [SerializeField]
+        private DialogueEntity _kitchenSink;
         [SerializeField]
         private string landlordDialogueEntryNode;
         [SerializeField]
@@ -51,12 +55,24 @@ namespace SunsetSystems.Loading
             _landlordSinkCameraPosition = default,
             _landlordSinkCameraRotation = default;
         [SerializeField]
+        private Vector3 _tablePositionForCover, _tableRotationForCover;
+        [SerializeField]
+        private Transform _coffeeTableTransform;
+        [SerializeField]
+        private Waypoint _pcCoverWaypoint;
+        [SerializeField]
         private Doors _havenDoors;
-        [Header("Bathroom")]
         [SerializeField]
         private DialogueEntity _bathroomDoorsDialogue;
         [SerializeField]
         private Doors _bathroomDoors;
+        [Header("Action")]
+        [SerializeField]
+        private Creature _dominic;
+        [SerializeField]
+        private Creature _kieran;
+        [SerializeField]
+        private Waypoint _dominicWaypoint, _kieranWaypoint;
 
         private CameraControlScript _cameraControl;
 
@@ -111,6 +127,16 @@ namespace SunsetSystems.Loading
             await fade.DoFadeInAsync(.5f);
         }
 
+        public async void MoveCoffeTableAndTakeCover()
+        {
+            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await fade.DoFadeOutAsync(.5f);
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
+            await PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
+        }
+
         public async Task MoveToSink()
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
@@ -126,9 +152,32 @@ namespace SunsetSystems.Loading
             await fade.DoFadeInAsync(.5f);
         }
 
+        private void DisableSinkInteraction()
+        {
+            _kitchenSink.Interactable = false;
+        }
+
         private void KillTheLandlord()
         {
             _landlord.StatsManager.Die();
+        }
+
+        private async void BargeIn()
+        {
+            
+            await new WaitForUpdate();
+            _havenDoors.Interactable = true;
+            _havenDoors.Interact();
+            _havenDoors.Interactable = false;
+            _dominic.Move(_dominicWaypoint.transform.position);
+            _kieran.Move(_kieranWaypoint.transform.position);
+        }
+
+        private void DisableInteractionsBeforeDominic()
+        {
+            _interactablesToEnableAfterPhoneCall.ForEach(i => i.Interactable = false);
+            _gun.GetComponent<IInteractable>().Interactable = true;
+            _crowbar.GetComponent<IInteractable>().Interactable = true;
         }
 
         private static class HavenDialogueCommands
@@ -181,7 +230,7 @@ namespace SunsetSystems.Loading
             [YarnCommand("HandleCrowbarTaken")]
             public static void HandleCrowbarTaken()
             {
-                HavenSceneLogic._crowbar.gameObject.SetActive(false);
+                HavenSceneLogic._crowbar.SetActive(false);
             }
 
             [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
@@ -207,6 +256,31 @@ namespace SunsetSystems.Loading
             public static void KillKevin()
             {
                 HavenSceneLogic.KillTheLandlord();
+            }
+
+            [YarnCommand("AddBobbyPinToInventory")] 
+            public static void AddBobbyPinToInventory()
+            {
+                Debug.LogException(new NotImplementedException());
+            }
+
+            [YarnCommand("KieranDominicBargeIn")]
+            public static IEnumerable KieranDominicBargeIn()
+            {
+                Task _bargeInTask = Task.Run(HavenSceneLogic.BargeIn);
+                yield return new WaitUntil(() => _bargeInTask.IsCompleted);
+            }
+
+            [YarnCommand("DisableSinkInteraction")]
+            public static void DisableSinkInteraction()
+            {
+                HavenSceneLogic.DisableSinkInteraction();
+            }
+
+            [YarnCommand("DisableInteractionsBeforeDominic")]
+            public static void DisableInteractionsBeforeDominic()
+            {
+                HavenSceneLogic.DisableInteractionsBeforeDominic();
             }
         }
     }

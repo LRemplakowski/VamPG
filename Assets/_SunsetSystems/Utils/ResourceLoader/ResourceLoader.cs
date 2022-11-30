@@ -27,6 +27,9 @@ namespace SunsetSystems.Resources
         private const string HOVER_HIGHLIGHT_MATERIAL = "hover_highlight_material";
         private const string PORTRAIT_DIRECTORY = "CharacterPortraits/";
 
+        private const string AUDIO_SFX = "SFX/";
+        private const string AUDIO_SOUNDTRACK = "Soundtrack/";
+
         private static T GetAsset<T>(string path) where T : Object
         {
             return UnityEngine.Resources.Load<T>(path);
@@ -100,6 +103,16 @@ namespace SunsetSystems.Resources
         public static Sprite GetPortrait(string portraitName)
         {
             return GetAsset<Sprite>($"{PORTRAIT_DIRECTORY}{portraitName}");
+        }
+
+        public static AudioClip GetSFX(string sfxName)
+        {
+            return GetAsset<AudioClip>($"{AUDIO_SFX}{sfxName}");
+        }
+
+        public static AudioClip GetSong(string songName)
+        {
+            return GetAsset<AudioClip>($"{AUDIO_SOUNDTRACK}{songName}");
         }
     }
 }

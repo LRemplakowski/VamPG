@@ -4,6 +4,7 @@ using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Entities
@@ -31,11 +32,13 @@ namespace SunsetSystems.Entities
         {
             if (_creatureRegistry.ContainsKey(config.DatabaseID))
             {
-                Debug.LogWarning("CreatureConfig " + config.DatabaseID + " is already registered in the database!");
+                _accessorRegistry = new();
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
                 return false;
             }
             _creatureRegistry.Add(config.DatabaseID, config);
-            _accessorRegistry.Add(config.FullName.ToPascalCase(), config.DatabaseID);
+            _accessorRegistry = new();
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
             return true;
         }
 
@@ -53,21 +56,17 @@ namespace SunsetSystems.Entities
                     keysToDelete.Add(key);
             }
             keysToDelete.ForEach(key => _creatureRegistry.Remove(key));
-            List<string> accessorKeysToDelete = new();
-            foreach (string key in _accessorRegistry.Keys)
-            {
-                if (keysToDelete.Contains(_accessorRegistry[key]))
-                    accessorKeysToDelete.Add(key);
-            }
-            accessorKeysToDelete.ForEach(key => _accessorRegistry.Remove(key.ToPascalCase()));
+            _accessorRegistry = new();
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
         }
 
         public void UnregisterConfig(CreatureConfig config)
         {
             if (_creatureRegistry.Remove(config.DatabaseID))
-                Debug.Log("Removed quest " + config.DatabaseID + " from the database!");
-            else
-                Debug.LogError("Quest " + config.DatabaseID + " was not registered in the database!");
+            {
+                _accessorRegistry = new();
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.Add(c.FullName.ToPascalCase(), c.DatabaseID));
+            }
         }
     }
 }

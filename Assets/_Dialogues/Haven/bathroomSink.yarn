@@ -1,0 +1,34 @@
+﻿title: bathroomSink
+tags:
+---
+-> {$pcName}: \[Mirror\] <<if visited("bathroomMirror") == false>>
+    <<jump bathroomMirror>>
+-> {$pcName}: \[Counter\] <<if visited("bathroomCounter") == false>>
+    <<jump bathroomCounter>>
+-> {$pcName}: \[Medicine Cabinet\] <<if visited("bathroomCabinet") == false>>
+    <<jump bathroomCabinet>>
+-> {$pcName}: \[Walk away\]
+===
+title: bathroomMirror
+---
+<<if $bloodsoaked == true>>
+{$narrator}: \[Blood splatters cover your tired, sagging eyes. Your clothes are soaked red. Upon closer inspection, you see that your canines have grown into fangs.\]
+<<else>>
+{$narrator}: \[The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.\]
+<<endif>>
+{$innerVoice}: What is happening to me?
+<<jump bathroomSink>>
+===
+title: bathroomCounter
+---
+{$narrator}: \[Sifting through your cosmetic products, you find a Bobby Pin on the counter.\]
+{$innerVoice}: Wish I had this sooner.
+<<AddBobbyPinToInventory>>
+<<jump bathroomSink>>
+===
+title: bathroomCabinet
+---
+{$narrator}: \[You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.\]
+{$innerVoice}: What's the worst some more liver damage gonna do?
+<<jump bathroomSink>>
+===

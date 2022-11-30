@@ -6,7 +6,7 @@ tags:
 -> {$pcName}: \[Take it.\] #line:049942a 
     <<HandleGunTaken>>
     <<set $hasGun to true>>
--> {$pcName}: \[Firearms 1\] \[Clean the gun.\] #line:0e85770 
+-> {$pcName}: \[Firearms 1\] \[Clean the gun.\] <<if $hasTimeToCleanGun == true>> #line:0e85770
     <<HandleGunTaken>>
     <<set $hasGun to true>>
     <<if Roll("firearms") >= 1>>

@@ -20,6 +20,7 @@ namespace SunsetSystems.Entities.Characters
         public StatsData Stats;
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
+        public float Money;
 
         public CreatureData(CreatureConfig config)
         {
@@ -34,6 +35,7 @@ namespace SunsetSystems.Entities.Characters
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;
+            Money = config.EquipmentConfig.Money;
         }
     }
 }

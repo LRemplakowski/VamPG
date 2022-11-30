@@ -1,3 +1,5 @@
+using NaughtyAttributes;
+using SunsetSystems.Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,10 +11,18 @@ namespace SunsetSystems.Dialogue
     [CreateAssetMenu(fileName = "new Dialogue Variable Config", menuName = "Sunset Dialogue/Variable Config")]
     public class DialogueVariableConfig : ScriptableObject
     {
-        public string pcName;
-        public string beastName;
-        public string innerMonologue;
-        public string narrator;
+        [SerializeField]
+        private CreatureConfig _pcConfig;
+        [SerializeField]
+        private CreatureConfig _beastConfig;
+        [SerializeField]
+        private CreatureConfig _innerMonologueConfig;
+        [SerializeField]
+        private CreatureConfig _narratorConfig;
+        [SerializeField, Required]
+        private CreatureConfig _kieranConfig;
+        [SerializeField, Required]
+        private CreatureConfig _dominicConfig;
 
         public const string SPEAKER_ID = "speakerID";
         public const string PC_NAME = "pcName";
@@ -20,6 +30,8 @@ namespace SunsetSystems.Dialogue
         public const string INNER_VOICE = "innerVoice";
         public const string NARRATOR_VOICE = "narrator";
         public const string PC_ID = "pcID";
+        public const string KIERAN = "kieran";
+        public const string DOMINIC = "sheriff";
 
         [SerializeField, HideInInspector]
         private DialogueSaveData _injectionData = new();
@@ -36,10 +48,12 @@ namespace SunsetSystems.Dialogue
             injectionData._strings = new();
             injectionData._bools = new();
 
-            injectionData._strings.Add(PC_NAME, pcName);
-            injectionData._strings.Add(BEAST, beastName);
-            injectionData._strings.Add(INNER_VOICE, innerMonologue);
-            injectionData._strings.Add(NARRATOR_VOICE, narrator);
+            injectionData._strings.Add(PC_NAME, _pcConfig.FullName);
+            injectionData._strings.Add(BEAST, _beastConfig.FullName);
+            injectionData._strings.Add(INNER_VOICE, _innerMonologueConfig.FullName);
+            injectionData._strings.Add(NARRATOR_VOICE, _narratorConfig.FullName);
+            injectionData._strings.Add(KIERAN, _kieranConfig.FullName);
+            injectionData._strings.Add(DOMINIC, _dominicConfig.FullName);
 
             return injectionData;
         }

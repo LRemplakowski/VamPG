@@ -1,0 +1,33 @@
+﻿title: bouncerConversation
+tags:
+---
+{$kieran}: Or don't listen to me.
+[nomarkup][The queue behind you grumbles and curses at you for cutting the line. The Bouncer eyes you up and down, unimpressed. Veins burst out of his roided out biceps.][/nomarkup]
+Bouncer: You on the list?
+-> {$pcName}: (Presence) Care to pencil us in?
+    <<if UseDiscipline("presence") == true>>
+    <<jump BouncerPresenceSuccess>>
+    <<else>>
+    <<jump BouncerPresenceFailure>>
+    <<endif>>
+-> {$pcName}: Yes.
+    Bouncer: Why even bother lying?
+-> {$pcName}: No.
+    Bouncer: Thanks for being honest, I guess. Now fuck off.
+===
+title: BouncerPresenceSuccess
+---
+[nomarkup][Your words sing to his ears like honey. His frigid stance warms up as he fawns over you.][/nomarkup] #success
+Bouncer: I'd love to miss, but someone as special as you should go in through the back. Not that I'm thinking about your back… it's just for “people” like you. Could I… get your number?
+[nomarkup][The poor man is stumbling over his words, practically drooling.][/nomarkup]
+{$kieran}: We're running late.
+Bouncer: Was I talking to you?
+{$pcName}: … Guess I should head on back.
+Bouncer: Yeah… totally… I get that. Come back later, alright.
+===
+title: BouncerPresenceFailure
+---
+Bouncer: Nice try. Head on back like the other licks. Kate's orders. #failure
+{$kieran}: Sorry to bother you.
+Bouncer: You should know better, Kieran.
+===

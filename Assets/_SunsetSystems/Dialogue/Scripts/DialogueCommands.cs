@@ -1,3 +1,4 @@
+using SunsetSystems.Audio;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
@@ -87,6 +88,12 @@ namespace SunsetSystems.Dialogue
         {
             if (InventoryManager.Instance.TryRemoveMoney(value) == false)
                 throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
+        }
+
+        [YarnCommand("PlaySFX")]
+        public static void PlaySFX(string clipName)
+        {
+            AudioManager.Instance.PlaySFXOneShot(clipName);
         }
     }
 }

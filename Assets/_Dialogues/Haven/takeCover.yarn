@@ -37,9 +37,9 @@ title: crowbarAttack
 position: 590,-350
 ---
 <<if Roll("melee") >= 1>>
-{$narrator}: \[Your attack connects, leaving a gnarly gash in Dominic, but he seems unbothered. His flesh reconnects as the wound heals before your eyes.\] #success 
+[nomarkup][Your attack connects, leaving a gnarly gash in Dominic, but he seems unbothered. His flesh reconnects as the wound heals before your eyes.][/nomarkup] #success 
 <<else>>
-{$narrator}: \[Barely moving, Dominic nonchalantly dodges your attack with swagger. Unbothered.\] #failure
+[nomarkup][Barely moving, Dominic nonchalantly dodges your attack with swagger. Unbothered.][/nomarkup] #failure
 <<endif>>
 <<jump counterAttack>>
 ===
@@ -47,9 +47,9 @@ title: gunAttack
 position: 352,-217
 ---
 <<if Roll("ranged") >= 1>>
-{$narrator}: \[Your attack connects, leaving a gnarly gash in Dominic, but he seems unbothered. His flesh reconnects as the wound heals before your eyes.\] #success 
+[nomarkup][Your attack connects, leaving a gnarly gash in Dominic, but he seems unbothered. His flesh reconnects as the wound heals before your eyes.][/nomarkup] #success 
 <<else>>
-{$narrator}: \[Barely moving, Dominic nonchalantly dodges your attack with swagger. Unbothered.\] #failure
+[nomarkup][Barely moving, Dominic nonchalantly dodges your attack with swagger. Unbothered.][/nomarkup] #failure
 <<endif>>
 <<jump counterAttack>>
 ===
@@ -57,14 +57,14 @@ title: counterAttack
 position: 656,-163
 ---
 {$sheriff}: Nice try, kid.
-{$narrator}: \[He saunters towards you, pinning you to the corner, but he doesn't even raise his hands.\]
+[nomarkup][He saunters towards you, pinning you to the corner, but he doesn't even raise his hands.\]
 {$sheriff}: Kieran, search the place for any other “friends” she's made.
 {$kieran}: \[Kieran nods and begins searching the apartment.\]
 {$sheriff}:  Now do you want to do this the hard way or the easy way?
 -> {$pcName}: \[Drop your weapon.\]
     {$sheriff}: Sharp.
 -> {$pcName}: \[Run.\]
-    {$narrator}: \[Before you even take a step, Dominic seemingly reads your mind and moves with inhuman speed to block your exit.\]
+    [nomarkup][Before you even take a step, Dominic seemingly reads your mind and moves with inhuman speed to block your exit.][/nomarkup]
 <<jump kieranEndsSearch>>
 ===
 title: kieranEndsSearch
@@ -75,9 +75,9 @@ position: 789,-13
 <<if $kevinMurdered == true>>
 {$sheriff}: Two already.
 <<endif>>
-{$narrator}: \[He shakes his head side to side but keeps his devilish smirk.\]
+[nomarkup][He shakes his head side to side but keeps his devilish smirk.][/nomarkup]
 {$sheriff}: You sure know how to party. I'll give you that.
-{$narrator}: \[He lights a cigar, blowing the smoke in your face.\]
+[nomarkup][He lights a cigar, blowing the smoke in your face.][/nomarkup]
 {$sheriff}: You've proven to be quite the headache. I'll be honest with you, I'm gonna kill you, but I'm debating whether I should just go ahead and do it now or drag you off to let my wife decide.
 -> {$pcName}: Continue.
     <<jump sheriffConfrontation>>
@@ -87,11 +87,11 @@ position: 811,169
 ---
 <<OverrideSpeakerPortrait {$beast}>> 
 {$beast}: Kill him!
-{$narrator}: \[You dig your nails into your flesh to stop the voice in your head. You're gonna have to think clearly to get out of this one.\]
+[nomarkup][You dig your nails into your flesh to stop the voice in your head. You're gonna have to think clearly to get out of this one.][/nomarkup]
 <<wait 1>>
 <<ClearPortraitOverride>>
 {$sheriff}: How about this, I bet you have several questions. I'll answer them, so you can at least make peace with your death. Can't have any more ghosts chasing my tail. I'm a taken man.
-{$narrator}: \[Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it either. You don't want to die either.\]
+[nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it either. You don't want to die either.][/nomarkup]
 <<OverrideSpeakerPortrait {$pcName}>>
 -> {$innerVoice}: I need to bide my time.
     <<ClearPortraitOverride>>
@@ -104,9 +104,9 @@ position: 824,309
 {$beast}: KILL HIM!
 <<wait 1>>
 <<ClearPortraitOverride>>
-{$narrator}: \[One question in particular sticks out the most.\]
+[nomarkup][One question in particular sticks out the most.][/nomarkup]
 {$pcName}: What's happening to me?
-{$narrator}: \[Dominic cackles.\]
+[nomarkup][Dominic cackles.][/nomarkup]
 {$kieran}: You don't know?
 {$sheriff}: \[He's calmed down but is still chuckling.\] You mean you still haven't figured it out yet? Damn, your sire really did you dirty. Well, no sense in pussyfooting around it, you're a vampire.
 {$innerVoice}: That's… that's impossible.
@@ -119,9 +119,9 @@ position: 616,311
 {$sheriff}: Don't act like you didn't hear me.
 {$kieran}: We prefer the term Kindred.
 {$sheriff}: Technically, yes. If you're a nerd.
-{$narrator}: \[Kieran squints at Dominic who responds with a shit-eating grin.\]
+[nomarkup][Kieran squints at Dominic who responds with a shit-eating grin.][/nomarkup]
 {$sheriff}: Well, at least now you know you didn't kill for no reason. You were hungry.
-{$narrator}: \[The crazy part is that it somewhat makes sense. Not that it makes you feel any better.\]
+[nomarkup][The crazy part is that it somewhat makes sense. Not that it makes you feel any better.][/nomarkup]
 {$sheriff}: Any other questions?
 <<jump questionsToSheriff>>
 ===
@@ -186,7 +186,7 @@ position: -31,211
 {$sheriff}: Oh my bad. Wouldn't want to be rude. Name's Dominic. I'm the Sheriff, but I'm no pig, just the closest thing we Kindred have to law around here. This is Kieran. He's shy.
 {$kieran}: I can introduce myself.
 {$sheriff}: Sure you can.
-{$narrator}: \[Kieran grumbles under his breath.\]
+[nomarkup][Kieran grumbles under his breath.][/nomarkup]
 <<jump questionsToSheriff>>
 ===
 title: youHaveWife
@@ -204,7 +204,7 @@ position: 27,457
 {$sheriff}: We have our ways.
 {$kieran}: We got an anonymous tip.
 {$sheriff}: Man, why you gotta give up our ways?
-{$narrator}: \[Kieran shrugs.\]
+[nomarkup][Kieran shrugs.][/nomarkup]
 <<jump questionsToSheriff>>
 ===
 title: whatHappensNow
@@ -212,16 +212,16 @@ position: 410,474
 ---
 {$sheriff}: Well my friend, it looks like our time has come to an end. I'd have loved to introduce you to the Mrs, but unfortunately for you I have plans tonight and am already running late. I hereby sentence you to death 2: Electric Boogaloo.
 {$kieran}: \[Rolling his eyes\] Is now really the time for jokes?
-{$narrator}: \[Kieran walks arond the room, briefly browsing through your things. He stops at the investigation board.\]
+[nomarkup][Kieran walks arond the room, briefly browsing through your things. He stops at the investigation board.][/nomarkup]
 {$sheriff}: I'm trying to lighten the mood, grumpy pants. 
 {$sheriff}: \[Sighs\] Let's just get this over with. Promise I'll make it quick.
-{$narrator}: \[Dominic draws his .44 Auto Mag revolver. He's a little too enthusiastic as he takes a step towards you.\]
+[nomarkup][Dominic draws his .44 Auto Mag revolver. He's a little too enthusiastic as he takes a step towards you.][/nomarkup]
 <<OverrideSpeakerPortrait {$beast}>>
 {$beast}: FIGHT BACK!
 <<wait 2>>
 <<ClearPortraitOverride>>
-{$narrator}: \[If there's ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.\]
-{$narrator}: \[You close your eyes. This is it.\]
+[nomarkup][If there's ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.][/nomarkup]
+[nomarkup][You close your eyes. This is it.][/nomarkup]
 <<OverrideSpeakerPortrait {$pcName}>>
 {$innerVoice}: Chad...
 -> {$pcName}: Continue.
@@ -238,7 +238,7 @@ position: 712,493
 -> {$pcName}: Continue.
 {$sheriff}: I wouldn't exactly call her discreet.
 {$kieran}: Cops haven't got her yet.
-{$narrator}: \[Dominic slightly loosens his grip, but remains steadfast. His brow furrows. You can see the cogs in his mind spin.\]
+[nomarkup][Dominic slightly loosens his grip, but remains steadfast. His brow furrows. You can see the cogs in his mind spin.][/nomarkup]
 <<jump keepHerAlive>>
 ===
 title: keepHerAlive
@@ -246,7 +246,7 @@ title: keepHerAlive
 {$sheriff}: I see why Kate keeps you around, Kieran. You make good points, but Sam will be pissed if she found out I let a fledgling who can't even change their own diaper go.
 -> {$innerVoice}: I'm not a child, dickwad.
 {$kieran}: Keep her on a short leash for the time being. A trial run and then bring her to the Court once she's proven herself useful. If she's not, proceed as planned.
-{$narrator}: \[Dominic stays silent for a few moments before his cheeky smile returns. He lets go of your throat as quickly as he grabbed it, causing you to drop to the floor. He turns around to face Kieran.\]
+[nomarkup][Dominic stays silent for a few moments before his cheeky smile returns. He lets go of your throat as quickly as he grabbed it, causing you to drop to the floor. He turns around to face Kieran.][/nomarkup]
 {$sheriff}: You've convinced me, but she's your responsibility. She fucks up. Your ass is on the line too. Hope whatever ulterior motive you have is worth it.
 {$kieran}: ...
 {$kieran}: ... Okay.
@@ -256,16 +256,16 @@ title: keepHerAlive
     {$sheriff}: Whatever you want to call it. Better behave though less you'll be put down. You should be thanking Kieran.
 {$sheriff}: I do have one condition though because I can't go home to my wife breaking too many Traditions less the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else.
 {$pcName}: That's impossible! I don't even remember where I was last night.
-{$narrator}: \[Kieran curses under his breath.\]
+[nomarkup][Kieran curses under his breath.][/nomarkup]
 {$sheriff}: Well hate to be an asshole, but that sounds like a “you” problem. Just kidding, I love being an asshole.
-{$narrator}: \[He taps his foot a couple times, glancing at the ground.\]
+[nomarkup][He taps his foot a couple times, glancing at the ground.][/nomarkup]
 {$sheriff}: I can give you a clue however.
 -> {$pcName}: Continue.
     <<jump clueRitual>>
 ===
 title: clueRitual
 ---
-{$narrator}: \[In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.\]
+[nomarkup][In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.][/nomarkup]
 {$pcName}: Ow!
 {$sheriff}: \[He grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.\]
 -> {$innerVoice}: Can I do that?
@@ -273,7 +273,7 @@ title: clueRitual
 -> {$pcName}: What's that supposed to mean?
 {$sheriff}: You come from an ancient bloodline of Kindred known for their- “radical” tendencies with roots as far back as the Bolshevik Revolution and ancient Carthage. 
 {$sheriff}: Basically, it's not your fault you're annoying. Also based on the potency of your blood, I can tell your sire is not somebody to be messed with, so best of luck you two. 
-{$narrator}: \[Dominic starts walking toward the doors.\]
+[nomarkup][Dominic starts walking toward the doors.][/nomarkup]
 {$sheriff}: I'm off. I'll send a team to clean up later. Pleasure to finally meet you Desiree. I'll check in later. [He takes off his shades and winks.\]
 -> {$pcName}: Continue.
     <<jump figureOutWhereYouWere>>
@@ -287,11 +287,12 @@ title: figureOutWhereYouWere
     {$kieran}: Smart ass. Great!
 {$kieran}: Let's look around for any clue. If you're going down, I'm not going down with you.
 -> {$pcName}: Thanks for saving me.
-    {$narrator}: \[Kieran shrugs.\]
+    [nomarkup][Kieran shrugs.][/nomarkup]
     {$kieran}: I didn't do it for you.
 -> {$pcName}: So you're my jailor.
-    {$narrator}: \[Kieran shrugs.\]
+    [nomarkup][Kieran shrugs.][/nomarkup]
     {$kieran}: More like your cellmate.
 {$pcName}: Why did you do it then?
 {$kieran}: We don't have time to chit-chat.
+-> {$pcName}: Continue.
 ===

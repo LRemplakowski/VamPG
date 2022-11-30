@@ -127,7 +127,7 @@ namespace SunsetSystems.Dialogue
             await new WaitForUpdate();
             if (_typeSpeed <= 0)
                 return;
-            _lineHistory.maxVisibleCharacters += line.CharacterName.Length;
+            _lineHistory.maxVisibleCharacters += line.CharacterName?.Length ?? 0;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
@@ -150,8 +150,13 @@ namespace SunsetSystems.Dialogue
                 .AppendLine("")
                 .Append("<size=26>");
             AppendRollPrefix(line);
+            if (line.CharacterName != null)
+            {
+                _lineHistoryStringBuilder
+                    .Append($"<color=\"red\">{line.CharacterName}:</color>");
+            }
             _lineHistoryStringBuilder
-                .AppendLine($"<color=\"red\">{line.CharacterName}:</size></color>")
+                .AppendLine("</size>")
                 .AppendLine(line.TextWithoutCharacterName.Text);
             return _lineHistoryStringBuilder.ToString();
         }

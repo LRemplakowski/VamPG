@@ -13,14 +13,14 @@ namespace SunsetSystems.Audio
         [SerializeField]
         private SoundtrackController _soundtrackController;
 
-        public void PlaySFX(string sfxName)
-        {
-            _sfxController.PlayLooped(sfxName);
-        }
-
         public void PlaySFXOneShot(string sfxName)
         {
             _sfxController.PlayOneShot(sfxName);
+        }
+
+        public void PlaySFXOneShot(AudioClip clip)
+        {
+            _sfxController.PlayOneShot(clip);
         }
 
         public void PlayTyperwriterLoop()

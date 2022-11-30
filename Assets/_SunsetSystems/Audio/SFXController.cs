@@ -2,6 +2,7 @@ using Redcode.Awaiting;
 using SunsetSystems.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Audio
@@ -10,7 +11,7 @@ namespace SunsetSystems.Audio
     public class SFXController : MonoBehaviour
     {
         [SerializeField]
-        private AudioSource _sfxSource;
+        private AudioSource _sfxSource, _typewriterSource;
 
         [SerializeField]
         private List<AudioClip> _typewriterLoop;
@@ -24,14 +25,11 @@ namespace SunsetSystems.Audio
         private void Awake()
         {
             _sfxSource ??= GetComponent<AudioSource>();
-        }
-
-        public void PlayLooped(string sfxName)
-        {
-            AudioClip clip = ResourceLoader.GetSFX(sfxName);
-            _sfxSource.clip = clip;
-            _sfxSource.loop = true;
-            _sfxSource.Play();
+            _sfxSource ??= gameObject.AddComponent<AudioSource>();
+            _sfxSource.loop = false;
+            _typewriterSource ??= GetComponents<AudioSource>().FirstOrDefault(s => s != _sfxSource);
+            _typewriterSource ??= gameObject.AddComponent<AudioSource>();
+            _typewriterSource.loop = false;
         }
 
         public void PlayOneShot(string sfxName)
@@ -42,7 +40,7 @@ namespace SunsetSystems.Audio
 
         public void PlayOneShot(AudioClip clip)
         {
-            _sfxSource.loop = false;
+            _sfxSource.Stop();
             _sfxSource.PlayOneShot(clip);
         }
 
@@ -57,24 +55,22 @@ namespace SunsetSystems.Audio
             AudioClip clip = _typewriterLoop[_random.Next(0, _typewriterLoop.Count)];
             if (DoPlayTypewriterLoop)
             {
-                PlayOneShot(clip);
+                _typewriterSource.Stop();
+                _typewriterSource.PlayOneShot(clip);
                 await new WaitForSeconds(clip.length);
-                _sfxSource.Stop();
                 PlayTyperwriterSFX();
             }
         }
 
         public void StopTyperwriterLoop()
         {
-            _sfxSource.Stop();
-            _sfxSource.loop = false;
+            _typewriterSource.Stop();
             DoPlayTypewriterLoop = false;
-            PlayOneShot(_typewriterEndBell);
+            _typewriterSource.PlayOneShot(_typewriterEndBell);
         }
 
         public void StopSFX()
         {
-            _sfxSource.loop = false;
             _sfxSource.Stop();
         }
     }

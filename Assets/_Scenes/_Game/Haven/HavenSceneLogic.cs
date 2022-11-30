@@ -85,7 +85,7 @@ namespace SunsetSystems.Loading
         private void Start()
         {
             this.TryFindFirstGameObjectWithTag(TagConstants.CAMERA_RIG, out GameObject cameraControlGO);
-            _cameraControl = cameraControlGO.GetComponent<CameraControlScript>();
+            _cameraControl = cameraControlGO?.GetComponent<CameraControlScript>();
         }
 
         public async override Task StartSceneAsync(SceneLoadingData data)

@@ -1,14 +1,14 @@
 ﻿title: pizza
 tags:
 ---
-{$narrator}: \[It's been out for two days now but you're so hungry.\] #line:05deeea 
+[nomarkup][It's been out for two days now but you're so hungry.][/nomarkup] #line:05deeea 
 -> {$pcName}: \[Grab a slice.\] #line:0b08af1 
     <<jump pizzaEat>>
 -> {$pcName}: \[Walk away.\] #line:0a67a1a 
 ===
 title: pizzaEat
 ---
-{$narrator}: \[As soon as the cheese hits your mouth you immediately get queasy. You can't tell if it's because it was left out or your hangover. Probably both. You try to hold it down but end up puking up whatever you ate last night. It's suspiciously red in hue, but you hardly notice. Now you're only hungrier.\] #line:0868496 
+[nomarkup][As soon as the cheese hits your mouth you immediately get queasy. You can't tell if it's because it was left out or your hangover. Probably both. You try to hold it down but end up puking up whatever you ate last night. It's suspiciously red in hue, but you hardly notice. Now you're only hungrier.][/nomarkup] #line:0868496 
 <<set $vomited to true>>
 <<set $sinkRepairdModifier to 1>>
 {$innerVoice}: Ew! I need a shower. #line:064afcc 

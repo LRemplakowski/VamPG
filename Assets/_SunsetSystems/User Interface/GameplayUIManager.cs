@@ -21,6 +21,8 @@ namespace SunsetSystems.UI
         public HoverNameplate HoverNameplate { get; private set; }
         [field: SerializeField]
         public DialogueViewBase DialogueGUI { get; private set; }
+        [field: SerializeField]
+        public GameObject HelpOverlay { get; private set; }
 
         public void HandleNameplateHover(INameplateReciever nameplateReciever)
         {

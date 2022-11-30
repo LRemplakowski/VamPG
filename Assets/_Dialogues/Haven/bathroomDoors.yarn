@@ -1,7 +1,7 @@
 ﻿title: bathroomDoors
 tags:
 ---
-{$narrator}: \[The door knob doesn't budge. It's locked. Of course from the inside because the architect must have been a sadist.\] #line:05c4aa7 
+[nomarkup][The door knob doesn't budge. It's locked. Of course from the inside because the architect must have been a sadist.][/nomarkup] #line:05c4aa7 
 <<if ($bathroomDoorInteractedWith == true)>>
 <<jump bathroomDoorDialogue>>
 <<endif>>
@@ -14,20 +14,20 @@ title: bathroomDoorDialogue
 position: 248,2
 ---
 -> {$pcName}: \[Try to force the door open.\] #line:0d96086 
-    {$narrator}: \[Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.\] #line:0877209 
+    [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #line:0877209 
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Knock\] #line:031893d 
     {$narrator}: KNOCK. KNOCK. KNOCK. #line:0c48419 
-    {$narrator}: \[No answer.\] #line:0cabaa6 
+    [nomarkup][No answer.][/nomarkup] #line:0cabaa6 
     {$innerVoice}: Why did I do that? #line:03a66e7 
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Walk away.\] #line:069c498 
 -> {$pcName}: \[Melee 1\] \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
     <<if Roll("melee") >= 1>>
-    {$narrator}: \[You jimmy the crowbar in between the door and the wall. With a little elbow grease you hear a CREAK, and the door glides open.\] #success #line:0ab6340 
+    [nomarkup][You jimmy the crowbar in between the door and the wall. With a little elbow grease you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0ab6340 
     <<OpenBathroomDoors>>
     <<else>>
-    {$narrator}: \[Perhaps you were a little too eager. The door shatters before you, splinters flying in the air, jamming into your flesh.\] 1 superficial damage. #failure #line:0cccabb 
+    [nomarkup][Perhaps you were a little too eager. The door shatters before you, splinters flying in the air, jamming into your flesh.][/nomarkup] 1 superficial damage. #failure #line:0cccabb 
     {$innerVoice}: Ow! What the fuck!? #line:0c15cec 
     <<DestroyBathroomDoors>>
     <<endif>>

@@ -37,6 +37,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal += OnJournal;
             PlayerInputHandler.OnSkipDialogue += OnSkipDialogue;
             PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
+            PlayerInputHandler.OnHelp += OnShowHelp;
         }
 
         private void OnDisable()
@@ -48,6 +49,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal -= OnJournal;
             PlayerInputHandler.OnSkipDialogue -= OnSkipDialogue;
             PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
+            PlayerInputHandler.OnHelp -= OnShowHelp;
         }
 
         private void Start()
@@ -140,6 +142,18 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             SwitchPauseAndOpenScreen(PauseMenuScreen.Journal);
+        }
+
+        private void OnShowHelp(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                gameplayUIParent.HelpOverlay.SetActive(true);
+            }
+            else if (context.canceled)
+            {
+                gameplayUIParent.HelpOverlay.SetActive(false);
+            }
         }
 
         private void SwitchPauseAndOpenScreen(PauseMenuScreen screen)

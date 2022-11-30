@@ -2,7 +2,7 @@
 tags:
 position: -156,-220
 ---
-{$narrator}: \[You pick up the phone. Whom do you call?\] #line:0dcfbcf 
+[nomarkup][You pick up the phone. Whom do you call?][/nomarkup] #line:0dcfbcf 
 -> {$pcName}: \[Call the police.\] <<if $police == true>> #line:058f272 
     <<jump policePhone>>
 -> {$pcName}: \[Call the landlord.\] <<if $kevinMurdered == false>> #line:071acb0 
@@ -14,7 +14,7 @@ position: 10,-345
 <<OverrideSpeakerPortrait $beast>>
 {$beast}: What are you doing that for? #line:0c8fbca 
 <<ClearPortraitOverride>>
-{$narrator}: \[A strange whisper in your head compels you to stop. Your conscience won't win tonight. You're not going to jail.\] #line:0fc58c8 
+[nomarkup][A strange whisper in your head compels you to stop. Your conscience won't win tonight. You're not going to jail.][/nomarkup] #line:0fc58c8 
 <<jump callLandlord>>
 ===
 title: kevinPhone
@@ -24,7 +24,7 @@ position: 37,-90
 Kevin: Sunset Acres Apartments, how can I help you? #line:01493b8 
 {$pcName}: Hey Kevin, it's Desiree. Sink is clogged again. #line:0d88850 
 Kevin: Again? There's no way. I just fixed it last week. You must be washing grease down the drain. Not my problem. Hire a plumber. #line:049bc7a 
-{$narrator}: \[You can hear his contempt through the phone\] #line:0f3693e 
+[nomarkup][You can hear his contempt through the phone][/nomarkup] #line:0f3693e 
 -> {$pcName}: I'll pay you for your time. #line:0718920 
     <<jump payKevin>>
 -> {$pcName}: Please Kevin? I'm just trying to get my life together here. \[Charisma 2\] #line:0230c89 
@@ -34,13 +34,13 @@ Kevin: Again? There's no way. I just fixed it last week. You must be washing gre
 -> {$pcName}: Kevin, you know I'm friends with tenant lawyers right? \[Intimidation 1\] #line:067315e 
     <<jump intimidateKevin>>
 -> {$pcName}: Okay. #line:0931f00 
-    {$narrator}: \[He hangs up.\] #line:0c2a5a8 
+    [nomarkup][He hangs up.\] #line:0c2a5a8 
     <<FailObjective "FIX_SINK" "CALL_LANDLORD">>
 ===
 title: payKevin
 position: 146,129
 ---
-{$narrator}: \[Now you're speaking his language.\] #line:0fa1f19 
+[nomarkup][Now you're speaking his language.][/nomarkup] #line:0fa1f19 
 Kevin: I'll have to charge you a… uh… a late night fee. $200. #line:07fb621 
 -> {$pcName}: \[Gritting your teeth\] Sure. #line:038d2cd 
     <<jump kevinConvinced>>
@@ -103,7 +103,7 @@ position: 43,259
 <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>
 Kevin: Okay, let me get dressed. I'll be over in a bit. #line:0a8c75c 
 {$pcName}: Thanks Kevin. #line:027a76e 
-{$narrator}: \[He hangs up.\] #line:000f2cb 
+[nomarkup][He hangs up.][/nomarkup] #line:000f2cb 
 <<ClearPortraitOverride>>
 -> {$pcName}: Continue. #line:0b1d3c6 
 ===

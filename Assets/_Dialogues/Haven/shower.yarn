@@ -1,7 +1,7 @@
 ﻿title: shower
 tags:
 ---
-{$narrator}: \[Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.\]
+[nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup]
 {$innerVoice}: No... No. No. No...! No!
 -> {$pcName}: \[Medicine 2\] \[Find the cause of death.\]
 -> {$pcName}: \[Streetwise 1\] \[Fleece the body.\]
@@ -10,9 +10,9 @@ tags:
 title: findCause
 ---
 <<if Roll("medicine") >= 2>>
-{$narrator}: \[In addition to his missing eye, he has several bruises and gashes across his face and neck. He most likely died of blood loss.\] #success
+[nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. He most likely died of blood loss.][/nomarkup] #success
 <<else>>
-{$narrator}: \[You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.\] #failure
+[nomarkup][You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure
 <<endif>>
 <<jump afterBodyInteraction>>
 ===
@@ -22,9 +22,9 @@ title: searchBody
 {$narrator}: [You find his wallet and ID: his name is Diego Vazguez.] #success
 <<AddMoney 10>>
 <<else>>
-{$narrator}: \[You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.\]
+[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup]
 <<endif>>
-{$narrator}: \[You find a black and white photo of him holding a baby.\]
+[nomarkup][You find a black and white photo of him holding a baby.][/nomarkup]
 {$innerVoice}: Poor bastard.
 <<jump afterBodyInteraction>>
 ===
@@ -47,12 +47,14 @@ title: afterBodyIntercation
 title: thatVoiceAgain
 ---
 {$innerVoice}: There's that voice again.
-{$narrator}: BANG! BANG! BANG!
+<<PlaySFX("door_knock_light")>>
+<<wait 1.7>>
 [$narrator]: \[It's coming from the front door.\]
 {$innerVoice}: Who is that?
 {$beast}: Kill them.
-{$narrator}: BANG! BANG! BANG! BANG!
-{$narrator}: \[They're getting more aggressive.\]
+<<PlaySFX("door_knock_heavy")>>
+<<wait 2>>
+[nomarkup][They're getting more aggressive.][/nomarkup]
 <<set $hasTimeToCleanGun to false>>
 <<DisableInteractionsBeforeDominic>>
 -> {$pcName}: Continue.

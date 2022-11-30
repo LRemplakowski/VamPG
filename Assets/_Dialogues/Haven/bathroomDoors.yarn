@@ -17,7 +17,7 @@ position: 248,2
     [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #line:0877209 
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Knock\] #line:031893d 
-    {$narrator}: KNOCK. KNOCK. KNOCK. #line:0c48419 
+    <<PlaySFX "door_knock_light">> 
     [nomarkup][No answer.][/nomarkup] #line:0cabaa6 
     {$innerVoice}: Why did I do that? #line:03a66e7 
     <<jump bathroomDoorDialogue>>

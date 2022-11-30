@@ -14,8 +14,9 @@ title: trashCanAfterDominic
 {$kieran}: \[He scratches his head.\] You're kidding. My sire sort of owns the place.
 {$pcName}: "Sort of?"
 {$kieran}: I'll tell you in the car. You're driving.
-<<if bloodsoaked ==true>>
+<<if $bloodsoaked is true>>
 {$kieran}: You should change first. I'd recommend a shower, but well…
+<<CompleteObjective "MAIN_SATURDAY_START" "FIGURE_OUT_WHERE_YOU_WERE">>
 <<endif>>
 ===
 title: trashCanBeforeDominic

@@ -47,6 +47,12 @@ namespace SunsetSystems.Entities
             return _creatureRegistry.ContainsKey(config.DatabaseID);
         }
 
+        [Button]
+        public void ForceInstance()
+        {
+            _instance = this;
+        }
+
         protected override void OnValidate()
         {
             List<string> keysToDelete = new();

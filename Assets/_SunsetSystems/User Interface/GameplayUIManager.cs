@@ -26,6 +26,11 @@ namespace SunsetSystems.UI
 
         public void HandleNameplateHover(INameplateReciever nameplateReciever)
         {
+            if (string.IsNullOrEmpty(nameplateReciever.NameplateText))
+            {
+                DisableNameplate();
+                return;
+            }
             Vector3 screenPoint = Camera.main.WorldToScreenPoint(nameplateReciever.NameplateWorldPosition);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(InGameUI.transform as RectTransform, screenPoint, Camera.main, out Vector2 nameplatePosition);
             HoverNameplate.transform.position = screenPoint;

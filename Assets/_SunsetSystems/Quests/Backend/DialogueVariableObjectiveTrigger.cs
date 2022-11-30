@@ -10,23 +10,30 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private Objective _objective;
+        //[SerializeField]
+        //private ValueType _valueType;
+        //private bool StringValue => _valueType == ValueType.StringValue;
+        //private bool IntValue => _valueType == ValueType.IntValue;
+        //private bool BoolValue => _valueType == ValueType.BoolValue;
+        //[SerializeField, ShowIf("StringValue")]
+        //private string _stringKey;
+        //[SerializeField, ShowIf("StringValue")]
+        //private string _stringValue;
+        //[SerializeField, ShowIf("IntValue")]
+        //private string _intKey;
+        //[SerializeField, ShowIf("IntValue")]
+        //private int _intValue;
+        //[SerializeField, ShowIf("BoolValue")]
+        //private string _boolKey;
+        //[SerializeField, ShowIf("BoolValue")]
+        //private bool _boolValue;
+
         [SerializeField]
-        private ValueType _valueType;
-        private bool StringValue => _valueType == ValueType.StringValue;
-        private bool IntValue => _valueType == ValueType.IntValue;
-        private bool BoolValue => _valueType == ValueType.BoolValue;
-        [SerializeField, ShowIf("StringValue")]
-        private string _stringKey;
-        [SerializeField, ShowIf("StringValue")]
-        private string _stringValue;
-        [SerializeField, ShowIf("IntValue")]
-        private string _intKey;
-        [SerializeField, ShowIf("IntValue")]
-        private int _intValue;
-        [SerializeField, ShowIf("BoolValue")]
-        private string _boolKey;
-        [SerializeField, ShowIf("BoolValue")]
-        private bool _boolValue;
+        StringStringDictionary _strings;
+        [SerializeField]
+        StringIntDictionary _ints;
+        [SerializeField]
+        StringBoolDictionary _bools;
 
         private bool _isActive;
 
@@ -48,7 +55,7 @@ namespace SunsetSystems.Journal
         // Update is called once per frame
         private void Update()
         {
-            if (_isActive || CheckCompletion(_objective))
+            if (_isActive && CheckCompletion(_objective))
             {
                 _objective.Complete();
                 _isActive = false;
@@ -57,24 +64,49 @@ namespace SunsetSystems.Journal
 
         public bool CheckCompletion(Objective objective)
         {
-            if (DialogueHelper.VariableStorage == null)
-                return false;
-            switch (_valueType)
+            foreach (string key in _bools.Keys)
             {
-                case ValueType.StringValue:
-                    if (DialogueHelper.VariableStorage.TryGetValue(_stringKey, out string stringValue))
-                        return stringValue.Equals(_stringValue);
+                if (DialogueHelper.VariableStorage.TryGetValue(key, out bool boolValue))
+                {
+                    if (boolValue == _bools[key])
+                        continue;
+                    else
+                        return false;
+                }
+                else
+                {
                     return false;
-                case ValueType.IntValue:
-                    if (DialogueHelper.VariableStorage.TryGetValue(_intKey, out int intValue))
-                        return intValue == _intValue;
-                    return false;
-                case ValueType.BoolValue:
-                    if (DialogueHelper.VariableStorage.TryGetValue(_boolKey, out bool boolValue))
-                        return boolValue == _boolValue;
-                    return false;
+                }
             }
-            return false;
+            foreach (string key in _ints.Keys)
+            {
+                if (DialogueHelper.VariableStorage.TryGetValue(key, out int intValue))
+                {
+                    if (intValue == _ints[key])
+                        continue;
+                    else
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            foreach (string key in _strings.Keys)
+            {
+                if (DialogueHelper.VariableStorage.TryGetValue(key, out string stringValue))
+                {
+                    if (stringValue.Equals(_strings[key]))
+                        continue;
+                    else
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private enum ValueType

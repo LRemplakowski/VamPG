@@ -11,16 +11,13 @@ position: -156,-220
 title: policePhone
 position: 10,-345
 ---
-<<OverrideSpeakerPortrait $beast>>
 {$beast}: What are you doing that for? #line:0c8fbca 
-<<ClearPortraitOverride>>
 [nomarkup][A strange whisper in your head compels you to stop. Your conscience won't win tonight. You're not going to jail.][/nomarkup] #line:0fc58c8 
 <<jump callLandlord>>
 ===
 title: kevinPhone
 position: 37,-90
 ---
-<<OverrideSpeakerPortrait "Kevin">>
 Kevin: Sunset Acres Apartments, how can I help you? #line:01493b8 
 {$pcName}: Hey Kevin, it's Desiree. Sink is clogged again. #line:0d88850 
 Kevin: Again? There's no way. I just fixed it last week. You must be washing grease down the drain. Not my problem. Hire a plumber. #line:049bc7a 
@@ -57,11 +54,9 @@ position: -17,94
 ---
 <<if Roll("charisma") >= 2>>
 Kevin: It must be hard for you, not having a man in your life. I guess I'll help. #success #line:0147d4b 
-<<OverrideSpeakerPortrait $pcName>>
 {$innerVoice}: Gross. #line:0fdc29e 
 <<else>>
 Kevin: Don't act like we're friends. You don't even know my last name. I only let you sign the lease just because I pitied you. I guess I'll extend my pity one last time, but after that you're on your own, miss. #line:06962de 
-<<OverrideSpeakerPortrait $pcName>>
 {$innerVoice}: What an asshole. #line:0ffdbc6 
 <<endif>>
 <<jump kevinConvinced>>
@@ -99,7 +94,6 @@ title: kevinConvinced
 position: 43,259
 ---
 <<EnableApartmentDoorLandlordDialogue>>
-<<OverrideSpeakerPortrait "Kevin">>
 <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>
 Kevin: Okay, let me get dressed. I'll be over in a bit. #line:0a8c75c 
 {$pcName}: Thanks Kevin. #line:027a76e 

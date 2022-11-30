@@ -12,7 +12,7 @@ tags:
     <<if Roll("firearms") >= 1>>
     {$innerVoice}: Good as new. #success #line:0d3b5c2 
     <<else>>
-    {$narrator}: BANG. \[You got too comfortable and were careless. The gun discharges, putting a bullet hole in the ceiling.\] #line:0ea9df6 
+    [nomarkup][BANG! You got too comfortable and were careless. The gun discharges, putting a bullet hole in the ceiling.][/nomarkup] #line:0ea9df6 
     {$innerVoice}: Definitely not getting my security deposit back. #line:090e9f1 
     <<endif>>
 ===

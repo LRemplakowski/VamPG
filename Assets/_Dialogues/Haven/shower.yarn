@@ -4,8 +4,11 @@ tags:
 [nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup]
 {$innerVoice}: No... No. No. No...! No!
 -> {$pcName}: \[Medicine 2\] \[Find the cause of death.\]
+    <<jump findCause>>
 -> {$pcName}: \[Streetwise 1\] \[Fleece the body.\]
+    <<jump searchBody>>
 -> {$pcName}: \[Walk away.\]
+    <<jump afterBodyInteraction>>
 ===
 title: findCause
 ---
@@ -19,7 +22,7 @@ title: findCause
 title: searchBody
 ---
 <<if Roll("streetwise") >= 1>>
-{$narrator}: [You find his wallet and ID: his name is Diego Vazguez.] #success
+[nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success
 <<AddMoney 10>>
 <<else>>
 [nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup]
@@ -28,17 +31,15 @@ title: searchBody
 {$innerVoice}: Poor bastard.
 <<jump afterBodyInteraction>>
 ===
-title: afterBodyIntercation
+title: afterBodyInteraction
 ---
 {$innerVoice}: What do I do?
 -> {$innerVoice}: I need to turn myself in.
-    <<OverrideSpeakerPortrait {$beast}>>
     {$beast}: Why? He's just food.
     <<wait 1>>
     <<ClearPortraitOverride>>
     <<jump thatVoiceAgain>>
 -> {$innerVoice}: I'm not going to jail.
-    <<OverrideSpeakerPortrait {$beast}>>
     {$beast}: Get rid of the body.
     <<wait 1>>
     <<ClearPortraitOverride>>
@@ -47,12 +48,12 @@ title: afterBodyIntercation
 title: thatVoiceAgain
 ---
 {$innerVoice}: There's that voice again.
-<<PlaySFX("door_knock_light")>>
+<<PlaySFX "door_knock_light">>
 <<wait 1.7>>
-[$narrator]: \[It's coming from the front door.\]
+[nomarkup][It's coming from the front door.][/nomarkup]
 {$innerVoice}: Who is that?
 {$beast}: Kill them.
-<<PlaySFX("door_knock_heavy")>>
+<<PlaySFX "door_knock_heavy">>
 <<wait 2>>
 [nomarkup][They're getting more aggressive.][/nomarkup]
 <<set $hasTimeToCleanGun to false>>

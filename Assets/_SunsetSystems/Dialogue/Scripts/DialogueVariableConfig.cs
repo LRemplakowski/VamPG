@@ -24,14 +24,14 @@ namespace SunsetSystems.Dialogue
         [SerializeField, Required]
         private CreatureConfig _dominicConfig;
 
-        public const string SPEAKER_ID = "speakerID";
-        public const string PC_NAME = "pcName";
-        public const string BEAST = "beast";
-        public const string INNER_VOICE = "innerVoice";
-        public const string NARRATOR_VOICE = "narrator";
-        public const string PC_ID = "pcID";
-        public const string KIERAN = "kieran";
-        public const string DOMINIC = "sheriff";
+        public const string SPEAKER_ID = "$speakerID";
+        public const string PC_NAME = "$pcName";
+        public const string BEAST = "$beast";
+        public const string INNER_VOICE = "$innerVoice";
+        public const string NARRATOR_VOICE = "$narrator";
+        public const string PC_ID = "$pcID";
+        public const string KIERAN = "$kieran";
+        public const string DOMINIC = "$sheriff";
 
         [SerializeField, HideInInspector]
         private DialogueSaveData _injectionData = new();

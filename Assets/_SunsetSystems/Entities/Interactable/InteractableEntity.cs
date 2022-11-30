@@ -45,7 +45,7 @@ namespace SunsetSystems.Entities.Interactable
             }
             set
             {
-                if (_interactableOnce || _interacted)
+                if (_interactableOnce && _interacted)
                     return;
                 _interacted = value;
             }
@@ -115,6 +115,12 @@ namespace SunsetSystems.Entities.Interactable
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             _interactionCollider.enabled = Interactable;
+        }
+
+        private void LateUpdate()
+        {
+            if (TargetedBy == null)
+                Interacted = false;
         }
 
         protected virtual void OnDisable()

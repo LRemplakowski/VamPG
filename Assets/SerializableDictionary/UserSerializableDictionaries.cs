@@ -53,3 +53,6 @@ public class StringCreatureConfigDictionary : SerializableDictionary<string, Cre
 
 [Serializable]
 public class StringObjectiveDictionary : SerializableDictionary<string, Objective> { }
+
+[Serializable]
+public class StringIntDictionary : SerializableDictionary<string, int> { }

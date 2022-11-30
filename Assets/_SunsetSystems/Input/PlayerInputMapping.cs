@@ -443,7 +443,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""a1283f60-7285-4a1f-bd3d-a5e9bb753c8b"",
                     ""path"": ""<Keyboard>/f1"",
-                    ""interactions"": ""Hold(duration=0.1)"",
+                    ""interactions"": ""Hold(duration=0.01)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Help"",

@@ -3,21 +3,17 @@ tags:
 position: -17,-494
 ---
 {$pcName}: Oh my God! What if it's the cops?
-<<OverrideSpeakerPortrait {$beast}>>
 {$beast}: Who cares? It's them or you.
 <<wait 1>>
 <<ClearPortraitOverride>>
 <<KieranDominicBargeIn>>
-<<SetDefaultSpeakerPortrait {$sheriff}>>
 <<wait 2>>
 <<if $kevinMurdered == true>>
 {$sheriff}: Ooooh! Looks like someone's been busy.
-<<OverrideSpeakerPortrait {$kieran}>>
 {$kieran}: Come on out, lick! Before you make even more of a mess.
 <<wait 1>>
 <<ClearPortraitOverride>>
 <<else>>
-<<OverrideSpeakerPortrait {$kieran}>>
 {$kieran}: Come on out, lick! We know you're here!
 <<wait 1>>
 <<ClearPortraitOverride>>
@@ -57,7 +53,7 @@ title: counterAttack
 position: 656,-163
 ---
 {$sheriff}: Nice try, kid.
-[nomarkup][He saunters towards you, pinning you to the corner, but he doesn't even raise his hands.\]
+[nomarkup][He saunters towards you, pinning you to the corner, but he doesn't even raise his hands.][/nomarkup]
 {$sheriff}: Kieran, search the place for any other “friends” she's made.
 {$kieran}: \[Kieran nods and begins searching the apartment.\]
 {$sheriff}:  Now do you want to do this the hard way or the easy way?
@@ -70,7 +66,7 @@ position: 656,-163
 title: kieranEndsSearch
 position: 789,-13
 ---
-{$narrator}: [The one named Kieran steps out of the bathroom.]
+[nomarkup][The one named Kieran steps out of the bathroom.][/nomarkup]
 {$kieran}: John Doe in here.
 <<if $kevinMurdered == true>>
 {$sheriff}: Two already.
@@ -85,14 +81,12 @@ position: 789,-13
 title: sheriffConfrontation
 position: 811,169
 ---
-<<OverrideSpeakerPortrait {$beast}>> 
 {$beast}: Kill him!
 [nomarkup][You dig your nails into your flesh to stop the voice in your head. You're gonna have to think clearly to get out of this one.][/nomarkup]
 <<wait 1>>
 <<ClearPortraitOverride>>
 {$sheriff}: How about this, I bet you have several questions. I'll answer them, so you can at least make peace with your death. Can't have any more ghosts chasing my tail. I'm a taken man.
 [nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it either. You don't want to die either.][/nomarkup]
-<<OverrideSpeakerPortrait {$pcName}>>
 -> {$innerVoice}: I need to bide my time.
     <<ClearPortraitOverride>>
     <<jump whatsGoingOn>>
@@ -100,7 +94,6 @@ position: 811,169
 title: whatsGoingOn
 position: 824,309
 ---
-<<OverrideSpeakerPortrait {$beast}>>
 {$beast}: KILL HIM!
 <<wait 1>>
 <<ClearPortraitOverride>>
@@ -215,14 +208,12 @@ position: 410,474
 [nomarkup][Kieran walks arond the room, briefly browsing through your things. He stops at the investigation board.][/nomarkup]
 {$sheriff}: I'm trying to lighten the mood, grumpy pants. 
 {$sheriff}: \[Sighs\] Let's just get this over with. Promise I'll make it quick.
-[nomarkup][Dominic draws his .44 Auto Mag revolver. He's a little too enthusiastic as he takes a step towards you.][/nomarkup]
-<<OverrideSpeakerPortrait {$beast}>>
+[nomarkup][Dominic draws his .44 Auto Mag pistol. He's a little too enthusiastic as he takes a step towards you.][/nomarkup]
 {$beast}: FIGHT BACK!
 <<wait 2>>
 <<ClearPortraitOverride>>
 [nomarkup][If there's ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.][/nomarkup]
 [nomarkup][You close your eyes. This is it.][/nomarkup]
-<<OverrideSpeakerPortrait {$pcName}>>
 {$innerVoice}: Chad...
 -> {$pcName}: Continue.
     <<ClearPortraitOverride>>
@@ -274,7 +265,7 @@ title: clueRitual
 {$sheriff}: You come from an ancient bloodline of Kindred known for their- “radical” tendencies with roots as far back as the Bolshevik Revolution and ancient Carthage. 
 {$sheriff}: Basically, it's not your fault you're annoying. Also based on the potency of your blood, I can tell your sire is not somebody to be messed with, so best of luck you two. 
 [nomarkup][Dominic starts walking toward the doors.][/nomarkup]
-{$sheriff}: I'm off. I'll send a team to clean up later. Pleasure to finally meet you Desiree. I'll check in later. [He takes off his shades and winks.\]
+{$sheriff}: I'm off. I'll send a team to clean up later. Pleasure to finally meet you Desiree. I'll check in later. \[He takes off his shades and winks.\]
 -> {$pcName}: Continue.
     <<jump figureOutWhereYouWere>>
 ===

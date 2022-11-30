@@ -1,24 +1,16 @@
 ﻿title: corkboard
 tags:
 ---
-<<if visited("takeCover")==true>>
-<<jump corkboardAfterDominic>>
+<<if visited("takeCover") == true>>
+{$pcName}: How'd you know I was a PI? #line:0b0c6c6 
+{$kieran}: Only people who have cork boards like this in their house are investigators and wacko conspiracy theorists. I guessed. #line:0feff99 
+-> {$pcName}: It's an apartment, not a house. #line:001befa 
+    <<DecreaseInfluence {$kieran} 1>>
+    {$kieran}: Whatever. \[-1 Influence\] #line:0dfe60a 
+-> {$pcName}: This is where I keep track of UFO sightings. #line:047a074 
+    {$kieran}: Not funny. #line:0ca02ed 
 <<else>>
-<<jump corkboardBeforeDominic>>
-<<endif>>
-===
-title: corkboardAfterDominic
----
-{$pcName}: How'd you know I was a PI?
-{$kieran}: Only people who have cork boards like this in their house are investigators and wacko conspiracy theorists. I guessed.
--> {$pcName}: It's an apartment, not a house.
-    <<set $kieranInfluence to $kieranInfluence-1>>
-    {$kieran}: Whatever. \[-1 Influence\]
--> {$pcName}: This is where I keep track of UFO sightings.
-    {$kieran}: Not funny.
-===
-title: corkboardBeforeDominic
----
 [nomarkup][Your investigation board is empty besides the overdue bills you've posted as fearful motivation. Hopefully things will pick up soon.][/nomarkup] #line:086a782 
 -> {$pcName}: \[Leave it alone.\] #line:025dbb2 
+<<endif>>
 ===

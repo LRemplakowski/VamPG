@@ -12,5 +12,7 @@ namespace SunsetSystems.Entities.Characters
         public EquipmentData Equipment { get; private set; } = EquipmentData.Initialize();
         [field: SerializeField]
         public List<InventoryEntry> Inventory { get; private set; }
+        [field: SerializeField]
+        public float Money { get; private set; }
     }
 }

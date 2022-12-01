@@ -16,7 +16,7 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private ItemStorage _playerInventory;
         [SerializeField]
-        private int _money;
+        private float _money;
         public static ItemStorage PlayerInventory => Instance._playerInventory;
         [SerializeField, ES3Serializable]
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
@@ -134,11 +134,35 @@ namespace SunsetSystems.Inventory
             }
         }
 
+        public void AddMoney(float value)
+        {
+            _money += value;
+        }
+
+        public bool TryRemoveMoney(float value)
+        {
+            if (value > _money)
+                return false;
+            _money -= value;
+            return true;
+        }
+
+        public float GetMoneyAmount()
+        {
+            return _money;
+        }
+
+        public void SetMoney(float value)
+        {
+            _money = value;
+        }
+
         public void SaveRuntimeData()
         {
             InventorySaveData saveData = new();
             saveData.EquipmentData = _coterieEquipmentData;
             saveData.PlayerInventory = _playerInventory;
+            saveData.Money = _money;
             ES3.Save(_unique.Id, saveData);
         }
 
@@ -147,12 +171,14 @@ namespace SunsetSystems.Inventory
             InventorySaveData saveData = ES3.Load<InventorySaveData>(_unique.Id);
             this._coterieEquipmentData = saveData.EquipmentData;
             this._playerInventory = saveData.PlayerInventory;
+            this._money = saveData.Money;
         }
 
         private struct InventorySaveData
         {
             public StringEquipmentDataDictionary EquipmentData;
             public ItemStorage PlayerInventory;
+            public float Money;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace SunsetSystems.Loading.UI
             gameObject.SetActive(true);
             fadePanel.color = Color.clear;
             float lerpTime = 0;
-            while (fadePanel.color.a <= 0.99f)
+            while (lerpTime / fadeTime < 1f)
             {
                 lerpTime += Time.deltaTime;
                 fadePanel.color = Color.Lerp(Color.clear, Color.black, lerpTime / fadeTime);
@@ -42,7 +42,7 @@ namespace SunsetSystems.Loading.UI
         public async Task FadeIn(float fadeTime)
         {
             float lerpTime = 0;
-            while (fadePanel.color.a >= 0.01f)
+            while (lerpTime / fadeTime < 1f)
             {
                 lerpTime += Time.deltaTime;
                 fadePanel.color = Color.Lerp(Color.black, Color.clear, lerpTime / fadeTime);

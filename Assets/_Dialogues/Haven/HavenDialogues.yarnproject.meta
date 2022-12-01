@@ -12,7 +12,6 @@ ScriptedImporter:
   - {fileID: 6391573757903218779, guid: 585cfa8bfeed0ea4d8eb232b3e9b520b, type: 3}
   - {fileID: 6391573757903218779, guid: 66b0e9e486981c84f9d503fac6326c62, type: 3}
   - {fileID: 6391573757903218779, guid: 7083db8c2375ab04bb0e9f6abea46cc7, type: 3}
-  - {fileID: 6391573757903218779, guid: f836360abee804049b8054e8c0412002, type: 3}
   - {fileID: 6391573757903218779, guid: 104e2fe5449ab594fa3c111a2ca7aec4, type: 3}
   - {fileID: 6391573757903218779, guid: 8ed1996a2c077a84e94cdd7b51138ae6, type: 3}
   - {fileID: 6391573757903218779, guid: c490217bcb054524f943b5eb50121036, type: 3}
@@ -21,25 +20,11 @@ ScriptedImporter:
   - {fileID: 6391573757903218779, guid: aea960a010fc05c46b96156831570728, type: 3}
   - {fileID: 6391573757903218779, guid: 52a76cb6326d6d043a5719d6fc3a7a81, type: 3}
   - {fileID: 6391573757903218779, guid: 1dfc8f2743b708549a62f84ed9bb831e, type: 3}
-  compileErrors:
-  - '34:22: Error: Can''t figure out the type of variable $pcID given its context.
-    Specify its type with a <<declare>> statement.
-
-    $pcID
-
-'
-  - '12:18: Error: Can''t figure out the type of variable $pcID given its context.
-    Specify its type with a <<declare>> statement.
-
-    $pcID
-
-'
-  - '38:18: Error: Can''t figure out the type of variable $pcID given its context.
-    Specify its type with a <<declare>> statement.
-
-    $pcID
-
-'
+  - {fileID: 6391573757903218779, guid: 03b50600a92c7a042b9d1a3b078a2131, type: 3}
+  - {fileID: 6391573757903218779, guid: 10d45bda8e9b8b144bd085b668da1a95, type: 3}
+  - {fileID: 6391573757903218779, guid: f836360abee804049b8054e8c0412002, type: 3}
+  - {fileID: 6391573757903218779, guid: e0dcc587b6d67d44e8f7a790e8cb8eb5, type: 3}
+  compileErrors: []
   serializedDeclarations:
   - name: $pcName
     typeName: String
@@ -49,19 +34,11 @@ ScriptedImporter:
     description: Main character name
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
-  - name: $narrator
-    typeName: String
-    defaultValueBool: 0
-    defaultValueNumber: 0
-    defaultValueString: Narrator
-    description: Narrator name
-    isImplicit: 0
-    sourceYarnAsset: {instanceID: 0}
   - name: $beast
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: Hunger
+    defaultValueString: The Beast
     description: Beast name
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
@@ -73,14 +50,110 @@ ScriptedImporter:
     description: Inner voice
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
-  - name: $pcID
+  - name: $sheriff
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: 
-    description: unique pc id
+    defaultValueString: Dominic Evans
+    description: 
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
+  - name: $kieran
+    typeName: String
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: Kieran Edevane
+    description: 
+    isImplicit: 0
+    sourceYarnAsset: {instanceID: 0}
+  - name: $landlord
+    typeName: String
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: Kevin
+    description: 
+    isImplicit: 0
+    sourceYarnAsset: {instanceID: 0}
+  - name: $bathroomDoorInteractedWith
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in bathroomDoors.yarn, node bathroomDoors
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 7083db8c2375ab04bb0e9f6abea46cc7, type: 3}
+  - name: $hasCrowbar
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in bathroomDoors.yarn, node bathroomDoorDialogue
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 7083db8c2375ab04bb0e9f6abea46cc7, type: 3}
+  - name: $hasBathroomDoorKey
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in bathroomDoors.yarn, node bathroomDoorDialogue
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 7083db8c2375ab04bb0e9f6abea46cc7, type: 3}
+  - name: $hasGun
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in gun.yarn, node gun
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 104e2fe5449ab594fa3c111a2ca7aec4, type: 3}
+  - name: $hasTimeToCleanGun
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in gun.yarn, node gun
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: 104e2fe5449ab594fa3c111a2ca7aec4, type: 3}
+  - name: $vomited
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in sink.yarn, node sink
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: c490217bcb054524f943b5eb50121036, type: 3}
+  - name: $sinkRepairdModifier
+    typeName: Number
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in sink.yarn, node sinkRepair
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: c490217bcb054524f943b5eb50121036, type: 3}
+  - name: $bloodsoaked
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in sink.yarn, node sinkRepair
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: c490217bcb054524f943b5eb50121036, type: 3}
+  - name: $police
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in sink.yarn, node sinkRepair
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: c490217bcb054524f943b5eb50121036, type: 3}
+  - name: $kevinMurdered
+    typeName: Bool
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: 
+    description: Implicitly declared in callLandlord.yarn, node callLandlord
+    isImplicit: 1
+    sourceYarnAsset: {fileID: 6391573757903218779, guid: aea960a010fc05c46b96156831570728, type: 3}
   defaultLanguage: pl-PL
   languagesToSourceAssets: []
   useAddressableAssets: 0
@@ -91,6 +164,9 @@ ScriptedImporter:
     ReturnType: -> Int32
     Parameters:
     - statName
+  - Name: GetCurrentMoney
+    ReturnType: -> Single
+    Parameters: []
   - Name: NegativeValue
     ReturnType: -> Int32
     Parameters:

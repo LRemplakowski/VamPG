@@ -48,13 +48,13 @@ namespace SunsetSystems.Loading.UI
         public void SetUnloadingProgress(float value)
         {
             loadingBar.value = value / 2;
-            loadingBarText.text = value * 50f + " %";
+            //loadingBarText.text = value * 50f + " %";
         }
 
         public void SetLoadingProgress(float value)
         {
             loadingBar.value = (value / 2) + .5f;
-            loadingBarText.text = (value * 50f) + 50f + " %";
+            //loadingBarText.text = (value * 50f) + 50f + " %";
         }
 
         public void EnableContinue()

@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        public string ID => FullName;
+        public string ID;
         public Sprite Portrait;
         public Faction Faction;
         public BodyType BodyType;
@@ -20,11 +20,13 @@ namespace SunsetSystems.Entities.Characters
         public StatsData Stats;
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
+        public float Money;
 
         public CreatureData(CreatureConfig config)
         {
             FirstName = config.Name;
             LastName = config.LastName;
+            ID = config.ReadableID;
             Portrait = config.Portrait;
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;
@@ -34,6 +36,7 @@ namespace SunsetSystems.Entities.Characters
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;
+            Money = config.EquipmentConfig.Money;
         }
     }
 }

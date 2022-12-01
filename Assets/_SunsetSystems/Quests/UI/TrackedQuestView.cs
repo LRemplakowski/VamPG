@@ -28,9 +28,12 @@ namespace SunsetSystems.Journal.UI
             {
                 foreach (Objective objective in objectives)
                 {
-                    TextMeshProUGUI textObject = GetTMPFromPool();
-                    textObject.text = objective.Description;
-                    textObject.gameObject.SetActive(true);
+                    if (string.IsNullOrWhiteSpace(objective.Description) == false)
+                    {
+                        TextMeshProUGUI textObject = GetTMPFromPool();
+                        textObject.text = objective.Description;
+                        textObject.gameObject.SetActive(true);
+                    }
                 }
             }
             else

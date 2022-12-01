@@ -2,9 +2,9 @@
 tags:
 position: -500,-105
 ---
-{$narrator}: \[You pick up the phone. Before you answer, the last voice you ever wanted to hear blares out the line. Your ex-husband.\] #line:0c4dd8d 
+[nomarkup][You pick up the phone. Before you answer, the last voice you ever wanted to hear blares out the line. Your ex-husband.][/nomarkup] #line:0c4dd8d 
 Chad: Hey Dez, how've you been? #line:05b9b6b 
-{$narrator}: \[The worst part is you know the question is sincere.\] #line:0a666ec 
+[nomarkup][The worst part is you know the question is sincere.][/nomarkup] #line:0a666ec 
 -> {$pcName}: ... Good. #line:0a19d5a 
     Chad: Glad to hear you're adjusting well. #line:018f165 
     <<jump AboutMoney>>
@@ -43,7 +43,7 @@ Chad: That's what you said a month ago. Look, I only gave you that money to help
     <<jump CharismaCommonPart>>
 -> {$pcName}: Fuck off with your vague threats. #line:0a32815 
     Chad: Let's not escalate things Dez. I don't want to fight with you anymore. #line:011fcb1 
-    {$narrator}: \[Frustrated, you hear him rush to hang up then the HUM of the dial tone.\] #line:0a7393e 
+    [nomarkup][Frustrated, you hear him rush to hang up then the HUM of the dial tone.][/nomarkup] #line:0a7393e 
     <<jump EndCall>>
 -> {$pcName}: \[Hang up.\] #line:0b31a1b 
     <<jump HangUp>>
@@ -51,17 +51,17 @@ Chad: That's what you said a month ago. Look, I only gave you that money to help
 title: CharismaCommonPart
 position: 48,159
 ---
-{$narrator}: \[Guilt hits you like a bag of bricks. He doesn't deserve this.\] #line:0e228ee 
+[nomarkup][Guilt hits you like a bag of bricks. He doesn't deserve this.][/nomarkup] #line:0e228ee 
 {$pcName}: Will do. #line:0930854 
 Chad: I'll let you get to it then. Bye Dez. I lo- #line:0d7c85b 
-{$narrator}: \[He quickly catches his mistake and hangs up the phone. Just force of habit you tell yourself. The worst part is you would have reciprocated.\] #line:09723fd 
+[nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit you tell yourself. The worst part is you would have reciprocated.][/nomarkup] #line:09723fd 
 <<jump EndCall>>
 ===
 title: HangUp
 tags:
 position: -101,-76
 ---
-{$narrator}: \[You hear Chad desperately mutter some syllables before you hang up the line.\] #line:0354cbf 
+[nomarkup][You hear Chad desperately mutter some syllables before you hang up the line.][/nomarkup] #line:0354cbf 
 <<jump EndCall>>
 ===
 title: EndCall
@@ -70,8 +70,8 @@ position: 216,-10
 ---
 <<CompleteObjective "MAIN_SATURDAY_START" "ANSWER_PHONE">>
 <<EnableInteractionsAfterPhoneCall>>
-{$narrator}: \[You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to talk about having a suburban fantasy with a white-picket fence and kids running in the backyard, but you just weren't ready. How far things have come since then.\] #line:0ca665a 
+[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to talk about having a suburban fantasy with a white-picket fence and kids running in the backyard, but you just weren't ready. How far things have come since then.][/nomarkup] #line:0ca665a 
 {$innerVoice}: Ugh. #line:06e74f0 
-{$narrator}: \[Your headache is getting worse by the minute. You rub your fingers against your temple to no avail. You need something to take the edge off.\]  #line:0a570f2 
+[nomarkup][Your headache is getting worse by the minute. You rub your fingers against your temple to no avail. You need something to take the edge off.][/nomarkup] #line:0a570f2 
 -> {$pcName}: Continue #line:06c65b5 
 ===

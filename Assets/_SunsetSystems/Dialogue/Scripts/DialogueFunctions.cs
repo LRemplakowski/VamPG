@@ -1,6 +1,8 @@
 using SunsetSystems.Dice;
+using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
+using System;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -14,6 +16,12 @@ namespace SunsetSystems.Dialogue
             dice += GetStatValueFromString(statName);
             Outcome rollOutcome = Roll.d10(dice);
             return rollOutcome.successes;
+        }
+
+        [YarnFunction("CurrentMoney")]
+        public static float GetCurrentMoney()
+        {
+            return InventoryManager.Instance.GetMoneyAmount();
         }
 
         private static int GetStatValueFromString(string statName)
@@ -33,29 +41,20 @@ namespace SunsetSystems.Dialogue
 
         private static AttributeType GetAttributeTypeFromString(string attributeTypeString)
         {
-            return attributeTypeString switch
+            if (Enum.TryParse(attributeTypeString, true, out AttributeType result))
             {
-                "strength" => AttributeType.Strength,
-                "dexterity" => AttributeType.Dexterity,
-                "stamina" => AttributeType.Stamina,
-                "charisma" => AttributeType.Charisma,
-                "manipulation" => AttributeType.Manipulation,
-                "composure" => AttributeType.Composure,
-                "intelligence" => AttributeType.Intelligence,
-                "wits" => AttributeType.Wits,
-                "resolve" => AttributeType.Resolve,
-                _ => AttributeType.Invalid,
-            };
+                return result;
+            }
+            return AttributeType.Invalid;
         }
 
         private static SkillType GetSkillTypeFromString(string skillTypeString)
         {
-            return skillTypeString switch
+            if (Enum.TryParse(skillTypeString, true, out SkillType result))
             {
-                "melee" => SkillType.Melee,
-                "firearms" => SkillType.Firearms,
-                _ => SkillType.Invalid,
-            };
+                return result;
+            }
+            return SkillType.Invalid;
         }
 
         [YarnFunction("neg")]

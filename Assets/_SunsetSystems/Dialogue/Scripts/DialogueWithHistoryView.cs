@@ -1,5 +1,7 @@
 using NaughtyAttributes;
 using Redcode.Awaiting;
+using SunsetSystems.Audio;
+using SunsetSystems.Party;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils;
 using System;
@@ -16,7 +18,7 @@ using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
-    public class DialogueWithHistoryView : DialogueViewBase, IPortraitUpdateReciever
+    public class DialogueWithHistoryView : DialogueViewBase
     {
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
@@ -57,8 +59,6 @@ namespace SunsetSystems.Dialogue
         private bool _clampScrollbarNextFrame;
         private bool RequestedLineInterrupt { get; set; } = false;
 
-        private int _parsedTextLength = 0;
-
         private void Awake()
         {
             _optionViews = new();
@@ -77,7 +77,6 @@ namespace SunsetSystems.Dialogue
 
         public override void DialogueStarted()
         {
-            _parsedTextLength = 0;
             _lineHistory.text = string.Empty;
             _lineHistory.maxVisibleCharacters = 0;
             _lineHistoryStringBuilder = new();
@@ -96,6 +95,8 @@ namespace SunsetSystems.Dialogue
 
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            AudioManager.Instance.StopSFXPlayback();
+            AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -106,25 +107,29 @@ namespace SunsetSystems.Dialogue
         {
             RequestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
+            UpdateSpeakerPhoto(dialogueLine.CharacterName);
+            _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             string formattedLineText = BuildFormattedText(dialogueLine);
-            _parsedTextLength += dialogueLine.Text.Text.Length;
             _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect)
             {
-                await TypewriteText();
+                AudioManager.Instance.PlayTyperwriterLoop();
+                await TypewriteText(dialogueLine);
                 if (RequestedLineInterrupt)
                     return;
             }
+            AudioManager.Instance.PlayTypewriterEnd();
             await new WaitForSeconds(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
         }
 
-        private async Task TypewriteText()
+        private async Task TypewriteText(LocalizedLine line)
         {
             await new WaitForUpdate();
             if (_typeSpeed <= 0)
                 return;
+            _lineHistory.maxVisibleCharacters += line.CharacterName?.Length ?? 0;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
@@ -147,8 +152,13 @@ namespace SunsetSystems.Dialogue
                 .AppendLine("")
                 .Append("<size=26>");
             AppendRollPrefix(line);
+            if (line.CharacterName != null && string.IsNullOrWhiteSpace(line.CharacterName) == false)
+            {
+                _lineHistoryStringBuilder
+                    .Append($"<color=\"red\">{line.CharacterName}:</color>");
+            }
             _lineHistoryStringBuilder
-                .AppendLine($"<color=\"red\">{line.CharacterName}:</size></color>")
+                .AppendLine("</size>")
                 .AppendLine(line.TextWithoutCharacterName.Text);
             return _lineHistoryStringBuilder.ToString();
         }
@@ -163,24 +173,32 @@ namespace SunsetSystems.Dialogue
                 _lineHistoryStringBuilder.Append("(Failure) ");
         }
 
-        public void InitializeSpeakerPhoto(string speakerID)
+        private void UpdateSpeakerPhoto(string characterName)
         {
-            Sprite sprite = this.GetSpeakerPortrait(speakerID);
-            if (sprite == null)
+            string speakerID;
+            if (characterName == null || string.IsNullOrWhiteSpace(characterName))
             {
-                if (DialogueHelper.VariableStorage.TryGetValue(DialogueVariableConfig.PC_NAME, out speakerID))
+                speakerID = PartyManager.MainCharacter.Data.ID;
+                characterName = PartyManager.MainCharacter.Data.FullName;
+            }
+            else
+            {
+                if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
                 {
-                    sprite = this.GetSpeakerPortrait(speakerID);
+                    speakerID = PartyManager.MainCharacter.Data.ID;
+                    characterName = PartyManager.MainCharacter.Data.FullName;
                 }
             }
+            Sprite sprite = this.GetSpeakerPortrait(speakerID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;
-                _photoText.text = speakerID;
+                _photoText.text = characterName;
                 _photoParent.SetActive(true);
             }
             else
             {
+                _photoParent.SetActive(false);
                 Debug.LogError($"Cannot find portrait for creature with ID {speakerID} and no placeholder portrait found!");
             }
         }
@@ -245,11 +263,14 @@ namespace SunsetSystems.Dialogue
 
             async void OptionViewWasSelected(DialogueOption option)
             {
+                UpdateSpeakerPhoto(option.Line.CharacterName);
+                AudioManager.Instance.PlayTypewriterEnd();
+                await new WaitForUpdate();
                 CleanupOptions();
                 string formattedLineText = BuildFormattedText(option.Line);
                 _lineHistory.text = formattedLineText;
+                await new WaitForUpdate();
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-                await new WaitForSeconds(_lineCompletionDelay);
                 OnOptionSelected(option.DialogueOptionID);
             }
 
@@ -261,6 +282,7 @@ namespace SunsetSystems.Dialogue
 
         public override void UserRequestedViewAdvancement()
         {
+            AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             requestInterrupt?.Invoke();
         }

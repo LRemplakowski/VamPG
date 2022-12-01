@@ -35,16 +35,18 @@ namespace SunsetSystems.Journal
         public static event Action<Quest, Objective> ObjectiveCompleted;
         public static event Action<Quest, Objective> ObjectiveFailed;
 
-        private void Awake()
+        private void OnEnable()
         {
+#if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(ID))
             {
                 AssignNewID();
             }
             QuestDatabase.Instance.RegisterQuest(this);
+#endif
         }
 
-        [ContextMenu("Force Validate")]
+        [Button("Force Validate")]
         private void OnValidate()
         {
             QuestDatabase.Instance.RegisterQuest(this);
@@ -55,14 +57,11 @@ namespace SunsetSystems.Journal
             AssignNewID();
         }
 
-        private void OnEnable()
-        {
-            QuestDatabase.Instance.RegisterQuest(this);
-        }
-
         private void OnDestroy()
         {
+#if UNITY_EDITOR
             QuestDatabase.Instance.UnregisterQuest(this);
+#endif
         }
 
         private void AssignNewID()

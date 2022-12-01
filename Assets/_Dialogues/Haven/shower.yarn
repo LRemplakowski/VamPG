@@ -22,10 +22,10 @@ title: findCause
 title: searchBody
 ---
 <<if Roll("streetwise") >= 1>>
-[nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success #line:06abb8d 
+[nomarkup][You find his wallet and ID - his name is Diego Vazguez.][/nomarkup] #success #line:06abb8d 
 <<AddMoney 10>>
 <<else>>
-[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup] #line:0dfae54 
+[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials - DV.][/nomarkup] #line:0dfae54 
 <<endif>>
 [nomarkup][You find a black and white photo of him holding a baby.][/nomarkup] #line:0baa1ed 
 {$innerVoice}: Poor bastard. #line:084e723 

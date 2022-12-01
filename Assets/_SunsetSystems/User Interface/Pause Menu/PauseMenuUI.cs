@@ -10,6 +10,8 @@ namespace SunsetSystems.UI
         private Canvas pauseMenuCanvas;
         [SerializeField]
         private PauseUISelector inventory, journal, settings, characterSheet;
+        [SerializeField]
+        private GameObject _characterSelector;
         
         public PauseMenuScreen CurrentActiveScreen { get; private set; }
 
@@ -22,6 +24,7 @@ namespace SunsetSystems.UI
         private void Start()
         {
             gameObject.SetActive(false);
+            _characterSelector.SetActive(true);
         }
 
         public void OpenMenuScreen(PauseMenuScreen screen)

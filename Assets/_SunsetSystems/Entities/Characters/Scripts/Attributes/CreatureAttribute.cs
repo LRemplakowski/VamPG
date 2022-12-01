@@ -1,16 +1,19 @@
 using Adnc.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class CreatureAttribute : BaseStat
 {
-    [SerializeField, Range(1, 100)]
+    [SerializeField, Range(1, 5)]
     private int _baseValue = 1;
     [SerializeField, ReadOnly]
     private AttributeType _attributeType;
     public int Value { get => GetValue(); }
     public AttributeType AttributeType { get => _attributeType; }
+
+    public override string Name => AttributeType.ToString();
 
     public CreatureAttribute(CreatureAttribute existing) : base(existing)
     {

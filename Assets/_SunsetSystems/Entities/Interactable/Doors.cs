@@ -9,6 +9,9 @@ namespace SunsetSystems.Entities.Interactable
     {
         [SerializeField]
         private Animator _animator;
+        [field: SerializeField]
+        public bool ReverseAnimation { get; private set; }
+
 
         protected override void Start()
         {
@@ -20,7 +23,10 @@ namespace SunsetSystems.Entities.Interactable
         protected override void HandleInteraction()
         {
             Debug.Log("Switching door animation state!");
-            _animator?.SetTrigger("DoorSwitch");
+            if (ReverseAnimation)
+                _animator?.SetTrigger("DoorSwitchReverse");
+            else
+                _animator?.SetTrigger("DoorSwitch");
         }
     }
 }

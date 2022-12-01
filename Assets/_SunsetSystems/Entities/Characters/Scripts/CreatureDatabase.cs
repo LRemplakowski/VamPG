@@ -4,25 +4,29 @@ using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Entities
 {
     [CreateAssetMenu(fileName = "Creature Database", menuName = "Entities/Creature Database")]
-    public class CreatureDatabase : ScriptableObjectSingleton<CreatureDatabase>
+    public class CreatureDatabase : ScriptableObject
     {
         [SerializeField]
         private StringCreatureConfigDictionary _creatureRegistry = new();
         [SerializeField]
         private StringStringDictionary _accessorRegistry = new();
+        public List<string> AccessorKeys => _accessorRegistry.Keys.ToList();
 
-        public bool TryGetConfig(string creatureName, out CreatureConfig config)
+        public static CreatureDatabase Instance { get; private set; }
+
+        public bool TryGetConfig(string accessorID, out CreatureConfig config)
         {
             config = null;
-            creatureName = creatureName.ToPascalCase();
-            if (_accessorRegistry.ContainsKey(creatureName))
+            accessorID ??= "";
+            if (_accessorRegistry.ContainsKey(accessorID))
             {
-                return _creatureRegistry.TryGetValue(_accessorRegistry[creatureName], out config);
+                return _creatureRegistry.TryGetValue(_accessorRegistry[accessorID], out config);
             }
             return false;
         }
@@ -31,11 +35,13 @@ namespace SunsetSystems.Entities
         {
             if (_creatureRegistry.ContainsKey(config.DatabaseID))
             {
-                Debug.LogWarning("CreatureConfig " + config.DatabaseID + " is already registered in the database!");
+                _accessorRegistry = new();
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
                 return false;
             }
-            _creatureRegistry.Add(config.DatabaseID, config);
-            _accessorRegistry.Add(config.FullName.ToPascalCase(), config.DatabaseID);
+            _creatureRegistry.TryAdd(config.DatabaseID, config);
+            _accessorRegistry = new();
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
             return true;
         }
 
@@ -44,8 +50,13 @@ namespace SunsetSystems.Entities
             return _creatureRegistry.ContainsKey(config.DatabaseID);
         }
 
-        protected override void OnValidate()
+        private void OnEnable()
         {
+            Instance = this;
+        }
+        protected void OnValidate()
+        {
+            Instance = this;
             List<string> keysToDelete = new();
             foreach (string key in _creatureRegistry.Keys)
             {
@@ -53,21 +64,17 @@ namespace SunsetSystems.Entities
                     keysToDelete.Add(key);
             }
             keysToDelete.ForEach(key => _creatureRegistry.Remove(key));
-            List<string> accessorKeysToDelete = new();
-            foreach (string key in _accessorRegistry.Keys)
-            {
-                if (keysToDelete.Contains(_accessorRegistry[key]))
-                    accessorKeysToDelete.Add(key);
-            }
-            accessorKeysToDelete.ForEach(key => _accessorRegistry.Remove(key.ToPascalCase()));
+            _accessorRegistry = new();
+            _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
         }
 
         public void UnregisterConfig(CreatureConfig config)
         {
             if (_creatureRegistry.Remove(config.DatabaseID))
-                Debug.Log("Removed quest " + config.DatabaseID + " from the database!");
-            else
-                Debug.LogError("Quest " + config.DatabaseID + " was not registered in the database!");
+            {
+                _accessorRegistry = new();
+                _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
+            }
         }
     }
 }

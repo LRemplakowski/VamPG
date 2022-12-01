@@ -26,7 +26,8 @@ namespace SunsetSystems.Journal
         public List<Objective> InitialObjectives;
         [field: SerializeField, AllowNesting]
         public List<RewardData> Rewards { get; private set; }
-
+        [SerializeField, SerializeReference]
+        private List<Quest> _startQuestsOnCompletion;
         public Quest Data => this;
 
         public static event Action<Quest> QuestStarted;

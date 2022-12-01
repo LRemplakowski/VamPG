@@ -6,6 +6,7 @@ using SunsetSystems.UI;
 using SunsetSystems.Utils;
 using NaughtyAttributes;
 using SunsetSystems.Party;
+using UnityEngine.Events;
 
 namespace SunsetSystems.Data
 {
@@ -27,6 +28,7 @@ namespace SunsetSystems.Data
         private SceneLoader _sceneLoader;
         [SerializeField]
         private GameObject _mainMenuParent;
+        public UnityEvent OnGameStart;
 
         private void Start()
         {
@@ -85,7 +87,8 @@ namespace SunsetSystems.Data
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameScene(data);
+            OnGameStart?.Invoke();
+            _ = _sceneLoader.LoadGameScene(data);
         }
 
         public void DisableMainMenu()

@@ -1,4 +1,6 @@
+using SunsetSystems.Audio;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
@@ -57,22 +59,23 @@ namespace SunsetSystems.Dialogue
             character.StatsManager.RegainBlood(value);
         }
 
-        [YarnCommand("OverrideSpeakerPortrait")]
-        public static void OverrideDialoguePortrait(string ownerID)
+        [YarnCommand("AddMoney")]
+        public static void AddMoney(float value)
         {
-            DialogueManager.Instance.OverrideSpeakerPortrait(ownerID);
+            InventoryManager.Instance.AddMoney(value);
         }
 
-        [YarnCommand("ClearPortraitOverride")]
-        public static void ClearDialoguePortraitOverride()
+        [YarnCommand("RemoveMoney")]
+        public static void RemoveMoney(float value)
         {
-            DialogueManager.Instance.ClearSpeakerPortraitOverride();
+            if (InventoryManager.Instance.TryRemoveMoney(value) == false)
+                throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
         }
 
-        [YarnCommand("SetDefaultSpeakerPortrait")]
-        public static void SetDefaultSpeakerPortrait(string speakerID)
+        [YarnCommand("PlaySFX")]
+        public static void PlaySFX(string clipName)
         {
-            DialogueManager.Instance.SetDefaultSpeakerPortrait(speakerID);
+            AudioManager.Instance.PlaySFXOneShot(clipName);
         }
     }
 }

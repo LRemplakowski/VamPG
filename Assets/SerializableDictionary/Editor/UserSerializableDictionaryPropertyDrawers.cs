@@ -17,6 +17,7 @@ using UnityEditor;
 [CustomPropertyDrawer(typeof(StringExperienceDataDictionary))]
 [CustomPropertyDrawer(typeof(StringCreatureConfigDictionary))]
 [CustomPropertyDrawer(typeof(StringObjectiveDictionary))]
+[CustomPropertyDrawer(typeof(StringIntDictionary))]
 public class AnySerializableDictionaryPropertyDrawer : SerializableDictionaryPropertyDrawer { }
 
 [CustomPropertyDrawer(typeof(ColorArrayStorage))]

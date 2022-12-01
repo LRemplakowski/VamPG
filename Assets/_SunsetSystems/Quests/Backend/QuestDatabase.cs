@@ -8,12 +8,14 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "Quest Database", menuName = "Sunset Journal/Database")]
-    public class QuestDatabase : ScriptableObjectSingleton<QuestDatabase>
+    public class QuestDatabase : ScriptableObject
     {
         [SerializeField]
         private StringQuestDictionary _questRegistry = new();
         [SerializeField]
         private StringStringDictionary _questAccessorRegistry = new();
+
+        public static QuestDatabase Instance { get; private set; }
 
         public bool TryGetQuest(string questID, out Quest quest)
         {
@@ -44,14 +46,14 @@ namespace SunsetSystems.Journal
             return _questRegistry.ContainsKey(quest.ID);
         }
 
-        [ContextMenu("Force Become Instance")]
-        public void ForceBecomeInstance()
+        private void OnEnable()
         {
-            _instance = this;
+            Instance = this;
         }
 
-        protected override void OnValidate()
+        protected void OnValidate()
         {
+            Instance = this;
             List<string> keysToDelete = new();
             foreach (string key in _questRegistry.Keys)
             {

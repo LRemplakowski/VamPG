@@ -152,6 +152,15 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Help"",
+                    ""type"": ""Button"",
+                    ""id"": ""c6071cb5-f65a-4c95-9e14-427763b30f7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -427,6 +436,17 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""HighlightInteractables"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1283f60-7285-4a1f-bd3d-a5e9bb753c8b"",
+                    ""path"": ""<Keyboard>/f1"",
+                    ""interactions"": ""Hold(duration=0.01)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Help"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -711,6 +731,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         m_Player_MousePosition = m_Player.FindAction("MousePosition", throwIfNotFound: true);
         m_Player_SkipDialogue = m_Player.FindAction("SkipDialogue", throwIfNotFound: true);
         m_Player_HighlightInteractables = m_Player.FindAction("HighlightInteractables", throwIfNotFound: true);
+        m_Player_Help = m_Player.FindAction("Help", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
@@ -795,6 +816,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MousePosition;
     private readonly InputAction m_Player_SkipDialogue;
     private readonly InputAction m_Player_HighlightInteractables;
+    private readonly InputAction m_Player_Help;
     public struct PlayerActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -813,6 +835,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         public InputAction @MousePosition => m_Wrapper.m_Player_MousePosition;
         public InputAction @SkipDialogue => m_Wrapper.m_Player_SkipDialogue;
         public InputAction @HighlightInteractables => m_Wrapper.m_Player_HighlightInteractables;
+        public InputAction @Help => m_Wrapper.m_Player_Help;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -864,6 +887,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @HighlightInteractables.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
                 @HighlightInteractables.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
                 @HighlightInteractables.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHighlightInteractables;
+                @Help.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHelp;
+                @Help.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHelp;
+                @Help.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHelp;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -910,6 +936,9 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
                 @HighlightInteractables.started += instance.OnHighlightInteractables;
                 @HighlightInteractables.performed += instance.OnHighlightInteractables;
                 @HighlightInteractables.canceled += instance.OnHighlightInteractables;
+                @Help.started += instance.OnHelp;
+                @Help.performed += instance.OnHelp;
+                @Help.canceled += instance.OnHelp;
             }
         }
     }
@@ -1072,6 +1101,7 @@ public partial class @PlayerInputMapping : IInputActionCollection2, IDisposable
         void OnMousePosition(InputAction.CallbackContext context);
         void OnSkipDialogue(InputAction.CallbackContext context);
         void OnHighlightInteractables(InputAction.CallbackContext context);
+        void OnHelp(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -33,6 +33,15 @@ namespace SunsetSystems.Dialogue
             }
         }
 
+        public void ReinjectPreconfiguredVariables()
+        {
+            if (_variableInjectionConfig != null)
+            {
+                DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
+                SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools, false);
+            }
+        }
+
         public override void Clear()
         {
             _floats.Clear();

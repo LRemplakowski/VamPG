@@ -59,12 +59,16 @@ namespace SunsetSystems.Entities.Characters
                 _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
             if (EquipmentConfig == null)
                 EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
+            if (_animatorController == null)
+                _animatorController = ResourceLoader.GetFallbackAnimator();
+#if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {
                 AssignNewID();
             }
             if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
                 CreatureDatabase.Instance?.RegisterConfig(this);
+#endif
         }
 
         private void OnValidate()
@@ -74,7 +78,7 @@ namespace SunsetSystems.Entities.Characters
                 AssignNewID();
             }
             _defaultReadableID = FullName.ToCamelCase();
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance.IsRegistered(this) == false)
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
                 CreatureDatabase.Instance?.RegisterConfig(this);
         }
 
@@ -83,23 +87,19 @@ namespace SunsetSystems.Entities.Characters
             AssignNewID();
         }
 
+        private void OnDestroy()
+        {
+#if UNITY_EDITOR
+            CreatureDatabase.Instance.UnregisterConfig(this);
+#endif
+        }
+
         private void AssignNewID()
         {
             DatabaseID = System.Guid.NewGuid().ToString();
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
-        }
-
-        private void Awake()
-        {
-            FindAnimatorController();
-        }
-
-        private void FindAnimatorController()
-        {
-            if (_animatorController == null)
-                _animatorController = ResourceLoader.GetFallbackAnimator();
         }
     }
 }

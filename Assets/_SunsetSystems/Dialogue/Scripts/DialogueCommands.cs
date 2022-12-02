@@ -65,6 +65,12 @@ namespace SunsetSystems.Dialogue
             InventoryManager.Instance.AddMoney(value);
         }
 
+        [YarnCommand("ModifyInfluence")]
+        public static void ModifyInfluence(int amount, string companionID)
+        {
+
+        }
+
         [YarnCommand("RemoveMoney")]
         public static void RemoveMoney(float value)
         {

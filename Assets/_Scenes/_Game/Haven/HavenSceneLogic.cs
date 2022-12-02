@@ -24,6 +24,8 @@ namespace SunsetSystems.Loading
         private string _wakeUpStartNode;
         [SerializeField, ES3NonSerializable]
         private Transform _startPosition;
+        [SerializeField]
+        private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Header("Prologue")]
         [SerializeField]
         private GameObject _desireeOnBed;
@@ -72,7 +74,9 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private Creature _kieran;
         [SerializeField]
-        private Waypoint _dominicWaypoint, _kieranWaypoint;
+        private Waypoint _dominicWaypoint, _kieranWaypoint, _dominicFridgeWaypoint, _kieranFridgeWaypoint, _pcFridgeWaypoint;
+        [SerializeField]
+        private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
         private CameraControlScript _cameraControl;
 
@@ -94,8 +98,13 @@ namespace SunsetSystems.Loading
             await new WaitForUpdate();
             PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
             await new WaitForSeconds(2);
-            await new WaitForUpdate();
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+            _ = Task.Run(async () =>
+            {
+                await new WaitForUpdate();
+                _cameraControl.ForceToPosition(_cameraStartPoint);
+                _cameraControl.ForceRotation(_cameraStartRotation);
+            });
         }
 
         private async Task MovePCToPositionAfterDialogue()
@@ -126,16 +135,6 @@ namespace SunsetSystems.Loading
             await fade.DoFadeInAsync(.5f);
         }
 
-        public async void MoveCoffeTableAndTakeCover()
-        {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-            await fade.DoFadeOutAsync(.5f);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
-            await PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
-        }
-
         public async Task MoveToSink()
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
@@ -163,21 +162,44 @@ namespace SunsetSystems.Loading
 
         public async void BargeIn()
         {
-            await new WaitForUpdate();
+            //SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            //await fade.DoFadeOutAsync(.5f);
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             _havenDoors.Interactable = true;
             _havenDoors.Interact();
             _havenDoors.Interactable = false;
-            _dominic.Move(_dominicWaypoint.transform.position);
             _dominic.gameObject.SetActive(true);
-            _kieran.Move(_kieranWaypoint.transform.position);
             _kieran.gameObject.SetActive(true);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
+            _dominic.ForceCreatureToPosition(_dominicWaypoint.transform.position);
+            _kieran.ForceCreatureToPosition(_kieranWaypoint.transform.position);
+            _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
-            _ = PartyManager.MainCharacter.FaceTarget(_dominic.transform);
+            _cameraControl.ForceRotation(_cameraRotationDominicEnter);
+            _ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
             _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
             _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            await new WaitForFixedUpdate();
+            //await fade.DoFadeInAsync(.5f);
+        }
+
+        private async void MoveActorsAndCameraToFridgeConfig()
+        {
+            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await fade.DoFadeOutAsync(.5f);
+            PartyManager.MainCharacter.ForceCreatureToPosition(_pcFridgeWaypoint.transform.position);
+            _dominic.ForceCreatureToPosition(_dominicFridgeWaypoint.transform.position);
+            _kieran.ForceCreatureToPosition(_kieranFridgeWaypoint.transform.position);
+            _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
+            await new WaitForFixedUpdate();
+            _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
+            _ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
+            _ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
+            _ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
+            await fade.DoFadeInAsync(.5f);
         }
 
         private void DisableInteractionsBeforeDominic()
@@ -185,6 +207,12 @@ namespace SunsetSystems.Loading
             _interactablesToEnableAfterPhoneCall.ForEach(i => i.Interactable = false);
             _gun.GetComponent<IInteractable>().Interactable = true;
             _crowbar.GetComponent<IInteractable>().Interactable = true;
+        }
+
+        public void RecruitKieran()
+        {
+            PartyManager.RecruitCharacter(_kieran.Data);
+            PartyManager.TryAddMemberToActiveRoster(_kieran.Data.ID);
         }
 
         private static class HavenDialogueCommands
@@ -281,6 +309,12 @@ namespace SunsetSystems.Loading
             public static void DisableInteractionsBeforeDominic()
             {
                 HavenSceneLogic.DisableInteractionsBeforeDominic();
+            }
+
+            [YarnCommand("HandleAltercationWithDominic")]
+            public static void HandleAltercationWithDominic()
+            {
+                HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
             }
         }
     }

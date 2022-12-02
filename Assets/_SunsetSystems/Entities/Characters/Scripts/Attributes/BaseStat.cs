@@ -1,16 +1,21 @@
 using NaughtyAttributes;
+using SunsetSystems.UI.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public abstract class BaseStat
+public abstract class BaseStat : IGameDataProvider<BaseStat>
 {
     public event Action OnValueChange;
 
+    public abstract string Name { get; }
+
     [field: NonSerialized]
     protected List<Modifier> Modifiers { get; private set; } = new();
+
+    public BaseStat Data => this;
 
     public BaseStat(BaseStat existing)
     {

@@ -1,9 +1,10 @@
-#if UNITY_EDITOR
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
+#endif
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Redcode.Awaiting;
@@ -12,6 +13,7 @@ namespace SunsetSystems.Bootstraper
 {
     public class SunsetBootstraper : Singleton<SunsetBootstraper>
     {
+#if UNITY_EDITOR
         [SerializeField]
         private List<SceneAsset> bootstrapScenes = new();
         private static bool didLoadGameplayScene = false;
@@ -62,6 +64,6 @@ namespace SunsetSystems.Bootstraper
             }
             return tasks;
         }
+#endif
     }
 }
-#endif

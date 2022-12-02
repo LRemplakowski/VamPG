@@ -50,7 +50,7 @@ namespace SunsetSystems.Entities
             return _creatureRegistry.ContainsKey(config.DatabaseID);
         }
 
-        private void OnEnable()
+        private void Awake()
         {
             Instance = this;
         }

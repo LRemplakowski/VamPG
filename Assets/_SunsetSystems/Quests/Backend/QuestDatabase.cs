@@ -45,6 +45,11 @@ namespace SunsetSystems.Journal
         {
             return _questRegistry.ContainsKey(quest.ID);
         }
+        
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void OnEnable()
         {

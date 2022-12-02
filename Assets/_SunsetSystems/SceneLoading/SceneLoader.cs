@@ -16,6 +16,7 @@ namespace SunsetSystems.Loading
         private SceneLoadingUIManager LoadingScreenUI => this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
         public SceneLoadingData CachedTransitionData { get; private set; }
+        private int _latestLoadedSceneIndex;
 
         private void OnEnable()
         {
@@ -43,10 +44,11 @@ namespace SunsetSystems.Loading
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             _previousScene = scene;
+            _latestLoadedSceneIndex = scene.buildIndex;
             SceneManager.SetActiveScene(scene);
         }
 
-        internal async Task LoadGameScene(SceneLoadingData data)
+        public async Task LoadGameScene(SceneLoadingData data)
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
@@ -123,6 +125,11 @@ namespace SunsetSystems.Loading
                 LoadingScreenUI.UpadteLoadingBar(progress);
                 await Task.Yield();
             }
+        }
+
+        public async Task UnloadGameScene()
+        {
+            await SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
         }
 
         private async Task DoLoadingByName()

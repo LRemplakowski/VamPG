@@ -60,10 +60,7 @@ namespace SunsetSystems.Loading
 
         public void MoveToScene(SceneLoadingData data)
         {
-            Task.Run(async () =>
-            {
-                await _sceneLoader.LoadGameScene(data);
-            });
+            _ = _sceneLoader.LoadGameScene(data);
         }
 
         public async Task MoveToArea()

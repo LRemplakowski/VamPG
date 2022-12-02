@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class Skill : BaseStat
     private int baseValue;
     [SerializeField, ReadOnly]
     private SkillType skillType;
+
+    public override string Name => skillType.ToString();
 
     public float Value { get => GetValue(); }
     public SkillType SkillType { get => skillType; }

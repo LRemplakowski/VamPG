@@ -6,10 +6,11 @@ using UnityEngine;
 using Yarn.Unity;
 using SunsetSystems.Loading;
 using System;
+using SunsetSystems.Data;
 
 namespace SunsetSystems.Dialogue
 {
-    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveRuntimeData
+    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveRuntimeData, IResetable
     {
         [SerializeField]
         private StringFloatDictionary _floats = new();
@@ -31,6 +32,12 @@ namespace SunsetSystems.Dialogue
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
                 SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
             }
+        }
+
+        public void ResetOnGameStart()
+        {
+            Clear();
+            Awake();
         }
 
         public void ReinjectPreconfiguredVariables()

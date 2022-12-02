@@ -42,14 +42,14 @@ namespace SunsetSystems.Journal
             {
                 AssignNewID();
             }
-            QuestDatabase.Instance.RegisterQuest(this);
+            QuestDatabase.Instance?.RegisterQuest(this);
 #endif
         }
 
         [Button("Force Validate")]
         private void OnValidate()
         {
-            QuestDatabase.Instance.RegisterQuest(this);
+            QuestDatabase.Instance?.RegisterQuest(this);
         }
 
         private void Reset()

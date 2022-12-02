@@ -9,11 +9,21 @@ namespace SunsetSystems.Dialogue
 {
     public static class DialogueFunctions
     {
-        [YarnFunction("Roll")]
+        [YarnFunction("RollSingle")]
         public static int GetRollResult(string statName)
         {
             int dice = 0;
             dice += GetStatValueFromString(statName);
+            Outcome rollOutcome = Roll.d10(dice);
+            return rollOutcome.successes;
+        }
+
+        [YarnFunction("Roll")]
+        public static int GetRollResult(string attributeName, string skillName)
+        {
+            int dice = 0;
+            dice += GetStatValueFromString(attributeName);
+            dice += GetStatValueFromString(skillName);
             Outcome rollOutcome = Roll.d10(dice);
             return rollOutcome.successes;
         }

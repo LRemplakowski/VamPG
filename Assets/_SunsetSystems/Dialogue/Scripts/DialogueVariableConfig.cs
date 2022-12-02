@@ -26,7 +26,7 @@ namespace SunsetSystems.Dialogue
             injectionData._floats = new();
             injectionData._strings = new();
             injectionData._bools = new();
-            List<string> configIDs = CreatureDatabase.Instance.AccessorKeys;
+            List<string> configIDs = CreatureDatabase.Instance?.AccessorKeys;
             foreach (string configID in configIDs)
             {
                 if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))

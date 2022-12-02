@@ -75,6 +75,8 @@ namespace SunsetSystems.Loading
         private Creature _kieran;
         [SerializeField]
         private Waypoint _dominicWaypoint, _kieranWaypoint;
+        [SerializeField]
+        private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
         private CameraControlScript _cameraControl;
 
@@ -96,10 +98,13 @@ namespace SunsetSystems.Loading
             await new WaitForUpdate();
             PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
             await new WaitForSeconds(2);
-            await new WaitForUpdate();
-            _cameraControl.ForceToPosition(_cameraStartPoint);
-            _cameraControl.ForceRotation(_cameraStartRotation);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+            _ = Task.Run(async () =>
+            {
+                await new WaitForUpdate();
+                _cameraControl.ForceToPosition(_cameraStartPoint);
+                _cameraControl.ForceRotation(_cameraStartRotation);
+            });
         }
 
         private async Task MovePCToPositionAfterDialogue()

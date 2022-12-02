@@ -1,4 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +16,8 @@ namespace SunsetSystems.Entities.Characters.Actions
         public delegate void OnMovementStarted(Creature who);
         public static OnMovementStarted onMovementStarted;
         private float stoppingDistance;
+        private Transform rotationTarget;
+        private Task rotationTask;
 
         protected override Creature Owner
         {
@@ -29,6 +33,18 @@ namespace SunsetSystems.Entities.Characters.Actions
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
             this.stoppingDistance = stoppingDistance;
+        }
+
+        public Move(Creature owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)
+        {
+            this.rotationTarget = rotationTarget;
+            rotationTask = new Task(RotateToTarget);
+            conditions.Add(new FaceTargetCondition(rotationTask));
+        }
+
+        private async void RotateToTarget()
+        {
+            await Owner.FaceTarget(rotationTarget);
         }
 
         public override void Abort()
@@ -57,6 +73,10 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override bool IsFinished()
         {
             bool finished = base.IsFinished();
+            if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()) && rotationTask.Status == TaskStatus.Created)
+            {
+                rotationTask.Start();
+            }
             if (finished)
             {
                 return true;

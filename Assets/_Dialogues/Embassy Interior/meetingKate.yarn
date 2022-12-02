@@ -3,7 +3,7 @@ tags:
 ---
 [nomarkup][The woman before you's corset is so tight you're convinced her organs are in her throat.][/nomarkup]
 {$innerVoice}: Guess she doesn't have much use for them.
-<<if visited ("anastasiaRecruitment") ==false>>
+<<if visited("anastasiaRecruitment") ==false>>
 {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who's your friend?
 <<else>>
 {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who are your friends?
@@ -41,7 +41,7 @@ title: questionsAboutLastNight
 {$pcName}: Did we leave with anybody else?
 {$sforza}: Not that I saw, but I couldn't give you an honest answer. I was preoccupied.
 -> {$pcName}: (Insight) “Preoccupied?”
-    <<if Roll ("insight")>=1>>
+    <<if Roll("insight")>=1>>
     {$sforza}: If you must know, Diana arranged an evening with one of my favorite “playthings.” I'll leave the rest to your imagination. #success
     <<jump kateFarewell>>
     <<else>>
@@ -51,15 +51,15 @@ title: questionsAboutLastNight
 ===
 title: kateFarewell
 ---
-<<if visited ("anastasiaRecruitment") ==false>>
+<<if visited("anastasiaRecruitment") ==false>>
 {$sforza}: Before you go, I have a lead for you. See the metal head bimbo down there?
-<<if visited ("anastasiaMeeting") ==true>>
-[nomarkup][Kate points to Anastasia. Even from this distance, you can tell she's still trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]
-<<jump kateNudgesTowardAnastasia>>
-<<else>>
-[nomarkup][Kate points to a woman decked out in studded leather garments and cleats. Even from this distance, you can tell she's blatantly trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]
-<<jump kateNudgesTowardAnastasia>>
-<<endif>>
+    <<if visited("anastasiaMeeting") ==true>>
+    [nomarkup][Kate points to Anastasia. Even from this distance, you can tell she's still trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]
+    <<jump kateNudgesTowardAnastasia>>
+    <<else>>
+    [nomarkup][Kate points to a woman decked out in studded leather garments and cleats. Even from this distance, you can tell she's blatantly trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]
+    <<jump kateNudgesTowardAnastasia>>
+    <<endif>>
 <<else>>
 -> {$pcName}: Thank you for your time.
     {$sforza}: I'd say “anytime” dear, but that wouldn't be honest. My time is precious. I do wish you best on your endeavor however. You might even be of some use to me down the line.
@@ -70,3 +70,4 @@ title: kateNudgesTowardAnastasia
 {$sforza}: Name's Anastasia. She's one of us. Shown up the past few nights, but hasn't done the courtesy of introducing herself. I've been keeping an eye on her. Hasn't caused any problems to my knowledge, but she might be your gal.
 {$kieran}: You're tolerating poachers in your domain?
 {$sforza}: She hasn't poached yet just lurking. I've been sniffing her out. Think she's staking out the place, or she's helplessly in love with my staff. Either way, if you saved me the hassle of dealing, I'd be grateful.
+===

@@ -24,6 +24,8 @@ namespace SunsetSystems.Loading
         private string _wakeUpStartNode;
         [SerializeField, ES3NonSerializable]
         private Transform _startPosition;
+        [SerializeField]
+        private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Header("Prologue")]
         [SerializeField]
         private GameObject _desireeOnBed;
@@ -95,6 +97,8 @@ namespace SunsetSystems.Loading
             PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
             await new WaitForSeconds(2);
             await new WaitForUpdate();
+            _cameraControl.ForceToPosition(_cameraStartPoint);
+            _cameraControl.ForceRotation(_cameraStartRotation);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
         }
 
@@ -167,17 +171,15 @@ namespace SunsetSystems.Loading
             _havenDoors.Interactable = true;
             _havenDoors.Interact();
             _havenDoors.Interactable = false;
-            _dominic.Move(_dominicWaypoint.transform.position);
             _dominic.gameObject.SetActive(true);
-            _kieran.Move(_kieranWaypoint.transform.position);
             _kieran.gameObject.SetActive(true);
+            _dominic.MoveAndRotate(_dominicWaypoint.transform.position, _dominicWaypoint.FaceDirection);
+            _kieran.MoveAndRotate(_kieranWaypoint.transform.position, _kieranWaypoint.FaceDirection);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
             await new WaitForFixedUpdate();
-            _ = PartyManager.MainCharacter.FaceTarget(_dominic.transform);
-            _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
-            _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            PartyManager.MainCharacter.MoveAndRotate(_pcCoverWaypoint.transform.position, _dominic.transform);
         }
 
         private void DisableInteractionsBeforeDominic()
@@ -185,6 +187,11 @@ namespace SunsetSystems.Loading
             _interactablesToEnableAfterPhoneCall.ForEach(i => i.Interactable = false);
             _gun.GetComponent<IInteractable>().Interactable = true;
             _crowbar.GetComponent<IInteractable>().Interactable = true;
+        }
+
+        public void RecruitKieran()
+        {
+            PartyManager.RecruitCharacter(_kieran.Data);
         }
 
         private static class HavenDialogueCommands

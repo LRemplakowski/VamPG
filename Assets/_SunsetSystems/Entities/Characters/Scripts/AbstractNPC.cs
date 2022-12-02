@@ -39,6 +39,14 @@ namespace SunsetSystems.Entities.Characters
             return Move(moveTarget.transform.position);
         }
 
+        public override Move MoveAndRotate(Vector3 moveTarget, Transform rotationTarget)
+        {
+            ClearAllActions();
+            Move moveAction = new(this, moveTarget, rotationTarget);
+            AddActionToQueue(moveAction);
+            return moveAction;
+        }
+
         public override Attack Attack(Creature target)
         {
             Attack attackAction = new(target, this);

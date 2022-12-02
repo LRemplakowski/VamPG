@@ -25,7 +25,7 @@ namespace SunsetSystems.Journal.UI
             UpdateViews(new List<IGameDataProvider<Quest>>(quests));
         }
 
-        public void UpdateViews(IList<IGameDataProvider<Quest>> data)
+        public void UpdateViews(List<IGameDataProvider<Quest>> data)
         {
             DisableViews();
             if (data == null || data.Count <= 0)

@@ -14,6 +14,8 @@ namespace SunsetSystems.Spellbook
         [SerializeField, ReadOnly]
         private DisciplineType disciplineType = DisciplineType.Invalid;
 
+        public override string Name => disciplineType.ToString();
+
         [SerializeField]
         private List<DisciplinePower> knownPowers = new();
 

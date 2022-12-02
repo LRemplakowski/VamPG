@@ -2,13 +2,10 @@ using NaughtyAttributes;
 using Redcode.Awaiting;
 using SunsetSystems.Audio;
 using SunsetSystems.Party;
-using SunsetSystems.Resources;
-using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -28,7 +25,6 @@ namespace SunsetSystems.Dialogue
         private Transform _optionParent;
         [SerializeField, Required]
         private OptionView _optionViewPrefab;
-        private List<OptionView> _optionViews;
         [SerializeField]
         private bool _typewriterEffect;
         [SerializeField, ShowIf("_typewriterEffect"), MinValue(0f)]
@@ -44,6 +40,8 @@ namespace SunsetSystems.Dialogue
         private Image _photo;
         [SerializeField]
         private TextMeshProUGUI _photoText;
+        [SerializeField]
+        private List<OptionView> _optionViews;
 
         private StringBuilder _lineHistoryStringBuilder = new();
 
@@ -70,6 +68,13 @@ namespace SunsetSystems.Dialogue
             gameObject.SetActive(false);
         }
 
+        private void Update()
+        {
+            if (_clampScrollbarNextFrame)
+                ClampScrollbar();
+            _clampScrollbarNextFrame = false;
+        }
+
         public override void DialogueComplete()
         {
             OnDialogueFinished?.Invoke();
@@ -80,11 +85,6 @@ namespace SunsetSystems.Dialogue
             _lineHistory.text = string.Empty;
             _lineHistory.maxVisibleCharacters = 0;
             _lineHistoryStringBuilder = new();
-
-            foreach (OptionView optionView in _optionViews)
-            {
-                optionView?.gameObject.SetActive(false);
-            }
             OnDialogueStarted?.Invoke();
         }
 
@@ -95,10 +95,12 @@ namespace SunsetSystems.Dialogue
 
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            _clampScrollbarNextFrame = true;
             AudioManager.Instance.StopSFXPlayback();
             AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             await new WaitForUpdate();
+            _clampScrollbarNextFrame = true;
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             onDialogueLineFinished?.Invoke();
         }
@@ -120,6 +122,7 @@ namespace SunsetSystems.Dialogue
                     return;
             }
             AudioManager.Instance.PlayTypewriterEnd();
+            _clampScrollbarNextFrame = true;
             await new WaitForSeconds(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
         }
@@ -141,6 +144,7 @@ namespace SunsetSystems.Dialogue
             }
             if (RequestedLineInterrupt)
             {
+                _clampScrollbarNextFrame = true;
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
                 return;
             }
@@ -203,85 +207,64 @@ namespace SunsetSystems.Dialogue
             }
         }
 
-        public void CheckForClampScrollbar()
+        public void ClampScrollbar()
         {
-            if (_clampScrollbarNextFrame)
-                _scrollbar.SetValueWithoutNotify(0f);
-            _clampScrollbarNextFrame = false;
+            _scrollbar.value = 0f;
         }
 
         public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
         {
-            foreach (OptionView optionView in _optionViews)
-            {
-                optionView.gameObject.SetActive(false);
-            }
-
-            while (dialogueOptions.Length > _optionViews.Count)
-            {
-                OptionView optionView = CreateNewOptionView();
-                optionView.gameObject.SetActive(false);
-            }
-
-            int optionViewsCreated = 0;
-
+            _clampScrollbarNextFrame = true;
             for (int i = 0; i < dialogueOptions.Length; i++)
             {
-                OptionView optionView = _optionViews[i];
                 DialogueOption option = dialogueOptions[i];
                 if (option is null)
+                {
+                    Debug.LogError($"Encountered null option!");
                     return;
+                }
                 bool alwaysShowOption = option.Line.Metadata?.Contains(ALWAYS_SHOW_OPTION) ?? false;
                 if (option.IsAvailable == false && _showUnavailableOptions == false && alwaysShowOption == false)
                 {
                     continue;
                 }
+                OptionView optionView = Instantiate(_optionViewPrefab, _optionParent);
+                optionView.transform.SetAsLastSibling();
+                optionView.OnOptionSelected = OptionViewWasSelected;
+                _optionViews.Add(optionView);
                 optionView.Option = option;
                 optionView.interactable = option.IsAvailable;
                 optionView.gameObject.SetActive(true);
-
-                if (optionViewsCreated == 0)
-                {
-                    optionView.Select();
-                }
-
-                optionViewsCreated += 1;
             }
 
             OnOptionSelected = onOptionSelected;
 
-            OptionView CreateNewOptionView()
-            {
-                OptionView optionView = Instantiate(_optionViewPrefab, _optionParent);
-                optionView.transform.SetAsLastSibling();
-
-                optionView.OnOptionSelected = OptionViewWasSelected;
-                _optionViews.Add(optionView);
-
-                return optionView;
-            }
-
             async void OptionViewWasSelected(DialogueOption option)
             {
+                _clampScrollbarNextFrame = true;
                 UpdateSpeakerPhoto(option.Line.CharacterName);
                 AudioManager.Instance.PlayTypewriterEnd();
                 await new WaitForUpdate();
-                CleanupOptions();
+                _clampScrollbarNextFrame = true;
                 string formattedLineText = BuildFormattedText(option.Line);
                 _lineHistory.text = formattedLineText;
                 await new WaitForUpdate();
+                _clampScrollbarNextFrame = true;
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
                 OnOptionSelected(option.DialogueOptionID);
+                CleanupOptions();
             }
 
             void CleanupOptions()
             {
-                _optionViews.ForEach(ov => ov.gameObject.SetActive(false));
+                _optionViews.ForEach(ov => Destroy(ov.gameObject));
+                _optionViews.Clear();
             }
         }
 
         public override void UserRequestedViewAdvancement()
         {
+            _clampScrollbarNextFrame = true;
             AudioManager.Instance.PlayTypewriterEnd();
             RequestedLineInterrupt = true;
             requestInterrupt?.Invoke();

@@ -88,7 +88,7 @@ namespace SunsetSystems.Data
             PartyManager.RecruitMainCharacter(new(desiree));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
-            _ = _sceneLoader.LoadGameScene(data);
+            await _sceneLoader.LoadGameScene(data);
         }
 
         public void DisableMainMenu()

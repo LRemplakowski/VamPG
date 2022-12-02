@@ -54,7 +54,7 @@ namespace SunsetSystems.UI
             _viewsPool.ForEach(v => v.gameObject.SetActive(false));
         }
 
-        public void UpdateViews(IList<IGameDataProvider<DisciplinePower>> data)
+        public void UpdateViews(List<IGameDataProvider<DisciplinePower>> data)
         {
             Creature spellcastingActor = CombatManager.CurrentActiveActor;
             foreach (IGameDataProvider<DisciplinePower> ability in data)

@@ -1,6 +1,9 @@
+using SunsetSystems.Loading;
+using SunsetSystems.Loading.UI;
 using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace SunsetSystems.UI
 {
@@ -10,6 +13,11 @@ namespace SunsetSystems.UI
         private Canvas pauseMenuCanvas;
         [SerializeField]
         private PauseUISelector inventory, journal, settings, characterSheet;
+        [SerializeField]
+        private GameObject _characterSelector;
+
+        [SerializeField]
+        private UnityEvent OnReturnToMenu;
         
         public PauseMenuScreen CurrentActiveScreen { get; private set; }
 
@@ -22,6 +30,16 @@ namespace SunsetSystems.UI
         private void Start()
         {
             gameObject.SetActive(false);
+            _characterSelector.SetActive(true);
+        }
+
+        public async void QuitToMenu()
+        {
+            SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await loading.DoFadeOutAsync(.5f);
+            await SceneLoader.Instance.UnloadGameScene();
+            OnReturnToMenu?.Invoke();
+            await loading.DoFadeInAsync(.5f);
         }
 
         public void OpenMenuScreen(PauseMenuScreen screen)

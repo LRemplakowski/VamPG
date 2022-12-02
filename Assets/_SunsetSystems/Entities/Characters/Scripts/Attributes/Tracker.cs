@@ -1,4 +1,5 @@
 using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,9 @@ public class Tracker : BaseStat
     public int SuperficialDamage { get; set; } 
     [field: SerializeField]
     public int AggravatedDamage { get; set; }
+
+    public override string Name => Enum.GetName(typeof(TrackerType), _trackerType);
+
     [SerializeField, ReadOnly]
     private TrackerType _trackerType;
 

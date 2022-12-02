@@ -2,7 +2,7 @@
 tags:
 position: -500,-105
 ---
-[nomarkup][You pick up the phone. Before you answer, the last voice you ever wanted to hear blares out the line. Your ex-husband.][/nomarkup] #line:0c4dd8d 
+[nomarkup][You pick up the phone. The last voice you ever wanted to hear blares out the line: your ex-husband.][/nomarkup] #line:0c4dd8d 
 Chad: Hey Dez, how've you been? #line:05b9b6b 
 [nomarkup][The worst part is you know the question is sincere.][/nomarkup] #line:0a666ec 
 -> {$pcName}: ... Good. #line:0a19d5a 
@@ -19,7 +19,7 @@ tags:
 position: -403,75
 ---
 Chad: Listen I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you. #line:0ea9d8f 
--> {$pcName}: I'm working on it, give me time. \(Charisma\) #line:069ca96 
+-> {$pcName}: I'm working on it, give me time. \(Charisma + Persuasion\) #line:069ca96 
     <<if Roll("charisma") >= 1>>
     <<jump CharismaSuccess>>
     <<else>>

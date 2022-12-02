@@ -8,14 +8,14 @@ tags:
 <<else>>
 [nomarkup][The sink is clogged. Again.][/nomarkup] #line:0c8ddc6 
 <<endif>>
--> {$pcName}: \(Intelligence + Craft\) \[Repair it yourself.\] #line:046b80f 
+-> {$pcName}: \[Intelligence + Craft\] \[Repair it yourself.\] #line:046b80f 
     <<jump sinkRepair>>
 -> {$pcName}: I better call the landlord. \[Walk away.\] #line:015067a 
     <<SetPhoneDialogueToLandlordDialogue>>
 ===
 title: sinkRepair
 ---
-<<if Roll("intelligence") >= 2 + $sinkRepairdModifier>>
+<<if Roll("intelligence","craft") >= 2 + $sinkRepairdModifier>>
 [nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out.][/nomarkup] #success #line:04431e1 
 <<else>>
 [nomarkup][The pipe breaks off into your hand. What is undeniably cold blood sprays you soaked.][/nomarkup] #failure #line:039abba 
@@ -30,7 +30,7 @@ title: sinkRepair
     [nomarkup][A wet PLOP as it flops into the bloodstained sink.][/nomarkup] #line:0ed08e4 
     <<jump needShower>>
 -> {$pcName}: \[Eat the eye.\] #line:0bd5b15 
-    [nomarkup][You fit the whole eyeball into your mouth. Chewing on it: a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.] \[-1 Hunger\][/nomarkup] #line:0002fbf 
+    [nomarkup][You fit the whole eyeball into your mouth. Chewing on it - a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.]\[Hunger -1\][/nomarkup] #line:0002fbf 
     [nomarkup][You stare at your now empty, bloodstained palm. A part of you feels like bursting into tears.][/nomarkup] #line:04aaf45 
     {$innerVoice}: ... #line:0a53d04 
     {$innerVoice}: What is happening to me? #line:0bf3876 

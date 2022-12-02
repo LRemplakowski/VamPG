@@ -27,7 +27,7 @@ position: 210,265
 title: streetwiseRoll
 position: 40,-74
 ---
-<<if Roll("streetwise")>=2>>
+<<if Roll("Manipulation","streetwise")>=2>>
 Drunk Guy: You guys did save me. I guess I can let it slide. #success
 {$kieran}: We appreciate the gratitude.
 <<jump drunkardSuccess>>
@@ -40,7 +40,7 @@ Drunk Guy: Still doesn't make it right for you to kill them. That's why we have 
 title: intimidationRoll
 position: -109,-294
 ---
-<<if Roll("intimidation")>=2>>
+<<if Roll("strenght","intimidation")>=2>>
 Drunk Guy: I hope you're bluffing, but you did just kill three people in front of me. #success
 [nomarkup][You don't even need to say anything, the both of you just stare him down. Ever so slightly puffing your chest.][/nomarkup]
 <<jump drunkardSuccess>>

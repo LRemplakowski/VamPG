@@ -27,7 +27,7 @@ title: landlordSink
 [nomarkup][{$landlord} starts to rush towards the door.][/nomarkup] #line:05624c7 
 {$beast}: DON'T DENY ME! #line:0075c99 
 <<KillKevin>>
-[nomarkup][You pounce on {$landlord} as a matter of instinct, sinking your teeth into his throat. Wet, warm blood fills your throat. This is what you've been craving.] [Hunger is set to 0][/nomarkup] #line:02ce3c5 
+[nomarkup][You pounce on {$landlord} as a matter of instinct, sinking your teeth into his throat. Wet, warm blood fills your throat. This is what you've been craving.][Hunger is set to 0][/nomarkup] #line:02ce3c5 
 -> {$pcName}: Continue. #line:0cca2c8 
     <<jump landlordKilled>>
 ===
@@ -39,8 +39,8 @@ title: landlordKilled
 -> {$pcName}: \[Walk away.\] #line:076fb43 
 -> {$pcName}: \[Pick up the Bathroom Key.\] #line:0ebb8df 
     <<set $hasBathroomDoorKey to true>>
--> {$pcName}: \[Try to save him.\] \(Intelligence + Medicine\) #line:0366f15 
-    <<if Roll("medicine") >= 1>>
+-> {$pcName}: \[Try to save him.\] \[Intelligence + Medicine\] #line:0366f15 
+    <<if Roll("intelligence","medicine") >= 1>>
     [nomarkup][You cover up the wound with a dish rag and administer CPR. {$landlord}'s eyes flutter open. Through exasperated breaths and gurgles you hear him struggle to speak.][/nomarkup] #success #line:01ce0d7 
     {$landlord}: \[gurgle\] You… \[gurgle\] bitch! \[gurgle\] #line:0ddf7b1 
     [nomarkup][His eyes go blank, and he breathes his last breath. At least he died how he lived.][/nomarkup] #line:041c089 

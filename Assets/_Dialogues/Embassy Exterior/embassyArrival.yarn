@@ -33,6 +33,7 @@ position: 164,153
     {$kieran}: Look, I know this is a lot to process, but you're gonna have to listen to me if you want to live to see another night.
 -> {$pcName}: I was trying to tune you out.
     {$kieran}: You'll see how well that works out for you. \[-1 Kieran Influence\]
+    <<set $kieranInfluence to $kieranInfluence-1>>
 {$kieran}: I'm trying to help, but like it or not we're in this boat together.
 <<jump embassyArrival>>
 ===

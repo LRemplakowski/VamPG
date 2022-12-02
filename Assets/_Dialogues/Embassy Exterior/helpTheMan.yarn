@@ -23,8 +23,8 @@ Soccer Mom: Can I help you?
     Soccer Mom: … Alright then.
     [nomarkup][The man mouths, “Help me.”][/nomarkup]
     [nomarkup][Suspicious, she looks over her shoulder the rest of her trek to her van.][/nomarkup]
--> {$pcName}: Is he alright? \(Wits + Insight\)
-    <<if Roll("insight")>=1>>
+-> {$pcName}: Is he alright? (Wits + Insight)
+    <<if Roll("wits","insight")>=1>>
     {$pcName}: \[She's jumpy and sweating bullets. You see the shimmer of the gun she is holding to the man's side.\] #success
     <<else>>
     {$pcName}: \[You find yourself distracted by her horrible fashion choices.\] #failure

@@ -15,9 +15,9 @@ Drunk Guy: I'm a pacifist. I have a principled stance against violence of any ki
 title: drunkardOptions
 position: 210,265
 ---
--> {$pcName}: (Steetwise) What do you think she would have done to you?<<if visited("streetwiseRoll") ==false>>
+-> {$pcName}: (Manipulation + Steetwise) What do you think she would have done to you?<<if visited("streetwiseRoll") ==false>>
     <<jump streetwiseRoll>>
--> {$pcName}: (Intimidate) Do that and you're next.<<if visited("intimidationRoll") ==false>>
+-> {$pcName}: (Strength + Intimidate) Do that and you're next.<<if visited("intimidationRoll") ==false>>
     <<jump intimidationRoll>>
 -> {$kieran}: (Dominate) Let's forget this ever happened.<<if visited("dominateCloudMemory") ==false>>
     <<jump dominateCloudMemory>>

@@ -27,5 +27,10 @@ namespace SunsetSystems.MainMenu
         {
             GameStarter.Instance.InitializeGameJam();
         }
+
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
     }
 }

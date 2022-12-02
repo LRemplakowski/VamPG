@@ -8,12 +8,12 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private Transform _lineTarget;
 
-        public virtual string NameplateText { get => _showNameplate ? Data.FullName : string.Empty; }
+        public virtual string NameplateText { get => ShowNameplate ? Data.FullName : string.Empty; }
         public Vector3 NameplateWorldPosition => new(transform.position.x, transform.position.y + _nameplateOffset, transform.position.z);
         [SerializeField]
         protected float _nameplateOffset = 2.5f;
-        [SerializeField]
-        protected bool _showNameplate = true;
+        [field: SerializeField]
+        public bool ShowNameplate { get; set; } = true;
 
         public Transform LineTarget
         {
@@ -37,6 +37,14 @@ namespace SunsetSystems.Entities.Characters
         {
             CurrentGridPosition = moveTarget;
             return Move(moveTarget.transform.position);
+        }
+
+        public override Move MoveAndRotate(Vector3 moveTarget, Transform rotationTarget)
+        {
+            ClearAllActions();
+            Move moveAction = new(this, moveTarget, rotationTarget);
+            AddActionToQueue(moveAction);
+            return moveAction;
         }
 
         public override Attack Attack(Creature target)

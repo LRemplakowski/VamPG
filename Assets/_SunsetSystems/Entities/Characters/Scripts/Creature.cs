@@ -186,10 +186,16 @@ namespace SunsetSystems.Entities.Characters
 
         public async Task FaceTarget(Transform target)
         {
+            bool agentState = Agent.enabled;
+            bool ObstacleState = NavMeshObstacle.enabled;
+            Agent.enabled = true;
+            NavMeshObstacle.enabled = false;
             while (!RotateTowardsTarget(target))
             {
                 await new WaitForUpdate();
             }
+            Agent.enabled = agentState;
+            NavMeshObstacle.enabled = ObstacleState;
         }
 
         public EntityAction PeekActionFromQueue()
@@ -205,6 +211,7 @@ namespace SunsetSystems.Entities.Characters
         public abstract Move Move(Vector3 moveTarget, float stoppingDistance);
         public abstract Move Move(Vector3 moveTarget);
         public abstract Move Move(GridElement moveTarget);
+        public abstract Move MoveAndRotate(Vector3 moveTarget, Transform rotationTarget);
         public abstract Attack Attack(Creature target);
         #endregion
 

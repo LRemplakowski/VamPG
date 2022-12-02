@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        public string ID;
+        public readonly string ID;
         public Sprite Portrait;
         public Faction Faction;
         public BodyType BodyType;

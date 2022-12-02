@@ -38,7 +38,7 @@ namespace SunsetSystems.Inventory.UI
             initializedOnce = true;
         }
 
-        public void UpdateViews(IList<IGameDataProvider<InventoryEntry>> data)
+        public void UpdateViews(List<IGameDataProvider<InventoryEntry>> data)
         {
             if (!initializedOnce)
                 Initialize();

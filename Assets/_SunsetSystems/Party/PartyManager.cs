@@ -69,6 +69,11 @@ namespace SunsetSystems.Party
             return _activeParty[key];
         }
 
+        public CreatureData GetPartyMemberDataByID(string key)
+        {
+            return _creatureDataCache[key];
+        }
+
         public bool IsRecruitedMember(string key)
         {
             return _creatureDataCache.ContainsKey(key);

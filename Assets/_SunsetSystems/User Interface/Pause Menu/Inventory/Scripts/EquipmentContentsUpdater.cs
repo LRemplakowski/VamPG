@@ -29,7 +29,7 @@ namespace SunsetSystems.Inventory.UI
             
         }
 
-        public void UpdateViews(IList<IGameDataProvider<EquipmentSlot>> data)
+        public void UpdateViews(List<IGameDataProvider<EquipmentSlot>> data)
         {
             foreach (IGameDataProvider<EquipmentSlot> slot in data)
             {

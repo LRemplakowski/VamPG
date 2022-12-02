@@ -46,6 +46,7 @@ namespace SunsetSystems.Audio
             _typewriterSource ??= GetComponents<AudioSource>().FirstOrDefault(s => s != _sfxSource);
             _typewriterSource ??= gameObject.AddComponent<AudioSource>();
             _typewriterSource.loop = false;
+            Volume = _defaultVolume;
         }
 
         public void PlayOneShot(string sfxName)

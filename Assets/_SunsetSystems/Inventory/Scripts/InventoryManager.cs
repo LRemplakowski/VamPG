@@ -7,11 +7,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Party;
+using SunsetSystems.Data;
 
 namespace SunsetSystems.Inventory
 {
     [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
-    public class InventoryManager : Singleton<InventoryManager>, ISaveRuntimeData
+    public class InventoryManager : Singleton<InventoryManager>, ISaveRuntimeData, IResetable
     {
         [SerializeField]
         private ItemStorage _playerInventory;
@@ -23,6 +24,13 @@ namespace SunsetSystems.Inventory
         private UniqueId _unique;
 
         public static event Action<string> ItemEquipped, ItemUnequipped;
+
+        public void ResetOnGameStart()
+        {
+            _playerInventory.Contents.Clear();
+            _money = 0;
+            _coterieEquipmentData = new();
+        }
 
         protected override void Awake()
         {

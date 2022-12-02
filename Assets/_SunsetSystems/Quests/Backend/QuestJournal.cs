@@ -1,4 +1,5 @@
 using CleverCrow.Fluid.Utilities;
+using SunsetSystems.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,11 +7,11 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    public class QuestJournal : Singleton<QuestJournal>
+    public class QuestJournal : Singleton<QuestJournal>, IResetable
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
-        private readonly Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
+        private Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
         [SerializeField]
         private List<Quest> _trackedQuests = new();
         public List<Quest> ActiveQuests => _activeQuests.Values.ToList();
@@ -20,6 +21,14 @@ namespace SunsetSystems.Journal
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
         public static event Action<List<Quest>> OnActiveQuestsChanged;
+
+        public void ResetOnGameStart()
+        {
+            _trackedQuests = new();
+            _activeQuests = new();
+            _completedQuests = new();
+            _currentObjectives = new();
+        }
 
         private void OnEnable()
         {

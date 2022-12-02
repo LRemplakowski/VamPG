@@ -12,14 +12,14 @@ namespace UI.CharacterPortraits
         private GameObject portraitPrefab;
         private readonly List<PortraitController> portraits = new();
 
-        internal void AddPortrait(CreatureUIData data)
+        internal void AddPortrait(Sprite portrait)
         {
             GameObject portraitGO = Instantiate(portraitPrefab, this.transform);
-            portraitGO.name = data.name + " Portrait";
+            //portraitGO.name = data.name + " Portrait";
             PortraitController portraitController = portraitGO.GetComponent<PortraitController>();
             if (portraitController == null)
                 Debug.LogWarning("jebany null");
-            portraitController.InitPotrait(data);
+            portraitController.InitPotrait(portrait);
             portraits.Add(portraitController);
         }
 

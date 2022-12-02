@@ -68,7 +68,7 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("ModifyInfluence")]
         public static void ModifyInfluence(int amount, string companionID)
         {
-
+            Debug.LogError("Modify that influence, you dummy");
         }
 
         [YarnCommand("RemoveMoney")]

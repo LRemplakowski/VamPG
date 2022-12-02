@@ -26,16 +26,19 @@ namespace SunsetSystems.Journal
 
         public void MakeActive()
         {
+            Debug.Log($"Begun tracking objective {ID}!");
             OnObjectiveActive?.Invoke(this);
         }
 
         public void MakeInactive()
         {
+            Debug.Log($"Failed objective {ID}!");
             OnObjectiveInactive?.Invoke(this);
         }
 
         public void Complete()
         {
+            Debug.Log($"Completed objective {ID}!");
             OnObjectiveCompleted?.Invoke(this);
             ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             NextObjectives.ForEach(o => (o as Objective).MakeActive());

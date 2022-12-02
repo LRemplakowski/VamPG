@@ -221,15 +221,5 @@ namespace SunsetSystems.Entities.Characters
             Gizmos.color = Color.magenta;
             Gizmos.DrawWireSphere(transform.position, movementRange);
         }
-
-        public CreatureUIData GetCreatureUIData()
-        {
-            HealthData healthData = StatsManager.GetHealthData();
-            CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
-                Data.Portrait,
-                healthData,
-                0);
-            return builder.Create();
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Data;
+﻿using Entities.Characters.Data;
+using SunsetSystems.Entities.Data;
 using System;
 using UMA.CharacterSystem;
 using UnityEngine;
@@ -38,5 +39,16 @@ namespace SunsetSystems.Entities.Characters
             UseEquipmentPreset = config.UseEquipmentPreset;
             Money = config.EquipmentConfig.Money;
         }
+
+        //public CreatureUIData GetCreatureUIData()
+        //{
+        //    Tracker tracker = Stats.Trackers.GetTracker(TrackerType.Health)
+        //    HealthData healthData = new HealthData(. );
+        //    CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
+        //        Data.Portrait,
+        //        healthData,
+        //        0);
+        //    return builder.Create();
+        //}
     }
 }

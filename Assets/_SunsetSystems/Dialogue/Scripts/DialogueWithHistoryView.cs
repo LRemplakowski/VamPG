@@ -57,6 +57,13 @@ namespace SunsetSystems.Dialogue
         private bool _clampScrollbarNextFrame;
         private bool RequestedLineInterrupt { get; set; } = false;
 
+        public void Cleanup()
+        {
+            _lineHistory.text = string.Empty;
+            _lineHistory.maxVisibleCharacters = 0;
+            _lineHistoryStringBuilder = new();
+        }
+
         private void Awake()
         {
             _optionViews = new();
@@ -82,9 +89,7 @@ namespace SunsetSystems.Dialogue
 
         public override void DialogueStarted()
         {
-            _lineHistory.text = string.Empty;
-            _lineHistory.maxVisibleCharacters = 0;
-            _lineHistoryStringBuilder = new();
+            Cleanup();
             OnDialogueStarted?.Invoke();
         }
 
@@ -242,7 +247,7 @@ namespace SunsetSystems.Dialogue
             async void OptionViewWasSelected(DialogueOption option)
             {
                 _clampScrollbarNextFrame = true;
-                UpdateSpeakerPhoto(option.Line.CharacterName);
+                //UpdateSpeakerPhoto(option.Line.CharacterName);
                 AudioManager.Instance.PlayTypewriterEnd();
                 await new WaitForUpdate();
                 _clampScrollbarNextFrame = true;

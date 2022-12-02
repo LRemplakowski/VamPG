@@ -11,17 +11,18 @@ using NaughtyAttributes;
 using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
 using SunsetSystems.Dialogue;
+using SunsetSystems.Data;
 
 namespace SunsetSystems.Party
 {
     [RequireComponent(typeof(UniqueId))]
-    public class PartyManager : InitializedSingleton<PartyManager>, ISaveRuntimeData
+    public class PartyManager : InitializedSingleton<PartyManager>, ISaveRuntimeData, IResetable
     {
         [field: SerializeField]
         private StringCreatureInstanceDictionary _activeParty;
         public static Creature MainCharacter => Instance._activeParty[Instance._mainCharacterKey];
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
-        public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value) as List<Creature>;
+        public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
         private StringCreatureDataDictionary _creatureDataCache;
@@ -45,6 +46,14 @@ namespace SunsetSystems.Party
             }
         }
 
+        public void ResetOnGameStart()
+        {
+            _activeParty = new();
+            _creatureDataCache = new();
+            _mainCharacterKey = "";
+            _activeCoterieMemberKeys = new();
+        }
+
         protected override void Awake()
         {
             _mainCharacterKey = string.Empty;
@@ -56,11 +65,16 @@ namespace SunsetSystems.Party
 
         public override void Initialize()
         {
+            UpdatePartyPortraits();
+        }
+
+        private void UpdatePartyPortraits()
+        {
             PartyPortraits?.Clear();
             Debug.Log("Party members count: " + _activeParty.Count);
             foreach (string key in _activeCoterieMemberKeys)
             {
-                PartyPortraits?.AddPortrait(_activeParty[key].GetCreatureUIData());
+                PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
             }
         }
 
@@ -107,6 +121,7 @@ namespace SunsetSystems.Party
 
         public static void RecruitCharacter(CreatureData creatureData)
         {
+            Debug.Log($"Recruited {creatureData.ID} to party!");
             Instance._creatureDataCache.Add(creatureData.ID, creatureData);
             InventoryManager.AddCoterieMemberEquipment(creatureData.ID, creatureData);
             ExperienceManager.AddCreatureToExperienceManager(creatureData.ID);
@@ -126,7 +141,18 @@ namespace SunsetSystems.Party
         {
             if (Instance._creatureDataCache.ContainsKey(memberID) == false)
                 Debug.LogError("Trying to add character to roster but character " + memberID + " is not yet recruited!");
-            return Instance._activeCoterieMemberKeys.Add(memberID);
+            bool result = Instance._activeCoterieMemberKeys.Add(memberID);
+            if (result)
+                Instance.UpdatePartyPortraits();
+            return result;
+        }
+
+        public static void AddCreatureAsActivePartyMember(Creature creature)
+        {
+            if (TryAddMemberToActiveRoster(creature.Data.ID))
+            {
+                Instance._activeParty.Add(creature.Data.ID, creature);
+            }
         }
 
         public static bool TryRemoveMemberFromActiveRoster(string memberID)
@@ -136,7 +162,10 @@ namespace SunsetSystems.Party
                 Debug.LogError("Cannot remove Main Character from active roster!");
                 return false;
             }
-            return Instance._activeCoterieMemberKeys.Remove(memberID);
+            bool result = Instance._activeCoterieMemberKeys.Remove(memberID);
+            if (result)
+                Instance.UpdatePartyPortraits();
+            return result;
         }
 
         public static void UpdateActivePartyData()

@@ -215,33 +215,26 @@ namespace SunsetSystems.Dialogue
         public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
         {
             _clampScrollbarNextFrame = true;
-
-            int optionViewsCreated = 0;
-
             for (int i = 0; i < dialogueOptions.Length; i++)
             {
-                OptionView optionView = Instantiate(_optionViewPrefab, _optionParent);
-                optionView.transform.SetAsLastSibling();
-                optionView.OnOptionSelected = OptionViewWasSelected;
-                _optionViews.Add(optionView);
                 DialogueOption option = dialogueOptions[i];
                 if (option is null)
+                {
+                    Debug.LogError($"Encountered null option!");
                     return;
+                }
                 bool alwaysShowOption = option.Line.Metadata?.Contains(ALWAYS_SHOW_OPTION) ?? false;
                 if (option.IsAvailable == false && _showUnavailableOptions == false && alwaysShowOption == false)
                 {
                     continue;
                 }
+                OptionView optionView = Instantiate(_optionViewPrefab, _optionParent);
+                optionView.transform.SetAsLastSibling();
+                optionView.OnOptionSelected = OptionViewWasSelected;
+                _optionViews.Add(optionView);
                 optionView.Option = option;
                 optionView.interactable = option.IsAvailable;
                 optionView.gameObject.SetActive(true);
-
-                if (optionViewsCreated == 0)
-                {
-                    optionView.Select();
-                }
-
-                optionViewsCreated += 1;
             }
 
             OnOptionSelected = onOptionSelected;

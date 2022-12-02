@@ -22,7 +22,7 @@ position: 248,2
     {$innerVoice}: Why did I do that? #line:03a66e7 
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Walk away.\] #line:069c498 
--> {$pcName}: \(Melee\) \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
+-> {$pcName}: \(Strength + Melee\) \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
     <<if Roll("melee") >= 1>>
     [nomarkup][You jimmy the crowbar just right. With a little elbow grease you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0ab6340 
     <<OpenBathroomDoors>>

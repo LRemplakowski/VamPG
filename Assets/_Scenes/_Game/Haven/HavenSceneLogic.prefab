@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1042354485840281110}
-  m_Father: {fileID: 1042354484607756806}
+  m_Father: {fileID: 7175237457238990578}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354484377679297
@@ -108,7 +108,7 @@ Transform:
   m_Children:
   - {fileID: 1042354486097262327}
   m_Father: {fileID: 1042354484607756806}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354484438170081
 MonoBehaviour:
@@ -151,10 +151,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1042354485934530134}
-  - {fileID: 1042354485201909916}
-  - {fileID: 1042354484377679296}
-  - {fileID: 1042354485097339853}
+  - {fileID: 7175237457238990578}
+  - {fileID: 7419206635886771523}
   - {fileID: 1042354486065483819}
   - {fileID: 1042354484438170080}
   - {fileID: 1042354485045506244}
@@ -223,7 +221,7 @@ Transform:
   m_Children:
   - {fileID: 1042354484666492064}
   m_Father: {fileID: 1042354484607756806}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354485045506245
 MonoBehaviour:
@@ -268,7 +266,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1042354485673086007}
-  m_Father: {fileID: 1042354484607756806}
+  m_Father: {fileID: 7175237457238990578}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354485097339854
@@ -314,7 +312,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1042354484400994141}
-  m_Father: {fileID: 1042354484607756806}
+  m_Father: {fileID: 7175237457238990578}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354485201909917
@@ -519,7 +517,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1042354485681900584}
-  m_Father: {fileID: 1042354484607756806}
+  m_Father: {fileID: 7175237457238990578}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354485934530135
@@ -566,7 +564,7 @@ Transform:
   m_Children:
   - {fileID: 1042354486067879311}
   m_Father: {fileID: 1042354484607756806}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1042354486065483860
 MonoBehaviour:
@@ -789,5 +787,85 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1042354484438170080}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7015989085768076620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7419206635886771523}
+  - component: {fileID: 6950662471767672030}
+  m_Layer: 0
+  m_Name: PCAgainstFridgeWaypoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7419206635886771523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7015989085768076620}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.669, y: 0.25, z: 1.509}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1042354484607756806}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6950662471767672030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7015989085768076620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <FaceDirection>k__BackingField: {fileID: 0}
+--- !u!1 &9071178368202153080
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7175237457238990578}
+  m_Layer: 0
+  m_Name: Landlord Visit Waypoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7175237457238990578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9071178368202153080}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1042354485934530134}
+  - {fileID: 1042354485201909916}
+  - {fileID: 1042354484377679296}
+  - {fileID: 1042354485097339853}
+  m_Father: {fileID: 1042354484607756806}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

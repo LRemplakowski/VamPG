@@ -39,7 +39,6 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             this.rotationTarget = rotationTarget;
             rotationTask = new Task(RotateToTarget);
-            conditions.Add(new FaceTargetCondition(rotationTask));
         }
 
         private async void RotateToTarget()
@@ -73,7 +72,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override bool IsFinished()
         {
             bool finished = base.IsFinished();
-            if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()) && rotationTask.Status == TaskStatus.Created)
+            if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()))
             {
                 rotationTask.Start();
             }

@@ -74,7 +74,7 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private Creature _kieran;
         [SerializeField]
-        private Waypoint _dominicWaypoint, _kieranWaypoint;
+        private Waypoint _dominicWaypoint, _kieranWaypoint, _dominicFridgeWaypoint, _kieranFridgeWaypoint, _pcFridgeWaypoint;
         [SerializeField]
         private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
@@ -135,16 +135,6 @@ namespace SunsetSystems.Loading
             await fade.DoFadeInAsync(.5f);
         }
 
-        public async void MoveCoffeTableAndTakeCover()
-        {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-            await fade.DoFadeOutAsync(.5f);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
-            await PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
-        }
-
         public async Task MoveToSink()
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
@@ -172,19 +162,44 @@ namespace SunsetSystems.Loading
 
         public async void BargeIn()
         {
-            await new WaitForUpdate();
+            //SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            //await fade.DoFadeOutAsync(.5f);
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             _havenDoors.Interactable = true;
             _havenDoors.Interact();
             _havenDoors.Interactable = false;
             _dominic.gameObject.SetActive(true);
             _kieran.gameObject.SetActive(true);
-            _dominic.MoveAndRotate(_dominicWaypoint.transform.position, _dominicWaypoint.FaceDirection);
-            _kieran.MoveAndRotate(_kieranWaypoint.transform.position, _kieranWaypoint.FaceDirection);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
+            _dominic.ForceCreatureToPosition(_dominicWaypoint.transform.position);
+            _kieran.ForceCreatureToPosition(_kieranWaypoint.transform.position);
+            _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
-            PartyManager.MainCharacter.MoveAndRotate(_pcCoverWaypoint.transform.position, _dominic.transform);
+            _cameraControl.ForceRotation(_cameraRotationDominicEnter);
+            _ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
+            _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
+            _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            await new WaitForFixedUpdate();
+            //await fade.DoFadeInAsync(.5f);
+        }
+
+        private async void MoveActorsAndCameraToFridgeConfig()
+        {
+            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await fade.DoFadeOutAsync(.5f);
+            PartyManager.MainCharacter.ForceCreatureToPosition(_pcFridgeWaypoint.transform.position);
+            _dominic.ForceCreatureToPosition(_dominicFridgeWaypoint.transform.position);
+            _kieran.ForceCreatureToPosition(_kieranFridgeWaypoint.transform.position);
+            _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
+            await new WaitForFixedUpdate();
+            _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
+            _ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
+            _ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
+            _ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
+            await fade.DoFadeInAsync(.5f);
         }
 
         private void DisableInteractionsBeforeDominic()
@@ -197,6 +212,7 @@ namespace SunsetSystems.Loading
         public void RecruitKieran()
         {
             PartyManager.RecruitCharacter(_kieran.Data);
+            PartyManager.TryAddMemberToActiveRoster(_kieran.Data.ID);
         }
 
         private static class HavenDialogueCommands
@@ -293,6 +309,12 @@ namespace SunsetSystems.Loading
             public static void DisableInteractionsBeforeDominic()
             {
                 HavenSceneLogic.DisableInteractionsBeforeDominic();
+            }
+
+            [YarnCommand("HandleAltercationWithDominic")]
+            public static void HandleAltercationWithDominic()
+            {
+                HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
             }
         }
     }

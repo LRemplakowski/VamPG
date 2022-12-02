@@ -2,10 +2,10 @@
 tags:
 ---
 [nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup] #line:0b235ad 
-{$innerVoice}: No... No. No. No...! No! #line:0267002 
--> {$pcName}: \[Medicine 2\] \[Find the cause of death.\] #line:019d0da 
+{$innerVoice}: No! No! No! No! No! #line:0267002 
+-> {$pcName}: \(Intelligence + Medicine\) \[Find the cause of death.\] #line:019d0da 
     <<jump findCause>>
--> {$pcName}: \[Streetwise 1\] \[Fleece the body.\] #line:0ff8d9d 
+-> {$pcName}: \(Wits + Streetwise\) \[Fleece the body.\] #line:0ff8d9d 
     <<jump searchBody>>
 -> {$pcName}: \[Walk away.\] #line:0994e23 
     <<jump afterBodyInteraction>>

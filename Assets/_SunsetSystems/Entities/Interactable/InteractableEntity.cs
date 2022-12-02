@@ -45,8 +45,6 @@ namespace SunsetSystems.Entities.Interactable
             }
             set
             {
-                if (_interactableOnce && _interacted)
-                    return;
                 _interacted = value;
             }
         }

@@ -15,9 +15,11 @@ namespace SunsetSystems.Audio
 
         private void Start()
         {
+            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
+                SetMusicVolume(PlayerPrefs.GetFloat("MUSIC_VOLUME"));
+            if (PlayerPrefs.HasKey("SFX_VOLUME"))
+                SetSFXVolume(PlayerPrefs.GetFloat("SFX_VOLUME"));
             PlayMenuMusic();
-            SetMusicVolume(PlayerPrefs.GetFloat("MUSIC_VOLUME"));
-            SetSFXVolume(PlayerPrefs.GetFloat("SFX_VOLUME"));
         }
 
         public void PlaySFXOneShot(string sfxName)
@@ -58,12 +60,14 @@ namespace SunsetSystems.Audio
         public void SetMusicVolume(float volume)
         {
             PlayerPrefs.SetFloat("MUSIC_VOLUME", volume);
+            PlayerPrefs.Save();
             _soundtrackController.Volume = volume;
         }
 
         public void SetSFXVolume(float volume)
         {
             PlayerPrefs.SetFloat("SFX_VOLUME", volume);
+            PlayerPrefs.Save();
             _sfxController.Volume = volume;
         }
     }

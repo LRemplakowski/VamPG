@@ -21,6 +21,10 @@ namespace SunsetSystems.MainMenu
         {
             if (debugUi)
                 debugUi.SetActive(GameConstants.DEBUG_MODE);
+            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
+                _musicSlider.value = PlayerPrefs.GetFloat("MUSIC_VOLUME");
+            if (PlayerPrefs.HasKey("SFX_VOLUME"))
+                _sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME");
             _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
             _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
         }

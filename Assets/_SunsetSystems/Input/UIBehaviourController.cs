@@ -35,7 +35,6 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape += OnEscape;
             PlayerInputHandler.OnPointerPosition += OnPointerPosition;
             PlayerInputHandler.OnJournal += OnJournal;
-            PlayerInputHandler.OnSkipDialogue += OnSkipDialogue;
             PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
             PlayerInputHandler.OnHelp += OnShowHelp;
         }
@@ -47,7 +46,6 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnEscape -= OnEscape;
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
             PlayerInputHandler.OnJournal -= OnJournal;
-            PlayerInputHandler.OnSkipDialogue -= OnSkipDialogue;
             PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
             PlayerInputHandler.OnHelp -= OnShowHelp;
         }
@@ -179,13 +177,6 @@ namespace SunsetSystems.Input
             if (!context.performed)
                 return;
             pointerPosition = context.ReadValue<Vector2>();
-        }
-
-        private void OnSkipDialogue(InputAction.CallbackContext context)
-        {
-            if (!context.performed)
-                return;
-            DialogueManager.Instance.InterruptCurrentLine();
         }
 
         private void OnHighlightInteractables(InputAction.CallbackContext context)

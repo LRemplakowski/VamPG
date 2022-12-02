@@ -106,7 +106,7 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.3
+    agentRadius: 0.25
     agentHeight: 1.8
     agentSlope: 45
     agentClimb: 0.5
@@ -114,7 +114,7 @@ NavMeshSettings:
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 1
-    cellSize: 0.038
+    cellSize: 0.0313
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 1
@@ -254,6 +254,37 @@ Transform:
   - {fileID: 1048735712}
   m_Father: {fileID: 2042823493}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &18836935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 18836936}
+  m_Layer: 8
+  m_Name: interaction_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &18836936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 18836935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.155, y: 0, z: 1.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1493672629717164978}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &21041538
 GameObject:
@@ -6792,6 +6823,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 582168789}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &582993869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 582993870}
+  m_Layer: 8
+  m_Name: Interaction target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &582993870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 582993869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.255, y: -0.796, z: -0.972}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3648448450239223760}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &583024759
 GameObject:
   m_ObjectHideFlags: 0
@@ -8648,6 +8710,37 @@ Transform:
   m_Children:
   - {fileID: 1108489196}
   m_Father: {fileID: 821153176}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &738240378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738240379}
+  m_Layer: 8
+  m_Name: interaction_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738240379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738240378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.005, y: 0, z: -0.804}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1974935688}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &738680819
@@ -14700,7 +14793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1153547749}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.07, y: -2.131, z: -2.62}
+  m_LocalPosition: {x: 0.1, y: -2.131, z: -4.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21753,7 +21846,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761643063}
-  m_LocalRotation: {x: -0.00937529, y: -0.036781717, z: 0.0147886025, w: 0.9991699}
+  m_LocalRotation: {x: -0.009375296, y: -0.036781717, z: 0.014788608, w: 0.9991699}
   m_LocalPosition: {x: -0.05342067, y: -0.000000022351742, z: 0.000000056810677}
   m_LocalScale: {x: 0.9999998, y: 0.99999994, z: 0.99999917}
   m_ConstrainProportionsScale: 0
@@ -26401,6 +26494,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2083673686}
   m_Mesh: {fileID: 2603407423154765579, guid: 7b20b620662ad264f9e7cc85ed4cd92f, type: 3}
+--- !u!1 &2098243038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2098243039}
+  m_Layer: 8
+  m_Name: interaction_target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2098243039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098243038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.524, y: 0, z: 0.12}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 781100931855757369}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2100976057
 GameObject:
   m_ObjectHideFlags: 0
@@ -27188,8 +27312,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: _interactionDistance
-      value: 1
+      value: 0.26
       objectReference: {fileID: 0}
+    - target: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: _interactionTransform
+      value: 
+      objectReference: {fileID: 2098243039}
     - target: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: <HoverHighlight>k__BackingField
       value: 
@@ -27344,8 +27472,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionCollider: {fileID: 819424585}
   <HoverHighlight>k__BackingField: {fileID: 853837789}
-  _interactionDistance: 1
-  _interactionTransform: {fileID: 781100931855757369}
+  _interactionDistance: 0.26
+  _interactionTransform: {fileID: 2098243039}
   _interactable: 0
   _nameplateName: Bathroom Door
   _interactableOnce: 0
@@ -27981,8 +28109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionCollider: {fileID: 1493672629717164981}
   <HoverHighlight>k__BackingField: {fileID: 358087618}
-  _interactionDistance: 1.2
-  _interactionTransform: {fileID: 1493672629717164978}
+  _interactionDistance: 0.27
+  _interactionTransform: {fileID: 18836936}
   _interactable: 0
   _nameplateName: Shower
   _interactableOnce: 1
@@ -33684,8 +33812,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionCollider: {fileID: 3648448450239223759}
   <HoverHighlight>k__BackingField: {fileID: 2000141496}
-  _interactionDistance: 1.6
-  _interactionTransform: {fileID: 8051448432210335394}
+  _interactionDistance: 0.36
+  _interactionTransform: {fileID: 582993870}
   _interactable: 1
   _nameplateName: Phone
   _interactableOnce: 1
@@ -43269,6 +43397,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1749489002}
     m_Modifications:
+    - target: {fileID: 70275548971246268, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.458
+      objectReference: {fileID: 0}
+    - target: {fileID: 70275548971246268, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: _interactionDistance
+      value: 0.26
+      objectReference: {fileID: 0}
     - target: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: OnInteractionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -43326,6 +43466,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7612416932428136423, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: _interactionDistance
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 7612416932428136423, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: _interactionTransform
+      value: 
+      objectReference: {fileID: 4264640439043287193}
+    - target: {fileID: 7612416932428136423, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: OnInteractionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 851448336}
@@ -43338,6 +43486,11 @@ PrefabInstance:
 --- !u!4 &4264640439043287192 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+  m_PrefabInstance: {fileID: 4264640439043287191}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4264640439043287193 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 70275548971246268, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_PrefabInstance: {fileID: 4264640439043287191}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &4264640439043287194 stripped
@@ -48228,7 +48381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionCollider: {fileID: 5363628252765409757}
   <HoverHighlight>k__BackingField: {fileID: 2083673686}
-  _interactionDistance: 1
+  _interactionDistance: 0.21
   _interactionTransform: {fileID: 1153547750}
   _interactable: 0
   _nameplateName: Sink
@@ -49583,8 +49736,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interactionCollider: {fileID: 7338327342520421205}
   <HoverHighlight>k__BackingField: {fileID: 434049927}
-  _interactionDistance: 1
-  _interactionTransform: {fileID: 1974935688}
+  _interactionDistance: 0.28
+  _interactionTransform: {fileID: 738240379}
   _interactable: 0
   _nameplateName: Sink
   _interactableOnce: 0

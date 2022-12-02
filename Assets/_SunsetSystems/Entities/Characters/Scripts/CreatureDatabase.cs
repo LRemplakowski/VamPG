@@ -54,6 +54,12 @@ namespace SunsetSystems.Entities
         {
             Instance = this;
         }
+
+        private void OnEnable()
+        {
+            Instance = this;
+        }
+
         protected void OnValidate()
         {
             Instance = this;

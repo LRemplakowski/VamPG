@@ -17,6 +17,8 @@ namespace SunsetSystems.Dialogue
 
         private const string UPDATE_SPEAKER_PORTRAIT_TAG = "UPDATE_SPEAKER_PORTRAIT";
 
+        private bool _optionsPresented = false;
+
         protected override void Awake()
         {
             _dialogueRunner ??= GetComponent<DialogueRunner>();
@@ -48,6 +50,16 @@ namespace SunsetSystems.Dialogue
             Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
+        private void HandleOptionsPresented()
+        {
+            _optionsPresented = true;
+        }
+
+        private void HandleOptionsSelected()
+        {
+            _optionsPresented = false;
+        }
+
         public bool StartDialogue(string startNode, YarnProject project = null)
         {
             if (project != null)
@@ -56,23 +68,33 @@ namespace SunsetSystems.Dialogue
             }
             if (_dialogueRunner.IsDialogueRunning)
                 return false;
-            _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(true));
+            foreach (DialogueViewBase view in _dialogueRunner.dialogueViews)
+            {
+                view.gameObject.SetActive(true);
+                if (view is DialogueWithHistoryView historyView)
+                {
+                    historyView.OnOptionsPresented += HandleOptionsPresented;
+                    historyView.OnOptionSelectedCustom += HandleOptionsSelected;
+                }
+            }
             _dialogueRunner.StartDialogue(startNode);
             GameManager.CurrentState = GameState.Conversation;
             return true;
         }   
 
-        public void InterruptCurrentLine()
-        {
-            if (_dialogueRunner.IsDialogueRunning)
-                _dialogueRunner.OnViewRequestedInterrupt();
-        }
-
         public void CleanupAfterDialogue()
         {
             GameManager.CurrentState = GameState.Exploration;
-            _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));
-            _dialogueRunner.dialogueViews.ToList().ForEach(view => (view as DialogueWithHistoryView).Cleanup());
+            foreach (DialogueViewBase view in _dialogueRunner.dialogueViews)
+            {
+                view.gameObject.SetActive(false);
+                if (view is DialogueWithHistoryView historyView)
+                {
+                    historyView.OnOptionsPresented -= HandleOptionsPresented;
+                    historyView.OnOptionSelectedCustom -= HandleOptionsSelected;
+                    historyView.Cleanup();
+                }
+            }    
         }
     }
 }

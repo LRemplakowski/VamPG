@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
@@ -33,7 +34,6 @@ namespace SunsetSystems.Entities.Characters.Actions
                 moveToTarget.Abort();
             _aborted = true;
             target.Interacted = false;
-            conditions.Clear();
         }
 
         public async override void Begin()
@@ -42,21 +42,17 @@ namespace SunsetSystems.Entities.Characters.Actions
             if (distance > target.InteractionDistance)
             {
                 await new WaitForUpdate();
-                moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
-                moveToTarget.Begin();
-                while (moveToTarget.IsFinished() == false)
+                Owner.Agent.SetDestination(target.InteractionTransform.position);
+                Owner.Agent.stoppingDistance = 0f;
+                Owner.Agent.isStopped = false;
+                NavMeshAgent agent = Owner.Agent;
+                while (PathComplete() == false)
                 {
-                    if (_aborted)
-                        return;
-                    await new WaitForFixedUpdate();
+                    await new WaitForSecondsRealtime(.1f);
                 }
-                if (Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) > target.InteractionDistance + .1f)
-                {
-                    Abort();
+                if (_aborted || Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) > target.InteractionDistance)
                     return;
-                }
-                moveToTarget = null;
-                await Owner.FaceTarget(target.InteractionTransform);
+                await Owner.FaceTarget((target as MonoBehaviour)?.transform);
                 target.TargetedBy = Owner;
                 target.Interact();
             }
@@ -66,6 +62,18 @@ namespace SunsetSystems.Entities.Characters.Actions
                 target.TargetedBy = Owner;
                 target.Interact();
             }
+        }
+
+        private bool PathComplete()
+        {
+            if (Vector3.Distance(Owner.Agent.destination, Owner.Agent.transform.position) <= Owner.Agent.stoppingDistance + target.InteractionDistance - 0.01f)
+            {
+                if (!Owner.Agent.hasPath || Owner.Agent.velocity.sqrMagnitude == 0f)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

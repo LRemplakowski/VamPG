@@ -17,6 +17,7 @@ namespace SunsetSystems.Audio
         private PlaylistConfig _menuPlaylist, _gamePlaylist;
         [SerializeField]
         private float _defaultVolume = .5f;
+        private float _cachedVolume;
         private float _currentVolume;
         public float Volume
         {
@@ -37,6 +38,7 @@ namespace SunsetSystems.Audio
         {
             _soundtrackSource ??= GetComponent<AudioSource>();
             Volume = _defaultVolume;
+            _cachedVolume = Volume;
         }
 
         public void PlayMenuPlaylist()
@@ -75,10 +77,10 @@ namespace SunsetSystems.Audio
         {
             float fadeTime = _trackTransitionTime / 2;
             float timeElapsed = 0f;
-            float cachedVolume = _currentVolume;
+            _cachedVolume = Volume;
             while (timeElapsed / fadeTime <= 1)
             {
-                Volume = Mathf.Clamp01(cachedVolume - Mathf.Lerp(0, cachedVolume, timeElapsed / fadeTime));
+                Volume = Mathf.Clamp01(_cachedVolume - Mathf.Lerp(0, _cachedVolume, timeElapsed / fadeTime));
                 timeElapsed += Time.deltaTime;
                 await new WaitForUpdate();
             }
@@ -88,10 +90,9 @@ namespace SunsetSystems.Audio
         {
             float fadeTime = _trackTransitionTime / 2;
             float timeElapsed = 0f;
-            float cachedVolume = _currentVolume;
             while (timeElapsed / fadeTime <= 1)
             {
-                Volume = Mathf.Clamp01(Mathf.Lerp(0, cachedVolume, timeElapsed / fadeTime));
+                Volume = Mathf.Clamp01(Mathf.Lerp(0, _cachedVolume, timeElapsed / fadeTime));
                 timeElapsed += Time.deltaTime;
                 await new WaitForUpdate();
             }

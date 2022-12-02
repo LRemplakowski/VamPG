@@ -49,6 +49,7 @@ namespace SunsetSystems.Dialogue
         private const string ROLL_FAIL_TAG = "failure";
         private const string ALWAYS_SHOW_OPTION = "showAlways";
 
+        public event Action OnOptionsPresented, OnOptionSelectedCustom;
         private Action<int> OnOptionSelected;
 
         [SerializeField]
@@ -78,8 +79,10 @@ namespace SunsetSystems.Dialogue
         private void Update()
         {
             if (_clampScrollbarNextFrame)
+            {
                 ClampScrollbar();
-            _clampScrollbarNextFrame = false;
+                _clampScrollbarNextFrame = false;
+            }
         }
 
         public override void DialogueComplete()
@@ -89,21 +92,24 @@ namespace SunsetSystems.Dialogue
 
         public override void DialogueStarted()
         {
+            _lineHistory.maxVisibleCharacters = 0;
+            _clampScrollbarNextFrame = true;
+            _lineHistory.text = string.Empty;
+            _lineHistoryStringBuilder = new();
             Cleanup();
             OnDialogueStarted?.Invoke();
         }
 
         public override void DismissLine(Action onDismissalComplete)
         {
+            _clampScrollbarNextFrame = true;
             onDismissalComplete?.Invoke();
         }
 
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             _clampScrollbarNextFrame = true;
-            AudioManager.Instance.StopSFXPlayback();
             AudioManager.Instance.PlayTypewriterEnd();
-            RequestedLineInterrupt = true;
             await new WaitForUpdate();
             _clampScrollbarNextFrame = true;
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -116,6 +122,7 @@ namespace SunsetSystems.Dialogue
             _clampScrollbarNextFrame = true;
             UpdateSpeakerPhoto(dialogueLine.CharacterName);
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
+            await new WaitForUpdate();
             string formattedLineText = BuildFormattedText(dialogueLine);
             _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
@@ -126,6 +133,7 @@ namespace SunsetSystems.Dialogue
                 if (RequestedLineInterrupt)
                     return;
             }
+            _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSeconds(_lineCompletionDelay);
@@ -134,52 +142,57 @@ namespace SunsetSystems.Dialogue
 
         private async Task TypewriteText(LocalizedLine line)
         {
-            await new WaitForUpdate();
+            await new WaitForSeconds(1f);
             if (_typeSpeed <= 0)
+            {
+                Debug.Log("Type speed is 0! Cancelling typewrite!");
                 return;
+            }
             _lineHistory.maxVisibleCharacters += line.CharacterName?.Length ?? 0;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
                 await new WaitForUpdate();
                 if (RequestedLineInterrupt)
+                {
+                    _clampScrollbarNextFrame = true;
                     break;
+                }
                 _lineHistory.maxVisibleCharacters = Mathf.RoundToInt(_currentVisibleCharacters);
                 _currentVisibleCharacters += Time.deltaTime * _typeSpeed;
-            }
-            if (RequestedLineInterrupt)
-            {
-                _clampScrollbarNextFrame = true;
-                _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-                return;
             }
         }
 
         private string BuildFormattedText(LocalizedLine line)
         {
             _lineHistoryStringBuilder
-                .AppendLine("")
-                .Append("<size=26>");
-            AppendRollPrefix(line);
+                .AppendLine("");
+            bool appended = AppendRollPrefix(line);
             if (line.CharacterName != null && string.IsNullOrWhiteSpace(line.CharacterName) == false)
             {
+                if (appended == false)
+                    _lineHistoryStringBuilder.Append("<size=26>");
+                appended = true;
                 _lineHistoryStringBuilder
                     .Append($"<color=\"red\">{line.CharacterName}:</color>");
             }
+            if (appended)
+                _lineHistoryStringBuilder.AppendLine("</size>");
             _lineHistoryStringBuilder
-                .AppendLine("</size>")
                 .AppendLine(line.TextWithoutCharacterName.Text);
             return _lineHistoryStringBuilder.ToString();
         }
 
-        private void AppendRollPrefix(LocalizedLine dialogueLine)
+        private bool AppendRollPrefix(LocalizedLine dialogueLine)
         {
             if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
-                return;
+                return false;
+            _lineHistoryStringBuilder.Append("<size=26>");
             if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
                 _lineHistoryStringBuilder.Append("(Success) ");
             else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))
                 _lineHistoryStringBuilder.Append("(Failure) ");
+            return true;
         }
 
         private void UpdateSpeakerPhoto(string characterName)
@@ -241,7 +254,7 @@ namespace SunsetSystems.Dialogue
                 optionView.interactable = option.IsAvailable;
                 optionView.gameObject.SetActive(true);
             }
-
+            OnOptionsPresented?.Invoke();
             OnOptionSelected = onOptionSelected;
 
             async void OptionViewWasSelected(DialogueOption option)
@@ -257,6 +270,7 @@ namespace SunsetSystems.Dialogue
                 _clampScrollbarNextFrame = true;
                 _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
                 OnOptionSelected(option.DialogueOptionID);
+                OnOptionSelectedCustom?.Invoke();
                 CleanupOptions();
             }
 

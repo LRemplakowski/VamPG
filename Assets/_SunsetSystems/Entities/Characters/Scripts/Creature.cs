@@ -113,9 +113,9 @@ namespace SunsetSystems.Entities.Characters
             if (!SpellbookManager)
                 SpellbookManager = GetComponent<SpellbookManager>();
             if (Agent)
-                Agent.enabled = false;
+                Agent.enabled = true;
             if (NavMeshObstacle)
-                NavMeshObstacle.enabled = true;
+                NavMeshObstacle.enabled = false;
             if (_config)
                 _data = new(_config);
             if (StatsManager)

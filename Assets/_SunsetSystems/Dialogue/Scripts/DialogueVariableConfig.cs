@@ -26,13 +26,13 @@ namespace SunsetSystems.Dialogue
             injectionData._floats = new();
             injectionData._strings = new();
             injectionData._bools = new();
-            List<string> configIDs = CreatureDatabase.Instance?.AccessorKeys ?? new();
+            List<string> configIDs = CreatureDatabase.Instance.AccessorKeys ?? new();
             foreach (string configID in configIDs)
             {
                 CreatureConfig config = default;
-                if (CreatureDatabase.Instance?.TryGetConfig(configID, out config) ?? false)
+                if (CreatureDatabase.Instance.TryGetConfig(configID, out config))
                 {
-                    injectionData._strings.Add(configID, config?.FullName);
+                    injectionData._strings.Add(configID, config.FullName);
                     injectionData._strings.Add(config?.FullName, configID);
                 }
             }

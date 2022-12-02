@@ -24,14 +24,14 @@ position: 37,-90
 [nomarkup][You can hear his contempt through the phone][/nomarkup] #line:0f3693e 
 -> {$pcName}: I'll pay you for your time. #line:0718920 
     <<jump payKevin>>
--> {$pcName}: Please {$landlord}? I'm just trying to get my life together here. \[Charisma 2\] #line:0230c89 
+-> {$pcName}: Please {$landlord}? I'm just trying to get my life together here. (Charisma + Subterfuge) #line:0230c89 
     <<jump begKevin>>
--> {$pcName}: \[Whispering seductively\] What if I make it worth your while? \[Manipulation 2\] #line:02751f0 
+-> {$pcName}: \[Whispering seductively\] What if I make it worth your while? (Manipulation + Persuasion) #line:02751f0 
     <<jump seduceKevin>>
--> {$pcName}: {$landlord}, you know I'm friends with tenant lawyers right? \[Intimidation 1\] #line:067315e 
+-> {$pcName}: {$landlord}, you know I'm friends with tenant lawyers right? (Manipulation + Intimidation) #line:067315e 
     <<jump intimidateKevin>>
 -> {$pcName}: Okay. #line:0931f00 
-    [nomarkup][He hangs up.\] #line:0c2a5a8 
+    [nomarkup][He hangs up.][/nomarkup] #line:0c2a5a8 
     <<FailObjective "FIX_SINK" "CALL_LANDLORD">>
 ===
 title: payKevin
@@ -42,7 +42,7 @@ position: 146,129
 -> {$pcName}: \[Gritting your teeth\] Sure. #line:038d2cd 
     <<jump kevinConvinced>>
 -> {$pcName}: You're trying to rip me off! #line:0b814b2 
-    {$landlord}: I'm a capitalist, miss. Take it or leave it. I'm going back to bed. #line:016a24d 
+    {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:016a24d 
     -> {$pcName}: Fine. I'll take it. #line:0fee4e4 
         <<RemoveMoney 200>>
         <<jump kevinConvinced>>
@@ -52,11 +52,11 @@ position: 146,129
 title: begKevin
 position: -17,94
 ---
-<<if Roll("charisma") >= 2>>
+<<if Roll("charisma","subterfuge") >= 2>>
 {$landlord}: It must be hard for you, not having a man in your life. I guess I'll help. #success #line:0147d4b 
 {$innerVoice}: Gross. #line:0fdc29e 
 <<else>>
-{$landlord}: Don't act like we're friends. You don't even know my last name. I only let you sign the lease just because I pitied you. I guess I'll extend my pity one last time, but after that you're on your own, miss. #line:06962de 
+{$landlord}: Don't act like we're friends. You don't even know my last name. I only let you sign the lease just because I pitied you. I guess I'll extend my pity one last time, but after that you're on your own. #line:06962de 
 {$innerVoice}: What an asshole. #line:0ffdbc6 
 <<endif>>
 <<jump kevinConvinced>>
@@ -64,7 +64,7 @@ position: -17,94
 title: seduceKevin
 position: -108,-2
 ---
-<<if Roll("manipulation") >= 2>>
+<<if Roll("manipulation","persuasion") >= 2>>
 {$landlord}: Oh… anything you say? #success #line:0be6ef1 
 {$pcName}: Anything. #line:0d12bb7 
 {$innerVoice}: Ew! \[You hold back a gag.\] #line:01cd8b5 
@@ -77,7 +77,7 @@ position: -108,-2
 title: intimidateKevin
 position: 205,12
 ---
-<<if Roll("intimidation") >= 1>>
+<<if Roll("manipulation","intimidation") >= 1>>
 {$landlord}: Oh, I didn't know that. #success #line:0c03378 
 {$pcName}: Now you do. #line:0b056ad 
 <<else>>

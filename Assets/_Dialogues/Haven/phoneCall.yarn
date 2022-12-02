@@ -2,14 +2,14 @@
 tags:
 position: -500,-105
 ---
-[nomarkup][You pick up the phone. Before you answer, the last voice you ever wanted to hear blares out the line. Your ex-husband.][/nomarkup] #line:0c4dd8d 
+[nomarkup][You pick up the phone. The last voice you ever wanted to hear blares out the line - your ex-husband.][/nomarkup] #line:0c4dd8d 
 Chad: Hey Dez, how've you been? #line:05b9b6b 
 [nomarkup][The worst part is you know the question is sincere.][/nomarkup] #line:0a666ec 
 -> {$pcName}: ... Good. #line:0a19d5a 
     Chad: Glad to hear you're adjusting well. #line:018f165 
     <<jump AboutMoney>>
 -> {$pcName}: Not going to lie to you, I've been better. #line:06d718b 
-    Chad: I'm sorry to hear that.This is a hard time for both of us. #line:0b2b52e 
+    Chad: I'm sorry to hear that. This has been hard on both of us. #line:0b2b52e 
     <<jump AboutMoney>>
 -> {$pcName}: \[Hang up.\] #line:0e6a023 
     <<jump HangUp>>
@@ -19,8 +19,8 @@ tags:
 position: -403,75
 ---
 Chad: Listen I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you. #line:0ea9d8f 
--> {$pcName}: I'm working on it, give me time. \[Charisma 1\] #line:069ca96 
-    <<if Roll("charisma") >= 1>>
+-> {$pcName}: I'm working on it, give me time. (Charisma + Persuasion) #line:069ca96 
+    <<if Roll("charisma","persuasion") >= 1>>
     <<jump CharismaSuccess>>
     <<else>>
     <<jump CharismaFail>>
@@ -37,7 +37,7 @@ Chad: Okay. I trust you. Just keep me updated alright. You know better than anyo
 title: CharismaFail
 position: -165,76
 ---
-Chad: That's what you said a month ago. Look, I only gave you that money to help you get on your feet. The last thing I want to do is take my ex to court, but I need the money. #failure #line:0bcbbb4 
+Chad: That's what you said a month ago. Look, I only gave it to you to help you get on your feet. The last thing I want to do is take my ex to court, but I don't know what else to do. #failure #line:0bcbbb4 
 -> {$pcName}: I understand where you're coming from. I'm sorry. #line:0dc765d 
     Chad: It's okay. I know you're good for it. Just keep me updated alright. You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #line:0afe6a1 
     <<jump CharismaCommonPart>>

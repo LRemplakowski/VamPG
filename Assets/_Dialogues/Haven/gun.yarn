@@ -6,13 +6,13 @@ tags:
 -> {$pcName}: \[Take it.\] #line:049942a 
     <<HandleGunTaken>>
     <<set $hasGun to true>>
--> {$pcName}: \[Firearms 1\] \[Clean the gun.\] <<if $hasTimeToCleanGun == true>> #line:0e85770
+-> {$pcName}: \[Intelligence + Firearms\] \[Clean the gun.\] <<if $hasTimeToCleanGun == true>> #line:0e85770
     <<HandleGunTaken>>
     <<set $hasGun to true>>
-    <<if Roll("firearms") >= 1>>
+    <<if Roll("intelligence","firearms") >= 1>>
     {$innerVoice}: Good as new. #success #line:0d3b5c2 
     <<else>>
-    [nomarkup][BANG! You got too comfortable and were careless. The gun discharges, putting a bullet hole in the ceiling.][/nomarkup] #line:0ea9df6 
+    [nomarkup][BANG! You got careless, putting a bullet hole in the ceiling.][/nomarkup] #line:0ea9df6 
     {$innerVoice}: Definitely not getting my security deposit back. #line:090e9f1 
     <<endif>>
 ===

@@ -5,15 +5,11 @@ position: -17,-494
 {$pcName}: Oh my God! What if it's the cops? #line:0df94ac 
 {$beast}: Who cares? It's them or you. #line:044bd7d 
 <<wait 1>>
-<<if $kevinMurdered == true>>
 {$sheriff}: Ooooh! Looks like someone's been busy. #line:066c8de 
 {$kieran}: Come on out, lick! Before you make even more of a mess. #line:0aa174d 
 -> {$pcName}: Continue. #line:03904b9 
-<<else>>
-{$kieran}: Come on out, lick! We know you're here! #line:038aa1c 
 <<wait 1>>
 {$sheriff}: Hurry up and make this quick. I have plans later. #line:0aecf52 
-<<endif>>
 <<jump attackIntruders>>
 ===
 title: attackIntruders
@@ -49,8 +45,6 @@ position: 656,-163
 ---
 {$sheriff}: Nice try, kid. #line:0a48c52 
 [nomarkup][He saunters towards you, pinning you to the corner, but he doesn't even raise his hands.][/nomarkup] #line:05603f5 
-{$sheriff}: Kieran, search the place for any other “friends” she's made. #line:0137843 
-{$kieran}: \[Kieran nods and begins searching the apartment.\] #line:08520a1 
 {$sheriff}:  Now do you want to do this the hard way or the easy way? #line:02ee38c 
 -> {$pcName}: \[Drop your weapon.\] #line:0950145 
     {$sheriff}: Sharp. #line:0232369 
@@ -61,11 +55,6 @@ position: 656,-163
 title: kieranEndsSearch
 position: 789,-13
 ---
-[nomarkup][The one named Kieran steps out of the bathroom.][/nomarkup] #line:0d68b4e 
-{$kieran}: John Doe in here. #line:039f8a1 
-<<if $kevinMurdered == true>>
-{$sheriff}: Two already. #line:0841b0e 
-<<endif>>
 [nomarkup][He shakes his head side to side but keeps his devilish smirk.][/nomarkup] #line:0f71bfc 
 {$sheriff}: You sure know how to party. I'll give you that. #line:05ad39e 
 [nomarkup][He lights a cigar, blowing the smoke in your face.][/nomarkup] #line:0deb44b 
@@ -200,7 +189,7 @@ position: 410,474
 [nomarkup][Kieran walks arond the room, briefly browsing through your things. He stops at the investigation board.][/nomarkup] #line:0725817 
 {$sheriff}: I'm trying to lighten the mood, grumpy pants.  #line:0b3de57 
 {$sheriff}: \[Sighs\] Let's just get this over with. Promise I'll make it quick. #line:096a78a 
-[nomarkup][Dominic draws his .44 Auto Mag pistol. He's a little too enthusiastic as he takes a step towards you.][/nomarkup] #line:0ea70dc 
+[nomarkup][Dominic draws his .44 Auto Mag pistol. He's a little too enthusiastic as he steps towards you.][/nomarkup] #line:0ea70dc 
 {$beast}: FIGHT BACK! #line:059e616 
 <<wait 2>>
 [nomarkup][If there's ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.][/nomarkup] #line:050f5f8 
@@ -269,7 +258,8 @@ title: figureOutWhereYouWere
 {$kieran}: Let's look around for any clue. If you're going down, I'm not going down with you. #line:0d5f2d7 
 -> {$pcName}: Thanks for saving me. #line:0aa3f25 
     [nomarkup][Kieran shrugs.][/nomarkup] #line:0251d36 
-    {$kieran}: I didn't do it for you. #line:09ad626 
+    {$kieran}: I didn't do it for you. \[+1 Kieran Influence\] #line:09ad626
+    <<set $kieranInfluence to $kieranInfluence-1>> 
 -> {$pcName}: So you're my jailor. #line:07813d7 
     [nomarkup][Kieran shrugs.][/nomarkup] #line:017bd3f 
     {$kieran}: More like your cellmate. #line:0bc77c9 

@@ -1,7 +1,7 @@
 ﻿title: bathroomDoors
 tags:
 ---
-[nomarkup][The door knob doesn't budge. It's locked. Of course from the inside because the architect must have been a sadist.][/nomarkup] #line:05c4aa7 
+[nomarkup][The door knob doesn't budge. It's locked. Of course from the inside. The architect must have been a sadist.][/nomarkup] #line:05c4aa7 
 <<if ($bathroomDoorInteractedWith == true)>>
 <<jump bathroomDoorDialogue>>
 <<endif>>
@@ -22,12 +22,12 @@ position: 248,2
     {$innerVoice}: Why did I do that? #line:03a66e7 
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Walk away.\] #line:069c498 
--> {$pcName}: \[Melee 1\] \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
-    <<if Roll("melee") >= 1>>
-    [nomarkup][You jimmy the crowbar in between the door and the wall. With a little elbow grease you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0ab6340 
+-> {$pcName}: \[Strenght + Melee\] \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
+    <<if Roll("strenght","melee") >= 1>>
+    [nomarkup][You jimmy the crowbar just right. With a little elbow grease you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0ab6340 
     <<OpenBathroomDoors>>
     <<else>>
-    [nomarkup][Perhaps you were a little too eager. The door shatters before you, splinters flying in the air, jamming into your flesh.][/nomarkup] 1 superficial damage. #failure #line:0cccabb 
+    [nomarkup][Perhaps you were a little too eager. The door SHATTERS! Splinters jam into your flesh.][1 superficial damage.][/nomarkup] #failure #line:0cccabb 
     {$innerVoice}: Ow! What the fuck!? #line:0c15cec 
     <<DestroyBathroomDoors>>
     <<endif>>

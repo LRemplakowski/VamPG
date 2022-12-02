@@ -2,17 +2,17 @@
 tags:
 ---
 [nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup] #line:0b235ad 
-{$innerVoice}: No... No. No. No...! No! #line:0267002 
--> {$pcName}: \[Medicine 2\] \[Find the cause of death.\] #line:019d0da 
+{$innerVoice}: No! No! No! No! No! #line:0267002 
+-> {$pcName}: \[Intelligence + Medicine\] \[Find the cause of death.\] #line:019d0da 
     <<jump findCause>>
--> {$pcName}: \[Streetwise 1\] \[Fleece the body.\] #line:0ff8d9d 
+-> {$pcName}: \[Wits + Streetwise\] \[Fleece the body.\] #line:0ff8d9d 
     <<jump searchBody>>
 -> {$pcName}: \[Walk away.\] #line:0994e23 
     <<jump afterBodyInteraction>>
 ===
 title: findCause
 ---
-<<if Roll("medicine") >= 2>>
+<<if Roll("intelligence","medicine") >= 2>>
 [nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. He most likely died of blood loss.][/nomarkup] #success #line:0afffb6 
 <<else>>
 [nomarkup][You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure #line:02d0269 
@@ -21,7 +21,7 @@ title: findCause
 ===
 title: searchBody
 ---
-<<if Roll("streetwise") >= 1>>
+<<if Roll("wits","streetwise") >= 1>>
 [nomarkup][You find his wallet and ID - his name is Diego Vazguez.][/nomarkup] #success #line:06abb8d 
 <<AddMoney 10>>
 <<else>>

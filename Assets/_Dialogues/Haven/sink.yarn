@@ -3,12 +3,12 @@ tags:
 ---
 <<StartQuest "FIX_SINK">>
 <<if $vomited == true>>
-[nomarkup][You forgot the sink was already clogged and now chunks of red liquid float in the old, soapy dish water. A part of you worries it's blood, but it's not like you can afford a visit to the ER, so there's no use in worrying about it.][/nomarkup] #line:07ac79f 
+[nomarkup][You forgot the sink was clogged. Now chunks of red liquid float in the stagnant dish water. A part of you worries it's blood, but it's not like you can afford a visit to the ER. No use in worrying about it.][/nomarkup] #line:07ac79f 
 {$innerVoice}: Probably just wine. #line:0d75167 
 <<else>>
 [nomarkup][The sink is clogged. Again.][/nomarkup] #line:0c8ddc6 
 <<endif>>
--> {$pcName}: \[Intelligence 2\] \[Repair it yourself.\] #line:046b80f 
+-> {$pcName}: \(Intelligence + Craft\) \[Repair it yourself.\] #line:046b80f 
     <<jump sinkRepair>>
 -> {$pcName}: I better call the landlord. \[Walk away.\] #line:015067a 
     <<SetPhoneDialogueToLandlordDialogue>>
@@ -16,9 +16,9 @@ tags:
 title: sinkRepair
 ---
 <<if Roll("intelligence") >= 2 + $sinkRepairdModifier>>
-[nomarkup][Under the sink, as you open up the U-Pipe, cold blood squirts you in the face.][/nomarkup] #success #line:04431e1 
+[nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out.][/nomarkup] #success #line:04431e1 
 <<else>>
-[nomarkup][The pipe breaks off into your hand, destroying the sink in the process. What is undeniably backed-up blood and whatever else was clogging the sink sprays you leaving you soaked.][/nomarkup] #failure #line:039abba 
+[nomarkup][The pipe breaks off into your hand. What is undeniably cold blood sprays you soaked.][/nomarkup] #failure #line:039abba 
 <<set $bloodsoaked to true>>
 <<endif>>
 [nomarkup][You find the source of the clog, the Bathroom Key and an eyeball.][/nomarkup] #line:0feb743 
@@ -30,7 +30,7 @@ title: sinkRepair
     [nomarkup][A wet PLOP as it flops into the bloodstained sink.][/nomarkup] #line:0ed08e4 
     <<jump needShower>>
 -> {$pcName}: \[Eat the eye.\] #line:0bd5b15 
-    [nomarkup][Before you can stop yourself, you fit the whole eyeball into your mouth. Chewing on it, a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.][/nomarkup] #line:0002fbf 
+    [nomarkup][You fit the whole eyeball into your mouth. Chewing on it: a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.] \[-1 Hunger\][/nomarkup] #line:0002fbf 
     [nomarkup][You stare at your now empty, bloodstained palm. A part of you feels like bursting into tears.][/nomarkup] #line:04aaf45 
     {$innerVoice}: ... #line:0a53d04 
     {$innerVoice}: What is happening to me? #line:0bf3876 

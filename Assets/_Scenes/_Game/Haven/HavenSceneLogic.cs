@@ -2,11 +2,14 @@ using Redcode.Awaiting;
 using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.MainMenu;
 using SunsetSystems.Party;
+using SunsetSystems.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -74,7 +77,7 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private Creature _kieran;
         [SerializeField]
-        private Waypoint _dominicWaypoint, _kieranWaypoint, _dominicFridgeWaypoint, _kieranFridgeWaypoint, _pcFridgeWaypoint;
+        private Waypoint _dominicWaypoint, _kieranWaypoint, _dominicFridgeWaypoint, _kieranFridgeWaypoint, _pcFridgeWaypoint, _dominicDoorWaypoint;
         [SerializeField]
         private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
@@ -212,7 +215,28 @@ namespace SunsetSystems.Loading
         public void RecruitKieran()
         {
             PartyManager.RecruitCharacter(_kieran.Data);
-            PartyManager.TryAddMemberToActiveRoster(_kieran.Data.ID);
+            PartyManager.AddCreatureAsActivePartyMember(_kieran);
+        }
+
+        public async void MoveDominicToDoorAndDestroy()
+        {
+            Move move = _dominic.Move(_dominicDoorWaypoint.transform.position);
+            while (Vector3.Distance(_dominic.transform.position, _dominicDoorWaypoint.transform.position) > .5f)
+            {
+                await new WaitForFixedUpdate();
+            }
+            _dominic.ClearAllActions();
+            Destroy(_dominic.gameObject);
+        }
+
+        public async void QuitGame()
+        {
+            SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await loading.DoFadeOutAsync(.5f);
+            await SceneLoader.Instance.UnloadGameScene();
+            this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
+            this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
+            await loading.DoFadeInAsync(.5f);
         }
 
         private static class HavenDialogueCommands

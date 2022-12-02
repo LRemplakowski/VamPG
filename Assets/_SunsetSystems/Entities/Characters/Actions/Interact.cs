@@ -12,7 +12,7 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         private readonly IInteractable target;
         private Move moveToTarget;
-        private readonly CancellationTokenSource tokenSource = new();
+        private bool _aborted;
 
         protected override Creature Owner
         {
@@ -29,10 +29,11 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public override void Abort()
         {
-            tokenSource.Cancel();
             if (moveToTarget != null)
                 moveToTarget.Abort();
+            _aborted = true;
             target.Interacted = false;
+            conditions.Clear();
         }
 
         public async override void Begin()
@@ -43,14 +44,16 @@ namespace SunsetSystems.Entities.Characters.Actions
                 await new WaitForUpdate();
                 moveToTarget = new Move(Owner, target.InteractionTransform.position, target.InteractionDistance);
                 moveToTarget.Begin();
-                while (!moveToTarget.IsFinished())
+                while (moveToTarget.IsFinished() == false)
                 {
-                    if (tokenSource.Token.IsCancellationRequested)
-                    {
-                        Debug.Log("Cancelling interaction task!!");
+                    if (_aborted)
                         return;
-                    }
-                    await new WaitForUpdate();
+                    await new WaitForFixedUpdate();
+                }
+                if (Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) > target.InteractionDistance + .1f)
+                {
+                    Abort();
+                    return;
                 }
                 moveToTarget = null;
                 await Owner.FaceTarget(target.InteractionTransform);

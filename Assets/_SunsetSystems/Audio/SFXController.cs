@@ -17,6 +17,22 @@ namespace SunsetSystems.Audio
         private List<AudioClip> _typewriterLoop;
         [SerializeField]
         private AudioClip _typewriterEndBell;
+        [SerializeField]
+        private float _defaultVolume = .5f;
+        private float _currentVolume;
+        public float Volume
+        {
+            get
+            {
+                return _currentVolume;
+            }
+            set
+            {
+                _currentVolume = value;
+                _sfxSource.volume = value;
+                _typewriterSource.volume = value;
+            }
+        }
 
         private static System.Random _random = new();
 

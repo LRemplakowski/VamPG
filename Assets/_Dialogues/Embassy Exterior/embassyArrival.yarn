@@ -1,7 +1,7 @@
 ﻿title: embassyArrival
 tags:
 ---
-{$narrator}: \[You arrive at Embassy. The city's best (and only) British rock club. An ominous red glow from the neon Union Jack illuminates the sidewalk.\]
+[nomarkup][You arrive at Embassy. The city's best (and only) British rock club. An ominous red glow from the neon Union Jack illuminates the sidewalk.][/nomarkup]
 {$kieran}: As I was saying, before you decided to bombard me with whatever that is your generation considers music, Embassy is my sire, Kate's domain, but on the books the club is run by her ghoul Diana.
 -> {$pcName}: You're telling me "ghouls" are real too? <<if visited("vampiricWeaknesses") == false>>
     <<jump vampiricWeaknesses>>
@@ -33,7 +33,7 @@ position: 164,153
     {$kieran}: Look, I know this is a lot to process, but you're gonna have to listen to me if you want to live to see another night.
 -> {$pcName}: I was trying to tune you out.
     {$kieran}: You'll see how well that works out for you. \[-1 Kieran Influence\]
-    <<set $kieranInfluence to $kieranInfluence-1>>
+    <<ModifyInfluence -1 "kieran">>
 {$kieran}: I'm trying to help, but like it or not we're in this boat together.
 <<jump embassyArrival>>
 ===

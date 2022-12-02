@@ -3,6 +3,7 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
+using System.Collections.Generic;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -28,10 +29,30 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("UseDiscipline")]
+        public static int GetUseDisciplineResult(string disciplineName)
+        {
+            int dice = 0;
+            dice += GetStatValueFromString(disciplineName);
+            Outcome rollOutcome = Roll.d10(dice);
+            return rollOutcome.successes;
+        }
+
+
         [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()
         {
             return InventoryManager.Instance.GetMoneyAmount();
+        }
+
+        [YarnFunction("GetIDFromName")]
+        public static string GetIDFromName(string name)
+        {
+            if (DialogueHelper.VariableStorage.TryGetValue(name, out string id))
+            {
+                return id;
+            }
+            return "";
         }
 
         private static int GetStatValueFromString(string statName)
@@ -71,6 +92,12 @@ namespace SunsetSystems.Dialogue
         public static int NegativeValue(int value)
         {
             return -value;
+        }
+
+        [YarnFunction("CurrentObjective")]
+        public static bool GetIsObjectiveActive(string questID, string objectiveID)
+        {
+            return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
         }
     }
 }

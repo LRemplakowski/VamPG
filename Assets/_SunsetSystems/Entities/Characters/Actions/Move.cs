@@ -50,8 +50,8 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
-            navMeshAgent.enabled = false;
-            navMeshObstacle.enabled = true;
+            //navMeshAgent.enabled = false;
+            //navMeshObstacle.enabled = true;
             navMeshAgent.stoppingDistance = 0f;
             if (onMovementFinished != null)
                 onMovementFinished.Invoke(this.Owner);

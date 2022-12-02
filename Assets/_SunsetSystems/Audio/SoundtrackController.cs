@@ -15,12 +15,28 @@ namespace SunsetSystems.Audio
         private float _trackTransitionTime = 1f;
         [SerializeField]
         private PlaylistConfig _menuPlaylist, _gamePlaylist;
+        [SerializeField]
+        private float _defaultVolume = .5f;
+        private float _currentVolume;
+        public float Volume
+        {
+            get
+            {
+                return _currentVolume;
+            }
+            set
+            {
+                _currentVolume = value;
+                _soundtrackSource.volume = value;
+            }
+        }
 
         private bool _playSoundtrack;
 
         private void Awake()
         {
             _soundtrackSource ??= GetComponent<AudioSource>();
+            Volume = _defaultVolume;
         }
 
         public void PlayMenuPlaylist()
@@ -59,11 +75,11 @@ namespace SunsetSystems.Audio
         {
             float fadeTime = _trackTransitionTime / 2;
             float timeElapsed = 0f;
+            float cachedVolume = _currentVolume;
             while (timeElapsed / fadeTime <= 1)
             {
-                float volume = Mathf.Clamp01(1f - Mathf.Lerp(0, 1, timeElapsed / fadeTime));
+                Volume = Mathf.Clamp01(cachedVolume - Mathf.Lerp(0, cachedVolume, timeElapsed / fadeTime));
                 timeElapsed += Time.deltaTime;
-                _soundtrackSource.volume = volume;
                 await new WaitForUpdate();
             }
         }
@@ -72,11 +88,11 @@ namespace SunsetSystems.Audio
         {
             float fadeTime = _trackTransitionTime / 2;
             float timeElapsed = 0f;
+            float cachedVolume = _currentVolume;
             while (timeElapsed / fadeTime <= 1)
             {
-                float volume = Mathf.Clamp01(Mathf.Lerp(0, 1, timeElapsed / fadeTime));
+                Volume = Mathf.Clamp01(Mathf.Lerp(0, cachedVolume, timeElapsed / fadeTime));
                 timeElapsed += Time.deltaTime;
-                _soundtrackSource.volume = volume;
                 await new WaitForUpdate();
             }
         }

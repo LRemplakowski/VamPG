@@ -7,6 +7,8 @@ using SunsetSystems.Utils;
 using NaughtyAttributes;
 using SunsetSystems.Party;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SunsetSystems.Data
 {
@@ -28,6 +30,9 @@ namespace SunsetSystems.Data
         private SceneLoader _sceneLoader;
         [SerializeField]
         private GameObject _mainMenuParent;
+        [SerializeField]
+        private List<GameObject> _objectsToReset;
+        private List<IResetable> _resetables => _objectsToReset.Select(go => go.GetComponent<IResetable>()).Where(r => r != null).ToList();
         public UnityEvent OnGameStart;
 
         private void Start()
@@ -75,6 +80,7 @@ namespace SunsetSystems.Data
         public async void InitializeGameDebug()
         {
             Start();
+            _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             PartyManager.RecruitMainCharacter(new(debugAsset));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
@@ -84,6 +90,7 @@ namespace SunsetSystems.Data
         public async void InitializeGameJam()
         {
             Start();
+            _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
             SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
@@ -117,5 +124,10 @@ namespace SunsetSystems.Data
                 _ => ResourceLoader.GetDefaultCreatureAsset(),
             };
         }
+    }
+
+    public interface IResetable
+    {
+        void ResetOnGameStart();
     }
 }

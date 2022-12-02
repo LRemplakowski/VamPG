@@ -16,9 +16,9 @@ namespace UI.CharacterPortraits
                 potraitIcon = GetComponentInChildren<PortraitIcon>();
         }
 
-        internal void InitPotrait(CreatureUIData data)
+        internal void InitPotrait(Sprite portrait)
         {
-            potraitIcon.SetIcon(data.portrait);
+            potraitIcon.SetIcon(portrait);
         }    
     }
 }

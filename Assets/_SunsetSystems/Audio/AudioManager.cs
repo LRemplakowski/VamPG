@@ -16,6 +16,8 @@ namespace SunsetSystems.Audio
         private void Start()
         {
             PlayMenuMusic();
+            SetMusicVolume(PlayerPrefs.GetFloat("MUSIC_VOLUME"));
+            SetSFXVolume(PlayerPrefs.GetFloat("SFX_VOLUME"));
         }
 
         public void PlaySFXOneShot(string sfxName)
@@ -51,6 +53,18 @@ namespace SunsetSystems.Audio
         public void PlayGameplayMusic()
         {
             _soundtrackController.PlayGamePlaylist();
+        }
+
+        public void SetMusicVolume(float volume)
+        {
+            PlayerPrefs.SetFloat("MUSIC_VOLUME", volume);
+            _soundtrackController.Volume = volume;
+        }
+
+        public void SetSFXVolume(float volume)
+        {
+            PlayerPrefs.SetFloat("SFX_VOLUME", volume);
+            _sfxController.Volume = volume;
         }
     }
 }

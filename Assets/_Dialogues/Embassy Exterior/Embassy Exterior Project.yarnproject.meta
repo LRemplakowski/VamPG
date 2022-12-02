@@ -9,20 +9,35 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 053561912b1654d80a424bb0696a74ae, type: 3}
   sourceScripts:
+  - {fileID: 6391573757903218779, guid: 7bd90052fc2946c4fa48d967fa56b6f9, type: 3}
+  - {fileID: 6391573757903218779, guid: 307835614b2319141af67e6c5a9486ba, type: 3}
+  - {fileID: 6391573757903218779, guid: 941f51290039e6b4b9ff31c05a32a193, type: 3}
+  - {fileID: 6391573757903218779, guid: 037de6ebbc622ee4487e4930686a8409, type: 3}
   - {fileID: 6391573757903218779, guid: 774f2a7f7f5d22643a2bda8e10aee392, type: 3}
+  - {fileID: 6391573757903218779, guid: 2b44161292d64a448979411c8bc6ed6a, type: 3}
+  - {fileID: 6391573757903218779, guid: 353665eea078f154983a661346f9cf1d, type: 3}
+  - {fileID: 6391573757903218779, guid: 3d10a99f226b67944b8da209ffb5ac93, type: 3}
   compileErrors:
-  - '6:4: Error: Can''t figure out the type of variable $pcName given its context.
+  - '7:181: Error: Can''t figure out the type of variable $sire given its context.
     Specify its type with a <<declare>> statement.
 
-    $pcName
+    $sire
 
 '
   serializedDeclarations:
+  - name: $pcName
+    typeName: String
+    defaultValueBool: 0
+    defaultValueNumber: 0
+    defaultValueString: Desiree Bardot
+    description: 
+    isImplicit: 0
+    sourceYarnAsset: {instanceID: 0}
   - name: $kieran
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: 
+    defaultValueString: Kieran Edevane
     description: 
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
@@ -30,15 +45,7 @@ ScriptedImporter:
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: 
-    description: 
-    isImplicit: 0
-    sourceYarnAsset: {instanceID: 0}
-  - name: $narrator
-    typeName: String
-    defaultValueBool: 0
-    defaultValueNumber: 0
-    defaultValueString: 
+    defaultValueString: The Beast
     description: 
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
@@ -46,11 +53,11 @@ ScriptedImporter:
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
-    defaultValueString: 
+    defaultValueString: Desiree's Inner Voice
     description: 
     isImplicit: 0
     sourceYarnAsset: {instanceID: 0}
-  - name: $pcName
+  - name: $sire
     typeName: String
     defaultValueBool: 0
     defaultValueNumber: 0
@@ -68,13 +75,31 @@ ScriptedImporter:
     ReturnType: -> Int32
     Parameters:
     - statName
+  - Name: GetRollResult
+    ReturnType: -> Int32
+    Parameters:
+    - attributeName
+    - skillName
+  - Name: GetUseDisciplineResult
+    ReturnType: -> Int32
+    Parameters:
+    - disciplineName
   - Name: GetCurrentMoney
     ReturnType: -> Single
     Parameters: []
+  - Name: GetIDFromName
+    ReturnType: -> String
+    Parameters:
+    - name
   - Name: NegativeValue
     ReturnType: -> Int32
     Parameters:
     - value
+  - Name: GetIsObjectiveActive
+    ReturnType: -> Boolean
+    Parameters:
+    - questID
+    - objectiveID
   - Name: Random
     ReturnType: -> Single
     Parameters: []

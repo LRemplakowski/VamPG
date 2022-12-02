@@ -1,3 +1,4 @@
+using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
 using System.Collections;
@@ -9,7 +10,7 @@ using Yarn.Unity;
 namespace SunsetSystems.Dialogue
 {
     [RequireComponent(typeof(Tagger))]
-    public class DialogueManager : Singleton<DialogueManager>
+    public class DialogueManager : Singleton<DialogueManager>, IResetable
     {
         [SerializeField]
         private DialogueRunner _dialogueRunner;
@@ -19,6 +20,13 @@ namespace SunsetSystems.Dialogue
         protected override void Awake()
         {
             _dialogueRunner ??= GetComponent<DialogueRunner>();
+        }
+
+        public void ResetOnGameStart()
+        {
+            _dialogueRunner.Dialogue.Stop();
+            _dialogueRunner.Dialogue.UnloadAll();
+            CleanupAfterDialogue();
         }
 
         private void Start()
@@ -64,6 +72,7 @@ namespace SunsetSystems.Dialogue
         {
             GameManager.CurrentState = GameState.Exploration;
             _dialogueRunner.dialogueViews.ToList().ForEach(view => view.gameObject.SetActive(false));
+            _dialogueRunner.dialogueViews.ToList().ForEach(view => (view as DialogueWithHistoryView).Cleanup());
         }
     }
 }

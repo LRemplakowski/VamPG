@@ -34,6 +34,11 @@ namespace SunsetSystems.Utils
             return $"{leadWord}{string.Join(string.Empty, tailWords)}";
         }
 
+        public static string ToSentenceCase(this string str)
+        {
+            return Regex.Replace(str, "[a-z][A-Z]", m => $"{m.Value[0]} {char.ToLower(m.Value[1])}");
+        }
+
         public static string ToPascalCase(this string str)
         {
             string[] words = str.Split(new[] { "_", " " }, StringSplitOptions.RemoveEmptyEntries);

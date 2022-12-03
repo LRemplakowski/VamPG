@@ -21,6 +21,7 @@ namespace SunsetSystems.Spellbook
 
         public Discipline(Discipline existing) : base(existing)
         {
+            baseValue = existing.baseValue;
             knownPowers = new(existing.knownPowers);
             disciplineType = existing.disciplineType;
         }

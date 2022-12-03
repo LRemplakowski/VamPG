@@ -29,11 +29,10 @@ namespace SunsetSystems.Dialogue
             List<string> configIDs = CreatureDatabase.Instance.AccessorKeys ?? new();
             foreach (string configID in configIDs)
             {
-                CreatureConfig config = default;
-                if (CreatureDatabase.Instance.TryGetConfig(configID, out config))
+                if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))
                 {
                     injectionData._strings.Add(configID, config.FullName);
-                    injectionData._strings.Add(config?.FullName, configID);
+                    injectionData._strings.Add(config.FullName, configID);
                 }
             }
             return injectionData;

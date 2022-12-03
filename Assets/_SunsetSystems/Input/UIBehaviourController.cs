@@ -156,6 +156,8 @@ namespace SunsetSystems.Input
 
         private void SwitchPauseAndOpenScreen(PauseMenuScreen screen)
         {
+            if (GameManager.CurrentState == GameState.Menu)
+                return;
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
             if (GameManager.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
             {

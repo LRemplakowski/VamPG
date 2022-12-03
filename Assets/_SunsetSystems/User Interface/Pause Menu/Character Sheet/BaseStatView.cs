@@ -1,6 +1,7 @@
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.MainMenu.UI;
 using SunsetSystems.UI.Utils;
+using SunsetSystems.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -21,7 +22,7 @@ namespace SunsetSystems.UI
         public void UpdateView(IGameDataProvider<BaseStat> dataProvider)
         {
             BaseStat stat = dataProvider.Data;
-            _text.text = stat.Name;
+            _text.text = stat.Name.ToSentenceCase();
             for (int i = 0; i < _chips.Count; i++)
             {
                 _chips[i].sprite = i < stat.GetValue() ? _activeChip : _disabledChip;

@@ -255,7 +255,7 @@ namespace SunsetSystems.Entities.Data
         {
             return new List<Skill>()
             {
-                athletics, brawl, craft, drive, firearms, melee, stealth, survival,
+                athletics, brawl, craft, drive, firearms, larceny, melee, stealth, survival,
                 animalKen, etiquette, insight, intimidation, leadership, performance, persuasion, streetwise, subterfuge,
                 academics, awarness, finance, investigation, medicine, occult, politics, science, technology
             };
@@ -377,14 +377,14 @@ namespace SunsetSystems.Entities.Data
             potence,
             presence,
             protean,
-            athletics,
-            firearms,
-            melee,
-            streetwise,
-            insight,
-            medicine,
-            larceny,
-            intimidation
+            //athletics,
+            //firearms,
+            //melee,
+            //streetwise,
+            //insight,
+            //medicine,
+            //larceny,
+            //intimidation
         };
     }
 }

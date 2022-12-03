@@ -12,6 +12,8 @@ namespace SunsetSystems.UI
         private List<AttributeGroupUpdateReciever> _attributes;
         [SerializeField]
         private List<SkillGroupUpdateReciever> _skills;
+        [SerializeField]
+        private DisciplineGroupUpdateReciever _disciplines;
 
         private void OnEnable()
         {
@@ -28,6 +30,9 @@ namespace SunsetSystems.UI
             List<IGameDataProvider<BaseStat>> skills = new();
             skills.AddRange(data.Stats.Skills.GetSkillList());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
+            List<IGameDataProvider<BaseStat>> disciplines = new();
+            disciplines.AddRange(data.Stats.Disciplines.GetDisciplines());
+            _disciplines.UpdateViews(disciplines);
         }
     }
 }

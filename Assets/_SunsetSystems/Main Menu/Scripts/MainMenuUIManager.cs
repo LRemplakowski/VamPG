@@ -16,17 +16,27 @@ namespace SunsetSystems.MainMenu
         [SerializeField]
         private Slider _musicSlider, _sfxSlider;
 
-        // Start is called before the first frame update
-        void Start()
+        private void OnEnable()
         {
-            if (debugUi)
-                debugUi.SetActive(GameConstants.DEBUG_MODE);
             if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
                 _musicSlider.value = PlayerPrefs.GetFloat("MUSIC_VOLUME");
             if (PlayerPrefs.HasKey("SFX_VOLUME"))
                 _sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME");
             _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
             _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
+        }
+
+        private void OnDisable()
+        {
+            _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
+            _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
+        }
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            if (debugUi)
+                debugUi.SetActive(GameConstants.DEBUG_MODE);
         }
 
         public void StartGameDebug()

@@ -31,6 +31,7 @@ namespace SunsetSystems.UI
         {
             gameObject.SetActive(false);
             _characterSelector.SetActive(true);
+            _characterSelector.SetActive(false);
         }
 
         public async void QuitToMenu()

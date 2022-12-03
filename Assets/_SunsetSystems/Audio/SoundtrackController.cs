@@ -31,6 +31,7 @@ namespace SunsetSystems.Audio
                 _soundtrackSource.volume = value;
             }
         }
+        private Task _cachedPlaylistTask;
 
         private bool _playSoundtrack;
 
@@ -44,23 +45,25 @@ namespace SunsetSystems.Audio
         public void PlayMenuPlaylist()
         {
             _playSoundtrack = true;
-            ExecutePlaylist(_menuPlaylist);
+            _cachedPlaylistTask = ExecutePlaylist(_menuPlaylist);
         }
 
         public void PlayGamePlaylist()
         {
             _playSoundtrack = true;
-            ExecutePlaylist(_gamePlaylist);
+            _cachedPlaylistTask = ExecutePlaylist(_gamePlaylist);
         }
 
         public void StopSoundtrackImmediate()
         {
             _playSoundtrack = false;
             _soundtrackSource.Stop();
+            _cachedPlaylistTask = null;
         }
 
-        private async void ExecutePlaylist(PlaylistConfig config)
+        private async Task ExecutePlaylist(PlaylistConfig config)
         {
+            Task myTask = _cachedPlaylistTask;
             while (_playSoundtrack)
             {
                 await FadeOutSource();
@@ -70,6 +73,8 @@ namespace SunsetSystems.Audio
                 _soundtrackSource.Play();
                 await FadeInSource();
                 await new WaitForSecondsRealtime(newTrack.length);
+                if (_soundtrackSource.clip != null && myTask != _cachedPlaylistTask)
+                    break;
             }
         }
 

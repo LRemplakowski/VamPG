@@ -45,5 +45,10 @@ namespace SunsetSystems.Audio
             }
             return track;
         }
+
+        public AudioClip GetCurrentClip()
+        {
+            return _tracks[_currentTrackIndex];
+        }
     }
 }

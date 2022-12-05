@@ -16,15 +16,15 @@ namespace SunsetSystems.Loading
 
         protected virtual void OnValidate()
         {
-            unique = GetComponent<UniqueId>();
+            unique ??= GetComponent<UniqueId>();
         }
 
         protected virtual void Awake()
         {
-            unique = GetComponent<UniqueId>();
+            unique ??= GetComponent<UniqueId>();
         }
 
-        public abstract Task StartSceneAsync(SceneLoadingData data);
+        public abstract Task StartSceneAsync(LevelLoadingData data);
 
         public abstract void SaveRuntimeData();
 

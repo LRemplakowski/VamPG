@@ -3,14 +3,14 @@ using System;
 
 namespace SunsetSystems.Data
 {
-    public abstract class SceneLoadingData
+    public abstract class LevelLoadingData
     {
         public readonly TransitionType transitionType;
         public readonly string targetEntryPointTag;
         public readonly string cameraBoundingBoxTag;
         public readonly Action[] preLoadingActions;
 
-        public SceneLoadingData(TransitionType transitionType, string targetEntryPointTag, string cameraBoundingBoxTag, params Action[] preLoadingActions)
+        public LevelLoadingData(TransitionType transitionType, string targetEntryPointTag, string cameraBoundingBoxTag, params Action[] preLoadingActions)
         {
             this.transitionType = transitionType;
             this.targetEntryPointTag = targetEntryPointTag;
@@ -21,7 +21,7 @@ namespace SunsetSystems.Data
         public abstract object Get();
     }
 
-    public class IndexLoadingData : SceneLoadingData
+    public class IndexLoadingData : LevelLoadingData
     {
         private readonly int sceneIndex;
 
@@ -41,7 +41,7 @@ namespace SunsetSystems.Data
         }
     }
 
-    public class NameLoadingData : SceneLoadingData
+    public class NameLoadingData : LevelLoadingData
     {
         private readonly string sceneName;
 

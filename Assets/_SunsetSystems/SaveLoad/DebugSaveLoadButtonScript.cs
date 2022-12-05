@@ -10,12 +10,12 @@ namespace SunsetSystems.Loading
     public class DebugSaveLoadButtonScript : MonoBehaviour
     {
         [SerializeField]
-        private SceneLoader _sceneLoader;
+        private LevelLoader _sceneLoader;
 
         private void Start()
         {
             if (!_sceneLoader)
-                _sceneLoader = FindObjectOfType<SceneLoader>();
+                _sceneLoader = FindObjectOfType<LevelLoader>();
         }
 
         public void DoSave()
@@ -33,7 +33,7 @@ namespace SunsetSystems.Loading
                 menu.gameObject.SetActive(false);
             else if (GameManager.IsCurrentState(GameState.Menu))
                 action = FindObjectOfType<GameStarter>().DisableMainMenu;
-            await _sceneLoader.LoadSavedScene(action);
+            await _sceneLoader.LoadSavedLevel(action);
         }
 
         public void EnableLoading()

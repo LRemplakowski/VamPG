@@ -27,7 +27,7 @@ namespace SunsetSystems.Data
         [SerializeField]
         private string _initialBoundingBoxTag;
         [SerializeField]
-        private SceneLoader _sceneLoader;
+        private LevelLoader _sceneLoader;
         [SerializeField]
         private GameObject _mainMenuParent;
         [SerializeField]
@@ -38,7 +38,7 @@ namespace SunsetSystems.Data
         private void Start()
         {
             if (!_sceneLoader)
-                _sceneLoader = FindObjectOfType<SceneLoader>();
+                _sceneLoader = FindObjectOfType<LevelLoader>();
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
         }
@@ -73,8 +73,8 @@ namespace SunsetSystems.Data
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
             PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameScene(data);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            await _sceneLoader.LoadGameLevel(data);
         }
 
         public async void InitializeGameDebug()
@@ -83,8 +83,8 @@ namespace SunsetSystems.Data
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             PartyManager.RecruitMainCharacter(new(debugAsset));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameScene(data);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            await _sceneLoader.LoadGameLevel(data);
         }
 
         public async void InitializeGameJam()
@@ -93,9 +93,9 @@ namespace SunsetSystems.Data
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
-            await _sceneLoader.LoadGameScene(data);
+            await _sceneLoader.LoadGameLevel(data);
         }
 
         public void DisableMainMenu()

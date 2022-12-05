@@ -15,7 +15,7 @@ namespace SunsetSystems
         [SerializeField]
         private string _sceneStartDialogueNode;
 
-        public async override Task StartSceneAsync(SceneLoadingData data)
+        public async override Task StartSceneAsync(LevelLoadingData data)
         {
             await base.StartSceneAsync(data);
         }

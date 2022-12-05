@@ -95,7 +95,7 @@ namespace SunsetSystems.Loading
             _cameraControl = cameraControlGO?.GetComponent<CameraControlScript>();
         }
 
-        public async override Task StartSceneAsync(SceneLoadingData data)
+        public async override Task StartSceneAsync(LevelLoadingData data)
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
@@ -233,7 +233,7 @@ namespace SunsetSystems.Loading
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await loading.DoFadeOutAsync(.5f);
-            await SceneLoader.Instance.UnloadGameScene();
+            await LevelLoader.Instance.UnloadGameScene();
             this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
             this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
             await loading.DoFadeInAsync(.5f);

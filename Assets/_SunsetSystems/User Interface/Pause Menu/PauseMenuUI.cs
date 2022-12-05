@@ -38,7 +38,7 @@ namespace SunsetSystems.UI
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await loading.DoFadeOutAsync(.5f);
-            await SceneLoader.Instance.UnloadGameScene();
+            await LevelLoader.Instance.UnloadGameScene();
             OnReturnToMenu?.Invoke();
             await loading.DoFadeInAsync(.5f);
         }

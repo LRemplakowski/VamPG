@@ -12,6 +12,7 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Data;
+using UMA;
 
 namespace SunsetSystems.Party
 {
@@ -56,11 +57,13 @@ namespace SunsetSystems.Party
 
         protected override void Awake()
         {
+            base.Awake();
             _mainCharacterKey = string.Empty;
             _activeParty = new();
             _creatureDataCache = new();
             _activeCoterieMemberKeys = new();
             _unique ??= GetComponent<UniqueId>();
+            SaveLoadManager.DataSet.Add(this);
         }
 
         public override void Initialize()
@@ -206,6 +209,8 @@ namespace SunsetSystems.Party
 
         public void LoadRuntimeData()
         {
+            if (ES3.KeyExists(_unique.Id) == false)
+                return;
             PartySaveData saveData = ES3.Load<PartySaveData>(_unique.Id);
             _creatureDataCache = saveData.CreatureDataCache;
             _activeCoterieMemberKeys = saveData.ActiveMemberKeys.ToHashSet();

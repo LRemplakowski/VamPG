@@ -13,18 +13,14 @@ namespace SunsetSystems.Loading
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
-        [SerializeField, ES3NonSerializable]
-        private GameRuntimeData _gameRuntimeData;
-        [SerializeField, ES3NonSerializable]
         private CameraControlScript _cameraControlScript;
+        [SerializeField]
+        private Waypoint _defaultEntryWaypoint;
 
-        public async override Task StartSceneAsync(SceneLoadingData data)
+        public async override Task StartSceneAsync(LevelLoadingData data)
         {
             Debug.Log("Starting scene");
-            if (!_gameRuntimeData)
-                _gameRuntimeData = FindObjectOfType<GameRuntimeData>();
-            if (!_cameraControlScript)
-                _cameraControlScript = FindObjectOfType<CameraControlScript>();
+            _cameraControlScript = this.FindFirstComponentWithTag<CameraControlScript>(TagConstants.CAMERA_CONTROL);
             string entryPointTag = data != null ? data.targetEntryPointTag : "";
             string cameraBoundingBoxTag = data != null ? data.cameraBoundingBoxTag : "";
             List<Vector3> partyPositions = new();
@@ -50,7 +46,6 @@ namespace SunsetSystems.Loading
                 List<Task> initializationTasks = new();
                 foreach (IInitialized initializable in objectsToInitialize)
                 {
-                    Debug.Log("Starting initialization for object " + initializable.ToString());
                     initializationTasks.Add(Task.Run(async () =>
                     {
                         await initializable.InitializeAsync();

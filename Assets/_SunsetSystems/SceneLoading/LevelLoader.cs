@@ -10,12 +10,11 @@ using Redcode.Awaiting;
 
 namespace SunsetSystems.Loading
 {
-    public class SceneLoader : Singleton<SceneLoader>
+    public class LevelLoader : Singleton<LevelLoader>
     {
-        private Scene _previousScene;
         private SceneLoadingUIManager LoadingScreenUI => this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
-        public SceneLoadingData CachedTransitionData { get; private set; }
+        public LevelLoadingData CachedTransitionData { get; private set; }
         private int _latestLoadedSceneIndex;
 
         private void OnEnable()
@@ -31,7 +30,7 @@ namespace SunsetSystems.Loading
         protected override void Awake()
         {
             base.Awake();
-            _previousScene = new Scene();
+            _latestLoadedSceneIndex = -1;
         }
 
         private void Start()
@@ -43,12 +42,11 @@ namespace SunsetSystems.Loading
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
-            _previousScene = scene;
             _latestLoadedSceneIndex = scene.buildIndex;
             SceneManager.SetActiveScene(scene);
         }
 
-        public async Task LoadGameScene(SceneLoadingData data)
+        public async Task LoadGameLevel(LevelLoadingData data)
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
@@ -56,61 +54,58 @@ namespace SunsetSystems.Loading
             await LoadingScreenUI.DoFadeInAsync(.5f);
             // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
             // Checking for -1 buildIndex works around this issue.
-            if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
+            if (_latestLoadedSceneIndex > 1)
             {
-                await SceneManager.LoadSceneAsync(_previousScene.buildIndex);
+                _ = UnloadGameScene();
             }
             await LoadNewScene(data);
             await InitializeSceneLogic(data);
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
-            await UnityAwaiters.NextFrame();
+            await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
-        internal async Task LoadSavedScene(Action preLoadingAction)
+        internal async Task LoadSavedLevel(Action preLoadingAction)
         {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.EnableAndResetLoadingScreen();
-            await UnityAwaiters.NextFrame();
+            await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
             // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
             // Checking for -1 buildIndex works around this issue.
-            if (_previousScene.IsValid() && _previousScene.buildIndex != -1 && _previousScene.buildIndex != GameConstants.GAME_SCENE_INDEX && _previousScene.buildIndex != GameConstants.UI_SCENE_INDEX)
+            if (_latestLoadedSceneIndex > 1)
             {
-                await SceneManager.LoadSceneAsync(_previousScene.buildIndex);
+                _ = UnloadGameScene();
             }
-            SceneLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
+            LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             await LoadNewScene(data);
             await SaveLoadManager.LoadObjects();
-            await InitializeSceneLogic(data);
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
-            await UnityAwaiters.NextFrame();
+            await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
-        internal async Task LoadSavedScene()
+        internal async Task LoadSavedLevel()
         {
-            await LoadSavedScene(null);
+            await LoadSavedLevel(null);
         }
 
-        private async Task LoadNewScene(SceneLoadingData data)
+        private async Task LoadNewScene(LevelLoadingData data)
         {
             CachedTransitionData = data;
             if (data.preLoadingActions != null)
                 foreach (Action action in data.preLoadingActions)
                 {
                     action?.Invoke();
-                    await Task.Yield();
                 }
             await DoSceneLoading();
         }
 
-        private async Task InitializeSceneLogic(SceneLoadingData data)
+        private async Task InitializeSceneLogic(LevelLoadingData data)
         {
-            AbstractSceneLogic sceneLogic = FindObjectOfType<AbstractSceneLogic>();
-            Debug.Log("Scene logic found? " + (sceneLogic != null).ToString());
+            AbstractSceneLogic sceneLogic = this.FindFirstComponentWithTag<AbstractSceneLogic>(TagConstants.SCENE_LOGIC);
             if (sceneLogic)
                 await sceneLogic.StartSceneAsync(data);
         }

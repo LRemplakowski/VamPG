@@ -32,6 +32,7 @@ namespace SunsetSystems.Dialogue
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
                 SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
             }
+            SaveLoadManager.DataSet.Add(this);
         }
 
         public void ResetOnGameStart()

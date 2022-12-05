@@ -56,7 +56,8 @@ namespace SunsetSystems.Dialogue
         private UnityEvent OnDialogueStarted, OnDialogueFinished;
 
         private bool _clampScrollbarNextFrame;
-        private bool RequestedLineInterrupt { get; set; } = false;
+        private bool _requestedLineInterrupt = false;
+        private bool _optionsPresented = false;
 
         public void Cleanup()
         {
@@ -118,7 +119,7 @@ namespace SunsetSystems.Dialogue
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
-            RequestedLineInterrupt = false;
+            _requestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
             UpdateSpeakerPhoto(dialogueLine.CharacterName);
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -130,7 +131,7 @@ namespace SunsetSystems.Dialogue
             {
                 AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
-                if (RequestedLineInterrupt)
+                if (_requestedLineInterrupt)
                     return;
             }
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -153,7 +154,7 @@ namespace SunsetSystems.Dialogue
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
                 await new WaitForUpdate();
-                if (RequestedLineInterrupt)
+                if (_requestedLineInterrupt)
                 {
                     _clampScrollbarNextFrame = true;
                     break;
@@ -254,13 +255,13 @@ namespace SunsetSystems.Dialogue
                 optionView.interactable = option.IsAvailable;
                 optionView.gameObject.SetActive(true);
             }
+            _optionsPresented = true;
             OnOptionsPresented?.Invoke();
             OnOptionSelected = onOptionSelected;
 
             async void OptionViewWasSelected(DialogueOption option)
             {
                 _clampScrollbarNextFrame = true;
-                //UpdateSpeakerPhoto(option.Line.CharacterName);
                 AudioManager.Instance.PlayTypewriterEnd();
                 await new WaitForUpdate();
                 _clampScrollbarNextFrame = true;
@@ -272,6 +273,9 @@ namespace SunsetSystems.Dialogue
                 OnOptionSelected(option.DialogueOptionID);
                 OnOptionSelectedCustom?.Invoke();
                 CleanupOptions();
+                _clampScrollbarNextFrame = true;
+                await new WaitForUpdate();
+                _optionsPresented = false;
             }
 
             void CleanupOptions()
@@ -283,9 +287,11 @@ namespace SunsetSystems.Dialogue
 
         public override void UserRequestedViewAdvancement()
         {
+            if (_requestedLineInterrupt || _optionsPresented)
+                return;
             _clampScrollbarNextFrame = true;
             AudioManager.Instance.PlayTypewriterEnd();
-            RequestedLineInterrupt = true;
+            _requestedLineInterrupt = true;
             requestInterrupt?.Invoke();
         }
     }

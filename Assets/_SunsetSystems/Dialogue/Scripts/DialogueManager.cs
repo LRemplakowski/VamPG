@@ -1,3 +1,4 @@
+using SunsetSystems.Constants;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
@@ -14,14 +15,16 @@ namespace SunsetSystems.Dialogue
     {
         [SerializeField]
         private DialogueRunner _dialogueRunner;
-
-        private const string UPDATE_SPEAKER_PORTRAIT_TAG = "UPDATE_SPEAKER_PORTRAIT";
-
-        private bool _optionsPresented = false;
+        [field: SerializeField]
+        public float DefaultTypewriterValue { get; private set; } = 15f;
 
         protected override void Awake()
         {
             _dialogueRunner ??= GetComponent<DialogueRunner>();
+            if (PlayerPrefs.HasKey(SettingsConstants.TYPEWRITER_SPEED_KEY))
+                SetTypewriterSpeed(PlayerPrefs.GetInt(SettingsConstants.TYPEWRITER_SPEED_KEY));
+            else
+                SetTypewriterSpeed((int)DefaultTypewriterValue);
         }
 
         public void ResetOnGameStart()
@@ -50,16 +53,6 @@ namespace SunsetSystems.Dialogue
             Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
-        private void HandleOptionsPresented()
-        {
-            _optionsPresented = true;
-        }
-
-        private void HandleOptionsSelected()
-        {
-            _optionsPresented = false;
-        }
-
         public bool StartDialogue(string startNode, YarnProject project = null)
         {
             if (project != null)
@@ -71,11 +64,6 @@ namespace SunsetSystems.Dialogue
             foreach (DialogueViewBase view in _dialogueRunner.dialogueViews)
             {
                 view.gameObject.SetActive(true);
-                if (view is DialogueWithHistoryView historyView)
-                {
-                    historyView.OnOptionsPresented += HandleOptionsPresented;
-                    historyView.OnOptionSelectedCustom += HandleOptionsSelected;
-                }
             }
             _dialogueRunner.StartDialogue(startNode);
             GameManager.CurrentState = GameState.Conversation;
@@ -90,11 +78,16 @@ namespace SunsetSystems.Dialogue
                 view.gameObject.SetActive(false);
                 if (view is DialogueWithHistoryView historyView)
                 {
-                    historyView.OnOptionsPresented -= HandleOptionsPresented;
-                    historyView.OnOptionSelectedCustom -= HandleOptionsSelected;
                     historyView.Cleanup();
                 }
             }    
+        }
+
+        public void SetTypewriterSpeed(float speed)
+        {
+            PlayerPrefs.SetInt(SettingsConstants.TYPEWRITER_SPEED_KEY, Mathf.RoundToInt(speed));
+            PlayerPrefs.Save();
+            _dialogueRunner.dialogueViews.ToList().ForEach(v => (v as DialogueWithHistoryView)?.SetTypeWriterSpeed(speed));
         }
     }
 }

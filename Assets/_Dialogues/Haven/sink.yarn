@@ -4,6 +4,7 @@ tags:
 <<StartQuest "FIX_SINK">>
 <<if $vomited == true>>
 [nomarkup][You forgot the sink was clogged. Now chunks of red liquid float in the stagnant dish water. A part of you worries it's blood, but it's not like you can afford a visit to the ER. No use in worrying about it.][/nomarkup] #line:07ac79f 
+-> Continue
 {$innerVoice}: Probably just wine. #line:0d75167 
 <<else>>
 [nomarkup][The sink is clogged. Again.][/nomarkup] #line:0c8ddc6 
@@ -21,24 +22,32 @@ title: sinkRepair
 [nomarkup][The pipe breaks off into your hand. What is undeniably cold blood sprays you soaked.][/nomarkup] #failure #line:039abba 
 <<set $bloodsoaked to true>>
 <<endif>>
+-> Continue
 [nomarkup][You find the source of the clog, the Bathroom Key and an eyeball.][/nomarkup] #line:0feb743 
 <<set $hasBathroomDoorKey to true>>
 <<set $police to true>>
 <<CompleteObjective "FIX_SINK" "REPAIR_SINK">>
+-> Continue
 {$innerVoice}: What the fuck? #line:08dd418 
 -> {$pcName}: \[Throw the eye back in the sink.\] #line:006f161 
     [nomarkup][A wet PLOP as it flops into the bloodstained sink.][/nomarkup] #line:0ed08e4 
+    -> Continue
     <<jump needShower>>
 -> {$pcName}: \[Eat the eye.\] #line:0bd5b15 
-    [nomarkup][You fit the whole eyeball into your mouth. Chewing on it - a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.]\[Hunger -1\][/nomarkup] #line:0002fbf 
+    [nomarkup][You fit the whole eyeball into your mouth. Chewing on it - a slimy, viscous fluid squirts in between your teeth. It's grotesque but oddly satisfying.] [Hunger -1][/nomarkup] #line:0002fbf
+    -> Continue 
     [nomarkup][You stare at your now empty, bloodstained palm. A part of you feels like bursting into tears.][/nomarkup] #line:04aaf45 
+    -> Continue
     {$innerVoice}: ... #line:0a53d04 
+    -> Continue
     {$innerVoice}: What is happening to me? #line:0bf3876 
+    -> Continue
     {$innerVoice}: ... #line:0ecdb57 
+    -> Continue
     <<jump needShower>>
 ===
 title: needShower
 ---
 {$pcName}: I need a shower. #line:0278713 
--> {$pcName}: Continue. #line:0dd2bf7 
+-> Continue #line:0dd2bf7 
 ===

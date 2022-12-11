@@ -13,24 +13,6 @@ namespace SunsetSystems.MainMenu
     {
         [SerializeField]
         private GameObject debugUi;
-        [SerializeField]
-        private Slider _musicSlider, _sfxSlider;
-
-        private void OnEnable()
-        {
-            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
-                _musicSlider.value = PlayerPrefs.GetFloat("MUSIC_VOLUME");
-            if (PlayerPrefs.HasKey("SFX_VOLUME"))
-                _sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME");
-            _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
-            _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
-        }
-
-        private void OnDisable()
-        {
-            _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
-            _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
-        }
 
         // Start is called before the first frame update
         void Start()
@@ -52,16 +34,6 @@ namespace SunsetSystems.MainMenu
         public void QuitGame()
         {
             Application.Quit();
-        }
-
-        public void SignalMusicVolumeChange(float volume)
-        {
-            AudioManager.Instance.SetMusicVolume(volume);
-        }
-
-        public void SignalSFXVolumeChange(float volume)
-        {
-            AudioManager.Instance.SetSFXVolume(volume);
         }
     }
 }

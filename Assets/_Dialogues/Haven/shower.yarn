@@ -2,6 +2,7 @@
 tags:
 ---
 [nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup] #line:0b235ad 
+-> Continue
 {$innerVoice}: No! No! No! No! No! #line:0267002 
 -> {$pcName}: \[Intelligence + Medicine\] \[Find the cause of death.\] #line:019d0da 
     <<jump findCause>>
@@ -17,6 +18,7 @@ title: findCause
 <<else>>
 [nomarkup][You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure #line:02d0269 
 <<endif>>
+-> Continue
 <<jump afterBodyInteraction>>
 ===
 title: searchBody
@@ -27,8 +29,11 @@ title: searchBody
 <<else>>
 [nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials - DV.][/nomarkup] #line:0dfae54 
 <<endif>>
+-> Continue
 [nomarkup][You find a black and white photo of him holding a baby.][/nomarkup] #line:0baa1ed 
+-> Continue
 {$innerVoice}: Poor bastard. #line:084e723 
+-> Continue
 <<jump afterBodyInteraction>>
 ===
 title: afterBodyInteraction
@@ -36,24 +41,30 @@ title: afterBodyInteraction
 {$innerVoice}: What do I do? #line:0b96ec1 
 -> {$innerVoice}: I need to turn myself in. #line:0106b38 
     {$beast}: Why? He's just food. #line:0a715e5 
-    <<wait 1>>
+    -> Continue
     <<jump thatVoiceAgain>>
 -> {$innerVoice}: I'm not going to jail. #line:02baf0d 
     {$beast}: Get rid of the body. #line:07347cc 
-    <<wait 1>>
+    -> Continue
     <<jump thatVoiceAgain>>
 ===
 title: thatVoiceAgain
 ---
 {$innerVoice}: There's that voice again. #line:0994259 
+-> Continue
+[nomarkup][KNOCK. KNOCK. KNOCK.][/nomarkup]
 <<PlaySFX "door_knock_light">>
-<<wait 1.7>>
+-> Continue
 [nomarkup][It's coming from the front door.][/nomarkup] #line:0154ead 
+-> Continue
 {$innerVoice}: Who is that? #line:082ed34 
+-> Continue
 {$beast}: Kill them. #line:00fd9fe 
+-> Continue
+[nomarkup][BANG! BANG! BANG!][/nomarkup]
 <<PlaySFX "door_knock_heavy">>
-<<wait 2>>
+-> Continue
 [nomarkup][They're getting more aggressive.][/nomarkup] #line:07f0684 
 <<set $hasTimeToCleanGun to false>>
--> {$pcName}: Continue. #line:060dd7e 
+-> Continue #line:060dd7e 
 ===

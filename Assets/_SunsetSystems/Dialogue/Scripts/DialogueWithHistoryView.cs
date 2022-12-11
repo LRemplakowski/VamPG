@@ -127,28 +127,23 @@ namespace SunsetSystems.Dialogue
             string formattedLineText = BuildFormattedText(dialogueLine);
             _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
-            if (_typewriterEffect)
+            if (_typewriterEffect && _typeSpeed > 0)
             {
                 AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
                 if (_requestedLineInterrupt)
                     return;
             }
+            await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
-            await new WaitForSeconds(_lineCompletionDelay);
+            await new WaitForSecondsRealtime(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
         }
 
         private async Task TypewriteText(LocalizedLine line)
         {
-            await new WaitForSeconds(1f);
-            if (_typeSpeed <= 0)
-            {
-                Debug.Log("Type speed is 0! Cancelling typewrite!");
-                return;
-            }
             _lineHistory.maxVisibleCharacters += line.CharacterName?.Length ?? 0;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
@@ -261,21 +256,19 @@ namespace SunsetSystems.Dialogue
 
             async void OptionViewWasSelected(DialogueOption option)
             {
-                _clampScrollbarNextFrame = true;
-                AudioManager.Instance.PlayTypewriterEnd();
-                await new WaitForUpdate();
-                _clampScrollbarNextFrame = true;
-                string formattedLineText = BuildFormattedText(option.Line);
-                _lineHistory.text = formattedLineText;
-                await new WaitForUpdate();
-                _clampScrollbarNextFrame = true;
-                _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
+                CleanupOptions();
+                if (option.Line.CharacterName != null)
+                {
+                    string formattedLineText = BuildFormattedText(option.Line);
+                    _lineHistory.text = formattedLineText;
+                    await new WaitForUpdate();
+                    _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
+                    _clampScrollbarNextFrame = true;
+                }
                 OnOptionSelected(option.DialogueOptionID);
                 OnOptionSelectedCustom?.Invoke();
-                CleanupOptions();
-                _clampScrollbarNextFrame = true;
-                await new WaitForUpdate();
                 _optionsPresented = false;
+                _clampScrollbarNextFrame = true;
             }
 
             void CleanupOptions()
@@ -293,6 +286,12 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _requestedLineInterrupt = true;
             requestInterrupt?.Invoke();
+        }
+
+
+        public void SetTypeWriterSpeed(float speed)
+        {
+            _typeSpeed = speed;
         }
     }
 

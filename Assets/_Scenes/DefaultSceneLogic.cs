@@ -20,7 +20,7 @@ namespace SunsetSystems.Loading
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
             Debug.Log("Starting scene");
-            _cameraControlScript = this.FindFirstComponentWithTag<CameraControlScript>(TagConstants.CAMERA_CONTROL);
+            _cameraControlScript = this.FindFirstComponentWithTag<CameraControlScript>(TagConstants.CAMERA_RIG);
             string entryPointTag = data != null ? data.targetEntryPointTag : "";
             string cameraBoundingBoxTag = data != null ? data.cameraBoundingBoxTag : "";
             List<Vector3> partyPositions = new();
@@ -57,10 +57,10 @@ namespace SunsetSystems.Loading
 
         private void HandleCameraPositionAndBounds(string cameraBoundingBoxTag, Vector3 cameraPosition)
         {
-            if (this.TryFindFirstGameObjectWithTag(cameraBoundingBoxTag, out GameObject boundingBoxGO))
-                if (boundingBoxGO.TryGetComponent(out BoundingBox boundingBox))
-                    _cameraControlScript.CurrentBoundingBox = boundingBox;
-            _cameraControlScript.ForceToPosition(cameraPosition);
+            BoundingBox boundingBox = this.FindFirstComponentWithTag<BoundingBox>(cameraBoundingBoxTag);
+            if (boundingBox is not null)
+                _cameraControlScript.CurrentBoundingBox = boundingBox;
+            _cameraControlScript?.ForceToPosition(cameraPosition);
         }
 
         private Waypoint FindAreaEntryPoint(string tag)

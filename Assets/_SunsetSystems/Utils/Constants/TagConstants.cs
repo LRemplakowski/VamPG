@@ -1,7 +1,6 @@
 ﻿public static class TagConstants
 {
     public const string PLAYER_INPUT_HANDLER = "PLAYER_INPUT_HANDLER";
-    public const string CAMERA_CONTROL = "CameraControl";
     public const string CAMERA_RIG = "CAMERA_RIG";
     public const string INVENTORY_MANAGER = "InventoryManager";
     public const string GAME_MANAGER = "GAME_MANAGER";

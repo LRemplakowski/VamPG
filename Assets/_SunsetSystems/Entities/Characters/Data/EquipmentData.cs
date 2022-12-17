@@ -19,15 +19,14 @@ namespace SunsetSystems.Entities.Characters
         public const string SLOT_HANDS = "SLOT_HANDS";
         public const string SLOT_TRINKET = "SLOT_TRINKET";
 
-        [ReadOnly]
-        public StringEquipmentSlotDictionary equipmentSlots;
+        public Dictionary<string, EquipmentSlot> EquipmentSlots;
 
         private string _selectedWeapon;
 
         public static EquipmentData Initialize()
         {
             EquipmentData data = new();
-            data.equipmentSlots = GetSlotsPreset();
+            data.EquipmentSlots = GetSlotsPreset();
             return data;
         }
 
@@ -45,13 +44,13 @@ namespace SunsetSystems.Entities.Characters
 
         public EquipmentData(InventoryConfig config)
         {
-            equipmentSlots = GetSlotsPreset();
+            EquipmentSlots = GetSlotsPreset();
             _selectedWeapon = SLOT_WEAPON_PRIMARY;
-            foreach (string key in config.Equipment.equipmentSlots.Keys)
+            foreach (string key in config.Equipment.EquipmentSlots.Keys)
             {
-                if (equipmentSlots.ContainsKey(key))
+                if (EquipmentSlots.ContainsKey(key))
                 {
-                    equipmentSlots[key] = config.Equipment.equipmentSlots[key];
+                    EquipmentSlots[key] = config.Equipment.EquipmentSlots[key];
                 }    
             }
         }
@@ -74,17 +73,17 @@ namespace SunsetSystems.Entities.Characters
 
         public Weapon GetSelectedWeapon()
         {
-            return equipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
+            return EquipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
         }
 
         public Weapon GetPrimaryWeapon()
         {
-            return equipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
+            return EquipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
         }
 
         public Weapon GetSecondaryWeapon()
         {
-            return equipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
+            return EquipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
         }
 
         public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)

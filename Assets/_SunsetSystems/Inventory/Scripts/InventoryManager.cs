@@ -65,7 +65,7 @@ namespace SunsetSystems.Inventory
             }
             try
             {
-                EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
+                EquipmentSlot slot = equipmentData.EquipmentSlots[slotID];
                 if (slot.GetEquippedItem() != null)
                 {
                     if (TryUnequipItemFromSlot(characterID, slotID) == false)
@@ -79,7 +79,7 @@ namespace SunsetSystems.Inventory
                 {
                     Debug.Log("Item equipped successfuly!");
                     PlayerInventory.TryRemoveItem(new(item));
-                    equipmentData.equipmentSlots[slotID] = slot;
+                    equipmentData.EquipmentSlots[slotID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
@@ -113,13 +113,13 @@ namespace SunsetSystems.Inventory
                 return false;
             try
             {
-                EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
+                EquipmentSlot slot = equipmentData.EquipmentSlots[slotID];
                 EquipableItem item = slot.GetEquippedItem();
                 bool success = slot.TryUnequipItem(item);
                 if (success)
                 {
                     PlayerInventory.AddItem(new(item));
-                    equipmentData.equipmentSlots[slot.ID] = slot;
+                    equipmentData.EquipmentSlots[slot.ID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
@@ -181,12 +181,12 @@ namespace SunsetSystems.Inventory
             this._playerInventory = saveData.PlayerInventory;
             this._money = saveData.Money;
         }
+    }
 
-        private struct InventorySaveData
-        {
-            public StringEquipmentDataDictionary EquipmentData;
-            public ItemStorage PlayerInventory;
-            public float Money;
-        }
+    public class InventorySaveData
+    {
+        public StringEquipmentDataDictionary EquipmentData;
+        public ItemStorage PlayerInventory;
+        public float Money;
     }
 }

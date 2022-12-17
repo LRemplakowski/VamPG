@@ -56,9 +56,9 @@ namespace SunsetSystems.UI
                 List<IGameDataProvider<EquipmentSlot>> slots = new();
                 if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
                 {
-                    foreach (string key in data.equipmentSlots.Keys)
+                    foreach (string key in data.EquipmentSlots.Keys)
                     {
-                        slots.Add(data.equipmentSlots[key]);
+                        slots.Add(data.EquipmentSlots[key]);
                     }
                 }
                 _equipmentContentsUpdater.UpdateViews(slots);

@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters
     public class CreatureConfig : ScriptableObject
     {
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; }
+        public string DatabaseID { get; private set; } = "";
         [SerializeField]
         private string _name = "New";
         public string Name { get => _name; }
@@ -21,9 +21,9 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private bool _overrideReadableID;
         [SerializeField, ReadOnly, HideIf("_overrideReadableID")]
-        private string _defaultReadableID;
+        private string _defaultReadableID = "";
         [SerializeField, ShowIf("_overrideReadableID")]
-        private string _readableIDOverride;
+        private string _readableIDOverride = "";
         public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [SerializeField]
         private Sprite _portrait;

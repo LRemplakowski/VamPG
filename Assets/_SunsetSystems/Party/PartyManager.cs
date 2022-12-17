@@ -196,9 +196,9 @@ namespace SunsetSystems.Party
         public void SaveRuntimeData()
         {
             PartySaveData saveData = new();
-            saveData.CreatureDataCache = _creatureDataCache;
-            saveData.ActiveMemberKeys = _activeCoterieMemberKeys.ToList();
-            StringVector3Dictionary partyPositions = new();
+            saveData.CreatureDataCache = new(_creatureDataCache);
+            saveData.ActiveMemberKeys = new(_activeCoterieMemberKeys);
+            Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
                 partyPositions.Add(key, _activeParty[key].transform.position);
@@ -209,25 +209,26 @@ namespace SunsetSystems.Party
 
         public void LoadRuntimeData()
         {
-            if (ES3.KeyExists(_unique.Id) == false)
+            if (ES3.KeyExists(_unique.Id) is false)
                 return;
             PartySaveData saveData = ES3.Load<PartySaveData>(_unique.Id);
-            _creatureDataCache = saveData.CreatureDataCache;
-            _activeCoterieMemberKeys = saveData.ActiveMemberKeys.ToHashSet();
+            _creatureDataCache = new();
+            _creatureDataCache.Concat(saveData.CreatureDataCache);
+            _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
             _activeParty = new();
             foreach (string key in _activeCoterieMemberKeys)
             {
                 _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], saveData.PartyPositions[key]));
             }
         }
+    }
 
-        [Serializable]
-        private struct PartySaveData
-        {
-            public StringVector3Dictionary PartyPositions;
-            public StringCreatureDataDictionary CreatureDataCache;
-            public List<string> ActiveMemberKeys;
-        }
+    [Serializable]
+    public class PartySaveData
+    {
+        public Dictionary<string, Vector3> PartyPositions;
+        public Dictionary<string, CreatureData> CreatureDataCache;
+        public HashSet<string> ActiveMemberKeys;
     }
 
     [Serializable]

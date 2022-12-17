@@ -124,17 +124,22 @@ namespace SunsetSystems.Dialogue
     }
 
     [Serializable]
-    public struct DialogueSaveData
+    public class DialogueSaveData
     {
-        public StringFloatDictionary _floats;
-        public StringStringDictionary _strings;
-        public StringBoolDictionary _bools;
+        public Dictionary<string, float> _floats = new();
+        public Dictionary<string, string> _strings = new();
+        public Dictionary<string, bool> _bools = new();
 
         public DialogueSaveData(StringFloatDictionary _floats, StringStringDictionary _strings, StringBoolDictionary _bools)
         {
-            this._floats = _floats;
-            this._strings = _strings;
-            this._bools = _bools;
+            this._floats = new(_floats);
+            this._strings = new(_strings);
+            this._bools = new(_bools);
+        }
+
+        public DialogueSaveData()
+        {
+
         }
     }
 }

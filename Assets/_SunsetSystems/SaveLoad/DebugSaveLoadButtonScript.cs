@@ -15,30 +15,19 @@ namespace SunsetSystems.Loading
         private void Start()
         {
             if (!_sceneLoader)
-                _sceneLoader = FindObjectOfType<LevelLoader>();
+                _sceneLoader = LevelLoader.Instance;
         }
 
         public void DoSave()
         {
             Debug.Log("DoSave button");
-            SaveLoadManager.Save();
+            SaveLoadManager.SaveObjects();
         }
 
         public async void DoLoad()
         {
             Debug.Log("DoLoad button");
-            PauseMenuUI menu = GetComponentInParent<PauseMenuUI>();
-            Action action = null;
-            if (GameManager.IsCurrentState(GameState.GamePaused))
-                menu.gameObject.SetActive(false);
-            else if (GameManager.IsCurrentState(GameState.Menu))
-                action = FindObjectOfType<GameStarter>().DisableMainMenu;
-            await _sceneLoader.LoadSavedLevel(action);
-        }
-
-        public void EnableLoading()
-        {
-            Debug.Log("ActionTest");
+            await _sceneLoader.LoadSavedLevel();
         }
     }
 }

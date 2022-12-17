@@ -80,7 +80,7 @@ namespace SunsetSystems.Loading
             }
             LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             await LoadNewScene(data);
-            await SaveLoadManager.LoadObjects();
+            SaveLoadManager.LoadObjects();
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
             await new WaitForUpdate();

@@ -7,10 +7,12 @@ using Yarn.Unity;
 using SunsetSystems.Loading;
 using System;
 using SunsetSystems.Data;
+using CleverCrow.Fluid.UniqueIds;
 
 namespace SunsetSystems.Dialogue
 {
-    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveRuntimeData, IResetable
+    [RequireComponent(typeof(UniqueId))]
+    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
         private StringFloatDictionary _floats = new();
@@ -23,16 +25,19 @@ namespace SunsetSystems.Dialogue
 
         private readonly Dictionary<string, object> _variables = new();
 
-        private const string DIALOGUE_DATA_KEY = "DIALOGUE_DATA";
+        [SerializeField]
+        private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         private void Awake()
         {
+            _unique ??= GetComponent<UniqueId>();
             if (_variableInjectionConfig != null)
             {
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
                 SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
             }
-            SaveLoadManager.DataSet.Add(this);
+            SaveLoadManager.TrackedSaveDataProviders.Add(this);
         }
 
         public void ResetOnGameStart()
@@ -68,15 +73,15 @@ namespace SunsetSystems.Dialogue
             return (_floats, _strings, _bools);
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            DialogueSaveData savedData = ES3.Load<DialogueSaveData>(DIALOGUE_DATA_KEY);
+            DialogueSaveData savedData = data as DialogueSaveData;
             SetAllVariables(savedData._floats, savedData._strings, savedData._bools);
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(DIALOGUE_DATA_KEY, new DialogueSaveData(_floats, _strings, _bools));
+            return new DialogueSaveData(_floats, _strings, _bools);
         }
 
         public override void SetAllVariables(Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools, bool clear = true)

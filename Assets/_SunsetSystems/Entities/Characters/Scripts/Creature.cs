@@ -131,7 +131,7 @@ namespace SunsetSystems.Entities.Characters
 
         public virtual void OnDestroy()
         {
-
+            Debug.LogError($"Destroying creature {gameObject.name}");
         }
 
         public void Update()

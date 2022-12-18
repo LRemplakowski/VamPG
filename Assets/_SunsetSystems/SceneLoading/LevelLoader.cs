@@ -7,6 +7,7 @@ using SunsetSystems.Utils.Threading;
 using SunsetSystems.Utils;
 using SunsetSystems.Constants;
 using Redcode.Awaiting;
+using UnityEngine.Events;
 
 namespace SunsetSystems.Loading
 {
@@ -16,6 +17,8 @@ namespace SunsetSystems.Loading
 
         public LevelLoadingData CachedTransitionData { get; private set; }
         private int _latestLoadedSceneIndex;
+
+        public UnityEvent OnBeforeLevelLoad, OnAfterLevelLoad;
 
         private void OnEnable()
         {
@@ -52,8 +55,6 @@ namespace SunsetSystems.Loading
             LoadingScreenUI.EnableAndResetLoadingScreen();
             await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
-            // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
-            // Checking for -1 buildIndex works around this issue.
             if (_latestLoadedSceneIndex > 1)
             {
                 _ = UnloadGameScene();
@@ -72,8 +73,6 @@ namespace SunsetSystems.Loading
             LoadingScreenUI.EnableAndResetLoadingScreen();
             await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
-            // Don't know why, but _previousScene can return true for IsValid() even for invalid scenes, like the one created in Awake.
-            // Checking for -1 buildIndex works around this issue.
             if (_latestLoadedSceneIndex > 1)
             {
                 _ = UnloadGameScene();

@@ -10,12 +10,12 @@ namespace SunsetSystems.Loading
     public class DebugSaveLoadButtonScript : MonoBehaviour
     {
         [SerializeField]
-        private LevelLoader _sceneLoader;
+        private LevelLoader _levelLoader;
 
         private void Start()
         {
-            if (!_sceneLoader)
-                _sceneLoader = LevelLoader.Instance;
+            if (!_levelLoader)
+                _levelLoader = LevelLoader.Instance;
         }
 
         public void DoSave()
@@ -27,7 +27,7 @@ namespace SunsetSystems.Loading
         public async void DoLoad()
         {
             Debug.Log("DoLoad button");
-            await _sceneLoader.LoadSavedLevel();
+            await _levelLoader.LoadSavedLevel();
         }
     }
 }

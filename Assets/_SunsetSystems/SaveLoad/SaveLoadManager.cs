@@ -1,8 +1,5 @@
-using Glitchers;
 using Redcode.Awaiting;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SunsetSystems.Loading
@@ -10,23 +7,27 @@ namespace SunsetSystems.Loading
     public static class SaveLoadManager
     {
         private const string SCENE_INDEX_ID = "SceneIndex";
+        private const string SAVE_DATA_KEY = "SAVE_DATA";
 
-        public static readonly HashSet<ISaveRuntimeData> DataSet = new();
+        public static readonly HashSet<ISaveable> TrackedSaveDataProviders = new();
+        private static GlobalSaveData _saveData = new();
 
         public static void SaveObjects()
         {
-            foreach (ISaveRuntimeData saveable in DataSet)
+            foreach (ISaveable saveable in TrackedSaveDataProviders)
             {
-                saveable.SaveRuntimeData();
+                _saveData.UpdateSaveData(saveable);
             }
+            ES3.Save(SAVE_DATA_KEY, _saveData);
             ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex);
         }
 
         public static void LoadObjects()
         {
-            foreach (ISaveRuntimeData saveable in DataSet)
+            _saveData = ES3.Load<GlobalSaveData>(SAVE_DATA_KEY);
+            foreach (ISaveable saveable in TrackedSaveDataProviders)
             {
-                saveable.LoadRuntimeData();
+                saveable.InjectSaveData(_saveData.GetData(saveable.DataKey));
             }
         }
 
@@ -34,12 +35,5 @@ namespace SunsetSystems.Loading
         {
             return ES3.Load<int>(SCENE_INDEX_ID);
         }
-    }
-
-    public interface ISaveRuntimeData
-    {
-        void SaveRuntimeData();
-
-        void LoadRuntimeData();
     }
 }

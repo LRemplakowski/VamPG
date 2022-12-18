@@ -78,14 +78,21 @@ namespace SunsetSystems.Loading
             return entryPoint;
         }
 
-        public sealed override void LoadRuntimeData()
+        public sealed override void InjectSaveData(object data)
         {
-            ES3.LoadInto(unique.Id, this);
+            //ES3.LoadInto(unique.Id, this);
+            
         }
 
-        public sealed override void SaveRuntimeData()
+        public sealed override object GetSaveData()
         {
-            ES3.Save(unique.Id, this);
+            //ES3.Save(unique.Id, this);
+            return new SceneLogicData();
         }
+    }
+
+    public class SceneLogicData : SaveData
+    {
+
     }
 }

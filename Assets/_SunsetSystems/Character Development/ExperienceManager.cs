@@ -7,16 +7,18 @@ using UnityEngine;
 namespace SunsetSystems.Experience
 {
     [RequireComponent(typeof(UniqueId))]
-    public class ExperienceManager : Singleton<ExperienceManager>, ISaveRuntimeData
+    public class ExperienceManager : Singleton<ExperienceManager>, ISaveable
     {
         [SerializeField]
         private StringExperienceDataDictionary _experienceDataCache = new();
 
         private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         protected override void Awake()
         {
             base.Awake();
+            SaveLoadManager.TrackedSaveDataProviders.Add(this);
             _unique ??= GetComponent<UniqueId>();
         }
 
@@ -50,15 +52,22 @@ namespace SunsetSystems.Experience
             return false;
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(_unique.Id, _experienceDataCache);
+            //ES3.Save(_unique.Id, _experienceDataCache);
+            return new ExperienceSaveData();
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            _experienceDataCache = ES3.Load<StringExperienceDataDictionary>(_unique.Id);
+            //_experienceDataCache = ES3.Load<StringExperienceDataDictionary>(_unique.Id);
         }
+    }
+
+    [Serializable]
+    public class ExperienceSaveData : SaveData
+    {
+
     }
 
     public enum ExperienceType

@@ -17,7 +17,7 @@ using UMA;
 namespace SunsetSystems.Party
 {
     [RequireComponent(typeof(UniqueId))]
-    public class PartyManager : InitializedSingleton<PartyManager>, ISaveRuntimeData, IResetable
+    public class PartyManager : InitializedSingleton<PartyManager>, ISaveable, IResetable
     {
         [field: SerializeField]
         private StringCreatureInstanceDictionary _activeParty;
@@ -35,6 +35,7 @@ namespace SunsetSystems.Party
 
         [SerializeField, Required]
         private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         private PartyPortraitsController _partyPortraits;
         private PartyPortraitsController PartyPortraits
@@ -63,7 +64,7 @@ namespace SunsetSystems.Party
             _creatureDataCache = new();
             _activeCoterieMemberKeys = new();
             _unique ??= GetComponent<UniqueId>();
-            SaveLoadManager.DataSet.Add(this);
+            SaveLoadManager.TrackedSaveDataProviders.Add(this);
         }
 
         public override void Initialize()
@@ -193,7 +194,7 @@ namespace SunsetSystems.Party
             }
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
             PartySaveData saveData = new();
             saveData.CreatureDataCache = new(_creatureDataCache);
@@ -204,16 +205,14 @@ namespace SunsetSystems.Party
                 partyPositions.Add(key, _activeParty[key].transform.position);
             }
             saveData.PartyPositions = partyPositions;
-            ES3.Save(_unique.Id, saveData);
+            return saveData;
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            if (ES3.KeyExists(_unique.Id) is false)
-                return;
-            PartySaveData saveData = ES3.Load<PartySaveData>(_unique.Id);
+            PartySaveData saveData = data as PartySaveData;
             _creatureDataCache = new();
-            _creatureDataCache.Concat(saveData.CreatureDataCache);
+            saveData.CreatureDataCache.Keys.ToList().ForEach(key => _creatureDataCache.Add(key, saveData.CreatureDataCache[key]));
             _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
             _activeParty = new();
             foreach (string key in _activeCoterieMemberKeys)

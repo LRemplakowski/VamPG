@@ -11,7 +11,7 @@ namespace SunsetSystems.Input.CameraControl
 {
     [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(Tagger))]
-    public class CameraControlScript : ExposableMonobehaviour, ISaveRuntimeData
+    public class CameraControlScript : ExposableMonobehaviour, ISaveable
     {
         private Transform _target;
         [SerializeField]
@@ -36,6 +36,7 @@ namespace SunsetSystems.Input.CameraControl
 
         //Save/Load variables
         private UniqueId Unique => GetComponent<UniqueId>();
+        public string DataKey => Unique.Id;
         private const string BOUNDING_BOX = "_boundingBox";
         private const string POSITION = "_position";
 
@@ -122,16 +123,25 @@ namespace SunsetSystems.Input.CameraControl
             transform.Rotate(_cameraRotationSpeed * _rotationDirection * Time.deltaTime * Vector3.up);
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
-            ES3.Save(Unique.Id + POSITION, transform.position);
+            CameraSaveData saveData = new();
+            saveData._currentBoundingBox = _currentBoundingBox;
+            saveData._position = transform.position;
+            return saveData;
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            _currentBoundingBox = ES3.Load<BoundingBox>(Unique.Id + BOUNDING_BOX);
-            ForceToPosition(ES3.Load<Vector3>(Unique.Id + POSITION));
+            CameraSaveData saveData = data as CameraSaveData;
+            _currentBoundingBox = saveData._currentBoundingBox;
+            ForceToPosition(saveData._position);
         }
+    }
+
+    public class CameraSaveData : SaveData
+    {
+        public BoundingBox _currentBoundingBox;
+        public Vector3 _position;
     }
 }

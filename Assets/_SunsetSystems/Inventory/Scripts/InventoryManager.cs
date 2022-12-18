@@ -8,11 +8,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Party;
 using SunsetSystems.Data;
+using System.Web.UI.WebControls;
+using System.Linq;
 
 namespace SunsetSystems.Inventory
 {
     [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
-    public class InventoryManager : Singleton<InventoryManager>, ISaveRuntimeData, IResetable
+    public class InventoryManager : Singleton<InventoryManager>, ISaveable, IResetable
     {
         [SerializeField]
         private ItemStorage _playerInventory;
@@ -22,6 +24,7 @@ namespace SunsetSystems.Inventory
         [SerializeField, ES3Serializable]
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         public static event Action<string> ItemEquipped, ItemUnequipped;
 
@@ -39,6 +42,7 @@ namespace SunsetSystems.Inventory
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
+            SaveLoadManager.TrackedSaveDataProviders.Add(this);
             _unique ??= GetComponent<UniqueId>();
         }
 
@@ -165,27 +169,29 @@ namespace SunsetSystems.Inventory
             _money = value;
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
             InventorySaveData saveData = new();
-            saveData.EquipmentData = _coterieEquipmentData;
+            saveData.EquipmentData = new(_coterieEquipmentData);
             saveData.PlayerInventory = _playerInventory;
             saveData.Money = _money;
-            ES3.Save(_unique.Id, saveData);
+            return saveData;
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            InventorySaveData saveData = ES3.Load<InventorySaveData>(_unique.Id);
-            this._coterieEquipmentData = saveData.EquipmentData;
+            InventorySaveData saveData = data as InventorySaveData;
+            this._coterieEquipmentData = new();
+            this._coterieEquipmentData.Concat(saveData.EquipmentData);
             this._playerInventory = saveData.PlayerInventory;
             this._money = saveData.Money;
         }
     }
 
+    [Serializable]
     public class InventorySaveData
     {
-        public StringEquipmentDataDictionary EquipmentData;
+        public Dictionary<string, EquipmentData> EquipmentData;
         public ItemStorage PlayerInventory;
         public float Money;
     }

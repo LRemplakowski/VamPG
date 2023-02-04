@@ -1,7 +1,5 @@
-﻿using Entities.Characters.Data;
-using SunsetSystems.Entities.Data;
+﻿using SunsetSystems.Entities.Data;
 using System;
-using UMA.CharacterSystem;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
@@ -12,10 +10,12 @@ namespace SunsetSystems.Entities.Characters
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
         public readonly string ID;
+        [ES3Serializable]
         public Sprite Portrait;
         public Faction Faction;
         public BodyType BodyType;
         public CreatureType CreatureType;
+        [ES3Serializable]
         public TextAsset UmaPreset;
         public RuntimeAnimatorController AnimatorControllerAsset;
         public StatsData Stats;

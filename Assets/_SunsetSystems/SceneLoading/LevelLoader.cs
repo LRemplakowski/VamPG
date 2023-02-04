@@ -3,9 +3,7 @@ using SunsetSystems.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
-using SunsetSystems.Utils.Threading;
 using SunsetSystems.Utils;
-using SunsetSystems.Constants;
 using Redcode.Awaiting;
 using UnityEngine.Events;
 
@@ -18,7 +16,7 @@ namespace SunsetSystems.Loading
         public LevelLoadingData CachedTransitionData { get; private set; }
         private int _latestLoadedSceneIndex;
 
-        public UnityEvent OnBeforeLevelLoad, OnAfterLevelLoad;
+        public static Action<LevelLoadingEventData> OnBeforeLevelLoad, OnAfterLevelLoad;
 
         private void OnEnable()
         {
@@ -51,39 +49,63 @@ namespace SunsetSystems.Loading
 
         public async Task LoadGameLevel(LevelLoadingData data)
         {
-            await LoadingScreenUI.DoFadeOutAsync(.5f);
-            LoadingScreenUI.EnableAndResetLoadingScreen();
-            await new WaitForUpdate();
-            await LoadingScreenUI.DoFadeInAsync(.5f);
+            CachedTransitionData = data;
+            await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
                 _ = UnloadGameScene();
             }
+            LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
+            OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
+            await IInitialized.InitializeObjectsAsync();
+            OnAfterLevelLoad?.Invoke(loadingEventData);
             await InitializeSceneLogic(data);
+            await IInitialized.LateInitializeObjectsAsync();
+            await DisableLoadingScreen();
+        }
+
+        internal async Task LoadSavedLevel(Action preLoadingAction)
+        {
+            await PrepareLoadingScreen();
+            if (_latestLoadedSceneIndex > 1)
+            {
+                _ = UnloadGameScene();
+            }
+            LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
+            CachedTransitionData = data;
+            LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
+            OnBeforeLevelLoad?.Invoke(loadingEventData);
+            await LoadNewScene(data);
+            await IInitialized.InitializeObjectsAsync();
+            OnAfterLevelLoad?.Invoke(loadingEventData);
+            SaveLoadManager.LoadObjects();
+            await IInitialized.LateInitializeObjectsAsync();
+            await DisableLoadingScreen();
+        }
+
+        private async Task PrepareLoadingScreen()
+        {
+            await LoadingScreenUI.DoFadeOutAsync(.5f);
+            LoadingScreenUI.EnableAndResetLoadingScreen();
+            await new WaitForUpdate();
+            await LoadingScreenUI.DoFadeInAsync(.5f);
+        }
+
+        private async Task DisableLoadingScreen()
+        {
             await LoadingScreenUI.DoFadeOutAsync(.5f);
             LoadingScreenUI.DisableLoadingScreen();
             await new WaitForUpdate();
             await LoadingScreenUI.DoFadeInAsync(.5f);
         }
 
-        internal async Task LoadSavedLevel(Action preLoadingAction)
+        private LevelLoadingEventData GetLevelLoadingEventData()
         {
-            await LoadingScreenUI.DoFadeOutAsync(.5f);
-            LoadingScreenUI.EnableAndResetLoadingScreen();
-            await new WaitForUpdate();
-            await LoadingScreenUI.DoFadeInAsync(.5f);
-            if (_latestLoadedSceneIndex > 1)
-            {
-                _ = UnloadGameScene();
-            }
-            LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
-            await LoadNewScene(data);
-            SaveLoadManager.LoadObjects();
-            await LoadingScreenUI.DoFadeOutAsync(.5f);
-            LoadingScreenUI.DisableLoadingScreen();
-            await new WaitForUpdate();
-            await LoadingScreenUI.DoFadeInAsync(.5f);
+            LevelLoadingEventData data = new();
+            data.AreaEntryPointTag = CachedTransitionData.targetEntryPointTag;
+            data.CameraBoundingBoxTag = CachedTransitionData.cameraBoundingBoxTag;
+            return data;
         }
 
         internal async Task LoadSavedLevel()
@@ -124,6 +146,7 @@ namespace SunsetSystems.Loading
         public async Task UnloadGameScene()
         {
             await SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
+            
         }
 
         private async Task DoLoadingByName()
@@ -152,5 +175,11 @@ namespace SunsetSystems.Loading
                     throw new ArgumentException("Invalid transition type!");
             }
         }
+    }
+
+    public struct LevelLoadingEventData
+    {
+        public string CameraBoundingBoxTag;
+        public string AreaEntryPointTag;
     }
 }

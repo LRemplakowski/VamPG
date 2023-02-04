@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using SunsetSystems.Utils;
 using UnityEngine.InputSystem.UI;
 using SunsetSystems.Game;
+using System;
 
 [RequireComponent(typeof(Tagger))]
 public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
@@ -14,32 +15,17 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     private GameManager gameManager;
 
     // Mouse input
-    public delegate void OnLeftClickHandler(InputAction.CallbackContext context);
-    public static event OnLeftClickHandler OnPrimaryAction;
-    public delegate void OnRightClickHandler(InputAction.CallbackContext context);
-    public static event OnRightClickHandler OnSecondaryAction;
-    public delegate void OnMousePositionHandler(InputAction.CallbackContext context);
-    public static event OnMousePositionHandler OnPointerPosition;
+    public static event Action<InputAction.CallbackContext> OnPrimaryAction;
+    public static event Action<InputAction.CallbackContext> OnSecondaryAction;
+    public static event Action<InputAction.CallbackContext> OnPointerPosition;
     // Keyboard input
-    public delegate void OnInventoryHandler(InputAction.CallbackContext context);
-    public static event OnInventoryHandler OnInventory;
-    public delegate void OnJournalHandler(InputAction.CallbackContext context);
-    public static event OnJournalHandler OnJournal;
-    public delegate void OnEscapeHandler(InputAction.CallbackContext context);
-    public static event OnEscapeHandler OnEscape;
-    public delegate void OnCharacterSheetHandler(InputAction.CallbackContext conext);
-    public static event OnCharacterSheetHandler OnCharacterSheet;
-    public delegate void OnSkipDialogueHandler(InputAction.CallbackContext context);
-    public static event OnSkipDialogueHandler OnSkipDialogue;
-    public delegate void OnHighlightInteractablesHandler(InputAction.CallbackContext context);
-    public static event OnHighlightInteractablesHandler OnHighlightInteractables;
-    public delegate void OnHelpHandler(InputAction.CallbackContext context);
-    public static event OnHelpHandler OnHelp;
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
+    public static event Action<InputAction.CallbackContext> OnInventory;
+    public static event Action<InputAction.CallbackContext> OnJournal;
+    public static event Action<InputAction.CallbackContext> OnEscape;
+    public static event Action<InputAction.CallbackContext> OnCharacterSheet;
+    public static event Action<InputAction.CallbackContext> OnSkipDialogue;
+    public static event Action<InputAction.CallbackContext> OnHighlightInteractables;
+    public static event Action<InputAction.CallbackContext> OnHelp;
 
     private void Start()
     {
@@ -52,6 +38,11 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
     public override void Initialize()
     {
         playerInput.uiInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
+    }
+
+    public override void LateInitialize()
+    {
+        
     }
 
     public void PrimaryAction(InputAction.CallbackContext context)

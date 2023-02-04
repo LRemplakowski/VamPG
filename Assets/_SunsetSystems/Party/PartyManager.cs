@@ -48,6 +48,9 @@ namespace SunsetSystems.Party
             }
         }
 
+        [SerializeField]
+        private Transform _creatureParent;
+
         public void ResetOnGameStart()
         {
             _activeParty = new();
@@ -67,15 +70,36 @@ namespace SunsetSystems.Party
             SaveLoadManager.TrackedSaveDataProviders.Add(this);
         }
 
+        private void OnEnable()
+        {
+            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        private void OnAfterLevelLoad(LevelLoadingEventData data)
+        {
+            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
+            if (entryPoint)
+                InitializePartyAtPosition(entryPoint.transform.position);
+        }
+
         public override void Initialize()
         {
             UpdatePartyPortraits();
         }
 
+        public override void LateInitialize()
+        {
+            
+        }
+
         private void UpdatePartyPortraits()
         {
             PartyPortraits?.Clear();
-            Debug.Log("Party members count: " + _activeParty.Count);
             foreach (string key in _activeCoterieMemberKeys)
             {
                 PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
@@ -120,7 +144,9 @@ namespace SunsetSystems.Party
 
         protected static Creature InitializePartyMember(CreatureData data, Vector3 position)
         {
-            return CreatureInitializer.InitializeCreature(data, position);
+            Creature creature = CreatureInitializer.InitializeCreature(data, position);
+            creature.transform.SetParent(Instance._creatureParent, true);
+            return creature;
         }
 
         public static void RecruitCharacter(CreatureData creatureData)

@@ -11,7 +11,6 @@ using SunsetSystems.MainMenu;
 using SunsetSystems.Party;
 using SunsetSystems.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -99,7 +98,7 @@ namespace SunsetSystems.Loading
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
-            PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
+            PartyManager.MainCharacter.gameObject.SetActive(false);
             await new WaitForSeconds(2);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>
@@ -116,7 +115,7 @@ namespace SunsetSystems.Loading
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.MainCharacter.Agent.Warp(_startPosition.position);
+            PartyManager.MainCharacter.gameObject.SetActive(true);
             await new WaitForSeconds(.5f);
             await new WaitForUpdate();
             await fade.DoFadeInAsync(.5f);

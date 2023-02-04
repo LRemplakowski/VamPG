@@ -3,6 +3,7 @@ using SunsetSystems.Constants;
 using SunsetSystems.Game;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
+using System;
 using System.EnterpriseServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +12,7 @@ namespace SunsetSystems.Input.CameraControl
 {
     [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(Tagger))]
-    public class CameraControlScript : ExposableMonobehaviour, ISaveable
+    public class CameraControlScript : MonoBehaviour, ISaveable
     {
         private Transform _target;
         [SerializeField]
@@ -39,6 +40,26 @@ namespace SunsetSystems.Input.CameraControl
         public string DataKey => Unique.Id;
         private const string BOUNDING_BOX = "_boundingBox";
         private const string POSITION = "_position";
+
+        private void OnEnable()
+        {
+            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        private void OnAfterLevelLoad(LevelLoadingEventData data)
+        {
+            BoundingBox boundingBox = this.FindFirstComponentWithTag<BoundingBox>(data.CameraBoundingBoxTag);
+            if (boundingBox is not null)
+                CurrentBoundingBox = boundingBox;
+            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
+            if (entryPoint is not null)
+                ForceToPosition(entryPoint.transform.position);
+        }
 
         private void Start()
         {

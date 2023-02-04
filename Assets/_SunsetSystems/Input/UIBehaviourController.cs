@@ -37,6 +37,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal += OnJournal;
             PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
             PlayerInputHandler.OnHelp += OnShowHelp;
+            IInitialized.RegisterInitialization(this);
         }
 
         private void OnDisable()
@@ -48,6 +49,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal -= OnJournal;
             PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
             PlayerInputHandler.OnHelp -= OnShowHelp;
+            IInitialized.UnregisterInitialization(this);
         }
 
         private void Start()
@@ -93,6 +95,11 @@ namespace SunsetSystems.Input
                 gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
             if (!gameManager)
                 gameManager = this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
+        }
+
+        public void LateInitialize()
+        {
+
         }
 
         private void OnSecondaryAction(InputAction.CallbackContext context)

@@ -252,6 +252,7 @@ Transform:
   - {fileID: 7918664679020069862}
   - {fileID: 678198889}
   - {fileID: 1048735712}
+  - {fileID: 1591118379}
   m_Father: {fileID: 2042823493}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2494,7 +2495,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &212152393
 PrefabInstance:
@@ -2960,6 +2961,39 @@ Transform:
   - {fileID: 1263128042}
   m_Father: {fileID: 700959223}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &268577892
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 268577893}
+  m_Layer: 0
+  m_Name: Quest Event Triggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &268577893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268577892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 797074314}
+  - {fileID: 1782368263}
+  m_Father: {fileID: 2042823493}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &270875989
 GameObject:
@@ -9529,13 +9563,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797074313}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2042823493}
-  m_RootOrder: 1
+  m_Father: {fileID: 268577893}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &797074315
 MonoBehaviour:
@@ -12058,7 +12092,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17681,7 +17715,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1369304079
 MonoBehaviour:
@@ -20234,11 +20268,11 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 11974418}
     m_Modifications:
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20258,15 +20292,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -20282,7 +20316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4711254041863113222, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_Name
-      value: Waypoint
+      value: Camera Start Scene Waypoint
       objectReference: {fileID: 0}
     - target: {fileID: 4711254041863113222, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
       propertyPath: m_TagString
@@ -20300,6 +20334,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2778307842649892684, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
   m_PrefabInstance: {fileID: 1591118378}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1591118380 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7555798042644436292, guid: 7b5eccd5225d12c4ab720cb85fecfd5d, type: 3}
+  m_PrefabInstance: {fileID: 1591118378}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1604006279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21846,7 +21891,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761643063}
-  m_LocalRotation: {x: -0.0093752965, y: -0.036781717, z: 0.014788609, w: 0.9991699}
+  m_LocalRotation: {x: -0.009375301, y: -0.036781717, z: 0.014788614, w: 0.9991699}
   m_LocalPosition: {x: -0.05342067, y: -0.000000022351742, z: 0.000000056810677}
   m_LocalScale: {x: 0.9999998, y: 0.99999994, z: 0.99999917}
   m_ConstrainProportionsScale: 0
@@ -21978,13 +22023,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782368262}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2042823493}
-  m_RootOrder: 2
+  m_Father: {fileID: 268577893}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1782368264
 MonoBehaviour:
@@ -25200,8 +25245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unique: {fileID: 2042823494}
-  _gameRuntimeData: {fileID: 0}
-  _cameraControlScript: {fileID: 0}
+  _defaultEntryWaypoint: {fileID: 1591118380}
   _sceneDialogues: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
   _wakeUpStartNode: Journal
   _startPosition: {fileID: 1591118379}
@@ -25265,10 +25309,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 11974418}
-  - {fileID: 797074314}
-  - {fileID: 1782368263}
+  - {fileID: 268577893}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2042823494
 MonoBehaviour:
@@ -25693,40 +25736,6 @@ MonoBehaviour:
           baseValue: 0
           disciplineType: 18
           knownPowers: []
-    Equipment:
-      equipmentSlots:
-        m_keys:
-        - SLOT_WEAPON_PRIMARY
-        - SLOT_WEAPON_SECONDARY
-        - SLOT_CHEST
-        - SLOT_BOOTS
-        - SLOT_HANDS
-        - SLOT_TRINKET
-        m_values:
-        - <Name>k__BackingField: Primary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_PRIMARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Secondary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_SECONDARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Chest
-          <ID>k__BackingField: SLOT_CHEST
-          _acceptedCategory: 2
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Boots
-          <ID>k__BackingField: SLOT_BOOTS
-          _acceptedCategory: 7
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Hands
-          <ID>k__BackingField: SLOT_HANDS
-          _acceptedCategory: 6
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Trinket
-          <ID>k__BackingField: SLOT_TRINKET
-          _acceptedCategory: 10
-          _equippedItem: {fileID: 0}
     UseEquipmentPreset: 0
     Money: 0
   _config: {fileID: 11400000, guid: 0643841b7a5a379448d99ed6f557388b, type: 2}
@@ -26233,7 +26242,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2057077708
 MonoBehaviour:
@@ -26739,7 +26748,7 @@ Transform:
   - {fileID: 2663066712043532966}
   - {fileID: 5033574601942649724}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &43873837289970351
 PrefabInstance:
@@ -30307,40 +30316,6 @@ MonoBehaviour:
           baseValue: 0
           disciplineType: 18
           knownPowers: []
-    Equipment:
-      equipmentSlots:
-        m_keys:
-        - SLOT_WEAPON_PRIMARY
-        - SLOT_WEAPON_SECONDARY
-        - SLOT_CHEST
-        - SLOT_BOOTS
-        - SLOT_HANDS
-        - SLOT_TRINKET
-        m_values:
-        - <Name>k__BackingField: Primary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_PRIMARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Secondary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_SECONDARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Chest
-          <ID>k__BackingField: SLOT_CHEST
-          _acceptedCategory: 2
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Boots
-          <ID>k__BackingField: SLOT_BOOTS
-          _acceptedCategory: 7
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Hands
-          <ID>k__BackingField: SLOT_HANDS
-          _acceptedCategory: 6
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Trinket
-          <ID>k__BackingField: SLOT_TRINKET
-          _acceptedCategory: 10
-          _equippedItem: {fileID: 0}
     UseEquipmentPreset: 0
     Money: 0
   _config: {fileID: 11400000, guid: f70647c35aa57b6498f83733d9ef2c41, type: 2}
@@ -38305,7 +38280,7 @@ Transform:
   m_Children:
   - {fileID: 4149957016005639536}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 106.593, z: 0}
 --- !u!114 &4149957016379629463
 MonoBehaviour:
@@ -47660,40 +47635,6 @@ MonoBehaviour:
           baseValue: 0
           disciplineType: 18
           knownPowers: []
-    Equipment:
-      equipmentSlots:
-        m_keys:
-        - SLOT_WEAPON_PRIMARY
-        - SLOT_WEAPON_SECONDARY
-        - SLOT_CHEST
-        - SLOT_BOOTS
-        - SLOT_HANDS
-        - SLOT_TRINKET
-        m_values:
-        - <Name>k__BackingField: Primary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_PRIMARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Secondary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_SECONDARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Chest
-          <ID>k__BackingField: SLOT_CHEST
-          _acceptedCategory: 2
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Boots
-          <ID>k__BackingField: SLOT_BOOTS
-          _acceptedCategory: 7
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Hands
-          <ID>k__BackingField: SLOT_HANDS
-          _acceptedCategory: 6
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Trinket
-          <ID>k__BackingField: SLOT_TRINKET
-          _acceptedCategory: 10
-          _equippedItem: {fileID: 0}
     UseEquipmentPreset: 0
     Money: 0
   _config: {fileID: 11400000, guid: 953bd39b7387a374b87e8eebbc5e2012, type: 2}

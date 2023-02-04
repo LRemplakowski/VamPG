@@ -53,12 +53,12 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnEnable()
         {
-            if (_portrait == null)
-                _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
-            if (_statsConfig == null)
-                _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
-            if (EquipmentConfig == null)
-                EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
+            //if (_portrait == null)
+            //    _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
+            //if (_statsConfig == null)
+            //    _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
+            //if (EquipmentConfig == null)
+            //    EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
             if (_animatorController == null)
                 _animatorController = ResourceLoader.GetFallbackAnimator();
 #if UNITY_EDITOR

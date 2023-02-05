@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [CreateAssetMenu(fileName = "Quest Database", menuName = "Sunset Journal/Database")]
+    [CreateAssetMenu(fileName = "Quest Database", menuName = "Sunset Journal/Quest Database")]
     public class QuestDatabase : ScriptableObject
     {
         [SerializeField]

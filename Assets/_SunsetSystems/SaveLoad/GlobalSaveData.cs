@@ -36,6 +36,19 @@ namespace SunsetSystems.Loading
 
     public interface ISaveable
     {
+        private static readonly HashSet<ISaveable> SaveablesCache = new();
+        public static IEnumerable<ISaveable> Saveables => new List<ISaveable>(SaveablesCache);
+
+        protected static void RegisterSaveable(ISaveable saveable)
+        {
+            SaveablesCache.Add(saveable);
+        }
+
+        protected static void UnregisterSaveable(ISaveable saveable)
+        {
+            SaveablesCache.Remove(saveable);
+        }
+
         string DataKey { get; }
         object GetSaveData();
         void InjectSaveData(object data);

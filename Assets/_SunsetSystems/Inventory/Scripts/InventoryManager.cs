@@ -42,8 +42,13 @@ namespace SunsetSystems.Inventory
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
-            SaveLoadManager.TrackedSaveDataProviders.Add(this);
+            ISaveable.RegisterSaveable(this);
             _unique ??= GetComponent<UniqueId>();
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         public static void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)

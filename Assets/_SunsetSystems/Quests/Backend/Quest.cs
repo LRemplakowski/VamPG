@@ -2,9 +2,6 @@ using NaughtyAttributes;
 using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -13,8 +10,6 @@ namespace SunsetSystems.Journal
     [Serializable]
     public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
-        private const string COMPLETE_QUEST = "COMPLETE_QUEST";
-
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField]
@@ -85,14 +80,14 @@ namespace SunsetSystems.Journal
         //TODO Rework this to sub recursively in quest begin
         private void OnObjectiveChanged(Objective objective)
         {
-            Debug.Log($"Completed objective {objective.ID}!");
+            Debug.Log($"Completed objective {objective.ReadableID}!");
             ObjectiveCompleted?.Invoke(this, objective);
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
             objective.OnObjectiveInactive -= OnObjectiveDeactivated;
-            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => o.MakeInactive());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
-                Debug.Log($"Completed quest!");
+                Debug.Log($"Completed quest {Name}!");
                 Complete();
             }
             else
@@ -105,6 +100,12 @@ namespace SunsetSystems.Journal
                     ob.OnObjectiveInactive += OnObjectiveDeactivated;
                 }
             }
+        }
+
+        public void ForceSubscribeToObjective(Objective objective)
+        {
+            objective.OnObjectiveCompleted += OnObjectiveChanged;
+            objective.OnObjectiveInactive += OnObjectiveDeactivated;
         }
 
         private void OnObjectiveDeactivated(Objective objective)

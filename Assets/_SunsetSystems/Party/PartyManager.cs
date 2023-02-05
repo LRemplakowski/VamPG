@@ -67,7 +67,7 @@ namespace SunsetSystems.Party
             _creatureDataCache = new();
             _activeCoterieMemberKeys = new();
             _unique ??= GetComponent<UniqueId>();
-            SaveLoadManager.TrackedSaveDataProviders.Add(this);
+            ISaveable.RegisterSaveable(this);
         }
 
         private void OnEnable()
@@ -78,6 +78,11 @@ namespace SunsetSystems.Party
         private void OnDisable()
         {
             LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         private void OnAfterLevelLoad(LevelLoadingEventData data)

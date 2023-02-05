@@ -1,5 +1,8 @@
-using CleverCrow.Fluid.Utilities;
+using Apex;
+using CleverCrow.Fluid.UniqueIds;
+using NaughtyAttributes;
 using SunsetSystems.Data;
+using SunsetSystems.Loading;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,8 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    public class QuestJournal : Singleton<QuestJournal>, IResetable
+    [RequireComponent(typeof(UniqueId))]
+    public class QuestJournal : Utils.Singleton<QuestJournal>, IResetable, ISaveable
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
@@ -20,6 +24,10 @@ namespace SunsetSystems.Journal
         public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Case)).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
+        public string DataKey => _uniqueId.Id;
+
+        private UniqueId _uniqueId;
+
         public static event Action<List<Quest>> OnActiveQuestsChanged;
 
         public void ResetOnGameStart()
@@ -28,6 +36,24 @@ namespace SunsetSystems.Journal
             _activeQuests = new();
             _completedQuests = new();
             _currentObjectives = new();
+        }
+
+        protected override void Awake()
+        {
+            _uniqueId ??= GetComponent<UniqueId>();
+            ISaveable.RegisterSaveable(this);
+        }
+
+        [ContextMenu("Foo")]
+        public void PrintObjectivesToConsole()
+        {
+            foreach (string key in Instance._currentObjectives.Keys)
+            {
+                foreach (string objectiveKey in Instance._currentObjectives[key].Keys)
+                {
+                    Debug.Log($"Quest: {Instance._activeQuests[key].Name}; Objective ID: {objectiveKey}; Objective Reference: {Instance._currentObjectives[key][objectiveKey]}");
+                }
+            }
         }
 
         private void OnEnable()
@@ -44,6 +70,11 @@ namespace SunsetSystems.Journal
             Quest.QuestCompleted -= OnQuestCompleted;
             Quest.ObjectiveCompleted -= OnQuestObjectiveCompleted;
             Quest.ObjectiveFailed -= OnQuestObjectiveFailed;
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         private void OnQuestStarted(Quest quest)
@@ -63,7 +94,7 @@ namespace SunsetSystems.Journal
                     questObjectives.Clear();
                     foreach (Objective newObjective in objective.NextObjectives)
                     {
-                        questObjectives.Add(newObjective.ID, newObjective);
+                        questObjectives.Add(newObjective.ReadableID, newObjective);
                     }
                 }
                 OnActiveQuestsChanged?.Invoke(_trackedQuests);
@@ -76,10 +107,10 @@ namespace SunsetSystems.Journal
             {
                 if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> questObjectives))
                 {
-                    if (questObjectives.Remove(objective.ID))
+                    if (questObjectives.Remove(objective.ReadableID))
                         OnActiveQuestsChanged?.Invoke(_trackedQuests);
                     else
-                        Debug.LogWarning($"Trying to fail objective {objective.ID} of quest {quest.Name} but it is not an active objective!");
+                        Debug.LogWarning($"Trying to fail objective {objective.ReadableID} of quest {quest.Name} but it is not an active objective!");
                 }
             }
         }
@@ -113,7 +144,7 @@ namespace SunsetSystems.Journal
                 _activeQuests.Add(quest.ID, quest);
                 _trackedQuests.Add(quest);
                 Dictionary<string, Objective> questObjectives = new();
-                quest.InitialObjectives.ForEach(o => questObjectives.Add(o.ID, o));
+                quest.InitialObjectives.ForEach(objective => questObjectives.Add(objective.ReadableID, objective));
                 _currentObjectives.Add(quest.ID, questObjectives);
                 quest.Begin();
                 return true;
@@ -188,5 +219,47 @@ namespace SunsetSystems.Journal
             }
             return false;
         }
+
+        public object GetSaveData()
+        {
+            QuestJournalSaveData saveData = new();
+            saveData.CurrentObjectives = new();
+            foreach (string questKey in _currentObjectives.Keys)
+            {
+                Dictionary<string, Objective> objectives = new();
+                foreach (string objectiveKey in _currentObjectives[questKey].Keys)
+                {
+                    objectives.Add(objectiveKey, _currentObjectives[questKey][objectiveKey]);
+                }
+                saveData.CurrentObjectives.Add(questKey, objectives);
+            }
+            saveData.ActiveQuests = new(_activeQuests);
+            saveData.CompletedQuests = new(_completedQuests);
+            return saveData;
+        }
+
+        public void InjectSaveData(object data)
+        {
+            QuestJournalSaveData saveData = data as QuestJournalSaveData;
+            _activeQuests = new();
+            _activeQuests.AddRange(saveData.ActiveQuests);
+            _completedQuests = new();
+            _completedQuests.AddRange(saveData.CompletedQuests);
+            _currentObjectives = new(saveData.CurrentObjectives);
+            foreach (string key in _activeQuests.Keys)
+            {
+                foreach (Objective objective in _currentObjectives[key].Values)
+                {
+                    _activeQuests[key].ForceSubscribeToObjective(objective);
+                }
+            }
+        }
+
+        private class QuestJournalSaveData : SaveData
+        {
+            public Dictionary<string, Dictionary<string, Objective>> CurrentObjectives;
+            public Dictionary<string, Quest> ActiveQuests, CompletedQuests;
+        }
+            
     }
 }

@@ -38,8 +38,12 @@ namespace SunsetSystems.Input.CameraControl
         //Save/Load variables
         private UniqueId Unique => GetComponent<UniqueId>();
         public string DataKey => Unique.Id;
-        private const string BOUNDING_BOX = "_boundingBox";
-        private const string POSITION = "_position";
+
+
+        private void Awake()
+        {
+            ISaveable.RegisterSaveable(this);
+        }
 
         private void OnEnable()
         {
@@ -49,6 +53,11 @@ namespace SunsetSystems.Input.CameraControl
         private void OnDisable()
         {
             LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         private void OnAfterLevelLoad(LevelLoadingEventData data)

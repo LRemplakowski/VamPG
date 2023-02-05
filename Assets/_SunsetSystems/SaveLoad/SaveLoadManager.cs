@@ -9,12 +9,11 @@ namespace SunsetSystems.Loading
         private const string SCENE_INDEX_ID = "SceneIndex";
         private const string SAVE_DATA_KEY = "SAVE_DATA";
 
-        public static readonly HashSet<ISaveable> TrackedSaveDataProviders = new();
         private static GlobalSaveData _saveData = new();
 
         public static void SaveObjects()
         {
-            foreach (ISaveable saveable in TrackedSaveDataProviders)
+            foreach (ISaveable saveable in ISaveable.Saveables)
             {
                 _saveData.UpdateSaveData(saveable);
             }
@@ -25,7 +24,7 @@ namespace SunsetSystems.Loading
         public static void LoadObjects()
         {
             _saveData = ES3.Load<GlobalSaveData>(SAVE_DATA_KEY);
-            foreach (ISaveable saveable in TrackedSaveDataProviders)
+            foreach (ISaveable saveable in ISaveable.Saveables)
             {
                 saveable.InjectSaveData(_saveData.GetData(saveable.DataKey));
             }

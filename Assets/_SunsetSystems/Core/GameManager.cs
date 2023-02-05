@@ -1,11 +1,14 @@
 ﻿using SunsetSystems.Utils;
 using UnityEngine;
 using System;
+using SunsetSystems.Loading;
+using CleverCrow.Fluid.UniqueIds;
 
 namespace SunsetSystems.Game
 {
+    [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(Tagger))]
-    public class GameManager : Singleton<GameManager>
+    public class GameManager : Singleton<GameManager>, ISaveable
     {
         public static event Action<GameState> OnGameStateChanged;
 
@@ -24,6 +27,21 @@ namespace SunsetSystems.Game
             }
         }
 
+        public string DataKey => _uniqueId.Id;
+
+        private UniqueId _uniqueId;
+
+        protected override void Awake()
+        {
+            _uniqueId ??= GetComponent<UniqueId>();
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
+        }
+
         public static string GetLanguage()
         {
             return "EN";
@@ -32,6 +50,24 @@ namespace SunsetSystems.Game
         public static bool IsCurrentState(GameState state)
         {
             return CurrentState.Equals(state);
+        }
+
+        public object GetSaveData()
+        {
+            GameManagerSaveData saveData = new GameManagerSaveData();
+            saveData.CurrentState = CurrentState;
+            return saveData;
+        }
+
+        public void InjectSaveData(object data)
+        {
+            GameManagerSaveData savedData = data as GameManagerSaveData;
+            CurrentState = savedData.CurrentState;
+        }
+
+        private class GameManagerSaveData : SaveData
+        {
+            public GameState CurrentState;
         }
     }
 

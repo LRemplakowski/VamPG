@@ -18,8 +18,13 @@ namespace SunsetSystems.Experience
         protected override void Awake()
         {
             base.Awake();
-            SaveLoadManager.TrackedSaveDataProviders.Add(this);
+            ISaveable.RegisterSaveable(this);
             _unique ??= GetComponent<UniqueId>();
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         public static void AddCreatureToExperienceManager(string creatureID)

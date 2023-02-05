@@ -16,7 +16,7 @@ namespace SunsetSystems.Loading
         public LevelLoadingData CachedTransitionData { get; private set; }
         private int _latestLoadedSceneIndex;
 
-        public static Action<LevelLoadingEventData> OnBeforeLevelLoad, OnAfterLevelLoad;
+        public static Action<LevelLoadingEventData> OnBeforeLevelLoad, OnAfterLevelLoad, OnAfterSaveLoad;
 
         private void OnEnable()
         {
@@ -81,6 +81,7 @@ namespace SunsetSystems.Loading
             OnAfterLevelLoad?.Invoke(loadingEventData);
             SaveLoadManager.LoadObjects();
             await IInitialized.LateInitializeObjectsAsync();
+            OnAfterSaveLoad?.Invoke(loadingEventData);
             await DisableLoadingScreen();
         }
 

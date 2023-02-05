@@ -1,22 +1,23 @@
 ﻿using SunsetSystems.Entities.Data;
+using SunsetSystems.Resources;
 using System;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public struct CreatureData
+    public class CreatureData
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
         public readonly string ID;
-        [ES3Serializable]
-        public Sprite Portrait;
+        public string PortraitFileName;
+        public Sprite Portrait => ResourceLoader.GetPortrait(PortraitFileName);
         public Faction Faction;
         public BodyType BodyType;
         public CreatureType CreatureType;
-        [ES3Serializable]
-        public TextAsset UmaPreset;
+        public string UmaPresetFileName;
+        public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
         public RuntimeAnimatorController AnimatorControllerAsset;
         public StatsData Stats;
         public EquipmentData Equipment;
@@ -28,11 +29,11 @@ namespace SunsetSystems.Entities.Characters
             FirstName = config.Name;
             LastName = config.LastName;
             ID = config.ReadableID;
-            Portrait = config.Portrait;
+            PortraitFileName = config.PortraitFileName;
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
-            UmaPreset = config.UmaPreset;
+            UmaPresetFileName = config.UmaPresetFileName;
             AnimatorControllerAsset = config.AnimatorController;
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
@@ -40,15 +41,9 @@ namespace SunsetSystems.Entities.Characters
             Money = config.EquipmentConfig.Money;
         }
 
-        //public CreatureUIData GetCreatureUIData()
-        //{
-        //    Tracker tracker = Stats.Trackers.GetTracker(TrackerType.Health)
-        //    HealthData healthData = new HealthData(. );
-        //    CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
-        //        Data.Portrait,
-        //        healthData,
-        //        0);
-        //    return builder.Create();
-        //}
+        public CreatureData()
+        {
+
+        }
     }
 }

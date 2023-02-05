@@ -53,7 +53,7 @@ namespace SunsetSystems.Loading
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
-                _ = UnloadGameScene();
+                await UnloadGameScene();
             }
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
@@ -70,7 +70,7 @@ namespace SunsetSystems.Loading
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
-                _ = UnloadGameScene();
+                await UnloadGameScene();
             }
             LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             CachedTransitionData = data;
@@ -146,7 +146,8 @@ namespace SunsetSystems.Loading
         public async Task UnloadGameScene()
         {
             await SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
-            
+            await UnityEngine.Resources.UnloadUnusedAssets();
+
         }
 
         private async Task DoLoadingByName()

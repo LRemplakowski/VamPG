@@ -26,15 +26,15 @@ namespace SunsetSystems.Entities.Characters
         private string _readableIDOverride = "";
         public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [SerializeField]
-        private Sprite _portrait;
-        public Sprite Portrait { get => _portrait; }
+        private string _portraitFileName;
+        public string PortraitFileName { get => _portraitFileName; }
         [SerializeField]
         private StatsConfig _statsConfig;
         public StatsConfig StatsAsset { get => _statsConfig; }
         [field: SerializeField]
         public InventoryConfig EquipmentConfig { get; private set; }
         [field: SerializeField]
-        public TextAsset UmaPreset { get; private set; }
+        public string UmaPresetFileName { get; private set; }
         [SerializeField]
         private RuntimeAnimatorController _animatorController;
         public RuntimeAnimatorController AnimatorController => _animatorController;
@@ -53,8 +53,6 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnEnable()
         {
-            //if (_portrait == null)
-            //    _portrait = UnityEngine.Resources.Load<Sprite>("DEBUG/missing");
             //if (_statsConfig == null)
             //    _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
             //if (EquipmentConfig == null)

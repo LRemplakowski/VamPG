@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
-using NaughtyAttributes;
 using System;
-using Apex;
 
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public struct EquipmentData
+    public class EquipmentData
     {
         public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
         public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
@@ -23,13 +21,6 @@ namespace SunsetSystems.Entities.Characters
 
         private string _selectedWeapon;
 
-        public static EquipmentData Initialize()
-        {
-            EquipmentData data = new();
-            data.EquipmentSlots = GetSlotsPreset();
-            return data;
-        }
-
         private static StringEquipmentSlotDictionary GetSlotsPreset()
         {
             StringEquipmentSlotDictionary equipmentSlots = new();
@@ -40,6 +31,11 @@ namespace SunsetSystems.Entities.Characters
             equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
             equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
             return equipmentSlots;
+        }
+
+        public EquipmentData()
+        {
+            EquipmentSlots = GetSlotsPreset();
         }
 
         public EquipmentData(InventoryConfig config)

@@ -1,10 +1,7 @@
 ﻿using CleverCrow.Fluid.UniqueIds;
-using SunsetSystems.Constants;
 using SunsetSystems.Game;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
-using System;
-using System.EnterpriseServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -156,7 +153,7 @@ namespace SunsetSystems.Input.CameraControl
         public object GetSaveData()
         {
             CameraSaveData saveData = new();
-            saveData._currentBoundingBox = _currentBoundingBox;
+            saveData._currentBoundingBoxTag = _currentBoundingBox.GetComponent<Tagger>().tag;
             saveData._position = transform.position;
             return saveData;
         }
@@ -164,14 +161,14 @@ namespace SunsetSystems.Input.CameraControl
         public void InjectSaveData(object data)
         {
             CameraSaveData saveData = data as CameraSaveData;
-            _currentBoundingBox = saveData._currentBoundingBox;
+            _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData._currentBoundingBoxTag);
             ForceToPosition(saveData._position);
         }
     }
 
     public class CameraSaveData : SaveData
     {
-        public BoundingBox _currentBoundingBox;
+        public string _currentBoundingBoxTag;
         public Vector3 _position;
     }
 }

@@ -29,6 +29,11 @@ namespace SunsetSystems.Inventory
             _equippedItem = null;
         }
 
+        public EquipmentSlot()
+        {
+
+        }
+
         public EquipableItem GetEquippedItem()
         {
             return _equippedItem;

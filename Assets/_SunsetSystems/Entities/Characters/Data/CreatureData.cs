@@ -19,7 +19,9 @@ namespace SunsetSystems.Entities.Characters
         public string UmaPresetFileName;
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
         public RuntimeAnimatorController AnimatorControllerAsset;
+        [ES3Serializable]
         public StatsData Stats;
+        [ES3Serializable]
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
         public float Money;

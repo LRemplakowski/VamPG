@@ -53,18 +53,12 @@ namespace SunsetSystems.Entities.Characters
 
         public void SetSelectedWeapon(SelectedWeapon weapon)
         {
-            switch (weapon)
+            _selectedWeapon = weapon switch
             {
-                case SelectedWeapon.Primary:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
-                case SelectedWeapon.Secondary:
-                    _selectedWeapon = SLOT_WEAPON_SECONDARY;
-                    break;
-                default:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
-            }
+                SelectedWeapon.Primary => SLOT_WEAPON_PRIMARY,
+                SelectedWeapon.Secondary => SLOT_WEAPON_SECONDARY,
+                _ => SLOT_WEAPON_PRIMARY,
+            };
         }
 
         public Weapon GetSelectedWeapon()

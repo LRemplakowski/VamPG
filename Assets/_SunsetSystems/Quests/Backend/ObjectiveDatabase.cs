@@ -40,17 +40,17 @@ namespace SunsetSystems
             _objectiveRegistry.Values.ToList().ForEach(objective => _objectiveAccessorRegistry.Add(objective.ReadableID, objective.DatabaseID));
         }
 
-        public bool TryGetQuest(string objectiveID, out Objective objective)
+        public bool TryGetEntry(string objectiveID, out Objective objective)
         {
             return _objectiveRegistry.TryGetValue(objectiveID, out objective);
         }
 
-        public bool TryGetQuestByReadableID(string readableID, out Objective objective)
+        public bool TryGetEntryByReadableID(string readableID, out Objective objective)
         {
-            return TryGetQuest(_objectiveAccessorRegistry[readableID], out objective);
+            return TryGetEntry(_objectiveAccessorRegistry[readableID], out objective);
         }
 
-        public bool RegisterObjective(Objective objective)
+        public bool Register(Objective objective)
         {
             if (_objectiveRegistry.ContainsKey(objective.DatabaseID))
             {
@@ -64,7 +64,7 @@ namespace SunsetSystems
             return true;
         }
 
-        public void UnregisterObjective(Objective objective)
+        public void Unregister(Objective objective)
         {
             if (_objectiveRegistry.Remove(objective.DatabaseID))
             {

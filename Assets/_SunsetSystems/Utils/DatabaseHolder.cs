@@ -11,7 +11,7 @@ namespace SunsetSystems.Utils.Database
 
         private void Awake()
         {
-            _databases.ForEach(d => Debug.Log($"Database {d.ToString()}"));
+            _databases.ForEach(d => Debug.Log($"Initializing database {d}"));
         }
     }
 }

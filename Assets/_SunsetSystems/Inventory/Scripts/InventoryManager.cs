@@ -79,7 +79,7 @@ namespace SunsetSystems.Inventory
                 {
                     if (TryUnequipItemFromSlot(characterID, slotID) == false)
                     {
-                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + characterID + "!");
+                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ReadableID + " from slot " + slotID + " for creature " + characterID + "!");
                         return false;
                     }
                 }
@@ -97,7 +97,7 @@ namespace SunsetSystems.Inventory
                 }
                 else
                 {
-                    Debug.LogError($"Failed to equip item {item.ItemName} in slot {slot.Name}!");
+                    Debug.LogError($"Failed to equip item {item.ReadableID} in slot {slot.Name}!");
                 }
                 return success;
             }

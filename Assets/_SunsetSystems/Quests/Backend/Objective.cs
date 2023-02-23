@@ -34,13 +34,13 @@ namespace SunsetSystems.Journal
             {
                 AssignNewID();
             }
-            ObjectiveDatabase.Instance?.RegisterObjective(this);
+            ObjectiveDatabase.Instance?.Register(this);
         }
 
         [Button("Force Validate")]
         private void OnValidate()
         {
-            ObjectiveDatabase.Instance?.RegisterObjective(this);
+            ObjectiveDatabase.Instance?.Register(this);
         }
 
         private void Reset()
@@ -50,7 +50,7 @@ namespace SunsetSystems.Journal
 
         private void OnDestroy()
         {
-            ObjectiveDatabase.Instance.UnregisterObjective(this);
+            ObjectiveDatabase.Instance.Unregister(this);
         }
 
         private void AssignNewID()

@@ -1,37 +1,46 @@
 ﻿using UnityEditor;
 using UnityEngine;
+
 namespace GeNa.Core
 {
     [CustomEditor(typeof(GeNaExtrusionExtension))]
     public class GeNaExtrusionExtensionEditor : GeNaSplineExtensionEditor
     {
-        private GeNaExtrusionExtension Extrusion;
+        private GeNaExtrusionExtension m_extension;
+        private bool m_isAsset;
+
         protected void OnEnable()
         {
-            Extrusion = target as GeNaExtrusionExtension;
-
             if (m_editorUtils == null)
                 m_editorUtils = PWApp.GetEditorUtils(this, "GeNaSplineExtensionEditor");
+            m_extension = target as GeNaExtrusionExtension;
+            m_isAsset = AssetDatabase.Contains(m_extension);
         }
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            if (Extrusion == null)
+            if (m_extension == null)
+                m_extension = target as GeNaExtrusionExtension;
+            EditorGUI.BeginChangeCheck();
             {
-                Extrusion = target as GeNaExtrusionExtension;
+                m_extension.SharedMaterial = (Material)m_editorUtils.ObjectField("Extrusion Material", m_extension.SharedMaterial, typeof(Material), true, HelpEnabled);
+                m_extension.Smoothness = m_editorUtils.Slider("Mesh Smoothness", m_extension.Smoothness, 1f, 5f, HelpEnabled);
+                m_extension.Width = m_editorUtils.FloatField("Mesh Width", m_extension.Width, HelpEnabled);
+                m_extension.HeightOffset = m_editorUtils.FloatField("Mesh Height Offset", m_extension.HeightOffset, HelpEnabled);
+                m_extension.SnapToGround = m_editorUtils.Toggle("Mesh Snap to Terrain", m_extension.SnapToGround, HelpEnabled);
+                m_extension.Curve = m_editorUtils.CurveField("Extrusion", m_extension.Curve, HelpEnabled);
+                m_extension.SplitAtTerrains = m_editorUtils.Toggle("SplitMeshesAtTerrains", m_extension.SplitAtTerrains, HelpEnabled);
+                if (!m_isAsset)
+                {
+                    if (m_editorUtils.Button("BakeExtrusion"))
+                        m_extension.Bake();
+                }
             }
-
-            Extrusion.SharedMaterial = (Material) m_editorUtils.ObjectField("Extrusion Material", Extrusion.SharedMaterial, typeof(Material), true, HelpEnabled);
-            Extrusion.Smoothness = m_editorUtils.Slider("Mesh Smoothness", Extrusion.Smoothness, 1f, 5f, HelpEnabled);
-            Extrusion.Width = m_editorUtils.FloatField("Mesh Width", Extrusion.Width, HelpEnabled);
-            Extrusion.HeightOffset = m_editorUtils.FloatField("Mesh Height Offset", Extrusion.HeightOffset, HelpEnabled);
-            Extrusion.SnapToGround = m_editorUtils.Toggle("Mesh Snap to Terrain", Extrusion.SnapToGround, HelpEnabled);
-            Extrusion.Curve = m_editorUtils.CurveField("Extrusion", Extrusion.Curve, HelpEnabled);
-            Extrusion.SplitAtTerrains = m_editorUtils.Toggle("SplitMeshesAtTerrains", Extrusion.SplitAtTerrains, HelpEnabled);
-
-            if (m_editorUtils.Button("BakeExtrusion"))
+            if (EditorGUI.EndChangeCheck())
             {
-                Extrusion.Bake();
+                EditorUtility.SetDirty(m_extension);
+                AssetDatabase.SaveAssets();
             }
         }
     }

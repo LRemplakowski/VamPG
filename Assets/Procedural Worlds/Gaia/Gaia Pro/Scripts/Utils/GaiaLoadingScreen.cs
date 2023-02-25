@@ -91,21 +91,47 @@ namespace Gaia
         /// </summary>
         private void OnLoadProgressTimeOut(List<TerrainScene> missingScenes)
         {
+
+            string message = "Gaia Loading Screen Timeout, closing down loading screen.\r\n";
+            message += "If you feel that there is no error but the terrain loading simply needs more time, try to increase the Timeout value in the Terrain Loader Manager.\r\n";
+            message += "The following scenes are still not loaded:\r\n";
+
             foreach (TerrainScene terrainScene in missingScenes)
             {
-                string regularReferences = "";
-                string impostorReferences = "";
-
-                foreach (GameObject regularGO in terrainScene.RegularReferences)
+                if (terrainScene == null)
                 {
-                    regularReferences += regularGO.name + ", ";
+                    continue;
                 }
 
-                foreach (GameObject impostorGO in terrainScene.ImpostorReferences)
+                if (terrainScene.RegularReferences.Count > 0)
                 {
-                    impostorReferences += impostorGO.name + ", ";
+                    message += $"\r\n {terrainScene.GetTerrainName()}";
+                    message += $"\r\n Referencing Objects:\r\n";
+
+                    foreach (GameObject regularGO in terrainScene.RegularReferences)
+                    {
+                        if (regularGO != null)
+                        {
+                            message += regularGO.name + ", ";
+                        }
+                    }
                 }
+                if (terrainScene.ImpostorReferences.Count > 0)
+                {
+                    message += $"\r\n {terrainScene.GetImpostorName()}";
+                    message += $"\r\n Referencing Objects:\r\n";
+
+                    foreach (GameObject regularGO in terrainScene.ImpostorReferences)
+                    {
+                        if (regularGO != null)
+                        {
+                            message += regularGO.name + ", ";
+                        }
+                    }
+                }
+                message += "\r\n";
             }
+            Debug.LogWarning(message);
             OnLoadProgressEnded();
         }
             

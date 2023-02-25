@@ -137,6 +137,16 @@ namespace Gaia
                 m_editorUtils.Dispose();
             }
         }
+
+        public void OnValidate()
+        {
+            if (m_profile != null)
+            {
+                Transform transform = m_profile.gameObject.transform;
+                transform.hideFlags = HideFlags.HideInInspector | HideFlags.NotEditable;
+            }
+        }
+
         public override void OnInspectorGUI()
         {
             if (dropdownGUIStyle == null)
@@ -149,8 +159,6 @@ namespace Gaia
 
             if (m_profile != null)
             {
-                Transform transform = m_profile.gameObject.transform;
-                transform.hideFlags = HideFlags.HideInInspector | HideFlags.NotEditable;
                 if (m_profile.m_mainCamera == null)
                 {
                     m_profile.m_mainCamera = GaiaUtils.GetCamera();

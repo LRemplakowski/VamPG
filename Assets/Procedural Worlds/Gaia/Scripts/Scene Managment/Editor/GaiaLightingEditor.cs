@@ -583,6 +583,7 @@ namespace Gaia
                             if (timeOfDay != null)
                             {
                                 Selection.activeObject = timeOfDay;
+                                EditorGUIUtility.ExitGUI();
                             }
                         }
                     }

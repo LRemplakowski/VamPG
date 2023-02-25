@@ -1403,6 +1403,20 @@ namespace Gaia
             SceneView.lastActiveSceneView.cameraSettings.farClip = worldSize * 2f;
         }
 
+        public void OnValidate()
+        {
+            if (m_spawner.m_settings.m_isWorldmapSpawner)
+            {
+                if (m_spawner.GetComponent<Transform>().hideFlags != HideFlags.HideInInspector)
+                {
+                    m_spawner.GetComponent<Transform>().hideFlags = HideFlags.HideInInspector;
+                    m_spawner.transform.position = Vector3.zero;
+                    m_spawner.transform.rotation = Quaternion.identity;
+                    m_spawner.transform.localScale = Vector3.one;
+                }
+            }
+        }
+
         /// <summary>
         /// Draw the UI
         /// </summary>
@@ -1541,14 +1555,6 @@ namespace Gaia
 
             if (m_spawner.m_settings.m_isWorldmapSpawner)
             {
-                if (m_spawner.GetComponent<Transform>().hideFlags != HideFlags.HideInInspector)
-                {
-                    m_spawner.GetComponent<Transform>().hideFlags = HideFlags.HideInInspector;
-                    m_spawner.transform.position = Vector3.zero;
-                    m_spawner.transform.rotation = Quaternion.identity;
-                    m_spawner.transform.localScale = Vector3.one;
-                }
-
                 m_spawner.m_terrainGeneratorPanelUnfolded = m_editorUtils.Panel("GenerateTerrain", DrawGenerateTerrainPanel, true);
             }
             else
@@ -1707,7 +1713,7 @@ namespace Gaia
                 //Display only short size info when running out of space on the UI
                 if (EditorGUIUtility.currentViewWidth > 400)
                 {
-                    worldSizeInfo = String.Format(" - {0} sq, Terrains: {2}", worldXText, worldZText, numberOfTerrains);
+                    worldSizeInfo = String.Format(" - {0} size, Terrains: {2}", worldXText, worldZText, numberOfTerrains);
                 }
                 else
                 {
@@ -2641,6 +2647,15 @@ namespace Gaia
                                 protoDetail.m_minHeight = terrainDetail.minHeight;
                                 protoDetail.m_minWidth = terrainDetail.minWidth;
                                 protoDetail.m_noiseSpread = terrainDetail.noiseSpread;
+#if UNITY_2022_2_OR_NEWER
+                                protoDetail.m_alignToGround = terrainDetail.alignToGround;
+                                protoDetail.m_density = terrainDetail.density;
+                                protoDetail.m_holeEdgePadding = terrainDetail.holeEdgePadding;
+                                protoDetail.m_noiseSeed = terrainDetail.noiseSeed;
+                                protoDetail.m_positionJitter = terrainDetail.positionJitter;
+                                protoDetail.m_targetCoverage = terrainDetail.targetCoverage;
+                                protoDetail.m_useDensityScaling = terrainDetail.useDensityScaling;
+#endif
                                 newRule.m_imageMasks = new ImageMask[0];
                                 //always fold out the resource settings for new rules so user can edit directly
                                 newRule.m_isFoldedOut = false;
@@ -6595,6 +6610,15 @@ namespace Gaia
                             exisitingPrototypes[detailPrototypeID].prototype = resourceProtoDetail.m_detailProtoype;
                             exisitingPrototypes[detailPrototypeID].prototypeTexture = resourceProtoDetail.m_detailTexture;
                             exisitingPrototypes[detailPrototypeID].renderMode = resourceProtoDetail.m_renderMode;
+#if UNITY_2022_2_OR_NEWER
+                            exisitingPrototypes[detailPrototypeID].alignToGround = resourceProtoDetail.m_alignToGround;
+                            exisitingPrototypes[detailPrototypeID].density = resourceProtoDetail.m_density;
+                            exisitingPrototypes[detailPrototypeID].holeEdgePadding = resourceProtoDetail.m_holeEdgePadding;
+                            exisitingPrototypes[detailPrototypeID].noiseSeed = resourceProtoDetail.m_noiseSeed;
+                            exisitingPrototypes[detailPrototypeID].positionJitter = resourceProtoDetail.m_positionJitter;
+                            exisitingPrototypes[detailPrototypeID].targetCoverage = resourceProtoDetail.m_targetCoverage;
+                            exisitingPrototypes[detailPrototypeID].useDensityScaling = resourceProtoDetail.m_useDensityScaling;
+#endif
                             if (resourceProtoDetail.m_detailProtoype != null)
                             {
                                 exisitingPrototypes[detailPrototypeID].usePrototypeMesh = true;

@@ -136,7 +136,7 @@ namespace GeNa.Core
             {
                 if (recordUndo)
                 {
-                    terrainEntity.name = "Clear Trees";
+                    terrainEntity.name = EffectType.ToString();
                     GeNaUndoRedo.RecordUndo(terrainEntity);
                 }
                 terrainEntity.Perform();

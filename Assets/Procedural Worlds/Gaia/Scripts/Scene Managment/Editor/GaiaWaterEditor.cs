@@ -556,7 +556,17 @@ namespace Gaia
         {
             if (m_renderPipeline == GaiaConstants.EnvironmentRenderer.HighDefinition)
             {
-                EditorGUILayout.HelpBox("Underwater effects are not yet supported in HDRP.", MessageType.Info);
+                m_profile.m_underwaterParticles = (GameObject)m_editorUtils.ObjectField("UnderwaterParticlesPrefab", m_profile.m_underwaterParticles, typeof(GameObject), false, helpEnabled, GUILayout.Height(16f));
+                if (m_profile.m_underwaterParticles == null)
+                {
+                    EditorGUILayout.HelpBox("Missing underwater particles prefab, please add one.", MessageType.Error);
+                }
+                m_profile.m_supportUnderwaterEffects = m_editorUtils.Toggle("SupportUnderwaterEffects", m_profile.m_supportUnderwaterEffects, helpEnabled);
+                if (m_profile.m_supportUnderwaterEffects)
+                {
+                    m_profile.m_supportUnderwaterFog = m_editorUtils.Toggle("SupportUnderwaterFog", m_profile.m_supportUnderwaterFog, helpEnabled);
+                    m_profile.m_supportUnderwaterParticles = m_editorUtils.Toggle("SupportUnderwaterParticles", m_profile.m_supportUnderwaterParticles, helpEnabled);
+                }
             }
             else
             {
@@ -576,12 +586,8 @@ namespace Gaia
                 if (m_profile.m_supportUnderwaterEffects)
                 {
                     m_profile.m_supportUnderwaterPostProcessing = m_editorUtils.Toggle("SupportUnderwaterPostProcessing", m_profile.m_supportUnderwaterPostProcessing, helpEnabled);
-
                     m_profile.m_supportUnderwaterFog = m_editorUtils.Toggle("SupportUnderwaterFog", m_profile.m_supportUnderwaterFog, helpEnabled);
-
                     m_profile.m_supportUnderwaterParticles = m_editorUtils.Toggle("SupportUnderwaterParticles", m_profile.m_supportUnderwaterParticles, helpEnabled);
-
-                    EditorGUILayout.HelpBox("Underwater effects are in 'Experimental' These will change and be updated over time.", MessageType.Info);
                 }
             }
         }

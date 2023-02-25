@@ -1800,7 +1800,7 @@ namespace Gaia
             //Release the texture references from the biome controller, if any
             if (biomeController != null)
             {
-                biomeController.m_settings.ClearImageMaskTextures();
+                biomeController.m_settings.ClearImageMaskTextures(false);
             }
 
             return finalOutputTexture;
@@ -3607,6 +3607,10 @@ namespace Gaia
             {
                 stamper.m_worldDesignerPreviewBounds.center = m_worldDesignerUserBounds.center;
                 stamper.m_worldDesignerPreviewBounds.size = m_worldDesignerUserBounds.size;
+                if (m_worldCreationSettings.m_gaiaDefaults == null)
+                {
+                    m_worldCreationSettings.m_gaiaDefaults = GaiaSettings.m_currentDefaults;
+                }
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewHeightmapResolution = Math.Min(4097, m_worldCreationSettings.m_xTiles * m_worldCreationSettings.m_gaiaDefaults.m_heightmapResolution);
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewRange = Mathf.RoundToInt(m_worldCreationSettings.m_xTiles * m_worldCreationSettings.m_tileSize);
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewTerrainHeight = m_worldCreationSettings.m_tileHeight;
@@ -6051,12 +6055,6 @@ namespace Gaia
                             DestroyImmediate(GOtoDelete);
                             deletedSomething = true;
                         }
-                    }
-                    //if the target is empty now, we can remove it as well to keep scene clean
-                    if (target.childCount <= 0)
-                    {
-                        deletedSomething = true;
-                        DestroyImmediate(target.gameObject);
                     }
                 }
                 //if we deleted something the scene we deleted from should be marked as dirty.

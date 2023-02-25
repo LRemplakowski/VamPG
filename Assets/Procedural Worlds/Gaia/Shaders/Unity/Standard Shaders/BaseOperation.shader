@@ -40,6 +40,7 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
+            #include "../../Terrain.cginc"
 
             sampler2D _MainTex;
 			sampler2D _GlobalMaskTex;
@@ -100,12 +101,12 @@
 			{
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
 				float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
                 // out of bounds multiplier
                 float oob = all(saturate(brushUV) == brushUV) ? 1.0f : 0.0f;
 				//value from the image mask texture multiplied with the multiplicator
-				float globalMaskValue = UnpackHeightmap(tex2D(_GlobalMaskTex, brushUV));
-                float brushShape = oob * UnpackHeightmap(tex2D(_BrushTex, brushUV));
+				float globalMaskValue = InternalUnpackHeightmap(tex2D(_GlobalMaskTex, brushUV));
+                float brushShape = oob * InternalUnpackHeightmap(tex2D(_BrushTex, brushUV));
 				float finalBrushLevel = BRUSH_STRENGTH * brushShape; // * transformheight * localMaskValue; 
 				
 				//only return the height value changed by the brush if we are actually in bounds
@@ -135,7 +136,7 @@
             {
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
 				float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float finalheight = GetFinalHeight(i);
 
 				//process baseLevel
@@ -160,9 +161,9 @@
 				}
 
 				if(finalheight>=height)
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
 				else
-				return PackHeightmap(height);
+				return InternalPackHeightmap(height);
 				
             }
             ENDCG
@@ -180,7 +181,7 @@
             {
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
                 float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float finalheight = GetFinalHeight(i);
 
 				//process baseLevel
@@ -205,9 +206,9 @@
 				}
 
 				if(finalheight<=height)
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
 				else
-				return PackHeightmap(height);
+				return InternalPackHeightmap(height);
 				
             }
             ENDCG
@@ -224,10 +225,10 @@
             float4 BlendHeight(v2f i) : SV_Target
             {
               float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float finalheight = GetFinalHeight(i);
 
-				return PackHeightmap((finalheight * _BlendStrength) + (height * (1-_BlendStrength)));
+				return InternalPackHeightmap((finalheight * _BlendStrength) + (height * (1-_BlendStrength)));
             }
             ENDCG
         }
@@ -243,9 +244,9 @@
             float4 SetHeight(v2f i) : SV_Target
             {
                float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float finalheight = GetFinalHeight(i);
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
             }
             ENDCG
         }
@@ -262,7 +263,7 @@
             {
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
 				float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float oob = all(saturate(brushUV) == brushUV) ? 1.0f : 0.0f;
 				if(!oob)
 				{
@@ -297,9 +298,9 @@
 				}
 				
 				if(finalheight>=height)
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
 				else
-				return PackHeightmap(height);
+				return InternalPackHeightmap(height);
 				
 
             }
@@ -322,7 +323,7 @@
 
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
 				float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float oob = all(saturate(brushUV) == brushUV) ? 1.0f : 0.0f;
 				if(!oob)
 				{
@@ -358,9 +359,9 @@
 				}
 
 				if(finalheight<=height)
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
 				else
-				return PackHeightmap(height);
+				return InternalPackHeightmap(height);
 			
             }
 			ENDCG
@@ -383,23 +384,23 @@
 
 				float2 brushUV = PaintContextUVToBrushUV(i.pcUV);
 				float2 heightmapUV = PaintContextUVToHeightmapUV(i.pcUV);
-				float height = UnpackHeightmap(tex2D(_MainTex, heightmapUV));
+				float height = InternalUnpackHeightmap(tex2D(_MainTex, heightmapUV));
 				float finalheight = GetFinalHeight(i);
-				return PackHeightmap(finalheight);
+				return InternalPackHeightmap(finalheight);
 
-				//float erodedHeight = UnpackHeightmap(tex2D(_ErosionTex, heightmapUV));
+				//float erodedHeight = InternalUnpackHeightmap(tex2D(_ErosionTex, heightmapUV));
 
 				 // out of bounds multiplier
                 /*float oob = all(saturate(brushUV) == brushUV) ? 1.0f : 0.0f;
 				//value from the image mask texture multiplied with the multiplicator
-				float imageMask = UnpackHeightmap(tex2D(_ImageMaskTex, brushUV));
+				float imageMask = InternalUnpackHeightmap(tex2D(_ImageMaskTex, brushUV));
 				if(_InvertImageMask>0)
 				{
 					//Invert the imagemask
 					imageMask=1.0f-imageMask;
 				}
 				
-				float distanceMask = UnpackHeightmap(tex2D(_DistanceMaskTex, smoothstep(0,sqrt(1)/2,distance(brushUV,float2(0.5f,0.5f)))));
+				float distanceMask = InternalUnpackHeightmap(tex2D(_DistanceMaskTex, smoothstep(0,sqrt(1)/2,distance(brushUV,float2(0.5f,0.5f)))));
                 
 				
 
@@ -412,11 +413,11 @@
 				//otherwise we get an ugly square base when rotating stamps
 				/*if(all(saturate(brushUV) == brushUV))
 				{
-					return PackHeightmap(clamp(erodedHeight, 0, 0.5f));
+					return InternalPackHeightmap(clamp(erodedHeight, 0, 0.5f));
 				}
 				else
 				{
-					return PackHeightmap(height);;
+					return InternalPackHeightmap(height);;
 				}*/
 				
 			

@@ -30,6 +30,9 @@ namespace Gaia
         private BoundsDouble m_sceneViewCameraLoadingBounds = new BoundsDouble(Vector3Double.zero, new Vector3Double(500f, 500f, 500f));
         [SerializeField]
         private CenterSceneViewLoadingOn m_centerSceneViewLoadingOn = CenterSceneViewLoadingOn.WorldOrigin;
+        [SerializeField]
+        private DateTime m_assembliesReloadTimeStamp;
+
 #if GAIA_PRO_PRESENT
         public List<FloatingPointFixMember> m_allFloatingPointFixMembers = new List<FloatingPointFixMember>();
         public List<ParticleSystem> m_allWorldSpaceParticleSystems = new List<ParticleSystem>();
@@ -491,6 +494,14 @@ namespace Gaia
 #endif
         }
 
+        public void CheckAssemblyReloadThreshold()
+        {
+            if ((DateTime.Now - m_assembliesReloadTimeStamp).TotalMilliseconds > 10000)
+            {
+                m_assembliesAreReloading = false;
+            }
+        }
+
         private void Update()
         {
 #if GAIA_PRO_PRESENT
@@ -674,6 +685,7 @@ namespace Gaia
         public void OnBeforeAssemblyReload()
         {
             m_assembliesAreReloading = true;
+            m_assembliesReloadTimeStamp = DateTime.Now;
         }
 
         public void OnAfterAssemblyReload()
@@ -914,6 +926,7 @@ namespace Gaia
                 return;
             }
 #endif
+            CheckAssemblyReloadThreshold();
             //Do not accept any changes to load state while assemblies are being reloaded, this leads to errors in the editor.
             if (m_assembliesAreReloading)
             {

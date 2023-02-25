@@ -446,6 +446,8 @@ namespace Gaia
             }
             else
             {
+                TerrainLoaderManager.Instance.CheckAssemblyReloadThreshold();
+
                 if (!TerrainLoaderManager.Instance.m_assembliesAreReloading)
                 {
                     try
@@ -500,6 +502,7 @@ namespace Gaia
             }
 #endif
         }
+
 
 #if PW_ADDRESSABLES
         private void LoadAddressableSceneAsync(bool isImpostor)

@@ -146,17 +146,20 @@ namespace GeNa.Core
         /// <summary>
         /// Records a custom operation with given label and actions
         /// </summary>
-        public static void RecordOperation(Action perform, Action undo, Action dispose, string label, bool mergeBefore = false, bool mergeAfter = false)
+        public static void RecordOperation(Action perform, Action undo, Action dispose, string label, bool mergeBefore = false, bool mergeAfter = false, bool updateRecords = true)
         {
-            RecordOperation(new UndoProRecord(perform, undo, dispose, label, 0), mergeBefore, mergeAfter);
+            RecordOperation(new UndoProRecord(perform, undo, dispose, label, 0), mergeBefore, mergeAfter, updateRecords);
         }
         /// <summary>
         /// Records the given operation
         /// </summary>
-        private static void RecordOperation(UndoProRecord operation, bool mergeBefore = false, bool mergeAfter = false)
+        private static void RecordOperation(UndoProRecord operation, bool mergeBefore = false, bool mergeAfter = false, bool updateRecords = true)
         {
-            // First, make sure the internal records representation is updated
-            UpdateUndoRecords();
+            if (updateRecords)
+            {
+                // First, make sure the internal records representation is updated
+                UpdateUndoRecords();
+            }
 
             // Make sure this record isn't included in the previous group
             if (!mergeBefore && !inRecordStack)

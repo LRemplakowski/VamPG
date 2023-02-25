@@ -409,7 +409,7 @@ namespace Gaia
                 m_sunLightExists = true;
             }
 
-            if (m_moonLight == null)
+            if (WeatherPresent && m_moonLight == null)
             {
                 GameObject moonObject = GameObject.Find("Moon Light");
                 if (moonObject != null)
@@ -462,7 +462,7 @@ namespace Gaia
                 m_sunLight = GaiaUtils.GetMainDirectionalLight(false);
             }
 
-            if (m_moonLight == null)
+            if (WeatherPresent && m_moonLight == null)
             {
                 GameObject moonObject = GameObject.Find("Moon Light");
                 if (moonObject != null)

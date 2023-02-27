@@ -13,7 +13,7 @@ using System;
 namespace SunsetSystems.Combat
 {
     [RequireComponent(typeof(Tagger))]
-    public class CombatManager : Singleton<CombatManager>
+    public class CombatManager : MonoBehaviour, ICombatManager
     {
         public delegate void CombatBeginHandler(List<Creature> creaturesInCombat);
         public static event CombatBeginHandler CombatBegin;
@@ -29,8 +29,8 @@ namespace SunsetSystems.Combat
 
         private int turnCounter;
 
-        private static Creature _currentActiveActor;
-        public static Creature CurrentActiveActor
+        private Creature _currentActiveActor;
+        public Creature CurrentActiveActor
         {
             get => _currentActiveActor;
             private set
@@ -48,7 +48,7 @@ namespace SunsetSystems.Combat
         [field: SerializeField]
         public List<Creature> Actors { get; private set; }
 
-        public void SetCurrentActiveActor(int index)
+        private void SetCurrentActiveActor(int index)
         {
             Creature c = null;
             if (index < Actors.Count)
@@ -79,7 +79,7 @@ namespace SunsetSystems.Combat
             Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + turnCounter + "!");
         }
 
-        public async Task BeginEncounter(Encounter encounter)
+        public async void BeginEncounter(Encounter encounter)
         {
             CurrentEncounter = encounter;
             turnCounter = 0;
@@ -98,9 +98,8 @@ namespace SunsetSystems.Combat
             return creatures[0];
         }
 
-        public async Task EndEncounter(Encounter encounter)
+        public void EndEncounter(Encounter encounter)
         {
-            await Task.Yield();
             CombatEnd?.Invoke();
             Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(false));
             CurrentEncounter = null;
@@ -135,7 +134,7 @@ namespace SunsetSystems.Combat
             return turnCounter == 1;
         }
 
-        public static bool IsActiveActorPlayerControlled()
+        public bool IsActiveActorPlayerControlled()
         {
             return _currentActiveActor ? CurrentActiveActor.CombatBehaviour.IsPlayerControlled : false;
         }
@@ -143,11 +142,6 @@ namespace SunsetSystems.Combat
         public int GetRound()
         {
             return turnCounter;
-        }
-
-        public class CombatEventData
-        {
-
         }
     }
 }

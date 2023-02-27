@@ -5,7 +5,7 @@ using SunsetSystems.Constants;
 
 namespace SunsetSystems.Audio
 {
-    public class AudioManager : Singleton<AudioManager>
+    public class AudioManager : MonoBehaviour
     {
         [SerializeField]
         private AudioMixer _audioMixer;

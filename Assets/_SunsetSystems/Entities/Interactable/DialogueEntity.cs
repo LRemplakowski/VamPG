@@ -1,7 +1,7 @@
 ﻿using NaughtyAttributes;
 using Redcode.Awaiting;
 using SunsetSystems.Dialogue;
-using SunsetSystems.Loading;
+using SunsetSystems.LevelManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;

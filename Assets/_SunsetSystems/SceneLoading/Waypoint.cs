@@ -1,7 +1,7 @@
 using SunsetSystems.Utils;
 using UnityEngine;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.LevelManagement
 {
     public class Waypoint : MonoBehaviour
     {

@@ -5,9 +5,10 @@ using SunsetSystems.Utils;
 using UnityEngine.InputSystem.UI;
 using SunsetSystems.Game;
 using System;
+using Zenject;
 
 [RequireComponent(typeof(Tagger))]
-public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
+public class PlayerInputHandler : MonoBehaviour, IInitializable
 {
     [SerializeField]
     private PlayerInput playerInput;
@@ -35,14 +36,9 @@ public class PlayerInputHandler : InitializedSingleton<PlayerInputHandler>
             playerInput = GetComponent<PlayerInput>();
     }
 
-    public override void Initialize()
+    public void Initialize()
     {
         playerInput.uiInputModule = EventSystem.current.GetComponent<InputSystemUIInputModule>();
-    }
-
-    public override void LateInitialize()
-    {
-        
     }
 
     public void PrimaryAction(InputAction.CallbackContext context)

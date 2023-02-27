@@ -2,7 +2,7 @@ using Redcode.Awaiting;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.LevelManagement
 {
     public static class SaveLoadManager
     {

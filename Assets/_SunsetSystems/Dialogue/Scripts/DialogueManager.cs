@@ -7,18 +7,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Yarn.Unity;
+using Zenject;
 
 namespace SunsetSystems.Dialogue
 {
     [RequireComponent(typeof(Tagger))]
-    public class DialogueManager : Singleton<DialogueManager>, IResetable
+    public class DialogueManager : MonoBehaviour, IResetable, IDialogueManager
     {
         [SerializeField]
         private DialogueRunner _dialogueRunner;
         [field: SerializeField]
         public float DefaultTypewriterValue { get; private set; } = 15f;
 
-        protected override void Awake()
+        [Inject]
+        private IGameManager _gameManager;
+
+        protected void Awake()
         {
             _dialogueRunner ??= GetComponent<DialogueRunner>();
             if (PlayerPrefs.HasKey(SettingsConstants.TYPEWRITER_SPEED_KEY))
@@ -34,23 +38,23 @@ namespace SunsetSystems.Dialogue
             CleanupAfterDialogue();
         }
 
-        private void Start()
+        protected void Start()
         {
             DialogueHelper.InitializePersistentVariableStorage(_dialogueRunner.VariableStorage as PersistentVariableStorage);
         }
 
-        public static void RegisterView(DialogueViewBase view)
+        public void RegisterView(DialogueViewBase view)
         {
-            List<DialogueViewBase> views = Instance._dialogueRunner.dialogueViews.ToList();
+            List<DialogueViewBase> views = _dialogueRunner.dialogueViews.ToList();
             views.Add(view);
-            Instance._dialogueRunner.SetDialogueViews(views.ToArray());
+            _dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
-        public static void UnregisterView(DialogueViewBase view)
+        public void UnregisterView(DialogueViewBase view)
         {
-            List<DialogueViewBase> views = Instance?._dialogueRunner.dialogueViews.ToList();
+            List<DialogueViewBase> views = _dialogueRunner.dialogueViews.ToList();
             views?.Remove(view);
-            Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
+            _dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
         public bool StartDialogue(string startNode, YarnProject project = null)
@@ -66,13 +70,13 @@ namespace SunsetSystems.Dialogue
                 view.gameObject.SetActive(true);
             }
             _dialogueRunner.StartDialogue(startNode);
-            GameManager.CurrentState = GameState.Conversation;
+            _gameManager.CurrentState = GameState.Conversation;
             return true;
         }   
 
         public void CleanupAfterDialogue()
         {
-            GameManager.CurrentState = GameState.Exploration;
+            _gameManager.CurrentState = GameState.Exploration;
             foreach (DialogueViewBase view in _dialogueRunner.dialogueViews)
             {
                 view.gameObject.SetActive(false);

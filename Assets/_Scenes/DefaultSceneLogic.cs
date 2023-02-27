@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using SunsetSystems.Game;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.LevelManagement
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.LevelManagement
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {

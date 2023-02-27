@@ -1,10 +1,7 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Loading;
+using SunsetSystems.LevelManagement;
 using UnityEngine;
 using SunsetSystems.Resources;
-using SunsetSystems.UI;
-using SunsetSystems.Utils;
-using NaughtyAttributes;
 using SunsetSystems.Party;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -12,7 +9,7 @@ using System.Linq;
 
 namespace SunsetSystems.Data
 {
-    public class GameStarter : Singleton<GameStarter>
+    public class GameStarter : MonoBehaviour
     {
         private const string MAIN_MENU = "MainMenuParent";
 
@@ -73,7 +70,7 @@ namespace SunsetSystems.Data
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
             PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             await _sceneLoader.LoadGameLevel(data);
         }
 
@@ -83,7 +80,7 @@ namespace SunsetSystems.Data
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             PartyManager.RecruitMainCharacter(new(debugAsset));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             await _sceneLoader.LoadGameLevel(data);
         }
 
@@ -93,7 +90,7 @@ namespace SunsetSystems.Data
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             OnGameStart?.Invoke();
             await _sceneLoader.LoadGameLevel(data);
         }

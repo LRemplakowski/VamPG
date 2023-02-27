@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using SunsetSystems.Loading;
+using SunsetSystems.LevelManagement;
 using System.Threading.Tasks;
 
-namespace SunsetSystems.Loading.UI
+namespace SunsetSystems.LevelManagement.UI
 {
     internal class LoadingScreenController : MonoBehaviour
     {

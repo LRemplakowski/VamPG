@@ -2,7 +2,6 @@ using SunsetSystems.Entities.Characters;
 using InsaneSystems.RTSSelection;
 using SunsetSystems.Combat;
 using SunsetSystems.Game;
-using SunsetSystems.Utils;
 using SunsetSystems.Utils.Input;
 using System;
 using System.Collections.Generic;
@@ -11,14 +10,14 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Linq;
-using NaughtyAttributes;
 using SunsetSystems.Party;
 using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;
+using Zenject;
 
 namespace SunsetSystems.Input
 {
-    public class PlayerBehaviourController : Singleton<PlayerBehaviourController>
+    public class PlayerBehaviourController : MonoBehaviour
     {
         private Vector2 mousePosition;
         private Collider lastHit;
@@ -31,6 +30,11 @@ namespace SunsetSystems.Input
         private bool _useSelection;
         [SerializeField]
         private Selection _selection;
+
+        [Inject]
+        private IGameManager _gameManager;
+        [Inject]
+        private ICombatManager _combatManager;
 
         private void OnEnable()
         {
@@ -68,7 +72,7 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask))
             {
-                switch (GameManager.CurrentState)
+                switch (_gameManager.CurrentState)
                 {
                     case GameState.Combat:
                         {
@@ -99,25 +103,25 @@ namespace SunsetSystems.Input
 
             void HandleSelectionExplorationInput()
             {
-                List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                PlayerControlledCharacter currentLead;
-                if (selectables.Count > 0)
-                {
-                    currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
-                }
-                else
-                {
-                    return;
-                }
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                {
-                    currentLead.ClearAllActions();
-                    currentLead.InteractWith(interactable);
-                }
-                else
-                {
-                    MoveCurrentSelectionToPositions(hit);
-                }
+                //List<ISelectable> selectables = Selection.Instance.GetAllSelected();
+                //PlayerControlledCharacter currentLead;
+                //if (selectables.Count > 0)
+                //{
+                //    currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
+                //}
+                //else
+                //{
+                //    return;
+                //}
+                //if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                //{
+                //    currentLead.ClearAllActions();
+                //    currentLead.InteractWith(interactable);
+                //}
+                //else
+                //{
+                //    MoveCurrentSelectionToPositions(hit);
+                //}
             }
 
             void HandleNoSelectionExplorationInput()
@@ -152,17 +156,17 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
+                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
                     {
-                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
+                        Debug.Log($"Move bar action failed! Current actor {_combatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
                         return;
                     }
                     if (hit.collider.TryGetComponent(out GridElement gridElement))
                     {
                         if (gridElement.Visited is not GridElement.Status.Occupied)
                         {
-                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.ID} to grid element {gridElement.gameObject.name}!");
-                            CombatManager.CurrentActiveActor.Move(gridElement);
+                            Debug.Log($"Moving {_combatManager.CurrentActiveActor.Data.ID} to grid element {gridElement.gameObject.name}!");
+                            _combatManager.CurrentActiveActor.Move(gridElement);
                         }
                         else
                         {
@@ -175,27 +179,27 @@ namespace SunsetSystems.Input
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
                     Creature enemy = hit.collider.GetComponent<Creature>();
                     if (enemy)
                     {
                         if (enemy.Data.Faction is Faction.Hostile && IsInRange(enemy))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
-                            CombatManager.CurrentActiveActor.Attack(enemy);
+                            Debug.Log($"{_combatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
+                            _combatManager.CurrentActiveActor.Attack(enemy);
                         }
                     }
                     break;
                 case BarAction.SELECT_TARGET:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
                     Creature powerTarget = hit.collider.GetComponent<Creature>();
                     if (powerTarget)
                     {
                         if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is using power on enemy {powerTarget.Data.ID}!");
+                            Debug.Log($"{_combatManager.CurrentActiveActor.Data.ID} is using power on enemy {powerTarget.Data.ID}!");
                             SpellbookManager.PowerTarget = powerTarget;
                         }
                     }
@@ -210,7 +214,7 @@ namespace SunsetSystems.Input
         {
             return requiredTarget switch
             {
-                Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
+                Spellbook.Target.Self => target.Equals(_combatManager.CurrentActiveActor),
                 Spellbook.Target.Friendly => target is PlayerControlledCharacter || target.Data.Faction is Faction.Friendly,
                 Spellbook.Target.Hostile => target.Data.Faction is Faction.Hostile,
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
@@ -219,10 +223,10 @@ namespace SunsetSystems.Input
             };
         }
 
-        private static bool IsInRange(Entity enemy)
+        private bool IsInRange(Entity enemy)
         {
-            int maxRange = CombatManager.CurrentActiveActor.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
-            float distance = Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position);
+            int maxRange = _combatManager.CurrentActiveActor.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
+            float distance = Vector3.Distance(_combatManager.CurrentActiveActor.transform.position, enemy.transform.position);
             return distance <= maxRange;
         }
 
@@ -250,7 +254,7 @@ namespace SunsetSystems.Input
                 {
                     lastHit = hit.collider;
                 }
-                switch (GameManager.CurrentState)
+                switch (_gameManager.CurrentState)
                 {
                     case GameState.Exploration:
                         {
@@ -310,7 +314,7 @@ namespace SunsetSystems.Input
 
                 void HandleMoveActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!_combatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
                         return;
                     if (lastHit != hit.collider)
                     {
@@ -328,9 +332,9 @@ namespace SunsetSystems.Input
 
                 void HandleAttackActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasActed)
                         return;
-                    LineRenderer lineRenderer = CombatManager.CurrentActiveActor.CombatBehaviour.LineRenderer;
+                    LineRenderer lineRenderer = _combatManager.CurrentActiveActor.CombatBehaviour.LineRenderer;
                     if (lastHit != hit.collider)
                     {
                         lineRenderer.enabled = false;
@@ -351,12 +355,6 @@ namespace SunsetSystems.Input
                     }
                 }
             }
-        }
-
-        private void MoveCurrentSelectionToPositions(RaycastHit hit)
-        {
-            List<Creature> allSelected = Selection.Instance.GetAllSelected().Select(s => s.GetCreature()) as List<Creature>;
-            MoveCreaturesToPosition(allSelected, hit.point);
         }
 
         private void MoveCreaturesToPosition(List<Creature> creatures, Vector3 samplingPoint)

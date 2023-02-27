@@ -1,28 +1,28 @@
 ﻿using SunsetSystems.Utils;
 using UnityEngine;
 using System;
-using SunsetSystems.Loading;
+using SunsetSystems.LevelManagement;
 using CleverCrow.Fluid.UniqueIds;
 
 namespace SunsetSystems.Game
 {
     [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(Tagger))]
-    public class GameManager : Singleton<GameManager>, ISaveable
+    public class GameManager : MonoBehaviour, IGameManager, ISaveable
     {
         public static event Action<GameState> OnGameStateChanged;
 
         [SerializeField]
         private GameState _gameState;
-        public static GameState CurrentState 
+        public GameState CurrentState 
         { 
             get
             {
-                return Instance._gameState;
+                return _gameState;
             }
             set
             {
-                Instance._gameState = value;
+                _gameState = value;
                 OnGameStateChanged?.Invoke(value);
             }
         }
@@ -31,7 +31,7 @@ namespace SunsetSystems.Game
 
         private UniqueId _uniqueId;
 
-        protected override void Awake()
+        protected void Awake()
         {
             _uniqueId ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
@@ -42,19 +42,19 @@ namespace SunsetSystems.Game
             ISaveable.UnregisterSaveable(this);
         }
 
-        public static string GetLanguage()
+        public string GetLanguage()
         {
             return "EN";
         }
 
-        public static bool IsCurrentState(GameState state)
+        public bool IsCurrentState(GameState state)
         {
             return CurrentState.Equals(state);
         }
 
         public object GetSaveData()
         {
-            GameManagerSaveData saveData = new GameManagerSaveData();
+            GameManagerSaveData saveData = new();
             saveData.CurrentState = CurrentState;
             return saveData;
         }

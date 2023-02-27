@@ -3,13 +3,11 @@ using SunsetSystems.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
-using SunsetSystems.Utils;
 using Redcode.Awaiting;
-using UnityEngine.Events;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.LevelManagement
 {
-    public class LevelLoader : Singleton<LevelLoader>
+    public class LevelLoader : MonoBehaviour, ILevelLoader
     {
         private SceneLoadingUIManager LoadingScreenUI => this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
 
@@ -28,17 +26,9 @@ namespace SunsetSystems.Loading
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             _latestLoadedSceneIndex = -1;
-        }
-
-        private void Start()
-        {
-#if !UNITY_EDITOR
-            SceneManager.LoadScene("UI", LoadSceneMode.Additive);
-#endif
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
@@ -58,29 +48,25 @@ namespace SunsetSystems.Loading
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
-            await IInitialized.InitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
             await InitializeSceneLogic(data);
-            await IInitialized.LateInitializeObjectsAsync();
             await DisableLoadingScreen();
         }
 
-        internal async Task LoadSavedLevel(Action preLoadingAction)
+        public async Task LoadSavedLevel()
         {
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
                 await UnloadGameScene();
             }
-            LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
+            LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "");
             CachedTransitionData = data;
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
-            await IInitialized.InitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
             SaveLoadManager.LoadObjects();
-            await IInitialized.LateInitializeObjectsAsync();
             OnAfterSaveLoad?.Invoke(loadingEventData);
             await DisableLoadingScreen();
         }
@@ -109,19 +95,9 @@ namespace SunsetSystems.Loading
             return data;
         }
 
-        internal async Task LoadSavedLevel()
-        {
-            await LoadSavedLevel(null);
-        }
-
         private async Task LoadNewScene(LevelLoadingData data)
         {
             CachedTransitionData = data;
-            if (data.preLoadingActions != null)
-                foreach (Action action in data.preLoadingActions)
-                {
-                    action?.Invoke();
-                }
             await DoSceneLoading();
         }
 
@@ -144,7 +120,7 @@ namespace SunsetSystems.Loading
             }
         }
 
-        public async Task UnloadGameScene()
+        private async Task UnloadGameScene()
         {
             await SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
             await UnityEngine.Resources.UnloadUnusedAssets();

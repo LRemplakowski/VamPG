@@ -11,7 +11,7 @@ using Redcode.Awaiting;
 
 namespace SunsetSystems.Bootstraper
 {
-    public class SunsetBootstraper : Singleton<SunsetBootstraper>
+    public class SunsetBootstraper : MonoBehaviour
     {
 #if UNITY_EDITOR
         [SerializeField]
@@ -20,9 +20,8 @@ namespace SunsetSystems.Bootstraper
 
         public static bool EnableBootstrap { get; set; }
 
-        protected async override void Awake()
+        protected async void Awake()
         {
-            base.Awake();
             List<string> bootstrapScenePaths = new();
             bootstrapScenes.ForEach(sc => bootstrapScenePaths.Add(AssetDatabase.GetAssetOrScenePath(sc)));
             await Task.WhenAll(LoadScenesByPathAsync(bootstrapScenePaths));

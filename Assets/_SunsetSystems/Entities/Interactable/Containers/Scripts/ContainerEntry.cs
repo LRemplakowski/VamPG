@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace SunsetSystems.Inventory.UI
 {
     [RequireComponent(typeof(Button))]
-    internal class ContainerEntry : MonoBehaviour
+    public class ContainerEntry : MonoBehaviour
     {
         [SerializeField]
         private Image _icon;
@@ -18,6 +19,14 @@ namespace SunsetSystems.Inventory.UI
 
         public delegate void ContainerEntryDestroyedHandler(ContainerEntry entry);
         public static event ContainerEntryDestroyedHandler ContainerEntryDestroyed;
+
+        private IInventoryManager _inventoryManager;
+
+        [Inject]
+        public void InjectDependencies(IInventoryManager inventoryManager)
+        {
+            _inventoryManager = inventoryManager;
+        }
 
         public void SetEntryContent(InventoryEntry content, ItemStorage storage)
         {
@@ -31,7 +40,8 @@ namespace SunsetSystems.Inventory.UI
         public void OnClick()
         {
             Debug.Log("Container Entry clicked!");
-            InventoryManager.TransferItem(_storage, InventoryManager.PlayerInventory, _content);
+            _inventoryManager.AddEntryToPlayerInventory(_content);
+            _storage.TryRemoveItem(_content);
             ContainerEntryDestroyed?.Invoke(this);
             Destroy(gameObject);
         }

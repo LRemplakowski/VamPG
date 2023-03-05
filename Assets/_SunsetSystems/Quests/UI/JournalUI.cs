@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.Journal.UI
 {
@@ -11,12 +12,20 @@ namespace SunsetSystems.Journal.UI
         [SerializeField, Required]
         private QuestListing _mainQuests, _sideQuests, _caseQuests, _completedQuests;
 
+        private IQuestJournal _questJournal;
+
+        [Inject]
+        public void InjectDependencies(IQuestJournal questJournal)
+        {
+            _questJournal = questJournal;
+        }
+
         private void OnEnable()
         {
-            _mainQuests.ListQuests(QuestJournal.Instance.MainQuests);
-            _sideQuests.ListQuests(QuestJournal.Instance.SideQuests);
-            _caseQuests.ListQuests(QuestJournal.Instance.CaseQuests);
-            _completedQuests.ListQuests(QuestJournal.Instance.CompletedQuests);
+            _mainQuests.ListQuests(_questJournal.MainQuests);
+            _sideQuests.ListQuests(_questJournal.SideQuests);
+            _caseQuests.ListQuests(_questJournal.CaseQuests);
+            _completedQuests.ListQuests(_questJournal.CompletedQuests);
         }
 
         private void Start()

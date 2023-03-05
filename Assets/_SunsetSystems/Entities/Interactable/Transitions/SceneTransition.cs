@@ -6,6 +6,7 @@ using SunsetSystems.Party;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.LevelManagement
 {
@@ -33,6 +34,14 @@ namespace SunsetSystems.LevelManagement
         private SceneLoadingUIManager _fadeUI;
         [SerializeField]
         private CameraControlScript _cameraControlScript;
+
+        private IPartyManager partyManager;
+
+        [Inject]
+        public void InjectDependencies(IPartyManager partyManager)
+        {
+            this.partyManager = partyManager;
+        }
 
         protected override void Start()
         {
@@ -66,7 +75,7 @@ namespace SunsetSystems.LevelManagement
         public async Task MoveToArea()
         {
             await _fadeUI.DoFadeOutAsync(.5f);
-            List<Creature> party = PartyManager.ActiveParty;
+            List<Creature> party = partyManager.ActiveParty;
             for (int i = 0; i < party.Count; i++)
             {
                 party[i].ClearAllActions();

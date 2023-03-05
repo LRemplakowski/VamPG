@@ -9,8 +9,8 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            if (GameManager.IsCurrentState(GameState.Combat) &&
-                context.Owner.Equals(CombatManager.CurrentActiveActor) &&
+            if (context.gameManager.IsCurrentState(GameState.Combat) &&
+                context.Owner.Equals(context.combatManager.CurrentActiveActor) &&
                 !context.IsPlayerControlled)
             {
                 Debug.LogWarning("idle in combat! creature: " + context.Owner);

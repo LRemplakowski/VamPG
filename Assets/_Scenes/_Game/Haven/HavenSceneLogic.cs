@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
+using Zenject;
 
 namespace SunsetSystems.LevelManagement
 {
@@ -82,6 +83,16 @@ namespace SunsetSystems.LevelManagement
 
         private CameraControlScript _cameraControl;
 
+        private IPartyManager _partyManager;
+        private IDialogueManager _dialogueManager;
+
+        [Inject]
+        public void InjectDependencies(IPartyManager partyManager, IDialogueManager dialogueManager)
+        {
+            _partyManager = partyManager;
+            _dialogueManager = dialogueManager;
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -98,9 +109,9 @@ namespace SunsetSystems.LevelManagement
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
-            PartyManager.MainCharacter.gameObject.SetActive(false);
+            _partyManager.MainCharacter.gameObject.SetActive(false);
             await new WaitForSeconds(2);
-            DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+            _dialogueManager.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>
             {
                 await new WaitForUpdate();
@@ -115,7 +126,7 @@ namespace SunsetSystems.LevelManagement
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.MainCharacter.gameObject.SetActive(true);
+            _partyManager.MainCharacter.gameObject.SetActive(true);
             await new WaitForSeconds(.5f);
             await new WaitForUpdate();
             await fade.DoFadeInAsync(.5f);
@@ -126,14 +137,14 @@ namespace SunsetSystems.LevelManagement
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
             _landlord.Agent.Warp(_landlordSpawnWaypoint.transform.position);
-            PartyManager.MainCharacter.Agent.Warp(_pcLandlordVisitWaypoint.transform.position);
+            _partyManager.MainCharacter.Agent.Warp(_pcLandlordVisitWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordEnterCameraPosition);
             _cameraControl.ForceRotation(_landlordEnterCameraRotation);
             await new WaitForFixedUpdate();
             _ = _landlord.FaceTarget(_landlordSpawnWaypoint.FaceDirection);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
+            _ = _partyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
-            DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
+            _dialogueManager.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -142,12 +153,12 @@ namespace SunsetSystems.LevelManagement
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
             _landlord.Agent.Warp(_landlordSinkWaypoint.transform.position);
-            PartyManager.MainCharacter.Agent.Warp(_pcLandlordSinkWaypoint.transform.position);
+            _partyManager.MainCharacter.Agent.Warp(_pcLandlordSinkWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordSinkCameraPosition);
             _cameraControl.ForceRotation(_landlordSinkCameraRotation);
             await new WaitForFixedUpdate();
             _ = _landlord.FaceTarget(_landlordSinkWaypoint.FaceDirection);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
+            _ = _partyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
@@ -175,13 +186,13 @@ namespace SunsetSystems.LevelManagement
             _kieran.gameObject.SetActive(true);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
+            _partyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
             _dominic.ForceCreatureToPosition(_dominicWaypoint.transform.position);
             _kieran.ForceCreatureToPosition(_kieranWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationDominicEnter);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
+            _ = _partyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
             _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
             _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
             await new WaitForFixedUpdate();
@@ -192,13 +203,13 @@ namespace SunsetSystems.LevelManagement
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcFridgeWaypoint.transform.position);
+            _partyManager.MainCharacter.ForceCreatureToPosition(_pcFridgeWaypoint.transform.position);
             _dominic.ForceCreatureToPosition(_dominicFridgeWaypoint.transform.position);
             _kieran.ForceCreatureToPosition(_kieranFridgeWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
+            _ = _partyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
             _ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
             _ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
             await fade.DoFadeInAsync(.5f);
@@ -213,8 +224,8 @@ namespace SunsetSystems.LevelManagement
 
         public void RecruitKieran()
         {
-            PartyManager.RecruitCharacter(_kieran.Data);
-            PartyManager.AddCreatureAsActivePartyMember(_kieran);
+            _partyManager.RecruitCharacter(_kieran.Data);
+            _partyManager.AddCreatureAsActivePartyMember(_kieran);
         }
 
         public async void MoveDominicToDoorAndDestroy()
@@ -230,12 +241,13 @@ namespace SunsetSystems.LevelManagement
 
         public async void QuitGame()
         {
-            SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-            await loading.DoFadeOutAsync(.5f);
-            await LevelLoader.Instance.UnloadGameScene();
-            this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
-            this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
-            await loading.DoFadeInAsync(.5f);
+            //SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            //await loading.DoFadeOutAsync(.5f);
+            //await LevelLoader.Instance.UnloadGameScene();
+            //this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
+            //this.FindFirstComponentWithTag<GameplayUI>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
+            //await loading.DoFadeInAsync(.5f);
+            throw new NotImplementedException();
         }
 
         private static class HavenDialogueCommands
@@ -282,7 +294,7 @@ namespace SunsetSystems.LevelManagement
             public static void HandleGunTaken()
             {
                 HavenSceneLogic._handgun.gameObject.SetActive(false);
-                InventoryManager.PlayerInventory.AddItem(new(HavenSceneLogic._handgunItem));
+                HavenSceneLogic._handgunItem.ApplyReward(1);
             }
 
             [YarnCommand("HandleCrowbarTaken")]

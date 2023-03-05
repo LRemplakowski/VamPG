@@ -11,7 +11,7 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.Owner.Equals(CombatManager.CurrentActiveActor) ? score : 0f;
+            return not ^ context.Owner.Equals(context.combatManager.CurrentActiveActor) ? score : 0f;
         }
     }
 }

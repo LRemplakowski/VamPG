@@ -4,17 +4,20 @@ using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Cover;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
-using UnityEngine;
 using SunsetSystems.Entities.Data;
 
 public sealed class CreatureContext : IAIContext
 {
-    private readonly CombatManager combatManager;
+    public readonly ICombatManager combatManager;
+    public readonly IGameManager gameManager;
+    public readonly ICoverDetector coverDetector;
 
-    public CreatureContext(Creature owner, CombatManager combatManager)
+    public CreatureContext(Creature owner, ICombatManager combatManager, IGameManager gameManager, ICoverDetector coverDetector)
     {
         Owner = owner;
         this.combatManager = combatManager;
+        this.gameManager = gameManager;
+        this.coverDetector = coverDetector;
     }
 
     public Creature Owner { get; private set; }
@@ -25,7 +28,7 @@ public sealed class CreatureContext : IAIContext
 
     public List<Cover> CoverSourcesInCombatGrid => combatManager.CurrentEncounter.MyGrid.CoverSourcesInGrid;
 
-    public bool IsInCombat => GameManager.IsCurrentState(GameState.Combat);
+    public bool IsInCombat => gameManager.IsCurrentState(GameState.Combat);
 
     public bool IsPlayerControlled => Owner is PlayerControlledCharacter;
 
@@ -40,15 +43,15 @@ public sealed class CreatureContext : IAIContext
 
     public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
+    public List<Creature> OtherCombatants => combatManager.Actors.FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c is PlayerControlledCharacter);
+    public List<Creature> PlayerControlledCombatants => combatManager.Actors.FindAll(c => c is PlayerControlledCharacter);
 
-    public List<Creature> FriendlyCombatants => CombatManager.Instance
+    public List<Creature> FriendlyCombatants => combatManager
         .Actors
         .FindAll(c => c.Data.Faction is Faction.Friendly);
 
-    public List<Creature> EnemyCombatants => CombatManager.Instance
+    public List<Creature> EnemyCombatants => combatManager
         .Actors
         .FindAll(c => c.Data.Faction is Faction.Hostile);
 }

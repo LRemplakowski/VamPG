@@ -5,7 +5,6 @@ using SunsetSystems.LevelManagement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using SunsetSystems.Party;
 using SunsetSystems.Data;
 using System.Linq;
 
@@ -18,7 +17,6 @@ namespace SunsetSystems.Inventory
         private ItemStorage _playerInventory;
         [SerializeField]
         private int _money;
-        public ItemStorage PlayerInventory => _playerInventory;
         [SerializeField, ES3Serializable]
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
@@ -84,7 +82,7 @@ namespace SunsetSystems.Inventory
                 if (success)
                 {
                     Debug.Log("Item equipped successfuly!");
-                    PlayerInventory.TryRemoveItem(new(item));
+                    _playerInventory.TryRemoveItem(new(item));
                     equipmentData.EquipmentSlots[slotID] = slot;
                     _coterieEquipmentData[characterID] = equipmentData;
                     ItemEquipped?.Invoke(characterID);
@@ -121,7 +119,7 @@ namespace SunsetSystems.Inventory
                 bool success = slot.TryUnequipItem(item);
                 if (success)
                 {
-                    PlayerInventory.AddItem(new(item));
+                    _playerInventory.AddItem(new(item));
                     equipmentData.EquipmentSlots[slot.ID] = slot;
                     _coterieEquipmentData[characterID] = equipmentData;
                     ItemUnequipped?.Invoke(characterID);
@@ -141,6 +139,13 @@ namespace SunsetSystems.Inventory
                 to.AddItem(item);
             }
         }
+
+        public void AddEntryToPlayerInventory(InventoryEntry entry)
+        {
+            _playerInventory.AddItem(entry);
+        }
+
+        public List<InventoryEntry> GetPlayerInventoryContents() => new(_playerInventory.Contents);
 
         public void AddMoney(int value)
         {
@@ -189,6 +194,6 @@ namespace SunsetSystems.Inventory
     {
         public Dictionary<string, EquipmentData> EquipmentData;
         public ItemStorage PlayerInventory;
-        public float Money;
+        public int Money;
     }
 }

@@ -17,7 +17,7 @@ namespace AI.Scorers.Context
 
         public override float Score(CreatureContext context, Creature option)
         {
-            bool hasCover = CoverDetector.FiringLineObstructedByCover(context.Owner, option, out Cover _);
+            bool hasCover = context.coverDetector.FiringLineObstructedByCover(context.Owner, option, out Cover _);
             return not ^ hasCover ? score : 0f;
         }
     }

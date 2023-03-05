@@ -35,6 +35,8 @@ namespace SunsetSystems.Input
         private IGameManager _gameManager;
         [Inject]
         private ICombatManager _combatManager;
+        [Inject]
+        private IPartyManager _partyManager;
 
         private void OnEnable()
         {
@@ -126,7 +128,7 @@ namespace SunsetSystems.Input
 
             void HandleNoSelectionExplorationInput()
             {
-                PlayerControlledCharacter mainCharacter = PartyManager.MainCharacter as PlayerControlledCharacter;
+                PlayerControlledCharacter mainCharacter = _partyManager.MainCharacter as PlayerControlledCharacter;
                 if (mainCharacter == null)
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
@@ -142,10 +144,10 @@ namespace SunsetSystems.Input
                 }
                 else
                 {
-                    creatures.Add(PartyManager.MainCharacter);
+                    creatures.Add(_partyManager.MainCharacter);
                 }
-                if (PartyManager.ActiveParty.Count > 1)
-                    creatures.AddRange(PartyManager.Companions);
+                if (_partyManager.ActiveParty.Count > 1)
+                    creatures.AddRange(_partyManager.Companions);
                 MoveCreaturesToPosition(creatures, hit.point);
             }
         }
@@ -156,7 +158,7 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
+                    if (!_combatManager.IsActiveActorPlayerControlled() || _combatManager.CurrentActiveActor.CombatBehaviour.HasMoved)
                     {
                         Debug.Log($"Move bar action failed! Current actor {_combatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
                         return;
@@ -314,7 +316,7 @@ namespace SunsetSystems.Input
 
                 void HandleMoveActionPointerPosition()
                 {
-                    if (!_combatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!_combatManager.IsActiveActorPlayerControlled())
                         return;
                     if (lastHit != hit.collider)
                     {

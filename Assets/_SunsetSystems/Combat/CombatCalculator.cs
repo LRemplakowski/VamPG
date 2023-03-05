@@ -3,6 +3,7 @@ using SunsetSystems.Entities.Cover;
 using SunsetSystems.Inventory.Data;
 using System;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.Combat
 {
@@ -16,6 +17,9 @@ namespace SunsetSystems.Combat
         public const double COVER_MODIFIER_HIGH = 0.5d;
 
         private static readonly System.Random _random = new();
+
+        [Inject]
+        private static ICoverDetector _coverDetector;
 
         public static AttackResult CalculateAttackResult(Creature attacker, Creature defender)
         {
@@ -31,7 +35,7 @@ namespace SunsetSystems.Combat
             double critRoll = 0;
 
             float heightDifference = attacker.transform.position.y - defender.transform.position.y;
-            if (heightDifference > attacker.Agent.height && attacker.SpellbookManager.GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+            if (heightDifference > attacker.Agent.height && attacker.SpellbookManager.GetIsPowerKnown(null))
             {
                 attackModifier.HitChanceMod += .1d;
                 attackModifier.DamageMod += 2;
@@ -113,7 +117,7 @@ namespace SunsetSystems.Combat
         private static double CalculateDodgeChance(Creature defender, Creature attacker)
         {
             double result = BASE_DODGE_CHANCE;
-            bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out Cover coverSource);
+            bool hasCover = _coverDetector.FiringLineObstructedByCover(attacker, defender, out Cover coverSource);
             if (hasCover)
             {
                 int defenderDexterity = defender.Data.Stats.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();

@@ -23,7 +23,7 @@
             bool providesCover = false;
             int count = 0;
 
-            if (CoverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
+            if (context.coverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
             {
                 List<Creature> enemies = new();
                 if (context.Owner.Data.Faction.Equals(Faction.Hostile))

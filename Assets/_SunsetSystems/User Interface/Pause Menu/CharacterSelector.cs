@@ -1,55 +1,60 @@
 using SunsetSystems.Party;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using Zenject;
 
-namespace SunsetSystems
+namespace SunsetSystems.UI
 {
-    public class CharacterSelector : MonoBehaviour
+    public class CharacterSelector : MonoBehaviour, ICharacterSelector
     {
         [SerializeField]
         private TextMeshProUGUI _selectedCharacterText;
-        private static string _selectedCharacterKey = default;
+        private string _selectedCharacterKey = default;
 
-        [SerializeField]
-        private UnityEvent OnSelectedCharacterChanged;
-        public static string SelectedCharacterKey 
+        public UnityEvent OnSelectedCharacterChanged;
+        public string SelectedCharacterKey 
         { 
             get
             {
                 if (string.IsNullOrEmpty(_selectedCharacterKey))
-                    _selectedCharacterKey = PartyManager.MainCharacter.Data.ID;
+                    _selectedCharacterKey = _partyManager.MainCharacter.Data.ID;
                 return _selectedCharacterKey;
             }
         }
 
+        private IPartyManager _partyManager;
+
+        [Inject]
+        public void InjectDependencies(IPartyManager partyManager)
+        {
+            _partyManager = partyManager;
+        }
+
         private void OnEnable()
         {
-            string key = SelectedCharacterKey;
             UpdateSelectedText();
         }
 
         private void UpdateSelectedText()
         {
-            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(_selectedCharacterKey).Data.FullName;
+            _selectedCharacterText.text = _partyManager.GetPartyMemberByID(_selectedCharacterKey).Data.FullName;
         }
 
         public void NextCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
-            currentIndex = currentIndex + 1 < PartyManager.AllCoterieMembers.Count ? currentIndex + 1 : 0;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].ID;
+            int currentIndex = _partyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
+            currentIndex = currentIndex + 1 < _partyManager.AllCoterieMembers.Count ? currentIndex + 1 : 0;
+            _selectedCharacterKey = _partyManager.AllCoterieMembers[currentIndex].ID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }
 
         public void PreviousCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
-            currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.AllCoterieMembers.Count - 1;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].ID;
+            int currentIndex = _partyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
+            currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : _partyManager.AllCoterieMembers.Count - 1;
+            _selectedCharacterKey = _partyManager.AllCoterieMembers[currentIndex].ID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }

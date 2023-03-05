@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -20,6 +21,14 @@ namespace SunsetSystems.UI
 
         private HashSet<DisciplineType> _hashedPowerTypes;
 
+        private ICombatManager _combatManager;
+
+        [Inject]
+        public void InjectDependencies(ICombatManager combatManager)
+        {
+            _combatManager = combatManager;
+        }
+
         private void Awake()
         {
             _hashedPowerTypes = new(_powerTypes.Distinct());
@@ -27,7 +36,7 @@ namespace SunsetSystems.UI
 
         public void ShowDisciplinePowerDisplay()
         {
-            Creature activeActor = CombatManager.CurrentActiveActor;
+            Creature activeActor = _combatManager.CurrentActiveActor;
             if (activeActor == null)
             {
                 Debug.LogError("Trying to display power list, but CurrentActiveActor is null!");

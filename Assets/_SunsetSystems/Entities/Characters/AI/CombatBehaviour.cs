@@ -8,8 +8,9 @@ using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using SunsetSystems.Resources;
+using Zenject;
 
-public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
+public class CombatBehaviour : MonoBehaviour, IContextProvider
 {
     private CreatureContext _context;
     private CreatureContext Context
@@ -17,7 +18,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
         get
         {
             if (_context == null)
-                _context = new(this.Owner, CombatManager.Instance);
+                _context = new(this.Owner, combatManager, gameManager, coverDetector);
             return _context;
         }
     }
@@ -37,6 +38,18 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     public bool HasMoved { get; set; }
 
     public bool IsPlayerControlled => Context.IsPlayerControlled;
+
+    private ICombatManager combatManager;
+    private IGameManager gameManager;
+    private ICoverDetector coverDetector;
+
+    [Inject]
+    public void InjectDependencies(ICombatManager combatManager, IGameManager gameManager, ICoverDetector coverDetector)
+    {
+        this.combatManager = combatManager;
+        this.gameManager = gameManager;
+        this.coverDetector = coverDetector;
+    }
 
     private void Reset()
     {
@@ -96,17 +109,17 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
     private void Update()
     {
-        if (GameManager.IsCurrentState(GameState.Combat) && Owner != null && CombatManager.CurrentActiveActor != null)
-            if (!IsPlayerControlled && Owner.Equals(CombatManager.CurrentActiveActor))
+        if (gameManager.IsCurrentState(GameState.Combat) && Owner != null && combatManager.CurrentActiveActor != null)
+            if (!IsPlayerControlled && Owner.Equals(combatManager.CurrentActiveActor))
                 if (HasMoved && HasActed)
-                    CombatManager.Instance.NextRound();
+                    combatManager.NextRound();
     }
 
     private void OnMovementStarted(Creature who)
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
-            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
+            combatManager.CurrentEncounter.MyGrid.ClearActiveElements();
         }
     }
 
@@ -154,7 +167,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
 
             if (IsPlayerControlled)
             {
-                CombatManager.Instance.CurrentEncounter.MyGrid.ActivateElementsInRangeOfActor(Owner);
+                combatManager.CurrentEncounter.MyGrid.ActivateElementsInRangeOfActor(Owner);
             }
         }
     }
@@ -163,7 +176,7 @@ public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
     {
         if (Owner.Equals(currentActor) && IsPlayerControlled)
         {
-            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
+            combatManager.CurrentEncounter.MyGrid.ClearActiveElements();
         }
     }
 

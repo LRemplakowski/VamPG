@@ -6,6 +6,7 @@ using SunsetSystems.Resources;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Zenject;
 
 public class GridController : ExposableMonobehaviour
 {
@@ -32,6 +33,14 @@ public class GridController : ExposableMonobehaviour
     private NavMeshAgent gridAgentHelper;
 
     public List<Cover> CoverSourcesInGrid { get; private set; }
+
+    private ICombatManager combatManager;
+
+    [Inject]
+    public void InjectDependencies(ICombatManager combatManager)
+    {
+        this.combatManager = combatManager;
+    }
 
     public void Start()
     {
@@ -279,10 +288,11 @@ public class GridController : ExposableMonobehaviour
         return position.x < gridElements.GetLength(0) && position.x >= 0 && position.y < gridElements.GetLength(1) && position.y >= 0;
     }
 
+#if UNITY_EDITOR
     public void Dev_SetWholeGridActive()
     {
         ClearActiveElements();
-        Creature currentActiveActor = CombatManager.CurrentActiveActor;
+        Creature currentActiveActor = combatManager.CurrentActiveActor;
         if (currentActiveActor != null)
         {
             GridElement currentGridPosition = currentActiveActor.CurrentGridPosition;
@@ -300,6 +310,7 @@ public class GridController : ExposableMonobehaviour
             }
         }
     }
+#endif
 
     private List<Cover> FindCoverSourcesInGrid()
     {

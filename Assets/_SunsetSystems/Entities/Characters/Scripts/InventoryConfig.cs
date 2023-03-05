@@ -13,6 +13,6 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public List<InventoryEntry> Inventory { get; private set; }
         [field: SerializeField]
-        public float Money { get; private set; }
+        public int Money { get; private set; }
     }
 }

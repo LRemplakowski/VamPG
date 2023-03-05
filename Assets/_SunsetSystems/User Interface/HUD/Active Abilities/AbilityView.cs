@@ -5,6 +5,7 @@ using SunsetSystems.UI.Utils;
 using System;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -19,6 +20,14 @@ namespace SunsetSystems.UI
 
         public static event Action OnAbilityPick;
 
+        private ICombatManager _combatManager;
+
+        [Inject]
+        public void InjectDependencies(ICombatManager combatManager)
+        {
+            _combatManager = combatManager;
+        }
+
         public void UpdateView(IGameDataProvider<DisciplinePower> dataProvider)
         {
             if (dataProvider == null)
@@ -26,7 +35,7 @@ namespace SunsetSystems.UI
             gameObject.SetActive(true);
             _button.SetContent(dataProvider.Data.Tooltip);
             _button.image.sprite = dataProvider.Data.Icon;
-            _button.interactable = !CombatManager.CurrentActiveActor.SpellbookManager.IsPowerOnCooldown(dataProvider.Data);
+            _button.interactable = !_combatManager.CurrentActiveActor.SpellbookManager.IsPowerOnCooldown(dataProvider.Data);
             _text.text = dataProvider.Data.PowerName;
         }
 

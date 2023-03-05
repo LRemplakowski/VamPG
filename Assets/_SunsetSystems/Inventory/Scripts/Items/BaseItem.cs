@@ -2,8 +2,8 @@ using NaughtyAttributes;
 using SunsetSystems.Journal;
 using SunsetSystems.Resources;
 using SunsetSystems.UI.Utils;
-using UnityEditor;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.Inventory.Data
 {
@@ -26,23 +26,32 @@ namespace SunsetSystems.Inventory.Data
 
         public BaseItem Data => this;
 
+        // DEPENDENCIES
+        private IInventoryManager inventoryManager;
+
+        [Inject]
+        public void InjectDependencies(IInventoryManager inventoryManager)
+        {
+            this.inventoryManager = inventoryManager;
+        }
+
         private void OnEnable()
         {
 #if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(ReadableID))
             {
                 ReadableID = name;
-                EditorUtility.SetDirty(this);
+                UnityEditor.EditorUtility.SetDirty(this);
             }
             if (Icon == null)
             {
                 Icon = ResourceLoader.GetFallbackIcon();
-                EditorUtility.SetDirty(this);
+                UnityEditor.EditorUtility.SetDirty(this);
             }
             if (string.IsNullOrWhiteSpace(DatabaseID))
                 AssignNewID();
-            ItemDatabase.Instance?.Register(this);
 #endif
+            ItemDatabase.Instance?.Register(this);
         }
 
         private void Reset()
@@ -54,22 +63,20 @@ namespace SunsetSystems.Inventory.Data
 
         private void OnDestroy()
         {
-#if UNITY_EDITOR
             ItemDatabase.Instance?.Unregister(this);
-#endif
         }
 
+#if UNITY_EDITOR
         private void AssignNewID()
         {
             DatabaseID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
-#endif
         }
+#endif
 
         public void ApplyReward(int amount)
         {
-            InventoryManager.PlayerInventory.AddItem(new InventoryEntry(this, amount));
+            inventoryManager.AddEntryToPlayerInventory(new InventoryEntry(this, amount));
         }
     }
 }

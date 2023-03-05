@@ -1,7 +1,6 @@
 using SunsetSystems.Journal;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -11,9 +10,22 @@ namespace SunsetSystems.Entities.Interactable
         private Quest _myQuest;
         public Quest MyQuest => _myQuest;
 
+        private IQuestJournal _questJournal;
+
+        [Inject]
+        public void InjectDependencies(IQuestJournal questJournal)
+        {
+            _questJournal = questJournal;
+        }
+
+        public void TriggerQuest()
+        {
+            _questJournal.BeginQuest(_myQuest.ID);
+        }
+
         protected override void HandleInteraction()
         {
-            (this as IQuestTrigger).TriggerQuest();
+            TriggerQuest();
         }
     }
 }

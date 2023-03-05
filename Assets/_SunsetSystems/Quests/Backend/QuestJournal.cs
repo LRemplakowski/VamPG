@@ -1,6 +1,5 @@
 using Apex;
 using CleverCrow.Fluid.UniqueIds;
-using NaughtyAttributes;
 using SunsetSystems.Data;
 using SunsetSystems.LevelManagement;
 using System;
@@ -11,7 +10,7 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [RequireComponent(typeof(UniqueId))]
-    public class QuestJournal : Utils.Singleton<QuestJournal>, IResetable, ISaveable
+    public class QuestJournal : MonoBehaviour, IResetable, ISaveable, IQuestJournal
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
@@ -38,7 +37,7 @@ namespace SunsetSystems.Journal
             _currentObjectives = new();
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
             _uniqueId ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
@@ -47,11 +46,11 @@ namespace SunsetSystems.Journal
         [ContextMenu("Foo")]
         public void PrintObjectivesToConsole()
         {
-            foreach (string key in Instance._currentObjectives.Keys)
+            foreach (string key in _currentObjectives.Keys)
             {
-                foreach (string objectiveKey in Instance._currentObjectives[key].Keys)
+                foreach (string objectiveKey in _currentObjectives[key].Keys)
                 {
-                    Debug.Log($"Quest: {Instance._activeQuests[key].Name}; Objective ID: {objectiveKey}; Objective Reference: {Instance._currentObjectives[key][objectiveKey]}");
+                    Debug.Log($"Quest: {_activeQuests[key].Name}; Objective ID: {objectiveKey}; Objective Reference: {_currentObjectives[key][objectiveKey]}");
                 }
             }
         }
@@ -193,29 +192,28 @@ namespace SunsetSystems.Journal
             return false;
         }
 
-        public bool TryGetTrackedObjective(string questID, string objectiveID, out Objective objective)
+        public bool CompleteObjective(string questID, string objectiveID)
         {
-            objective = default;
-            if (_currentObjectives.TryGetValue(questID, out Dictionary<string, Objective> questObjectives))
+            if (_currentObjectives.TryGetValue(questID, out Dictionary<string, Objective> currentObjectives))
             {
-                if (questObjectives.TryGetValue(objectiveID, out objective))
+                if (currentObjectives.TryGetValue(objectiveID, out Objective objective))
+                {
+                    objective.Complete();
                     return true;
-                else
-                    Debug.LogWarning($"Trying to get objective {objectiveID} for quest {questID} but that objective is not active!");
-            }
-            else
-            {
-                Debug.LogWarning($"Trying to get objectives for quest {questID} but quest is not active!");
+                }
             }
             return false;
         }
 
-        public bool TryGetTrackedObjectiveByReadableID(string readableID, string objectiveID, out Objective objective)
+        public bool FailObjective(string questID, string objectiveID)
         {
-            objective = default;
-            if (QuestDatabase.Instance.TryGetQuestByReadableID(readableID, out Quest quest))
+            if (_currentObjectives.TryGetValue(questID, out Dictionary<string, Objective> currentObjectives))
             {
-                return TryGetTrackedObjective(quest.ID, objectiveID, out objective);
+                if (currentObjectives.TryGetValue(objectiveID, out Objective objective))
+                {
+                    objective.MakeInactive();
+                    return true;
+                }
             }
             return false;
         }

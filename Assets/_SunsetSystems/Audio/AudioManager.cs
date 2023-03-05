@@ -5,7 +5,7 @@ using SunsetSystems.Constants;
 
 namespace SunsetSystems.Audio
 {
-    public class AudioManager : MonoBehaviour
+    public class AudioManager : MonoBehaviour, IAudioManager
     {
         [SerializeField]
         private AudioMixer _audioMixer;
@@ -15,9 +15,9 @@ namespace SunsetSystems.Audio
         private SoundtrackController _soundtrackController;
 
         [field: SerializeField]
-        public float MusicDefaultValue { get; private set; } = .5f;
+        public float MusicDefaultVolume { get; private set; } = .5f;
         [field: SerializeField]
-        public float SFXDefaultValue { get; private set; } = .5f;
+        public float SFXDefaultVolume { get; private set; } = .5f;
 
         private void Start()
         {

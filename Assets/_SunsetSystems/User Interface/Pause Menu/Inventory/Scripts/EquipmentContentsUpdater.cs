@@ -19,7 +19,7 @@ namespace SunsetSystems.Inventory.UI
         {
             foreach (string key in new EquipmentData().EquipmentSlots.Keys)
             {
-                _slotViews.TryAdd(key, null);
+                _slotViews?.TryAdd(key, null);
             }
         }
 

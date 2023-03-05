@@ -14,7 +14,7 @@ namespace AI.Scorers.Option
         public override float Score(CreatureContext context)
         {
             bool result = not ^ (context.Owner.CurrentGridPosition != null &&
-                    CoverDetector.IsPositionNearCover(context.Owner.CurrentGridPosition, out List<Cover> coverSources));
+                    context.coverDetector.IsPositionNearCover(context.Owner.CurrentGridPosition, out List<Cover> coverSources));
             Debug.Log("is in cover? " + result);
             return result ? score : 0f;
         }

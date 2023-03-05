@@ -6,6 +6,7 @@ using SunsetSystems.Party;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
+using Zenject;
 
 namespace SunsetSystems.Data
 {
@@ -30,7 +31,16 @@ namespace SunsetSystems.Data
         [SerializeField]
         private List<GameObject> _objectsToReset;
         private List<IResetable> _resetables => _objectsToReset.Select(go => go.GetComponent<IResetable>()).Where(r => r != null).ToList();
+
         public UnityEvent OnGameStart;
+
+        private IPartyManager _partyManager;
+
+        [Inject]
+        public void InjectDependencies(IPartyManager partyManager)
+        {
+            _partyManager = partyManager;
+        }
 
         private void Start()
         {
@@ -69,7 +79,7 @@ namespace SunsetSystems.Data
         {
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
+            _partyManager.RecruitMainCharacter(new(mainCharacterAsset));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             await _sceneLoader.LoadGameLevel(data);
         }
@@ -79,7 +89,7 @@ namespace SunsetSystems.Data
             Start();
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(debugAsset));
+            _partyManager.RecruitMainCharacter(new(debugAsset));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             await _sceneLoader.LoadGameLevel(data);
         }
@@ -89,7 +99,7 @@ namespace SunsetSystems.Data
             Start();
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
-            PartyManager.RecruitMainCharacter(new(desiree));
+            _partyManager.RecruitMainCharacter(new(desiree));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag);
             OnGameStart?.Invoke();
             await _sceneLoader.LoadGameLevel(data);

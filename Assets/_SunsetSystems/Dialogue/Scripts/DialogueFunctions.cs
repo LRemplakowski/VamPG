@@ -4,12 +4,22 @@ using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Yarn.Unity;
+using Zenject;
 
 namespace SunsetSystems.Dialogue
 {
     public static class DialogueFunctions
     {
+        [Inject]
+        private static IInventoryManager inventoryManager;
+        [Inject]
+        private static IQuestJournal journal;
+        [Inject]
+        private static IPartyManager partyManager;
+
+
         [YarnFunction("RollSingle")]
         public static int GetRollResult(string statName)
         {
@@ -42,7 +52,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()
         {
-            return InventoryManager.Instance.GetMoneyAmount();
+            return inventoryManager.GetMoney();
         }
 
         [YarnFunction("GetIDFromName")]
@@ -60,12 +70,12 @@ namespace SunsetSystems.Dialogue
             AttributeType attributeType = GetAttributeTypeFromString(statName);
             if (attributeType != AttributeType.Invalid)
             {
-                return PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
+                return partyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
             }
             SkillType skillType = GetSkillTypeFromString(statName);
             if (skillType != SkillType.Invalid)
             {
-                return PartyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
+                return partyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
             }
             return 1;
         }
@@ -97,7 +107,11 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("CurrentObjective")]
         public static bool GetIsObjectiveActive(string questID, string objectiveID)
         {
-            return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
+            if (journal.GetCurrentObjectives(questID, out List<Objective> objectives))
+            {
+                return objectives.Any(o => o.ReadableID.Equals(objectiveID));
+            }
+            return false;
         }
     }
 }

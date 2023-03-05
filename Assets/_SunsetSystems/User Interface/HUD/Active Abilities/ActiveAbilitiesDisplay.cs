@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -19,6 +20,14 @@ namespace SunsetSystems.UI
         private GameTooltip _tooltipInstance;
 
         private readonly List<AbilityView> _viewsPool = new();
+
+        private ICombatManager _combatManager;
+
+        [Inject]
+        public void InjectDependencies(ICombatManager combatManager)
+        {
+            _combatManager = combatManager;
+        }    
 
         private void OnEnable()
         {
@@ -56,7 +65,7 @@ namespace SunsetSystems.UI
 
         public void UpdateViews(List<IGameDataProvider<DisciplinePower>> data)
         {
-            Creature spellcastingActor = CombatManager.CurrentActiveActor;
+            Creature spellcastingActor = _combatManager.CurrentActiveActor;
             foreach (IGameDataProvider<DisciplinePower> ability in data)
             {
                 AbilityView view = GetViewFromPool();

@@ -2,8 +2,9 @@ namespace SunsetSystems.Combat
 {
     public interface IEncounter
     {
-        void Begin();
+        GridController MyGrid { get; }
 
+        void Begin();
         void End();
     }
 }

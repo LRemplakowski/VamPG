@@ -2,6 +2,7 @@ using SunsetSystems.Data;
 using UnityEngine;
 using System.Threading.Tasks;
 using SunsetSystems.Game;
+using Zenject;
 
 namespace SunsetSystems.LevelManagement
 {
@@ -10,10 +11,19 @@ namespace SunsetSystems.LevelManagement
         [SerializeField]
         private Waypoint _defaultEntryWaypoint;
 
+        protected IGameManager _gameManager;
+
+        [Inject]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Dependency Injection")]
+        private void InjectDependencies(IGameManager gameManager)
+        {
+            _gameManager = gameManager;
+        }
+
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
             Debug.Log("Starting scene");
-            GameManager.CurrentState = GameState.Exploration;
+            _gameManager.CurrentState = GameState.Exploration;
             await Task.Yield();
         }
 

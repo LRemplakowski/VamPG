@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using SunsetSystems.Utils;
 using UnityEngine.InputSystem.UI;
-using SunsetSystems.Game;
 using System;
 using Zenject;
 
@@ -12,8 +11,6 @@ public class PlayerInputHandler : MonoBehaviour, IInitializable
 {
     [SerializeField]
     private PlayerInput playerInput;
-    [SerializeField]
-    private GameManager gameManager;
 
     // Mouse input
     public static event Action<InputAction.CallbackContext> OnPrimaryAction;
@@ -30,8 +27,6 @@ public class PlayerInputHandler : MonoBehaviour, IInitializable
 
     private void Start()
     {
-        if (!gameManager)
-            this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
         if (!playerInput)
             playerInput = GetComponent<PlayerInput>();
     }

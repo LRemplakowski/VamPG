@@ -1,6 +1,6 @@
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory.UI;
-using SunsetSystems.LevelManagement;
+using SunsetSystems.Loading;
 using SunsetSystems.Utils;
 using UnityEngine;
 using Yarn.Unity;

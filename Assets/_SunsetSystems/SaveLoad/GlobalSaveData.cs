@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SunsetSystems.LevelManagement
+namespace SunsetSystems.Loading
 {
     [Serializable]
     public class GlobalSaveData

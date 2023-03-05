@@ -1,5 +1,5 @@
-using SunsetSystems.LevelManagement;
-using SunsetSystems.LevelManagement.UI;
+using SunsetSystems.Loading;
+using SunsetSystems.Loading.UI;
 using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using UnityEngine;

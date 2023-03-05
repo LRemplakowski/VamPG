@@ -1,24 +1,26 @@
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.LevelManagement;
+using SunsetSystems.Loading;
+using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Party;
 using SunsetSystems.Data;
+using System.Web.UI.WebControls;
 using System.Linq;
 
 namespace SunsetSystems.Inventory
 {
     [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
-    public class InventoryManager : MonoBehaviour, ISaveable, IResetable, IInventoryManager
+    public class InventoryManager : Singleton<InventoryManager>, ISaveable, IResetable
     {
         [SerializeField]
         private ItemStorage _playerInventory;
         [SerializeField]
-        private int _money;
-        public ItemStorage PlayerInventory => _playerInventory;
+        private float _money;
+        public static ItemStorage PlayerInventory => Instance._playerInventory;
         [SerializeField, ES3Serializable]
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
@@ -33,14 +35,15 @@ namespace SunsetSystems.Inventory
             _coterieEquipmentData = new();
         }
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (!_playerInventory)
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
-            _unique ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
+            _unique ??= GetComponent<UniqueId>();
         }
 
         private void OnDestroy()
@@ -48,23 +51,23 @@ namespace SunsetSystems.Inventory
             ISaveable.UnregisterSaveable(this);
         }
 
-        public void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)
+        public static void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)
         {
-            bool success = _coterieEquipmentData.TryAdd(creatureID, creatureData.Equipment);
+            bool success = Instance._coterieEquipmentData.TryAdd(creatureID, creatureData.Equipment);
             if (!success)
                 Debug.LogWarning($"Trying to add coterie member equipment, but equipment data for {creatureID} already exists!");
             else
                 Debug.Log($"Successfully added equipment entry for coterie member with ID {creatureID}");
         }
 
-        public bool TryGetEquipmentData(string characterKey, out EquipmentData data)
+        public static bool TryGetEquipmentData(string characterKey, out EquipmentData data)
         {
-            return _coterieEquipmentData.TryGetValue(characterKey, out data);
+            return Instance._coterieEquipmentData.TryGetValue(characterKey, out data);
         }
 
-        public bool TryEquipItemInSlot(string characterID, string slotID, EquipableItem item)
+        public static bool TryEquipItemInSlot(string characterID, string slotID, EquipableItem item)
         {
-            if (_coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
             {
                 Debug.LogError($"Could not find equipment data for creater with ID {characterID}! Is {characterID} registered as party member?");
                 return false;
@@ -86,7 +89,10 @@ namespace SunsetSystems.Inventory
                     Debug.Log("Item equipped successfuly!");
                     PlayerInventory.TryRemoveItem(new(item));
                     equipmentData.EquipmentSlots[slotID] = slot;
-                    _coterieEquipmentData[characterID] = equipmentData;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.Equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemEquipped?.Invoke(characterID);
                 }
                 else
@@ -102,7 +108,7 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public bool TryEquipItem(string characterKey, EquipableItem item)
+        public static bool TryEquipItem(string characterKey, EquipableItem item)
         {
             List<string> slotIDs = EquipmentData.GetSlotIDsFromItemCategory(item.ItemCategory);
             if (slotIDs.Count <= 0)
@@ -110,9 +116,9 @@ namespace SunsetSystems.Inventory
             return TryEquipItemInSlot(characterKey, slotIDs[0], item);
         }
 
-        public bool TryUnequipItemFromSlot(string characterID, string slotID)
+        public static bool TryUnequipItemFromSlot(string characterID, string slotID)
         {
-            if (_coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
+            if (Instance._coterieEquipmentData.TryGetValue(characterID, out EquipmentData equipmentData) == false)
                 return false;
             try
             {
@@ -123,7 +129,10 @@ namespace SunsetSystems.Inventory
                 {
                     PlayerInventory.AddItem(new(item));
                     equipmentData.EquipmentSlots[slot.ID] = slot;
-                    _coterieEquipmentData[characterID] = equipmentData;
+                    Instance._coterieEquipmentData[characterID] = equipmentData;
+                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    data.Equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemUnequipped?.Invoke(characterID);
                 }
                 return success;
@@ -134,7 +143,7 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
+        public static void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
         {
             if (from.TryRemoveItem(item))
             {
@@ -142,12 +151,12 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public void AddMoney(int value)
+        public void AddMoney(float value)
         {
             _money += value;
         }
 
-        public bool TryRemoveMoney(int value)
+        public bool TryRemoveMoney(float value)
         {
             if (value > _money)
                 return false;
@@ -155,12 +164,12 @@ namespace SunsetSystems.Inventory
             return true;
         }
 
-        public int GetMoney()
+        public float GetMoneyAmount()
         {
             return _money;
         }
 
-        public void SetMoney(int value)
+        public void SetMoney(float value)
         {
             _money = value;
         }

@@ -1,7 +1,11 @@
 using SunsetSystems.Entities.Characters;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using SunsetSystems.Game;
+using System.Threading.Tasks;
+using System.Linq;
+using Redcode.Awaiting;
 
 namespace SunsetSystems.Combat
 {
@@ -34,14 +38,14 @@ namespace SunsetSystems.Combat
                 combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
         }
 
-        public void Begin()
+        public async void Begin()
         {
             Debug.LogWarning("Begin encounter, do encounter start logic.");
             if (encounterStartLogic)
-                encounterStartLogic.Perform();
+                await encounterStartLogic.Perform();
             GameManager.CurrentState = GameState.Combat;
             _creatureCounter = Creatures.Count;
-            combatManager.BeginEncounter(this);
+            await combatManager.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             {
                 Creatures.ForEach(c => c.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
@@ -56,14 +60,14 @@ namespace SunsetSystems.Combat
                 End();
         }
 
-        public void End()
+        public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
             MyGrid.ClearActiveElements();
-            combatManager.EndEncounter(this);
+            await combatManager.EndEncounter(this);
             GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
-                encounterEndLogic.Perform();
+                await encounterEndLogic.Perform();
         }
 
         private enum EncounterEndTrigger

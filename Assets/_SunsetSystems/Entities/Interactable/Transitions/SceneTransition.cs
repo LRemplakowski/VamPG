@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.LevelManagement
+namespace SunsetSystems.Loading
 {
     public class SceneTransition : InteractableEntity, ITransition
     {

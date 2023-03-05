@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.LevelManagement
+namespace SunsetSystems.Loading
 {
     internal class TestStartSceneSceneLogic : DefaultSceneLogic
     {

@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using SunsetSystems.Utils;
+using SunsetSystems.Utils.Threading;
 
 namespace InsaneSystems.RTSSelection
 {
-    public class Selection : MonoBehaviour
+    public class Selection : InitializedSingleton<Selection>
     {
         public static readonly List<ISelectable> AllSelectables = new();
 
@@ -30,13 +32,13 @@ namespace InsaneSystems.RTSSelection
             PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             AllSelectables.Clear();
             AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
 
-        public void LateInitialize()
+        public override void LateInitialize()
         {
 
         }

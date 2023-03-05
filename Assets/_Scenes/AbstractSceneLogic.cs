@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Data;
 
-namespace SunsetSystems.LevelManagement
+namespace SunsetSystems.Loading
 {
     [RequireComponent(typeof(UniqueId))]
     public abstract class AbstractSceneLogic : MonoBehaviour, ISaveable

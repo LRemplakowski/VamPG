@@ -10,7 +10,7 @@ namespace InsaneSystems.RTSSelection
 {
     /// <summary> In this class handled all player selection input. </summary>
     [RequireComponent(typeof(Selection))]
-    public class SelectionInput : MonoBehaviour
+    public class SelectionInput : Singleton<SelectionInput>
     {
         [SerializeField]
         Selection selection;

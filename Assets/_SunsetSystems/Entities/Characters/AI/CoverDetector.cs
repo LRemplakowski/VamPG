@@ -1,19 +1,22 @@
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Cover;
+using SunsetSystems.Utils;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoverDetector : MonoBehaviour
+public class CoverDetector : Singleton<CoverDetector>
 {
     [SerializeField]
     private float coverDetectionRadius = 1f;
     [SerializeField]
     private LayerMask coverLayerMask;
 
-    public bool IsPositionNearCover(GridElement gridPos, out List<Cover> coverSources)
+    public static bool IsPositionNearCover(GridElement gridPos, out List<Cover> coverSources)
     {
         coverSources = new List<Cover>();
-        Collider[] colliders = Physics.OverlapSphere(gridPos.transform.position, coverDetectionRadius * gridPos.transform.localScale.x, coverLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(gridPos.transform.position, instance.coverDetectionRadius * gridPos.transform.localScale.x, instance.coverLayerMask);
         foreach (Collider col in colliders)
         {
             if (col.TryGetComponent(out Cover cover))
@@ -22,7 +25,7 @@ public class CoverDetector : MonoBehaviour
         return true;
     }
 
-    public bool FiringLineObstructedByCover(Creature attacker, Creature target, out Cover coverSource)
+    public static bool FiringLineObstructedByCover(Creature attacker, Creature target, out Cover coverSource)
     {
         if (IsPositionNearCover(target.CurrentGridPosition, out List<Cover> coverSources))
         {

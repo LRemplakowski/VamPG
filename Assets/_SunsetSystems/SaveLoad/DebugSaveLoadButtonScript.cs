@@ -1,11 +1,11 @@
 using SunsetSystems.Data;
 using UnityEngine;
-using SunsetSystems.LevelManagement;
+using SunsetSystems.Loading;
 using System;
 using SunsetSystems.Game;
 using SunsetSystems.UI;
 
-namespace SunsetSystems.LevelManagement
+namespace SunsetSystems.Loading
 {
     public class DebugSaveLoadButtonScript : MonoBehaviour
     {

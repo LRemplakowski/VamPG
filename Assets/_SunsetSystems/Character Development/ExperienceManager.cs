@@ -1,12 +1,13 @@
 using CleverCrow.Fluid.UniqueIds;
-using SunsetSystems.LevelManagement;
+using SunsetSystems.Loading;
+using SunsetSystems.Utils;
 using System;
 using UnityEngine;
 
 namespace SunsetSystems.Experience
 {
     [RequireComponent(typeof(UniqueId))]
-    public class ExperienceManager : MonoBehaviour, ISaveable, IExperienceManager
+    public class ExperienceManager : Singleton<ExperienceManager>, ISaveable
     {
         [SerializeField]
         private StringExperienceDataDictionary _experienceDataCache = new();
@@ -14,8 +15,9 @@ namespace SunsetSystems.Experience
         private UniqueId _unique;
         public string DataKey => _unique.Id;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             ISaveable.RegisterSaveable(this);
             _unique ??= GetComponent<UniqueId>();
         }
@@ -25,31 +27,31 @@ namespace SunsetSystems.Experience
             ISaveable.UnregisterSaveable(this);
         }
 
-        public void AddCreatureToExperienceManager(string creatureID)
+        public static void AddCreatureToExperienceManager(string creatureID)
         {
-            bool result = _experienceDataCache.TryAdd(creatureID, new());
+            bool result = Instance._experienceDataCache.TryAdd(creatureID, new());
             if (result == false)
                 Debug.LogError($"Cannot add creature to experience manager. Creature with ID {creatureID} is already tracked!");
         }
 
-        public bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
+        public static bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 data.AddExperience(amount, experienceType);
-                _experienceDataCache[creatureID] = data;
+                Instance._experienceDataCache[creatureID] = data;
             }
             return false;
         }
 
-        public bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
+        public static bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 if (data.GetCurrentExperience(experienceType) < amount)
                     return false;
                 data.RemoveExperience(amount, experienceType);
-                _experienceDataCache[creatureID] = data;
+                Instance._experienceDataCache[creatureID] = data;
                 return true;
             }
             return false;

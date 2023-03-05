@@ -1,34 +1,27 @@
 using NaughtyAttributes;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
+using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using Zenject;
 
 namespace SunsetSystems.UI
 {
-    public class InventoryUI : MonoBehaviour
+    public class InventoryUIParent : MonoBehaviour
     {
         [SerializeField, Required]
         private InventoryContentsUpdater _inventoryContentsUpdater;
         [SerializeField, Required]
         private EquipmentContentsUpdater _equipmentContentsUpdater;
 
-        private IInventoryManager _inventoryManager;
-        private ICharacterSelector _characterSelector;
-
-        [Inject]
-        public void InjectDependencies(IInventoryManager inventoryManager, ICharacterSelector characterSelector)
-        {
-            _inventoryManager = inventoryManager;
-            _characterSelector = characterSelector;
-        }
-
         private void OnEnable()
         {
-            string characterKey = _characterSelector.SelectedCharacterKey;
+            string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
             UpdateInventory(characterKey);
 
@@ -48,22 +41,28 @@ namespace SunsetSystems.UI
 
         private void UpdateEquipment(string characterKey)
         {
-            List<IGameDataProvider<InventoryEntry>> items = new();
-            items.AddRange(_inventoryManager.GetPlayerInventoryContents());
-            _inventoryContentsUpdater.UpdateViews(items);
+            if (PartyManager.Instance.IsRecruitedMember(characterKey))
+            {
+                List<IGameDataProvider<InventoryEntry>> items = new();
+                items.AddRange(InventoryManager.PlayerInventory.Contents);
+                _inventoryContentsUpdater.UpdateViews(items);
+            }
         }
 
         private void UpdateInventory(string characterKey)
         {
-            List<IGameDataProvider<EquipmentSlot>> slots = new();
-            if (_inventoryManager.TryGetEquipmentData(_characterSelector.SelectedCharacterKey, out EquipmentData data))
+            if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
-                foreach (string key in data.EquipmentSlots.Keys)
+                List<IGameDataProvider<EquipmentSlot>> slots = new();
+                if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
                 {
-                    slots.Add(data.EquipmentSlots[key]);
+                    foreach (string key in data.EquipmentSlots.Keys)
+                    {
+                        slots.Add(data.EquipmentSlots[key]);
+                    }
                 }
+                _equipmentContentsUpdater.UpdateViews(slots);
             }
-            _equipmentContentsUpdater.UpdateViews(slots);
         }
     }
 }

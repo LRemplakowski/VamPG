@@ -4,8 +4,6 @@ namespace SunsetSystems.Dialogue
 {
     public interface IDialogueManager
     {
-        int DefaultTypewriterSpeed { get; }
-
         void RegisterView(DialogueViewBase view);
 
         void UnregisterView(DialogueViewBase view);

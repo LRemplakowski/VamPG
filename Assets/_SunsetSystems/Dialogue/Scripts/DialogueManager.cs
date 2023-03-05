@@ -17,7 +17,7 @@ namespace SunsetSystems.Dialogue
         [SerializeField]
         private DialogueRunner _dialogueRunner;
         [field: SerializeField]
-        public int DefaultTypewriterSpeed { get; private set; } = 15;
+        public float DefaultTypewriterValue { get; private set; } = 15f;
 
         [Inject]
         private IGameManager _gameManager;
@@ -28,7 +28,7 @@ namespace SunsetSystems.Dialogue
             if (PlayerPrefs.HasKey(SettingsConstants.TYPEWRITER_SPEED_KEY))
                 SetTypewriterSpeed(PlayerPrefs.GetInt(SettingsConstants.TYPEWRITER_SPEED_KEY));
             else
-                SetTypewriterSpeed((int)DefaultTypewriterSpeed);
+                SetTypewriterSpeed((int)DefaultTypewriterValue);
         }
 
         public void ResetOnGameStart()

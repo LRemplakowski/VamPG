@@ -1,5 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters.Actions;
 using InsaneSystems.RTSSelection;
+using SunsetSystems.Inventory;
 using UnityEngine;
 using SunsetSystems.Party;
 
@@ -46,6 +47,14 @@ namespace SunsetSystems.Entities.Characters
             Attack attackAction = new(target, this);
             AddActionToQueue(attackAction);
             return attackAction;
+        }
+
+        private void OnDisable()
+        {
+            if (this.TryFindFirstGameObjectWithTag(TagConstants.PARTY_MANAGER, out GameObject partyManagerObject))
+            {
+                partyManagerObject.GetComponent<PartyManager>().UpdateCreatureData(this.Data);
+            }
         }
     }
 }

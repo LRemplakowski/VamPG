@@ -5,7 +5,6 @@ using SunsetSystems.LevelManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
-using Zenject;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -24,14 +23,6 @@ namespace SunsetSystems.Entities.Interactable
         [field: SerializeField]
         public string EntryNode { get; set; }
 
-        private IDialogueManager _dialogueManager;
-
-        [Inject]
-        public void InjectDependencies(IDialogueManager dialogueManager)
-        {
-            _dialogueManager = dialogueManager;
-        }
-
         protected async override void HandleInteraction()
         {
             if (_fadeOutBeforeDialogue)
@@ -42,7 +33,7 @@ namespace SunsetSystems.Entities.Interactable
                 await new WaitForSecondsRealtime(_fadeTimes.y);
                 await fade.DoFadeInAsync(_fadeTimes.z);
             }
-            _dialogueManager.StartDialogue(EntryNode, _dialogueProject);
+            DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
         }
     }
 }

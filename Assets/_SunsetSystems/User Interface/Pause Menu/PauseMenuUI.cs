@@ -4,7 +4,6 @@ using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.Events;
-using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -17,17 +16,10 @@ namespace SunsetSystems.UI
         [SerializeField]
         private GameObject _characterSelector;
 
-        public UnityEvent OnReturnToMenu;
+        [SerializeField]
+        private UnityEvent OnReturnToMenu;
         
         public PauseMenuScreen CurrentActiveScreen { get; private set; }
-
-        private ILevelLoader _levelLoader;
-
-        [Inject]
-        public void InjectDependencies(ILevelLoader levelLoader)
-        {
-            _levelLoader = levelLoader;
-        }
 
         private void Awake()
         {
@@ -42,11 +34,13 @@ namespace SunsetSystems.UI
             _characterSelector.SetActive(false);
         }
 
-        public void QuitToMenu()
+        public async void QuitToMenu()
         {
-            //await _levelLoader.UnloadGameScene();
-            Debug.LogError("Rework back to menu dumbass!");
+            SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            await loading.DoFadeOutAsync(.5f);
+            await LevelLoader.Instance.UnloadGameScene();
             OnReturnToMenu?.Invoke();
+            await loading.DoFadeInAsync(.5f);
         }
 
         public void OpenMenuScreen(PauseMenuScreen screen)

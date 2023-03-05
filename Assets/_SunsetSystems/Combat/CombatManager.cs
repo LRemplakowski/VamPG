@@ -9,7 +9,6 @@ using UnityEngine;
 using Redcode.Awaiting;
 using SunsetSystems.Animation;
 using System;
-using Zenject;
 
 namespace SunsetSystems.Combat
 {
@@ -44,19 +43,10 @@ namespace SunsetSystems.Combat
         private Creature FirstActor;
 
         [field: SerializeField]
-        public IEncounter CurrentEncounter { get; private set; }
+        public Encounter CurrentEncounter { get; private set; }
 
         [field: SerializeField]
         public List<Creature> Actors { get; private set; }
-
-        // DEPENDENCIES
-        private IPartyManager partyManager;
-
-        [Inject]
-        public void InjectDependencies(IPartyManager partyManager)
-        {
-            this.partyManager = partyManager;
-        }
 
         private void SetCurrentActiveActor(int index)
         {
@@ -95,7 +85,7 @@ namespace SunsetSystems.Combat
             turnCounter = 0;
             Actors = new();
             Actors.AddRange(encounter.Creatures);
-            Actors.AddRange(partyManager.ActiveParty);
+            Actors.AddRange(PartyManager.ActiveParty);
             CombatBegin?.Invoke(Actors);
             Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(true));
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
@@ -115,7 +105,7 @@ namespace SunsetSystems.Combat
             CurrentEncounter = null;
         }
 
-        private static async Task MoveAllCreaturesToNearestGridPosition(List<Creature> actors, IEncounter currentEncounter)
+        private static async Task MoveAllCreaturesToNearestGridPosition(List<Creature> actors, Encounter currentEncounter)
         {
             List<Task> moveTasks = new();
             foreach (Creature c in actors)

@@ -4,7 +4,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SunsetSystems.Journal.UI
 {
@@ -21,19 +20,11 @@ namespace SunsetSystems.Journal.UI
 
         private List<TextMeshProUGUI> _textPool = new();
 
-        private IQuestJournal _questJournal;
-
-        [Inject]
-        public void InjectDependencies(IQuestJournal questJournal)
-        {
-            _questJournal = questJournal;
-        }
-
         public void UpdateView(IGameDataProvider<Quest> dataProvider)
         {
             _textPool.ForEach(text => text.gameObject.SetActive(false));
             _title.text = dataProvider.Data.Name;
-            if (_questJournal.GetCurrentObjectives(dataProvider.Data.ID, out List<Objective> objectives))
+            if (QuestJournal.Instance.GetCurrentObjectives(dataProvider.Data.ID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {

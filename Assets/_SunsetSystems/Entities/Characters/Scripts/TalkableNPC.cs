@@ -2,7 +2,6 @@ using Apex;
 using SunsetSystems.Dialogue;
 using UnityEngine;
 using Yarn.Unity;
-using Zenject;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -66,14 +65,6 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private string _startNode;
 
-        private IDialogueManager _dialogueManager;
-
-        [Inject]
-        public void InjectDependencies(IDialogueManager dialogueManager)
-        {
-            _dialogueManager = dialogueManager;
-        }
-
         public void OnValidate()
         {
             if (InteractionTransform == null)
@@ -95,7 +86,7 @@ namespace SunsetSystems.Entities.Characters
         {
             if (!Interactable)
                 return;
-            _dialogueManager.StartDialogue(_startNode, dialogueProject);
+            DialogueManager.Instance.StartDialogue(_startNode, dialogueProject);
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             Interacted = true;
             TargetedBy = null;

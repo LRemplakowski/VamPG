@@ -6,6 +6,10 @@ namespace SunsetSystems.Journal
     {
         Quest MyQuest { get; }
 
-        void TriggerQuest();
+        void TriggerQuest()
+        {
+            Debug.Log("Starting quest " + MyQuest.Name);
+            QuestJournal.Instance.BeginQuest(MyQuest.ID);
+        }
     }
 }

@@ -1,16 +1,21 @@
+using SunsetSystems.Data;
 using UnityEngine;
-using Zenject;
+using SunsetSystems.LevelManagement;
+using System;
+using SunsetSystems.Game;
+using SunsetSystems.UI;
 
 namespace SunsetSystems.LevelManagement
 {
     public class DebugSaveLoadButtonScript : MonoBehaviour
     {
-        private ILevelLoader _levelLoader;
+        [SerializeField]
+        private LevelLoader _levelLoader;
 
-        [Inject]
-        public void InjectDependencies(ILevelLoader levelLoader)
+        private void Start()
         {
-            _levelLoader = levelLoader;
+            if (!_levelLoader)
+                _levelLoader = LevelLoader.Instance;
         }
 
         public void DoSave()

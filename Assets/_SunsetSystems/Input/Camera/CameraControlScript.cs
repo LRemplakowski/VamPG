@@ -4,7 +4,6 @@ using SunsetSystems.LevelManagement;
 using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Zenject;
 
 namespace SunsetSystems.Input.CameraControl
 {
@@ -36,15 +35,6 @@ namespace SunsetSystems.Input.CameraControl
         //Save/Load variables
         private UniqueId Unique => GetComponent<UniqueId>();
         public string DataKey => Unique.Id;
-
-        // Dependencies
-        private IGameManager _gameManager;
-
-        [Inject]
-        public void InjectDependencies(IGameManager gameManager)
-        {
-            _gameManager = gameManager;
-        }
 
 
         private void Awake()
@@ -113,7 +103,7 @@ namespace SunsetSystems.Input.CameraControl
                 _moveDirection = Vector3.zero;
             }
             _moveDirection = new Vector3(value.x, 0, value.y);
-            if (_gameManager.CurrentState == GameState.Conversation)
+            if (GameManager.CurrentState == GameState.Conversation)
                 _moveDirection = Vector3.zero;
         }
 
@@ -122,7 +112,7 @@ namespace SunsetSystems.Input.CameraControl
             if (!(context.performed || context.canceled))
                 return;
             _rotationDirection = -context.ReadValue<Vector2>().x;
-            if (_gameManager.CurrentState == GameState.Conversation)
+            if (GameManager.CurrentState == GameState.Conversation)
                 _rotationDirection = 0;
         }
 

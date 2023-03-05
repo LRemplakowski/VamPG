@@ -2,7 +2,6 @@ using SunsetSystems.Entities.Characters;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Game;
-using Zenject;
 
 namespace SunsetSystems.Combat
 {
@@ -27,14 +26,6 @@ namespace SunsetSystems.Combat
 
         private int _creatureCounter = 0;
 
-        private IGameManager gameManager;
-
-        [Inject]
-        public void InjectDependencies(IGameManager gameManager)
-        {
-            this.gameManager = gameManager;
-        }
-
         private void Start()
         {
             if (!MyGrid)
@@ -48,7 +39,7 @@ namespace SunsetSystems.Combat
             Debug.LogWarning("Begin encounter, do encounter start logic.");
             if (encounterStartLogic)
                 encounterStartLogic.Perform();
-            gameManager.CurrentState = GameState.Combat;
+            GameManager.CurrentState = GameState.Combat;
             _creatureCounter = Creatures.Count;
             combatManager.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
@@ -70,7 +61,7 @@ namespace SunsetSystems.Combat
             Debug.LogWarning("End encounter, do encounter end logic.");
             MyGrid.ClearActiveElements();
             combatManager.EndEncounter(this);
-            gameManager.CurrentState = GameState.Exploration;
+            GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
                 encounterEndLogic.Perform();
         }

@@ -3,7 +3,6 @@ using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -16,16 +15,6 @@ namespace SunsetSystems.UI
         [SerializeField]
         private DisciplineGroupUpdateReciever _disciplines;
 
-        private IPartyManager _partyManager;
-        private ICharacterSelector _characterSelector;
-
-        [Inject]
-        public void InjectDependencies(ICharacterSelector characterSelector, IPartyManager partyManager)
-        {
-            _characterSelector = characterSelector;
-            _partyManager = partyManager;
-        }
-
         private void OnEnable()
         {
             UpdateCharacterSheet();
@@ -33,8 +22,8 @@ namespace SunsetSystems.UI
 
         public void UpdateCharacterSheet()
         {
-            string selectedCharacterKey = _characterSelector.SelectedCharacterKey;
-            CreatureData data = _partyManager.GetPartyMemberDataByID(selectedCharacterKey);
+            string selectedCharacterKey = CharacterSelector.SelectedCharacterKey;
+            CreatureData data = PartyManager.Instance.GetPartyMemberDataByID(selectedCharacterKey);
             List<IGameDataProvider<BaseStat>> attributes = new();
             attributes.AddRange(data.Stats.Attributes.GetAttributeList());
             _attributes.ForEach(attributeGroup => attributeGroup.UpdateViews(attributes));

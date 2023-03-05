@@ -1,9 +1,10 @@
 using SunsetSystems.UI.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SunsetSystems.Journal.UI
 {
@@ -17,14 +18,6 @@ namespace SunsetSystems.Journal.UI
 
         public static event Action<Quest> QuestSelectorButtonClicked;
 
-        private IQuestJournal _questJournal;
-
-        [Inject]
-        public void InjectDependencies(IQuestJournal questJournal)
-        {
-            _questJournal = questJournal;
-        }
-
         public void OnButtonClicked()
         {
             QuestSelectorButtonClicked?.Invoke(_quest);
@@ -34,7 +27,7 @@ namespace SunsetSystems.Journal.UI
         {
             _quest = dataProvider.Data;
             _questTitle.text = _quest.Name;
-            _button.interactable = !_questJournal.IsQuestCompleted(_quest.ID);
+            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.ID);
         }
     }
 }

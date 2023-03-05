@@ -13,17 +13,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using Yarn.Unity;
-using Zenject;
 
 namespace SunsetSystems.Input
 {
     [RequireComponent(typeof(Tagger))]
-    public class UIBehaviourController : MonoBehaviour
+    public class UIBehaviourController : MonoBehaviour, IInitialized
     {
-        [Inject]
-        private IGameplayUI gameplayUI;
-        [Inject]
-        private IGameManager gameManager;
+        [SerializeField]
+        private GameplayUIManager gameplayUIParent;
+        [SerializeField]
+        private GameManager gameManager;
         [SerializeField]
         private LayerMask _raycastTargetMask;
 
@@ -38,6 +37,7 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal += OnJournal;
             PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
             PlayerInputHandler.OnHelp += OnShowHelp;
+            IInitialized.RegisterInitialization(this);
         }
 
         private void OnDisable()
@@ -49,18 +49,24 @@ namespace SunsetSystems.Input
             PlayerInputHandler.OnJournal -= OnJournal;
             PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
             PlayerInputHandler.OnHelp -= OnShowHelp;
+            IInitialized.UnregisterInitialization(this);
+        }
+
+        private void Start()
+        {
+            Initialize();
         }
 
         private void Update()
         {
             Ray ray = Camera.main.ScreenPointToRay(pointerPosition);
-            if (gameplayUI != null && Physics.Raycast(ray, out RaycastHit hit, 100f, _raycastTargetMask))
+            if (gameplayUIParent != null && Physics.Raycast(ray, out RaycastHit hit, 100f, _raycastTargetMask))
             {
                 if (InputHelper.IsRaycastHittingUIObject(pointerPosition, out List<RaycastResult> hits))
                 {
                     if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
                     {
-                        gameplayUI.DisableNameplate();
+                        gameplayUIParent.DisableNameplate();
                         return;
                     }
                 }
@@ -69,18 +75,31 @@ namespace SunsetSystems.Input
                 {
                     if (nameplateReciever is IInteractable interactable && interactable.IsHoveredOver == false)
                     {
-                        gameplayUI.DisableNameplate();
+                        gameplayUIParent.DisableNameplate();
                     }
                     else
                     {
-                        gameplayUI.ShowNameplate(nameplateReciever);
+                        gameplayUIParent.HandleNameplateHover(nameplateReciever);
                     }
                 }
                 else
                 {
-                    gameplayUI.DisableNameplate();
+                    gameplayUIParent.DisableNameplate();
                 }
             }
+        }
+
+        public void Initialize()
+        {
+            if (!gameplayUIParent)
+                gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
+            if (!gameManager)
+                gameManager = this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
+        }
+
+        public void LateInitialize()
+        {
+
         }
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
@@ -101,9 +120,9 @@ namespace SunsetSystems.Input
         {
             if (!context.performed)
                 return;
-            if (gameplayUI.ContainerGUI.gameObject.activeInHierarchy)
+            if (gameplayUIParent.ContainerGUI.gameObject.activeInHierarchy)
             {
-                gameplayUI.ContainerGUI.CloseContainerGUI();
+                gameplayUIParent.ContainerGUI.CloseContainerGUI();
                 return;
             }
             SwitchPauseAndOpenScreen(PauseMenuScreen.Settings);
@@ -134,29 +153,29 @@ namespace SunsetSystems.Input
         {
             if (context.performed)
             {
-                gameplayUI.HelpOverlay.SetActive(true);
+                gameplayUIParent.HelpOverlay.SetActive(true);
             }
             else if (context.canceled)
             {
-                gameplayUI.HelpOverlay.SetActive(false);
+                gameplayUIParent.HelpOverlay.SetActive(false);
             }
         }
 
         private void SwitchPauseAndOpenScreen(PauseMenuScreen screen)
         {
-            if (gameManager.IsCurrentState(GameState.Menu))
+            if (GameManager.CurrentState == GameState.Menu)
                 return;
-            PauseMenuUI pauseUI = gameplayUI.PauseMenuUI;
-            if (gameManager.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
+            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
+            if (GameManager.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
             {
                 Debug.Log("Resuming game");
-                gameManager.CurrentState = GameState.Exploration;
+                GameManager.CurrentState = GameState.Exploration;
                 pauseUI.gameObject.SetActive(false);
             }
             else
             {
                 Debug.Log("Pausing game");
-                gameManager.CurrentState = GameState.GamePaused;
+                GameManager.CurrentState = GameState.GamePaused;
                 pauseUI.gameObject.SetActive(true);
                 pauseUI.OpenMenuScreen(screen);
             }

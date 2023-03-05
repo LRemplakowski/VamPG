@@ -1,12 +1,12 @@
 using NaughtyAttributes;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SunsetSystems.UI
 {
@@ -18,16 +18,6 @@ namespace SunsetSystems.UI
         private Image _icon;
         [SerializeField]
         private TextMeshProUGUI _stackSize;
-
-        private ICharacterSelector characterSelector;
-        private IInventoryManager inventoryManager;
-
-        [Inject]
-        public void InjectDependencies(ICharacterSelector characterSelector, IInventoryManager inventoryManager)
-        {
-            this.characterSelector = characterSelector;
-            this.inventoryManager = inventoryManager;
-        }
 
         public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
@@ -56,8 +46,8 @@ namespace SunsetSystems.UI
             Debug.Log($"Equipping item {_itemEntry._item.ReadableID}!");
             if (_itemEntry._item is EquipableItem item)
             {
-                if (!inventoryManager.TryEquipItem(characterSelector.SelectedCharacterKey, item))
-                    Debug.LogError($"Failed to equip item {item.ReadableID} for character {characterSelector.SelectedCharacterKey}!");
+                if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
+                    Debug.LogError($"Failed to equip item {item.ReadableID} for character {CharacterSelector.SelectedCharacterKey}!");
             }
         }
 

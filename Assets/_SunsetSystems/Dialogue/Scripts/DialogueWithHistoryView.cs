@@ -12,7 +12,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Yarn.Unity;
-using Zenject;
 
 namespace SunsetSystems.Dialogue
 {
@@ -60,18 +59,6 @@ namespace SunsetSystems.Dialogue
         private bool _requestedLineInterrupt = false;
         private bool _optionsPresented = false;
 
-        private IDialogueManager _dialogueManager;
-        private IAudioManager _audioManager;
-        private IPartyManager _partyManager;
-
-        [Inject]
-        public void InjectDependencies(IDialogueManager dialogueManager, IAudioManager audioManager, IPartyManager partyManager)
-        {
-            _dialogueManager = dialogueManager;
-            _audioManager = audioManager;
-            _partyManager = partyManager;
-        }
-
         public void Cleanup()
         {
             _lineHistory.text = string.Empty;
@@ -86,7 +73,7 @@ namespace SunsetSystems.Dialogue
 
         private void Start()
         {
-            _dialogueManager.RegisterView(this);
+            DialogueManager.RegisterView(this);
             gameObject.SetActive(false);
         }
 
@@ -123,7 +110,7 @@ namespace SunsetSystems.Dialogue
         public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             _clampScrollbarNextFrame = true;
-            _audioManager.PlayTypewriterEnd();
+            AudioManager.Instance.PlayTypewriterEnd();
             await new WaitForUpdate();
             _clampScrollbarNextFrame = true;
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -142,14 +129,14 @@ namespace SunsetSystems.Dialogue
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect && _typeSpeed > 0)
             {
-                _audioManager.PlayTyperwriterLoop();
+                AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
                 if (_requestedLineInterrupt)
                     return;
             }
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-            _audioManager.PlayTypewriterEnd();
+            AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
             onDialogueLineFinished?.Invoke();
@@ -209,15 +196,15 @@ namespace SunsetSystems.Dialogue
             string speakerID;
             if (characterName == null || string.IsNullOrWhiteSpace(characterName))
             {
-                speakerID = _partyManager.MainCharacter.Data.ID;
-                characterName = _partyManager.MainCharacter.Data.FullName;
+                speakerID = PartyManager.MainCharacter.Data.ID;
+                characterName = PartyManager.MainCharacter.Data.FullName;
             }
             else
             {
                 if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
                 {
-                    speakerID = _partyManager.MainCharacter.Data.ID;
-                    characterName = _partyManager.MainCharacter.Data.FullName;
+                    speakerID = PartyManager.MainCharacter.Data.ID;
+                    characterName = PartyManager.MainCharacter.Data.FullName;
                 }
             }
             Sprite sprite = this.GetSpeakerPortrait(speakerID);
@@ -296,7 +283,7 @@ namespace SunsetSystems.Dialogue
             if (_requestedLineInterrupt || _optionsPresented)
                 return;
             _clampScrollbarNextFrame = true;
-            _audioManager.PlayTypewriterEnd();
+            AudioManager.Instance.PlayTypewriterEnd();
             _requestedLineInterrupt = true;
             requestInterrupt?.Invoke();
         }

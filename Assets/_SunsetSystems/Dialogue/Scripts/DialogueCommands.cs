@@ -4,59 +4,65 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Yarn.Unity;
-using Zenject;
 
 namespace SunsetSystems.Dialogue
 {
     public static class DialogueCommands
     {
-        [Inject]
-        private static IQuestJournal questJournal;
-        [Inject]
-        private static IPartyManager partyManager;
-        [Inject]
-        private static IInventoryManager inventoryManager;
-        [Inject]
-        private static IAudioManager audioManager;
-
         [YarnCommand("StartQuest")]
         public static void StartQuest(string readableID)
         {
-            questJournal.BeginQuestByReadableID(readableID);
+            QuestJournal.Instance.BeginQuestByReadableID(readableID);
         }
 
         [YarnCommand("CompleteObjective")]
         public static void CompleteObjective(string readableQuestID, string objectiveID)
         {
-            questJournal.CompleteObjective(readableQuestID, objectiveID);
+            if (QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(readableQuestID, objectiveID, out Objective objective))
+            {
+                objective.Complete();
+            }
+            else
+            {
+                Debug.LogError($"Dialogue tried to completed objective {objectiveID} in quest {readableQuestID} but that objective is not currently active!");
+            }
         }
 
         [YarnCommand("FailObjective")]
         public static void FailObjective(string readableQuestID, string objectiveID)
         {
-            questJournal.FailObjective(readableQuestID, objectiveID);
+            if (QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(readableQuestID, objectiveID, out Objective objective))
+            {
+                objective.MakeInactive();
+            }
+            else
+            {
+                Debug.LogError($"Dialogue tried to fail objective {objectiveID} in quest {readableQuestID} but that objective is not currently active!");
+            }
         }
 
         [YarnCommand("IncreaseHunger")]
         public static void IncreaseHunger(string characterID, int value)
         {
-            Creature character = partyManager.GetPartyMemberByID(characterID);
+            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
             character.StatsManager.TryUseBlood(value);
         }
 
         [YarnCommand("DecreaseHunger")]
         public static void DecreaseHunger(string characterID, int value)
         {
-            Creature character = partyManager.GetPartyMemberByID(characterID);
+            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
             character.StatsManager.RegainBlood(value);
         }
 
         [YarnCommand("AddMoney")]
         public static void AddMoney(float value)
         {
-            inventoryManager.AddMoney(Mathf.RoundToInt(value));
+            InventoryManager.Instance.AddMoney(value);
         }
 
         [YarnCommand("ModifyInfluence")]
@@ -68,14 +74,14 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("RemoveMoney")]
         public static void RemoveMoney(float value)
         {
-            if (inventoryManager.TryRemoveMoney(Mathf.RoundToInt(value)) == false)
+            if (InventoryManager.Instance.TryRemoveMoney(value) == false)
                 throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
         }
 
         [YarnCommand("PlaySFX")]
         public static void PlaySFX(string clipName)
         {
-            audioManager.PlaySFXOneShot(clipName);
+            AudioManager.Instance.PlaySFXOneShot(clipName);
         }
     }
 }

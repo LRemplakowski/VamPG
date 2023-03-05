@@ -11,8 +11,6 @@ namespace SunsetSystems.MainMenu
     {
         [SerializeField]
         private GameObject debugUi;
-        [SerializeField]
-        private GameStarter gameStarter;
 
         private void OnEnable()
         {
@@ -38,12 +36,12 @@ namespace SunsetSystems.MainMenu
 
         public void StartGameDebug()
         {
-            gameStarter.InitializeGameDebug();
+            GameStarter.Instance.InitializeGameDebug();
         }
 
         public void StartGameJam()
         {
-            gameStarter.InitializeGameJam();
+            GameStarter.Instance.InitializeGameJam();
         }
 
         public void QuitGame()

@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace SunsetSystems
 {
@@ -23,14 +22,6 @@ namespace SunsetSystems
         private List<TextMeshProUGUI> _objectivePool = new();
 
         private Quest _cachedQuest;
-
-        private IQuestJournal _questJournal;
-
-        [Inject]
-        public void InjectDependencies(IQuestJournal questJournal)
-        {
-            _questJournal = questJournal;
-        }
 
         private void Awake()
         {
@@ -68,7 +59,7 @@ namespace SunsetSystems
             _description.text = _cachedQuest.Description;
             _objectivePool.RemoveAll(obView => obView == null);
             _objectivePool.ForEach(obView => obView.gameObject.SetActive(false));
-            if (_questJournal.GetCurrentObjectives(_cachedQuest.ID, out List<Objective> objectives))
+            if (QuestJournal.Instance.GetCurrentObjectives(_cachedQuest.ID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {

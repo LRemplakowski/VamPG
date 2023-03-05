@@ -24,7 +24,7 @@ namespace SunsetSystems.Entities.Characters
         [ES3Serializable]
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
-        public int Money;
+        public float Money;
 
         public CreatureData(CreatureConfig config)
         {

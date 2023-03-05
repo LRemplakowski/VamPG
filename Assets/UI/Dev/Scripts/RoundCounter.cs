@@ -4,34 +4,26 @@ using UnityEngine;
 using TMPro;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
-using Zenject;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class RoundCounter : MonoBehaviour
 {
     private TextMeshProUGUI text;
 
-    private ICombatManager combatManager;
-    private IGameManager gameManager;
-
-    [Inject]
-    public void InjectDependencies(ICombatManager combatManager, IGameManager gameManager)
-    {
-        this.combatManager = combatManager;
-        this.gameManager = gameManager;
-    }
+    private CombatManager turnCombatManager;
 
     // Start is called before the first frame update
     void Start()
     {
         text = GetComponent<TextMeshProUGUI>();
         text.text = "";
+        turnCombatManager = CombatManager.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameManager.IsCurrentState(GameState.Combat))
-            text.text = combatManager.GetRound().ToString();
+        if (GameManager.IsCurrentState(GameState.Combat))
+            text.text = turnCombatManager.GetRound().ToString();
     }
 }

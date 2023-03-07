@@ -3,6 +3,7 @@ using CleverCrow.Fluid.UniqueIds;
 using NaughtyAttributes;
 using SunsetSystems.Data;
 using SunsetSystems.Loading;
+using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [RequireComponent(typeof(UniqueId))]
-    public class QuestJournal : Utils.Singleton<QuestJournal>, IResetable, ISaveable
+    public class QuestJournal : InitializedSingleton<QuestJournal>, IResetable, ISaveable
     {
         [SerializeField]
         private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
@@ -40,6 +41,7 @@ namespace SunsetSystems.Journal
 
         protected override void Awake()
         {
+            base.Awake();
             _uniqueId ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
         }
@@ -72,9 +74,20 @@ namespace SunsetSystems.Journal
             Quest.ObjectiveFailed -= OnQuestObjectiveFailed;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
+            base.OnDestroy();
+        }
+
+        public override void Initialize()
+        {
+            
+        }
+
+        public override void LateInitialize()
+        {
+            OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
         private void OnQuestStarted(Quest quest)
@@ -235,6 +248,7 @@ namespace SunsetSystems.Journal
             }
             saveData.ActiveQuests = new(_activeQuests);
             saveData.CompletedQuests = new(_completedQuests);
+            saveData.TrackedQuests = new(_trackedQuests);
             return saveData;
         }
 
@@ -246,6 +260,7 @@ namespace SunsetSystems.Journal
             _completedQuests = new();
             _completedQuests.AddRange(saveData.CompletedQuests);
             _currentObjectives = new(saveData.CurrentObjectives);
+            _trackedQuests = new(saveData.TrackedQuests);
             foreach (string key in _activeQuests.Keys)
             {
                 foreach (Objective objective in _currentObjectives[key].Values)
@@ -259,6 +274,7 @@ namespace SunsetSystems.Journal
         {
             public Dictionary<string, Dictionary<string, Objective>> CurrentObjectives;
             public Dictionary<string, Quest> ActiveQuests, CompletedQuests;
+            public List<Quest> TrackedQuests;
         }
             
     }

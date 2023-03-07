@@ -94,12 +94,12 @@ namespace SunsetSystems.Party
 
         public override void Initialize()
         {
-            UpdatePartyPortraits();
+
         }
 
         public override void LateInitialize()
         {
-            
+            UpdatePartyPortraits();
         }
 
         private void UpdatePartyPortraits()
@@ -118,7 +118,10 @@ namespace SunsetSystems.Party
 
         public CreatureData GetPartyMemberDataByID(string key)
         {
-            return _creatureDataCache[key];
+            if (_creatureDataCache.TryGetValue(key, out CreatureData data))
+                return data;
+            else
+                return new();
         }
 
         public bool IsRecruitedMember(string key)
@@ -230,6 +233,7 @@ namespace SunsetSystems.Party
             PartySaveData saveData = new();
             saveData.CreatureDataCache = new(_creatureDataCache);
             saveData.ActiveMemberKeys = new(_activeCoterieMemberKeys);
+            saveData.MainCharacterKey = _mainCharacterKey;
             Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
@@ -245,6 +249,7 @@ namespace SunsetSystems.Party
             _creatureDataCache = new();
             saveData.CreatureDataCache.Keys.ToList().ForEach(key => _creatureDataCache.Add(key, saveData.CreatureDataCache[key]));
             _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
+            _mainCharacterKey = saveData.MainCharacterKey;
             _activeParty = new();
             foreach (string key in _activeCoterieMemberKeys)
             {
@@ -259,6 +264,7 @@ namespace SunsetSystems.Party
         public Dictionary<string, Vector3> PartyPositions;
         public Dictionary<string, CreatureData> CreatureDataCache;
         public HashSet<string> ActiveMemberKeys;
+        public string MainCharacterKey;
     }
 
     [Serializable]

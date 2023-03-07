@@ -10,7 +10,9 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        public readonly string ID;
+        [ES3Serializable]
+        private string _id;
+        public string ID => _id;
         public string PortraitFileName;
         public Sprite Portrait => ResourceLoader.GetPortrait(PortraitFileName);
         public Faction Faction;
@@ -30,7 +32,7 @@ namespace SunsetSystems.Entities.Characters
         {
             FirstName = config.Name;
             LastName = config.LastName;
-            ID = config.ReadableID;
+            _id = config.ReadableID;
             PortraitFileName = config.PortraitFileName;
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;

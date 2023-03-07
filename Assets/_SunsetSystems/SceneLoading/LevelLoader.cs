@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SunsetSystems.Utils;
 using Redcode.Awaiting;
 using UnityEngine.Events;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Loading
 {
@@ -67,6 +68,7 @@ namespace SunsetSystems.Loading
 
         internal async Task LoadSavedLevel(Action preLoadingAction)
         {
+            GameManager.CurrentState = GameState.GamePaused;
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
@@ -83,6 +85,7 @@ namespace SunsetSystems.Loading
             await IInitialized.LateInitializeObjectsAsync();
             OnAfterSaveLoad?.Invoke(loadingEventData);
             await DisableLoadingScreen();
+            GameManager.CurrentState = GameState.Exploration;
         }
 
         private async Task PrepareLoadingScreen()

@@ -1,6 +1,4 @@
-using Apex;
 using CleverCrow.Fluid.UniqueIds;
-using NaughtyAttributes;
 using SunsetSystems.Data;
 using SunsetSystems.Loading;
 using SunsetSystems.Utils;
@@ -107,7 +105,7 @@ namespace SunsetSystems.Journal
                     questObjectives.Clear();
                     foreach (Objective newObjective in objective.NextObjectives)
                     {
-                        questObjectives.Add(newObjective.ReadableID, newObjective);
+                        questObjectives.Add(newObjective.DatabaseID, newObjective);
                     }
                 }
                 OnActiveQuestsChanged?.Invoke(_trackedQuests);
@@ -157,7 +155,7 @@ namespace SunsetSystems.Journal
                 _activeQuests.Add(quest.ID, quest);
                 _trackedQuests.Add(quest);
                 Dictionary<string, Objective> questObjectives = new();
-                quest.InitialObjectives.ForEach(objective => questObjectives.Add(objective.ReadableID, objective));
+                quest.InitialObjectives.ForEach(objective => questObjectives.Add(objective.DatabaseID, objective));
                 _currentObjectives.Add(quest.ID, questObjectives);
                 quest.Begin();
                 return true;
@@ -239,16 +237,16 @@ namespace SunsetSystems.Journal
             saveData.CurrentObjectives = new();
             foreach (string questKey in _currentObjectives.Keys)
             {
-                Dictionary<string, Objective> objectives = new();
+                List<string> objectives = new();
                 foreach (string objectiveKey in _currentObjectives[questKey].Keys)
                 {
-                    objectives.Add(objectiveKey, _currentObjectives[questKey][objectiveKey]);
+                    objectives.Add(objectiveKey);
                 }
                 saveData.CurrentObjectives.Add(questKey, objectives);
             }
-            saveData.ActiveQuests = new(_activeQuests);
-            saveData.CompletedQuests = new(_completedQuests);
-            saveData.TrackedQuests = new(_trackedQuests);
+            saveData.ActiveQuests = _activeQuests.Keys.ToList();
+            saveData.CompletedQuests = _completedQuests.Keys.ToList();
+            saveData.TrackedQuests = _trackedQuests.Select(quest => quest.ID).ToList();
             return saveData;
         }
 
@@ -256,11 +254,16 @@ namespace SunsetSystems.Journal
         {
             QuestJournalSaveData saveData = data as QuestJournalSaveData;
             _activeQuests = new();
-            _activeQuests.AddRange(saveData.ActiveQuests);
+            saveData.ActiveQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _activeQuests.Add(questID, quest); });
             _completedQuests = new();
-            _completedQuests.AddRange(saveData.CompletedQuests);
-            _currentObjectives = new(saveData.CurrentObjectives);
-            _trackedQuests = new(saveData.TrackedQuests);
+            saveData.CompletedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _activeQuests.Add(questID, quest); });
+            foreach (string key in saveData.CurrentObjectives.Keys)
+            {
+                Dictionary<string, Objective> objectives = new();
+                saveData.CurrentObjectives[key].ForEach(objectiveID => { ObjectiveDatabase.Instance.TryGetEntry(objectiveID, out Objective objective); objectives.Add(objectiveID, objective); });
+                _currentObjectives.Add(key, objectives);
+            }
+            saveData.TrackedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _trackedQuests.Add(quest); });
             foreach (string key in _activeQuests.Keys)
             {
                 foreach (Objective objective in _currentObjectives[key].Values)
@@ -272,9 +275,8 @@ namespace SunsetSystems.Journal
 
         private class QuestJournalSaveData : SaveData
         {
-            public Dictionary<string, Dictionary<string, Objective>> CurrentObjectives;
-            public Dictionary<string, Quest> ActiveQuests, CompletedQuests;
-            public List<Quest> TrackedQuests;
+            public Dictionary<string, List<string>> CurrentObjectives;
+            public List<string> ActiveQuests, CompletedQuests, TrackedQuests;
         }
             
     }

@@ -29,15 +29,19 @@ namespace SunsetSystems.Journal
 
         public bool RegisterQuest(Quest quest)
         {
+            if (quest.ID == null)
+            {
+                Debug.LogError($"Quest {quest} has null ID string!");
+            }
             if (_questRegistry.ContainsKey(quest.ID))
             {
                 _questAccessorRegistry = new();
-                _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.Add(q.ReadableID, q.ID));
+                _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
                 return false;
             }
-            _questRegistry.Add(quest.ID, quest);
+            _questRegistry.TryAdd(quest.ID, quest);
             _questAccessorRegistry = new();
-            _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.Add(q.ReadableID, q.ID));
+            _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
             return true;
         }
 
@@ -67,7 +71,7 @@ namespace SunsetSystems.Journal
             }
             keysToDelete.ForEach(key => _questRegistry.Remove(key));
             _questAccessorRegistry = new();
-            _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.Add(q.ReadableID, q.ID));
+            _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
         }
 
         public void UnregisterQuest(Quest quest)
@@ -75,7 +79,7 @@ namespace SunsetSystems.Journal
             if (_questRegistry.Remove(quest.ID))
             {
                 _questAccessorRegistry = new();
-                _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.Add(q.ReadableID, q.ID));
+                _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
             }
         }
     }

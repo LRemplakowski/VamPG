@@ -37,7 +37,7 @@ namespace SunsetSystems
             }
             keysToDelete.ForEach(key => _objectiveRegistry.Remove(key));
             _objectiveAccessorRegistry = new();
-            _objectiveRegistry.Values.ToList().ForEach(objective => _objectiveAccessorRegistry.Add(objective.ReadableID, objective.DatabaseID));
+            _objectiveRegistry.Values.ToList().ForEach(objective => _objectiveAccessorRegistry.TryAdd(objective.ReadableID, objective.DatabaseID));
         }
 
         public bool TryGetEntry(string objectiveID, out Objective objective)
@@ -55,12 +55,12 @@ namespace SunsetSystems
             if (_objectiveRegistry.ContainsKey(objective.DatabaseID))
             {
                 _objectiveAccessorRegistry = new();
-                _objectiveRegistry.Values.ToList().ForEach(o => _objectiveAccessorRegistry.Add(o.ReadableID, o.DatabaseID));
+                _objectiveRegistry.Values.ToList().ForEach(o => _objectiveAccessorRegistry.TryAdd(o.ReadableID, o.DatabaseID));
                 return false;
             }
             _objectiveRegistry.Add(objective.DatabaseID, objective);
             _objectiveAccessorRegistry = new();
-            _objectiveRegistry.Values.ToList().ForEach(o => _objectiveAccessorRegistry.Add(o.ReadableID, o.DatabaseID));
+            _objectiveRegistry.Values.ToList().ForEach(o => _objectiveAccessorRegistry.TryAdd(o.ReadableID, o.DatabaseID));
             return true;
         }
 
@@ -69,7 +69,7 @@ namespace SunsetSystems
             if (_objectiveRegistry.Remove(objective.DatabaseID))
             {
                 _objectiveAccessorRegistry = new();
-                _objectiveRegistry.Values.ToList().ForEach(q => _objectiveAccessorRegistry.Add(q.ReadableID, q.DatabaseID));
+                _objectiveRegistry.Values.ToList().ForEach(q => _objectiveAccessorRegistry.TryAdd(q.ReadableID, q.DatabaseID));
             }
         }
     }

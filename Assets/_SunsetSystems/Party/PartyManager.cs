@@ -80,9 +80,10 @@ namespace SunsetSystems.Party
             LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
+            base.OnDestroy();
         }
 
         private void OnAfterLevelLoad(LevelLoadingEventData data)

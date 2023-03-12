@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {
@@ -228,6 +228,8 @@ namespace SunsetSystems.Loading
             Destroy(_dominic.gameObject);
         }
 
+
+
         public async void QuitGame()
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
@@ -236,6 +238,11 @@ namespace SunsetSystems.Loading
             this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
             this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
             await loading.DoFadeInAsync(.5f);
+        }
+
+        private class HavenSceneData : SceneLogicData
+        {
+
         }
 
         private static class HavenDialogueCommands

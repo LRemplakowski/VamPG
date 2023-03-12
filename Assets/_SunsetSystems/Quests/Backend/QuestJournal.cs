@@ -1,6 +1,6 @@
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Data;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
@@ -221,12 +221,15 @@ namespace SunsetSystems.Journal
             return false;
         }
 
-        public bool TryGetTrackedObjectiveByReadableID(string readableID, string objectiveID, out Objective objective)
+        public bool TryGetTrackedObjectiveByReadableID(string readableQuestID, string readableObjectiveID, out Objective objective)
         {
             objective = default;
-            if (QuestDatabase.Instance.TryGetQuestByReadableID(readableID, out Quest quest))
+            if (QuestDatabase.Instance.TryGetQuestByReadableID(readableQuestID, out Quest quest))
             {
-                return TryGetTrackedObjective(quest.ID, objectiveID, out objective);
+                if (ObjectiveDatabase.Instance.TryGetEntryByReadableID(readableObjectiveID, out objective))
+                {
+                    return TryGetTrackedObjective(quest.ID, objective.DatabaseID, out objective);
+                }
             }
             return false;
         }

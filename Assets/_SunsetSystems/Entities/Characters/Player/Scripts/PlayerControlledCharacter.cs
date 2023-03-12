@@ -56,5 +56,20 @@ namespace SunsetSystems.Entities.Characters
                 partyManagerObject.GetComponent<PartyManager>().UpdateCreatureData(this.Data);
             }
         }
+
+        public override object GetPersistenceData()
+        {
+            return new Foo();
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            Foo castData = data as Foo;
+        }
+
+        public class Foo
+        {
+
+        }
     }
 }

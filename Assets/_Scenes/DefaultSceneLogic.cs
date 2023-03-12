@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using SunsetSystems.Game;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
@@ -12,24 +12,23 @@ namespace SunsetSystems.Loading
 
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
-            Debug.Log("Starting scene");
             GameManager.CurrentState = GameState.Exploration;
             await Task.Yield();
         }
 
-        public sealed override void InjectSaveData(object data)
+        public override void InjectSaveData(object data)
         {
             
         }
 
-        public sealed override object GetSaveData()
+        public override object GetSaveData()
         {
-            return new SceneLogicData();
+            return null;
         }
-    }
 
-    public class SceneLogicData : SaveData
-    {
+        protected class SceneLogicData : SaveData
+        {
 
+        }
     }
 }

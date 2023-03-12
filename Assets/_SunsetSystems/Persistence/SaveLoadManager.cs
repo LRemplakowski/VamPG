@@ -1,8 +1,8 @@
-using Redcode.Awaiting;
-using System.Collections.Generic;
+using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public static class SaveLoadManager
     {
@@ -17,7 +17,14 @@ namespace SunsetSystems.Loading
             {
                 _saveData.UpdateSaveData(saveable);
             }
-            ES3.Save(SAVE_DATA_KEY, _saveData);
+            try
+            {
+                ES3.Save(SAVE_DATA_KEY, _saveData);
+            }
+            catch (NotSupportedException exception)
+            {
+                Debug.LogException(exception);
+            }
             ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex);
         }
 

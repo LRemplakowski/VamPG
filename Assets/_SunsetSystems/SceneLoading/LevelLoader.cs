@@ -8,7 +8,7 @@ using Redcode.Awaiting;
 using UnityEngine.Events;
 using SunsetSystems.Game;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public class LevelLoader : Singleton<LevelLoader>
     {

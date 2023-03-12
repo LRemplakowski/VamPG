@@ -1,5 +1,5 @@
-using Apex;
 using SunsetSystems.Dialogue;
+using System;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -96,6 +96,36 @@ namespace SunsetSystems.Entities.Characters
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
+        }
+
+        public override object GetPersistenceData()
+        {
+            TalkableNPCPersistenceData data = new(base.GetPersistenceData() as PersistenceData);
+            data.Interactable = Interactable;
+            return data;
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            TalkableNPCPersistenceData persistenceData = data as TalkableNPCPersistenceData;
+            Interactable = persistenceData.Interactable;
+        }
+
+        [Serializable]
+        protected class TalkableNPCPersistenceData : PersistenceData
+        {
+            public bool Interactable;
+
+            public TalkableNPCPersistenceData(PersistenceData persistenceData)
+            {
+                GameObjectActive = persistenceData.GameObjectActive;
+            }
+
+            public TalkableNPCPersistenceData()
+            {
+
+            }
         }
     }
 }

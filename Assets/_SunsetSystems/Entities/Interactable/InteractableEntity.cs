@@ -1,5 +1,4 @@
 ﻿using SunsetSystems.Entities.Characters;
-using SunsetSystems.Resources;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine.Events;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public abstract class InteractableEntity : Entity, IInteractable, INameplateReciever
+    public abstract class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
     {
         public static readonly List<IInteractable> InteractablesInScene = new();
 
@@ -84,8 +83,9 @@ namespace SunsetSystems.Entities.Interactable
 
         public UnityEvent OnInteractionTriggered;
 
-        protected virtual void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;
@@ -94,8 +94,9 @@ namespace SunsetSystems.Entities.Interactable
                 _interactionCollider = GetComponentInChildren<Collider>();
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;
@@ -107,23 +108,19 @@ namespace SunsetSystems.Entities.Interactable
             InteractablesInScene.Add(this);
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
+            base.Start();
             enabled = Interactable;
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             _interactionCollider.enabled = Interactable;
         }
 
-        private void LateUpdate()
+        protected virtual void LateUpdate()
         {
             if (TargetedBy == null)
                 Interacted = false;
-        }
-
-        protected virtual void OnDisable()
-        {
-            InteractablesInScene.Remove(this);
         }
 
         public void Interact()
@@ -158,6 +155,36 @@ namespace SunsetSystems.Entities.Interactable
         {
             _interacted = false;
             Interactable = true;
+        }
+
+        public override object GetPersistenceData()
+        {
+            InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData);
+            persistenceData.Interactable = Interactable;
+            return persistenceData;
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            InteractableEntityPersistenceData persistenceData = data as InteractableEntityPersistenceData;
+            Interactable = persistenceData.Interactable;
+        }
+
+        [Serializable]
+        protected class InteractableEntityPersistenceData : PersistenceData
+        {
+            public bool Interactable;
+
+            public InteractableEntityPersistenceData(PersistenceData persistentEntity)
+            {
+                GameObjectActive = persistentEntity.GameObjectActive;
+            }
+
+            public InteractableEntityPersistenceData()
+            {
+
+            }
         }
     }
 }

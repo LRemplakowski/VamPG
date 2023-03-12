@@ -20,7 +20,8 @@ namespace SunsetSystems.Entities.Characters
         public CreatureType CreatureType;
         public string UmaPresetFileName;
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
-        public RuntimeAnimatorController AnimatorControllerAsset;
+        public string animatorControllerResourceName;
+        public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
         [ES3Serializable]
         public StatsData Stats;
         [ES3Serializable]
@@ -38,7 +39,7 @@ namespace SunsetSystems.Entities.Characters
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
             UmaPresetFileName = config.UmaPresetFileName;
-            AnimatorControllerAsset = config.AnimatorController;
+            animatorControllerResourceName = config.AnimatorController.name;
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;

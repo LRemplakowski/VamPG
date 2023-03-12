@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Journal;
 using NaughtyAttributes;
-using System.Linq;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -27,8 +24,9 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             if (_objective != null)
             {
                 _objective.OnObjectiveActive -= OnObjectiveActive;

@@ -11,8 +11,13 @@ namespace SunsetSystems.Persistence
 
         public void UpdateSaveData<T>(T dataProvider) where T : ISaveable
         {
-            if (_saveDataDictionary.TryAdd(dataProvider.DataKey, dataProvider.GetSaveData()))
-                _saveDataDictionary[dataProvider.DataKey] = dataProvider.GetSaveData();
+            if (dataProvider is null || string.IsNullOrWhiteSpace(dataProvider.DataKey))
+                return;
+            object saveData = dataProvider.GetSaveData();
+            if (saveData is null)
+                return;
+            if (_saveDataDictionary.TryAdd(dataProvider.DataKey, saveData) is false)
+                _saveDataDictionary[dataProvider.DataKey] = saveData;
         }
 
         public object GetData(string dataKey)

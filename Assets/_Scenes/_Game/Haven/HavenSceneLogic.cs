@@ -276,7 +276,8 @@ namespace SunsetSystems.Persistence
             {
                 HavenSceneLogic._bathroomDoors.Interactable = true;
                 HavenSceneLogic._bathroomDoors.Interact();
-                Destroy(HavenSceneLogic._bathroomDoors.gameObject);
+                HavenSceneLogic._bathroomDoors.gameObject.SetActive(false);
+                //Destroy(HavenSceneLogic._bathroomDoors.gameObject);
             }
 
             [YarnCommand("ActivateApartmentDoorInteraction")]

@@ -65,8 +65,9 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private string _startNode;
 
-        public void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;

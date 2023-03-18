@@ -60,7 +60,7 @@ namespace SunsetSystems.Journal
             Instance = this;
         }
 
-        protected void OnValidate()
+        private void OnValidate()
         {
             Instance = this;
             List<string> keysToDelete = new();

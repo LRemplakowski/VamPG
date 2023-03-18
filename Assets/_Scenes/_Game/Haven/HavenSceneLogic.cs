@@ -3,6 +3,7 @@ using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Enviroment;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Inventory;
@@ -65,11 +66,11 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Waypoint _pcCoverWaypoint;
         [SerializeField]
-        private Doors _havenDoors;
+        private InteractableDoors _havenDoors;
         [SerializeField]
         private DialogueEntity _bathroomDoorsDialogue;
         [SerializeField]
-        private Doors _bathroomDoors;
+        private InteractableDoors _bathroomDoors;
         [Header("Action")]
         [SerializeField]
         private Creature _dominic;
@@ -117,7 +118,6 @@ namespace SunsetSystems.Persistence
             _desireeOnBed.SetActive(false);
             PartyManager.MainCharacter.gameObject.SetActive(true);
             await new WaitForSeconds(.5f);
-            await new WaitForUpdate();
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -274,16 +274,7 @@ namespace SunsetSystems.Persistence
             [YarnCommand("DestroyBathroomDoors")]
             public static void DestroyBathroomDoors()
             {
-                HavenSceneLogic._bathroomDoors.Interactable = true;
-                HavenSceneLogic._bathroomDoors.Interact();
                 HavenSceneLogic._bathroomDoors.gameObject.SetActive(false);
-                //Destroy(HavenSceneLogic._bathroomDoors.gameObject);
-            }
-
-            [YarnCommand("ActivateApartmentDoorInteraction")]
-            public static void ActivateApartmentDoorInteraction()
-            {
-                HavenSceneLogic._havenDoors.Interactable = true;
             }
 
             [YarnCommand("HandleGunTaken")]
@@ -328,12 +319,6 @@ namespace SunsetSystems.Persistence
             public static void AddBobbyPinToInventory()
             {
                 Debug.LogException(new NotImplementedException());
-            }
-
-            [YarnCommand("DisableSinkInteraction")]
-            public static void DisableSinkInteraction()
-            {
-                HavenSceneLogic.DisableSinkInteraction();
             }
 
             [YarnCommand("DisableInteractionsBeforeDominic")]

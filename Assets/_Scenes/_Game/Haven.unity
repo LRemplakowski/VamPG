@@ -974,6 +974,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 78059002}
+  _enablePersistence: 1
 --- !u!114 &78059002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3447,6 +3448,98 @@ Transform:
   m_Father: {fileID: 106778034}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &313491339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 313491340}
+  - component: {fileID: 313491342}
+  - component: {fileID: 313491341}
+  - component: {fileID: 313491343}
+  m_Layer: 8
+  m_Name: bathroom_door_dialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &313491340
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313491339}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.918, y: 0, z: 5.51}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 781100931855757369}
+  m_Father: {fileID: 1749489002}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &313491341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313491339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unique: {fileID: 313491342}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 313491343}
+  <HoverHighlight>k__BackingField: {fileID: 853837789}
+  _interactionDistance: 0.26
+  _interactionTransform: {fileID: 2098243039}
+  _interactable: 0
+  _nameplateName: Bathroom Door
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+  _fadeOutBeforeDialogue: 0
+  _fadeTimes: {x: 0, y: 0, z: 0}
+  _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
+  <EntryNode>k__BackingField: bathroomDoors
+--- !u!114 &313491342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313491339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: f818156e-70a4-4808-b450-4db1911bfdd9
+--- !u!65 &313491343
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313491339}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.046, y: 1.94, z: 1.01}
+  m_Center: {x: 0, y: 0.97, z: 0}
 --- !u!1 &313877112
 GameObject:
   m_ObjectHideFlags: 0
@@ -10382,6 +10475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 838806431}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 838806428}
   <HoverHighlight>k__BackingField: {fileID: 867816870}
   _interactionDistance: 1
@@ -10463,6 +10557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 838806431}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 838806428}
   <HoverHighlight>k__BackingField: {fileID: 867816870}
   _interactionDistance: 2
@@ -10616,6 +10711,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 851448342}
+  _enablePersistence: 1
 --- !u!114 &851448342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10817,17 +10913,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &858728475 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6936288575554144190, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 781100931855757368}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 781100931855757372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &859607337 stripped
@@ -14140,6 +14225,103 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <FaceDirection>k__BackingField: {fileID: 1094078755}
+--- !u!1 &1071963722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1071963723}
+  - component: {fileID: 1071963725}
+  - component: {fileID: 1071963724}
+  - component: {fileID: 1071963726}
+  m_Layer: 8
+  m_Name: PC_apartment_door_interaction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1071963723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071963722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.016, y: 0, z: 5.516}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4264640439043287192}
+  m_Father: {fileID: 1749489002}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1071963724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071963722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b54d5577960e584da2c6019922a74b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unique: {fileID: 1071963725}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 1071963726}
+  <HoverHighlight>k__BackingField: {fileID: 4264640439043287194}
+  _interactionDistance: 0.26
+  _interactionTransform: {fileID: 4264640439043287193}
+  _interactable: 0
+  _nameplateName: 
+  _interactableOnce: 1
+  OnInteractionTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2042823492}
+        m_TargetAssemblyTypeName: SunsetSystems.Persistence.HavenSceneLogic, Assembly-CSharp
+        m_MethodName: BringKevinForVisit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1071963725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071963722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 14c41e2d-5467-4e08-85fb-bc18deafcf43
+--- !u!65 &1071963726
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071963722}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.046, y: 1.94, z: 1.01}
+  m_Center: {x: 0.023, y: 0.97, z: 0}
 --- !u!1 &1085854011
 GameObject:
   m_ObjectHideFlags: 0
@@ -14873,6 +15055,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1124927101}
+  _enablePersistence: 1
 --- !u!114 &1124927101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16723,6 +16906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1292147317}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 1292147315}
   <HoverHighlight>k__BackingField: {fileID: 1305351739}
   _interactionDistance: 0.72
@@ -19417,6 +19601,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1513787331}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 1513787328}
   <HoverHighlight>k__BackingField: {fileID: 553209692}
   _interactionDistance: 1
@@ -21200,6 +21385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1654185705}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 1654185702}
   <HoverHighlight>k__BackingField: {fileID: 236378142}
   _interactionDistance: 1.39
@@ -21999,8 +22185,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4264640439043287192}
-  - {fileID: 781100931855757369}
+  - {fileID: 1071963723}
+  - {fileID: 313491340}
   m_Father: {fileID: 107125032}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22117,7 +22303,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761643063}
-  m_LocalRotation: {x: -0.009375398, y: -0.036781717, z: 0.0147887105, w: 0.9991699}
+  m_LocalRotation: {x: -0.009375421, y: -0.036781717, z: 0.014788734, w: 0.9991699}
   m_LocalPosition: {x: -0.05342067, y: -0.000000022351742, z: 0.000000056810677}
   m_LocalScale: {x: 0.9999998, y: 0.99999994, z: 0.99999917}
   m_ConstrainProportionsScale: 0
@@ -24245,6 +24431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1948786696}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 1948786694}
   <HoverHighlight>k__BackingField: {fileID: 427724042}
   _interactionDistance: 0.5
@@ -25594,7 +25781,7 @@ MonoBehaviour:
   _landlordSinkWaypoint: {fileID: 1904968515}
   _pcLandlordVisitWaypoint: {fileID: 318761173}
   _pcLandlordSinkWaypoint: {fileID: 1071711962}
-  _apartmentDoorLandlordInteraction: {fileID: 4264640439043287197}
+  _apartmentDoorLandlordInteraction: {fileID: 1071963724}
   _landlordVisitDialogueEntryNode: landlordVisit
   _landlordEnterCameraPosition: {x: 0.7085743, y: 0.251, z: 4.719709}
   _landlordEnterCameraRotation: {x: 0, y: -121.998, z: 0}
@@ -25604,9 +25791,9 @@ MonoBehaviour:
   _tableRotationForCover: {x: 0, y: -48.312, z: 0}
   _coffeeTableTransform: {fileID: 1644486157}
   _pcCoverWaypoint: {fileID: 1985334592}
-  _havenDoors: {fileID: 4264640439043287194}
-  _bathroomDoorsDialogue: {fileID: 781100931855757373}
-  _bathroomDoors: {fileID: 781100931855757371}
+  _havenDoors: {fileID: 4264640439043287202}
+  _bathroomDoorsDialogue: {fileID: 313491341}
+  _bathroomDoors: {fileID: 781100931855757375}
   _dominic: {fileID: 2663066712043532968}
   _kieran: {fileID: 5033574601942649726}
   _dominicWaypoint: {fileID: 391832821}
@@ -25778,7 +25965,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71f0f1b1ad5d554a9dd1a611e6863d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unique: {fileID: 0}
+  _unique: {fileID: 2046311564}
+  _enablePersistence: 1
   _data:
     FirstName: Kevin
     LastName: 
@@ -26975,6 +27163,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6972633198339030573, guid: 9923eb69b47fa2b4caf40b13044031dc, type: 3}
   m_PrefabInstance: {fileID: 3964407379641947259}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2115674511 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5238055860189060978, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+  m_PrefabInstance: {fileID: 4264640439043287191}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4264640439043287195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7fe7285ea4b794bb70a9e7822167e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2117317206 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6608639209144110784, guid: 6eff9698768e65d47ad38bc23551fd46, type: 3}
@@ -27579,7 +27778,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1749489002}
+    m_TransformParent: {fileID: 313491340}
     m_Modifications:
     - target: {fileID: 1206634403651007068, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Controller
@@ -27591,7 +27790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Layer
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -27599,11 +27798,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.918
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27611,7 +27810,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalRotation.w
@@ -27619,15 +27818,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -27647,7 +27846,7 @@ PrefabInstance:
       objectReference: {fileID: 545379654}
     - target: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: _interactable
@@ -27773,6 +27972,14 @@ PrefabInstance:
       propertyPath: m_Size.z
       value: 1.01
       objectReference: {fileID: 0}
+    - target: {fileID: 7363549319578438250, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363549319578438250, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8615270128421518650, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Name
       value: door_body
@@ -27781,7 +27988,8 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
 --- !u!4 &781100931855757369 stripped
 Transform:
@@ -27795,13 +28003,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &781100931855757371 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5334093391640963282, guid: 894d74694202427499f35233c24e5c48, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7016400798426151755, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 781100931855757368}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 781100931855757372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c7fe7285ea4b794bb70a9e7822167e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &781100931855757372 stripped
@@ -27809,7 +28017,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 781100931855757368}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &781100931855757373
+--- !u!114 &781100931855757374
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -27818,27 +28026,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 781100931855757372}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unique: {fileID: 858728475}
+  _id: 034f2b82-3870-4c19-bc23-c2683f9e631e
+--- !u!114 &781100931855757375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781100931855757372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unique: {fileID: 781100931855757374}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 819424585}
-  <HoverHighlight>k__BackingField: {fileID: 853837789}
-  _interactionDistance: 0.26
-  _interactionTransform: {fileID: 2098243039}
+  <HoverHighlight>k__BackingField: {fileID: 0}
+  _interactionDistance: 0
+  _interactionTransform: {fileID: 781100931855757369}
   _interactable: 0
-  _nameplateName: Bathroom Door
+  _nameplateName: 
   _interactableOnce: 0
   OnInteractionTriggered:
     m_PersistentCalls:
       m_Calls: []
-  _fadeOutBeforeDialogue: 0
-  _fadeTimes: {x: 0, y: 0, z: 0}
-  _onAfterFadeout:
-    m_PersistentCalls:
-      m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
-  <EntryNode>k__BackingField: bathroomDoors
+  _doors: {fileID: 781100931855757371}
 --- !u!1001 &808362554433068549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28460,6 +28676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1493672629717164985}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 1493672629717164981}
   <HoverHighlight>k__BackingField: {fileID: 358087618}
   _interactionDistance: 0.27
@@ -28608,6 +28825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 1493672629717164989}
+  _enablePersistence: 1
 --- !u!114 &1493672629717164989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30419,6 +30637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 2663066712043532981}
+  _enablePersistence: 1
   _data:
     FirstName: Dominic
     LastName: Evans
@@ -34184,6 +34403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 3648448450239223761}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 3648448450239223759}
   <HoverHighlight>k__BackingField: {fileID: 2000141496}
   _interactionDistance: 0.36
@@ -39305,6 +39525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 4149957016379629468}
+  _enablePersistence: 1
 --- !u!114 &4149957016379629468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43810,7 +44031,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1749489002}
+    m_TransformParent: {fileID: 1071963723}
     m_Modifications:
     - target: {fileID: 70275548971246268, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -43820,6 +44041,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.002
       objectReference: {fileID: 0}
+    - target: {fileID: 3338932014632279863, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: _interactionDistance
       value: 0.26
@@ -43828,13 +44053,21 @@ PrefabInstance:
       propertyPath: OnInteractionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2042823492}
+    - target: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: OnInteractionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BringKevinForVisit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: OnInteractionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SunsetSystems.Persistence.HavenSceneLogic, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.016
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -43842,7 +44075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.516
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -43850,15 +44083,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5333186893748465256, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -43900,7 +44133,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: PC_apartment_door
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7612416932428136423, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+    - {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
 --- !u!4 &4264640439043287192 stripped
 Transform:
@@ -43912,33 +44151,62 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 70275548971246268, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_PrefabInstance: {fileID: 4264640439043287191}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4264640439043287194 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7612416932428136423, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+--- !u!1 &4264640439043287194 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4030266691944660807, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_PrefabInstance: {fileID: 4264640439043287191}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4264640439043287197 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+--- !u!1 &4264640439043287195 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_PrefabInstance: {fileID: 4264640439043287191}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &4264640439043287196 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6713558428189820793, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+  m_PrefabInstance: {fileID: 4264640439043287191}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4264640439043287195}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b54d5577960e584da2c6019922a74b9, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &4264640439043287197 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 3338932014632279863, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+  m_PrefabInstance: {fileID: 4264640439043287191}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &4264640439043287201 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3198304015770628069, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
   m_PrefabInstance: {fileID: 4264640439043287191}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4264640439043287202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4264640439043287195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unique: {fileID: 4264640439043287196}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 4264640439043287197}
+  <HoverHighlight>k__BackingField: {fileID: 0}
+  _interactionDistance: 0
+  _interactionTransform: {fileID: 4264640439043287192}
+  _interactable: 0
+  _nameplateName: 
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+  _doors: {fileID: 2115674511}
 --- !u!1001 &4316442064626977172
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47857,6 +48125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 5033574601942649740}
+  _enablePersistence: 1
   _data:
     FirstName: Kieran
     LastName: Edevane
@@ -48780,13 +49049,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 5363628252765409762}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 5363628252765409757}
   <HoverHighlight>k__BackingField: {fileID: 2083673686}
   _interactionDistance: 0.21
   _interactionTransform: {fileID: 1153547750}
   _interactable: 0
   _nameplateName: Sink
-  _interactableOnce: 0
+  _interactableOnce: 1
   OnInteractionTriggered:
     m_PersistentCalls:
       m_Calls: []
@@ -49728,6 +49998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 6672455340073717591}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 6672455340073717590}
   <HoverHighlight>k__BackingField: {fileID: 1070228477}
   _interactionDistance: 1
@@ -50163,6 +50434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 7338327342520421208}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 7338327342520421205}
   <HoverHighlight>k__BackingField: {fileID: 434049927}
   _interactionDistance: 0.28
@@ -50624,6 +50896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 7762869251854723827}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 7762869251854723825}
   <HoverHighlight>k__BackingField: {fileID: 1362571084}
   _interactionDistance: 0.1
@@ -51290,6 +51563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 8629123247756599239}
+  _enablePersistence: 1
   _interactionCollider: {fileID: 8629123247756599237}
   <HoverHighlight>k__BackingField: {fileID: 1881289018}
   _interactionDistance: 1

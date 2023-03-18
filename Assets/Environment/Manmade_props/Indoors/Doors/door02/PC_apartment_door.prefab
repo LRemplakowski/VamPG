@@ -42,8 +42,9 @@ GameObject:
   - component: {fileID: 5333186893748465256}
   - component: {fileID: 3338932014632279863}
   - component: {fileID: 3198304015770628069}
-  - component: {fileID: 7612416932428136423}
   - component: {fileID: 4264640439043287197}
+  - component: {fileID: 6713558428189820793}
+  - component: {fileID: 5238055860189060978}
   m_Layer: 8
   m_Name: PC_apartment_door
   m_TagString: Untagged
@@ -101,42 +102,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7612416932428136423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8669574892900375537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interactionCollider: {fileID: 3338932014632279863}
-  <HoverHighlight>k__BackingField: {fileID: 4030266691944660807}
-  _interactionDistance: 1
-  _interactionTransform: {fileID: 5333186893748465256}
-  _interactable: 0
-  _nameplateName: Apartment Door
-  _interactableOnce: 1
-  OnInteractionTriggered:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  _animator: {fileID: 0}
-  _reverseAnimation: 0
 --- !u!114 &4264640439043287197
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b54d5577960e584da2c6019922a74b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unique: {fileID: 6713558428189820793}
   _interactionCollider: {fileID: 3338932014632279863}
   <HoverHighlight>k__BackingField: {fileID: 4030266691944660807}
   _interactionDistance: 2
@@ -159,9 +125,10 @@ MonoBehaviour:
   OnInteractionTriggered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SunsetSystems.Loading.HavenSceneLogic, Assembly-CSharp
-        m_MethodName: BringKevinForVisit
+      - m_Target: {fileID: 5238055860189060978}
+        m_TargetAssemblyTypeName: SunsetSystems.Entities.Enviroment.DoorController,
+          Assembly-CSharp
+        m_MethodName: TriggerStateChange
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -171,6 +138,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6713558428189820793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669574892900375537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
+--- !u!114 &5238055860189060978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669574892900375537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c7fe7285ea4b794bb70a9e7822167e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 3198304015770628069}
+  _reverseAnimation: 0
 --- !u!1001 &1984600761582614753
 PrefabInstance:
   m_ObjectHideFlags: 0

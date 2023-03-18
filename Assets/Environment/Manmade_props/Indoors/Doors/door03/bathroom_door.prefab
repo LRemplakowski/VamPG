@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4858457029234095027}
   - component: {fileID: 7363549319578438250}
   - component: {fileID: 1206634403651007068}
-  - component: {fileID: 5334093391640963282}
+  - component: {fileID: 7016400798426151755}
   m_Layer: 0
   m_Name: bathroom_door
   m_TagString: Untagged
@@ -58,7 +58,7 @@ Animator:
   m_GameObject: {fileID: 1772037835463075424}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0c3b06e65c0b0c546ac5dc0124b20598, type: 2}
+  m_Controller: {fileID: 9100000, guid: 28b080ad47189524486a4d61240374ad, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -68,7 +68,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5334093391640963282
+--- !u!114 &7016400798426151755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -77,13 +77,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1772037835463075424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130a30139537eba4ab528e1823e3bb95, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c7fe7285ea4b794bb70a9e7822167e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hoverHighlight: {fileID: 0}
-  _interactionDistance: 1.5
-  _interactionTransform: {fileID: 4858457029234095027}
-  animator: {fileID: 1206634403651007068}
+  _animator: {fileID: 1206634403651007068}
+  _reverseAnimation: 0
 --- !u!1001 &8885319871031935083
 PrefabInstance:
   m_ObjectHideFlags: 0

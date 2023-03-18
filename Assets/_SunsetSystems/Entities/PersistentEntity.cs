@@ -11,6 +11,8 @@ namespace SunsetSystems.Entities
     {
         [SerializeField, ReadOnly]
         protected UniqueId _unique;
+        [SerializeField]
+        private bool _enablePersistence = true;
         public string PersistenceID => _unique?.Id;
 
         protected virtual void Awake()
@@ -20,10 +22,13 @@ namespace SunsetSystems.Entities
 
         protected virtual void Start()
         {
-            if (ScenePersistenceManager.Instance != null)
-                ScenePersistenceManager.Instance.Register(this);
-            else
-                Debug.LogError($"Persistent entity {gameObject.name} found no instance of ScenePersistenceManager! Entity will not persist.");
+            if (_enablePersistence)
+            {
+                if (ScenePersistenceManager.Instance != null)
+                    ScenePersistenceManager.Instance.Register(this);
+                else
+                    Debug.LogError($"Persistent entity {gameObject.name} found no instance of ScenePersistenceManager! Entity will not persist.");
+            }
         }
 
         protected virtual void OnDestroy()

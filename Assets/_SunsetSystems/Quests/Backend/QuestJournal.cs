@@ -259,13 +259,15 @@ namespace SunsetSystems.Journal
             _activeQuests = new();
             saveData.ActiveQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _activeQuests.Add(questID, quest); });
             _completedQuests = new();
-            saveData.CompletedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _activeQuests.Add(questID, quest); });
+            saveData.CompletedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _completedQuests.Add(questID, quest); });
+            _currentObjectives = new();
             foreach (string key in saveData.CurrentObjectives.Keys)
             {
                 Dictionary<string, Objective> objectives = new();
                 saveData.CurrentObjectives[key].ForEach(objectiveID => { ObjectiveDatabase.Instance.TryGetEntry(objectiveID, out Objective objective); objectives.Add(objectiveID, objective); });
                 _currentObjectives.Add(key, objectives);
             }
+            _trackedQuests = new();
             saveData.TrackedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _trackedQuests.Add(quest); });
             foreach (string key in _activeQuests.Keys)
             {

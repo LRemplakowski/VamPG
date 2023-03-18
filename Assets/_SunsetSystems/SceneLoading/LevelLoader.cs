@@ -61,6 +61,7 @@ namespace SunsetSystems.Persistence
             await LoadNewScene(data);
             await IInitialized.InitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
+            await new WaitForUpdate();
             await InitializeSceneLogic(data);
             await IInitialized.LateInitializeObjectsAsync();
             await DisableLoadingScreen();
@@ -81,6 +82,7 @@ namespace SunsetSystems.Persistence
             await LoadNewScene(data);
             await IInitialized.InitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
+            await new WaitForUpdate();
             SaveLoadManager.LoadObjects();
             await IInitialized.LateInitializeObjectsAsync();
             OnAfterSaveLoad?.Invoke(loadingEventData);

@@ -10469,7 +10469,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838806425}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1aeb4106db00281488d4d72bb3404da9, type: 3}
   m_Name: 
@@ -10480,8 +10480,8 @@ MonoBehaviour:
   <HoverHighlight>k__BackingField: {fileID: 867816870}
   _interactionDistance: 1
   _interactionTransform: {fileID: 238466927}
-  _interactable: 0
-  _nameplateName: Leave Area
+  _interactable: 1
+  _nameplateName: Leave Apartment
   _interactableOnce: 0
   OnInteractionTriggered:
     m_PersistentCalls:
@@ -10551,7 +10551,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838806425}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b54d5577960e584da2c6019922a74b9, type: 3}
   m_Name: 
@@ -30339,6 +30339,7 @@ GameObject:
   - component: {fileID: 2663066712043532968}
   - component: {fileID: 2663066712043532980}
   - component: {fileID: 2663066712043532981}
+  - component: {fileID: 2663066712043532982}
   m_Layer: 8
   m_Name: Dominic_Evans
   m_TagString: Untagged
@@ -31157,6 +31158,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: 524d0ec3-0354-4be2-9122-d5cb2302bec5
+--- !u!114 &2663066712043532982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2663066712043532962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003c25630808c7243847bd9149749434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AwakeEvent:
+    _PersistentCalls: []
+  _StartEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 2663066712043532962}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  _EnableEvent:
+    _PersistentCalls: []
+  _DisableEvent:
+    _PersistentCalls: []
+  _DestroyEvent:
+    _PersistentCalls: []
 --- !u!4 &2663066712071281934
 Transform:
   m_ObjectHideFlags: 0
@@ -47874,6 +47908,7 @@ GameObject:
   - component: {fileID: 5033574601942649727}
   - component: {fileID: 5033574601942649726}
   - component: {fileID: 5033574601942649740}
+  - component: {fileID: 5033574601942649741}
   m_Layer: 8
   m_Name: Kieran_Edevane
   m_TagString: Untagged
@@ -48149,7 +48184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _unique: {fileID: 5033574601942649740}
-  _enablePersistence: 1
+  _enablePersistence: 0
   _data:
     FirstName: Kieran
     LastName: Edevane
@@ -48586,6 +48621,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: b3390d1b-b83b-4f01-90bb-60d95aa92df2
+--- !u!114 &5033574601942649741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5033574601942649712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003c25630808c7243847bd9149749434, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _AwakeEvent:
+    _PersistentCalls: []
+  _StartEvent:
+    _PersistentCalls:
+    - _Target: {fileID: 5033574601942649712}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  _EnableEvent:
+    _PersistentCalls: []
+  _DisableEvent:
+    _PersistentCalls: []
+  _DestroyEvent:
+    _PersistentCalls: []
 --- !u!4 &5033574601957020529
 Transform:
   m_ObjectHideFlags: 0

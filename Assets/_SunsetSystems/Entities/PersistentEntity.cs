@@ -14,6 +14,7 @@ namespace SunsetSystems.Entities
         [SerializeField]
         private bool _enablePersistence = true;
         public string PersistenceID => _unique?.Id;
+        public string GameObjectName => gameObject.name;
 
         protected virtual void Awake()
         {
@@ -74,5 +75,7 @@ namespace SunsetSystems.Entities
         public void InjectPersistenceData(object data);
 
         public string PersistenceID { get; }
+
+        public string GameObjectName { get; }
     }
 }

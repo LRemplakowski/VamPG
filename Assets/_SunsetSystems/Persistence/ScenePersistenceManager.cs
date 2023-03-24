@@ -45,7 +45,10 @@ namespace SunsetSystems.Persistence
             ScenePersistenceData savedData = data as ScenePersistenceData;
             foreach (IPersistentEntity persistentEntity in persistentEntitiesSet)
             {
-                persistentEntity.InjectPersistenceData(savedData.PersistentData[persistentEntity.PersistenceID]);
+                if (savedData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
+                    persistentEntity.InjectPersistenceData(entityData);
+                else
+                    Debug.LogError($"Could not find persistence data for entity {persistentEntity.GameObjectName}! Entity ID: {persistentEntity.PersistenceID}");
             }
         }
 

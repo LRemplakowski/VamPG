@@ -1,8 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters.Actions;
 using InsaneSystems.RTSSelection;
-using SunsetSystems.Inventory;
 using UnityEngine;
-using SunsetSystems.Party;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -47,29 +45,6 @@ namespace SunsetSystems.Entities.Characters
             Attack attackAction = new(target, this);
             AddActionToQueue(attackAction);
             return attackAction;
-        }
-
-        private void OnDisable()
-        {
-            if (this.TryFindFirstGameObjectWithTag(TagConstants.PARTY_MANAGER, out GameObject partyManagerObject))
-            {
-                partyManagerObject.GetComponent<PartyManager>().UpdateCreatureData(this.Data);
-            }
-        }
-
-        public override object GetPersistenceData()
-        {
-            return new Foo();
-        }
-
-        public override void InjectPersistenceData(object data)
-        {
-            Foo castData = data as Foo;
-        }
-
-        public class Foo
-        {
-
         }
     }
 }

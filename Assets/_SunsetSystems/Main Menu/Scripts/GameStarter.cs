@@ -90,6 +90,7 @@ namespace SunsetSystems.Data
         public async void InitializeGameJam()
         {
             Start();
+            SaveLoadManager.SetSaveID(new());
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));

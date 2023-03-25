@@ -62,8 +62,10 @@ namespace SunsetSystems.Persistence
             await IInitialized.InitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
             await new WaitForUpdate();
-            await InitializeSceneLogic(data);
+            //await InitializeSceneLogic(data);
+            await new WaitForUpdate();
             await IInitialized.LateInitializeObjectsAsync();
+            await new WaitForUpdate();
             await DisableLoadingScreen();
         }
 

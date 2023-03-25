@@ -104,6 +104,8 @@ namespace SunsetSystems.Journal
 
         public void ForceSubscribeToObjective(Objective objective)
         {
+            if (objective == null)
+                return;
             objective.OnObjectiveCompleted += OnObjectiveChanged;
             objective.OnObjectiveInactive += OnObjectiveDeactivated;
         }

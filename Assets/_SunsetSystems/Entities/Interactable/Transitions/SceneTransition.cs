@@ -34,6 +34,8 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private CameraControlScript _cameraControlScript;
 
+        private Task loadingTask = null;
+
         protected override void Start()
         {
             base.Start();
@@ -43,6 +45,8 @@ namespace SunsetSystems.Persistence
 
         protected override void HandleInteraction()
         {
+            if (loadingTask != null)
+                return;
             Debug.Log("Interacting with area transition!");
             switch (_type)
             {
@@ -60,7 +64,7 @@ namespace SunsetSystems.Persistence
 
         public void MoveToScene(LevelLoadingData data)
         {
-            _ = _sceneLoader.LoadGameLevel(data);
+            loadingTask = _sceneLoader.LoadGameLevel(data);
         }
 
         public async Task MoveToArea()

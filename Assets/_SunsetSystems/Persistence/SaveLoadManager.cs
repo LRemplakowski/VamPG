@@ -10,6 +10,7 @@ namespace SunsetSystems.Persistence
         private const string SAVE_DATA_KEY = "SAVE_DATA";
         private const string LAST_SAVE_FILENAME = "LAST_SAVE_FILENAME";
         private const string SAVE_META_FILE_NAME = "SunsetSave.meta";
+        private const string CURRENT_SAVE_ID = "SAVE_ID";
 
         private static GlobalSaveData _saveData = new();
 
@@ -30,11 +31,17 @@ namespace SunsetSystems.Persistence
                 Debug.LogException(exception);
             }
             ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex, filename);
+            ES3.Save(CURRENT_SAVE_ID, ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME), filename);
         }
 
         public static void LoadObjects()
         {
+            string saveID = ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME);
             string path = ES3.Load<string>(LAST_SAVE_FILENAME, SAVE_META_FILE_NAME);
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+            if (string.Equals(saveID, ES3.Load<string>(CURRENT_SAVE_ID, path)) is false)
+                return;
             _saveData = ES3.Load<GlobalSaveData>(SAVE_DATA_KEY, path);
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
@@ -42,9 +49,15 @@ namespace SunsetSystems.Persistence
             }
         }
 
+        public static void SetSaveID(Guid guid)
+        {
+            ES3.Save(CURRENT_SAVE_ID, guid.ToString(), SAVE_META_FILE_NAME);
+        }
+
         public static int GetSavedSceneIndex()
         {
-            return ES3.Load<int>(SCENE_INDEX_ID);
+            string path = ES3.Load<string>(LAST_SAVE_FILENAME, SAVE_META_FILE_NAME);
+            return ES3.Load<int>(SCENE_INDEX_ID, path);
         }
     }
 }

@@ -12,10 +12,12 @@ namespace SunsetSystems.Persistence
         private const string SAVE_META_FILE_NAME = "SunsetSave.meta";
         private const string CURRENT_SAVE_ID = "SAVE_ID";
 
-        private static GlobalSaveData _saveData = new();
+        private static GlobalPersistenceData _saveData = new();
 
         public static void SaveObjects()
         {
+            if (_saveData == null)
+                _saveData = new();
             string filename = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}.sav";
             ES3.Save(LAST_SAVE_FILENAME, filename, SAVE_META_FILE_NAME);
             foreach (ISaveable saveable in ISaveable.Saveables)
@@ -34,7 +36,7 @@ namespace SunsetSystems.Persistence
             ES3.Save(CURRENT_SAVE_ID, ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME), filename);
         }
 
-        public static void LoadObjects()
+        public static void LoadSavedDataIntoRuntime()
         {
             string saveID = ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME);
             string path = ES3.Load<string>(LAST_SAVE_FILENAME, SAVE_META_FILE_NAME);
@@ -42,7 +44,16 @@ namespace SunsetSystems.Persistence
                 return;
             if (string.Equals(saveID, ES3.Load<string>(CURRENT_SAVE_ID, path)) is false)
                 return;
-            _saveData = ES3.Load<GlobalSaveData>(SAVE_DATA_KEY, path);
+            if (_saveData == null)
+                _saveData = new();
+            _saveData.ClearSaveData();
+            ES3.LoadInto(SAVE_DATA_KEY, path, _saveData);
+        }
+
+        public static void InjectRuntimeDataIntoSaveables()
+        {
+            if (_saveData == null)
+                throw new NullReferenceException("GlobalSaveData instance is null!");
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
                 saveable.InjectSaveData(_saveData.GetData(saveable.DataKey));

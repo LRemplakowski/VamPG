@@ -4,10 +4,10 @@ using System.Collections.Generic;
 namespace SunsetSystems.Persistence
 {
     [Serializable]
-    public class GlobalSaveData
+    public class GlobalPersistenceData
     {
         [ES3Serializable]
-        private Dictionary<string, object> _saveDataDictionary = new();
+        private Dictionary<string, object> _persistenceDataDictionary = new();
 
         public void UpdateSaveData<T>(T dataProvider) where T : ISaveable
         {
@@ -16,20 +16,20 @@ namespace SunsetSystems.Persistence
             object saveData = dataProvider.GetSaveData();
             if (saveData is null)
                 return;
-            if (_saveDataDictionary.TryAdd(dataProvider.DataKey, saveData) is false)
-                _saveDataDictionary[dataProvider.DataKey] = saveData;
+            if (_persistenceDataDictionary.TryAdd(dataProvider.DataKey, saveData) is false)
+                _persistenceDataDictionary[dataProvider.DataKey] = saveData;
         }
 
         public object GetData(string dataKey)
         {
-            if (_saveDataDictionary.TryGetValue(dataKey, out object data))
+            if (_persistenceDataDictionary.TryGetValue(dataKey, out object data))
                 return data;
             return null;
         }
 
         public void ClearSaveData()
         {
-            _saveDataDictionary.Clear();
+            _persistenceDataDictionary.Clear();
         }
     }
 

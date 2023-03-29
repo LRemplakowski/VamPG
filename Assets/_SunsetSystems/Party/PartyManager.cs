@@ -51,6 +51,8 @@ namespace SunsetSystems.Party
         [SerializeField]
         private Transform _creatureParent;
 
+        private Dictionary<string, Vector3> _partyPositions = null;
+
         public void ResetOnGameStart()
         {
             _activeParty = new();
@@ -90,7 +92,17 @@ namespace SunsetSystems.Party
         {
             Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
             if (entryPoint)
+            {
                 InitializePartyAtPosition(entryPoint.transform.position);
+            }
+            else if (_partyPositions != null)
+            {
+                foreach (string key in _activeCoterieMemberKeys)
+                {
+                    _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], _partyPositions[key]));
+                }
+                _partyPositions = null;
+            }
         }
 
         public override void Initialize()
@@ -252,9 +264,10 @@ namespace SunsetSystems.Party
             _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
             _mainCharacterKey = saveData.MainCharacterKey;
             _activeParty = new();
+            _partyPositions = new();
             foreach (string key in _activeCoterieMemberKeys)
             {
-                _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], saveData.PartyPositions[key]));
+                _partyPositions.Add(key, saveData.PartyPositions[key]);
             }
         }
     }

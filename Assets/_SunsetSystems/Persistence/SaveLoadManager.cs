@@ -20,10 +20,7 @@ namespace SunsetSystems.Persistence
                 _saveData = new();
             string filename = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}.sav";
             ES3.Save(LAST_SAVE_FILENAME, filename, SAVE_META_FILE_NAME);
-            foreach (ISaveable saveable in ISaveable.Saveables)
-            {
-                _saveData.UpdateSaveData(saveable);
-            }
+            UpdateRuntimeDataCache();
             try
             {
                 ES3.Save(SAVE_DATA_KEY, _saveData, filename);
@@ -34,6 +31,14 @@ namespace SunsetSystems.Persistence
             }
             ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex, filename);
             ES3.Save(CURRENT_SAVE_ID, ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME), filename);
+        }
+
+        public static void UpdateRuntimeDataCache()
+        {
+            foreach (ISaveable saveable in ISaveable.Saveables)
+            {
+                _saveData.UpdateSaveData(saveable);
+            }
         }
 
         public static void LoadSavedDataIntoRuntime()

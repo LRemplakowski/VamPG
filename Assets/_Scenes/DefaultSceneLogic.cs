@@ -2,6 +2,7 @@ using SunsetSystems.Data;
 using UnityEngine;
 using System.Threading.Tasks;
 using SunsetSystems.Game;
+using SunsetSystems.Party;
 
 namespace SunsetSystems.Persistence
 {
@@ -12,6 +13,7 @@ namespace SunsetSystems.Persistence
 
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
+            PartyManager.ActiveParty.ForEach(p => p.ForceCreatureToPosition(_defaultEntryWaypoint.transform.position));
             GameManager.CurrentState = GameState.Exploration;
             await Task.Yield();
         }

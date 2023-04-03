@@ -54,7 +54,8 @@ namespace SunsetSystems.Persistence
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
-                _ = UnloadGameScene();
+                SaveLoadManager.UpdateRuntimeDataCache();
+                await UnloadGameScene();
             }
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
@@ -63,6 +64,7 @@ namespace SunsetSystems.Persistence
             await new WaitForUpdate();
             await InitializeSceneLogic(data);
             await new WaitForUpdate();
+            SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await IInitialized.LateInitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
             await new WaitForUpdate();
@@ -77,7 +79,7 @@ namespace SunsetSystems.Persistence
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
-                _ = UnloadGameScene();
+                await UnloadGameScene();
             }
             LevelLoadingData data = new IndexLoadingData(SaveLoadManager.GetSavedSceneIndex(), "", "", preLoadingAction);
             CachedTransitionData = data;

@@ -10485,12 +10485,24 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 60504b85199d316438c14d0ffb8ea9d8, type: 2}
+        m_TargetAssemblyTypeName: SunsetSystems.Journal.Objective, Assembly-CSharp
+        m_MethodName: Complete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _sceneName: 
   _sceneIndex: 3
   _type: 0
-  _targetEntryPointTag: 
-  _targetBoundingBoxTag: 
+  _targetEntryPointTag: embassy_exterior_waypoint_initial
+  _targetBoundingBoxTag: embassy_exterior_bounding_box
   _targetEntryPoint: {fileID: 0}
   _targetBoundingBox: {fileID: 0}
   _sceneLoader: {fileID: 0}

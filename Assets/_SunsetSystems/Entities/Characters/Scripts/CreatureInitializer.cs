@@ -87,7 +87,7 @@ namespace SunsetSystems.Entities.Characters
                 UnityEngine.Object.DestroyImmediate(creature);
                 AddMatchingCreatureScript(creatureObject, data.Faction, out creature);
             }
-            creature.Data = data;
+            creature.Data.CopyFrom(data);
             return creature;
         }
 

@@ -92,7 +92,6 @@ namespace SunsetSystems.Inventory
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
-                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemEquipped?.Invoke(characterID);
                 }
                 else
@@ -132,7 +131,6 @@ namespace SunsetSystems.Inventory
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
-                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemUnequipped?.Invoke(characterID);
                 }
                 return success;

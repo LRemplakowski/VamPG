@@ -223,7 +223,7 @@ namespace SunsetSystems.Party
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                Instance._activeParty[key].Data = Instance._creatureDataCache[key];
+                Instance._activeParty[key].Data.CopyFrom(Instance._creatureDataCache[key]);
             }
         }
 

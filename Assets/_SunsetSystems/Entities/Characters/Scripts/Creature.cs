@@ -47,7 +47,7 @@ namespace SunsetSystems.Entities.Characters
 
         [SerializeField]
         private CreatureData _data;
-        public ref CreatureData Data => ref _data;
+        public CreatureData Data => _data;
 
         [SerializeField]
         private CreatureConfig _config;

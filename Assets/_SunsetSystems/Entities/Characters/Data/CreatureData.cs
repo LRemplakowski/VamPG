@@ -46,6 +46,23 @@ namespace SunsetSystems.Entities.Characters
             Money = config.EquipmentConfig.Money;
         }
 
+        public void CopyFrom(CreatureData config)
+        {
+            FirstName = config.FirstName;
+            LastName = config.LastName;
+            _id = config._id;
+            PortraitFileName = config.PortraitFileName;
+            Faction = config.Faction;
+            BodyType = config.BodyType;
+            CreatureType = config.CreatureType;
+            UmaPresetFileName = config.UmaPresetFileName;
+            animatorControllerResourceName = config.animatorControllerResourceName;
+            Stats = config.Stats;
+            Equipment = config.Equipment;
+            UseEquipmentPreset = config.UseEquipmentPreset;
+            Money = config.Money;
+        }
+
         public CreatureData()
         {
 

@@ -61,7 +61,8 @@ namespace SunsetSystems.Game
 
         public void InjectSaveData(object data)
         {
-            GameManagerSaveData savedData = data as GameManagerSaveData;
+            if (data is not GameManagerSaveData savedData)
+                return;
             CurrentState = savedData.CurrentState;
         }
 

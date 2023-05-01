@@ -1,4 +1,4 @@
-﻿using CleverCrow.Fluid.UniqueIds;
+using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Constants;
 using SunsetSystems.Game;
 using SunsetSystems.Loading;
@@ -6,6 +6,8 @@ using SunsetSystems.Utils;
 using System.EnterpriseServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
+
 
 namespace SunsetSystems.Input.CameraControl
 {
@@ -39,6 +41,7 @@ namespace SunsetSystems.Input.CameraControl
         private const string BOUNDING_BOX = "_boundingBox";
         private const string POSITION = "_position";
 
+
         private void Start()
         {
             if (!_cameraTransform)
@@ -49,7 +52,9 @@ namespace SunsetSystems.Input.CameraControl
                 transform.position = _target.position;
             _moveTarget = transform.position;
             RealignCamera();
+           
         }
+
 
         private void OnValidate()
         {
@@ -58,12 +63,14 @@ namespace SunsetSystems.Input.CameraControl
             RealignCamera();
         }
 
+
         [ContextMenu("Realign camera")]
         private void RealignCamera()
         {
             _cameraTransform.localPosition = _offset;
             _cameraTransform.LookAt(_rotationTarget);
         }
+
 
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -75,9 +82,11 @@ namespace SunsetSystems.Input.CameraControl
                 _moveDirection = Vector3.zero;
             }
             _moveDirection = new Vector3(value.x, 0, value.y);
-            if (GameManager.CurrentState == GameState.Conversation)
+            if (GameManager.CurrentState == GameState.Conversation){
                 _moveDirection = Vector3.zero;
+            }
         }
+
 
         public void OnRotate(InputAction.CallbackContext context)
         {
@@ -88,6 +97,7 @@ namespace SunsetSystems.Input.CameraControl
                 _rotationDirection = 0;
         }
 
+
         public void ForceToPosition(Vector3 position)
         {
             transform.position = position;
@@ -95,10 +105,12 @@ namespace SunsetSystems.Input.CameraControl
             Debug.Log("Forcing camera to position " + position);
         }
 
+
         public void ForceRotation(Vector3 eulerAngles)
         {
             transform.localEulerAngles = eulerAngles;
         }
+
 
         private void FixedUpdate()
         {
@@ -116,17 +128,20 @@ namespace SunsetSystems.Input.CameraControl
                 _moveTarget = _currentBoundingBox.IsPositionWithinBounds(_moveTarget) ? _moveTarget : _currentBoundingBox.ClampPositionToBounds(_moveTarget);
         }
 
+
         private void LateUpdate()
         {
             transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * _cameraMoveSpeed);
             transform.Rotate(_cameraRotationSpeed * _rotationDirection * Time.deltaTime * Vector3.up);
         }
 
+
         public void SaveRuntimeData()
         {
             ES3.Save(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
             ES3.Save(Unique.Id + POSITION, transform.position);
         }
+
 
         public void LoadRuntimeData()
         {
@@ -135,3 +150,4 @@ namespace SunsetSystems.Input.CameraControl
         }
     }
 }
+

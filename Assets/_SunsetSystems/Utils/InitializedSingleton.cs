@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace SunsetSystems.Utils
 {
@@ -22,9 +23,10 @@ namespace SunsetSystems.Utils
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            IInitialized.UnregisterInitialization(this);
+            if (instance == this)
+                IInitialized.UnregisterInitialization(this);
         }
     }
 }

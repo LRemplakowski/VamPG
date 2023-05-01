@@ -41,6 +41,11 @@ namespace SunsetSystems.Spellbook
 
         public List<DisciplinePower> GetKnownPowers() => knownPowers;
 
+        public Discipline() : this(DisciplineType.Invalid)
+        {
+
+        }
+
         public Discipline(DisciplineType disciplineType)
         {
             this.disciplineType = disciplineType;

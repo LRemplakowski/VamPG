@@ -21,11 +21,11 @@ MonoBehaviour:
     directory: 0
     format: 0
     prettyPrint: 1
-    bufferSize: 2048
+    bufferSize: 4096
     saveChildren: 1
     typeChecking: 1
     safeReflection: 1
-    memberReferenceMode: 0
+    memberReferenceMode: 1
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
@@ -39,6 +39,7 @@ MonoBehaviour:
     - UMA_Content
     - NaughtyAttributes.Test
     - com.fluid.dialogue
+    - UltEvents
     - NaughtyAttributes.Core
     - com.fluid.quest-journal
     - UMA_Examples
@@ -72,7 +73,8 @@ MonoBehaviour:
     - com.fluid.find-and-replace.Editor
     - Autodesk.Fbx.Editor
     - Addressable_Editor
-    showAdvancedSettings: 0
+    - Sirenix.OdinInspector.Modules.UnityMathematics
+    showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
   addAllPrefabsToManager: 1

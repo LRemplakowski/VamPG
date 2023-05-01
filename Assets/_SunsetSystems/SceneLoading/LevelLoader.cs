@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using SunsetSystems.Utils;
 using Redcode.Awaiting;
 using UnityEngine.Events;
+using SunsetSystems.Game;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public class LevelLoader : Singleton<LevelLoader>
     {
@@ -34,12 +35,12 @@ namespace SunsetSystems.Loading
             _latestLoadedSceneIndex = -1;
         }
 
+#if !UNITY_EDITOR
         private void Start()
         {
-#if !UNITY_EDITOR
             SceneManager.LoadScene("UI", LoadSceneMode.Additive);
-#endif
         }
+#endif
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
@@ -53,20 +54,28 @@ namespace SunsetSystems.Loading
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
+                SaveLoadManager.UpdateRuntimeDataCache();
                 await UnloadGameScene();
             }
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
             await IInitialized.InitializeObjectsAsync();
-            OnAfterLevelLoad?.Invoke(loadingEventData);
+            await new WaitForUpdate();
             await InitializeSceneLogic(data);
+            await new WaitForUpdate();
+            SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await IInitialized.LateInitializeObjectsAsync();
+            OnAfterLevelLoad?.Invoke(loadingEventData);
+            await new WaitForUpdate();
             await DisableLoadingScreen();
+            GameManager.CurrentState = GameState.Exploration;
+            //Debug.Break();
         }
 
         internal async Task LoadSavedLevel(Action preLoadingAction)
         {
+            GameManager.CurrentState = GameState.GamePaused;
             await PrepareLoadingScreen();
             if (_latestLoadedSceneIndex > 1)
             {
@@ -78,11 +87,15 @@ namespace SunsetSystems.Loading
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
             await IInitialized.InitializeObjectsAsync();
-            OnAfterLevelLoad?.Invoke(loadingEventData);
-            SaveLoadManager.LoadObjects();
-            await IInitialized.LateInitializeObjectsAsync();
+            await new WaitForUpdate();
+            SaveLoadManager.LoadSavedDataIntoRuntime();
+            SaveLoadManager.InjectRuntimeDataIntoSaveables();
             OnAfterSaveLoad?.Invoke(loadingEventData);
+            await IInitialized.LateInitializeObjectsAsync();
+            OnAfterLevelLoad?.Invoke(loadingEventData);
+            await new WaitForUpdate();
             await DisableLoadingScreen();
+            GameManager.CurrentState = GameState.Exploration;
         }
 
         private async Task PrepareLoadingScreen()
@@ -136,30 +149,34 @@ namespace SunsetSystems.Loading
         {
             int index = (int)CachedTransitionData.Get();
             AsyncOperation loadingOp = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
-            while (!loadingOp.isDone)
+            while (loadingOp.isDone is false)
             {
                 float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
                 LoadingScreenUI.UpadteLoadingBar(progress);
-                await Task.Yield();
+                Debug.Log($"Loading progress: {progress}");
+                await new WaitForUpdate();
             }
         }
 
         public async Task UnloadGameScene()
         {
-            await SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
-            await UnityEngine.Resources.UnloadUnusedAssets();
-
+            AsyncOperation op = SceneManager.UnloadSceneAsync(_latestLoadedSceneIndex);
+            await new WaitUntil(() => op.isDone);
+            op = UnityEngine.Resources.UnloadUnusedAssets();
+            await new WaitUntil(() => op.isDone);
         }
 
         private async Task DoLoadingByName()
         {
             string name = CachedTransitionData.Get() as string;
+            if (string.IsNullOrWhiteSpace(name))
+                return;
             AsyncOperation loadingOp = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
-            while (!loadingOp.isDone)
+            while (loadingOp.isDone is not true)
             {
                 float progress = Mathf.Clamp01(loadingOp.progress / 0.9f);
                 LoadingScreenUI.UpadteLoadingBar(progress);
-                await Task.Yield();
+                await new WaitForUpdate();
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Game;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -153,22 +153,27 @@ namespace SunsetSystems.Input.CameraControl
         public object GetSaveData()
         {
             CameraSaveData saveData = new();
-            saveData._currentBoundingBoxTag = _currentBoundingBox.GetComponent<Tagger>().tag;
-            saveData._position = transform.position;
+            saveData.CurrentBoundingBoxTag = _currentBoundingBox?.GetComponent<Tagger>().tag ?? "";
+            saveData.RigPosition = transform.position;
+            saveData.CameraMoveTarget = _moveTarget;
+            saveData.CameraRotationTarget = _rotationTarget.localEulerAngles;
             return saveData;
         }
 
         public void InjectSaveData(object data)
         {
             CameraSaveData saveData = data as CameraSaveData;
-            _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData._currentBoundingBoxTag);
-            ForceToPosition(saveData._position);
+            _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
+            ForceToPosition(saveData.RigPosition);
+            _moveTarget = saveData.CameraMoveTarget;
+            _rotationTarget.localEulerAngles = saveData.CameraRotationTarget;
         }
     }
 
     public class CameraSaveData : SaveData
     {
-        public string _currentBoundingBoxTag;
-        public Vector3 _position;
+        public string CurrentBoundingBoxTag;
+        public Vector3 RigPosition;
+        public Vector3 CameraMoveTarget, CameraRotationTarget;
     }
 }

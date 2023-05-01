@@ -1,7 +1,7 @@
 ﻿using SunsetSystems.Utils;
 using UnityEngine;
 using System;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using CleverCrow.Fluid.UniqueIds;
 
 namespace SunsetSystems.Game
@@ -61,7 +61,8 @@ namespace SunsetSystems.Game
 
         public void InjectSaveData(object data)
         {
-            GameManagerSaveData savedData = data as GameManagerSaveData;
+            if (data is not GameManagerSaveData savedData)
+                return;
             CurrentState = savedData.CurrentState;
         }
 

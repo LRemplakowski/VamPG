@@ -10,7 +10,9 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        public readonly string ID;
+        [ES3Serializable]
+        private string _id;
+        public string ID => _id;
         public string PortraitFileName;
         public Sprite Portrait => ResourceLoader.GetPortrait(PortraitFileName);
         public Faction Faction;
@@ -18,7 +20,8 @@ namespace SunsetSystems.Entities.Characters
         public CreatureType CreatureType;
         public string UmaPresetFileName;
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
-        public RuntimeAnimatorController AnimatorControllerAsset;
+        public string animatorControllerResourceName;
+        public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
         [ES3Serializable]
         public StatsData Stats;
         [ES3Serializable]
@@ -30,17 +33,34 @@ namespace SunsetSystems.Entities.Characters
         {
             FirstName = config.Name;
             LastName = config.LastName;
-            ID = config.ReadableID;
+            _id = config.ReadableID;
             PortraitFileName = config.PortraitFileName;
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
             UmaPresetFileName = config.UmaPresetFileName;
-            AnimatorControllerAsset = config.AnimatorController;
+            animatorControllerResourceName = config.AnimatorController.name;
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;
             Money = config.EquipmentConfig.Money;
+        }
+
+        public void CopyFrom(CreatureData config)
+        {
+            FirstName = config.FirstName;
+            LastName = config.LastName;
+            _id = config._id;
+            PortraitFileName = config.PortraitFileName;
+            Faction = config.Faction;
+            BodyType = config.BodyType;
+            CreatureType = config.CreatureType;
+            UmaPresetFileName = config.UmaPresetFileName;
+            animatorControllerResourceName = config.animatorControllerResourceName;
+            Stats = config.Stats;
+            Equipment = config.Equipment;
+            UseEquipmentPreset = config.UseEquipmentPreset;
+            Money = config.Money;
         }
 
         public CreatureData()

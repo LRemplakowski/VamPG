@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [Serializable]
     [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
+    [Serializable]
     public class Objective : ScriptableObject
     {
         [field: SerializeField, ReadOnly]
@@ -21,20 +21,20 @@ namespace SunsetSystems.Journal
         [ReadOnly]
         public bool IsFirst, IsLast;
 
-        [SerializeReference]
         public List<Objective> ObjectivesToCancelOnCompletion;
-        [SerializeReference]
         public List<Objective> NextObjectives;
 
         #region Database Registration
-#if UNITY_EDITOR
+
         private void OnEnable()
         {
+#if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {
                 AssignNewID();
             }
             ObjectiveDatabase.Instance?.Register(this);
+#endif
         }
 
         [Button("Force Validate")]
@@ -50,7 +50,9 @@ namespace SunsetSystems.Journal
 
         private void OnDestroy()
         {
+#if UNITY_EDITOR
             ObjectiveDatabase.Instance.Unregister(this);
+#endif
         }
 
         private void AssignNewID()
@@ -58,7 +60,6 @@ namespace SunsetSystems.Journal
             DatabaseID = System.Guid.NewGuid().ToString();
             UnityEditor.EditorUtility.SetDirty(this);
         }
-#endif
         #endregion
 
         public void MakeActive()

@@ -6,7 +6,7 @@ namespace SunsetSystems.Utils.Database
 {
     public class DatabaseHolder : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, SerializeReference]
         private List<ScriptableObject> _databases;
 
         private void Awake()

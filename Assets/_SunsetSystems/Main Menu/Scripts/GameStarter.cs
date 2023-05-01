@@ -1,5 +1,5 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using UnityEngine;
 using SunsetSystems.Resources;
 using SunsetSystems.UI;
@@ -90,11 +90,13 @@ namespace SunsetSystems.Data
         public async void InitializeGameJam()
         {
             Start();
+            SaveLoadManager.SetSaveID(new());
             _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
+            SaveLoadManager.UpdateRuntimeDataCache();
             await _sceneLoader.LoadGameLevel(data);
         }
 

@@ -29,7 +29,7 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(WardrobeManager)),
     RequireComponent(typeof(RigBuilder)),
     RequireComponent(typeof(SpellbookManager))]
-    public abstract class Creature : Entity
+    public abstract class Creature : PersistentEntity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
@@ -47,7 +47,7 @@ namespace SunsetSystems.Entities.Characters
 
         [SerializeField]
         private CreatureData _data;
-        public ref CreatureData Data => ref _data;
+        public CreatureData Data => _data;
 
         [SerializeField]
         private CreatureConfig _config;
@@ -100,8 +100,9 @@ namespace SunsetSystems.Entities.Characters
         public bool IsVampire => Data.CreatureType.Equals(CreatureType.Vampire);
 
         #region Unity messages
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (!StatsManager)
                 StatsManager = GetComponent<StatsManager>();
             if (!Agent)
@@ -124,14 +125,16 @@ namespace SunsetSystems.Entities.Characters
                 SpellbookManager.Initialize(this);
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
+            base.Start();
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        public virtual void OnDestroy()
+        protected override void OnDestroy()
         {
-            Debug.LogError($"Destroying creature {gameObject.name}");
+            base.OnDestroy();
+            Debug.Log($"Destroying creature {gameObject.name}!");
         }
 
         public void Update()

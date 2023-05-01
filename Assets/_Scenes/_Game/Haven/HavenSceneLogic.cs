@@ -99,7 +99,8 @@ namespace SunsetSystems.Persistence
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
-            PartyManager.MainCharacter.gameObject.SetActive(false);
+            await new WaitUntil(() => PartyManager.MainCharacter != null);
+            PartyManager.MainCharacter?.gameObject.SetActive(false);
             await new WaitForSeconds(2);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>

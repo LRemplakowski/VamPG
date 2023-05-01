@@ -153,7 +153,7 @@ namespace SunsetSystems.Input.CameraControl
         public object GetSaveData()
         {
             CameraSaveData saveData = new();
-            saveData.CurrentBoundingBoxTag = _currentBoundingBox.GetComponent<Tagger>().tag;
+            saveData.CurrentBoundingBoxTag = _currentBoundingBox?.GetComponent<Tagger>().tag ?? "";
             saveData.RigPosition = transform.position;
             saveData.CameraMoveTarget = _moveTarget;
             saveData.CameraRotationTarget = _rotationTarget.localEulerAngles;

@@ -20,13 +20,13 @@ namespace SunsetSystems.Party
     public class PartyManager : InitializedSingleton<PartyManager>, ISaveable, IResetable
     {
         [field: SerializeField]
-        private StringCreatureInstanceDictionary _activeParty;
-        public static Creature MainCharacter => Instance._activeParty[Instance._mainCharacterKey];
+        private Dictionary<string, Creature> _activeParty;
+        public static Creature MainCharacter => Instance._activeParty.TryGetValue(Instance._mainCharacterKey, out Creature creature) ? creature : null;
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
         public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
-        private StringCreatureDataDictionary _creatureDataCache;
+        private Dictionary<string, CreatureData> _creatureDataCache;
         public static List<CreatureData> AllCoterieMembers => new(Instance._creatureDataCache.Values);
 
         private string _mainCharacterKey;
@@ -165,9 +165,16 @@ namespace SunsetSystems.Party
 
         protected static Creature InitializePartyMember(CreatureData data, Vector3 position)
         {
-            Creature creature = CreatureInitializer.InitializeCreature(data, position);
-            creature.transform.SetParent(Instance._creatureParent, true);
-            return creature;
+            if (data == null)
+            {
+                throw new NullReferenceException("Party member initialization failed! Null CreatureData!");
+            }
+            else
+            {
+                Creature creature = CreatureInitializer.InitializeCreature(data, position);
+                creature.transform.SetParent(Instance._creatureParent, true);
+                return creature;
+            }
         }
 
         public static void RecruitCharacter(CreatureData creatureData)

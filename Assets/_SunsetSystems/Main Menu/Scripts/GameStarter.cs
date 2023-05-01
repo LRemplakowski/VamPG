@@ -96,6 +96,7 @@ namespace SunsetSystems.Data
             PartyManager.RecruitMainCharacter(new(desiree));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
+            SaveLoadManager.UpdateRuntimeDataCache();
             await _sceneLoader.LoadGameLevel(data);
         }
 

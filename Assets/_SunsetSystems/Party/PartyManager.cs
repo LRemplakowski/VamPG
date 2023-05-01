@@ -171,8 +171,7 @@ namespace SunsetSystems.Party
             }
             else
             {
-                Creature creature = CreatureInitializer.InitializeCreature(data, position);
-                creature.transform.SetParent(Instance._creatureParent, true);
+                Creature creature = CreatureInitializer.InitializeCreature(data, position, Instance._creatureParent, Quaternion.identity);
                 return creature;
             }
         }
@@ -230,7 +229,7 @@ namespace SunsetSystems.Party
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                Instance._activeParty[key].Data.CopyFrom(Instance._creatureDataCache[key]);
+                Instance._activeParty[key].Data = Instance._creatureDataCache[key];
             }
         }
 
@@ -274,7 +273,10 @@ namespace SunsetSystems.Party
             _partyPositions = new();
             foreach (string key in _activeCoterieMemberKeys)
             {
-                _partyPositions.Add(key, saveData.PartyPositions[key]);
+                if (saveData.PartyPositions.TryGetValue(key, out Vector3 position))
+                    _partyPositions.Add(key, position);
+                else
+                    _partyPositions.Add(key, Vector3.zero);
             }
         }
     }

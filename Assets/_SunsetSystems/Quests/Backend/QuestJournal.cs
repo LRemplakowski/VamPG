@@ -1,4 +1,5 @@
 using CleverCrow.Fluid.UniqueIds;
+using Sirenix.OdinInspector;
 using SunsetSystems.Data;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
@@ -136,6 +137,12 @@ namespace SunsetSystems.Journal
         public bool IsQuestCompleted(string questID)
         {
             return _completedQuests.ContainsKey(questID);
+        }
+
+        [Button("Force Start Quest"), EnableIf("@UnityEngine.Application.isPlaying")]
+        private void BeginQuestDebug(Quest quest)
+        {
+            BeginQuest(quest.ID);
         }
 
         public bool BeginQuest(string questID)

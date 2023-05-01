@@ -1,5 +1,5 @@
 using CleverCrow.Fluid.UniqueIds;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities;
 using System;
 using System.Collections.Generic;
@@ -43,9 +43,10 @@ namespace SunsetSystems.Persistence
         public void InjectSaveData(object data)
         {
             ScenePersistenceData savedData = data as ScenePersistenceData;
+            object entityData = null;
             foreach (IPersistentEntity persistentEntity in persistentEntitiesSet)
             {
-                if (savedData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
+                if (savedData?.PersistentData?.TryGetValue(persistentEntity.PersistenceID, out entityData) ?? false)
                     persistentEntity.InjectPersistenceData(entityData);
                 else
                     Debug.LogError($"Could not find persistence data for entity {persistentEntity.GameObjectName}! Entity ID: {persistentEntity.PersistenceID}");

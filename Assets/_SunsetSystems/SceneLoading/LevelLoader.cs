@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using SunsetSystems.Utils;
 using Redcode.Awaiting;
-using UnityEngine.Events;
 using SunsetSystems.Game;
 
 namespace SunsetSystems.Persistence
@@ -60,16 +59,17 @@ namespace SunsetSystems.Persistence
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
+            GameManager.CurrentState = GameState.Exploration;
             await IInitialized.InitializeObjectsAsync();
             await new WaitForUpdate();
-            await InitializeSceneLogic(data);
-            await new WaitForUpdate();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
+            await new WaitForUpdate();
             await IInitialized.LateInitializeObjectsAsync();
             OnAfterLevelLoad?.Invoke(loadingEventData);
             await new WaitForUpdate();
+            await InitializeSceneLogic(data);
+            await new WaitForUpdate();
             await DisableLoadingScreen();
-            GameManager.CurrentState = GameState.Exploration;
             //Debug.Break();
         }
 
@@ -86,6 +86,7 @@ namespace SunsetSystems.Persistence
             LevelLoadingEventData loadingEventData = GetLevelLoadingEventData();
             OnBeforeLevelLoad?.Invoke(loadingEventData);
             await LoadNewScene(data);
+            GameManager.CurrentState = GameState.Exploration;
             await IInitialized.InitializeObjectsAsync();
             await new WaitForUpdate();
             SaveLoadManager.LoadSavedDataIntoRuntime();
@@ -95,7 +96,6 @@ namespace SunsetSystems.Persistence
             OnAfterLevelLoad?.Invoke(loadingEventData);
             await new WaitForUpdate();
             await DisableLoadingScreen();
-            GameManager.CurrentState = GameState.Exploration;
         }
 
         private async Task PrepareLoadingScreen()

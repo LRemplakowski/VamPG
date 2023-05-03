@@ -28,7 +28,7 @@ namespace SunsetSystems.Input.CameraControl
         public float rotationSpeed;
         
         [SerializeField]
-        private LayerMask _groundRaycastMask;
+        private static LayerMask _groundRaycastMask;
         [SerializeField]
         private Transform _rotationTarget;
         [SerializeField]
@@ -50,6 +50,8 @@ namespace SunsetSystems.Input.CameraControl
         private Vector3 _moveDirection;
         private float _rotationDirection;
         private Vector2 _zoomDirection;
+        private static Vector2 mousePos;
+        private static Vector3 mousePosVector;
 
         private float _currentZoomAmount;
         public float currentZoom
@@ -161,6 +163,14 @@ namespace SunsetSystems.Input.CameraControl
             if (_currentBoundingBox){
                 _moveTarget = _currentBoundingBox.IsPositionWithinBounds(_moveTarget) ? _moveTarget : _currentBoundingBox.ClampPositionToBounds(_moveTarget);
             }
+        }
+
+        public static Vector3 GetPosition(){
+            mousePos = new Vector2(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue());
+            mousePosVector = new Vector3(mousePos.x, 0, mousePos.y);
+            Ray ray = Camera.main.ScreenPointToRay(mousePosVector);
+            Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _groundRaycastMask);
+            return raycastHit.point;
         }
 
         private void LateUpdate()

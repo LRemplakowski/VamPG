@@ -22,6 +22,8 @@ namespace SunsetSystems.Entities.Characters
         public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
         public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
 
+        public StatsManager Instance { get; protected set; }
+
         public event Action<Creature> OnCreatureDied;
 
         public void Initialize(Creature owner)

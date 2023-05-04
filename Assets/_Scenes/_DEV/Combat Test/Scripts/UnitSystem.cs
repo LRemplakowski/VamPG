@@ -85,7 +85,6 @@ namespace SunsetSystems
 
         public void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            Debug.Log("primary action");
             if (context.performed is false)
                 return;
 
@@ -107,7 +106,6 @@ namespace SunsetSystems
         {
             if (context.performed)
                 mousePos = context.ReadValue<Vector2>();
-            Debug.Log($"{mousePos}");
         }
 
         public bool TryHandleUnitSelection()

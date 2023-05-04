@@ -11,7 +11,7 @@ namespace SunsetSystems.Dialogue
     public static class DialogueFunctions
     {
         [YarnFunction("RollSingle")]
-        public static int GetRollResult(string statName)
+        public static int GetRollResultSingle(string statName)
         {
             int dice = 0;
             dice += GetStatValueFromString(statName);

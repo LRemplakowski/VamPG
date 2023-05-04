@@ -1,7 +1,7 @@
 ﻿using NaughtyAttributes;
 using Redcode.Awaiting;
 using SunsetSystems.Dialogue;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
@@ -23,6 +23,20 @@ namespace SunsetSystems.Entities.Interactable
         [field: SerializeField]
         public string EntryNode { get; set; }
 
+        public override object GetPersistenceData()
+        {
+            DialogueEntityPersistenceData persistenceData = new(base.GetPersistenceData() as InteractableEntityPersistenceData);
+            persistenceData.EntryNode = EntryNode;
+            return persistenceData;
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            DialogueEntityPersistenceData persistenceData = data as DialogueEntityPersistenceData;
+            EntryNode = persistenceData?.EntryNode;
+        }
+
         protected async override void HandleInteraction()
         {
             if (_fadeOutBeforeDialogue)
@@ -34,6 +48,22 @@ namespace SunsetSystems.Entities.Interactable
                 await fade.DoFadeInAsync(_fadeTimes.z);
             }
             DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
+        }
+
+        protected class DialogueEntityPersistenceData : InteractableEntityPersistenceData
+        {
+            public string EntryNode;
+
+            public DialogueEntityPersistenceData(InteractableEntityPersistenceData persistenceData)
+            {
+                Interactable = persistenceData.Interactable;
+                GameObjectActive = persistenceData.GameObjectActive;
+            }
+
+            public DialogueEntityPersistenceData()
+            {
+
+            }
         }
     }
 }

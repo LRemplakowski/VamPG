@@ -17,8 +17,7 @@ namespace SunsetSystems.Inventory.UI
 
         private void OnValidate()
         {
-            StringEquipmentSlotDictionary slotPairs = EquipmentData.Initialize().equipmentSlots;
-            foreach (string key in slotPairs.Keys)
+            foreach (string key in new EquipmentData().EquipmentSlots.Keys)
             {
                 _slotViews.TryAdd(key, null);
             }

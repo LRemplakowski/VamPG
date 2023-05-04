@@ -3,7 +3,7 @@ using UI.CharacterPortraits;
 using UnityEngine;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using System;
 using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
@@ -12,20 +12,21 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Data;
+using UMA;
 
 namespace SunsetSystems.Party
 {
     [RequireComponent(typeof(UniqueId))]
-    public class PartyManager : InitializedSingleton<PartyManager>, ISaveRuntimeData, IResetable
+    public class PartyManager : InitializedSingleton<PartyManager>, ISaveable, IResetable
     {
         [field: SerializeField]
-        private StringCreatureInstanceDictionary _activeParty;
-        public static Creature MainCharacter => Instance._activeParty[Instance._mainCharacterKey];
+        private Dictionary<string, Creature> _activeParty;
+        public static Creature MainCharacter => Instance._activeParty.TryGetValue(Instance._mainCharacterKey, out Creature creature) ? creature : null;
         public static List<Creature> ActiveParty => Instance._activeParty.Values.ToList();
         public static List<Creature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
-        private StringCreatureDataDictionary _creatureDataCache;
+        private Dictionary<string, CreatureData> _creatureDataCache;
         public static List<CreatureData> AllCoterieMembers => new(Instance._creatureDataCache.Values);
 
         private string _mainCharacterKey;
@@ -34,6 +35,7 @@ namespace SunsetSystems.Party
 
         [SerializeField, Required]
         private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         private PartyPortraitsController _partyPortraits;
         private PartyPortraitsController PartyPortraits
@@ -46,6 +48,11 @@ namespace SunsetSystems.Party
             }
         }
 
+        [SerializeField]
+        private Transform _creatureParent;
+
+        private Dictionary<string, Vector3> _partyPositions = null;
+
         public void ResetOnGameStart()
         {
             _activeParty = new();
@@ -56,14 +63,54 @@ namespace SunsetSystems.Party
 
         protected override void Awake()
         {
+            base.Awake();
             _mainCharacterKey = string.Empty;
             _activeParty = new();
             _creatureDataCache = new();
             _activeCoterieMemberKeys = new();
             _unique ??= GetComponent<UniqueId>();
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnEnable()
+        {
+            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        protected override void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
+            base.OnDestroy();
+        }
+
+        private void OnAfterLevelLoad(LevelLoadingEventData data)
+        {
+            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
+            if (entryPoint)
+            {
+                InitializePartyAtPosition(entryPoint.transform.position);
+            }
+            else if (_partyPositions != null)
+            {
+                foreach (string key in _activeCoterieMemberKeys)
+                {
+                    _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], _partyPositions[key]));
+                }
+                _partyPositions = null;
+            }
         }
 
         public override void Initialize()
+        {
+
+        }
+
+        public override void LateInitialize()
         {
             UpdatePartyPortraits();
         }
@@ -71,7 +118,6 @@ namespace SunsetSystems.Party
         private void UpdatePartyPortraits()
         {
             PartyPortraits?.Clear();
-            Debug.Log("Party members count: " + _activeParty.Count);
             foreach (string key in _activeCoterieMemberKeys)
             {
                 PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
@@ -85,7 +131,10 @@ namespace SunsetSystems.Party
 
         public CreatureData GetPartyMemberDataByID(string key)
         {
-            return _creatureDataCache[key];
+            if (_creatureDataCache.TryGetValue(key, out CreatureData data))
+                return data;
+            else
+                return new();
         }
 
         public bool IsRecruitedMember(string key)
@@ -116,7 +165,15 @@ namespace SunsetSystems.Party
 
         protected static Creature InitializePartyMember(CreatureData data, Vector3 position)
         {
-            return CreatureInitializer.InitializeCreature(data, position);
+            if (data == null)
+            {
+                throw new NullReferenceException("Party member initialization failed! Null CreatureData!");
+            }
+            else
+            {
+                Creature creature = CreatureInitializer.InitializeCreature(data, position, Instance._creatureParent, Quaternion.identity);
+                return creature;
+            }
         }
 
         public static void RecruitCharacter(CreatureData creatureData)
@@ -190,39 +247,47 @@ namespace SunsetSystems.Party
             }
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
             PartySaveData saveData = new();
-            saveData.CreatureDataCache = _creatureDataCache;
-            saveData.ActiveMemberKeys = _activeCoterieMemberKeys.ToList();
-            StringVector3Dictionary partyPositions = new();
+            saveData.CreatureDataCache = new(_creatureDataCache);
+            saveData.ActiveMemberKeys = new(_activeCoterieMemberKeys);
+            saveData.MainCharacterKey = _mainCharacterKey;
+            Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
                 partyPositions.Add(key, _activeParty[key].transform.position);
             }
             saveData.PartyPositions = partyPositions;
-            ES3.Save(_unique.Id, saveData);
+            return saveData;
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            PartySaveData saveData = ES3.Load<PartySaveData>(_unique.Id);
-            _creatureDataCache = saveData.CreatureDataCache;
-            _activeCoterieMemberKeys = saveData.ActiveMemberKeys.ToHashSet();
+            PartySaveData saveData = data as PartySaveData;
+            _creatureDataCache = new();
+            saveData.CreatureDataCache.Keys.ToList().ForEach(key => _creatureDataCache.Add(key, saveData.CreatureDataCache[key]));
+            _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
+            _mainCharacterKey = saveData.MainCharacterKey;
             _activeParty = new();
+            _partyPositions = new();
             foreach (string key in _activeCoterieMemberKeys)
             {
-                _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], saveData.PartyPositions[key]));
+                if (saveData.PartyPositions.TryGetValue(key, out Vector3 position))
+                    _partyPositions.Add(key, position);
+                else
+                    _partyPositions.Add(key, Vector3.zero);
             }
         }
+    }
 
-        [Serializable]
-        private struct PartySaveData
-        {
-            public StringVector3Dictionary PartyPositions;
-            public StringCreatureDataDictionary CreatureDataCache;
-            public List<string> ActiveMemberKeys;
-        }
+    [Serializable]
+    public class PartySaveData
+    {
+        public Dictionary<string, Vector3> PartyPositions;
+        public Dictionary<string, CreatureData> CreatureDataCache;
+        public HashSet<string> ActiveMemberKeys;
+        public string MainCharacterKey;
     }
 
     [Serializable]

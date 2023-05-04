@@ -5,12 +5,12 @@ using Apex.AI.Components;
 using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
-using NaughtyAttributes;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEngine.Animations.Rigging;
 using SunsetSystems.Animation;
 using SunsetSystems.Spellbook;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -29,7 +29,7 @@ namespace SunsetSystems.Entities.Characters
     RequireComponent(typeof(WardrobeManager)),
     RequireComponent(typeof(RigBuilder)),
     RequireComponent(typeof(SpellbookManager))]
-    public abstract class Creature : Entity
+    public abstract class Creature : PersistentEntity
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
@@ -41,13 +41,12 @@ namespace SunsetSystems.Entities.Characters
                 Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
                 return;
             }
-            _data = new(_config);
+            Data = new(_config);
             CreatureInitializer.InitializeCreature(this);
         }
 
-        [SerializeField]
-        private CreatureData _data;
-        public ref CreatureData Data => ref _data;
+        [field: SerializeField]
+        public CreatureData Data { get; set; }
 
         [SerializeField]
         private CreatureConfig _config;
@@ -100,8 +99,9 @@ namespace SunsetSystems.Entities.Characters
         public bool IsVampire => Data.CreatureType.Equals(CreatureType.Vampire);
 
         #region Unity messages
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (!StatsManager)
                 StatsManager = GetComponent<StatsManager>();
             if (!Agent)
@@ -117,21 +117,23 @@ namespace SunsetSystems.Entities.Characters
             if (NavMeshObstacle)
                 NavMeshObstacle.enabled = false;
             if (_config)
-                _data = new(_config);
+                Data = new(_config);
             if (StatsManager)
                 StatsManager.Initialize(this);
             if (SpellbookManager)
                 SpellbookManager.Initialize(this);
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
+            base.Start();
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        public virtual void OnDestroy()
+        protected override void OnDestroy()
         {
-
+            base.OnDestroy();
+            Debug.Log($"Destroying creature {gameObject.name}!");
         }
 
         public void Update()

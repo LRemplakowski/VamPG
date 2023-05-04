@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
-using NaughtyAttributes;
 using System;
-using Apex;
 
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public struct EquipmentData
+    public class EquipmentData
     {
         public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
         public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
@@ -19,17 +17,9 @@ namespace SunsetSystems.Entities.Characters
         public const string SLOT_HANDS = "SLOT_HANDS";
         public const string SLOT_TRINKET = "SLOT_TRINKET";
 
-        [ReadOnly]
-        public StringEquipmentSlotDictionary equipmentSlots;
+        public Dictionary<string, EquipmentSlot> EquipmentSlots;
 
         private string _selectedWeapon;
-
-        public static EquipmentData Initialize()
-        {
-            EquipmentData data = new();
-            data.equipmentSlots = GetSlotsPreset();
-            return data;
-        }
 
         private static StringEquipmentSlotDictionary GetSlotsPreset()
         {
@@ -43,48 +33,47 @@ namespace SunsetSystems.Entities.Characters
             return equipmentSlots;
         }
 
+        public EquipmentData()
+        {
+            EquipmentSlots = GetSlotsPreset();
+        }
+
         public EquipmentData(InventoryConfig config)
         {
-            equipmentSlots = GetSlotsPreset();
+            EquipmentSlots = GetSlotsPreset();
             _selectedWeapon = SLOT_WEAPON_PRIMARY;
-            foreach (string key in config.Equipment.equipmentSlots.Keys)
+            foreach (string key in config.Equipment.EquipmentSlots.Keys)
             {
-                if (equipmentSlots.ContainsKey(key))
+                if (EquipmentSlots.ContainsKey(key))
                 {
-                    equipmentSlots[key] = config.Equipment.equipmentSlots[key];
+                    EquipmentSlots[key] = config.Equipment.EquipmentSlots[key];
                 }    
             }
         }
 
         public void SetSelectedWeapon(SelectedWeapon weapon)
         {
-            switch (weapon)
+            _selectedWeapon = weapon switch
             {
-                case SelectedWeapon.Primary:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
-                case SelectedWeapon.Secondary:
-                    _selectedWeapon = SLOT_WEAPON_SECONDARY;
-                    break;
-                default:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
-            }
+                SelectedWeapon.Primary => SLOT_WEAPON_PRIMARY,
+                SelectedWeapon.Secondary => SLOT_WEAPON_SECONDARY,
+                _ => SLOT_WEAPON_PRIMARY,
+            };
         }
 
         public Weapon GetSelectedWeapon()
         {
-            return equipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
+            return EquipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
         }
 
         public Weapon GetPrimaryWeapon()
         {
-            return equipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
+            return EquipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
         }
 
         public Weapon GetSecondaryWeapon()
         {
-            return equipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
+            return EquipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
         }
 
         public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)

@@ -15,7 +15,7 @@ namespace SunsetSystems.Entities.Characters
     {
         [SerializeField, ReadOnly]
         private Creature _owner;
-        private ref StatsData Data => ref _owner.Data.Stats;
+        private StatsData Data => _owner.Data.Stats;
 
         public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
         public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);

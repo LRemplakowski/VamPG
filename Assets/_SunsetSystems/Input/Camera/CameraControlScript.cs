@@ -1,9 +1,7 @@
-using CleverCrow.Fluid.UniqueIds;
-using SunsetSystems.Constants;
+﻿using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Game;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
-using System.EnterpriseServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
@@ -12,7 +10,7 @@ namespace SunsetSystems.Input.CameraControl
 {
     [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(Tagger))]
-    public class CameraControlScript : ExposableMonobehaviour, ISaveRuntimeData
+    public class CameraControlScript : MonoBehaviour, ISaveable
     {
         [SerializeField]
         public float lookOffset;
@@ -41,8 +39,38 @@ namespace SunsetSystems.Input.CameraControl
 
         //Save/Load variables
         private UniqueId Unique => GetComponent<UniqueId>();
-        private const string BOUNDING_BOX = "_boundingBox";
-        private const string POSITION = "_position";
+        public string DataKey => Unique.Id;
+
+
+        private void Awake()
+        {
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnEnable()
+        {
+            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
+        }
+
+        private void OnAfterLevelLoad(LevelLoadingEventData data)
+        {
+            BoundingBox boundingBox = this.FindFirstComponentWithTag<BoundingBox>(data.CameraBoundingBoxTag);
+            if (boundingBox is not null)
+                CurrentBoundingBox = boundingBox;
+            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
+            if (entryPoint is not null)
+                ForceToPosition(entryPoint.transform.position);
+        }
 
         private const float internalMoveTargetSpeed = 8;
         private const float internalMoveSpeed = 4;
@@ -180,21 +208,30 @@ namespace SunsetSystems.Input.CameraControl
             transform.Rotate(rotationSpeed * _rotationDirection * Time.deltaTime * Vector3.up);
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(Unique.Id + BOUNDING_BOX, _currentBoundingBox);
-            ES3.Save(Unique.Id + POSITION, transform.position);
+            CameraSaveData saveData = new();
+            saveData.CurrentBoundingBoxTag = _currentBoundingBox?.GetComponent<Tagger>().tag ?? "";
+            saveData.RigPosition = transform.position;
+            saveData.CameraMoveTarget = _moveTarget;
+            saveData.CameraRotationTarget = _rotationTarget.localEulerAngles;
+            return saveData;
         }
 
-
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            _currentBoundingBox = ES3.Load<BoundingBox>(Unique.Id + BOUNDING_BOX);
-            ForceToPosition(ES3.Load<Vector3>(Unique.Id + POSITION));
+            CameraSaveData saveData = data as CameraSaveData;
+            _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
+            ForceToPosition(saveData.RigPosition);
+            _moveTarget = saveData.CameraMoveTarget;
+            _rotationTarget.localEulerAngles = saveData.CameraRotationTarget;
         }
     }
-}       
-        
-        
 
-
+    public class CameraSaveData : SaveData
+    {
+        public string CurrentBoundingBoxTag;
+        public Vector3 RigPosition;
+        public Vector3 CameraMoveTarget, CameraRotationTarget;
+    }
+}

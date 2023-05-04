@@ -1,11 +1,8 @@
-using SunsetSystems.Audio;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory.UI;
-using SunsetSystems.UI.Pause;
+using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Yarn.Unity;
 
 namespace SunsetSystems.UI
@@ -25,6 +22,21 @@ namespace SunsetSystems.UI
         public DialogueViewBase DialogueGUI { get; private set; }
         [field: SerializeField]
         public GameObject HelpOverlay { get; private set; }
+
+        private void OnEnable()
+        {
+            LevelLoader.OnBeforeLevelLoad += OnBeforeLevelLoad;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnBeforeLevelLoad -= OnBeforeLevelLoad;
+        }
+
+        private void OnBeforeLevelLoad(LevelLoadingEventData data)
+        {
+            gameObject.SetActive(true);
+        }
 
         public void HandleNameplateHover(INameplateReciever nameplateReciever)
         {

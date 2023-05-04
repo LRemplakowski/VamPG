@@ -3,7 +3,7 @@ using System;
 namespace SunsetSystems.Entities.Data
 {
     [Serializable]
-    public struct StatsData
+    public class StatsData
     {
         public Trackers Trackers;
         public Clan Clan;
@@ -33,6 +33,15 @@ namespace SunsetSystems.Entities.Data
             this.Attributes = data.Attributes;
             this.Skills = data.Skills;
             this.Disciplines = data.Disciplines;
+        }
+
+        public StatsData()
+        {
+            this.Trackers = new Trackers();
+            this.Clan = Clan.Invalid;
+            this.Attributes = new Attributes();
+            this.Skills = new Skills();
+            this.Disciplines = new Disciplines();
         }
     }
 }

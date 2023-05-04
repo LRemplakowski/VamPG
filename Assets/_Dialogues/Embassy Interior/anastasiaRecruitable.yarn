@@ -1,5 +1,47 @@
-﻿title: anastasiaFirstTalk
+title: anastasiaEntry
+---
+<<if (visited("anastasiaInitial"))>>
+    <<jump anastasiaSubsequent>>
+<<else>>
+    <<jump anastasiaInitial>>
+<<endif>>
+===
+title: anastasiaInitial
 tags:
 ---
-
+<<declare $bartender to "Bartender">>
+{$bartender}: ... I should get back to work.
+{$anastasia}: You're working right now silly, come on, let me buy you a drink.
+{$bartender}: ...
+[nomarkup][The Bartender locks eye contact with you, silently pleading for your help.][/nomarkup]
+-> {$pcName}: Doesn't look like she's interested.
+    [nomarkup][She turns towards the bartender, an exaggerated pout on her lips.][/nomarkup]
+    {$anastasia}: Is that true? Are you not interested?
+    [nomarkup][Congratulations, you've been outmaneuvered. The bartender huffs out a deep sigh.][/nomarkup]
+    {$bartender}: Listen, I've been trying to tell you that for what? A week?
+    [nomarkup][The woman in black furrows her brows.][/nomarkup]
+    {$anastasia}: Then why didn't you just say so?
+    [nomarkup][The Bartender is waiting for something, anything, to break the silence that now fills the air...][/nomarkup]
+    -> Continue
+        <<jump anastasiaAddressingPC>>
+-> {$pcName}: I'll have a Bloody Mary.
+    {$bartender}: Coming right up!
+    [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
+    <<GiveItem("DRINK_BLOODY_MARY")>>
+    -> Continue
+        <<jump anastasiaAddressingPC>>
+-> [nomarkup][Say nothing.][/nomarkup]
+    [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup]
+    {$bartender}: Go away. Just, leave me alone, please...
+    [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup]
+    {$anastasia}: Well, that was rude.
+    -> Continue
+        <<jump anastasiaAddressingPC>>
+===
+title: anastasiaAddressingPC
+---
+{$anastasia}: Why hello there?
+===
+title: anastasiaSubsequent
+---
 ===

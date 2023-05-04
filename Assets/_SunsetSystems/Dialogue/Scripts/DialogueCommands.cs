@@ -1,6 +1,7 @@
 using SunsetSystems.Audio;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
@@ -82,6 +83,26 @@ namespace SunsetSystems.Dialogue
         public static void PlaySFX(string clipName)
         {
             AudioManager.Instance.PlaySFXOneShot(clipName);
+        }
+
+        [YarnCommand("GiveItem")]
+        public static void GiveItem(string itemID)
+        {
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out BaseItem item))
+                InventoryManager.Instance.GiveItemToPlayer(new(item));
+            else
+                Debug.LogError($"Dialogue command GiveItem: Could not find item {itemID} in the ItemDatabase instance!");
+        }
+
+        [YarnCommand("GiveItemCount")]
+        public static void GiveItemCount(string itemID, int count)
+        {
+            if (count <= 0)
+                throw new ArgumentException("Item count cannot be less than 1!");
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out BaseItem item))
+                InventoryManager.Instance.GiveItemToPlayer(new(item, count));
+            else
+                Debug.LogError($"Dialogue command GiveItemCount: Could not find item {itemID} in the ItemDatabase instance!");
         }
     }
 }

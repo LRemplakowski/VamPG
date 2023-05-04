@@ -141,6 +141,11 @@ namespace SunsetSystems.Inventory
             }
         }
 
+        public void GiveItemToPlayer(InventoryEntry item)
+        {
+            PlayerInventory.AddItem(item);
+        }
+
         public static void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
         {
             if (from.TryRemoveItem(item))

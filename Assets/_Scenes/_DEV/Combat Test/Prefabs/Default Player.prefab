@@ -1458,6 +1458,8 @@ GameObject:
   - component: {fileID: 1931756068266129087}
   - component: {fileID: 1931756068266129088}
   - component: {fileID: 2792128458689222970}
+  - component: {fileID: 2610113987165991847}
+  - component: {fileID: 261113006983766073}
   m_Layer: 8
   m_Name: Default Player
   m_TagString: Untagged
@@ -1546,7 +1548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af099b1f4bd5a34b851456c4b291b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _owner: {fileID: 0}
+  _owner: {fileID: 1931756068266129088}
 --- !u!114 &1931756068266129078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1640,7 +1642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   context: {fileID: 0}
-  umaData: {fileID: 0}
+  umaData: {fileID: 261113006983766073}
   defaultRendererAsset: {fileID: 0}
   umaRecipe: {fileID: 11400000, guid: 52235af6470accd49b10f288d964a658, type: 2}
   umaAdditionalRecipes: []
@@ -1683,7 +1685,7 @@ MonoBehaviour:
   loadBlendShapes: 0
   keepAvatar: 0
   activeRace:
-    name: HumanFemale
+    name: VampireFemale
   defaultChangeRaceOptions: 8
   cacheCurrentState: 1
   rebuildSkeleton: 0
@@ -1775,15 +1777,15 @@ MonoBehaviour:
     PreloadValues: []
   loadPathType: 1
   loadPath: UMAPresets/
-  loadFilename: 
+  loadFilename: default
   loadString: 
-  loadFileOnStart: 0
+  loadFileOnStart: 1
   ForceSlotMaterials: 0
   AtlasResolutionScale: 1
   defaultLoadOptions: 31
-  savePathType: 0
-  savePath: 
-  saveFilename: 
+  savePathType: 1
+  savePath: UMAPresets/
+  saveFilename: default
   makeUniqueFilename: 0
   ensureSharedColors: 0
   defaultSaveOptions: 15
@@ -1861,15 +1863,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 065731c9fd6dd1a4eb1e2a6319fcda3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _data:
+  _unique: {fileID: 2610113987165991847}
+  _enablePersistence: 1
+  <Data>k__BackingField:
     FirstName: Some
     LastName: Goon
-    Portrait: {fileID: 21300000, guid: 5b0c29a19f7687e45ab155f6db5f4a39, type: 3}
-    Faction: 3
+    PortraitFileName: sire_dialog
+    Faction: 0
     BodyType: 1
     CreatureType: 0
-    UmaPreset: {fileID: 0}
-    AnimatorControllerAsset: {fileID: 9100000, guid: b6baf64b1736249499205b779ee9dcba, type: 2}
+    UmaPresetFileName: default
+    animatorControllerResourceName: female_anims
     Stats:
       Trackers:
         health:
@@ -2140,40 +2144,6 @@ MonoBehaviour:
           baseValue: 0
           disciplineType: 18
           knownPowers: []
-    Equipment:
-      equipmentSlots:
-        m_keys:
-        - SLOT_WEAPON_PRIMARY
-        - SLOT_WEAPON_SECONDARY
-        - SLOT_CHEST
-        - SLOT_BOOTS
-        - SLOT_HANDS
-        - SLOT_TRINKET
-        m_values:
-        - <Name>k__BackingField: Primary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_PRIMARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 11400000, guid: 9473c7124bd30fe4cb13e2a1422685a1, type: 2}
-        - <Name>k__BackingField: Secondary Weapon
-          <ID>k__BackingField: SLOT_WEAPON_SECONDARY
-          _acceptedCategory: 1
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Chest
-          <ID>k__BackingField: SLOT_CHEST
-          _acceptedCategory: 2
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Boots
-          <ID>k__BackingField: SLOT_BOOTS
-          _acceptedCategory: 7
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Hands
-          <ID>k__BackingField: SLOT_HANDS
-          _acceptedCategory: 6
-          _equippedItem: {fileID: 0}
-        - <Name>k__BackingField: Trinket
-          <ID>k__BackingField: SLOT_TRINKET
-          _acceptedCategory: 10
-          _equippedItem: {fileID: 0}
     UseEquipmentPreset: 0
     Money: 0
   _config: {fileID: 11400000, guid: 4c01568ed82d72d4ea7173f4392046b4, type: 2}
@@ -2199,6 +2169,81 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isEnemy: 0
+--- !u!114 &2610113987165991847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931756068266129091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
+--- !u!114 &261113006983766073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1931756068266129091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15ee0e75ac30e964b8dcd0ad5f953c15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []
+  umaGenerator: {fileID: 0}
+  atlasResolutionScale: 1
+  ForceRebindAnimator: 0
+  isMeshDirty: 0
+  isShapeDirty: 0
+  isTextureDirty: 0
+  isAtlasDirty: 0
+  animationController: {fileID: 0}
+  CharacterCreated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBeforeUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBeforeDnaUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterDnaUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  CharacterBegun:
+    m_PersistentCalls:
+      m_Calls: []
+  AnimatorStateSaved:
+    m_PersistentCalls:
+      m_Calls: []
+  AnimatorStateRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  PreUpdateUMABody:
+    m_PersistentCalls:
+      m_Calls: []
+  umaRoot: {fileID: 0}
+  _umaRecipe:
+    raceData: {fileID: 0}
+    dnaValues: []
+    slotDataList: []
+    sharedColors: []
+  animator: {fileID: 0}
+  KeepAvatar: 0
+  characterHeight: 2
+  characterRadius: 0.25
+  characterMass: 50
 --- !u!1 &1945488948645572037
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, HideInInspector]
         private Creature _owner;
         private StatsData Data => _owner.Data.Stats;
 
@@ -25,6 +25,11 @@ namespace SunsetSystems.Entities.Characters
         public StatsManager Instance { get; protected set; }
 
         public event Action<Creature> OnCreatureDied;
+
+        private void OnValidate()
+        {
+            _owner ??= GetComponent<Creature>();
+        }
 
         public void Initialize(Creature owner)
         {

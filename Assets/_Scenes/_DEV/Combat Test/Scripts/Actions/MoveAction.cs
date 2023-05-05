@@ -12,7 +12,8 @@ namespace SunsetSystems
         public event EventHandler OnStartMoving;
         public event EventHandler OnStopMoving;
 
-        private StatsManager statsManager;
+        [SerializeField] private StatsManager statsManager;
+        private int maxMoveDistance;
 
         private Vector3 targetPosition;
 
@@ -64,7 +65,7 @@ namespace SunsetSystems
 
             GridPosition unitGridPosition = unit.GetGridPosition();
 
-            int maxMoveDistance = statsManager.GetCombatSpeed();
+            maxMoveDistance = statsManager.GetCombatSpeed();
 
             for (int x = -maxMoveDistance; x <= maxMoveDistance; x++)
             {

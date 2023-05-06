@@ -2042,6 +2042,9 @@ namespace Gaia
             CenterSceneViewLoadingOn originalCenter = TerrainLoaderManager.Instance.CenterSceneViewLoadingOn;
             Vector3Double originalOrigin = TerrainLoaderManager.Instance.GetOrigin();
 
+            Vector3 originalSpawnerPosition = this.transform.position;
+            float originalspawnRange = m_settings.m_spawnRange;
+
             Vector3 startPosition;
             float spawnRange;
 
@@ -2442,6 +2445,10 @@ namespace Gaia
                 TerrainLoaderManager.Instance.SetOrigin(originalOrigin);
             }
 #endif
+            //Resetting this spawner to the original position and range
+            transform.position = originalSpawnerPosition;
+            m_settings.m_spawnRange = originalspawnRange;
+
             SimpleCameraLayerCulling.Refresh();
             GaiaStopwatch.EndEvent("Area Spawn");
             GaiaStopwatch.Stop();
@@ -4414,7 +4421,7 @@ namespace Gaia
             }
             else
             {
-                spawnArea.center = transform.position;
+                spawnArea.center = transform.position + (Vector3)TerrainLoaderManager.Instance.GetOrigin();
                 spawnArea.size = new Vector3(m_settings.m_spawnRange * 2f, m_settings.m_spawnRange * 2f, m_settings.m_spawnRange * 2f);
             }
 

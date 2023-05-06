@@ -58,7 +58,7 @@ namespace ProceduralWorlds.Flora
         
         #region Custom Menu Items
 
-        [MenuItem("Window/" + PWConst.COMMON_MENU + "/Flora/Flora... %w", false, 40)]
+        [MenuItem("Window/" + PWConst.COMMON_MENU + "/Flora/Flora...", false, 40)]
         public static void MenuDetailerMainWindow()
         {
             var window = EditorWindow.GetWindow<FloraMainWindow>(false, "Flora");

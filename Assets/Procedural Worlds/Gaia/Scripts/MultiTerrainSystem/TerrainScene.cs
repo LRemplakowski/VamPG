@@ -40,7 +40,7 @@ namespace Gaia
         public LoadState m_impostorLoadState;
         public bool m_useFloatingPointFix;
         public long m_nextUpdateTimestamp;
-        private AsyncOperation asyncLoadOp;
+        private AsyncOperation m_asyncLoadOp;
         public bool m_regularLoadRequested;
         public bool m_regularUnloadRequested;
         public bool m_impostorLoadRequested;
@@ -429,16 +429,16 @@ namespace Gaia
                     }
                     else
                     {
-                        asyncLoadOp = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                        m_asyncLoadOp = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                         tlm.m_lastTerrainLoadedTimeStamp = currentTimeStamp;
 
                         if (isImpostor)
                         {
-                            asyncLoadOp.completed += SceneLoadCompletedImpostor;
+                            m_asyncLoadOp.completed += SceneLoadCompletedImpostor;
                         }
                         else
                         {
-                            asyncLoadOp.completed += SceneLoadCompletedRegular;
+                            m_asyncLoadOp.completed += SceneLoadCompletedRegular;
                         }
                     }
                     loadRequested = true;
@@ -487,15 +487,15 @@ namespace Gaia
 #endif
                 }
                 else { 
-                    asyncLoadOp = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
+                    m_asyncLoadOp = SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive);
                     
                     if (isImpostor)
                     {
-                        asyncLoadOp.completed += SceneLoadCompletedImpostor;
+                        m_asyncLoadOp.completed += SceneLoadCompletedImpostor;
                     }
                     else
                     {
-                        asyncLoadOp.completed += SceneLoadCompletedRegular;
+                        m_asyncLoadOp.completed += SceneLoadCompletedRegular;
                     }
                 }
                 loadRequested = true;
@@ -644,12 +644,15 @@ namespace Gaia
             else
             {
                 //conditions for caching not met, do full unload now
-
                 if (Application.isPlaying)
                 {
                     if (!unLoadRequested)
                     {
-                        SceneManager.UnloadSceneAsync(scene.name);
+                        if (TerrainLoaderManager.Instance.m_unloadUnusedAssetsRuntime)
+                        {
+                            m_asyncLoadOp = SceneManager.UnloadSceneAsync(scene.name);
+                            m_asyncLoadOp.completed += UnloadCompleted;
+                        }
                         loadState = LoadState.Unloaded;
                         unLoadRequested = true;
                     }
@@ -663,6 +666,10 @@ namespace Gaia
                         EditorSceneManager.SaveScene(scene);
                     }
                     EditorSceneManager.CloseScene(scene, true);
+                    if (TerrainLoaderManager.Instance.m_unloadUnusedAssetsEditor)
+                    {
+                        UnityEditor.EditorUtility.UnloadUnusedAssetsImmediate();
+                    }
                     //TerrainLoaderManager.Instance.EmptyCache();
                     ProgressBar.Clear(ProgressBarPriority.TerrainLoading);
                     loadState = LoadState.Unloaded;
@@ -794,6 +801,12 @@ namespace Gaia
         {
 
             obj.completed -= SceneLoadCompletedImpostor;
+        }
+
+        private void UnloadCompleted(AsyncOperation obj)
+        {
+            Resources.UnloadUnusedAssets();
+            obj.completed -= UnloadCompleted;
         }
 
         private void SceneLoadCompletedHandling()

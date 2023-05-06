@@ -411,7 +411,6 @@ namespace Gaia
             if (GameObject.Find(GaiaConstants.gaiaLightingObject) != null ||
                GameObject.Find(GaiaConstants.gaiaWaterObject) != null ||
                GameObject.Find(GaiaConstants.gaiaPlayerObject) != null)
-
             {
                 m_runtimeCreated = true;
             }

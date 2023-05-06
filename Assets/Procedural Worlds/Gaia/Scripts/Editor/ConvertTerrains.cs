@@ -2067,7 +2067,7 @@ namespace Gaia
                     }
                     break;
                 case SourceTerrainTreatment.Delete:
-                    if (terrain.transform.parent != null || terrain.transform.parent.name == GaiaConstants.SourceTerrainBackupObject)
+                    if (terrain.transform.parent != null && terrain.transform.parent.name == GaiaConstants.SourceTerrainBackupObject)
                     {
                         GameObject.DestroyImmediate(terrain.transform.parent.gameObject);
                     }

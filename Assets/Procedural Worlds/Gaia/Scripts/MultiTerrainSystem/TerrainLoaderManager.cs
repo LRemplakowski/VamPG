@@ -38,6 +38,8 @@ namespace Gaia
         public List<ParticleSystem> m_allWorldSpaceParticleSystems = new List<ParticleSystem>();
         public GaiaLoadingScreen m_loadingScreen;
 #endif
+        public bool m_unloadUnusedAssetsRuntime = true;
+        public bool m_unloadUnusedAssetsEditor = true;
         public bool m_autoTerrainStitching = true;
         public bool m_assembliesAreReloading = false;
         public int m_originTargetTileX;
@@ -372,8 +374,6 @@ namespace Gaia
         private bool m_progressTrackingRunning;
         private long m_lastLoadingProgressTimeStamp;
         private float m_lastTrackedProgressValue;
-
-
         public bool ShowLocalTerrain
         {
             get
@@ -1155,6 +1155,7 @@ namespace Gaia
         {
             ShowWorldMapTerrain = true;
             ShowLocalTerrain = false;
+            TerrainLoaderManager.Instance.SetOrigin(Vector3.zero);
             if (!Application.isPlaying)
             {
                 UpdateTerrainLoadState();

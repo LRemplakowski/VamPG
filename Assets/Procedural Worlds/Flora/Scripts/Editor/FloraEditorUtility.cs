@@ -80,6 +80,8 @@ namespace ProceduralWorlds.Flora
             AnimationCurve ScaleBySlope = data.ScaleBySlope;
             bool DrawCPUSpawnLocations = data.DrawCPUSpawnLocations;
             Color DebugColor = data.DebugColor;
+            float BoundsHeightMultiplier = data.BoundsHeightMultiplier;
+            int Padding = data.Padding;
 
             EditorGUI.BeginChangeCheck();
 
@@ -128,7 +130,7 @@ namespace ProceduralWorlds.Flora
                 }
             }
             // copy old data for material if it exists
-            if (data.Mat != null && Mesh != null && data.Mesh !=null)
+            if (data.Mat != null && Mesh != null)
             {
                 if (Mesh.subMeshCount != data.Mat.Length && meshReady)
                 {
@@ -224,6 +226,8 @@ namespace ProceduralWorlds.Flora
             EditorUtils.LabelField("Cell Data", EditorStyles.boldLabel); 
             EditorGUI.indentLevel++;
             SubCellDivision = EditorUtils.IntSlider("Subdivision Cell Value", SubCellDivision, 1, 16, HelpEnabled);
+            BoundsHeightMultiplier = EditorUtils.FloatField("Bounds Height Multiplier", BoundsHeightMultiplier, HelpEnabled);
+            Padding = EditorUtils.IntField("Padding", Padding, HelpEnabled);
             //MaxDistSQR = EditorUtils.FloatField("Max Distance Sqr", 1, HelpEnabled);
             MaxDistSQR = EditorUtils.FloatField("Max Distance Sqr", MaxDistSQR, HelpEnabled);
             
@@ -408,6 +412,8 @@ namespace ProceduralWorlds.Flora
                 data.ScaleBySlope = ScaleBySlope;
                 data.DrawCPUSpawnLocations = DrawCPUSpawnLocations;
                 data.DebugColor = DebugColor;
+                data.BoundsHeightMultiplier = BoundsHeightMultiplier;
+                data.Padding = Padding;
                 EditorUtility.SetDirty(data);
             }
 

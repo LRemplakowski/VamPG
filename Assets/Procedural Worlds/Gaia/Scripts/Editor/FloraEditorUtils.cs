@@ -33,7 +33,10 @@ namespace Gaia
 
                 if (floraLOD.DetailerSettingsObject == null)
                 {
-                    FloraUtils.AddNewDetailerSettingsObject(floraLODs, name, resourceType);
+                    //FloraUtils.AddNewDetailerSettingsObject(floraLODs, name, resourceType);
+                    floraLOD.DetailerSettingsObject = ScriptableObject.CreateInstance<DetailScriptableObject>();
+                    FloraUtils.SaveSettingsFile(floraLOD.DetailerSettingsObject, ref floraLOD.m_detailerSettingsObjectAssetGUID, ref floraLOD.m_detailerSettingsObjectInstanceID, false, floraLOD.m_name, GaiaDirectories.GetFloraDataPath());
+
                 }
 
                 EditorGUILayout.BeginHorizontal();

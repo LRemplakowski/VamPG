@@ -4071,6 +4071,10 @@ namespace Gaia
                     {
                         affectedTerrainNames.Add(t.name);
                     }
+
+                    //Reset Origin before stamping and spawning
+                    TerrainLoaderManager.Instance.SetOrigin(Vector3.zero);
+
                     //if we have world map stamp settings, let's stamp this terrain right away before it is unloaded again
                     if (worldMapStampSettings != null)
                     {

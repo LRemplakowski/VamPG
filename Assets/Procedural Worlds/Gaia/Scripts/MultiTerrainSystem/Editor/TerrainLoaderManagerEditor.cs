@@ -217,6 +217,8 @@ namespace Gaia
             EditorGUI.BeginChangeCheck();
             m_terrainLoaderManager.m_cacheInRuntime = m_editorUtils.Toggle("CacheInRuntime", m_terrainLoaderManager.m_cacheInRuntime, helpEnabled);
             m_terrainLoaderManager.m_cacheInEditor = m_editorUtils.Toggle("CacheInEditor", m_terrainLoaderManager.m_cacheInEditor, helpEnabled);
+            m_terrainLoaderManager.m_unloadUnusedAssetsRuntime = m_editorUtils.Toggle("UnloadAssetsRuntime", m_terrainLoaderManager.m_unloadUnusedAssetsRuntime, helpEnabled);
+            m_terrainLoaderManager.m_unloadUnusedAssetsEditor = m_editorUtils.Toggle("UnloadAssetsEditor", m_terrainLoaderManager.m_unloadUnusedAssetsEditor, helpEnabled);
             string allocatedMegabytes = (Math.Round(Profiler.GetTotalAllocatedMemoryLong() / Math.Pow(1024, 2))).ToString();
             string availableMegabytes = SystemInfo.systemMemorySize.ToString();
             allocatedMegabytes = allocatedMegabytes.PadLeft(allocatedMegabytes.Length + (availableMegabytes.Length - allocatedMegabytes.Length) * 3 , ' ');

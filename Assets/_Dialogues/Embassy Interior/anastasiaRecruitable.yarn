@@ -1,4 +1,5 @@
 title: anastasiaEntry
+position: 136,-238
 ---
 <<if (visited("anastasiaInitial"))>>
     <<jump anastasiaSubsequent>>
@@ -8,8 +9,10 @@ title: anastasiaEntry
 ===
 title: anastasiaInitial
 tags:
+position: -407,-310
 ---
 <<declare $bartender to "Bartender">>
+<<declare $anastasiaNatureKnown to false>>
 {$bartender}: ... I should get back to work.
 {$anastasia}: You're working right now silly, come on, let me buy you a drink.
 {$bartender}: ...
@@ -23,12 +26,14 @@ tags:
     {$anastasia}: Then why didn't you just say so?
     [nomarkup][The Bartender is waiting for something, anything, to break the silence that now fills the air...][/nomarkup]
     -> Continue
+        {$anastasia}: Why hello there?
         <<jump anastasiaAddressingPC>>
 -> {$pcName}: I'll have a Bloody Mary.
     {$bartender}: Coming right up!
     [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
     <<GiveItem("DRINK_BLOODY_MARY")>>
     -> Continue
+        {$anastasia}: Why hello there?
         <<jump anastasiaAddressingPC>>
 -> [nomarkup][Say nothing.][/nomarkup]
     [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup]
@@ -36,12 +41,38 @@ tags:
     [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup]
     {$anastasia}: Well, that was rude.
     -> Continue
+        {$anastasia}: Why hello there?
         <<jump anastasiaAddressingPC>>
 ===
 title: anastasiaAddressingPC
+position: -403,-28
 ---
-{$anastasia}: Why hello there?
+<<if $anastasiaNatureKnown is true>>
+    <<jump anastasiaKnowIsKindred>>
+<<endif>>
+<<if visited("anastasiaSomethingOff") is false>>
+-> {$pcName}: [nomarkup](Intelligence + Medicine) [Something's off about her.][/nomarkup]
+    <<jump anastasiaSomethingOff>>
+<<endif>>
+===
+title: anastasiaSomethingOff
+position: -130,38
+---
+    <<if Roll("INTELLIGENCE", "MEDICINE") == true>>
+        [nomarkup][You notice her skin is unusually blanched pale.][/nomarkup] #success
+        <<set $anastasiaNatureKnown to true>>
+        <<jump anastasiaKnowIsKindred>>
+    <<else>>
+        {$anastasia}: If you're gonna stare at my tits, at least flirt with me first. #failure
+        {$kieran}: \[flustered\] Sorry about that.
+        <<jump anastasiaAddressingPC>>
+    <<endif>>
 ===
 title: anastasiaSubsequent
+position: 138,93
+---
+===
+title: anastasiaKnowIsKindred
+position: -323,308
 ---
 ===

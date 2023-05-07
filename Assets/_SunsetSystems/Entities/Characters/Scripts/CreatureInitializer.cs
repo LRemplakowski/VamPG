@@ -96,7 +96,7 @@ namespace SunsetSystems.Entities.Characters
             creature = faction switch
             {
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
-                Faction.Dialogue => creatureObject.AddComponent<TalkableNPC>(),
+                Faction.Dialogue => creatureObject.AddComponent<DialogueNPC>(),
                 _ => creatureObject.AddComponent<DefaultNPC>(),
             };
         }

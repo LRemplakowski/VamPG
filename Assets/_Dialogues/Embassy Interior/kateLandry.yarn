@@ -7,7 +7,7 @@ position: -178,-136
 <<declare $clanRevealed to false>>
 [nomarkup][The woman before you's corset is so tight you're convinced her organs are in her throat.][/nomarkup]
 {$innerVoice}: Guess she doesn't have much use for them.
-<<if visited("anastasiaRecruitment")==false>>
+<<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
     {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who's your friend?
 <<else>>
     {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who are your friends?
@@ -55,7 +55,7 @@ position: 6,20
 title: kateFarewell
 position: 293,-24
 ---
-<<if visited("anastasiaRecruitment")==false>>
+<<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
 {$sforza}: Before you go, I have a lead for you. See the metal head bimbo down there?
     <<if visited("anastasiaMeeting")==true>>
         [nomarkup][Kate points to Anastasia. Even from this distance, you can tell she's still trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]

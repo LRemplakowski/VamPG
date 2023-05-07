@@ -38,6 +38,11 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetIsPartyMemberRecruited")]
+        public static bool GetIsPartyMemberRecruited(string readableID)
+        {
+            return PartyManager.Instance.IsRecruitedMember(readableID);
+        }
 
         [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()

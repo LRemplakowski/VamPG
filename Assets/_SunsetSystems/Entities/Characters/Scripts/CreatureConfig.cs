@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {

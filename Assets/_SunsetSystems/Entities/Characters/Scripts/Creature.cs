@@ -118,8 +118,6 @@ namespace SunsetSystems.Entities.Characters
                 NavMeshObstacle.enabled = false;
             if (_config)
                 Data = new(_config);
-            if (StatsManager)
-                StatsManager.Initialize(this);
             if (SpellbookManager)
                 SpellbookManager.Initialize(this);
         }

@@ -15,7 +15,16 @@ namespace SunsetSystems.Entities.Characters
     {
         [SerializeField, ReadOnly]
         private Creature _owner;
-        private StatsData Data => _owner.Data.Stats;
+        private Creature Owner
+        {
+            get
+            {
+                if (_owner == null)
+                    _owner = GetComponent<Creature>();
+                return _owner;
+            }
+        }
+        private StatsData Data => Owner.Data.Stats;
 
         public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
         public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);
@@ -23,11 +32,6 @@ namespace SunsetSystems.Entities.Characters
         public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
 
         public event Action<Creature> OnCreatureDied;
-
-        public void Initialize(Creature owner)
-        {
-            this._owner = owner;
-        }
 
         public void TakeDamage(int damage)
         {
@@ -55,7 +59,7 @@ namespace SunsetSystems.Entities.Characters
         public virtual void Die()
         {
             Health.SuperficialDamage = 10000;
-            OnCreatureDied?.Invoke(_owner);
+            OnCreatureDied?.Invoke(Owner);
         }
 
         internal void Heal(int amount)

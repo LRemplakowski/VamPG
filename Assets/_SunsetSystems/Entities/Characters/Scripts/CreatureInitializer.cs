@@ -127,7 +127,7 @@ namespace SunsetSystems.Entities.Characters
 
         private static void InitializeStatsManager(StatsManager statsManager, Creature owner)
         {
-            statsManager.Initialize(owner);
+
         }
 
         private static void InitializeCollider(CapsuleCollider collider)

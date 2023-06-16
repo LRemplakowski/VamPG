@@ -148,7 +148,6 @@ namespace UMA
 			generatedMaterials = new List<UMAData.GeneratedMaterial>(20);
 			atlassedMaterials.Clear();
 			uniqueRenderers.Clear();
-			umaData.umaRecipe.BlendshapeSlots.Clear();
 
 			SlotData[] slots = umaData.umaRecipe.slotDataList;
 
@@ -159,18 +158,6 @@ namespace UMA
 					continue; 
 				if (slot.Suppressed)
 					continue;
-
-				if (slot.isBlendShapeSource)
-				{
-					// Blendshape Source Slots are not combined. Instead, their blendshapes
-					// are added to the mesh at generation time.
-					if (!umaData.umaRecipe.BlendshapeSlots.ContainsKey(slot.blendShapeTargetSlot))
-					{
-						umaData.umaRecipe.BlendshapeSlots.Add(slot.blendShapeTargetSlot, new List<UMAMeshData>());
-					}
-					umaData.umaRecipe.BlendshapeSlots[slot.blendShapeTargetSlot].Add(slot.asset.meshData);
-					continue;
-				}
 
 				//Keep a running list of unique RendererHashes from our slots
 				//Null rendererAsset gets added, which is good, it is the default renderer.
@@ -319,18 +306,14 @@ namespace UMA
 					// parameters. 
 					if (matfrag.overlayData != null && matfrag.overlayData.Length > 0)
 					{
-						for (int oi = 0; oi < matfrag.overlayData.Length; oi++)
+						OverlayData od = matfrag.overlayData[0];
+						if (od.colorData.HasProperties)
 						{
-							OverlayData od = matfrag.overlayData[oi];
-							if (od == null) continue;
-							if (od.colorData.HasProperties)
+							foreach (var s in od.colorData.PropertyBlock.shaderProperties)
 							{
-								foreach (var s in od.colorData.PropertyBlock.shaderProperties)
+								if (ugm.material.HasProperty(s.name))
 								{
-									if (ugm.material.HasProperty(s.name))
-									{
-										s.Apply(ugm.material);
-									}
+									s.Apply(ugm.material);
 								}
 							}
 						}

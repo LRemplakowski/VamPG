@@ -150,13 +150,7 @@ namespace UMA
 				{
 					// fast track
 					var tempMesh = SkinnedMeshCombiner.ShallowInstanceMesh(combinedMeshList[0].meshData, combinedMeshList[0].triangleMask );
-					if (umaData.umaRecipe.BlendshapeSlots.ContainsKey(combinedMeshList[0].meshData.SlotName))
-                    {
-
-						var Blendshapes = SkinnedMeshCombiner.GetBlendshapeSources(tempMesh, umaData.umaRecipe);
-						tempMesh.blendShapes = Blendshapes.ToArray();
-                    }
-					tempMesh.ApplyDataToUnityMesh(renderers[currentRendererIndex], umaData.skeleton,umaData.umaRecipe);
+					tempMesh.ApplyDataToUnityMesh(renderers[currentRendererIndex], umaData.skeleton);
 				}
 				else
 				{
@@ -166,14 +160,14 @@ namespace UMA
 					umaMesh.subMeshCount = 0;
 					umaMesh.vertexCount = 0;
 
-					SkinnedMeshCombiner.CombineMeshes(umaMesh, combinedMeshList.ToArray(), umaData.blendShapeSettings,umaData.umaRecipe );
+					SkinnedMeshCombiner.CombineMeshes(umaMesh, combinedMeshList.ToArray(), umaData.blendShapeSettings );
 
 					if (updatedAtlas)
 					{
 						RecalculateUV(umaMesh);
 					}
 
-					umaMesh.ApplyDataToUnityMesh(renderers[currentRendererIndex], umaData.skeleton,umaData.umaRecipe);
+					umaMesh.ApplyDataToUnityMesh(renderers[currentRendererIndex], umaData.skeleton);
 					umaMesh.ReleaseSharedBuffers();
 				}
 				var cloth = renderers[currentRendererIndex].GetComponent<Cloth>();
@@ -202,7 +196,7 @@ namespace UMA
 			for (int i = 0; i < umaData.umaRecipe.slotDataList.Length; i++)
 			{
 				SlotData slotData = umaData.umaRecipe.slotDataList[i];
-				if (slotData != null && !slotData.isBlendShapeSource)
+				if (slotData != null)
 				{
 					umaData.umaRecipe.AddDNAUpdater(slotData.asset.slotDNA);
 				}
@@ -233,7 +227,6 @@ namespace UMA
 					var slotData = materialDefinition.slotData;
 					combineInstance = new SkinnedMeshCombiner.CombineInstance();
 					combineInstance.meshData = slotData.asset.meshData;
-					combineInstance.meshData.SlotName = slotData.slotName;
 
 					//New MeshHiding
 					if (slotData.meshHideMask != null)

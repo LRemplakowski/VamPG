@@ -82,8 +82,6 @@ namespace UMA.CharacterSystem
 							for (int i = 0; i < umaRecipe.slotDataList.Length; i++)
 							{
 								SlotData slotData = umaRecipe.slotDataList[i];
-								if (slotData.isBlendShapeSource)
-									continue;
 								if (slotData != null && slotData.asset != null)
 									wardrobeSlotAssets.Add(slotData.asset);
 							}

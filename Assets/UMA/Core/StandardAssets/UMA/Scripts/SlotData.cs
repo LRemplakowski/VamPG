@@ -27,16 +27,6 @@ namespace UMA
 
 		public string[] Races;
 
-		public bool isBlendShapeSource
-        {
-			get { return !string.IsNullOrEmpty(blendShapeTargetSlot); }
-        }
-		// This only appears in recipes
-		public string blendShapeTargetSlot;
-#if UNITY_EDITOR
-		public bool BlendshapeFoldout;
-		public bool isDeleted;
-#endif
 		/// <summary>
 		/// 
 		/// </summary>
@@ -72,9 +62,6 @@ namespace UMA
 				return asset.material;
 	        }
         }
-
-		// Slots to copy blendshapes from as needed...
-		public List<string> BlendshapeSlotNames = new List<string>();
 
 		public bool Suppressed; 
 
@@ -239,7 +226,6 @@ namespace UMA
 
 			res.Races = Races;
 			res.tags = tags;
-			res.blendShapeTargetSlot = blendShapeTargetSlot;
 			return res;
 		}
 
@@ -450,7 +436,7 @@ namespace UMA
 							if (!channel.NonShaderTexture && !material.material.HasProperty(channel.materialPropertyName))
 							{
 								if (Debug.isDebugBuild)
-									Debug.LogError(string.Format("Slot '{0}' Material Channel {1} on UMAMaterial {3} refers to material property '{2}' but no such property exists.", asset.slotName, i, channel.materialPropertyName,material.name), asset);
+									Debug.LogError(string.Format("Slot '{0}' Material Channel {1} refers to material property '{2}' but no such property exists.", asset.slotName, i, channel.materialPropertyName), asset);
 								valid = false;
 							}
 						}

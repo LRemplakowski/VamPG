@@ -599,7 +599,7 @@ namespace UMA
 		/// </summary>
 		/// <param name="renderer">Target renderer.</param>
 		/// <param name="skeleton">Skeleton.</param>
-		public void ApplyDataToUnityMesh(SkinnedMeshRenderer renderer, UMASkeleton skeleton, UMAData.UMARecipe recipe)
+		public void ApplyDataToUnityMesh(SkinnedMeshRenderer renderer, UMASkeleton skeleton)
 		{
 			if (renderer == null)
 			{
@@ -1057,7 +1057,6 @@ namespace UMA
 		{
 			UMAMeshData newMeshData = new UMAMeshData();
 
-			newMeshData.SlotName = SlotName; 
 			if (ManagedBonesPerVertex != null)
             {
 				newMeshData.ManagedBonesPerVertex = new byte[ManagedBonesPerVertex.Length];

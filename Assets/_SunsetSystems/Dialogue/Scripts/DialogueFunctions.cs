@@ -11,7 +11,7 @@ namespace SunsetSystems.Dialogue
     public static class DialogueFunctions
     {
         [YarnFunction("RollSingle")]
-        public static int GetRollResult(string statName)
+        public static int GetRollResultSingle(string statName)
         {
             int dice = 0;
             dice += GetStatValueFromString(statName);
@@ -38,6 +38,11 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetIsPartyMemberRecruited")]
+        public static bool GetIsPartyMemberRecruited(string readableID)
+        {
+            return PartyManager.Instance.IsRecruitedMember(readableID);
+        }
 
         [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()

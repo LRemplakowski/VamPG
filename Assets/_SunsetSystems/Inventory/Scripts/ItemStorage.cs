@@ -28,7 +28,7 @@ namespace SunsetSystems.Inventory
 
         public void AddItems(List<InventoryEntry> itemEntries)
         {
-            itemEntries.ForEach(entry => AddItem(entry));
+            itemEntries?.ForEach(entry => AddItem(entry));
         }
 
         public void AddItem(InventoryEntry itemEntry)

@@ -87,7 +87,7 @@ namespace SunsetSystems.Entities.Characters
                 UnityEngine.Object.DestroyImmediate(creature);
                 AddMatchingCreatureScript(creatureObject, data.Faction, out creature);
             }
-            creature.Data.CopyFrom(data);
+            creature.Data = data;
             return creature;
         }
 
@@ -96,7 +96,7 @@ namespace SunsetSystems.Entities.Characters
             creature = faction switch
             {
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
-                Faction.Dialogue => creatureObject.AddComponent<TalkableNPC>(),
+                Faction.Dialogue => creatureObject.AddComponent<DialogueNPC>(),
                 _ => creatureObject.AddComponent<DefaultNPC>(),
             };
         }
@@ -127,7 +127,7 @@ namespace SunsetSystems.Entities.Characters
 
         private static void InitializeStatsManager(StatsManager statsManager, Creature owner)
         {
-            statsManager.Initialize(owner);
+
         }
 
         private static void InitializeCollider(CapsuleCollider collider)

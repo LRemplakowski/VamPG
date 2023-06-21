@@ -47,7 +47,7 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private DialogueEntity _phone;
         [SerializeField]
-        private TalkableNPC _landlord;
+        private DialogueNPC _landlord;
         [SerializeField]
         private Waypoint _landlordSpawnWaypoint, _landlordSinkWaypoint, _pcLandlordVisitWaypoint, _pcLandlordSinkWaypoint;
         [SerializeField]

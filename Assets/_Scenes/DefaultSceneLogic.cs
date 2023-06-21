@@ -1,8 +1,7 @@
 using SunsetSystems.Data;
 using UnityEngine;
 using System.Threading.Tasks;
-using SunsetSystems.Game;
-using SunsetSystems.Party;
+using UltEvents;
 
 namespace SunsetSystems.Persistence
 {
@@ -11,10 +10,11 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Waypoint _defaultEntryWaypoint;
 
+        [field: SerializeField]
+        public UltEvent OnSceneStart { get; private set; }
+
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
-            PartyManager.ActiveParty.ForEach(p => p.ForceCreatureToPosition(_defaultEntryWaypoint.transform.position));
-            GameManager.CurrentState = GameState.Exploration;
             await Task.Yield();
         }
 

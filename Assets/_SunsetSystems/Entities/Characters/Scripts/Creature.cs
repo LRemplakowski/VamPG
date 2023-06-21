@@ -5,12 +5,12 @@ using Apex.AI.Components;
 using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
-using NaughtyAttributes;
 using UMA.CharacterSystem;
 using Redcode.Awaiting;
 using UnityEngine.Animations.Rigging;
 using SunsetSystems.Animation;
 using SunsetSystems.Spellbook;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -41,13 +41,12 @@ namespace SunsetSystems.Entities.Characters
                 Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
                 return;
             }
-            _data = new(_config);
+            Data = new(_config);
             CreatureInitializer.InitializeCreature(this);
         }
 
-        [SerializeField]
-        private CreatureData _data;
-        public CreatureData Data => _data;
+        [field: SerializeField]
+        public CreatureData Data { get; set; }
 
         [SerializeField]
         private CreatureConfig _config;
@@ -118,9 +117,7 @@ namespace SunsetSystems.Entities.Characters
             if (NavMeshObstacle)
                 NavMeshObstacle.enabled = false;
             if (_config)
-                _data = new(_config);
-            if (StatsManager)
-                StatsManager.Initialize(this);
+                Data = new(_config);
             if (SpellbookManager)
                 SpellbookManager.Initialize(this);
         }

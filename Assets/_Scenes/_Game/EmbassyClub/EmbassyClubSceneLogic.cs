@@ -1,18 +1,50 @@
-using System.Collections;
-using System.Collections.Generic;
+using Redcode.Awaiting;
+using SunsetSystems.Data;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Party;
+using SunsetSystems.Persistence;
+using System.Threading.Tasks;
 using UnityEngine;
+using Yarn.Unity;
 
-public class EmbassyClubSceneLogic : MonoBehaviour
+public class EmbassyClubSceneLogic : DefaultSceneLogic
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private PlayerControlledCharacter anastasiaCompanion;
+    [SerializeField]
+    private Creature anastasiaDialogue;
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+        EmbassyClubDialogueCommands.sceneLogic = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override Task StartSceneAsync(LevelLoadingData data)
     {
-        
+        return base.StartSceneAsync(data);
+    }
+
+    private async Task DoRecruitAnastasia()
+    {
+        SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+        await fade.DoFadeOutAsync(.5f);
+        anastasiaDialogue.gameObject.SetActive(false);
+        anastasiaCompanion.gameObject.SetActive(true);
+        PartyManager.RecruitCharacter(anastasiaCompanion.Data);
+        PartyManager.AddCreatureAsActivePartyMember(anastasiaCompanion);
+        await new WaitForUpdate();
+        await fade.DoFadeInAsync(.5f);
+    }
+
+    private static class EmbassyClubDialogueCommands
+    {
+        public static EmbassyClubSceneLogic sceneLogic;
+
+        [YarnCommand("RecruitAnastasia")]
+        public static void RecruitAnastasia()
+        {
+            _ = sceneLogic.DoRecruitAnastasia();
+        }
     }
 }

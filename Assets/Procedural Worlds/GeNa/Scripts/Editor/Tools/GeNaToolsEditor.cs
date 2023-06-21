@@ -1,17 +1,20 @@
 ﻿using UnityEditor;
 using UnityEngine;
+
 namespace GeNa.Core
 {
     [CustomEditor(typeof(GeNaTools))]
     public class GeNaToolsEditor : GeNaEditor
     {
         private GeNaTools m_tools;
+
         private void OnEnable()
         {
             if (m_editorUtils == null)
                 m_editorUtils = PWApp.GetEditorUtils(this, "GeNaToolsEditor", null);
             m_tools = target as GeNaTools;
         }
+
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -27,6 +30,7 @@ namespace GeNa.Core
                 EditorUtility.SetDirty(m_tools);
             }
         }
+
         public override void OnSceneGUI()
         {
             base.OnSceneGUI();
@@ -82,6 +86,7 @@ namespace GeNa.Core
                             settings.MoveUp = false;
                             raiseOrLower = true;
                         }
+
                         // else if (e.keyCode == keyBindings.CombineMeshesKey && combineMeshes.Enabled)
                         // {
                         //     Undo.SetCurrentGroupName("Combine Meshes");
@@ -119,37 +124,43 @@ namespace GeNa.Core
                 m_tools.ProcessSelectedObjects(Selection.gameObjects);
             }
         }
+
         #region Editor Panels
+
         private void GlobalSettingsPanel(bool helpEnabled)
         {
             GeNaToolsSettings settings = m_tools.Settings;
-            settings.SnapMode = (GeNaToolsSettings.GeNaSnapMode)m_editorUtils.EnumPopup("SnapMode", settings.SnapMode, helpEnabled);
+            settings.SnapMode =
+                (GeNaToolsSettings.GeNaSnapMode)m_editorUtils.EnumPopup("SnapMode", settings.SnapMode, helpEnabled);
             settings.OffsetCheck = m_editorUtils.FloatField("OffsetCheck", settings.OffsetCheck, helpEnabled);
             settings.DistanceCheck = m_editorUtils.FloatField("DistanceCheck", settings.DistanceCheck, helpEnabled);
-            settings.RaiseAndLowerAmount = m_editorUtils.FloatField("RaiseAndLowerAmount", settings.RaiseAndLowerAmount, helpEnabled);
+            settings.RaiseAndLowerAmount =
+                m_editorUtils.FloatField("RaiseAndLowerAmount", settings.RaiseAndLowerAmount, helpEnabled);
             m_editorUtils.LabelField("Experimental");
             EditorGUI.indentLevel++;
-            settings.AlwaysKeepSnappedToGround = m_editorUtils.Toggle("AlwaysSnapAlign", settings.AlwaysKeepSnappedToGround);
+            settings.AlwaysKeepSnappedToGround =
+                m_editorUtils.Toggle("AlwaysSnapAlign", settings.AlwaysKeepSnappedToGround);
             EditorGUI.indentLevel--;
         }
+
         private void KeyBindingsPanel(bool helpEnabled)
         {
             GeNaToolsKeyBindings keyBindings = m_tools.KeyBindings;
             GUI.enabled = false;
-            GeNaTools.m_firstKey = (KeyCode)m_editorUtils.EnumPopup("HoldDownKey", GeNaTools.m_firstKey);
+            GeNaToolsUtility.m_firstKey = (KeyCode)m_editorUtils.EnumPopup("HoldDownKey", GeNaToolsUtility.m_firstKey);
             GUI.enabled = true;
             keyBindings.SnapToGroundKey = (KeyCode)m_editorUtils.EnumPopup("SnapToGroundKey", keyBindings.SnapToGroundKey);
             keyBindings.AlignToGroundKey = (KeyCode)m_editorUtils.EnumPopup("AlignToSlopeKey", keyBindings.AlignToGroundKey);
             keyBindings.AlignAndSnapToGroundKey = (KeyCode)m_editorUtils.EnumPopup("SnapAndAlignToGroundKey", keyBindings.AlignAndSnapToGroundKey);
             keyBindings.RaiseFromGroundKey = (KeyCode)m_editorUtils.EnumPopup("RaiseFromGroundKey", keyBindings.RaiseFromGroundKey);
             keyBindings.LowerInGroundKey = (KeyCode)m_editorUtils.EnumPopup("LowerInGroundKey", keyBindings.LowerInGroundKey);
-            keyBindings.CombineMeshesKey = (KeyCode)m_editorUtils.EnumPopup("CombineMeshesKey", keyBindings.CombineMeshesKey);
         }
-        // private void CombineMeshesPanel(bool helpEnabled)
-        // {
-        //     GeNaCombineMeshes combineMeshes = m_tools.CombineMeshes;
-        //     combineMeshes.Enabled = m_editorUtils.Toggle("CombineMeshesEnabled", combineMeshes.Enabled, helpEnabled);
-        // }
+
+        private void PhysicsSimulatorPanel(bool helpEnabled)
+        {
+            
+        }
+
         #endregion
     }
 }

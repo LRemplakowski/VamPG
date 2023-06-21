@@ -119,8 +119,8 @@ Shader "PWS/Details/Zprime"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/Procedural Worlds/Flora/Content Resources/Shaders/PW_FloraIncludes.hlsl"
-            #include "Assets/Procedural Worlds/Flora/Content Resources/Shaders/PW_FloraWInd.cginc"
+            #include "PW_FloraIncludes.hlsl"
+            #include "PW_FloraWInd.cginc"
             
 
             struct appdata
@@ -194,8 +194,8 @@ Shader "PWS/Details/Zprime"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/Procedural Worlds/Flora/Content Resources/Shaders/PW_FloraIncludes.hlsl"
-            #include "Assets/Procedural Worlds/Flora/Content Resources/Shaders/PW_FloraWInd.cginc"
+            #include "PW_FloraIncludes.hlsl"
+            #include "PW_FloraWInd.cginc"
             
 
             struct appdata

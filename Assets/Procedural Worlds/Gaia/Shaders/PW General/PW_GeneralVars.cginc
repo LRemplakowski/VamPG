@@ -129,8 +129,8 @@ half 		_PW_Global_CoverLayer1Progress;
 half      	_PW_Global_CoverLayer0FadeStart;
 half      	_PW_Global_CoverLayer0FadeDist;
 
-half      	_PW_Global_CoverLayer1FadeStart;
-half      	_PW_Global_CoverLayer1FadeDist;
+//half      	_PW_Global_CoverLayer1FadeStart;
+//half      	_PW_Global_CoverLayer1FadeDist;
 
 half 		_PW_Global_Metallic;
 half 		_PW_Global_Smoothness;

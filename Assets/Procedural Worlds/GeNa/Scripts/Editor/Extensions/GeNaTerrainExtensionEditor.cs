@@ -5,35 +5,54 @@ namespace GeNa.Core
     [CustomEditor(typeof(GeNaTerrainExtension))]
     public class GeNaTerrainExtensionEditor : GeNaSplineExtensionEditor
     {
+        private GeNaTerrainExtension m_extension;
+        private bool m_isAsset;
+        
         protected void OnEnable()
         {
             if (m_editorUtils == null)
-            {
                 m_editorUtils = PWApp.GetEditorUtils(this, "GeNaSplineExtensionEditor");
-            }
+            m_extension = target as GeNaTerrainExtension;
+            m_isAsset = AssetDatabase.Contains(m_extension);
         }
         public void RenderPanel()
         {
-            GeNaTerrainExtension terrainExtension = target as GeNaTerrainExtension;
-            terrainExtension.Width = m_editorUtils.FloatField("Width", terrainExtension.Width, HelpEnabled);
-            switch (terrainExtension.EffectType)
+            m_extension = target as GeNaTerrainExtension;
+            if (m_extension == null)
+                return;
+            EditorGUI.BeginChangeCheck();
             {
-                case EffectType.Raise:
-                case EffectType.Lower:
-                case EffectType.Flatten:
-                    terrainExtension.HeightOffset = m_editorUtils.FloatField("Height Offset", terrainExtension.HeightOffset, HelpEnabled);
-                    break;
+                m_extension.Width = m_editorUtils.FloatField("Width", m_extension.Width, HelpEnabled);
+                switch (m_extension.EffectType)
+                {
+                    case EffectType.Raise:
+                    case EffectType.Lower:
+                    case EffectType.Flatten:
+                        m_extension.HeightOffset = m_editorUtils.FloatField("Height Offset", m_extension.HeightOffset, HelpEnabled);
+                        break;
+                }
+                m_extension.Strength = m_editorUtils.Slider("Strength", m_extension.Strength, 0f, 1f, HelpEnabled);
+                m_extension.Shoulder = m_editorUtils.FloatField("Shoulder", m_extension.Shoulder, HelpEnabled);
+                m_extension.ShoulderFalloff = m_editorUtils.CurveField("Shoulder Falloff", m_extension.ShoulderFalloff, HelpEnabled);
+                m_editorUtils.Fractal(m_extension.MaskFractal, HelpEnabled);
+                if (!m_isAsset)
+                {
+                    if (GUILayout.Button(m_extension.EffectType.ToString()))
+                        m_extension.Clear();
+                }
             }
-            terrainExtension.Strength = m_editorUtils.Slider("Strength", terrainExtension.Strength, 0f, 1f, HelpEnabled);
-            terrainExtension.Shoulder = m_editorUtils.FloatField("Shoulder", terrainExtension.Shoulder, HelpEnabled);
-            terrainExtension.ShoulderFalloff = m_editorUtils.CurveField("Shoulder Falloff", terrainExtension.ShoulderFalloff, HelpEnabled);
-            m_editorUtils.Fractal(terrainExtension.MaskFractal, HelpEnabled);
-            if (GUILayout.Button(terrainExtension.EffectType.ToString()))
-                terrainExtension.Clear();
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(m_extension);
+                AssetDatabase.SaveAssets();
+            }
         }
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            m_extension = target as GeNaTerrainExtension;
+            if (m_extension == null)
+                return;
             if (!GeNaEditorUtility.ValidateComputeShader())
             {
                 Color guiColor = GUI.backgroundColor;
@@ -50,9 +69,8 @@ namespace GeNa.Core
                 TerrainData terrainData = terrain.terrainData;
                 if (terrainData != null)
                 {
-                    GeNaTerrainExtension terrainExtension = target as GeNaTerrainExtension;
-                    terrainExtension.EffectType = (EffectType)m_editorUtils.EnumPopup("Effect Type", terrainExtension.EffectType, HelpEnabled);
-                    switch (terrainExtension.EffectType)
+                    m_extension.EffectType = (EffectType)m_editorUtils.EnumPopup("Effect Type", m_extension.EffectType, HelpEnabled);
+                    switch (m_extension.EffectType)
                     {
                         case EffectType.Raise:
                         case EffectType.Lower:
@@ -84,7 +102,7 @@ namespace GeNa.Core
                                         name = terrainLayer.diffuseTexture.name;
                                     choices[assetIdx] = new GUIContent(name);
                                 }
-                                terrainExtension.TextureProtoIndex = m_editorUtils.Popup("Texture", terrainExtension.TextureProtoIndex, choices, HelpEnabled);
+                                m_extension.TextureProtoIndex = m_editorUtils.Popup("Texture", m_extension.TextureProtoIndex, choices, HelpEnabled);
                                 RenderPanel();
                             }
                             else
@@ -109,7 +127,7 @@ namespace GeNa.Core
                                         name = texture.name;
                                     choices[assetIdx] = new GUIContent(name);
                                 }
-                                terrainExtension.DetailProtoIndex = m_editorUtils.Popup("Details", terrainExtension.DetailProtoIndex, choices, HelpEnabled);
+                                m_extension.DetailProtoIndex = m_editorUtils.Popup("Details", m_extension.DetailProtoIndex, choices, HelpEnabled);
                                 RenderPanel();
                             }
                             else

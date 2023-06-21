@@ -254,6 +254,9 @@ namespace Gaia
         [Tooltip("Delay in milliseconds until the Tile X / Z sliders start loading in the terrains when changing the values (Gaia Pro Only)")]
         public int m_gaiaPanelSliderDelay = 1000;
 
+        [Header("Terrain Converter")]
+        public double m_terrainConverterProcessingThreshold = 500;
+
         [Header("News")]
         public long m_lastWebUpdate = 0;
         public bool m_hideHeroMessage = false;
@@ -305,6 +308,7 @@ namespace Gaia
         public bool m_forceShaderReimport;
         [HideInInspector]
         public bool m_shaderReimportRestartRequired;
+        
 
         public Color GetActionButtonColor()
         {

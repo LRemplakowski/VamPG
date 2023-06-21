@@ -14,7 +14,7 @@ namespace GeNa.Core
             EditorGUI.BeginChangeCheck();
             {
                 settings.Iterations = EditorUtils.IntField("Iterations", settings.Iterations, helpEnabled);
-                settings.StepSize = EditorUtils.Slider("Step Size", settings.StepSize, 0.01f, 0.1f, helpEnabled);
+                settings.Speed = EditorUtils.FloatField("Speed", settings.Speed, helpEnabled);
                 settings.EmbedOffsetY = EditorUtils.Slider("Embed Offset Y", settings.EmbedOffsetY, -5f, 5f, helpEnabled);
                 settings.MinHeightY = EditorUtils.FloatField("Min Height Y", settings.MinHeightY, helpEnabled);
             }
@@ -26,12 +26,14 @@ namespace GeNa.Core
                     {
                         PhysicsSimulatorSettings otherSettings = decorator.Settings;
                         otherSettings.Iterations = settings.Iterations;
-                        otherSettings.StepSize = settings.StepSize;
+                        otherSettings.Speed = settings.Speed;
                         otherSettings.EmbedOffsetY = settings.EmbedOffsetY;
                         otherSettings.MinHeightY = settings.MinHeightY;
                         EditorUtility.SetDirty(@object);
                     }
                 }
+                
+                EditorUtility.SetDirty(Decorator);
             }
         }
     }

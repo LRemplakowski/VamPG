@@ -43,7 +43,9 @@ namespace Gaia
         public void OnEnable()
         {
             m_terrainLoaderManager = (TerrainLoaderManager)target;
-            #if GAIA_PRO_PRESENT
+            m_terrainLoaderManager.m_assembliesAreReloading = false;
+            m_terrainLoaderManager.SubscribeToAssemblyReloadEvents();
+#if GAIA_PRO_PRESENT
             m_terrainLoaders = Resources.FindObjectsOfTypeAll<TerrainLoader>();
             #endif
             //m_placeHolders = Resources.FindObjectsOfTypeAll<GaiaTerrainPlaceHolder>();
@@ -198,9 +200,7 @@ namespace Gaia
                 //offer button to create impostors setup
                 if (m_editorUtils.Button("OpenTerrainMeshExporterForImpostors", GUILayout.Width(EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth - 38)))
                 {
-                    ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
-                    exportTerrainWindow.FindAndSetPreset("Create Impostors");
-                    exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
+                    TerrainConverterEditorWindow.OpenWithPreset("Create Impostors");
                 }
                 EditorGUILayout.EndHorizontal();
 
@@ -217,6 +217,8 @@ namespace Gaia
             EditorGUI.BeginChangeCheck();
             m_terrainLoaderManager.m_cacheInRuntime = m_editorUtils.Toggle("CacheInRuntime", m_terrainLoaderManager.m_cacheInRuntime, helpEnabled);
             m_terrainLoaderManager.m_cacheInEditor = m_editorUtils.Toggle("CacheInEditor", m_terrainLoaderManager.m_cacheInEditor, helpEnabled);
+            m_terrainLoaderManager.m_unloadUnusedAssetsRuntime = m_editorUtils.Toggle("UnloadAssetsRuntime", m_terrainLoaderManager.m_unloadUnusedAssetsRuntime, helpEnabled);
+            m_terrainLoaderManager.m_unloadUnusedAssetsEditor = m_editorUtils.Toggle("UnloadAssetsEditor", m_terrainLoaderManager.m_unloadUnusedAssetsEditor, helpEnabled);
             string allocatedMegabytes = (Math.Round(Profiler.GetTotalAllocatedMemoryLong() / Math.Pow(1024, 2))).ToString();
             string availableMegabytes = SystemInfo.systemMemorySize.ToString();
             allocatedMegabytes = allocatedMegabytes.PadLeft(allocatedMegabytes.Length + (availableMegabytes.Length - allocatedMegabytes.Length) * 3 , ' ');
@@ -438,6 +440,7 @@ namespace Gaia
             }
 
             int removeIndex = -99;
+            int removeImpostorIndex = -99;
             int currentIndex = 0;
 
             foreach (TerrainScene terrainScene in m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes)
@@ -514,6 +517,21 @@ namespace Gaia
                         }
                     }
 
+                    if (string.IsNullOrEmpty(terrainScene.m_impostorScenePath))
+                    {
+                        GUI.enabled = false;
+                    }
+
+                        if (m_editorUtils.Button("RemoveImpostor"))
+                    {
+                        if (EditorUtility.DisplayDialog(m_editorUtils.GetTextValue("RemoveImpostorTitle"), m_editorUtils.GetTextValue("RemoveImpostorText"), m_editorUtils.GetTextValue("Continue"), m_editorUtils.GetTextValue("Cancel")))
+                        {
+                            removeImpostorIndex = currentIndex;
+                        }
+                    }
+
+                    GUI.enabled = originalGUIState;
+
                     EditorGUILayout.EndHorizontal();
                     if (terrainScene.RegularReferences.Count > 0)
                     {
@@ -579,10 +597,21 @@ namespace Gaia
 
             if (removeIndex != -99)
             {
+                m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes[removeIndex].RemoveAllReferences(true);
                 AssetDatabase.DeleteAsset(m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes[removeIndex].m_scenePath);
                 m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes.RemoveAt(removeIndex);
                 m_terrainLoaderManager.SaveStorageData();
             }
+
+            if (removeImpostorIndex != -99)
+            {
+                m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes[removeImpostorIndex].RemoveAllImpostorReferences(true);
+                AssetDatabase.DeleteAsset(m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes[removeImpostorIndex].m_impostorScenePath);
+                m_terrainLoaderManager.TerrainSceneStorage.m_terrainScenes[removeImpostorIndex].m_impostorScenePath = "";
+                m_terrainLoaderManager.SaveStorageData();
+            }
+
+
 
         }
 

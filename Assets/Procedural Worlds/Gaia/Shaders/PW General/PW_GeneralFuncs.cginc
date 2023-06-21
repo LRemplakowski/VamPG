@@ -28,9 +28,13 @@ inline void PW_WorldScaleGraph_half ( in half i_global_TerrainScale, out half2 o
 inline void CoverVertexUV ( in float2 i_worldUVScale, in float4 i_vertex, inout float2 i_coverLayer0UV,inout float2 i_coverLayer1UV )
 {
 #if defined(_PW_SF_COVER_ON)
-
+#ifdef _PW_HDRP_ON
 	float4 worldPosition = mul ( UNITY_MATRIX_M, i_vertex );
-
+#elif defined (_PW_HDRP)
+	float4 worldPosition = mul(UNITY_MATRIX_M, i_vertex);
+#else
+	float4 worldPosition = mul(unity_ObjectToWorld, i_vertex);
+#endif
 	half2 guv = ( ( worldPosition.xz * i_worldUVScale ) - float2 ( 0.5, 0.5 ) );
 
 	i_coverLayer0UV = guv * _PW_CoverLayer0Tiling;
@@ -85,7 +89,13 @@ inline void WorldMapObject_half ( in half4 i_worldMap, in half3 i_albedo, in hal
 //=============================================================================
 inline void WorldMapUV ( in half2 i_worldUVScale, in half i_worldMapUVScale, out half2 o_uv )
 {
+#ifdef _PW_HDRP_ON
 	half4 worldPosition	= mul ( UNITY_MATRIX_M, float4(0,0,0,1) );
+#elif defined (_PW_HDRP)
+	half4 worldPosition = mul(UNITY_MATRIX_M, float4(0, 0, 0, 1));
+#else
+	half4 worldPosition = mul(unity_ObjectToWorld, float4(0, 0, 0, 1));
+#endif
 	half2 worldMapUV 	= ( ( worldPosition.xz * i_worldUVScale ) + float2 ( 0.5, 0.5 ) ) * i_worldMapUVScale;
 
 	worldMapUV.x = abs ( fmod ( worldMapUV.x, 1.0 ) );
@@ -393,6 +403,9 @@ inline void CalculateThicknessHDRP_float(
 	o_thickness = thickness;
 }
 
+half _PW_Global_CoverLayer1FadeStart;
+half _PW_Global_CoverLayer1FadeDist;
+
 //=============================================================================
 inline void CoverSurface_half ( 
 						  in half3	i_albedo,
@@ -446,9 +459,9 @@ inline void CoverSurface_half (
 	#endif
 
 	// fade cover
-	half delta = i_worldPosY - i_user_FadeStartY;
+	half delta = i_worldPosY - i_user_FadeStartY - _PW_Global_CoverLayer1FadeStart;
 	half sgn   = max ( sign ( delta ), 0 );
-	half fade  = clamp ( length ( delta ) / max ( i_user_FadeDistance, HALF_MIN ), 0.0, 1.0 ) * sgn;
+	half fade  = clamp ( length ( delta ) / max ( i_user_FadeDistance + _PW_Global_CoverLayer1FadeDist, HALF_MIN ), 0.0, 1.0 ) * sgn;
 
 	progress *= fade;
 

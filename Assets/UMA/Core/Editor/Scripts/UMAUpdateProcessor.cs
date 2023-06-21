@@ -45,7 +45,6 @@ namespace UMA
                     foreach (var wi in items)
                     {
                         if (wi == null) continue;
-                        if (wi._recipe == null) continue;
                         var rcp = wi._recipe;
                         if (rcp.name == recipe.name)
                         {

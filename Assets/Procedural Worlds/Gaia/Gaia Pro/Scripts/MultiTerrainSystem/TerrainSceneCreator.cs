@@ -108,7 +108,11 @@ namespace Gaia
             var ambientMode = RenderSettings.ambientMode;
             var ambientProbe = RenderSettings.ambientProbe;
             var ambientSkyColor = RenderSettings.ambientSkyColor;
+#if UNITY_2022_1_OR_NEWER
+            var customReflection = RenderSettings.customReflectionTexture;
+#else
             var customReflection = RenderSettings.customReflection;
+#endif
             var defaultReflectionMode = RenderSettings.defaultReflectionMode;
             var defaultReflectionResolution = RenderSettings.defaultReflectionResolution;
             var flareFadeSpeed = RenderSettings.flareFadeSpeed;
@@ -147,7 +151,11 @@ namespace Gaia
             RenderSettings.ambientMode = ambientMode;
             RenderSettings.ambientProbe = ambientProbe;
             RenderSettings.ambientSkyColor = ambientSkyColor;
+#if UNITY_2022_1_OR_NEWER
+            RenderSettings.customReflectionTexture = customReflection;
+#else
             RenderSettings.customReflection = customReflection;
+#endif
             RenderSettings.defaultReflectionMode = defaultReflectionMode;
             RenderSettings.defaultReflectionResolution = defaultReflectionResolution;
             RenderSettings.flareFadeSpeed = flareFadeSpeed;

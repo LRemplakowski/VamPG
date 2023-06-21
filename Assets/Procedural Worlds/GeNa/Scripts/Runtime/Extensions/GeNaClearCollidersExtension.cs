@@ -64,7 +64,11 @@ namespace GeNa.Core
             {
                 float nextDistance = Mathf.Min(distance + m_width, Spline.Length);
                 GeNaSample sample = Spline.GetSampleAtDistance(distance);
+                if (sample == null)
+                    return;
                 GeNaSample nextSample = Spline.GetSampleAtDistance(nextDistance);
+                if (nextSample == null)
+                    return;
                 if (nextSample != null && sample != null)
                 {
                     Vector3 origin = sample.Location;
@@ -103,8 +107,12 @@ namespace GeNa.Core
             while (distance < Spline.Length)
             {
                 GeNaSample sample = Spline.GetSampleAtDistance(distance);
+                if (sample == null)
+                    return result;
                 float nextDistance = Mathf.Min(distance + m_width, Spline.Length);
                 GeNaSample nextSample = Spline.GetSampleAtDistance(nextDistance);
+                if (nextSample == null)
+                    return result;
                 Vector3 origin = sample.Location;
                 Vector3 direction = (nextSample.Location - sample.Location).normalized;
                 Ray ray = new Ray(origin, direction);

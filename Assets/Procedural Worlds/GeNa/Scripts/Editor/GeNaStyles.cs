@@ -123,7 +123,7 @@ namespace GeNa.Core
             #endregion
             #region Background
             redBackground = new GUIStyle();
-            redBackground.active.background = GetBGTexture(Color.red);
+            // redBackground.active.background = Texture2D.whiteTexture;
             #endregion
             #region Spline Buttons
             knobTexture2D = AssetDatabase.GetBuiltinExtraResource<Texture2D>(kKnobPath);
@@ -137,6 +137,7 @@ namespace GeNa.Core
             #endregion
             #region Cancel Button
             cancelBtn = new GUIStyle("button");
+            cancelBtn.normal.background = Texture2D.whiteTexture;
             //cancelBtn.normal.textColor = Color.red;
             #endregion
             #region Unity Personal / Pro Colors

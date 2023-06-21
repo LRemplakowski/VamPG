@@ -316,6 +316,11 @@ namespace Gaia
                                 newTerrainDetail.renderMode = protoDetail.m_renderMode;
 #if UNITY_2021_2_OR_NEWER
                                 newTerrainDetail.useInstancing = protoDetail.m_useInstancing;
+                                //override to vertex lit if we are using instancing.
+                                if (newTerrainDetail.useInstancing)
+                                {
+                                    newTerrainDetail.renderMode = DetailRenderMode.VertexLit;
+                                }
 #endif
                                 newTerrainDetail.prototypeTexture = protoDetail.m_detailTexture;
                                 newTerrainDetail.prototype = protoDetail.m_detailProtoype;
@@ -326,9 +331,19 @@ namespace Gaia
                                 newTerrainDetail.minHeight = protoDetail.m_minHeight;
                                 newTerrainDetail.minWidth = protoDetail.m_minWidth;
                                 newTerrainDetail.noiseSpread = protoDetail.m_noiseSpread;
+#if UNITY_2022_2_OR_NEWER
+                                newTerrainDetail.alignToGround = protoDetail.m_alignToGround;
+                                newTerrainDetail.density = protoDetail.m_density;
+                                newTerrainDetail.holeEdgePadding = protoDetail.m_holeEdgePadding;
+                                newTerrainDetail.noiseSeed = protoDetail.m_noiseSeed;
+                                newTerrainDetail.positionJitter = protoDetail.m_positionJitter;
+                                newTerrainDetail.targetCoverage = protoDetail.m_targetCoverage;
+                                newTerrainDetail.useDensityScaling = protoDetail.m_useDensityScaling;
+#endif
 
                                 if ((protoDetail.m_renderMode == DetailRenderMode.Grass && protoDetail.m_detailProtoype == null) || protoDetail.m_renderMode == DetailRenderMode.GrassBillboard)
                                 {
+                                    //Texture Prototype
                                     if (!presetTerrainDetails.Exists(x => x.prototypeTexture == newTerrainDetail.prototypeTexture &&
                                                                     x.prototype == newTerrainDetail.prototype &&
                                                                     x.dryColor == newTerrainDetail.dryColor &&
@@ -338,6 +353,15 @@ namespace Gaia
                                                                     x.minHeight == newTerrainDetail.minHeight &&
                                                                     x.minWidth == newTerrainDetail.minWidth &&
                                                                     x.noiseSpread == newTerrainDetail.noiseSpread
+                                                                    #if UNITY_2022_2_OR_NEWER
+                                                                        && x.alignToGround == newTerrainDetail.alignToGround &&
+                                                                        x.density == newTerrainDetail.density &&
+                                                                        x.holeEdgePadding == newTerrainDetail.holeEdgePadding &&
+                                                                        x.noiseSeed == newTerrainDetail.noiseSeed &&
+                                                                        x.positionJitter == newTerrainDetail.positionJitter &&
+                                                                        x.targetCoverage == newTerrainDetail.targetCoverage &&
+                                                                        x.useDensityScaling == newTerrainDetail.useDensityScaling
+                                                                    #endif
                                                                ))
                                     {
                                         presetTerrainDetails.Add(newTerrainDetail);
@@ -345,6 +369,9 @@ namespace Gaia
                                 }
                                 else
                                 {
+                                    //Mesh Prototype
+                                    newTerrainDetail.usePrototypeMesh = true;
+
                                     if (!presetTerrainDetails.Exists(x => x.prototype == newTerrainDetail.prototype &&
                                                                     x.prototype == newTerrainDetail.prototype &&
                                                                     x.dryColor == newTerrainDetail.dryColor &&
@@ -355,8 +382,18 @@ namespace Gaia
                                                                     x.minWidth == newTerrainDetail.minWidth &&
                                                                     x.noiseSpread == newTerrainDetail.noiseSpread
 #if UNITY_2021_2_OR_NEWER
-                                                                     && x.useInstancing== newTerrainDetail.useInstancing
+                                                                    && x.useInstancing== newTerrainDetail.useInstancing
 #endif
+#if UNITY_2022_2_OR_NEWER
+                                                                    && x.alignToGround == newTerrainDetail.alignToGround &&
+                                                                        x.density == newTerrainDetail.density &&
+                                                                        x.holeEdgePadding == newTerrainDetail.holeEdgePadding &&
+                                                                        x.noiseSeed == newTerrainDetail.noiseSeed &&
+                                                                        x.positionJitter == newTerrainDetail.positionJitter &&
+                                                                        x.targetCoverage == newTerrainDetail.targetCoverage &&
+                                                                        x.useDensityScaling == newTerrainDetail.useDensityScaling
+#endif
+
                                                                ))
                                     {
                                         presetTerrainDetails.Add(newTerrainDetail);

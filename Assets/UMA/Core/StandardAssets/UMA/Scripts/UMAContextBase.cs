@@ -247,10 +247,8 @@ namespace UMA
 		}
 
 #if UNITY_EDITOR
-		/*
 		public static GameObject CreateEditorContext()
 		{
-
 			GameObject EditorUMAContextBase = null;
 			if (UnityEditor.BuildPipeline.isBuildingPlayer)
 				return null;
@@ -318,8 +316,8 @@ namespace UMA
 				gen.NoCoroutines = true;
 				UMAContextBase.Instance = context;
 			}
-			return EditorUMAContextBase; 
-		}*/
+			return EditorUMAContextBase;
+		}
 #endif
 	}
 }

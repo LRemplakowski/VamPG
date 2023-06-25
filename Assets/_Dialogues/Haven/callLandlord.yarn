@@ -11,9 +11,9 @@ position: -156,-220
 title: policePhone
 position: 10,-345
 ---
-{$beast}: What are you doing that for? #line:0c8fbca
+{$beast}: To change one cage for another? Not the smartest thing to do. #line:0c8fbca
 -> Continue 
-[nomarkup][A strange whisper in your head compels you to stop. Your conscience won't win tonight. You're not going to jail.][/nomarkup] #line:0fc58c8 
+[nomarkup][A strange whisper in your head compels you to stop, and surprisingly, you can't disagree with it. Your conscience won't win tonight. You're not going to jail.][/nomarkup] #line:0fc58c8 
 -> Continue
 <<jump callLandlord>>
 ===
@@ -96,13 +96,11 @@ position: 205,12
 -> Continue
 {$pcName}: Now you do. #line:0b056ad 
 <<else>>
-{$landlord}: You bitch! You motherfucking bitch! I'll kill you! You bitch! #failure #line:07b787f 
+{$landlord}: \[He snorts out a laugh on the other end.\] You're trying to intimidate me? After I put a roof over your head? Get the fuck out of here with your empty threats. #failure #line:07b787f 
 -> Continue
-{$pcName}: .... #line:05cafeb 
+{$innerVoice}: And I'm paying through the nose for that same roof. #line:05cafeb 
 -> Continue
 {$pcName}: You're not helping your case. #line:0a5c4d1 
--> Continue
-{$landlord}: ... #line:01c2768 
 -> Continue
 {$pcName}: You done? #line:03df597 
 -> Continue

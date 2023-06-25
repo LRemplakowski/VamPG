@@ -3,7 +3,7 @@ tags:
 ---
 [nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup] #line:0b235ad 
 -> Continue
-{$innerVoice}: No! No! No! No! No! #line:0267002 
+{$innerVoice}: No! Oh god, please, no! #line:0267002 
 -> {$pcName}: \[Intelligence + Medicine\] \[Find the cause of death.\] #line:019d0da 
     <<jump findCause>>
 -> {$pcName}: \[Wits + Streetwise\] \[Fleece the body.\] #line:0ff8d9d 
@@ -14,7 +14,7 @@ tags:
 title: findCause
 ---
 <<if Roll("intelligence","medicine") >= 2>>
-[nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. He most likely died of blood loss.][/nomarkup] #success #line:0afffb6 
+[nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. Due to his complexion, he most likely died of blood loss.][/nomarkup] #success #line:0afffb6 
 <<else>>
 [nomarkup][You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure #line:02d0269 
 <<endif>>
@@ -40,11 +40,11 @@ title: afterBodyInteraction
 ---
 {$innerVoice}: What do I do? #line:0b96ec1 
 -> {$innerVoice}: I need to turn myself in. #line:0106b38 
-    {$beast}: Why? He's just food. #line:0a715e5 
+    {$beast}: On the other hand, think about it this way: it won't do anything to help him. He's already dead. #line:0a715e5 
     -> Continue
     <<jump thatVoiceAgain>>
 -> {$innerVoice}: I'm not going to jail. #line:02baf0d 
-    {$beast}: Get rid of the body. #line:07347cc 
+    {$beast}: Not if I can do something about it. #line:07347cc 
     -> Continue
     <<jump thatVoiceAgain>>
 ===
@@ -59,7 +59,7 @@ title: thatVoiceAgain
 -> Continue
 {$innerVoice}: Who is that? #line:082ed34 
 -> Continue
-{$beast}: Kill them. #line:00fd9fe 
+{$beast}: Just ignore it. I don't want more witnesses. #line:00fd9fe 
 -> Continue
 [nomarkup][BANG! BANG! BANG!][/nomarkup]
 <<PlaySFX "door_knock_heavy">>

@@ -29,6 +29,15 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetAttributeSkillPoolSize")]
+        public static int GetDicePoolSize(string attributeName, string skillName)
+        {
+            int size = 0;
+            size += GetStatValueFromString(attributeName);
+            size += GetStatValueFromString(skillName);
+            return size;
+        }
+
         [YarnFunction("UseDiscipline")]
         public static int GetUseDisciplineResult(string disciplineName)
         {

@@ -1,0 +1,161 @@
+﻿title: kieranDialogue
+tags: 
+---
+{$kieran}: Yes? We don't have much time before our heads roll.
+-> {$pcName}: I think we can spare a few minutes to talk.
+    [nomarkup][Kieran sights.][/nomarkup]
+    -> Continue
+    {$kieran}: Okay. As long as it'll help our investigation, I'm all answers. So ask.
+    <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
+    [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions to ask. Just to be sure if they are true or false.][/nomarkup]
+    <<endif>>
+    -> {$pcName}: You and Dominic don't seem to get along.
+    <<jump kieranDominicRelations>>
+    -> {$pcName}: So... vampires...
+    <<jump vampisismExplained>>
+    -> {$pcName}: Will Dominic really kill us if we don't find my Sire?
+    <<jump willHeKillUs>>
+    -> {$pcName}: How old are you exactly?
+    <<jump  kieransAge>>
+    -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if visited("drinks") ==false>>
+    <<jump  drinks>>
+    <<if GetAttributeSkillPoolSize("wits","awarness")>=4>>
+    -> {$pcName}: I can't help but notice you're wearing a wedding ring on your finger.
+    <<jump kieransRing>>
+    <<endif>>
+    -> {$pcName}: Can you tell me something about your Sire? <<if visited("kieransSire") ==false>>
+    <<jump kieransSire>>
+    -> {$pcName}: If we'll be partners, even temporarily I would like to know more about you.
+    <<jump  wantToKnowMoreAboutKieran>>
+    -> {$pcName}: I think that some thanks are in order. <<if visited("thanks") ==false>>
+    <<jump thanks>>
+    -> {$pcName}: I keep hearing this voice in my head...
+    <<jump beastExplained>>
+    -> {$pcName}: Maybe later
+        {$kieran}: OK, it's not like I'm going anywhere.
+===
+title: kieranDominicRelations
+---
+{$kieran}: Is it that obvious? \[he sighs\] Let's say that I didn't want to tag along with him, and he didn't want a partner. But an order is an order, so what could I do?
+-> Continue
+<<if GetCompanionInfluence("$kieran")>=2>>
+{$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
+<<elseif GetCompanionInfluence("$kieran")<=-2>>>
+{$kieran}: … but now that I think of it, I like his company more.
+<<else>>
+{$kieran}: To be honest, I don't know if the change is for better or for worse yet…
+<<endif>>
+    -> {$pcName}: Order?
+    {$kieran}: My Sire wanted me to get more experience in the field, so here I am, coping with bad jokes and forced adoptions.
+        -> {$pcName}: Forced… what?
+        {$kieran}: Sorry. Didn't want to sound rude. But technically you're my adoptive Childe, at least for the night.
+            -> {$pcName}: This sounds… awkward.
+            {$kieran}: You're telling me.
+            <<jump kieranDialogue>>
+===
+title: vampisismExplained
+---
+{$kieran}: Yes, I know, it does sound crazy. I'd love to talk about the details, but we don't have much time right now. Besides, theory is theory, but practice is much better.
+    -> {$pcName}: Not even a crash course?
+        {$kieran}: You had it in your apartment.
+        -> {$pcName}: You know, I don't think that this crash course gave me more then additional headache.
+            {$kieran}: Yes, I know, but we don't have time for more in-depth tutorials right now.
+        <<jump kieranDialogue>>
+===
+title: willHeKillUs
+---
+{$kieran}: I don't want to get your hopes up, but even if he doesn't want to, he'll be forced to do so.
+    -> {$pcName}: Those are some harsh laws, there.
+    {$kieran}: Harsh enough sustain our society through the centuries while remaining hidden from mortal eyes, that is.
+    <<jump kieranDialogue>>
+===
+title: kieransAge
+---
+{$kieran}: Just about old enough to be your adoptive Sire, it seems. \[he chuckles\] Yes, I know, you didn't ask about that. I'm around 55 right now. I've been a Kindred since 1972. The older you get, the faster time seems to move, so in other Kindred's eyes, I'm barely older than you.
+<<jump kieranDialogue>>
+===
+title: drinks
+---
+{$kieran}: Technically, we can't drink alcohol...
+-> Continue
+<<if GetCompanionInfluence("$kieran")>=2>>
+{$kieran}: ... but I can show you some tricks on how to make it work.
+<<elseif GetCompanionInfluence("$kieran")<=-2>>
+{$kieran}: ... so no, I'm not interested.
+<<else>>
+{$kieran}: ... but I don't know if it'll be… appropriate.
+<<endif>>
+<<jump kieranDialogue>>
+===
+title: kieransRing
+---
+[nomarkup][Kieran looks at his hand and hides it quickly][/nomarkup]
+-> Continue
+{$kieran}: Just a memento, nothing more.
+    <<if GetAttributeSkillPoolSize("wits","insight")>=5>>
+    -> {$pcName}: Seems to be more than that to me.
+        {$kieran}: \[His face goes stone cold\] This isn't pertinent to our investigation.
+    <<else>>
+    <<jump kieranDialogue>>
+    <<endif>>
+===
+title: kieransSire
+---
+{$kieran}: Maybe. Depends on what you want to know.
+    -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>>
+    <<jump catherinaCharacteristics>>
+    -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>>
+    <<jump catherinasAge>>
+    -> {$pcName}: You know what? Maybe another time.
+    <<jump kieranDialogue>>
+===
+title: catherinaCharacteristics
+---
+{$kieran}: Why do you ask?
+    -> {$pcName}: Just gathering data.
+    [nomarkup][He looks at you reluctantly][/nomarkup]
+    <<if GetCompanionInfluence("$kieran")>=2>>
+    {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring… every young Kindred would like to have her as a Sire.
+    -> {$pcName}: Whoa, I didn't expect that. 
+    <<ModifyInfluence kieran +1>>
+        {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
+        -> Continue
+        {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
+        <<jump kieransSire>>
+    ->  {$pcName}: You're painting her as if she was some kind of ideal.
+        {$kieran}: Uh… sorry… maybe a little.
+        <<jump kieransSire>>
+    ->  {$pcName}: You must exaggerate.
+    <<ModifyInfluence kieran -1>>
+        {$kieran}: No I'm not! You don't even know her as good as I do! \[Kieran influence -1\]
+        <<jump  kieransSire>>
+    <<else if GetCompanionInfluence("$kieran")<=-2>>
+    {$kieran}: I don't want to sound rude, but I don't know how it may be relevant to our investigation.
+    <<jump kieransSire>>
+    <<else>>
+    {$kieran}: Other than that I won't say. I'm not a gossip type of person.
+    <<endif>>
+    <<jump kieransSire>>
+===
+title: catherinasAge
+---
+{$kieran}: Let me think… she's been around for nearly 500 years.
+-> Continue
+[nomarkup][at first you don't know what to say, other than blinking your eyes in surprise][/nomarkup]
+-> Continue
+{$kieran}: She's not the oldest around you know.
+<<jump kieransSire>>
+===
+title: wantToKnowMoreAboutKieran
+---
+{$kieran}: Sorry Desiree, but it'll have to wait. It's unimportant right now. Not that I don't like to talk about myself.
+<<jump kieranDialogue>>
+===
+title: thanks
+---
+{$kieran}: Don't thank me just yet. We still need to pull through in that investigation of ours. The last thing I want is to become Dominic's target practice.
+    -> {$pcName}: I bet. Me neither. The prospect isn't appealing in any way. Especially with this hand cannon of his.
+        {$kieran}: Well then? Let's get to it.
+        -> {$pcName}: Wait, I have some questions!
+            <<jump kieranDialogue>>
+        -> End dialogue.

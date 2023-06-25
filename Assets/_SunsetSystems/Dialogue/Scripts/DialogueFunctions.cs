@@ -113,5 +113,11 @@ namespace SunsetSystems.Dialogue
         {
             return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
         }
+
+        [YarnFunction("GetCompanionInfluence")]
+        public static int GetCompanionInfluence(string companionID)
+        {
+            return 0;
+        }
     }
 }

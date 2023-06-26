@@ -1,6 +1,7 @@
 ﻿title: landlordVisit
 tags:
 ---
+<<declare $landlordKilled to 0>>
 <<PlaySFX "door_knock_light">>
 [nomarkup][You rush to open the door. As soon as you do, {$landlord} barges past you and steps into the apartment. He immediately covers his nose.][/nomarkup] #line:075fa98 
 -> Continue
@@ -47,6 +48,7 @@ title: landlordSink
 title: landlordKilled
 ---
 [nomarkup][When you retract your bite, his limp body falls to the ground. The shock of what you've just done hits you at once.][/nomarkup] #line:04f2573
+<<set $landlordKilled to 1>>
 -> Continue
 [nomarkup][He may have been a terrible, abusive, parasitic excuse for a human being, but Kevin didn't deserve to die like this.][/nomarkup]
 -> Continue

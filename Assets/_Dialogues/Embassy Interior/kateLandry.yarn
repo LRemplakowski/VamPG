@@ -5,6 +5,10 @@ position: -178,-136
 <<declare $anastasia to "bar">>
 <<declare $kieranInfluence to 0>>
 <<declare $clanRevealed to false>>
+<<declare $anastasiaIntroduced to 0>>
+<<declare $kateAlleyTalk to 0>>
+<<declare $kateSentUs to 0>>
+<<declare $kateDealsWithBouncer to 0>>
 [nomarkup][The woman before you's corset is so tight you're convinced her organs are in her throat.][/nomarkup]
 {$innerVoice}: Guess she doesn't have much use for them.
 <<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
@@ -19,7 +23,7 @@ position: -178,-136
 {$sforza}: I see Dominic's trying to start another Court scandal. Does Sam know?
 {$kieran}: \[A nervous chuckle\] I'll leave their marital drama up to them. She's a PI. He thinks she can be of some use. Her first task is to find her sire to minimize the scandal.
 {$sforza}: Interesting.
-[nomarkup][She gives you an ocular pat down, eyeing you up and down.][/nomarkup]
+[nomarkup][She gives you an ocular pat down, eyeing the length of your figure.][/nomarkup]
 {$sforza}: \[Scowls\] I suppose if Dominic thinks you're worth breaking the Traditions, I'll give you the benefit of the doubt. See how well you handle this test.
 -> {$pcName}: Thanks.
     {$sforza}: At least you know your manners. That helps. \[+1 Kieran Influence\]
@@ -56,7 +60,7 @@ title: kateFarewell
 position: 293,-24
 ---
 <<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
-{$sforza}: Before you go, I have a lead for you. See the metal head bimbo down there?
+{$sforza}: Before you go, I may have a lead for you. See the metalhead bimbo down there?
     <<if visited("anastasiaMeeting")==true>>
         [nomarkup][Kate points to Anastasia. Even from this distance, you can tell she's still trying to flirt with the bartender, and by the looks of it, it's not going well.][/nomarkup]
         <<jump kateNudgesTowardAnastasia>>
@@ -73,6 +77,167 @@ title: kateNudgesTowardAnastasia
 position: 308,190
 ---
 {$sforza}: Name's Anastasia. She's one of us. Shown up the past few nights, but hasn't done the courtesy of introducing herself. I've been keeping an eye on her. Hasn't caused any problems to my knowledge, but she might be your gal.
+-> Continue
 {$kieran}: You're tolerating poachers in your domain?
+-> Continue
 {$sforza}: She hasn't poached yet just lurking. I've been sniffing her out. Think she's staking out the place, or she's helplessly in love with my staff. Either way, if you saved me the hassle of dealing, I'd be grateful.
 ===
+title: subsequentInteractions
+---
+<<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
+{$sforza}: Back again, piccola mia? I suppose I have a few minutes.
+<<else GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if $anastasiaIntroduced ==0>>
+{$sforza}: Pleasure to finally make your acquaintance, Anastasia.
+-> Continue
+[nomarkup][Anastasia raises an eyebrow, but keeps her bearings.][/nomarkup]
+-> Continue
+{$anastasia}: Likewise, Caterina.
+-> Continue
+[nomarkup][She kisses Kate's hand. Kate wipes it off on the table.][/nomarkup]
+[endif]
+{$sforza}: Let's cut to the chase, what do you want?
+-> {$pcName}: What can you tell me about Diana?
+<<jump whoIsDiana>>
+-> {$pcName}: How did you come to own this place?
+<<jump howSheStarted>>
+-> {$pcName}: Tell me about youself. <<if visited("kateTalksAboutHerself") == false>>
+<<jump kateTalksAboutHerself>>
+<<if $dianaMet ==1>>
+-> {$pcName}: I need to get into Diana's office.
+<<endif>>
+    <<jump whatDianaDid>>
+-> {$pcName}: I should go.
+    {$sforza}: Best of luck on your little search.
+===
+title: whoIsDiana
+---
+{$sforza}: What about her? She's my ghoul. She owns this place on paper. Runs the bar to keep up appearances, makes the place feel authentic. She's been with me for some time now. Why do you ask?
+-> {$pcName}: You mentioned she was here last night.
+<<jump dianaEveryNight>>
+<<if $dianaMet ==1>>
+-> {$pcName}: She led me into the alley last night.
+<<endif>>
+<<jump whatDianaDid>>
+====
+title: dianaEveryNight
+----
+    {$sforza}: Hardly news. She's here almost every night.
+    -> {$pcName}: Almost every night?
+    {$sforza}: I may be old, but I'm not blind. She's been seeing someone on occasion. It hasn't interfered with her duties, so I haven't said anything. I like her having her own life. Keeps things interesting.
+    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: \[Scoffs\] How generous of you.
+    <<endif>>
+    <<jump whoIsDiana>>
+===
+title: whatDianaDid
+---
+{$sforza}: You should talk to her about that then.
+-> {$pcName}: She ran to her office before I had the chance.
+    [nomarkup][Kate cocks her head to the side.][/nomarkup]
+    -> Continue
+    {$sforza}: Curious. She's probably just busy.
+    <<set $kateAlleyTalk to 1>>
+    <<jump subsequentInteractions>>
+<<if $kateAlleyTalk ==1>>
+{$sforza}: Talk to the bouncer at the door to her office. Tell him I sent you.
+<<endif>>
+    <<if $kateSentUs ==0>>
+    {$kieran}: We appreciate your assistance in this manner.
+    <<else>>
+    {$pcName}: The bouncer is being difficult.
+    <<jump bouncerDifficulties>>
+===
+title: howSheStarted
+---
+{$sforza}: Diana owns the place, piccola mia. I just look after it. It was a gift from our “beloved”... 
+-> Continue
+[nomarkup][She chews on that word.][/nomarkup]
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+-> Continue
+{$anastasia}: \[Whispering\] I believe her.
+<<endif>>
+<<jump additionalQuestions>>
+===
+title: additionalQuestions
+---
+{$sforza}: … Prince. She saw fit to bestow upon me this modest domain as a token of her gratitude after that nasty business with what happened to the previous Prince. I knew that The Embassy would be the perfect spot to establish a place where Kindred could gather and socialize, a true haven for our dysfunctional little community. It required a bit of remodeling and adapting to the needs of our kind, but with Diana's help and expertise, it has become one of the most popular spots for us in the city.
+    -> {$pcName}: What do you think about the Prince?
+    <<jump katePrinceOpinion>>
+    -> {$pcName}: Who is a Prince? This title seems to repeat in nearly all discussions with… our kind.
+    <<jump princeExplained>>
+    -> {$pcName}: What happened to the previous Prince?
+    <<jump previousPrince>>
+===
+title: katePrinceOpinion
+---
+[nomarkup][Kieran glares at you.][/nomarkup]
+{$sforza}: It is my duty to follow her lead and contribute to the betterment of our community.
+-> {$pcName}: That's a non-answer.
+    {$sforza}: But it is the only answer you'll get.
+    {$kieran}: We have an investigation to get back to.
+    <<jump additionalQuestions>>
+===
+title: princeExplained
+---
+{$sforza}: Ah, it's so refreshing to have someone as oblivious to politics as you. But frankly, I don't have time to teach you everything you need to know.
+-> Continue
+{$kieran}: The Prince is the head figure in charge of the Camarilla's capital-D Domain here in Las Vegas - nearly the entire valley aside from Henderson and Sunset Manor is under our control. I'll tell you more when we've finished this investigation of ours.
+<<jump additionalQuestions>>
+===
+title: previousPrince
+---
+{$sforza}: Benedic was the Prince before Sam. Bastard got himself killed by Sabbat assassins, but they learned their lesson after we hunted them down.
+-> {$pcName}: Sabbat?
+<<jump whatIsSabbat>>
+-> {$pcName}: Traditions?
+<<jump whatAreTraditions>>
+-> {$pcName}: Camarilla?
+<<jump camarillaExplained>>
+===
+title: whatIsSabbat
+---
+    {$kieran}: A bunch of savages.
+    -> Continue
+    [nomarkup][Kates gestures towards Kieran in approval.][/nomarkup]
+    -> Continue
+    {$sforza}: A dangerous, misguided organization that rejects the Traditions and laws that keep our kind from becoming animals. Benedic didn't see them as a serious threat and now you know what happened to him. Someone in your position, the less you know about them. The better.
+    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: It's just the natural order of things. \[she shrugged\]
+    <<endif>>
+    <<jump previousPrince>>
+===
+title: whatAreTraditions
+---
+{$kieran}: A set of rules that everyone has to adhere to survive. Something like the Ten Commandments, if you're religious.
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+{$anastasia}: More like Hammurabi's Code, if we're talking severity of retribution. Death usually isn't on the table when talking about Christianity.
+[nomarkup][Kieran sighs][/nomarkup]
+{$anastasia}: What? You know I'm right. Forgiveness, and all that junk.
+<<jump additionalQuestions>>
+====
+title: camarillaExplained
+---
+{$kieran}: That's us. The good guys, so to speak.
+<<jump additionalQuestions>>
+===
+title: kateTalksAboutHerself
+---
+[nomarkup][Kate just laughs. Kieran only looks down at the ground and shakes his head side to side.][/nomarkup]
+{$sforza}: Don't you have an investigation to get back to?
+<<jump subsequentInteractions>>
+===
+title: bouncerDifficulties
+---
+{$sforza}: After you told him I sent you?
+-> {$pcName}: Yes ma'am.
+    {$sforza}: That won't do at all. Stay here. I'll deal with this myself.
+    <<set $kateDealsWithBouncer to 1>>
+    //cut to black//
+    {$sforza}: Apologies for the delay. He won't be an issue anymore.
+    {$kieran}: Thank you ma'am.
+    -> {$pcName}: What did you do to him?
+        {$kieran}: Pro tip. Best not to ask questions.
+        <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+        {$anastasia}: Oooooh how ominous.
+        <<jump subsequentInteractions>>

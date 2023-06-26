@@ -1,6 +1,7 @@
 ﻿title: dumpTheBodies
 tags:
 ---
+<<declare $toldKieranAboutVision to 0>>
 [nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup]
 -> Continue
 {$innerVoice}: Must've come by here last night.
@@ -28,6 +29,7 @@ title: kieranInterrupts
 -> Continue
 {$kieran}: What happened? You looked like a deer in the headlights for a moment there.
 -> {$pcName}: I had some sort of “vision.”
+    <<declare $toldKieranAboutVision to 1>>
     <<ModifyInfluence 1 "kieran">>
     <<jump toldAboutVision>>
 -> {$pcName}: Don't worry about it.

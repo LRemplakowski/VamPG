@@ -1,6 +1,10 @@
 ﻿title: paintings
 tags:
 ---
+<<declare $paintingsAreDestroyed to false>>
+<<declare $aidanBryant to false>>
+<<declare $dateCode to false>>
+<<declare $vibrantVistas to false>>
 [nomarkup][The wall is decorated with kitsch “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup]
 -> [nomarkup][Destroy the paintings.][/nomarkup]
     <<jump paintingsDestroyed>>
@@ -63,8 +67,8 @@ title: paintingIntelligenceSuccess
 -> {$pcName}: I think so. Those are gallery or auction bought pieces.
     {$kieran}: Curious… Diana never hit me as an art enthusiast person. That is not as big enthusiast to buy paintings in the gallery.
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Even if she is she has really bad taste.
-    {$kieran}: You know how it is with tastes.
+        {$anastasia}: Even if she is she has really bad taste.
+        {$kieran}: You know how it is with tastes.
     <<endif>>
     <<jump paintingSuccessExamination>>
 ===
@@ -75,10 +79,36 @@ title: paintingWitsSuccess
     -> {$pcName}: I'm not sure. But those paintings don't fit in here.
         {$kieran}: \[He gently scratches his chin thinking\] Hm… you're right. I would've placed those rather in some kind of CEO's office or gallery. Not in the punk rocker hideout.
         <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: Maybe it has some sentimental value? Because it certainly doesn't have any aesthetic one.
+            {$anastasia}: Maybe it has some sentimental value? Because it certainly doesn't have any aesthetic one.
         <<endif>>
         <<jump paintingSuccessExamination>>
 === 
+title: paintingSuccessExamination
+---
+<<set $aidanBryant to true>>
+<<set $dateCode to true>>
+<<set $vibrantVistas to true>>
+-> [nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup]
+{$kieran}: Vibrant Vistas Gallery… the address… I believe it's somewhere in the Art's District. And the date. 17th June 1969. Probably a date when it was bought.
+<<if GetIsPartyMemberRecruited($anastasia) is true and $paintingsAreDestroyed ==true>>
+    {$anastasia}: Great! Now we know where we can find more pieces to rip and shred our appreciation for. \[She chuckles.\]
+<<endif>>
+[nomarkup][Your attention goes to small handwritten note on the stamp - “For my beloved Diana for one of her most important days in her life. Aidan Bryant.”][/nomarkup]
+-> {$pcName}: Did you heard of any Aidan Bryant by any chance?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: \[Anastasia shooks her head.\] Not that I pay any attention to the guys. \[She shrugged.\]
+<<endif>>
+[nomarkup][Kieran on the other hand looks like he is thinking.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Our nerd guy seems to have an idea though.
+    {$kieran}: You're right ms Goth Queen. I have.
+<<endif>>
+{$kieran}: I believe that Aidan Bryant was Diana's husband. Rather touchy topic for her. He died in 'nam in 1972 from what I recall. Killed in action. Once I accidentally asked her about it. When I was Kate's ghoul I was helping Diana from time to time with the papers and stumbled upon a mail with the guys name.
+-> {$pcName}: Good to know. May be important. Thanks Kieran.
+<<if $paintingsAreDestroyed ==false>>
+    [nomarkup][You spend a minute to put the painting back on it's place. You will not gain more information from it.][/nomarkup]
+<<endif>>
+===
 title: paintingFailure
 ---
 [nomarkup][Just a hideous wall decoration, nothing more. You grow more and more frustrated inspecting it. Something stirs inside you with flashing anger and clouding your better judgement.][/nomarkup] #failure
@@ -95,15 +125,87 @@ title: paintingFailure
 ===
 title: paintingsDestroyed
 ---
-[nomarkup][Paintings are't a big obstacle to you. They are just plain canvas hanged on wall. You punch and rip the frame leaving miserable shreds as a witness to your growing frustration. Somehow you feel better...and terrified. This act was something not entirely in your control.][/nomarkup]
+[nomarkup][Paintings are't a big obstacle to you. They are just plain canvas hanged on wall. You punch the frame and rip the canvas leaving miserable shreds as a witness to your growing frustration. Somehow you feel better...and terrified. This act was something not entirely in your control.][/nomarkup]
+<<set $paintingsAreDestroyed to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-{$anastasia}: Such depths of aggression and viciousness. I like it. You should make your own exhibition one day. \[Anastasia grins\]
+    {$anastasia}: Such depths of aggression and viciousness. I like it. You should make your own exhibition one day. \[Anastasia grins\]
 <<endif>>
 {$kieran}: Why did you do that? Is it how you conduct investigations? \[Kieran influence -1\]
 <<ModifyInfluence (-1, $kieran)>>
 -> {$pcName}: I… don't know what came over me.
-<<jump beastTalk>>
+    <<jump beastTalk>>
 -> {$pcName}: Normally no. But I'm pissed.
-<<jump beastTalk>>
+    <<jump beastTalk>>
 ===
-
+title: beastTalk
+---
+[nomarkup][Kieran frowns, and it isn't this frown of anger or judging, rather of concern][/nomarkup]
+{$kieran}: I know what you are talking about. Just try to suppress those impulses. Otherwise we may end up without anything to cling on regarding our investigation.
+-> {$pcName}: Is there something you're not telling me?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Probably a lot. I guess he tries to hide the facts about the Beast inside of you.
+<<endif>>
+{$kieran}: Yes, but not because I'm afraid to talk about it or I want to hide anything. It's just a… complicated concept.
+<<if (GetCompanionInfluence($kieran) >4)>>
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$kieran}: And she had a lot of them tonight. I just don't want to overburden her. \[did you just heard genuine… concern in his voice?\]
+        {$beast}: No, it's not concern, he's just toying with my feelings. He wasn't particularly “concerned” when I had gun next to my head. All he does is complaining.
+        [nomarkup][Anastasia laughs at what Kieran said.][/nomarkup]
+        {$anastasia}: Complicated? Whats complicated about it? Listen girl, when you hear it just follow your gut. Don't listen to him. He'll just hinder your REAL potential.
+        {$beast}: I like that girl. She talks sense.
+        {$kieran}: Listen Anastasia, I said to her that I'm going to help her and this is what I do. If she'll just run rampage…
+        {$anastasia}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. Not that I care about it.
+        <<jump anaAndKieranConflict>>
+    <<else>>
+        {$kieran}: You had a lot of them tonight. I just don't want to overburden you. \[did you just heard genuine… concern in his voice?\]
+        {$beast}: No, it's not concern, he's just toying with my feelings. He wasn't particularly “concerned” when I had gun next to my head. All he does is complaining.
+        {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage…
+        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time.
+            <<jump examineScraps>>
+    <<endif>>
+<<else>>
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        [nomarkup][Anastasia laughs at what Kieran said.][/nomarkup]
+        {$anastasia}: Complicated? Whats complicated about it? Listen girl, when you hear it just follow your gut. Don't listen to him. He'll just hinder your REAL potential.
+        {$beast}: I like that girl. She talks sense.
+        [nomarkup][Kieran rolls his eyes][/nomarkup]
+        {$kieran}: Listen Anastasia, I said to her that I'm going to help her and this is what I do. If she'll just run rampage…
+        {$anastasia}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. Not that I care about it.
+        <<jump anaAndKieranConflict>>
+    <<else>>
+        {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage…
+        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time.
+            <<jump examineScraps>>
+    <<endif>>
+<<endif>>
+===
+title: anaAndKieranConflict
+---
+[nomarkup][you see that Kieran will continue and you get a feeling that if you don't stop them both they will just argue till dawn catches you here][/nomarkup]
+{$innerVoice}: Shit…
+{$beast}: If they won't stop I'm gonna be dead...
+-> {$pcName}: Listen guys… BOTH of you. It's my investigation and we'll do as I say alright? It's not only his ass on the line, but mine too.
+    [nomarkup][Anastasia and Kieran focus on you, then stare at each other][/nomarkup]
+    {$kieran}: We'll end this conversation at another time.
+    {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust.
+    <<jump examineScraps>>
+-> {$pcName}: Kieran, do you really want to roll around in her mud till dawn?
+    [nomarkup][Kieran looks at you and shooks his head][/nomarkup]
+    {$kieran}: You're right. It's not a good place or time for a philosophical discussion. \[+1 Kieran influence\]
+    <<ModifyInfluence (+1,$kieran)>>
+    [nomarkup][Anastasia frowns at you][/nomarkup]
+    {$anastasia}: MY mud? It's him who didn't tell you about the Beast in the first place! \[-1 Anastasia influence\]
+    <<ModifyInfluence (-1,$anastasia)>>
+    <<jump examineScraps>>
+-> {$pcName}: Shut up Kieran! For a guy who tells me he's here to help you hide a lot from me!
+    {$anastasia}: Yes! Exactly my thought! \[+1 Anastasia Influence\]
+    <<ModifyInfluence (+1,$anastasia)>>
+    {$kieran}: I'm sorry, okay? There was too little time to tell you everything… \[-1 Kieran influence\]
+    <<ModifyInfluence (-1,$kieran)>>
+    <<jump examineScraps>>
+===
+title: examineScraps
+---
+[nomarkup][What is left of paintings is littering the floor. The wood from wrames is shattered. Canvas scraps try desperately to cling onto broken frame. Some of the paint cracked leaving colorul dust on the floor. On one of them you see a ripped, paper stamp.Well… at least someone elses day is far worse than you - you're still in one piece. You cant's say the same about the paintings.][/nomarkup]
+<<jump paintingSuccessExamination>>
+===

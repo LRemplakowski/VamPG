@@ -1,7 +1,7 @@
 ﻿title: dumpTheBodies
 tags:
 ---
-<<declare $toldKieranAboutVision to 0>>
+<<declare $toldKieranAboutVision to false>>
 [nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup]
 -> Continue
 {$innerVoice}: Must've come by here last night.
@@ -19,19 +19,15 @@ Mysterious Woman: This way.
 ===
 title: kieranInterrupts
 ---
-<<declare $toldKieranAboutVision to false>>
 [nomarkup][Kieran stands before you waving his hand before your eyes][/nomarkup]
 -> Continue
 {$kieran}: You there?
 -> Continue
 [nomarkup][You catch your bearings. Kieran's gravelly but annoying voice grounding you.][/nomarkup]
--> Continue
-{$pcName}: Yeah.
--> Continue
-{$kieran}: What happened? You looked like a deer in the headlights for a moment there.
+-> {$pcName}: Yeah.
+    {$kieran}: What happened? You looked like a deer in the headlights for a moment there.
 -> {$pcName}: I had some sort of “vision.”
     <<set $toldKieranAboutVision to true>>
-    <<ModifyInfluence (1,"kieran")>>
     <<jump toldAboutVision>>
 -> {$pcName}: Don't worry about it.
     <<jump dontTellAboutVision>>
@@ -39,19 +35,12 @@ title: kieranInterrupts
 title: toldAboutVision
 ---
 {$kieran}: \[Laughing\] Don't tell me Dominic was wrong, and you're actually a Malkavian. \[+1 Influence\]
--> Continue
-{$pcName}: What's a Malkavian?
--> Continue
+<<ModifyInfluence (1,"kieran")>>
+-> {$pcName}: What's a Malkavian?
 {$kieran}: Don't worry about it. At least for now. Tell me about this vision.
--> Continue
-{$pcName}: I was in this alley last night with the guy…
--> Continue
+-> {$pcName}: I was in this alley last night with the guy…
 {$kieran}: The one in your shower.
--> Continue
-{$pcName}: ...
--> Continue
-{$pcName}: A woman was with us too.
--> Continue
+-> {$pcName}: ... A woman was with us too.
 {$kieran}: Could be your Sire. Hopefully she's dumb enough to stick around. 
 ===
 title: dontTellAboutVision

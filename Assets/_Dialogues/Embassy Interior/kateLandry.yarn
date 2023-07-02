@@ -85,29 +85,29 @@ position: 308,190
 ===
 title: subsequentInteractions
 ---
-<<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
-{$sforza}: Back again, piccola mia? I suppose I have a few minutes.
-<<else GetIsPartyMemberRecruited("ANASTASIA") is true>>
-<<if $anastasiaIntroduced ==0>>
-{$sforza}: Pleasure to finally make your acquaintance, Anastasia.
--> Continue
-[nomarkup][Anastasia raises an eyebrow, but keeps her bearings.][/nomarkup]
--> Continue
-{$anastasia}: Likewise, Caterina.
--> Continue
-[nomarkup][She kisses Kate's hand. Kate wipes it off on the table.][/nomarkup]
-[endif]
+<<if GetIsPartyMemberRecruited($anastasia) is false>>
+    {$sforza}: Back again, piccola mia? I suppose I have a few minutes.
+<<else>>
+    <<if $anastasiaIntroduced ==false>>
+        {$sforza}: Pleasure to finally make your acquaintance, Anastasia.
+        -> Continue
+        [nomarkup][Anastasia raises an eyebrow, but keeps her bearings.][/nomarkup]
+        -> Continue
+        {$anastasia}: Likewise, Caterina.
+        -> Continue
+        [nomarkup][She kisses Kate's hand. Kate wipes it off on the table.][/nomarkup]
+    <<endif>>
+<<endif>>
 {$sforza}: Let's cut to the chase, what do you want?
 -> {$pcName}: What can you tell me about Diana?
-<<jump whoIsDiana>>
+    <<jump whoIsDiana>>
 -> {$pcName}: How did you come to own this place?
-<<jump howSheStarted>>
+    <<jump howSheStarted>>
 -> {$pcName}: Tell me about youself. <<if visited("kateTalksAboutHerself") == false>>
-<<jump kateTalksAboutHerself>>
+    <<jump kateTalksAboutHerself>>
 <<if $dianaMet ==true>>
 -> {$pcName}: I need to get into Diana's office.
 <<endif>>
-    <<jump whatDianaDid>>
 -> {$pcName}: I should go.
     {$sforza}: Best of luck on your little search.
 ===
@@ -115,14 +115,14 @@ title: whoIsDiana
 ---
 {$sforza}: What about her? She's my ghoul. She owns this place on paper. Runs the bar to keep up appearances, makes the place feel authentic. She's been with me for some time now. Why do you ask?
 -> {$pcName}: You mentioned she was here last night.
-<<jump dianaEveryNight>>
+    <<jump dianaEveryNight>>
 <<if $dianaMet ==true>>
--> {$pcName}: She led me into the alley last night.
+    -> {$pcName}: She led me into the alley last night.
 <<endif>>
-<<jump whatDianaDid>>
-====
+    <<jump whatDianaDid>>
+===
 title: dianaEveryNight
-----
+---
     {$sforza}: Hardly news. She's here almost every night.
     -> {$pcName}: Almost every night?
     {$sforza}: I may be old, but I'm not blind. She's been seeing someone on occasion. It hasn't interfered with her duties, so I haven't said anything. I like her having her own life. Keeps things interesting.
@@ -141,13 +141,14 @@ title: whatDianaDid
     <<set $kateAlleyTalk to true>>
     <<jump subsequentInteractions>>
 <<if $kateAlleyTalk ==true>>
-{$sforza}: Talk to the bouncer at the door to her office. Tell him I sent you.
+    {$sforza}: Talk to the bouncer at the door to her office. Tell him I sent you.
 <<endif>>
-    <<if $kateSentUs ==true>>
+<<if $kateSentUs ==true>>
     {$kieran}: We appreciate your assistance in this manner.
-    <<else>>
-    {$pcName}: The bouncer is being difficult.
-    <<jump bouncerDifficulties>>
+<<else>>
+    -> {$pcName}: The bouncer is being difficult.
+        <<jump bouncerDifficulties>>
+<<endif>>
 ===
 title: howSheStarted
 ---
@@ -211,13 +212,13 @@ title: whatIsSabbat
 title: whatAreTraditions
 ---
 {$kieran}: A set of rules that everyone has to adhere to survive. Something like the Ten Commandments, if you're religious.
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
 {$anastasia}: More like Hammurabi's Code, if we're talking severity of retribution. Death usually isn't on the table when talking about Christianity.
 [nomarkup][Kieran sighs][/nomarkup]
 {$anastasia}: What? You know I'm right. Forgiveness, and all that junk.
 <<endif>>
 <<jump additionalQuestions>>
-====
+===
 title: camarillaExplained
 ---
 {$kieran}: That's us. The good guys, so to speak.
@@ -240,7 +241,8 @@ title: bouncerDifficulties
     {$kieran}: Thank you ma'am.
     -> {$pcName}: What did you do to him?
         {$kieran}: Pro tip. Best not to ask questions.
-        <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-        {$anastasia}: Oooooh how ominous.
-        <<jump subsequentInteractions>>
+        <<if GetIsPartyMemberRecruited($anastasia) is true>>
+            {$anastasia}: Oooooh how ominous.
+            <<jump subsequentInteractions>>
+        <<endif>>
 ===

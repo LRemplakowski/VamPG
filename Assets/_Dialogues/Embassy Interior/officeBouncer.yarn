@@ -9,27 +9,29 @@ Office Bouncer: \[Terse\] Private area.
     -> Continue
     {$beast}: \[scoff\] He thinks he's the authority here. Time to reassert mine.
     <<if $dianaOffice ==true>>
-    -> {pcName}: I need to speak to Diana.
-    <<jump bouncerAnswers>>
+        -> {$pcName}: I need to speak to Diana.
+            <<jump bouncerAnswers>>
     <<else>>
-    -> Continue
-    {$kieran}: Sorry to bother you.
+        -> Continue
+        {$kieran}: Sorry to bother you.
     <<endif>>
     <<if $kateAlleyTalk ==true>>
-    -> {pcName}: Kate sent us.
-    <<jump officeBouncerKateSentUs>>
+        -> {$pcName}: Kate sent us.
+            <<jump officeBouncerKateSentUs>>
     <<endif>>
     <<if $drink ==true>>
-    -> {pcName}: You've been working all night. Here, a drink. \[Manipulation + Persuasion\]
-    <<if Roll("manipulation","persuasion" >=3)>>
-    <<jump drinkSuccess>>
-    <<else>>
-    <<jump drinkFailure>>
+        -> {$pcName}: You've been working all night. Here, a drink. \[Manipulation + Persuasion\]
+        <<if Roll("manipulation","persuasion" >=3)>>
+            <<jump drinkSuccess>>
+        <<else>>
+            <<jump drinkFailure>>
+        <<endif>>
+    <<endif>>
 ===
 title: bouncerAnswers
 ---
 Office Bouncer: Ms. Foster is not taking any visitors at the moment.
--> {pcName}: She's expecting me.
+-> {$pcName}: She's expecting me.
     Office Bouncer: \[Glaring through his shades.\] Ms. Foster is not taking any visitors at the moment.
 ===
 title: officeBouncerKateSentUs
@@ -54,7 +56,7 @@ Office Bouncer: I shouldn't drink on duty.
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
 {$anastasia}: But you want to.
 <<endif>>
--> {pcName}: Come on. Nobody's looking.
+-> {$pcName}: Come on. Nobody's looking.
     [nomarkup][Without a word, the Bouncer grabs the drinks and greedily drinks it in one gulp.][/nomarkup]
     -> Continue
     <<if $benzos ==true>>

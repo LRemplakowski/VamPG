@@ -41,7 +41,7 @@ title: paintingAwarenessSuccess
 [nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that. You reach up to dislodge the panels in the polyptych. Applying a modest amount of force to the largest painting in the center unlatches it, revealing a paper stamp on it's back.][/nomarkup] #success
 -> Continue
 {$kieran}: Did you find something?
--> {pcName}: I'm not sure. Call it a gut feeling.
+-> {$pcName}: I'm not sure. Call it a gut feeling.
     <<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
     {$kieran}: I'll leave you to it then. If it's instinct it's probably important. \[He looks at the painting with curiosity\]
         <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -60,7 +60,7 @@ title: paintingIntelligenceSuccess
 ---
 [nomarkup][Those are hideous pieces of art, but still - you recognize that this particular set looks like it is worth quite a bit. It had to be bought in one of the local galleries or on an auction. Such pieces often have stamps or notes on their back. It may even contain some useful information. Like when or where this set was bought. You stare at the picture which seems to be made under the acid influence for a minute and then dislodge it from the wall and look at it's back. You are not disappointed - indeed there is a paper stamp.][/nomarkup] #success
 {$kieran}: Did you find something?
--> {pcName}: I think so. Those are gallery or auction bought pieces.
+-> {$pcName}: I think so. Those are gallery or auction bought pieces.
     {$kieran}: Curious… Diana never hit me as an art enthusiast person. That is not as big enthusiast to buy paintings in the gallery.
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Even if she is she has really bad taste.
@@ -72,7 +72,7 @@ title: paintingWitsSuccess
 ---
 [nomarkup][This painting is here on purpose. It's not a simple wall decoration. It's here for a reason. It just doesn't sit with Diana proudly painting herself as a british punk rocker. Otherwise she’d just place Sex Pistols or The Exploited posters on the wall. Maybe there’s something worth looking for behind one part of this poliptich? You go with your gut, and dislodge one of the paintings. You were right. There's a paper stamp on the back.][/nomarkup] #success
 {$kieran}: Did you find something?
-    -> {pcName}: I'm not sure. But those paintings don't fit in here.
+    -> {$pcName}: I'm not sure. But those paintings don't fit in here.
         {$kieran}: \[He gently scratches his chin thinking\] Hm… you're right. I would've placed those rather in some kind of CEO's office or gallery. Not in the punk rocker hideout.
         <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Maybe it has some sentimental value? Because it certainly doesn't have any aesthetic one.
@@ -82,15 +82,15 @@ title: paintingWitsSuccess
 title: paintingFailure
 ---
 [nomarkup][Just a hideous wall decoration, nothing more. You grow more and more frustrated inspecting it. Something stirs inside you with flashing anger and clouding your better judgement.][/nomarkup] #failure
-<<if GetBloodPoints >1>>
--> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup]
-<<DecreaseWillpower ($pcName, 1)>>
-<<jump paintings>>
--> [nomarkup][Give in to the feeling.][/nomarkup]
-<<jump paintingsDestroyed>>
+<<if GetBloodPoints($pcName) >1>>
+    -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup]
+        <<DecreaseWillpower ($pcName, 1)>>
+        <<jump paintings>>
+    -> [nomarkup][Give in to the feeling.][/nomarkup]
+        <<jump paintingsDestroyed>>
 <<else>>
--> [nomarkup][You grit your teeth staring at the painting trying to solve this little, annoying mystery in front of your eyes.][/nomarkup]
-<<jump paintings>>
+    -> [nomarkup][You grit your teeth staring at the painting trying to solve this little, annoying mystery in front of your eyes.][/nomarkup]
+        <<jump paintings>>
 <<endif>>
 ===
 title: paintingsDestroyed
@@ -101,9 +101,9 @@ title: paintingsDestroyed
 <<endif>>
 {$kieran}: Why did you do that? Is it how you conduct investigations? \[Kieran influence -1\]
 <<ModifyInfluence (-1, $kieran)>>
--> {pcName}: I… don't know what came over me.
+-> {$pcName}: I… don't know what came over me.
 <<jump beastTalk>>
--> {pcName}: Normally no. But I'm pissed.
+-> {$pcName}: Normally no. But I'm pissed.
 <<jump beastTalk>>
 ===
 

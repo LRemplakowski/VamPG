@@ -120,7 +120,6 @@ namespace SunsetSystems.Dialogue
             throw new NotImplementedException();
         }
 
-        {
         [YarnFunction ("GetBloodPoints")]
         public static int GetBloodPoints(string characterID)
         {

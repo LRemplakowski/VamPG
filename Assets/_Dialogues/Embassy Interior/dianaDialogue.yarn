@@ -7,48 +7,49 @@ position: 136,-238
 {$diana}: … and I had to tell the bloke I've seen bigger willies on the chihuahuas.
 [nomarkup][Desiree is walking down the alley with the man whose corpse was in her shower. They exchange drunken flirty lines. They are being led by a mysterious woman.]
 {$diana}: Not much further.
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-{$anastasia}: You on something and you didn't share? Rude.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: You on something and you didn't share? Rude.
+<<endif>>
 <<if $toldKieranAboutVision ==1>>
-{$kieran}: Another vision?
+    {$kieran}: Another vision?
 <<endif>>
 -> {$pcName}: That's the woman I've been seeing. <<if visited("tellAboutVision") == false>>
-<<jump tellAboutVision>>
+    <<jump tellAboutVision>>
 -> {$pcName}: \[Approach Diana.\]
-<<jump approachDiana>>
+    <<jump approachDiana>>
 ===
 title: tellAboutVision
 ---
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-{$anastasia}: Awkward running into an ex.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Awkward running into an ex.
     -> {$pcName}: Not like that.
-    <<endif>>
-        {$kieran}: Diana's here almost every night. Hardly surprising you recognize her.
-        -> {$pcName}: She led… us into the alley. Last thing I remember.
-        <<jump meetingDiana>>
+<<endif>>
+{$kieran}: Diana's here almost every night. Hardly surprising you recognize her.
+-> {$pcName}: She led… us into the alley. Last thing I remember.
+    <<jump meetingDiana>>
 ===
 title: approachDiana
 ---
 -> [nomarkup][As you weave through the crowd making your way to the bar, Kieran grabs your attention.][/nomarkup]
-    {$kieran}: Proceed with caution, Diana is Kate's favorite ghoul.
-    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+{$kieran}: Proceed with caution, Diana is Kate's favorite ghoul.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Funny way to say pet.
+<<endif>>
+-> {$pcName}: \[Nod.\]
+    {$kieran}: \[Kieran nods back.][+1 Kieran Reputation\]
+    <<ModifyInfluence (1,$kieran)>>
+    <<jump dianaApproached>>
+-> {$pcName}: Geez, don't act like I'm some psycho killer…
+    {$kieran}: The corpse in your bathroom makes me worried. \[-1 Kieran Reputation\]
+    <<ModifyInfluence (-1,$kieran)>>
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Hey, you can't accuse the girl if she wanna have fun you know?
     <<endif>>
-    -> {$pcName}: \[Nod.\]
-        {$kieran}: \[Kieran nods back.][+1 Kieran Reputation\]
-        <<ModifyInfluence (1,"kieran")>>
-        <<jump dianaApproached>>
-    -> {$pcName}: Geez, don't act like I'm some psycho killer…
-        {$kieran}: The corpse in your bathroom makes me worried. \[-1 Kieran Reputation\]
-        <<ModifyInfluence (-1,"kieran")>>
-        <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-        {$anastasia}: Hey, you can't accuse the girl if she wanna have fun you know?
-        <<endif>>
-        <<jump dianaApproached>>
+    <<jump dianaApproached>>
 ===
 title: dianaApproached
 ---
-[nomarkup][You whip your head back around to find yourself making direct eye contact with Diana. She clearly wasn't expecting you.][\nomarkup]
+[nomarkup][You whip your head back around to find yourself making direct eye contact with Diana. She clearly wasn't expecting you.][/nomarkup]
 -> {$pcName}: Last night was pretty crazy, huh? \[Composure + Etiquette\]
     <<if Roll("composure","etiquette") >=3>>
     <<jump dianaApproachedSuccess>>
@@ -69,7 +70,7 @@ title: dianaApproachedSuccess
     {$diana}: \[Chuckling\] That's a word for it.
     -> Continue
     {$diana}: ... Say want to come to my office, for a drink?
-    <<set dianaOffice to true>>
+    <<set $dianaOffice to true>>
     <<jump dianaInvitation>>
 ===
 title: dianaApproachedFailure
@@ -84,7 +85,7 @@ title: dianaThreatenedSuccess
         {$diana}: \[She raises her voice as music bursts out of the big speakers on the scene.\] What?!
         -> {$pcName}: What what?!
             {$diana}: I can't hear you! Let's talk in my office if you want answers!
-            <<set dianaOffice to true>>
+            <<set $dianaOffice to true>>
             <<jump dianaInvitation>>
 ===
 title: dianaThreatenedFailure

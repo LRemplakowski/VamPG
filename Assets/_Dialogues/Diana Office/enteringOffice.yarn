@@ -20,12 +20,12 @@ title: anastasiaIsPresent
 {$kieran}: Not all of us are goth nymphomaniacs.
 -> Continue
 {$anastasia}: Oooh spicy. Caterina's footstool has some bite after all.
-    -> {pcName}: What's your problem Anastasia?
-    <<jump to sidingWithKieran>>
-    -> {pcName}: Lighten up, Kieran.
-    <<jump to sidingWithAnastasia>>
-    -> {pcName}: Guys, priorities!
-    <<jump to neutralResponse>>
+    -> {$pcName}: What's your problem Anastasia?
+    <<jump sidingWithKieran>>
+    -> {$pcName}: Lighten up, Kieran.
+    <<jump sidingWithAnastasia>>
+    -> {$pcName}: Guys, priorities!
+    <<jump neutralResponse>>
 ===
 title: sidingWithKieran
 ---

@@ -2,7 +2,7 @@
 tags:
 position: 490,264
 ---
-<<declare $disciplineUse ==false>>
+<<declare $disciplineUse to false>>
 {$kieran}: Here I thought we could at least make it inside before running into problems. You seem to be a big trouble magnet.
 -> {$pcName}: Do you ever stop complaining?
 {$kieran}: When I'm not under the threat of death.
@@ -36,54 +36,54 @@ title: streetwiseRoll
 position: 40,-74
 ---
 <<if Roll("Manipulation","streetwise")>=2>>
-Drunk Guy: You guys did save me. I guess I can let it slide. #success
--> Continue
-{$kieran}: We appreciate the gratitude.
-<<jump drunkardSuccess>>
+    Drunk Guy: You guys did save me. I guess I can let it slide. #success
+    -> Continue
+    {$kieran}: We appreciate the gratitude.
+    <<jump drunkardSuccess>>
 <<else>>
-Drunk Guy: Still doesn't make it right for you to kill them. That's why we have a criminal justice system. #failure
--> Continue
-{$innerVoice}: He's right but at the same time naive.
--> Continue
-{$kieran}: And where was that system when you were nearly kidnapped?
-<<jump drunkardOptions>>
+    Drunk Guy: Still doesn't make it right for you to kill them. That's why we have a criminal justice system. #failure
+    -> Continue
+    {$innerVoice}: He's right but at the same time naive.
+    -> Continue
+    {$kieran}: And where was that system when you were nearly kidnapped?
+    <<jump drunkardOptions>>
 <<endif>>
 ===
 title: intimidationRoll
 position: -109,-294
 ---
 <<if Roll("strenght","intimidation")>=2>>
-Drunk Guy: I hope you're bluffing, but you did just kill three people in front of me. #success
--> Continue
-[nomarkup][You don't even need to say anything, the both of you just stare him down. Ever so slightly puffing your chest.][/nomarkup]
--> Continue
-{$beast}: He's afraid. I can smell it.
-<<jump drunkardSuccess>>
+    Drunk Guy: I hope you're bluffing, but you did just kill three people in front of me. #success
+    -> Continue
+    [nomarkup][You don't even need to say anything, the both of you just stare him down. Ever so slightly puffing your chest.][/nomarkup]
+    -> Continue
+    {$beast}: He's afraid. I can smell it.
+    <<jump drunkardSuccess>>
 <<else>>
-Drunk Guy: I'm not scared of death. I'd rather die than betray my beliefs. #failure
--> Continue
-{$kieran}: Great, a martyr.
-<<jump drunkardOptions>>
+    Drunk Guy: I'm not scared of death. I'd rather die than betray my beliefs. #failure
+    -> Continue
+    {$kieran}: Great, a martyr.
+    <<jump drunkardOptions>>
 <<endif>>
 ===
 title: dominateCloudMemory
 position: 341,-14
 ---
 <<if UseDiscipline("dominate")>=1>>
-[nomarkup][The man's eyes glaze over on Kieran's words.][/nomarkup] #success
-<<set $disciplineUse to true>>
--> Continue
-Drunk Guy: Huh, where am I?
--> Continue
-{$kieran}: You were just walking home.
--> Continue
-Drunk Guy: Thanks stranger, you're right. I miss my bed. Mmm, bed.
-<<jump drunkardSuccess>>
+    [nomarkup][The man's eyes glaze over on Kieran's words.][/nomarkup] #success
+    <<set $disciplineUse to true>>
+    -> Continue
+    Drunk Guy: Huh, where am I?
+    -> Continue
+    {$kieran}: You were just walking home.
+    -> Continue
+    Drunk Guy: Thanks stranger, you're right. I miss my bed. Mmm, bed.
+    <<jump drunkardSuccess>>
 <<else>>
-Drunk Guy: You're not going to gaslight me into forgetting murder. #failure
--> Continue
-{$kieran}: Looks like I'm losing my touch.
-<<jump drunkardOptions>>
+    Drunk Guy: You're not going to gaslight me into forgetting murder. #failure
+    -> Continue
+    {$kieran}: Looks like I'm losing my touch.
+    <<jump drunkardOptions>>
 <<endif>>
 ===
 title: killTheDrunkard
@@ -109,19 +109,13 @@ title: kieranComment
 position: -509,170
 ---
 <<if $disciplineUse ==true>>
-{$pcName}: How did you... I can't even... did this Jedi trick?
--> Continue
-{$kieran}: \[He raises his brow a little\] Jedi.. what?
--> Continue
-{$pcName}: You told that guy to forget that something happened and he went this all... out of place and out of space.
--> Continue
-{$kieran}: \[He seems not to understand at first to what you are referring to, but then you see realization in his eyes\] Ah, you mean Discipline. I used powers of my blood to [nomarkup]<i>make</i>[/nomarkup] him forget.
--> Continue
-{$pcName}: Can you teach me that?
--> Continue
-{$kieran}: Sadly no. At least not so easily. But your blood has other useful and hidden powers. But it's not the time nor place.
--> Continue
+    -> {$pcName}: How did you... I can't even... did this Jedi trick?
+    {$kieran}: \[He raises his brow a little\] Jedi.. what?
+    -> {$pcName}: You told that guy to forget that something happened and he went this all... out of place and out of space.
+    {$kieran}: \[He seems not to understand at first to what you are referring to, but then you see realization in his eyes\] Ah, you mean Discipline. I used powers of my blood to [nomarkup]<i>make</i>[/nomarkup] him forget.
+    -> {$pcName}: Can you teach me that?
+    {$kieran}: Sadly no. At least not so easily. But your blood has other useful and hidden powers. But it's not the time nor place.
 <<else>>
-{$kieran}: We need to get rid of these bodies before anybody comes by. There's a dumpster in the back alley Kate uses for clean up.
+    {$kieran}: We need to get rid of these bodies before anybody comes by. There's a dumpster in the back alley Kate uses for clean up.
 <<endif>>
 ===

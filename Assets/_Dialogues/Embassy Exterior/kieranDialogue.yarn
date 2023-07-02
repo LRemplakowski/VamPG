@@ -10,27 +10,27 @@ tags:
     [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions to ask. Just to be sure if they are true or false.][/nomarkup]
     <<endif>>
     -> {$pcName}: You and Dominic don't seem to get along.
-    <<jump kieranDominicRelations>>
+        <<jump kieranDominicRelations>>
     -> {$pcName}: So... vampires...
-    <<jump vampisismExplained>>
+        <<jump vampisismExplained>>
     -> {$pcName}: Will Dominic really kill us if we don't find my Sire?
-    <<jump willHeKillUs>>
+        <<jump willHeKillUs>>
     -> {$pcName}: How old are you exactly?
-    <<jump  kieransAge>>
+        <<jump kieransAge>>
     -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if visited("drinks") ==false>>
-    <<jump  drinks>>
+        <<jump drinks>>
     <<if GetAttributeSkillPoolSize("wits","awarness")>=4>>
-    -> {$pcName}: I can't help but notice you're wearing a wedding ring on your finger.
-    <<jump kieransRing>>
+        -> {$pcName}: I can't help but notice you're wearing a wedding ring on your finger.
+            <<jump kieransRing>>
     <<endif>>
     -> {$pcName}: Can you tell me something about your Sire? <<if visited("kieransSire") ==false>>
-    <<jump kieransSire>>
+        <<jump kieransSire>>
     -> {$pcName}: If we'll be partners, even temporarily I would like to know more about you.
-    <<jump  wantToKnowMoreAboutKieran>>
+        <<jump wantToKnowMoreAboutKieran>>
     -> {$pcName}: I think that some thanks are in order. <<if visited("thanks") ==false>>
-    <<jump thanks>>
+        <<jump thanks>>
     -> {$pcName}: I keep hearing this voice in my head...
-    <<jump beastExplained>>
+        <<jump beastExplained>>
     -> {$pcName}: Maybe later
         {$kieran}: OK, it's not like I'm going anywhere.
 ===
@@ -115,25 +115,25 @@ title: catherinaCharacteristics
     -> {$pcName}: Just gathering data.
     [nomarkup][He looks at you reluctantly][/nomarkup]
     <<if GetCompanionInfluence("$kieran")>=2>>
-    {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring… every young Kindred would like to have her as a Sire.
-    -> {$pcName}: Whoa, I didn't expect that. 
-    <<ModifyInfluence kieran +1>>
-        {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
-        -> Continue
-        {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
+        {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring… every young Kindred would like to have her as a Sire.
+        -> {$pcName}: Whoa, I didn't expect that. 
+            <<ModifyInfluence ($kieran,+1)>>
+            {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
+            -> Continue
+            {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
+            <<jump kieransSire>>
+        ->  {$pcName}: You're painting her as if she was some kind of ideal.
+            {$kieran}: Uh… sorry… maybe a little.
+            <<jump kieransSire>>
+        ->  {$pcName}: You must exaggerate.
+            <<ModifyInfluence ($kieran,-1)>>
+            {$kieran}: No I'm not! You don't even know her as good as I do! \[Kieran influence -1\]
+            <<jump kieransSire>>
+    <<elseif GetCompanionInfluence("$kieran")<=-2>>
+        {$kieran}: I don't want to sound rude, but I don't know how it may be relevant to our investigation.
         <<jump kieransSire>>
-    ->  {$pcName}: You're painting her as if she was some kind of ideal.
-        {$kieran}: Uh… sorry… maybe a little.
-        <<jump kieransSire>>
-    ->  {$pcName}: You must exaggerate.
-    <<ModifyInfluence kieran -1>>
-        {$kieran}: No I'm not! You don't even know her as good as I do! \[Kieran influence -1\]
-        <<jump  kieransSire>>
-    <<else if GetCompanionInfluence("$kieran")<=-2>>
-    {$kieran}: I don't want to sound rude, but I don't know how it may be relevant to our investigation.
-    <<jump kieransSire>>
     <<else>>
-    {$kieran}: Other than that I won't say. I'm not a gossip type of person.
+        {$kieran}: Other than that I won't say. I'm not a gossip type of person.
     <<endif>>
     <<jump kieransSire>>
 ===
@@ -159,3 +159,4 @@ title: thanks
         -> {$pcName}: Wait, I have some questions!
             <<jump kieranDialogue>>
         -> End dialogue.
+===

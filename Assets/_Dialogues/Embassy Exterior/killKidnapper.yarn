@@ -2,6 +2,7 @@
 tags:
 position: 490,264
 ---
+<<declare $disciplineUse ==false>>
 {$kieran}: Here I thought we could at least make it inside before running into problems. You seem to be a big trouble magnet.
 -> {$pcName}: Do you ever stop complaining?
 {$kieran}: When I'm not under the threat of death.
@@ -70,7 +71,7 @@ position: 341,-14
 ---
 <<if UseDiscipline("dominate")>=1>>
 [nomarkup][The man's eyes glaze over on Kieran's words.][/nomarkup] #success
-<<declare $disciplineUse to 1>>
+<<set $disciplineUse to true>>
 -> Continue
 Drunk Guy: Huh, where am I?
 -> Continue
@@ -107,7 +108,7 @@ position: -140,238
 title: kieranComment
 position: -509,170
 ---
-<<if $disciplineUse ==1>>
+<<if $disciplineUse ==true>>
 {$pcName}: How did you... I can't even... did this Jedi trick?
 -> Continue
 {$kieran}: \[He raises his brow a little\] Jedi.. what?

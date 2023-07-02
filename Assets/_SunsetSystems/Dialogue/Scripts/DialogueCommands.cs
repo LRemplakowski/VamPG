@@ -108,7 +108,13 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("DealDamage")]
         public static void DealDamage(string characterID, int damage, string damageType)
         {
+            throw new NotImplementedException();
+        }
 
+        [YarnCommand("DecreaseWillpower")]
+        public static void DecreaseWillpower(string characterID, int value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

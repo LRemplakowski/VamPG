@@ -117,7 +117,14 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetCompanionInfluence")]
         public static int GetCompanionInfluence(string companionID)
         {
-            return 0;
+            throw new NotImplementedException();
+        }
+
+        {
+        [YarnFunction ("GetBloodPoints")]
+        public static int GetBloodPoints(string characterID)
+        {
+            throw new NotImplementedException();
         }
     }
 }

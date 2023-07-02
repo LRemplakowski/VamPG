@@ -3,12 +3,11 @@ position: -178,-136
 ---
 <<declare $sforza to "foo">>
 <<declare $anastasia to "bar">>
-<<declare $kieranInfluence to 0>>
 <<declare $clanRevealed to false>>
-<<declare $anastasiaIntroduced to 0>>
-<<declare $kateAlleyTalk to 0>>
-<<declare $kateSentUs to 0>>
-<<declare $kateDealsWithBouncer to 0>>
+<<declare $anastasiaIntroduced to false>>
+<<declare $kateAlleyTalk to false>>
+<<declare $kateSentUs to false>>
+<<declare $kateDealsWithBouncer to false>>
 [nomarkup][The woman before you's corset is so tight you're convinced her organs are in her throat.][/nomarkup]
 {$innerVoice}: Guess she doesn't have much use for them.
 <<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
@@ -27,9 +26,11 @@ position: -178,-136
 {$sforza}: \[Scowls\] I suppose if Dominic thinks you're worth breaking the Traditions, I'll give you the benefit of the doubt. See how well you handle this test.
 -> {$pcName}: Thanks.
     {$sforza}: At least you know your manners. That helps. \[+1 Kieran Influence\]
+     <<ModifyInfluence (1,"kieran")>>
     <<jump questionsAboutLastNight>>
 -> {$pcName}: How generous of you.
     {$sforza}: \[Laughs\] My dear, you should learn to bite your tongue if you want to survive your new life. Not all Kindred are as level headed as me. \[-1 Kieran Influence\]
+     <<ModifyInfluence (-1,"kieran")>>
     <<if ($clanRevealed)==true>>
         {$kieran}: What do you expect from a Brujah?
         {$sforza}: \[Sighs\] I'd recommend not being such a stereotype.
@@ -103,7 +104,7 @@ title: subsequentInteractions
 <<jump howSheStarted>>
 -> {$pcName}: Tell me about youself. <<if visited("kateTalksAboutHerself") == false>>
 <<jump kateTalksAboutHerself>>
-<<if $dianaMet ==1>>
+<<if $dianaMet ==true>>
 -> {$pcName}: I need to get into Diana's office.
 <<endif>>
     <<jump whatDianaDid>>
@@ -115,7 +116,7 @@ title: whoIsDiana
 {$sforza}: What about her? She's my ghoul. She owns this place on paper. Runs the bar to keep up appearances, makes the place feel authentic. She's been with me for some time now. Why do you ask?
 -> {$pcName}: You mentioned she was here last night.
 <<jump dianaEveryNight>>
-<<if $dianaMet ==1>>
+<<if $dianaMet ==true>>
 -> {$pcName}: She led me into the alley last night.
 <<endif>>
 <<jump whatDianaDid>>
@@ -137,12 +138,12 @@ title: whatDianaDid
     [nomarkup][Kate cocks her head to the side.][/nomarkup]
     -> Continue
     {$sforza}: Curious. She's probably just busy.
-    <<set $kateAlleyTalk to 1>>
+    <<set $kateAlleyTalk to true>>
     <<jump subsequentInteractions>>
-<<if $kateAlleyTalk ==1>>
+<<if $kateAlleyTalk ==true>>
 {$sforza}: Talk to the bouncer at the door to her office. Tell him I sent you.
 <<endif>>
-    <<if $kateSentUs ==1>>
+    <<if $kateSentUs ==true>>
     {$kieran}: We appreciate your assistance in this manner.
     <<else>>
     {$pcName}: The bouncer is being difficult.
@@ -214,6 +215,7 @@ title: whatAreTraditions
 {$anastasia}: More like Hammurabi's Code, if we're talking severity of retribution. Death usually isn't on the table when talking about Christianity.
 [nomarkup][Kieran sighs][/nomarkup]
 {$anastasia}: What? You know I'm right. Forgiveness, and all that junk.
+<<endif>>
 <<jump additionalQuestions>>
 ====
 title: camarillaExplained
@@ -232,7 +234,7 @@ title: bouncerDifficulties
 {$sforza}: After you told him I sent you?
 -> {$pcName}: Yes ma'am.
     {$sforza}: That won't do at all. Stay here. I'll deal with this myself.
-    <<set $kateDealsWithBouncer to 1>>
+    <<set $kateDealsWithBouncer to true>>
     //cut to black//
     {$sforza}: Apologies for the delay. He won't be an issue anymore.
     {$kieran}: Thank you ma'am.
@@ -241,3 +243,4 @@ title: bouncerDifficulties
         <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
         {$anastasia}: Oooooh how ominous.
         <<jump subsequentInteractions>>
+===

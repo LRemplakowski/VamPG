@@ -19,6 +19,7 @@ Mysterious Woman: This way.
 ===
 title: kieranInterrupts
 ---
+<<declare $toldKieranAboutVision to false>>
 [nomarkup][Kieran stands before you waving his hand before your eyes][/nomarkup]
 -> Continue
 {$kieran}: You there?
@@ -29,8 +30,8 @@ title: kieranInterrupts
 -> Continue
 {$kieran}: What happened? You looked like a deer in the headlights for a moment there.
 -> {$pcName}: I had some sort of “vision.”
-    <<declare $toldKieranAboutVision to 1>>
-    <<ModifyInfluence 1 "kieran">>
+    <<set $toldKieranAboutVision to true>>
+    <<ModifyInfluence (1,"kieran")>>
     <<jump toldAboutVision>>
 -> {$pcName}: Don't worry about it.
     <<jump dontTellAboutVision>>

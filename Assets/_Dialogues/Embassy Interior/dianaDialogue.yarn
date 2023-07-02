@@ -1,8 +1,8 @@
 title: meetingDiana
 position: 136,-238
 ---
-<<declare $dianaMet to 1>>
-<<deckare $dianaOffice to 0>>
+<<declare $dianaMet to true>>
+<<deckare $dianaOffice to false>>
 [nomarkup][Despite the sea of UK memorabilia, for the first time tonight you hear an authentic British accent slice through the crowd.][/nomarkup]
 {$diana}: … and I had to tell the bloke I've seen bigger willies on the chihuahuas.
 [nomarkup][Desiree is walking down the alley with the man whose corpse was in her shower. They exchange drunken flirty lines. They are being led by a mysterious woman.]
@@ -36,11 +36,11 @@ title: approachDiana
     <<endif>>
     -> {$pcName}: \[Nod.\]
         {$kieran}: \[Kieran nods back.][+1 Kieran Reputation\]
-        <<ModifyInfluence +1 "kieran">>
+        <<ModifyInfluence (1,"kieran")>>
         <<jump dianaApproached>>
     -> {$pcName}: Geez, don't act like I'm some psycho killer…
         {$kieran}: The corpse in your bathroom makes me worried. \[-1 Kieran Reputation\]
-        <<ModifyInfluence -1 "kieran">>
+        <<ModifyInfluence (-1,"kieran")>>
         <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
         {$anastasia}: Hey, you can't accuse the girl if she wanna have fun you know?
         <<endif>>
@@ -68,8 +68,8 @@ title: dianaApproachedSuccess
 -> {$pcName}: Enough to know things got pretty crazy.
     {$diana}: \[Chuckling\] That's a word for it.
     -> Continue
-    {$diana}:: ... Say want to come to my office, for a drink?
-    <<set dianaOffice to 1>>
+    {$diana}: ... Say want to come to my office, for a drink?
+    <<set dianaOffice to true>>
     <<jump dianaInvitation>>
 ===
 title: dianaApproachedFailure
@@ -84,7 +84,7 @@ title: dianaThreatenedSuccess
         {$diana}: \[She raises her voice as music bursts out of the big speakers on the scene.\] What?!
         -> {$pcName}: What what?!
             {$diana}: I can't hear you! Let's talk in my office if you want answers!
-            <<set dianaOffice to 1>>
+            <<set dianaOffice to true>>
             <<jump dianaInvitation>>
 ===
 title: dianaThreatenedFailure
@@ -105,3 +105,4 @@ title: blownOffByDiana
     -> Continue
         {$beast}: I will [nomarkup]<i>not</i>[/nomarkup] be casually brushed aside like some insignificant fool.
         //cut to black, Diana dissapears//
+===

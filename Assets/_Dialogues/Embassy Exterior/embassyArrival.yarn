@@ -54,7 +54,7 @@ position: 164,153
     {$kieran}: Look, I know this is a lot to process, but we're in the same boat right now. If we want to live to see another night, we need to work together to achieve that.
 -> {$pcName}: I was trying to tune you out.
     {$kieran}: You'll see how well that works out for you. \[-1 Kieran Influence\]
-    <<ModifyInfluence -1 "kieran">>
+    <<ModifyInfluence (-1,"kieran")>>
 {$kieran}: Don't get me wrong, I'm trying to help. I'm sorry if it sounds patronizing, but I've got more experience with Kindred than you.
 <<jump embassyArrival>>
 ===
@@ -68,5 +68,5 @@ position: -52,-156
 ---
 {$kieran}: We should head in through the back.
 -> {$pcName}: Why?
-{$kieran}: That's the special entrance for our kind. It's best if we remain inconspicuous.
+    {$kieran}: That's the special entrance for our kind. It's best if we remain inconspicuous.
 ===

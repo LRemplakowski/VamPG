@@ -1,7 +1,7 @@
 ﻿title: hvac
 tags:
 ---
-<<declare $windowBroken to 0>>
+<<declare $windowBroken to false>>
 [nomarkup][You see a faint purple glow emanating from a high-up window in the brick.][/nomarkup]
 -> Continue
 {$kieran}: Has to be Diana's office. She likes things 'moody'.
@@ -41,4 +41,5 @@ title: climbingFailure
 -> Continue
 {$anastasia}: Smooth.
 <<endif>>
-<<set $windowBroken to 1>>
+<<set $windowBroken to true>>
+===

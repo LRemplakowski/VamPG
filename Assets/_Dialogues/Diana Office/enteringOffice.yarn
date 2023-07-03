@@ -20,23 +20,23 @@ title: anastasiaIsPresent
 {$kieran}: Not all of us are goth nymphomaniacs.
 -> Continue
 {$anastasia}: Oooh spicy. Caterina's footstool has some bite after all.
-    -> {$pcName}: What's your problem Anastasia?
+-> {$pcName}: What's your problem Anastasia?
     <<jump sidingWithKieran>>
-    -> {$pcName}: Lighten up, Kieran.
+-> {$pcName}: Lighten up, Kieran.
     <<jump sidingWithAnastasia>>
-    -> {$pcName}: Guys, priorities!
+-> {$pcName}: Guys, priorities!
     <<jump neutralResponse>>
 ===
 title: sidingWithKieran
 ---
 {$anastasia}: I don't have any problem… At least for now. \[-1 Anastasia Reputation\]
 <<ModifyInfluence (-1,"anastasia")>>
-    -> Continue
-    {$kieran}: What is that supposed to mean? Is it a threat? If so - not wise. You're an intruder here after all. \[+1 Kieran Reputation\]
-    <<ModifyInfluence (1,"kieran")>>
-    -> Continue
-    {$anastasia}: Boo-hoo watch me stain my pants because of it. And hey, you introduced me to the lady Wasp back down. It's not like I'm an intruder anymore.
-    <<jump neutralResponse>>
+-> Continue
+{$kieran}: What is that supposed to mean? Is it a threat? If so - not wise. You're an intruder here after all. \[+1 Kieran Reputation\]
+<<ModifyInfluence (1,"kieran")>>
+-> Continue
+{$anastasia}: Boo-hoo watch me stain my pants because of it. And hey, you introduced me to the lady Wasp back down. It's not like I'm an intruder anymore.
+ <<jump neutralResponse>>
 ===
 title: sidingWithAnastasia
 ---

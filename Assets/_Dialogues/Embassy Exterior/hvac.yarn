@@ -19,9 +19,9 @@ tags:
         -> Continue
     <<endif>>
     <<if Roll ("dexterity","Athletics" >=2)>>
-    <<jump climbingSuccess>>
+        <<jump climbingSuccess>>
     <<else>>
-    <<jump climbingFailure>>
+        <<jump climbingFailure>>
     <<endif>>
 -> [nomarkup][Step away.][/nomarkup]
 ===
@@ -38,8 +38,8 @@ title: climbingFailure
 -> Continue
 {$kieran}: Ow!
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
--> Continue
-{$anastasia}: Smooth.
+    -> Continue
+    {$anastasia}: Smooth.
 <<endif>>
 <<set $windowBroken to true>>
 ===

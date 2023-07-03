@@ -26,23 +26,23 @@ position: -407,-310
     {$anastasia}: Then why didn't you just say so?
     [nomarkup][The Bartender is waiting for something, anything, to break the silence that now fills the air...][/nomarkup]
     -> Continue
-        {$anastasia}: Why hello there?
-        <<jump anastasiaAddressingPC>>
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
 -> {$pcName}: I'll have a Bloody Mary.
     {$bartender}: Coming right up!
     [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
     <<GiveItem("DRINK_BLOODY_MARY")>>
     -> Continue
-        {$anastasia}: Why hello there?
-        <<jump anastasiaAddressingPC>>
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
 -> [nomarkup][Say nothing.][/nomarkup]
     [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup]
     {$bartender}: Go away. Just, leave me alone, please...
     [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup]
     {$anastasia}: Well, that was rude.
     -> Continue
-        {$anastasia}: Why hello there?
-        <<jump anastasiaAddressingPC>>
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
 ===
 title: anastasiaAddressingPC
 position: -403,-28

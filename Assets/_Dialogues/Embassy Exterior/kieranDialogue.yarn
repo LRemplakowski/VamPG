@@ -39,19 +39,19 @@ title: kieranDominicRelations
 {$kieran}: Is it that obvious? \[he sighs\] Let's say that I didn't want to tag along with him, and he didn't want a partner. But an order is an order, so what could I do?
 -> Continue
 <<if GetCompanionInfluence("$kieran")>=2>>
-{$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
+    {$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>>
-{$kieran}: … but now that I think of it, I like his company more.
+    {$kieran}: … but now that I think of it, I like his company more.
 <<else>>
-{$kieran}: To be honest, I don't know if the change is for better or for worse yet…
+    {$kieran}: To be honest, I don't know if the change is for better or for worse yet…
 <<endif>>
     -> {$pcName}: Order?
     {$kieran}: My Sire wanted me to get more experience in the field, so here I am, coping with bad jokes and forced adoptions.
         -> {$pcName}: Forced… what?
         {$kieran}: Sorry. Didn't want to sound rude. But technically you're my adoptive Childe, at least for the night.
             -> {$pcName}: This sounds… awkward.
-            {$kieran}: You're telling me.
-            <<jump kieranDialogue>>
+                {$kieran}: You're telling me.
+                <<jump kieranDialogue>>
 ===
 title: vampisismExplained
 ---
@@ -60,14 +60,14 @@ title: vampisismExplained
         {$kieran}: You had it in your apartment.
         -> {$pcName}: You know, I don't think that this crash course gave me more then additional headache.
             {$kieran}: Yes, I know, but we don't have time for more in-depth tutorials right now.
-        <<jump kieranDialogue>>
+            <<jump kieranDialogue>>
 ===
 title: willHeKillUs
 ---
 {$kieran}: I don't want to get your hopes up, but even if he doesn't want to, he'll be forced to do so.
     -> {$pcName}: Those are some harsh laws, there.
-    {$kieran}: Harsh enough sustain our society through the centuries while remaining hidden from mortal eyes, that is.
-    <<jump kieranDialogue>>
+        {$kieran}: Harsh enough sustain our society through the centuries while remaining hidden from mortal eyes, that is.
+        <<jump kieranDialogue>>
 ===
 title: kieransAge
 ---
@@ -79,11 +79,11 @@ title: drinks
 {$kieran}: Technically, we can't drink alcohol...
 -> Continue
 <<if GetCompanionInfluence("$kieran")>=2>>
-{$kieran}: ... but I can show you some tricks on how to make it work.
+    {$kieran}: ... but I can show you some tricks on how to make it work.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>
-{$kieran}: ... so no, I'm not interested.
+    {$kieran}: ... so no, I'm not interested.
 <<else>>
-{$kieran}: ... but I don't know if it'll be… appropriate.
+    {$kieran}: ... but I don't know if it'll be… appropriate.
 <<endif>>
 <<jump kieranDialogue>>
 ===
@@ -96,18 +96,18 @@ title: kieransRing
     -> {$pcName}: Seems to be more than that to me.
         {$kieran}: \[His face goes stone cold\] This isn't pertinent to our investigation.
     <<else>>
-    <<jump kieranDialogue>>
+        <<jump kieranDialogue>>
     <<endif>>
 ===
 title: kieransSire
 ---
 {$kieran}: Maybe. Depends on what you want to know.
     -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>>
-    <<jump catherinaCharacteristics>>
+        <<jump catherinaCharacteristics>>
     -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>>
-    <<jump catherinasAge>>
+        <<jump catherinasAge>>
     -> {$pcName}: You know what? Maybe another time.
-    <<jump kieranDialogue>>
+        <<jump kieranDialogue>>
 ===
 title: catherinaCharacteristics
 ---

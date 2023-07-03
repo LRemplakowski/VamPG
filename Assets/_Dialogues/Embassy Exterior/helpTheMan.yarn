@@ -33,13 +33,13 @@ Soccer Mom: Can I help you?
     [nomarkup][Suspicious, she looks over her shoulder the rest of her trek to her van.][/nomarkup]
 -> {$pcName}: Is he alright? (Wits + Awarness)
     <<if Roll("wits","awarness")>=2-$smileInsincere>>
-    [nomarkup][She's jumpy and sweating bullets. You see the shimmer of the gun she is holding to the man's side.\][/nomarkup] #success
-    -> Continue
-    {$beast}: My, you are subtle as a bag of bricks.
+        [nomarkup][She's jumpy and sweating bullets. You see the shimmer of the gun she is holding to the man's side.\][/nomarkup] #success
+        -> Continue
+        {$beast}: My, you are subtle as a bag of bricks.
     <<else>>
-    {$pcName}: \[You find yourself distracted by her horrible fashion choices.\] #failure
-    -> Continue
-    {$innerVoice}: Those jeans with that top?
+        {$pcName}: \[You find yourself distracted by her horrible fashion choices.\] #failure
+        -> Continue
+        {$innerVoice}: Those jeans with that top?
     <<endif>>
     -> Continue
     Soccer Mom: He's fine, why do you ask?

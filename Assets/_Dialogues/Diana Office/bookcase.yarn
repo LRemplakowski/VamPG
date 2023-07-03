@@ -1,0 +1,138 @@
+﻿title: bookcase
+tags:
+---
+<<declare $thelema to false>>
+[nomarkup][Bookcase is filled with a myriad of items. Not only books, but it also nests big TV, radio, some vases… There are modern books on the shelves, but also several occult tomes line the wall, and the faint scent of lignin permeates the air. These books must be pretty old. There are also several scrolls. You don't know if they are made from paper or parchment. You even find a traditional quill that is gaining the dust in one of the shelf compartments. It's a weird fusion of new and old.][/nomarkup]
+{$kieran}: Oh my… do you see these books?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: What, not alphabetized and color-coded, poindexter?
+    [nomarkup][Kieran just rolls his eyes.][/nomarkup]
+    {$kieran}: No? Just take a closer look, occult books lying next to normal, present day books. Popular literature.
+    {$anastasia}: So what? She is your Sire's ghoul. It's obvious she's interested in that.
+    {$kieran}: Not when you know her better. She never showed any interest in the magic and the occult. She was satisfied with running the show for Catherina.
+<<endif>>
+[nomarkup][Kieran leans towards the shelf looking at the titles more closely][/nomarkup]
+{$kieran}: Some of these books seem out of place. Take a look, but don't touch anything just yet.
+-> [nomarkup][Examine the books Kieran is interested with.][Intellicence + Occult][/nomarkup] <<if visited("bookcaseOccultRoll") == false>>
+    <<jump bookcaseOccultRoll>>
+-> [nomarkup][Examine the normal books.][Intellicence + Academics][/nomarkup] <<if visited("bookcaseAcademicsRoll") == false>>
+    <<jump bookcaseAcademicsRoll>>
+-> [nomarkup][Turn on the TV.][/nomarkup] <<if visited("bookcaseTV") == false>>
+    <<jump bookcaseTV>>
+-> [nomarkup][Turn on the radio.][/nomarkup] <<if visited("bookcaseRadio") == false>>
+    <<jump bookcaseRadio>>
+-> [nomarkup][Check what's behind TV.][Strength + Athletics][/nomarkup] <<if visited("bookcaseStrenghtRoll") == false>>
+    <<jump bookcaseStrenghtRoll>>
+-> [nomarkup][Try to peek what's on the top of the shelf.][Dexterity + Athletics][/nomarkup] <<if visited("bookcaseDexterityRoll") == false>>
+    <<jump bookcaseDexterityRoll>>
+-> [nomarkup][Step back.][/nomarkup]
+===
+title: bookcaseOccultRoll
+---
+<<if Roll("intelligence","occult") >=4>>
+    <<jump bookcaseOccultSuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseAcademicsRoll
+---
+<<if Roll("intelligence","academics") >=3>>
+    <<jump bookcaseAcademicsSuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseStrenghtRoll
+---
+<<if Roll("strength","athletics") >=3>>
+    <<jump bookcaseStrenghtSuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseDexterityRoll
+---
+<<if Roll("dexterity","athletics") >=2>>
+    <<jump bookcaseDexteritySuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseTV
+---
+[nomarkup][You find yourself watching late night MTV. From what you see it's the one of the latest video clips from Madonna. You aren't really that close with modern day music to tell for sure what title it is, but at the video the young performer looks like new Marilyn Monroe.][/nomarkup]
+{$kieran}: Why are we doing it exactly?
+-> {$pcName}: I don't know. I just hit the switch out of curiosity.
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        <<jump bookcaseTVAnaTenderMoment>>
+    <<else>>
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<endif>>
+-> {$pcName}: I'm curious what Diana likes to watch. You know, to get into her head.
+    {$kieran}: And? Did it give you any new insight?
+    -> {$pcName}: Not much more to what we already know. It's obvious she's interested in latest trends in music.
+        <<if GetIsPartyMemberRecruited($anastasia) is true>>
+            <<jump bookcaseTVAnaTenderMoment>>
+        <<else>>
+            [nomarkup][You turn the TV off.][/nomarkup]
+            <<jump bookcase>>
+        <<endif>>
+===
+title: bookcaseTVAnaTenderMoment
+---
+[nomarkup][You want to turn the TV off, but Anastasia stopped you. You look at her in surprise.][/nomarkup]
+{$kieran}: Do you like it Ms Goth Queen?
+[nomarkup][She looks at Kieran for several seconds and then shooks her head frowning at him.][/nomarkup]
+{$anastasia}: Hell no, do I look like a pop girl to you? This is for pussies.
+-> {$pcName}: You seem to care though. \[Wits + Insight\]
+    <<if Roll("wits","insight") >=3>>
+    [nomarkup][She curls her mouth until it looks like a line - she indeed likes it for some reason. And not because of performer][/nomarkup] #success
+    {$anastasia}: I don't have the slightest idea why do you care. Don't you have an investigation to end?
+    [nomarkup][You turn the TV off.][/nomarkup]
+    <<jump bookcase>>
+<<else>>
+    [nomarkup][Anastasia laughted so hard you're sure it was heard down below.][/nomarkup] #failure
+    {$anastasia}: Oh my god, me listening to pop. A new low.
+    [nomarkup][You turn the TV off.][/nomarkup]
+    <<jump bookcase>>
+<<endif>>
+===
+title: bookcaseRadio
+---
+[nomarkup][The radio comes to life. It seems that the broadcast is already in progress.][/nomarkup]
+Radio: Thank you for your insight Josh! It's always good to know what is happening in the city! Aaaaand… in the other news…
+[nomarkup][You know that voice - it's local late night audition - Olive Branch. It's broadcasted for nearly a decade already. You believe that the name of the woman you hear in the radio is Olive Richmond. If someone knows about some important events that take place in the city it's 100% Olive. Shame your death probably wasn't as important to others as it was for you.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Oh! It's Olive time! \[She clapped her hands a little - not because of mockery. She seems to be a genuine fan.\]
+<<endif>>
+[nomarkup][Kieran scratched his chin and rolled up his sleeve.][/nomarkup]
+{$kieran}: It can't be that late… \[he looks at the clock shield making big eyes of surprise.\] Oh… it is that late… we need to hurry, I don't think that Ms Richmond would have any useful information for us.
+ <<if GetIsPartyMemberRecruited($anastasia) is true>>    
+    [nomarkup][You turn the radio off much to Anastasia's disappointment.][/nomarkup]
+    <<jump bookcase>>
+<<else>>
+    [nomarkup][You turn the radio off.][/nomarkup]
+    <<jump bookcase>>
+<<endif>>
+===
+title: bookcaseOccultSuccess
+---
+[nomarkup][The books on the first sight are disorganized chaos. But when you are looking at it more closely you see a pattern. The occult ones are disguised being placed between normal ones. You see at least several titles that can be directly linked to “Hidden Arts”. One books seems to be especially often used - and damaged. “The Book of the Law” by Aleister Crowley.][/nomarkup] #success
+-> [nomarkup][Take the book.][/nomarkup]
+    [nomarkup][Kieran stops you before you could touch the cover.][/nomarkup]
+    <<jump theBookOfTheLaw>>
+-> {$pcName}: Diana has quite big collection. This one… The Book of the Law \[You point at it\] … seems to be used especially often.
+    [nomarkup][Kieran looks for a while at the book you pointed out.][/nomarkup]
+    {$kieran}: Liber AL vel Legis by Aleister Crowley. Good eyes. \[+1 Kieran influence\]
+    <<modifyInfluence (1,$kieran)>>
+    <<jump theBookOfTheLaw>>
+===
+title: theBookOfTheLaw
+---
+{$kieran}: Let me check them first. I don't think there can be a trap, but if it is occult you're better safe than sorry.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: What? Now even books have teeth?
+    {$kieran}: If they have you just have to gently stroke their spine. You didn't know Ms Goth Queen? \[Kieran chuckles.\]
+===

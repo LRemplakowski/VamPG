@@ -43,7 +43,7 @@ title: approachDiana
     {$kieran}: The corpse in your bathroom makes me worried. \[-1 Kieran Reputation\]
     <<ModifyInfluence (-1,$kieran)>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Hey, you can't accuse the girl if she wanna have fun you know?
+        {$anastasia}: Hey, you can't accuse the girl if she wanna have fun you know?
     <<endif>>
     <<jump dianaApproached>>
 ===
@@ -52,15 +52,15 @@ title: dianaApproached
 [nomarkup][You whip your head back around to find yourself making direct eye contact with Diana. She clearly wasn't expecting you.][/nomarkup]
 -> {$pcName}: Last night was pretty crazy, huh? \[Composure + Etiquette\]
     <<if Roll("composure","etiquette") >=3>>
-    <<jump dianaApproachedSuccess>>
+        <<jump dianaApproachedSuccess>>
     <<else>>
-    <<jump dianaApproachedFailure>>
+        <<jump dianaApproachedFailure>>
     <<endif>>
 -> {$pcName}: Yeah, it's me! Care to tell me what the fuck happened last night?!
     <<if Roll("manipulation","intimidation") >=3>>
-    <<jump dianaThreatenedSuccess>>
+        <<jump dianaThreatenedSuccess>>
     <<else>>
-    <<jump dianaThreatenedFailure>>
+        <<jump dianaThreatenedFailure>>
     <<endif>>
 ===
 title: dianaApproachedSuccess

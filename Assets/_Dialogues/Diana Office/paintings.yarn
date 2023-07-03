@@ -3,8 +3,10 @@ tags:
 ---
 <<declare $paintingsAreDestroyed to false>>
 <<declare $aidanBryant to false>>
-<<declare $dateCode to false>>
+<<declare $safeCode to false>>
 <<declare $vibrantVistas to false>>
+<<declare $safeDiscovered to false>>
+<<declare $luciaLoveLetter to false>>
 [nomarkup][The wall is decorated with kitsch “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup]
 -> [nomarkup][Destroy the paintings.][/nomarkup]
     <<jump paintingsDestroyed>>
@@ -14,6 +16,28 @@ tags:
     <<jump paintingIntelligenceRoll>>
 -> [nomarkup][Those seem to be completely out of place… you wonder why…][/nomarkup]<<if visited("paintingWitsSuccess") == false>>  
     <<jump paintingWitsRoll>>
+<<if $safeDiscovered ==true>>
+    -> [nomarkup][Examine the safe.][/nomarkup]
+        <<jump safeExamine>>
+    -> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup]<<if visited("safeClosed") == false>>  
+        <<if Roll("resolve","larceny") >=6>>
+            <<jump safeOpenedwoCode>>
+        <<else>>
+            <<jump safeClosed>>
+        <<endif>>
+    <<if $crowbar ==true>>
+        -> [nomarkup][Try to pry safe open.][Strength + Athletics][/nomarkup]<<if visited("safeClosed") == false>> 
+            <<if Roll("strenth","athletics") >=6>>
+                <<jump safeOForcepened>>
+            <<else>>
+                <<jump safeClosed>>
+            <<endif>>
+    <<endif>>
+    <<if $safeCode ==true>>
+        ->[nomarkup][Try to open the safe with code.][/nomarkup]
+            <<jump safeOpenedwCode>>
+    <<endif>>
+<<endif>>
 -> [Step away.]
 ===
 title: paintingAwarenessRoll
@@ -42,8 +66,44 @@ title: paintingWitsRoll
 ===
 title: paintingAwarenessSuccess
 ---
-[nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that. You reach up to dislodge the panels in the polyptych. Applying a modest amount of force to the largest painting in the center unlatches it, revealing a paper stamp on it's back.][/nomarkup] #success
+[nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that. You reach up to dislodge the panels in the polyptych. Youe see that something is hidden behind it, because shadow neat the frame isn't going in straight line. Applying a modest amount of force to the largest painting in the center unlatches it, revealing a safe on the wall. There is also a paper stamp on the back of the canvas.][/nomarkup] #success
+===
+title: successContinued
+---
+<<set $safeDiscovered to true>>
 -> Continue
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Jackpot! Now we just have to pry it open.
+<<endif>>
+{$kieran}: As long as we don't have the right combination prying it open would take entire night... or several.
+<<if $paintingsDestroyed ==false>>
+    -> [nomarkup][Examine the stamp.][/nomarkup]
+    <<jump stampExamine>>
+<<endif>>
+-> [nomarkup][Examine the safe.][/nomarkup]
+    <<jump safeExamine>>
+-> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup]<<if visited("safeClosed") == false>>  
+    <<if Roll("resolve","larceny") >=6>>
+        <<jump safeOpened>>
+    <<else>>
+        <<jump safeClosed>>
+    <<endif>>
+<<if $crowbar ==true>>
+    -> [nomarkup][Try to pry safe open.][Strength + Athletics][/nomarkup]<<if visited("safeClosed") == false>> 
+        <<if Roll("strenth","athletics") >=6>>
+            <<jump safeOForcepened>>
+        <<else>>
+            <<jump safeClosed>>
+        <<endif>>
+<<endif>>
+<<if $safeCode ==true>>
+    ->[nomarkup][Try to open the safe with code.][/nomarkup]
+        <<jump safeOpenedwCode>>
+<<endif>>
+-> [Step away.]
+===
+title: stampExamine
+---
 {$kieran}: Did you find something?
 -> {$pcName}: I'm not sure. Call it a gut feeling.
     <<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
@@ -62,26 +122,13 @@ title: paintingAwarenessSuccess
 ===
 title: paintingIntelligenceSuccess
 ---
-[nomarkup][Those are hideous pieces of art, but still - you recognize that this particular set looks like it is worth quite a bit. It had to be bought in one of the local galleries or on an auction. Such pieces often have stamps or notes on their back. It may even contain some useful information. Like when or where this set was bought. You stare at the picture which seems to be made under the acid influence for a minute and then dislodge it from the wall and look at it's back. You are not disappointed - indeed there is a paper stamp.][/nomarkup] #success
-{$kieran}: Did you find something?
--> {$pcName}: I think so. Those are gallery or auction bought pieces.
-    {$kieran}: Curious… Diana never hit me as an art enthusiast person. That is not as big enthusiast to buy paintings in the gallery.
-    <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: Even if she is she has really bad taste.
-        {$kieran}: You know how it is with tastes.
-    <<endif>>
-    <<jump paintingSuccessExamination>>
+[nomarkup][Those are hideous pieces of art, but still - you recognize that this particular set looks like it is worth quite a bit. It had to be bought in one of the local galleries or on an auction. Such pieces often have stamps or notes on their back. It may even contain some useful information. Like when or where this set was bought. You stare at the picture which seems to be made under the acid influence for a minute and then dislodge it from the wall and look at it's back. You are not disappointed - indeed there is a paper stamp... and the safe.][/nomarkup] #success
+<<jump successContinued>>
 ===
 title: paintingWitsSuccess
 ---
-[nomarkup][This painting is here on purpose. It's not a simple wall decoration. It's here for a reason. It just doesn't sit with Diana proudly painting herself as a british punk rocker. Otherwise she’d just place Sex Pistols or The Exploited posters on the wall. Maybe there’s something worth looking for behind one part of this poliptich? You go with your gut, and dislodge one of the paintings. You were right. There's a paper stamp on the back.][/nomarkup] #success
-{$kieran}: Did you find something?
-    -> {$pcName}: I'm not sure. But those paintings don't fit in here.
-        {$kieran}: \[He gently scratches his chin thinking\] Hm… you're right. I would've placed those rather in some kind of CEO's office or gallery. Not in the punk rocker hideout.
-        <<if GetIsPartyMemberRecruited($anastasia) is true>>
-            {$anastasia}: Maybe it has some sentimental value? Because it certainly doesn't have any aesthetic one.
-        <<endif>>
-        <<jump paintingSuccessExamination>>
+[nomarkup][This painting is here on purpose. It's not a simple wall decoration. It's here for a reason. It just doesn't sit with Diana proudly painting herself as a british punk rocker. Otherwise she'd just place Sex Pistols or The Exploited posters on the wall. Maybe there's something worth looking for behind one part of this poliptich? You go with your gut, and dislodge one of the paintings. You were right. There's a paper stamp on the back. And the safe...][/nomarkup] #success
+<<jump successContinued>>
 === 
 title: paintingSuccessExamination
 ---
@@ -106,7 +153,7 @@ title: paintingSuccessExamination
 {$kieran}: I believe that Aidan Bryant was Diana's husband. Rather touchy topic for her. He died in 'nam in 1972 from what I recall. Killed in action. Once I accidentally asked her about it. When I was Kate's ghoul I was helping Diana from time to time with the papers and stumbled upon a mail with the guys name.
 -> {$pcName}: Good to know. May be important. Thanks Kieran.
 <<if $paintingsAreDestroyed ==false>>
-    [nomarkup][You spend a minute to put the painting back on it's place. You will not gain more information from it.][/nomarkup]
+    [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup]
 <<endif>>
 ===
 title: paintingFailure
@@ -206,6 +253,87 @@ title: anaAndKieranConflict
 ===
 title: examineScraps
 ---
-[nomarkup][What is left of paintings is littering the floor. The wood from wrames is shattered. Canvas scraps try desperately to cling onto broken frame. Some of the paint cracked leaving colorul dust on the floor. On one of them you see a ripped, paper stamp.Well… at least someone elses day is far worse than you - you're still in one piece. You cant's say the same about the paintings.][/nomarkup]
-<<jump paintingSuccessExamination>>
+[nomarkup][What is left of paintings is littering the floor. The wood from wrames is shattered. Canvas scraps try desperately to cling onto broken frame. Some of the paint cracked leaving colorul dust on the floor. On one of them you see a ripped, paper stamp.Well… at least someone elses day is far worse than you - you're still in one piece. You cant's say the same about the paintings. Luckily (or not) for you a safe hidden underneath is intact. You didn't even noticed it because of Kieran and Anastasia quarreling about.][/nomarkup]
+<<jump successContinued>>
+===
+title: safeExamine
+---
+[nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup]
+<<jump paintings>>
+===
+title: safeOpenedwoCode
+---
+[nomarkup][Despite all odds you try to open the safe without any combination. Risky, but what's better place to take risks than Vegas? You've seen how people crack open the safes in films. Why not try it yourself? You stick one of your ears to the chilly metal and cautiously rotate the knob expecting to hear a click. It is a difficult task demanding your full attention. Even Kieran went silent as if he knew what are you up to. After several minutes later you hear the last click and the doors are opened.][/nomarkup] #success
+<<jump safeOpened>>
+===
+title: safeClosed
+---
+[nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #failure
+<<jump paintings>>
+===
+title: safeOForcepened
+---
+[nomarkup][Good thing you didn't forget the old crowbar from your home. It'll be handy in here. You jimmy the crowbar in the slit between it's frame and the doors applying force. You wouldn't make it without that tool. There's just not enough space for fingers. You use wall to push this improvised lever. Good thing your body is undead - otherwise after several takes you'd be exhausted. Finally you feel the lock giving up to your brute strength.][/nomarkup] #success
+===
+title: safeOpenedwCode
+---
+[nomarkup][You deftly enter the code by rotating the knob. Lock obediently opens. There is one thing left to do…][/nomarkup]
+<<jump safeOpened>>
+===
+title: safeOpened
+---
+-> {$pcName}: Open sesame! \[You exclaim with satisfaction opening the safe doors\]
+    [nomarkup][The safe contains - as they always do - some cash. Also some documents and closed, ornate casket. There's also a gun lying inside as well as some ammunition. Luckily for you it's popular 9mm. The caliber you use yourself. One thing is out of the ordinary… a bottle with strangely red liquid…][/nomarkup]
+    {$kieran}: Great work! \[You hear Kieran's joyful - for the first time this night - voice behind you.\]
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: That was smooth as butter. Let's dig into contents. Do we split the spoils?
+        [nomarkup][Kieran grimaces.][/nomarkup]
+        {$kieran}: I will not take Diana's money and I suggest you do it the same.
+    <<endif>>
+    <<jump safeQuestions>>
+===
+title: safeQuestions
+---
+-> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if visited("safeGunExamine") == false>>
+    <<if Roll("intelligence","firearms") >=6>>
+        <<jump safeGunExamine>>
+    <<else>>
+        <<jump safeGunExamineFail>>
+    <<endif>>
+-> [nomarkup][Examine documents.][/nomarkup]
+    <<jump safeDocumentsExamine>>
+-> [nomarkup][Examine the bottle.][Intelligence + Medicine][/nomarkup] <<if visited("safeBloodIdentified") == false>>
+    <<if Roll("intelligence","medicine") >=3>>
+        <<jump safeBloodIdentified>>
+    <<else>>
+        <<jump safeBloodfailure>>
+    <<endif>>
+    <<jump safeBottleExamine>>
+-> [nomarkup][Examine the bottle.][Wits + Investigation][/nomarkup] <<if visited("safeBloodIdentified") == false>>
+    <<if Roll("wits","investigation") >=3>>
+        <<jump safeBloodIdentified>>
+    <<else>>
+        <<jump safeBloodfailure>>
+    <<endif>>
+    <<jump safeBottleExamine>>
+-> [nomarkup][Take the money.][/nomarkup]
+===
+title: safeGunExamine
+---
+[nomarkup][The gun is standard issue Colt 1911A1. The magazine is full, but as with this line of guns you need to hold the gun to disengage the safety. The only difference between normal gun and this one is that this one doesn't have any serial number.][/nomarkup]
+<<jump safeQuestions>>
+===
+title: safeDocumentsExamine
+---
+[nomarkup][You rummage through documents. Nothing interesting. Just financial stuff and other similar things. When you flipped several pages one, folded and being loosely stuck between them fell to the floor. You pick it up to examine it. But apparently life again made decision for you - you hear shooting noises downstairs.][/nomarkup]
+<<set $luciaLoveLetter to true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: FINALLY! Some action! \[She exclaimed with much more enthusiasm than she should.\]
+<<endif>>
+{$kieran}: That didn't sound good... \[Kieran looks concerned.\]
+===
+title: safeBloodIdentified
+---
+[nomarkup][You take the bottle and examine it more closely. At first it may seem to be a weird, red wine. But on closer inspection it is behaving really strange. It's not wine - it's blood.][/nomarkup]
+-> {$pcName}: I think I found… blood?
 ===

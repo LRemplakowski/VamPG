@@ -127,7 +127,7 @@ title: dianaEveryNight
     -> {$pcName}: Almost every night?
     {$sforza}: I may be old, but I'm not blind. She's been seeing someone on occasion. It hasn't interfered with her duties, so I haven't said anything. I like her having her own life. Keeps things interesting.
     <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-    {$anastasia}: \[Scoffs\] How generous of you.
+        {$anastasia}: \[Scoffs\] How generous of you.
     <<endif>>
     <<jump whoIsDiana>>
 ===
@@ -156,8 +156,8 @@ title: howSheStarted
 -> Continue
 [nomarkup][She chews on that word.][/nomarkup]
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
--> Continue
-{$anastasia}: \[Whispering\] I believe her.
+    -> Continue
+    {$anastasia}: \[Whispering\] I believe her.
 <<endif>>
 <<jump additionalQuestions>>
 ===
@@ -165,11 +165,11 @@ title: additionalQuestions
 ---
 {$sforza}: … Prince. She saw fit to bestow upon me this modest domain as a token of her gratitude after that nasty business with what happened to the previous Prince. I knew that The Embassy would be the perfect spot to establish a place where Kindred could gather and socialize, a true haven for our dysfunctional little community. It required a bit of remodeling and adapting to the needs of our kind, but with Diana's help and expertise, it has become one of the most popular spots for us in the city.
     -> {$pcName}: What do you think about the Prince?
-    <<jump katePrinceOpinion>>
+        <<jump katePrinceOpinion>>
     -> {$pcName}: Who is a Prince? This title seems to repeat in nearly all discussions with… our kind.
-    <<jump princeExplained>>
+        <<jump princeExplained>>
     -> {$pcName}: What happened to the previous Prince?
-    <<jump previousPrince>>
+        <<jump previousPrince>>
 ===
 title: katePrinceOpinion
 ---
@@ -191,11 +191,11 @@ title: previousPrince
 ---
 {$sforza}: Benedic was the Prince before Sam. Bastard got himself killed by Sabbat assassins, but they learned their lesson after we hunted them down.
 -> {$pcName}: Sabbat?
-<<jump whatIsSabbat>>
+    <<jump whatIsSabbat>>
 -> {$pcName}: Traditions?
-<<jump whatAreTraditions>>
+    <<jump whatAreTraditions>>
 -> {$pcName}: Camarilla?
-<<jump camarillaExplained>>
+    <<jump camarillaExplained>>
 ===
 title: whatIsSabbat
 ---
@@ -205,7 +205,7 @@ title: whatIsSabbat
     -> Continue
     {$sforza}: A dangerous, misguided organization that rejects the Traditions and laws that keep our kind from becoming animals. Benedic didn't see them as a serious threat and now you know what happened to him. Someone in your position, the less you know about them. The better.
     <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-    {$anastasia}: It's just the natural order of things. \[she shrugged\]
+        {$anastasia}: It's just the natural order of things. \[she shrugged\]
     <<endif>>
     <<jump previousPrince>>
 ===
@@ -213,9 +213,9 @@ title: whatAreTraditions
 ---
 {$kieran}: A set of rules that everyone has to adhere to survive. Something like the Ten Commandments, if you're religious.
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-{$anastasia}: More like Hammurabi's Code, if we're talking severity of retribution. Death usually isn't on the table when talking about Christianity.
-[nomarkup][Kieran sighs][/nomarkup]
-{$anastasia}: What? You know I'm right. Forgiveness, and all that junk.
+    {$anastasia}: More like Hammurabi's Code, if we're talking severity of retribution. Death usually isn't on the table when talking about Christianity.
+    [nomarkup][Kieran sighs][/nomarkup]
+    {$anastasia}: What? You know I'm right. Forgiveness, and all that junk.
 <<endif>>
 <<jump additionalQuestions>>
 ===

@@ -1,0 +1,121 @@
+﻿title: safeOpened
+tags:
+---
+-> {$pcName}: Open sesame! \[You exclaim with satisfaction opening the safe doors\]
+    [nomarkup][The safe contains - as they always do - some cash. Also some documents and closed, ornate casket. There's also a gun lying inside as well as some ammunition. The ammunition is .45 caliber - not what's your gun is using. One thing is out of the ordinary… a vial with strangely red liquid…][/nomarkup]
+    {$kieran}: Great work! \[You hear Kieran's joyful - for the first time this night - voice behind you.\]
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: That was smooth as butter. Let's dig into contents. Do we split the spoils?
+        [nomarkup][Kieran grimaces.][/nomarkup]
+        {$kieran}: I will not take Diana's money and I suggest you do it the same.
+    <<endif>>
+    <<jump safeQuestions>>
+===
+title: safeQuestions
+---
+-> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if visited("safeGunExamine") == false>>
+    <<if Roll("intelligence","firearms") >=3>>
+        <<jump safeGunExamine>>
+    <<else>>
+        <<jump safeGunExamineFail>>
+    <<endif>>
+-> [nomarkup][Examine the documents.][/nomarkup]
+    <<jump safeDocumentsExamine>>
+-> [nomarkup][Examine the vial.][Intelligence + Medicine][/nomarkup] <<if visited("safeBloodIdentified") == false>>
+    <<if Roll("intelligence","medicine") >=3>>
+        <<jump safeBloodIdentified>>
+    <<else>>
+        <<jump safeBloodFailure>>
+    <<endif>>
+-> [nomarkup][Examine the vial.][Wits + Investigation][/nomarkup] <<if visited("safeBloodIdentified") == false>>
+    <<if Roll("wits","investigation") >=3>>
+        <<jump safeBloodIdentified>>
+    <<else>>
+        <<jump safeBloodFailure>>
+    <<endif>>
+-> [nomarkup][Take the money.][/nomarkup] <<if visited("safeMoney") == false>>
+    <<jump takeSafeMoney>>
+===
+title: safeGunExamine
+---
+[nomarkup][The gun is standard issue Colt 1911A1. The magazine is full, but safety is engaged. The only difference between normal gun and this one is that this one doesn't have any serial number.][/nomarkup]
+<<jump safeQuestions>>
+===
+title: safeDocumentsExamine
+---
+[nomarkup][You rummage through documents. Nothing interesting. Just financial stuff and other similar things. When you flipped several pages one, folded and being loosely stuck between them fell to the floor. You pick it up to examine it.][/nomarkup]
+Love Letter: My beloved Diana,
+My little ray of light in darkness of my heart.
+The only person that can stave my Beast away.
+I can't stand to see you used by that Wasp you call your Master.
+I want us to be and live together.
+Away from all this nonsense, from Jyhad and everything else.
+Just you - and me. Together in the night.
+With love, Lucia
+<<set $luciaLoveLetter to true>>
+[nomarkup][You hear a sound from the downstairs. A sound that you can't mistake with anything else. A gunfire.][/nomarkup]
+{$kieran}: What the hell?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: FINALLY! Some action! \[She exclaimed with much more enthusiasm than she should.\]
+<<endif>>
+{$kieran}: That didn't sound good... We need to leave. Now. \[Kieran looks concerned.\]
+===
+title: safeBloodIdentified
+---
+[nomarkup][You take the bottle and examine it more closely. At first it may seem to be a weird, red wine. But on closer inspection it is behaving really strange. It's not wine - it's blood.][/nomarkup]
+-> {$pcName}: I think I found… blood?
+[nomarkup][Kieran looks at the vial you are holding in your hand.][/nomarkup]
+{$kieran}: I think it's not an ordinary blood. Let me.
+[nomarkup][Kieran takes the vial from your hand and uncorks the glass receptacle, tilting it gently towards his palm. He allows a droplet of the viscous fluid to splash upon his skin, then quickly tastes it. A puzzled expression flashes across his features, his brows furrowed, as he reseals the vial.][/nomarkup]
+<<jump bloodVialRolls>>
+===
+title: bloodVialRolls
+---
+<<if Roll("intelligence","occult") or Roll("wits","awareness") >=4>>
+    -> {$pcName}: Did you just do the same thing that Dominic did back in my apartment?
+        <<jump bloodVialSuccess>>
+<<else>>
+    -> {$pcName}: It was evidence!
+        <<jump bloodVialFailure>>
+<<endif>>
+===
+title: bloodVialSuccess
+---
+{$kieran}: Yes. It's a little but useful trick. \[Kieran Influence +1\]
+<<modifyInfluence (1,$kieran)>>
+-> {$pcName}: Can I do that?
+    [nomarkup][Kieran shakes his head][/nomarkup]
+    {$kieran}: It's something only my Clan can do.
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: That's what he said.
+    <<endif>>
+    <<jump safeContinuation>>
+===
+title: bloodVialFailure
+---
+-> {$pcName}: It was evidence!
+    {$kieran}: Trust me, I know what I'm doing.
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Tremere and trust. Isn't that a little counter-intuitive?
+    <<endif>>
+    <<jump safeContinuation>>
+===
+title: safeContinuation
+---
+{$kieran}: Brujah blood. Could be yours, or…
+[nomarkup][It doesn't take a rocket scientist to understand what he's implying.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: You done, twinkle toes?
+    {$kieran}: Pretty much, yes.
+<<endif>>
+{$kieran}: We don't have time for more detailed examination right now. It'll have to suffice. I suggest you to hold onto it. At least for the time being.
+===
+title: takeSafeMoney
+---
+-> {$pcName}: I need to pay my bills Kieran.
+{$kieran}: That's not a good reason to steal! \[Kieran influence -2\]
+-> {$pcName}: In my situation it is. Besides. We already did bigger sins than that today.
+[nomarkup][As you stuff the money into your shooks his head really disappointed.][/nomarkup]
+<<jump safeQuestions>>
+<<giveMoney (500)>>
+===

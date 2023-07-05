@@ -1,4 +1,47 @@
-﻿title: safeOpened
+﻿title: safeExamine
+---
+[nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup]
+-> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeFailure") == false>>
+    <<if roll("resolve","larceny" >=6)>>
+        <<jump safeOpenedwoCode>>
+    <<else>>
+        <<jump safeFailure>>
+    <<endif>>
+<<if $crowbar ==true>>
+-> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if visited("safeFailure") == false>>
+    <<if roll("strength","larceny" >=6)>>
+        <<jump safeForceOpened>>
+    <<else>>
+        <<jump safeFailure>>
+    <<endif>>
+<<endif>>
+<<if $safeCode ==true>>
+-> [nomarkup][Open the safe with a combination.][/nomarkup]
+    <<jump safeOpenedwCode>>
+<<endif>>
+-> [nomarkup][Step away.][/nomarkup]
+===
+title: safeOpenedwoCode
+---
+[nomarkup][Despite all odds you try to open the safe without any combination. Risky, but what's better place to take risks than Vegas? You've seen how people crack open the safes in films. Why not try it yourself? You stick one of your ears to the chilly metal and cautiously rotate the knob expecting to hear a click. It is a difficult task demanding your full attention. Even Kieran went silent as if he knew what are you up to. After several minutes later you hear the last click and the doors are opened.][/nomarkup] #success
+<<jump safeOpened>>
+===
+title: safeForceOpened
+---
+[nomarkup][Good thing you didn't forget the old crowbar from your home. It'll be handy in here. You jimmy the crowbar in the slit between it's frame and the doors applying force. You wouldn't make it without that tool. There's just not enough space for fingers. You use wall to push this improvised lever. Good thing your body is undead - otherwise after several takes you'd be exhausted. Finally you feel the lock giving up to your brute strength.][/nomarkup] #success
+<<jump safeOpened>>
+===
+title: safeFailure
+---
+[nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup]
+<<jump safeExamine>>
+===
+title: safeOpenedwCode
+---
+[nomarkup][You deftly enter the code by rotating the knob. Lock obediently opens. There is one thing left to do…][/nomarkup]
+<<jump safeOpened>>
+===
+title: safeOpened
 tags:
 ---
 -> {$pcName}: Open sesame! \[You exclaim with satisfaction opening the safe doors\]

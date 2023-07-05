@@ -19,25 +19,6 @@ tags:
 <<if $safeDiscovered ==true>>
     -> [nomarkup][Examine the safe.][/nomarkup]
         <<jump safeExamine>>
-    -> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup]<<if visited("safeClosed") == false>>  
-        <<if Roll("resolve","larceny") >=6>>
-            <<jump safeOpenedwoCode>>
-        <<else>>
-            <<jump safeClosed>>
-        <<endif>>
-    <<if $crowbar ==true>>
-        -> [nomarkup][Try to pry safe open.][Strength + Athletics][/nomarkup]<<if visited("safeClosed") == false>> 
-            <<if Roll("strenth","athletics") >=6>>
-                <<jump safeOForcepened>>
-            <<else>>
-                <<jump safeClosed>>
-            <<endif>>
-    <<endif>>
-    <<if $safeCode ==true>>
-        ->[nomarkup][Try to open the safe with code.][/nomarkup]
-            <<jump safeOpenedwCode>>
-    <<endif>>
-<<endif>>
 -> [Step away.]
 ===
 title: paintingAwarenessRoll
@@ -82,24 +63,6 @@ title: successContinued
 <<endif>>
 -> [nomarkup][Examine the safe.][/nomarkup]
     <<jump safeExamine>>
--> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup]<<if visited("safeClosed") == false>>  
-    <<if Roll("resolve","larceny") >=6>>
-        <<jump safeOpened>>
-    <<else>>
-        <<jump safeClosed>>
-    <<endif>>
-<<if $crowbar ==true>>
-    -> [nomarkup][Try to pry safe open.][Strength + Athletics][/nomarkup]<<if visited("safeClosed") == false>> 
-        <<if Roll("strenth","athletics") >=6>>
-            <<jump safeOForcepened>>
-        <<else>>
-            <<jump safeClosed>>
-        <<endif>>
-<<endif>>
-<<if $safeCode ==true>>
-    ->[nomarkup][Try to open the safe with code.][/nomarkup]
-        <<jump safeOpenedwCode>>
-<<endif>>
 -> [Step away.]
 ===
 title: stampExamine
@@ -255,28 +218,4 @@ title: examineScraps
 ---
 [nomarkup][What is left of paintings is littering the floor. The wood from wrames is shattered. Canvas scraps try desperately to cling onto broken frame. Some of the paint cracked leaving colorul dust on the floor. On one of them you see a ripped, paper stamp.Well… at least someone elses day is far worse than you - you're still in one piece. You cant's say the same about the paintings. Luckily (or not) for you a safe hidden underneath is intact. You didn't even noticed it because of Kieran and Anastasia quarreling about.][/nomarkup]
 <<jump successContinued>>
-===
-title: safeExamine
----
-[nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup]
-<<jump paintings>>
-===
-title: safeOpenedwoCode
----
-[nomarkup][Despite all odds you try to open the safe without any combination. Risky, but what's better place to take risks than Vegas? You've seen how people crack open the safes in films. Why not try it yourself? You stick one of your ears to the chilly metal and cautiously rotate the knob expecting to hear a click. It is a difficult task demanding your full attention. Even Kieran went silent as if he knew what are you up to. After several minutes later you hear the last click and the doors are opened.][/nomarkup] #success
-<<jump safeOpened>>
-===
-title: safeClosed
----
-[nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #failure
-<<jump paintings>>
-===
-title: safeOForcepened
----
-[nomarkup][Good thing you didn't forget the old crowbar from your home. It'll be handy in here. You jimmy the crowbar in the slit between it's frame and the doors applying force. You wouldn't make it without that tool. There's just not enough space for fingers. You use wall to push this improvised lever. Good thing your body is undead - otherwise after several takes you'd be exhausted. Finally you feel the lock giving up to your brute strength.][/nomarkup] #success
-===
-title: safeOpenedwCode
----
-[nomarkup][You deftly enter the code by rotating the knob. Lock obediently opens. There is one thing left to do…][/nomarkup]
-<<jump safeOpened>>
 ===

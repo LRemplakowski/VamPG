@@ -13,7 +13,7 @@ tags:
         {$kieran}: Where's your tin foil hat, then? #line:0ca02ed 
         -> Continue
 <<else>>
-    [nomarkup][Your investigation board is empty besides the overdue bills you've posted as fearful motivation. Hopefully things will pick up soon.][/nomarkup]
+    [nomarkup][Your investigation board is empty besides the overdue bills you've posted as fearful motivation. Hopefully, things will pick up soon.][/nomarkup]
     <<if GetAttributeSkillPoolSize("intelligence","finance") <= 1>>
     {$pcName}: [nomarkup][You don't know much about budgeting, and it shows.][/nomarkup]
     <<elseif GetAttributeSkillPoolSize("intelligence","finance") >= 4>>

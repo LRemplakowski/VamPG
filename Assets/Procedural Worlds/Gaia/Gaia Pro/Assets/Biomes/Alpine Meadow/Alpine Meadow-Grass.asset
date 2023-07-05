@@ -121,6 +121,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - BOOLEAN_39538BE377C8401B940482B739880ACC: 0
     - _AORemapMax: 1
@@ -248,8 +249,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38,
-        a: 6.8169325e-31}
+    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38, a: 6.8169325e-31}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -418,6 +418,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.4
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!114 &-6660474868033380129
 MonoBehaviour:
@@ -569,6 +571,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.70000005
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!114 &-5545396329751587404
 MonoBehaviour:
@@ -720,6 +724,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.6
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!114 &-2784048073185755176
 MonoBehaviour:
@@ -871,6 +877,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.5
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!21 &-2416659631490850483
 Material:
@@ -993,6 +1001,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - BOOLEAN_39538BE377C8401B940482B739880ACC: 0
     - _AORemapMax: 1
@@ -1120,8 +1129,7 @@ Material:
     - _BaseColor: {r: 0.8207547, g: 0.70848167, b: 0.70848167, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38,
-        a: 6.8169325e-31}
+    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38, a: 6.8169325e-31}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -1273,6 +1281,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - BOOLEAN_39538BE377C8401B940482B739880ACC: 0
     - Vector1_95d7235b4e28472c8b43574046d10a99: 0
@@ -1428,8 +1437,7 @@ Material:
     - _Color: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 1}
     - _ColorA: {r: 1, g: 0.033018887, b: 0.033018887, a: 1}
     - _ColorB: {r: 0.46226418, g: 0.032707367, b: 0.032707367, a: 1}
-    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38,
-        a: 6.8169325e-31}
+    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38, a: 6.8169325e-31}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -1469,6 +1477,8 @@ MonoBehaviour:
     m_texturePrototypes:
     - m_name: PW_Detail_Grass_4_patch
       m_texture: {fileID: 0}
+      substanceSourceIndex: 0
+      m_substanceMaterial: {fileID: 0}
       m_textureFileName: 
       m_normal: {fileID: 0}
       m_maskmap: {fileID: 0}
@@ -1495,6 +1505,14 @@ MonoBehaviour:
     m_detailPrototypes:
     - m_name: PW_Grass_Patch_02
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: d2473f86f1367b04db57ea21726d18d8, type: 3}
@@ -1532,6 +1550,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Detail_Grass_3_patch
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: b0dd4f58f57483140922be61a08cc83d, type: 3}
@@ -1555,6 +1581,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_Blue_Flower_02
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: dac3ec54c55d2894e952eba6a3e4b7f5, type: 3}
@@ -1578,6 +1612,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_Pink_Flower_01
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: 4728e859f89c6c44d873cff9dc4c8546, type: 3}
@@ -1608,6 +1650,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: Flowers Red
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: 2902993231d3d664abf44cfda4fe209a, type: 3}
@@ -1638,6 +1688,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_White_Flower_04
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: 33e5a3d2c6a3e1c45a43cfb130223341, type: 3}
@@ -1661,6 +1719,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_Blue_Flower_03
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: 7aae7e7897fc8b642811fe0c644af3b2, type: 3}
@@ -1684,6 +1750,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: Flowers Purple
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: af54753c09d287841a3ba8584905e056, type: 3}
@@ -1714,6 +1788,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_Dactylis_Glomerata
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: e4fa685c2e6a1d84d9ef155383f7fe8f, type: 3}
@@ -1744,6 +1826,14 @@ MonoBehaviour:
       m_dnaFoldedOut: 0
     - m_name: PW_Grass_Phleum_Pratense
       m_renderMode: 2
+      m_useInstancing: 0
+      m_alignToGround: 0
+      m_density: 1
+      m_holeEdgePadding: 0
+      m_noiseSeed: 0
+      m_positionJitter: 0
+      m_targetCoverage: 1
+      m_useDensityScaling: 1
       m_detailProtoype: {fileID: 0}
       m_detailPrototypeFileName: 
       m_detailTexture: {fileID: 2800000, guid: 53d09239d3b57614691b300c27af1dc2, type: 3}
@@ -2623,6 +2713,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Detail_Grass_3_patch
     m_guid: d5538d24-b940-445c-9d2d-3da80a2374aa
     m_useExtendedSpawn: 0
@@ -3056,6 +3151,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_Blue_Flower_02
     m_guid: 54ffa3a4-b9f4-41a0-be80-2a5386191c0f
     m_useExtendedSpawn: 0
@@ -3489,6 +3589,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_Pink_Flower_01
     m_guid: 25552ec4-525d-4b3f-b591-400e9385f7d7
     m_useExtendedSpawn: 0
@@ -3733,6 +3838,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: Flowers Red
     m_guid: ed2d9d5e-3ade-4ca8-8b6d-4b25e3e77c4d
     m_useExtendedSpawn: 0
@@ -4364,6 +4474,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_White_Flower_04
     m_guid: 6454a111-17bb-41a3-8b31-0bad93f2c4a3
     m_useExtendedSpawn: 0
@@ -5013,6 +5128,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_Blue_Flower_03
     m_guid: 737409e4-352b-4f0d-88d7-191339dbd888
     m_useExtendedSpawn: 0
@@ -5851,6 +5971,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: Flowers Purple
     m_guid: fc6448cc-92c4-4fd4-ba03-4321088a89dd
     m_useExtendedSpawn: 0
@@ -6482,6 +6607,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_Dactylis_Glomerata
     m_guid: 581283c9-5c08-469a-ae87-15c5fc8ae300
     m_useExtendedSpawn: 0
@@ -7113,6 +7243,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   - m_name: PW_Grass_Phleum_Pratense
     m_guid: c49382ae-5553-433f-829e-f9044a198d76
     m_useExtendedSpawn: 0
@@ -7942,6 +8077,11 @@ MonoBehaviour:
     m_usesBoxStandIn: 0
     m_boundsCollisionCheck: 0
     m_changesHeightmap: 0
+    m_startOffsetX: 0
+    m_startOffsetZ: 0
+    m_collisionLayersToClear:
+      serializedVersion: 2
+      m_Bits: 0
   m_showGizmos: 1
   m_showDebug: 0
   m_showTerrainHelper: 1
@@ -8108,6 +8248,7 @@ MonoBehaviour:
     - m_active: 1
       m_invert: 0
       m_type: 2
+      m_selectedTreeSpawnRuleGUIDs: []
       m_treeSpawnRuleGUID: d2137b68-5102-4756-ba03-f180cdec55b9
       m_tag: 
       m_Radius: 0.37
@@ -8501,6 +8642,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.2
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!114 &3000704658475099301
 MonoBehaviour:
@@ -8652,6 +8795,8 @@ MonoBehaviour:
   m_drawCPUSpawnLocations: 0
   m_debugColor: {r: 1, g: 0.35174727, b: 0, a: 1}
   m_debugCellSize: 0.3
+  m_boundsHeightMultiplier: 1
+  m_padding: 2
   m_subCellDivision: 8
 --- !u!21 &3329969213965738006
 Material:
@@ -8774,6 +8919,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - BOOLEAN_39538BE377C8401B940482B739880ACC: 0
     - _AORemapMax: 1
@@ -8901,8 +9047,7 @@ Material:
     - _BaseColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38,
-        a: 6.8169325e-31}
+    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38, a: 6.8169325e-31}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}
@@ -8929,7 +9074,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Flowers PurpleLOD0_7146_41592_19266_5074_27484_41470_-231316_30360_-143924
-  m_Shader: {fileID: 4800000, guid: 72462e7bb7591b4418a705a37fe544ac, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 70478a660a9fe5b4c869384aa0440733, type: 3}
   m_ShaderKeywords: _ALPHATEST_ON _DISABLE_DECALS _DISABLE_SSR_TRANSPARENT _DOUBLESIDED_ON
     _PW_SF_WIND_ON
   m_LightmapFlags: 4
@@ -9042,6 +9187,7 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - BOOLEAN_39538BE377C8401B940482B739880ACC: 0
     - _AORemapMax: 1
@@ -9114,6 +9260,7 @@ Material:
     - _PPDMinSamples: 5
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
+    - _PW_FLORAHDRP: 1
     - _PW_SF_WIND: 1
     - _PW_SSSDistortion: 0.5
     - _PW_SSSPower: 1
@@ -9169,8 +9316,7 @@ Material:
     - _BaseColor: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38,
-        a: 6.8169325e-31}
+    - _DiffusionProfileAsset: {r: -9.2396434e+33, g: 2.6337685e-36, b: 2.14897e-38, a: 6.8169325e-31}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 1}

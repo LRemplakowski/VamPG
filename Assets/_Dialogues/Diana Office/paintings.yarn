@@ -2,7 +2,7 @@
 tags:
 ---
 <<declare $paintingsAreDestroyed to false>>
-<<declare $aidanBryant to false>>
+<<declare $aidanFoster to false>>
 <<declare $safeCode to false>>
 <<declare $vibrantVistas to false>>
 <<declare $safeDiscovered to false>>
@@ -19,6 +19,7 @@ tags:
 <<if $safeDiscovered ==true>>
     -> [nomarkup][Examine the safe.][/nomarkup]
         <<jump safeExamine>>
+<<endif>>
 -> [Step away.]
 ===
 title: paintingAwarenessRoll
@@ -103,8 +104,8 @@ title: paintingSuccessExamination
 <<if GetIsPartyMemberRecruited($anastasia) is true and $paintingsAreDestroyed ==true>>
     {$anastasia}: Great! Now we know where we can find more pieces to rip and shred our appreciation for. \[She chuckles.\]
 <<endif>>
-[nomarkup][Your attention goes to small handwritten note on the stamp - “For my beloved Diana for one of her most important days in her life. Aidan Bryant.”][/nomarkup]
--> {$pcName}: Did you heard of any Aidan Bryant by any chance?
+[nomarkup][Your attention goes to small handwritten note on the stamp - “For my beloved Diana for one of her most important days in her life. Aidan Foster.”][/nomarkup]
+-> {$pcName}: Did you heard of any Aidan Foster by any chance?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: \[Anastasia shooks her head.\] Not that I pay any attention to the guys. \[She shrugged.\]
 <<endif>>
@@ -113,7 +114,7 @@ title: paintingSuccessExamination
     {$anastasia}: Our nerd guy seems to have an idea though.
     {$kieran}: You're right ms Goth Queen. I have.
 <<endif>>
-{$kieran}: I believe that Aidan Bryant was Diana's husband. Rather touchy topic for her. He died in 'nam in 1972 from what I recall. Killed in action. Once I accidentally asked her about it. When I was Kate's ghoul I was helping Diana from time to time with the papers and stumbled upon a mail with the guys name.
+{$kieran}: I believe that Aidan Foster was Diana's husband. Rather touchy topic for her. He died in 'nam in 1972 from what I recall. Killed in action. Once I accidentally asked her about it. When I was Kate's ghoul I was helping Diana from time to time with the papers and stumbled upon a mail with the guys name.
 -> {$pcName}: Good to know. May be important. Thanks Kieran.
 <<if $paintingsAreDestroyed ==false>>
     [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup]
@@ -142,9 +143,9 @@ title: paintingsDestroyed
 <<endif>>
 {$kieran}: Why did you do that? Is it how you conduct investigations? \[Kieran influence -1\]
 <<ModifyInfluence (-1, $kieran)>>
--> {$pcName}: I… don't know what came over me.
+-> {$pcName}: I… don't know what came over me. <<if visited("beastTalk") == false>>
     <<jump beastTalk>>
--> {$pcName}: Normally no. But I'm pissed.
+-> {$pcName}: Normally no. But I'm pissed. <<if visited("beastTalk") == false>>
     <<jump beastTalk>>
 ===
 title: beastTalk
@@ -171,7 +172,6 @@ title: beastTalk
         {$beast}: No, it's not concern, he's just toying with my feelings. He wasn't particularly “concerned” when I had gun next to my head. All he does is complaining.
         {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage…
         -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time.
-            <<jump examineScraps>>
     <<endif>>
 <<else>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -185,7 +185,6 @@ title: beastTalk
     <<else>>
         {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage…
         -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time.
-            <<jump examineScraps>>
     <<endif>>
 <<endif>>
 ===
@@ -198,7 +197,6 @@ title: anaAndKieranConflict
     [nomarkup][Anastasia and Kieran focus on you, then stare at each other][/nomarkup]
     {$kieran}: We'll end this conversation at another time.
     {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust.
-    <<jump examineScraps>>
 -> {$pcName}: Kieran, do you really want to roll around in her mud till dawn?
     [nomarkup][Kieran looks at you and shooks his head][/nomarkup]
     {$kieran}: You're right. It's not a good place or time for a philosophical discussion. \[+1 Kieran influence\]
@@ -206,13 +204,11 @@ title: anaAndKieranConflict
     [nomarkup][Anastasia frowns at you][/nomarkup]
     {$anastasia}: MY mud? It's him who didn't tell you about the Beast in the first place! \[-1 Anastasia influence\]
     <<ModifyInfluence (-1,$anastasia)>>
-    <<jump examineScraps>>
 -> {$pcName}: Shut up Kieran! For a guy who tells me he's here to help you hide a lot from me!
     {$anastasia}: Yes! Exactly my thought! \[+1 Anastasia Influence\]
     <<ModifyInfluence (+1,$anastasia)>>
     {$kieran}: I'm sorry, okay? There was too little time to tell you everything… \[-1 Kieran influence\]
     <<ModifyInfluence (-1,$kieran)>>
-    <<jump examineScraps>>
 ===
 title: examineScraps
 ---

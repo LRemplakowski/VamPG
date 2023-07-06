@@ -88,16 +88,16 @@ title: bookcaseTVAnaTenderMoment
 {$anastasia}: Hell no, do I look like a pop girl to you? This is for pussies.
 -> {$pcName}: You seem to care though. \[Wits + Insight\]
     <<if Roll("wits","insight") >=3>>
-    [nomarkup][She curls her mouth until it looks like a line - she indeed likes it for some reason. And not because of performer][/nomarkup] #success
-    {$anastasia}: I don't have the slightest idea why do you care. Don't you have an investigation to end?
-    [nomarkup][You turn the TV off.][/nomarkup]
-    <<jump bookcase>>
-<<else>>
-    [nomarkup][Anastasia laughted so hard you're sure it was heard down below.][/nomarkup] #failure
-    {$anastasia}: Oh my god, me listening to pop. A new low.
-    [nomarkup][You turn the TV off.][/nomarkup]
-    <<jump bookcase>>
-<<endif>>
+        [nomarkup][She curls her mouth until it looks like a line - she indeed likes it for some reason. And not because of performer][/nomarkup] #success
+        {$anastasia}: I don't have the slightest idea why do you care. Don't you have an investigation to end?
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<else>>
+        [nomarkup][Anastasia laughted so hard you're sure it was heard down below.][/nomarkup] #failure
+        {$anastasia}: Oh my god, me listening to pop. A new low.
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<endif>>
 ===
 title: bookcaseRadio
 ---
@@ -109,7 +109,7 @@ Radio: Thank you for your insight Josh! It's always good to know what is happeni
 <<endif>>
 [nomarkup][Kieran scratched his chin and rolled up his sleeve.][/nomarkup]
 {$kieran}: It can't be that late… \[he looks at the clock shield making big eyes of surprise.\] Oh… it is that late… we need to hurry, I don't think that Ms Richmond would have any useful information for us.
- <<if GetIsPartyMemberRecruited($anastasia) is true>>    
+<<if GetIsPartyMemberRecruited($anastasia) is true>>    
     [nomarkup][You turn the radio off much to Anastasia's disappointment.][/nomarkup]
     <<jump bookcase>>
 <<else>>
@@ -135,4 +135,5 @@ title: theBookOfTheLaw
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: What? Now even books have teeth?
     {$kieran}: If they have you just have to gently stroke their spine. You didn't know Ms Goth Queen? \[Kieran chuckles.\]
+<<endif>>
 ===

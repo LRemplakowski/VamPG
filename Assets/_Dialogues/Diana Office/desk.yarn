@@ -1,6 +1,7 @@
 ﻿title: desk
 tags:
 ---
+<<declare $satanDate to false>>
 [nomarkup][This desk looks like a solid piece of furniture. Surely it shows anyone that seats behind it as a king - or in this case queen - of entire place. It's not neat though. There's a lot of clutter laying around, seemingly disorganised, but when you approach it closer you can see a pattern. A computer, IBM line you think, rests on the side. You can only dream about this achievement of modern technology.][/nomarkup]
 -> [nomarkup][Inspect the desk.][/nomarkup]
     <<jump deskExamination>>
@@ -10,26 +11,30 @@ tags:
 ===
 title: deskExamination
 ---
-[nomarkup][There are several items on the desk. A newspaper, an ashtray, several pens, and pencils, some documents as well as empty pieces of paper, and some books. Noe of those is in any way out of the ordinary. The ashtray though seems to commemorate something. In the middle there is an Union Jack with letters surrounding it. But you aren't sure what they mean. There is a lot of ash in it and cigarette buds in it. One of the cigarettes looks unfinished.][/nomarkup]
+[nomarkup][There are several items on the desk. A newspaper, an ashtray, several pens, and pencils, some documents as well as empty pieces of paper, and some books. None of those is in any way out of the ordinary. The ashtray though seems to commemorate something. In the middle there is an Union Jack with letters surrounding it. But you aren't sure what they mean. There is a lot of ash in it and cigarette buds in it. One of the cigarettes looks unfinished.][/nomarkup]
 -> [nomarkup][Throw the ash away.][/nomarkup] <<if visited("throwAsh") == false>>
     <<jump throwAsh>>
 -> [nomarkup][Smoke the remaining cigarette.][/nomarkup] <<if visited("smokeCigarette") == false>>
     <<jump smokeCigarette>>
 -> [nomarkup][Inspect the buds.][/nomarkup]
     <<jump inspectBuds>>
+-> [nomarkup][Inspect the books.][/nomarkup]
+    <<jump deskBook>>
+-> [nomarkup][Inspect the newspaper.][/nomarkup]
+    <<jump deskNewspaper>>
 -> [nomarkup][Leave the items alone.][/nomarkup]
     <<jump desk>>
 ===
 title: throwAsh
 ---
 [nomarkup][Ash inside the ashtray is stubborn as a mole. Through the years of use it doesn't want to simply go away - you'll probably need to wash it to see clearly what is in it's bottom. But you can work with what you see. You squint your eyes trying to decipher the inscription surrounding Union Jack.][/nomarkup]
-<<if roll("resolve","awareness" >=3)>>
+<<if Roll("resolve","awareness") >=3>>
     -> {$pcName}: Spreading the anarchy in Las Vegas since 19… \[It's a miracle you were able to read nearly entire sentence.\]
         {$kieran}: It's probably the year when Diana started. 1969.
         <<set $safeCode to true>>
         [nomarkup][Yout put the ashtray back on the desk.][/nomarkup]
         <<jump deskExamination>>
-<<else roll("intelligence","investigation >=3")>>
+<<else Roll("intelligence","investigation") >=3>>
     [nomarkup][You saw the same ashtrays downstairs. You didn't pay too much attention to how they look in the inside though. Maybe it's something similar to casino chips - they often have year of opening written on it.][/nomarkup]
     -> {$pcName}: When The Embassy was opened?
         {$kieran}: In 1969. Why?
@@ -54,11 +59,31 @@ title: inspectBuds
 [nomarkup][Your typical buds from your typical cigarettes. You can tell the brand name - Embassy - it is written on the verge of the filter. Diana seems to be a big fan of this word. And those cigarettes. Nearly every one of them has lipstick stains.][/nomarkup]
 <<jump deskExamination>>
 ===
+title: deskBook
+---
+[nomarkup][Nothing of particular interest. Well mayba aside from the biography of Anton LaVey with several bookmarks. When you picked it up Kieran chuckled. You raise your brows looking at him.][/nomarkup]
+{$kieran}: I'm sorry. It's… I've met the guy in the past. Quite a showman to be honest. Don't ask. I was on… an investigation of sorts.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: It sounds like everyone in here is a PI. Quite popular pastime.
+    [nomarkup][Kieran shooks his head][/nomarkup]
+    {$kieran}: No, no it wasn't anything like that. I was searching… for something.
+    {$anastasia}: Still sounds like PI to me.
+    [nomarkup][Kieran sighs.][/nomarkup]
+<<endif>>
+{$kieran}: I've mentioned him once when I was talking with Diana. Didn't thought she'd remember about it.
+[nomarkup][One of the bookmarks signs the date of founding the Church of Satan - 30th April 1966.][/nomarkup]
+<<set $satanDate to true>>
+<<jump deskExamination>>
+===
+title: deskNewspaper
+---
+[nomarkup][It's LV's local newspaper - Daily-Preview. There are several articles about local events. One of the advertisements tells about upcoming event in the Embassy itself.][/nomarkup]
+===
 title: computerTurnedOn
 ---
 [nomarkup][As soon as you flipped the switch on the side of the box that is nesting the screen it comes to life. A series of scratches and other weird noises come out from the steel cube. The glass screen showed a series of letters and then it all stopped asking you for a password.][/nomarkup]
 -> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.][Intelligence + Technology][/nomarkup]
-    <<if roll("intelligence","technology" >=3)>>
+    <<if Roll("intelligence","technology") >=3>>
         <<jump hackingSuccess>>
     <<else>>
         <<jump hackingFailure>>
@@ -67,12 +92,22 @@ title: computerTurnedOn
 -> [nomarkup][Enter the password - “Thelema”.][/nomarkup]
     <<jump accessGranted>>
 <<endif>>
+<<if $satanDate ==true>>
+-> [nomarkup][Enter the password - "Satan".][/nomarkup]
+    <<jump wrongPassword>>
+<<endif>>
+-> [nomarkup][Enter the password - "Anarchy".][/nomarkup]
+    <<jump wrongPassword>>
+-> [nomarkup][Enter the password - "Embassy".][/nomarkup]
+    <<jump wrongPassword>>
+-> [nomarkup][Enter the password - "Password".][/nomarkup]
+    <<jump wrongPassword>>
 -> [nomarkup][Leave computer as it is.][/nomarkup]
     <<jump desk>>
 ===
 title: hackingSuccess
 ---
-[nomarkup][A few commands here, a few commands there. Your fingers brush the keyboard gently bypassing the password with ease. You just need a white hat for full image. After all the case of your death is justifying hacking into Diana's computer. Right?][/nomarkup] #success
+[nomarkup][A few commands here, a few commands there. Your fingers brush the keyboard gently bypassing the password with ease. You just need a white hat for the full image. After all the case of your death is justifying hacking into Diana's computer. Right?][/nomarkup] #success
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Show off.
 <<endif>>
@@ -92,4 +127,20 @@ title: hackingFailure
     -> [nomarkup][You grit your teeth staring at the computer screen. You can't win with the machine. Machine wins with you sooner or later. Just like in the Terminator.][/nomarkup]
         <<jump desk>>
 <<endif>>
+===
+title: computerDestroyed
+---
+[nomarkup][You are pissed… everything tonight is going completely haywire with your life and this soulless machine is only adding up to the pile. You aren't even sure when your fist punched the screen and broke the glass. The pain of cut skin and the smell of burned circuits has brought you back to senses. It's a miracle that your show of anger didn't cause a power shortage. Somehow you feel better, but you can't shrug off the feeling that the person that punched the screen wasn't you.][/nomarkup]
+<<DealDamage ($pcName,2,"superficial")>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Haha! Straight between the eyes!
+<<endif>>
+{$kieran}: Goddamit! There could be some useful data!
+-> {$pcName}: Don't scream at me! I don't even know what happened! <<if visited("beastTalk") == false>>
+    <<jump beastTalk>>
+===
+title: wrongPassword
+---
+[nomarkup][You write the password in every possible way that got into your head. It looks like it isn't it.][/nomarkup]
+<<jump deskExamination>>
 ===

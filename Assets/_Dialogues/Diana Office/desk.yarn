@@ -34,7 +34,7 @@ title: throwAsh
         <<set $safeCode to true>>
         [nomarkup][Yout put the ashtray back on the desk.][/nomarkup]
         <<jump deskExamination>>
-<<else Roll("intelligence","investigation") >=3>>
+<<elseif Roll("intelligence","investigation") >=3>>
     [nomarkup][You saw the same ashtrays downstairs. You didn't pay too much attention to how they look in the inside though. Maybe it's something similar to casino chips - they often have year of opening written on it.][/nomarkup]
     -> {$pcName}: When The Embassy was opened?
         {$kieran}: In 1969. Why?

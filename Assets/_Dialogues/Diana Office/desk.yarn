@@ -2,11 +2,14 @@
 tags:
 ---
 <<declare $satanDate to false>>
+<<declare $computerUnusable to false>>
 [nomarkup][This desk looks like a solid piece of furniture. Surely it shows anyone that seats behind it as a king - or in this case queen - of entire place. It's not neat though. There's a lot of clutter laying around, seemingly disorganised, but when you approach it closer you can see a pattern. A computer, IBM line you think, rests on the side. You can only dream about this achievement of modern technology.][/nomarkup]
 -> [nomarkup][Inspect the desk.][/nomarkup]
     <<jump deskExamination>>
+<<if $computerUnusable ==false>>
 -> [nomarkup][Boot the computer.][/nomarkup]
     <<jump computerTurnedOn>>
+<<endif>>
 -> [nomarkup][Leave the desk alone.][/nomarkup]
 ===
 title: deskExamination
@@ -27,7 +30,7 @@ title: deskExamination
 ===
 title: throwAsh
 ---
-[nomarkup][Ash inside the ashtray is stubborn as a mole. Through the years of use it doesn't want to simply go away - you'll probably need to wash it to see clearly what is in it's bottom. But you can work with what you see. You squint your eyes trying to decipher the inscription surrounding Union Jack.][/nomarkup]
+[nomarkup][Ash inside the ashtray is stubborn as a mule. Through the years of use it doesn't want to simply go away - you'll probably need to wash it to see clearly what is in it's bottom. But you can work with what you see. You squint your eyes trying to decipher the inscription surrounding Union Jack.][/nomarkup]
 <<if Roll("resolve","awareness") >=3>>
     -> {$pcName}: Spreading the anarchy in Las Vegas since 19… \[It's a miracle you were able to read nearly entire sentence.\]
         {$kieran}: It's probably the year when Diana started. 1969.
@@ -82,7 +85,7 @@ title: deskNewspaper
 title: computerTurnedOn
 ---
 [nomarkup][As soon as you flipped the switch on the side of the box that is nesting the screen it comes to life. A series of scratches and other weird noises come out from the steel cube. The glass screen showed a series of letters and then it all stopped asking you for a password.][/nomarkup]
--> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.][Intelligence + Technology][/nomarkup]
+-> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.][Intelligence + Technology][/nomarkup] <<if visited("hackingFailure") == false or visited("hackingSuccess") == false>>
     <<if Roll("intelligence","technology") >=3>>
         <<jump hackingSuccess>>
     <<else>>
@@ -143,4 +146,48 @@ title: wrongPassword
 ---
 [nomarkup][You write the password in every possible way that got into your head. It looks like it isn't it.][/nomarkup]
 <<jump deskExamination>>
+===
+title: accessGranted
+---
+[nomarkup][Just when you hit enter the screen changes, passing you to the next set of lines and signs welcoming Diana. There are several files. Mostly financial stuff starting from 1969. You guess that she had to move it from paper. Probably a good call? Definitely for you.][/nomarkup]
+-> [nomarkup][Examine recent logs.][Resolve + Investigation][/nomarkup] <<if visited("recentLogs") == false>>
+    <<jump recentLogs>>
+-> [nomarkup][Examine older logs.][Intelligence + Finance][/nomarkup] <<if visited("olderLogs") == false>>
+    <<jump olderLogs>>
+<<if $safeDiscovered ==true>>
+    -> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if visited("searchQuerry") == false>>
+        <<jump searchQuerry>>
+<<endif>>
+-> [nomarkup][Leave computer as it is.][/nomarkup]
+===
+title: recentLogs
+---
+<<if Roll("resolve","investigation") >=3>>
+    [nomarkup][You dig through boresome and similar looking sets of data indicating losses and gains of the club. As you are nearing to a point of surrendering you see that Diana ordered a wall mounted safe. It was quite a cost. But as a Vegas clubowner she probably could afford that without a big problem. You look around the walls scouring for it. But you don't see any. Maybe it's behind one of the paintings?][/nomarkup] #success
+<<else>>
+    [nomarkup][You dig through boresome and similar looking sets of data indicating losses and gains of the club. You wasted too much time looking at that stuff. You'll find nothing in here.][/nomarkup]
+<<endif>>
+<<jump accessGranted>>
+===
+title: olderLogs
+---
+<<if Roll("inteligence","finance") >=3>>
+    [nomarkup][Nothing too incriminating. Just some “creative accounting” here and there.][/nomarkup]
+        -> [nomarkup][Look for a floppy disc and save the data.][/nomarkup]
+            <<if GetAttributeSkillPoolSize("wits","politics") >=3>>
+                [nomarkup][You probably don't want to use that as a leverage against Diana since she is a “ghoul” of someone who is apparently quite important here. At least now, when you don't have any backing.][/nomarkup]
+                <<jump accessGranted>>
+            <<else>>
+                [nomarkup][Maybe a small thing, but it could prove quite useful if you'd like to blackmail Diana into talking.][/nomarkup]
+                <<jump accessGranted>>
+            <<endif>>
+<<else>>
+    [nomarkup][Nothing of interest. At least to you. You are no accountant and so you can't tell if something is wrong or good in the books.][/nomarkup] #failure
+    <<jump accessGranted>>
+<<endif>>
+===
+title: searchQuerry
+---
+[nomarkup][Computer grinds the files in search of anything “safe” related. And… bingo! You find that Diana ordered one some time ago and the other file indicates that the code is set to 1969.][/nomarkup]
+<<jump accessGranted>>
 ===

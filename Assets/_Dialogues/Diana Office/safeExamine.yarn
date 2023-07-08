@@ -1,25 +1,41 @@
 ﻿title: safeExamine
 ---
 [nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup]
--> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeFailure") == false>>
-    <<if roll("resolve","larceny" >=6)>>
-        <<jump safeOpenedwoCode>>
-    <<else>>
-        <<jump safeFailure>>
-    <<endif>>
+-> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeResolveRoll") == false>>
+    <<jump safeResolveRoll>>
 <<if $crowbar ==true>>
--> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if visited("safeFailure") == false>>
-    <<if roll("strength","larceny" >=6)>>
-        <<jump safeForceOpened>>
-    <<else>>
-        <<jump safeFailure>>
-    <<endif>>
+-> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if visited("safeStrengthRoll") == false>>
+    <<jump safeStrengthRoll>>
 <<endif>>
 <<if $safeCode ==true>>
--> [nomarkup][Open the safe with a combination.][/nomarkup]
+-> [nomarkup][Open the safe with a 1969 combination.][/nomarkup]
     <<jump safeOpenedwCode>>
 <<endif>>
+<<if $satanDate ==true>>
+-> [nomarkup][Open the safe with a 1966 combination.][/nomarkup]
+    <<jump safeFailure>>
+<<endif>>
+<<if $goldBugCode ==true>>
+-> [nomarkup][Open the safe with a 4113 combination.][/nomarkup]
+    <<jump safeFailure>>
+<<endif>>
 -> [nomarkup][Step away.][/nomarkup]
+===
+title: safeResolveRoll
+---
+<<if roll("resolve","larceny" >=6)>>
+    <<jump safeOpenedwoCode>>
+<<else>>
+    <<jump safeFailure>>
+<<endif>>
+===
+title: safeStrengthRoll
+---
+<<if roll("strength","larceny" >=6)>>
+    <<jump safeForceOpened>>
+<<else>>
+    <<jump safeFailure>>
+<<endif>>
 ===
 title: safeOpenedwoCode
 ---
@@ -34,6 +50,8 @@ title: safeForceOpened
 title: safeFailure
 ---
 [nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup]
+<<set $satanDate to false>>
+<<set $goldBugCode to false>>
 <<jump safeExamine>>
 ===
 title: safeOpenedwCode

@@ -2,6 +2,7 @@
 tags:
 ---
 <<declare $satanDate to false>>
+<<declare $satanCode to false>>
 <<declare $computerUnusable to false>>
 [nomarkup][This desk looks like a solid piece of furniture. Surely it shows anyone that seats behind it as a king - or in this case queen - of entire place. It's not neat though. There's a lot of clutter laying around, seemingly disorganised, but when you approach it closer you can see a pattern. A computer, IBM line you think, rests on the side. You can only dream about this achievement of modern technology.][/nomarkup]
 -> [nomarkup][Inspect the desk.][/nomarkup]
@@ -10,6 +11,8 @@ tags:
 -> [nomarkup][Boot the computer.][/nomarkup]
     <<jump computerTurnedOn>>
 <<endif>>
+-> [nomarkup][Check the drawers.][/nomarkup]
+    <<jump deskDrawers>>
 -> [nomarkup][Leave the desk alone.][/nomarkup]
 ===
 title: deskExamination
@@ -76,6 +79,7 @@ title: deskBook
 {$kieran}: I've mentioned him once when I was talking with Diana. Didn't thought she'd remember about it.
 [nomarkup][One of the bookmarks signs the date of founding the Church of Satan - 30th April 1966.][/nomarkup]
 <<set $satanDate to true>>
+<<set $satanCode to true>>
 <<jump deskExamination>>
 ===
 title: deskNewspaper
@@ -105,6 +109,10 @@ title: computerTurnedOn
     <<jump wrongPassword>>
 -> [nomarkup][Enter the password - "Password".][/nomarkup]
     <<jump wrongPassword>>
+<<if $goldBugPassword ==true>>
+-> [nomarkup][Enter the password - "Gold-Bug".][/nomarkup]
+    <<jump wrongPassword>>
+<<endif>>
 -> [nomarkup][Leave computer as it is.][/nomarkup]
     <<jump desk>>
 ===
@@ -190,4 +198,71 @@ title: searchQuerry
 ---
 [nomarkup][Computer grinds the files in search of anything “safe” related. And… bingo! You find that Diana ordered one some time ago and the other file indicates that the code is set to 1969.][/nomarkup]
 <<jump accessGranted>>
+===
+title: deskDrawers
+---
+[nomarkup][Not much in here. Most of them contain paper, writing utensils, some various tokens… in one there was even an unopened pack of the Embassy cigarettes. There is one drawer that remains locked to you. You see a keyhole. But lock doesn't look too complicated.][/nomarkup]
+-> [nomarkup][Pick the drawer open.][Dexterity + Larceny][/nomarkup]
+    <<if Roll("strenth","larceny") >=2>>
+        <<jump drawerLockpickSuccess>>
+    <<else>>
+        <<jump drawerFailure>>
+    <<endif>>
+-> [nomarkup][Break the lock by force.][Strength + Larceny][/nomarkup]
+    <<if Roll("strength","larceny") >=2>>
+         <<jump drawerStrengthSuccess>>
+    <<else>>
+        <<jump drawerFailure>>
+    <<endif>>
+===
+title: drawerLockpickSuccess
+---
+[nomarkup][The lock isn't a challenge for you. All you needed was a paper clip - which was abundant in one of the drawers - and a little patience.][/nomarkup]
+<<jump drawerSuccess>>
+===
+title: drawerStrengthSuccess
+---
+[nomarkup][The lock isn't strong. It easily breaks when you apply more force while pulling the drawer.][/nomarkup]
+<<jumo drawerSuccess>>
+===
+title: drawerFailure
+---
+[nomarkup][The lock seems to be more than you thought. What secrets it may hide if it is as resilient as armored safe? You'll never know… this is getting more and more annoying. As if everything around you is sworn to stay in your way.][/nomarkup]
+<<if GetBloodPoints($pcName) >1>>
+    -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup]
+        <<DecreaseWillpower ($pcName, 1)>>
+        <<jump desk>>
+    -> [nomarkup][Give in to the feeling.][/nomarkup]
+        <<jump drawerDestroyed>>
+<<else>>
+    -> [nomarkup][This is ridiculous. You count to ten, breathing slowly. And hope nothing of importance is hidden inside the drawer.][/nomarkup]
+        <<jump desk>>
+<<endif>>
+===
+title: drawerDestroyed
+---
+[nomarkup][This is NOT how the things suppose to work. In your line of work you are the master of surroundings. Not the other way around! You pull the drawer towards yourself to the point where you unhinge it from it’s place and make it flying across the room. Papers that were stored inside it went flying across the room. There’s no way now to make anything from them. At least not during several hours you have. In best scenario.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Hey! Let me know earlier if you want to throw something!
+<<endif>>
+{$kieran}: By the Blood! It's not how lockpicking works!
+-> {$pcName}: Don't scream at me! I don't even know what happened! <<if visited("beastTalk") == false>>
+    <<jump beastTalk>>
+===
+title: drawerSuccess
+---
+[nomarkup][You pull the drawer. Lock is no longer an issue standing in your way.][/nomarkup]
+{$kieran}: Something useful in there?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: You are thorough, aren't you?
+<<endif>>
+[nomarkup][You sift through documents that are in the drawer. From what you see they are mostly orders, receipts and such.][/nomarkup]
+ <<if GetAttributeSkillPoolSize("resolve","awareness") or GetAttributeSkillPoolSize("resolve","inmvestigation") >=2>>
+                [nomarkup][You find a receipt for wall safe as well as a combination note to it. It's 1969.][/nomarkup]
+                <<set $safeDiscovered to true>>
+                <<jump desk>>
+            <<else>>
+                [nomarkup][You see nothing you can use, but the oldest documents are from 1969.][/nomarkup]
+                <<jump desk>>
+            <<endif>>
 ===

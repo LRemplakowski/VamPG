@@ -7,6 +7,7 @@ tags:
 <<declare $vibrantVistas to false>>
 <<declare $safeDiscovered to false>>
 <<declare $luciaLoveLetter to false>>
+<<declare $paintingsPutDown to false>>
 [nomarkup][The wall is decorated with kitsch “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup]
 -> [nomarkup][Destroy the paintings.][/nomarkup]
     <<jump paintingsDestroyed>>
@@ -16,9 +17,13 @@ tags:
     <<jump paintingIntelligenceRoll>>
 -> [nomarkup][Those seem to be completely out of place… you wonder why…][/nomarkup]<<if visited("paintingWitsSuccess") == false>>  
     <<jump paintingWitsRoll>>
-<<if $safeDiscovered ==true>>
+<<if $paintingsPutDown ==true>>
     -> [nomarkup][Examine the safe.][/nomarkup]
         <<jump safeExamine>>
+<<endif>>
+<<if $safeDiscovered ==true>>
+    -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if visited("successContinued") == false>>
+        <<jump successContinued>>
 <<endif>>
 -> [Step away.]
 ===
@@ -87,11 +92,13 @@ title: stampExamine
 title: paintingIntelligenceSuccess
 ---
 [nomarkup][Those are hideous pieces of art, but still - you recognize that this particular set looks like it is worth quite a bit. It had to be bought in one of the local galleries or on an auction. Such pieces often have stamps or notes on their back. It may even contain some useful information. Like when or where this set was bought. You stare at the picture which seems to be made under the acid influence for a minute and then dislodge it from the wall and look at it's back. You are not disappointed - indeed there is a paper stamp... and the safe.][/nomarkup] #success
+<<set $safeDiscovered to true>>
 <<jump successContinued>>
 ===
 title: paintingWitsSuccess
 ---
 [nomarkup][This painting is here on purpose. It's not a simple wall decoration. It's here for a reason. It just doesn't sit with Diana proudly painting herself as a british punk rocker. Otherwise she'd just place Sex Pistols or The Exploited posters on the wall. Maybe there's something worth looking for behind one part of this poliptich? You go with your gut, and dislodge one of the paintings. You were right. There's a paper stamp on the back. And the safe...][/nomarkup] #success
+<<set $safeDiscovered to true>>
 <<jump successContinued>>
 === 
 title: paintingSuccessExamination
@@ -137,6 +144,7 @@ title: paintingFailure
 title: paintingsDestroyed
 ---
 [nomarkup][Paintings are't a big obstacle to you. They are just plain canvas hanged on wall. You punch the frame and rip the canvas leaving miserable shreds as a witness to your growing frustration. Somehow you feel better...and terrified. This act was something not entirely in your control.][/nomarkup]
+<<set $safeDiscovered to true>>
 <<set $paintingsAreDestroyed to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Such depths of aggression and viciousness. I like it. You should make your own exhibition one day. \[Anastasia grins\]

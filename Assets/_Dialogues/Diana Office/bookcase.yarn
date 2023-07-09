@@ -138,6 +138,7 @@ title: bookcaseAcademicsSuccess
 <<else>>
     [nomarkup][It's probably just a circumstancial book laying around. You put it back at its place.][nomarkup]
     <<jump bookcase>>
+<<endif>>
 ===
 title: poeBookExamine
 ---
@@ -238,7 +239,7 @@ title: poeMissingPagesDexterityFailure
 ---
 [nomarkup][The shelf is really tall. Even when you step on your fingers you can't reach the stuff. You look around for something you can climb on, but all you see are heavy furniture and nothing else. Praying that shelves won't break under your weight you decide to use them as improvised ladder. All you achieved was wounded pride as you slipped when reaching for the page and fell down on your ass.][/nomarkup] #failure
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Graceful as a swan. \[She chuckles.]\
+    {$anastasia}: Graceful as a swan. \[She chuckles.\]
 <<endif>>
 {$kieran}: You're alright?
 -> {$pcName}: Yes, I'm fine…

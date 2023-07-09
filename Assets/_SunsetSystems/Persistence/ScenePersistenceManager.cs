@@ -10,11 +10,8 @@ namespace SunsetSystems.Persistence
     [RequireComponent(typeof(UniqueId))]
     public class ScenePersistenceManager : MonoBehaviour, ISaveable
     {
+        [ReadOnly, ShowInInspector]
         private HashSet<IPersistentEntity> persistentEntitiesSet = new();
-        [SerializeField, ReadOnly]
-        private int persistentEntitiesCount = 0;
-        [SerializeField, ReadOnly]
-        private List<PersistentEntity> persistentEntitiesList = new();
         [SerializeField, ReadOnly]
         private UniqueId _unique;
 
@@ -61,25 +58,12 @@ namespace SunsetSystems.Persistence
                 return;
             }
             persistentEntitiesSet.Add(persistentEntity);
-            persistentEntitiesCount = persistentEntitiesSet.Count;
         }
 
         public void Unregister(IPersistentEntity persistentEntity)
         {
             persistentEntitiesSet.Remove(persistentEntity);
-            persistentEntitiesCount = persistentEntitiesSet.Count;
         }
-#if UNITY_EDITOR
-        [Button]
-        private void UpdateEntitiesInspectorList()
-        {
-            persistentEntitiesList = new();
-            foreach (IPersistentEntity entity in persistentEntitiesSet)
-            {
-                persistentEntitiesList.Add(entity as PersistentEntity);
-            }
-        }
-#endif
 
         private void Awake()
         {

@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
-using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using UMA.CharacterSystem;

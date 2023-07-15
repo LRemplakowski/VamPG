@@ -11,15 +11,20 @@ namespace ES3Editor
 		public ES3Defaults editorSettings = null;
 		public ES3SerializableSettings settings = null;
 		public SerializedObject so = null;
-		public SerializedProperty assemblyNamesProperty = null;
+		public SerializedProperty referenceFoldersProperty = null;
 
         private Vector2 scrollPos = Vector2.zero;
 
 		public SettingsWindow(EditorWindow window) : base("Settings", window){}
 
+        public void OnEnable()
+        {
+
+        }
+
 		public override void OnGUI()
 		{
-			if(settings == null || editorSettings == null || assemblyNamesProperty == null)
+			if(settings == null || editorSettings == null)
 				Init();
 
             var style = EditorStyle.Get;
@@ -81,6 +86,50 @@ namespace ES3Editor
                         editorSettings.autoUpdateReferences = EditorGUILayout.Toggle(editorSettings.autoUpdateReferences);
                     }
 
+                    if (editorSettings.autoUpdateReferences)
+                    {
+                        using (new EditorGUILayout.HorizontalScope())
+                        {
+                            var content = new GUIContent("-- When changes are made", "Should Easy Save update the reference manager when objects in your scene changes?");
+                            editorSettings.updateReferencesWhenSceneChanges = EditorGUILayout.Toggle(content, editorSettings.updateReferencesWhenSceneChanges);
+                        }
+
+                        using (new EditorGUILayout.HorizontalScope())
+                        {
+                            var content = new GUIContent("-- When scene is saved", "Should Easy Save update the reference manager when objects in your scene is saved?");
+                            editorSettings.updateReferencesWhenSceneIsSaved = EditorGUILayout.Toggle(content, editorSettings.updateReferencesWhenSceneIsSaved);
+                        }
+
+                        using (new EditorGUILayout.HorizontalScope())
+                        {
+                            var content = new GUIContent("-- When scene is opened", "Should Easy Save update the reference manager you open a scene in the Editor?");
+                            editorSettings.updateReferencesWhenSceneIsOpened = EditorGUILayout.Toggle(content, editorSettings.updateReferencesWhenSceneIsOpened);
+                        }
+                        EditorGUILayout.Space();
+                    }
+
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        so.Update();
+                        EditorGUILayout.PropertyField(referenceFoldersProperty, true);
+                        so.ApplyModifiedProperties();
+                    }
+                    EditorGUILayout.Space();
+
+                    /*using (new EditorGUILayout.HorizontalScope())
+                    {
+                        var content = new GUIContent("Reference depth", "How deep should Easy Save look when gathering references from an object? Higher means deeper.");
+                        EditorGUILayout.PrefixLabel(content);
+                        editorSettings.collectDependenciesDepth = EditorGUILayout.IntField(editorSettings.collectDependenciesDepth);
+                    }*/
+
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        var content = new GUIContent("Reference timeout (seconds)", "How many seconds should Easy Save taking collecting references for an object before timing out?");
+                        EditorGUILayout.PrefixLabel(content);
+                        editorSettings.collectDependenciesTimeout = EditorGUILayout.IntField(editorSettings.collectDependenciesTimeout);
+                    }
+
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         EditorGUILayout.PrefixLabel("Use Global References");
@@ -106,7 +155,8 @@ namespace ES3Editor
 
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        EditorGUILayout.PrefixLabel("Add All Prefabs to Manager");
+                        var content = new GUIContent("Add All Prefabs to Manager", "Should all prefabs with ES3Prefab Components be added to the manager?");
+                        EditorGUILayout.PrefixLabel(content);
                         editorSettings.addAllPrefabsToManager = EditorGUILayout.Toggle(editorSettings.addAllPrefabsToManager);
                     }
 
@@ -123,13 +173,10 @@ namespace ES3Editor
 		public void Init()
 		{
             editorSettings = ES3Settings.defaultSettingsScriptableObject;
-
 			settings = editorSettings.settings;
-			/*so = new SerializedObject(editorSettings);
-			var settingsProperty = so.FindProperty("settings");
-			assemblyNamesProperty = settingsProperty.FindPropertyRelative("assemblyNames");*/
-			
-		}
+            so = new SerializedObject(editorSettings);
+            referenceFoldersProperty = so.FindProperty("referenceFolders");
+        }
 	}
 
 }

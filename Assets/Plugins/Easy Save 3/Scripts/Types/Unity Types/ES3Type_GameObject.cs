@@ -55,10 +55,14 @@ namespace ES3Types
 
             List<Component> components;
 
+            var es3GameObject = instance.GetComponent<ES3GameObject>();
+
             // If there's an ES3AutoSave attached and Components are marked to be saved, save these.
             if (es3AutoSave != null)
                 components = es3AutoSave.componentsToSave;
-
+            // If there's an ES3GameObject attached, save these.
+            else if (es3GameObject != null)
+                components = es3GameObject.components;
             // Otherwise, only save explicitly-supported Components, /*or those explicitly marked as Serializable*/.
             else
             {
@@ -82,7 +86,7 @@ namespace ES3Types
             while (true)
             {
                 if (refMgr == null)
-                    throw new InvalidOperationException("An Easy Save 3 Manager is required to load references. To add one to your scene, exit playmode and go to Assets > Easy Save 3 > Add Manager to Scene");
+                    throw new InvalidOperationException("An Easy Save 3 Manager is required to load references. To add one to your scene, exit playmode and go to Tools > Easy Save 3 > Add Manager to Scene");
 
                 var propertyName = ReadPropertyName(reader);
 
@@ -162,7 +166,11 @@ namespace ES3Types
                         instance.SetActive(reader.Read<bool>(ES3Type_bool.Instance));
                         break;
                     case "children":
-                        reader.Read<GameObject[]>();
+                        var children = reader.Read<GameObject[]>();
+                        var parent = instance.transform;
+                        // Set the parent of each child to this Transform in case the reference ID of the parent has changed.
+                        foreach (var child in children)
+                            child.transform.SetParent(parent);
                         break;
                     case "components":
                         ReadComponents(reader, instance);
@@ -221,9 +229,9 @@ namespace ES3Types
                         // Else, create a new Component.
                         else
                         {
-                            var component = ES3TypeMgr.GetOrCreateES3Type(type).Read<Component>(reader);
-                            if(component != null)
-                                ES3ReferenceMgrBase.Current.Add((Component)component, componentRef);
+                            var component = go.AddComponent(type);
+                            ES3TypeMgr.GetOrCreateES3Type(type).ReadInto<Component>(reader, component);
+                            ES3ReferenceMgrBase.Current.Add(component, componentRef);
                         }
                         break;
                     }

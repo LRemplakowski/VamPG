@@ -236,7 +236,7 @@ public abstract class ES3Writer : IDisposable
 	{
         var refMgr = ES3ReferenceMgrBase.Current;
         if (refMgr == null)
-            throw new InvalidOperationException("An Easy Save 3 Manager is required to save references. To add one to your scene, exit playmode and go to Assets > Easy Save 3 > Add Manager to Scene");
+            throw new InvalidOperationException("An Easy Save 3 Manager is required to save references. To add one to your scene, exit playmode and go to Tools > Easy Save 3 > Add Manager to Scene");
 
         // Get the reference ID, if it exists, and store it.
         long id = refMgr.Get(obj);

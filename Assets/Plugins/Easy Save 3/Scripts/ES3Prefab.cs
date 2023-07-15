@@ -92,7 +92,7 @@ namespace ES3Internal
 #if UNITY_2021_3_OR_NEWER
             if (this.gameObject.scene.name != null || UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null)
 #elif UNITY_2018_3_OR_NEWER
-            if (this.gameObject.scene.name != null || UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null)
+            if (this.gameObject.scene.name != null || UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null)
 #else
             if (this.gameObject.scene.name != null)
 #endif
@@ -110,7 +110,7 @@ namespace ES3Internal
             bool addedNewReference = false;
 
             // Add the GameObject's dependencies to the reference list.
-            foreach (var obj in ES3ReferenceMgr.CollectDependencies(gos))
+            foreach (var obj in EditorUtility.CollectDependencies(gos))
             {
                 var dependency = (UnityEngine.Object)obj;
                 if (obj == null || !ES3ReferenceMgr.CanBeSaved(dependency))

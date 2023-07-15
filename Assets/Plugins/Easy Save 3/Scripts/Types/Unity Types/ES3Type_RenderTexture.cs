@@ -19,7 +19,6 @@ namespace ES3Types
             writer.WriteProperty("descriptor", instance.descriptor);
             writer.WriteProperty("antiAliasing", instance.antiAliasing, ES3Type_int.Instance);
             writer.WriteProperty("isPowerOfTwo", instance.isPowerOfTwo, ES3Type_bool.Instance);
-            writer.WriteProperty("masterTextureLimit", UnityEngine.RenderTexture.globalMipmapLimit, ES3Type_int.Instance);
             writer.WriteProperty("anisotropicFiltering", UnityEngine.RenderTexture.anisotropicFiltering);
             writer.WriteProperty("wrapMode", instance.wrapMode);
             writer.WriteProperty("wrapModeU", instance.wrapModeU);
@@ -81,9 +80,6 @@ namespace ES3Types
                         break;
                     case "descriptor":
                         instance.descriptor = reader.Read<UnityEngine.RenderTextureDescriptor>();
-                        break;
-                    case "masterTextureLimit":
-                        UnityEngine.RenderTexture.globalMipmapLimit = reader.Read<System.Int32>(ES3Type_int.Instance);
                         break;
                     case "anisotropicFiltering":
                         UnityEngine.RenderTexture.anisotropicFiltering = reader.Read<UnityEngine.AnisotropicFiltering>();

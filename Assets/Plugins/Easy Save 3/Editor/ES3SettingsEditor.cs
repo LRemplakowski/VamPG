@@ -45,6 +45,7 @@ namespace ES3Editor
 				settings.bufferSize = EditorGUILayout.IntField("Buffer Size", settings.bufferSize);
 				settings.memberReferenceMode = (ES3.ReferenceMode)EditorGUILayout.EnumPopup("Serialise Unity Object fields", settings.memberReferenceMode);
                 settings.serializationDepthLimit = EditorGUILayout.IntField("Serialisation Depth", settings.serializationDepthLimit);
+                settings.postprocessRawCachedData = EditorGUILayout.Toggle(new GUIContent("Postprocess raw cached data"), settings.postprocessRawCachedData);
 
                 EditorGUILayout.Space();
 

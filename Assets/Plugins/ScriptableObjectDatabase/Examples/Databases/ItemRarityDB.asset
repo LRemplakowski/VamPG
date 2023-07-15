@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec0b2227f15ccd4d818f8c7dd6ee09f, type: 3}
+  m_Name: ItemRarityDB
+  m_EditorClassIdentifier: 
+  data:
+    id: 24268
+    mKeys: 405e0000256a0000b2290000
+    visibility: 0
+    pIcons:
+      maxSize: 2048
+      mKeys: 405e0000256a0000b2290000
+      mUvs:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0.5
+        height: 0.5
+      - serializedVersion: 2
+        x: 0.5
+        y: 0
+        width: 0.5
+        height: 0.5
+      - serializedVersion: 2
+        x: 0
+        y: 0.5
+        width: 0.5
+        height: 0.5
+      mTexture: {fileID: 28341426678693698}
+    mVals:
+    - name: Common
+      pKey:
+        mKey32: 1590451776
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114978056846188116}
+      testInt: 0
+    - name: Uncommon
+      pKey:
+        mKey32: 1590454821
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114909954081603316}
+      testInt: 0
+    - name: Rare
+      pKey:
+        mKey32: 1590438322
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114720958296409514}
+      testInt: 0
+--- !u!28 &28341426678693698
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ItemRarityDB_Icons
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  serializedVersion: 2
+  m_Width: 8
+  m_Height: 8
+  m_CompleteImageSize: 256
+  m_TextureFormat: 5
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  image data: 256
+  _typelessdata: cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd00000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd00000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd00000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd00000000000000000000000000000000
+  m_StreamData:
+    offset: 0
+    size: 0
+    path: 
+--- !u!114 &114720958296409514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e88c1dc8bc14b4eb5c92f2ed3cd8eb, type: 3}
+  m_Name: Rare
+  m_EditorClassIdentifier: 
+  description: More uncommon than uncommon things.
+  color: {r: 1, g: 0, b: 0.89987373, a: 1}
+  dropChance: 3
+--- !u!114 &114909954081603316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e88c1dc8bc14b4eb5c92f2ed3cd8eb, type: 3}
+  m_Name: Uncommon
+  m_EditorClassIdentifier: 
+  description: Dont see this everywhere.
+  color: {r: 0, g: 1, b: 0.08161616, a: 1}
+  dropChance: 45
+--- !u!114 &114978056846188116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e88c1dc8bc14b4eb5c92f2ed3cd8eb, type: 3}
+  m_Name: Common
+  m_EditorClassIdentifier: 
+  description: Not too rare.
+  color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  dropChance: 74

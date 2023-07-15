@@ -8,32 +8,19 @@ using System.Linq;
 using System;
 
 [InitializeOnLoad]
-public class ES3ScriptingDefineSymbols : IActiveBuildTargetChanged
+public class ES3ScriptingDefineSymbols
 {
     static ES3ScriptingDefineSymbols()
     {
         SetDefineSymbols();
     }
 
-
-    public int callbackOrder { get { return 0; } }
-    public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
-    {
-        SetDefineSymbols();
-    }
-
     static void SetDefineSymbols() 
     {
-        foreach (var assembly in CompilationPipeline.GetAssemblies())
-        {
-            if (assembly.name.Contains("VisualScripting"))
-            {
-                SetDefineSymbol("UNITY_VISUAL_SCRIPTING");
-                break;
-            }
-        }
+        if (Type.GetType("Unity.VisualScripting.IncludeInSettingsAttribute, Unity.VisualScripting.Core") != null)
+            SetDefineSymbol("UNITY_VISUAL_SCRIPTING");
 
-        if (Type.GetType("Bolt.Break, Bolt.Flow.Runtime") != null)
+        if (Type.GetType("Ludiq.IncludeInSettingsAttribute, Ludiq.Core.Runtime") != null)
             SetDefineSymbol("BOLT_VISUAL_SCRIPTING");
     }
 
@@ -43,9 +30,16 @@ public class ES3ScriptingDefineSymbols : IActiveBuildTargetChanged
         foreach (var target in GetAllNamedBuildTargets())
         {
             string[] defines;
-            PlayerSettings.GetScriptingDefineSymbols(target, out defines);
-            if(!defines.Contains(symbol))
-                PlayerSettings.SetScriptingDefineSymbols(target, symbol);
+            try
+            {
+                PlayerSettings.GetScriptingDefineSymbols(target, out defines);
+                if (!defines.Contains(symbol))
+                {
+                    ArrayUtility.Add(ref defines, symbol);
+                    PlayerSettings.SetScriptingDefineSymbols(target, defines);
+                }
+            }
+            catch { }
         }
 #else
         string definesString = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
@@ -54,13 +48,6 @@ public class ES3ScriptingDefineSymbols : IActiveBuildTargetChanged
             PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, string.Join(";", allDefines.Concat(new string[] { symbol }).ToArray()));
 #endif
             return;
-    }
-
-    static int GetCurrentUnixTimestamp()
-    {
-        DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        TimeSpan diff = DateTime.Now.ToUniversalTime() - origin;
-        return (int)Math.Floor(diff.TotalSeconds);
     }
 
 #if UNITY_2021_2_OR_NEWER
@@ -73,6 +60,10 @@ public class ES3ScriptingDefineSymbols : IActiveBuildTargetChanged
         {
             // We exclude 'Unknown' because this can throw errors when used with certain methods.
             if (staticField.Name == "Unknown")
+                continue;
+
+            // A bug at Unity's end means that Stadia can throw an error.
+            if (staticField.Name == "Stadia")
                 continue;
 
             if (staticField.FieldType == typeof(NamedBuildTarget))

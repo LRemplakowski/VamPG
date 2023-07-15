@@ -1,9 +1,9 @@
+using SunsetSystems.Dialogue;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems.UI
 {
@@ -19,7 +19,7 @@ namespace SunsetSystems.UI
         [field: SerializeField]
         public HoverNameplate HoverNameplate { get; private set; }
         [field: SerializeField]
-        public DialogueViewBase DialogueGUI { get; private set; }
+        public DialogueWithHistoryView DialogueGUI { get; private set; }
         [field: SerializeField]
         public GameObject HelpOverlay { get; private set; }
 

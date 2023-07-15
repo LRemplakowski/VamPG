@@ -32,6 +32,34 @@ public class ES3Spreadsheet
 		get{ return rows; }
 	}
 
+    public int GetColumnLength(int col)
+    {
+        if (col >= cols)
+            return 0;
+
+        int maxRow = -1;
+
+        foreach(var index in cells.Keys)
+            if (index.col == col && index.row > maxRow)
+                maxRow = index.row;
+
+        return maxRow+1;
+    }
+
+    public int GetRowLength(int row)
+    {
+        if (row >= rows)
+            return 0;
+
+        int maxCol = -1;
+
+        foreach (var index in cells.Keys)
+            if (index.row == row && index.col > maxCol)
+                maxCol = index.col;
+
+        return maxCol + 1;
+    }
+
     public void SetCell(int col, int row, object value)
     {
         var type = value.GetType();

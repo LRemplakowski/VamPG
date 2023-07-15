@@ -1,7 +1,6 @@
 using SunsetSystems.Dialogue;
 using System;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -61,8 +60,6 @@ namespace SunsetSystems.Entities.Characters
         }
 
         [SerializeField]
-        private YarnProject dialogueProject;
-        [SerializeField]
         private string _startNode;
 
         protected override void OnValidate()
@@ -87,7 +84,7 @@ namespace SunsetSystems.Entities.Characters
         {
             if (!Interactable)
                 return;
-            DialogueManager.Instance.StartDialogue(_startNode, dialogueProject);
+            //DialogueManager.Instance.StartDialogue(_startNode, dialogueProject);
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             Interacted = true;
             TargetedBy = null;

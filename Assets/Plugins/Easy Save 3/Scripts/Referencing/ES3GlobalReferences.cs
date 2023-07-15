@@ -29,8 +29,10 @@ namespace ES3Internal
         {
             get
             {
-                // If Global References is disabled, we still keep it enabled unless we're playing so that ES3ReferenceMgrs in different scenes still use the same IDs.
-                if (Application.isPlaying && !useGlobalReferences)
+                if (Application.isPlaying)
+                    return null;
+
+                if (!useGlobalReferences)
                     return null;
 
                 if (_globalReferences == null)

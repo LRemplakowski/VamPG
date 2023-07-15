@@ -56,17 +56,19 @@ namespace ES3Types
 				else
 				{
 					reader.overridePropertiesName = propertyName;
-					if(instance == null)
-					{
-						instance = ScriptableObject.CreateInstance(type);
-                        if(refMgr != null)
-						    refMgr.Add(instance, id);
+
+                    if (instance == null)
+                    {
+                        instance = ScriptableObject.CreateInstance(type);
+                        if (refMgr != null)
+                            refMgr.Add(instance, id);
                     }
-					break;
+
+                    break;
 				}
 			}
 
-			ReadScriptableObject<T>(reader, instance);
+            ReadScriptableObject<T>(reader, instance);
 			return instance;
 		}
 	}

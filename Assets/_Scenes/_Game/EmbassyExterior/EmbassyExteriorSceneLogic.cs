@@ -5,14 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems
 {
     public class EmbassyExteriorSceneLogic : DefaultSceneLogic
     {
-        [SerializeField]
-        private YarnProject _sceneDialogueProject;
         [SerializeField]
         private string _sceneStartDialogueNode;
 
@@ -21,8 +18,8 @@ namespace SunsetSystems
         public async override Task StartSceneAsync(LevelLoadingData data)
         {
             await base.StartSceneAsync(data);
-            if (_firstVisit)
-                DialogueManager.Instance.StartDialogue(_sceneStartDialogueNode, _sceneDialogueProject);
+            //if (_firstVisit)
+            //    DialogueManager.Instance.StartDialogue(_sceneStartDialogueNode, _sceneDialogueProject);
         }
 
         public override object GetSaveData()

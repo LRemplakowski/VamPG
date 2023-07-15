@@ -11,7 +11,7 @@ using System.Linq;
 public class ES3File
 {
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
-    internal static Dictionary<string, ES3File> cachedFiles = new Dictionary<string, ES3File>();
+    public static Dictionary<string, ES3File> cachedFiles = new Dictionary<string, ES3File>();
 
     public ES3Settings settings;
     private Dictionary<string, ES3Data> cache = new Dictionary<string, ES3Data>();
@@ -67,6 +67,8 @@ public class ES3File
                 foreach (KeyValuePair<string, ES3Data> kvp in reader.RawEnumerator)
                     cache[kvp.Key] = kvp.Value;
             }
+
+            timestamp = ES3.GetTimestamp(settingsWithTypeChecking);
         }
     }
 
@@ -80,6 +82,9 @@ public class ES3File
             this.settings = new ES3Settings();
         else
             this.settings = settings;
+
+        syncWithFile = true; // This ensures that the file won't be merged, which would prevent deleted keys from being deleted.
+
         SaveRaw(bytes, settings);
     }
 
@@ -104,10 +109,11 @@ public class ES3File
         if (settings == null)
             settings = new ES3Settings();
 
-        ES3.DeleteFile(settings);
-
         if (cache.Count == 0)
+        {
+            ES3.DeleteFile(settings);
             return;
+        }
 
         using (var baseWriter = ES3Writer.Create(settings, true, !syncWithFile, false))
         {
@@ -153,8 +159,13 @@ public class ES3File
         unencryptedSettings.compressionType = ES3.CompressionType.None;
 
         // If T is object, use the value to get it's type. Otherwise, use T so that it works with inheritence.
+        Type type;
+        if (value == null)
+            type = typeof(T);
+        else
+            type = value.GetType();
 
-        cache[key] = new ES3Data(ES3TypeMgr.GetOrCreateES3Type(typeof(T)), ES3.Serialize(value, unencryptedSettings));
+        cache[key] = new ES3Data(ES3TypeMgr.GetOrCreateES3Type(type), ES3.Serialize(value, unencryptedSettings));
     }
 
     /// <summary>Merges the data specified by the bytes parameter into this ES3File.</summary>
@@ -273,10 +284,13 @@ public class ES3File
     /// <summary>Loads the ES3File as a raw, unencrypted, uncompressed byte array.</summary>
     public byte[] LoadRawBytes()
     {
-        var unencryptedSettings = (ES3Settings)settings.Clone();
-        unencryptedSettings.encryptionType = ES3.EncryptionType.None;
-        unencryptedSettings.compressionType = ES3.CompressionType.None;
-        return GetBytes(unencryptedSettings);
+        var newSettings = (ES3Settings)settings.Clone();
+        if (!newSettings.postprocessRawCachedData)
+        {
+            newSettings.encryptionType = ES3.EncryptionType.None;
+            newSettings.compressionType = ES3.CompressionType.None;
+        }
+        return GetBytes(newSettings);
     }
 
     /// <summary>Loads the ES3File as a raw, unencrypted, uncompressed string, using the encoding defined in the ES3File's settings variable.</summary>
@@ -303,8 +317,11 @@ public class ES3File
             var memorySettings = (ES3Settings)settings.Clone();
             memorySettings.location = ES3.Location.InternalMS;
             // Ensure we return unencrypted bytes.
-            memorySettings.encryptionType = ES3.EncryptionType.None;
-            memorySettings.compressionType = ES3.CompressionType.None;
+            if (!memorySettings.postprocessRawCachedData)
+            {
+                memorySettings.encryptionType = ES3.EncryptionType.None;
+                memorySettings.compressionType = ES3.CompressionType.None;
+            }
 
             using (var baseWriter = ES3Writer.Create(ES3Stream.CreateStream(ms, memorySettings, ES3FileMode.Write), memorySettings, true, false))
             {
@@ -364,6 +381,7 @@ public class ES3File
         {
             cachedFile = new ES3File(settings, false);
             cachedFiles.Add(settings.path, cachedFile);
+            cachedFile.syncWithFile = true; // This ensures that the file won't be merged, which would prevent deleted keys from being deleted.
         }
         // Settings might refer to the same file, but might have changed.
         // To account for this, we update the settings of the ES3File each time we access it.
@@ -373,16 +391,16 @@ public class ES3File
 
     internal static void CacheFile(ES3Settings settings)
     {
-        // If we're still using cached settings, default to file.
+        // If we're still using cached settings, set it to the default location.
         if (settings.location == ES3.Location.Cache)
         {
             settings = (ES3Settings)settings.Clone();
-            settings.location = ES3.Location.File;
+            // If the default settings are also set to cache, assume ES3.Location.File. Otherwise, set it to the default location.
+            settings.location = ES3Settings.defaultSettings.location == ES3.Location.Cache ? ES3.Location.File : ES3Settings.defaultSettings.location;
         }
 
         if (!ES3.FileExists(settings))
             return;
-
 
         // Disable compression and encryption when loading the raw bytes, and the ES3File constructor will expect encrypted/compressed bytes.
         var loadSettings = (ES3Settings)settings.Clone();
@@ -397,11 +415,12 @@ public class ES3File
     {
         if (settings == null)
             settings = new ES3Settings(ES3.Location.File);
-        // If we're still using cached settings, default to file.
+        // If we're still using cached settings, set it to the default location.
         else if (settings.location == ES3.Location.Cache)
         {
             settings = (ES3Settings)settings.Clone();
-            settings.location = ES3.Location.File;
+            // If the default settings are also set to cache, assume ES3.Location.File. Otherwise, set it to the default location.
+            settings.location = ES3Settings.defaultSettings.location == ES3.Location.Cache ? ES3.Location.File : ES3Settings.defaultSettings.location;
         }
 
         ES3File cachedFile;

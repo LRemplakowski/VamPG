@@ -12,7 +12,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Yarn.Unity;
 
 namespace SunsetSystems.Input
 {

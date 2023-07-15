@@ -40,10 +40,8 @@ namespace ES3Internal
             if (_Keys == null || _Values == null)
                 return;
 
-            if (_Keys.Count != _Values.Count)
-            {
-                throw new System.Exception(string.Format($"Key count is different to value count after deserialising dictionary. Keys: {_Keys.Count}; Values: {_Values.Count}"));
-            }
+			if(_Keys.Count != _Values.Count)
+				throw new System.Exception(string.Format("Key count is different to value count after deserialising dictionary."));
 
             this.Clear();
 

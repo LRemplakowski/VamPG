@@ -1,0 +1,208 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f3099f5af727e34cb3e3deb44fd271f, type: 3}
+  m_Name: ItemCategoryDB
+  m_EditorClassIdentifier: 
+  data:
+    id: 2976
+    mKeys: b0260000f3480000d52c0000427800008a2c0000f8320000
+    visibility: 0
+    pIcons:
+      maxSize: 2048
+      mKeys: f348000042780000d52c0000b02600008a2c0000f8320000
+      mUvs:
+      - serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0.25
+        height: 0.5
+      - serializedVersion: 2
+        x: 0
+        y: 0.5
+        width: 0.25
+        height: 0.5
+      - serializedVersion: 2
+        x: 0.25
+        y: 0
+        width: 0.25
+        height: 0.5
+      - serializedVersion: 2
+        x: 0.25
+        y: 0.5
+        width: 0.25
+        height: 0.5
+      - serializedVersion: 2
+        x: 0.5
+        y: 0
+        width: 0.25
+        height: 0.5
+      - serializedVersion: 2
+        x: 0.75
+        y: 0
+        width: 0.25
+        height: 0.5
+      mTexture: {fileID: 4637584230495864705}
+    mVals:
+    - name: Armor
+      pKey:
+        mKey32: 195045040
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114314220941662136}
+      testInt: 0
+    - name: Consumable
+      pKey:
+        mKey32: 195053811
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114477680867937706}
+      testInt: 0
+    - name: Tool
+      pKey:
+        mKey32: 195046613
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114135150698234344}
+      testInt: 0
+    - name: Weapon
+      pKey:
+        mKey32: 195065922
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114202757826283898}
+      testInt: 0
+    - name: Intangible
+      pKey:
+        mKey32: 195046538
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114983433443624348}
+      testInt: 0
+    - name: Planetary
+      pKey:
+        mKey32: 195048184
+      iconTexture: {fileID: 0}
+      mAsset: {fileID: 114831692905925390}
+      testInt: 0
+--- !u!114 &114135150698234344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Tool
+  m_EditorClassIdentifier: 
+  description: Used to create or manipulate things.
+--- !u!114 &114202757826283898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Weapon
+  m_EditorClassIdentifier: 
+  description: Used in combat to deal damage.
+--- !u!114 &114314220941662136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Armor
+  m_EditorClassIdentifier: 
+  description: Used to defend ones self again physical attacks.
+--- !u!114 &114477680867937706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Consumable
+  m_EditorClassIdentifier: 
+  description: Can consume this item.
+--- !u!114 &114831692905925390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Planetary
+  m_EditorClassIdentifier: 
+  description: Huge bodies of material.
+--- !u!114 &114983433443624348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537f62fb4e716fc4ba48c519d770e42c, type: 3}
+  m_Name: Intangible
+  m_EditorClassIdentifier: 
+  description: Cannot touch.
+--- !u!28 &4637584230495864705
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ItemCategoryDB_Icons
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 2
+  m_Width: 16
+  m_Height: 8
+  m_CompleteImageSize: 512
+  m_TextureFormat: 5
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 0
+  image data: 512
+  _typelessdata: cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd0000000000000000000000000000000000000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd0000000000000000000000000000000000000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd0000000000000000000000000000000000000000000000000000000000000000cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd0000000000000000000000000000000000000000000000000000000000000000
+  m_StreamData:
+    offset: 0
+    size: 0
+    path: 

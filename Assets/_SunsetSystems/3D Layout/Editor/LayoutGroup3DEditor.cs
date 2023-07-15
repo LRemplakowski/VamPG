@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿#if UNITY_EDITOR
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -20,10 +21,11 @@ public class LayoutGroup3DEditor : Editor
     private float Radius;
     private float StartAngleOffset;
     private bool AlignToRadius;
+    private LayoutAxis3D PrimaryAlignmentAxis;
+    private LayoutAxis3D SecondaryAlignmentAxis;
     private float SpiralFactor;
     private LayoutAxis3D LayoutAxis;
     private LayoutAxis3D SecondaryLayoutAxis;
-    private LayoutAxis2D GridLayoutAxis;
     private Vector3 StartPositionOffset;
     private Alignment PrimaryAlignment;
     private Alignment SecondaryAlignment;
@@ -47,7 +49,7 @@ public class LayoutGroup3DEditor : Editor
         // Element Dimensions
         EditorGUI.BeginChangeCheck();
 
-        ElementDimensions = EditorGUILayout.Vector3Field("Element Dimensions", LayoutGroup.ElementDimensions);
+        ElementDimensions = EditorGUILayout.Vector3Field(new GUIContent("Element Dimensions", ToolTip_ElemDimensions), LayoutGroup.ElementDimensions);
 
         if (EditorGUI.EndChangeCheck())
         {
@@ -79,6 +81,8 @@ public class LayoutGroup3DEditor : Editor
             shouldRebuild = true;
         }
 
+        EditorGUILayout.Space();
+
         EditorGUI.BeginChangeCheck();
 
         if (Style == LayoutStyle.Linear)
@@ -96,11 +100,12 @@ public class LayoutGroup3DEditor : Editor
         }
         else if (Style == LayoutStyle.Grid)
         {
-            GridLayoutAxis = (LayoutAxis2D)EditorGUILayout.EnumPopup("Primary Layout Axis", LayoutGroup.GridLayoutAxis);
+            LayoutAxis = (LayoutAxis3D)EditorGUILayout.EnumPopup("Primary Layout Axis", LayoutGroup.LayoutAxis);
+            SecondaryLayoutAxis = (LayoutAxis3D)EditorGUILayout.EnumPopup("Secondary Layout Axis", LayoutGroup.SecondaryLayoutAxis);
             GridConstraintCount = EditorGUILayout.IntField("Constraint Count", LayoutGroup.GridConstraintCount);
 
-            string pAlignStr = GridLayoutAxis == LayoutAxis2D.X ? "X Alignment" : "Y Alignment";
-            string sAlignStr = GridLayoutAxis == LayoutAxis2D.X ? "Y Alignment" : "X Alignment";
+            string pAlignStr = "Primary Alignment";
+            string sAlignStr = "Secondary Alignment";
 
             PrimaryAlignment = (Alignment)EditorGUILayout.EnumPopup(pAlignStr, LayoutGroup.PrimaryAlignment);
             SecondaryAlignment = (Alignment)EditorGUILayout.EnumPopup(sAlignStr, LayoutGroup.SecondaryAlignment);
@@ -109,7 +114,8 @@ public class LayoutGroup3DEditor : Editor
             {
                 Undo.RecordObject(LayoutGroup, "Change Grid Layout Options");
                 LayoutGroup.GridConstraintCount = GridConstraintCount;
-                LayoutGroup.GridLayoutAxis = GridLayoutAxis;
+                LayoutGroup.LayoutAxis = LayoutAxis;
+                LayoutGroup.SecondaryLayoutAxis = SecondaryLayoutAxis;
                 LayoutGroup.PrimaryAlignment = PrimaryAlignment;
                 LayoutGroup.SecondaryAlignment = SecondaryAlignment;
                 shouldRebuild = true;
@@ -142,10 +148,11 @@ public class LayoutGroup3DEditor : Editor
         }
         else if (Style == LayoutStyle.Radial)
         {
-            UseFullCircle = EditorGUILayout.Toggle("Use Full Circle", LayoutGroup.UseFullCircle);
+            LayoutAxis = (LayoutAxis3D)EditorGUILayout.EnumPopup(new GUIContent("Plane Normal Axis", ToolTip_Radial_LayoutAxis), LayoutGroup.LayoutAxis);
+            UseFullCircle = EditorGUILayout.Toggle(new GUIContent("Use Full Circle", ToolTip_Radial_UseFullCircle), LayoutGroup.UseFullCircle);
             if(!UseFullCircle)
             {
-                MaxArcAngle = EditorGUILayout.FloatField("Max Arc Angle", LayoutGroup.MaxArcAngle);
+                MaxArcAngle = EditorGUILayout.FloatField(new GUIContent("Max Arc Angle", ToolTip_Radial_MaxArcAngle), LayoutGroup.MaxArcAngle);
             }
             else
             {
@@ -155,17 +162,26 @@ public class LayoutGroup3DEditor : Editor
             Radius = EditorGUILayout.FloatField("Radius", LayoutGroup.Radius);
             StartAngleOffset = EditorGUILayout.FloatField("Start Angle Offset", LayoutGroup.StartAngleOffset);
             SpiralFactor = EditorGUILayout.FloatField("Spiral Factor", LayoutGroup.SpiralFactor);
-            AlignToRadius = EditorGUILayout.Toggle("Align To Radius", LayoutGroup.AlignToRadius);
+            AlignToRadius = EditorGUILayout.Toggle(new GUIContent("Align To Radius", ToolTip_Radial_AlignToRadius), LayoutGroup.AlignToRadius);
+
+            if(AlignToRadius)
+            {
+                PrimaryAlignmentAxis = (LayoutAxis3D)EditorGUILayout.EnumPopup(new GUIContent("Primary Alignment Axis", ToolTip_Radial_PrimaryAlign), LayoutGroup.PrimaryAlignmentAxis);
+                SecondaryAlignmentAxis = (LayoutAxis3D)EditorGUILayout.EnumPopup(new GUIContent("Secondary Alignment Axis", ToolTip_Radial_SecondaryAlign), LayoutGroup.SecondaryAlignmentAxis);
+            }
 
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(LayoutGroup, "Change Radial Layout Options");
+                LayoutGroup.LayoutAxis = LayoutAxis;
                 LayoutGroup.UseFullCircle = UseFullCircle;
                 LayoutGroup.MaxArcAngle = MaxArcAngle;
                 LayoutGroup.Radius = Radius;
                 LayoutGroup.StartAngleOffset = StartAngleOffset;
                 LayoutGroup.SpiralFactor = SpiralFactor;
                 LayoutGroup.AlignToRadius = AlignToRadius;
+                LayoutGroup.PrimaryAlignmentAxis = PrimaryAlignmentAxis;
+                LayoutGroup.SecondaryAlignmentAxis = SecondaryAlignmentAxis;
                 shouldRebuild = true;
             }
         }
@@ -173,7 +189,7 @@ public class LayoutGroup3DEditor : Editor
         if (LayoutGroup.Style != LayoutStyle.Radial)
         {
             EditorGUI.BeginChangeCheck();
-            Spacing = EditorGUILayout.FloatField("Spacing", LayoutGroup.Spacing);
+            Spacing = EditorGUILayout.FloatField(new GUIContent("Spacing", ToolTip_Spacing), LayoutGroup.Spacing);
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RecordObject(LayoutGroup, "Change spacing");
@@ -213,4 +229,14 @@ public class LayoutGroup3DEditor : Editor
         }
     }
 
+    private const string ToolTip_ElemDimensions = "The size of child elements in local space used to determine the distance between their pivot points in the layout.  Not used in Radial Layout.";
+    private const string ToolTip_Spacing = "Additional spacing applied between elements";
+    private const string ToolTip_Radial_LayoutAxis = "The direction of the plane normal containing the circle";
+    private const string ToolTip_Radial_UseFullCircle = "If true, angle between elements is automatically calculated so that they evenly fill a circle";
+    private const string ToolTip_Radial_MaxArcAngle = "Elements will be distributed around the circle between 0 and this angle";
+    private const string ToolTip_Radial_AlignToRadius = "If true, Elements will be rotated to align one axis pointing outward from the circle center, and another axis aligned with the plane normal";
+    private const string ToolTip_Radial_PrimaryAlign = "The transform axis of the elements that should point outward from the center of the circle.";
+    private const string ToolTip_Radial_SecondaryAlign = "The transform axis of the elements that should point in the same direction as the plane normal.";
 }
+
+#endif

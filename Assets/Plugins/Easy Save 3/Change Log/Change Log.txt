@@ -1,3 +1,64 @@
+3.5.6
+- ES3GameObject Component is now automatically moved to end of Components List to ensure that it's loaded after the Components it references.
+- Resolved merge issue where cached data was being stored with it's generic type rather than actual type.
+- Resolved issue where private members of inherited types wouldn't be saved in specific circumstances.
+
+3.5.5
+- References are now gathered when saving a scene and when changes are made in a scene, not when entering playmode.
+- Added option to refresh reference managers in all scenes (Tools > Easy Save 3 > Refresh References for All Scenes).
+- Added option to exclude references from being added to the manager (right-click > Easy Save 3 > Exclude Reference(s) from Manager).
+- Added GetColumnLength and GetRowLength methods to ES3Spreadsheet.
+- Resolved issue where enums would cause a FormatException when they were fields of a class with an ES3Type.
+- Worked around Unity bug where initialisation events are sometimes not called when importing Easy Save.
+- Worked around Unity bug where GetDirectoryName fails to work with a path to a file.
+- Auto Saves are now processed in order of their position in the hierarchy.
+- Resolved issue where members would be serialized twice when it was marked as ES3Serializable in both concrete and base classes.
+- Worked around Unity bug where Unity would throw an error when trying to set a scripting define symbol for Stadia.
+- Accounted for change in 2022.3 LTS where Unity have fixed a typo in their Editor API ("ToolbarSeachTextField")
+
+3.5.4
+- You can now enable Assembly Definition Files for Easy Save by going to Tools > Easy Save 3 > Enable Assembly Definition Files.
+- Accounted for edge case where ES3File would be merged rather than overwritten, preventing keys from being deleted from the stored file.
+- Resolved issue where reference collection can cause an InvalidOperationException (Collection was modified).
+- Worked around bug with Unity Runner Template which prevented Easy Save types from loading.
+- overrideSprite is no longer saved when saving UI.Image as Unity now returns the Sprite rather than null when this is unassigned.
+- Resolved issue where Auto Save's events sometimes did not update when changing the active scene in the Editor.
+- Resolved issue where saving a non-prefab instance GameObject with multiple Components would only save one of those Components.
+
+3.5.3
+- Attempting to save a Material with a RenderTexture will now throw a warning indicating that the RenderTexture won't be saved.
+- Added filtering by tag in the Auto Save window by prefixing 'tag:' to the search query.
+
+3.5.2
+- Resolved issue where RectTransform was loaded incorrectly as parent is deserialized before anchoredPosition.
+- Removed warning regarding Transform parents being set using the accessor rather than the SetParent method.
+- ES3.CopyFile now automatically creates the target directory if it doesn't exist.
+- Added an option to encrypt/compress raw cached data if the setting is defined for the cached file (postprocessRawCachedData).
+- 'Add References to Manager' now permanently adds prefabs to the manager if 'Auto Add Prefabs to Manager' is enabled.
+- Assembly names are now in alphabetical order so changes in order aren't registered as a change in version control.
+- Using 'Add References to Manager' on a folder now adds all supported assets in that folder to the reference manager.
+
+3.5.1
+- Reverted changes to LoadRaw methods when using Cache as it caused regression issues.
+
+3.5.0
+- Added support for NativeArray.
+- Managed case where ES3.EncryptBytes/DecryptBytes encountered an encoding issue.
+- Worked around Unity bug where invalid assembly list would cause issues when exceptions are disabled.
+- Worked around bug at Unity's end where unloaded scenes are returned by their methods.
+- Resolved issue where scripting define symbols were overwritten on older versions of Unity.
+- Worked around bug where inertia tensor value is rejected even when set as it's default upon loading.
+- Most Material properties can now be saved, including custom properties.
+- When saving a parent GameObject, children automatically have their parent set to the parent GameObject rather than loading this value by reference.
+- Support added for Tuples.
+- Added overload for AppendRaw which accepts a string and a filename.
+- Worked around Unity bug where EventType.Layout isn't called when moving tabs for first time, causing Types pane recent types to be uninitialised.
+- Worked around Unity bug which infrequently prevented Auto Save changes from persisting.
+- Added ES3.Compress and ES3.Decompress methods.
+- Performing 'Add Reference(s) to Manager' for a Texture2D will also add it's Sprite if one is present.
+- Classes without parameterless constructors can now be serialised (note that their constructor will not be called).
+- Resolved issue where an unloaded scene warning was thrown when scene is open but manually marked as unloaded in the Editor.
+
 3.4.2
 - Resolved issue where Unity Visual Scripting defines were not present on some versions of Unity.
 

@@ -1,0 +1,24 @@
+﻿//Created by Scriptable Object Database plugin.
+using 'targetNamespace';
+using MyLib.Shared.Database;
+
+[System.Serializable]
+public class 'databaseName'File : DatabaseFileBase<'databaseName'Class, 'databaseName'Asset>
+{
+    public 'databaseName'File(string name, short id16) : base(name, id16) { }
+
+    public override int AddNew(string name, UnityEngine.Object value)
+    {
+        return AddNew(new 'databaseName'Asset(name, data.ID16, data.UniqueAssetKey, value as 'objectType'));
+    }
+}
+
+[System.Serializable]
+public class 'databaseName'Class : Database<'databaseName'Asset> { };
+
+[System.Serializable]
+public class 'databaseName'Asset : DatabaseAsset<'objectType'>
+{
+    public 'databaseName'Asset(string name, short databaseId16, short assetId, 'objectType' objectReference)
+        : base(name, databaseId16, assetId, objectReference) { }
+}

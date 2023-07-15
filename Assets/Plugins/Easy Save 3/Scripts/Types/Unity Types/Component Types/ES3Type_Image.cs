@@ -17,7 +17,6 @@ namespace ES3Types
 			var instance = (UnityEngine.UI.Image)obj;
 			
 			writer.WritePropertyByRef("sprite", instance.sprite);
-			writer.WritePropertyByRef("overrideSprite", instance.overrideSprite);
 			writer.WriteProperty("type", instance.type);
 			writer.WriteProperty("preserveAspect", instance.preserveAspect, ES3Type_bool.Instance);
 			writer.WriteProperty("fillCenter", instance.fillCenter, ES3Type_bool.Instance);
@@ -55,9 +54,6 @@ namespace ES3Types
 					
 					case "sprite":
 						instance.sprite = reader.Read<UnityEngine.Sprite>(ES3Type_Sprite.Instance);
-						break;
-					case "overrideSprite":
-						instance.overrideSprite = reader.Read<UnityEngine.Sprite>(ES3Type_Sprite.Instance);
 						break;
 					case "type":
 						instance.type = reader.Read<UnityEngine.UI.Image.Type>();

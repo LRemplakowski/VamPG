@@ -13,7 +13,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, HideInInspector]
         private Creature _owner;
         private Creature Owner
         {
@@ -31,7 +31,19 @@ namespace SunsetSystems.Entities.Characters
         public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
         public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
 
+        public StatsManager Instance { get; protected set; }
+
         public event Action<Creature> OnCreatureDied;
+
+        private void OnValidate()
+        {
+            _owner ??= GetComponent<Creature>();
+        }
+
+        public void Initialize(Creature owner)
+        {
+            this._owner = owner;
+        }
 
         public void TakeDamage(int damage)
         {

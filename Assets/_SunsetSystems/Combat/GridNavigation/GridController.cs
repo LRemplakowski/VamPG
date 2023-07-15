@@ -157,32 +157,32 @@ public class GridController : ExposableMonobehaviour
         {
             gridAgentHelper.transform.position = actor.transform.position;
             currentGridPosition.Visited = GridElement.Status.Occupied;
-            Debug.Log($"Grid Controll: Getting actor combat speed! Value = {actor.StatsManager.GetCombatSpeed()}");
-            List<GridElement> elementsInRange = FindReachableGridElements(currentGridPosition, actor.StatsManager.GetCombatSpeed());
-            Debug.Log("Elements in range: " + elementsInRange.Count);
-            foreach (GridElement g in elementsInRange)
-            {
-                g.gameObject.SetActive(true);
-                activeElements.Add(g);
-            }
+            //Debug.Log($"Grid Controll: Getting actor combat speed! Value = {actor.StatsManager.GetCombatSpeed()}");
+            //List<GridElement> elementsInRange = FindReachableGridElements(currentGridPosition, actor.StatsManager.GetCombatSpeed());
+            //Debug.Log("Elements in range: " + elementsInRange.Count);
+            //foreach (GridElement g in elementsInRange)
+            //{
+              //  g.gameObject.SetActive(true);
+              //  activeElements.Add(g);
+            //}
         }
     }
 
-    public List<GridElement> GetElementsInRangeOfActor(Creature c)
-    {
-        gridAgentHelper.transform.position = c.transform.position;
-        GridElement actorPosition = c.CurrentGridPosition;
-        List<GridElement> result = FindReachableGridElements(actorPosition, c.StatsManager.GetCombatSpeed());
-        return result;
-    }
+    //public List<GridElement> GetElementsInRangeOfActor(Creature c)
+    //{
+      //  gridAgentHelper.transform.position = c.transform.position;
+      //  GridElement actorPosition = c.CurrentGridPosition;
+       // List<GridElement> result = FindReachableGridElements(actorPosition, c.StatsManager.GetCombatSpeed());
+       // return result;
+    //}
 
-    public List<Vector3> GetGridPositionsInRangeOfActor(Creature actor)
-    {
-        List<GridElement> elements = GetElementsInRangeOfActor(actor);
-        List<Vector3> result = new();
-        elements.ForEach(e => result.Add(e.transform.position));
-        return result;
-    }
+    //public List<Vector3> GetGridPositionsInRangeOfActor(Creature actor)
+   // {
+        //List<GridElement> elements = GetElementsInRangeOfActor(actor);
+        //List<Vector3> result = new();
+       // elements.ForEach(e => result.Add(e.transform.position));
+       // return result;
+    //}
 
     private List<GridElement> FindReachableGridElements(GridElement startElement, int movementRange)
     {

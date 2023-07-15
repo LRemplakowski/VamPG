@@ -1,9 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SunsetSystems.Utils
 {
-    public abstract class Singleton<T> : SerializedMonoBehaviour where T : Component
+    public abstract class Singleton<T> : ExposableMonobehaviour where T : Component
     {
         protected static T instance;
         public static T Instance

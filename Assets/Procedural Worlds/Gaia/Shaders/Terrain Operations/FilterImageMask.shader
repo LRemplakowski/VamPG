@@ -37,7 +37,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			sampler2D _ImageMaskTex;
@@ -99,7 +98,7 @@
 				// Based on http://www.easyrgb.com/index.php?X=MATH&H=07
 				float ref_Y = 100.0f;
 				float ref_Z = 108.883f;
-				float ref_X = 95.047f; // Observer= 2?, Illuminant= D65
+				float ref_X = 95.047f; // Observer= 2°, Illuminant= D65
 				float Y = c.y / ref_Y;
 				float Z = c.z / ref_Z;
 				float X = c.x / ref_X;
@@ -150,7 +149,7 @@
 				G *= 100.0f;
 				B *= 100.0f;
 
-				// Observer. = 2?, Illuminant = D65
+				// Observer. = 2°, Illuminant = D65
 				float X = R * 0.4124f + G * 0.3576f + B * 0.1805f;
 				float Y = R * 0.2126f + G * 0.7152f + B * 0.0722f;
 				float Z = R * 0.0193f + G * 0.1192f + B * 0.9505f;
@@ -280,11 +279,11 @@
 
             float4 FilterImageMultiply(v2f i) : SV_Target
             {
-				float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float col2 = GetCol2(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, col2));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, col2));
 				float result = col * transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -299,15 +298,15 @@
 
             float4 FilterImageGreaterThan(v2f i) : SV_Target
             {
-				float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float col2 = GetCol2(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, col2));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, col2));
 				float result = col;
 				if(transformedHeight>col)
 				{
 					result = transformedHeight;
 				}
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -322,16 +321,16 @@
 
             float4 FilterImageSmallerThan(v2f i) : SV_Target
             {
-				float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float col2 = GetCol2(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, col2));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, col2));
 				float result = col;
 				if(transformedHeight<col)
 				{
 					result = transformedHeight;
 				}
 
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -346,11 +345,11 @@
 
             float4 FilterImageAdd(v2f i) : SV_Target
             {
-				float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float col2 = GetCol2(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, col2));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, col2));
 				float result = col + transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -365,11 +364,11 @@
 
             float4 FilterImageSubtract(v2f i) : SV_Target
             {
-				float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float col2 = GetCol2(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, col2));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, col2));
 				float result = col - transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }

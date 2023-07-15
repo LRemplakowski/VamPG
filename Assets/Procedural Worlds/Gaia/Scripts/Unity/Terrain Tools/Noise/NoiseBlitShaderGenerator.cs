@@ -8,7 +8,7 @@ namespace Gaia
         private static ShaderGeneratorDescriptor m_desc = new ShaderGeneratorDescriptor()
         {
             name = "NoiseBlit",
-            shaderCategory = "Hidden/Gaia/TerrainTools/Noise/NoiseBlit",
+            shaderCategory = "Hidden/TerrainTools/Noise/NoiseBlit",
             outputDir = "Assets/Procedural Worlds/Gaia/Shaders/Unity/Terrain Tools/Generated/",
             templatePath = "Assets/Procedural Worlds/Gaia/Shaders/Unity/Terrain Tools/NoiseLib/Templates/Blit.noisehlsltemplate"
         };

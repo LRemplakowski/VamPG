@@ -380,10 +380,6 @@ namespace Gaia
         /// </summary>
         public void CheckForNewTerrainsForMinMax()
         {
-            if (m_session == null)
-            {
-                return;
-            }
 #if UNITY_EDITOR
             //Are there any new terrains that are not part of the cache yet?
             foreach (Terrain t in Terrain.activeTerrains)
@@ -828,11 +824,8 @@ namespace Gaia
         public void SaveSession()
         {
 #if UNITY_EDITOR
-            if (m_session != null)
-            {
-                EditorUtility.SetDirty(m_session);
-                AssetDatabase.SaveAssets();
-            }
+            EditorUtility.SetDirty(m_session);
+            AssetDatabase.SaveAssets();
 #endif
         }
 
@@ -1494,33 +1487,32 @@ namespace Gaia
         public void CreateBackup(string path, bool allowCreate = false, Terrain terrain = null)
         {
 #if UNITY_EDITOR
-            try
+            if (!Directory.Exists(path))
             {
-                AssetDatabase.StartAssetEditing();
-                if (!Directory.Exists(path))
+                if (!allowCreate)
                 {
-                    if (!allowCreate)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(path);
-                        AssetDatabase.ImportAsset(path);
-                    }
-                }
-
-                if (GaiaUtils.HasDynamicLoadedTerrains())
-                {
-                    Action<Terrain> act = (t) => BackupHeightmapData(t, path);
-                    List<string> terrainNames = null;
-                    if (terrain != null)
-                    {
-                        terrainNames = new List<string>() { terrain.name };
-                    }
-                    GaiaUtils.CallFunctionOnDynamicLoadedTerrains(act, false, terrainNames, "Backing up heightmaps...");
+                    return;
                 }
                 else
+                {
+                    Directory.CreateDirectory(path);
+                    AssetDatabase.ImportAsset(path);
+                }
+            }
+
+            if (GaiaUtils.HasDynamicLoadedTerrains())
+            {
+                Action<Terrain> act = (t) => BackupHeightmapData(t, path);
+                List<string> terrainNames = null;
+                if (terrain != null)
+                {
+                    terrainNames = new List<string>() { terrain.name };
+                }
+                GaiaUtils.CallFunctionOnDynamicLoadedTerrains(act, false, terrainNames, "Backing up heightmaps...");
+            }
+            else
+            {
+                try
                 {
                     if (terrain == null)
                     {
@@ -1539,15 +1531,15 @@ namespace Gaia
                         BackupHeightmapData(terrain, path);
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error during creation of the heightmap backups! Message: {e.Message}, Stack Trace: {e.StackTrace}");
-            }
-            finally
-            {
-                AssetDatabase.StopAssetEditing();
-                Gaia.ProgressBar.Clear(ProgressBarPriority.Stamping);
+                catch (Exception e)
+                {
+                    Debug.LogError($"Error during creation of the heightmap backups! Message: {e.Message}, Stack Trace: {e.StackTrace}");
+                }
+                finally
+                {
+                    Gaia.ProgressBar.Clear(ProgressBarPriority.Stamping);
+                }
+
             }
 #endif
         }
@@ -1972,8 +1964,7 @@ namespace Gaia
             DestroyTempSessionTools();
             //Refresh texture spawn rule GUIDs, to make sure there are no GUIDs from temporary spawners being kept
             ImageMask.RefreshSpawnRuleGUIDs();
-            //removed for now as this creates unpredictable issues in Unity 2022.2
-            //Resources.UnloadUnusedAssets();
+            Resources.UnloadUnusedAssets();
             sessionManager.RestoreOriginAndLoadRange();
         }
 
@@ -3284,9 +3275,6 @@ namespace Gaia
             terrainData.wavingGrassSpeed = gaiaDefaults.m_size;
             terrainData.wavingGrassStrength = gaiaDefaults.m_speed;
             terrainData.wavingGrassTint = gaiaDefaults.m_grassTint;
-#if UNITY_2022_2_OR_NEWER
-            terrainData.SetDetailScatterMode(DetailScatterMode.InstanceCountMode);
-#endif
             terrainData.size = new Vector3(worldCreationSettings.m_tileSize, worldCreationSettings.m_tileHeight, worldCreationSettings.m_tileSize);
 
 #if UNITY_EDITOR
@@ -3348,15 +3336,12 @@ namespace Gaia
             terrain.treeMaximumFullLODCount = gaiaDefaults.m_maxMeshTrees;
 #if UNITY_EDITOR
             GameObjectUtility.SetStaticEditorFlags(terrain.gameObject,
-
-#if UNITY_2022_2_OR_NEWER
-                StaticEditorFlags.BatchingStatic |
-                StaticEditorFlags.OccludeeStatic | StaticEditorFlags.OccluderStatic |
-                StaticEditorFlags.ReflectionProbeStatic | StaticEditorFlags.ContributeGI
-#else
                 StaticEditorFlags.BatchingStatic | StaticEditorFlags.NavigationStatic |
                 StaticEditorFlags.OccludeeStatic | StaticEditorFlags.OccluderStatic |
+#if (UNITY_2019_2_OR_NEWER)
                 StaticEditorFlags.OffMeshLinkGeneration | StaticEditorFlags.ReflectionProbeStatic | StaticEditorFlags.ContributeGI
+#else
+                StaticEditorFlags.OffMeshLinkGeneration | StaticEditorFlags.ReflectionProbeStatic | StaticEditorFlags.LightmapStatic
 #endif
                 );
             terrain.bakeLightProbesForTrees = false;
@@ -4001,7 +3986,7 @@ namespace Gaia
                 for (int z = 0; z < worldCreationSettings.m_zTiles; z++)
                 {
                     //skip non-affected terrain tiles if it is a regenerate run
-                    if (m_regenerateRun && !m_terrainNamesFlaggedForRegeneration.Exists(k => k.Contains($"Terrain_{x}_{z}-")))
+                    if (m_regenerateRun && !m_terrainNamesFlaggedForRegeneration.Exists(k=>k.Contains($"Terrain_{x}_{z}-")))
                     {
                         continue;
                     }
@@ -4071,10 +4056,6 @@ namespace Gaia
                     {
                         affectedTerrainNames.Add(t.name);
                     }
-
-                    //Reset Origin before stamping and spawning
-                    TerrainLoaderManager.Instance.SetOrigin(Vector3.zero);
-
                     //if we have world map stamp settings, let's stamp this terrain right away before it is unloaded again
                     if (worldMapStampSettings != null)
                     {
@@ -4167,7 +4148,7 @@ namespace Gaia
                 ProgressBar.Clear(ProgressBarPriority.WorldCreation);
                 StopEditorUpdates();
                 AfterSessionPlaybackCleanup();
-                if (OnWorldCreationCancelled != null)
+                if (OnWorldCreationCancelled!=null)
                 {
                     OnWorldCreationCancelled();
                 }
@@ -4216,7 +4197,7 @@ namespace Gaia
                         Double regularRange = TerrainLoaderManager.GetDefaultLoadingRangeForTilesize(worldCreationSettings.m_tileSize);
                         TerrainLoaderManager.Instance.SetLoadingRange(regularRange, regularRange * 3f);
                         TerrainLoaderManager.Instance.UpdateTerrainLoadState();
-
+#if PW_ADDRESSABLES
                         BuildConfig buildConfig = GaiaUtils.GetOrCreateBuildConfig();
 
                         if (buildConfig.m_publicationType != PublicationType.Addressables)
@@ -4228,6 +4209,7 @@ namespace Gaia
                         {
                             TerrainLoaderManager.Instance.TerrainSceneStorage.m_useAddressables = true;
                         }
+#endif
                     }
 #endif
                 }
@@ -5703,7 +5685,7 @@ namespace Gaia
 #if UNITY_EDITOR
             List<EditorBuildSettingsScene> sceneSettings = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
 
-            for (int i = sceneSettings.Count - 1; i >= 0; i--)
+            for (int i = sceneSettings.Count-1; i >= 0; i--)
             {
                 if (allTerrainScenes.Exists(x => x.m_scenePath == sceneSettings[i].path || x.m_impostorScenePath == sceneSettings[i].path || x.m_colliderScenePath == sceneSettings[i].path))
                 {
@@ -5716,10 +5698,10 @@ namespace Gaia
         }
 
 
-        /// <summary>
-        /// Adds only the collider scenes to build settings, will remove the regular / impostor scenes
-        /// </summary>
-        public static void AddOnlyColliderScenesToBuildSettings(List<TerrainScene> allTerrainScenes)
+            /// <summary>
+            /// Adds only the collider scenes to build settings, will remove the regular / impostor scenes
+            /// </summary>
+            public static void AddOnlyColliderScenesToBuildSettings(List<TerrainScene> allTerrainScenes)
         {
 #if GAIA_PRO_PRESENT
 #if UNITY_EDITOR
@@ -5872,7 +5854,7 @@ namespace Gaia
             List<EditorBuildSettingsScene> sceneSettings = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
             if (!sceneSettings.Exists(x => x.path == path))
             {
-                sceneSettings.Add(new EditorBuildSettingsScene() { enabled = true, path = path });
+                sceneSettings.Add(new EditorBuildSettingsScene() { enabled = true, path = path});
             }
             EditorBuildSettings.scenes = sceneSettings.ToArray();
 #endif
@@ -5986,7 +5968,7 @@ namespace Gaia
         {
             //check if the spawners contain at least one Terrain Modifier stamp rule and if there is already a backup taken - 
             //if yes we need to warn the user that the heightmap will be restored in the process
-            List<Spawner> spawnersWithTerrainModification = spawnersToCheck.FindAll(x => x != null && x.m_settings.m_spawnerRules.Exists(y => y.m_isActive && (y.m_resourceType == SpawnerResourceType.TerrainModifierStamp || y.m_changesHeightmap)));
+            List<Spawner> spawnersWithTerrainModification = spawnersToCheck.FindAll(x => x!=null && x.m_settings.m_spawnerRules.Exists(y => y.m_isActive && (y.m_resourceType == SpawnerResourceType.TerrainModifierStamp || y.m_changesHeightmap)));
             if (spawnersWithTerrainModification.Count > 0 && DoesStamperBackupExist())
             {
                 if (gaiaSettings == null)

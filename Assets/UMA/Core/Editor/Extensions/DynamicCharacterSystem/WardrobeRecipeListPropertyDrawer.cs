@@ -13,7 +13,7 @@ namespace UMA.CharacterSystem.Editors
         // public DynamicCharacterSystem thisDCS;
         public DynamicCharacterAvatar thisDCA;
 		public bool changed = false;
-		static bool defaultOpen = false;
+		static bool defaultOpen = true;
         Texture warningIcon;
 		int wardrobeRecipePickerID = -1;
         bool recipesIndexed = false;
@@ -244,7 +244,10 @@ namespace UMA.CharacterSystem.Editors
                         }
                         recipeName = thisElement.FindPropertyRelative("_recipeName").stringValue;
 
-                        recipeIsLive = UMAContext.Instance.HasRecipe(recipeName);
+                        if (UMAContext.Instance != null)
+                        {
+                            recipeIsLive = UMAContext.Instance.HasRecipe(recipeName);
+                        }
 
                         if (!recipeIsLive)
                             valR.width = valR.width - 25f;

@@ -21,9 +21,6 @@ namespace AmbientSounds {
         SerializedProperty m_outputTypeProp = null;
         SerializedProperty m_outputPrefabProp = null;
         SerializedProperty m_outputDistanceProp = null;
-        SerializedProperty m_outputSetAudioRangesProp = null;
-        SerializedProperty m_outputAudioRangesFollowSpawnDistanceProp = null;
-        SerializedProperty m_outputAudioRangesProp = null;
         SerializedProperty m_outputVerticalAngleProp = null;
         SerializedProperty m_outputHorizontalAngleProp = null;
         SerializedProperty m_shapeProp = null;
@@ -39,8 +36,6 @@ namespace AmbientSounds {
 
         /// <summary> Animated Boolean for if Output Distance should be shown </summary>
         AnimBool outputBool = null;
-        /// <summary> Animated Boolean for if Output 3D Audio Ranges should be shown </summary>
-        AnimBool outputRangesBool = null;
         /// <summary> Animated Boolean for if Shape should be shown </summary>
         AnimBool shapeBool = null;
         /// <summary> Animated Boolean for if Direction should be shown </summary>
@@ -60,9 +55,6 @@ namespace AmbientSounds {
             m_outputTypeProp = serializedObject.FindProperty("m_outputType");
             m_outputPrefabProp = serializedObject.FindProperty("m_outputPrefab");
             m_outputDistanceProp = serializedObject.FindProperty("m_outputDistance");
-            m_outputSetAudioRangesProp = serializedObject.FindProperty("m_outputSetAudioRanges");
-            m_outputAudioRangesFollowSpawnDistanceProp = serializedObject.FindProperty("m_outputAudioRangesFollowSpawnDistance");
-            m_outputAudioRangesProp = serializedObject.FindProperty("m_outputAudioRanges");
             m_outputVerticalAngleProp = serializedObject.FindProperty("m_outputVerticalAngle");
             m_outputHorizontalAngleProp = serializedObject.FindProperty("m_outputHorizontalAngle");
             m_shapeProp = serializedObject.FindProperty("m_shape");
@@ -79,10 +71,14 @@ namespace AmbientSounds {
             OutputType outputType = ( OutputType)System.Enum.GetValues(typeof( OutputType)).GetValue(m_outputTypeProp.enumValueIndex);
              Dimentions dimensions = ( Dimentions)System.Enum.GetValues(typeof( Dimentions)).GetValue(m_dimensionsProp.enumValueIndex);
 
-            outputBool = new AnimBool(outputType !=  OutputType.STRAIGHT, Repaint);
-            outputRangesBool = new AnimBool(outputBool.value && m_outputSetAudioRangesProp.boolValue, Repaint);
-            shapeBool = new AnimBool(dimensions !=  Dimentions.ONE, Repaint);
-            directionBool = new AnimBool(dimensions !=  Dimentions.THREE, Repaint);
+            outputBool = new AnimBool(outputType !=  OutputType.STRAIGHT);
+            outputBool.valueChanged.AddListener(Repaint);
+
+            shapeBool = new AnimBool(dimensions !=  Dimentions.ONE);
+            shapeBool.valueChanged.AddListener(Repaint);
+
+            directionBool = new AnimBool(dimensions !=  Dimentions.THREE);
+            directionBool.valueChanged.AddListener(Repaint);
 
             m_sequencesReorderable = new UnityEditorInternal.ReorderableList(serializedObject, m_sequencesProp, true, true, true, true);
             m_sequencesReorderable.elementHeight = EditorGUIUtility.singleLineHeight;
@@ -168,7 +164,7 @@ namespace AmbientSounds {
                                 prefabSource.spatialBlend = 1.0f;
                                 EditorUtility.SetDirty(m_outputPrefabProp.objectReferenceValue);
 #if UNITY_2018_3_OR_NEWER
-                                PrefabUtility.SavePrefabAsset(prefabSource.gameObject);
+                        PrefabUtility.SavePrefabAsset(prefabSource.gameObject);
 #else
                                 PrefabUtility.ReplacePrefab(prefabSource.gameObject, m_outputPrefabProp.objectReferenceValue);
 #endif
@@ -182,22 +178,6 @@ namespace AmbientSounds {
                 EditorGUI.MultiFloatField(r, m_editorUtils.GetContent("mOutputDistance"), new GUIContent[] { new GUIContent(""), new GUIContent("-") }, vals);
                 if (EditorGUI.EndChangeCheck())
                     m_outputDistanceProp.vector2Value = new Vector2(vals[0], vals[1]);
-                m_editorUtils.InlineHelp("mOutputDistance", inlineHelp);
-                m_outputSetAudioRangesProp.boolValue = m_editorUtils.Toggle("mOutputSetAudioRangesProp", m_outputSetAudioRangesProp.boolValue, inlineHelp);
-                outputRangesBool.target = m_outputSetAudioRangesProp.boolValue;
-                if (EditorGUILayout.BeginFadeGroup(outputRangesBool.faded))
-                {
-                    m_editorUtils.PropertyField("mOutputAudioRangesFollowSpawnDistance", m_outputAudioRangesFollowSpawnDistanceProp, inlineHelp);
-                    vals[0] = m_outputAudioRangesProp.vector2Value.x;
-                    vals[1] = m_outputAudioRangesProp.vector2Value.y;
-                    EditorGUI.BeginChangeCheck();
-                    r = EditorGUILayout.GetControlRect();
-                    EditorGUI.MultiFloatField(r, m_editorUtils.GetContent("mOutputAudioRanges"), new GUIContent[] { new GUIContent(""), new GUIContent("-") }, vals);
-                    if (EditorGUI.EndChangeCheck())
-                        m_outputAudioRangesProp.vector2Value = new Vector2(vals[0], vals[1]);
-                    m_editorUtils.InlineHelp("mOutputAudioRanges", inlineHelp);
-                }
-                EditorGUILayout.EndFadeGroup();
                 m_editorUtils.SliderRange("mOutputVerticalAngle", m_outputVerticalAngleProp, inlineHelp, -180, 180);
                 m_editorUtils.SliderRange("mOutputHorizontalAngle", m_outputHorizontalAngleProp, inlineHelp, -180, 180);
                 m_outputFollowPosition.boolValue = m_editorUtils.Toggle("mOutputFollowPosition", m_outputFollowPosition.boolValue, inlineHelp);

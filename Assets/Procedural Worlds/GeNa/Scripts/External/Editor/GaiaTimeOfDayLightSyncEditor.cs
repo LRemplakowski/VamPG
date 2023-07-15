@@ -1,110 +1,56 @@
-﻿using PWCommon5;
+﻿using UnityEngine;
 using UnityEditor;
-using UnityEngine;
-
+using PWCommon5;
 namespace GeNa.Core
 {
     [CustomEditor(typeof(GaiaTimeOfDayLightSync))]
     public class GaiaTimeOfDayLightSyncEditor : PWEditor
     {
-        private GaiaTimeOfDayLightSync m_editor;
-        private GUIStyle m_boxStyle;
-        private EditorUtils m_editorUtils;
-
+        private EditorUtils m_editor;
+        private GaiaTimeOfDayLightSync m_lightSync;
+        
         private void OnEnable()
         {
-            m_editorUtils = PWApp.GetEditorUtils(this, null, null);
+            m_editor = PWApp.GetEditorUtils(this, null, null, null);
+            m_lightSync = (GaiaTimeOfDayLightSync)target;
         }
-        private void OnDestroy()
+        private void Update()
         {
-            if (m_editorUtils != null)
-            {
-                m_editorUtils.Dispose();
-                m_editorUtils = null;
-            }
+            m_lightSync.UpdateLights();
         }
+        
+        
         public override void OnInspectorGUI()
         {
-            m_editorUtils.Initialize();
-            m_editor = (GaiaTimeOfDayLightSync)target;
-            //Set up the box style
-            if (m_boxStyle == null)
+            m_editor.Initialize();
+            if (m_lightSync == null)
             {
-                m_boxStyle = new GUIStyle(GUI.skin.box)
-                {
-                    normal = {textColor = GUI.skin.label.normal.textColor},
-                    fontStyle = FontStyle.Bold,
-                    alignment = TextAnchor.UpperLeft
-                };
+                m_lightSync = (GaiaTimeOfDayLightSync)target;
             }
-          
-            m_editorUtils.Panel("GlobalPanel", GlobalPanel, true);
+
+            m_editor.Panel("GlobalSettings", GlobalPanel, true);
         }
 
         private void GlobalPanel(bool helpEnabled)
         {
-#if HDPipeline && HDRPTIMEOFDAY
-            if (GUILayout.Button(new GUIContent("Convert To Standalone HDRP TOD",
-                    "Converts all the gena light syncs scripts to HDRP TOD scripts.")))
-            {
-                if (EditorUtility.DisplayDialog("Converting",
-                        "This will convert the gena light sync scripts to HDRP Standalone in the scene, note this can not be undone.",
-                        "Yes", "No"))
-                {
-                    GaiaTimeOfDayLightSyncManagerEditor.ConvertToHDRPStandalone(m_editor);
-                }
-            }
-#else
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginVertical(m_boxStyle);
-            EditorGUILayout.LabelField("Component Settings");
-            m_editor.m_lightSource = (Light)m_editorUtils.ObjectField("Light Source", m_editor.m_lightSource, typeof(Light), true, helpEnabled);
-            m_editor.m_emissionObject = (GameObject)m_editorUtils.ObjectField("Emission GameObject", m_editor.m_emissionObject, typeof(GameObject), true, helpEnabled);
+            m_lightSync.m_skyMode = (SkyTypeMode) m_editor.EnumPopup("SkyMode", m_lightSync.m_skyMode, helpEnabled);
+            m_lightSync.m_overrideSystemActiveState = m_editor.Toggle("OverrideSystemActiveState", m_lightSync.m_overrideSystemActiveState, helpEnabled);
+            m_lightSync.m_lightComponent = (Light)m_editor.ObjectField("LightComponent", m_lightSync.m_lightComponent, typeof(Light), true, helpEnabled);
+            m_lightSync.LightEmissionCullingDistance = m_editor.FloatField("LightCullingDistance", m_lightSync.LightEmissionCullingDistance, helpEnabled);
+            EditorGUILayout.Space();
 
-            EditorGUILayout.EndVertical();
+            m_editor.Heading("EmissionSettings");
+            m_lightSync.m_emissionRenderType = (EmissionRenderType)m_editor.EnumPopup("EmissionRenderType", m_lightSync.m_emissionRenderType, helpEnabled);
+            m_lightSync.m_lightEmissionObject = (GameObject)m_editor.ObjectField("LightEmissionObject", m_lightSync.m_lightEmissionObject, typeof(GameObject), true, helpEnabled);
+            m_lightSync.m_emissionMaterial = (Material)m_editor.ObjectField("EmissionMaterial", m_lightSync.m_emissionMaterial, typeof(Material), true, helpEnabled);
+            m_lightSync.m_enableEmissioKeyWord = m_editor.TextField("EmissionKeyWord", m_lightSync.m_enableEmissioKeyWord, helpEnabled);
+
             if (EditorGUI.EndChangeCheck())
             {
-                m_editor.ValidateComponents(GaiaTimeOfDayLightSyncManager.Instance);
-                if (m_editor != null)
-                {
-                    EditorUtility.SetDirty(m_editor);
-                }
+                m_lightSync.ValidateComponents();
+                EditorUtility.SetDirty(m_lightSync);
             }
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.BeginVertical(m_boxStyle);
-            EditorGUILayout.LabelField("Light Sync Settings");
-            m_editor.m_renderMode = (LightSyncRenderMode)m_editorUtils.EnumPopup("RenderMode", m_editor.m_renderMode, helpEnabled);
-            if (m_editor.m_renderMode != LightSyncRenderMode.AlwaysOn)
-            {
-                EditorGUI.indentLevel++;
-                m_editor.m_useRenderDistance = m_editorUtils.Toggle("UseRenderDistance", m_editor.m_useRenderDistance, helpEnabled);
-                if (m_editor.m_useRenderDistance)
-                {
-                    EditorGUI.indentLevel++;
-                    m_editor.m_renderDistance = m_editorUtils.FloatField("RenderDistance", m_editor.m_renderDistance, helpEnabled);
-                    m_editor.m_useShadowDistanceCulling = m_editorUtils.Toggle("UseShadowCulling", m_editor.m_useShadowDistanceCulling);
-                    if (m_editor.m_useShadowDistanceCulling)
-                    {
-                        EditorGUI.indentLevel++;
-                        m_editor.m_shadowRenderDistance = m_editorUtils.FloatField("ShadowRenderDistance", m_editor.m_shadowRenderDistance, helpEnabled);
-                        EditorGUI.indentLevel--;
-                    }
-                    EditorGUI.indentLevel--;
-                }
-
-                EditorGUI.indentLevel--;
-            }
-            EditorGUILayout.EndVertical();
-            if (EditorGUI.EndChangeCheck())
-            {
-                m_editor.Refresh();
-                if (m_editor != null)
-                {
-                    EditorUtility.SetDirty(m_editor);
-                }
-            }
-#endif
         }
     }
 }

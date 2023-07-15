@@ -9,6 +9,9 @@ using PWCommon5;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine.Rendering;
+// Procedural Worlds
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 namespace GeNa.Core
 {
@@ -185,7 +188,7 @@ namespace GeNa.Core
             #region Spawner Setup
             m_spawner = target as GeNaSpawner;
             m_isPartOfPrefab = PrefabUtility.IsPartOfAnyPrefab(m_spawner.gameObject) && !AssetDatabase.Contains(m_spawner.gameObject);
-            GeNaReferenceLoader.visitedSpawners.Clear();
+            GeNaReferenceLoader.depthCount = 100;
             m_spawner.Load();
             // Setup defaults
             m_spawner.SetDefaults(GeNaEditorUtility.Defaults);
@@ -234,6 +237,7 @@ namespace GeNa.Core
             GeNaEvents.onSpawnerDestroyed += OnSpawnerDestroyed;
             GeNaEditorEvents.onBeforeAssemblyReloads -= Dispose;
             GeNaEditorEvents.onBeforeAssemblyReloads += Dispose;
+            m_spawner.transform.hideFlags = HideFlags.HideInInspector;
             Tools.hidden = true;
             m_isPrefabMode = GeNaEditorUtility.IsPrefab(m_spawner.gameObject) && AssetDatabase.Contains(m_spawner.gameObject);
         }
@@ -288,8 +292,6 @@ namespace GeNa.Core
         /// <returns></returns>
         public static void GeNaSpawnerEditor(GeNaSpawner spawner, Action onRepaint = null)
         {
-            if (spawner == null)
-                return;
             Event e = Event.current;
             int controlID = GUIUtility.GetControlID(FocusType.Passive);
             // Exit if event does not have current value
@@ -607,26 +609,23 @@ namespace GeNa.Core
                 Prototype spawnPrototype = spawnPrototypes[0];
                 if (spawnPrototype.Resources.Count == 1)
                 {
-                    if (geNaManager != null)
+                    TerrainTools terrainTools = geNaManager.TerrainTools;
+                    foreach (Prototype prototype in spawnPrototypes)
                     {
-                        TerrainTools terrainTools = geNaManager.TerrainTools;
-                        foreach (Prototype prototype in spawnPrototypes)
+                        foreach (Resource resource in prototype.Resources)
                         {
-                            foreach (Resource resource in prototype.Resources)
+                            foreach (IDecorator decorator in resource.Decorators)
                             {
-                                foreach (IDecorator decorator in resource.Decorators)
+                                if (decorator is GeNaTerrainDecorator terrainDecorator)
                                 {
-                                    if (decorator is GeNaTerrainDecorator terrainDecorator)
+                                    TerrainModifier terrainModifier = terrainDecorator.TerrainModifier;
+                                    terrainModifier.Position = spawnerData.SpawnOriginLocation;
+                                    terrainModifier.RotationY = spawnerData.PlacementCriteria.MinRotationY;
+                                    TerrainEntity terrainEntity = terrainModifier.GenerateTerrainEntity();
+                                    if (terrainEntity != null)
                                     {
-                                        TerrainModifier terrainModifier = terrainDecorator.TerrainModifier;
-                                        terrainModifier.Position = spawnerData.SpawnOriginLocation;
-                                        terrainModifier.RotationY = spawnerData.PlacementCriteria.MinRotationY;
-                                        TerrainEntity terrainEntity = terrainModifier.GenerateTerrainEntity();
-                                        if (terrainEntity != null)
-                                        {
-                                            terrainTools.Visualize(terrainEntity);
-                                            terrainEntity.Dispose();
-                                        }
+                                        terrainTools.Visualize(terrainEntity);
+                                        terrainEntity.Dispose();
                                     }
                                 }
                             }
@@ -763,12 +762,6 @@ namespace GeNa.Core
                     break;
             }
         }
-        private Color m_baseColor = Color.white;
-        private Color m_backgroundColor = new Color(1f, 0.01f, 0f, 0.24f); 
-        private Color m_proBackgroundColor = new Color(1f, 0.01f, 0f, 0.31f);
-        private Color m_saveColor = new Color(0.47f, 0.72f, 0f);
-        private Color m_discardColor = new Color(0.72f, 0.06f, 0f);
-        private Color m_disabledColor = new Color(0.4f, 0.4f, 0.4f, 0.5f);
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
@@ -804,11 +797,8 @@ namespace GeNa.Core
                     }
                     #region Panels
                     m_showQuickStart = m_editorUtils.Panel("Quick Start", QuickStartPanel, m_showQuickStart);
-
-                    Color backgroundColor = EditorGUIUtility.isProSkin ? m_proBackgroundColor : m_backgroundColor;
-                    bool isPrefabAndTemp = m_isPartOfPrefab && SpawnerData.IsTemp; 
-                    Color oldBackColor = GUI.backgroundColor;
-                    GUI.backgroundColor = isPrefabAndTemp ? backgroundColor : oldBackColor;
+                    Color oldColor = GUI.backgroundColor;
+                    GUI.backgroundColor = (m_isPartOfPrefab && SpawnerData.IsTemp) ? new Color(0.48f, 0.29f, 0.3f) : oldColor;
                     // Overview Panel
                     GUIStyle overviewLabelStyle = Styles.panelLabel;
                     string overviewText = string.Format("{0} : {1}", m_editorUtils.GetTextValue("Overview Panel"), SpawnerData.Name);
@@ -821,14 +811,16 @@ namespace GeNa.Core
                         // Spawn Criteria Panel
                         m_showSpawnCriteria = m_editorUtils.Panel("Spawn Criteria Panel Label", SpawnCritPanel, m_showSpawnCriteria);
                         // Prototypes Panel
-                        GUIContent protoPanelLabel = new GUIContent(string.Format("{0} ({1}) [{2}]", m_editorUtils.GetTextValue("Spawn Prototypes"), SpawnerData.SpawnPrototypes.Count, SpawnerData.InstancesSpawned), m_editorUtils.GetTooltip("Spawn Prototypes"));
+                        GUIContent protoPanelLabel = new GUIContent(string.Format("{0} ({1}) [{2}]",
+                                m_editorUtils.GetTextValue("Spawn Prototypes"), SpawnerData.SpawnPrototypes.Count, SpawnerData.InstancesSpawned),
+                            m_editorUtils.GetTooltip("Spawn Prototypes"));
                         m_showPrototypes = m_editorUtils.Panel(protoPanelLabel, PrototypesPanel, m_showPrototypes);
                         // Advanced Panel
                         m_showAdvancedSettings = m_editorUtils.Panel("Advanced Panel Label", AdvancedPanel, m_showAdvancedSettings);
                         // Add Panel
                         AddPrototypesPanel();
-                    } 
-                    GUI.backgroundColor = oldBackColor;
+                    }
+                    GUI.backgroundColor = oldColor;
                     #endregion
                     if (GeNaEditorUtility.ValidateComputeShader())
                     {
@@ -840,7 +832,7 @@ namespace GeNa.Core
                 if (EditorGUI.EndChangeCheck())
                 {
                     Serialize();
-                    // m_spawner.UpdateSpawnCritOverrides();
+                    m_spawner.UpdateSpawnCritOverrides();
                     if (!GeNaEditorUtility.IsPrefab(m_spawner.gameObject))
                         m_spawner.UpdateGoName();
                     m_spawner.UpdateVisualization();
@@ -1081,15 +1073,16 @@ namespace GeNa.Core
                     SpawnFlags spawnFlags = res.SpawnFlags;
                     StaticEditorFlags flags = GameObjectUtility.GetStaticEditorFlags(res.Prefab);
                     spawnFlags.FlagBatchingStatic = (flags & StaticEditorFlags.BatchingStatic) == StaticEditorFlags.BatchingStatic;
+#if UNITY_5 || UNITY_2017 || UNITY_2018 || UNITY_2019_1
+                    spawnFlags.FlagLightmapStatic = (flags & StaticEditorFlags.LightmapStatic) == StaticEditorFlags.LightmapStatic;
+#else
                     spawnFlags.FlagLightmapStatic = (flags & StaticEditorFlags.ContributeGI) == StaticEditorFlags.ContributeGI;
+#endif
+                    spawnFlags.FlagNavigationStatic = (flags & StaticEditorFlags.NavigationStatic) == StaticEditorFlags.NavigationStatic;
                     spawnFlags.FlagOccludeeStatic = (flags & StaticEditorFlags.OccludeeStatic) == StaticEditorFlags.OccludeeStatic;
                     spawnFlags.FlagOccluderStatic = (flags & StaticEditorFlags.OccluderStatic) == StaticEditorFlags.OccluderStatic;
-                    spawnFlags.FlagReflectionProbeStatic = (flags & StaticEditorFlags.ReflectionProbeStatic) == StaticEditorFlags.ReflectionProbeStatic;
-      
-#if !UNITY_2022_2_OR_NEWER
-                    spawnFlags.FlagNavigationStatic = (flags & StaticEditorFlags.NavigationStatic) == StaticEditorFlags.NavigationStatic;
                     spawnFlags.FlagOffMeshLinkGeneration = (flags & StaticEditorFlags.OffMeshLinkGeneration) == StaticEditorFlags.OffMeshLinkGeneration;
-#endif
+                    spawnFlags.FlagReflectionProbeStatic = (flags & StaticEditorFlags.ReflectionProbeStatic) == StaticEditorFlags.ReflectionProbeStatic;
                 }
                 else
                     GeNaDebug.LogErrorFormat("Unable to get prefab for '{0}'", res.Name);
@@ -1383,24 +1376,24 @@ namespace GeNa.Core
         {
             float spawnRange = SpawnerData.SpawnRange;
             m_editorUtils.InlineHelp("Overview Panel", helpEnabled);
-            bool canSaveAndDiscard = SpawnerData.IsTemp && GeNaEditorUtility.IsPrefab(m_spawner.gameObject) &&
-                                     !AssetDatabase.Contains(m_spawner.gameObject); 
-            GUI.enabled = canSaveAndDiscard;
+            GUI.enabled = SpawnerData.IsTemp && GeNaEditorUtility.IsPrefab(m_spawner.gameObject) && !AssetDatabase.Contains(m_spawner.gameObject);
             {
                 EditorGUILayout.BeginHorizontal();
                 {
-                    Color oldColor = GUI.backgroundColor;
-                    GUI.backgroundColor = canSaveAndDiscard ? m_saveColor : m_disabledColor;
                     GUIContent saveToPrefabContent = new GUIContent("Save Changes");
+                    Color oldColor = GUI.backgroundColor;
+                    GUI.backgroundColor = Color.green;
                     if (GUILayout.Button(saveToPrefabContent, Styles.cancelBtn, GUILayout.MaxHeight(25f)))
                     {
                         SaveChanges(m_spawner);
                         GUI.changed = false;
                     }
                     GUI.backgroundColor = oldColor;
+                }
+                {
                     GUIContent revertToPrefab = new GUIContent("Discard Changes");
-                    oldColor = GUI.backgroundColor;
-                    GUI.backgroundColor = canSaveAndDiscard ? m_discardColor : m_disabledColor;
+                    Color oldColor = GUI.backgroundColor;
+                    GUI.backgroundColor = Color.red;
                     if (GUILayout.Button(revertToPrefab, Styles.cancelBtn, GUILayout.MaxHeight(25f)))
                     {
                         DiscardChanges(m_spawner);
@@ -1411,9 +1404,6 @@ namespace GeNa.Core
                 EditorGUILayout.EndHorizontal();
                 m_editorUtils.InlineHelp("Spawner Changes", helpEnabled);
             }
-            
-            EditorGUILayout.Space(1f);
-            
             GUI.enabled = true;
             bool cancel = true;
             GeNaManager geNaManager = GeNaGlobalReferences.GeNaManagerInstance;
@@ -1425,9 +1415,9 @@ namespace GeNa.Core
                 {
                     GUI.enabled = true;
                 }
-                GUIContent cancelContent = new GUIContent("Cancel \u00D7");
+                GUIContent cancelContent = new GUIContent("\u00D7 Cancel");
                 Color oldColor = GUI.backgroundColor;
-                GUI.backgroundColor = m_discardColor;
+                GUI.backgroundColor = Color.red;
                 if (GUILayout.Button(cancelContent, Styles.cancelBtn, GUILayout.MaxHeight(25f)))
                 {
                     if (geNaManager != null)
@@ -1450,7 +1440,6 @@ namespace GeNa.Core
                 if (m_editorUtils.Button("NewPalette", GUILayout.MaxWidth(40f)))
                 {
                     m_spawner.Palette = CreatePalette();
-                    EditorUtility.SetDirty(m_spawner);
                     GUIUtility.ExitGUI();
                 }
                 EditorGUILayout.EndHorizontal();
@@ -1469,7 +1458,7 @@ namespace GeNa.Core
                             EditorGUI.indentLevel++;
                             PhysicsSimulatorSettings physicsSettings = SpawnerData.PhysicsSettings;
                             physicsSettings.Iterations = m_editorUtils.IntField("Iterations", physicsSettings.Iterations, helpEnabled);
-                            physicsSettings.Speed = m_editorUtils.FloatField("Speed", physicsSettings.Speed, helpEnabled);
+                            physicsSettings.StepSize = m_editorUtils.Slider("Step Size", physicsSettings.StepSize, 0.01f, 0.1f, helpEnabled);
                             physicsSettings.EmbedOffsetY = m_editorUtils.Slider("Embed Offset Y", physicsSettings.EmbedOffsetY, -5f, 5f, helpEnabled);
                             physicsSettings.MinHeightY = m_editorUtils.FloatField("Min Height Y", physicsSettings.MinHeightY, helpEnabled);
                             EditorGUI.indentLevel--;
@@ -1524,7 +1513,6 @@ namespace GeNa.Core
                         SpawnerData.MinInstances = m_editorUtils.LongField("Min Instances", SpawnerData.MinInstances, helpEnabled);
                         SpawnerData.MaxInstances = m_editorUtils.LongField("Max Instances", SpawnerData.MaxInstances, helpEnabled);
                     }
-                    SpawnerData.SpawnToGround = m_editorUtils.Toggle("Spawn to Ground", SpawnerData.SpawnToGround, helpEnabled);
                     if (m_hasPrefabs)
                     {
                         // spawnerData.MergeSpawns = m_editorUtils.Toggle("Merge Instances", spawnerData.MergeSpawns, helpEnabled);
@@ -1900,13 +1888,6 @@ namespace GeNa.Core
                 #endregion
                 if (SpawnerData.SpawnOriginIsTerrain)
                 {
-                    bool oldEnabled = GUI.enabled;
-                    Constants.Processor currentProcessor = Settings.Advanced.CurrentProcessor;
-                    if (currentProcessor == Constants.Processor.CPU || !SystemInfo.supportsComputeShaders)
-                    {
-                        EditorGUILayout.HelpBox("Warning: The following settings are unavailable when using CPU, please consider using a machine with a GPU.", MessageType.Warning);
-                        GUI.enabled = false;
-                    }
                     #region Check Textures
                     checkTextures = m_editorUtils.Toggle("Check Textures", checkTextures, helpEnabled);
                     if (checkTextures)
@@ -2053,7 +2034,6 @@ namespace GeNa.Core
                         EditorGUI.indentLevel--;
                     }
                     #endregion
-                    GUI.enabled = oldEnabled;
                 }
                 if (!SpawnerData.IsProcessing)
                 {
@@ -2331,7 +2311,6 @@ namespace GeNa.Core
             EditorGUI.BeginChangeCheck();
             {
                 SpawnerSettings.AdvancedSettings advancedSettings = Settings.Advanced;
-                advancedSettings.CurrentProcessor = (Constants.Processor)m_editorUtils.EnumPopup("Current Processor", advancedSettings.CurrentProcessor, helpEnabled);
                 // spawnerData.MergeSpawns = m_editorUtils.Toggle("Merge Instances", spawnerData.MergeSpawns, helpEnabled);
                 // Placement
                 PlacementCriteria.ScaleToNearestInt = m_editorUtils.Toggle("Scale Nearest Int", PlacementCriteria.ScaleToNearestInt, helpEnabled);
@@ -2415,23 +2394,20 @@ namespace GeNa.Core
                         {
                             m_spawner.AddTreeProto();
                             GUI.changed = true;
-                            GUIUtility.ExitGUI();
                         }
                         if (m_editorUtils.Button("Add Grass", Styles.addBtn, GUILayout.Width(50), GUILayout.Height(49)))
                         {
                             //Add and init the brushsets for it
-                            m_spawner.AddGrassProto();
-                            // AddTerrainPrototype(EffectType.Detail);
+                            //[Obselete] m_spawner.AddGrassProto();
+                            AddTerrainPrototype(EffectType.Detail);
                             GUI.changed = true;
-                            GUIUtility.ExitGUI();
                         }
                         if (m_editorUtils.Button("Add Tx", Styles.addBtn, GUILayout.Width(50), GUILayout.Height(49)))
                         {
                             //Add and init the brushsets for it
-                            // m_spawner.AddTextureProto();
+                            //[Obselete] m_spawner.AddTextureProto();
                             AddTerrainPrototype(EffectType.Texture);
                             GUI.changed = true;
-                            GUIUtility.ExitGUI();
                         }
                     }
                     GUILayout.EndHorizontal();
@@ -2518,19 +2494,7 @@ namespace GeNa.Core
                     continue;
                 EditorGUI.BeginChangeCheck();
                 {
-                    bool showDecorator = true;
-                    if (decorator is GeNaPhysicsDecorator physicsDecorator)
-                    {
-                        var spawnerData = m_spawner.SpawnerData;
-                        if (spawnerData.PhysicsType == Constants.PhysicsType.Spawner)
-                        {
-                            decoratorEditor.RenderTitle();
-                            EditorGUILayout.LabelField("Physics Type set to 'Spawner' in Overview Panel. Local Physics Disabled.");
-                            showDecorator = false;
-                        }
-                    }
-                    if (showDecorator) 
-                        decoratorEditor.OnInspectorGUI();
+                    decoratorEditor.OnInspectorGUI();
                 }
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -2574,11 +2538,27 @@ namespace GeNa.Core
         /// <returns></returns>
         private PaletteData CreatePalette()
         {
-            string fileName = "New GeNa Palette";
-            string filePath = $"Assets/{fileName}.asset";
-            filePath = AssetDatabase.GenerateUniqueAssetPath(filePath);
+            string name = "Assets/New Palette";
+            if (SceneManager.GetActiveScene() != null)
+            {
+                name += " " + SceneManager.GetActiveScene().name;
+            }
+            PaletteData checkPalette = AssetDatabase.LoadAssetAtPath<PaletteData>(name + ".asset");
+            if (checkPalette != null)
+            {
+                int index = 0;
+                string[] guids = AssetDatabase.FindAssets("t:PaletteData", null);
+                foreach (string guid in guids)
+                {
+                    if (!string.IsNullOrEmpty(AssetDatabase.GUIDToAssetPath(guid)))
+                    {
+                        index++;
+                    }
+                }
+                name += " " + index;
+            }
             PaletteData asset = CreateInstance<PaletteData>();
-            AssetDatabase.CreateAsset(asset, filePath);
+            AssetDatabase.CreateAsset(asset, name + ".asset");
             AssetDatabase.SaveAssets();
             EditorUtility.FocusProjectWindow();
             return asset;
@@ -3278,15 +3258,16 @@ namespace GeNa.Core
                     SpawnFlags spawnFlags = resource.SpawnFlags;
                     StaticEditorFlags flags = GameObjectUtility.GetStaticEditorFlags(resource.Prefab);
                     spawnFlags.FlagBatchingStatic = (flags & StaticEditorFlags.BatchingStatic) == StaticEditorFlags.BatchingStatic;
+#if UNITY_5 || UNITY_2017 || UNITY_2018 || UNITY_2019_1
+                    spawnFlags.FlagLightmapStatic = (flags & StaticEditorFlags.LightmapStatic) == StaticEditorFlags.LightmapStatic;
+#else
                     spawnFlags.FlagLightmapStatic = (flags & StaticEditorFlags.ContributeGI) == StaticEditorFlags.ContributeGI;
+#endif
+                    spawnFlags.FlagNavigationStatic = (flags & StaticEditorFlags.NavigationStatic) == StaticEditorFlags.NavigationStatic;
                     spawnFlags.FlagOccludeeStatic = (flags & StaticEditorFlags.OccludeeStatic) == StaticEditorFlags.OccludeeStatic;
                     spawnFlags.FlagOccluderStatic = (flags & StaticEditorFlags.OccluderStatic) == StaticEditorFlags.OccluderStatic;
-                    spawnFlags.FlagReflectionProbeStatic = (flags & StaticEditorFlags.ReflectionProbeStatic) == StaticEditorFlags.ReflectionProbeStatic;
-             
-#if !UNITY_2022_2_OR_NEWER
-                    spawnFlags.FlagNavigationStatic = (flags & StaticEditorFlags.NavigationStatic) == StaticEditorFlags.NavigationStatic;
                     spawnFlags.FlagOffMeshLinkGeneration = (flags & StaticEditorFlags.OffMeshLinkGeneration) == StaticEditorFlags.OffMeshLinkGeneration;
-#endif
+                    spawnFlags.FlagReflectionProbeStatic = (flags & StaticEditorFlags.ReflectionProbeStatic) == StaticEditorFlags.ReflectionProbeStatic;
                 }
                 else
                     GeNaDebug.LogErrorFormat("Unable to get prefab for '{0}'", resource.Name);

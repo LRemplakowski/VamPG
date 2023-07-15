@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace GeNa.Core
 {
-    [ExecuteAlways]
     public class GeNaMapBuilder : MonoBehaviour
     {
         [Header("Area Parameters")]
@@ -96,12 +95,6 @@ namespace GeNa.Core
             m_entries.Add(entry);
             return entry;
         }
-
-        private void OnValidate()
-        {
-            transform.hideFlags = HideFlags.NotEditable | HideFlags.HideInInspector;
-        }
-
         void Reset()
         {
             m_areaBuilder = Resources.Load<AreaSpawnBuilder>("Builders/Area Spawner Builder");

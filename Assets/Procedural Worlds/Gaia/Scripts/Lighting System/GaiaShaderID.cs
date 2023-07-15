@@ -115,8 +115,6 @@ namespace Gaia
 
         //Water Shaders
         public static readonly string BuiltInWaterShader = "PWS/PW_Water";
-        public static readonly string URPWaterShader = "PWS/PW_Water_URP";
-        public static readonly string VRWaterShader = "PWS/PW_Water_VR";
         public static readonly string HDRPWaterShader = "Shader Graphs/PW_Water_RP";
         public static readonly string HDRPWaterShaderFile = "PW_Water_RP";
 

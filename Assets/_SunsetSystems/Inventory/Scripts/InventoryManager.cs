@@ -1,20 +1,18 @@
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.Persistence;
+using SunsetSystems.Loading;
 using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Party;
 using SunsetSystems.Data;
-using System.Web.UI.WebControls;
-using System.Linq;
 
 namespace SunsetSystems.Inventory
 {
     [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
-    public class InventoryManager : Singleton<InventoryManager>, ISaveable, IResetable
+    public class InventoryManager : Singleton<InventoryManager>, ISaveRuntimeData, IResetable
     {
         [SerializeField]
         private ItemStorage _playerInventory;
@@ -24,7 +22,6 @@ namespace SunsetSystems.Inventory
         [SerializeField, ES3Serializable]
         private StringEquipmentDataDictionary _coterieEquipmentData = new();
         private UniqueId _unique;
-        public string DataKey => _unique.Id;
 
         public static event Action<string> ItemEquipped, ItemUnequipped;
 
@@ -42,13 +39,7 @@ namespace SunsetSystems.Inventory
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
-            ISaveable.RegisterSaveable(this);
             _unique ??= GetComponent<UniqueId>();
-        }
-
-        private void OnDestroy()
-        {
-            ISaveable.UnregisterSaveable(this);
         }
 
         public static void AddCoterieMemberEquipment(string creatureID, CreatureData creatureData)
@@ -74,12 +65,12 @@ namespace SunsetSystems.Inventory
             }
             try
             {
-                EquipmentSlot slot = equipmentData.EquipmentSlots[slotID];
+                EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
                 if (slot.GetEquippedItem() != null)
                 {
                     if (TryUnequipItemFromSlot(characterID, slotID) == false)
                     {
-                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ReadableID + " from slot " + slotID + " for creature " + characterID + "!");
+                        Debug.LogError("Could not unequip item " + slot.GetEquippedItem().ItemName + " from slot " + slotID + " for creature " + characterID + "!");
                         return false;
                     }
                 }
@@ -88,15 +79,16 @@ namespace SunsetSystems.Inventory
                 {
                     Debug.Log("Item equipped successfuly!");
                     PlayerInventory.TryRemoveItem(new(item));
-                    equipmentData.EquipmentSlots[slotID] = slot;
+                    equipmentData.equipmentSlots[slotID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemEquipped?.Invoke(characterID);
                 }
                 else
                 {
-                    Debug.LogError($"Failed to equip item {item.ReadableID} in slot {slot.Name}!");
+                    Debug.LogError($"Failed to equip item {item.ItemName} in slot {slot.Name}!");
                 }
                 return success;
             }
@@ -121,16 +113,17 @@ namespace SunsetSystems.Inventory
                 return false;
             try
             {
-                EquipmentSlot slot = equipmentData.EquipmentSlots[slotID];
+                EquipmentSlot slot = equipmentData.equipmentSlots[slotID];
                 EquipableItem item = slot.GetEquippedItem();
                 bool success = slot.TryUnequipItem(item);
                 if (success)
                 {
                     PlayerInventory.AddItem(new(item));
-                    equipmentData.EquipmentSlots[slot.ID] = slot;
+                    equipmentData.equipmentSlots[slot.ID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
                     CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
                     data.Equipment = Instance._coterieEquipmentData[characterID];
+                    PartyManager.Instance.GetPartyMemberByID(characterID).Data = data;
                     ItemUnequipped?.Invoke(characterID);
                 }
                 return success;
@@ -139,11 +132,6 @@ namespace SunsetSystems.Inventory
             {
                 return false;
             }
-        }
-
-        public void GiveItemToPlayer(InventoryEntry item)
-        {
-            PlayerInventory.AddItem(item);
         }
 
         public static void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
@@ -177,31 +165,28 @@ namespace SunsetSystems.Inventory
             _money = value;
         }
 
-        public object GetSaveData()
+        public void SaveRuntimeData()
         {
             InventorySaveData saveData = new();
-            saveData.EquipmentData = new(_coterieEquipmentData);
-            saveData.InventoryContents = _playerInventory.Contents;
+            saveData.EquipmentData = _coterieEquipmentData;
+            saveData.PlayerInventory = _playerInventory;
             saveData.Money = _money;
-            return saveData;
+            ES3.Save(_unique.Id, saveData);
         }
 
-        public void InjectSaveData(object data)
+        public void LoadRuntimeData()
         {
-            InventorySaveData saveData = data as InventorySaveData;
-            this._coterieEquipmentData = new();
-            this._coterieEquipmentData.Concat(saveData.EquipmentData);
-            this._playerInventory ??= GetComponent<ItemStorage>();
-            this._playerInventory.AddItems(saveData.InventoryContents);
+            InventorySaveData saveData = ES3.Load<InventorySaveData>(_unique.Id);
+            this._coterieEquipmentData = saveData.EquipmentData;
+            this._playerInventory = saveData.PlayerInventory;
             this._money = saveData.Money;
         }
-    }
 
-    [Serializable]
-    public class InventorySaveData
-    {
-        public Dictionary<string, EquipmentData> EquipmentData;
-        public List<InventoryEntry> InventoryContents;
-        public float Money;
+        private struct InventorySaveData
+        {
+            public StringEquipmentDataDictionary EquipmentData;
+            public ItemStorage PlayerInventory;
+            public float Money;
+        }
     }
 }

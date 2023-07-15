@@ -356,8 +356,6 @@ namespace Gaia
                 }
             }
 
-            types.Sort((a, b) => a.Name.CompareTo(b.Name));
-
             foreach (Type t in types)
             {
                 PropertyInfo propertyInfo = t.GetProperty("instance", s_bindingFlags);

@@ -96,7 +96,7 @@ namespace SunsetSystems.Entities.Characters
             creature = faction switch
             {
                 Faction.PlayerControlled => creatureObject.AddComponent<PlayerControlledCharacter>(),
-                Faction.Dialogue => creatureObject.AddComponent<DialogueNPC>(),
+                Faction.Dialogue => creatureObject.AddComponent<TalkableNPC>(),
                 _ => creatureObject.AddComponent<DefaultNPC>(),
             };
         }
@@ -127,7 +127,7 @@ namespace SunsetSystems.Entities.Characters
 
         private static void InitializeStatsManager(StatsManager statsManager, Creature owner)
         {
-
+            statsManager.Initialize(owner);
         }
 
         private static void InitializeCollider(CapsuleCollider collider)

@@ -6,7 +6,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-Shader "Hidden/Gaia/TerrainTools/Noise/NoiseBlit/NoiseBlitFbm"
+Shader "Hidden/TerrainTools/Noise/NoiseBlit/NoiseBlitFbm"
 {
     Properties { _MainTex ("Texture", any) = "" {} }
 

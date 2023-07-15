@@ -40,7 +40,6 @@ Shader "Hidden/Gaia/StampPreview"
 
             #include "UnityCG.cginc"
             #include "TerrainPreview.cginc"
-            #include "../../Terrain.cginc"
 
             sampler2D _BrushTex;
 
@@ -69,7 +68,7 @@ Shader "Hidden/Gaia/StampPreview"
 
                 // compute heightmap UV and sample heightmap
                 float2 heightmapUV = PaintContextPixelsToHeightmapUV(pcPixels);
-                float heightmapSample = InternalUnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
+                float heightmapSample = UnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
 
                 // compute brush UV
                 float2 brushUV = PaintContextPixelsToBrushUV(pcPixels);
@@ -90,7 +89,7 @@ Shader "Hidden/Gaia/StampPreview"
 
             float4 frag(v2f i) : SV_Target
             {
-                float brushSample = InternalUnpackHeightmap(tex2D(_BrushTex, i.brushUV));
+                float brushSample = UnpackHeightmap(tex2D(_BrushTex, i.brushUV));
 
                 // out of bounds multiplier
                 float oob = all(saturate(i.brushUV) == i.brushUV) ? 1.0f : 0.0f;
@@ -158,8 +157,8 @@ Shader "Hidden/Gaia/StampPreview"
 
                 // compute heightmap UV and sample heightmap
                 float2 heightmapUV = PaintContextPixelsToHeightmapUV(pcPixels);
-                float heightmapSample = InternalUnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
-                float heightmapSampleOrig = InternalUnpackHeightmap(tex2Dlod(_HeightmapOrig, float4(heightmapUV, 0, 0)));
+                float heightmapSample = UnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
+                float heightmapSampleOrig = UnpackHeightmap(tex2Dlod(_HeightmapOrig, float4(heightmapUV, 0, 0)));
 
                 // compute brush UV
                 float2 brushUV = PaintContextPixelsToBrushUV(pcPixels);
@@ -182,7 +181,7 @@ Shader "Hidden/Gaia/StampPreview"
 
             float4 frag(v2f i) : SV_Target
             {
-                float brushSample = InternalUnpackHeightmap(tex2D(_BrushTex, i.brushUV));
+                float brushSample = UnpackHeightmap(tex2D(_BrushTex, i.brushUV));
 
                 // out of bounds multiplier
                 float oob = all(saturate(i.brushUV) == i.brushUV) ? 1.0f : 0.0f;
@@ -278,8 +277,8 @@ Shader "Hidden/Gaia/StampPreview"
 
                 // compute heightmap UV and sample heightmap
                 float2 heightmapUV = PaintContextPixelsToHeightmapUV(pcPixels);
-                float heightmapSample = InternalUnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
-                float heightmapSampleOrig = InternalUnpackHeightmap(tex2Dlod(_HeightmapOrig, float4(heightmapUV, 0, 0)));
+                float heightmapSample = UnpackHeightmap(tex2Dlod(_Heightmap, float4(heightmapUV, 0, 0)));
+                float heightmapSampleOrig = UnpackHeightmap(tex2Dlod(_HeightmapOrig, float4(heightmapUV, 0, 0)));
 
                 // compute brush UV
                 float2 brushUV = PaintContextPixelsToBrushUV(pcPixels);
@@ -321,7 +320,7 @@ Shader "Hidden/Gaia/StampPreview"
 
             float4 frag(v2f i) : SV_Target
             {
-                float brushSample = InternalUnpackHeightmap(tex2D(_BrushTex, i.brushUV));
+                float brushSample = UnpackHeightmap(tex2D(_BrushTex, i.brushUV));
 
                 // out of bounds multiplier
                 float oob = all(saturate(i.brushUV) == i.brushUV) ? 1.0f : 0.0f;

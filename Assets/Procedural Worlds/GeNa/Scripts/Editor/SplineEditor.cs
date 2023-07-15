@@ -136,6 +136,7 @@ namespace GeNa.Core
             CreateExtensionList();
             #endregion
             m_spline.OnSubscribe();
+            m_spline.transform.hideFlags = HideFlags.HideInInspector;
             Tools.hidden = true;
         }
         protected void OnDisable()
@@ -211,8 +212,6 @@ namespace GeNa.Core
                                     m_selectedNodes.Clear();
                                     m_selectedNodes.Add(m_spline.Nodes.Count > 0 ? m_spline.Nodes.Last() : null);
                                 });
-                                m_spline.IsDirty = true;
-                                m_splineModified = true;
                                 e.Use();
                             }
                             break;
@@ -314,8 +313,6 @@ namespace GeNa.Core
                                     m_spline.RecordUndoSnapshot("Nodes Moved", postAction);
                                 else
                                     postAction?.Invoke();
-                                m_spline.IsDirty = true;
-                                m_splineModified = true;
                             }
                             break;
                         }
@@ -462,8 +459,6 @@ namespace GeNa.Core
                                             m_selectedNodes.Add(newNode);
                                         }
                                     });
-                                    m_spline.IsDirty = true;
-                                    m_splineModified = true;
                                 }
                                 e.Use();
                                 break;
@@ -668,8 +663,6 @@ namespace GeNa.Core
                                     m_spline.AddNode(node, currentNode); //, node);
                                 }
                             });
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                     if (!e.shift)
                         m_selectedNodes.Clear();
@@ -792,8 +785,6 @@ namespace GeNa.Core
                     SelectExtensionEntry(nextEntry);
                 }
             });
-            m_spline.IsDirty = true;
-            m_splineModified = true;
         }
         private void OnAddExtensionListEntry(ReorderableList reorderableList)
         {
@@ -803,8 +794,6 @@ namespace GeNa.Core
                 reorderableList.list = m_spline.Extensions;
                 SelectExtensionEntry(extension);
             });
-            m_spline.IsDirty = true;
-            m_splineModified = true;
         }
         private void DrawExtensionListHeader(Rect rect)
         {
@@ -902,8 +891,6 @@ namespace GeNa.Core
                     if (entry.Extension != null)
                     {
                         m_spline.RecordUndoSnapshot("Extension Removed", () => { m_spline.RemoveExtension(entry.Extension); });
-                        m_spline.IsDirty = true;
-                        m_splineModified = true;
                     }
                     if (extension != null)
                     {
@@ -914,8 +901,6 @@ namespace GeNa.Core
                             m_spline.RemoveExtensionEntry(entry);
                             SelectExtensionEntry(newEntry);
                         });
-                        m_spline.IsDirty = true;
-                        m_splineModified = true;
                     }
                 }
                 EditorGUI.indentLevel = oldIndent;
@@ -985,8 +970,6 @@ namespace GeNa.Core
                                         ExtensionEntry entry = m_spline.AddExtension(geNaSpawnerExtension);
                                         SelectExtensionEntry(entry);
                                     });
-                                    m_spline.IsDirty = true;
-                                    m_splineModified = true;
                                 }
                                 else
                                 {
@@ -1007,8 +990,6 @@ namespace GeNa.Core
                                         ExtensionEntry entry = m_spline.AddExtension(newExtension);
                                         SelectExtensionEntry(entry);
                                     });
-                                    m_spline.IsDirty = true;
-                                    m_splineModified = true;
                                 }
                                 else
                                 {
@@ -1050,20 +1031,14 @@ namespace GeNa.Core
                         if (m_editorUtils.Button("Subdivide", helpEnabled))
                         {
                             m_spline.RecordUndoSnapshot("Subdivide", m_spline.Subdivide);
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                         if (m_editorUtils.Button("Simplify", helpEnabled))
                         {
                             m_spline.RecordUndoSnapshot("Simplify", () => m_spline.SimplifyNodesAndCurves(m_spline.SimplifyScale, m_spline.SimplifyEpsilon));
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                         if (m_editorUtils.Button("Smooth Spline", helpEnabled))
                         {
                             m_spline.RecordUndoSnapshot("Smooth", () => m_spline.Smooth(m_spline.SmoothStrength));
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                     }
                     EditorGUILayout.EndHorizontal();
@@ -1075,14 +1050,10 @@ namespace GeNa.Core
                         {
                             m_spline.RecordUndoSnapshot("Clear All Nodes", () => m_spline.RemoveAllNodes());
                             m_selectedNodes.Clear();
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                         if (m_editorUtils.Button("Snap Nodes To Ground", helpEnabled))
                         {
                             m_spline.RecordUndoSnapshot("Snap to Ground", () => m_spline.SnapNodesToGround());
-                            m_spline.IsDirty = true;
-                            m_splineModified = true;
                         }
                     }
                     EditorGUILayout.EndHorizontal();

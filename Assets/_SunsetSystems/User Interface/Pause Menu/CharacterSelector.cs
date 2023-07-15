@@ -11,7 +11,7 @@ namespace SunsetSystems
     {
         [SerializeField]
         private TextMeshProUGUI _selectedCharacterText;
-        private static string _selectedCharacterKey = "";
+        private static string _selectedCharacterKey = default;
 
         [SerializeField]
         private UnityEvent OnSelectedCharacterChanged;
@@ -27,12 +27,13 @@ namespace SunsetSystems
 
         private void OnEnable()
         {
+            string key = SelectedCharacterKey;
             UpdateSelectedText();
         }
 
         private void UpdateSelectedText()
         {
-            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(SelectedCharacterKey).Data.FullName;
+            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(_selectedCharacterKey).Data.FullName;
         }
 
         public void NextCharacter()

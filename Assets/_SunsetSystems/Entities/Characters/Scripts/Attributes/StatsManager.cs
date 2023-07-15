@@ -13,32 +13,16 @@ namespace SunsetSystems.Entities.Characters
 {
     public class StatsManager : MonoBehaviour
     {
-        [SerializeField, HideInInspector]
+        [SerializeField, ReadOnly]
         private Creature _owner;
-        private Creature Owner
-        {
-            get
-            {
-                if (_owner == null)
-                    _owner = GetComponent<Creature>();
-                return _owner;
-            }
-        }
-        private StatsData Data => Owner.Data.Stats;
+        private ref StatsData Data => ref _owner.Data.Stats;
 
         public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
         public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);
         public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
         public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
 
-        public StatsManager Instance { get; protected set; }
-
         public event Action<Creature> OnCreatureDied;
-
-        private void OnValidate()
-        {
-            _owner ??= GetComponent<Creature>();
-        }
 
         public void Initialize(Creature owner)
         {
@@ -71,7 +55,7 @@ namespace SunsetSystems.Entities.Characters
         public virtual void Die()
         {
             Health.SuperficialDamage = 10000;
-            OnCreatureDied?.Invoke(Owner);
+            OnCreatureDied?.Invoke(_owner);
         }
 
         internal void Heal(int amount)

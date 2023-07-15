@@ -7,7 +7,6 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Experience;
-using SunsetSystems.Inventory.Data;
 
 [Serializable]
 public class StringStringDictionary : SerializableDictionary<string, string> { }
@@ -57,6 +56,3 @@ public class StringObjectiveDictionary : SerializableDictionary<string, Objectiv
 
 [Serializable]
 public class StringIntDictionary : SerializableDictionary<string, int> { }
-
-[Serializable]
-public class StringBaseItemDictionary : SerializableDictionary<string, BaseItem> { }

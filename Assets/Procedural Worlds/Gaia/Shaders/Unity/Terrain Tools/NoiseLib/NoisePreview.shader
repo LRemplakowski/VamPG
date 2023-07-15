@@ -1,4 +1,4 @@
-Shader "Hidden/Gaia/TerrainTools/NoiseLib/DefaultPreview"
+Shader "Hidden/TerrainTools/NoiseLib/DefaultPreview"
 {
     Properties { _MainTex ("Texture", any) = "" {} }
 

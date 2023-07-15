@@ -160,8 +160,8 @@ namespace Gaia
             {
                 im.FreeTextureReferences();
             }
-            //removed for now as this creates unpredictable issues in Unity 2022.2
-            //Resources.UnloadUnusedAssets();
+
+            Resources.UnloadUnusedAssets();
         }
 
 

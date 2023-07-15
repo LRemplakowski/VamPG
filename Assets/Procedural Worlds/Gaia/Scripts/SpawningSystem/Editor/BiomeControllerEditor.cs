@@ -123,7 +123,7 @@ namespace Gaia
 #endif
             if (m_biomeController != null && m_biomeController.m_settings != null)
             {
-                m_biomeController.m_settings.ClearImageMaskTextures(true);
+                m_biomeController.m_settings.ClearImageMaskTextures();
             }
         }
 
@@ -911,14 +911,8 @@ namespace Gaia
                     biomePreset.postProcessProfile = m_biomeController.m_postProcessProfile;
 #endif
 
-
-
                     AssetDatabase.CreateAsset(biomePreset, saveFilePath);
                     AssetDatabase.ImportAsset(saveFilePath);
-                    BiomeControllerSettings biomeControllerSettings = Instantiate(m_biomeController.m_settings);
-                    AssetDatabase.AddObjectToAsset(biomeControllerSettings, saveFilePath);
-                    biomePreset.m_biomeControllerSettings = biomeControllerSettings;
-                    EditorUtility.SetDirty(biomePreset);
 
                     //Check if save was successful
                     BiomePreset biomePresetToLoad = (BiomePreset)AssetDatabase.LoadAssetAtPath(saveFilePath, typeof(BiomePreset));

@@ -301,11 +301,6 @@ namespace Gaia
 
         private void DrawHeightmapBackups(bool helpEnabled)
         {
-            if (m_manager == null || m_manager.m_session == null)
-            {
-                GUILayout.Label("No Session assigned yet.");
-                return;
-            }
             string path = GaiaDirectories.GetBackupHeightmapsPath(false, m_manager.m_session);
             if (Directory.Exists(path))
             {
@@ -381,7 +376,6 @@ namespace Gaia
         {
             if (m_manager.m_session == null)
             {
-                GUILayout.Label("No Session assigned yet.");
                 return;
             }
             if (m_manager.m_session.m_operations.Count > 0)

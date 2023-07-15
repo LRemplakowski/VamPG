@@ -284,13 +284,13 @@ namespace AmbientSounds
         static void CreateAmbienceManager(MenuCommand menuCommand)
         {
             // Create a new game object
-            GameObject go = new GameObject("AmbienceManager");
+            GameObject go = new GameObject("Ambience Manager");
             // Add the Ambience Manager
             go.AddComponent<AmbienceManager>();
             // Ensure it gets reparented if this was a context click (otherwise does nothing)
             GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
             // Register the creation in the undo system
-            Undo.RegisterCreatedObjectUndo(go, "Create AmbienceManager");
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
 
@@ -307,7 +307,7 @@ namespace AmbientSounds
             // Ensure it gets reparented if this was a context click (otherwise does nothing)
             GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
             // Register the creation in the undo system
-            Undo.RegisterCreatedObjectUndo(go, "Create Audio Area");
+            Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
         }
         #endregion
@@ -343,9 +343,6 @@ namespace AmbientSounds
             AmbienceManager.OnValueChanged -= OnValueChanged;
             AmbienceManager.OnValueChanged += OnValueChanged;
             UpdateSpatializers();
-            GameObject go = GameObject.Find("AmbienceManager");
-            if (go != null && (go.hideFlags & HideFlags.HideInHierarchy) != 0)
-                go.hideFlags = 0;
         }
 
         void SetupGlobalSequenceReorderable() { 
@@ -376,11 +373,8 @@ namespace AmbientSounds
             ) {
             m_editorUtils.Dispose();
             m_editorUtils = PWApp.GetEditorUtils(this, UpdateTabs);
-            if (Manager_UseAudioSourceGroup != null)
-            {
-                Manager_UseAudioSourceGroup.valueChanged.RemoveAllListeners();
-                Manager_UseAudioSourceGroup.valueChanged.AddListener(Repaint);
-            }
+            Manager_UseAudioSourceGroup.valueChanged.RemoveAllListeners();
+            Manager_UseAudioSourceGroup.valueChanged.AddListener(Repaint);
             UpdateTabs();
             Repaint();
         }
@@ -449,10 +443,8 @@ namespace AmbientSounds
                     {
                         GameObject go = GameObject.Find("AmbienceManager");
                         if (go == null)
-                        {
                             go = new GameObject("AmbienceManager");
-                            Undo.RegisterCreatedObjectUndo(go, "Created AmbienceManager");
-                        }
+                        go.hideFlags = HideFlags.HideInHierarchy;
 
                         if (go) {
                             AmbienceManagerInstance = go.AddComponent<AmbienceManager>();
@@ -478,17 +470,7 @@ namespace AmbientSounds
         }
 #endregion
 #region Tabs
-        void ManagerSettingsPanel(bool inlineHelp)
-        {
-            var allManagers = FindObjectsOfType<AmbienceManager>();
-            if (allManagers.Length > 1)
-            {
-                EditorGUILayout.HelpBox(m_editorUtils.GetContent("Manager_MultipleManagersFoundMessage").text, MessageType.Warning, true);
-            }
-            for (int m = 0; m < allManagers.Length; ++m)
-            {
-                EditorGUILayout.ObjectField(allManagers[m], typeof(AmbienceManager), true);
-            }
+        void ManagerSettingsPanel(bool inlineHelp) {
             if (Manager_UseAudioSourceGroup == null) {
                 Manager_UseAudioSourceGroup = new AnimBool(AmbienceManagerInstance.m_useAudioSource);
                 Manager_UseAudioSourceGroup.valueChanged.AddListener(Repaint);
@@ -497,20 +479,17 @@ namespace AmbientSounds
                 Manager_HideManagerObjectGroup = new AnimBool(AmbienceManagerInstance.m_hideManagerObject);
                 Manager_HideManagerObjectGroup.valueChanged.AddListener(Repaint);
             }
-            AmbienceManagerInstance.m_replaceManagerOnLoad = m_editorUtils.Toggle("Manager_ReplaceManagerOnLoad", AmbienceManagerInstance.m_replaceManagerOnLoad, inlineHelp);
             AmbienceManagerInstance.m_autoMoveManager = m_editorUtils.Toggle("Manager_AutoMoveManager", AmbienceManagerInstance.m_autoMoveManager, inlineHelp);
             Manager_HideManagerObjectGroup.target = AmbienceManagerInstance.m_autoMoveManager;
             if (EditorGUILayout.BeginFadeGroup(Manager_HideManagerObjectGroup.faded))
             {
                 AmbienceManagerInstance.m_hideManagerObject = m_editorUtils.Toggle("Manager_HideManagerObject", AmbienceManagerInstance.m_hideManagerObject, inlineHelp);
             }
-            AmbienceManagerInstance.m_clearEventsOnLoad = m_editorUtils.Toggle("Manager_ClearEventsOnLoad", AmbienceManagerInstance.m_clearEventsOnLoad, inlineHelp);
-            AmbienceManagerInstance.m_clearValuesOnLoad = m_editorUtils.Toggle("Manager_ClearValuesOnLoad", AmbienceManagerInstance.m_clearValuesOnLoad, inlineHelp);
             EditorGUILayout.EndFadeGroup();
             AmbienceManagerInstance.m_playerObject = m_editorUtils.ObjectField("Manager_PlayerObject", AmbienceManagerInstance.m_playerObject, typeof(Transform), true, inlineHelp) as Transform;
             AmbienceManagerInstance.m_volume = m_editorUtils.Slider("Manager_Volume", AmbienceManagerInstance.m_volume, 0f, 1f, inlineHelp);
             AmbienceManagerInstance.m_playSpeed = m_editorUtils.FloatField("Manager_PlaySpeed", AmbienceManagerInstance.m_playSpeed, inlineHelp);
-            AmbienceManager.PreloadAudio = AmbienceManagerInstance.m_preloadAudio = m_editorUtils.Toggle("Manager_PreloadAudio", AmbienceManagerInstance.m_preloadAudio, inlineHelp);
+            AmbienceManager.s_preloadAudio = AmbienceManagerInstance.m_preloadAudio = m_editorUtils.Toggle("Manager_PreloadAudio", AmbienceManagerInstance.m_preloadAudio, inlineHelp);
             AmbienceManagerInstance.m_useAudioSource = m_editorUtils.Toggle("Manager_UseAudioSource", AmbienceManagerInstance.m_useAudioSource, inlineHelp);
             Manager_UseAudioSourceGroup.target = AmbienceManagerInstance.m_useAudioSource;
             if (EditorGUILayout.BeginFadeGroup(Manager_UseAudioSourceGroup.faded)) {
@@ -815,7 +794,6 @@ namespace AmbientSounds
             {
                 GUI.FocusControl(""); //fixes bug where selected Text of one item would remain in old position until another control is focused
                 Selection.activeGameObject = new GameObject("New AudioArea", new System.Type[] { typeof(AudioArea) });
-                Undo.RegisterCreatedObjectUndo(Selection.activeGameObject, "Created New AudioArea");
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginHorizontal();

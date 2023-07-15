@@ -1145,28 +1145,13 @@ namespace Gaia
             }
 #endif
 
-#if UNITY_2022_2_OR_NEWER
-            resourceProtoDetail.m_alignToGround = editorUtils.Slider("ProtoAlignToGround", resourceProtoDetail.m_alignToGround, 0.0f, 100.0f);
-            resourceProtoDetail.m_positionJitter = editorUtils.Slider("ProtoPositionJitter", resourceProtoDetail.m_positionJitter, 0.0f, 100.0f);
-#endif
             editorUtils.LabelField("ProtoSpawnScale", "ProtoSpawnScaleRandom", showHelp);
             editorUtils.MinMaxSliderWithFields("DetailProtoMinMaxWidth", ref resourceProtoDetail.m_minWidth, ref resourceProtoDetail.m_maxWidth, 0, 20, showHelp);
             editorUtils.MinMaxSliderWithFields("DetailProtoMinMaxHeight", ref resourceProtoDetail.m_minHeight, ref resourceProtoDetail.m_maxHeight, 0, 20, showHelp);
-#if UNITY_2022_2_OR_NEWER
-            resourceProtoDetail.m_noiseSeed = editorUtils.IntField("ProtoNoiseSeed", resourceProtoDetail.m_noiseSeed);
-#endif
             resourceProtoDetail.m_noiseSpread = editorUtils.FloatField("DetailProtoNoiseSpread", resourceProtoDetail.m_noiseSpread, showHelp);
-#if UNITY_2022_2_OR_NEWER
-            resourceProtoDetail.m_density = editorUtils.Slider("ProtoDetailDensity", resourceProtoDetail.m_density, 0.0f, 5.0f);
-            resourceProtoDetail.m_holeEdgePadding = editorUtils.Slider("ProtoHoleEdgePadding", resourceProtoDetail.m_holeEdgePadding, 0.0f, 100.0f);
-#endif
-
             //resourceProtoDetail.m_bendFactor = editorUtils.FloatField("DetailProtoBendFactor", resourceProtoDetail.m_bendFactor, showHelp);
             resourceProtoDetail.m_healthyColour = editorUtils.ColorField("DetailProtoHealthyColour", resourceProtoDetail.m_healthyColour, showHelp);
             resourceProtoDetail.m_dryColour = editorUtils.ColorField("DetailProtoDryColour", resourceProtoDetail.m_dryColour, showHelp);
-#if UNITY_2022_2_OR_NEWER
-            resourceProtoDetail.m_useDensityScaling = editorUtils.Toggle("DetailProtoUseDensityScaling", resourceProtoDetail.m_useDensityScaling, showHelp);
-#endif
             EditorGUI.indentLevel--;
             EditorGUILayout.BeginHorizontal();
             editorUtils.LabelField("DetailProtoHeadingPWGrass", EditorStyles.boldLabel, GUILayout.Width(150));
@@ -1389,15 +1374,6 @@ namespace Gaia
                 newTerrainDetail.minHeight = resourceProtoDetail.m_minHeight;
                 newTerrainDetail.minWidth = resourceProtoDetail.m_minWidth;
                 newTerrainDetail.noiseSpread = resourceProtoDetail.m_noiseSpread;
-#if UNITY_2022_2_OR_NEWER
-                newTerrainDetail.alignToGround = resourceProtoDetail.m_alignToGround;
-                newTerrainDetail.density = resourceProtoDetail.m_density;
-                newTerrainDetail.holeEdgePadding = resourceProtoDetail.m_holeEdgePadding;
-                newTerrainDetail.noiseSeed = resourceProtoDetail.m_noiseSeed;
-                newTerrainDetail.positionJitter = resourceProtoDetail.m_positionJitter;
-                newTerrainDetail.targetCoverage = resourceProtoDetail.m_targetCoverage;
-                newTerrainDetail.useDensityScaling = resourceProtoDetail.m_useDensityScaling;
-#endif
                 FloraUtils.CreateConfigFromTexture(newTerrainDetail, resourceProtoDetail.m_floraLODs, resourceProtoDetail.m_name, SpawnerResourceType.TerrainDetail);
             }
 #endif

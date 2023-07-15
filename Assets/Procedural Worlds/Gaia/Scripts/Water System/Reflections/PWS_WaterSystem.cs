@@ -761,28 +761,19 @@ namespace Gaia
                 return;
             }
 
-            switch (renderPipeline)
+            if (renderPipeline != GaiaConstants.EnvironmentRenderer.HighDefinition)
             {
-                case GaiaConstants.EnvironmentRenderer.BuiltIn:
-                    masterMaterial.shader = Shader.Find(GaiaShaderID.BuiltInWaterShader);
-                    break;
-                case GaiaConstants.EnvironmentRenderer.Universal:
-#if GAIA_XR
-                    masterMaterial.shader = Shader.Find(GaiaShaderID.VRWaterShader);
-#else
-                    masterMaterial.shader = Shader.Find(GaiaShaderID.URPWaterShader);
-#endif
-
-                    break;
-                case GaiaConstants.EnvironmentRenderer.HighDefinition:
-                    masterMaterial.shader = Shader.Find(GaiaShaderID.HDRPWaterShader);
-                    masterMaterial.EnableKeyword("_DISABLE_DECALS");
-                    masterMaterial.EnableKeyword("_DISABLE_SSR");
-                    masterMaterial.EnableKeyword("_DISABLE_SSR_TRANSPARENT");
-                    masterMaterial.EnableKeyword("_DOUBLESIDED_ON");
-                    masterMaterial.EnableKeyword("_ENABLE_FOG_ON_TRANSPARENT");
-                    masterMaterial.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-                    break;
+                masterMaterial.shader = Shader.Find(GaiaShaderID.BuiltInWaterShader);
+            }
+            else
+            {
+                masterMaterial.shader = Shader.Find(GaiaShaderID.HDRPWaterShader);
+                masterMaterial.EnableKeyword("_DISABLE_DECALS");
+                masterMaterial.EnableKeyword("_DISABLE_SSR");
+                masterMaterial.EnableKeyword("_DISABLE_SSR_TRANSPARENT");
+                masterMaterial.EnableKeyword("_DOUBLESIDED_ON");
+                masterMaterial.EnableKeyword("_ENABLE_FOG_ON_TRANSPARENT");
+                masterMaterial.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             }
         }
         /// <summary>
@@ -1262,7 +1253,7 @@ namespace Gaia
                 return true;
             }
 
-            Debug.LogWarning("Water System: The player was null or no camera was found in your scene.");
+            //Debug.LogWarning("Water System: The player was null or no camera was found in your scene.");
             return false;
         }
         /// <summary>
@@ -2482,8 +2473,8 @@ namespace Gaia
             }
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
     }
 }

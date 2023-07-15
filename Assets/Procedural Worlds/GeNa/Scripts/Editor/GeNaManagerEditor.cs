@@ -19,6 +19,12 @@ namespace GeNa.Core
         #endregion
         #region Preferences
         private bool showNews;
+        private bool enableTODLightSync;
+        private bool previewInEditor;
+        private LightShadows lightShadowType;
+        private Constants.LightSyncCullingMode lightCullingMode;
+        private float cullingDitance;
+        private int cullingWaitTime;
         #endregion
         // Core
         private GeNaManager m_manager;
@@ -55,6 +61,8 @@ namespace GeNa.Core
             if (m_manager == null)
                 return;
             m_settings = m_manager.Settings;
+            //Hide its m_transform
+            m_manager.transform.hideFlags = HideFlags.HideInInspector;
             m_manager.Initialize();
             Tab[] tabs =
             {
@@ -120,6 +128,7 @@ namespace GeNa.Core
                 }
             }
             m_editorUtils.Panel("Adv Spawn Panel", SpawnPanel, true);
+            m_editorUtils.Panel("ComponentExtensionsPanel", ExtensionSystems, true);
             if (m_editorUtils.Button("RevertToDefaults"))
             {
                 if (EditorUtility.DisplayDialog("Reverting Preferences", "You are about to revert your preferences this will reset them back there default value. Are you sure you want to proceed?", "Yes", "No"))
@@ -147,6 +156,68 @@ namespace GeNa.Core
             }
         }
         /// <summary>
+        /// Extension Component System Panel
+        /// </summary>
+        /// <param name="helpEnabled"></param>
+        private void ExtensionSystems(bool helpEnabled)
+        {
+            if (m_manager == null)
+                m_manager = GeNaManager.GetInstance();
+            enableTODLightSync = m_manager.EnableTimeOfDayLightSync;
+            previewInEditor = m_manager.PreviewSyncLightCullingInEditor;
+            lightShadowType = m_manager.TimeOfDayLightSyncShadowMode;
+            lightCullingMode = m_manager.LightCullingMode;
+            cullingDitance = m_manager.LightCullingDistance;
+            cullingWaitTime = m_manager.CullingWaitForFrames;
+            EditorGUI.BeginChangeCheck();
+            {
+                enableTODLightSync = m_editorUtils.Toggle("EnableTimeOfDayLightSync", enableTODLightSync, helpEnabled);
+                if (enableTODLightSync)
+                {
+                    EditorGUI.indentLevel++;
+                    m_editorUtils.Heading("Setup");
+                    lightShadowType = (LightShadows)m_editorUtils.EnumPopup("TimeOfDayLightSyncShadowType", lightShadowType, helpEnabled);
+                    previewInEditor = m_editorUtils.Toggle("PreviewInEditor", previewInEditor, helpEnabled);
+                    if (previewInEditor)
+                    {
+                        m_editorUtils.Text("PreviewInEditorText");
+                    }
+                    m_editorUtils.Heading("Culling");
+                    lightCullingMode = (Constants.LightSyncCullingMode)m_editorUtils.EnumPopup("TimeOfDayLightSyncCullingMode", lightCullingMode, helpEnabled);
+                    cullingDitance = m_editorUtils.FloatField("TimeOfDayLightSyncCullingDistance", cullingDitance, helpEnabled);
+                    if (cullingDitance < 0.1f)
+                    {
+                        cullingDitance = 0.1f;
+                    }
+                    // cullingWaitTime = m_editorUtils.IntField("TimeOfDayLightSyncCullingWaitTime", cullingWaitTime, helpEnabled);
+                    // if (cullingWaitTime < 1)
+                    // {
+                    //     cullingWaitTime = 1;
+                    // }
+                    EditorGUI.indentLevel--;
+                }
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                //Setup
+                EditorPrefs.SetBool(Constants.ENABLE_GAIA_TIME_OF_DAY_LIGHT_SYNC, enableTODLightSync);
+                m_manager.EnableTimeOfDayLightSync = enableTODLightSync;
+                EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_SHADOWS_MODE, (int)lightShadowType);
+                m_manager.TimeOfDayLightSyncShadowMode = lightShadowType;
+                EditorPrefs.SetBool(Constants.SET_GAIA_TIME_OF_DAY_PREVIEW_IN_EDITOR, m_manager.PreviewSyncLightCullingInEditor);
+                m_manager.PreviewSyncLightCullingInEditor = previewInEditor;
+
+                //Culling
+                EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_MODE, (int)lightCullingMode);
+                m_manager.LightCullingMode = lightCullingMode;
+                EditorPrefs.SetFloat(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_DISTANCE, cullingDitance);
+                m_manager.LightCullingDistance = cullingDitance;
+                EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_WAIT_FOR_FRAMES, cullingWaitTime);
+                m_manager.CullingWaitForFrames = cullingWaitTime;
+                GeNaEvents.UpdateTimeOfDaySyncCulling();
+            }
+        }
+        /// <summary>
         /// Reverts all the prefs to there default value
         /// </summary>
         public static void RevertPrefsToDefaults()
@@ -156,6 +227,17 @@ namespace GeNa.Core
 
             //Undo
             GeNaManager manager = GeNaManager.GetInstance();
+            //Component Extension
+            EditorPrefs.SetBool(Constants.ENABLE_GAIA_TIME_OF_DAY_LIGHT_SYNC, false);
+            manager.EnableTimeOfDayLightSync = false;
+            EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_SHADOWS_MODE, 0);
+            manager.TimeOfDayLightSyncShadowMode = LightShadows.None;
+            EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_MODE, 0);
+            manager.LightCullingMode = Constants.LightSyncCullingMode.ShadowOnly;
+            EditorPrefs.SetFloat(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_DISTANCE, 70F);
+            manager.LightCullingDistance = 70f;
+            EditorPrefs.SetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_WAIT_FOR_FRAMES, 100);
+            manager.CullingWaitForFrames = 100;
 
             //News
             EditorPrefs.SetBool(Constants.PW_SHOW_NEWS + PWApp.CONF.NameSpace, false);
@@ -295,6 +377,25 @@ namespace GeNa.Core
             //Spawning
             ValidateEditorPref(Defaults.DEF_SPAWN_TO_TARGET_KEY, Constants.EditorPrefsType.Bool, true);
             Preferences.DefaultSpawnToTarget = EditorPrefs.GetBool(Defaults.DEF_SPAWN_TO_TARGET_KEY);
+
+            //Undo
+            GeNaManager manager = GeNaGlobalReferences.GeNaManagerInstance;
+            if (manager != null)
+            {
+                //Extensions
+                ValidateEditorPref(Constants.ENABLE_GAIA_TIME_OF_DAY_LIGHT_SYNC, Constants.EditorPrefsType.Bool, false);
+                manager.EnableTimeOfDayLightSync = EditorPrefs.GetBool(Constants.ENABLE_GAIA_TIME_OF_DAY_LIGHT_SYNC);
+                ValidateEditorPref(Constants.SET_GAIA_TIME_OF_DAY_PREVIEW_IN_EDITOR, Constants.EditorPrefsType.Bool, false);
+                manager.PreviewSyncLightCullingInEditor = EditorPrefs.GetBool(Constants.SET_GAIA_TIME_OF_DAY_PREVIEW_IN_EDITOR);
+                ValidateEditorPref(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_SHADOWS_MODE, Constants.EditorPrefsType.Int, 0);
+                manager.TimeOfDayLightSyncShadowMode = (LightShadows)EditorPrefs.GetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_SHADOWS_MODE);
+                ValidateEditorPref(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_MODE, Constants.EditorPrefsType.Int, 0);
+                manager.LightCullingMode = (Constants.LightSyncCullingMode)EditorPrefs.GetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_MODE);
+                ValidateEditorPref(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_DISTANCE, Constants.EditorPrefsType.Float, 70f);
+                manager.LightCullingDistance = EditorPrefs.GetFloat(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_DISTANCE);
+                ValidateEditorPref(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_WAIT_FOR_FRAMES, Constants.EditorPrefsType.Int, 100);
+                manager.CullingWaitForFrames = EditorPrefs.GetInt(Constants.SET_GAIA_TIME_OF_DAY_LIGHT_CULLING_WAIT_FOR_FRAMES);
+            }
 
             //News
             ValidateEditorPref(Constants.PW_SHOW_NEWS, Constants.EditorPrefsType.Bool, false);

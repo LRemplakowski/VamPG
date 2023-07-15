@@ -31,11 +31,6 @@ public class CreatureAttribute : BaseStat
         this._attributeType = attributeType;
     }
 
-    public CreatureAttribute() : this(AttributeType.Invalid)
-    {
-
-    }
-
     public override int GetValue(ModifierType modifierTypesFlag)
     {
         int finalValue = _baseValue;

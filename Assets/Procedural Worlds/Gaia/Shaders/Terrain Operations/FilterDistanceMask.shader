@@ -33,7 +33,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			sampler2D _DistanceMaskTex;
@@ -121,24 +120,24 @@
 				if (_AxisMode == 0)
 				{
 					//X-Z-Circle
-					filter = InternalUnpackHeightmap(tex2D(_DistanceMaskTex, smoothstep(0, 0.5f, distance(UVOffset, float2(0.5f, 0.5f)))));
+					filter = UnpackHeightmap(tex2D(_DistanceMaskTex, smoothstep(0, 0.5f, distance(UVOffset, float2(0.5f, 0.5f)))));
 				}
 				else if (_AxisMode == 1)
 				{
 					//X-Axis
-					filter = InternalUnpackHeightmap(tex2D(_DistanceMaskTex, float2(UVOffset.x, 0)));
+					filter = UnpackHeightmap(tex2D(_DistanceMaskTex, float2(UVOffset.x, 0)));
 				}
 				else if (_AxisMode == 2)
 				{
 					//Z-Axis
-					filter = InternalUnpackHeightmap(tex2D(_DistanceMaskTex, float2(UVOffset.y, 0)));
+					filter = UnpackHeightmap(tex2D(_DistanceMaskTex, float2(UVOffset.y, 0)));
 				}
 				else
 				{
 					//X-Z-Square
 					 UVOffset *=  1.0f - UVOffset.yx;   
 					float square = pow(UVOffset.x*UVOffset.y, _SquareRoundness); 
-					filter = InternalUnpackHeightmap(tex2D(_DistanceMaskTex, float2(1.0f-(square * 2.0f), 0)));
+					filter = UnpackHeightmap(tex2D(_DistanceMaskTex, float2(1.0f-(square * 2.0f), 0)));
 				}
 				return filter;
 			}
@@ -154,11 +153,11 @@
 
             float4 DistanceMaskMultiply(v2f i) : SV_Target
             {
-				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filter));
 				float result = height * transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -174,15 +173,15 @@
 
             float4 DistanceMaskGreaterThan(v2f i) : SV_Target
             {
-				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filter));
 				float result = height;
 				if (transformedHeight > height)
 				{
 					result = transformedHeight;
 				}
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -198,15 +197,15 @@
 
 			float4 DistanceMaskSmallerThan(v2f i) : SV_Target
 			{
-				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filter));
 				float result = height;
 				if (transformedHeight < height)
 				{
 					result = transformedHeight;
 				}
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -221,11 +220,11 @@
 
 			float4 DistanceMaskAdd(v2f i) : SV_Target
 			{
-				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
-				float transformedHeight =InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				float transformedHeight =UnpackHeightmap(tex2D(_HeightTransformTex, filter));
 				float result = height + transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -240,11 +239,11 @@
 
 			float4 DistanceMaskSubtract(v2f i) : SV_Target
 			{
-				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
-				float transformedHeight =InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				float transformedHeight =UnpackHeightmap(tex2D(_HeightTransformTex, filter));
 				float result = height - transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}

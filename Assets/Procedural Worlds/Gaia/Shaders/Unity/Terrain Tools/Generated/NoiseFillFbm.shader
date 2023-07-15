@@ -6,7 +6,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-    Shader "Hidden/Gaia/TerrainTools/NoiseFill/NoiseFillFbm"
+    Shader "Hidden/TerrainTools/NoiseFill/NoiseFillFbm"
     {
 
         Properties

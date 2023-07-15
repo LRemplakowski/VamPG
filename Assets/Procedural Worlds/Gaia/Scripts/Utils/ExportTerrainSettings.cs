@@ -13,7 +13,7 @@ namespace Gaia
     public enum ConversionAction { MeshTerrain, ColliderOnly, OBJFileExport }
     public enum LODSettingsMode { Impostor, LowPoly, Custom }
     public enum SaveFormat { Triangles, Quads }
-    public enum TerrainColliderType { MeshCollider, TerrainCollider, None }
+    public enum TerrainColliderType { MeshCollider, TerrainCollider }
     public enum SaveResolution { Full = 0, Half, Quarter, Eighth, Sixteenth }
     public enum NormalEdgeMode { Smooth, Sharp }
     public enum TextureExportMethod { OrthographicBake, BaseMapExport }
@@ -142,7 +142,6 @@ namespace Gaia
         public double m_impostorRange = 0;
         public float m_colliderSimplifyQuality = 1.0f;
         public bool m_customSimplificationSettingsFoldedOut;
-        public bool m_colliderExportCreateServerScene;
 #if GAIA_MESH_PRESENT
         public UnityMeshSimplifierGaia.SimplificationOptions m_colliderSimplificationOptions = new UnityMeshSimplifierGaia.SimplificationOptions()
         {
@@ -157,7 +156,6 @@ namespace Gaia
             ManualUVComponentCount = false,
             UVComponentCount = 2
         };
-        
 #endif
 
         public bool CompareTo(ExportTerrainSettings compareSettings)

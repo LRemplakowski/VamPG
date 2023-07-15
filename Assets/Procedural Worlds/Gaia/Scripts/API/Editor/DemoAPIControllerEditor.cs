@@ -70,7 +70,7 @@ namespace Gaia
         {
             if (controller != null)
             {
-                controller.m_seasonData = GaiaAPI.GetWeatherSeasonSettings();
+                controller.m_seasonData = GaiaAPI.GetWeaterSeasonSettings();
             }
         }
         private void LoadWind(DemoAPIController controller)

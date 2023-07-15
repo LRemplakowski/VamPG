@@ -24,6 +24,10 @@ namespace GeNa.Core
 #else
             GeNaUtility.Gaia2Present = false;
 #endif
+            GeNaEvents.SetupLightSync = GaiaTimeOfDayLightSync.SetupLightSync;
+            GeNaEvents.UpdateTimeOfDayLightSync = UpdateAllTimeOfDayLightSyncs;
+            GeNaEvents.UpdateTimeOfDayLightSyncShadows = UpdateAllTimeOfDayLightSyncsShadows;
+            GeNaEvents.UpdateTimeOfDaySyncCulling = UpdateAllTimeOfDayLightSyncsCulling;
             GeNaEvents.SetupRiverWeatherSync = SetupRiverWeatherController;
         }
         /// <summary>
@@ -90,6 +94,71 @@ namespace GeNa.Core
             hasTerrainScenes = GaiaUtils.HasDynamicLoadedTerrains();
 #endif
             return hasTerrainScenes;
+        }
+        /// <summary>
+        /// Updates all the time of day sync lights in the scene
+        /// </summary>
+        /// <param name="value"></param>
+        public static bool UpdateAllTimeOfDayLightSyncs(bool value)
+        {
+            GaiaTimeOfDayLightSync[] syncs = GaiaTimeOfDayLightSync.GetAllInstances();
+            if (syncs.Length > 0)
+            {
+                foreach (GaiaTimeOfDayLightSync sync in syncs)
+                {
+                    sync.SystemActive = value;
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// Updates all the time of day sync light shadows types
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static LightShadows UpdateAllTimeOfDayLightSyncsShadows(LightShadows value)
+        {
+            GaiaTimeOfDayLightSync[] syncs = GaiaTimeOfDayLightSync.GetAllInstances();
+            if (syncs.Length > 0)
+            {
+                foreach (GaiaTimeOfDayLightSync sync in syncs)
+                {
+                    sync.LightShadowMode = value;
+                }
+            }
+            return value;
+        }
+        /// <summary>
+        /// Updates all the culling settings in the light sync system
+        /// </summary>
+        /// <returns></returns>
+        public static bool UpdateAllTimeOfDayLightSyncsCulling()
+        {
+            GaiaTimeOfDayLightSync[] syncs = GaiaTimeOfDayLightSync.GetAllInstances();
+            if (syncs.Length > 0)
+            {
+                GeNaManager manager = GeNaGlobalReferences.GeNaManagerInstance;
+                if (manager != null)
+                {
+                    foreach (GaiaTimeOfDayLightSync sync in syncs)
+                    {
+                        sync.GetLightRenderSettings();
+                        sync.SystemActive = manager.EnableTimeOfDayLightSync;
+                        sync.PreviewSyncLightCullingInEditor = manager.PreviewSyncLightCullingInEditor;
+                        sync.LightShadowMode = manager.TimeOfDayLightSyncShadowMode;
+                        sync.LightCullingMode = manager.LightCullingMode;
+                        sync.LightCullingDistance = manager.LightCullingDistance;
+                        sync.CullingWaitForFrames = manager.CullingWaitForFrames;
+                        sync.UpdateLightSettings(true);
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
         public static bool SetupRiverWeatherController(GameObject go, GeNaRiverProfile profile, float seaLevel, bool isEnabled)
         {

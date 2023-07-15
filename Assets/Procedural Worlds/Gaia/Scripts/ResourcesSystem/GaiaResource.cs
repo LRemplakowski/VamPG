@@ -322,45 +322,6 @@ namespace Gaia
                             {
                                 return localTerrainIdx;
                             }
-
-                            //Check if the prototype in question has a LOD group - if yes, we will check 
-                            //if the detail on the terrain has the same mesh than what is used as first LOD in the LOD group. If this is true,
-                            //we will consider the prototypes to be "the same".
-                            //This is for compatibility with terrain detail renderers such as Nature Renderer
-
-                            if (detail.m_detailProtoype != null)
-                            {
-
-                                LODGroup lodGroup = detail.m_detailProtoype.GetComponent<LODGroup>();
-
-                                if (lodGroup != null && proto.prototype != null)
-                                {
-                                    if (lodGroup.lodCount > 0)
-                                    {
-                                        LOD lod0 = lodGroup.GetLODs()[0];
-                                        if (lod0.renderers.Length > 0)
-                                        {
-                                            MeshFilter mfDetail = lod0.renderers[0].GetComponent<MeshFilter>();
-                                            if (mfDetail != null)
-                                            {
-                                                Renderer otherRenderer = proto.prototype.GetComponent<Renderer>();
-                                                if (otherRenderer != null)
-                                                {
-                                                    MeshFilter mfTerrain = otherRenderer.GetComponent<MeshFilter>();
-                                                    if (mfTerrain != null)
-                                                    {
-                                                        if (mfDetail.sharedMesh == mfTerrain.sharedMesh)
-                                                        {
-                                                            return localTerrainIdx;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
                         }
                         localTerrainIdx++;
                     }
@@ -493,15 +454,6 @@ namespace Gaia
                     newDetail.minHeight = detail.m_minHeight;
                     newDetail.minWidth = detail.m_minWidth;
                     newDetail.noiseSpread = detail.m_noiseSpread;
-#if UNITY_2022_2_OR_NEWER
-                    newDetail.alignToGround = detail.m_alignToGround;
-                    newDetail.density = detail.m_density;
-                    newDetail.holeEdgePadding = detail.m_holeEdgePadding;
-                    newDetail.noiseSeed = detail.m_noiseSeed;
-                    newDetail.positionJitter = detail.m_positionJitter;
-                    newDetail.targetCoverage = detail.m_targetCoverage;
-                    newDetail.useDensityScaling = detail.m_useDensityScaling;
-#endif
                     terrainDetails.Add(newDetail);
                 }
                 else
@@ -790,16 +742,6 @@ namespace Gaia
                 resourceDetailProto.m_minHeight = terrainDetailProto.minHeight;
                 resourceDetailProto.m_minWidth = terrainDetailProto.minWidth;
                 resourceDetailProto.m_noiseSpread = terrainDetailProto.noiseSpread;
-
-#if UNITY_2022_2_OR_NEWER
-                resourceDetailProto.m_alignToGround = terrainDetailProto.alignToGround;
-                resourceDetailProto.m_density = terrainDetailProto.density;
-                resourceDetailProto.m_holeEdgePadding = terrainDetailProto.holeEdgePadding;
-                resourceDetailProto.m_noiseSeed = terrainDetailProto.noiseSeed;
-                resourceDetailProto.m_positionJitter = terrainDetailProto.positionJitter;
-                resourceDetailProto.m_targetCoverage = terrainDetailProto.targetCoverage;
-                resourceDetailProto.m_useDensityScaling = terrainDetailProto.useDensityScaling;
-#endif
 
                 //Handle missing dna
                 if (resourceDetailProto.m_dna == null)
@@ -1267,44 +1209,6 @@ namespace Gaia
                         {
                             found = true;
                         }
-
-                        //Check if the prototype in question has a LOD group - if yes, we will check 
-                        //if the detail on the terrain has the same mesh than what is used as first LOD in the LOD group. If this is true,
-                        //we will consider the prototypes to be "the same".
-                        //This is for compatibility with terrain detail renderers such as Nature Renderer
-
-                        if (detail.m_detailProtoype != null)
-                        {
-
-                            LODGroup lodGroup = detail.m_detailProtoype.GetComponent<LODGroup>();
-
-                            if (lodGroup != null && dp.prototype != null)
-                            {
-                                if (lodGroup.lodCount > 0)
-                                {
-                                    LOD lod0 = lodGroup.GetLODs()[0];
-                                    if (lod0.renderers.Length > 0)
-                                    {
-                                        MeshFilter mfDetail = lod0.renderers[0].GetComponent<MeshFilter>();
-                                        if (mfDetail != null)
-                                        {
-                                            Renderer otherRenderer = dp.prototype.GetComponent<Renderer>();
-                                            if (otherRenderer != null)
-                                            {
-                                                MeshFilter mfTerrain = otherRenderer.GetComponent<MeshFilter>();
-                                                if (mfTerrain != null)
-                                                {
-                                                    if (mfDetail.sharedMesh == mfTerrain.sharedMesh)
-                                                    {
-                                                        found = true;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
                 //Add if necessary
@@ -1332,17 +1236,6 @@ namespace Gaia
                     newDetail.minHeight = detail.m_minHeight;
                     newDetail.minWidth = detail.m_minWidth;
                     newDetail.noiseSpread = detail.m_noiseSpread;
-
-#if UNITY_2022_2_OR_NEWER
-                    newDetail.alignToGround = detail.m_alignToGround;
-                    newDetail.density = detail.m_density;
-                    newDetail.holeEdgePadding = detail.m_holeEdgePadding;
-                    newDetail.noiseSeed = detail.m_noiseSeed;
-                    newDetail.positionJitter = detail.m_positionJitter;
-                    newDetail.targetCoverage = detail.m_targetCoverage;
-                    newDetail.useDensityScaling = detail.m_useDensityScaling;
-#endif
-
                     terrainDetails.Add(newDetail);
                 }
             }
@@ -1498,15 +1391,6 @@ namespace Gaia
                     newDetail.minHeight = detail.m_minHeight;
                     newDetail.minWidth = detail.m_minWidth;
                     newDetail.noiseSpread = detail.m_noiseSpread;
-#if UNITY_2022_2_OR_NEWER
-                    newDetail.alignToGround = detail.m_alignToGround;
-                    newDetail.density =  detail.m_density;
-                    newDetail.holeEdgePadding =  detail.m_holeEdgePadding;
-                    newDetail.noiseSeed = detail.m_noiseSeed;
-                    newDetail.positionJitter = detail.m_positionJitter;
-                    newDetail.targetCoverage = detail.m_targetCoverage;
-                    newDetail.useDensityScaling = detail.m_useDensityScaling;
-#endif
                     terrainDetails.Add(newDetail);
                     terrain.terrainData.detailPrototypes = terrainDetails.ToArray();
                     break;

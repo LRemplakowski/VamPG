@@ -13,7 +13,7 @@ namespace UMA.CharacterSystem.Editors
 	{		
 		public static bool showHelp = false;
 		public static bool showWardrobe = false;
-		public static bool showEditorCustomization = false;
+		public static bool showEditorCustomization = true;
 		public static bool showPrefinedDNA = false;
 
 		public static int currentcolorfilter=0;
@@ -34,6 +34,7 @@ namespace UMA.CharacterSystem.Editors
 			baseColorNames.Clear();
 			baseColorNames.AddRange(new string[] { "skin","hair","eyes"});
 			thisDCA = target as DynamicCharacterAvatar;
+			/*
 			if (thisDCA.context == null)
 			{
 				thisDCA.context = UMAContextBase.Instance;
@@ -52,7 +53,7 @@ namespace UMA.CharacterSystem.Editors
 				//this will set also the existing Editorcontext if there is one
 				if (thisDCA.context.gameObject.transform.parent.gameObject.name == "UMAEditorContext")
 					thisDCA.CreateEditorContext();
-			}
+			}*/
 			_racePropDrawer.thisDCA = thisDCA;
 			_wardrobePropDrawer.thisDCA = thisDCA;
 			_animatorPropDrawer.thisDCA = thisDCA;

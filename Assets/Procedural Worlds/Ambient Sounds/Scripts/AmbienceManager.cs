@@ -61,12 +61,6 @@ namespace AmbientSounds
         public bool m_autoMoveManager = true;
         /// <summary> Should the GameObject the AmbienceManager is placed on be hidden in Hierarchy? </summary>
         public bool m_hideManagerObject = true;
-        /// <summary> Should this Manager replace any existing ones on scene load? </summary>
-        public bool m_replaceManagerOnLoad = false;
-        /// <summary> Should Events be cleared when this Manager starts? </summary>
-        public bool m_clearEventsOnLoad = false;
-        /// <summary> Should Values be cleared when this Manager starts? </summary>
-        public bool m_clearValuesOnLoad = false;
         /// <summary> Object to track position of for Audio Areas </summary>
         public Transform m_playerObject = null;
         /// <summary> Global playback speed for all Sequences </summary>
@@ -101,68 +95,24 @@ namespace AmbientSounds
         bool lastHideManagerObject = false;
         #endregion
         #region Unity Lifecycle
-        void OnEnable()
+        void Awake()
         {
-            if(_instance != null && _instance != this)
-            {
-                if (m_replaceManagerOnLoad)
-                {
-                    Destroy(_instance);
-                }
-                else
-                {
-                    Debug.LogWarning("Another AmbienceManager was found and already running. This Manager=" + gameObject.name + ((gameObject.hideFlags & HideFlags.HideInHierarchy) != 0 ? " (hidden)" : ""), _instance.gameObject);
-                    enabled = false;
-                    return;
-                }
-            }
             _instance = this;
+            /*
+            addedSequences.Clear();
+            fadeOutToRemoveSequences.Clear();
+            lock(trackData)
+                trackData.Clear();
+            sourceTrackData.Clear();
+            immediatePlaySequences.Clear();
+            activeEvents.Clear();
+            activeValues.Clear();
+            loadedAudioClips.Clear();
+            loadingAudioClips.Clear();
+            //*/
             lastHideManagerObject = m_hideManagerObject;
-            //clear values/events if set
-            if (m_clearValuesOnLoad)
-                s_activeValues.Clear();
-            if (m_clearEventsOnLoad)
-                s_activeEvents.Clear();
-
-            //remove all tracks that are playing that shouldn't be (like old globals)
-            for (int t = 0; t < s_trackData.Count; ++t)
-            {
-                AudioTrack track = s_trackData[t];
-                bool found = false;
-                for (int s = 0; !found && s < m_globalSequences.Length; ++s)
-                    if (track.m_sequence == m_globalSequences[s])
-                        found = true;
-                for (int s = 0; !found && s < s_immediatePlaySequences.Count; ++s)
-                    if (track.m_sequence == s_immediatePlaySequences[s])
-                        found = true;
-
-                if (!found)
-                {
-                    if (s_fadeOutToRemoveSequences.IndexOf(track.m_sequence) < 0)
-                        s_fadeOutToRemoveSequences.Add(track.m_sequence);
-                }
-            }
-            for (int t = 0; t < s_sourceTrackData.Count; ++t)
-            {
-                AudioTrack track = s_sourceTrackData[t];
-                bool found = false;
-                for (int s = 0; !found && s < m_globalSequences.Length; ++s)
-                    if (track.m_sequence == m_globalSequences[s])
-                        found = true;
-                for (int s = 0; !found && s < s_immediatePlaySequences.Count; ++s)
-                    if (track.m_sequence == s_immediatePlaySequences[s])
-                        found = true;
-
-                if (!found)
-                {
-                    if (s_fadeOutToRemoveSequences.IndexOf(track.m_sequence) < 0)
-                        s_fadeOutToRemoveSequences.Add(track.m_sequence);
-                }
-            }
-
-            //preload audio if set
-            PreloadAudio = m_preloadAudio;
-            if (PreloadAudio)
+            s_preloadAudio = m_preloadAudio;
+            if (s_preloadAudio)
             {
                 foreach (Sequence seq in m_globalSequences)
                 {
@@ -184,7 +134,7 @@ namespace AmbientSounds
                         }
                     }
                 }
-                foreach (AudioArea area in s_areaSequences)
+                foreach (AudioArea area in areaSequences)
                     if (area != null)
                         foreach (Sequence seq in area.m_sequences)
                             if (seq != null) {
@@ -198,48 +148,31 @@ namespace AmbientSounds
                                                 GetAudioData(clip.m_clip);
                             }
             }
-            //update our Audio "SampleRate" setting and add our callback to the Audio system
             lastSampleRate = AudioSettings.outputSampleRate;
             AudioSettings.OnAudioConfigurationChanged += OnAudioSettingsChanged;
-            //if we are set to move the manager, then move it
             if (m_autoMoveManager)
             {
-                if (_instanceGO == null)
-                    _instanceGO = new GameObject("AmbienceManager");
-                _instanceGO.hideFlags = m_hideManagerObject ? HideFlags.HideInHierarchy : 0;
+                GameObject go = GameObject.Find("AmbienceManager");
+                if (go == null)
+                    go = new GameObject("AmbienceManager");
+                go.hideFlags = m_hideManagerObject ? HideFlags.HideInHierarchy : 0;
 
-                StartCoroutine(Move(_instanceGO));
+                Move(go);
             }
             else
             {
                 DontDestroyOnLoad(gameObject);
             }
-            //make sure we have an audio listener set up
             StartCoroutine(CoroFindListener());
-            //update flags for Global Sequences
             foreach (Sequence seq in m_globalSequences) //update all global sequences' modifier data on load
                 if (seq != null)
                     seq.UpdateModifiers();
-            //create our output source if needed
+
             if (m_useAudioSource)
                 CreateOutputSource();
 
-            //add callback to pause audio playback when editor pauses
 #if UNITY_EDITOR && UNITY_2017_2_OR_NEWER
-            EditorApplication.pauseStateChanged -= HandleOnPauseStateChanged;
             EditorApplication.pauseStateChanged += HandleOnPauseStateChanged;
-#endif
-        }
-        private void OnDisable()
-        {
-            if (_instance == this)
-                _instance = null;
-            if (outputSourceGO)
-                Destroy(outputSourceGO);
-            else if (outputSource != null)
-                Destroy(outputSource);
-#if UNITY_EDITOR && UNITY_2017_2_OR_NEWER
-            EditorApplication.pauseStateChanged -= HandleOnPauseStateChanged;
 #endif
         }
         /// <summary> Destructor to destroy AudioSource </summary>
@@ -255,6 +188,7 @@ namespace AmbientSounds
 #if UNITY_EDITOR && UNITY_2017_2_OR_NEWER
             EditorApplication.pauseStateChanged -= HandleOnPauseStateChanged;
 #endif
+
         }
 #if UNITY_EDITOR && UNITY_2017_2_OR_NEWER
         /// <summary>
@@ -263,9 +197,9 @@ namespace AmbientSounds
         private void HandleOnPauseStateChanged(PauseState state)
         {
             if (state == PauseState.Paused)
-                s_isUnityPaused = true;
+                isUnityPaused = true;
             else
-                s_isUnityPaused = false;
+                isUnityPaused = false;
         }
 #endif
         ///<summary> check position and update audio track data if needed </summary>
@@ -291,7 +225,7 @@ namespace AmbientSounds
                     outputSource = null;
                 }
             }
-            if (m_playerObject == null || m_playerObject == transform)
+            if (m_playerObject == null)
             {
                 if (Camera.main != null)
                 {
@@ -299,7 +233,7 @@ namespace AmbientSounds
                 }
                 else
                 {
-                    m_playerObject = GetDefaultTransform();
+                    m_playerObject = transform;
                 }
             }
             if (lastHideManagerObject != m_hideManagerObject)
@@ -315,10 +249,10 @@ namespace AmbientSounds
                 sequenceFades[i].used = false;
                 sequenceFades[i].fade = 0;
             }
-            int cnt = s_areaSequences.Count;
+            int cnt = areaSequences.Count;
             for (int seq = 0; seq < cnt; ++seq)
             {
-                AudioArea ps = s_areaSequences[seq];
+                AudioArea ps = areaSequences[seq];
                 float fadeAmt = ps.GetFade(PlayerPos); //fade based on position
                 if (fadeAmt > 0) {
                     for (int sid = 0; sid < ps.m_sequences.Length; ++sid)
@@ -351,10 +285,10 @@ namespace AmbientSounds
                     }
                 }
             }
-            cnt = s_addedSequences.Count;
+            cnt = addedSequences.Count;
             for (int seq = 0; seq < cnt; ++seq)
             {
-                Sequence data = s_addedSequences[seq];
+                Sequence data = addedSequences[seq];
                 if (data != null) {
                     bool found = false;
                     for (int s = 0; s < fadecnt; ++s) {
@@ -410,7 +344,7 @@ namespace AmbientSounds
             }
             for (int f = 0; f < fadecnt; f++) {
                 if (!sequenceFades[f].used) {
-                    s_fadeOutToRemoveSequences.Add(sequenceFades[f].sequence);
+                    fadeOutToRemoveSequences.Add(sequenceFades[f].sequence);
                     sequenceFades.RemoveAt(f--);
                     --fadecnt;
                 }
@@ -443,14 +377,14 @@ namespace AmbientSounds
                 UpdateTrackData(seq.sequence, seq.area, seq.fade);
             }
             bool valueChanged = false;
-            int avCnt = s_activeValues.Count;
+            int avCnt = activeValues.Count;
             for(int v = 0; v < vwpCount; ++v) {
                 bool found = false;
                 for (int a = 0; a < avCnt; ++a) {
-                    if (s_activeValues[a].Name == valuesWhilePlaying[v].Name) {
+                    if (activeValues[a].Name == valuesWhilePlaying[v].Name) {
                         found = true;
-                        if (s_activeValues[a].Value != valuesWhilePlaying[v].Value) {
-                            s_activeValues[a].Value = valuesWhilePlaying[v].Value;
+                        if (activeValues[a].Value != valuesWhilePlaying[v].Value) {
+                            activeValues[a].Value = valuesWhilePlaying[v].Value;
                             valueChanged = true;
                         }
                         break;
@@ -458,7 +392,7 @@ namespace AmbientSounds
                 }
                 if (!found)
                 {
-                    s_activeValues.Add(new ValueData(valuesWhilePlaying[v].Name, valuesWhilePlaying[v].Value));
+                    activeValues.Add(new ValueData(valuesWhilePlaying[v].Name, valuesWhilePlaying[v].Value));
                     ++avCnt;
                 }
                 if (!valuesWhilePlaying[v].used)
@@ -471,10 +405,10 @@ namespace AmbientSounds
                 sequenceFades.ForEach(seq => seq.sequence.UpdateModifiers());
             }
             //update all "Play" clips
-            cnt = s_immediatePlaySequences.Count;
+            cnt = immediatePlaySequences.Count;
             for (int s = 0; s < cnt; ++s)
             {
-                Sequence seq = s_immediatePlaySequences[s];
+                Sequence seq = immediatePlaySequences[s];
                 if (seq != null)
                 {
                     AudioTrack track = UpdateTrackData(seq, null, 1f, true);
@@ -488,23 +422,22 @@ namespace AmbientSounds
                             track.StartedPlaying = null;
                         }
                         if (track.StoppedPlaying) {
-                            try
-                            {
+                            try {
                                 seq.m_OnStopClip.Invoke(track.StoppedPlaying);
                             } catch (System.Exception e) {
                                 Debug.LogError(e);
                             }
                             track.StoppedPlaying = null;
                         }
-                        s_immediatePlaySequences.RemoveAt(s--);
+                        immediatePlaySequences.RemoveAt(s--);
                         --cnt;
                     }
                 }
             }
-            cnt = s_fadeOutToRemoveSequences.Count;
+            cnt = fadeOutToRemoveSequences.Count;
             for (int s = 0; s < cnt; ++s)
             {
-                Sequence seq = s_fadeOutToRemoveSequences[s];
+                Sequence seq = fadeOutToRemoveSequences[s];
                 if (seq != null)
                 {
                     bool found = false;
@@ -515,15 +448,14 @@ namespace AmbientSounds
                         }
                     }
                     if (found) {
-                        s_fadeOutToRemoveSequences.RemoveAt(s--);
+                        fadeOutToRemoveSequences.RemoveAt(s--);
                         --cnt;
                         continue;
                     }
                     AudioTrack track = UpdateTrackData(seq, null, 0f, false);
                     if (track != null && track.IsFinished(true)) {
                         if (track.StartedPlaying) {
-                            try
-                            {
+                            try {
                                 seq.m_OnPlayClip.Invoke(track.StartedPlaying);
                             } catch (System.Exception e) {
                                 Debug.LogError(e);
@@ -538,15 +470,15 @@ namespace AmbientSounds
                             }
                             track.StoppedPlaying = null;
                         }
-                        s_fadeOutToRemoveSequences.RemoveAt(s--);
+                        fadeOutToRemoveSequences.RemoveAt(s--);
                         --cnt;
                     }
                 }
             }
-            cnt = s_trackData.Count;
+            cnt = trackData.Count;
             for (int t = 0; t < cnt; ++t)
             {
-                AudioTrack track = s_trackData[t];
+                AudioTrack track = trackData[t];
                 if (track != null && track.m_sequence != null)
                 {
                     if (track.StartedPlaying)
@@ -575,10 +507,10 @@ namespace AmbientSounds
                     }
                 }
             }
-            cnt = s_sourceTrackData.Count;
+            cnt = sourceTrackData.Count;
             for (int t = 0; t < cnt; ++t)
             {
-                AudioTrack track = s_sourceTrackData[t];
+                AudioTrack track = sourceTrackData[t];
                 if (track != null && track.m_sequence != null)
                 {
                     if (track.StartedPlaying)
@@ -607,41 +539,41 @@ namespace AmbientSounds
                     }
                 }
             }
-            lock (s_trackData) {
-                cnt = s_trackData.Count;
+            lock (trackData) {
+                cnt = trackData.Count;
                 for (int t = 0; t < cnt; ++t) {
-                    AudioTrack track = s_trackData[t];
+                    AudioTrack track = trackData[t];
                     if (track == null || track.IsFinished(true)) {
                         if (track != null && track.m_sequence != null)
                             for (int e = 0; e < track.m_sequence.m_eventsWhilePlaying.Length; ++e)
                                 CheckUpdateEvent(track.m_sequence.m_eventsWhilePlaying[e]);
-                        s_trackData.RemoveAt(t--);
+                        trackData.RemoveAt(t--);
                         --cnt;
                     }
                 }
             }
-            cnt = s_sourceTrackData.Count;
-            for (int t = 0; t < s_sourceTrackData.Count; ++t) {
-                AudioTrack track = s_sourceTrackData[t];
+            cnt = sourceTrackData.Count;
+            for (int t = 0; t < sourceTrackData.Count; ++t) {
+                AudioTrack track = sourceTrackData[t];
                 if (track == null || track.IsFinished(true)) {
                     if(track != null && track.m_sequence != null)
                         for (int e = 0; e < track.m_sequence.m_eventsWhilePlaying.Length; ++e)
                             CheckUpdateEvent(track.m_sequence.m_eventsWhilePlaying[e]);
-                    s_sourceTrackData.RemoveAt(t--);
+                    sourceTrackData.RemoveAt(t--);
                     --cnt;
                 }
             }
 
             //Update RawAudioData that may not be loaded already
-            cnt = s_loadingAudioClips.Count;
+            cnt = loadingAudioClips.Count;
             for (int x = 0; x < cnt; ++x)
             {
-                if (!s_loadingAudioClips[x].IsLoaded)
-                    s_loadingAudioClips[x].UpdateLoad();
-                if (s_loadingAudioClips[x].IsLoaded)
+                if (!loadingAudioClips[x].IsLoaded)
+                    loadingAudioClips[x].UpdateLoad();
+                if (loadingAudioClips[x].IsLoaded)
                 {
                     //Debug.Log("Finished loading " + loadingAudioClips[x].Name + " time="+Time.time);
-                    s_loadingAudioClips.RemoveAt(x--);
+                    loadingAudioClips.RemoveAt(x--);
                     --cnt;
                 }
             }
@@ -652,34 +584,22 @@ namespace AmbientSounds
         #region Internal Functions
         /// <summary> Moves this Ambience Manager to a new AudioListener </summary>
         /// <param name="al">Audio Listener to move to</param>
-        IEnumerator Move(GameObject go) {
-            yield return null;
+        void Move(GameObject go) {
             if (go == null)
             {
-                if (_instanceGO == null)
-                {
-                    _instanceGO = GameObject.Find("AmbienceManager");
-                    if (_instanceGO == null)
-                        _instanceGO = new GameObject("AmbienceManager");
-                }
-                go = _instanceGO;
+                go = GameObject.Find("AmbienceManager");
+                if (go == null)
+                    go = new GameObject("AmbienceManager");
             }
             if (go == null || go == gameObject)
-                yield break; //no move required
+                return; //no move required
 
             DontDestroyOnLoad(go);
-
-            if (_instance == this)
-                _instance = null;
 
             AmbienceManager am = go.GetComponent<AmbienceManager>();
             if (am == null)
                 am = go.AddComponent<AmbienceManager>();
-            am.m_replaceManagerOnLoad = m_replaceManagerOnLoad;
             am.m_autoMoveManager = m_autoMoveManager;
-            am.m_hideManagerObject = m_hideManagerObject;
-            am.m_clearEventsOnLoad = m_clearEventsOnLoad;
-            am.m_clearValuesOnLoad = m_clearValuesOnLoad;
             am.m_playerObject = m_playerObject;
             am.m_playSpeed = m_playSpeed;
             am.m_volume = m_volume;
@@ -688,7 +608,7 @@ namespace AmbientSounds
             am.m_audioSourcePrefab = m_audioSourcePrefab;
             am.m_audioSourceChannels = m_audioSourceChannels;
             am.m_preloadAudio = m_preloadAudio;
-            if (_instance == null)
+            if (_instance == this)
                 _instance = am;
             Destroy(this);
         }
@@ -697,7 +617,7 @@ namespace AmbientSounds
         {
             if (m_audioSourcePrefab)
             {
-                GameObject prefab = Instantiate(m_audioSourcePrefab, GetDefaultTransform());
+                GameObject prefab = Instantiate(m_audioSourcePrefab, transform);
                 prefab.transform.localPosition = Vector3.zero;
                 prefab.transform.localScale = Vector3.one;
                 prefab.transform.localRotation = Quaternion.identity;
@@ -709,7 +629,7 @@ namespace AmbientSounds
             else
             {
                 GameObject prefab = new GameObject("Ambient Sounds Output");
-                prefab.transform.parent = GetDefaultTransform();
+                prefab.transform.parent = transform;
                 prefab.transform.localPosition = Vector3.zero;
                 prefab.transform.localScale = Vector3.one;
                 prefab.transform.localRotation = Quaternion.identity;
@@ -726,7 +646,7 @@ namespace AmbientSounds
         void OnAudioSettingsChanged(bool deviceWasChanged)
         {
             lastSampleRate = AudioSettings.outputSampleRate;
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
             {
                 if (track == null)
                     continue;
@@ -748,15 +668,14 @@ namespace AmbientSounds
         {
             while (true)
             {
-                AudioListener al = FindObjectOfType<AudioListener>();
-                if (al) {
-                    if (al.GetComponent<ListenerRelay>() == null)
-                        al.gameObject.AddComponent<ListenerRelay>();
-                    yield break;
-                }
                 float timer = Time.time + 1f;
                 while (Time.time < timer)
                     yield return null;
+                AudioListener al = FindObjectOfType<AudioListener>();
+                if (al) {
+                    al.gameObject.AddComponent<ListenerRelay>();
+                    yield break;
+                }
             }
         }
         /// <summary>
@@ -777,7 +696,7 @@ namespace AmbientSounds
             if (data.Clips == null || data.Clips.Length == 0)
             {
                 foreach (Sequence.ClipData c in data.m_clipData)
-                    if (c.m_clip != null && !s_loadedAudioClips.ContainsKey(c.m_clip))
+                    if (c.m_clip != null && !loadedAudioClips.ContainsKey(c.m_clip))
                         GetAudioData(c.m_clip); //trying to play but not loaded yet ... start the load
                 return null;//no clips? nothing to play then so abort.
             }
@@ -786,49 +705,49 @@ namespace AmbientSounds
             AudioTrack track;
             if ((area != null && area.m_outputType != OutputType.STRAIGHT) || data.m_outputDirect || data.m_outputType != OutputType.STRAIGHT) {
                 track = null;
-                for (int t = 0; t < s_sourceTrackData.Count; ++t) {
-                    if (s_sourceTrackData[t].IsPlayOnce == isPlayOnce && s_sourceTrackData[t].m_sequence == data) {
-                        track = s_sourceTrackData[t];
+                for (int t = 0; t < sourceTrackData.Count; ++t) {
+                    if (sourceTrackData[t].IsPlayOnce == isPlayOnce && sourceTrackData[t].m_sequence == data) {
+                        track = sourceTrackData[t];
                         break;
                     }
                 }
                 if (track == null) { //see if it is in the other list? (possible if a Sequence is in Global list and a AudioArea)
-                    for (int t = 0; t < s_trackData.Count; ++t) {
-                        if (s_trackData[t].IsPlayOnce == isPlayOnce && s_trackData[t].m_sequence == data) {
-                            track = s_trackData[t];
+                    for (int t = 0; t < trackData.Count; ++t) {
+                        if (trackData[t].IsPlayOnce == isPlayOnce && trackData[t].m_sequence == data) {
+                            track = trackData[t];
                             break;
                         }
                     }
                     if (track != null)
                     { //we found one so we need to move it to the right list
-                        lock(s_trackData)
-                            s_trackData.Remove(track);
+                        lock(trackData)
+                            trackData.Remove(track);
                         CreateAudioSource(track, data, area);
-                        s_sourceTrackData.Add(track);
+                        sourceTrackData.Add(track);
                     }
                 }
             }
             else
             {
                 track = null;
-                for (int t = 0; t < s_trackData.Count; ++t) {
-                    if (s_trackData[t].IsPlayOnce == isPlayOnce && s_trackData[t].m_sequence == data) {
-                        track = s_trackData[t];
+                for (int t = 0; t < trackData.Count; ++t) {
+                    if (trackData[t].IsPlayOnce == isPlayOnce && trackData[t].m_sequence == data) {
+                        track = trackData[t];
                         break;
                     }
                 }
                 if (track == null) { //see if it is in the other list? (possible if a Sequence is in Global list and a AudioArea)
-                    for (int t = 0; t < s_sourceTrackData.Count; ++t) {
-                        if (s_sourceTrackData[t].IsPlayOnce == isPlayOnce && s_sourceTrackData[t].m_sequence == data) {
-                            track = s_sourceTrackData[t];
+                    for (int t = 0; t < sourceTrackData.Count; ++t) {
+                        if (sourceTrackData[t].IsPlayOnce == isPlayOnce && sourceTrackData[t].m_sequence == data) {
+                            track = sourceTrackData[t];
                             break;
                         }
                     }
                     if (track != null)
                     { //we found one so we need to move it to the right list
-                        s_sourceTrackData.Remove(track);
-                        lock (s_trackData)
-                            s_trackData.Add(track);
+                        sourceTrackData.Remove(track);
+                        lock (trackData)
+                            trackData.Add(track);
                         if (track.m_outputSource != null) {
                             Destroy(track.m_outputSource.gameObject);
                             track.m_outputSource = null;
@@ -890,14 +809,14 @@ namespace AmbientSounds
                     {
                         AudioTrack newTrack = new AudioTrack(data, isPlayOnce) { m_fadeTarget = valueFade };
                         CreateAudioSource(newTrack, data, area);
-                        s_sourceTrackData.Add(newTrack);
+                        sourceTrackData.Add(newTrack);
                         //Debug.Log("Created AudioSource for track " + newTrack.m_name, newTrack.m_outputSource);
                     }
                     else
                     {
                         //Debug.Log("Creating Track for " + data.name);
-                        lock(s_trackData)
-                            s_trackData.Add(new AudioTrack(data, isPlayOnce) { m_fadeTarget = valueFade });
+                        lock(trackData)
+                            trackData.Add(new AudioTrack(data, isPlayOnce) { m_fadeTarget = valueFade });
                     }
                     foreach (string e in data.m_eventsWhilePlaying)
                         CheckUpdateEvent(e);
@@ -918,7 +837,7 @@ namespace AmbientSounds
                 if (!sequence.m_outputFollowPosition || !sequence.m_outputFollowRotation)
                     parent = null;
                 else
-                    parent = m_playerObject ?? GetDefaultTransform();
+                    parent = m_playerObject ?? transform;
                 prefab = sequence.m_outputPrefab;
             }
             else
@@ -926,7 +845,7 @@ namespace AmbientSounds
                 if (!area.m_outputFollowPosition || !area.m_outputFollowRotation)
                     parent = null;
                 else
-                    parent = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject ?? GetDefaultTransform();
+                    parent = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject ?? transform;
                 prefab = area.m_outputPrefab ?? sequence.m_outputPrefab;
             }
 
@@ -947,7 +866,7 @@ namespace AmbientSounds
             track.curFollowing = parent;
             sourceGO.transform.localScale = Vector3.one;
             if (parent == null)
-                sourceGO.transform.position = GetDefaultTransform().position;
+                sourceGO.transform.position = transform.position;
             else
                 sourceGO.transform.localPosition = Vector3.zero;
             sourceGO.transform.localRotation = Quaternion.identity;
@@ -996,15 +915,12 @@ namespace AmbientSounds
                 return;
             if (area == null || area.m_outputType == OutputType.STRAIGHT)
             {
-                track.curFollowing = m_playerObject ?? GetDefaultTransform();
+                track.curFollowing = m_playerObject ?? transform;
                 if (sequence == null)
                 {
                     track.curVerticalRotation = 0f;
                     track.curHorizontalRotation = 0f;
                     track.curDistance = 0f;
-                    track.curSetRanges = false;
-                    track.curMinRange = 0;
-                    track.curMaxRange = 200;
                     track.curFollowPosition = true;
                     track.curFollowRotation = true;
                 }
@@ -1013,22 +929,16 @@ namespace AmbientSounds
                     track.curVerticalRotation = -Helpers.GetRandom(sequence.m_outputVerticalAngle);
                     track.curHorizontalRotation = -Helpers.GetRandom(sequence.m_outputHorizontalAngle);
                     track.curDistance = Helpers.GetRandom(sequence.m_outputDistance);
-                    track.curSetRanges = sequence.m_outputSetAudioRanges;
-                    track.curMinRange = Mathf.Max(0, sequence.m_outputAudioRanges.x + sequence.m_outputAudioRangesFollowSpawnDistance * track.curDistance);
-                    track.curMaxRange = Mathf.Max(0, sequence.m_outputAudioRanges.y + sequence.m_outputAudioRangesFollowSpawnDistance * track.curDistance);
                     track.curFollowPosition = sequence.m_outputFollowPosition;
                     track.curFollowRotation = sequence.m_outputFollowRotation;
                 }
             }
             else
             {
-                track.curFollowing = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject ?? GetDefaultTransform();
+                track.curFollowing = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject ?? transform;
                 track.curVerticalRotation = -Helpers.GetRandom(area.m_outputVerticalAngle);
                 track.curHorizontalRotation = -Helpers.GetRandom(area.m_outputHorizontalAngle);
                 track.curDistance = Helpers.GetRandom(area.m_outputDistance);
-                track.curSetRanges = area.m_outputSetAudioRanges;
-                track.curMinRange = Mathf.Max(0, area.m_outputAudioRanges.x + area.m_outputAudioRangesFollowSpawnDistance * track.curDistance);
-                track.curMaxRange = Mathf.Max(0, area.m_outputAudioRanges.y + area.m_outputAudioRangesFollowSpawnDistance * track.curDistance);
                 track.curFollowPosition = area.m_outputFollowPosition;
                 track.curFollowRotation = area.m_outputFollowRotation;
             }
@@ -1039,25 +949,20 @@ namespace AmbientSounds
             }
             else
             {
-                if (track.curSetRanges)
-                {
-                    source.minDistance = track.curMinRange;
-                    source.maxDistance = track.curMaxRange;
-                }
                 if (!track.curFollowPosition && !track.curFollowRotation)
                 {
                     Transform follow;
                     if (area == null || area.m_outputType == OutputType.STRAIGHT)
                     {
                         if (!sequence.m_outputFollowPosition || !sequence.m_outputFollowRotation)
-                            follow = GetDefaultTransform();
+                            follow = transform;
                         else
                             follow = m_playerObject;
                     }
                     else
                     {
                         if (!area.m_outputFollowPosition || !area.m_outputFollowRotation)
-                            follow = GetDefaultTransform();
+                            follow = transform;
                         else
                             follow = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject;
                     }
@@ -1077,25 +982,20 @@ namespace AmbientSounds
             AudioSource source = track.m_outputSource;
             if (track == null || source == null)
                 yield break;
-            if (track.curSetRanges)
-            {
-                source.minDistance = track.curMinRange;
-                source.maxDistance = track.curMaxRange;
-            }
             if (!track.curFollowPosition && !track.curFollowRotation)
             {
                 Transform follow;
                 if (area == null || area.m_outputType == OutputType.STRAIGHT)
                 {
                     if (!sequence.m_outputFollowPosition || !sequence.m_outputFollowRotation)
-                        follow = GetDefaultTransform();
+                        follow = transform;
                     else
                         follow = m_playerObject;
                 }
                 else
                 {
                     if (!area.m_outputFollowPosition || !area.m_outputFollowRotation)
-                        follow = GetDefaultTransform();
+                        follow = transform;
                     else
                         follow = area.m_outputType == OutputType.LOCAL_POSITION ? area.transform : m_playerObject;
                 }
@@ -1125,12 +1025,6 @@ namespace AmbientSounds
                 }
             }
         }
-        Transform GetDefaultTransform()
-        {
-            if (_listenerRelay == null)
-                return transform;
-            return _listenerRelay.transform;
-        }
         #endregion
         #region Audio Filter Read
         /// <summary> Called by AudioSource to retrieve the next set of audio graph data </summary>
@@ -1153,17 +1047,17 @@ namespace AmbientSounds
         /// <param name="channels">Number of channels expected to be output</param>
         internal void OnAudioReadInternal(float[] data, int channels, bool fromAudioSource)
         {
-            if (s_isUnityPaused || fromAudioSource != m_useAudioSource)
+            if (isUnityPaused || fromAudioSource != m_useAudioSource)
                 return;
             double timeStep = (1.0 / lastSampleRate) * m_playSpeed;
             float FadeStep = 1f / lastSampleRate;
-            lock (s_trackData) {
-                for (int t = 0; t < s_trackData.Count; ++t)
-                    if (s_trackData[t] != null)
-                        s_trackData[t].OnBeforeAudioRead();
+            lock (trackData) {
+                for (int t = 0; t < trackData.Count; ++t)
+                    if (trackData[t] != null)
+                        trackData[t].OnBeforeAudioRead();
                 for (int p = 0; p < data.Length / channels; ++p) {
-                    for (int t = 0; t < s_trackData.Count; ++t) {
-                        AudioTrack Track = s_trackData[t];
+                    for (int t = 0; t < trackData.Count; ++t) {
+                        AudioTrack Track = trackData[t];
                         if (Track == null)
                             continue;
                         Track.UpdateFade(FadeStep);
@@ -1194,17 +1088,10 @@ namespace AmbientSounds
         }
         #endregion
         #region Static Variables
-        static GameObject _instanceGO = null;
         static AmbienceManager _instance = null;
         static ListenerRelay _listenerRelay = null;
         /// <summary> Whether audio clips should be loaded at first chance (or when first played when false) </summary>
-        public static bool PreloadAudio = true;
-
-        [System.Obsolete("Use 'PreloadAudio' setting. Renamed to make static names more consistent")]
-        public static bool s_preloadAudio {
-            get { return PreloadAudio; }
-            set { PreloadAudio = value; }
-        }
+        public static bool s_preloadAudio = true;
 
         /// <summary> Event called every time a Value value has been changed or a Value is removed </summary>
         public static event System.Action<string> OnValueChanged;
@@ -1214,27 +1101,27 @@ namespace AmbientSounds
         /// <summary> Is entire system disabled? </summary>
         static bool s_disabled = false;
         /// <summary> Is Unity Paused? </summary>
-        internal static bool s_isUnityPaused = false;
+        internal static bool isUnityPaused = false;
         /// <summary> The List of tracks currently playing through AudioListener. </summary>
-        static List<AudioTrack> s_trackData = new List<AudioTrack>();
+        static List<AudioTrack> trackData = new List<AudioTrack>();
         /// <summary> The List of tracks currently playing through AudioSources. </summary>
-        static List<AudioTrack> s_sourceTrackData = new List<AudioTrack>();
+        static List<AudioTrack> sourceTrackData = new List<AudioTrack>();
         /// <summary> List of all loading audio clips and their RawAudioData (reduces number of clips checked every Update() to only ones still loading) </summary>
-        static List<RawAudioData> s_loadingAudioClips = new List<RawAudioData>();
+        static List<RawAudioData> loadingAudioClips = new List<RawAudioData>();
         /// <summary> List of all loaded (and loading) audio clips and their RawAudioData </summary>
-        static Dictionary<AudioClip, RawAudioData> s_loadedAudioClips = new Dictionary<AudioClip, RawAudioData>();
+        static Dictionary<AudioClip, RawAudioData> loadedAudioClips = new Dictionary<AudioClip, RawAudioData>();
         /// <summary> List of AudioAreas to play while PlayerObject is in area </summary>
-        static List<AudioArea> s_areaSequences = new List<AudioArea>();
+        static List<AudioArea> areaSequences = new List<AudioArea>();
         /// <summary> List of Sequences added at runtime through AddSequence </summary>
-        static List<Sequence> s_addedSequences = new List<Sequence>();
+        static List<Sequence> addedSequences = new List<Sequence>();
         /// <summary> List of 'One-Shot' Sequences to play once (one clip) and discard </summary>
-        static List<Sequence> s_fadeOutToRemoveSequences = new List<Sequence>();
+        static List<Sequence> fadeOutToRemoveSequences = new List<Sequence>();
         /// <summary> List of 'One-Shot' Sequences to play once (one clip) and discard </summary>
-        static List<Sequence> s_immediatePlaySequences = new List<Sequence>();
+        static List<Sequence> immediatePlaySequences = new List<Sequence>();
         /// <summary> List of active Events for Sequence requirements </summary>
-        static List<string> s_activeEvents = new List<string>();
+        static List<string> activeEvents = new List<string>();
         /// <summary> List of active Values and their values for Sequence requirements </summary>
-        static List<ValueData> s_activeValues = new List<ValueData>();
+        static List<ValueData> activeValues = new List<ValueData>();
         #endregion
         #region Static Interfaces
         #region AudioData
@@ -1243,14 +1130,14 @@ namespace AmbientSounds
         /// <returns>RawAudioData for given clip</returns>
         internal static RawAudioData GetAudioData(AudioClip clip)
         {
-            if (s_loadedAudioClips.ContainsKey(clip))
-                return s_loadedAudioClips[clip];
+            if (loadedAudioClips.ContainsKey(clip))
+                return loadedAudioClips[clip];
             RawAudioData ret = new RawAudioData(clip);
-            s_loadedAudioClips.Add(clip, ret);
+            loadedAudioClips.Add(clip, ret);
             if (!ret.IsLoaded)
             {
                 //Debug.Log("Started loading " + ret.Name + " time=" + Time.time);
-                s_loadingAudioClips.Add(ret);
+                loadingAudioClips.Add(ret);
             }
             return ret;
         }
@@ -1260,9 +1147,9 @@ namespace AmbientSounds
         /// <summary> Updates any Track if it uses an Event named 'EventName' </summary>
         /// <param name="EventName">Event that changed</param>
         internal static void CheckUpdateEvent(string EventName) {
-            foreach (AudioTrack track in s_trackData)
+            foreach (AudioTrack track in trackData)
                 CheckUpdateEvent(track, EventName);
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
                 CheckUpdateEvent(track, EventName);
         }
         /// <summary> Updates a Track if it uses an Event named 'EventName' </summary>
@@ -1332,7 +1219,7 @@ namespace AmbientSounds
         {
             if (area == null)
                 return;
-            if (PreloadAudio)
+            if (s_preloadAudio)
             {
                 foreach (Sequence seq in area.m_sequences)
                     if (seq != null)
@@ -1348,11 +1235,11 @@ namespace AmbientSounds
                         seq.UpdateModifiers();
                     }
             }
-            if (!s_areaSequences.Contains(area))
-                s_areaSequences.Add(area);
+            if (!areaSequences.Contains(area))
+                areaSequences.Add(area);
             foreach (Sequence seq in area.m_sequences)
                 if (seq != null)
-                    s_fadeOutToRemoveSequences.Remove(seq);
+                    fadeOutToRemoveSequences.Remove(seq);
         }
         /// <summary> Removes a AudioArea object from this Manager </summary>
         /// <param name="area">AudioArea to deregister (usually 'this')</param>
@@ -1360,10 +1247,10 @@ namespace AmbientSounds
         {
             if (area == null)
                 return;
-            s_areaSequences.Remove(area);
+            areaSequences.Remove(area);
             foreach (Sequence seq in area.m_sequences)
                 if (seq != null)
-                    s_fadeOutToRemoveSequences.Add(seq);
+                    fadeOutToRemoveSequences.Add(seq);
         }
         #endregion
 
@@ -1372,8 +1259,8 @@ namespace AmbientSounds
         /// <param name="seq">Sequence that is being removed</param>
         public static void OnEditorRemovedSequence(Sequence seq)
         {
-            if (!s_fadeOutToRemoveSequences.Contains(seq))
-                s_fadeOutToRemoveSequences.Add(seq);
+            if (!fadeOutToRemoveSequences.Contains(seq))
+                fadeOutToRemoveSequences.Add(seq);
         }
         #endregion
 
@@ -1466,11 +1353,11 @@ namespace AmbientSounds
         {
             if (Globals != null) {
                 Globals.Clear();
-                Globals.AddRange(s_addedSequences);
+                Globals.AddRange(addedSequences);
             }
             if (Areas != null) {
                 Areas.Clear();
-                Areas.AddRange(s_areaSequences);
+                Areas.AddRange(areaSequences);
             }
         }
         /// <summary> Gets a List of all playing tracks and their fade values </summary>
@@ -1478,7 +1365,7 @@ namespace AmbientSounds
         public static List<TrackPlayingInfo> GetTracks()
         {
             List<TrackPlayingInfo> ret = new List<TrackPlayingInfo>();
-            foreach (AudioTrack track in s_trackData)
+            foreach (AudioTrack track in trackData)
             {
                 RawAudioData curPlaying = track.CurPlaying;
                 ret.Add(new TrackPlayingInfo()
@@ -1489,7 +1376,7 @@ namespace AmbientSounds
                     m_sequence = track.m_sequence
                 });
             }
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
             {
                 RawAudioData curPlaying = track.CurPlaying;
                 ret.Add(new TrackPlayingInfo()
@@ -1511,10 +1398,10 @@ namespace AmbientSounds
                     if (seq != null && seq.FadeValue <= 0f && !ret.ContainsKey(seq))
                         ret.Add(seq, GetBlockedReason(seq));
             }
-            foreach (Sequence seq in s_addedSequences)
+            foreach (Sequence seq in addedSequences)
                 if (seq.FadeValue <= 0f && !ret.ContainsKey(seq))
                     ret.Add(seq, GetBlockedReason(seq));
-            foreach (AudioArea area in s_areaSequences)
+            foreach (AudioArea area in areaSequences)
                 foreach(Sequence seq in area.m_sequences)
                     if (seq.FadeValue <= 0f && !ret.ContainsKey(seq))
                         ret.Add(seq, GetBlockedReason(seq));
@@ -1616,12 +1503,12 @@ namespace AmbientSounds
         /// <param name="EventName">Event to activate</param>
         public static void ActivateEvent(string EventName)
         {
-            if (!s_activeEvents.Contains(EventName))
+            if (!activeEvents.Contains(EventName))
             {
-                s_activeEvents.Add(EventName);
-                foreach (AudioTrack track in s_trackData)
+                activeEvents.Add(EventName);
+                foreach (AudioTrack track in trackData)
                     CheckUpdateEvent(track, EventName);
-                foreach (AudioTrack track in s_sourceTrackData)
+                foreach (AudioTrack track in sourceTrackData)
                     CheckUpdateEvent(track, EventName);
                 if (OnEventChanged != null)
                     OnEventChanged.Invoke(EventName);
@@ -1631,12 +1518,12 @@ namespace AmbientSounds
         /// <param name="EventName">Event to deactivate</param>
         public static void DeactivateEvent(string EventName)
         {
-            if (s_activeEvents.Contains(EventName))
+            if (activeEvents.Contains(EventName))
             {
-                s_activeEvents.Remove(EventName);
-                foreach (AudioTrack track in s_trackData)
+                activeEvents.Remove(EventName);
+                foreach (AudioTrack track in trackData)
                     CheckUpdateEvent(track, EventName);
-                foreach (AudioTrack track in s_sourceTrackData)
+                foreach (AudioTrack track in sourceTrackData)
                     CheckUpdateEvent(track, EventName);
                 if (OnEventChanged != null)
                     OnEventChanged.Invoke(EventName);
@@ -1650,14 +1537,14 @@ namespace AmbientSounds
             if (string.IsNullOrEmpty(EventName))
                 return false;
 
-            if (s_activeEvents.Contains(EventName))
+            if (activeEvents.Contains(EventName))
                 return true;
-            foreach (AudioTrack track in s_trackData)
+            foreach (AudioTrack track in trackData)
                 if (track.m_sequence != null && !track.IsFinished())
                     foreach (string E in track.m_sequence.m_eventsWhilePlaying)
                         if (E == EventName)
                             return true;
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
                 if (track.m_sequence != null && !track.IsFinished())
                     foreach (string E in track.m_sequence.m_eventsWhilePlaying)
                         if (E == EventName)
@@ -1668,13 +1555,13 @@ namespace AmbientSounds
         /// <returns>String Array active Event names</returns>
         public static string[] GetEvents()
         {
-            List<string> allEvents = new List<string>(s_activeEvents);
-            foreach (AudioTrack track in s_trackData)
+            List<string> allEvents = new List<string>(activeEvents);
+            foreach (AudioTrack track in trackData)
                 if (track.m_sequence != null)
                     foreach (string e in track.m_sequence.m_eventsWhilePlaying)
                         if (!allEvents.Contains(e))
                             allEvents.Add(e);
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
                 if (track.m_sequence != null)
                     foreach (string e in track.m_sequence.m_eventsWhilePlaying)
                         if (!allEvents.Contains(e))
@@ -1688,10 +1575,10 @@ namespace AmbientSounds
         /// <returns>Dictionary containing a copy of Value names and their values</returns>
         public static Dictionary<string, float> GetValues()
         {
-            int count = s_activeValues.Count;
+            int count = activeValues.Count;
             var ret =  new Dictionary<string, float>(count);
             for (int v = 0; v < count; ++v)
-                ret.Add(s_activeValues[v].Name, s_activeValues[v].Value);
+                ret.Add(activeValues[v].Name, activeValues[v].Value);
             return ret;
         }
         /// <summary> Sets a value for a Value Check in the Manager </summary>
@@ -1700,17 +1587,17 @@ namespace AmbientSounds
         public static void SetValue(string Name, float Value) {
             bool found = false;
             Value = Mathf.Clamp01(Value);
-            for (int a = 0; a < s_activeValues.Count; ++a) {
-                if (s_activeValues[a].Name == Name) {
-                    s_activeValues[a].Value = Value;
+            for (int a = 0; a < activeValues.Count; ++a) {
+                if (activeValues[a].Name == Name) {
+                    activeValues[a].Value = Value;
                     found = true;
                 }
             }
             if (!found)
-                s_activeValues.Add(new ValueData(Name, Value));
-            foreach (AudioTrack track in s_trackData)
+                activeValues.Add(new ValueData(Name, Value));
+            foreach (AudioTrack track in trackData)
                 CheckUpdateValue(track, Name);
-            foreach (AudioTrack track in s_sourceTrackData)
+            foreach (AudioTrack track in sourceTrackData)
                 CheckUpdateValue(track, Name);
             if (OnValueChanged != null)
                 OnValueChanged.Invoke(Name);
@@ -1720,25 +1607,25 @@ namespace AmbientSounds
         /// <param name="AddIfMissing">Should this Value be added if missing?</param>
         /// <returns>Current value of specified Value check</returns>
         public static float GetValue(string Name, bool AddIfMissing = true) {
-            for (int a = 0; a < s_activeValues.Count; ++a) {
-                if (s_activeValues[a].Name == Name) {
-                    return s_activeValues[a].Value;
+            for (int a = 0; a < activeValues.Count; ++a) {
+                if (activeValues[a].Name == Name) {
+                    return activeValues[a].Value;
                 }
             }
             if (AddIfMissing)
-                s_activeValues.Add(new ValueData(Name, 0f));
+                activeValues.Add(new ValueData(Name, 0f));
             return 0f;
         }
         /// <summary> Removes the current value of a Value Check from the Manager </summary>
         /// <param name="Name">Name of value to remove</param>
         public static void RemoveValue(string Name)
         {
-            for (int a = 0; a < s_activeValues.Count; ++a) {
-                if (s_activeValues[a].Name == Name) {
-                    s_activeValues.RemoveAt(a--);
-                    foreach (AudioTrack track in s_trackData)
+            for (int a = 0; a < activeValues.Count; ++a) {
+                if (activeValues[a].Name == Name) {
+                    activeValues.RemoveAt(a--);
+                    foreach (AudioTrack track in trackData)
                         CheckUpdateValue(track, Name);
-                    foreach (AudioTrack track in s_sourceTrackData)
+                    foreach (AudioTrack track in sourceTrackData)
                         CheckUpdateValue(track, Name);
                     if (OnValueChanged != null)
                         OnValueChanged.Invoke(Name);
@@ -1753,7 +1640,7 @@ namespace AmbientSounds
         /// <param name="seq">Sequence to add</param>
         public static void AddSequence(Sequence seq)
         {
-            if (seq == null || s_addedSequences.Contains(seq))
+            if (seq == null || addedSequences.Contains(seq))
                 return;
             foreach (Sequence.ClipData clip in seq.m_clipData)
                 if (clip.m_clip != null)
@@ -1763,8 +1650,8 @@ namespace AmbientSounds
                     foreach (Sequence.ClipData clip in mod.m_clipData)
                         if (clip.m_clip != null)
                             GetAudioData(clip.m_clip);
-            s_fadeOutToRemoveSequences.Remove(seq);
-            s_addedSequences.Add(seq);
+            fadeOutToRemoveSequences.Remove(seq);
+            addedSequences.Add(seq);
             seq.UpdateModifiers();
         }
         /// <summary> Removes a Sequence from the "Global Sequences" list </summary>
@@ -1773,10 +1660,10 @@ namespace AmbientSounds
         {
             if (seq == null)
                 return;
-            if (s_addedSequences.Remove(seq) && !s_fadeOutToRemoveSequences.Contains(seq))
+            if (addedSequences.Remove(seq) && !fadeOutToRemoveSequences.Contains(seq))
             {
                 seq.m_forcePlay = false;
-                s_fadeOutToRemoveSequences.Add(seq);
+                fadeOutToRemoveSequences.Add(seq);
             }
         }
         /// <summary> Gets whether Sequence seq was added by AddSequence() and can be removed with RemoveSequence() </summary>
@@ -1784,16 +1671,16 @@ namespace AmbientSounds
         /// <returns>True if Sequence seq has been loaded and can be played</returns>
         public static bool WasSequenceAdded(Sequence seq)
         {
-            return s_addedSequences.Contains(seq);
+            return addedSequences.Contains(seq);
         }
         /// <summary> Gets whether Sequence seq is currently active and will be played if it's conditions are met </summary>
         /// <param name="seq">Sequence to search for</param>
         /// <returns>True if Sequence seq has been loaded and can be played</returns>
         public static bool IsSequenceActive(Sequence seq)
         {
-            if (s_addedSequences.Contains(seq))
+            if (addedSequences.Contains(seq))
                 return true;
-            foreach (AudioArea aa in s_areaSequences)
+            foreach (AudioArea aa in areaSequences)
             {
                 foreach (Sequence s in aa.m_sequences)
                     if (s == seq)
@@ -1831,21 +1718,21 @@ namespace AmbientSounds
         {
             if (clip == null)
                 return;
-            if (PreloadAudio) //a little late to request but better late than never i guess (should use PreloadAudioClip(clip) before trying to push a new clip)
+            if (s_preloadAudio) //a little late to request but better late than never i guess (should use PreloadAudioClip(clip) before trying to push a new clip)
                 GetAudioData(clip);
             Sequence seq = ScriptableObject.CreateInstance<Sequence>();
             seq.m_clipData = new Sequence.ClipData[] { new Sequence.ClipData(clip, 1f) };
             seq.m_volume = Mathf.Clamp01(volume);
             seq.UpdateModifiers();
-            s_immediatePlaySequences.Add(seq);
+            immediatePlaySequences.Add(seq);
         }
         /// <summary> Gets whether an AudioClip is currently being played through Play() function </summary>
         /// <param name="clip">AudioClip to search for</param>
         /// <returns>True if AudioClip is currently playing</returns>
         public static bool IsPlaying(AudioClip clip)
         {
-            for (int s = 0; s < s_immediatePlaySequences.Count; ++s) {
-                foreach (Sequence.ClipData c in s_immediatePlaySequences[s].Clips) {
+            for (int s = 0; s < immediatePlaySequences.Count; ++s) {
+                foreach (Sequence.ClipData c in immediatePlaySequences[s].Clips) {
                     if (c.m_clip == clip)
                         return true;
                 }
@@ -1865,12 +1752,12 @@ namespace AmbientSounds
         /// <summary> Pauses AmbientSound playback. </summary>
         public static void PausePlayback()
         {
-            s_isUnityPaused = true;
+            isUnityPaused = true;
         }
         /// <summary> Continues AmbientSound playback. </summary>
         public static void ContinuePlayback()
         {
-            s_isUnityPaused = false;
+            isUnityPaused = false;
         }
         #endregion
 
@@ -1880,7 +1767,7 @@ namespace AmbientSounds
         public static void MoveTo(GameObject go) {
             if (_instance == null)
                 return; //no move required
-            _instance.StartCoroutine(_instance.Move(go));
+            _instance.Move(go);
         }
         #endregion
         #endregion

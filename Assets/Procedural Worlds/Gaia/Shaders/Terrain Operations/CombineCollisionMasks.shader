@@ -23,7 +23,6 @@ Shader "Hidden/Gaia/CombineCollisionMasks" {
 
 				#include "UnityCG.cginc"
 				#include "TerrainTool.cginc"
-				#include "../Terrain.cginc"
 
 				sampler2D _InputTex;
 				sampler2D _ImageMaskTex;
@@ -65,12 +64,12 @@ Shader "Hidden/Gaia/CombineCollisionMasks" {
 
 				float4 FilterImageGreaterThan(v2f i) : SV_Target
 				{
-					float col = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+					float col = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 					//scale the UV input according to the size difference so that the image mask tex
 					float2 relativeUV = i.pcUV;
 					relativeUV.x = i.pcUV.x * 1.0f;// (_Dimensions.z / _Dimensions.x);
 					relativeUV.y = i.pcUV.y * 1.0f; // (_Dimensions.w / _Dimensions.y);
-					float col2 = InternalUnpackHeightmap(tex2D(_ImageMaskTex, relativeUV));
+					float col2 = UnpackHeightmap(tex2D(_ImageMaskTex, relativeUV));
 
 
 
@@ -85,8 +84,8 @@ Shader "Hidden/Gaia/CombineCollisionMasks" {
 						result = col2;
 					}
 
-					return InternalPackHeightmap(result);
-					//return InternalPackHeightmap(lerp(col,result,_Strength));
+					return PackHeightmap(result);
+					//return PackHeightmap(lerp(col,result,_Strength));
 				}
 				ENDCG
 			}

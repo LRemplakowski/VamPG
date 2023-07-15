@@ -25,13 +25,13 @@ namespace SunsetSystems.UI
             string selectedCharacterKey = CharacterSelector.SelectedCharacterKey;
             CreatureData data = PartyManager.Instance.GetPartyMemberDataByID(selectedCharacterKey);
             List<IGameDataProvider<BaseStat>> attributes = new();
-            attributes.AddRange(data.Stats.Attributes?.GetAttributeList() ?? new());
+            attributes.AddRange(data.Stats.Attributes.GetAttributeList());
             _attributes.ForEach(attributeGroup => attributeGroup.UpdateViews(attributes));
             List<IGameDataProvider<BaseStat>> skills = new();
-            skills.AddRange(data.Stats.Skills?.GetSkillList() ?? new());
+            skills.AddRange(data.Stats.Skills.GetSkillList());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IGameDataProvider<BaseStat>> disciplines = new();
-            disciplines.AddRange(data.Stats.Disciplines?.GetDisciplines() ?? new());
+            disciplines.AddRange(data.Stats.Disciplines.GetDisciplines());
             _disciplines.UpdateViews(disciplines);
         }
     }

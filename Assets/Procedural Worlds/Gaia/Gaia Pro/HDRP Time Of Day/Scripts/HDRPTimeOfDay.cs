@@ -50,11 +50,7 @@ namespace ProceduralWorlds.HDRPTOD
         public Bloom m_bloom;
         public SplitToning m_splitToning;
         public Vignette m_vignette;
-#if UNITY_2022_2_OR_NEWER
-        public ScreenSpaceAmbientOcclusion m_ambientOcclusion;
-#else
         public AmbientOcclusion m_ambientOcclusion;
-#endif
         //Advanced
         public LensFlareComponentSRP m_sunLensFlare;
         public LensFlareComponentSRP m_moonLensFlare;
@@ -278,7 +274,7 @@ namespace ProceduralWorlds.HDRPTOD
     [ExecuteAlways]
     public class HDRPTimeOfDay : MonoBehaviour
     {
-#region Properties
+        #region Properties
 
         public static HDRPTimeOfDay Instance
         {
@@ -566,8 +562,8 @@ namespace ProceduralWorlds.HDRPTOD
         }
         [SerializeField] private HDRPTimeOfDayAmbientProfile m_audioProfile;
 
-#endregion
-#region Variables
+        #endregion
+        #region Variables
 
         public bool m_lightSourceOverride = false;
         public bool m_enableTimeOfDaySystem = false;
@@ -620,8 +616,8 @@ namespace ProceduralWorlds.HDRPTOD
         private const string WeatherProfileSand = "Sand Weather Profile.asset";
         private const int ValidateCheckerFrameLimit = 1000;
 
-#endregion
-#region Unity Functions
+        #endregion
+        #region Unity Functions
 
         private void OnEnable()
         {
@@ -713,8 +709,8 @@ namespace ProceduralWorlds.HDRPTOD
             }
         }
 
-#endregion
-#region Public Functions
+        #endregion
+        #region Public Functions
 
         /// <summary>
         /// Returns the bool if weather is currently active
@@ -1657,8 +1653,8 @@ namespace ProceduralWorlds.HDRPTOD
             DebugSettings.m_simulate = true;
         }
 
-#endregion
-#region Private Functions
+        #endregion
+        #region Private Functions
 
         /// <summary>
         /// Sets up the gameobjects that are used for parenting
@@ -2567,8 +2563,8 @@ namespace ProceduralWorlds.HDRPTOD
             return null;
         }
 
-#endregion
-#region Public Static Functions
+        #endregion
+        #region Public Static Functions
 
         /// <summary>
         /// Adds time of day to the scene
@@ -2774,7 +2770,7 @@ namespace ProceduralWorlds.HDRPTOD
 #endif
         }
 
-#endregion
+        #endregion
     }
 }
 #endif

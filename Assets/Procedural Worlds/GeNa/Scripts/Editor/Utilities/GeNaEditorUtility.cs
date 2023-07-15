@@ -12,9 +12,6 @@ using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using Directory = System.IO.Directory;
 using Object = UnityEngine.Object;
-#if !UNITY_2021_2_OR_NEWER
-using UnityEngine.Experimental.TerrainAPI;
-#endif
 namespace GeNa
 {
     public static class GeNaEditorUtility
@@ -311,12 +308,6 @@ namespace GeNa
             GeNaEvents.OptimiseGameObject = OptimiseGameObject;
             GeNaEvents.UnOptimiseGameObject = UnOptimiseGameObject;
             GeNaEvents.GetQuadMaterial = GetVisulizationMaterial;
-            TerrainCallbacks.textureChanged -= OnTerrainTextureChanged;
-            TerrainCallbacks.textureChanged += OnTerrainTextureChanged;
-        }
-        public static void OnTerrainTextureChanged(Terrain terrain, string textureName, RectInt texelRegion, bool synched)
-        {
-            GeNaEvents.textureChanged?.Invoke(terrain, textureName, texelRegion, synched);
         }
         public static int GetCurrentGroup() => Undo.GetCurrentGroup();
         public static void MarkSceneDirty(Scene scene)
@@ -384,14 +375,14 @@ namespace GeNa
             flag |= spawnFlags.FlagBatchingStatic ? StaticEditorFlags.BatchingStatic : flag;
             flag |= spawnFlags.FlagOccludeeStatic ? StaticEditorFlags.OccludeeStatic : flag;
             flag |= spawnFlags.FlagOccluderStatic ? StaticEditorFlags.OccluderStatic : flag;
+#if UNITY_5 || UNITY_2017 || UNITY_2018 || UNITY_2019_1
+            flag |= spawnFlags.FlagLightmapStatic ? StaticEditorFlags.LightmapStatic : flag;
+#else
             flag |= spawnFlags.FlagLightmapStatic ? StaticEditorFlags.ContributeGI : flag;
-            flag |= spawnFlags.FlagReflectionProbeStatic ? StaticEditorFlags.ReflectionProbeStatic : flag;
-            
-#if !UNITY_2022_2_OR_NEWER
+#endif
             flag |= spawnFlags.FlagNavigationStatic ? StaticEditorFlags.NavigationStatic : flag;
             flag |= spawnFlags.FlagOffMeshLinkGeneration ? StaticEditorFlags.OffMeshLinkGeneration : flag;
-#endif
-
+            flag |= spawnFlags.FlagReflectionProbeStatic ? StaticEditorFlags.ReflectionProbeStatic : flag;
             bool setChildren = spawnFlags.ApplyToChildren;
 
             // And do same to game object m_children
@@ -416,12 +407,9 @@ namespace GeNa
                 flag |= StaticEditorFlags.BatchingStatic;
                 flag |= StaticEditorFlags.OccludeeStatic;
                 flag |= StaticEditorFlags.OccluderStatic;
-                flag |= StaticEditorFlags.ReflectionProbeStatic;
-   
-#if !UNITY_2022_2_OR_NEWER
                 flag |= StaticEditorFlags.NavigationStatic;
                 flag |= StaticEditorFlags.OffMeshLinkGeneration;
-#endif
+                flag |= StaticEditorFlags.ReflectionProbeStatic;
             }
             bool setChildren = spawnFlags.ApplyToChildren;
 

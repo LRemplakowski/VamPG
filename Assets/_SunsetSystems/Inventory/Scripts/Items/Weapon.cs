@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 

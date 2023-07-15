@@ -1,6 +1,4 @@
-using NaughtyAttributes;
-using SunsetSystems.Utils;
-using System.Collections;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,12 +6,12 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "Quest Database", menuName = "Sunset Journal/Quest Database")]
-    public class QuestDatabase : ScriptableObject
+    public class QuestDatabase : SerializedScriptableObject
     {
         [SerializeField]
-        private StringQuestDictionary _questRegistry = new();
+        private Dictionary<string, Quest> _questRegistry = new();
         [SerializeField]
-        private StringStringDictionary _questAccessorRegistry = new();
+        private Dictionary<string, string> _questAccessorRegistry = new();
 
         public static QuestDatabase Instance { get; private set; }
 

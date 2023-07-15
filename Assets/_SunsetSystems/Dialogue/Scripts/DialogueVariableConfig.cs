@@ -1,11 +1,8 @@
-using NaughtyAttributes;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {

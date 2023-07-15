@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using SunsetSystems.UI.Utils;
 using System;
 using System.Collections;

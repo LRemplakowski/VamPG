@@ -1,6 +1,6 @@
 using UnityEngine;
 using SunsetSystems.Journal;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Interactable
 {

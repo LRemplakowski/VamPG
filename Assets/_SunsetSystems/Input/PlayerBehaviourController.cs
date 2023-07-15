@@ -11,7 +11,6 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System.Linq;
-using NaughtyAttributes;
 using SunsetSystems.Party;
 using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;

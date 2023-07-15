@@ -7,7 +7,7 @@ using SunsetSystems.Persistence;
 using System;
 using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
 using SunsetSystems.Dialogue;

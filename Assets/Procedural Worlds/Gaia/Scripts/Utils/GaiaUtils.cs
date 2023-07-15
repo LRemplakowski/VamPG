@@ -1413,7 +1413,7 @@ namespace Gaia
 #endif
             //HDRP
 #if HDPipeline
-            UnityEngine.Rendering.HighDefinition.AmbientOcclusion HDRPAmbientOcclusion;
+            ScreenSpaceAmbientOcclusion HDRPAmbientOcclusion;
             UnityEngine.Rendering.HighDefinition.Bloom HDRPBloom;
             UnityEngine.Rendering.HighDefinition.ChromaticAberration HDRPChromaticAberration;
             UnityEngine.Rendering.HighDefinition.ColorAdjustments HDRPColorAdjustments;
@@ -1662,9 +1662,9 @@ namespace Gaia
                 //Ambient Occlusion
                 if (profile.TryGetSettings(out ambientOcclusion))
                 {
-                    if (!volumeProfile.Has<UnityEngine.Rendering.HighDefinition.AmbientOcclusion>())
+                    if (!volumeProfile.Has<ScreenSpaceAmbientOcclusion>())
                     {
-                        volumeProfile.Add<UnityEngine.Rendering.HighDefinition.AmbientOcclusion>();
+                        volumeProfile.Add<ScreenSpaceAmbientOcclusion>();
                     }
                     if (volumeProfile.TryGet(out HDRPAmbientOcclusion))
                     {

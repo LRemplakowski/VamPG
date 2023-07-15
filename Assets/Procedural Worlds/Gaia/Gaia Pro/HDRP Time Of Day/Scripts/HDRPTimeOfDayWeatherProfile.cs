@@ -114,7 +114,7 @@ namespace ProceduralWorlds.HDRPTOD
             if (ValidateClouds())
             {
                 //Volumetric
-                components.m_volumetricClouds.cloudPreset.value = m_weatherData.m_cloudPresets;
+                components.m_volumetricClouds.cloudPreset = m_weatherData.m_cloudPresets;
 #if UNITY_2022_2_OR_NEWER
                 components.m_volumetricClouds.densityCurve.value = m_weatherData.m_volumetricDensityCurve;
                 components.m_volumetricClouds.bottomAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricLowestCloudAltitude.Evaluate(time), duration);

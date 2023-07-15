@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Party;
 using SunsetSystems.Data;
-using System.Web.UI.WebControls;
 using System.Linq;
 
 namespace SunsetSystems.Inventory

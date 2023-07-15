@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEngine;
-using NaughtyAttributes;
 using UnityEditor;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems
 {

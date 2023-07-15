@@ -281,7 +281,7 @@ namespace ProceduralWorlds.HDRPTOD
             if (ValidateClouds())
             {
                 //Volumetric
-                components.m_volumetricClouds.cloudPreset.value = m_cloudPresets;
+                components.m_volumetricClouds.cloudPreset = m_cloudPresets;
 #if UNITY_2022_2_OR_NEWER
                 components.m_volumetricClouds.densityCurve.value = m_volumetricDensityCurve;
                 components.m_volumetricClouds.bottomAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_volumetricLowestCloudAltitude.Evaluate(time), duration);
@@ -1122,7 +1122,7 @@ namespace ProceduralWorlds.HDRPTOD
         {
 #region Volumetric
 
-            components.m_volumetricClouds.cloudPreset.value = m_cloudPresets;
+            components.m_volumetricClouds.cloudPreset = m_cloudPresets;
             components.m_volumetricClouds.localClouds.value = m_useLocalClouds;
             components.m_volumetricClouds.densityMultiplier.value = m_volumetricDensityMultiplier.Evaluate(time);
             components.m_volumetricClouds.shapeFactor.value = m_volumetricShapeFactor.Evaluate(time);

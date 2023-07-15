@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Journal;
 using SunsetSystems.Resources;
 using SunsetSystems.UI.Utils;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Spellbook;
-using System.Data.Linq.Mapping;
+using System.Linq;
 
 namespace SunsetSystems.Entities.Data
 {

@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Spellbook;
 using SunsetSystems.UI.Utils;

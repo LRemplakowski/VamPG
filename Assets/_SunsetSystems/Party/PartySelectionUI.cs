@@ -1,5 +1,5 @@
 using Entities.Characters.Data;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace SunsetSystems.Party.UI

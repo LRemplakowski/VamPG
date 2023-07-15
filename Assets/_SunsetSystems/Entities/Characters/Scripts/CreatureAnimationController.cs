@@ -1,5 +1,5 @@
 ﻿using SunsetSystems.Entities.Characters;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using System.Collections.Generic;
 using UnityEngine;

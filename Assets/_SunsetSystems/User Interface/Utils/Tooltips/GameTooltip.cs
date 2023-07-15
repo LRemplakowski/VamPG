@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using Redcode.Awaiting;
 using System.Threading.Tasks;
 using TMPro;
@@ -70,7 +70,7 @@ namespace SunsetSystems.UI
     public struct TooltipContent
     {
         public string _title;
-        [ResizableTextArea]
+        [MultiLineProperty]
         public string _description;
     }
 }

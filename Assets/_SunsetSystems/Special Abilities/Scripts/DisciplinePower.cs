@@ -1,4 +1,4 @@
-﻿using NaughtyAttributes;
+﻿using Sirenix.OdinInspector;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Resources;
@@ -30,7 +30,7 @@ namespace SunsetSystems.Spellbook
 
         [field: SerializeField]
         public string PowerName { get; private set; }
-        [field: SerializeField, ResizableTextArea]
+        [field: SerializeField, MultiLineProperty]
         public string PowerDescription { get; private set; }
         [field: SerializeField]
         public int BloodCost { get; private set; }
@@ -111,7 +111,7 @@ namespace SunsetSystems.Spellbook
             return effects;
         }
 
-        [SerializeField, AllowNesting]
+        [SerializeField]
         private List<EffectWrapper> effects = new();
         [System.Serializable]
         public class EffectWrapper

@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using Redcode.Awaiting;
 using SunsetSystems.Audio;
 using SunsetSystems.Party;

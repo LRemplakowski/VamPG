@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;

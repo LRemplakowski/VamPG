@@ -4,7 +4,7 @@ using UnityEngine;
 using SunsetSystems.Resources;
 using SunsetSystems.UI;
 using SunsetSystems.Utils;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Party;
 using UnityEngine.Events;
 using System.Collections.Generic;

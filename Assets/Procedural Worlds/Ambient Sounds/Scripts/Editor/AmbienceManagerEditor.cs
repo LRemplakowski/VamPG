@@ -17,6 +17,10 @@ namespace AmbientSounds {
         private EditorUtils m_editorUtils;
 
         //Property references for AmbienceManager object
+        SerializedProperty m_replaceManagerOnLoad;
+        SerializedProperty m_hideManagerObject;
+        SerializedProperty m_clearEventsOnLoad;
+        SerializedProperty m_clearValuesOnLoad;
         SerializedProperty m_autoMoveManager;
         SerializedProperty m_playerObject;
         SerializedProperty m_playSpeed;
@@ -54,6 +58,10 @@ namespace AmbientSounds {
         }
         /// <summary> Constructor to set up references </summary>
         public void OnEnable() {
+            m_hideManagerObject = serializedObject.FindProperty("m_hideManagerObject");
+            m_clearEventsOnLoad = serializedObject.FindProperty("m_clearEventsOnLoad");
+            m_clearValuesOnLoad = serializedObject.FindProperty("m_clearValuesOnLoad");
+            m_replaceManagerOnLoad = serializedObject.FindProperty("m_replaceManagerOnLoad");
             m_autoMoveManager = serializedObject.FindProperty("m_autoMoveManager");
             m_playerObject = serializedObject.FindProperty("m_playerObject");
             m_playSpeed = serializedObject.FindProperty("m_playSpeed");
@@ -134,7 +142,12 @@ namespace AmbientSounds {
         /// <param name="inlineHelp">Should help be displayed?</param>
         void GeneralPanel(bool inlineHelp) {
             ++EditorGUI.indentLevel;
+            m_editorUtils.PropertyField("mReplaceManagerOnLoad", m_replaceManagerOnLoad, inlineHelp);
             m_editorUtils.PropertyField("mAutoMoveManager", m_autoMoveManager, inlineHelp);
+            if (m_autoMoveManager.boolValue)
+                m_editorUtils.PropertyField("mHideManagerObject", m_hideManagerObject, inlineHelp);
+            m_editorUtils.PropertyField("mClearEventsOnLoad", m_clearEventsOnLoad, inlineHelp);
+            m_editorUtils.PropertyField("mClearValuesOnLoad", m_clearValuesOnLoad, inlineHelp);
             m_editorUtils.PropertyField("mPlayerObject", m_playerObject, inlineHelp);
             m_editorUtils.PropertyField("mPlaySpeed", m_playSpeed, inlineHelp);
             m_editorUtils.PropertyField("mVolume", false, m_volume, inlineHelp);
@@ -142,7 +155,7 @@ namespace AmbientSounds {
             EditorGUI.BeginChangeCheck();
             m_editorUtils.PropertyField("mPreloadAudio", m_preloadAudio, inlineHelp);
             if (EditorGUI.EndChangeCheck())
-                AmbienceManager.s_preloadAudio = m_preloadAudio.boolValue;
+                AmbienceManager.PreloadAudio = m_preloadAudio.boolValue;
             --EditorGUI.indentLevel;
         }
         void DrawSequenceElement(Rect rect, int index, bool isActive, bool isFocused) {

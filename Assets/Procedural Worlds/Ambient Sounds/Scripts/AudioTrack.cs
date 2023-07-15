@@ -292,6 +292,9 @@ namespace AmbientSounds {
         internal bool curFollowPosition = true;
         /// <summary> Used by AmbienceManager to store if rotation should be followed </summary>
         internal bool curFollowRotation = false;
+        internal bool curSetRanges = false;
+        internal float curMinRange = 0;
+        internal float curMaxRange = 1;
         /// <summary> Used by AmbienceManager to store what Transform should be followed </summary>
         internal Transform curFollowing = null;
         internal AudioClip StartedPlaying = null;
@@ -344,6 +347,7 @@ namespace AmbientSounds {
             for (int c = 0; c < RawClipData.Length; ++c)
                 RawClipData[c] = AmbienceManager.GetAudioData(allClips[c]);
             currentClipIdx = NextClipIdx;
+            NextClipIdx = -1;
             if (m_sequence.m_clipData.Length > currentClipIdx)
                 curVolume *= m_sequence.m_clipData[currentClipIdx].m_volume;
             if (m_sequence.RandomizeVolume)
@@ -507,7 +511,7 @@ namespace AmbientSounds {
                     isDelaying = true;
                     m_outputNeedsMovedDelay = (float)(trackTime - lastTrackTime) + m_sequence.TrackDelayTime;
                     m_outputNeedsMoved = true;
-                    //Debug.Log("Starting delay of " + m_clipData.TrackDelayTime + " seconds.");
+                    //Debug.Log("Starting delay of " + m_sequence.TrackDelayTime + " seconds.");
                     trackTime = 0.0;
                     currentClipIdx = NextClipIdx;
                     NextClipIdx = -1;
@@ -529,7 +533,7 @@ namespace AmbientSounds {
         public void OnAudioRead(float[] data) {
             for (int frame = 0; frame < data.Length; ++frame)
                 data[frame] = 0f;
-            if (AmbienceManager.isUnityPaused) {
+            if (AmbienceManager.s_isUnityPaused) {
                 return;
             }
             float FadeStep = 1f / m_outputSampleRate;
@@ -765,6 +769,7 @@ namespace AmbientSounds {
                     newRawClipData[c] = AmbienceManager.GetAudioData(allClips[c]);
                 }
                 NextClipIdx = -1;
+                DirectClipData = allClips.ToArray();
                 if (newClipIdx < 0) {
                     PlayToFade = RawClipData[currentClipIdx];
                     RawClipData = newRawClipData;
@@ -773,7 +778,6 @@ namespace AmbientSounds {
                 } else
                     RawClipData = newRawClipData;
                 currentClipIdx = newClipIdx;
-                DirectClipData = allClips.ToArray();
                 if (m_sequence.RandomizeVolume)
                     curVolumeMod = Helpers.GetRandom(m_sequence.MinMaxVolume);
                 else

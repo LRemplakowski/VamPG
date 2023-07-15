@@ -628,7 +628,7 @@ namespace Gaia
 
                             if (GUILayout.Button(new GUIContent(m_helpButtonImage, "Opens the online help for the scene view panel."), m_smallButtonStyle, GUILayout.Height(15), GUILayout.Width(15)))
                             {
-                                Application.OpenURL("https://proceduralworlds.freshdesk.com/support/solutions/articles/33000258900-using-the-gaia-scene-view-panel");
+                                Application.OpenURL("https://canopy.procedural-worlds.com/library/tools/gaia-pro-2021/written-articles/30_installation__getting_started/5-using-the-gaia-scene-view-panel-r24/");
                             }
 
                         }
@@ -642,7 +642,7 @@ namespace Gaia
                             }
                             if (GUILayout.Button(new GUIContent(m_helpButtonImage, "Opens the online help for the scene view panel."), m_smallButtonStyle, GUILayout.Height(15), GUILayout.Width(15)))
                             {
-                                Application.OpenURL("https://proceduralworlds.freshdesk.com/support/solutions/articles/33000258900-using-the-gaia-scene-view-panel");
+                                Application.OpenURL("https://canopy.procedural-worlds.com/library/tools/gaia-pro-2021/written-articles/30_installation__getting_started/5-using-the-gaia-scene-view-panel-r24/");
                             }
                         }
                     }
@@ -725,9 +725,7 @@ namespace Gaia
                                 impostorRange = 0;
                                 if (GUILayout.Button(new GUIContent("Create Impostor Terrains...", "Opens the Terrain Mesh Exporter to create Impostor Terrains. Impostors are simple, low detail mesh versions of your terrains that can be displayed as a placeholder for the full terrain in the distance."), GUILayout.Width(170)))
                                 {
-                                    ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
-                                    exportTerrainWindow.FindAndSetPreset("Create Impostors");
-                                    exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
+                                    TerrainConverterEditorWindow.OpenWithPreset("Create Impostors");
                                 }
                                 GUILayout.Space(20);
                             }

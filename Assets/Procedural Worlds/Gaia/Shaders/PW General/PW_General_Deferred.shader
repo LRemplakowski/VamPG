@@ -152,6 +152,8 @@
 			data.screenPosition = ComputeScreenPos( UnityObjectToClipPos( v.vertex ) );
 		}
 
+		float4 _PW_SnowColor;
+
 		//=====================================================================
         void surf ( Input IN, inout SurfaceOutputStandard o)
         {
@@ -230,7 +232,7 @@
 						   out_Smoothness,  
 						   out_SSS );
 
-			half4 layer1_CoverRGBA 		= tex2D ( _PW_CoverLayer1, IN.coverLayer1UV ) * _PW_CoverLayer1Color;
+			half4 layer1_CoverRGBA 		= tex2D ( _PW_CoverLayer1, IN.coverLayer1UV ) * _PW_CoverLayer1Color * _PW_SnowColor;
 			half3 layer1_CoverNormal 	= UnpackScaleNormal ( tex2D ( _PW_CoverLayer1Normal, IN.coverLayer1UV ), _PW_CoverLayer1NormalScale );
 
 			CombineLocalGlobal ( _PW_CoverLayer1FadeStart, _PW_Global_CoverLayer1FadeStart, fadeStart );
@@ -242,7 +244,7 @@
 						   out_Metallic, 
 						   out_Smoothness, 
 						   out_SSS,
-						   IN.worldPos.y,
+						   IN.worldPos.y * 2,
 						   e.worldNormal.y,
 						   layer1_CoverRGBA, 
 						   layer1_CoverNormal, 

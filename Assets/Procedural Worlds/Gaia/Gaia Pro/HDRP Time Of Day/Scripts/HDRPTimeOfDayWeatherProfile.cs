@@ -115,14 +115,20 @@ namespace ProceduralWorlds.HDRPTOD
             {
                 //Volumetric
                 components.m_volumetricClouds.cloudPreset.value = m_weatherData.m_cloudPresets;
-                components.m_volumetricClouds.densityMultiplier.value = LerpFloat(m_startingData.m_volumetricDensityMultiplier.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricDensityMultiplier.Evaluate(time), duration);
+#if UNITY_2022_2_OR_NEWER
+                components.m_volumetricClouds.densityCurve.value = m_weatherData.m_volumetricDensityCurve;
+                components.m_volumetricClouds.bottomAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricLowestCloudAltitude.Evaluate(time), duration);
+                components.m_volumetricClouds.altitudeRange.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricCloudThickness.Evaluate(time), duration);
+#else
                 components.m_volumetricClouds.customDensityCurve.value = m_weatherData.m_volumetricDensityCurve;
+                components.m_volumetricClouds.lowestCloudAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricLowestCloudAltitude.Evaluate(time), duration);
+                components.m_volumetricClouds.cloudThickness.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricCloudThickness.Evaluate(time), duration);
+#endif
+                components.m_volumetricClouds.densityMultiplier.value = LerpFloat(m_startingData.m_volumetricDensityMultiplier.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricDensityMultiplier.Evaluate(time), duration);
                 components.m_volumetricClouds.shapeFactor.value = LerpFloat(m_startingData.m_volumetricShapeFactor.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricShapeFactor.Evaluate(time), duration);
                 components.m_volumetricClouds.shapeScale.value = LerpFloat(m_startingData.m_volumetricShapeScale.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricShapeScale.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionFactor.value = LerpFloat(m_startingData.m_volumetricErosionFactor.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricErosionFactor.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionScale.value = LerpFloat(m_startingData.m_volumetricErosionScale.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricErosionScale.Evaluate(time), duration);
-                components.m_volumetricClouds.lowestCloudAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricLowestCloudAltitude.Evaluate(time), duration);
-                components.m_volumetricClouds.cloudThickness.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricCloudThickness.Evaluate(time), duration);
                 components.m_volumetricClouds.ambientLightProbeDimmer.value = LerpFloat(m_startingData.m_volumetricAmbientLightProbeDimmer.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricAmbientLightProbeDimmer.Evaluate(time), duration);
                 components.m_volumetricClouds.sunLightDimmer.value = LerpFloat(m_startingData.m_volumetricSunLightDimmer.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricSunLightDimmer.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionOcclusion.value = LerpFloat(m_startingData.m_volumetricErosionOcclusion.Evaluate(m_lastTimeOfDayValue), m_weatherData.m_volumetricErosionOcclusion.Evaluate(time), duration);

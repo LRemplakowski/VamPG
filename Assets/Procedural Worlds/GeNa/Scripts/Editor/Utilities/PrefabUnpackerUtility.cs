@@ -202,7 +202,7 @@ namespace GeNa.Core
         {
             if (currentGameObject == null)
                 return;
-            if (PrefabUtility.IsAnyPrefabInstanceRoot(currentGameObject))
+            if (PrefabUtility.IsOutermostPrefabInstanceRoot(currentGameObject))
                 PrefabUtility.UnpackPrefabInstance(currentGameObject, unpackMode, interactionMode);
         }
         #endregion

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if GAIA_PRO_PRESENT
 using ProceduralWorlds.HDRPTOD;
+#endif
 #if FLORA_PRESENT
 using ProceduralWorlds.Flora;
 #endif
@@ -221,9 +223,11 @@ namespace Gaia
         private PhotoModeUIHelper m_ambientGroundColor = null;
 
         //HDRP Time Of Day
+#if GAIA_PRO_PRESENT
         private PhotoModeUIHelper m_hdrpGlobalShadowMultiplier = null;
         private PhotoModeUIHelper m_hdrpGlobalFogMultiplier = null;
         private PhotoModeUIHelper m_hdrpGlobalSunMultiplier = null;
+#endif
 
         #endregion
         #region Water Settings
@@ -803,7 +807,7 @@ namespace Gaia
             m_weather = ProceduralWorldsGlobalWeather.Instance;
             m_pwWeatherPresent = m_weather != null;
 
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
             m_hdrpTimeOfDay = HDRPTimeOfDay.Instance;
 #endif
 #endif
@@ -955,7 +959,11 @@ namespace Gaia
                 }
 
                 Resolution res = Screen.currentResolution;
+#if UNITY_2022_2_OR_NEWER
+                m_screenInfo = res.width + "x" + res.height + " @" + res.refreshRateRatio + " Hz [window size: " +
+#else
                 m_screenInfo = res.width + "x" + res.height + " @" + res.refreshRate + " Hz [window size: " +
+#endif
                                Screen.width + "x" + Screen.height;
                 float dpi = Screen.dpi;
                 if (dpi > 0)
@@ -1034,12 +1042,21 @@ namespace Gaia
                 bool skyIsSet =
                     m_sceneProfile.m_lightingProfiles[m_sceneProfile.m_selectedLightingProfileValuesIndex]
                         .m_profileType == GaiaConstants.GaiaLightingProfileType.ProceduralWorldsSky;
-                if (skyIsSet != m_pwWeatherPresent)
+                if (skyIsSet != m_pwWeatherPresent && m_renderPipeline != GaiaConstants.EnvironmentRenderer.HighDefinition)
                 {
                     m_pwWeatherPresent = skyIsSet;
                     m_weather = ProceduralWorldsGlobalWeather.Instance;
                     SetMetricsParent(false, m_transformSettings.m_photoMode);
                     Setup();
+                }
+                else
+                {
+                    if (skyIsSet != m_hdrpTimeOfDay)
+                    {
+                        m_hdrpTimeOfDay = skyIsSet;
+                        SetMetricsParent(false, m_transformSettings.m_photoMode);
+                        Setup();
+                    }
                 }
             }
 
@@ -1065,7 +1082,7 @@ namespace Gaia
             }
             else if (m_hdrpTimeOfDay)
             {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                 HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float autoUpdateValue);
                 if (m_photoModeValues.m_gaiaTimeOfDayEnabled != autoUpdate)
                 {
@@ -1768,7 +1785,7 @@ namespace Gaia
                     }
                     else
                     {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                         HDRPTimeOfDay hdrpTimeOfDay = HDRPTimeOfDayAPI.GetTimeOfDay();
                         m_photoModeValues.m_gaiaTimeOfDayEnabled = hdrpTimeOfDay.m_enableTimeOfDaySystem;
                         m_photoModeValues.m_gaiaTime = hdrpTimeOfDay.TimeOfDay;
@@ -1865,6 +1882,7 @@ namespace Gaia
 #if HDPipeline
                             if (m_hdrpTimeOfDay)
                             {
+#if HDPipeline && UNITY_2021_2_OR_NEWER && GAIA_PRO_PRESENT
                                 PhotoModeUtils.CreateTitleHeader(ref m_lightingGeneralHeader, m_transformSettings.m_lighting, "Time Of Day Settings");
                                 PhotoModeUtils.CreateSlider(ref m_gaiaTime, m_transformSettings.m_lighting, "Current Time", m_photoModeValues.m_gaiaTime, m_minAndMaxValues.m_gaiaTime.x, m_minAndMaxValues.m_gaiaTime.y, SetGaiaTime, SetGaiaTime, true);
                                 PhotoModeUtils.CreateSlider(ref m_gaiaSunAngle, m_transformSettings.m_lighting, "Sun Rotation", m_photoModeValues.m_sunRotation, m_minAndMaxValues.m_sunRotation.x, m_minAndMaxValues.m_sunRotation.y, SetGaiaSunAngle, SetGaiaSunAngle, true);
@@ -1883,6 +1901,7 @@ namespace Gaia
                                         m_gaiaTimeScale.gameObject.SetActive(false);
                                     }
                                 }
+#endif
                             }
                             else
                             {
@@ -1947,7 +1966,7 @@ namespace Gaia
                                 }
                             }
 #endif
-                            break;
+                                    break;
                         }
                         default:
                         {
@@ -2354,13 +2373,15 @@ namespace Gaia
                     GaiaAPI.SetHDRPAntiAliasingMode(m_savedPhotoModeValues.m_antiAliasing);
                     GaiaAPI.SetHDRPAmbientIntensity(m_savedPhotoModeValues.m_ambientIntensity);
                     GaiaAPI.SetHDRPDOFFocusMode(m_savedPhotoModeValues.m_savedDofFocusMode);
+#endif
+#if HDPipeline && UNITY_2021_2_OR_NEWER && GAIA_PRO_PRESENT
                     HDRPTimeOfDayAPI.SetCurrentTime(m_savedPhotoModeValues.m_gaiaTime, false);
                     HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(m_savedPhotoModeValues.m_gaiaTimeOfDayEnabled, m_savedPhotoModeValues.m_gaiaTimeScale);
                     HDRPTimeOfDayAPI.SetGlobalSunMultiplier(m_savedPhotoModeValues.m_globalLightIntensityMultiplier);
                     HDRPTimeOfDayAPI.SetGlobalFogMultiplier(m_savedPhotoModeValues.m_globalFogDensityMultiplier);
                     HDRPTimeOfDayAPI.SetGlobalShadowMultiplier(m_savedPhotoModeValues.m_globalShadowDistanceMultiplier);
 #endif
-                    break;
+                        break;
                 }
                 default:
                 {
@@ -2570,6 +2591,8 @@ namespace Gaia
                     m_savedPhotoModeValues.m_ambientIntensity = GaiaAPI.GetHDRPAmbientIntensity();
                     GaiaAPI.GetSunRotation(out m_savedPhotoModeValues.m_sunPitch, out m_savedPhotoModeValues.m_sunRotation, m_mainSunLight);
                     m_savedPhotoModeValues.m_savedDofFocusMode = GaiaAPI.GetHDRPDOFFocusMode();
+#endif
+#if HDPipeline && UNITY_2021_2_OR_NEWER && GAIA_PRO_PRESENT
                     m_savedPhotoModeValues.m_gaiaTime = HDRPTimeOfDayAPI.GetCurrentTime();
                     HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float autoUpdateValue);
                     m_savedPhotoModeValues.m_gaiaTimeOfDayEnabled = autoUpdate;
@@ -3852,7 +3875,7 @@ namespace Gaia
 #if GAIA_PRO_PRESENT
         public void SetGlobalSunIntensity(float f)
         {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
             if (m_isSettingValues || m_hdrpGlobalSunMultiplier == null)
             {
                 return;
@@ -3877,7 +3900,7 @@ namespace Gaia
         }
         public void SetGlobalFogDensity(float f)
         {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
             if (m_isSettingValues || m_hdrpGlobalFogMultiplier == null)
             {
                 return;
@@ -3902,8 +3925,7 @@ namespace Gaia
         }
         public void SetGlobalShadowDistance(float f)
         {
-#if HDPipeline
-
+#if HDPipeline && UNITY_2021_2_OR_NEWER
             if (m_isSettingValues || m_hdrpGlobalShadowMultiplier == null)
             {
                 return;
@@ -3937,7 +3959,7 @@ namespace Gaia
             {
                 if (m_hdrpTimeOfDay)
                 {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                     HDRPTimeOfDayAPI.SetCurrentTime(f, false);
 #endif
                 }
@@ -3970,7 +3992,7 @@ namespace Gaia
             m_photoModeValues.m_gaiaTimeScale = f;
             if (!m_isUpdatingValues)
             {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                 HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float autoUpdateValue);
                 HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(autoUpdate, f);
 #endif
@@ -4006,7 +4028,7 @@ namespace Gaia
             {
                 if (m_hdrpTimeOfDay)
                 {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                     HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float autoUpdateValue);
                     HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(boolValue, autoUpdateValue);
 #endif
@@ -4050,7 +4072,6 @@ namespace Gaia
                 {
                     if (!GaiaAPI.SetTimeOfDaySunRotation(f))
                     {
-
                         if (m_mainSunLight != null)
                         {
                             m_mainSunLight.transform.localEulerAngles =
@@ -4060,7 +4081,7 @@ namespace Gaia
                 }
                 else
                 {
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                     HDRPTimeOfDayAPI.SetDirection(f);
 #endif
                 }
@@ -6740,7 +6761,11 @@ namespace Gaia
                     }
 
                     SetGaiaFogMode((int)m_photoModeValues.m_fogMode);
-                    SetNewColorPickerRefs(m_photoModeValues.m_fogColor, m_gaiaFogColor.m_colorPreviewButton, false);
+                    if (m_gaiaFogColor != null)
+                    {
+                        SetNewColorPickerRefs(m_photoModeValues.m_fogColor, m_gaiaFogColor.m_colorPreviewButton, false);
+                    }
+
                     SetGaiaFogStart(m_photoModeValues.m_fogStart);
                     SetGaiaFogEnd(m_photoModeValues.m_fogEnd);
                     SetGaiaFogDensity(m_photoModeValues.m_fogDensity);

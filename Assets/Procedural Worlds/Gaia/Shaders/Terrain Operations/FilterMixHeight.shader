@@ -42,6 +42,7 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
+			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			sampler2D _BrushTex;
@@ -133,20 +134,20 @@
 				float oob2 = all(saturate(UVOffset) == UVOffset) ? 1.0f : 0.0f;
 				float inputHeight = tex2D(_InputTex, heightmapUV);
 				
-				float brushStrength = oob * UnpackHeightmap(tex2D(_BrushTex, brushUV));
-				float globalBrushStrength = oob * UnpackHeightmap(tex2D(_GlobalBrushTex, brushUV));
-                //float stampHeight = oob * UnpackHeightmap(tex2D(_StampTex, UVOffset));
+				float brushStrength = oob * InternalUnpackHeightmap(tex2D(_BrushTex, brushUV));
+				float globalBrushStrength = oob * InternalUnpackHeightmap(tex2D(_GlobalBrushTex, brushUV));
+                //float stampHeight = oob * InternalUnpackHeightmap(tex2D(_StampTex, UVOffset));
 
                 float target = inputHeight + ((brushStrength - _MixMidPoint) * (_WorldHeightMax - _WorldHeightMin) * _Strength);
 				if(oob>0)
 				{
-					return PackHeightmap(clamp(lerp(inputHeight, target, globalBrushStrength),0.0f,0.5f));
+					return InternalPackHeightmap(clamp(lerp(inputHeight, target, globalBrushStrength),0.0f,0.5f));
 				}
 				else
 				{
 					return inputHeight;
 				}
-				//return PackHeightmap(lerp(inputHeight, target, brushStrength));*/
+				//return InternalPackHeightmap(lerp(inputHeight, target, brushStrength));*/
 				//return target;
 
             }

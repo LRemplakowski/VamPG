@@ -4,7 +4,7 @@ position: -17,-494
 ---
 {$pcName}: Oh my God! What if it's the cops? #line:0df94ac 
 -> Continue
-{$beast}: Who cares? It's them or you. #line:044bd7d 
+{$beast}: Who cares? It's them or me. #line:044bd7d 
 -> Continue
 {$sheriff}: Ooooh! Looks like someone's been busy. #line:066c8de 
 -> Continue
@@ -63,7 +63,7 @@ position: 789,-13
 -> Continue
 {$sheriff}: You sure know how to party. I'll give you that. #line:05ad39e 
 -> Continue
-[nomarkup][He lights a cigar, blowing the smoke in your face.][/nomarkup] #line:0deb44b 
+[nomarkup][He lights a cigarette, blowing the smoke in your face.][/nomarkup] #line:0deb44b 
 -> Continue
 {$sheriff}: You've proven to be quite the headache. I'll be honest with you, I'm gonna kill you, but I'm debating whether I should just go ahead and do it now or drag you off to let my wife decide. #line:02bb6cd 
 -> Continue #line:0028622 
@@ -72,13 +72,13 @@ position: 789,-13
 title: sheriffConfrontation
 position: 811,169
 ---
-{$beast}: Kill him! #line:007e7ff 
+{$beast}: It's run, fight, or die. #line:007e7ff 
 -> Continue
-[nomarkup][You dig your nails into your flesh to stop the voice in your head. You're gonna have to think clearly to get out of this one.][/nomarkup] #line:0118043 
+[nomarkup][You dig your nails into your flesh, hoping the pain will stop the voice plaguing your mind with unwanted advice. You're gonna have to think clearly to get out of this one.][/nomarkup] #line:0118043 
 -> Continue
 {$sheriff}: How about this, I bet you have several questions. I'll answer them, so you can at least make peace with your death. Can't have any more ghosts chasing my tail. I'm a taken man. #line:04653f7 
 -> Continue
-[nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it either. You don't want to die either.][/nomarkup] #line:051582f 
+[nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it, either. You don't want to die here. Not now.][/nomarkup] #line:051582f 
 -> Continue
 {$innerVoice}: I need to bide my time. #line:046db56 
 -> Continue
@@ -100,7 +100,7 @@ position: 824,309
 {$sheriff}: \[He's calmed down but is still chuckling.\] You mean you still haven't figured it out yet? Damn, your sire really did you dirty. Well, no sense in pussyfooting around it, you're a vampire. #line:0bbec3a 
 -> Continue
 {$innerVoice}: That's… that's impossible. #line:0af388f 
--> {$pcName}: A what? #line:0e3a42f 
+-> {$pcName}: A... what? #line:0e3a42f 
 <<jump introductionToSociety>>
 ===
 title: introductionToSociety
@@ -112,7 +112,9 @@ position: 616,311
 -> Continue
 {$sheriff}: Technically, yes. If you're a nerd. #line:0b5cb70
 -> Continue 
-[nomarkup][Kieran squints at Dominic who responds with a shit-eating grin.][/nomarkup] #line:07cf79e 
+{$kieran}: And here I thought you reached the height of your insolence.
+-> Continue 
+[nomarkup][Dominic responds with a shit-eating grin.][/nomarkup] #line:07cf79e 
 -> Continue
 {$sheriff}: Well, at least now you know you didn't kill for no reason. You were hungry. #line:08722ba 
 -> Continue
@@ -124,18 +126,14 @@ position: 616,311
 title: questionsToSheriff
 position: 396,314
 ---
--> {$pcName}: Why are you going to kill me? <<if visited("whyKillMe") == false>> #line:0902e0b 
+-> {$pcName}: Why do you want to kill me? <<if visited("whyKillMe") == false>> #line:0902e0b 
     <<jump whyKillMe>>
 -> {$pcName}: How did this happen to me? <<if visited("howDidThisHappen") == false>> #line:05409a7 
     <<jump howDidThisHappen>>
 -> {$pcName}: What did you mean by sire? <<if visited("whatIsSire") == false>> #line:07ad8b9 
     <<jump whatIsSire>>
--> {$pcName}: Who is my sire? <<if visited("whatIsSire") == true && visited("whoIsSire") == false>> #line:05be31a 
-    <<jump whoIsSire>>
 -> {$pcName}: Who are you? <<if visited("whoAreYou") == false>> #line:0f77218 
     <<jump whoAreYou>>
--> {$pcName}: And you have a wife? <<if visited("whoAreYou") == true && visited("youHaveWife") == false>> #line:0f5e55d 
-    <<jump youHaveWife>>
 -> {$pcName}: How did you find me? <<if visited("howYouFindMe") == false>> #line:06e322f 
     <<jump howYouFindMe>>
 -> {$pcName}: What happens now? #line:02cd03c 
@@ -144,21 +142,26 @@ position: 396,314
 title: whyKillMe
 position: 475,142
 ---
-{$sheriff}: Not your fault per say. #line:025fc3f 
+{$sheriff}: I don't [nomarkup]<i>want</i>[/nomarkup] to kill you, per se. That's just the law of the land. The cookie crumbles as it will. #line:025fc3f 
 -> Continue
 <<if $kevinMurdered == true>>
 {$kieran}: She killed two people in cold blood. #line:041e8bd 
 <<else>>
-{$kieran}: She killed a man in cold blood. #line:0ddd67d 
+{$kieran}: She murdered somebody in cold blood. #line:0ddd67d 
 <<endif>>
 -> Continue
-{$sheriff}: Well there's that, but it's not like we're saints either. Let's just say, we have a way of doing things and unfortunately your blood sucking is gonna fuck up our blood sucking if we don't put a stop to it. No hard feelings. #line:0d01b07 
+{$sheriff}: Well there's that, but it's not like we're saints either. Let's just say, we have a way of doing things and unfortunately your blood sucking is gonna fuck up our blood sucking if we don't put a stop to it. No hard feelings. #line:0d01b07
+-> {$pcName}:  The 'law of the land'?
+    {$sheriff}: Yes ma'am. Sorry, but I don't make the rules here. It's out of my hands.
+    -> Continue
+    {$kieran}: We don't have time to debate you on it, either.
+    ->{$pcName}: Well, shit.
 <<jump questionsToSheriff>>
 ===
 title: howDidThisHappen
 position: 37,-20
 ---
-{$kieran}: We call it the Embrace. Your sire drained you of blood and then filled you up with theirs. #line:004bef7 
+{$kieran}: We call it the Embrace. In a nutshell, your Sire drained you of blood and then filled you up with theirs. #line:004bef7 
 -> Continue
 {$sheriff}: Not as kinky as it sounds. Be thankful you don't remember it. #line:0d4779b 
 <<jump questionsToSheriff>>
@@ -171,17 +174,9 @@ position: 295,39
 {$kieran}: The person who did this to you. #line:0a9ae96 
 -> Continue
 {$sheriff}: Your vampire daddy… or mommy. Don't want to assume. #line:0144bcf 
+    -> {$pcName}: Do you know who is my Sire then?
+    {$sheriff}:  We were hoping you knew. Wanted to kill you both in one fell swoop. \[Sighs.\] Things can never be easy.
 <<jump questionsToSheriff>>
-===
-title: whoIsSire
-position: 21,105
----
-{$pcName}: Who is my sire? #line:0d8c617 
--> Continue
-{$sheriff}: We were hoping you knew. Wanted to kill you both in one fell swoop.  #line:05db0fb 
--> Continue
-{$sheriff}: \[Sighs.\] Things can never be easy.  #line:080f098 
-<<jump questionsToSheriff>> 
 ===
 title: whoAreYou
 position: -31,211
@@ -192,19 +187,15 @@ position: -31,211
 -> Continue
 {$sheriff}: Sure you can. #line:0b7e88f 
 -> Continue
-[nomarkup][Kieran grumbles under his breath.][/nomarkup] #line:0a0a8f8 
-<<jump questionsToSheriff>>
-===
-title: youHaveWife
-position: -26,347
----
-{$sheriff}: \[Laughing\] You sound surprised, but since you asked: my wife, Sam, is the Prince who rules Vegas' vampires. Well the cool one's anyway. What can I say? I like 'em powerful. #line:067372e 
--> Continue
-{$sheriff}: \[Sighs\] Pity. She would have liked you. She likes spunk. #line:0ba32d6 
--> Continue
-{$kieran}: Ew. #line:0060b1e 
--> Continue
-{$sheriff}: You know what I mean. #line:0295fbe 
+[nomarkup][Kieran sighs, glaring tired daggers at Dominic.][/nomarkup] #line:0a0a8f8 
+    -> {$pcName}: And you have a wife?
+    {$sheriff}: \[Laughing\] You sound surprised, but since you asked: my wife, Sam, is the Prince who rules Vegas' vampires. Well the cool one's anyway. What can I say? I like 'em powerful. #line:067372e 
+    -> Continue
+    {$sheriff}: \[Sighs\] Pity. She would have liked you. She likes spunk. #line:0ba32d6 
+    -> Continue
+    {$kieran}: Ew. #line:0060b1e 
+    -> Continue
+    {$sheriff}: You know what I mean. #line:0295fbe 
 <<jump questionsToSheriff>>
 ===
 title: howYouFindMe
@@ -216,7 +207,9 @@ position: 27,457
 -> Continue
 {$sheriff}: Man, why you gotta give up our ways? #line:07a245e 
 -> Continue
-[nomarkup][Kieran shrugs.][/nomarkup] #line:0d3b0e4 
+{$kieran}: If you want, I can delve further. #line:0d3b0e4 
+-> Continue
+{$sheriff}: My, you're so annoying tonight, more than usual.
 <<jump questionsToSheriff>>
 ===
 title: whatHappensNow
@@ -234,13 +227,14 @@ position: 410,474
 -> Continue
 [nomarkup][Dominic draws his .44 Auto Mag pistol. He's a little too enthusiastic as he steps towards you.][/nomarkup] #line:0ea70dc 
 -> Continue
-{$beast}: FIGHT BACK! #line:059e616 
+{$beast}: I have to do something. Otherwise, I'm done for, and the party's barely even started yet. #line:059e616 
 -> Continue
-[nomarkup][If there's ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.][/nomarkup] #line:050f5f8 
+[nomarkup][If there ever a time for self preservation it's now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the wall. Behind his sunglasses, he's all too chipper for a man holding a gun to your head.][/nomarkup] #line:050f5f8 
 -> Continue
 [nomarkup][You close your eyes. This is it.][/nomarkup] #line:066e12d 
 -> Continue
 {$innerVoice}: Chad... #line:06bf482 
+{$beast}: … is he here? No. I need to stop it with the useless sentimentality and think about myself, first and foremost.
 -> Continue #line:0c93a96 
 <<jump sheIsPI>>
 ===
@@ -249,27 +243,31 @@ position: 712,493
 ---
 {$sheriff}: I want you to know, despite appearances, I'm not into this. #line:035123f 
 -> Continue
+{$beast}: Don't lie to yourself, you ass. You enjoy it more than you want to admit.
+-> Continue
 {$kieran}: Wait a second, Dominic. She's a PI. #line:01681cf 
 -> Continue
-{$sheriff}: \[Looking back at Kieran, hand still firm around your neck.\] … And? #line:0ebd133 
+{$sheriff}: \[He looks back at Kieran, hand still firm around your neck.\] … And? #line:0ebd133 
+-> Continue
+{$beast}: Kick in the balls, now! While he's distracted. Just like in the self-defense classes.
 -> Continue
 {$kieran}: Don't you think it'd be useful having a lick indebted to you who knows how to be discreet and sniff out secrets? #line:0aa7997 
 -> Continue #line:00f2c94 
-{$sheriff}: I wouldn't exactly call her discreet. #line:0dd57fa 
+{$sheriff}: \[He nonchalantly dodges your panicked attempts to free yourself. You feel the cold metal of his gun dig deeper into your temple. He grimaces, clearly a little bit annoyed. As if he heard a mosquito buzz next to his ear.\]I wouldn't exactly call her discreet. #line:0dd57fa 
 -> Continue
 {$kieran}: Cops haven't got her yet. #line:0549150 
 -> Continue
-[nomarkup][Dominic slightly loosens his grip, but remains steadfast. His brow furrows. You can see the cogs in his mind spin.][/nomarkup] #line:0a17fa0 
+[nomarkup][Dominic slightly loosens his iron grip, but remains steadfast. His brow furrows, and you can practically see the cogs in his mind beginning to spin.][/nomarkup] #line:0a17fa0 
 -> Continue
 <<jump keepHerAlive>>
 ===
 title: keepHerAlive
 ---
-{$sheriff}: I see why Kate keeps you around, Kieran. You make good points, but Sam will be pissed if she found out I let a fledgling who can't even change their own diaper go. #line:0a43186 
+{$sheriff}: I see why Kate keeps you around, Kieran. You make good points, but Sam will be pissed if she found out I let a fledgling who can't even change their own diaper traipse around her Domain. #line:0a43186 
 -> Continue
-{$innerVoice}: I'm not a child, dickwad. #line:02971be 
+{$beast}: I'm not a child, dickwad. #line:02971be 
 -> Continue
-{$kieran}: Keep her on a short leash for the time being. A trial run and then bring her to the Court once she's proven herself useful. If she's not, proceed as planned. #line:09c533e 
+{$kieran}: Keep her on a short leash for the time being. A trial run, then she can be presented to the Court once she's proven herself useful. If she's not, proceed as planned #line:09c533e 
 -> Continue
 [nomarkup][Dominic stays silent for a few moments before his cheeky smile returns. He lets go of your throat as quickly as he grabbed it, causing you to drop to the floor. He turns around to face Kieran.][/nomarkup] #line:00b1691 
 -> Continue
@@ -284,17 +282,17 @@ title: keepHerAlive
 -> {$pcName}: I'm nobody's pet. #line:0efda3e 
     {$sheriff}: Whatever you want to call it. Better behave though less you'll be put down. You should be thanking Kieran. #line:044d270 
     -> Continue
-{$sheriff}: I do have one condition though because I can't go home to my wife breaking too many Traditions less the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else. #line:0f11782 
+{$sheriff}: I do have one condition, though, because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your Sire. Tonight. Or else... \[He points at his gun.\] #line:0f11782 
 -> Continue
 {$pcName}: That's impossible! I don't even remember where I was last night. #line:057aca1 
 -> Continue
-[nomarkup][Kieran curses under his breath.][/nomarkup] #line:0c7c45f 
+{$kieran}: ... I'm starting to doubt she's a PI. #line:0c7c45f 
 -> Continue
 {$sheriff}: Well hate to be an asshole, but that sounds like a “you” problem. Just kidding, I love being an asshole. #line:00a2599 
 -> Continue
-[nomarkup][He taps his foot a couple times, glancing at the ground.][/nomarkup] #line:00eaa92 
+[nomarkup][He taps his foot a couple times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.][/nomarkup] #line:00eaa92 
 -> Continue
-{$sheriff}: I can give you a clue however. #line:05ed23f 
+{$sheriff}: You know, I don't want to tell you how to do your job, but I can give you a clue. #line:05ed23f 
 -> Continue #line:0621f83 
 <<jump clueRitual>>
 ===
@@ -304,17 +302,21 @@ title: clueRitual
 -> Continue
 {$pcName}: Ow! #line:013070c 
 -> Continue
-{$sheriff}: \[He grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.\] #line:029daf2 
+[nomarkup][Dominic grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.][/nomarkup] #line:029daf2 
 -> Continue
-{$innerVoice}: Can I do that? #line:07ee001 
+{$innerVoice}: Why is he...? The fuck? #line:07ee001 
 -> Continue
 {$sheriff}: Ah, of course you're a Brujah. #line:00cbb03 
 -> Continue
 {$pcName}: What's that supposed to mean? #line:01a0f6b 
 -> Continue
-{$sheriff}: You come from an ancient bloodline of Kindred known for their- “radical” tendencies with roots as far back as the Bolshevik Revolution and ancient Carthage.  #line:00ebf01 
+{$kieran}: You come from an ancient bloodline of Kindred known for their- “radical” tendencies with roots as far back as the ancient Carthage.  #line:00ebf01 
 -> Continue
-{$sheriff}: Basically, it's not your fault you're annoying. Also based on the potency of your blood, I can tell your sire is not somebody to be messed with, so best of luck you two.  #line:0ccaf34 
+{$sheriff}: So it's not your fault you're annoying. #line:0ccaf34 
+-> Continue
+{$innerVoice}: Coming from this guy of all people...
+-> Continue
+{$sheriff}: Mmmm, based on the potency of your blood, your Sire is not somebody to be messed with, so best of luck, you two.
 -> Continue
 [nomarkup][Dominic starts walking toward the doors.][/nomarkup] #line:082d650 
 -> Continue
@@ -329,19 +331,19 @@ title: figureOutWhereYouWere
     {$kieran}: Well that's helpful. #line:04c07c4 
     -> Continue
 -> {$pcName}: I woke up. #line:0e7276a 
-    {$kieran}: Smart ass. Great! #line:02ccffd 
+    {$kieran}: This isn't helping any of us. #line:02ccffd 
     -> Continue
-{$kieran}: Let's look around for any clue. If you're going down, I'm not going down with you. #line:0d5f2d7 
+{$kieran}: OK, let's start with the basics. Look around for any clues. If you're going down, I'm not going down with you. #line:0d5f2d7 
 -> {$pcName}: Thanks for saving me. #line:0aa3f25 
     [nomarkup][Kieran shrugs.][/nomarkup] #line:0251d36 
     -> Continue
-    {$kieran}: I didn't do it for you. \[+1 Kieran Influence\] #line:09ad626
+    {$kieran}: I didn't do it for you, but it's good to know you have some manners. \[+1 Kieran Influence\] #line:09ad626
     <<ModifyInfluence 1 "kieran">>
     -> Continue
 -> {$pcName}: So you're my jailor. #line:07813d7 
     [nomarkup][Kieran shrugs.][/nomarkup] #line:017bd3f 
     -> Continue
-    {$kieran}: More like your cellmate. #line:0bc77c9 
+    {$kieran}: More like your cellmate. I've taken responsibility for your actions, as well as your inactions until next sunrise. Don't fuck this up, or both our heads roll. #line:0bc77c9 
     -> Continue
 {$pcName}: Why did you do it then? #line:0f5c4f0 
 -> Continue

@@ -1,5 +1,134 @@
-﻿title: anastasiaFirstTalk
-tags:
+title: anastasiaEntry
+position: 136,-238
 ---
-
+<<if (visited("anastasiaInitial"))>>
+    <<jump anastasiaSubsequent>>
+<<else>>
+    <<jump anastasiaInitial>>
+<<endif>>
+===
+title: anastasiaInitial
+tags:
+position: -407,-310
+---
+<<declare $bartender to "Bartender">>
+<<declare $anastasiaNatureKnown to false>>
+{$bartender}: ... I should get back to work.
+{$anastasia}: You're working right now silly, come on, let me buy you a drink.
+{$bartender}: ...
+[nomarkup][The Bartender locks eye contact with you, silently pleading for your help.][/nomarkup]
+-> {$pcName}: Doesn't look like she's interested.
+    [nomarkup][She turns towards the bartender, an exaggerated pout on her lips.][/nomarkup]
+    {$anastasia}: Is that true? Are you not interested?
+    [nomarkup][Congratulations, you've been outmaneuvered. The bartender huffs out a deep sigh.][/nomarkup]
+    {$bartender}: Listen, I've been trying to tell you that for what? A week?
+    [nomarkup][The woman in black furrows her brows.][/nomarkup]
+    {$anastasia}: Then why didn't you just say so?
+    [nomarkup][The Bartender is waiting for something, anything, to break the silence that now fills the air...][/nomarkup]
+    -> Continue
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
+-> {$pcName}: I'll have a Bloody Mary.
+    {$bartender}: Coming right up!
+    [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
+    <<GiveItem("DRINK_BLOODY_MARY")>>
+    -> Continue
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
+-> [nomarkup][Say nothing.][/nomarkup]
+    [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup]
+    {$bartender}: Go away. Just, leave me alone, please...
+    [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup]
+    {$anastasia}: Well, that was rude.
+    -> Continue
+    {$anastasia}: Why hello there?
+    <<jump anastasiaAddressingPC>>
+===
+title: anastasiaAddressingPC
+position: -403,-28
+---
+<<if $anastasiaNatureKnown is true>>
+    <<jump anastasiaKnowIsKindred>>
+<<endif>>
+<<if visited("anastasiaSomethingOff") is false>>
+-> {$pcName}: [nomarkup](Intelligence + Medicine) [Something's off about her.][/nomarkup]
+    <<jump anastasiaSomethingOff>>
+<<endif>>
+<<if visited("anastasiaIsBreathing") is false>>
+-> {$pcName}: [nomarkup](Auspex) [Is she breathing?][/nomarkup]
+    <<jump anastasiaIsBreathing>>
+<<endif>>
+===
+title: anastasiaSomethingOff
+position: -130,38
+---
+<<if Roll("INTELLIGENCE", "MEDICINE") >= 3>>
+    [nomarkup][You notice her skin is unusually blanched pale.][/nomarkup] #success
+    <<set $anastasiaNatureKnown to true>>
+    -> Continue
+        <<jump anastasiaKnowIsKindred>>
+<<else>>
+    {$anastasia}: If you're gonna stare at my tits, at least flirt with me first. #failure
+    {$kieran}: \[flustered\] Sorry about that.
+    -> Continue
+        <<jump anastasiaAddressingPC>>
+<<endif>>
+===
+title: anastasiaIsBreathing
+---
+<<if RollSingle("AUSPEX") >= 3>>
+    [nomarkup][You notice the distinctive windy sounds of the flow of breath coming from everyone at the bar except Anastasia.][/nomarkup] #success
+    <<set $anastasiaNatureKnown to true>>
+    -> Continue
+        <<jump anastasiaKnowIsKindred>>
+<<else>>
+    {$anastasia}: If you're gonna stare at my tits, at least flirt with me first. #failure
+    {$kieran}: \[flustered\] Sorry about that.
+    -> Continue
+        <<jump anastasiaAddressingPC>>
+<<endif>>
+===
+title: anastasiaSubsequent
+position: 138,93
+---
+<<if $anastasiaNatureKnown is true>>
+{$anastasia}: Miss me already? So you did need my help.
+-> {$pcName}: You know what? Sure. Why not?
+    [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup]
+    -> Continue
+        <<RecruitAnastasia()>>
+-> {$pcName}: Sorry, but I'm gonna have to pass.
+    {$anastasia}: Your loss, toots.
+    {$kieran}: A sensible decision, for once.
+    -> Continue
+<<else>>
+{$anastasia}: Look you're cute and all, but I don't like people who blow their first chance.
+-> Continue
+<<endif>>
+===
+title: anastasiaKnowIsKindred
+position: -323,308
+---
+{$pcName}: I know what you are.
+{$anastasia}: What? A lesbian? Anyone a mile away could tell you that.
+-> {$pcName}: No. A vampire.
+{$anastasia}: ...
+{$anastasia}: Pretty and blunt. I like you.
+-> {$pcName}: Are you my Sire?
+[nomarkup][Anastasia is caught by surprise, bursting into laughter - almost like music to your ears.][/nomarkup]
+{$anastasia}: I'm too old to be having kids. I'll be your mommy though if you ask nicely.
+[nomarkup][She winks at you.][/nomarkup]
+-> {$pcName}: I don't believe you.
+    {$anastasia}: Look I'm sorry your Sire didn't come back with the milk but that's not my problem.
+-> {$pcName}: Then who is my Sire, if it's not you?
+    {$anastasia}: How should I know? Other Kindred's bed affairs are none of my business as long as I'm not involved.
+{$anastasia}: I am amused by this whole ordeal. How about I help you out and then once we get this mess sorted you and I will go grab a few “drinks”? 
+-> {$pcName}: You know what? Sure. Why not?
+    [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup]
+    -> Continue
+        <<RecruitAnastasia()>>
+-> {$pcName}: Sorry, but I'm gonna have to pass.
+    {$anastasia}: Your loss, toots.
+    {$kieran}: A sensible decision, for once.
+    -> Continue
 ===

@@ -200,7 +200,8 @@ namespace Gaia
                     im.FreeTextureReferences();
                 }
             }
-            Resources.UnloadUnusedAssets();
+            //removed for now as this creates unpredictable issues in Unity 2022.2
+            //Resources.UnloadUnusedAssets();
         }
 
         private void OnDestroy()

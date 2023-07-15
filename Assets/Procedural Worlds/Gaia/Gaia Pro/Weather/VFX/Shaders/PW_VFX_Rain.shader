@@ -159,7 +159,7 @@ Shader "PW_VFX_Rain"
 					ase_worldViewDir = normalize(ase_worldViewDir);
 					float3 normalizeResult147 = normalize( ase_worldViewDir );
 					float3 worldSpaceLightDir = UnityWorldSpaceLightDir(ase_worldPos);
-					float dotResult144 = dot( -normalizeResult147 , worldSpaceLightDir );
+					float dotResult144 = 1.0f; //dot( -normalizeResult147 , worldSpaceLightDir );
 					float4 lerpResult157 = lerp( ( float4( ( appendResult138 * appendResult140 * ( pow( saturate( dotResult144 ) , 8.0 ) * 3.0 ) ) , 0.0 ) + unity_AmbientSky * 2) , unity_FogColor , unity_FogParams.y);
 					float4 screenPos = i.ase_texcoord4;
 					float4 ase_screenPosNorm = screenPos / screenPos.w;

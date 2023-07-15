@@ -141,6 +141,11 @@ namespace SunsetSystems.Inventory
             }
         }
 
+        public void GiveItemToPlayer(InventoryEntry item)
+        {
+            PlayerInventory.AddItem(item);
+        }
+
         public static void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
         {
             if (from.TryRemoveItem(item))
@@ -176,7 +181,7 @@ namespace SunsetSystems.Inventory
         {
             InventorySaveData saveData = new();
             saveData.EquipmentData = new(_coterieEquipmentData);
-            saveData.PlayerInventory = _playerInventory;
+            saveData.InventoryContents = _playerInventory.Contents;
             saveData.Money = _money;
             return saveData;
         }
@@ -186,7 +191,8 @@ namespace SunsetSystems.Inventory
             InventorySaveData saveData = data as InventorySaveData;
             this._coterieEquipmentData = new();
             this._coterieEquipmentData.Concat(saveData.EquipmentData);
-            this._playerInventory = saveData.PlayerInventory;
+            this._playerInventory ??= GetComponent<ItemStorage>();
+            this._playerInventory.AddItems(saveData.InventoryContents);
             this._money = saveData.Money;
         }
     }
@@ -195,7 +201,7 @@ namespace SunsetSystems.Inventory
     public class InventorySaveData
     {
         public Dictionary<string, EquipmentData> EquipmentData;
-        public ItemStorage PlayerInventory;
+        public List<InventoryEntry> InventoryContents;
         public float Money;
     }
 }

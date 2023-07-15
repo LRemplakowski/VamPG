@@ -3,9 +3,6 @@ using UnityEditor;
 using PWCommon5;
 using Gaia.Internal;
 using UnityEngine.Rendering;
-#if HDPipeline
-using UnityEngine.Rendering.HighDefinition;
-#endif
 
 namespace Gaia
 {
@@ -17,10 +14,6 @@ namespace Gaia
         private EditorUtils m_editorUtils;
         private ProceduralWorldsGlobalWeather m_globalWeather;
         private SceneProfile m_profile;
-#if HDPipeline
-        private VolumeProfile m_hdrpVolumeProfile;
-        private VisualEnvironment VisualEnvironment;
-#endif
 
         private int hour;
         private float minute;
@@ -35,15 +28,6 @@ namespace Gaia
                 // Get editor utils for this
                 m_editorUtils = PWApp.GetEditorUtils(this);
             }
-
-            #if HDPipeline
-
-            if (VisualEnvironment == null)
-            {
-
-            }
-
-            #endif
 
             m_globalWeather.m_renderPipeline = GaiaUtils.GetActivePipeline();
             if (!Application.isPlaying)
@@ -67,7 +51,17 @@ namespace Gaia
                     }
                 }
 
+                m_globalWeather.UpdateSavedSnowHeight();
                 m_globalWeather.UpdateAllSystems(false);
+            }
+        }
+
+        public void OnValidate()
+        {
+            if (m_globalWeather != null)
+            {
+                Transform transform = m_globalWeather.gameObject.transform;
+                transform.hideFlags = HideFlags.HideInInspector | HideFlags.NotEditable;
             }
         }
 
@@ -78,18 +72,12 @@ namespace Gaia
             if (m_globalWeather != null)
             {
                 m_globalWeather.m_renderPipeline = GaiaUtils.GetActivePipeline();
-                Transform transform = m_globalWeather.gameObject.transform;
-                transform.hideFlags = HideFlags.HideInInspector | HideFlags.NotEditable;
             }
 
             if (m_profile == null)
             {
                 m_profile = GaiaGlobal.Instance.SceneProfile;
             }
-
-#if HDPipeline
-            m_hdrpVolumeProfile = GaiaUtils.GetVolumeProfile(false, "Environment", "Processing");
-#endif
 
             //Monitor for changes
             EditorGUI.BeginChangeCheck();
@@ -787,39 +775,17 @@ namespace Gaia
                         EditorGUI.indentLevel++;
                         weatherSettings.m_fogColor = EditorGUILayout.GradientField(new GUIContent(m_editorUtils.GetTextValue("FogColor"), m_editorUtils.GetTooltip("FogColor")), weatherSettings.m_fogColor);
                         m_editorUtils.InlineHelp("FogColor", helpEnabled);
-                        if (m_globalWeather.m_renderPipeline == GaiaConstants.EnvironmentRenderer.HighDefinition)
+                        if (RenderSettings.fogMode == FogMode.Linear)
                         {
-#if HDPipeline
-                            if (m_hdrpVolumeProfile == null)
-                            {
-                                EditorGUILayout.HelpBox("Unable to find a Sky volume profile in the scene. Setting Gaia default lighting will add a sky volume to your scene", MessageType.Info);
-                                return;
-                            }
+                            weatherSettings.m_fogStartDistance = m_editorUtils.CurveField("StartFogDistance", weatherSettings.m_fogStartDistance, helpEnabled);
+                            weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
 
-                            if (m_hdrpVolumeProfile.TryGet(out VisualEnvironment))
-                            {
-                                weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
-                                weatherSettings.m_fogHeight = m_editorUtils.CurveField("FogHeight", weatherSettings.m_fogHeight, helpEnabled);
-                                weatherSettings.m_volumetricGlobalAnisotropy = m_editorUtils.CurveField("GlobalAnisotropy", weatherSettings.m_volumetricGlobalAnisotropy, helpEnabled);
-                                weatherSettings.m_volumetricGlobalProbeDimmer = m_editorUtils.CurveField("GlobalProbeDimmer", weatherSettings.m_volumetricGlobalProbeDimmer, helpEnabled);
-                                weatherSettings.m_volumetricDepthExtent = m_editorUtils.CurveField("DepthExtent", weatherSettings.m_volumetricDepthExtent, helpEnabled);
-                            }
-#endif
+                            GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 2.2f);
                         }
                         else
                         {
-                            if (RenderSettings.fogMode == FogMode.Linear)
-                            {
-                                weatherSettings.m_fogStartDistance = m_editorUtils.CurveField("StartFogDistance", weatherSettings.m_fogStartDistance, helpEnabled);
-                                weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
-
-                                GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 2.2f);
-                            }
-                            else
-                            {
-                                weatherSettings.m_fogDensity = m_editorUtils.CurveField("FogDensity", weatherSettings.m_fogDensity, helpEnabled);
-                                GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 1.2f);
-                            }
+                            weatherSettings.m_fogDensity = m_editorUtils.CurveField("FogDensity", weatherSettings.m_fogDensity, helpEnabled);
+                            GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 1.2f);
                         }
                         EditorGUI.indentLevel--;
                     }
@@ -969,36 +935,16 @@ namespace Gaia
                         EditorGUI.indentLevel++;
                         weatherSettings.m_fogColor = EditorGUILayout.GradientField(new GUIContent(m_editorUtils.GetTextValue("FogColor"), m_editorUtils.GetTooltip("FogColor")), weatherSettings.m_fogColor);
                         m_editorUtils.InlineHelp("FogColor", helpEnabled);
-                        if (m_globalWeather.m_renderPipeline == GaiaConstants.EnvironmentRenderer.HighDefinition)
+                        if (RenderSettings.fogMode == FogMode.Linear)
                         {
-#if HDPipeline
-                            if (m_hdrpVolumeProfile.TryGet(out VisualEnvironment))
-                            {
-                                weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
-                                weatherSettings.m_fogHeight = m_editorUtils.CurveField("FogHeight", weatherSettings.m_fogHeight, helpEnabled);
-                                weatherSettings.m_volumetricGlobalAnisotropy = m_editorUtils.CurveField("GlobalAnisotropy", weatherSettings.m_volumetricGlobalAnisotropy, helpEnabled);
-                                weatherSettings.m_volumetricGlobalProbeDimmer = m_editorUtils.CurveField("GlobalProbeDimmer", weatherSettings.m_volumetricGlobalProbeDimmer, helpEnabled);
-                                weatherSettings.m_volumetricDepthExtent = m_editorUtils.CurveField("DepthExtent", weatherSettings.m_volumetricDepthExtent, helpEnabled);
-                            }
-                            else
-                            {
-                                EditorGUILayout.HelpBox("Unable to find a Sky volume profile in the scene. Setting Gaia default lighting will add a sky volume to your scene", MessageType.Info);
-                            }
-#endif
+                            weatherSettings.m_fogStartDistance = m_editorUtils.CurveField("StartFogDistance", weatherSettings.m_fogStartDistance, helpEnabled);
+                            weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
+                            GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 2.2f);
                         }
                         else
                         {
-                            if (RenderSettings.fogMode == FogMode.Linear)
-                            {
-                                weatherSettings.m_fogStartDistance = m_editorUtils.CurveField("StartFogDistance", weatherSettings.m_fogStartDistance, helpEnabled);
-                                weatherSettings.m_fogEndDistance = m_editorUtils.CurveField("EndFogDistance", weatherSettings.m_fogEndDistance, helpEnabled);
-                                GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 2.2f);
-                            }
-                            else
-                            {
-                                weatherSettings.m_fogDensity = m_editorUtils.CurveField("FogDensity", weatherSettings.m_fogDensity);
-                                GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 1.2f);
-                            }
+                            weatherSettings.m_fogDensity = m_editorUtils.CurveField("FogDensity", weatherSettings.m_fogDensity);
+                            GaiaEditorUtils.DrawTimeOfDayLine(GaiaGlobal.GetTimeOfDayMainValue(), 1.2f);
                         }
                         EditorGUI.indentLevel--;
                     }

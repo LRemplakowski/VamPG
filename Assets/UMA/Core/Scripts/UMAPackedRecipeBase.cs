@@ -198,7 +198,6 @@ namespace UMA
 			public PackedOverlayDataV3[] overlays;
 			public string[] Tags; // Any recipe specific tags.
 			public string[] Races;
-			public string blendShapeTarget;
 		}
 
 		[System.Serializable]
@@ -647,7 +646,6 @@ namespace UMA
 					tempPackedSlotData.scale = Mathf.FloorToInt(umaRecipe.slotDataList[i].overlayScale * 100);
 					tempPackedSlotData.Tags = umaRecipe.slotDataList[i].tags;
 					tempPackedSlotData.Races = umaRecipe.slotDataList[i].Races;
-					tempPackedSlotData.blendShapeTarget = umaRecipe.slotDataList[i].blendShapeTargetSlot;
 
 					bool copiedOverlays = false;
 					for (int i2 = 0; i2 < i; i2++)
@@ -974,7 +972,6 @@ namespace UMA
                     {
 						tempSlotData.Races = packedSlot.Races;
                     }
-					tempSlotData.blendShapeTargetSlot = packedSlot.blendShapeTarget;
 					tempSlotData.overlayScale = packedSlot.scale * 0.01f;
                     umaRecipe.slotDataList[i] = tempSlotData;
 

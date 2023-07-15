@@ -15,6 +15,7 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
+			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			int _PositionsCount = 0;
@@ -70,10 +71,10 @@
 
             float4 DistanceMaskMultiply(v2f i) : SV_Target
             {
-				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
 
-				return PackHeightmap(filter);
+				return InternalPackHeightmap(filter);
             }
             ENDCG
         }
@@ -89,7 +90,7 @@
 
             float4 DistanceMaskGreaterThan(v2f i) : SV_Target
             {
-				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
 
 				float result = height;
@@ -98,7 +99,7 @@
 					result = filter;
 				}
 
-				return PackHeightmap(result);
+				return InternalPackHeightmap(result);
             }
             ENDCG
         }
@@ -114,7 +115,7 @@
 
 			float4 DistanceMaskSmallerThan(v2f i) : SV_Target
 			{
-				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
 
 				float result = height;
@@ -122,7 +123,7 @@
 				{
 					result = filter;
 				}
-				return PackHeightmap(result);
+				return InternalPackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -137,10 +138,10 @@
 
 			float4 DistanceMaskAdd(v2f i) : SV_Target
 			{
-				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
 				float result = height + filter;
-				return PackHeightmap(result);
+				return InternalPackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -155,10 +156,10 @@
 
 			float4 DistanceMaskSubtract(v2f i) : SV_Target
 			{
-				float height = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float height = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetFilter(i);
 				float result = height - filter;
-				return PackHeightmap(result);
+				return InternalPackHeightmap(result);
 			}
 			ENDCG
 		}

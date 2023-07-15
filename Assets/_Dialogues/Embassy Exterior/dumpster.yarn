@@ -2,10 +2,12 @@
 tags:
 ---
 <<if CurrentObjective("NEVER_TRUST", "DUMP_BODIES")==true>>
-[nomarkup][One by one, you heave the bodies into the dumpster. There's a soft clank as they hit the metal.][/nomarkup]
-{$pcName}: Won't these be found?
-{$kieran}: We have a lot of drop points like this across the city. Dominic's team will handle it.
+    [nomarkup][One by one, you heave the bodies into the dumpster. There's a soft clank as they hit the metal.][/nomarkup]
+    -> Continue
+    {$pcName}: Won't these be found?
+    -> Continue
+    {$kieran}: We have a lot of drop points like this across the city. Dominic's team will handle it.
 <<else>>
-[nomarkup][An old, weathered dumpster. You're not sure if it's blood or rust lining the sides.][/nomarkup]
+    [nomarkup][An old, weathered dumpster with the Ardus Enterprises logo on it. You're not sure if it's blood or rust lining the sides.][/nomarkup]
 <<endif>>
 ===

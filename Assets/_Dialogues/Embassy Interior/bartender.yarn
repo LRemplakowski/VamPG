@@ -1,0 +1,25 @@
+title: bartenderDialogue
+position: 136,-238
+---
+<<declare $drink to false>>
+[nomarkup][The bartender is drying a glass with a dishrag. Looking up from her work, she spots you at the other side of the counter.][/nomarkup]
+Bartender: Sorry about that. What can I get you?
+<<if $drink ==false>>
+-> {$pcName}: I'll have a Bloody Mary.
+    Bartender: Coming right up! 
+    [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
+    {$kieran}: You know you won't be able to drink it right?
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Oh come on, a little bit of bile and blood never hurt anyone. Or clogged toilet.
+            <<if $landlordKilled ==1>>
+                -> {$pcName}: Can't say that about clogged sink though…
+            <<endif>>
+    <<endif>>
+<<endif>>
+<<set $drink to true>>
+-> {$pcName}: So, what can you tell me about Diana?
+    Bartender: She's nice enough. Been seeing someone who kinda gives me a bad feeling, but I can't put my finger on why.
+    -> {$pcName}: Bad feeling?
+        Bartender: foo. She only hangs around her office when Kate isn't here.
+-> {$pcName}: Nothing, nevermind.
+===

@@ -29,6 +29,15 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetAttributeSkillPoolSize")]
+        public static int GetDicePoolSize(string attributeName, string skillName)
+        {
+            int size = 0;
+            size += GetStatValueFromString(attributeName);
+            size += GetStatValueFromString(skillName);
+            return size;
+        }
+
         [YarnFunction("UseDiscipline")]
         public static int GetUseDisciplineResult(string disciplineName)
         {
@@ -38,6 +47,11 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetIsPartyMemberRecruited")]
+        public static bool GetIsPartyMemberRecruited(string readableID)
+        {
+            return PartyManager.Instance.IsRecruitedMember(readableID);
+        }
 
         [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()
@@ -98,6 +112,18 @@ namespace SunsetSystems.Dialogue
         public static bool GetIsObjectiveActive(string questID, string objectiveID)
         {
             return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
+        }
+
+        [YarnFunction("GetCompanionInfluence")]
+        public static int GetCompanionInfluence(string companionID)
+        {
+            throw new NotImplementedException();
+        }
+
+        [YarnFunction ("GetBloodPoints")]
+        public static int GetBloodPoints(string characterID)
+        {
+            throw new NotImplementedException();
         }
     }
 }

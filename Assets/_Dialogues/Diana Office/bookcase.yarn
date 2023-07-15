@@ -1,0 +1,270 @@
+﻿title: bookcase
+tags:
+---
+<<declare $thelema to false>>
+<<declare $goldBug to false>>
+<<declare $goldBugCombination to false>>
+<<declare $goldBugPassword to false>>
+[nomarkup][Bookcase is filled with a myriad of items. Not only books, but it also nests big TV, radio, some vases… There are modern books on the shelves, but also several occult tomes line the wall, and the faint scent of lignin permeates the air. These books must be pretty old. There are also several scrolls. You don't know if they are made from paper or parchment. You even find a traditional quill that is gaining the dust in one of the shelf compartments. It's a weird fusion of new and old.][/nomarkup]
+{$kieran}: Oh my… do you see these books?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: What, not alphabetized and color-coded, poindexter?
+    [nomarkup][Kieran just rolls his eyes.][/nomarkup]
+    {$kieran}: No? Just take a closer look, occult books lying next to normal, present day books. Popular literature.
+    {$anastasia}: So what? She is your Sire's ghoul. It's obvious she's interested in that.
+    {$kieran}: Not when you know her better. She never showed any interest in the magic and the occult. She was satisfied with running the show for Catherina.
+<<endif>>
+[nomarkup][Kieran leans towards the shelf looking at the titles more closely][/nomarkup]
+{$kieran}: Some of these books seem out of place. Take a look, but don't touch anything just yet.
+-> [nomarkup][Examine the books Kieran is interested with.][Intellicence + Occult][/nomarkup] <<if visited("bookcaseOccultRoll") == false>>
+    <<jump bookcaseOccultRoll>>
+-> [nomarkup][Examine the normal books.][Intellicence + Academics][/nomarkup] <<if visited("bookcaseAcademicsRoll") == false>>
+    <<jump bookcaseAcademicsRoll>>
+-> [nomarkup][Turn on the TV.][/nomarkup] <<if visited("bookcaseTV") == false>>
+    <<jump bookcaseTV>>
+-> [nomarkup][Turn on the radio.][/nomarkup] <<if visited("bookcaseRadio") == false>>
+    <<jump bookcaseRadio>>
+-> [nomarkup][Examine Poe's book.]<<if visited("bookcaseAcademicsRoll") == true>>
+    <<jump poeBookExamine>>
+-> [nomarkup][Step back.][/nomarkup]
+===
+title: bookcaseOccultRoll
+---
+<<if Roll("intelligence","occult") >=4>>
+    <<jump bookcaseOccultSuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseAcademicsRoll
+---
+<<if Roll("intelligence","academics") >=3>>
+    <<jump bookcaseAcademicsSuccess>>
+<<else>>
+    <<jump bookcaseFailure>>
+<<endif>>
+===
+title: bookcaseTV
+---
+[nomarkup][You find yourself watching late night MTV. From what you see it's the one of the latest video clips from Madonna. You aren't really that close with modern day music to tell for sure what title it is, but at the video the young performer looks like new Marilyn Monroe.][/nomarkup]
+{$kieran}: Why are we doing it exactly?
+-> {$pcName}: I don't know. I just hit the switch out of curiosity.
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        <<jump bookcaseTVAnaTenderMoment>>
+    <<else>>
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<endif>>
+-> {$pcName}: I'm curious what Diana likes to watch. You know, to get into her head.
+    {$kieran}: And? Did it give you any new insight?
+    -> {$pcName}: Not much more to what we already know. It's obvious she's interested in latest trends in music.
+        <<if GetIsPartyMemberRecruited($anastasia) is true>>
+            <<jump bookcaseTVAnaTenderMoment>>
+        <<else>>
+            [nomarkup][You turn the TV off.][/nomarkup]
+            <<jump bookcase>>
+        <<endif>>
+===
+title: bookcaseTVAnaTenderMoment
+---
+[nomarkup][You want to turn the TV off, but Anastasia stopped you. You look at her in surprise.][/nomarkup]
+{$kieran}: Do you like it Ms Goth Queen?
+[nomarkup][She looks at Kieran for several seconds and then shooks her head frowning at him.][/nomarkup]
+{$anastasia}: Hell no, do I look like a pop girl to you? This is for pussies.
+-> {$pcName}: You seem to care though. \[Wits + Insight\]
+    <<if Roll("wits","insight") >=3>>
+        [nomarkup][She curls her mouth until it looks like a line - she indeed likes it for some reason. And not because of performer][/nomarkup] #success
+        {$anastasia}: I don't have the slightest idea why do you care. Don't you have an investigation to end?
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<else>>
+        [nomarkup][Anastasia laughted so hard you're sure it was heard down below.][/nomarkup] #failure
+        {$anastasia}: Oh my god, me listening to pop. A new low.
+        [nomarkup][You turn the TV off.][/nomarkup]
+        <<jump bookcase>>
+    <<endif>>
+===
+title: bookcaseRadio
+---
+[nomarkup][The radio comes to life. It seems that the broadcast is already in progress.][/nomarkup]
+Radio: Thank you for your insight Josh! It's always good to know what is happening in the city! Aaaaand… in the other news…
+[nomarkup][You know that voice - it's local late night audition - Olive Branch. It's broadcasted for nearly a decade already. You believe that the name of the woman you hear in the radio is Olive Richmond. If someone knows about some important events that take place in the city it's 100% Olive. Shame your death probably wasn't as important to others as it was for you.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Oh! It's Olive time! \[She clapped her hands a little - not because of mockery. She seems to be a genuine fan.\]
+<<endif>>
+[nomarkup][Kieran scratched his chin and rolled up his sleeve.][/nomarkup]
+{$kieran}: It can't be that late… \[he looks at the clock shield making big eyes of surprise.\] Oh… it is that late… we need to hurry, I don't think that Ms Richmond would have any useful information for us.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>    
+    [nomarkup][You turn the radio off much to Anastasia's disappointment.][/nomarkup]
+    <<jump bookcase>>
+<<else>>
+    [nomarkup][You turn the radio off.][/nomarkup]
+    <<jump bookcase>>
+<<endif>>
+===
+title: bookcaseOccultSuccess
+---
+[nomarkup][The books on the first sight are disorganized chaos. But when you are looking at it more closely you see a pattern. The occult ones are disguised being placed between normal ones. You see at least several titles that can be directly linked to “Hidden Arts”. One books seems to be especially often used - and damaged. “The Book of the Law” by Aleister Crowley.][/nomarkup] #success
+-> [nomarkup][Take the book.][/nomarkup]
+    [nomarkup][Kieran stops you before you could touch the cover.][/nomarkup]
+    <<jump theBookOfTheLaw>>
+-> {$pcName}: Diana has quite big collection. This one… The Book of the Law \[You point at it\] … seems to be used especially often.
+    [nomarkup][Kieran looks for a while at the book you pointed out.][/nomarkup]
+    {$kieran}: Liber AL vel Legis by Aleister Crowley. Good eyes. \[+1 Kieran influence\]
+    <<modifyInfluence (1,$kieran)>>
+    <<jump theBookOfTheLaw>>
+===
+title: bookcaseFailure
+---
+[nomarkup][Just a bunch of dusty, sometimes old books.][/nomarkup] #failure
+<<jump bookcase>>
+===
+title: theBookOfTheLaw
+---
+{$kieran}: Let me check them first. I don't think there can be a trap, but if it is occult you're better safe than sorry.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: What? Now even books have teeth?
+    {$kieran}: If they have you just have to gently stroke their spine. You didn't know Ms Goth Queen? \[Kieran chuckles.\]
+<<endif>>
+===
+title: bookcaseAcademicsSuccess
+---
+[nomarkup][Nothing interesting mostly. Some biographies, trivia books. Things about the economy and business management. One book stands out though. The Gold-Bug and other Short Stories by Edgar Allan Poe. Maybe it's you or maybe it's here for a reason. None of the other books on the shelves are novels. Not to mention poems or something similar.][/nomarkup] #success
+(set $goldBugPassword to true)
+-> [nomarkup][Open the book.][/nomarkup]
+[nomarkup][You open the book and search it through. The titled short story is marked. From what you recall from english lessons this one was about deciphering a message leading to a hidden treasure.][/nomarkup]
+<<if $safeDiscovered ==true>>
+    <<jump poeBookExamine>>
+<<else>>
+    [nomarkup][It's probably just a circumstancial book laying around. You put it back at its place.][nomarkup]
+    <<jump bookcase>>
+<<endif>>
+===
+title: poeBookExamine
+---
+[nomarkup][Poe was considered a master of ciphers during his time… maybe a safe combination is hidden within one of his short stories? You open the book looking for answers… or maybe a nudges? Hard to say… The Gold-Bug is marked. You look at the text sifting through it quickly.][/nomarkup]
+[nomarkup][You see a set of signs and numbers… your knowledge of the literature would be useful in here…][/nomarkup]
+[nomarkup]53‡‡†305))6*;4826)4‡.)4‡);80<br>6*;48†8¶60))85;1‡(;:‡*8†83(88)<br>5*†;46(;88*96*?;8)*‡(;485);5*†<br>2:*‡(;4956*2(5*-4)8¶8*;40692<br>85);)6†8)4‡‡;1(‡9;48081;8:8‡1<br>;48†85;4)485†528806*81(‡9;48<br>;(88;4(‡?34;48)4‡;161;:188;‡?;[/nomarkup]
+[nomarkup][You look for the decryption key which was present in the story, as well as the solution, but the pages on which those would be are ripped from the book.][/nomarkup]
+<<jump poeBookExamineQuestions>>
+===
+title: poeBookExamineQuestions
+---
+-> [nomarkup][Try to recall the code.][Intelligence + Academics][/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>>
+    <<jump poeExamineAcademicsRoll>>
+-> [nomarkup][Try to break the code by yourself.][Intelligence + Investigation][/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>>
+    <<jump poeExamineInvestigationRoll>>
+-> [nomarkup][Look for the missing pages.][Resolve + Awareness][/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>>
+    <<jump poeExamineAwarenessRoll>>
+-> [nomarkup][Look for the missing pages behind the TV.][Strength + Athletics][/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>>
+    <<jump poeExamineAthleticsRoll>>
+-> [nomarkup][Look at the code again.][/nomarkup]
+    <<jump poeBookExamine>>
+-> [nomarkup][Leave the book alone.][/nomarkup]
+    <<jump bookcase>>
+===
+title: poeExamineAcademicsRoll
+---
+<<if Roll("intelligence","academics") >=3>>
+    <<jump poeExamineAcademicsRollSuccess>>
+<<else>>
+    <<jump poeExamineFailure>>
+<<endif>>
+===
+title: poeExamineAcademicsRollSuccess
+---
+[nomarkup][You still remember the code from the lessons, barely, but when you saw that streak of lines it came back. By the trials and errors you place the decryption key together and decipher the message.][/nomarkup]
+<<jump poeBookExamineMentalSuccess>>
+===
+title: poeBookExamineMentalSuccess
+---
+[nomarkup]A good glass in the bishop's hostel in the devil's seat<br>forty-one degrees and thirteen minutes<br>northeast and by north<br>main branch seventh limb east side<br>shoot from the left eye of the death's-head<br>a bee line from the tree through the shot fifty feet out.[/nomarkup]
+(set $goldBugCombination to true)
+{$kieran}: My… do you think there is a code for a safe hidden in this riddle?
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    [nomarkup][Anastasia sighs.][/nomarkup]
+    {$anastasia}: Why do you people are always cloaks and daggers? Couldn't she keep a note with the safe code straight on her desk?
+    {$kieran}: It would be stupid.
+    {$anastasia}: Maybe. But far easier for us.
+    {$kieran}: That's exactly why she shuldn't keep this kind of note in the plain sight.
+<<endif>>
+<<jump bookcase>>
+===
+title: poeExamineFailure
+---
+[nomarkup][It's of no use. You can spend entire evening trying to break the code, but all you gain is a headache… or maybe a lack of it since by the next night you won't have any head that will cause the ache.][/nomarkup] #failure
+<<jump poeBookExamineQuestions>>
+===
+title: poeExamineInvestigationRoll
+---
+<<if Roll("intelligence","investigation") >=3>>
+    <<jump poeExamineInvestigationRollSuccess>>
+<<else>>
+    <<jump poeExamineFailure>>
+<<endif>>
+===
+title: poeExamineInvestigationRollSuccess
+---
+[nomarkup][In your time as a PI and in your past you had to deal with this kind of stuff. This one doesn't look too difficult. The letters are just replaced by symbols. All you need to do is to create decryption key using logic.][/nomarkup] #success
+<<jump poeBookExamineMentalSuccess>>
+===
+title: poeExamineAwarenessRoll
+---
+<<if Roll("resolve","awareness") >=3>>
+    <<jump poeExamineAwarenessRollSuccess>>
+<<else>>
+    <<jump poeExamineFailureAwareness>>
+<<endif>>
+===
+title:poeExamineAwarenessRollSuccess
+---
+[nomarkup][You don't have the time to play cat and mouse around some stupid riddle from the story that is nearly 100 years old. There has to be a simpler solution than breaking the code. It's from book after all. You look around the shelves. Then up. As you look at the top of the shelf you see a piece of paper protruding from the edge.][/nomarkup] #success
+-> [nomarkup][Try to reach it.][Dexterity + Athletics][/nomarkup]
+    <<jump poeMissingPagesDexterityRoll>>
+===
+title: poeMissingPagesDexterityRoll
+---
+<<if Roll("dexterity","athletics") >=3>>
+    <<jump poeMissingPagesDexteritySuccess>>
+<<else>>
+    <<jump poeMissingPagesDexterityFailure>>
+<<endif>>
+===
+title: poeMissingPagesDexteritySuccess
+---
+[nomarkup][The shelf is really tall. Even when you step on your fingers you can't reach the stuff. You look around for something you can climb on, but all you see are heavy furniture and nothing else. Praying that shelves won't break under your weight you decide to use them as improvised ladder. Luckily for you the shelf is made from solid wood and you were able to reach for the page. You're in luck. This is a page with the decryption key from the story.][/nomarkup] #success
+<<jump poeBookExamineMentalSuccess>>
+===
+title: poeMissingPagesDexterityFailure
+---
+[nomarkup][The shelf is really tall. Even when you step on your fingers you can't reach the stuff. You look around for something you can climb on, but all you see are heavy furniture and nothing else. Praying that shelves won't break under your weight you decide to use them as improvised ladder. All you achieved was wounded pride as you slipped when reaching for the page and fell down on your ass.][/nomarkup] #failure
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Graceful as a swan. \[She chuckles.\]
+<<endif>>
+{$kieran}: You're alright?
+-> {$pcName}: Yes, I'm fine…
+<<jump poeBookExamineQuestions>>
+===
+title: poeExamineFailureAwareness
+---
+[nomarkup][You look around. Even under the shelf. And you find nothing.][/nomarkup]
+<<jump poeBookExamineQuestions>>
+===
+title: poeExamineAthleticsRoll
+---
+<<if Roll("strength","athletics") >=3>>
+    <<jump poeExamineAthleticsSuccess>>
+<<else>>
+    <<jump poeExamineAthleticsFailure>>
+<<endif>>
+===
+title: poeExamineAthleticsRollSuccess
+---
+[nomarkup][This TV is heavier than it looks, but with a good grip and help from one of your companions you were able to take the TV out of the shelf as far as the cable allows. Aside from dust you see a folded page that was lying under the screen. It looks like it is from a book. You take it, place the TV back in place and unfold this little mystery. It looks like you found the missing page containing the riddle solution!.][/nomarkup] #success
+<<jump poeBookExamineMentalSuccess>>
+===
+title:  poeExamineAthleticsFailure
+---
+[nomarkup][The TV is too heavy, you barely managed to make it move. Not to mention pulling it out of its place on the shelf.][/nomarkup] #failure
+<<jump poeExamine>>
+===

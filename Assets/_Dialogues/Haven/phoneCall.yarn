@@ -13,7 +13,7 @@ Chad: Hey Dez, how've you been? #line:05b9b6b
     <<jump AboutMoney>>
 -> {$pcName}: Not going to lie to you, I've been better. #line:06d718b 
     Chad: I'm sorry to hear that. This has been hard on both of us. #line:0b2b52e 
-    -> Continue
+    -> {$pcName}: Yeah, "both of us".
     <<jump AboutMoney>>
 -> {$pcName}: \[Hang up.\] #line:0e6a023 
     <<jump HangUp>>
@@ -35,8 +35,12 @@ Chad: Listen I know I'm probably the last person you want to hear from, but I wa
 title: CharismaSuccess
 position: -174,180
 ---
-Chad: Okay. I trust you. Just keep me updated alright. You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #success #line:01dfbad 
--> Continue
+Chad: Okay. I trust you. Just keep me updated alright? You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #success #line:01dfbad 
+-> {$pcName}: \[Guilt hits you like a bag o bricks. He doesn't deserve this\] Will do.
+    Chad: I'll let you to it then. Bye Dez. I lo-
+    -> Continue
+    [nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated.][/nomarkup]
+    -> Continue
 <<jump CharismaCommonPart>>
 ===
 title: CharismaFail
@@ -45,6 +49,11 @@ position: -165,76
 Chad: That's what you said a month ago. Look, I only gave it to you to help you get on your feet. The last thing I want to do is take my ex to court, but I don't know what else to do. #failure #line:0bcbbb4 
 -> {$pcName}: I understand where you're coming from. I'm sorry. #line:0dc765d 
     Chad: It's okay. I know you're good for it. Just keep me updated alright. You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #line:0afe6a1 
+    -> Continue
+    -> {$pcName}: \[Guilt hits you like a bag o bricks. He doesn't deserve this\] Will do.
+    Chad: I'll let you to it then. Bye Dez. I lo-
+    -> Continue
+    [nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated.][/nomarkup]
     -> Continue
     <<jump CharismaCommonPart>>
 -> {$pcName}: Fuck off with your vague threats. #line:0a32815 
@@ -83,7 +92,7 @@ position: 216,-10
 ---
 <<CompleteObjective "MAIN_SATURDAY_START" "ANSWER_PHONE">>
 <<EnableInteractionsAfterPhoneCall>>
-[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to talk about having a suburban fantasy with a white-picket fence and kids running in the backyard, but you just weren't ready. How far things have come since then.][/nomarkup] #line:0ca665a 
+[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to dream about living the quintessential suburban fantasy, with a white-picket fence and two or three kids running around in the backyard, but when it came time to commit to that plan, you weren't ready, and Chad never pressed. How far things have come since then.][/nomarkup] #line:0ca665a 
 -> Continue
 {$innerVoice}: Ugh. #line:06e74f0 
 -> Continue

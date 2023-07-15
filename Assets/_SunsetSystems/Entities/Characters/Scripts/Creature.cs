@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 using Apex.AI.Components;
-using Entities.Characters.Data;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using UMA.CharacterSystem;
@@ -118,8 +117,6 @@ namespace SunsetSystems.Entities.Characters
                 NavMeshObstacle.enabled = false;
             if (_config)
                 Data = new(_config);
-            if (StatsManager)
-                StatsManager.Initialize(this);
             if (SpellbookManager)
                 SpellbookManager.Initialize(this);
         }

@@ -95,6 +95,13 @@ namespace AmbientSounds {
         public bool m_outputDirect = false;
         /// <summary> Min/Max distance to place AudioSource when output type is not "STRAIGHT" </summary>
         public Vector2 m_outputDistance = Vector2.zero;
+        /// <summary> Should the Min/Max 3d range of the AudioSource be set on spawn? </summary>
+        public bool m_outputSetAudioRanges = false;
+        /// <summary> The amount of spawned distance to apply to Min/Max 3D range on spawned AudioSource </summary>
+        [Range(0, 1)]
+        public float m_outputAudioRangesFollowSpawnDistance = 1f;
+        /// <summary> The Min/Max 3D range to set on a spawned AudioSource </summary>
+        public Vector2 m_outputAudioRanges = Vector2.zero;
         /// <summary> Min/Max angle (in degrees) to place AudioSource when output type is not "STRAIGHT" </summary>
         public Vector2 m_outputVerticalAngle = new Vector2(-180, 180);
         /// <summary> Min/Max angle (in degrees) to place AudioSource when output type is not "STRAIGHT" </summary>
@@ -396,8 +403,6 @@ namespace AmbientSounds {
             m_needsUpdateModifiers = true;
             m_forceMuted = false;
             m_forcePlay = false;
-
-            
         }
     }
 }

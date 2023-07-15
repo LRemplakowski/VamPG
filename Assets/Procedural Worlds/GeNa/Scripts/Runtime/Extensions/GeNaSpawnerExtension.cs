@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 namespace GeNa.Core
 {
     /// <summary>
@@ -12,7 +13,8 @@ namespace GeNa.Core
     public class GeNaSpawnerExtension : GeNaSplineExtension
     {
         #region Variables
-        [SerializeField] protected SpawnerEntry m_spawnerEntry = new SpawnerEntry();
+
+        [SerializeField] protected SpawnerEntry m_spawnerEntry = null;
         [SerializeField] protected bool m_autoIterate = false;
         [SerializeField] protected bool m_alignToSpline = false;
         [SerializeField] protected bool m_alignChildrenToSpline = false;
@@ -24,108 +26,173 @@ namespace GeNa.Core
         [SerializeField] protected Vector3 m_intersectionBoundsSize = new Vector3(10f, 10f, 10f);
         [SerializeField] protected bool m_checkIntersectionBounds = false;
         [NonSerialized] private bool m_isProcessing = false;
+
         #endregion
+
         #region Properties
+
         public SpawnerEntry SpawnerEntry => m_spawnerEntry;
+
         public GeNaSpawner Spawner
         {
-            get => m_spawnerEntry.Spawner;
-            set => m_spawnerEntry.Spawner = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.Spawner : null;
+            set
+            {
+                if (m_spawnerEntry != null)
+                {
+                    if (m_spawnerEntry.Spawner != value)
+                        m_spawnerEntry = new SpawnerEntry(value);
+                }
+                else
+                {
+                    m_spawnerEntry = new SpawnerEntry(value);
+                }
+            }
         }
-        public GeNaSpawnerData SpawnerData => m_spawnerEntry.SpawnerData;
+
+        public GeNaSpawnerData SpawnerData => m_spawnerEntry?.SpawnerData;
+
         public Transform Target
         {
-            get => m_spawnerEntry.Target;
-            set => m_spawnerEntry.Target = value;
+            get => m_spawnerEntry?.Target;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.Target = value;
+            }
         }
+
         public Vector3 OffsetPosition
         {
-            get => m_spawnerEntry.OffsetPosition;
-            set => m_spawnerEntry.OffsetPosition = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.OffsetPosition : default;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.OffsetPosition = value;
+            }
         }
+
         public Vector3 OffsetRotation
         {
-            get => m_spawnerEntry.OffsetRotation;
-            set => m_spawnerEntry.OffsetRotation = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.OffsetRotation : default;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.OffsetRotation = value;
+            }
         }
+
         public float FlowRate
         {
-            get => m_spawnerEntry.FlowRate;
-            set => m_spawnerEntry.FlowRate = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.FlowRate : default;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.FlowRate = value;
+            }
         }
+
         public float SpawnRange
         {
-            get => m_spawnerEntry.SpawnRange;
-            set => m_spawnerEntry.SpawnRange = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.SpawnRange : default;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.SpawnRange = value;
+            }
         }
+
         public float ThrowDistance
         {
-            get => m_spawnerEntry.ThrowDistance;
-            set => m_spawnerEntry.ThrowDistance = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.ThrowDistance : default;
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.ThrowDistance = value;
+            }
         }
+
         public List<SpawnCall> SpawnCalls
         {
-            get => m_spawnerEntry.SpawnCalls;
-            set => m_spawnerEntry.SpawnCalls = value;
+            get => m_spawnerEntry != null ? m_spawnerEntry.SpawnCalls : new List<SpawnCall>();
+            set
+            {
+                if (m_spawnerEntry != null)
+                    m_spawnerEntry.SpawnCalls = value;
+            }
         }
+
         public bool AutoIterate
         {
             get => m_autoIterate;
             set => m_autoIterate = value;
         }
+
         public bool AlignToSpline
         {
             get => m_alignToSpline;
             set => m_alignToSpline = value;
         }
+
         public bool AlignChildrenToSpline
         {
             get => m_alignChildrenToSpline;
             set => m_alignChildrenToSpline = value;
         }
+
         public bool ConformToSlope
         {
             get => m_conformToSlope;
             set => m_conformToSlope = value;
         }
+
         public bool ConformChildrenToSlope
         {
             get => m_conformChildrenToSlope;
             set => m_conformChildrenToSlope = value;
         }
+
         public bool SnapToGround
         {
             get => m_snapToGround;
             set => m_snapToGround = value;
         }
+
         public bool SnapChildrenToGround
         {
             get => m_snapChildrenToGround;
             set => m_snapChildrenToGround = value;
         }
+
         public bool IsProcessing
         {
             get => m_isProcessing;
             set => m_isProcessing = value;
         }
+
         public Vector3 IntersectionBoundsSize
         {
             get => m_intersectionBoundsSize;
             set => m_intersectionBoundsSize = value;
         }
+
         public bool CheckIntersectionBounds
         {
             get => m_checkIntersectionBounds;
             set => m_checkIntersectionBounds = value;
         }
+
         #endregion
+
         #region Methods
+
         protected override GameObject OnBake(GeNaSpline spline)
         {
             SpawnCalls.Clear();
             Execute();
             return null;
         }
+
         public void Load()
         {
             if (m_spawnerEntry == null)
@@ -135,6 +202,7 @@ namespace GeNa.Core
                 return;
             spawner.Load();
         }
+
         protected override void OnSelect()
         {
             base.OnSelect();
@@ -143,6 +211,7 @@ namespace GeNa.Core
             name = Spawner.name;
             Spawner.Load();
         }
+
         protected override void OnAttach(GeNaSpline spline)
         {
             if (SpawnerData == null)
@@ -151,6 +220,7 @@ namespace GeNa.Core
             m_spawnerEntry.FlowRate = SpawnerData.SpawnRange;
             UpdateSpawnCallsGround(m_spawnerEntry.SpawnCalls);
         }
+
         public override void PreExecute()
         {
             if (SpawnerData == null)
@@ -162,6 +232,7 @@ namespace GeNa.Core
             if (Spline != null)
                 GeNaSpawnerInternal.SetupTempObject(Spline.transform);
         }
+
         public override void Execute()
         {
             if (SpawnerData == null)
@@ -182,14 +253,17 @@ namespace GeNa.Core
                     }
                 }
             }
+
             UpdateEntities();
         }
+
         protected override void OnDelete()
         {
             if (m_undoRecord != null)
                 m_undoRecord.Undo();
             GeNaEvents.onSpawnFinished -= OnPostSpawn;
         }
+
         public void UpdateSpawnCallsGround(List<SpawnCall> spawnCalls)
         {
             if (m_spawnerEntry == null)
@@ -214,6 +288,7 @@ namespace GeNa.Core
                 spawnCall.CanSpawn = locationIsValid && spawnCall.Target == ground;
             }
         }
+
         public void Spawn()
         {
             if (m_isProcessing)
@@ -223,6 +298,7 @@ namespace GeNa.Core
                 GeNaDebug.LogWarning($"The Spline '{Spline.name}' does not contain any nodes!");
                 return;
             }
+
             if (SpawnerData == null)
                 return;
             List<SpawnCall> spawnCalls = GenerateSpawnCalls();
@@ -237,6 +313,7 @@ namespace GeNa.Core
             GeNaEvents.onSpawnFinished -= OnPostSpawn;
             GeNaEvents.onSpawnFinished += OnPostSpawn;
         }
+
         public void OnPostSpawn()
         {
             m_undoRecord = SpawnerData.LastUndoRecord;
@@ -244,6 +321,7 @@ namespace GeNa.Core
             Spline.UpdateSpline();
             GeNaEvents.onSpawnFinished -= OnPostSpawn;
         }
+
         public void Iterate()
         {
             if (SpawnerData == null)
@@ -259,6 +337,7 @@ namespace GeNa.Core
             GeNaEvents.onSpawnFinished -= OnPostSpawn;
             GeNaEvents.onSpawnFinished += OnPostSpawn;
         }
+
         public void UpdateEntities()
         {
             if (SpawnerData == null)
@@ -274,6 +353,7 @@ namespace GeNa.Core
                 spawnCall.UpdateEntities();
             }
         }
+
         public Transform GetTarget(Vector3 position, out RaycastHit hitInfo)
         {
             Transform target = default;
@@ -285,6 +365,7 @@ namespace GeNa.Core
                 target = hitInfo.transform;
             return target;
         }
+
         public Transform GetTarget(out RaycastHit hitInfo)
         {
             hitInfo = default;
@@ -299,6 +380,7 @@ namespace GeNa.Core
             Vector3 nodePosition = firstNode.Position;
             return GetTarget(nodePosition, out hitInfo);
         }
+
         public void ActivateAllEntities(bool isActive)
         {
             foreach (var spawnCall in SpawnCalls)
@@ -309,6 +391,7 @@ namespace GeNa.Core
                     spawnCall.DisableEntities();
             }
         }
+
         public List<SpawnCall> GenerateSpawnCalls()
         {
             List<SpawnCall> result = new List<SpawnCall>();
@@ -338,6 +421,7 @@ namespace GeNa.Core
                         // if (spawnCall.IsEmpty || !spawnCall.Generated)
                         //     spawnCall = null;
                     }
+
                     if (spawnCall == null)
                     {
                         // Generate Spawn Call for entry
@@ -346,6 +430,7 @@ namespace GeNa.Core
                             Normal = Vector3.up
                         };
                     }
+
                     // Offset Location & Rotation
                     Vector3 location = geNaSample.Location +
                                        (geNaSample.Scale.x * OffsetPosition.x * geNaSample.Right) +
@@ -366,6 +451,7 @@ namespace GeNa.Core
                     {
                         spawnCall.IsActive = true;
                     }
+
                     if (m_isProcessing)
                     {
                         spawnCall.Rotation = Vector3.zero;
@@ -384,6 +470,7 @@ namespace GeNa.Core
                             euler.y += OffsetRotation.y;
                             rotation = euler;
                         }
+
                         spawnCall.SpawnedLocation = location;
                         spawnCall.Location = location;
                         spawnCall.Rotation = rotation;
@@ -391,30 +478,37 @@ namespace GeNa.Core
                         {
                             spawnCall.ConformToSlope();
                         }
+
                         if (m_snapToGround)
                         {
                             spawnCall.SnapToGround();
                             spawnCall.Location += Vector3.up * OffsetPosition.y;
                         }
                     }
+
                     // GeNaSpawnerInternal.SetSpawnOrigin(SpawnerData, spawnCall);
                     result.Add(spawnCall);
                 }
+
                 // Offset Distance for next iteration
                 distance += FlowRate;
             }
+
             for (int i = index; i < SpawnCalls.Count; i++)
             {
                 SpawnCall spawnCall = SpawnCalls[i];
                 spawnCall.Dispose();
             }
+
             if (SpawnerData != null)
                 GeNaSpawnerInternal.GenerateRandomData(SpawnerData, result);
             return result;
         }
+
         protected override void OnDeselect()
         {
         }
+
         #endregion
     }
 }

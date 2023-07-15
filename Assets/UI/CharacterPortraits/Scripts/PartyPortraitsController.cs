@@ -12,10 +12,9 @@ namespace UI.CharacterPortraits
         private GameObject portraitPrefab;
         private readonly List<PortraitController> portraits = new();
 
-        internal void AddPortrait(Sprite portrait)
+        public void AddPortrait(Sprite portrait)
         {
             GameObject portraitGO = Instantiate(portraitPrefab, this.transform);
-            //portraitGO.name = data.name + " Portrait";
             PortraitController portraitController = portraitGO.GetComponent<PortraitController>();
             if (portraitController == null)
                 Debug.LogWarning("jebany null");
@@ -23,7 +22,7 @@ namespace UI.CharacterPortraits
             portraits.Add(portraitController);
         }
 
-        internal void Clear()
+        public void Clear()
         {
             portraits.ForEach(p => Destroy(p.gameObject));
             portraits.Clear();

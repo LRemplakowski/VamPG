@@ -1,16 +1,16 @@
 using Apex;
-using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using System;
 using SunsetSystems.Data;
+using CleverCrow.Fluid.UniqueIds;
 
 namespace SunsetSystems.Dialogue
 {
-    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveRuntimeData, IResetable
+    [RequireComponent(typeof(UniqueId))]
+    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
         private StringFloatDictionary _floats = new();
@@ -23,15 +23,24 @@ namespace SunsetSystems.Dialogue
 
         private readonly Dictionary<string, object> _variables = new();
 
-        private const string DIALOGUE_DATA_KEY = "DIALOGUE_DATA";
+        [SerializeField]
+        private UniqueId _unique;
+        public string DataKey => _unique.Id;
 
         private void Awake()
         {
+            _unique ??= GetComponent<UniqueId>();
             if (_variableInjectionConfig != null)
             {
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
                 SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
             }
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         public void ResetOnGameStart()
@@ -67,15 +76,15 @@ namespace SunsetSystems.Dialogue
             return (_floats, _strings, _bools);
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            DialogueSaveData savedData = ES3.Load<DialogueSaveData>(DIALOGUE_DATA_KEY);
+            DialogueSaveData savedData = data as DialogueSaveData;
             SetAllVariables(savedData._floats, savedData._strings, savedData._bools);
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(DIALOGUE_DATA_KEY, new DialogueSaveData(_floats, _strings, _bools));
+            return new DialogueSaveData(_floats, _strings, _bools);
         }
 
         public override void SetAllVariables(Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools, bool clear = true)
@@ -123,17 +132,22 @@ namespace SunsetSystems.Dialogue
     }
 
     [Serializable]
-    public struct DialogueSaveData
+    public class DialogueSaveData
     {
-        public StringFloatDictionary _floats;
-        public StringStringDictionary _strings;
-        public StringBoolDictionary _bools;
+        public Dictionary<string, float> _floats = new();
+        public Dictionary<string, string> _strings = new();
+        public Dictionary<string, bool> _bools = new();
 
         public DialogueSaveData(StringFloatDictionary _floats, StringStringDictionary _strings, StringBoolDictionary _bools)
         {
-            this._floats = _floats;
-            this._strings = _strings;
-            this._bools = _bools;
+            this._floats = new(_floats);
+            this._strings = new(_strings);
+            this._bools = new(_bools);
+        }
+
+        public DialogueSaveData()
+        {
+
         }
     }
 }

@@ -1,0 +1,45 @@
+﻿title: hvac
+tags:
+---
+<<declare $windowBroken to false>>
+[nomarkup][You see a faint purple glow emanating from a high-up window in the brick.][/nomarkup]
+-> Continue
+{$kieran}: Has to be Diana's office. She likes things 'moody'.
+-> Continue
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+{$anastasia}: You and her have a lot in common.
+<<endif>>
+-> [nomarkup][Climb up the HVAC.][Dexterity + Athletics][/nomarkup]
+    {$kieran}: Be careful!
+    -> Continue
+    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+        {$anastasia}: \[Cough\] Pussy. \[Cough. Cough.\]
+        -> Continue
+        {$kieran}: Yes Miss Goth Queen, so far you have been very forthcoming about your preferences.
+        -> Continue
+    <<endif>>
+    <<if Roll ("dexterity","Athletics" >=2)>>
+        <<jump climbingSuccess>>
+    <<else>>
+        <<jump climbingFailure>>
+    <<endif>>
+-> [nomarkup][Step away.][/nomarkup]
+===
+title: climbingSuccess
+---
+[nomarkup][You gracefully scale the brick before you, push the window open, and slide inside.][/nomarkup] #success
+-> Continue
+{$kieran}: She left her window unlocked. Curious?
+===
+title: climbingFailure
+---
+[nomarkup][You violently chuck yourself up the wall, vaulting head first through the glass.][+1 Superficial Damage][/nomarkup]
+<<DealDamage($pcName, 1, "Superficial")>>
+-> Continue
+{$kieran}: Ow!
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    -> Continue
+    {$anastasia}: Smooth.
+<<endif>>
+<<set $windowBroken to true>>
+===

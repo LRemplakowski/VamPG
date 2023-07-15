@@ -74,35 +74,13 @@ namespace UMA
 		static NativeArray<BoneWeight1> nativeBoneWeights;
 		static NativeArray<byte> nativeBonesPerVertex;
 
-		public static List<UMABlendShape> GetBlendshapeSources(UMAMeshData meshData, UMAData.UMARecipe recipe)
-        {
-			List<UMABlendShape> sourceShapes;
-			if (meshData.blendShapes != null && meshData.blendShapes.Length > 0)
-			{
-				sourceShapes = new List<UMABlendShape>(meshData.blendShapes);
-			}
-			else
-			{
-				sourceShapes = new List<UMABlendShape>();
-			}
-			if (recipe.BlendshapeSlots.ContainsKey(meshData.SlotName))
-			{
-				List<UMAMeshData> addlBlendShapes = recipe.BlendshapeSlots[meshData.SlotName];
-				foreach (var md in addlBlendShapes)
-				{
-					sourceShapes.AddRange(md.blendShapes);
-				}
-			}
-			return sourceShapes;
-		}
-
 		/// <summary>
 		/// Combines a set of meshes into the target mesh.
 		/// </summary>
 		/// <param name="target">Target.</param>
 		/// <param name="sources">Sources.</param>
 		/// <param name="blendShapeSettings">BlendShape Settings.</param>
-		public static void CombineMeshes(UMAMeshData target, CombineInstance[] sources, BlendShapeSettings blendShapeSettings, UMAData.UMARecipe recipe)
+		public static void CombineMeshes(UMAMeshData target, CombineInstance[] sources, BlendShapeSettings blendShapeSettings = null)
 		{
 			if (blendShapeSettings == null)
 				blendShapeSettings = new BlendShapeSettings();
@@ -119,7 +97,7 @@ namespace UMA
 			AnalyzeSources(sources, subMeshTriangleLength, ref vertexCount, ref boneWeightCount, ref bindPoseCount, ref transformHierarchyCount, ref meshComponents);
 
 			if(!blendShapeSettings.ignoreBlendShapes)
-				AnalyzeBlendShapeSources(sources, blendShapeSettings, ref meshComponents, out blendShapeNames, recipe);
+				AnalyzeBlendShapeSources(sources, blendShapeSettings, ref meshComponents, out blendShapeNames);
 
 			int[][] submeshTriangles = new int[subMeshCount][];
 			for (int i = 0; i < subMeshTriangleLength.Length; i++)
@@ -275,58 +253,56 @@ namespace UMA
 
 				if (has_blendShapes) 
 				{
-					// calculate the group of blendshapes
-					// use that instead of source.meshData.blendShapes.
-					List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
-					// 	int sourceBlendShapeLength = source.meshData.blendShapes.Length;
-					// for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
-					foreach(UMABlendShape ubs in sourceShapes)
+					if (source.meshData.blendShapes != null && source.meshData.blendShapes.Length > 0) 
 					{
-						string shapeName = ubs.shapeName;// source.meshData.blendShapes[shapeIndex].shapeName;
-
-						//If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
-						if (!blendShapeSettings.loadAllBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
-							continue;
-
-						#region BlendShape Baking
-						if (BakeBlendShape(blendShapeSettings.blendShapes, ubs /*source.meshData.blendShapes[shapeIndex]*/, ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
-							continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
-						#endregion
-
-						//If our dictionary contains the shape name, which it should
-						if (blendShapeNames.ContainsKey(shapeName))
+						int sourceBlendShapeLength = source.meshData.blendShapes.Length;
+						for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
 						{
-							//UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
-							int i = blendShapeNames[shapeName].index;
+							string shapeName = source.meshData.blendShapes[shapeIndex].shapeName;
 
-							if (blendShapes[i].frames.Length != ubs.frames.Length)
+							//If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
+							if (!blendShapeSettings.loadAllBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
+								continue;
+
+#region BlendShape Baking
+							if(BakeBlendShape(blendShapeSettings.blendShapes, source.meshData.blendShapes[shapeIndex], ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
+								continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
+#endregion
+							
+							//If our dictionary contains the shape name, which it should
+							if (blendShapeNames.ContainsKey(shapeName))
 							{
-								if (Debug.isDebugBuild)
-									Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
-								break;
+								UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
+								int i = blendShapeNames[shapeName].index;
+
+								if (blendShapes[i].frames.Length != sourceBlendShapes[shapeIndex].frames.Length)
+								{
+									if (Debug.isDebugBuild)
+										Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
+									break;
+								}
+
+								for (int frameIndex = 0; frameIndex < sourceBlendShapes[shapeIndex].frames.Length; frameIndex++)
+								{
+									Array.Copy(sourceBlendShapes[shapeIndex].frames[frameIndex].deltaVertices, 0, blendShapes[i].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
+
+									Vector3[] sourceDeltaNormals = sourceBlendShapes[shapeIndex].frames[frameIndex].deltaNormals;
+									Vector3[] sourceDeltaTangents = sourceBlendShapes[shapeIndex].frames[frameIndex].deltaTangents;
+
+									//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
+									if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
+										Array.Copy(sourceDeltaNormals, 0, blendShapes[i].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
+
+									if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
+										Array.Copy(sourceDeltaTangents, 0, blendShapes[i].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
+								}
 							}
-
-							for (int frameIndex = 0; frameIndex < ubs.frames.Length; frameIndex++)
+							else
 							{
-								Array.Copy(ubs.frames[frameIndex].deltaVertices, 0, blendShapes[i].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
-
-								Vector3[] sourceDeltaNormals = ubs.frames[frameIndex].deltaNormals;
-								Vector3[] sourceDeltaTangents = ubs.frames[frameIndex].deltaTangents;
-
-								//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
-								if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
-									Array.Copy(sourceDeltaNormals, 0, blendShapes[i].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
-
-								if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
-									Array.Copy(sourceDeltaTangents, 0, blendShapes[i].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
+								if(Debug.isDebugBuild)
+									Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
 							}
 						}
-						else
-						{
-							if (Debug.isDebugBuild)
-								Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
-						}
-
 					}
 				}
 				if (has_clothSkinning)
@@ -454,7 +430,7 @@ namespace UMA
 #endif
 			target.colors32 = source.colors32;
 			target.normals = source.normals;
-			target.rootBoneHash = source.rootBoneHash; 
+			target.rootBoneHash = source.rootBoneHash;
 			target.subMeshCount = source.subMeshCount;
 			target.tangents = source.tangents;
 			target.umaBoneCount = source.umaBoneCount;
@@ -466,7 +442,7 @@ namespace UMA
 			target.vertexCount = source.vertexCount;
 			target.vertices = source.vertices;
 			target.blendShapes = source.blendShapes;
-			target.SlotName = source.SlotName;
+			target.SlotName = source.SlotName + " (shallow copy)";
 			target.ManagedBonesPerVertex = source.ManagedBonesPerVertex;
 			target.ManagedBoneWeights = source.ManagedBoneWeights;
 
@@ -685,7 +661,7 @@ namespace UMA
 			}
 		}
 
-		private static void AnalyzeBlendShapeSources(CombineInstance[] sources, BlendShapeSettings blendShapeSettings, ref MeshComponents meshComponents, out Dictionary<string, BlendShapeVertexData> blendShapeNames, UMAData.UMARecipe recipe)
+		private static void AnalyzeBlendShapeSources(CombineInstance[] sources, BlendShapeSettings blendShapeSettings, ref MeshComponents meshComponents, out Dictionary<string, BlendShapeVertexData> blendShapeNames)
 		{
 			blendShapeNames = new Dictionary<string, BlendShapeVertexData>();
 
@@ -696,17 +672,16 @@ namespace UMA
 
 			foreach (var source in sources)
 			{
-				// get source blendshapes...
 				//If we find a blendshape on this mesh then lets add it to the blendShapeNames hash to get all the unique names
-				List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
-
-				if (sourceShapes.Count == 0)
+				if (source.meshData.blendShapes == null)
 					continue;
 
-				foreach(UMABlendShape ubs in sourceShapes)
-				// for (int shapeIndex = 0; shapeIndex < source.meshData.blendShapes.Length; shapeIndex++)
+				if (source.meshData.blendShapes.Length == 0)
+					continue;
+
+				for (int shapeIndex = 0; shapeIndex < source.meshData.blendShapes.Length; shapeIndex++)
 				{
-					string shapeName = ubs.shapeName;// source.meshData.blendShapes[shapeIndex].shapeName;
+					string shapeName = source.meshData.blendShapes[shapeIndex].shapeName;
 
 					//if we are baking this blendshape then skip and don't add to the blendshape names.
 					BlendShapeData data;
@@ -725,18 +700,18 @@ namespace UMA
 						blendShapeNames.Add(shapeName, newData);
 					}
 
-					blendShapeNames[shapeName].hasNormals |= ubs.frames[0].HasNormals();
-					blendShapeNames[shapeName].hasTangents |= ubs.frames[0].HasTangents();
+					blendShapeNames[shapeName].hasNormals |= source.meshData.blendShapes[shapeIndex].frames[0].HasNormals();
+					blendShapeNames[shapeName].hasTangents |= source.meshData.blendShapes[shapeIndex].frames[0].HasTangents();
 
-					if (ubs.frames.Length > blendShapeNames[shapeName].frameCount)
+					if (source.meshData.blendShapes[shapeIndex].frames.Length > blendShapeNames[shapeName].frameCount)
 					{
-						blendShapeNames[shapeName].frameCount = ubs.frames.Length;
+						blendShapeNames[shapeName].frameCount = source.meshData.blendShapes[shapeIndex].frames.Length;
 						blendShapeNames[shapeName].frameWeights = new float[blendShapeNames[shapeName].frameCount];
 
 						for (int i = 0; i < blendShapeNames[shapeName].frameCount; i++)
 						{
 							//technically two sources could have different frame weights for the same blendshape, but then thats a problem with the source.
-							blendShapeNames[shapeName].frameWeights[i] = ubs.frames[i].frameWeight;
+							blendShapeNames[shapeName].frameWeights[i] = source.meshData.blendShapes[shapeIndex].frames[i].frameWeight;
 						}
 					}
 				}

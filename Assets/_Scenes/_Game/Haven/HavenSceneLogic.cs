@@ -3,6 +3,7 @@ using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Enviroment;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Inventory;
@@ -11,13 +12,12 @@ using SunsetSystems.MainMenu;
 using SunsetSystems.Party;
 using SunsetSystems.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Persistence
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {
@@ -47,7 +47,7 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private DialogueEntity _phone;
         [SerializeField]
-        private TalkableNPC _landlord;
+        private DialogueNPC _landlord;
         [SerializeField]
         private Waypoint _landlordSpawnWaypoint, _landlordSinkWaypoint, _pcLandlordVisitWaypoint, _pcLandlordSinkWaypoint;
         [SerializeField]
@@ -66,11 +66,11 @@ namespace SunsetSystems.Loading
         [SerializeField]
         private Waypoint _pcCoverWaypoint;
         [SerializeField]
-        private Doors _havenDoors;
+        private InteractableDoors _havenDoors;
         [SerializeField]
         private DialogueEntity _bathroomDoorsDialogue;
         [SerializeField]
-        private Doors _bathroomDoors;
+        private InteractableDoors _bathroomDoors;
         [Header("Action")]
         [SerializeField]
         private Creature _dominic;
@@ -95,11 +95,12 @@ namespace SunsetSystems.Loading
             _cameraControl = cameraControlGO?.GetComponent<CameraControlScript>();
         }
 
-        public async override Task StartSceneAsync(SceneLoadingData data)
+        public async override Task StartSceneAsync(LevelLoadingData data)
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
-            PartyManager.MainCharacter.Agent.Warp(new Vector3(100, 100, 100));
+            await new WaitUntil(() => PartyManager.MainCharacter != null);
+            PartyManager.MainCharacter?.gameObject.SetActive(false);
             await new WaitForSeconds(2);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>
@@ -116,9 +117,8 @@ namespace SunsetSystems.Loading
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.MainCharacter.Agent.Warp(_startPosition.position);
+            PartyManager.MainCharacter.gameObject.SetActive(true);
             await new WaitForSeconds(.5f);
-            await new WaitForUpdate();
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -229,14 +229,21 @@ namespace SunsetSystems.Loading
             Destroy(_dominic.gameObject);
         }
 
+
+
         public async void QuitGame()
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await loading.DoFadeOutAsync(.5f);
-            await SceneLoader.Instance.UnloadGameScene();
+            await LevelLoader.Instance.UnloadGameScene();
             this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
             this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
             await loading.DoFadeInAsync(.5f);
+        }
+
+        private class HavenSceneData : SceneLogicData
+        {
+
         }
 
         private static class HavenDialogueCommands
@@ -268,15 +275,7 @@ namespace SunsetSystems.Loading
             [YarnCommand("DestroyBathroomDoors")]
             public static void DestroyBathroomDoors()
             {
-                HavenSceneLogic._bathroomDoors.Interactable = true;
-                HavenSceneLogic._bathroomDoors.Interact();
-                Destroy(HavenSceneLogic._bathroomDoors.gameObject);
-            }
-
-            [YarnCommand("ActivateApartmentDoorInteraction")]
-            public static void ActivateApartmentDoorInteraction()
-            {
-                HavenSceneLogic._havenDoors.Interactable = true;
+                HavenSceneLogic._bathroomDoors.gameObject.SetActive(false);
             }
 
             [YarnCommand("HandleGunTaken")]
@@ -321,12 +320,6 @@ namespace SunsetSystems.Loading
             public static void AddBobbyPinToInventory()
             {
                 Debug.LogException(new NotImplementedException());
-            }
-
-            [YarnCommand("DisableSinkInteraction")]
-            public static void DisableSinkInteraction()
-            {
-                HavenSceneLogic.DisableSinkInteraction();
             }
 
             [YarnCommand("DisableInteractionsBeforeDominic")]

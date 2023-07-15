@@ -1,31 +1,29 @@
 ﻿using Gaia.Internal;
+using Gaia.Pipeline;
+using Gaia.Pipeline.HDRP;
+using Gaia.Pipeline.URP;
+using ProceduralWorlds.Addressables1;
 using PWCommon5;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-using System.Linq;
-using System.Text;
-using UnityEditorInternal;
 using UnityEditor.SceneManagement;
-using Gaia.Pipeline.HDRP;
-using Gaia.Pipeline.URP;
-using Gaia.Pipeline;
+using UnityEditorInternal;
+using UnityEngine;
 using UnityEngine.Networking;
-using ProceduralWorlds;
-using ProceduralWorlds.Addressables1;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 #if AIGAMEDEV
 using AIGamedevToolkit;
 #endif
 #if PW_ADDRESSABLES
-using UnityEditor.AddressableAssets;
 #endif
 
 namespace Gaia
@@ -413,7 +411,6 @@ namespace Gaia
             if (GameObject.Find(GaiaConstants.gaiaLightingObject) != null ||
                GameObject.Find(GaiaConstants.gaiaWaterObject) != null ||
                GameObject.Find(GaiaConstants.gaiaPlayerObject) != null)
-
             {
                 m_runtimeCreated = true;
             }
@@ -915,36 +912,40 @@ namespace Gaia
             {
                 GUI.enabled = false;
             }
-            fieldRect.width = rect.width / 4f;
-            fieldRect.x = rect.width - fieldRect.width +3;
+            fieldRect.width = (rect.width / 4f)+30;
+            fieldRect.x = rect.width - fieldRect.width + 31;
             if (GUI.Button(fieldRect, m_editorUtils.GetContent("AdditionalScenesCreateImpostors")))
             {
+                //if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
+                //{
+                //    if (EditorUtility.DisplayDialog("Create Impostor Terrains?", $"Do you want to create impostor terrains for the scene \r\n\r\n {m_buildConfig.m_sceneBuildEntries[index].m_masterScene.name} \r\n\r\n now? Impostor terrains are lightweight, low detail versions of your terrain intended to be displayed in the distance as replacement for your full terrains. The creation process will use the default settings for impostor creation, for more advanced settings you can use the cogwheel icon button.", "Create Impostors", "Cancel"))
+                //    {
+                //        ExportTerrainUtility.m_settings = GaiaUtils.FindTerrainExportPreset("Create Impostors");
+                //        if (ExportTerrainUtility.m_settings != null)
+                //        {
+                //            ExportTerrainUtility.m_copyToPath = "";
+                //            string path = GaiaDirectories.GetExportDirectory() + GaiaDirectories.TERRAIN_MESH_EXPORT_DIRECTORY;
+                //            ExportTerrainUtility.ExportTerrain(ExportTerrainUtility.m_settings, path);
+                //        }
+                //    }
+                //}
                 if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
                 {
-                    if (EditorUtility.DisplayDialog("Create Impostor Terrains?", $"Do you want to create impostor terrains for the scene \r\n\r\n {m_buildConfig.m_sceneBuildEntries[index].m_masterScene.name} \r\n\r\n now? Impostor terrains are lightweight, low detail versions of your terrain intended to be displayed in the distance as replacement for your full terrains. The creation process will use the default settings for impostor creation, for more advanced settings you can use the cogwheel icon button.", "Create Impostors", "Cancel"))
-                    {
-                        ExportTerrainUtility.m_settings = GaiaUtils.FindTerrainExportPreset("Create Impostors");
-                        if (ExportTerrainUtility.m_settings != null)
-                        {
-                            ExportTerrainUtility.m_copyToPath = "";
-                            string path = GaiaDirectories.GetExportDirectory() + GaiaDirectories.TERRAIN_MESH_EXPORT_DIRECTORY;
-                            ExportTerrainUtility.ExportTerrain(ExportTerrainUtility.m_settings, path);
-                        }
-                    }
+                    TerrainConverterEditorWindow.OpenWithPreset("Create Impostors");
                 }
             }
-            fieldRect.x = rect.width + 11;
-            fieldRect.width = 20;
-            if (GUI.Button(fieldRect, m_cogwheelImpostorsContent, m_smallButtonStyle))
-            {
-                if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
-                {
-                    ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
-                    exportTerrainWindow.m_UIMode = ExportTerrainWindowUIMode.ImpostorScenes;
-                    exportTerrainWindow.FindAndSetPreset("Create Impostors");
-                    exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
-                }
-            }
+            //fieldRect.x = rect.width + 11;
+            //fieldRect.width = 20;
+            //if (GUI.Button(fieldRect, m_cogwheelImpostorsContent, m_smallButtonStyle))
+            //{
+            //    if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
+            //    {
+            //        ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
+            //        exportTerrainWindow.m_UIMode = ExportTerrainWindowUIMode.ImpostorScenes;
+            //        exportTerrainWindow.FindAndSetPreset("Create Impostors");
+            //        exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
+            //    }
+            //}
 
             GUI.enabled = originalGUIState;
 
@@ -961,68 +962,75 @@ namespace Gaia
             string sceneName = m_buildConfig.m_sceneBuildEntries[index].m_serverScene == null ? "None" : m_buildConfig.m_sceneBuildEntries[index].m_serverScene.name;
 
             EditorGUI.LabelField(fieldRect, sceneName);
-           
-            fieldRect.width = rect.width / 4f;
-            fieldRect.x = rect.width - fieldRect.width + 3;
+
+            fieldRect.width = (rect.width / 4f) + 30;
+            fieldRect.x = rect.width - fieldRect.width + 31;
             if (GUI.Button(fieldRect, m_editorUtils.GetContent("AdditionalScenesCreateColliderScenes")))
             {
-                if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
-                {
-                    if (EditorUtility.DisplayDialog("Create Server Side Scene?", $"Do you want to create a server scene that contains all the collision information for the scene  \r\n\r\n {m_buildConfig.m_sceneBuildEntries[index].m_masterScene}?", "Yes, create Server Scene", "Skip"))
-                    {
-                        bool scenesSaved = false;
-                        //Abort if exporting to scenes is active and the current scene has not been saved yet - we need a valid scene filename to create subfolders for the scene files, etc.
-                        if (string.IsNullOrEmpty(EditorSceneManager.GetActiveScene().path))
-                        {
-                            if (EditorUtility.DisplayDialog(m_editorUtils.GetTextValue("SceneNotSavedYetTitle"), m_editorUtils.GetTextValue("AdditionalScenesSceneNotSavedYetText"), m_editorUtils.GetTextValue("SaveNow"), m_editorUtils.GetTextValue("Cancel")))
-                            {
-                                string suggestedPath = GaiaDirectories.GetSessionSubFolderPath(SessionManager.m_session, true);
-                                string sceneTargetPath = EditorUtility.SaveFilePanel("Save Scene As...", suggestedPath, "New Gaia Scene", "unity");
-                                if (!string.IsNullOrEmpty(sceneTargetPath))
-                                {
-                                    EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), GaiaDirectories.GetPathStartingAtAssetsFolder(sceneTargetPath));
-                                    scenesSaved = true;
-                                }
-                                else
-                                {
-                                    scenesSaved = false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            scenesSaved = true;
-                        }
-                    
+                //if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
+                //{
+                //    if (EditorUtility.DisplayDialog("Create Server Side Scene?", $"Do you want to create a server scene that contains all the collision information for the scene  \r\n\r\n {m_buildConfig.m_sceneBuildEntries[index].m_masterScene}?", "Yes, create Server Scene", "Skip"))
+                //    {
+                //        bool scenesSaved = false;
+                //        //Abort if exporting to scenes is active and the current scene has not been saved yet - we need a valid scene filename to create subfolders for the scene files, etc.
+                //        if (string.IsNullOrEmpty(EditorSceneManager.GetActiveScene().path))
+                //        {
+                //            if (EditorUtility.DisplayDialog(m_editorUtils.GetTextValue("SceneNotSavedYetTitle"), m_editorUtils.GetTextValue("AdditionalScenesSceneNotSavedYetText"), m_editorUtils.GetTextValue("SaveNow"), m_editorUtils.GetTextValue("Cancel")))
+                //            {
+                //                string suggestedPath = GaiaDirectories.GetSessionSubFolderPath(SessionManager.m_session, true);
+                //                string sceneTargetPath = EditorUtility.SaveFilePanel("Save Scene As...", suggestedPath, "New Gaia Scene", "unity");
+                //                if (!string.IsNullOrEmpty(sceneTargetPath))
+                //                {
+                //                    EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene(), GaiaDirectories.GetPathStartingAtAssetsFolder(sceneTargetPath));
+                //                    scenesSaved = true;
+                //                }
+                //                else
+                //                {
+                //                    scenesSaved = false;
+                //                }
+                //            }
+                //        }
+                //        else
+                //        {
+                //            scenesSaved = true;
+                //        }
 
-                        if (scenesSaved)
-                        {
-                            ExportTerrainUtility.m_settings = GaiaUtils.FindTerrainExportPreset("Bake Collider Objects");
-                            if (ExportTerrainUtility.m_settings != null)
-                            {
-                                ExportTerrainUtility.m_copyToPath = "";
-                                string path = GaiaDirectories.GetExportDirectory() + GaiaDirectories.TERRAIN_MESH_EXPORT_DIRECTORY;
-                                ExportTerrainUtility.ExportTerrain(ExportTerrainUtility.m_settings, path);
-                            }
-                            CreateServerScene(index);
-                        }
-                    }
-                }
-            }
-            fieldRect.x = rect.width + 11;
-            fieldRect.width = 20;
-            if (GUI.Button(fieldRect, m_cogwheelServerSceneContent, m_smallButtonStyle))
-            {
+
+                //        if (scenesSaved)
+                //        {
+                //            ExportTerrainUtility.m_settings = GaiaUtils.FindTerrainExportPreset("Bake Collider Objects");
+                //            if (ExportTerrainUtility.m_settings != null)
+                //            {
+                //                ExportTerrainUtility.m_copyToPath = "";
+                //                string path = GaiaDirectories.GetExportDirectory() + GaiaDirectories.TERRAIN_MESH_EXPORT_DIRECTORY;
+                //                ExportTerrainUtility.ExportTerrain(ExportTerrainUtility.m_settings, path);
+                //            }
+                //            CreateServerScene(index);
+                //        }
+                //    }
+                //}
+
                 if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
                 {
-                    ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
-                    exportTerrainWindow.m_UIMode = ExportTerrainWindowUIMode.ServerScene;
-                    exportTerrainWindow.maxSize = new Vector2(500, 180);
-                    exportTerrainWindow.m_buildConfigIndex = index;
-                    exportTerrainWindow.FindAndSetPreset("Bake Collider Objects");
-                    exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
+                    TerrainConverterEditorWindow.OpenWithPreset("Bake Collider Objects");
+
                 }
+
             }
+            //fieldRect.x = rect.width + 11;
+            //fieldRect.width = 20;
+            //if (GUI.Button(fieldRect, m_cogwheelServerSceneContent, m_smallButtonStyle))
+            //{
+            //    if (CheckForCurrentScene(m_buildConfig.m_sceneBuildEntries[index].m_masterScene))
+            //    {
+            //        ExportTerrain exportTerrainWindow = EditorWindow.GetWindow<ExportTerrain>();
+            //        exportTerrainWindow.m_UIMode = ExportTerrainWindowUIMode.ServerScene;
+            //        exportTerrainWindow.maxSize = new Vector2(500, 180);
+            //        exportTerrainWindow.m_buildConfigIndex = index;
+            //        exportTerrainWindow.FindAndSetPreset("Bake Collider Objects");
+            //        exportTerrainWindow.m_settings.m_customSettingsFoldedOut = false;
+            //    }
+            //}
 
         }
 
@@ -1790,6 +1798,7 @@ namespace Gaia
                         Gaia2TopPanel.m_sessionManagerExits = true;
                     }
 #endif
+                            EditorGUIUtility.ExitGUI();
 
                         }
                     }
@@ -2360,11 +2369,6 @@ namespace Gaia
         {
             bool currentGUIState = GUI.enabled;
 
-            //if (AddressableUpload.m_uploadingFolder)
-            //{
-            //    GUI.enabled = false;
-            //}
-
             if (m_addressableConfig == null)
             {
                 m_addressableConfig = GaiaUtils.GetOrCreateAddressableConfig();
@@ -2427,7 +2431,6 @@ namespace Gaia
 
             GUILayout.BeginHorizontal();
             {
-                //GUILayout.Space(EditorGUIUtility.labelWidth);
                 Rect listRect = EditorGUILayout.GetControlRect(true, m_buildSettingsSceneList.GetHeight());
                 m_buildSettingsSceneList.DoList(listRect);
             }
@@ -3278,6 +3281,7 @@ namespace Gaia
 
             if (m_editorUtils.ButtonAutoIndent("Stamper"))
             {
+
                 //Collect all spawners from the scene, and add them to the auto-trigger list
 
                 var allBiomeControllers = Resources.FindObjectsOfTypeAll<BiomeController>();
@@ -3303,9 +3307,10 @@ namespace Gaia
 #if !GAIA_MESH_PRESENT
             GUI.enabled = false;
 #endif
-            if (m_editorUtils.ButtonAutoIndent("Terrain Mesh Export"))
+
+            if (m_editorUtils.ButtonAutoIndent("Terrain Converter"))
             {
-                ShowTerrainObjExporter();
+                ShowTerrainConverter();
             }
 
 
@@ -3593,16 +3598,16 @@ namespace Gaia
 
             if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Tutorials"), m_linkStyle))
             {
-                Application.OpenURL("https://www.procedural-worlds.com/support/tutorials");
+                Application.OpenURL("https://canopy.procedural-worlds.com/library/tools/gaia-pro-2021/");
             }
             m_editorUtils.Text("Tutorials Text");
             GUILayout.Space(5f);
 
-            if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Knowledge Base"), m_linkStyle))
+            if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Library"), m_linkStyle))
             {
-                Application.OpenURL("https://proceduralworlds.freshdesk.com/support/solutions");
+                Application.OpenURL("https://canopy.procedural-worlds.com/library/");
             }
-            m_editorUtils.Text("Knowledge Base Text");
+            m_editorUtils.Text("Library Text");
             GUILayout.Space(5f);
 
             if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Open Documentation Folder"), m_linkStyle))
@@ -3623,11 +3628,11 @@ namespace Gaia
             m_editorUtils.Text("Whether you need an answer now or feel like a chat our friendly discord community is a great place to learn!");
             GUILayout.Space(5f);
 
-            if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Ticketed Support"), m_linkStyle))
+            if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Product Support"), m_linkStyle))
             {
-                Application.OpenURL("https://proceduralworlds.freshdesk.com/support/home");
+                Application.OpenURL("https://canopy.procedural-worlds.com/forums/forum/8-gaia-gaia-pro-2021/");
             }
-            m_editorUtils.Text("Don't let your question get lost in the noise. All ticketed requests are answered, and usually within 48 hours.");
+            m_editorUtils.Text("Product Support Text");
             GUILayout.Space(5f);
 
             if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Help us Grow - Rate & Review!"), m_linkStyle))
@@ -3678,7 +3683,7 @@ namespace Gaia
 
             if (ClickableHeaderCustomStyle(m_editorUtils.GetContent("Gaia eXtensions (GX)"), m_linkStyle))
             {
-                Application.OpenURL("https://proceduralworlds.freshdesk.com/support/solutions/articles/33000252356-creating-gaia-extensions-for-gaia-2-gaia-pro");
+                Application.OpenURL("https://canopy.procedural-worlds.com/library/tools/gaia-pro-2021/written-articles/advanced/creating-gaia-extensions-for-gaia-2-gaia-pro-r116/");
             }
             m_editorUtils.Text("Gaia eXtensions accelerate and simplify your development by automating asset setup in your scene. Check out the quality assets we have integrated for you!");
             GUILayout.Space(5f);
@@ -4855,6 +4860,17 @@ namespace Gaia
 
             var export = EditorWindow.GetWindow<ExportTerrain>(false, m_editorUtils.GetTextValue("Export Terrain"));
             export.Show();
+        }
+
+        void ShowTerrainConverter()
+        {
+            var converter = EditorWindow.GetWindow<TerrainConverterEditorWindow>(false, m_editorUtils.GetTextValue("TerrainConverterWindowTitle"));
+            if (GaiaUtils.HasDynamicLoadedTerrains())
+            {
+                converter.m_sourceType = TerrainConversionSourceType.TerrainLoading;
+                converter.RefreshTerrainList();
+            }
+            converter.Show();
         }
 
         /// <summary>
@@ -6494,7 +6510,15 @@ namespace Gaia
             {
                 foreach (string guid in materialGUIDs)
                 {
-                    Material mat = (Material)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(guid), typeof(Material));
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+
+                    //Skip all materials whose asset path ends in "shadergraph" - those are materials embedded in a shadergraph object
+                    if (path.EndsWith("shadergraph"))
+                    {
+                        continue;
+                    }
+
+                    Material mat = (Material)AssetDatabase.LoadAssetAtPath(path, typeof(Material));
                     if (mat != null && mat.shader != null)
                     {
                         if (migratableShaderNames.Contains(mat.shader.name))
@@ -6776,7 +6800,12 @@ namespace Gaia
                     {
                         EditorUtility.DisplayProgressBar(m_editorUtils.GetTextValue("MaintenanceProgressMeshTitle"), String.Format(m_editorUtils.GetTextValue("MaintenanceProgressMeshText"), currentGUID, allPrefabGuids.Length), (float)currentGUID / (float)allPrefabGuids.Length);
                         string prefabPath = AssetDatabase.GUIDToAssetPath(prefabGUID);
-                        allPrefabPaths.Add(prefabPath);
+                        //It can happen that FindAssets returns directories in the search above,
+                        //need to make sure the path ends in ".prefab"
+                        if (prefabPath.EndsWith(".prefab"))
+                        {
+                            allPrefabPaths.Add(prefabPath);
+                        }
                     }
 
                     //Perform layer fix

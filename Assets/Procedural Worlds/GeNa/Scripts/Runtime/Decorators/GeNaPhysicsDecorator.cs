@@ -9,15 +9,18 @@ namespace GeNa.Core
     public class GeNaPhysicsDecorator : GeNaDecorator
     {
         [SerializeField] protected PhysicsSimulatorSettings m_settings = new PhysicsSimulatorSettings();
+
         public PhysicsSimulatorSettings Settings
         {
             get => m_settings;
             set => m_settings = value;
         }
+
         public override void OnIngest(Resource resource)
         {
             resource.PhysicsEnabled = true;
         }
+
         public override IEnumerator OnSelfSpawned(Resource resource)
         {
             GeNaSpawnerData spawnerData = resource.SpawnerData;
@@ -26,11 +29,16 @@ namespace GeNa.Core
             Vector3 rotation = transform.eulerAngles;
             Vector3 scale = transform.localScale;
             ResourceEntity spawnedEntity = GeNaSpawnerInternal.GetResourceEntity(location, rotation, scale, resource);
-            spawnedEntity.GameObject = gameObject;
-            entities.Add(spawnedEntity);
+
             GameObject spawnProgress = GeNaSpawnerInternal.GetSpawnProgressParent(spawnerData);
-            transform.SetParent(spawnProgress.transform);
-            // If no longer spawning 
+            if (spawnedEntity != null)
+            {
+                spawnedEntity.GameObject = gameObject;
+                entities.Add(spawnedEntity);
+                transform.SetParent(spawnProgress.transform);
+            }
+
+            // This system needs to be adjusted to work at runtime as well.
             if (spawnerData.PhysicsType == Constants.PhysicsType.Resource && !GeNaGlobalReferences.GeNaManagerInstance.Cancel)
             {
                 IEnumerator simulateMethod = GeNaEvents.Simulate(entities, m_settings, this);

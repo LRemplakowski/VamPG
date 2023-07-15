@@ -1,5 +1,6 @@
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Resources;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -13,7 +14,7 @@ namespace SunsetSystems.Dialogue
             Debug.Log($"Fetching config of {speakerID} from the database!");
             if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
             {
-                result = config.Portrait;
+                result = ResourceLoader.GetPortrait(config.PortraitFileName);
             }
             else
             {

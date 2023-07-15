@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Gaia.Pipeline.HDRP;
+#if GAIA_PRO_PRESENT
 using ProceduralWorlds.HDRPTOD;
+#endif
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -117,7 +119,7 @@ namespace Gaia
         public AudioClip m_submergeSoundFXDown;
         public AudioClip m_submergeSoundFXUp;
         public AudioClip m_underwaterSoundFX;
-#if GAIA_PRO_PRESENT && HDPipeline
+#if GAIA_PRO_PRESENT && HDPipeline && UNITY_2021_2_OR_NEWER
         public bool m_useOverrideReverb = false;
         public UnderwaterReverbFilterSettings m_overrideReverbSettings = new UnderwaterReverbFilterSettings();
 #endif
@@ -557,7 +559,7 @@ namespace Gaia
                 }
             }
 
-#if GAIA_PRO_PRESENT && HDPipeline
+#if GAIA_PRO_PRESENT && HDPipeline && UNITY_2021_2_OR_NEWER
             if (m_useOverrideReverb && m_overrideReverbSettings != null)
             {
                 m_overrideReverbSettings.ApplyReverb(null, m_playerCamera, IsUnderwater);

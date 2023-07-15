@@ -44,15 +44,17 @@ namespace ProceduralWorlds.HDRPTOD
             {
                 if (m_visualEffects.Count > 0)
                 {
+#if HDPipeline && UNITY_2021_2_OR_NEWER
                     foreach (VisualEffect visualEffect in m_visualEffects)
                     {
                         SyncWind(visualEffect);
                     }
+#endif
                 }
             }
         }
 
-#if HDPipeline
+#if HDPipeline && UNITY_2021_2_OR_NEWER
         /// <summary>
         /// Adds a visual effect to the list
         /// </summary>
@@ -103,15 +105,6 @@ namespace ProceduralWorlds.HDRPTOD
                 } 
             }
         }
-#endif
-        /// <summary>
-        /// Clears the list
-        /// </summary>
-        public void RemoveAllVisualEffects()
-        {
-            m_visualEffects.Clear();
-        }
-
         /// <summary>
         /// Processes a wind sync on a visual effect
         /// </summary>
@@ -130,6 +123,14 @@ namespace ProceduralWorlds.HDRPTOD
                     visualEffect.SetFloat(m_windPropertySettings.m_windSpeedProperty, Mathf.InverseLerp(m_windPropertySettings.m_windSpeedClamp.x, m_windPropertySettings.m_windSpeedClamp.y, m_visualEnvironment.windSpeed.value));
                 }
             }
+        }
+#endif
+        /// <summary>
+        /// Clears the list
+        /// </summary>
+        public void RemoveAllVisualEffects()
+        {
+            m_visualEffects.Clear();
         }
         /// <summary>
         /// Sets up the components

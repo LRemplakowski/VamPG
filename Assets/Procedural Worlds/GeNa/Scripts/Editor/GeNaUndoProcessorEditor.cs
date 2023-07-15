@@ -21,12 +21,12 @@ namespace GeNa.Core
         {
             while (undoQueue.Count > 0)
             {
-                var entity = undoQueue.Dequeue();
+                UndoEntity entity = undoQueue.Dequeue();
                 RecordUndo(entity);
             }
             while (postActionQueue.Count > 0)
             {
-                var action = postActionQueue.Dequeue();
+                Action action = postActionQueue.Dequeue();
                 action?.Invoke();
             }
         }
@@ -34,22 +34,14 @@ namespace GeNa.Core
         {
             switch (undoEntity)
             {
-                case ActionEntity entity:
-                    RecordUndoPro(entity);
-                    break;
-                case UndoRecord undoRecord:
-                    RecordUndoPro(undoRecord);
-                    break;
                 case SplineEntity splineEntity:
                     if (splineEntity.Spline != null)
                         Undo.RegisterCompleteObjectUndo(splineEntity.Spline, splineEntity.name);
-                    break;
+                    return;
                 case ResourceEntity resourceEntity:
                     if (resourceEntity.GameObject != null)
                         Undo.RegisterCreatedObjectUndo(resourceEntity.GameObject, resourceEntity.name);
-                    else
-                        RecordUndoPro(resourceEntity);
-                    break;
+                    return;
                 case GameObjectEntity gameObjectEntity:
                     GameObject gameObject = gameObjectEntity.m_gameObject;
                     if (gameObject != null)
@@ -66,26 +58,41 @@ namespace GeNa.Core
                             Undo.RegisterCreatedObjectUndo(gameObject, gameObject.name);
                         }
                     }
-                    break;
-                case TerrainEntity terrainEntity:
-                    RecordUndoPro(terrainEntity);
-                    break;
+                    return;
+                default:
+                    RecordUndoPro(undoEntity, true);
+                    return;
             }
         }
         private static void OnRecordUndo(UndoEntity undoEntity, Action postAction)
         {
+            // Do not record undo stack in play mode
+            if (Application.isPlaying)
+                return;
             undoQueue.Enqueue(undoEntity);
             postActionQueue.Enqueue(postAction);
         }
-        public static void RecordUndoPro(UndoEntity undoEntity) => UndoProManager.RecordOperation(undoEntity.Perform, undoEntity.Undo, undoEntity.Dispose, undoEntity.name, undoEntity.mergeBefore, undoEntity.mergeAfter);
+        public static void RecordUndoPro(UndoEntity undoEntity, bool updateRecords)
+        {
+            UndoProManager.RecordOperation(undoEntity.Perform, 
+                undoEntity.Undo, 
+                undoEntity.Dispose,
+                undoEntity.name,
+                undoEntity.mergeBefore,
+                undoEntity.mergeAfter, 
+                updateRecords);
+        }
+
         public static void RecordUndo(UndoEntity undoEntity)
         {
             switch (undoEntity)
             {
                 case UndoRecord undoRecord:
                     int group = undoRecord.Group;
-                    foreach (var entity in undoRecord.Entities)
+                    Stack<UndoEntity> entities = undoRecord.Entities;
+                    foreach (UndoEntity entity in entities)
                         ProcessEntity(entity);
+                    RecordUndoPro(undoEntity, true);
                     Undo.CollapseUndoOperations(group);
                     break;
                 default:

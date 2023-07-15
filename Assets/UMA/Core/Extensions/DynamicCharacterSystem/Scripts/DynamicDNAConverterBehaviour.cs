@@ -314,7 +314,7 @@ namespace UMA.CharacterSystem
 #if UNITY_2018_3_OR_NEWER
 			var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(this.gameObject);
 			if (prefabStage != null)
-				DCBPath = prefabStage.assetPath;
+				DCBPath = prefabStage.prefabAssetPath;
 #endif
 			if (string.IsNullOrEmpty(DCBPath))
 			{
@@ -432,7 +432,7 @@ namespace UMA.CharacterSystem
 			var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(this.gameObject);
 			if (prefabStage != null)
 			{
-				var origGO = (GameObject)AssetDatabase.LoadAssetAtPath(prefabStage.assetPath, typeof(GameObject));
+				var origGO = (GameObject)AssetDatabase.LoadAssetAtPath(prefabStage.prefabAssetPath, typeof(GameObject));
 				if (origGO != null && origGO.GetComponent<DynamicDNAConverterBehaviour>() != null)
 				{
 					original = origGO.GetComponent<DynamicDNAConverterBehaviour>();

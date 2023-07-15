@@ -23,9 +23,9 @@ namespace SunsetSystems.Inventory.UI
         {
             _content = content;
             _storage = storage;
-            _text.text = content._item.ItemName;
+            _text.text = content._item.ReadableID;
             _icon.sprite = content._item.Icon;
-            gameObject.name = content._item.ItemName;
+            gameObject.name = content._item.ReadableID;
         }
 
         public void OnClick()

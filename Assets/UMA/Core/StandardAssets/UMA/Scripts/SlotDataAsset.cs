@@ -17,12 +17,8 @@ namespace UMA
 		public string slotName;
 		[System.NonSerialized]
 		public int nameHash;
-#if UNITY_EDITOR
-		[Tooltip("This is only used when updating the slot with drag and drop below. It is not used at runtime nor is it included in the build")]
-		public SkinnedMeshRenderer normalReferenceMesh;
-		[HideInInspector]
-		public bool ConvertTangents;
 
+#if UNITY_EDITOR
 		private StringBuilder errorBuilder  = new StringBuilder();
 
 
@@ -281,7 +277,6 @@ namespace UMA
         public void UpdateMeshData(SkinnedMeshRenderer meshRenderer, string rootBoneName)
         {
             meshData = new UMAMeshData();
-			meshData.SlotName = this.slotName;
             meshData.RootBoneName = rootBoneName;
             meshData.RetrieveDataFromUnityMesh(meshRenderer);
 #if UNITY_EDITOR
@@ -292,7 +287,6 @@ namespace UMA
         public void UpdateMeshData(SkinnedMeshRenderer meshRenderer)
 		{
 			meshData = new UMAMeshData();
-			meshData.SlotName = this.slotName;
 			meshData.RetrieveDataFromUnityMesh(meshRenderer);
 #if UNITY_EDITOR
 			UnityEditor.EditorUtility.SetDirty(this);
@@ -316,7 +310,7 @@ namespace UMA
             }
 			else if (meshData.boneWeights != null && meshData.boneWeights.Length > 0)
 			{
-				meshData.LoadBoneWeights(); 
+				meshData.LoadBoneWeights();
 			}
 		}
 

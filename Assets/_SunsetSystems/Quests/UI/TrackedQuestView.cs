@@ -49,7 +49,6 @@ namespace SunsetSystems.Journal.UI
                 if (text != null && text.IsActive() == false)
                     return text;
             }
-            Debug.Log("Foo");
             TextMeshProUGUI newText = Instantiate(_objectivePrefab, _objectivePoolParent);
             newText.gameObject.SetActive(false);
             _textPool.Add(newText);

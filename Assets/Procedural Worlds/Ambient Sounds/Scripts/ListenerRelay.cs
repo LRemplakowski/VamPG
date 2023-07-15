@@ -2,6 +2,7 @@
 using UnityEngine;
 
 namespace AmbientSounds {
+    [DisallowMultipleComponent]
     public class ListenerRelay : MonoBehaviour {
         /// <summary> Called by AudioListener or AudioSource to allow script to alter audio graph. </summary>
         /// <param name="data">Array of floats containing current audio graph data.</param>

@@ -19,7 +19,7 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &6004250221373638061
 Transform:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 10
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -87,6 +87,7 @@ MonoBehaviour:
     m_showCritMinSpawnHeight: 0
     m_showCritMaxSpawnHeight: 0
     m_advanced:
+      m_currentProcessor: 0
       m_performUndoAtRuntime: 0
       m_addColliderToSpawnedPrefabs: 0
       m_spawnCheckOffset: 2000
@@ -273,6 +274,7 @@ MonoBehaviour:
   m_rangesOriginNormal: {x: 0, y: 1, z: 0}
   m_spawnType: 1
   m_spawnMode: 0
+  m_spawnToGround: 1
   m_flowRate: 10
   m_rotationY: 0
   m_name: Spline Cube
@@ -567,7 +569,7 @@ MonoBehaviour:
   m_visualizationFixed: 0
   m_physicsSettings:
     m_iterations: 1000
-    m_stepSize: 0.05
+    m_speed: 1
     m_spawnOffsetY: 0.3
     m_minHeightY: -10
   m_prototypeIDPool: 

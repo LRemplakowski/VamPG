@@ -724,10 +724,12 @@ namespace GeNa.Core
                 {
                     spawnFlags.FlagBatchingStatic = editorUtils.Toggle("Static Batching", spawnFlags.FlagBatchingStatic, helpEnabled, fieldOption);
                     spawnFlags.FlagLightmapStatic = editorUtils.Toggle("Static Lightmap", spawnFlags.FlagLightmapStatic, helpEnabled, fieldOption);
-                    spawnFlags.FlagNavigationStatic = editorUtils.Toggle("Static Navigation", spawnFlags.FlagNavigationStatic, helpEnabled, fieldOption);
                     spawnFlags.FlagOccludeeStatic = editorUtils.Toggle("Static Occludee", spawnFlags.FlagOccludeeStatic, helpEnabled, fieldOption);
                     spawnFlags.FlagOccluderStatic = editorUtils.Toggle("Static Occluder", spawnFlags.FlagOccluderStatic, helpEnabled, fieldOption);
+#if !UNITY_2022_2_OR_NEWER
+                    spawnFlags.FlagNavigationStatic = editorUtils.Toggle("Static Navigation", spawnFlags.FlagNavigationStatic, helpEnabled, fieldOption);
                     //spawnFlags.FlagOffMeshLinkGeneration = editorUtils.Toggle("Offmesh Link Gen", spawnFlags.FlagOffMeshLinkGeneration, helpEnabled, fieldOption);
+#endif
                 }
                 GUILayout.EndVertical();
                 GUILayout.Space(20f);

@@ -48,7 +48,7 @@ namespace Gaia
         {
             if(s_defaultPreviewMaterial == null)
             {
-                s_defaultPreviewMaterial = new Material(Shader.Find("Hidden/TerrainTools/Noise/Preview"));
+                s_defaultPreviewMaterial = new Material(Shader.Find("Hidden/Gaia/TerrainTools/Noise/Preview"));
             }
 
             return s_defaultPreviewMaterial;

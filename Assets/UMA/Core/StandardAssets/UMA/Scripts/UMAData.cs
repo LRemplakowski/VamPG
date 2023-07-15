@@ -1,4 +1,3 @@
-//#define TEST_INSERTFIX
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -164,7 +163,6 @@ namespace UMA
 
 		public float atlasResolutionScale = 1f;
 
-		public bool ForceRebindAnimator;
 		/// <summary>
 		/// Has the character mesh changed?
 		/// </summary>
@@ -306,16 +304,16 @@ namespace UMA
 		public event Action<UMAData> OnAnimatorStateRestored { add { if (AnimatorStateRestored == null) AnimatorStateRestored = new UMADataEvent(); AnimatorStateRestored.AddAction(value); } remove { AnimatorStateRestored.RemoveAction(value); } }
 		public event Action<UMAData> OnPreUpdateUMABody { add { if(PreUpdateUMABody == null) PreUpdateUMABody = new UMADataEvent(); PreUpdateUMABody.AddAction(value); } remove { PreUpdateUMABody.RemoveAction(value); } } //VES added
 
-		public UMADataEvent CharacterCreated = new();
-		public UMADataEvent CharacterDestroyed = new();
-		public UMADataEvent CharacterUpdated = new();
-		public UMADataEvent CharacterBeforeUpdated = new();
-		public UMADataEvent CharacterBeforeDnaUpdated = new();
-		public UMADataEvent CharacterDnaUpdated = new();
-		public UMADataEvent CharacterBegun = new();
-		public UMADataEvent AnimatorStateSaved = new();
-		public UMADataEvent AnimatorStateRestored = new();
-		public UMADataEvent PreUpdateUMABody = new();
+		public UMADataEvent CharacterCreated;
+		public UMADataEvent CharacterDestroyed;
+		public UMADataEvent CharacterUpdated;
+		public UMADataEvent CharacterBeforeUpdated;
+		public UMADataEvent CharacterBeforeDnaUpdated;
+		public UMADataEvent CharacterDnaUpdated;
+		public UMADataEvent CharacterBegun;
+		public UMADataEvent AnimatorStateSaved;
+		public UMADataEvent AnimatorStateRestored;
+		public UMADataEvent PreUpdateUMABody;
 
 		public GameObject umaRoot;
 
@@ -369,16 +367,6 @@ namespace UMA
 
 		void Awake()
 		{
-			CharacterCreated ??= new();
-			CharacterDestroyed ??= new();
-			CharacterUpdated ??= new();
-			CharacterBeforeUpdated ??= new();
-			CharacterBeforeDnaUpdated ??= new();
-			CharacterDnaUpdated ??= new();
-			CharacterBegun ??= new();
-			AnimatorStateSaved ??= new();
-			AnimatorStateRestored ??= new();
-			PreUpdateUMABody ??= new();
 			if (!umaGenerator)
             {
 				if (UMAContextBase.Instance != null)
@@ -434,7 +422,6 @@ namespace UMA
 
 		public bool Validate()
 		{
-			if (Application.isBatchMode) return true;
 			bool valid = true;
 			if (umaGenerator == null)
 			{
@@ -708,7 +695,6 @@ namespace UMA
 			public SlotData[] slotDataList;
 			public OverlayColorData[] sharedColors;
 			public Dictionary<string, List<MeshHideAsset>> MeshHideDictionary { get; set; } = new Dictionary<string, List<MeshHideAsset>>();
-			public Dictionary<string, List<UMAMeshData>> BlendshapeSlots { get; set; } = new Dictionary<string, List<UMAMeshData>>();
 
 			public void UpdateMeshHideMasks()
 			{
@@ -994,19 +980,6 @@ namespace UMA
 				slotDataList = slots;
 			}
 
-			public void RemoveSlot(SlotData sd)
-            {
-				if (sd == null) return;
-				for (int i = 0; i < slotDataList.Length; i++)
-				{
-					if (slotDataList[i] == null) continue;
-					if (slotDataList[i].slotName == sd.slotName)
-                    {
-						slotDataList[i] = null;
-                    }
-				}
-			}
-
 			/// <summary>
 			/// Combine additional slot with current data.
 			/// </summary>
@@ -1018,19 +991,10 @@ namespace UMA
 					return null;
 
 				int overlayCount = 0;
-#if TEST_INSERTFIX
-				int nullFound = -1;
-#endif
 				for (int i = 0; i < slotDataList.Length; i++)
 				{
 					if (slotDataList[i] == null)
-					{
-#if TEST_INSERTFIX
-						if (nullFound == -1) nullFound = i;
-#endif
 						continue;
-					}
-
 					if (slot.asset == slotDataList[i].asset)
 					{
 						SlotData originalSlot = slotDataList[i];
@@ -1071,22 +1035,9 @@ namespace UMA
 					}
 				}
 
-#if TEST_INSERTFIX
-				int insertIndex;
-
-				if (nullFound != -1)
-				{
-					insertIndex = nullFound;
-				}
-				else
-                {
-					insertIndex = slotDataList.Length;
-					System.Array.Resize<SlotData>(ref slotDataList, slotDataList.Length + 1);
-				}
-#else
 				int insertIndex = slotDataList.Length;
 				System.Array.Resize<SlotData>(ref slotDataList, slotDataList.Length + 1);
-#endif
+
 				SlotData slotCopy = slot.Copy();
 				slotCopy.dontSerialize = dontSerialize;
 				overlayCount = slotCopy.OverlayCount;
@@ -1306,15 +1257,8 @@ namespace UMA
 						}
 						else if (converter is IDynamicDNAConverter)
 						{
-                            UMADnaBase dna = umaDna[dnaTypeHash];
-							if (dna is DynamicUMADnaBase)
-							{
-								((DynamicUMADnaBase)dna).dnaAsset = ((IDynamicDNAConverter)converter).dnaAsset;
-							}
-							else
-                            {
-								Debug.LogError("Invalid converter "+converter.name+" on race " + raceData.raceName);
-                            }
+							var dna = umaDna[dnaTypeHash];
+							((DynamicUMADnaBase)dna).dnaAsset = ((IDynamicDNAConverter)converter).dnaAsset;
 						}
 					}
 				}
@@ -2002,7 +1946,7 @@ namespace UMA
 			}
 		}
 
-#region BlendShape Support
+		#region BlendShape Support
 
 		[Obsolete("AddBakedBlendShape has been replaced with SetBlendShapeData", true)]
 		public void AddBakedBlendShape(float dnaValue, string blendShapeZero, string blendShapeOne, bool rebuild = false)

@@ -203,8 +203,20 @@ namespace Gaia
                 {
                     underwaterMaterial = GaiaUtils.LoadUnderwaterMaterial();
                 }
-                UpdateMeshRendererMaterials(masterMaterial, underwaterMaterial);
+                if (GaiaUtils.GetActivePipeline() == GaiaConstants.EnvironmentRenderer.Universal)
+                {
+                    UpdateMeshRendererMaterials(masterMaterial, null);
+                }
+                else
+                {
+                    UpdateMeshRendererMaterials(masterMaterial, underwaterMaterial);
+                }
+
                 if (GaiaUtils.GetActivePipeline() == GaiaConstants.EnvironmentRenderer.HighDefinition)
+                {
+                    UpdateWaterMaterialInstances(masterMaterial, underwaterMaterial, true);
+                }
+                else if (GaiaUtils.GetActivePipeline() == GaiaConstants.EnvironmentRenderer.Universal)
                 {
                     UpdateWaterMaterialInstances(masterMaterial, underwaterMaterial, true);
                 }
@@ -212,6 +224,8 @@ namespace Gaia
                 {
                     UpdateWaterMaterialInstances(masterMaterial, underwaterMaterial);
                 }
+
+
 
                 //Mark water as dirty
                 MarkWaterMaterialDirty(m_waterProfile.m_activeWaterMaterial);
@@ -561,6 +575,7 @@ namespace Gaia
                         underwaterEffects.m_constUnderwaterColorFilter = profileValues.m_constUnderwaterColorFilter;
                         underwaterEffects.m_gradientUnderwaterPostExposure = profileValues.m_gradientUnderwaterPostExposure;
                         underwaterEffects.m_gradientUnderwaterColorFilter = profileValues.m_gradientUnderwaterColorFilter;
+                        underwaterEffects.m_supportFog = profile.m_supportUnderwaterFog;
                         if (profile.m_supportUnderwaterFog)
                         {
                             Transform horizonTransform = underwaterEffectsObject.transform.Find(profile.m_underwaterHorizonPrefab.name);
@@ -698,6 +713,7 @@ namespace Gaia
                             underwaterEffects.m_constUnderwaterColorFilter = profileValues.m_constUnderwaterColorFilter;
                             underwaterEffects.m_gradientUnderwaterPostExposure = profileValues.m_gradientUnderwaterPostExposure;
                             underwaterEffects.m_gradientUnderwaterColorFilter = profileValues.m_gradientUnderwaterColorFilter;
+                            underwaterEffects.m_supportFog = profile.m_supportUnderwaterFog;
                         }
                     }
                 }
@@ -1759,6 +1775,6 @@ namespace Gaia
             return AssetDatabase.LoadAssetAtPath<Material>(GaiaUtils.GetAssetPath("Gaia Ocean.mat"));
         }
 
-        #endregion
+#endregion
     }
 }

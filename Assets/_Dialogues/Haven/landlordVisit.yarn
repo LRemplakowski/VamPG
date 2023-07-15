@@ -1,39 +1,57 @@
 ﻿title: landlordVisit
 tags:
 ---
+<<declare $landlordKilled to 0>>
 <<PlaySFX "door_knock_light">>
 [nomarkup][You rush to open the door. As soon as you do, {$landlord} barges past you and steps into the apartment. He immediately covers his nose.][/nomarkup] #line:075fa98 
+-> Continue
 {$landlord}: Gah, what the hell is that smell? #line:021505f 
+-> Continue
 {$pcName}: What do you mean? #line:0c52f8c 
+-> Continue
 {$landlord}: You don't smell that? Smells like… nevermind. Let me take a look at that sink. #line:063cfd0 
--> {$pcName}: Continue. #line:030d4d0 
+-> Continue #line:030d4d0 
     <<jump landlordSink>>
 ===
 title: landlordSink
 ---
 <<MoveLandlordAndPCToSinkPositions>>
 <<wait 1>>
-[nomarkup][{$landlord} bends over and takes a look under the sink. You find yourself looking at him in a different way you can't nail down. He looks strangely – delicious.][/nomarkup] #line:06da74c 
-{$beast}: Feed. #line:0ce6fe3 
-[nomarkup][You try your best to suppress your strange hunger.][/nomarkup] #line:04e0d7f 
-<<wait 1>>
+[nomarkup][You find yourself staring at {$landlord}'s exposed neck as he bends over to examine the pipes under the sink. You swear you can see his pulse through the veins in his neck. Why are you doing this?][/nomarkup]#line:06da74c 
+[nomarkup][You can't seem to rip your eyes away from his jugular. He looks strangely - delicious.][/nomarkup] 
+-> Continue
+{$beast}: I'm so hungry... #line:0ce6fe3 
+-> Continue
+[nomarkup][You try your best to suppress your strange urges.][/nomarkup] #line:04e0d7f 
+-> Continue
 {$landlord}: Here we go. #line:0c9d47c 
+-> Continue
 [nomarkup][{$landlord} leverages his wrench and loosens a bolt. As the pipe opens, blood sprays him leaving him soaked. The Bathroom Key and an eyeball falls onto {$landlord}'s chest. He jumps up with eyes wide in horror.][/nomarkup] #line:099e163 
+-> Continue
 {$landlord}: UGH! #line:0447526 
+-> Continue
 {$beast}: FEED! #line:073ea11 
-[nomarkup][{$landlord} brings his attention to you, clearly in shock. The blood covering him only makes him more appetizing. You catch yourself licking your lips.][/nomarkup] #line:05f98ec 
-<<wait 1>>
+-> Continue
+[nomarkup][{$landlord} brings his attention to you, clearly in shock. The blood soaking his body only makes him more appetizing - the smell of iron is like a siren's call to your senses. You catch yourself licking your lips.][/nomarkup] #line:05f98ec 
+-> Continue
 {$landlord}: Stay away! Monster! #line:0fc7d02 
+-> Continue
 [nomarkup][{$landlord} starts to rush towards the door.][/nomarkup] #line:05624c7 
-{$beast}: DON'T DENY ME! #line:0075c99 
+-> Continue
+{$beast}: YOU CAN'T RUN FROM ME! #line:0075c99 
+-> Continue
 <<KillKevin>>
 [nomarkup][You pounce on {$landlord} as a matter of instinct, sinking your teeth into his throat. Wet, warm blood fills your throat. This is what you've been craving.][Hunger is set to 0][/nomarkup] #line:02ce3c5 
--> {$pcName}: Continue. #line:0cca2c8 
+-> Continue #line:0cca2c8 
     <<jump landlordKilled>>
 ===
 title: landlordKilled
 ---
-[nomarkup][When you retract your bite, his limp body falls to the ground. The shock of what you've just done hits you at once.][/nomarkup] #line:04f2573 
+[nomarkup][When you retract your bite, his limp body falls to the ground. The shock of what you've just done hits you at once.][/nomarkup] #line:04f2573
+<<set $landlordKilled to 1>>
+-> Continue
+[nomarkup][He may have been a terrible, abusive, parasitic excuse for a human being, but Kevin didn't deserve to die like this.][/nomarkup]
+-> Continue
 {$innerVoice}: Holy fuck! What did I-? #line:062d910 
 <<set $police to true>>
 -> {$pcName}: \[Walk away.\] #line:076fb43 
@@ -42,12 +60,15 @@ title: landlordKilled
 -> {$pcName}: \[Try to save him.\] \[Intelligence + Medicine\] #line:0366f15 
     <<if Roll("intelligence","medicine") >= 1>>
     [nomarkup][You cover up the wound with a dish rag and administer CPR. {$landlord}'s eyes flutter open. Through exasperated breaths and gurgles you hear him struggle to speak.][/nomarkup] #success #line:01ce0d7 
+    -> Continue
     {$landlord}: \[gurgle\] You… \[gurgle\] bitch! \[gurgle\] #line:0ddf7b1 
+    -> Continue
     [nomarkup][His eyes go blank, and he breathes his last breath. At least he died how he lived.][/nomarkup] #line:041c089 
+    -> Continue
     {$innerVoice}: Shit! #line:04822b1 
     <<else>>
     [nomarkup][You try to administer CPR, but end up hearing the crack of his ribs breaking. What little of his blood remains pools on the floor.][/nomarkup] #failure #line:00f4d56 
     <<endif>>
-    -> {$pcName}: Continue. #line:0eefadf
+    -> Continue #line:0eefadf
 <<CompleteObjective "FIX_SINK" "EAT_LANDLORD">> 
 ===

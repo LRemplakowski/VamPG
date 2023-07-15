@@ -1,0 +1,63 @@
+﻿title: enteringOffice
+tags:
+---
+[nomarkup][The small office is a blend of cozy and gaudy. Rude British accents like a bust of Queen Victoria make the rooms almost feel like a real embassy office, but the neon glow of the Union Jack and the rich bar rack tell you it’s still a nightclub. A citrus perfume wafts in the air. The smell is awfully familiar. Its owner is nowhere to be seen.][/nomarkup]
+-> Continue
+{$kieran}: Where did she go?
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<jump anastasiaIsPresent>>
+<<endif>>
+===
+title: anastasiaIsPresent
+---
+-> Continue
+{$anastasia}: Maybe she fucked off somewhere for a wank.
+-> Continue
+{$kieran}: Why does that even cross your mind?
+-> Continue
+{$anastasia}: Not all of us are virgins, y'know?
+-> Continue
+{$kieran}: Not all of us are goth nymphomaniacs.
+-> Continue
+{$anastasia}: Oooh spicy. Caterina's footstool has some bite after all.
+-> {$pcName}: What's your problem Anastasia?
+    <<jump sidingWithKieran>>
+-> {$pcName}: Lighten up, Kieran.
+    <<jump sidingWithAnastasia>>
+-> {$pcName}: Guys, priorities!
+    <<jump neutralResponse>>
+===
+title: sidingWithKieran
+---
+{$anastasia}: I don't have any problem… At least for now. \[-1 Anastasia Reputation\]
+<<ModifyInfluence (-1,"anastasia")>>
+-> Continue
+{$kieran}: What is that supposed to mean? Is it a threat? If so - not wise. You're an intruder here after all. \[+1 Kieran Reputation\]
+<<ModifyInfluence (1,"kieran")>>
+-> Continue
+{$anastasia}: Boo-hoo watch me stain my pants because of it. And hey, you introduced me to the lady Wasp back down. It's not like I'm an intruder anymore.
+ <<jump neutralResponse>>
+===
+title: sidingWithAnastasia
+---
+[nomarkup][Kieran frowns][/nomarkup]
+{$kieran}: Sorry if I'm not eager to jerk around when my ass is on the line. \[-1 Kieran Reputation\]
+<<ModifyInfluence (-1,"kieran")>>
+-> Continue
+[nomarkup][Anastasia shows her tongue to Kieran][/nomarkup]
+{$anastasia}: I win. \[+1 Anastasia Reputation\]
+<<ModifyInfluence (1,"anastasia")>>
+-> Continue
+[nomarkup][Kieran rolls his eyes and sights as if he is disappointed. Towards whom? Hard to say. And he isn't eager to clear that up either][/nomarkup]
+<<jump neutralResponse>>
+===
+title: neutralResponse
+---
+{$kieran}: Yes, we have much more important things to do than some childish Kindred bickering.
+-> Continue
+{$anastasia}: Geez, you both are so stiff…
+-> Continue
+{$kieran}: Well… considering that we all are Kindred you're stiff too. \[Kieran brightens up a bit at his own joke\]
+-> Continue
+[nomarkup][Anastasia shooks her head but it seems the joke was funny for her too][/nomarkup]
+===

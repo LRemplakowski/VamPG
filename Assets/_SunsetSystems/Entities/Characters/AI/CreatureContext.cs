@@ -38,7 +38,7 @@ public sealed class CreatureContext : IAIContext
 
     public StatsData Stats => Owner.Data.Stats;
 
-    public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
+   // public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
     public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
 

@@ -5,11 +5,13 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [Serializable]
     [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
+    [Serializable]
     public class Objective : ScriptableObject
     {
-        public string ID = "";
+        [field: SerializeField, ReadOnly]
+        public string DatabaseID { get; private set; }
+        public string ReadableID = "";
         [TextArea(5, 10)]
         public string Description = "";
         public event Action<Objective> OnObjectiveActive;
@@ -19,26 +21,62 @@ namespace SunsetSystems.Journal
         [ReadOnly]
         public bool IsFirst, IsLast;
 
-        [RequireInterface(typeof(Objective))]
-        public List<UnityEngine.Object> ObjectivesToCancelOnCompletion;
-        [RequireInterface(typeof(Objective))]
-        public List<UnityEngine.Object> NextObjectives;
+        public List<Objective> ObjectivesToCancelOnCompletion;
+        public List<Objective> NextObjectives;
+
+        #region Database Registration
+
+        private void OnEnable()
+        {
+#if UNITY_EDITOR
+            if (string.IsNullOrWhiteSpace(DatabaseID))
+            {
+                AssignNewID();
+            }
+            ObjectiveDatabase.Instance?.Register(this);
+#endif
+        }
+
+        [Button("Force Validate")]
+        private void OnValidate()
+        {
+            ObjectiveDatabase.Instance?.Register(this);
+        }
+
+        private void Reset()
+        {
+            AssignNewID();
+        }
+
+        private void OnDestroy()
+        {
+#if UNITY_EDITOR
+            ObjectiveDatabase.Instance.Unregister(this);
+#endif
+        }
+
+        private void AssignNewID()
+        {
+            DatabaseID = System.Guid.NewGuid().ToString();
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+        #endregion
 
         public void MakeActive()
         {
-            Debug.Log($"Begun tracking objective {ID}!");
+            Debug.Log($"Begun tracking objective {ReadableID}!");
             OnObjectiveActive?.Invoke(this);
         }
 
         public void MakeInactive()
         {
-            Debug.Log($"Failed objective {ID}!");
+            Debug.Log($"Failed objective {ReadableID}!");
             OnObjectiveInactive?.Invoke(this);
         }
 
         public void Complete()
         {
-            Debug.Log($"Completed objective {ID}!");
+            Debug.Log($"Completed objective {ReadableID}!");
             OnObjectiveCompleted?.Invoke(this);
             ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             NextObjectives.ForEach(o => (o as Objective).MakeActive());

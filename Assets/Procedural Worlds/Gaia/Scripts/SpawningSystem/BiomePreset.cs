@@ -79,6 +79,7 @@ namespace Gaia
     {
         public int m_orderNumber = 0;
         public List<BiomeSpawnerListEntry> m_spawnerPresetList = new List<BiomeSpawnerListEntry>();
+        public BiomeControllerSettings m_biomeControllerSettings;
 
 #if UNITY_POST_PROCESSING_STACK_V2
         [System.NonSerialized]
@@ -227,6 +228,8 @@ namespace Gaia
 #if UNITY_POST_PROCESSING_STACK_V2
             biomeController.m_postProcessProfile = postProcessProfile;
 #endif
+            biomeController.LoadSettings(m_biomeControllerSettings);
+
             ProgressBar.Clear(ProgressBarPriority.CreateBiomeTools);
 
             return biomeController;

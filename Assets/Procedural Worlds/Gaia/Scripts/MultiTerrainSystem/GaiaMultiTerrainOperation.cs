@@ -190,20 +190,11 @@ namespace Gaia
         public GaiaMultiTerrainOperation(Terrain originTerrain, Transform toolTransform, float range, bool fullTextureQuality = false, List<string> validTerrainNames = null)
         {
             //All operations need to be executed with masterTextureLimit = 0, else there are quality / functional issues in the render texture processing!
-#if UNITY_2022_2_OR_NEWER
-            m_originalMasterTextureLimit = QualitySettings.globalTextureMipmapLimit;
-            if (fullTextureQuality)
-            {
-                QualitySettings.globalTextureMipmapLimit = 0;
-            }
-
-#else
             m_originalMasterTextureLimit = QualitySettings.masterTextureLimit;
             if (fullTextureQuality)
             {
                 QualitySettings.masterTextureLimit = 0;
             }
-#endif
 
             m_originTerrain = originTerrain;
             m_originTransform = toolTransform;
@@ -256,9 +247,9 @@ namespace Gaia
 
             m_heightmapBrushTransform = TerrainPaintUtility.CalculateBrushTransform(m_originTerrain, GaiaUtils.ConvertPositonToTerrainUV(m_originTerrain, new Vector2(m_originTransform.position.x, m_originTransform.position.z)), m_range, m_originTransform.rotation.eulerAngles.y);
             m_heightmapPixels = GetPixelsForResolution(m_originTerrain.terrainData.size, m_heightmapBrushTransform.GetBrushXYBounds(), heightmapResolution, heightmapResolution, 0);
-            CreateDefaultRenderTexture(ref RTheightmap, m_heightmapPixels.width, m_heightmapPixels.height, RenderTextureFormat.RFloat);
+            CreateDefaultRenderTexture(ref RTheightmap, m_heightmapPixels.width, m_heightmapPixels.height, Terrain.heightmapRenderTextureFormat);
             AddAffectedTerrainPixels(m_heightmapPixels, MultiTerrainOperationType.Heightmap, heightmapResolution, heightmapResolution);
-            var blitMaterial = new Material(Shader.Find("Hidden/Gaia/UnpackUnityTerrain"));
+            Material blitMaterial = TerrainPaintUtility.GetBlitMaterial();
             RenderTexture.active = RTheightmap;
             GL.Clear(false, true, new Color(0.0f, 0.0f, 0.0f, 0.0f));
             GL.PushMatrix();
@@ -311,7 +302,7 @@ namespace Gaia
             {
                 RenderTexture.ReleaseTemporary(RTheightmap);
             }
-            RTheightmap = new RenderTexture(heightmapResolution, heightmapResolution, 0, RenderTextureFormat.RFloat, RenderTextureReadWrite.Linear);// RenderTexture.GetTemporary(heightmapResolution, heightmapResolution, 0, Terrain.heightmapRenderTextureFormat, RenderTextureReadWrite.Linear);
+            RTheightmap = new RenderTexture(heightmapResolution, heightmapResolution, 0, Terrain.heightmapRenderTextureFormat, RenderTextureReadWrite.Linear);// RenderTexture.GetTemporary(heightmapResolution, heightmapResolution, 0, Terrain.heightmapRenderTextureFormat, RenderTextureReadWrite.Linear);
             RTheightmap.wrapMode = TextureWrapMode.Clamp;
             RTheightmap.filterMode = FilterMode.Bilinear;
 
@@ -338,12 +329,8 @@ namespace Gaia
         /// <param name="newHeightmapRT">The render texture containing the new target heightmap.</param>
         public void SetHeightmap(RenderTexture newHeightmapRT)
         {
-            var tempRT = RenderTexture.GetTemporary(newHeightmapRT.width, newHeightmapRT.height, 0, Terrain.heightmapFormat);
-            var copyMat = new Material(Shader.Find("Hidden/Gaia/PackUnityTerrain"));
-            Graphics.Blit(newHeightmapRT, tempRT, copyMat);
-            
             var previousRT = RenderTexture.active;
-            RenderTexture.active = tempRT;
+            RenderTexture.active = newHeightmapRT;
             int heightmapResolution = m_originTerrain.terrainData.heightmapResolution;
             var relevantEntries = affectedTerrainPixels.Where(x => x.Key.operationType == MultiTerrainOperationType.Heightmap);
 
@@ -374,7 +361,6 @@ namespace Gaia
             RenderTexture.active = previousRT;
 
             RenderTexture.ReleaseTemporary(RTheightmap);
-            RenderTexture.ReleaseTemporary(tempRT);
             //RTheightmap = null;
         }
 
@@ -2791,11 +2777,8 @@ namespace Gaia
             }
 
             m_terrainsMissingSpawnRules.Clear();
-#if UNITY_2022_2_OR_NEWER
-            QualitySettings.globalTextureMipmapLimit = m_originalMasterTextureLimit;
-#else
+
             QualitySettings.masterTextureLimit = m_originalMasterTextureLimit;
-#endif
         }
 
 
@@ -3221,7 +3204,7 @@ namespace Gaia
             return colors;
         }
 
-#endregion
+        #endregion
 
     }
 

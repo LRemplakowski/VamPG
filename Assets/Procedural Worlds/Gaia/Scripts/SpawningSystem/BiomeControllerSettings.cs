@@ -66,17 +66,13 @@ namespace Gaia
         /// Removes References to Texture2Ds in Image masks. The image mask will still remember the GUID of that texture to load it when needed.
         /// Call this when you are "done" with the biome controller settings to free up memory caused by these references.
         /// </summary>
-        public void ClearImageMaskTextures(bool unloadAssets = false)
+        public void ClearImageMaskTextures()
         {
             foreach (ImageMask im in m_imageMasks)
             {
                 im.FreeTextureReferences();
             }
-            if (unloadAssets)
-            {
-                //removed for now as this creates unpredictable issues in Unity 2022.2
-                //Resources.UnloadUnusedAssets();
-            }
+            Resources.UnloadUnusedAssets();
         }
 
 

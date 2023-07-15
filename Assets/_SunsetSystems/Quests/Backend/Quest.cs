@@ -1,7 +1,10 @@
-using Sirenix.OdinInspector;
+using NaughtyAttributes;
 using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -10,6 +13,8 @@ namespace SunsetSystems.Journal
     [Serializable]
     public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
+        private const string COMPLETE_QUEST = "COMPLETE_QUEST";
+
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField]
@@ -19,7 +24,7 @@ namespace SunsetSystems.Journal
         [TextArea(10, 15)]
         public string Description;
         public List<Objective> InitialObjectives;
-        [field: SerializeField]
+        [field: SerializeField, AllowNesting]
         public List<RewardData> Rewards { get; private set; }
         [SerializeField, SerializeReference]
         private List<Quest> _startQuestsOnCompletion;
@@ -80,14 +85,14 @@ namespace SunsetSystems.Journal
         //TODO Rework this to sub recursively in quest begin
         private void OnObjectiveChanged(Objective objective)
         {
-            Debug.Log($"Completed objective {objective.ReadableID}!");
+            Debug.Log($"Completed objective {objective.ID}!");
             ObjectiveCompleted?.Invoke(this, objective);
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
             objective.OnObjectiveInactive -= OnObjectiveDeactivated;
-            objective.ObjectivesToCancelOnCompletion.ForEach(o => o.MakeInactive());
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
-                Debug.Log($"Completed quest {Name}!");
+                Debug.Log($"Completed quest!");
                 Complete();
             }
             else
@@ -102,14 +107,6 @@ namespace SunsetSystems.Journal
             }
         }
 
-        public void ForceSubscribeToObjective(Objective objective)
-        {
-            if (objective == null)
-                return;
-            objective.OnObjectiveCompleted += OnObjectiveChanged;
-            objective.OnObjectiveInactive += OnObjectiveDeactivated;
-        }
-
         private void OnObjectiveDeactivated(Objective objective)
         {
             objective.OnObjectiveCompleted -= OnObjectiveChanged;
@@ -121,7 +118,6 @@ namespace SunsetSystems.Journal
         {
             Rewards.ForEach(rewardData => (rewardData.Reward as IRewardable).ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
-            _startQuestsOnCompletion.ForEach(q => q.Begin());
         }
     }
 
@@ -141,7 +137,8 @@ namespace SunsetSystems.Journal
     public struct RewardData
     {
         public int Amount;
-        public IRewardable Reward;
+        [RequireInterface(typeof(IRewardable))]
+        public UnityEngine.Object Reward;
     }
 
     public enum QuestCategory

@@ -4,6 +4,6 @@
 
     public interface ITransition
     {
-        void MoveToScene(LevelLoadingData data);
+        void MoveToScene(SceneLoadingData data);
     }
 }

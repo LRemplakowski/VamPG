@@ -10,9 +10,9 @@ namespace SunsetSystems.Inventory.Data
     public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>
     {
         [field: SerializeField]
-        public string ReadableID { get; protected set; }
+        public string ItemName { get; protected set; }
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; }
+        public string ID { get; private set; }
         [field: SerializeField, ReadOnly]
         public ItemCategory ItemCategory { get; protected set; }
         [field: SerializeField, TextArea]
@@ -26,12 +26,12 @@ namespace SunsetSystems.Inventory.Data
 
         public BaseItem Data => this;
 
-        private void OnEnable()
+        private void OnValidate()
         {
 #if UNITY_EDITOR
-            if (string.IsNullOrWhiteSpace(ReadableID))
+            if (ItemName == "")
             {
-                ReadableID = name;
+                ItemName = name;
                 EditorUtility.SetDirty(this);
             }
             if (Icon == null)
@@ -39,31 +39,11 @@ namespace SunsetSystems.Inventory.Data
                 Icon = ResourceLoader.GetFallbackIcon();
                 EditorUtility.SetDirty(this);
             }
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-                AssignNewID();
-            ItemDatabase.Instance?.Register(this);
-#endif
-        }
-
-        private void Reset()
-        {
-            ReadableID = name;
-            Icon = ResourceLoader.GetFallbackIcon();
-            AssignNewID();
-        }
-
-        private void OnDestroy()
-        {
-#if UNITY_EDITOR
-            ItemDatabase.Instance?.Unregister(this);
-#endif
-        }
-
-        private void AssignNewID()
-        {
-            DatabaseID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (ID == "")
+            {
+                ID = GUID.Generate().ToString();
+                EditorUtility.SetDirty(this);
+            }
 #endif
         }
 

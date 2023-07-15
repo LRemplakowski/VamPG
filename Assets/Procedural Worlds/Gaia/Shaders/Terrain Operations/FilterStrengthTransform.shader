@@ -22,7 +22,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			sampler2D _BrushTex;
@@ -65,15 +64,15 @@
             float4 StrengthTransformMultiply(v2f i) : SV_Target
             {
 				float inputHeight = tex2D(_InputTex, i.pcUV);
-				float test = InternalUnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
-				float transformedHeight = lerp(0.0f,1.0f,InternalUnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
+				float test = UnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
+				float transformedHeight = lerp(0.0f,1.0f,UnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
 				if (_Invert > 0)
 				{
 					transformedHeight = (1.0f - transformedHeight);
 				}
 
-				//return InternalPackHeightmap(transformedHeight * brushStrength);
-				return InternalPackHeightmap(lerp(inputHeight, transformedHeight, _Strength));
+				//return PackHeightmap(transformedHeight * brushStrength);
+				return PackHeightmap(lerp(inputHeight, transformedHeight, _Strength));
             }
             ENDCG
         }
@@ -89,8 +88,8 @@
 			float4 StrengthTransformGreaterThan(v2f i) : SV_Target
 			{
 				float inputHeight = tex2D(_InputTex, i.pcUV);
-				float test = InternalUnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
-				float transformedHeight = lerp(0.0f,1.0f,InternalUnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
+				float test = UnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
+				float transformedHeight = lerp(0.0f,1.0f,UnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
 
 				if (_Invert > 0)
 				{
@@ -102,8 +101,8 @@
 				{
 					result = transformedHeight;
 				}
-				//return InternalPackHeightmap(transformedHeight * brushStrength);
-				return InternalPackHeightmap(lerp(inputHeight, result, _Strength));
+				//return PackHeightmap(transformedHeight * brushStrength);
+				return PackHeightmap(lerp(inputHeight, result, _Strength));
 			}
 			ENDCG
 		}
@@ -119,8 +118,8 @@
 			float4 StrengthTransformSmallerThan(v2f i) : SV_Target
 			{
 				float inputHeight = tex2D(_InputTex, i.pcUV);
-				float test = InternalUnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
-				float transformedHeight = lerp(0.0f,1.0f,InternalUnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
+				float test = UnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
+				float transformedHeight = lerp(0.0f,1.0f,UnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
 
 				if (_Invert > 0)
 				{
@@ -132,8 +131,8 @@
 				{
 					result = transformedHeight;
 				}
-				//return InternalPackHeightmap(transformedHeight * brushStrength);
-				return InternalPackHeightmap(lerp(inputHeight, result, _Strength));
+				//return PackHeightmap(transformedHeight * brushStrength);
+				return PackHeightmap(lerp(inputHeight, result, _Strength));
 			}
 			ENDCG
 		}
@@ -150,16 +149,16 @@
 			float4 StrengthTransformAdd(v2f i) : SV_Target
 			{
 				float inputHeight = tex2D(_InputTex, i.pcUV);
-				float test = InternalUnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
-				float transformedHeight = lerp(0.0f,1.0f,InternalUnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
+				float test = UnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
+				float transformedHeight = lerp(0.0f,1.0f,UnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
 
 				if (_Invert > 0)
 				{
 					transformedHeight = (1.0f - transformedHeight);
 				}
 				
-				//return InternalPackHeightmap(transformedHeight * brushStrength);
-				return InternalPackHeightmap(lerp(inputHeight, inputHeight + transformedHeight, _Strength));
+				//return PackHeightmap(transformedHeight * brushStrength);
+				return PackHeightmap(lerp(inputHeight, inputHeight + transformedHeight, _Strength));
 			}
 			ENDCG
 		}
@@ -175,16 +174,16 @@
 				float4 StrengthTransformSubtract(v2f i) : SV_Target
 				{
 					float inputHeight = tex2D(_InputTex, i.pcUV);
-					float test = InternalUnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
-					float transformedHeight = lerp(0.0f,1.0f,InternalUnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
+					float test = UnpackHeightmap(tex2D(_HeightTransformTex, i.pcUV));
+					float transformedHeight = lerp(0.0f,1.0f,UnpackHeightmap(tex2D(_HeightTransformTex, inputHeight)));
 
 					if (_Invert > 0)
 					{
 						transformedHeight = (1.0f - transformedHeight);
 					}
 
-					//return InternalPackHeightmap(transformedHeight * brushStrength);
-					return InternalPackHeightmap(lerp(inputHeight, inputHeight - transformedHeight, _Strength));
+					//return PackHeightmap(transformedHeight * brushStrength);
+					return PackHeightmap(lerp(inputHeight, inputHeight - transformedHeight, _Strength));
 				}
 				ENDCG
 			}

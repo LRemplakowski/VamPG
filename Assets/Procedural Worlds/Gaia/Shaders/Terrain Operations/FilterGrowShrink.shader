@@ -19,7 +19,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			float _Distance;
@@ -48,7 +47,7 @@
 
             float GetGrowShrink(v2f i)
 			{
-                float input = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+                float input = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
                 //float shiftedInput = (tex2D(_InputTex, float2(i.pcUV.x + 0.1f,i.pcUV.y +0.1f)));
                 if(_Distance!=0)
                 {
@@ -96,10 +95,10 @@
             #pragma fragment GrowShrinkStrengthTransform
             float4 GrowShrinkStrengthTransform(v2f i) : SV_Target
             {
-                float input = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+                float input = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetGrowShrink(i);
-				float strengthTransform = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filter));
-				return InternalPackHeightmap(strengthTransform);
+				float strengthTransform = UnpackHeightmap(tex2D(_HeightTransformTex, filter));
+				return PackHeightmap(strengthTransform);
             }
             ENDCG
         }
@@ -113,9 +112,9 @@
             #pragma fragment GrowShrinkWithoutStrengthTransform
             float4 GrowShrinkWithoutStrengthTransform(v2f i) : SV_Target
             {
-                float input = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+                float input = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filter = GetGrowShrink(i);
-				return InternalPackHeightmap(filter);
+				return PackHeightmap(filter);
             }
             ENDCG
         }

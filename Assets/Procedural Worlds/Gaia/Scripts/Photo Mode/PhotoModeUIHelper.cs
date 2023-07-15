@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-#if GAIA_PRO_PRESENT
 using ProceduralWorlds.HDRPTOD;
-#endif
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -604,7 +602,7 @@ namespace Gaia
         /// </summary>
         public void SyncHDRPTimeOfDay()
         {
-#if HDPipeline && UNITY_2021_2_OR_NEWER && GAIA_PRO_PRESENT
+#if HDPipeline
             if (HDRPTimeOfDayAPI.GetTimeOfDay())
             {
                 SetInput(HDRPTimeOfDayAPI.GetCurrentTime().ToString());

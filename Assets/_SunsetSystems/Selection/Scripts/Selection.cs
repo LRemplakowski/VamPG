@@ -38,11 +38,6 @@ namespace InsaneSystems.RTSSelection
             AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
         }
 
-        public override void LateInitialize()
-        {
-
-        }
-
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.
         /// <para>If you have several types, you can get filtered selected objects.
         /// For example, if you have SelectableA and SelectableB types (for different actions or something other), calling this method with SelectableA will return only selectables of this type.</para></summary>

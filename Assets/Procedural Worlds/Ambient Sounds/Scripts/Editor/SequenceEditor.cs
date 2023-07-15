@@ -58,9 +58,6 @@ namespace AmbientSounds {
         SerializedProperty m_outputPrefab;
         SerializedProperty m_outputDirect;
         SerializedProperty m_outputDistance;
-        SerializedProperty m_outputSetAudioRangesProp = null;
-        SerializedProperty m_outputAudioRangesFollowSpawnDistanceProp = null;
-        SerializedProperty m_outputAudioRangesProp = null;
         SerializedProperty m_outputVerticalAngle;
         SerializedProperty m_outputHorizontalAngle;
         SerializedProperty m_syncGroup;
@@ -74,8 +71,6 @@ namespace AmbientSounds {
 
         /// <summary> Animated Boolean for if Output Distance should be shown </summary>
         AnimBool outputGroup;
-        /// <summary> Animated Boolean for if Output 3D Audio Ranges should be shown </summary>
-        AnimBool outputRangesBool = null;
         /// <summary> Animated Boolean for if Sliders should be displayed </summary>
         AnimBool slidersGroup;
         /// <summary> Animated Boolean for if Events should be displayed </summary>
@@ -126,9 +121,6 @@ namespace AmbientSounds {
             m_outputPrefab = serializedObject.FindProperty("m_outputPrefab");
             m_outputDirect = serializedObject.FindProperty("m_outputDirect");
             m_outputDistance = serializedObject.FindProperty("m_outputDistance");
-            m_outputSetAudioRangesProp = serializedObject.FindProperty("m_outputSetAudioRanges");
-            m_outputAudioRangesFollowSpawnDistanceProp = serializedObject.FindProperty("m_outputAudioRangesFollowSpawnDistance");
-            m_outputAudioRangesProp = serializedObject.FindProperty("m_outputAudioRanges");
             m_outputVerticalAngle = serializedObject.FindProperty("m_outputVerticalAngle");
             m_outputHorizontalAngle = serializedObject.FindProperty("m_outputHorizontalAngle");
             m_syncGroup = serializedObject.FindProperty("m_syncGroup");
@@ -148,8 +140,6 @@ namespace AmbientSounds {
             eventsGroup = new AnimBool((reqVal & ValuesOrEvents.Events) != 0, Repaint);
             directGroup = new AnimBool(!m_outputDirect.boolValue, Repaint);
             syncGroup = new AnimBool(!string.IsNullOrEmpty(m_syncGroup.stringValue), Repaint);
-
-            outputRangesBool = new AnimBool(outputGroup.value && m_outputSetAudioRangesProp.boolValue, Repaint);
 
             m_eventsReorderable = new UnityEditorInternal.ReorderableList(serializedObject, m_events, true, true, true, true);
             m_eventsReorderable.elementHeight = EditorGUIUtility.singleLineHeight;
@@ -486,22 +476,6 @@ namespace AmbientSounds {
                 if (EditorGUI.EndChangeCheck())
                     m_outputDistance.vector2Value = new Vector2(vals[0], vals[1]);
                 m_editorUtils.InlineHelp("mOutputDistance", inlineHelp);
-                m_outputSetAudioRangesProp.boolValue = m_editorUtils.Toggle("mOutputSetAudioRangesProp", m_outputSetAudioRangesProp.boolValue, inlineHelp);
-                outputRangesBool.target = m_outputSetAudioRangesProp.boolValue;
-                if (EditorGUILayout.BeginFadeGroup(outputRangesBool.faded))
-                {
-                    m_editorUtils.PropertyField("mOutputAudioRangesFollowSpawnDistance", m_outputAudioRangesFollowSpawnDistanceProp, inlineHelp);
-                    vals[0] = m_outputAudioRangesProp.vector2Value.x;
-                    vals[1] = m_outputAudioRangesProp.vector2Value.y;
-                    EditorGUI.BeginChangeCheck();
-                    r = EditorGUILayout.GetControlRect();
-                    EditorGUI.MultiFloatField(r, m_editorUtils.GetContent("mOutputAudioRanges"), new GUIContent[] { new GUIContent(""), new GUIContent("-") }, vals);
-                    if (EditorGUI.EndChangeCheck())
-                        m_outputAudioRangesProp.vector2Value = new Vector2(vals[0], vals[1]);
-                    m_editorUtils.InlineHelp("mOutputAudioRanges", inlineHelp);
-
-                }
-                EditorGUILayout.EndFadeGroup();
                 m_editorUtils.SliderRange("mOutputVerticalAngle", m_outputVerticalAngle, inlineHelp, -180, 180);
                 m_editorUtils.SliderRange("mOutputHorizontalAngle", m_outputHorizontalAngle, inlineHelp, -180, 180);
                 m_outputFollowPosition.boolValue = m_editorUtils.Toggle("mOutputFollowPosition", m_outputFollowPosition.boolValue, inlineHelp);

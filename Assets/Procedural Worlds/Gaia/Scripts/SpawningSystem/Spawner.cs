@@ -1800,7 +1800,7 @@ namespace Gaia
             //Release the texture references from the biome controller, if any
             if (biomeController != null)
             {
-                biomeController.m_settings.ClearImageMaskTextures(false);
+                biomeController.m_settings.ClearImageMaskTextures();
             }
 
             return finalOutputTexture;
@@ -2041,9 +2041,6 @@ namespace Gaia
             double originalLoadingRangeImpostor = TerrainLoaderManager.Instance.GetImpostorLoadingRange();
             CenterSceneViewLoadingOn originalCenter = TerrainLoaderManager.Instance.CenterSceneViewLoadingOn;
             Vector3Double originalOrigin = TerrainLoaderManager.Instance.GetOrigin();
-
-            Vector3 originalSpawnerPosition = this.transform.position;
-            float originalspawnRange = m_settings.m_spawnRange;
 
             Vector3 startPosition;
             float spawnRange;
@@ -2445,10 +2442,6 @@ namespace Gaia
                 TerrainLoaderManager.Instance.SetOrigin(originalOrigin);
             }
 #endif
-            //Resetting this spawner to the original position and range
-            transform.position = originalSpawnerPosition;
-            m_settings.m_spawnRange = originalspawnRange;
-
             SimpleCameraLayerCulling.Refresh();
             GaiaStopwatch.EndEvent("Area Spawn");
             GaiaStopwatch.Stop();
@@ -3614,10 +3607,6 @@ namespace Gaia
             {
                 stamper.m_worldDesignerPreviewBounds.center = m_worldDesignerUserBounds.center;
                 stamper.m_worldDesignerPreviewBounds.size = m_worldDesignerUserBounds.size;
-                if (m_worldCreationSettings.m_gaiaDefaults == null)
-                {
-                    m_worldCreationSettings.m_gaiaDefaults = GaiaSettings.m_currentDefaults;
-                }
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewHeightmapResolution = Math.Min(4097, m_worldCreationSettings.m_xTiles * m_worldCreationSettings.m_gaiaDefaults.m_heightmapResolution);
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewRange = Mathf.RoundToInt(m_worldCreationSettings.m_xTiles * m_worldCreationSettings.m_tileSize);
                 TerrainLoaderManager.Instance.TerrainSceneStorage.m_worldMapPreviewTerrainHeight = m_worldCreationSettings.m_tileHeight;
@@ -4421,7 +4410,7 @@ namespace Gaia
             }
             else
             {
-                spawnArea.center = transform.position + (Vector3)TerrainLoaderManager.Instance.GetOrigin();
+                spawnArea.center = transform.position;
                 spawnArea.size = new Vector3(m_settings.m_spawnRange * 2f, m_settings.m_spawnRange * 2f, m_settings.m_spawnRange * 2f);
             }
 
@@ -6062,6 +6051,12 @@ namespace Gaia
                             DestroyImmediate(GOtoDelete);
                             deletedSomething = true;
                         }
+                    }
+                    //if the target is empty now, we can remove it as well to keep scene clean
+                    if (target.childCount <= 0)
+                    {
+                        deletedSomething = true;
+                        DestroyImmediate(target.gameObject);
                     }
                 }
                 //if we deleted something the scene we deleted from should be marked as dirty.

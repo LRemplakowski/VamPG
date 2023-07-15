@@ -191,12 +191,7 @@ namespace ProceduralWorlds.Flora
                 for (int i = 0; i < m_detailObjectList.Count; i++)
                 {
                     var detailObjectData = m_detailObjectList[i];
-
-                    if (detailObjectData.DetailScriptableObject == null)
-                    {
-                        continue;
-                    }
-
+                    
                     // get render pipeline shader
                     for (int j = 0; j < detailObjectData.DetailScriptableObject.Mat.Length; j++)
                     {

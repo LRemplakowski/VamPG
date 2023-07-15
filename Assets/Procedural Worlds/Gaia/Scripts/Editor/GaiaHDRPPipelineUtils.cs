@@ -496,51 +496,27 @@ namespace Gaia.Pipeline.HDRP
                     SerializedProperty gaiaDiffusionProfileList = gaiaSettingsSO.FindProperty("diffusionProfileSettingsList");
                     SerializedObject currentSettingsSO = new SerializedObject(currentSettings);
                     SerializedProperty currentDiffusionProfileList = currentSettingsSO.FindProperty("diffusionProfileSettingsList");
-                    if (currentDiffusionProfileList != null) 
+                    for (int i = 0; i < currentDiffusionProfileList.arraySize; i++)
                     {
-                        for (int i = 0; i < currentDiffusionProfileList.arraySize; i++)
+                        SerializedProperty obj1Property = currentDiffusionProfileList.GetArrayElementAtIndex(i);
+                        Object obj1 = obj1Property.objectReferenceValue;
+                        bool found = false;
+                        for (int j = 0; j < gaiaDiffusionProfileList.arraySize; j++)
                         {
-                            SerializedProperty obj1Property = currentDiffusionProfileList.GetArrayElementAtIndex(i);
-                            Object obj1 = obj1Property.objectReferenceValue;
-                            bool found = false;
-                            for (int j = 0; j < gaiaDiffusionProfileList.arraySize; j++)
+                            Object obj2 = gaiaDiffusionProfileList.GetArrayElementAtIndex(j).objectReferenceValue;
+                            if (obj1 == obj2)
                             {
-                                Object obj2 = gaiaDiffusionProfileList.GetArrayElementAtIndex(j).objectReferenceValue;
-                                if (obj1 == obj2)
-                                {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (!found)
-                            {
-                                gaiaDiffusionProfileList.InsertArrayElementAtIndex(gaiaDiffusionProfileList.arraySize);
-                                SerializedProperty newElement = gaiaDiffusionProfileList.GetArrayElementAtIndex(gaiaDiffusionProfileList.arraySize - 1);
-                                newElement.objectReferenceValue = obj1;
+                                found = true;
+                                break;
                             }
                         }
-                    }
-
-                    //check for the "Default Volume Profile" - if we can find one of those in the current settings object, we will reference that one instead
-                    //otherwise the HDRP setup wizard will display an error, and the user might potentially run into issues later
-                    if (currentSettingsSO != null)
-                    {
-                        SerializedProperty currentVolumeProfileProperty = currentSettingsSO.FindProperty("m_DefaultVolumeProfile");
-                        SerializedProperty gaiaVolumeProfileProperty = gaiaSettingsSO.FindProperty("m_DefaultVolumeProfile");
-                        if (gaiaSettingsSO != null && gaiaVolumeProfileProperty!=null && currentSettingsSO!=null && currentVolumeProfileProperty!=null && currentVolumeProfileProperty.objectReferenceValue !=null)
+                        if (!found)
                         {
-                            gaiaVolumeProfileProperty.objectReferenceValue = currentVolumeProfileProperty.objectReferenceValue;
-                        }
-                    
-                        //same treatment for the "lookdev" profile
-                        SerializedProperty currentLookDevProfileProperty = currentSettingsSO.FindProperty("m_LookDevVolumeProfile");
-                        SerializedProperty gaiaLookDevProfileProperty = gaiaSettingsSO.FindProperty("m_LookDevVolumeProfile");
-                        if (gaiaSettingsSO != null && gaiaLookDevProfileProperty != null && currentSettingsSO != null && currentLookDevProfileProperty != null && currentLookDevProfileProperty.objectReferenceValue != null)
-                        {
-                            gaiaLookDevProfileProperty.objectReferenceValue = currentLookDevProfileProperty.objectReferenceValue;
+                            gaiaDiffusionProfileList.InsertArrayElementAtIndex(gaiaDiffusionProfileList.arraySize);
+                            SerializedProperty newElement = gaiaDiffusionProfileList.GetArrayElementAtIndex(gaiaDiffusionProfileList.arraySize - 1);
+                            newElement.objectReferenceValue = obj1;
                         }
                     }
-
                     gaiaSettingsSO.ApplyModifiedProperties();
                     GraphicsSettings.RegisterRenderPipelineSettings<UnityEngine.Rendering.HighDefinition.HDRenderPipeline>(gaiaSettings);
                 }

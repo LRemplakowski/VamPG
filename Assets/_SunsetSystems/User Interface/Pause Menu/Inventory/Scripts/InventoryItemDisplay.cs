@@ -43,11 +43,11 @@ namespace SunsetSystems.UI
         public void OnClick()
         {
             //TODO: Handle equip item in double click or right click context menu
-            Debug.Log($"Equipping item {_itemEntry._item.ReadableID}!");
+            Debug.Log($"Equipping item {_itemEntry._item.ItemName}!");
             if (_itemEntry._item is EquipableItem item)
             {
                 if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
-                    Debug.LogError($"Failed to equip item {item.ReadableID} for character {CharacterSelector.SelectedCharacterKey}!");
+                    Debug.LogError($"Failed to equip item {item.ItemName} for character {CharacterSelector.SelectedCharacterKey}!");
             }
         }
 

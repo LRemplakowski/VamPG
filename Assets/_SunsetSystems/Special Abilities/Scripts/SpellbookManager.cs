@@ -44,7 +44,6 @@ namespace SunsetSystems.Spellbook
 
         private async void ApplyPasivePowers()
         {
-            await Task.Yield();
             //await new WaitForBackgroundThread();
             //List<DisciplinePower> powers = new();
             //foreach (Discipline discipline in Disciplines.GetDisciplines())

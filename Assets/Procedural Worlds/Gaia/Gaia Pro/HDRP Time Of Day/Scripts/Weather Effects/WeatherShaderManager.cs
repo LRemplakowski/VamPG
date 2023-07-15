@@ -5,7 +5,6 @@ namespace ProceduralWorlds.HDRPTOD
     [System.Serializable]
     public class WeatherShaderData
     {
-        public bool m_isUsingGTS = false;
         public RainShaderData m_rainShaderData = new RainShaderData();
         public HailShaderData m_hailShaderData = new HailShaderData();
         public SnowShaderData m_snowShaderData = new SnowShaderData();
@@ -20,7 +19,7 @@ namespace ProceduralWorlds.HDRPTOD
         [Range(0f, 1f)]
         public float m_rainPower = 0f;
         [Range(0f, 1f)]
-        public float m_rainPowerOnTerrain = 0f;
+        public float m_rainPowerOnTerrain = 0.7f;
         public float m_rainMinHeight = 0f;
         public float m_rainMaxHeight = 3000f;
         public float m_rainSpeed = 1f;
@@ -130,17 +129,14 @@ namespace ProceduralWorlds.HDRPTOD
         [Range(0f, 1f)]
         public float m_snowPower = 0f;
         [Range(0f, 1f)]
-        public float m_snowPowerOnTerrain = 0f;
+        public float m_snowPowerOnTerrain = 0.7f;
         public float m_snowMinHeight = 0f;
-        [Range(0f, 1f)]
-        public float m_snowAge = 1f;
+        public float m_snowAge = 0f;
         public float m_snowContrast = 2f;
         public float m_snowWorldScale = 0.1f;
         public Texture2D m_snowAlbedo;
         public Texture2D m_snowNormal;
         public Texture2D m_snowMask;
-        [ColorUsage(true, true)]
-        public Color m_snowColor = new Color(1, 1, 1, 1);
 
         /// <summary>
         /// Used to copy all the settings over into a new data block
@@ -165,8 +161,7 @@ namespace ProceduralWorlds.HDRPTOD
                 m_snowNormal = data.m_snowNormal, 
                 m_snowPower = data.m_snowPower, 
                 m_snowWorldScale = data.m_snowWorldScale, 
-                m_snowPowerOnTerrain = data.m_snowPowerOnTerrain,
-                m_snowColor = data.m_snowColor
+                m_snowPowerOnTerrain = data.m_snowPowerOnTerrain
             };
         }
         /// <summary>
@@ -201,8 +196,7 @@ namespace ProceduralWorlds.HDRPTOD
         public Vector4 GetSnowDataB()
         {
             //TODO : Add z + w values when we have more to add
-            Vector4 dataB = Shader.GetGlobalVector(WeatherShaderID.m_TOD_SnowDataB);
-            return new Vector4(m_snowWorldScale, m_snowContrast, dataB.z, dataB.w);
+            return new Vector4(m_snowWorldScale, m_snowContrast, 0f, 0f);
         }
         /// <summary>
         /// Set the snow data a
@@ -240,22 +234,6 @@ namespace ProceduralWorlds.HDRPTOD
             return m_snowMask;
         }
         /// <summary>
-        /// Get the snow color
-        /// </summary>
-        /// <returns></returns>
-        public Color GetSnowColor()
-        {
-            return m_snowColor;
-        }
-        /// <summary>
-        /// Set the snow color
-        /// </summary>
-        /// <returns></returns>
-        public void SetSnowColor(Color color)
-        {
-            m_snowColor = color;
-        }
-        /// <summary>
         /// Sets all the snow textures
         /// </summary>
         /// <param name="albedo"></param>
@@ -274,8 +252,6 @@ namespace ProceduralWorlds.HDRPTOD
         public bool m_applyShaderSettings = true;
         [Range(0f, 1f)]
         public float m_sandPower = 0f;
-        [Range(0f, 1f)]
-        public float m_sandPowerOnTerrain = 0f;
         public float m_sandContrast = 2f;
         public float m_sandWorldScale = 0.1f;
         public float m_sandMaxHeight = 3000f;
@@ -302,9 +278,7 @@ namespace ProceduralWorlds.HDRPTOD
                 m_sandContrast = data.m_sandContrast,
                 m_sandMask = data.m_sandMask,
                 m_sandMaxHeight = data.m_sandMaxHeight,
-                m_sandNormal = data.m_sandNormal, 
-                m_sandPower = data.m_sandPower,
-                m_sandPowerOnTerrain = data.m_sandPowerOnTerrain,
+                m_sandNormal = data.m_sandNormal, m_sandPower = data.m_sandPower,
                 m_sandWorldScale = data.m_sandWorldScale
             };
         }
@@ -437,7 +411,6 @@ namespace ProceduralWorlds.HDRPTOD
         public static readonly int m_TOD_SnowAlbedo;
         public static readonly int m_TOD_SnowNormal;
         public static readonly int m_TOD_SnowMask;
-        public static readonly int m_TOD_SnowColor;
         //Sand
         public static readonly int m_TOD_SandDataA;
         public static readonly int m_TOD_SandAlbedo;
@@ -448,34 +421,29 @@ namespace ProceduralWorlds.HDRPTOD
         public static readonly int m_TOD_WeatherMask;
         //Legacy
         public static readonly int m_TOD_Legacy_Snow_Power;
-        public static readonly int m_TOD_Legacy_Snow_MinHeight;
-        public static readonly int m_TOD_Legacy_Snow_Blend;
 
         static WeatherShaderID()
         {
             //Rain
-            m_TOD_RainDataA = Shader.PropertyToID("_PW_RainDataA");
-            m_TOD_RainDataB = Shader.PropertyToID("_PW_RainDataB");
-            m_TOD_RainMap = Shader.PropertyToID("_PW_RainMap");
+            m_TOD_RainDataA = Shader.PropertyToID("_TOD_RainDataA");
+            m_TOD_RainDataB = Shader.PropertyToID("_TOD_RainDataB");
+            m_TOD_RainMap = Shader.PropertyToID("_TOD_RainMap");
             //Snow
-            m_TOD_SnowDataA = Shader.PropertyToID("_PW_SnowDataA");
-            m_TOD_SnowDataB = Shader.PropertyToID("_PW_SnowDataB");
-            m_TOD_SnowAlbedo = Shader.PropertyToID("_PW_SnowAlbedoMap");
-            m_TOD_SnowNormal = Shader.PropertyToID("_PW_SnowNormalMap");
-            m_TOD_SnowMask = Shader.PropertyToID("_PW_SnowMaskMap");
-            m_TOD_SnowColor = Shader.PropertyToID("_PW_SnowColor");
+            m_TOD_SnowDataA = Shader.PropertyToID("_TOD_SnowDataA");
+            m_TOD_SnowDataB = Shader.PropertyToID("_TOD_SnowDataB");
+            m_TOD_SnowAlbedo = Shader.PropertyToID("_TOD_SnowAlbedo");
+            m_TOD_SnowNormal = Shader.PropertyToID("_TOD_SnowNormal");
+            m_TOD_SnowMask = Shader.PropertyToID("_TOD_SnowMask");
             //Sand
-            m_TOD_SandDataA = Shader.PropertyToID("_PW_SandDataA");
-            m_TOD_SandAlbedo = Shader.PropertyToID("_PW_SandAlbedoMap");
-            m_TOD_SandNormal = Shader.PropertyToID("_PW_SandNormalMap");
-            m_TOD_SandMask = Shader.PropertyToID("_PW_SandMaskMap");
+            m_TOD_SandDataA = Shader.PropertyToID("_TOD_SandDataA");
+            m_TOD_SandAlbedo = Shader.PropertyToID("_TOD_SandAlbedo");
+            m_TOD_SandNormal = Shader.PropertyToID("_TOD_SandNormal");
+            m_TOD_SandMask = Shader.PropertyToID("_TOD_SandMask");
             //Misc
-            m_TOD_WeatherDataA = Shader.PropertyToID("_PW_WeatherDataA");
-            m_TOD_WeatherMask = Shader.PropertyToID("_PW_WeatherMask");
+            m_TOD_WeatherDataA = Shader.PropertyToID("_TOD_WeatherDataA");
+            m_TOD_WeatherMask = Shader.PropertyToID("_TOD_WeatherMask");
             //Legacy
             m_TOD_Legacy_Snow_Power = Shader.PropertyToID("_PW_Global_CoverLayer1Progress");
-            m_TOD_Legacy_Snow_MinHeight = Shader.PropertyToID("_PW_Global_CoverLayer1FadeStart");
-            m_TOD_Legacy_Snow_Blend = Shader.PropertyToID("_PW_Global_CoverLayer1FadeDist");
         }
     }
 
@@ -551,7 +519,6 @@ namespace ProceduralWorlds.HDRPTOD
             snowShaderData.SetSnowDataA(Shader.GetGlobalVector(WeatherShaderID.m_TOD_SnowDataA));
             snowShaderData.SetSnowDataB(Shader.GetGlobalVector(WeatherShaderID.m_TOD_SnowDataB));
             snowShaderData.SetSnowTextures((Texture2D)Shader.GetGlobalTexture(WeatherShaderID.m_TOD_SnowAlbedo), (Texture2D)Shader.GetGlobalTexture(WeatherShaderID.m_TOD_SnowNormal), (Texture2D)Shader.GetGlobalTexture(WeatherShaderID.m_TOD_SnowMask));
-            snowShaderData.SetSnowColor((Shader.GetGlobalColor(WeatherShaderID.m_TOD_SnowColor)));
             return snowShaderData;
         }
         /// <summary>
@@ -672,9 +639,7 @@ namespace ProceduralWorlds.HDRPTOD
         {
             if (rainShaderData != null && rainShaderData.m_applyShaderSettings)
             {
-                var data = rainShaderData.GetRainDataA();
-                data.y *= rainShaderData.m_rainPower;
-                Shader.SetGlobalVector(WeatherShaderID.m_TOD_RainDataA, data);
+                Shader.SetGlobalVector(WeatherShaderID.m_TOD_RainDataA, rainShaderData.GetRainDataA());
                 Shader.SetGlobalVector(WeatherShaderID.m_TOD_RainDataB, rainShaderData.GetRainDataB());
                 Shader.SetGlobalTexture(WeatherShaderID.m_TOD_RainMap, rainShaderData.GetRainTexture());
             }
@@ -687,17 +652,12 @@ namespace ProceduralWorlds.HDRPTOD
         {
             if (snowShaderData != null && snowShaderData.m_applyShaderSettings)
             {
-                var data = snowShaderData.GetSnowDataA();
-                data.y *= snowShaderData.m_snowPower;
-                Shader.SetGlobalVector(WeatherShaderID.m_TOD_SnowDataA, data);
+                Shader.SetGlobalVector(WeatherShaderID.m_TOD_SnowDataA, snowShaderData.GetSnowDataA());
                 Shader.SetGlobalVector(WeatherShaderID.m_TOD_SnowDataB, snowShaderData.GetSnowDataB());
                 Shader.SetGlobalTexture(WeatherShaderID.m_TOD_SnowAlbedo, snowShaderData.GetSnowAlbedo());
                 Shader.SetGlobalTexture(WeatherShaderID.m_TOD_SnowNormal, snowShaderData.GetSnowNormal());
                 Shader.SetGlobalTexture(WeatherShaderID.m_TOD_SnowMask, snowShaderData.GetSnowMask());
                 Shader.SetGlobalFloat(WeatherShaderID.m_TOD_Legacy_Snow_Power, snowShaderData.GetSnowDataA().x);
-                Shader.SetGlobalFloat(WeatherShaderID.m_TOD_Legacy_Snow_MinHeight, snowShaderData.GetSnowDataA().z);
-                Shader.SetGlobalFloat(WeatherShaderID.m_TOD_Legacy_Snow_Blend, snowShaderData.GetSnowDataB().y);
-                Shader.SetGlobalColor(WeatherShaderID.m_TOD_SnowColor, snowShaderData.GetSnowColor());
             }
         }
         //Applies the sand global shader values based on the data provided

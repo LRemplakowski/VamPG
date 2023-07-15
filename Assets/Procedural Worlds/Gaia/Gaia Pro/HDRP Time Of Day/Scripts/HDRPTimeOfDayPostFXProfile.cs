@@ -171,21 +171,12 @@ namespace ProceduralWorlds.HDRPTOD
             return true;
         }
 #if HDPipeline
-#if UNITY_2022_2_OR_NEWER
-        public void ApplyAmbientOcclusion(ScreenSpaceAmbientOcclusion ambientOcclusion, float time)
-        {
-            ambientOcclusion.intensity.value = m_ambientIntensity.Evaluate(time);
-            ambientOcclusion.directLightingStrength.value = m_ambientDirectStrength.Evaluate(time);
-            ambientOcclusion.radius.value = m_ambientRadius.Evaluate(time);
-        }
-#else
         public void ApplyAmbientOcclusion(AmbientOcclusion ambientOcclusion, float time)
         {
             ambientOcclusion.intensity.value = m_ambientIntensity.Evaluate(time);
             ambientOcclusion.directLightingStrength.value = m_ambientDirectStrength.Evaluate(time);
             ambientOcclusion.radius.value = m_ambientRadius.Evaluate(time);
         }
-#endif
 #endif
     }
 

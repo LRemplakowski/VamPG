@@ -240,6 +240,7 @@ namespace Gaia
                     im.FreeTextureReferences();
                 }
             }
+            Resources.UnloadUnusedAssets();
         }
 
         public void RefreshGUID()

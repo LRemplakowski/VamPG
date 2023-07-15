@@ -1,8 +1,10 @@
+using SunsetSystems.Audio;
 using SunsetSystems.Constants;
 using SunsetSystems.Data;
-using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SunsetSystems.MainMenu
 {
@@ -11,27 +13,30 @@ namespace SunsetSystems.MainMenu
     {
         [SerializeField]
         private GameObject debugUi;
+        [SerializeField]
+        private Slider _musicSlider, _sfxSlider;
 
         private void OnEnable()
         {
-            LevelLoader.OnBeforeLevelLoad += OnBeforeLevelLoad;
+            if (PlayerPrefs.HasKey("MUSIC_VOLUME"))
+                _musicSlider.value = PlayerPrefs.GetFloat("MUSIC_VOLUME");
+            if (PlayerPrefs.HasKey("SFX_VOLUME"))
+                _sfxSlider.value = PlayerPrefs.GetFloat("SFX_VOLUME");
+            _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
+            _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
         }
 
         private void OnDisable()
         {
-            LevelLoader.OnBeforeLevelLoad -= OnBeforeLevelLoad;
+            _musicSlider.onValueChanged.AddListener(SignalMusicVolumeChange);
+            _sfxSlider.onValueChanged.AddListener(SignalSFXVolumeChange);
         }
 
         // Start is called before the first frame update
-        private void Start()
+        void Start()
         {
             if (debugUi)
                 debugUi.SetActive(GameConstants.DEBUG_MODE);
-        }
-
-        private void OnBeforeLevelLoad(LevelLoadingEventData data)
-        {
-            gameObject.SetActive(false);
         }
 
         public void StartGameDebug()
@@ -47,6 +52,16 @@ namespace SunsetSystems.MainMenu
         public void QuitGame()
         {
             Application.Quit();
+        }
+
+        public void SignalMusicVolumeChange(float volume)
+        {
+            AudioManager.Instance.SetMusicVolume(volume);
+        }
+
+        public void SignalSFXVolumeChange(float volume)
+        {
+            AudioManager.Instance.SetSFXVolume(volume);
         }
     }
 }

@@ -125,7 +125,7 @@ namespace UMA.Editors
 							}
 						}
 					}
-					string matname = Folder + "/"+CharName+"_Mat_" + Material + ".mat";
+					string matname = Folder + "/"+CharName+"_Mat_" + Material + ".mat"; 
 					CustomAssetUtility.SaveAsset<Material>(m, matname);
 					Material++;
 					// Save the material to disk?
@@ -135,6 +135,7 @@ namespace UMA.Editors
 				string meshName = Folder + "/"+CharName+"_Mesh_" + meshno + ".asset";
 				meshno++;
 				// Save Mesh to disk.
+				// smr.sharedMesh.Optimize(); This blows up some versions of Unity.
 				CustomAssetUtility.SaveAsset<Mesh>(smr.sharedMesh, meshName);
 				smr.sharedMaterials = mats;
 				smr.materials = mats;
@@ -312,7 +313,7 @@ namespace UMA.Editors
 			Graphics.Blit(rt, outputMap);
 
 
-			// Remember currently active render texture
+			// Remember crrently active render texture
 			RenderTexture currentActiveRT = RenderTexture.active;
 
 			// Set the supplied RenderTexture as the active one

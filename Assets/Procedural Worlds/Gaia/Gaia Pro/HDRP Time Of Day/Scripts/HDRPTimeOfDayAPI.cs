@@ -7,7 +7,7 @@ namespace ProceduralWorlds.HDRPTOD
     public class HDRPTimeOfDayAPI
     {
 
-#if HDPipeline && UNITY_2021_2_OR_NEWER
+        #if HDPipeline
         /// <summary>
         /// Gets the time of day system instance in the scene
         /// </summary>
@@ -72,7 +72,7 @@ namespace ProceduralWorlds.HDRPTOD
         /// </summary>
         /// <param name="time"></param>
         /// <param name="is0To1"></param>
-        public static void SetCurrentTime(float time, bool is0To1 = false)
+        public static void SetCurrentTime(float time, bool is0To1)
         {
             if (IsPresent())
             {

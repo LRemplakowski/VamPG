@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace GeNa.Core
 {
     /// <summary>
@@ -42,91 +41,76 @@ namespace GeNa.Core
         [NonSerialized] protected GameObject m_riverMeshParent = null;
         [NonSerialized] protected bool m_postProcess = true;
         [SerializeField] protected List<GameObject> m_bakedMeshes = new List<GameObject>();
-
         public GeNaRiverProfile RiverProfile
         {
             get => m_riverProfile;
             set => m_riverProfile = value;
         }
-
         public bool UseGaiaSeaLevel
         {
             get => m_useGaiaSeaLevel;
             set => m_useGaiaSeaLevel = value;
         }
-
         public float SeaLevel
         {
             get => m_seaLevel;
             set => m_seaLevel = value;
         }
-
         public bool SyncToWeather
         {
             get => m_riverProfile.RiverParameters.m_syncToWeather;
             set => m_riverProfile.RiverParameters.m_syncToWeather = value;
         }
-
         public float StartFlow
         {
             get => m_startFlow;
             set => m_startFlow = Mathf.Clamp(value, 0.05f, Mathf.Infinity);
         }
-
         public float VertexDistance
         {
             get => m_vertexDistance;
             set => m_vertexDistance = value;
         }
-
         public float BankOverstep
         {
             get => m_bankOverstep;
             set => m_bankOverstep = Mathf.Clamp(value, 0.5f, 5.0f);
         }
-
         public float RiverWidth
         {
             get => m_riverWidth;
             set => m_riverWidth = Mathf.Max(value, 0.5f);
         }
-
         public float CapDistance
         {
             get => m_capDistance;
             set => m_capDistance = Mathf.Clamp(value, 0.1f, Mathf.Infinity);
         }
-
         public float EndCapDistance
         {
             get => m_endCapDistance;
             set => m_endCapDistance = Mathf.Clamp(value, 0.0f, 5000.0f);
         }
-
         public bool AddCollider
         {
             get => m_addCollider;
             set => m_addCollider = value;
         }
-
         public bool RaycastTerrainOnly
         {
             get => m_raycastTerrainOnly;
             set => m_raycastTerrainOnly = value;
         }
-
         public bool ReceiveShadows
         {
             get => m_shadowsReceive;
             set => m_shadowsReceive = value;
         }
-
         public bool CastShadows
         {
             get => m_shadowsCast;
             set => m_shadowsCast = value;
         }
-
         private void OnEnable()
         {
             if (m_autoUpdateOnTerrainChange)
@@ -135,7 +119,6 @@ namespace GeNa.Core
                 GeNaEvents.onTerrainChanged += TerrainChanged;
             }
         }
-
         public bool UpdateOnTerrainChange
         {
             get => m_autoUpdateOnTerrainChange;
@@ -145,67 +128,59 @@ namespace GeNa.Core
                 {
                     if (value)
                     {
+                        //UnityEngine.Experimental.TerrainAPI.TerrainCallbacks.heightmapChanged -= TerrainCallbacks_heightmapChanged;
+                        //UnityEngine.Experimental.TerrainAPI.TerrainCallbacks.heightmapChanged += TerrainCallbacks_heightmapChanged;
                         GeNaEvents.onTerrainChanged -= TerrainChanged;
                         GeNaEvents.onTerrainChanged += TerrainChanged;
                     }
                     else
                     {
+                        //UnityEngine.Experimental.TerrainAPI.TerrainCallbacks.heightmapChanged -= TerrainCallbacks_heightmapChanged;
                         GeNaEvents.onTerrainChanged -= TerrainChanged;
                     }
                 }
-
                 m_autoUpdateOnTerrainChange = value;
             }
         }
-
         public string Tag
         {
             get => m_tag;
             set => m_tag = value;
         }
-
         public int Layer
         {
             get => m_layer;
             set => m_layer = value;
         }
-
         public bool SplitAtTerrains
         {
             get => m_splitAtTerrains;
             set => m_splitAtTerrains = value;
         }
-
         public bool UseWorldspaceTextureWidth
         {
             get => m_useWorldspaceTextureWidth;
             set => m_useWorldspaceTextureWidth = value;
         }
-
         public float WorldspaceWidthRepeat
         {
             get => m_worldspaceWidth;
             set => m_worldspaceWidth = value;
         }
-
         public MeshRenderer MeshRenderer
         {
             get => m_meshRenderer;
             set => m_meshRenderer = value;
         }
-
         public GameObject Parent
         {
             get => m_riverMeshParent;
             set => m_riverMeshParent = value;
         }
-
         /// <summary>
         /// GeNa Extension Methods
         /// </summary>
-
         #region GeNaSpline Extension Methods
-
         protected override void OnAttach(GeNaSpline spline)
         {
             if (RiverProfile == null)
@@ -218,21 +193,17 @@ namespace GeNa.Core
                         m_layer = 0;
                 }
             }
-
             if (m_autoUpdateOnTerrainChange)
             {
                 GeNaEvents.onTerrainChanged -= TerrainChanged;
                 GeNaEvents.onTerrainChanged += TerrainChanged;
             }
-
             CreateRivers();
             GameObjectEntity gameObjectEntity = ScriptableObject.CreateInstance<GameObjectEntity>();
             gameObjectEntity.m_gameObject = m_riverMeshParent;
             GeNaUndoRedo.RecordUndo(gameObjectEntity);
         }
-
         List<Transform> affectedTerrains = new List<Transform>();
-
         private void TerrainChanged(Terrain terrain, TerrainChangedFlags flags)
         {
             if ((flags & TerrainChangedFlags.Heightmap) == TerrainChangedFlags.Heightmap || (flags & TerrainChangedFlags.FlushEverythingImmediately) == TerrainChangedFlags.FlushEverythingImmediately)
@@ -244,7 +215,6 @@ namespace GeNa.Core
                     if (affectedTerrains[i] == terrainTransform)
                         affected = true;
                 }
-
                 if (!affected)
                     return;
 
@@ -271,7 +241,6 @@ namespace GeNa.Core
             {
                 CreateCurrentRenderTexture();
             }
-
             FindMeshesParent();
 
             if (m_autoUpdateOnTerrainChange)
@@ -288,7 +257,6 @@ namespace GeNa.Core
                         GeNaEvents.Destroy(m_bakedMeshes[i]);
                 }
             }
-
             m_bakedMeshes.Clear();
 
             spline.IsDirty = true;
@@ -317,7 +285,6 @@ namespace GeNa.Core
                 {
                     bakedRivers = new GameObject(BAKED_UNSPLIT_RIVER_PARENT_NAME);
                 }
-
                 riverMeshes.transform.parent = bakedRivers.transform;
                 riverMeshes.name = BakedGroupName();
                 List<Transform> meshTransforms = new List<Transform>();
@@ -333,10 +300,8 @@ namespace GeNa.Core
                     }
                 }
             }
-
             return riverMeshes;
         }
-
         void FindMeshesParent()
         {
             if (m_riverMeshParent != null && m_riverMeshParent.transform.parent != Spline.transform)
@@ -418,7 +383,6 @@ namespace GeNa.Core
                     meshParentDict.Add(meshXform.parent, new List<Transform>());
                 meshParentDict[meshXform.parent].Add(meshXform);
             }
-
             // If the current River Profile uses the RiverFlow shader, then 
             // we need to capture the flow texture for all of the meshes
             // that are parented to the same terrain, with the same resolution
@@ -494,10 +458,8 @@ namespace GeNa.Core
                     }
                 }
             }
-
             return meshParentDict;
         }
-
         public override void Execute()
         {
             if (IsActive && Spline.Nodes.Count > 1)
@@ -505,12 +467,10 @@ namespace GeNa.Core
                 ProcessSpline(Spline);
             }
         }
-
         public override void PreExecute()
         {
             //DeleteRiverMeshGameobjects(Spline);
         }
-
         protected override void OnActivate()
         {
             if (Spline.Nodes.Count > 1)
@@ -521,14 +481,12 @@ namespace GeNa.Core
                 GeNaEvents.onTerrainChanged += TerrainChanged;
             }
         }
-
         protected override void OnDeactivate()
         {
             DeleteRiverMeshGameobjects(Spline);
             if (m_autoUpdateOnTerrainChange)
                 GeNaEvents.onTerrainChanged -= TerrainChanged;
         }
-
         protected override void OnDelete()
         {
             DeleteRiverMeshGameobjects(Spline);
@@ -540,7 +498,6 @@ namespace GeNa.Core
                 m_riverMeshParent = null;
             }
         }
-
         protected override void OnDrawGizmosSelected()
         {
             if (Spline.Settings.Advanced.DebuggingEnabled == false)
@@ -550,7 +507,6 @@ namespace GeNa.Core
                 DrawCurveInfo(curve);
             }
         }
-
         private void DrawCurveInfo(GeNaCurve geNaCurve)
         {
             // Draw arrows showing which direction a curve is facing (from StartNode to EndNode).
@@ -562,7 +518,6 @@ namespace GeNa.Core
             geNaSample = geNaCurve.GetSample(0.55f);
             DrawArrow(geNaSample.Location, geNaSample.Forward);
         }
-
         private void DrawArrow(Vector3 position, Vector3 direction)
         {
             direction.Normalize();
@@ -572,9 +527,7 @@ namespace GeNa.Core
             ray.direction = (-direction - right) * 0.5f;
             Gizmos.DrawRay(ray);
         }
-
         #endregion End GeNa Extension Methods
-
         private void DeleteRiverMeshGameobjects(GeNaSpline spline)
         {
             // Check to make sure they haven't move the road meshes in the hierarchy
@@ -588,7 +541,6 @@ namespace GeNa.Core
                 if (riverMeshesTransform != null)
                     m_riverMeshParent = riverMeshesTransform.gameObject;
             }
-
             if (m_riverMeshParent != null)
             {
                 List<Transform> children = new List<Transform>();
@@ -596,26 +548,22 @@ namespace GeNa.Core
                 {
                     children.Add(transform);
                 }
-
                 for (int i = 0; i < children.Count; i++)
                 {
                     GeNaEvents.Destroy(children[i].gameObject);
                 }
             }
         }
-
         private void ProcessSpline(GeNaSpline spline)
         {
             CreateRivers();
         }
-
         public void UpdateMaterial()
         {
             if (RiverProfile == null)
             {
                 return;
             }
-
             // recompute the river meshes and assign new material.
             ProcessSpline(this.Spline);
         }
@@ -624,7 +572,6 @@ namespace GeNa.Core
         {
             return $"River Meshes ({this.Spline.GetInstanceID() % 9997})";
         }
-
         public bool HasBakedRivers()
         {
             return m_bakedMeshes != null && m_bakedMeshes.Count > 0;
@@ -636,7 +583,6 @@ namespace GeNa.Core
             return false;
             */
         }
-
         public void DeleteBakedRiver(bool reenableSpline = false)
         {
             //string groupName = BakedGroupName();
@@ -660,10 +606,9 @@ namespace GeNa.Core
                 }
                 //go = GameObject.Find(groupName);
             }
-
             if (reenableSpline)
                 Spline.gameObject.SetActive(true);
-
+            
             m_bakedMeshes.Clear();
             Spline.IsDirty = true;
 
@@ -677,7 +622,6 @@ namespace GeNa.Core
                 return;
             _SetSplineToDownhill();
         }
-
         private void _SetSplineToDownhill()
         {
             Dictionary<int, List<GeNaCurve>> trees = Spline.GetTrees();
@@ -690,7 +634,6 @@ namespace GeNa.Core
                     curves.Reverse();
                     (minMax.min, minMax.max) = (minMax.max, minMax.min);
                 }
-
                 float curHeight = minMax.max;
                 for (int i = 0; i < curves.Count; i++)
                 {
@@ -700,19 +643,15 @@ namespace GeNa.Core
                         pos = new Vector3(pos.x, curHeight - 0.001f, pos.z);
                         curves[i].EndNode.Position = pos;
                     }
-
                     curHeight = curves[i].EndNode.Position.y;
                 }
             }
-
             Spline.Smooth();
         }
-
         private (float min, float max) _GetCurvesMinMax(List<GeNaCurve> curves)
         {
             return (curves[curves.Count - 1].P3.y, curves[0].P0.y);
         }
-
         private void CreateRivers()
         {
             if (Spline == null || Spline.Nodes.Count < 2)
@@ -748,7 +687,6 @@ namespace GeNa.Core
                     m_riverMeshParent.transform.parent = splineTransform;
                 }
             }
-
             if (RiverProfile != null)
             {
                 if (GeNaUtility.Gaia2Present)
@@ -773,7 +711,6 @@ namespace GeNa.Core
                     GeNaEvents.Destroy(m_currentRenderTexture);
                     //Debug.Log("Render Texture for River Material destroyed.");
                 }
-
                 m_currentRenderTexture = newRTex;
             }
         }
@@ -787,7 +724,6 @@ namespace GeNa.Core
                 GeNaEvents.Destroy(m_currentRenderTexture);
                 //Debug.Log("Render Texture for River Material destroyed.");
             }
-
             m_currentRenderTexture = newRTex;
         }
 
@@ -797,41 +733,36 @@ namespace GeNa.Core
                 return m_currentRenderTexture;
 
             // Do we need to create a river flow texture?
-            GeNaRiverParameters riverParameters = RiverProfile.RiverParameters;
-            if (riverParameters != null)
+            if (RiverProfile.RiverParameters.m_renderMode == Constants.ProfileRenderMode.RiverFlow)
             {
-                if (riverParameters.m_renderMode == Constants.ProfileRenderMode.RiverFlow)
+                GameObject oceanGO = GameObject.Find("Water Surface");
+                Transform oceanMeshTransform = null;
+                if (oceanGO != null)
+                    oceanMeshTransform = oceanGO.transform;
+
+                int textureSize = 1024;
+                string filename = string.Empty;
+                if (saveFlowTexture)
                 {
-                    GameObject oceanGO = GameObject.Find("Water Surface");
-                    Transform oceanMeshTransform = null;
-                    if (oceanGO != null)
-                        oceanMeshTransform = oceanGO.transform;
-
-                    int textureSize = 1024;
-                    string filename = string.Empty;
-                    if (saveFlowTexture)
-                    {
-                        filename = System.IO.Path.Combine(Application.dataPath, GENA_USER_DATA_PATH, $"FlowMap_{Spline.GetInstanceID()}.png");
-                        Debug.Log($"Flow Map filename = {filename}");
-                    }
-                    else
-                    {
-                        textureSize = 2048;
-                    }
-
-                    CaptureFlow captureFlow = new CaptureFlow();
-
-                    CaptureFlow.RiverFlowResults results = captureFlow.CaptureRiverFlow(m_riverMeshParent.transform, filename, textureSize, m_currentMaterial, oceanMeshTransform);
-
-                    m_currentMaterial.SetVector("_BoundsMinimum", results.boundsCenter - results.boundsExtent);
-                    m_currentMaterial.SetVector("_BoundsMaximum", results.boundsCenter + results.boundsExtent);
-                    m_currentMaterial.SetVector("_Center", results.boundsCenter);
-                    m_currentMaterial.SetVector("_Extent", results.boundsExtent);
-
-                    return results.rtFlow;
+                    filename = System.IO.Path.Combine(Application.dataPath, GENA_USER_DATA_PATH, $"FlowMap_{Spline.GetInstanceID()}.png");
+                    Debug.Log($"Flow Map filename = {filename}");
                 }
-            }
+                else
+                {
+                    textureSize = 2048;
+                }
 
+                CaptureFlow captureFlow = new CaptureFlow();
+
+                CaptureFlow.RiverFlowResults results = captureFlow.CaptureRiverFlow(m_riverMeshParent.transform, filename, textureSize, m_currentMaterial, oceanMeshTransform);
+
+                m_currentMaterial.SetVector("_BoundsMinimum", results.boundsCenter - results.boundsExtent);
+                m_currentMaterial.SetVector("_BoundsMaximum", results.boundsCenter + results.boundsExtent);
+                m_currentMaterial.SetVector("_Center", results.boundsCenter);
+                m_currentMaterial.SetVector("_Extent", results.boundsExtent);
+
+                return results.rtFlow;
+            }
             return null;
         }
     }

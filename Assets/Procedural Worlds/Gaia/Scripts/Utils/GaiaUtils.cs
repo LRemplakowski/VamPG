@@ -2196,14 +2196,7 @@ namespace Gaia
                     {
                         if (getUnderWaterMaterial)
                         {
-                            if (GaiaUtils.GetActivePipeline() == EnvironmentRenderer.Universal)
-                            {
-                                material = null;
-                            }
-                            else
-                            {
-                                material = materials[1];
-                            }
+                            material = materials[1];
                         }
                         else
                         {
@@ -2525,7 +2518,7 @@ namespace Gaia
         /// <returns></returns>
         public static Material LoadUnderwaterMaterial()
         {
-            #if UNITY_EDITOR && !UPPipeline
+            #if UNITY_EDITOR
             return AssetDatabase.LoadAssetAtPath<Material>(GetAssetPath(GaiaConstants.gaiaUnderwaterMaterial + ".mat"));
             #else
             return null;
@@ -3498,7 +3491,6 @@ namespace Gaia
 
             try
             {
-                AssetDatabase.StartAssetEditing();
                 var SerializedObjectTagManager =
                 new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
                 if (SerializedObjectTagManager != null)
@@ -3632,7 +3624,6 @@ namespace Gaia
             }
             finally
             {
-                AssetDatabase.StopAssetEditing();
                 ProgressBar.Clear(ProgressBarPriority.Maintenance);
             }
             #endif

@@ -33,6 +33,7 @@ namespace GeNa.Core
             if (m_editorUtils == null)
                 m_editorUtils = PWApp.GetEditorUtils(this, null, null);
             m_mapBuilder = target as GeNaMapBuilder;
+            m_mapBuilder.transform.hideFlags = HideFlags.HideInInspector;
             Tools.hidden = true;
             CreateEntryList();
         }

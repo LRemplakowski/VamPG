@@ -1,9 +1,9 @@
-using SunsetSystems.Persistence.UI;
+using SunsetSystems.Loading.UI;
 using SunsetSystems.Utils;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Loading
 {
     [RequireComponent(typeof(Tagger))]
     public class SceneLoadingUIManager : MonoBehaviour

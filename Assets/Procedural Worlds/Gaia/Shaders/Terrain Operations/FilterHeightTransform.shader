@@ -23,7 +23,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
             sampler2D _InputTex;
 			sampler2D _BrushTex;
@@ -74,9 +73,9 @@
 					return inputHeight;
 				}
                 float normalizedHeight = smoothstep(_MinWorldHeight,_MaxWorldHeight, inputHeight);
-			    float transformedHeight = (_MaxWorldHeight - _MinWorldHeight) * InternalUnpackHeightmap(tex2D(_HeightTransformTex, normalizedHeight));
-				float brushStrength = InternalUnpackHeightmap(tex2D(_BrushTex, i.pcUV));
-				return InternalPackHeightmap(lerp(inputHeight, transformedHeight, brushStrength));
+			    float transformedHeight = (_MaxWorldHeight - _MinWorldHeight) * UnpackHeightmap(tex2D(_HeightTransformTex, normalizedHeight));
+				float brushStrength = UnpackHeightmap(tex2D(_BrushTex, i.pcUV));
+				return PackHeightmap(lerp(inputHeight, transformedHeight, brushStrength));
             }
             ENDCG
         }

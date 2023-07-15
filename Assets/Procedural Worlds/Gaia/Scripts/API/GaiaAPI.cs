@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using Gaia.Pipeline.HDRP;
 using Gaia.Pipeline.URP;
-#if GAIA_PRO_PRESENT
-using ProceduralWorlds.HDRPTOD;
-#endif
 #if FLORA_PRESENT
 using ProceduralWorlds.Flora;
 #endif
@@ -45,21 +42,8 @@ namespace Gaia
             {
                 return GaiaGlobal.Instance.GaiaTimeOfDayValue;
             }
-            else
-            {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-                GaiaTimeOfDay timeOfDay = new GaiaTimeOfDay();
-                float time = HDRPTimeOfDayAPI.GetCurrentTime();
-                HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float timeScale);
-                timeOfDay.m_todDayTimeScale = timeScale;
-                timeOfDay.m_todEnabled = autoUpdate;
-                timeOfDay.m_todHour = (int)time;
-                timeOfDay.m_todMinutes = (time / 24 * 60f);
-                return timeOfDay;
-#else
-                return null;
-#endif
-            }
+
+            return null;
         }
         /// <summary>
         /// Sets all the time of day settings
@@ -74,47 +58,11 @@ namespace Gaia
                     GaiaGlobal.Instance.GaiaTimeOfDayValue = newGaiaTimeOfDaySettings;
                     GaiaGlobal.Instance.UpdateGaiaTimeOfDay(false);
                 }
-                else
-                {
-                    float time = newGaiaTimeOfDaySettings.m_todHour + (newGaiaTimeOfDaySettings.m_todMinutes / 60f);
-                    SetTimeOfDaySettingsHDRP(time, newGaiaTimeOfDaySettings.m_todEnabled, newGaiaTimeOfDaySettings.m_todDayTimeScale);
-                }
             }
             else
             {
                 Debug.LogError("The time of day profile data you have provided is null. Please make sure it's not null.");
             }
-        }
-
-        /// <summary>
-        /// Sets all the time of day settings in HDRP
-        /// </summary>
-        /// <param name="time"></param>
-        /// <param name="enabled"></param>
-        /// <param name="timeScale"></param>
-        public static void SetTimeOfDaySettingsHDRP(float time, bool enabled, float timeScale)
-        {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-            HDRPTimeOfDayAPI.SetCurrentTime(time);
-            HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(enabled, timeScale);
-#endif
-        }
-        /// <summary>
-        /// Gets the time of day settings in HDRP
-        /// </summary>
-        /// <param name="time"></param>
-        /// <param name="enabled"></param>
-        /// <param name="timeScale"></param>
-        public static void GetTimeOfDaySettingsHDRP(out float time, out bool enabled, out float timeScale)
-        {
-            time = 0f;
-            enabled = false;
-            timeScale = 1f;
-
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-            time = HDRPTimeOfDayAPI.GetCurrentTime();
-            HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out enabled, out timeScale);
-#endif
         }
         /// <summary>
         /// Gets the current hour value in time of day
@@ -172,19 +120,9 @@ namespace Gaia
         /// <returns></returns>
         public static bool GetTimeOfDayEnabled()
         {
-            if (GaiaUtils.GetActivePipeline() != GaiaConstants.EnvironmentRenderer.HighDefinition)
+            if (GaiaUtils.CheckIfSceneProfileExists())
             {
-                if (GaiaUtils.CheckIfSceneProfileExists())
-                {
-                    return GaiaGlobal.Instance.GaiaTimeOfDayValue.m_todEnabled;
-                }
-            }
-            else
-            {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-                HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float value);
-                return autoUpdate;
-#endif
+                return GaiaGlobal.Instance.GaiaTimeOfDayValue.m_todEnabled;
             }
 
             return false;
@@ -200,13 +138,6 @@ namespace Gaia
                 GaiaGlobal.Instance.GaiaTimeOfDayValue.m_todEnabled = timeOfDayEnabled;
                 GaiaGlobal.Instance.UpdateGaiaTimeOfDay(false);
             }
-            else
-            {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-                HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float timeScale);
-                HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(timeOfDayEnabled, timeScale);
-#endif
-            }
         }
         /// <summary>
         /// Gets the time of day scale. How quick Day/Night lasts
@@ -219,15 +150,8 @@ namespace Gaia
             {
                 return GaiaGlobal.Instance.GaiaTimeOfDayValue.m_todDayTimeScale;
             }
-            else
-            {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-                HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float timeScale);
-                return timeScale;
-#else
-                return 0f;
-#endif
-            }
+
+            return 0f;
         }
         /// <summary>
         /// Sets the time scale
@@ -241,25 +165,18 @@ namespace Gaia
                 GaiaGlobal.Instance.GaiaTimeOfDayValue.m_todDayTimeScale = newTimeScale;
                 GaiaGlobal.Instance.UpdateGaiaTimeOfDay(false);
             }
-            else
-            {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
-                HDRPTimeOfDayAPI.GetAutoUpdateMultiplier(out bool autoUpdate, out float timeScale);
-                HDRPTimeOfDayAPI.SetAutoUpdateMultiplier(autoUpdate, newTimeScale);
-#endif
-            }
         }
 #endif
 
-#endregion
-            #region Gaia Weather
+        #endregion
+        #region Gaia Weather
 
-            /// <summary>
-            /// Gets the gaia wind settings
-            /// </summary>
-            /// <param name="windSpeed"></param>
-            /// <param name="windDirection"></param>
-            public static bool GetGaiaWindSettings(out float windSpeed, out float windDirection, out bool overrideWind)
+        /// <summary>
+        /// Gets the gaia wind settings
+        /// </summary>
+        /// <param name="windSpeed"></param>
+        /// <param name="windDirection"></param>
+        public static bool GetGaiaWindSettings(out float windSpeed, out float windDirection, out bool overrideWind)
         {
             windSpeed = 0.35f;
             windDirection = 0f;
@@ -493,7 +410,7 @@ namespace Gaia
         /// Gets the current season settings
         /// </summary>
         /// <returns></returns>
-        public static PWSkySeason GetWeatherSeasonSettings()
+        public static PWSkySeason GetWeaterSeasonSettings()
         {
             if (GaiaWeatherInScene())
             {
@@ -2671,31 +2588,19 @@ namespace Gaia
 
                     if (camera != null)
                     {
-#if UNITY_2022_2_OR_NEWER
-                        aperture = camera.aperture;
-                        focalLength = camera.focalLength;
-                        return true;
-#else
                         HDAdditionalCameraData data = GaiaHDRPRuntimeUtils.GetHDCameraData(camera);
                         aperture = data.physicalParameters.aperture;
                         focalLength = camera.focalLength;
                         return true;
-#endif
                     }
                 }
             }
             else
             {
-#if UNITY_2022_2_OR_NEWER
-                aperture = camera.aperture;
-                focalLength = camera.focalLength;
-                return true;
-#else
                 HDAdditionalCameraData data = GaiaHDRPRuntimeUtils.GetHDCameraData(camera);
                 aperture = data.physicalParameters.aperture;
                 focalLength = camera.focalLength;
                 return true;
-#endif
             }
 
             return false;
@@ -2722,38 +2627,26 @@ namespace Gaia
 
                     if (camera != null)
                     {
-#if UNITY_2022_2_OR_NEWER
-                        camera.aperture = aperture;
-                        camera.focalLength = focalLength;
-                        return true;
-#else
                         HDAdditionalCameraData data = GaiaHDRPRuntimeUtils.GetHDCameraData(camera);
                         data.physicalParameters.aperture = aperture;
                         camera.focalLength = focalLength;
                         return true;
-#endif
                     }
                 }
             }
             else
             {
-#if UNITY_2022_2_OR_NEWER
-                camera.aperture = aperture;
-                camera.focalLength = focalLength;
-                return true;
-#else
                 HDAdditionalCameraData data = GaiaHDRPRuntimeUtils.GetHDCameraData(camera);
                 data.physicalParameters.aperture = aperture;
                 camera.focalLength = focalLength;
                 return true;
-#endif
             }
 
             return false;
         }
 #endif
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Sets Auto Dof enabled or disabled 
@@ -3361,15 +3254,6 @@ namespace Gaia
             dest.allowMSAA = source.allowMSAA;
             dest.allowHDR = source.allowHDR;
             //Physical
-#if UNITY_2022_2_OR_NEWER
-            dest.anamorphism = source.anamorphism;
-            dest.aperture = source.aperture;
-            dest.barrelClipping = source.barrelClipping;
-            dest.bladeCount = source.bladeCount;
-            dest.curvature = source.curvature;
-            dest.iso = source.iso;
-            dest.shutterSpeed = source.shutterSpeed;
-#else
             dataDest.physicalParameters.anamorphism = dataSource.physicalParameters.anamorphism;
             dataDest.physicalParameters.aperture = dataSource.physicalParameters.aperture;
             dataDest.physicalParameters.barrelClipping = dataSource.physicalParameters.barrelClipping;
@@ -3377,7 +3261,6 @@ namespace Gaia
             dataDest.physicalParameters.curvature = dataSource.physicalParameters.curvature;
             dataDest.physicalParameters.iso = dataSource.physicalParameters.iso;
             dataDest.physicalParameters.shutterSpeed = dataSource.physicalParameters.shutterSpeed;
-#endif
             dest.focalLength = source.focalLength;
 #endif
         }
@@ -3471,12 +3354,12 @@ namespace Gaia
         /// <param name="dest"></param>
         public static void CopyCameraSettingsURP(Camera source, Camera dest)
         {
-#if UPPipeline
             if (source == null || dest == null)
             {
                 return;
             }
 
+#if UPPipeline
             UniversalAdditionalCameraData dataSource = GaiaURPRuntimeUtils.GetUPCameraData(source);
             UniversalAdditionalCameraData dataDest = GaiaURPRuntimeUtils.GetUPCameraData(dest);
 

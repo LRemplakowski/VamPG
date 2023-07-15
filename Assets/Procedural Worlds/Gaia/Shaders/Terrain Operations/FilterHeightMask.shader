@@ -23,7 +23,6 @@
 
             #include "UnityCG.cginc"
             #include "TerrainTool.cginc"
-			#include "../Terrain.cginc"
 
 			sampler2D _HeightMapTex;
             sampler2D _InputTex;
@@ -62,8 +61,8 @@
 		
 			float GetFilteredHeight(v2f i)
 			{
-				float height = InternalUnpackHeightmap(tex2D(_HeightMapTex, i.pcUV));
-				float filteredHeight = InternalUnpackHeightmap(tex2D(_HeightMaskTex, smoothstep(_MinHeight, _MaxHeight, height)));
+				float height = UnpackHeightmap(tex2D(_HeightMapTex, i.pcUV));
+				float filteredHeight = UnpackHeightmap(tex2D(_HeightMaskTex, smoothstep(_MinHeight, _MaxHeight, height)));
 				return filteredHeight;
 			}
 		ENDCG
@@ -79,11 +78,11 @@
 
             float4 HeightMaskMultiply(v2f i) : SV_Target
             {
-				float inputTexHeight = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float inputTexHeight = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filteredHeight = GetFilteredHeight(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
 				float result = transformedHeight*inputTexHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
             }
             ENDCG
         }
@@ -98,15 +97,15 @@
 
 			float4 HeightMaskGreaterThan(v2f i) : SV_Target
 			{
-				float inputTexHeight = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float inputTexHeight = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filteredHeight = GetFilteredHeight(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
 				float result = inputTexHeight;
 				if (transformedHeight > inputTexHeight)
 				{
 					result = transformedHeight;
 				}
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -121,15 +120,15 @@
 
 			float4 HeightMaskSmallerThan(v2f i) : SV_Target
 			{
-				float inputTexHeight = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float inputTexHeight = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filteredHeight = GetFilteredHeight(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
 				float result = inputTexHeight;
 				if (transformedHeight < inputTexHeight)
 				{
 					result = transformedHeight;
 				}
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -144,11 +143,11 @@
 
 			float4 HeightMaskAdd(v2f i) : SV_Target
 			{
-				float inputTexHeight = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float inputTexHeight = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filteredHeight = GetFilteredHeight(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
 				float result= inputTexHeight + transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}
@@ -163,11 +162,11 @@
 
 			float4 HeightMaskSubtract(v2f i) : SV_Target
 			{
-				float inputTexHeight = InternalUnpackHeightmap(tex2D(_InputTex, i.pcUV));
+				float inputTexHeight = UnpackHeightmap(tex2D(_InputTex, i.pcUV));
 				float filteredHeight = GetFilteredHeight(i);
-				float transformedHeight = InternalUnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
+				float transformedHeight = UnpackHeightmap(tex2D(_HeightTransformTex, filteredHeight));
 				float result= inputTexHeight - transformedHeight;
-				return InternalPackHeightmap(result);
+				return PackHeightmap(result);
 			}
 			ENDCG
 		}

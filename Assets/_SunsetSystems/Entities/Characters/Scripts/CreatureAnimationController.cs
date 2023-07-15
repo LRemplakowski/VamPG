@@ -91,7 +91,7 @@ namespace SunsetSystems.Animation
             float deltaTime = Time.deltaTime;
             float accelerationNormalized = deltaV / Mathf.Abs(deltaV / deltaTime);
             animator.SetFloat("Speed", agent.velocity.magnitude / agent.speed);
-            //animator.SetFloat("acceleration", accelerationNormalized);
+            animator.SetFloat("acceleration", accelerationNormalized);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)

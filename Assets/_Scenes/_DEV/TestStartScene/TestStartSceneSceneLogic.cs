@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Loading
 {
     internal class TestStartSceneSceneLogic : DefaultSceneLogic
     {
-        public async override Task StartSceneAsync(LevelLoadingData data)
+        public async override Task StartSceneAsync(SceneLoadingData data)
         {
             await base.StartSceneAsync(data);
         }

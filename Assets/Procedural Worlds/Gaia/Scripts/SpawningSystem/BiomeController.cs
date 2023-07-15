@@ -233,7 +233,7 @@ namespace Gaia
 
         private void OnDestroy()
         {
-            m_settings.ClearImageMaskTextures(true);
+            m_settings.ClearImageMaskTextures();
         }
 
         void OnDrawGizmosSelected()
@@ -266,16 +266,13 @@ namespace Gaia
 
         public void LoadSettings(BiomeControllerSettings settingsToLoad)
         {
-            m_settings.ClearImageMaskTextures(true);
-            if (settingsToLoad != null)
-            {
-                //set position according to the stored settings
-                transform.position = new Vector3(settingsToLoad.m_x, settingsToLoad.m_y, settingsToLoad.m_z);
+            m_settings.ClearImageMaskTextures();
+            //set position according to the stored settings
+            transform.position = new Vector3(settingsToLoad.m_x, settingsToLoad.m_y, settingsToLoad.m_z);
 
-                //Set existing settings = null to force a new scriptable object
-                m_settings = null;
-                m_settings = Instantiate(settingsToLoad);
-            }
+            //Set existing settings = null to force a new scriptable object
+            m_settings = null;
+            m_settings = Instantiate(settingsToLoad);
 
             //Try to look up all collision layer masks by their name where possible - layer orders could be different from when the biome controller was saved.
             foreach (ImageMask imageMask in m_settings.m_imageMasks.Where(x => x.m_operation == ImageMaskOperation.CollisionMask))

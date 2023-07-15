@@ -58,7 +58,7 @@ namespace Gaia
             cam.rect = new Rect(0f, 0f, 1f, 1f);
             cam.depth = 0f;
             cam.renderingPath = RenderingPath.Forward; //Forward rendering required for orthographic
-            cam.useOcclusionCulling = false;
+            cam.useOcclusionCulling = true;
 
 #if UPPipeline
             if (m_gaiaSettings != null)

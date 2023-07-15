@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Loading
 {
     public class SceneTransition : InteractableEntity, ITransition
     {
@@ -28,25 +28,21 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private BoundingBox _targetBoundingBox;
         [SerializeField]
-        private LevelLoader _sceneLoader;
+        private SceneLoader _sceneLoader;
         [SerializeField]
         private SceneLoadingUIManager _fadeUI;
         [SerializeField]
         private CameraControlScript _cameraControlScript;
 
-        private Task loadingTask = null;
-
         protected override void Start()
         {
             base.Start();
-            _sceneLoader = FindObjectOfType<LevelLoader>();
+            _sceneLoader = FindObjectOfType<SceneLoader>();
             _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         }
 
         protected override void HandleInteraction()
         {
-            if (loadingTask != null)
-                return;
             Debug.Log("Interacting with area transition!");
             switch (_type)
             {
@@ -62,9 +58,9 @@ namespace SunsetSystems.Persistence
             }
         }
 
-        public void MoveToScene(LevelLoadingData data)
+        public void MoveToScene(SceneLoadingData data)
         {
-            loadingTask = _sceneLoader.LoadGameLevel(data);
+            _ = _sceneLoader.LoadGameScene(data);
         }
 
         public async Task MoveToArea()

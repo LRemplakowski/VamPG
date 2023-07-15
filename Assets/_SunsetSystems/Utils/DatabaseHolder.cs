@@ -6,12 +6,12 @@ namespace SunsetSystems.Utils.Database
 {
     public class DatabaseHolder : MonoBehaviour
     {
-        [SerializeField, SerializeReference]
+        [SerializeField]
         private List<ScriptableObject> _databases;
 
         private void Awake()
         {
-            _databases.ForEach(d => Debug.Log($"Initializing database {d}"));
+            _databases.ForEach(d => Debug.Log($"Database {d.ToString()}"));
         }
     }
 }

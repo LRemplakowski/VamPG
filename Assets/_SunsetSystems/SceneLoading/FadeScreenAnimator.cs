@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Persistence.UI
+namespace SunsetSystems.Loading.UI
 {
     internal class FadeScreenAnimator : ExposableMonobehaviour
     {

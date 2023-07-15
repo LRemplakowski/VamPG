@@ -208,36 +208,21 @@ namespace Gaia
         public static TerrainLayer[] CreateTerrainLayers(string namePrefix, GaiaSplatPrototype[] splats)
         {
             TerrainLayer[] terrainLayers = new TerrainLayer[splats.Length];
-            try
-            {
-#if UNITY_EDITOR
-                AssetDatabase.StartAssetEditing();
-#endif
 
-                for (int i = 0; i < splats.Length; i++)
-                {
-                    terrainLayers[i] = splats[i].Convert();
-                }
-
-                //completely remove all old splat prototypes first to prevent build-up of abandoned files
-                RemoveTerrainLayerAssetFiles(namePrefix);
-
-                //Permanently save the new layers as asset files & get a reference, else they will not work properly in the terrain
-                for (int i = 0; i < terrainLayers.Length; i++)
-                {
-                    terrainLayers[i] = SaveTerrainLayerAsAsset(namePrefix, i.ToString(), terrainLayers[i]);
-                }
-            }
-            catch (Exception ex)
+            for (int i = 0; i < splats.Length; i++)
             {
-                Debug.LogError($"Exception while creating Terrain Layers, Message: {ex.Message}, Stack Trace: {ex.StackTrace}");
+                terrainLayers[i] = splats[i].Convert();
             }
-            finally
+
+            //completely remove all old splat prototypes first to prevent build-up of abandoned files
+            RemoveTerrainLayerAssetFiles(namePrefix);
+
+            //Permanently save the new layers as asset files & get a reference, else they will not work properly in the terrain
+            for (int i = 0; i < terrainLayers.Length; i++)
             {
-#if UNITY_EDITOR
-                AssetDatabase.StopAssetEditing();
-#endif
+                terrainLayers[i] = SaveTerrainLayerAsAsset(namePrefix, i.ToString(), terrainLayers[i]);
             }
+
             return terrainLayers;
         }
 
@@ -290,7 +275,7 @@ namespace Gaia
             //AssetDatabase.ImportAsset(path);
             //AssetDatabase.LoadAssetAtPath<TerrainLayer>(path);
 
-            return terrainLayer;
+            return terrainLayer; 
 
 #else
             Debug.LogError("Runtime Gaia operation is not supported");

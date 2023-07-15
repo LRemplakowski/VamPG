@@ -13,7 +13,7 @@ namespace ProceduralWorlds.HDRPTOD
         public float m_weatherVolumeMultiplier = 0.25f;
         public Vector4 m_timeOfDayIntervals = new Vector4(0f, 0.25f, 0.5f, 0.75f);
         //Private
-#if HDPipeline && UNITY_2021_2_OR_NEWER
+#if HDPipeline
         private bool m_validated = false;
 
         /// <summary>

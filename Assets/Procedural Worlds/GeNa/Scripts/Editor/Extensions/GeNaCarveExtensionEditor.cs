@@ -1,26 +1,15 @@
 ﻿using UnityEditor;
 using UnityEngine;
-
 namespace GeNa.Core
 {
     [CustomEditor(typeof(GeNaCarveExtension))]
     public class GeNaCarveExtensionEditor : GeNaSplineExtensionEditor
     {
-        private GeNaCarveExtension m_extension;
-        private bool m_isAsset;
-
         protected void OnEnable()
         {
             if (m_editorUtils == null)
                 m_editorUtils = PWApp.GetEditorUtils(this, "GeNaSplineExtensionEditor");
-
-            m_extension = target as GeNaCarveExtension;
-            if (m_extension != null)
-            {
-                m_isAsset = AssetDatabase.Contains(m_extension);
-            }
         }
-
         public override void OnInspectorGUI()
         {
             Initialize();
@@ -34,34 +23,20 @@ namespace GeNa.Core
                 GUI.backgroundColor = guiColor;
                 GUI.enabled = false;
             }
-
-            if (m_extension == null)
-                m_extension = target as GeNaCarveExtension;
-            EditorGUI.BeginChangeCheck();
+            GeNaCarveExtension carveExtension = target as GeNaCarveExtension;
+            carveExtension.Width = m_editorUtils.FloatField("Width", carveExtension.Width, HelpEnabled);
+            if (carveExtension.Width < 0.05f)
             {
-                m_extension.Width = m_editorUtils.FloatField("Width", m_extension.Width, HelpEnabled);
-                if (m_extension.Width < 0.05f)
-                {
-                    m_extension.Width = 0.05f;
-                }
-
-                m_extension.HeightOffset = m_editorUtils.FloatField("Height Offset", m_extension.HeightOffset, HelpEnabled);
-                m_extension.Shoulder = m_editorUtils.FloatField("Shoulder", m_extension.Shoulder, HelpEnabled);
-                m_extension.ShoulderFalloff = m_editorUtils.CurveField("Shoulder Falloff", m_extension.ShoulderFalloff, HelpEnabled);
-                m_extension.RoadLike = m_editorUtils.Toggle("Road Like", m_extension.RoadLike, HelpEnabled);
-                m_editorUtils.Fractal(m_extension.MaskFractal, HelpEnabled);
-                m_extension.ShowPreview = m_editorUtils.Toggle("Preview Btn", m_extension.ShowPreview, HelpEnabled);
-                if (!m_isAsset)
-                {
-                    if (m_editorUtils.Button("Carve Btn", HelpEnabled))
-                        m_extension.Carve();
-                }
+                carveExtension.Width = 0.05f;
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                EditorUtility.SetDirty(m_extension);
-                AssetDatabase.SaveAssets();
-            }
+            carveExtension.HeightOffset = m_editorUtils.FloatField("Height Offset", carveExtension.HeightOffset, HelpEnabled);
+            carveExtension.Shoulder = m_editorUtils.FloatField("Shoulder", carveExtension.Shoulder, HelpEnabled);
+            carveExtension.ShoulderFalloff = m_editorUtils.CurveField("Shoulder Falloff", carveExtension.ShoulderFalloff, HelpEnabled);
+            carveExtension.RoadLike = m_editorUtils.Toggle("Road Like", carveExtension.RoadLike, HelpEnabled);
+            m_editorUtils.Fractal(carveExtension.MaskFractal, HelpEnabled);
+            carveExtension.ShowPreview = m_editorUtils.Toggle("Preview Btn", carveExtension.ShowPreview, HelpEnabled);
+            if (m_editorUtils.Button("Carve Btn", HelpEnabled))
+                carveExtension.Carve();
         }
     }
 }

@@ -1,32 +1,33 @@
+using Entities.Characters;
 using UnityEngine;
+using SunsetSystems.Resources;
 using System.Threading.Tasks;
+using SunsetSystems.Loading;
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Data;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Loading
 {
     [RequireComponent(typeof(UniqueId))]
-    public abstract class AbstractSceneLogic : MonoBehaviour, ISaveable
+    public abstract class AbstractSceneLogic : MonoBehaviour, ISaveRuntimeData
     {
         [SerializeField]
         protected UniqueId unique;
 
-        public string DataKey => unique.Id;
-
         protected virtual void OnValidate()
         {
-            unique ??= GetComponent<UniqueId>();
+            unique = GetComponent<UniqueId>();
         }
 
         protected virtual void Awake()
         {
-            unique ??= GetComponent<UniqueId>();
+            unique = GetComponent<UniqueId>();
         }
 
-        public abstract Task StartSceneAsync(LevelLoadingData data);
+        public abstract Task StartSceneAsync(SceneLoadingData data);
 
-        public abstract object GetSaveData();
+        public abstract void SaveRuntimeData();
 
-        public abstract void InjectSaveData(object data);
+        public abstract void LoadRuntimeData();
     }
 }

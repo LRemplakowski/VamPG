@@ -26,16 +26,7 @@ namespace Gaia
         public DetailRenderMode m_renderMode = DetailRenderMode.Grass;
         [Tooltip("GPU Instancing.")]
         public bool m_useInstancing = false;
-
-        public float m_alignToGround = 0.0f;
-        public float m_density = 1.0f;
-        public float m_holeEdgePadding = 0.0f;
-        public int m_noiseSeed = 0;
-        public float m_positionJitter = 0.0f;
-        public float m_targetCoverage = 1.0f;
-        public bool m_useDensityScaling = true;
-
-[Tooltip("Detail prototype - used by vertex lit render mode.")]
+        [Tooltip("Detail prototype - used by vertex lit render mode.")]
         public GameObject m_detailProtoype;
         [HideInInspector]
         public string m_detailPrototypeFileName; // Used for re-association

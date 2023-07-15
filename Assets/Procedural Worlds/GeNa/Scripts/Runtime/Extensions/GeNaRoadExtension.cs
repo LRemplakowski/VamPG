@@ -13,8 +13,6 @@ namespace GeNa.Core
     {
         [SerializeField] protected GeNaRoadProfile m_roadProfile;
         [SerializeField] protected float m_width = 6.2f;
-        [SerializeField] protected bool m_separateYScale = false;
-        [SerializeField] protected float m_height = 1.0f; // <= 1.0 uses width
         [SerializeField] protected float m_intersectionSize = 1.0f;
         [SerializeField] protected float m_groundAttractDistance = 0.0f;
         [SerializeField] protected bool m_conformToGround = false;
@@ -28,17 +26,11 @@ namespace GeNa.Core
         [SerializeField] protected bool m_splitAtTerrains = true;
         [SerializeField] protected bool m_postProcess = false;
         [SerializeField] protected List<GameObject> m_bakedMeshes = new List<GameObject>();
-        [SerializeField] protected RoadCrossSectionOverride m_crossSectionOverrideComponent = null;
         [NonSerialized] protected GameObject m_roadMeshParent = null;
         public GeNaRoadProfile RoadProfile
         {
             get => m_roadProfile;
             set => m_roadProfile = value;
-        }
-        public RoadCrossSectionOverride CrossSectionOverride
-        {
-            get => m_crossSectionOverrideComponent;
-            set => m_crossSectionOverrideComponent = value;
         }
         public float Width
         {
@@ -49,25 +41,6 @@ namespace GeNa.Core
                 {
                     m_width = Mathf.Max(0.5f, value);
                     SyncCarveParameters();
-                }
-            }
-        }
-        public bool SeparateYScale
-        {
-            get => m_separateYScale;
-            set
-            {
-                m_separateYScale = value;
-            }
-        }
-        public float Height
-        {
-            get => m_height;
-            set
-            {
-                if (!Mathf.Approximately(m_height, value))
-                {
-                    m_height = Mathf.Min(Mathf.Max(1.0f, value), 20.0f);
                 }
             }
         }
@@ -165,7 +138,7 @@ namespace GeNa.Core
 
             GameObject roadMeshes = GeNaEvents.BakeSpline(m_roadMeshParent, spline);
 
-            if (m_postProcess && m_splitAtTerrains && roadMeshes != null)
+            if (m_postProcess && m_splitAtTerrains)
             {
                 List<Transform> meshTransforms = GeNaRoadsMesh.PostProcess(roadMeshes, BakedGroupName());
                 Dictionary<Transform, List<Transform>> meshParentDict = new Dictionary<Transform, List<Transform>>();
@@ -299,8 +272,10 @@ namespace GeNa.Core
         }
         public void DeleteBakedRoad(bool reenableSpline = false)
         {
+            string groupName = BakedGroupName();
             if (!HasBakedRoads())
                 return;
+
             int count = 0;
             foreach (GameObject go in m_bakedMeshes)
             {
@@ -335,6 +310,7 @@ namespace GeNa.Core
         {
             if (Spline == null)
                 return;
+            Dictionary<int, List<GeNaCurve>> trees = Spline.GetTrees();
             foreach (GeNaNode node in Spline.Nodes)
             {
                 List<GeNaCurve> connected = Spline.GetConnectedCurves(node);
@@ -361,45 +337,14 @@ namespace GeNa.Core
         {
             if (m_roadMeshParent == null)
             {
-                m_roadMeshParent = new GameObject("Road Meshes")
-                {
-                    transform =
-                    {
-                        position = Vector3.zero,
-                        parent = spline.gameObject.transform
-                    }
-                };
+                m_roadMeshParent = new GameObject("Road Meshes");
+                m_roadMeshParent.transform.position = Vector3.zero;
+                m_roadMeshParent.transform.parent = spline.gameObject.transform;
             }
             if (RoadProfile != null)
             {
-                GeNaRoadsMesh geNaRoadsMesh = new GeNaRoadsMesh(RoadProfile.ApplyRoadProfile(), RoadProfile.ApplyIntersectionProfile(), m_roadMeshParent, m_tag, m_layer, m_shadowsCast, m_shadowsReceive)
-                {
-                    // Check for a user override of the Road Cross Section.
-                    RoadCrossSection = null // default
-                };
-
-                RoadCrossSectionOverride xOverride = m_crossSectionOverrideComponent;
-                if (xOverride != null && xOverride.enabled)
-                {
-                    RoadCrossSection crossSection = xOverride.GetRoadCrossSection();
-                    if (crossSection != null)
-                    {
-                        if (crossSection.Points.Length > 1 && (crossSection.Points.Length & 1) == 0 && crossSection.Normals.Length == crossSection.Points.Length)
-                        {
-                            geNaRoadsMesh.RoadCrossSection = crossSection;
-                        }
-                        else
-                        {
-                            Debug.LogError($"The provided Road Cross Section Override on {Spline.Name} does not meet specifications.  The cross section must have an even number of points, and the same number of normals.");
-                        }
-                    }
-                }
-
-                // Generate the Road mesh(es).
-                float heightScale = Height;
-                if (SeparateYScale == false)
-                    heightScale = 1.0f;
-                geNaRoadsMesh.Process(spline, Width, m_intersectionSize, m_conformToGround, m_groundAttractDistance, m_addRoadCollider, m_raycastTerrainOnly, m_useSlopedCrossection, heightScale);
+                GeNaRoadsMesh geNaRoadsMesh = new GeNaRoadsMesh(RoadProfile.ApplyRoadProfile(), RoadProfile.ApplyIntersectionProfile(), m_roadMeshParent, m_tag, m_layer, m_shadowsCast, m_shadowsReceive);
+                geNaRoadsMesh.Process(spline, Width, m_intersectionSize, m_conformToGround, m_groundAttractDistance, m_addRoadCollider, m_raycastTerrainOnly, m_useSlopedCrossection);
             }
         }
         protected override void OnDrawGizmosSelected()

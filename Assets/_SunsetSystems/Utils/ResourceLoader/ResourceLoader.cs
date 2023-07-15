@@ -7,19 +7,18 @@ namespace SunsetSystems.Resources
     public static class ResourceLoader
     {
         // Main character assets
-        private const string CHARACTER_MALE_AGENT_PATH = "CharacterPresets/_MaleAgent";
-        private const string CHARACTER_MALE_CONVICT_PATH = "CharacterPresets/_MaleConvict";
-        private const string CHARACTER_MALE_JOURNALIST_PATH = "CharacterPresets/_MaleJournalist";
-        private const string CHARACTER_FEMALE_AGENT_PATH = "CharacterPresets/_FemaleAgent";
-        private const string CHARACTER_FEMALE_CONVICT_PATH = "CharacterPresets/_FemaleConvict";
-        private const string CHARACTER_FEMALE_JOURNALIST_PATH = "CharacterPresets/_FemaleJournalist";
+        private const string CHARACTER_MALE_AGENT_PATH = "CharacterPresets/MaleAgent";
+        private const string CHARACTER_MALE_CONVICT_PATH = "CharacterPresets/MaleConvict";
+        private const string CHARACTER_MALE_JOURNALIST_PATH = "CharacterPresets/MaleJournalist";
+        private const string CHARACTER_FEMALE_AGENT_PATH = "CharacterPresets/FemaleAgent";
+        private const string CHARACTER_FEMALE_CONVICT_PATH = "CharacterPresets/FemaleConvict";
+        private const string CHARACTER_FEMALE_JOURNALIST_PATH = "CharacterPresets/FemaleJournalist";
         // Character debug fallback
         private const string CHARACTER_DEBUG = "DEBUG/default";
+        private const string EMPTY_CREATURE_PREFAB = "DEBUG/CreatureData";
         private const string FALLBACK_ICON_PATH = "DEBUG/missing";
 
         private const string ANIMATOR_CONTROLLERS_PATH = "Animation/AnimationControllers/";
-
-        private const string UMA_PRESETS_PATH = "UMAPresets/";
 
         // Combat
         private const string GRID_HELPER_AGENT_PATH = "Combat/GridNavAgent";
@@ -114,11 +113,6 @@ namespace SunsetSystems.Resources
         public static AudioClip GetSong(string songName)
         {
             return GetAsset<AudioClip>($"{AUDIO_SOUNDTRACK}{songName}");
-        }
-
-        public static TextAsset GetUmaPreset(string presetName)
-        {
-            return GetAsset<TextAsset>($"{UMA_PRESETS_PATH}{presetName}");
         }
     }
 }

@@ -2,7 +2,6 @@
 tags:
 ---
 [nomarkup][The door knob doesn't budge. It's locked. Of course from the inside. The architect must have been a sadist.][/nomarkup] #line:05c4aa7 
--> Continue
 <<if ($bathroomDoorInteractedWith == true)>>
 <<jump bathroomDoorDialogue>>
 <<endif>>
@@ -16,25 +15,20 @@ position: 248,2
 ---
 -> {$pcName}: \[Try to force the door open.\] #line:0d96086 
     [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #line:0877209 
-    -> Continue
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Knock\] #line:031893d 
     <<PlaySFX "door_knock_light">> 
     [nomarkup][No answer.][/nomarkup] #line:0cabaa6 
     {$innerVoice}: Why did I do that? #line:03a66e7 
-    -> Continue
     <<jump bathroomDoorDialogue>>
 -> {$pcName}: \[Walk away.\] #line:069c498 
 -> {$pcName}: \[Strenght + Melee\] \[Crowbar the door.\] <<if $hasCrowbar == true>> #line:03c586a 
     <<if Roll("strenght","melee") >= 1>>
     [nomarkup][You jimmy the crowbar just right. With a little elbow grease you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0ab6340 
-    -> Continue
     <<OpenBathroomDoors>>
     <<else>>
     [nomarkup][Perhaps you were a little too eager. The door SHATTERS! Splinters jam into your flesh.][1 superficial damage.][/nomarkup] #failure #line:0cccabb 
-    -> Continue
     {$innerVoice}: Ow! What the fuck!? #line:0c15cec 
-    -> Continue
     <<DestroyBathroomDoors>>
     <<endif>>
     <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>

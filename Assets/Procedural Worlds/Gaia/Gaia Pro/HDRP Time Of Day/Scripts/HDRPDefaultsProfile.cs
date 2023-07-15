@@ -4,7 +4,7 @@ namespace ProceduralWorlds.HDRPTOD
 {
     public class HDRPDefaultsProfile : ScriptableObject
     {
-#if HDPipeline && UNITY_2021_2_OR_NEWER
+#if HDPipeline
         public HDRPTimeOfDayProfile m_timeOfDayProfile;
         public HDRPTimeOfDayPostFXProfile m_postProcessingProfile;
         public HDRPTimeOfDayAmbientProfile m_ambientAudioProfile;

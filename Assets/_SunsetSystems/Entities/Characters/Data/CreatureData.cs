@@ -1,30 +1,24 @@
-﻿using SunsetSystems.Entities.Data;
-using SunsetSystems.Resources;
+﻿using Entities.Characters.Data;
+using SunsetSystems.Entities.Data;
 using System;
+using UMA.CharacterSystem;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public class CreatureData
+    public struct CreatureData
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        [ES3Serializable]
-        private string _id;
-        public string ID => _id;
-        public string PortraitFileName;
-        public Sprite Portrait => ResourceLoader.GetPortrait(PortraitFileName);
+        public readonly string ID;
+        public Sprite Portrait;
         public Faction Faction;
         public BodyType BodyType;
         public CreatureType CreatureType;
-        public string UmaPresetFileName;
-        public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
-        public string animatorControllerResourceName;
-        public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
-        [ES3Serializable]
+        public TextAsset UmaPreset;
+        public RuntimeAnimatorController AnimatorControllerAsset;
         public StatsData Stats;
-        [ES3Serializable]
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
         public float Money;
@@ -33,22 +27,28 @@ namespace SunsetSystems.Entities.Characters
         {
             FirstName = config.Name;
             LastName = config.LastName;
-            _id = config.ReadableID;
-            PortraitFileName = config.PortraitFileName;
+            ID = config.ReadableID;
+            Portrait = config.Portrait;
             Faction = config.CreatureFaction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
-            UmaPresetFileName = config.UmaPresetFileName;
-            animatorControllerResourceName = config.AnimatorController.name;
+            UmaPreset = config.UmaPreset;
+            AnimatorControllerAsset = config.AnimatorController;
             Stats = new(config.StatsAsset);
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;
             Money = config.EquipmentConfig.Money;
         }
 
-        public CreatureData()
-        {
-
-        }
+        //public CreatureUIData GetCreatureUIData()
+        //{
+        //    Tracker tracker = Stats.Trackers.GetTracker(TrackerType.Health)
+        //    HealthData healthData = new HealthData(. );
+        //    CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
+        //        Data.Portrait,
+        //        healthData,
+        //        0);
+        //    return builder.Create();
+        //}
     }
 }

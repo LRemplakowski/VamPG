@@ -282,20 +282,14 @@ namespace ProceduralWorlds.HDRPTOD
             {
                 //Volumetric
                 components.m_volumetricClouds.cloudPreset.value = m_cloudPresets;
-#if UNITY_2022_2_OR_NEWER
-                components.m_volumetricClouds.densityCurve.value = m_volumetricDensityCurve;
-                components.m_volumetricClouds.bottomAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_volumetricLowestCloudAltitude.Evaluate(time), duration);
-                components.m_volumetricClouds.altitudeRange.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_volumetricCloudThickness.Evaluate(time), duration);
-#else
-                components.m_volumetricClouds.customDensityCurve.value = m_volumetricDensityCurve;
-                components.m_volumetricClouds.lowestCloudAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_volumetricLowestCloudAltitude.Evaluate(time), duration);
-                components.m_volumetricClouds.cloudThickness.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_volumetricCloudThickness.Evaluate(time), duration);
-#endif
                 components.m_volumetricClouds.densityMultiplier.value = LerpFloat(m_startingData.m_volumetricDensityMultiplier.Evaluate(m_lastTimeOfDayValue), m_volumetricDensityMultiplier.Evaluate(time), duration);
+                components.m_volumetricClouds.customDensityCurve.value = m_volumetricDensityCurve;
                 components.m_volumetricClouds.shapeFactor.value = LerpFloat(m_startingData.m_volumetricShapeFactor.Evaluate(m_lastTimeOfDayValue), m_volumetricShapeFactor.Evaluate(time), duration);
                 components.m_volumetricClouds.shapeScale.value = LerpFloat(m_startingData.m_volumetricShapeScale.Evaluate(m_lastTimeOfDayValue), m_volumetricShapeScale.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionFactor.value = LerpFloat(m_startingData.m_volumetricErosionFactor.Evaluate(m_lastTimeOfDayValue), m_volumetricErosionFactor.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionScale.value = LerpFloat(m_startingData.m_volumetricErosionScale.Evaluate(m_lastTimeOfDayValue), m_volumetricErosionScale.Evaluate(time), duration);
+                components.m_volumetricClouds.lowestCloudAltitude.value = LerpFloat(m_startingData.m_volumetricLowestCloudAltitude.Evaluate(m_lastTimeOfDayValue), m_volumetricLowestCloudAltitude.Evaluate(time), duration);
+                components.m_volumetricClouds.cloudThickness.value = LerpFloat(m_startingData.m_volumetricCloudThickness.Evaluate(m_lastTimeOfDayValue), m_volumetricCloudThickness.Evaluate(time), duration);
                 components.m_volumetricClouds.ambientLightProbeDimmer.value = LerpFloat(m_startingData.m_volumetricAmbientLightProbeDimmer.Evaluate(m_lastTimeOfDayValue), m_volumetricAmbientLightProbeDimmer.Evaluate(time), duration);
                 components.m_volumetricClouds.sunLightDimmer.value = LerpFloat(m_startingData.m_volumetricSunLightDimmer.Evaluate(m_lastTimeOfDayValue), m_volumetricSunLightDimmer.Evaluate(time), duration);
                 components.m_volumetricClouds.erosionOcclusion.value = LerpFloat(m_startingData.m_volumetricErosionOcclusion.Evaluate(m_lastTimeOfDayValue), m_volumetricErosionOcclusion.Evaluate(time), duration);
@@ -1120,29 +1114,21 @@ namespace ProceduralWorlds.HDRPTOD
         }
         public float ApplyCloudSettings(HDRPTimeOfDayComponents components, float time)
         {
-#region Volumetric
+            #region Volumetric
 
             components.m_volumetricClouds.cloudPreset.value = m_cloudPresets;
             components.m_volumetricClouds.localClouds.value = m_useLocalClouds;
             components.m_volumetricClouds.densityMultiplier.value = m_volumetricDensityMultiplier.Evaluate(time);
+            components.m_volumetricClouds.customDensityCurve.value = m_volumetricDensityCurve;
             components.m_volumetricClouds.shapeFactor.value = m_volumetricShapeFactor.Evaluate(time);
             components.m_volumetricClouds.shapeScale.value = m_volumetricShapeScale.Evaluate(time);
             components.m_volumetricClouds.erosionFactor.value = m_volumetricErosionFactor.Evaluate(time);
             components.m_volumetricClouds.erosionScale.value = m_volumetricErosionScale.Evaluate(time);
             components.m_volumetricClouds.erosionNoiseType.value = m_erosionNoiseType;
-#if UNITY_2022_2_OR_NEWER
-            components.m_volumetricClouds.densityCurve.value = m_volumetricDensityCurve;
-            components.m_volumetricClouds.erosionCurve.value = m_volumetricErosionCurve;
-            components.m_volumetricClouds.ambientOcclusionCurve.value = m_volumetricAmbientOcclusionCurve;
-            components.m_volumetricClouds.bottomAltitude.value = m_volumetricLowestCloudAltitude.Evaluate(time);
-            components.m_volumetricClouds.altitudeRange.value = m_volumetricCloudThickness.Evaluate(time);
-#else
-            components.m_volumetricClouds.customDensityCurve.value = m_volumetricDensityCurve;
             components.m_volumetricClouds.customErosionCurve.value = m_volumetricErosionCurve;
             components.m_volumetricClouds.customAmbientOcclusionCurve.value = m_volumetricAmbientOcclusionCurve;
             components.m_volumetricClouds.lowestCloudAltitude.value = m_volumetricLowestCloudAltitude.Evaluate(time);
             components.m_volumetricClouds.cloudThickness.value = m_volumetricCloudThickness.Evaluate(time);
-#endif
             //Lighting
             components.m_volumetricClouds.ambientLightProbeDimmer.value = m_volumetricAmbientLightProbeDimmer.Evaluate(time);
             components.m_volumetricClouds.sunLightDimmer.value = m_volumetricSunLightDimmer.Evaluate(time);
@@ -1158,8 +1144,8 @@ namespace ProceduralWorlds.HDRPTOD
                 components.m_volumetricClouds.shadowOpacity.value = m_volumetricCloudShadowOpacity.Evaluate(time);
             }
 
-#endregion
-#region Procedural
+            #endregion
+            #region Procedural
 
             components.m_cloudLayer.layers.value = (CloudMapMode)m_cloudLayers;
             switch (m_cloudResolution)
@@ -1281,7 +1267,7 @@ namespace ProceduralWorlds.HDRPTOD
 
             return components.m_cloudLayer.opacity.value;
 
-#endregion
+            #endregion
         }
 
         public bool ValidateSunLensFlare()

@@ -28,7 +28,7 @@ namespace SunsetSystems.Inventory
 
         public void AddItems(List<InventoryEntry> itemEntries)
         {
-            itemEntries?.ForEach(entry => AddItem(entry));
+            itemEntries.ForEach(entry => AddItem(entry));
         }
 
         public void AddItem(InventoryEntry itemEntry)
@@ -39,7 +39,7 @@ namespace SunsetSystems.Inventory
             {
                 if (DoesInventoryContainItem(itemEntry._item))
                 {
-                    _contents.Find(existing => existing._item.DatabaseID.Equals(itemEntry._item.DatabaseID))._stackSize += itemEntry._stackSize;
+                    _contents.Find(existing => existing._item.ID.Equals(itemEntry._item.ID))._stackSize += itemEntry._stackSize;
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace SunsetSystems.Inventory
 
         private bool DoesInventoryContainItem(BaseItem item)
         {
-            return _contents.Any(entry => entry._item.DatabaseID.Equals(item.DatabaseID));
+            return _contents.Any(entry => entry._item.ID.Equals(item.ID));
         }
 
         public bool TryRemoveItems(List<InventoryEntry> itemEntries)
@@ -62,7 +62,7 @@ namespace SunsetSystems.Inventory
         {
             if (DoesInventoryContainItem(entry._item))
             {
-                InventoryEntry existing = _contents.Find(existingEntry => existingEntry._item.DatabaseID.Equals(entry._item.DatabaseID));
+                InventoryEntry existing = _contents.Find(existingEntry => existingEntry._item.ID.Equals(entry._item.ID));
                 if (existing._stackSize >= entry._stackSize)
                 {
                     existing._stackSize -= entry._stackSize;

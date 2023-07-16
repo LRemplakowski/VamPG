@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Dropdown))]
-public class DevCurrentActiveActorChanger : ExposableMonobehaviour
+public class DevCurrentActiveActorChanger : MonoBehaviour
 {
     #region Enable&Disable
     private void OnEnable()

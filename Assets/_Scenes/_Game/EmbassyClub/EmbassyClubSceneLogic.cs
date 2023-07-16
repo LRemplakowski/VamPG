@@ -5,6 +5,7 @@ using SunsetSystems.Party;
 using SunsetSystems.Persistence;
 using System.Threading.Tasks;
 using UnityEngine;
+using Yarn.Unity;
 
 public class EmbassyClubSceneLogic : DefaultSceneLogic
 {
@@ -39,6 +40,8 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
     public static class EmbassyClubDialogueCommands
     {
         public static EmbassyClubSceneLogic sceneLogic;
+
+        [YarnCommand("RecruitAnastasia")]
         public static void RecruitAnastasia()
         {
             _ = sceneLogic.DoRecruitAnastasia();

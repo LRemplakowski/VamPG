@@ -15,11 +15,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Yarn.Unity;
 
 namespace SunsetSystems.Persistence
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {
+        [SerializeField, ES3NonSerializable]
+        private YarnProject _sceneDialogues;
         [SerializeField, ES3NonSerializable]
         private string _wakeUpStartNode;
         [SerializeField, ES3NonSerializable]
@@ -99,7 +102,7 @@ namespace SunsetSystems.Persistence
             await new WaitUntil(() => PartyManager.MainCharacter != null);
             PartyManager.MainCharacter?.gameObject.SetActive(false);
             await new WaitForSeconds(2);
-            //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+            DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>
             {
                 await new WaitForUpdate();
@@ -131,7 +134,7 @@ namespace SunsetSystems.Persistence
             _ = _landlord.FaceTarget(_landlordSpawnWaypoint.FaceDirection);
             _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
-            //DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
+            DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -247,17 +250,20 @@ namespace SunsetSystems.Persistence
         {
             public static HavenSceneLogic HavenSceneLogic;
 
+            [YarnCommand("GetUpFromBedDesiree")]
             public async static void GetUpFromBedDesiree()
             {
                 await HavenSceneLogic.MovePCToPositionAfterDialogue();
             }
 
+            [YarnCommand("EnableInteractionsAfterPhoneCall")]
             public static void EnableInteractionsAfterPhoneCall()
             {
                 HavenSceneLogic._bathroomDoorsDialogue.Interactable = true;
                 HavenSceneLogic._interactablesToEnableAfterPhoneCall.ForEach(interactable => interactable.Interactable = true);
             }
 
+            [YarnCommand("OpenBathroomDoors")]
             public static void OpenBathroomDoors()
             {
                 HavenSceneLogic._bathroomDoorsDialogue.Interactable = false;
@@ -266,53 +272,63 @@ namespace SunsetSystems.Persistence
                 HavenSceneLogic._bathroomDoors.Interactable = false;
             }
 
+            [YarnCommand("DestroyBathroomDoors")]
             public static void DestroyBathroomDoors()
             {
                 HavenSceneLogic._bathroomDoors.gameObject.SetActive(false);
             }
 
+            [YarnCommand("HandleGunTaken")]
             public static void HandleGunTaken()
             {
                 HavenSceneLogic._handgun.gameObject.SetActive(false);
                 InventoryManager.PlayerInventory.AddItem(new(HavenSceneLogic._handgunItem));
             }
 
+            [YarnCommand("HandleCrowbarTaken")]
             public static void HandleCrowbarTaken()
             {
                 HavenSceneLogic._crowbar.SetActive(false);
             }
 
+            [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
             public static void SetPhoneDialogueToLandlordDialogue()
             {
                 HavenSceneLogic._phone.EntryNode = HavenSceneLogic.landlordDialogueEntryNode;
                 HavenSceneLogic._phone.ResetInteraction();
             }
 
+            [YarnCommand("EnableApartmentDoorLandlordDialogue")]
             public static void EnableApartmentDoorLandlordDialogue()
             {
                 HavenSceneLogic._apartmentDoorLandlordInteraction.Interactable = true;
             }
 
+            [YarnCommand("MoveLandlordAndPCToSinkPositions")]
             public async static void MoveLandlordAndPCToSinkPositions()
             {
                 await HavenSceneLogic.MoveToSink();
             }
 
+            [YarnCommand("KillKevin")]
             public static void KillKevin()
             {
                 HavenSceneLogic.KillTheLandlord();
             }
 
+            [YarnCommand("AddBobbyPinToInventory")] 
             public static void AddBobbyPinToInventory()
             {
                 Debug.LogException(new NotImplementedException());
             }
 
+            [YarnCommand("DisableInteractionsBeforeDominic")]
             public static void DisableInteractionsBeforeDominic()
             {
                 HavenSceneLogic.DisableInteractionsBeforeDominic();
             }
 
+            [YarnCommand("HandleAltercationWithDominic")]
             public static void HandleAltercationWithDominic()
             {
                 HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();

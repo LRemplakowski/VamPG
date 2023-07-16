@@ -9,7 +9,7 @@ using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using SunsetSystems.Resources;
 
-public class CombatBehaviour : ExposableMonobehaviour, IContextProvider
+public class CombatBehaviour : MonoBehaviour, IContextProvider
 {
     private CreatureContext _context;
     private CreatureContext Context

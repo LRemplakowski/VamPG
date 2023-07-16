@@ -1,6 +1,7 @@
 using Apex;
 using System.Collections.Generic;
 using UnityEngine;
+using Yarn.Unity;
 using SunsetSystems.Persistence;
 using System;
 using SunsetSystems.Data;
@@ -9,7 +10,7 @@ using CleverCrow.Fluid.UniqueIds;
 namespace SunsetSystems.Dialogue
 {
     [RequireComponent(typeof(UniqueId))]
-    public class PersistentVariableStorage : MonoBehaviour, ISaveable, IResetable
+    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
         private StringFloatDictionary _floats = new();
@@ -57,7 +58,7 @@ namespace SunsetSystems.Dialogue
             }
         }
 
-        public void Clear()
+        public override void Clear()
         {
             _floats.Clear();
             _strings.Clear();
@@ -65,12 +66,12 @@ namespace SunsetSystems.Dialogue
             _variables.Clear();
         }
 
-        public bool Contains(string variableName)
+        public override bool Contains(string variableName)
         {
             return _variables.ContainsKey(variableName);
         }
 
-        public (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>) GetAllVariables()
+        public override (Dictionary<string, float>, Dictionary<string, string>, Dictionary<string, bool>) GetAllVariables()
         {
             return (_floats, _strings, _bools);
         }
@@ -86,7 +87,7 @@ namespace SunsetSystems.Dialogue
             return new DialogueSaveData(_floats, _strings, _bools);
         }
 
-        public void SetAllVariables(Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools, bool clear = true)
+        public override void SetAllVariables(Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools, bool clear = true)
         {
             if (clear)
             {
@@ -100,25 +101,25 @@ namespace SunsetSystems.Dialogue
             _bools.Apply(kv => _variables.Add(kv.Key, kv.Value));
         }
 
-        public void SetValue(string variableName, string stringValue)
+        public override void SetValue(string variableName, string stringValue)
         {
             _strings[variableName] = stringValue;
             _variables[variableName] = stringValue;
         }
 
-        public void SetValue(string variableName, float floatValue)
+        public override void SetValue(string variableName, float floatValue)
         {
             _floats[variableName] = floatValue;
             _variables[variableName] = floatValue;
         }
 
-        public void SetValue(string variableName, bool boolValue)
+        public override void SetValue(string variableName, bool boolValue)
         {
             _bools[variableName] = boolValue;
             _variables[variableName] = boolValue;
         }
 
-        public bool TryGetValue<T>(string variableName, out T result)
+        public override bool TryGetValue<T>(string variableName, out T result)
         {
             result = default;
             if (_variables.TryGetValue(variableName, out object value))

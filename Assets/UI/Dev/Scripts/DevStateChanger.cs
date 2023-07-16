@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace SunsetSystems.Game
 {
     [RequireComponent(typeof(Dropdown))]
-    public class DevStateChanger : ExposableMonobehaviour
+    public class DevStateChanger : MonoBehaviour
     {
         private Dropdown dropdown;
 

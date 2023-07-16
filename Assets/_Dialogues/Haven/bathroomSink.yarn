@@ -16,25 +16,25 @@ title: bathroomMirror
 <<else>>
 [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup] #line:008edcf 
 <<endif>>
--> Continue
+-> Continue #line:0fb2272 
 {$innerVoice}: What is happening to me? #line:0d915f8 
--> Continue
+-> Continue #line:00b32f8 
 <<jump bathroomSink>>
 ===
 title: bathroomCounter
 ---
 [nomarkup][Sifting through your cosmetic products, you find a Bobby Pin on the counter.][/nomarkup] #line:0cff0f7 
--> Continue
+-> Continue #line:0becc3a 
 {$innerVoice}: Wish I had this sooner. #line:07ffa75 
--> Continue
+-> Continue #line:0063677 
 <<AddBobbyPinToInventory>>
 <<jump bathroomSink>>
 ===
 title: bathroomCabinet
 ---
 [nomarkup][You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.][/nomarkup] #line:0cbe679 
--> Continue
+-> Continue #line:0674fde 
 {$innerVoice}: What's the worst some more liver damage gonna do? #line:0860ea4 
--> [nomarkup][Walk away][/nomarkup]
+-> [nomarkup][Walk away][/nomarkup] #line:0ebda1d 
 <<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS_2">>
 ===

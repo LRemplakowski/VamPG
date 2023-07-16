@@ -1,3 +1,5 @@
+using Yarn.Unity;
+
 namespace SunsetSystems.Dialogue
 {
     public static class DialogueHelper

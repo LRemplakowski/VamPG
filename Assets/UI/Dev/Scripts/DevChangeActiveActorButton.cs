@@ -3,7 +3,7 @@ using SunsetSystems.Combat;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DevChangeActiveActorButton : ExposableMonobehaviour
+public class DevChangeActiveActorButton : MonoBehaviour
 {
     public void NextActor()
     {

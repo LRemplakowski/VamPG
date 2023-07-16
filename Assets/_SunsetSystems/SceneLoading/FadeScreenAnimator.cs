@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.Persistence.UI
 {
-    internal class FadeScreenAnimator : ExposableMonobehaviour
+    internal class FadeScreenAnimator : MonoBehaviour
     {
         [SerializeField]
         private Image fadePanel;

@@ -4,6 +4,7 @@ using SunsetSystems.Dialogue;
 using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.Events;
+using Yarn.Unity;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -17,6 +18,8 @@ namespace SunsetSystems.Entities.Interactable
         private Vector3 _fadeTimes = Vector3.one;
         [SerializeField, ShowIf("_fadeOutBeforeDialogue")]
         private UnityEvent _onAfterFadeout;
+        [SerializeField]
+        private YarnProject _dialogueProject;
         [field: SerializeField]
         public string EntryNode { get; set; }
 
@@ -44,7 +47,7 @@ namespace SunsetSystems.Entities.Interactable
                 await new WaitForSecondsRealtime(_fadeTimes.y);
                 await fade.DoFadeInAsync(_fadeTimes.z);
             }
-            //DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
+            DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
         }
 
         protected class DialogueEntityPersistenceData : InteractableEntityPersistenceData

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GridController : ExposableMonobehaviour
+public class GridController : MonoBehaviour
 {
     [SerializeField]
     private GridElement gridElementPrefab;

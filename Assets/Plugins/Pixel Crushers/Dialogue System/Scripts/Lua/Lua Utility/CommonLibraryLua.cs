@@ -1,4 +1,4 @@
-﻿// Copyright (c) Pixel Crushers. All rights reserved.
+﻿// Copyright © Pixel Crushers. All rights reserved.
 
 using UnityEngine;
 
@@ -8,40 +8,24 @@ namespace PixelCrushers.DialogueSystem
     /// <summary>
     /// Adds Lua functions that interface with the Pixel Crushers Common Library.
     /// </summary>
-    [AddComponentMenu("")] // Use wrapper.
+    [AddComponentMenu("Dialogue System/Miscellaneous/Common Library Lua")]
     public class CommonLibraryLua : MonoBehaviour
     {
-        [Tooltip("Unregister functions when this component is disabled. Leave unticked if this script is on Dialogue Manager or other persistent GameObject.")]
-        public bool unregisterOnDisable = false;
-
-        private static bool s_registered = false;
-
-        private bool didIRegister = false;
 
         void OnEnable()
         {
-            if (!s_registered)
-            {
-                // Make the functions available to Lua:
-                Lua.RegisterFunction("SendMessageSystem", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystem(string.Empty, string.Empty)));
-                Lua.RegisterFunction("SendMessageSystemString", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystemString(string.Empty, string.Empty, string.Empty)));
-                Lua.RegisterFunction("SendMessageSystemInt", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystemInt(string.Empty, string.Empty, (double)0)));
-                s_registered = true;
-                didIRegister = true;
-            }
+            // Make the functions available to Lua:
+            Lua.RegisterFunction("SendMessageSystem", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystem(string.Empty, string.Empty)));
+            Lua.RegisterFunction("SendMessageSystemString", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystemString(string.Empty, string.Empty, string.Empty)));
+            Lua.RegisterFunction("SendMessageSystemInt", this, SymbolExtensions.GetMethodInfo(() => SendMessageSystemInt(string.Empty, string.Empty, (double)0)));
         }
 
         void OnDisable()
         {
-            if (unregisterOnDisable && s_registered && didIRegister)
-            {
-                // Remove the functions from Lua:
-                Lua.UnregisterFunction("SendMessageSystem");
-                Lua.UnregisterFunction("SendMessageSystemString");
-                Lua.UnregisterFunction("SendMessageSystemInt");
-                s_registered = false;
-                didIRegister = false;
-            }
+            // Remove the functions from Lua:
+            Lua.UnregisterFunction("SendMessageSystem");
+            Lua.UnregisterFunction("SendMessageSystemString");
+            Lua.UnregisterFunction("SendMessageSystemInt");
         }
 
         /// <summary>

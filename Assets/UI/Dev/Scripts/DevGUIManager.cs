@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DevGUIManager : ExposableMonobehaviour
+public class DevGUIManager : MonoBehaviour
 {
     private DevTurnCombatGUI devTurnCombatGUI;
 

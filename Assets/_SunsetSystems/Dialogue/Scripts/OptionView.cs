@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
@@ -12,33 +13,35 @@ namespace SunsetSystems.Dialogue
         [SerializeField] TextMeshProUGUI text;
         [SerializeField] bool showCharacterName = false;
 
-        public Action<object> OnOptionSelected;
+        public Action<DialogueOption> OnOptionSelected;
+
+        DialogueOption _option;
 
         bool hasSubmittedOptionSelection = false;
 
-        //public DialogueOption Option
-        //{
-        //    get => _option;
+        public DialogueOption Option
+        {
+            get => _option;
 
-        //    set
-        //    {
-        //        _option = value;
+            set
+            {
+                _option = value;
 
-        //        hasSubmittedOptionSelection = false;
+                hasSubmittedOptionSelection = false;
 
-        //        // When we're given an Option, use its text and update our
-        //        // interactibility.
-        //        if (showCharacterName)
-        //        {
-        //            text.text = value.Line.Text.Text;
-        //        }
-        //        else
-        //        {
-        //            text.text = value.Line.TextWithoutCharacterName.Text;
-        //        }
-        //        interactable = value.IsAvailable;
-        //    }
-        //}
+                // When we're given an Option, use its text and update our
+                // interactibility.
+                if (showCharacterName)
+                {
+                    text.text = value.Line.Text.Text;
+                }
+                else
+                {
+                    text.text = value.Line.TextWithoutCharacterName.Text;
+                }
+                interactable = value.IsAvailable;
+            }
+        }
 
         // If we receive a submit or click event, invoke our "we just selected
         // this option" handler.
@@ -55,7 +58,7 @@ namespace SunsetSystems.Dialogue
             // prevent this, we'll only invoke this if the flag hasn't been cleared already.
             if (hasSubmittedOptionSelection == false)
             {
-                OnOptionSelected.Invoke(null);
+                OnOptionSelected.Invoke(Option);
                 hasSubmittedOptionSelection = true;
             }
         }

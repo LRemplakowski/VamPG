@@ -11,11 +11,11 @@ tags:
     <<set $hasGun to true>>
     <<if Roll("intelligence","firearms") >= 1>>
     {$innerVoice}: Good as new. #success #line:0d3b5c2 
-    -> Continue
+    -> Continue #line:0b33900 
     <<else>>
     [nomarkup][BANG! You got careless, putting a bullet hole in the ceiling.][/nomarkup] #line:0ea9df6 
-    -> Continue
+    -> Continue #line:0f6c256 
     {$innerVoice}: Definitely not getting my security deposit back. #line:090e9f1 
-    -> Continue
+    -> Continue #line:0afcae0 
     <<endif>>
 ===

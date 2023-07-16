@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [System.Serializable]
-public class GridElement : ExposableMonobehaviour
+public class GridElement : MonoBehaviour
 {
     public Vector3 WorldPosition { get; private set; }
     public Vector2Int GridPosition { get; set; }

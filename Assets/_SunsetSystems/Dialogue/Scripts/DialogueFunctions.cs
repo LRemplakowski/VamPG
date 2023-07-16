@@ -3,11 +3,14 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
 using System;
+using System.Collections.Generic;
+using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
     public static class DialogueFunctions
     {
+        [YarnFunction("RollSingle")]
         public static int GetRollResultSingle(string statName)
         {
             int dice = 0;
@@ -16,6 +19,7 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("Roll")]
         public static int GetRollResult(string attributeName, string skillName)
         {
             int dice = 0;
@@ -25,6 +29,7 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetAttributeSkillPoolSize")]
         public static int GetDicePoolSize(string attributeName, string skillName)
         {
             int size = 0;
@@ -33,6 +38,7 @@ namespace SunsetSystems.Dialogue
             return size;
         }
 
+        [YarnFunction("UseDiscipline")]
         public static int GetUseDisciplineResult(string disciplineName)
         {
             int dice = 0;
@@ -41,16 +47,19 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetIsPartyMemberRecruited")]
         public static bool GetIsPartyMemberRecruited(string readableID)
         {
             return PartyManager.Instance.IsRecruitedMember(readableID);
         }
 
+        [YarnFunction("CurrentMoney")]
         public static float GetCurrentMoney()
         {
             return InventoryManager.Instance.GetMoneyAmount();
         }
 
+        [YarnFunction("GetIDFromName")]
         public static string GetIDFromName(string name)
         {
             if (DialogueHelper.VariableStorage.TryGetValue(name, out string id))
@@ -93,21 +102,25 @@ namespace SunsetSystems.Dialogue
             return SkillType.Invalid;
         }
 
+        [YarnFunction("neg")]
         public static int NegativeValue(int value)
         {
             return -value;
         }
 
+        [YarnFunction("CurrentObjective")]
         public static bool GetIsObjectiveActive(string questID, string objectiveID)
         {
             return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
         }
 
+        [YarnFunction("GetCompanionInfluence")]
         public static int GetCompanionInfluence(string companionID)
         {
             throw new NotImplementedException();
         }
 
+        [YarnFunction ("GetBloodPoints")]
         public static int GetBloodPoints(string characterID)
         {
             throw new NotImplementedException();

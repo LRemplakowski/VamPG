@@ -7,7 +7,7 @@ using SunsetSystems.Game;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Spellbook;
 
-public class DevSpellbook : ExposableMonobehaviour
+public class DevSpellbook : MonoBehaviour
 {
     public StatsConfig devStatsAsset;
     public TMP_Dropdown dropdown;

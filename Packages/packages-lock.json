@@ -14,35 +14,6 @@
       "dependencies": {},
       "url": "https://registry.npmjs.org"
     },
-    "com.fluid.database": {
-      "version": "2.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.fluid.simple-singleton": "1.0.0",
-        "com.fluid.unity-event-plus": "1.0.0"
-      },
-      "url": "https://registry.npmjs.org"
-    },
-    "com.fluid.dialogue": {
-      "version": "2.5.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.fluid.database": "2.0.0",
-        "com.fluid.unity-event-plus": "1.1.0",
-        "com.fluid.simple-spellcheck": "1.1.0",
-        "com.fluid.find-and-replace": "1.0.1"
-      },
-      "url": "https://registry.npmjs.org"
-    },
-    "com.fluid.find-and-replace": {
-      "version": "1.0.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.npmjs.org"
-    },
     "com.fluid.quest-journal": {
       "version": "1.0.1",
       "depth": 0,
@@ -68,32 +39,9 @@
       "dependencies": {},
       "url": "https://registry.npmjs.org"
     },
-    "com.fluid.simple-spellcheck": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.npmjs.org"
-    },
-    "com.fluid.stats": {
-      "version": "1.1.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.fluid.adnc-utilities": "1.0.0"
-      },
-      "url": "https://registry.npmjs.org"
-    },
     "com.fluid.unique-id": {
       "version": "1.0.2",
       "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://registry.npmjs.org"
-    },
-    "com.fluid.unity-event-plus": {
-      "version": "1.1.0",
-      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://registry.npmjs.org"
@@ -227,6 +175,16 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.localization": {
+      "version": "1.3.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.addressables": "1.19.19",
+        "com.unity.nuget.newtonsoft-json": "2.0.2"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.mathematics": {
       "version": "1.2.6",
       "depth": 1,
@@ -241,6 +199,13 @@
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.polybrush": {
@@ -394,6 +359,15 @@
         "com.unity.shadergraph": "14.0.8",
         "com.unity.render-pipelines.core": "14.0.8"
       }
+    },
+    "dev.yarnspinner.unity": {
+      "version": "2.3.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.textmeshpro": "1.4.1"
+      },
+      "url": "https://package.openupm.com"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

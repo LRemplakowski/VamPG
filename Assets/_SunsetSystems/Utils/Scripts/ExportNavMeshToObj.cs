@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 // Obj exporter component based on: http://wiki.unity3d.com/index.php?title=ObjExporter
 
-public class ExportNavMeshToObj : ExposableMonobehaviour
+public class ExportNavMeshToObj : MonoBehaviour
 {
 
     [MenuItem("Custom/Export NavMesh to mesh")]

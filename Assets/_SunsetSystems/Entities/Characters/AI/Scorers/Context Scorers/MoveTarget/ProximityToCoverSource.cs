@@ -2,7 +2,7 @@
 {
     using Apex.AI;
     using Apex.Serialization;
-    using SunsetSystems.Entities.Cover;
+    using SunsetSystems.Entities;
     using System.Collections.Generic;
     using UnityEngine;
 

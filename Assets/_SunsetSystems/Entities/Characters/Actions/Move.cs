@@ -1,4 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Characters.Interfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -11,25 +13,16 @@ namespace SunsetSystems.Entities.Characters.Actions
         private readonly NavMeshAgent navMeshAgent;
         private readonly NavMeshObstacle navMeshObstacle;
         private Vector3 destination;
-        public delegate void OnMovementFinished(Creature who);
-        public static OnMovementFinished onMovementFinished;
-        public delegate void OnMovementStarted(Creature who);
-        public static OnMovementStarted onMovementStarted;
+        public static event Action<ICreature> onMovementFinished;
+        public static Action<ICreature> onMovementStarted;
         private float stoppingDistance;
         private Transform rotationTarget;
         private Task rotationTask;
 
-        protected override Creature Owner
+        public Move(ICreature owner, Vector3 destination, float stoppingDistance) : base(owner, true)
         {
-            get;
-            set;
-        }
-
-        public Move(Creature owner, Vector3 destination, float stoppingDistance)
-        {
-            this.Owner = owner;
-            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
-            this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
+            this.navMeshAgent = owner.References.GetComponent<NavMeshAgent>();
+            this.navMeshObstacle = owner.References.GetComponent<NavMeshObstacle>();
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
             this.stoppingDistance = stoppingDistance;
@@ -43,7 +36,8 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private async void RotateToTarget()
         {
-            await Owner.FaceTarget(rotationTarget);
+            //await Owner.FaceTarget(rotationTarget);
+            await Task.Yield();
         }
 
         public override void Abort()

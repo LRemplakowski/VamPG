@@ -1,9 +1,12 @@
+using SunsetSystems.Inventory.Data;
+
 namespace SunsetSystems.Inventory
 {
     public interface IWeapon
     {
-        RangeData GetRangeData();
+        WeaponType WeaponType { get; }
 
+        RangeData GetRangeData();
         DamageData GetDamageData();
     }
 

@@ -1,22 +1,24 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
+﻿using SunsetSystems.Entities.Characters.Interfaces;
+
+namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public class HostileActionCondition : Condition
     {
-
         public bool Performed { get; set; }
 
-        private Creature target, performer;
+        private readonly ICreature target, performer;
 
-        public HostileActionCondition(Creature target, Creature performer)
+        public HostileActionCondition(ICreature target, ICreature performer)
         {
             Performed = false;
             this.target = target;
             this.performer = performer;
         }
 
-        public void OnHostileActionFinished(Creature target, Creature performer)
+        public void OnHostileActionFinished(ICreature target, ICreature performer)
         {
-            Finish();
+            if ((target?.Equals(this.target) ?? false) && (performer?.Equals(this.performer) ?? false))
+                Finish();
         }
 
         public void Finish()

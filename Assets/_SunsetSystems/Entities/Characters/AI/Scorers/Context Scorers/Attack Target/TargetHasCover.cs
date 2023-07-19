@@ -2,7 +2,7 @@ using Apex.AI;
 using Apex.Serialization;
 using UnityEngine;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Cover;
+using SunsetSystems.Entities;
 
 namespace AI.Scorers.Context
 {

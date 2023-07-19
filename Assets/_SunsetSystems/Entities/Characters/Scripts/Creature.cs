@@ -1,35 +1,24 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Apex.AI.Components;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
-using UMA.CharacterSystem;
 using Redcode.Awaiting;
-using UnityEngine.Animations.Rigging;
-using SunsetSystems.Animation;
 using SunsetSystems.Spellbook;
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Entities.Characters
 {
-    [RequireComponent(typeof(NavMeshAgent)),
-    RequireComponent(typeof(NavMeshObstacle)),
-    RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(CombatBehaviour)),
-    RequireComponent(typeof(CreatureAnimationController)),
-    RequireComponent(typeof(Rigidbody)),
-    RequireComponent(typeof(CapsuleCollider)),
-    RequireComponent(typeof(Animator)),
-    RequireComponent(typeof(DynamicCharacterAvatar)),
-    RequireComponent(typeof(StatsManager)),
-    RequireComponent(typeof(UtilityAIComponent)),
-    RequireComponent(typeof(CapsuleCollider)),
-    RequireComponent(typeof(WardrobeManager)),
-    RequireComponent(typeof(RigBuilder)),
-    RequireComponent(typeof(SpellbookManager))]
-    public abstract class Creature : PersistentEntity
+    public abstract class Creature : PersistentEntity, ICreature, IEntityReferences
     {
+        public IEntityReferences References => this;
+
+        public Transform Transform => this.transform;
+        public GameObject GameObject => this.gameObject;
+
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
         [Button("Rebuild Creature")]
@@ -88,7 +77,7 @@ namespace SunsetSystems.Entities.Characters
                 if (_actionQueue == null)
                 {
                     _actionQueue = new Queue<EntityAction>();
-                    AddActionToQueue(new Idle(this));
+                    _ = PerformAction(new Idle(this));
                 }
                 return _actionQueue;
             }
@@ -97,28 +86,31 @@ namespace SunsetSystems.Entities.Characters
         public bool IsAlive => StatsManager.IsAlive();
         public bool IsVampire => Data.CreatureType.Equals(CreatureType.Vampire);
 
+        public IWeapon CurrentWeapon => throw new System.NotImplementedException();
+
+        public IWeapon PrimaryWeapon => throw new System.NotImplementedException();
+
+        public IWeapon SecondaryWeapon => throw new System.NotImplementedException();
+
+        public Vector3 AimingOrigin => throw new System.NotImplementedException();
+
+        public bool IsInCover => throw new System.NotImplementedException();
+
+        public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
+
         #region Unity messages
         protected override void Awake()
         {
             base.Awake();
-            if (!StatsManager)
-                StatsManager = GetComponent<StatsManager>();
             if (!Agent)
                 Agent = GetComponent<NavMeshAgent>();
-            if (!CombatBehaviour)
-                CombatBehaviour = GetComponent<CombatBehaviour>();
             if (!NavMeshObstacle)
                 NavMeshObstacle = GetComponent<NavMeshObstacle>();
-            if (!SpellbookManager)
-                SpellbookManager = GetComponent<SpellbookManager>();
+
             if (Agent)
                 Agent.enabled = true;
             if (NavMeshObstacle)
                 NavMeshObstacle.enabled = false;
-            if (_config)
-                Data = new(_config);
-            if (SpellbookManager)
-                SpellbookManager.Initialize(this);
         }
 
         protected override void Start()
@@ -156,11 +148,6 @@ namespace SunsetSystems.Entities.Characters
             ClearAllActions();
             Debug.LogWarning("Forcing creature to position: " + position);
             Agent.Warp(position);
-        }
-
-        public void AddActionToQueue(EntityAction action)
-        {
-            ActionQueue.Enqueue(action);
         }
 
         public void ClearAllActions()
@@ -212,13 +199,29 @@ namespace SunsetSystems.Entities.Characters
         public abstract Move Move(GridElement moveTarget);
         public abstract Move MoveAndRotate(Vector3 moveTarget, Transform rotationTarget);
         public abstract Attack Attack(Creature target);
-        #endregion
 
-        protected virtual void OnDrawGizmos()
+        public Task PerformAction(EntityAction action)
         {
-            float movementRange = StatsManager?.GetCombatSpeed() ?? 0f;
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, movementRange);
+            if (action.IsPriority)
+                ClearAllActions();
+            ActionQueue.Enqueue(action);
+            return Task.Run(async () =>
+            {
+                await new WaitForUpdate();
+                while (!action.IsFinished())
+                    await new WaitForUpdate();
+            });
         }
+
+        public bool TakeDamage(int amount)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetAttributeValue(AttributeType attributeType)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
 }

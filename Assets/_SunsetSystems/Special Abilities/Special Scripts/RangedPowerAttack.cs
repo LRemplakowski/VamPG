@@ -19,7 +19,7 @@ namespace SunsetSystems.Spellbook
             modifier.CriticalMod = true;
             modifier.HitChanceMod = -0.3d;
             Attack attack = new(target, caster, modifier);
-            caster.AddActionToQueue(attack);
+            caster.PerformAction(attack);
         }
     }
 }

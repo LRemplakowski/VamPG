@@ -1,8 +1,7 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Cover;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Utils;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,12 +24,12 @@ public class CoverDetector : Singleton<CoverDetector>
         return true;
     }
 
-    public static bool FiringLineObstructedByCover(Creature attacker, Creature target, out Cover coverSource)
+    public static bool FiringLineObstructedByCover(ICombatant attacker, ICombatant target, out Cover coverSource)
     {
-        if (IsPositionNearCover(target.CurrentGridPosition, out List<Cover> coverSources))
+        if (target.IsInCover)
         {
-            Vector3 attackerRaycast = attacker.CombatBehaviour.RaycastOrigin;
-            Vector3 targetRaycast = target.CombatBehaviour.RaycastOrigin;
+            Vector3 attackerRaycast = attacker.AimingOrigin;
+            Vector3 targetRaycast = target.AimingOrigin;
             float distance = Vector3.Distance(attackerRaycast, targetRaycast);
             Vector3 direction = (attackerRaycast - targetRaycast).normalized;
             RaycastHit[] hits = Physics.RaycastAll(new Ray(attackerRaycast, direction), distance, instance.coverLayerMask);
@@ -39,7 +38,7 @@ public class CoverDetector : Singleton<CoverDetector>
                 foreach (RaycastHit hit in hits)
                 {
                     coverSource = hit.collider.GetComponent<Cover>();
-                    if (coverSources.Contains(coverSource))
+                    if (target.CurrentCoverSources.Contains(coverSource))
                     {
                         return true;
                     }

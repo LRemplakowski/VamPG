@@ -1,7 +1,7 @@
 ﻿using Apex.AI;
 using System.Collections.Generic;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Cover;
+using SunsetSystems.Entities;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using UnityEngine;

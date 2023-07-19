@@ -7,11 +7,16 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Weapon", menuName = "Sunset Inventory/Items/Weapon")]
     public class Weapon : EquipableItem, IWeapon
     {
-        public int DamageModifier = 0;
-        public DamageType DamageType;
-        public WeaponType WeaponType;
-        public AttributeType AssociatedAttribute;
-        public SkillType AssociatedSkill;
+        [field: SerializeField]
+        public int DamageModifier { get; private set; } = 0;
+        [field: SerializeField]
+        public DamageType DamageType { get; private set; }
+        [field: SerializeField]
+        public WeaponType WeaponType { get; private set; }
+        [field: SerializeField]
+        public AttributeType AssociatedAttribute { get; private set; }
+        [field: SerializeField]
+        public SkillType AssociatedSkill { get; private set; }
 
         [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used in ShowIf Attribute")]
         private bool ShowRange => WeaponType == WeaponType.Ranged;

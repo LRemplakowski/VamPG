@@ -1,5 +1,6 @@
-﻿using SunsetSystems.Entities.Characters;
+﻿using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine;
+
 public interface IInteractable
 {
     GameObject HoverHighlight
@@ -20,7 +21,7 @@ public interface IInteractable
         set;
     }
 
-    Creature TargetedBy
+    ICreature TargetedBy
     {
         get;
         set;

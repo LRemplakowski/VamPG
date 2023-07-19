@@ -1,8 +1,11 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Cover;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Spellbook;
 using System;
 using UnityEngine;
+using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Combat
 {
@@ -17,12 +20,12 @@ namespace SunsetSystems.Combat
 
         private static readonly System.Random _random = new();
 
-        public static AttackResult CalculateAttackResult(Creature attacker, Creature defender)
+        public static AttackResult CalculateAttackResult(ICombatant attacker, ICombatant defender)
         {
             return CalculateAttackResult(attacker, defender, new());
         }
 
-        public static AttackResult CalculateAttackResult(Creature attacker, Creature defender, AttackModifier attackModifier)
+        public static AttackResult CalculateAttackResult(ICombatant attacker, ICombatant defender, AttackModifier attackModifier)
         {
             int damage = 0;
             int damageReduction = 0;
@@ -30,8 +33,8 @@ namespace SunsetSystems.Combat
             double critChance = 0;
             double critRoll = 0;
 
-            float heightDifference = attacker.transform.position.y - defender.transform.position.y;
-            if (heightDifference > attacker.Agent.height && attacker.SpellbookManager.GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+            float heightDifference = attacker.References.Transform.position.y - defender.References.Transform.position.y;
+            if (heightDifference > 2f && attacker.References.GetComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
             {
                 attackModifier.HitChanceMod += .1d;
                 attackModifier.DamageMod += 2;
@@ -54,69 +57,69 @@ namespace SunsetSystems.Combat
                 crit |= attackModifier.CriticalMod;
                 if (crit)
                     damage = Mathf.RoundToInt(damage * 1.5f);
-                damageReduction = CalculateDefenderDamageReduction(defender, attacker.Data.Equipment.GetSelectedWeapon().WeaponType) + attackModifier.DamageReductionMod;
+                damageReduction = CalculateDefenderDamageReduction(defender, attacker.CurrentWeapon.WeaponType) + attackModifier.DamageReductionMod;
                 adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
             return new(attackerHitChance, defenderDodgeChance, hitRoll, critChance, critRoll, damage, damageReduction, adjustedDamage, hit, crit);
         }
 
-        private static double CalculateCritChance(Creature attacker)
+        private static double CalculateCritChance(ICombatant attacker)
         {
             double result = BASE_CRIT_CHANCE;
-            result += attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Wits).GetValue() * 0.01d;
+            result += attacker.GetAttributeValue(AttributeType.Wits) * 0.01d;
             return result;
         }
 
-        private static int CalculateDefenderDamageReduction(Creature defender, WeaponType attackType)
+        private static int CalculateDefenderDamageReduction(ICombatant defender, WeaponType attackType)
         {
             int damageReduction = 0;
             switch (attackType)
             {
                 case WeaponType.Melee:
-                    damageReduction += defender.Data.Stats.Attributes.GetAttribute(AttributeType.Stamina).GetValue();
+                    damageReduction += defender.GetAttributeValue(AttributeType.Stamina);
                     break;
                 case WeaponType.Ranged:
-                    damageReduction += defender.Data.Stats.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
+                    damageReduction += defender.GetAttributeValue(AttributeType.Dexterity);
                     break;
             }
             return damageReduction;
         }
 
-        private static int CalculateAttackDamage(Creature attacker, Creature defender)
+        private static int CalculateAttackDamage(ICombatant attacker, ICombatant defender)
         {
             int damage = 0;
-            Weapon selectedWeapon = attacker.Data.Equipment.GetSelectedWeapon();
-            float weaponDamageMod = attacker.Data.Equipment.GetPrimaryWeapon() == selectedWeapon ? 1f : 0.6f;
+            IWeapon selectedWeapon = attacker.CurrentWeapon;
+            float weaponDamageMod = attacker.PrimaryWeapon.Equals(selectedWeapon) ? 1f : 0.6f;
             switch (selectedWeapon.WeaponType)
             {
                 case WeaponType.Melee:
-                    damage = Mathf.RoundToInt(attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Strength).GetValue() * weaponDamageMod);
+                    damage = Mathf.RoundToInt(attacker.GetAttributeValue(AttributeType.Strength) * weaponDamageMod);
                     break;
                 case WeaponType.Ranged:
-                    damage = Mathf.RoundToInt(attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Composure).GetValue() * weaponDamageMod);
+                    damage = Mathf.RoundToInt(attacker.GetAttributeValue(AttributeType.Composure) * weaponDamageMod);
                     break;
             }
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             return damage;
         }
 
-        private static double CalculateHitChance(Creature attacker, Creature defender)
+        private static double CalculateHitChance(ICombatant attacker, ICombatant defender)
         {
-            double attributeModifier = attacker.Data.Stats.Attributes.GetAttribute(AttributeType.Wits).GetValue();
+            double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
             double result = 0d;
-            if (attacker.Data.Equipment.GetSelectedWeapon().GetRangeData().shortRange >= Vector3.Distance(attacker.transform.position, defender.transform.position))
+            if (attacker.CurrentWeapon.GetRangeData().shortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;
         }
 
-        private static double CalculateDodgeChance(Creature defender, Creature attacker)
+        private static double CalculateDodgeChance(ICombatant defender, ICombatant attacker)
         {
             double result = BASE_DODGE_CHANCE;
             bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out Cover coverSource);
             if (hasCover)
             {
-                int defenderDexterity = defender.Data.Stats.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
+                int defenderDexterity = defender.GetAttributeValue(AttributeType.Dexterity);
                 switch (coverSource.GetCoverQuality())
                 {
                     case CoverQuality.Half:

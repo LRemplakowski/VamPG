@@ -4,6 +4,7 @@ using UnityEngine;
 using Apex.AI;
 using Apex.AI.Components;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
@@ -68,14 +69,14 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     #region Enable&Disable
     private void OnEnable()
     {
-        HostileAction.onAttackFinished += OnHostileActionFinished;
+        HostileAction.OnAttackFinished += OnHostileActionFinished;
         CombatManager.CombatRoundBegin += OnCombatRoundBegin;
         CombatManager.CombatRoundEnd += OnCombatRoundEnd;
     }
 
     private void OnDisable()
     {
-        HostileAction.onAttackFinished -= OnHostileActionFinished;
+        HostileAction.OnAttackFinished -= OnHostileActionFinished;
         CombatManager.CombatRoundBegin -= OnCombatRoundBegin;
         CombatManager.CombatRoundEnd -= OnCombatRoundEnd;
     }
@@ -102,7 +103,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
                     CombatManager.Instance.NextRound();
     }
 
-    private void OnMovementStarted(Creature who)
+    private void OnMovementStarted(ICreature who)
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
@@ -110,7 +111,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         }
     }
 
-    private void OnMovementFinished(Creature who)
+    private void OnMovementFinished(ICreature who)
     {
         if (who.Equals(Owner))
         {
@@ -118,7 +119,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         }
     }
 
-    private void OnHostileActionFinished(Creature target, Creature performer)
+    private void OnHostileActionFinished(ICreature target, ICreature performer)
     {
         if (performer.Equals(Owner))
         {

@@ -151,7 +151,7 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved && !DevMoveActorToPosition.InputOverride)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved)
                     {
                         Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
                         return;
@@ -309,7 +309,7 @@ namespace SunsetSystems.Input
 
                 void HandleMoveActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() && !DevMoveActorToPosition.InputOverride)
+                    if (!CombatManager.IsActiveActorPlayerControlled())
                         return;
                     if (lastHit != hit.collider)
                     {

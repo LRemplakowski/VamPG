@@ -5,7 +5,7 @@
     using UnityEngine;
     using System.Collections.Generic;
     using SunsetSystems.Entities.Characters;
-    using SunsetSystems.Entities.Cover;
+    using SunsetSystems.Entities;
 
     public class ProvidesCoverAgainstEnemies : OptionScorerBase<GridElement, CreatureContext>
     {

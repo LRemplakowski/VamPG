@@ -1,30 +1,30 @@
 ﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Characters.Interfaces;
+using System;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
     public abstract class HostileAction : EntityAction
     {
-        protected override Creature Owner { get; set; }
+        public static event Action<ICreature, ICreature> OnAttackFinished;
 
-        public delegate void OnAttackFinished(Creature target, Creature performer);
-        public static OnAttackFinished onAttackFinished;
-
-        public Creature Target { get; private set; }
+        public ICreature Target { get; private set; }
         protected readonly HostileActionCondition condition;
 
-        public HostileAction(Creature target, Creature attacker)
+        public HostileAction(ICreature target, ICreature attacker) : base(attacker, true)
         {
-            Owner = attacker;
             Target = target;
             HostileActionCondition condition = new(target, attacker);
-            onAttackFinished += condition.OnHostileActionFinished;
+            OnAttackFinished += condition.OnHostileActionFinished;
             conditions.Add(condition);
             this.condition = condition;
         }
 
         public override void Abort()
         {
-            onAttackFinished -= condition.OnHostileActionFinished;
+            OnAttackFinished -= condition.OnHostileActionFinished;
         }
+
+        protected void Finish(ICreature target, ICreature attacker) => OnAttackFinished?.Invoke(target, attacker);
     }
 }

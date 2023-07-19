@@ -1,17 +1,10 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions
+﻿using SunsetSystems.Entities.Characters.Interfaces;
+
+namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Idle : EntityAction
     {
-        protected override Creature Owner
-        {
-            get;
-            set;
-        }
-
-        public Idle(Creature owner)
-        {
-            Owner = owner;
-        }
+        public Idle(ICreature owner) : base(owner) { }
 
         public override void Abort()
         {

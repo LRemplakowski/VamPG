@@ -1,4 +1,5 @@
 using SunsetSystems.Dialogue;
+using SunsetSystems.Entities.Characters.Interfaces;
 using System;
 using UnityEngine;
 using Yarn.Unity;
@@ -35,7 +36,7 @@ namespace SunsetSystems.Entities.Characters
             get => _interactionDistance;
             set => _interactionDistance = value;
         }
-        public Creature TargetedBy { get; set; }
+        public ICreature TargetedBy { get; set; }
         public bool Interacted { get; set; }
 
         [SerializeField]

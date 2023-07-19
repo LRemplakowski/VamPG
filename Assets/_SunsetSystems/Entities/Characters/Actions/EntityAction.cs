@@ -1,22 +1,38 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions
-{
-    using SunsetSystems.Entities.Characters.Actions.Conditions;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Characters.Interfaces;
+using System.Collections.Generic;
+using UnityEngine;
 
+namespace SunsetSystems.Entities.Characters.Actions
+{
     [System.Serializable]
     public abstract class EntityAction
     {
-        protected abstract Creature Owner { get; set; }
+        /// <summary>
+        /// Priority actions clear action queue upon assignment.
+        /// </summary>
+        public bool IsPriority { get; protected set; }
+        protected ICreature Owner { get; }
         protected List<Condition> conditions = new List<Condition>();
 
+        public EntityAction(ICreature owner)
+        {
+            Owner = owner;
+            IsPriority = false;
+        }
+
+        public EntityAction(ICreature owner, bool isPriority) : this(owner)
+        {
+            IsPriority = isPriority;
+        }
+
         /// <summary>
-        /// Rozpoczęcie akcji. Wywoływane kiedy akcja trafia na początek kolejki akcji.
+        /// Start executing action logic.
         /// </summary>
         public abstract void Begin();
 
         /// <summary>
-        /// Przerwanie akcji. Wywoływane kiedy warunki ukończenia akcji zostaną spełnione lub zewnętrznie przez inną klasę.
+        /// Do any relevant cleanup.
         /// </summary>
         public abstract void Abort();
 

@@ -24,7 +24,7 @@ namespace SunsetSystems.Entities.Characters
         public override Move Move(Vector3 moveTarget, float stoppingDistance)
         {
             Move moveAction = new(this, moveTarget, stoppingDistance);
-            AddActionToQueue(moveAction);
+            PerformAction(moveAction);
             return moveAction;
         }
 
@@ -43,14 +43,14 @@ namespace SunsetSystems.Entities.Characters
         {
             ClearAllActions();
             Move moveAction = new(this, moveTarget, rotationTarget);
-            AddActionToQueue(moveAction);
+            PerformAction(moveAction);
             return moveAction;
         }
 
         public override Attack Attack(Creature target)
         {
             Attack attackAction = new(target, this);
-            AddActionToQueue(attackAction);
+            PerformAction(attackAction);
             return attackAction;
         }
 

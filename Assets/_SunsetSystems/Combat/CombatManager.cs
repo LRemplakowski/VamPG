@@ -9,6 +9,7 @@ using UnityEngine;
 using Redcode.Awaiting;
 using SunsetSystems.Animation;
 using System;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Combat
 {
@@ -85,7 +86,8 @@ namespace SunsetSystems.Combat
             turnCounter = 0;
             Actors = new();
             Actors.AddRange(encounter.Creatures);
-            Actors.AddRange(PartyManager.ActiveParty);
+            //Actors.AddRange(PartyManager.ActiveParty);
+            throw new NotImplementedException();
             CombatBegin?.Invoke(Actors);
             Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(true));
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
@@ -114,12 +116,7 @@ namespace SunsetSystems.Combat
                 moveTasks.Add(Task.Run(async () =>
                 {
                     await new WaitForUpdate();
-                    c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
-                    while (c.Agent.enabled)
-                    {
-                        Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
-                        await Task.Delay(1000);
-                    }
+                    await c.PerformAction(new Move(c, currentEncounter.MyGrid.GetNearestGridElement(c.References.Transform.position).WorldPosition, 0f));
                 }));
             }
             await Task.WhenAll(moveTasks);

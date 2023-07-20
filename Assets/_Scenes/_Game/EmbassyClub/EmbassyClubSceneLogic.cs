@@ -1,6 +1,7 @@
 using Redcode.Awaiting;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Party;
 using SunsetSystems.Persistence;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using Yarn.Unity;
 public class EmbassyClubSceneLogic : DefaultSceneLogic
 {
     [SerializeField]
-    private PlayerControlledCharacter anastasiaCompanion;
+    private ICreature anastasiaCompanion;
     [SerializeField]
     private Creature anastasiaDialogue;
 
@@ -30,8 +31,8 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
         SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
         await fade.DoFadeOutAsync(.5f);
         anastasiaDialogue.gameObject.SetActive(false);
-        anastasiaCompanion.gameObject.SetActive(true);
-        PartyManager.RecruitCharacter(anastasiaCompanion.Data);
+        anastasiaCompanion.References.GameObject.SetActive(true);
+        PartyManager.RecruitCharacter(anastasiaCompanion);
         PartyManager.AddCreatureAsActivePartyMember(anastasiaCompanion);
         await new WaitForUpdate();
         await fade.DoFadeInAsync(.5f);

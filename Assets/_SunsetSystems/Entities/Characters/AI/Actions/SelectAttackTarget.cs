@@ -1,19 +1,20 @@
-﻿namespace AI.Actions
-{
-    using Apex.AI;
-    using SunsetSystems.Entities.Characters;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using Apex.AI;
+using SunsetSystems.Entities.Characters;
+using System.Collections.Generic;
+using UnityEngine;
+using SunsetSystems.Entities.Interfaces;
 
-    public class SelectAttackTarget : ActionWithOptions<Creature>
+namespace AI.Actions
+{
+    public class SelectAttackTarget : ActionWithOptions<ICombatant>
     {
         public override void Execute(IAIContext context)
         {
             CreatureContext c = context as CreatureContext;
-            Creature self = c.Owner;
+            ICombatant self = c.Owner;
 
-            List<Creature> potentialTargets = new();
-            if (self.Data.Faction.Equals(Faction.Hostile))
+            List<ICombatant> potentialTargets = new();
+            if (self.Faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(c.FriendlyCombatants);
                 potentialTargets.AddRange(c.PlayerControlledCombatants);
@@ -23,8 +24,8 @@
                 potentialTargets.AddRange(c.EnemyCombatants);
             }
 
-            Creature target = this.GetBest(c, potentialTargets);
-            Debug.Log($"Selected target {target.Data.FullName}");
+            ICombatant target = this.GetBest(c, potentialTargets);
+            Debug.Log($"Selected target {target.Name}");
             if (target != null)
             {
                 c.CurrentTarget = target;

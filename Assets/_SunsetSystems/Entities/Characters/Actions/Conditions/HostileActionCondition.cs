@@ -1,4 +1,4 @@
-﻿using SunsetSystems.Entities.Characters.Interfaces;
+﻿using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
@@ -6,16 +6,16 @@ namespace SunsetSystems.Entities.Characters.Actions.Conditions
     {
         public bool Performed { get; set; }
 
-        private readonly ICreature target, performer;
+        private readonly ICombatant target, performer;
 
-        public HostileActionCondition(ICreature target, ICreature performer)
+        public HostileActionCondition(ICombatant target, ICombatant performer)
         {
             Performed = false;
             this.target = target;
             this.performer = performer;
         }
 
-        public void OnHostileActionFinished(ICreature target, ICreature performer)
+        public void OnHostileActionFinished(ICombatant target, ICombatant performer)
         {
             if ((target?.Equals(this.target) ?? false) && (performer?.Equals(this.performer) ?? false))
                 Finish();

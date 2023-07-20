@@ -1,11 +1,12 @@
+using Apex.AI;
+using Apex.Serialization;
+using SunsetSystems.Entities.Characters;
+using UnityEngine;
+using SunsetSystems.Entities.Interfaces;
+
 namespace AI.Scorers.Context
 {
-    using Apex.AI;
-    using Apex.Serialization;
-    using SunsetSystems.Entities.Characters;
-    using UnityEngine;
-
-    public class IsInWeaponsRange : OptionScorerBase<Creature, CreatureContext>
+    public class IsInWeaponsRange : OptionScorerBase<ICombatant, CreatureContext>
     {
         [ApexSerialization]
         public bool not = false;
@@ -14,14 +15,14 @@ namespace AI.Scorers.Context
         [ApexSerialization]
         public float effectiveRangeMultiplier = 2.0f;
 
-        public override float Score(CreatureContext context, Creature option)
+        public override float Score(CreatureContext context, ICombatant option)
         {
-            Vector3 myPos = context.Owner.transform.position;
-            Vector3 targetPos = option.transform.position;
+            Vector3 myPos = context.Owner.References.Transform.position;
+            Vector3 targetPos = option.References.Transform.position;
             float distance = Vector3.Distance(myPos, targetPos);
 
-            return not ^ (distance <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange) ?
-                (distance <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().optimalRange ? score * effectiveRangeMultiplier : score) :
+            return not ^ (distance <= context.Owner.CurrentWeapon.GetRangeData().maxRange) ?
+                (distance <= context.Owner.CurrentWeapon.GetRangeData().optimalRange ? score * effectiveRangeMultiplier : score) :
                 0f;
         }
     }

@@ -12,26 +12,9 @@ using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public abstract class Creature : PersistentEntity, ICreature, IEntityReferences
+    public class Creature : PersistentEntity, ICreature, ICombatant, IEntityReferences
     {
-        public IEntityReferences References => this;
-
-        public Transform Transform => this.transform;
-        public GameObject GameObject => this.gameObject;
-
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
-
-        [Button("Rebuild Creature")]
-        private void RebuildCreature()
-        {
-            if (_config == null)
-            {
-                Debug.LogError("Failed to rebuild creature! There is no Config assigned to Creature component!");
-                return;
-            }
-            Data = new(_config);
-            CreatureInitializer.InitializeCreature(this);
-        }
 
         [field: SerializeField]
         public CreatureData Data { get; set; }
@@ -143,10 +126,10 @@ namespace SunsetSystems.Entities.Characters
         #endregion
 
         #region Actions and control
-        public void ForceCreatureToPosition(Vector3 position)
+        public void ForceToPosition(Vector3 position)
         {
             ClearAllActions();
-            Debug.LogWarning("Forcing creature to position: " + position);
+            Debug.Log($"Forcing Creature {gameObject.name} to position: {position}");
             Agent.Warp(position);
         }
 
@@ -193,12 +176,6 @@ namespace SunsetSystems.Entities.Characters
         {
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
-
-        public abstract Move Move(Vector3 moveTarget, float stoppingDistance);
-        public abstract Move Move(Vector3 moveTarget);
-        public abstract Move Move(GridElement moveTarget);
-        public abstract Move MoveAndRotate(Vector3 moveTarget, Transform rotationTarget);
-        public abstract Attack Attack(Creature target);
 
         public Task PerformAction(EntityAction action)
         {

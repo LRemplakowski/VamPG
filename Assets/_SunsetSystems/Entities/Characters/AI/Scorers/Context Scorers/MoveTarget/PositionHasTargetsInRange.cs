@@ -19,7 +19,7 @@
         {
             bool hasTargets = false;
             List<Creature> targets = new();
-            if (context.Owner.Data.Faction.Equals(Faction.Hostile))
+            if (context.Owner.Faction.Equals(Faction.Hostile))
             {
                 targets.AddRange(context.FriendlyCombatants);
                 targets.AddRange(context.PlayerControlledCombatants);
@@ -29,7 +29,7 @@
                 targets.AddRange(context.EnemyCombatants);
             }
 
-            float range = context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
+            float range = context.Owner.CurrentWeapon.GetRangeData().maxRange;
             int targetCount = 0;
             Vector3 myPos = option.WorldPosition;
             foreach (Creature c in targets)

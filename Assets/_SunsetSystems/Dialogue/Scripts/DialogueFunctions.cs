@@ -71,17 +71,18 @@ namespace SunsetSystems.Dialogue
 
         private static int GetStatValueFromString(string statName)
         {
-            AttributeType attributeType = GetAttributeTypeFromString(statName);
-            if (attributeType != AttributeType.Invalid)
-            {
-                return PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
-            }
-            SkillType skillType = GetSkillTypeFromString(statName);
-            if (skillType != SkillType.Invalid)
-            {
-                return PartyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
-            }
-            return 1;
+            //AttributeType attributeType = GetAttributeTypeFromString(statName);
+            //if (attributeType != AttributeType.Invalid)
+            //{
+            //    return PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
+            //}
+            //SkillType skillType = GetSkillTypeFromString(statName);
+            //if (skillType != SkillType.Invalid)
+            //{
+            //    return PartyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
+            //}
+            //return 1;
+            throw new NotImplementedException();
         }
 
         private static AttributeType GetAttributeTypeFromString(string attributeTypeString)

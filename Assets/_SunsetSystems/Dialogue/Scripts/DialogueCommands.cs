@@ -49,15 +49,17 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("IncreaseHunger")]
         public static void IncreaseHunger(string characterID, int value)
         {
-            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            character.StatsManager.TryUseBlood(value);
+            //ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            //character.StatsManager.TryUseBlood(value);
+            throw new NotImplementedException();
         }
 
         [YarnCommand("DecreaseHunger")]
         public static void DecreaseHunger(string characterID, int value)
         {
-            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            character.StatsManager.RegainBlood(value);
+            //Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            //character.StatsManager.RegainBlood(value);
+            throw new NotImplementedException();
         }
 
         [YarnCommand("AddMoney")]

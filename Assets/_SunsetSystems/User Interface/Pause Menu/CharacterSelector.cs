@@ -1,6 +1,4 @@
 using SunsetSystems.Party;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,7 +18,7 @@ namespace SunsetSystems
             get
             {
                 if (string.IsNullOrEmpty(_selectedCharacterKey))
-                    _selectedCharacterKey = PartyManager.MainCharacter.Data.ID;
+                    _selectedCharacterKey = PartyManager.MainCharacter.ID;
                 return _selectedCharacterKey;
             }
         }
@@ -32,7 +30,7 @@ namespace SunsetSystems
 
         private void UpdateSelectedText()
         {
-            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(SelectedCharacterKey).Data.FullName;
+            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(SelectedCharacterKey).Name;
         }
 
         public void NextCharacter()

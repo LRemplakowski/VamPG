@@ -1,8 +1,10 @@
 using Redcode.Awaiting;
 using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
+using SunsetSystems.Dialogue.Interfaces;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Enviroment;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Input.CameraControl;
@@ -41,13 +43,15 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private List<InteractableEntity> _interactablesToEnableAfterPhoneCall = new();
         [SerializeField]
-        private DialogueEntity _kitchenSink;
+        private IDialogueSource _kitchenSink;
         [SerializeField]
         private string landlordDialogueEntryNode;
         [SerializeField]
-        private DialogueEntity _phone;
+        private IDialogueSource _phone;
         [SerializeField]
-        private DialogueNPC _landlord;
+        private ICreature _landlord;
+        [SerializeField]
+        private IDialogueSource _landlordDialogue;
         [SerializeField]
         private Waypoint _landlordSpawnWaypoint, _landlordSinkWaypoint, _pcLandlordVisitWaypoint, _pcLandlordSinkWaypoint;
         [SerializeField]
@@ -118,7 +122,7 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.MainCharacter.gameObject.SetActive(true);
+            PartyManager.MainCharacter.References.GameObject.SetActive(true);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
@@ -127,13 +131,12 @@ namespace SunsetSystems.Persistence
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
-            _landlord.Agent.Warp(_landlordSpawnWaypoint.transform.position);
-            PartyManager.MainCharacter.Agent.Warp(_pcLandlordVisitWaypoint.transform.position);
+            _landlord.ForceToPosition(_landlordSpawnWaypoint.transform.position);
+            PartyManager.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordEnterCameraPosition);
             _cameraControl.ForceRotation(_landlordEnterCameraRotation);
             await new WaitForFixedUpdate();
-            _ = _landlord.FaceTarget(_landlordSpawnWaypoint.FaceDirection);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
+            //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
             DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
             await fade.DoFadeInAsync(.5f);
@@ -143,25 +146,26 @@ namespace SunsetSystems.Persistence
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
-            _landlord.Agent.Warp(_landlordSinkWaypoint.transform.position);
-            PartyManager.MainCharacter.Agent.Warp(_pcLandlordSinkWaypoint.transform.position);
+            _landlord.ForceToPosition(_landlordSinkWaypoint.transform.position);
+            PartyManager.MainCharacter.ForceToPosition(_pcLandlordSinkWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordSinkCameraPosition);
             _cameraControl.ForceRotation(_landlordSinkCameraRotation);
             await new WaitForFixedUpdate();
-            _ = _landlord.FaceTarget(_landlordSinkWaypoint.FaceDirection);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
+            //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
 
         private void DisableSinkInteraction()
         {
-            _kitchenSink.Interactable = false;
+            //_kitchenSink.Interactable = false;
+            throw new NotImplementedException();
         }
 
         private void KillTheLandlord()
         {
-            _landlord.StatsManager.Die();
+            //_landlord.StatsManager.Die();
+            throw new NotImplementedException();
         }
 
         public async void BargeIn()
@@ -177,13 +181,13 @@ namespace SunsetSystems.Persistence
             _kieran.gameObject.SetActive(true);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcCoverWaypoint.transform.position);
-            _dominic.ForceCreatureToPosition(_dominicWaypoint.transform.position);
-            _kieran.ForceCreatureToPosition(_kieranWaypoint.transform.position);
+            PartyManager.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
+            _dominic.ForceToPosition(_dominicWaypoint.transform.position);
+            _kieran.ForceToPosition(_kieranWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationDominicEnter);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
+            //_ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
             _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
             _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
             await new WaitForFixedUpdate();
@@ -194,13 +198,13 @@ namespace SunsetSystems.Persistence
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
-            PartyManager.MainCharacter.ForceCreatureToPosition(_pcFridgeWaypoint.transform.position);
-            _dominic.ForceCreatureToPosition(_dominicFridgeWaypoint.transform.position);
-            _kieran.ForceCreatureToPosition(_kieranFridgeWaypoint.transform.position);
+            PartyManager.MainCharacter.ForceToPosition(_pcFridgeWaypoint.transform.position);
+            _dominic.ForceToPosition(_dominicFridgeWaypoint.transform.position);
+            _kieran.ForceToPosition(_kieranFridgeWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
-            _ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
+            //_ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
             _ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
             _ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
             await fade.DoFadeInAsync(.5f);
@@ -221,11 +225,7 @@ namespace SunsetSystems.Persistence
 
         public async void MoveDominicToDoorAndDestroy()
         {
-            Move move = _dominic.Move(_dominicDoorWaypoint.transform.position);
-            while (Vector3.Distance(_dominic.transform.position, _dominicDoorWaypoint.transform.position) > .5f)
-            {
-                await new WaitForFixedUpdate();
-            }
+            await _dominic.PerformAction(new Move(_dominic, _dominicDoorWaypoint.transform.position, .4f));
             _dominic.ClearAllActions();
             Destroy(_dominic.gameObject);
         }
@@ -295,8 +295,7 @@ namespace SunsetSystems.Persistence
             [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
             public static void SetPhoneDialogueToLandlordDialogue()
             {
-                HavenSceneLogic._phone.EntryNode = HavenSceneLogic.landlordDialogueEntryNode;
-                HavenSceneLogic._phone.ResetInteraction();
+                throw new NotImplementedException();
             }
 
             [YarnCommand("EnableApartmentDoorLandlordDialogue")]

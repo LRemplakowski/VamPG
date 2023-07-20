@@ -1,19 +1,20 @@
+using Apex.AI;
+using Apex.Serialization;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
+
 namespace AI.Scorers.Context
 {
-    using Apex.AI;
-    using Apex.Serialization;
-    using SunsetSystems.Entities.Characters;
-
-    public class IsCurrentTarget : OptionScorerBase<Creature, CreatureContext>
+    public class IsCurrentTarget : OptionScorerBase<ICombatant, CreatureContext>
     {
         [ApexSerialization]
         public bool not = false;
         [ApexSerialization]
         public float score = 0f;
 
-        public override float Score(CreatureContext context, Creature option)
+        public override float Score(CreatureContext context, ICombatant option)
         {
-            if (context.CurrentTarget)
+            if (context.CurrentTarget != null)
             {
                 return not ^ context.CurrentTarget.Equals(option) ? score : 0f;
             }

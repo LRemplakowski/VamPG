@@ -1,12 +1,12 @@
-﻿namespace AI.Scorers.Context
-{
-    using Apex.AI;
-    using Apex.Serialization;
-    using UnityEngine;
-    using System.Collections.Generic;
-    using SunsetSystems.Entities.Characters;
-    using SunsetSystems.Entities;
+﻿using Apex.AI;
+using Apex.Serialization;
+using UnityEngine;
+using System.Collections.Generic;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities;
 
+namespace AI.Scorers.Context
+{
     public class ProvidesCoverAgainstEnemies : OptionScorerBase<GridElement, CreatureContext>
     {
         [ApexSerialization]
@@ -26,7 +26,7 @@
             if (CoverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
             {
                 List<Creature> enemies = new();
-                if (context.Owner.Data.Faction.Equals(Faction.Hostile))
+                if (context.Owner.Faction.Equals(Faction.Hostile))
                 {
                     enemies.AddRange(context.PlayerControlledCombatants);
                     enemies.AddRange(context.FriendlyCombatants);
@@ -38,7 +38,7 @@
                 Vector3 optionPosition = option.transform.position;
                 foreach (Creature enemy in enemies)
                 {
-                    Vector3 raycastOrigin = enemy.GetComponent<CombatBehaviour>().RaycastOrigin;
+                    Vector3 raycastOrigin = enemy.References.GetComponent<CombatBehaviour>().RaycastOrigin;
                     float distance = Vector3.Distance(raycastOrigin, optionPosition);
                     Vector3 direction = (raycastOrigin - optionPosition).normalized;
                     RaycastHit[] hits = Physics.RaycastAll(new Ray(raycastOrigin, direction), distance, coverMask);

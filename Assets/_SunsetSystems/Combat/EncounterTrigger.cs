@@ -1,4 +1,5 @@
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -11,7 +12,7 @@ namespace SunsetSystems.Combat
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out PlayerControlledCharacter _))
+            if (other.TryGetComponent(out ICreature creature) && creature.Faction is Faction.PlayerControlled)
                 if (encounterToTrigger)
                     encounterToTrigger.Begin();
                 else

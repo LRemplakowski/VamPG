@@ -1,5 +1,6 @@
 using Apex.AI;
 using Apex.Serialization;
+using System;
 
 namespace AI.Scorers.Option
 {
@@ -10,7 +11,8 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.StatsManager.IsAlive() ? score : 0f;
+            //return not ^ context.StatsManager.IsAlive() ? score : 0f;
+            throw new NotImplementedException();
         }
     }
 }

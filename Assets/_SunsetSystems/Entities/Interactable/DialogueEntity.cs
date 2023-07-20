@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using Redcode.Awaiting;
 using SunsetSystems.Dialogue;
+using SunsetSystems.Dialogue.Interfaces;
 using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,7 +9,7 @@ using Yarn.Unity;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class DialogueEntity : InteractableEntity
+    public class DialogueEntity : InteractableEntity, IDialogueSource
     {
         [SerializeField]
         private bool _fadeOutBeforeDialogue;
@@ -37,7 +38,7 @@ namespace SunsetSystems.Entities.Interactable
             EntryNode = persistenceData?.EntryNode;
         }
 
-        protected async override void HandleInteraction()
+        public async void StartDialogue(string dialogueID)
         {
             if (_fadeOutBeforeDialogue)
             {
@@ -47,7 +48,12 @@ namespace SunsetSystems.Entities.Interactable
                 await new WaitForSecondsRealtime(_fadeTimes.y);
                 await fade.DoFadeInAsync(_fadeTimes.z);
             }
-            DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
+            DialogueManager.Instance.StartDialogue(dialogueID, _dialogueProject);
+        }
+
+        protected override void HandleInteraction()
+        {
+            StartDialogue(EntryNode);
         }
 
         protected class DialogueEntityPersistenceData : InteractableEntityPersistenceData

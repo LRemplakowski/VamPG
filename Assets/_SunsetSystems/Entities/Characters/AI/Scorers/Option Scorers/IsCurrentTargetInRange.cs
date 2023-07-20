@@ -13,10 +13,10 @@ namespace AI.Scorers.Option
         {
             if (context.CurrentTarget == null)
                 return 0;
-            Vector3 myPos = context.Owner.transform.position;
-            Vector3 targetPos = context.CurrentTarget.transform.position;
+            Vector3 myPos = context.Owner.References.Transform.position;
+            Vector3 targetPos = context.CurrentTarget.References.Transform.position;
 
-            return not ^ Vector3.Distance(myPos, targetPos) <= context.Owner.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange ? score : 0f;
+            return not ^ Vector3.Distance(myPos, targetPos) <= context.Owner.CurrentWeapon.GetRangeData().maxRange ? score : 0f;
         }
     }
 }

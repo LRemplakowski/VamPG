@@ -14,6 +14,8 @@ using System.Linq;
 using SunsetSystems.Party;
 using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Input
 {
@@ -99,10 +101,10 @@ namespace SunsetSystems.Input
             void HandleSelectionExplorationInput()
             {
                 List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                PlayerControlledCharacter currentLead;
+                ICreature currentLead;
                 if (selectables.Count > 0)
                 {
-                    currentLead = selectables[0].GetCreature() as PlayerControlledCharacter;
+                    currentLead = selectables[0].GetCreature();
                 }
                 else
                 {
@@ -110,8 +112,7 @@ namespace SunsetSystems.Input
                 }
                 if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                 {
-                    currentLead.ClearAllActions();
-                    currentLead.InteractWith(interactable);
+                    currentLead.PerformAction(new Interact(interactable, currentLead));
                 }
                 else
                 {
@@ -121,18 +122,17 @@ namespace SunsetSystems.Input
 
             void HandleNoSelectionExplorationInput()
             {
-                PlayerControlledCharacter mainCharacter = PartyManager.MainCharacter as PlayerControlledCharacter;
+                ICreature mainCharacter = PartyManager.MainCharacter;
                 if (mainCharacter == null)
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
-                List<Creature> creatures = new();
+                List<ICreature> creatures = new();
                 IInteractable interactable = hit.collider.gameObject
                         .GetComponents<IInteractable>()?
                         .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
                 if (interactable != null)
                 {
-                    mainCharacter.ClearAllActions();
-                    mainCharacter.InteractWith(interactable);
+                    mainCharacter.PerformAction(new Interact(interactable, mainCharacter));
                     creatures.Add(null);
                 }
                 else
@@ -161,7 +161,7 @@ namespace SunsetSystems.Input
                         if (gridElement.Visited is not GridElement.Status.Occupied)
                         {
                             Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.ID} to grid element {gridElement.gameObject.name}!");
-                            CombatManager.CurrentActiveActor.Move(gridElement);
+                            CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
                         }
                         else
                         {
@@ -182,7 +182,7 @@ namespace SunsetSystems.Input
                         if (enemy.Data.Faction is Faction.Hostile && IsInRange(enemy))
                         {
                             Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
-                            CombatManager.CurrentActiveActor.Attack(enemy);
+                            CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
                         }
                     }
                     break;
@@ -210,7 +210,7 @@ namespace SunsetSystems.Input
             return requiredTarget switch
             {
                 Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
-                Spellbook.Target.Friendly => target is PlayerControlledCharacter || target.Data.Faction is Faction.Friendly,
+                Spellbook.Target.Friendly => target.Faction is Faction.PlayerControlled || target.Faction is Faction.Friendly,
                 Spellbook.Target.Hostile => target.Data.Faction is Faction.Hostile,
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
                 Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
@@ -335,18 +335,19 @@ namespace SunsetSystems.Input
                         lineRenderer.enabled = false;
                         lastHit = hit.collider;
                     }
-                    DefaultNPC creature = lastHit.GetComponent<DefaultNPC>();
-                    if (creature)
+                    ICreature creature = lastHit.GetComponent<ICreature>();
+                    if (creature != null && creature.Faction is Faction.Hostile)
                     {
                         lineRenderer.positionCount = 2;
-                        lineRenderer.SetPosition(0, lineRenderer.transform.position);
-                        lineRenderer.SetPosition(1, creature.LineTarget.position);
-                        Color color = IsInRange(creature)
-                            ? Color.green
-                            : Color.red;
-                        lineRenderer.startColor = color;
-                        lineRenderer.endColor = color;
-                        lineRenderer.enabled = true;
+                        throw new NotImplementedException();
+                        //lineRenderer.SetPosition(0, lineRenderer.transform.position);
+                        //lineRenderer.SetPosition(1, creature.LineTarget.position);
+                        //Color color = IsInRange(creature)
+                        //    ? Color.green
+                        //    : Color.red;
+                        //lineRenderer.startColor = color;
+                        //lineRenderer.endColor = color;
+                        //lineRenderer.enabled = true;
                     }
                 }
             }
@@ -354,20 +355,20 @@ namespace SunsetSystems.Input
 
         private void MoveCurrentSelectionToPositions(RaycastHit hit)
         {
-            List<Creature> allSelected = Selection.Instance.GetAllSelected().Select(s => s.GetCreature()) as List<Creature>;
+            List<ICreature> allSelected = Selection.Instance.GetAllSelected().Select(s => s.GetCreature()) as List<ICreature>;
             MoveCreaturesToPosition(allSelected, hit.point);
         }
 
-        private void MoveCreaturesToPosition(List<Creature> creatures, Vector3 samplingPoint)
+        private void MoveCreaturesToPosition(List<ICreature> creatures, Vector3 samplingPoint)
         {
             float stoppingDistance = 0f;
             for (int i = 0; i < creatures.Count; i++)
             {
                 NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
                 stoppingDistance += (i % 2) * _followerStoppingDistance;
-                Creature creature = creatures[i];
+                ICreature creature = creatures[i];
                 if (creature != null)
-                    creature.Move(hit.position, stoppingDistance);
+                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance));
             }
         }
     }

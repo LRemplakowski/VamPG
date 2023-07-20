@@ -1,8 +1,10 @@
-﻿namespace AI.Actions
+﻿using Apex.AI;
+using SunsetSystems.Entities.Characters.Actions;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace AI.Actions
 {
-    using Apex.AI;
-    using System.Collections.Generic;
-    using UnityEngine;
 
     public class MoveToTargetPosition : ActionBase<CreatureContext>
     {
@@ -12,7 +14,7 @@
             if (targetPosition != null)
             {
                 Debug.Log("Moving to " + targetPosition);
-                context.Owner.Move(targetPosition);
+                context.ActionPerformer.PerformAction(new Move(context.ActionPerformer, targetPosition.WorldPosition, 0f));
                 context.CurrentMoveTarget = null;
             }
             else

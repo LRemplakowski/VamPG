@@ -1,10 +1,11 @@
+using Apex.AI;
+using Apex.Serialization;
+using SunsetSystems.Entities.Characters.Actions;
+using System;
+using UnityEngine;
+
 namespace AI.Scorers.Option
 {
-    using Apex.AI;
-    using Apex.Serialization;
-    using SunsetSystems.Entities.Characters.Actions;
-    using UnityEngine;
-
     public class IsCurrentEntityActionIdle : ContextualScorerBase<CreatureContext>
     {
         [ApexSerialization]
@@ -12,7 +13,8 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            return not ^ context.Owner.PeekActionFromQueue().GetType().Equals(typeof(Idle)) ? score : 0f;
+            //return not ^ context.Owner.PeekActionFromQueue().GetType().Equals(typeof(Idle)) ? score : 0f;
+            throw new NotImplementedException();
         }
     }
 }

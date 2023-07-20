@@ -6,6 +6,7 @@ using SunsetSystems.Party;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using SunsetSystems.Entities.Characters.Interfaces;
 
 namespace SunsetSystems.Persistence
 {
@@ -70,11 +71,10 @@ namespace SunsetSystems.Persistence
         public async Task MoveToArea()
         {
             await _fadeUI.DoFadeOutAsync(.5f);
-            List<Creature> party = PartyManager.ActiveParty;
+            List<ICreature> party = PartyManager.ActiveParty;
             for (int i = 0; i < party.Count; i++)
             {
-                party[i].ClearAllActions();
-                party[i].ForceCreatureToPosition(_targetEntryPoint.transform.position);
+                party[i].ForceToPosition(_targetEntryPoint.transform.position);
                 await Task.Yield();
             }
             if (!_cameraControlScript)

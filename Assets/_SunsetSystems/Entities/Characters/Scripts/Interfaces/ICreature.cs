@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Interfaces
 {
-    public interface ICreature : ICombatant
+    public interface ICreature : IEntity, ICombatant
     {
-        new IEntityReferences References { get; }
-
         Task PerformAction(EntityAction action);
         bool HasActionsInQueue();
+
+        void ForceToPosition(Vector3 position);
     }
 }

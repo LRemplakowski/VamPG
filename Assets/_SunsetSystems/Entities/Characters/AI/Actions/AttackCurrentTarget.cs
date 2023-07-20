@@ -2,16 +2,19 @@
 {
     using Apex.AI;
     using SunsetSystems.Entities.Characters;
+    using SunsetSystems.Entities.Characters.Actions;
+    using SunsetSystems.Entities.Characters.Interfaces;
+    using SunsetSystems.Entities.Interfaces;
     using System.Collections.Generic;
 
     public class AttackCurrentTarget : ActionBase<CreatureContext>
     {
         public override void Execute(CreatureContext context)
         {
-            Creature owner = context.Owner;
-            Creature target = context.CurrentTarget;
+            ICombatant owner = context.Owner;
+            ICombatant target = context.CurrentTarget;
 
-            owner.Attack(target);
+            context.ActionPerformer.PerformAction(new Attack(target, owner));
         }
     }
 }

@@ -1,9 +1,9 @@
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Persistence
 {

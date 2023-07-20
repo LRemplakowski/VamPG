@@ -9,6 +9,7 @@ using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using SunsetSystems.Resources;
+using SunsetSystems.Entities.Interfaces;
 
 public class CombatBehaviour : MonoBehaviour, IContextProvider
 {
@@ -103,7 +104,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
                     CombatManager.Instance.NextRound();
     }
 
-    private void OnMovementStarted(ICreature who)
+    private void OnMovementStarted(ICombatant who)
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
@@ -111,7 +112,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         }
     }
 
-    private void OnMovementFinished(ICreature who)
+    private void OnMovementFinished(ICombatant who)
     {
         if (who.Equals(Owner))
         {
@@ -119,7 +120,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         }
     }
 
-    private void OnHostileActionFinished(ICreature target, ICreature performer)
+    private void OnHostileActionFinished(ICombatant target, ICombatant performer)
     {
         if (performer.Equals(Owner))
         {

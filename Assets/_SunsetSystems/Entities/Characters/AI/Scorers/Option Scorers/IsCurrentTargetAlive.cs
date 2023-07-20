@@ -12,7 +12,7 @@ namespace AI.Scorers.Option
 
         public override float Score(CreatureContext context)
         {
-            return not ^ (context.CurrentTarget != null && context.CurrentTarget.GetComponent<StatsManager>().IsAlive()) ? score : 0f;
+            return not ^ (context.CurrentTarget != null && context.CurrentTarget.References.GetComponent<StatsManager>().IsAlive()) ? score : 0f;
         }
     }
 }

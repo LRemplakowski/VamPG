@@ -89,8 +89,9 @@ namespace SunsetSystems.Inventory
                     PlayerInventory.TryRemoveItem(new(item));
                     equipmentData.EquipmentSlots[slotID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
-                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
-                    data.Equipment = Instance._coterieEquipmentData[characterID];
+                    //CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    //data.Equipment = Instance._coterieEquipmentData[characterID];
+                    throw new NotImplementedException();
                     ItemEquipped?.Invoke(characterID);
                 }
                 else
@@ -128,8 +129,9 @@ namespace SunsetSystems.Inventory
                     PlayerInventory.AddItem(new(item));
                     equipmentData.EquipmentSlots[slot.ID] = slot;
                     Instance._coterieEquipmentData[characterID] = equipmentData;
-                    CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
-                    data.Equipment = Instance._coterieEquipmentData[characterID];
+                    //CreatureData data = PartyManager.Instance.GetPartyMemberByID(characterID).Data;
+                    //data.Equipment = Instance._coterieEquipmentData[characterID];
+                    throw new NotImplementedException();
                     ItemUnequipped?.Invoke(characterID);
                 }
                 return success;

@@ -15,16 +15,16 @@ MonoBehaviour:
   active: 1
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.75
+    m_Value: 1
   intensity:
     m_OverrideState: 1
-    m_Value: 0.271
+    m_Value: 0.683
   scatter:
     m_OverrideState: 1
-    m_Value: 0.149
+    m_Value: 0.347
   tint:
     m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
@@ -42,7 +42,7 @@ MonoBehaviour:
     m_Value: 2
   m_HighQualityPrefiltering:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   m_HighQualityFiltering:
     m_OverrideState: 1
     m_Value: 1
@@ -70,16 +70,16 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: -1.5
+    m_Value: 12.8
   compensation:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   limitMin:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: 12.5
   limitMax:
     m_OverrideState: 1
-    m_Value: -1.5
+    m_Value: 13
   curveMap:
     m_OverrideState: 0
     m_Value:
@@ -163,10 +163,10 @@ MonoBehaviour:
     m_Value: 1
   adaptationSpeedDarkToLight:
     m_OverrideState: 1
-    m_Value: 3
+    m_Value: 8
   adaptationSpeedLightToDark:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 8
   weightTextureMask:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -180,8 +180,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   centerAroundExposureTarget:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   proceduralCenter:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
@@ -212,7 +212,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 1
   useFullACES:
     m_OverrideState: 0
     m_Value: 0
@@ -279,41 +279,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0775cbb206825d541bf6c0297ee524ca, type: 3}
   m_Name: SplitToning
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {r: 0.38679248, g: 0.38679248, b: 0.38679248, a: 1}
+    m_Value: {r: 0.3970588, g: 0.41470587, b: 0.45, a: 1}
   highlights:
     m_OverrideState: 1
-    m_Value: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    m_Value: {r: 0.6981132, g: 0.62718487, b: 0.5960306, a: 1}
   balance:
     m_OverrideState: 1
-    m_Value: -10
---- !u!114 &-4657058639176779097
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 598e2d32e2c7b0c418e030c3236d663a, type: 3}
-  m_Name: ChromaticAberration
-  m_EditorClassIdentifier: 
-  active: 1
-  quality:
-    m_OverrideState: 1
-    m_Value: 1
-  spectralLut:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.1
-  m_MaxSamples:
-    m_OverrideState: 1
-    m_Value: 6
+    m_Value: 0
 --- !u!114 &-3189233672739655379
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -329,13 +304,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.90999997, y: 1, z: 0.96099997, w: 0.03876911}
+    m_Value: {x: 0.87968826, y: 0.91807824, z: 1, w: 0.0013859341}
   midtones:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 0.9921357, z: 0.88656425, w: 0}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0, z: 0.0026607513, w: -0.7311501}
+    m_Value: {x: 1, y: 1, z: 1, w: 0}
   shadowsStart:
     m_OverrideState: 0
     m_Value: 0
@@ -363,10 +338,10 @@ MonoBehaviour:
   active: 1
   temperature:
     m_OverrideState: 1
-    m_Value: -40
+    m_Value: 3
   tint:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 6
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,7 +352,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Gaia Night HDRP Post Processing Profile
+  m_Name: Gaia Day HDRP Post Processing Profile
   m_EditorClassIdentifier: 
   components:
   - {fileID: 4399353755296866317}
@@ -391,8 +366,6 @@ MonoBehaviour:
   - {fileID: -2632822790516930173}
   - {fileID: -7533960277209232648}
   - {fileID: 3661820133455880829}
-  - {fileID: -4657058639176779097}
-  - {fileID: 6101142139205673362}
 --- !u!114 &2117887315035477800
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -411,13 +384,13 @@ MonoBehaviour:
     m_Value: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 0.08370417, g: 0.09145891, b: 0.103773594, a: 1}
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
     m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.356
+    m_Value: 0.235
   smoothness:
     m_OverrideState: 1
     m_Value: 0.625
@@ -451,16 +424,16 @@ MonoBehaviour:
     m_Value: 0
   contrast:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 5
   colorFilter:
-    m_OverrideState: 1
-    m_Value: {r: 0.9723464, g: 0.9723464, b: 0.9723464, a: 0}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 0}
   hueShift:
     m_OverrideState: 0
     m_Value: 0
   saturation:
     m_OverrideState: 1
-    m_Value: -45
+    m_Value: 10
 --- !u!114 &3661820133455880829
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -476,13 +449,13 @@ MonoBehaviour:
   active: 1
   lift:
     m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: -0.008109001}
+    m_Value: {x: 1, y: 1, z: 1, w: 0.010741139}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 0.9508333, y: 0.95, z: 1, w: 0.07174888}
+    m_Value: {x: 1, y: 1, z: 1, w: -0.2300109}
   gain:
-    m_OverrideState: 0
-    m_Value: {x: 1, y: 1, z: 1, w: 0}
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 1, z: 1, w: -0.00029473956}
 --- !u!114 &4399353755296866317
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -504,15 +477,15 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 0.8
   directLightingStrength:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.8
   radius:
     m_OverrideState: 1
     m_Value: 1
   spatialBilateralAggressiveness:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.15
   temporalAccumulation:
     m_OverrideState: 1
@@ -564,31 +537,6 @@ MonoBehaviour:
   m_DenoiserRadius:
     m_OverrideState: 1
     m_Value: 0.5
---- !u!114 &6101142139205673362
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6b00fcf518bb94a90b408492e07b44, type: 3}
-  m_Name: FilmGrain
-  m_EditorClassIdentifier: 
-  active: 1
-  type:
-    m_OverrideState: 1
-    m_Value: 1
-  intensity:
-    m_OverrideState: 1
-    m_Value: 0.3
-  response:
-    m_OverrideState: 0
-    m_Value: 0.8
-  texture:
-    m_OverrideState: 0
-    m_Value: {fileID: 0}
 --- !u!114 &8358557847009993446
 MonoBehaviour:
   m_ObjectHideFlags: 3

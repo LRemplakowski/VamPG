@@ -6,7 +6,6 @@ namespace SunsetSystems.Persistence
     [Serializable]
     public class GlobalPersistenceData
     {
-        [ES3Serializable]
         private Dictionary<string, object> _persistenceDataDictionary = new();
 
         public void UpdateSaveData<T>(T dataProvider) where T : ISaveable

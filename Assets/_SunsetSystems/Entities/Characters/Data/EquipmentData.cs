@@ -21,9 +21,9 @@ namespace SunsetSystems.Entities.Characters
 
         private string _selectedWeapon;
 
-        private static StringEquipmentSlotDictionary GetSlotsPreset()
+        private static Dictionary<string, EquipmentSlot> GetSlotsPreset()
         {
-            StringEquipmentSlotDictionary equipmentSlots = new();
+            Dictionary<string, EquipmentSlot> equipmentSlots = new();
             equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
             equipmentSlots.Add(SLOT_WEAPON_SECONDARY, new EquipmentSlot(ItemCategory.WEAPON, "Secondary Weapon", SLOT_WEAPON_SECONDARY));
             equipmentSlots.Add(SLOT_CHEST, new EquipmentSlot(ItemCategory.CLOTHING, "Chest", SLOT_CHEST));

@@ -20,8 +20,8 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private float _money;
         public static ItemStorage PlayerInventory => Instance._playerInventory;
-        [SerializeField, ES3Serializable]
-        private StringEquipmentDataDictionary _coterieEquipmentData = new();
+        [SerializeField]
+        private Dictionary<string, EquipmentData> _coterieEquipmentData = new();
         private UniqueId _unique;
         public string DataKey => _unique.Id;
 

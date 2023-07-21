@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName, LastName;
         public string FullName => $"{FirstName} {LastName}";
-        [ES3Serializable]
+        [SerializeField]
         private string _id;
         public string ID => _id;
         public string PortraitFileName;
@@ -22,9 +22,9 @@ namespace SunsetSystems.Entities.Characters
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
         public string animatorControllerResourceName;
         public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
-        [ES3Serializable]
+        [SerializeField]
         public StatsData Stats;
-        [ES3Serializable]
+        [SerializeField]
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
         public float Money;

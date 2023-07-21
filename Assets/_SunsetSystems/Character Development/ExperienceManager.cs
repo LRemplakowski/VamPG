@@ -2,6 +2,7 @@ using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Experience
@@ -10,7 +11,7 @@ namespace SunsetSystems.Experience
     public class ExperienceManager : Singleton<ExperienceManager>, ISaveable
     {
         [SerializeField]
-        private StringExperienceDataDictionary _experienceDataCache = new();
+        private Dictionary<string, ExperienceData> _experienceDataCache = new();
 
         private UniqueId _unique;
         public string DataKey => _unique.Id;

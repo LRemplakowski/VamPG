@@ -29,11 +29,11 @@ namespace SunsetSystems.Journal
         //private bool _boolValue;
 
         [SerializeField]
-        StringStringDictionary _strings;
+        private Dictionary<string, string> _strings;
         [SerializeField]
-        StringIntDictionary _ints;
+        private Dictionary<string, int> _ints;
         [SerializeField]
-        StringBoolDictionary _bools;
+        private Dictionary<string, bool> _bools;
 
         private bool _isActive;
 

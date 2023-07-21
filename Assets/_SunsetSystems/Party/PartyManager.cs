@@ -287,16 +287,4 @@ namespace SunsetSystems.Party
         public HashSet<string> ActiveMemberKeys;
         public string MainCharacterKey;
     }
-
-    [Serializable]
-    public class StringCreatureDataDictionary : SerializableDictionary<string, CreatureData>
-    {
-
-    }
-
-    [Serializable]
-    public class StringCreatureInstanceDictionary : SerializableDictionary<string, Creature>
-    {
-
-    }
 }

@@ -9,9 +9,9 @@ namespace SunsetSystems.Entities
     public class CreatureDatabase : ScriptableObject
     {
         [SerializeField]
-        private StringCreatureConfigDictionary _creatureRegistry = new();
+        private Dictionary<string, CreatureConfig> _creatureRegistry = new();
         [SerializeField]
-        private StringStringDictionary _accessorRegistry = new();
+        private Dictionary<string, string> _accessorRegistry = new();
         public List<string> AccessorKeys => _accessorRegistry.Keys.ToList();
 
         public static CreatureDatabase Instance { get; private set; }

@@ -1,4 +1,4 @@
-using Adnc.Utility;
+using Sirenix.OdinInspector;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
 using UnityEngine;

@@ -1,5 +1,5 @@
-using Adnc.Utility;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 [System.Serializable]
 public class CreatureAttribute : BaseStat

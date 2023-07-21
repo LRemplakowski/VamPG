@@ -13,13 +13,13 @@ namespace SunsetSystems.Inventory.UI
         private EquipmentSlotDisplay _slotPrefab;
 
         [SerializeField]
-        private StringEquipmentSlotDisplayDictionary _slotViews;
+        private Dictionary<string, EquipmentSlotDisplay> _slotViews;
 
         private void OnValidate()
         {
             foreach (string key in new EquipmentData().EquipmentSlots.Keys)
             {
-                _slotViews.TryAdd(key, null);
+                _slotViews?.TryAdd(key, null);
             }
         }
 

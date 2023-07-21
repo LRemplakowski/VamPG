@@ -14,7 +14,7 @@ namespace SunsetSystems.Journal
     public class QuestJournal : InitializedSingleton<QuestJournal>, IResetable, ISaveable
     {
         [SerializeField]
-        private StringQuestDictionary _activeQuests = new(), _completedQuests = new();
+        private Dictionary<string, Quest> _activeQuests = new(), _completedQuests = new();
         private Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
         [SerializeField]
         private List<Quest> _trackedQuests = new();

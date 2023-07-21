@@ -13,11 +13,11 @@ namespace SunsetSystems.Dialogue
     public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
-        private StringFloatDictionary _floats = new();
+        private Dictionary<string, float> _floats = new();
         [SerializeField]
-        private StringStringDictionary _strings = new();
+        private Dictionary<string, string> _strings = new();
         [SerializeField]
-        private StringBoolDictionary _bools = new();
+        private Dictionary<string, bool> _bools = new();
         [SerializeField]
         private DialogueVariableConfig _variableInjectionConfig;
 
@@ -138,7 +138,7 @@ namespace SunsetSystems.Dialogue
         public Dictionary<string, string> _strings = new();
         public Dictionary<string, bool> _bools = new();
 
-        public DialogueSaveData(StringFloatDictionary _floats, StringStringDictionary _strings, StringBoolDictionary _bools)
+        public DialogueSaveData(Dictionary<string, float> _floats, Dictionary<string, string> _strings, Dictionary<string, bool> _bools)
         {
             this._floats = new(_floats);
             this._strings = new(_strings);

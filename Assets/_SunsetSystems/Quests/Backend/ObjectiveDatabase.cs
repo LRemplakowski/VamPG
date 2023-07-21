@@ -10,9 +10,9 @@ namespace SunsetSystems
     public class ObjectiveDatabase : ScriptableObject
     {
         [SerializeField]
-        private StringObjectiveDictionary _objectiveRegistry = new();
+        private Dictionary<string, Objective> _objectiveRegistry = new();
         [SerializeField]
-        private StringStringDictionary _objectiveAccessorRegistry = new();
+        private Dictionary<string, string> _objectiveAccessorRegistry = new();
 
         public static ObjectiveDatabase Instance { get; private set; }
 

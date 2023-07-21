@@ -9,9 +9,9 @@ namespace SunsetSystems
     public class ItemDatabase : ScriptableObject
     {
         [SerializeField]
-        private StringBaseItemDictionary _objectiveRegistry = new();
+        private Dictionary<string, BaseItem> _objectiveRegistry = new();
         [SerializeField]
-        private StringStringDictionary _objectiveAccessorRegistry = new();
+        private Dictionary<string, string> _objectiveAccessorRegistry = new();
 
         public static ItemDatabase Instance { get; private set; }
 

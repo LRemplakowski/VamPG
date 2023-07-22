@@ -10,6 +10,7 @@ using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.LevelUtility;
 using SunsetSystems.MainMenu;
 using SunsetSystems.Party;
 using SunsetSystems.UI;
@@ -236,7 +237,7 @@ namespace SunsetSystems.Persistence
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await loading.DoFadeOutAsync(.5f);
-            await LevelLoader.Instance.UnloadGameScene();
+            //await LevelLoader.Instance.UnloadGameScene();
             this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
             this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
             await loading.DoFadeInAsync(.5f);

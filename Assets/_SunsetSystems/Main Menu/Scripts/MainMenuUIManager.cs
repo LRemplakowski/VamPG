@@ -12,26 +12,11 @@ namespace SunsetSystems.MainMenu
         [SerializeField]
         private GameObject debugUi;
 
-        private void OnEnable()
-        {
-            LevelLoader.OnBeforeLevelLoad += OnBeforeLevelLoad;
-        }
-
-        private void OnDisable()
-        {
-            LevelLoader.OnBeforeLevelLoad -= OnBeforeLevelLoad;
-        }
-
         // Start is called before the first frame update
         private void Start()
         {
             if (debugUi)
                 debugUi.SetActive(GameConstants.DEBUG_MODE);
-        }
-
-        private void OnBeforeLevelLoad(LevelLoadingEventData data)
-        {
-            gameObject.SetActive(false);
         }
 
         public void StartGameDebug()

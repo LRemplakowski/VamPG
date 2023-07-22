@@ -42,11 +42,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_fadeOutBeforeDialogue)
             {
-                SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-                await fade.DoFadeOutAsync(_fadeTimes.x);
                 _onAfterFadeout?.Invoke();
-                await new WaitForSecondsRealtime(_fadeTimes.y);
-                await fade.DoFadeInAsync(_fadeTimes.z);
             }
             DialogueManager.Instance.StartDialogue(dialogueID, _dialogueProject);
         }

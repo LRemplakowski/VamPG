@@ -1,12 +1,9 @@
-﻿using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interactable;
+﻿using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Data;
 using SunsetSystems.Input.CameraControl;
-using SunsetSystems.Party;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.LevelUtility;
 
 namespace SunsetSystems.Persistence
 {
@@ -29,20 +26,9 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private BoundingBox _targetBoundingBox;
         [SerializeField]
-        private LevelLoader _sceneLoader;
-        [SerializeField]
-        private SceneLoadingUIManager _fadeUI;
-        [SerializeField]
         private CameraControlScript _cameraControlScript;
 
         private Task loadingTask = null;
-
-        protected override void Start()
-        {
-            base.Start();
-            _sceneLoader = FindObjectOfType<LevelLoader>();
-            _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-        }
 
         protected override void HandleInteraction()
         {
@@ -65,24 +51,24 @@ namespace SunsetSystems.Persistence
 
         public void MoveToScene(LevelLoadingData data)
         {
-            loadingTask = _sceneLoader.LoadGameLevel(data);
+            //loadingTask = LevelLoader.Instance.LoadGameLevel(data);
         }
 
         public async Task MoveToArea()
         {
-            await _fadeUI.DoFadeOutAsync(.5f);
-            List<ICreature> party = PartyManager.ActiveParty;
-            for (int i = 0; i < party.Count; i++)
-            {
-                party[i].ForceToPosition(_targetEntryPoint.transform.position);
-                await Task.Yield();
-            }
-            if (!_cameraControlScript)
-                _cameraControlScript = FindObjectOfType<CameraControlScript>();
-            _cameraControlScript.CurrentBoundingBox = _targetBoundingBox;
-            _cameraControlScript.ForceToPosition(_targetEntryPoint.transform.position);
-            await Task.Delay(500);
-            await _fadeUI.DoFadeInAsync(.5f);
+            //await _fadeUI.DoFadeOutAsync(.5f);
+            //List<ICreature> party = PartyManager.ActiveParty;
+            //for (int i = 0; i < party.Count; i++)
+            //{
+            //    party[i].ForceToPosition(_targetEntryPoint.transform.position);
+            //    await Task.Yield();
+            //}
+            //if (!_cameraControlScript)
+            //    _cameraControlScript = FindObjectOfType<CameraControlScript>();
+            //_cameraControlScript.CurrentBoundingBox = _targetBoundingBox;
+            //_cameraControlScript.ForceToPosition(_targetEntryPoint.transform.position);
+            //await Task.Delay(500);
+            //await _fadeUI.DoFadeInAsync(.5f);
         }
     }
 

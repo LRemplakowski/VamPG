@@ -24,21 +24,6 @@ namespace SunsetSystems.UI
         [field: SerializeField]
         public GameObject HelpOverlay { get; private set; }
 
-        private void OnEnable()
-        {
-            LevelLoader.OnBeforeLevelLoad += OnBeforeLevelLoad;
-        }
-
-        private void OnDisable()
-        {
-            LevelLoader.OnBeforeLevelLoad -= OnBeforeLevelLoad;
-        }
-
-        private void OnBeforeLevelLoad(LevelLoadingEventData data)
-        {
-            gameObject.SetActive(true);
-        }
-
         public void HandleNameplateHover(INameplateReciever nameplateReciever)
         {
             if (string.IsNullOrEmpty(nameplateReciever.NameplateText))

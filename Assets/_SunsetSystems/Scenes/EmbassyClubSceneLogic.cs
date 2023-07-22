@@ -26,16 +26,12 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
         return base.StartSceneAsync(data);
     }
 
-    private async Task DoRecruitAnastasia()
+    private void DoRecruitAnastasia()
     {
-        SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-        await fade.DoFadeOutAsync(.5f);
         anastasiaDialogue.gameObject.SetActive(false);
         anastasiaCompanion.References.GameObject.SetActive(true);
         PartyManager.RecruitCharacter(anastasiaCompanion);
         PartyManager.AddCreatureAsActivePartyMember(anastasiaCompanion);
-        await new WaitForUpdate();
-        await fade.DoFadeInAsync(.5f);
     }
 
     public static class EmbassyClubDialogueCommands
@@ -45,7 +41,7 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
         [YarnCommand("RecruitAnastasia")]
         public static void RecruitAnastasia()
         {
-            _ = sceneLogic.DoRecruitAnastasia();
+            sceneLogic.DoRecruitAnastasia();
         }
     }
 }

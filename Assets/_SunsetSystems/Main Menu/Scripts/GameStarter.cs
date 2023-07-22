@@ -9,6 +9,7 @@ using SunsetSystems.Party;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
+using SunsetSystems.SceneLoading;
 
 namespace SunsetSystems.Data
 {
@@ -27,8 +28,6 @@ namespace SunsetSystems.Data
         [SerializeField]
         private string _initialBoundingBoxTag;
         [SerializeField]
-        private LevelLoader _sceneLoader;
-        [SerializeField]
         private GameObject _mainMenuParent;
         [SerializeField]
         private List<GameObject> _objectsToReset;
@@ -37,8 +36,6 @@ namespace SunsetSystems.Data
 
         private void Start()
         {
-            if (!_sceneLoader)
-                _sceneLoader = FindObjectOfType<LevelLoader>();
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
         }
@@ -74,7 +71,7 @@ namespace SunsetSystems.Data
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
             PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameLevel(data);
+            //await _sceneLoader.LoadGameLevel(data);
         }
 
         public async void InitializeGameDebug()
@@ -84,7 +81,7 @@ namespace SunsetSystems.Data
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             PartyManager.RecruitMainCharacter(new(debugAsset));
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameLevel(data);
+            //await _sceneLoader.LoadGameLevel(data);
         }
 
         public async void InitializeGameJam()
@@ -97,7 +94,7 @@ namespace SunsetSystems.Data
             LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
             SaveLoadManager.UpdateRuntimeDataCache();
-            await _sceneLoader.LoadGameLevel(data);
+            //await _sceneLoader.LoadGameLevel(data);
         }
 
         public void DisableMainMenu()

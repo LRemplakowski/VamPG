@@ -73,37 +73,10 @@ namespace SunsetSystems.Party
             ISaveable.RegisterSaveable(this);
         }
 
-        private void OnEnable()
-        {
-            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
-        }
-
-        private void OnDisable()
-        {
-            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
-        }
-
         protected override void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
             base.OnDestroy();
-        }
-
-        private void OnAfterLevelLoad(LevelLoadingEventData data)
-        {
-            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
-            if (entryPoint)
-            {
-                InitializePartyAtPosition(entryPoint.transform.position);
-            }
-            else if (_partyPositions != null)
-            {
-                foreach (string key in _activeCoterieMemberKeys)
-                {
-                    _activeParty.Add(key, InitializePartyMember(_creatureDataCache[key], _partyPositions[key]));
-                }
-                _partyPositions = null;
-            }
         }
 
         public override void Initialize()

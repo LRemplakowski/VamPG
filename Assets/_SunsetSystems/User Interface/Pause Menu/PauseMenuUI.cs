@@ -1,5 +1,5 @@
 using SunsetSystems.Persistence;
-using SunsetSystems.Persistence.UI;
+using SunsetSystems.SceneLoading;
 using SunsetSystems.UI.Pause;
 using SunsetSystems.Utils;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace SunsetSystems.UI
         {
             SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await loading.DoFadeOutAsync(.5f);
-            await LevelLoader.Instance.UnloadGameScene();
+            //await LevelLoader.Instance.UnloadGameScene();
             OnReturnToMenu?.Invoke();
             await loading.DoFadeInAsync(.5f);
         }

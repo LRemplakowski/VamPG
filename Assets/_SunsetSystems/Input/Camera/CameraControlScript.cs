@@ -47,29 +47,9 @@ namespace SunsetSystems.Input.CameraControl
             ISaveable.RegisterSaveable(this);
         }
 
-        private void OnEnable()
-        {
-            LevelLoader.OnAfterLevelLoad += OnAfterLevelLoad;
-        }
-
-        private void OnDisable()
-        {
-            LevelLoader.OnAfterLevelLoad -= OnAfterLevelLoad;
-        }
-
         private void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
-        }
-
-        private void OnAfterLevelLoad(LevelLoadingEventData data)
-        {
-            BoundingBox boundingBox = this.FindFirstComponentWithTag<BoundingBox>(data.CameraBoundingBoxTag);
-            if (boundingBox is not null)
-                CurrentBoundingBox = boundingBox;
-            Waypoint entryPoint = this.FindFirstComponentWithTag<Waypoint>(data.AreaEntryPointTag);
-            if (entryPoint is not null)
-                ForceToPosition(entryPoint.transform.position);
         }
 
         private const float internalMoveTargetSpeed = 8;

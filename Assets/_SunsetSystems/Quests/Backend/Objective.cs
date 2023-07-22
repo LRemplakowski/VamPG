@@ -42,7 +42,7 @@ namespace SunsetSystems.Journal
         {
             ObjectiveDatabase.Instance?.Register(this);
         }
-
+#if UNITY_EDITOR
         private void Reset()
         {
             AssignNewID();
@@ -50,9 +50,8 @@ namespace SunsetSystems.Journal
 
         private void OnDestroy()
         {
-#if UNITY_EDITOR
             ObjectiveDatabase.Instance.Unregister(this);
-#endif
+
         }
 
         private void AssignNewID()
@@ -60,6 +59,7 @@ namespace SunsetSystems.Journal
             DatabaseID = System.Guid.NewGuid().ToString();
             UnityEditor.EditorUtility.SetDirty(this);
         }
+#endif
         #endregion
 
         public void MakeActive()

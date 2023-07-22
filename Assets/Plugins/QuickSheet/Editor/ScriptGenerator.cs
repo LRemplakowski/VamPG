@@ -18,7 +18,7 @@ using Object = UnityEngine.Object;
 
 namespace UnityQuickSheet
 {
-    internal class ScriptGenerator
+    public class ScriptGenerator
     {
         private const int CommentWrapLength = 35;
         

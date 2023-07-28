@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.UI
+namespace SunsetSystems.Core.SceneLoading.UI
 {
     public class FadeScreenAnimator : MonoBehaviour
     {

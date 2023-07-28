@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using SunsetSystems.UI;
+using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Utils;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
-namespace SunsetSystems.SceneLoading
+namespace SunsetSystems.Core.SceneLoading
 {
     public class LevelLoader : Singleton<LevelLoader>
     {
@@ -23,7 +22,7 @@ namespace SunsetSystems.SceneLoading
 
         private async Task DoSceneLoading(SceneLoadingData data)
         {
-            var asyncOp = Addressables.LoadSceneAsync(data.AddressableScenePaths[0], UnityEngine.SceneManagement.LoadSceneMode.Single);
+            var asyncOp = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[0], UnityEngine.SceneManagement.LoadSceneMode.Single);
             while (asyncOp.IsDone == false)
             {
                 loadingScreenUI.UpadteLoadingBar(asyncOp.PercentComplete);
@@ -33,7 +32,7 @@ namespace SunsetSystems.SceneLoading
             List<Task> loadingOps = new();
             for (int i = 1; i < data.AddressableScenePaths.Count; i++)
             {
-                loadingOps.Add(Addressables.LoadSceneAsync(data.AddressableScenePaths[i], UnityEngine.SceneManagement.LoadSceneMode.Additive).Task);
+                loadingOps.Add(UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[i], UnityEngine.SceneManagement.LoadSceneMode.Additive).Task);
             }
             await Task.WhenAll(loadingOps);
         }

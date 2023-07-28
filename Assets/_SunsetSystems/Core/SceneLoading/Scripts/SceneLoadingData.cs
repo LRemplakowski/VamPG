@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace SunsetSystems.SceneLoading
+namespace SunsetSystems.Core.SceneLoading
 {
     [CreateAssetMenu(fileName = "loadingData_NewSceneLoadingData", menuName = "Scene Loading Data")]
     public class SceneLoadingData : SerializedScriptableObject

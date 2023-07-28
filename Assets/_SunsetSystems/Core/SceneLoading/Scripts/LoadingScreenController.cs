@@ -3,13 +3,16 @@ using UnityEngine.UI;
 using TMPro;
 using SunsetSystems.Persistence;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using SunsetSystems.Core.AddressableManagement;
 
-namespace SunsetSystems.UI
+namespace SunsetSystems.Core.SceneLoading.UI
 {
-    internal class LoadingScreenController : MonoBehaviour
+    public class LoadingScreenController : SerializedMonoBehaviour
     {
-        private const string LOADING_SCREEN_TAG = "LoadingScreen";
-
+        [Title("Runtime References")]
         [SerializeField]
         private Slider loadingBar;
         [SerializeField]
@@ -20,12 +23,16 @@ namespace SunsetSystems.UI
         private Button continueButton;
         [SerializeField]
         private FadeScreenAnimator transitionAnimator;
+        [Title("Asset References")]
+        [SerializeField]
+        private AssetReferenceT<LoadingScreenProviderConfig> loadingScreenProviderReference;
+        private LoadingScreenProviderConfig loadingScreenProviderConfig;
 
         public delegate void LoadingScreenHandler();
         public static event LoadingScreenHandler LoadingScreenEnabled;
         public static event LoadingScreenHandler LoadingScreenDisabled;
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             if (loadingBar == null)
                 loadingBar = GetComponentInChildren<Slider>();
@@ -37,7 +44,15 @@ namespace SunsetSystems.UI
                 continueButton = GetComponentInChildren<Button>();
             loadingBar.value = 0f;
             continueButton.gameObject.SetActive(false);
+            loadingScreenProviderConfig = await AddressableManager.Instance.LoadAssetAsync(loadingScreenProviderReference);
+            backgroundImage.sprite = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
             LoadingScreenEnabled?.Invoke();
+        }
+
+        private void OnDisable()
+        {
+            loadingScreenProviderConfig.ReleaseLoadingScreens();
+            AddressableManager.Instance.ReleaseAsset(loadingScreenProviderReference);
         }
 
         private void Start()

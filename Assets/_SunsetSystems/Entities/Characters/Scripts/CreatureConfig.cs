@@ -3,6 +3,7 @@ using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils;
 using Sirenix.OdinInspector;
+using SunsetSystems.Utils.Extensions;
 
 namespace SunsetSystems.Entities.Characters
 {

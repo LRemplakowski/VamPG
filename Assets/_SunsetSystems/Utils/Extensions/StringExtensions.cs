@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SunsetSystems.Utils
+namespace SunsetSystems.Utils.Extensions
 {
     public static class StringExtensions
     {

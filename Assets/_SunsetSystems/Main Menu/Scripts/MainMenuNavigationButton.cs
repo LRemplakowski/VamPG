@@ -1,12 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SunsetSystems.Persistence;
-using SunsetSystems.UI;
-using SunsetSystems.Utils;
+using SunsetSystems.Core.SceneLoading.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SunsetSystems.MainMenu.UI
 {

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.UI
+namespace SunsetSystems.Core.SceneLoading.UI
 {
     public class SceneLoadingUIManager : MonoBehaviour
     {

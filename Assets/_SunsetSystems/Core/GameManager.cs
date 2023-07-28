@@ -35,6 +35,7 @@ namespace SunsetSystems.Game
         {
             _uniqueId ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
+            CurrentState = GameState.Menu;
         }
 
         private void OnDestroy()
@@ -54,8 +55,10 @@ namespace SunsetSystems.Game
 
         public object GetSaveData()
         {
-            GameManagerSaveData saveData = new GameManagerSaveData();
-            saveData.CurrentState = CurrentState;
+            GameManagerSaveData saveData = new()
+            {
+                CurrentState = CurrentState
+            };
             return saveData;
         }
 

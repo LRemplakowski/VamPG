@@ -1,7 +1,5 @@
-using SunsetSystems.Persistence;
-using SunsetSystems.SceneLoading;
+using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.UI.Pause;
-using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 

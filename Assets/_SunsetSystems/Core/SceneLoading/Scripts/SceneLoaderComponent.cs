@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems.SceneLoading
+namespace SunsetSystems.Core.SceneLoading
 {
     public class SceneLoaderComponent : MonoBehaviour
     {

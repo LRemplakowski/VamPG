@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Utils;
+using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Core.SceneLoading
@@ -12,12 +14,23 @@ namespace SunsetSystems.Core.SceneLoading
         private SceneLoadingUIManager loadingScreenUI;
         [SerializeField]
         private float loadingCrossfadeTime = 1f;
+        [SerializeField]
+        private UltEvent OnLoadingStart, OnLoadingEnd;
 
         public async Task LoadNewScene(SceneLoadingData data)
         {
-            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2);
+            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            OnLoadingStart?.InvokeSafe();
             loadingScreenUI.EnableAndResetLoadingScreen();
+            await new WaitForUpdate();
+            await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data);
+            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            loadingScreenUI.DisableLoadingScreen();
+            OnLoadingEnd?.InvokeSafe();
+            await new WaitForUpdate();
+            await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
+
         }
 
         private async Task DoSceneLoading(SceneLoadingData data)

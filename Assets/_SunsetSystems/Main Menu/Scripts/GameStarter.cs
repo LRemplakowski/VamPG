@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Party;
 using System.Collections.Generic;
 using UltEvents;
+using SunsetSystems.Core.SceneLoading;
 
 namespace SunsetSystems.Data
 {
@@ -26,6 +27,8 @@ namespace SunsetSystems.Data
         private string _initialBoundingBoxTag;
         [SerializeField]
         private GameObject _mainMenuParent;
+        [SerializeField, Required]
+        private SceneLoadingData startSceneData;
         [SerializeField]
         private List<GameObject> _objectsToReset;
         [field: SerializeField]
@@ -67,7 +70,6 @@ namespace SunsetSystems.Data
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
             PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             //await _sceneLoader.LoadGameLevel(data);
         }
 
@@ -76,25 +78,18 @@ namespace SunsetSystems.Data
             Start();
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
             PartyManager.RecruitMainCharacter(new(debugAsset));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             //await _sceneLoader.LoadGameLevel(data);
         }
 
-        public async void InitializeGameJam()
+        public void InitializeGameJam()
         {
             Start();
             SaveLoadManager.SetSaveID(new());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
             PartyManager.RecruitMainCharacter(new(desiree));
-            LevelLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
             OnGameStart?.Invoke();
             SaveLoadManager.UpdateRuntimeDataCache();
-            //await _sceneLoader.LoadGameLevel(data);
-        }
-
-        public void DisableMainMenu()
-        {
-            _mainMenuParent.SetActive(false);
+            _ = LevelLoader.Instance.LoadNewScene(startSceneData);
         }
 
         private CreatureConfig GetMatchingCreatureAsset()

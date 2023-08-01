@@ -36,7 +36,10 @@ namespace SunsetSystems.Core.AddressableManagement
         {
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {
-                Addressables.Release(handle);
+                if (handle.IsValid())
+                    Addressables.Release(handle);
+                else
+                    assetHandlesDictionary.Remove(assetReference);
             }
         }
     }

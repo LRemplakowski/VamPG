@@ -8,7 +8,7 @@ namespace SunsetSystems.Utils
     public class TimeManager : MonoBehaviour
     {
         [ShowInInspector, ReadOnly]
-        private float _currentTimeScale;
+        private float _currentTimeScale = 1f;
         [ShowInInspector, PropertyRange(0f, 20f), OnValueChanged("OnTargetTimeScaleChanged")]
         private float _targetTimeScale = 1f;
 

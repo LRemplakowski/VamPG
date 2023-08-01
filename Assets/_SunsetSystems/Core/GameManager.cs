@@ -14,8 +14,8 @@ namespace SunsetSystems.Game
 
         [SerializeField]
         private GameState _gameState;
-        public static GameState CurrentState 
-        { 
+        public static GameState CurrentState
+        {
             get
             {
                 return Instance._gameState;

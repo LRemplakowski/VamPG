@@ -33,7 +33,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6571141627060250920}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -91,19 +90,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8443822292630448110}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ResumeGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &3033767873130316571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +233,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6571141627060250920}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -304,19 +290,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6006383755089233853}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ResumeGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &860396390809337583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,7 +435,6 @@ RectTransform:
   - {fileID: 8872770346176194568}
   - {fileID: 3838208597848893873}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -505,7 +478,6 @@ GameObject:
   - component: {fileID: 6571141627790031345}
   - component: {fileID: 6571141627790031350}
   - component: {fileID: 6571141627790031344}
-  - component: {fileID: 6571141627790031349}
   - component: {fileID: 3161817703615100290}
   - component: {fileID: 6155399711757232675}
   m_Layer: 5
@@ -528,7 +500,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6571141627060250920}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -586,32 +557,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6155399711757232675}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6571141627790031349}
-        m_TargetAssemblyTypeName: DebugSaveLoadButtonScript, Assembly-CSharp
-        m_MethodName: DoSave
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &6571141627790031349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6571141627790031346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e867976a842c1841a223271681ffc83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sceneLoader: {fileID: 0}
+      m_Calls: []
 --- !u!114 &3161817703615100290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -732,7 +678,6 @@ GameObject:
   - component: {fileID: 7707526133293631649}
   - component: {fileID: 4620429101573531188}
   - component: {fileID: 8255879240059214942}
-  - component: {fileID: 6672494443900711097}
   - component: {fileID: 4809065626288602384}
   - component: {fileID: 3694539878128658264}
   m_Layer: 5
@@ -755,7 +700,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6571141627060250920}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -813,33 +757,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3694539878128658264}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6672494443900711097}
-        m_TargetAssemblyTypeName: SunsetSystems.Loading.DebugSaveLoadButtonScript,
-          Assembly-CSharp
-        m_MethodName: DoLoad
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &6672494443900711097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8562964097330971079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e867976a842c1841a223271681ffc83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sceneLoader: {fileID: 0}
+      m_Calls: []
 --- !u!114 &4809065626288602384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,6 +872,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 6571141627060250920}
     m_Modifications:
     - target: {fileID: 75545493794225189, guid: 84e925bd4e0d28448805ae5802cdde7d, type: 3}
@@ -1453,6 +1372,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84e925bd4e0d28448805ae5802cdde7d, type: 3}
 --- !u!224 &3838208597848893873 stripped
 RectTransform:

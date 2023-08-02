@@ -4,15 +4,15 @@ position: -500,-105
 ---
 [nomarkup][You pick up the phone. The last voice you ever wanted to hear blares out the line - your ex-husband.][/nomarkup] #line:0c4dd8d 
 -> Continue #line:00c2793 
-Chad: Hey Dez, how've you been? #line:05b9b6b 
+Arthur: Hey Dez, how've you been? #line:05b9b6b 
 -> Continue #line:02d8b52 
 [nomarkup][The worst part is you know the question is sincere.][/nomarkup] #line:0a666ec 
 -> {$pcName}: ... Good. #line:0a19d5a 
-    Chad: Glad to hear you're adjusting well. #line:018f165 
+    Arthur: Glad to hear you're adjusting well. #line:018f165 
     -> Continue #line:0869210 
     <<jump AboutMoney>>
 -> {$pcName}: Not going to lie to you, I've been better. #line:06d718b 
-    Chad: I'm sorry to hear that. This has been hard on both of us. #line:0b2b52e 
+    Arthur: I'm sorry to hear that. This has been hard on both of us. #line:0b2b52e 
     -> {$pcName}: Yeah, "both of us". #line:07c1205 
     <<jump AboutMoney>>
 -> {$pcName}: \[Hang up.\] #line:0e6a023 
@@ -22,7 +22,7 @@ title: AboutMoney
 tags:
 position: -403,75
 ---
-Chad: Listen I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you. #line:0ea9d8f 
+Arthur: Listen I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you. #line:0ea9d8f 
 -> {$pcName}: I'm working on it, give me time. (Charisma + Persuasion) #line:069ca96 
     <<if Roll("charisma","persuasion") >= 1>>
     <<jump CharismaSuccess>>
@@ -35,9 +35,9 @@ Chad: Listen I know I'm probably the last person you want to hear from, but I wa
 title: CharismaSuccess
 position: -174,180
 ---
-Chad: Okay. I trust you. Just keep me updated alright? You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #success #line:01dfbad 
+Arthur: Okay. I trust you. Just keep me updated alright? You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #success #line:01dfbad 
 -> {$pcName}: \[Guilt hits you like a bag o bricks. He doesn't deserve this\] Will do. #line:0f9c1f7 
-    Chad: I'll let you to it then. Bye Dez. I lo- #line:078a347 
+    Arthur: I'll let you to it then. Bye Dez. I lo- #line:078a347 
     -> Continue #line:07e8ab2 
     [nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated.][/nomarkup] #line:0f1530a 
     -> Continue #line:08b6ae3 
@@ -46,18 +46,18 @@ Chad: Okay. I trust you. Just keep me updated alright? You know better than anyo
 title: CharismaFail
 position: -165,76
 ---
-Chad: That's what you said a month ago. Look, I only gave it to you to help you get on your feet. The last thing I want to do is take my ex to court, but I don't know what else to do. #failure #line:0bcbbb4 
+Arthur: That's what you said a month ago. Look, I only gave it to you to help you get on your feet. The last thing I want to do is take my ex to court, but I don't know what else to do. #failure #line:0bcbbb4 
 -> {$pcName}: I understand where you're coming from. I'm sorry. #line:0dc765d 
-    Chad: It's okay. I know you're good for it. Just keep me updated alright. You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #line:0afe6a1 
+    Arthur: It's okay. I know you're good for it. Just keep me updated alright. You know better than anyone I'm not exactly swimming in cash here. \[He awkwardly chuckles.\] #line:0afe6a1 
     -> Continue #line:09f81c8 
     -> {$pcName}: \[Guilt hits you like a bag o bricks. He doesn't deserve this\] Will do. #line:01977cb 
-    Chad: I'll let you to it then. Bye Dez. I lo- #line:0b40583 
+    Arthur: I'll let you to it then. Bye Dez. I lo- #line:0b40583 
     -> Continue #line:084ba8e 
     [nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated.][/nomarkup] #line:00361f3 
     -> Continue #line:081d6c3 
     <<jump CharismaCommonPart>>
 -> {$pcName}: Fuck off with your vague threats. #line:0a32815 
-    Chad: Let's not escalate things Dez. I don't want to fight with you anymore. #line:011fcb1 
+    Arthur: Let's not escalate things Dez. I don't want to fight with you anymore. #line:011fcb1 
     -> Continue #line:097a79f 
     [nomarkup][Frustrated, you hear him rush to hang up then the HUM of the dial tone.][/nomarkup] #line:0a7393e 
     -> Continue #line:03535ca 
@@ -72,7 +72,7 @@ position: 48,159
 -> Continue #line:00d174c 
 {$pcName}: Will do. #line:0930854 
 -> Continue #line:03ea092 
-Chad: I'll let you get to it then. Bye Dez. I lo- #line:0d7c85b 
+Arthur: I'll let you get to it then. Bye Dez. I lo- #line:0d7c85b 
 -> Continue #line:0195250 
 [nomarkup][He quickly catches his mistake and hangs up the phone. Just force of habit you tell yourself. The worst part is you would have reciprocated.][/nomarkup] #line:09723fd 
 -> Continue #line:04e7697 
@@ -82,7 +82,7 @@ title: HangUp
 tags:
 position: -101,-76
 ---
-[nomarkup][You hear Chad desperately mutter some syllables before you hang up the line.][/nomarkup] #line:0354cbf 
+[nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup] #line:0354cbf 
 -> Continue #line:0ce67c8 
 <<jump EndCall>>
 ===
@@ -92,7 +92,7 @@ position: 216,-10
 ---
 <<CompleteObjective "MAIN_SATURDAY_START" "ANSWER_PHONE">>
 <<EnableInteractionsAfterPhoneCall>>
-[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to dream about living the quintessential suburban fantasy, with a white-picket fence and two or three kids running around in the backyard, but when it came time to commit to that plan, you weren't ready, and Chad never pressed. How far things have come since then.][/nomarkup] #line:0ca665a 
+[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to dream about living the quintessential suburban fantasy, with a white-picket fence and two or three kids running around in the backyard, but when it came time to commit to that plan, you weren't ready, and Arthur never pressed. How far things have come since then.][/nomarkup] #line:0ca665a 
 -> Continue #line:0be1a16 
 {$innerVoice}: Ugh. #line:06e74f0 
 -> Continue #line:0f624f5 

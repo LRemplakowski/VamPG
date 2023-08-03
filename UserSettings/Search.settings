@@ -17,6 +17,11 @@ scopes = {
 	"last_search.E8DA1663" = "t:Texture ext:png"
 	"OpenInspectorPreview.E8DA1663" = "0"
 	"currentGroup.E8DA1663" = "all"
+	"picker_window_position_offset.3172962C" = "967;401;320;550"
+	"picker_search_text.3172962C" = "giz "
+	"last_search.3172962C" = "giz "
+	"OpenInspectorPreview.3172962C" = "0"
+	"currentGroup.3172962C" = "all"
 }
 providers = {
 	adb = {
@@ -77,6 +82,26 @@ providers = {
 	profilermarkers = {
 		active = false
 		priority = 100
+		defaultAction = null
+	}
+	menu = {
+		active = true
+		priority = 80
+		defaultAction = null
+	}
+	settings = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	calculator = {
+		active = true
+		priority = 10
+		defaultAction = null
+	}
+	static_methods = {
+		active = true
+		priority = 85
 		defaultAction = null
 	}
 }

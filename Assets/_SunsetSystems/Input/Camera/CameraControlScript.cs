@@ -5,6 +5,7 @@ using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using System;
 
 namespace SunsetSystems.Input.CameraControl
 {
@@ -13,26 +14,16 @@ namespace SunsetSystems.Input.CameraControl
     public class CameraControlScript : MonoBehaviour, ISaveable
     {
         [SerializeField]
-        public float lookOffset;
-        [SerializeField]
-        public float cameraAngle;
-        [SerializeField]
         public float defaultZoom;
         [SerializeField]
         public float zoomMax;
         [SerializeField]
         public float zoomMin;
         [SerializeField]
-        public float rotationSpeed;
+        private CinemachineVirtualCamera mainVirtualCam;
         
         [SerializeField]
         private static LayerMask _groundRaycastMask;
-        [SerializeField]
-        private Transform _rotationTarget;
-        [SerializeField]
-        private Camera _mainCamera;
-        [SerializeField]
-        private Vector3 _cameraPositionTarget;
         [SerializeField]
         private BoundingBox _currentBoundingBox;
         public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
@@ -68,50 +59,27 @@ namespace SunsetSystems.Input.CameraControl
             private set
             {
                 _currentZoomAmount = value;
-                UpdateCameraTarget();
             }
         }
         private float _internalZoomSpeed = 4;
 
-        private void UpdateCameraTarget()
-        {
-            _cameraPositionTarget = (Vector3.up * lookOffset) + 
-                (Quaternion.AngleAxis(cameraAngle, Vector3.right) * Vector3.back) * _currentZoomAmount;
-        }
-
         void Start()
         {
-            if (!_mainCamera){
-                _mainCamera = GetComponentInChildren<Camera>();
-            }
             if(_moveTarget != Vector3.zero){
-                _mainCamera.transform.position = _cameraPositionTarget;
                 _moveTarget = transform.position;
             }
-            _mainCamera.transform.rotation = Quaternion.AngleAxis(cameraAngle, Vector3.right);
             currentZoom = defaultZoom;
-            _mainCamera.transform.position = _cameraPositionTarget;
-            _rotationTarget = transform;
-            RealignCamera();
-        }
-
-
-        private void RealignCamera()
-        {
-            _mainCamera.transform.localPosition = Vector3.zero;
-            _mainCamera.transform.LookAt(_rotationTarget);
         }
 
         public void ForceToPosition(Vector3 position)
         {
-            _mainCamera.transform.position = position;
             _moveTarget = transform.position;
             Debug.Log("Forcing camera to position " + position);
         }
 
         public void ForceRotation(Vector3 eulerAngles)
         {
-            _mainCamera.transform.localEulerAngles = eulerAngles;
+            throw new NotImplementedException();
         }
         
         public void OnMove(InputAction.CallbackContext context)
@@ -123,9 +91,6 @@ namespace SunsetSystems.Input.CameraControl
             _moveDirection = new Vector3(value.x, 0, value.y);
             if (GameManager.CurrentState == GameState.Conversation){
                 _moveDirection = Vector3.zero;
-            }
-            else if (GameManager.CurrentState == GameState.Combat){
-                return;
             }
         }
 
@@ -148,22 +113,9 @@ namespace SunsetSystems.Input.CameraControl
             
         }
 
-        public void OnRotate(InputAction.CallbackContext context)
-        {
-            if (!(context.performed || context.canceled))
-                return;
-            _rotationDirection = -context.ReadValue<Vector2>().x;
-            if (GameManager.CurrentState == GameState.Conversation)
-                _rotationDirection = 0;
-            else if (GameManager.CurrentState == GameState.Combat){
-                return;
-            }
-        }
-
         private void FixedUpdate()
         {
-            _moveTarget += (transform.forward * _moveDirection.z + transform.right *
-            _moveDirection.x) * Time.fixedDeltaTime * internalMoveTargetSpeed;
+            _moveTarget += Quaternion.AngleAxis(mainVirtualCam.transform.localRotation.eulerAngles.y, Vector3.up) * _moveDirection * internalMoveTargetSpeed * Time.fixedDeltaTime;
             Ray ray = new(transform.position + Vector3.up, -Vector3.up);
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f, _groundRaycastMask, QueryTriggerInteraction.Collide)){
                 _moveTarget = new(_moveTarget.x, hitInfo.point.y, _moveTarget.z);
@@ -184,8 +136,6 @@ namespace SunsetSystems.Input.CameraControl
         private void LateUpdate()
         {
             transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * internalMoveSpeed);
-            _mainCamera.transform.localPosition = Vector3.Lerp(_mainCamera.transform.localPosition, _cameraPositionTarget, Time.deltaTime * _internalZoomSpeed);
-            transform.Rotate(rotationSpeed * _rotationDirection * Time.deltaTime * Vector3.up);
         }
 
         public object GetSaveData()
@@ -194,7 +144,6 @@ namespace SunsetSystems.Input.CameraControl
             saveData.CurrentBoundingBoxTag = _currentBoundingBox?.GetComponent<Tagger>().tag ?? "";
             saveData.RigPosition = transform.position;
             saveData.CameraMoveTarget = _moveTarget;
-            saveData.CameraRotationTarget = _rotationTarget.localEulerAngles;
             return saveData;
         }
 
@@ -204,7 +153,6 @@ namespace SunsetSystems.Input.CameraControl
             _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
             ForceToPosition(saveData.RigPosition);
             _moveTarget = saveData.CameraMoveTarget;
-            _rotationTarget.localEulerAngles = saveData.CameraRotationTarget;
         }
     }
 

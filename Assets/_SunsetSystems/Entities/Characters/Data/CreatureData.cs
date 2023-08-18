@@ -34,8 +34,8 @@ namespace SunsetSystems.Entities.Characters
             FirstName = config.Name;
             LastName = config.LastName;
             _id = config.ReadableID;
-            PortraitFileName = config.PortraitFileName;
-            Faction = config.CreatureFaction;
+            PortraitFileName = "";
+            Faction = config.Faction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
             UmaPresetFileName = config.UmaPresetFileName;

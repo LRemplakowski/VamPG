@@ -4,11 +4,13 @@ using SunsetSystems.Resources;
 using SunsetSystems.Utils;
 using Sirenix.OdinInspector;
 using SunsetSystems.Utils.Extensions;
+using SunsetSystems.Entities.Characters.Interfaces;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
-    public class CreatureConfig : ScriptableObject
+    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplate
     {
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; } = "";
@@ -26,9 +28,8 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField, ShowIf("_overrideReadableID")]
         private string _readableIDOverride = "";
         public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
-        [SerializeField]
-        private string _portraitFileName;
-        public string PortraitFileName { get => _portraitFileName; }
+        [field: SerializeField]
+        public AssetReferenceSprite PortraitAssetRef { get; private set; }
         [SerializeField]
         private StatsConfig _statsConfig;
         public StatsConfig StatsAsset { get => _statsConfig; }
@@ -41,7 +42,7 @@ namespace SunsetSystems.Entities.Characters
         public RuntimeAnimatorController AnimatorController => _animatorController;
         [SerializeField]
         private Faction _creatureFaction;
-        public Faction CreatureFaction { get => _creatureFaction; }
+        public Faction Faction { get => _creatureFaction; }
         [SerializeField]
         private BodyType _bodyType;
         public BodyType BodyType { get => _bodyType; }

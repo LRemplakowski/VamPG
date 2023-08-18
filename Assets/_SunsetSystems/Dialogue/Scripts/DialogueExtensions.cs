@@ -14,7 +14,7 @@ namespace SunsetSystems.Dialogue
             Debug.Log($"Fetching config of {speakerID} from the database!");
             if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
             {
-                result = ResourceLoader.GetPortrait(config.PortraitFileName);
+                result = ResourceLoader.GetPortrait("");
             }
             else
             {

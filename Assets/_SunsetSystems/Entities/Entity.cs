@@ -5,11 +5,11 @@ using Sirenix.OdinInspector;
 namespace SunsetSystems.Entities
 {
     [DisallowMultipleComponent]
-    public abstract class Entity : SerializedMonoBehaviour, IEntity, IEntityReferences
+    public abstract class Entity : SerializedMonoBehaviour, IEntity
     {
         public abstract string ID { get; }
         public virtual string Name => gameObject.name;
-        public IEntityReferences References => this;
+        public abstract IEntityReferences References { get; }
 
         public Transform Transform => this.transform;
         public GameObject GameObject => this.gameObject;

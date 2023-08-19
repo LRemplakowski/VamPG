@@ -12,7 +12,7 @@ using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class Creature : PersistentEntity, ICreature, ICombatant, IEntityReferences
+    public class Creature : PersistentEntity, ICreature, ICombatant
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 

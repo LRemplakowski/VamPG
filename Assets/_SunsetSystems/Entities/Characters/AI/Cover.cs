@@ -6,7 +6,7 @@ using UnityEngine;
 namespace SunsetSystems.Entities
 {
     [RequireComponent(typeof(UniqueId))]
-    public class Cover : Entity
+    public class Cover : PersistentEntity
     {
         [SerializeField]
         private UniqueId uniqueID;
@@ -14,8 +14,9 @@ namespace SunsetSystems.Entities
         [SerializeField]
         private CoverQuality coverQuality;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             uniqueID ??= GetComponent<UniqueId>();
         }
 

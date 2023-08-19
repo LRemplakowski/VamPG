@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 14182379}
   - component: {fileID: 14182381}
   - component: {fileID: 14182380}
+  - component: {fileID: 14182382}
   m_Layer: 0
   m_Name: Creature Template
   m_TagString: Untagged
@@ -173,12 +174,16 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 14182382}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: _references
+      Entry: 10
+      Data: 0
   <Faction>k__BackingField: 0
   _unique: {fileID: 14182381}
   _enablePersistence: 1
@@ -429,6 +434,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: a49d4f0d-ff4b-4374-9242-4ffbab5fe806
+--- !u!114 &14182382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14182378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &21832880
 GameObject:
   m_ObjectHideFlags: 0
@@ -4073,11 +4090,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002162992
+      value: 0.00000002163656
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000011131141
+      value: -0.000000011134561
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4105,11 +4122,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002162992
+      value: 0.00000002163656
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000011131141
+      value: -0.000000011134561
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab

@@ -7,7 +7,7 @@ namespace SunsetSystems.Entities.Interfaces
         Transform Transform { get; }
         GameObject GameObject { get; }
 
-        T GetComponent<T>();
-        T GetComponentInChildren<T>();
+        T GetComponent<T>() where T : Component;
+        T GetComponentInChildren<T>() where T : Component;
     }
 }

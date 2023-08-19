@@ -8,6 +8,7 @@ using SunsetSystems.Entities.Interfaces;
 namespace SunsetSystems.Entities
 {
     [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(CachedReferenceManager))]
     public class PersistentEntity : Entity, IPersistentEntity
     {
         [SerializeField, ReadOnly]
@@ -17,6 +18,18 @@ namespace SunsetSystems.Entities
         public string PersistenceID => _unique?.Id;
         public override string ID => PersistenceID;
         public string GameObjectName => gameObject.name;
+
+        [SerializeField, Required]
+        private IEntityReferences _references;
+        public override IEntityReferences References
+        {
+            get
+            {
+                if (_references == null)
+                    _references = GetComponent<IEntityReferences>();
+                return _references;
+            }
+        }
 
         protected virtual void Awake()
         {

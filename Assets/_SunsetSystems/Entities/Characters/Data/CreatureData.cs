@@ -6,9 +6,9 @@ using UnityEngine;
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public class CreatureData
+    public class CreatureData : MonoBehaviour
     {
-        public string FirstName, LastName;
+        public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
         [SerializeField]
         private string _id;
@@ -22,9 +22,7 @@ namespace SunsetSystems.Entities.Characters
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
         public string animatorControllerResourceName;
         public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
-        [SerializeField]
         public StatsData Stats;
-        [SerializeField]
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
         public float Money;

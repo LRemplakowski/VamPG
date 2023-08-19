@@ -66,9 +66,6 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        public bool IsAlive => StatsManager.IsAlive();
-        public bool IsVampire => Data.CreatureType.Equals(CreatureType.Vampire);
-
         public IWeapon CurrentWeapon => throw new System.NotImplementedException();
 
         public IWeapon PrimaryWeapon => throw new System.NotImplementedException();

@@ -3,25 +3,25 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
-using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 namespace ChaseMacMillan.CurveDesigner
 {
 
     [CustomEditor(typeof(Curve3D))]
-    public class Curve3DInspector : Editor
+    public class Curve3DInspector : Sirenix.OdinInspector.Editor.OdinEditor
     {
         private static readonly int _CurveHint = "NewGUI.CURVE".GetHashCode();
 
         MonoScript script;
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             if (target!=null)
                 script = MonoScript.FromMonoBehaviour((Curve3D)target);
         }
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             Tools.hidden = false;
         }
 

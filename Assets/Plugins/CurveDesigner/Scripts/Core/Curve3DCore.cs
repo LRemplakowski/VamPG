@@ -231,10 +231,6 @@ namespace ChaseMacMillan.CurveDesigner
         {
             get
             {
-                if (_settings == null)
-                {
-                    _settings = Resources.Load<GUITexturesAndStyles>("CurveDesignerSettings");
-                }
                 return _settings;
             }
         }

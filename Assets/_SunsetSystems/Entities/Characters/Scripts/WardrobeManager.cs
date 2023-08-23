@@ -67,7 +67,7 @@ namespace SunsetSystems.Entities.Characters
             Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
             _dca = GetComponent<DynamicCharacterAvatar>();
             _owner = GetComponent<Creature>();
-            _characterID = _owner.Data.ID;
+            _characterID = _owner.Data.DatabaseID;
             _initializedOnce = true;
             _animationController = GetComponent<CreatureAnimationController>();
         }    

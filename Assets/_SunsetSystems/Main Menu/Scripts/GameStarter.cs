@@ -47,7 +47,7 @@ namespace SunsetSystems.Data
 
         public void SelectBodyType(BodyType selectedBodyType)
         {
-            this._playerCharacterData.BodyType = selectedBodyType;
+            //this._playerCharacterData.BodyType = selectedBodyType;
         }
 
         public void SetAttribueValue(AttributeType attribute, int value)
@@ -69,7 +69,7 @@ namespace SunsetSystems.Data
         {
             Start();
             CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
+            //PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
             //await _sceneLoader.LoadGameLevel(data);
         }
 
@@ -77,7 +77,7 @@ namespace SunsetSystems.Data
         {
             Start();
             CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(debugAsset));
+            //PartyManager.RecruitMainCharacter(new(debugAsset));
             //await _sceneLoader.LoadGameLevel(data);
         }
 
@@ -86,7 +86,7 @@ namespace SunsetSystems.Data
             Start();
             SaveLoadManager.SetSaveID(new());
             CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
-            PartyManager.RecruitMainCharacter(new(desiree));
+            //PartyManager.RecruitMainCharacter(new(desiree));
             OnGameStart?.Invoke();
             SaveLoadManager.UpdateRuntimeDataCache();
             _ = LevelLoader.Instance.LoadNewScene(startSceneData);

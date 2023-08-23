@@ -12,29 +12,12 @@ using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class Creature : PersistentEntity, ICreature, ICombatant
+    public class Creature : PersistentEntity, ICreature, ICombatant, ICreatureTemplateProvider
     {
         private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
 
         [field: SerializeField]
         public CreatureData Data { get; set; }
-
-        [SerializeField]
-        private CreatureConfig _config;
-        [field: SerializeField]
-        public NavMeshAgent Agent { get; protected set; }
-
-        [field: SerializeField]
-        public NavMeshObstacle NavMeshObstacle { get; protected set; }
-
-        [field: SerializeField]
-        public StatsManager StatsManager { get; protected set; }
-
-        [field: SerializeField]
-        public CombatBehaviour CombatBehaviour { get; private set; }
-
-        [field: SerializeField]
-        public SpellbookManager SpellbookManager { get; private set; }
 
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
@@ -78,19 +61,12 @@ namespace SunsetSystems.Entities.Characters
 
         public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
 
+        public ICreatureTemplate CreatureTemplate => References.GetComponentInChildren<CreatureData>();
+
         #region Unity messages
         protected override void Awake()
         {
             base.Awake();
-            if (!Agent)
-                Agent = GetComponent<NavMeshAgent>();
-            if (!NavMeshObstacle)
-                NavMeshObstacle = GetComponent<NavMeshObstacle>();
-
-            if (Agent)
-                Agent.enabled = true;
-            if (NavMeshObstacle)
-                NavMeshObstacle.enabled = false;
         }
 
         protected override void Start()
@@ -127,7 +103,7 @@ namespace SunsetSystems.Entities.Characters
         {
             ClearAllActions();
             Debug.Log($"Forcing Creature {gameObject.name} to position: {position}");
-            Agent.Warp(position);
+            References.GetComponent<NavMeshAgent>().Warp(position);
         }
 
         public void ClearAllActions()
@@ -139,30 +115,30 @@ namespace SunsetSystems.Entities.Characters
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        public bool RotateTowardsTarget(Transform target)
-        {
-            if (target == null)
-                return true;
-            Vector3 direction = (target.position - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
-            float dot = Quaternion.Dot(transform.rotation, lookRotation);
-            return dot >= 0.999f || dot <= -0.999f;
-        }
+        //public bool RotateTowardsTarget(Transform target)
+        //{
+        //    if (target == null)
+        //        return true;
+        //    Vector3 direction = (target.position - transform.position).normalized;
+        //    Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
+        //    float dot = Quaternion.Dot(transform.rotation, lookRotation);
+        //    return dot >= 0.999f || dot <= -0.999f;
+        //}
 
-        public async Task FaceTarget(Transform target)
-        {
-            bool agentState = Agent.enabled;
-            bool ObstacleState = NavMeshObstacle.enabled;
-            Agent.enabled = true;
-            NavMeshObstacle.enabled = false;
-            while (!RotateTowardsTarget(target))
-            {
-                await new WaitForUpdate();
-            }
-            Agent.enabled = agentState;
-            NavMeshObstacle.enabled = ObstacleState;
-        }
+        //public async Task FaceTarget(Transform target)
+        //{
+        //    bool agentState = Agent.enabled;
+        //    bool ObstacleState = NavMeshObstacle.enabled;
+        //    Agent.enabled = true;
+        //    NavMeshObstacle.enabled = false;
+        //    while (!RotateTowardsTarget(target))
+        //    {
+        //        await new WaitForUpdate();
+        //    }
+        //    Agent.enabled = agentState;
+        //    NavMeshObstacle.enabled = ObstacleState;
+        //}
 
         public EntityAction PeekActionFromQueue()
         {

@@ -190,8 +190,8 @@ namespace SunsetSystems.Persistence
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationDominicEnter);
             //_ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
-            _ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
-            _ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            //_ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
+            //_ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
             await new WaitForFixedUpdate();
             //await fade.DoFadeInAsync(.5f);
         }
@@ -207,8 +207,8 @@ namespace SunsetSystems.Persistence
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
             //_ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
-            _ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
-            _ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
+            //_ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
+            //_ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
             await fade.DoFadeInAsync(.5f);
         }
 

@@ -136,7 +136,7 @@ namespace SunsetSystems.Spellbook
         private bool DeducePowerCost(DisciplinePower power)
         {
             if (_owner.Faction is Faction.PlayerControlled)
-                return _owner.StatsManager.TryUseBlood(power.BloodCost);
+                return _owner.GetComponentInChildren<StatsManager>().TryUseBlood(power.BloodCost);
             else
                 return true;
         }

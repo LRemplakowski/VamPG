@@ -13,9 +13,9 @@ namespace SunsetSystems.Spellbook
         {
             return power.Target switch
             {
-                Spellbook.Target.Self => () => castingActor.SpellbookManager.UsePower(power, castingActor),
-                Spellbook.Target.Friendly => () => castingActor.SpellbookManager.UsePowerAfterTargetSelection(power),
-                Spellbook.Target.Hostile => () => castingActor.SpellbookManager.UsePowerAfterTargetSelection(power),
+                Spellbook.Target.Self => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePower(power, castingActor),
+                Spellbook.Target.Friendly => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePowerAfterTargetSelection(power),
+                Spellbook.Target.Hostile => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePowerAfterTargetSelection(power),
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
                 Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
                 _ => null,
@@ -131,7 +131,7 @@ namespace SunsetSystems.Spellbook
 
         static void HandleAttributeEffect(EffectWrapper.AttributeEffect attributeEffect, Creature target, Creature caster)
         {
-            target.StatsManager.ApplyEffect(attributeEffect);
+            target.GetComponentInChildren<StatsManager>().ApplyEffect(attributeEffect);
         }
 
         static void HandleScriptEffect(EffectWrapper.ScriptEffect scriptEffect, Creature target, Creature caster)

@@ -1,38 +1,44 @@
-﻿using SunsetSystems.Entities.Data;
+﻿using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
+using SunsetSystems.Utils.Extensions;
 using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    [Serializable]
-    public class CreatureData : MonoBehaviour
+    public class CreatureData : MonoBehaviour, ICreatureTemplate
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
+        public string ReadableID => FullName.ToPascalCase();
         [SerializeField]
         private string _id;
-        public string ID => _id;
-        public string PortraitFileName;
-        public Sprite Portrait => ResourceLoader.GetPortrait(PortraitFileName);
-        public Faction Faction;
-        public BodyType BodyType;
-        public CreatureType CreatureType;
+        public string DatabaseID => _id;
+        [field: SerializeField]
+        public AssetReferenceSprite PortraitAssetRef { get; private set; }
+        [field: SerializeField]
+        public Faction Faction { get; private set; }
+        [field: SerializeField]
+        public BodyType BodyType { get; private set; }
+        [field: SerializeField]
+        public CreatureType CreatureType { get; private set; }
         public string UmaPresetFileName;
         public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
         public string animatorControllerResourceName;
         public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
+
         public StatsData Stats;
         public EquipmentData Equipment;
         public bool UseEquipmentPreset;
         public float Money;
 
-        public CreatureData(CreatureConfig config)
+        public void CopyFromConfig(CreatureConfig config)
         {
             FirstName = config.Name;
             LastName = config.LastName;
             _id = config.ReadableID;
-            PortraitFileName = "";
             Faction = config.Faction;
             BodyType = config.BodyType;
             CreatureType = config.CreatureType;
@@ -42,11 +48,6 @@ namespace SunsetSystems.Entities.Characters
             Equipment = new(config.EquipmentConfig);
             UseEquipmentPreset = config.UseEquipmentPreset;
             Money = config.EquipmentConfig.Money;
-        }
-
-        public CreatureData()
-        {
-
         }
     }
 }

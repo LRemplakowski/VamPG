@@ -36,7 +36,7 @@ namespace SunsetSystems.Combat.UI
 
         private void OnCombatRoundBegin(Creature currentActor)
         {
-            myButton.interactable = currentActor.CombatBehaviour.IsPlayerControlled;
+            myButton.interactable = currentActor.References.GetComponentInChildren<CombatBehaviour>().IsPlayerControlled;
         }
 
         public void EndRound()

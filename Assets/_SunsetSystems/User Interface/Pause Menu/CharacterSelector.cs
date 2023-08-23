@@ -35,18 +35,18 @@ namespace SunsetSystems
 
         public void NextCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
+            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
             currentIndex = currentIndex + 1 < PartyManager.AllCoterieMembers.Count ? currentIndex + 1 : 0;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].ID;
+            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].DatabaseID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }
 
         public void PreviousCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.ID.Equals(SelectedCharacterKey));
+            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
             currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.AllCoterieMembers.Count - 1;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].ID;
+            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].DatabaseID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }

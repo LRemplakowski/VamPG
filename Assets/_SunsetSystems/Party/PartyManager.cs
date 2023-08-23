@@ -94,7 +94,7 @@ namespace SunsetSystems.Party
             PartyPortraits?.Clear();
             foreach (string key in _activeCoterieMemberKeys)
             {
-                PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
+                //PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
             }
         }
 
@@ -152,11 +152,11 @@ namespace SunsetSystems.Party
 
         public static void RecruitCharacter(CreatureData creatureData)
         {
-            Debug.Log($"Recruited {creatureData.ID} to party!");
-            Instance._creatureDataCache.Add(creatureData.ID, creatureData);
-            InventoryManager.AddCoterieMemberEquipment(creatureData.ID, creatureData);
-            ExperienceManager.AddCreatureToExperienceManager(creatureData.ID);
-            OnPartyMemberRecruited?.Invoke(creatureData.ID, creatureData);
+            Debug.Log($"Recruited {creatureData.DatabaseID} to party!");
+            Instance._creatureDataCache.Add(creatureData.DatabaseID, creatureData);
+            InventoryManager.AddCoterieMemberEquipment(creatureData.DatabaseID, creatureData);
+            ExperienceManager.AddCreatureToExperienceManager(creatureData.DatabaseID);
+            OnPartyMemberRecruited?.Invoke(creatureData.DatabaseID, creatureData);
         }
 
         public static void RecruitCharacter(ICreature creature)
@@ -167,7 +167,7 @@ namespace SunsetSystems.Party
         public static void RecruitMainCharacter(CreatureData mainCharacterData)
         {
             RecruitCharacter(mainCharacterData);
-            Instance._mainCharacterKey = mainCharacterData.ID;
+            Instance._mainCharacterKey = mainCharacterData.DatabaseID;
             InventoryManager.Instance.SetMoney(mainCharacterData.Money);
             if (TryAddMemberToActiveRoster(Instance._mainCharacterKey) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
@@ -206,14 +206,14 @@ namespace SunsetSystems.Party
 
         public bool UpdateCreatureData(CreatureData data)
         {
-            if (Instance._activeCoterieMemberKeys.Contains(data.ID))
+            if (Instance._activeCoterieMemberKeys.Contains(data.DatabaseID))
             {
-                Instance._creatureDataCache[data.ID] = data;
+                Instance._creatureDataCache[data.DatabaseID] = data;
                 return true;
             }
             else
             {
-                Debug.LogWarning("No cached party member with name " + data.ID + " found!");
+                Debug.LogWarning("No cached party member with name " + data.DatabaseID + " found!");
                 return false;
             }
         }

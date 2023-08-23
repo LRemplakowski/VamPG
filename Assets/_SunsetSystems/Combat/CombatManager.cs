@@ -96,7 +96,7 @@ namespace SunsetSystems.Combat
 
         private Creature DecideFirstActor(List<Creature> creatures)
         {
-            creatures.OrderByDescending(creature => creature.StatsManager.GetInitiative());
+            creatures.OrderByDescending(creature => creature.References.GetComponentInChildren<StatsManager>().GetInitiative());
             return creatures[0];
         }
 
@@ -134,7 +134,7 @@ namespace SunsetSystems.Combat
 
         public static bool IsActiveActorPlayerControlled()
         {
-            return _currentActiveActor ? CurrentActiveActor.CombatBehaviour.IsPlayerControlled : false;
+            return _currentActiveActor ? CurrentActiveActor.References.GetComponentInChildren<CombatBehaviour>().IsPlayerControlled : false;
         }
 
         public int GetRound()

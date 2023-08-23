@@ -34,12 +34,13 @@ namespace SunsetSystems.Spellbook
             _effectRecievers.ForEach(c => DoHealing(c));
         }
 
-        private void DoHealing(Creature c)
+        private void DoHealing(Creature creature)
         {
-            if (c.StatsManager.IsAlive())
+            StatsManager targetStatsManager = creature.References.GetComponentInChildren<StatsManager>();
+            if (targetStatsManager != null && targetStatsManager.IsAlive())
             {
                 int amount = UnityEngine.Random.Range(1, 3);
-                c.StatsManager.Heal(amount);
+                targetStatsManager.Heal(amount);
             }
         }
     }

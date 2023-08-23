@@ -26,7 +26,7 @@ namespace SunsetSystems.UI
             gameObject.SetActive(true);
             _button.SetContent(dataProvider.Data.Tooltip);
             _button.image.sprite = dataProvider.Data.Icon;
-            _button.interactable = !CombatManager.CurrentActiveActor.SpellbookManager.IsPowerOnCooldown(dataProvider.Data);
+            _button.interactable = !CombatManager.CurrentActiveActor.GetComponentInChildren<SpellbookManager>().IsPowerOnCooldown(dataProvider.Data);
             _text.text = dataProvider.Data.PowerName;
         }
 

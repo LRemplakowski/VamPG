@@ -151,16 +151,16 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasMoved)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasMoved)
                     {
-                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.ID} is not player controlled or has already moved!");
+                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.DatabaseID} is not player controlled or has already moved!");
                         return;
                     }
                     if (hit.collider.TryGetComponent(out GridElement gridElement))
                     {
                         if (gridElement.Visited is not GridElement.Status.Occupied)
                         {
-                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.ID} to grid element {gridElement.gameObject.name}!");
+                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.DatabaseID} to grid element {gridElement.gameObject.name}!");
                             CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
                         }
                         else
@@ -174,27 +174,27 @@ namespace SunsetSystems.Input
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
                         return;
                     Creature enemy = hit.collider.GetComponent<Creature>();
                     if (enemy)
                     {
                         if (enemy.Data.Faction is Faction.Hostile && IsInRange(enemy))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is attacking enemy {enemy.Data.ID}!");
+                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.DatabaseID} is attacking enemy {enemy.Data.DatabaseID}!");
                             CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
                         }
                     }
                     break;
                 case BarAction.SELECT_TARGET:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
                         return;
                     Creature powerTarget = hit.collider.GetComponent<Creature>();
                     if (powerTarget)
                     {
                         if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.ID} is using power on enemy {powerTarget.Data.ID}!");
+                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.DatabaseID} is using power on enemy {powerTarget.Data.DatabaseID}!");
                             SpellbookManager.PowerTarget = powerTarget;
                         }
                     }
@@ -327,9 +327,9 @@ namespace SunsetSystems.Input
 
                 void HandleAttackActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.CombatBehaviour.HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
                         return;
-                    LineRenderer lineRenderer = CombatManager.CurrentActiveActor.CombatBehaviour.LineRenderer;
+                    LineRenderer lineRenderer = CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().LineRenderer;
                     if (lastHit != hit.collider)
                     {
                         lineRenderer.enabled = false;

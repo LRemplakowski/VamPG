@@ -48,14 +48,14 @@ namespace SunsetSystems.Combat
             await combatManager.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             {
-                Creatures.ForEach(c => c.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
+                Creatures.ForEach(c => c.References.GetComponentInChildren<StatsManager>().OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
             }
         }
 
         private void DecrementCounterAndCheckForEncounterEnd(Creature creature)
         {
             _creatureCounter -= 1;
-            creature.StatsManager.OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
+            creature.References.GetComponentInChildren<StatsManager>().OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
             if (_creatureCounter <= 0)
                 End();
         }

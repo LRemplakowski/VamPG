@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Characters.Interfaces;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Resources;
 using SunsetSystems.Utils.Extensions;

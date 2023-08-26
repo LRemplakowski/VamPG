@@ -95,6 +95,7 @@ namespace SunsetSystems.Party
             foreach (string key in _activeCoterieMemberKeys)
             {
                 //PartyPortraits?.AddPortrait(_creatureDataCache[key].Portrait);
+                throw new NotImplementedException();
             }
         }
 

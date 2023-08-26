@@ -190,12 +190,6 @@ MonoBehaviour:
   _unique: {fileID: 14182381}
   _enablePersistence: 1
   <Data>k__BackingField: {fileID: 1101683965}
-  _config: {fileID: 0}
-  <Agent>k__BackingField: {fileID: 14182383}
-  <NavMeshObstacle>k__BackingField: {fileID: 14182384}
-  <StatsManager>k__BackingField: {fileID: 459494923}
-  <CombatBehaviour>k__BackingField: {fileID: 1566168799}
-  <SpellbookManager>k__BackingField: {fileID: 1722104288}
   _currentGridPosition: {fileID: 0}
 --- !u!114 &14182381
 MonoBehaviour:
@@ -803,64 +797,6 @@ MonoBehaviour:
   customRotation: {x: 0, y: 0, z: 0}
   previewColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _buildCharacterEnabled: 1
---- !u!1 &116417651
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 116417654}
-  - component: {fileID: 116417653}
-  - component: {fileID: 116417652}
-  m_Layer: 0
-  m_Name: SceneLogic
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &116417652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116417651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9cd92cdc680624419fa2b69d25db2eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &116417653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116417651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 1f4bdade-9763-45e9-9611-29d836125ba2
---- !u!4 &116417654
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 116417651}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &118138215
 GameObject:
   m_ObjectHideFlags: 0
@@ -2610,10 +2546,14 @@ MonoBehaviour:
   FirstName: 
   LastName: 
   _id: 
-  PortraitFileName: 
-  Faction: 0
-  BodyType: 0
-  CreatureType: 0
+  <PortraitAssetRef>k__BackingField:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  <Faction>k__BackingField: 0
+  <BodyType>k__BackingField: 0
+  <CreatureType>k__BackingField: 0
   UmaPresetFileName: 
   animatorControllerResourceName: 
   Stats:
@@ -4254,11 +4194,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021636557
+      value: 0.00000002163656
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000011134559
+      value: -0.000000011134561
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -4286,11 +4226,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021636557
+      value: 0.00000002163656
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000011134559
+      value: -0.000000011134561
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -6134,7 +6074,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1387929984}
   - {fileID: 1368386864}
-  - {fileID: 116417654}
   - {fileID: 14182379}
   - {fileID: 543228486}
   - {fileID: 1239700727}

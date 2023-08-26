@@ -173,5 +173,11 @@ namespace SunsetSystems.Entities.Characters
             throw new System.NotImplementedException();
         }
         #endregion
+
+        [Button(Expanded = true)]
+        public void RebuildFromAsset(CreatureConfig config)
+        {
+
+        }
     }
 }

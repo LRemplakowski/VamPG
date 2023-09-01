@@ -221,7 +221,7 @@ namespace SunsetSystems.Persistence
 
         public void RecruitKieran()
         {
-            PartyManager.RecruitCharacter(_kieran.Data);
+            PartyManager.RecruitCharacter(_kieran.References.Data);
             PartyManager.AddCreatureAsActivePartyMember(_kieran);
         }
 

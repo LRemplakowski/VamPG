@@ -65,11 +65,11 @@ namespace SunsetSystems.Entities.Characters
         private void Initialize()
         {
             Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
-            _dca = GetComponent<DynamicCharacterAvatar>();
-            _owner = GetComponent<Creature>();
-            _characterID = _owner.Data.DatabaseID;
+            _owner = GetComponentInParent<Creature>();
+            _dca = _owner.References.GetComponentInChildren<DynamicCharacterAvatar>();
+            _characterID = _owner.References.Data.DatabaseID;
+            _animationController = _owner.References.GetComponentInChildren<CreatureAnimationController>();
             _initializedOnce = true;
-            _animationController = GetComponent<CreatureAnimationController>();
         }    
 
         public void UpdateWardrobe(string characterID)
@@ -78,7 +78,7 @@ namespace SunsetSystems.Entities.Characters
                 Initialize();
             if (this._characterID.Equals(characterID))
             {
-                EquipmentData data = _owner.Data.Equipment;
+                EquipmentData data = _owner.References.Data.Equipment;
                 RemoveWardrobe();
                 HandleWeapon(data);                
             }

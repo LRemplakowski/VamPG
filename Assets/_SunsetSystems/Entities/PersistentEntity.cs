@@ -20,7 +20,7 @@ namespace SunsetSystems.Entities
         public string GameObjectName => gameObject.name;
 
         [SerializeField, Required]
-        private IEntityReferences _references;
+        protected IEntityReferences _references;
         public override IEntityReferences References
         {
             get

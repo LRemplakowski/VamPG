@@ -153,14 +153,14 @@ namespace SunsetSystems.Input
                 case BarAction.MOVE:
                     if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasMoved)
                     {
-                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.Data.DatabaseID} is not player controlled or has already moved!");
+                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.References.Data.DatabaseID} is not player controlled or has already moved!");
                         return;
                     }
                     if (hit.collider.TryGetComponent(out GridElement gridElement))
                     {
                         if (gridElement.Visited is not GridElement.Status.Occupied)
                         {
-                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.Data.DatabaseID} to grid element {gridElement.gameObject.name}!");
+                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.References.Data.DatabaseID} to grid element {gridElement.gameObject.name}!");
                             CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
                         }
                         else
@@ -179,9 +179,9 @@ namespace SunsetSystems.Input
                     Creature enemy = hit.collider.GetComponent<Creature>();
                     if (enemy)
                     {
-                        if (enemy.Data.Faction is Faction.Hostile && IsInRange(enemy))
+                        if (enemy.References.Data.Faction is Faction.Hostile && IsInRange(enemy))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.DatabaseID} is attacking enemy {enemy.Data.DatabaseID}!");
+                            Debug.Log($"{CombatManager.CurrentActiveActor.References.Data.DatabaseID} is attacking enemy {enemy.References.Data.DatabaseID}!");
                             CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
                         }
                     }
@@ -194,7 +194,7 @@ namespace SunsetSystems.Input
                     {
                         if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.Data.DatabaseID} is using power on enemy {powerTarget.Data.DatabaseID}!");
+                            Debug.Log($"{CombatManager.CurrentActiveActor.References.Data.DatabaseID} is using power on enemy {powerTarget.References.Data.DatabaseID}!");
                             SpellbookManager.PowerTarget = powerTarget;
                         }
                     }
@@ -211,7 +211,7 @@ namespace SunsetSystems.Input
             {
                 Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
                 Spellbook.Target.Friendly => target.Faction is Faction.PlayerControlled || target.Faction is Faction.Friendly,
-                Spellbook.Target.Hostile => target.Data.Faction is Faction.Hostile,
+                Spellbook.Target.Hostile => target.References.Data.Faction is Faction.Hostile,
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
                 Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
                 _ => false,
@@ -220,7 +220,7 @@ namespace SunsetSystems.Input
 
         private static bool IsInRange(Entity enemy)
         {
-            int maxRange = CombatManager.CurrentActiveActor.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
+            int maxRange = CombatManager.CurrentActiveActor.References.Data.Equipment.GetSelectedWeapon().GetRangeData().maxRange;
             float distance = Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position);
             return distance <= maxRange;
         }

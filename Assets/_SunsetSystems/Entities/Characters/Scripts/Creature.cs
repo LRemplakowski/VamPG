@@ -9,15 +9,13 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory;
+using SunsetSystems.Entities.Creatures.Interfaces;
 
 namespace SunsetSystems.Entities.Characters
 {
     public class Creature : PersistentEntity, ICreature, ICombatant, ICreatureTemplateProvider
     {
-        private const float LOOK_TOWARDS_ROTATION_SPEED = 5.0f;
-
-        [field: SerializeField]
-        public CreatureData Data { get; set; }
+        public new Faction Faction => References.Data.Faction;
 
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
@@ -62,6 +60,16 @@ namespace SunsetSystems.Entities.Characters
         public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
 
         public ICreatureTemplate CreatureTemplate => References.GetComponentInChildren<CreatureData>();
+
+        public new ICreatureReferences References
+        {
+            get
+            {
+                if (_references is not ICreatureReferences)
+                    _references = GetComponent<ICreatureReferences>();
+                return _references as ICreatureReferences;
+            }
+        }
 
         #region Unity messages
         protected override void Awake()
@@ -173,11 +181,5 @@ namespace SunsetSystems.Entities.Characters
             throw new System.NotImplementedException();
         }
         #endregion
-
-        [Button(Expanded = true)]
-        public void RebuildFromAsset(CreatureConfig config)
-        {
-
-        }
     }
 }

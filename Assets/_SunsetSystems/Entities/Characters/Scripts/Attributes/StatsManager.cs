@@ -22,7 +22,7 @@ namespace SunsetSystems.Entities.Characters
                 return _owner;
             }
         }
-        private StatsData Data => Owner.Data.Stats;
+        private StatsData Data => Owner.References.Data.Stats;
 
         public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
         public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);

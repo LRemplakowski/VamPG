@@ -48,9 +48,9 @@ public sealed class CreatureContext : IAIContext
 
     public List<Creature> FriendlyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.Faction is Faction.Friendly);
+        .FindAll(c => c.References.Data.Faction is Faction.Friendly);
 
     public List<Creature> EnemyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.Data.Faction is Faction.Hostile);
+        .FindAll(c => c.References.Data.Faction is Faction.Hostile);
 }

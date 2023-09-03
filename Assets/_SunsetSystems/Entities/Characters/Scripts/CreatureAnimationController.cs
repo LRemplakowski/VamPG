@@ -13,11 +13,11 @@ namespace SunsetSystems.Animation
     {
         const float movementAnimationSmoothTime = 0.1f;
 
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private Animator animator;
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private NavMeshAgent agent;
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private RigBuilder rigBuilder;
         private StatsManager _statsManager;
 

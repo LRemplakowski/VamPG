@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class CreatureData : MonoBehaviour, ICreatureTemplate
+    public class CreatureData : MonoBehaviour
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
@@ -30,11 +30,6 @@ namespace SunsetSystems.Entities.Characters
         public string animatorControllerResourceName;
         public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
 
-        public StatsData Stats;
-        public EquipmentData Equipment;
-        public bool UseEquipmentPreset;
-        public float Money;
-
         public void CopyFromConfig(CreatureConfig config)
         {
             FirstName = config.Name;
@@ -45,10 +40,6 @@ namespace SunsetSystems.Entities.Characters
             CreatureType = config.CreatureType;
             UmaPresetFileName = config.UmaPresetFileName;
             animatorControllerResourceName = config.AnimatorController.name;
-            Stats = new(config.StatsAsset);
-            Equipment = new(config.EquipmentConfig);
-            UseEquipmentPreset = config.UseEquipmentPreset;
-            Money = config.EquipmentConfig.Money;
         }
     }
 }

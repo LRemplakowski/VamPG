@@ -1,37 +1,34 @@
-using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Zenject;
 
-namespace SunsetSystems.Entities.Instantiation
+namespace SunsetSystems.Entities.Creatures
 {
     public class CreatureFactory : MonoBehaviour
     {
         [SerializeField]
-        private AssetReferenceT<Creature> creaturePrefabReference;
+        private AssetReference creaturePrefabReference;
 
         public async Task<ICreature> Create(ICreatureTemplate creatureTemplate)
         {
             ICreature newInstance = await GetNewCreatureInstance();
-            throw new System.NotImplementedException();
+            newInstance.InjectDataFromTemplate(creatureTemplate);
+            return newInstance;
         }
 
-        private async Task<Creature> GetNewCreatureInstance()
+        private async Task<ICreature> GetNewCreatureInstance()
         {
             AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(creaturePrefabReference.RuntimeKey);
             await handle.Task;
-            return handle.Result.GetComponent<Creature>();
+            return handle.Result.GetComponent<ICreature>();
         }
 
-        public void DestroyCreature(Creature instance)
+        public void DestroyCreature(ICreature instance)
         {
-            Addressables.ReleaseInstance(instance.gameObject);
+            Addressables.ReleaseInstance(instance.References.GameObject);
         }
     }
 }

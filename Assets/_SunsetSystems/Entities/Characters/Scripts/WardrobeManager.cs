@@ -1,7 +1,5 @@
 using SunsetSystems.Animation;
 using SunsetSystems.Combat;
-using SunsetSystems.Game;
-using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System;
 using System.Collections.Generic;
@@ -25,16 +23,12 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnEnable()
         {
-            InventoryManager.ItemEquipped += UpdateWardrobe;
-            InventoryManager.ItemUnequipped += UpdateWardrobe;
             CombatManager.CombatBegin += OnCombatBegin;
             CombatManager.CombatEnd += OnCombatEnd;
         }
 
         private void OnDisable()
         {
-            InventoryManager.ItemEquipped -= UpdateWardrobe;
-            InventoryManager.ItemUnequipped -= UpdateWardrobe;
             CombatManager.CombatBegin -= OnCombatBegin;
             CombatManager.CombatEnd -= OnCombatEnd;
         }
@@ -67,7 +61,7 @@ namespace SunsetSystems.Entities.Characters
             Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
             _owner = GetComponentInParent<Creature>();
             _dca = _owner.References.GetComponentInChildren<DynamicCharacterAvatar>();
-            _characterID = _owner.References.Data.DatabaseID;
+            _characterID = _owner.References.CreatureData.DatabaseID;
             _animationController = _owner.References.GetComponentInChildren<CreatureAnimationController>();
             _initializedOnce = true;
         }    
@@ -76,12 +70,7 @@ namespace SunsetSystems.Entities.Characters
         {
             if (!_initializedOnce)
                 Initialize();
-            if (this._characterID.Equals(characterID))
-            {
-                EquipmentData data = _owner.References.Data.Equipment;
-                RemoveWardrobe();
-                HandleWeapon(data);                
-            }
+            throw new NotImplementedException();
         }
 
         private void HandleWeapon(EquipmentData data)

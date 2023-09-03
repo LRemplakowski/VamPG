@@ -4,11 +4,12 @@ using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System;
+using Sirenix.Serialization;
 
 namespace SunsetSystems.Entities.Characters
 {
     [Serializable]
-    public class EquipmentData
+    public struct EquipmentData
     {
         public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
         public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
@@ -17,11 +18,12 @@ namespace SunsetSystems.Entities.Characters
         public const string SLOT_HANDS = "SLOT_HANDS";
         public const string SLOT_TRINKET = "SLOT_TRINKET";
 
-        public Dictionary<string, EquipmentSlot> EquipmentSlots;
+        [SerializeField]
+        public Dictionary<string, EquipmentSlot> EquipmentSlots { get; private set; }
 
         private string _selectedWeapon;
 
-        private static Dictionary<string, EquipmentSlot> GetSlotsPreset()
+        public static Dictionary<string, EquipmentSlot> GetSlotsPreset()
         {
             Dictionary<string, EquipmentSlot> equipmentSlots = new();
             equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
@@ -31,11 +33,6 @@ namespace SunsetSystems.Entities.Characters
             equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
             equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
             return equipmentSlots;
-        }
-
-        public EquipmentData()
-        {
-            EquipmentSlots = GetSlotsPreset();
         }
 
         public EquipmentData(InventoryConfig config)

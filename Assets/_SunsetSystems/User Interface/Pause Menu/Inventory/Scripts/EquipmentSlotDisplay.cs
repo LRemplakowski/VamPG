@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ namespace SunsetSystems.Inventory.UI
         {
             if (_cachedSlotData.GetEquippedItem() != null)
             {
-                InventoryManager.TryUnequipItemFromSlot(CharacterSelector.SelectedCharacterKey, _cachedSlotData.ID);
+                throw new NotImplementedException();
             }
         }
     }

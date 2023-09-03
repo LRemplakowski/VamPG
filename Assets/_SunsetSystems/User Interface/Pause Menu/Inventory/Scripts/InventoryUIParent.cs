@@ -24,19 +24,11 @@ namespace SunsetSystems.UI
             string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
             UpdateInventory(characterKey);
-
-            InventoryManager.ItemEquipped += UpdateInventory;
-            InventoryManager.ItemEquipped += UpdateEquipment;
-            InventoryManager.ItemUnequipped += UpdateInventory;
-            InventoryManager.ItemUnequipped += UpdateEquipment;
         }
 
         private void OnDisable()
         {
-            InventoryManager.ItemEquipped -= UpdateInventory;
-            InventoryManager.ItemEquipped -= UpdateEquipment;
-            InventoryManager.ItemUnequipped -= UpdateInventory;
-            InventoryManager.ItemUnequipped -= UpdateEquipment;
+
         }
 
         private void UpdateEquipment(string characterKey)
@@ -54,13 +46,14 @@ namespace SunsetSystems.UI
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
                 List<IGameDataProvider<EquipmentSlot>> slots = new();
-                if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
-                {
-                    foreach (string key in data.EquipmentSlots.Keys)
-                    {
-                        slots.Add(data.EquipmentSlots[key]);
-                    }
-                }
+                throw new NotImplementedException();
+                //if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
+                //{
+                //    foreach (string key in data.EquipmentSlots.Keys)
+                //    {
+                //        slots.Add(data.EquipmentSlots[key]);
+                //    }
+                //}
                 _equipmentContentsUpdater.UpdateViews(slots);
             }
         }

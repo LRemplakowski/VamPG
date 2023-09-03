@@ -7,7 +7,9 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
     public class CreatureReferenceManager : CachedReferenceManager, ICreatureReferences
     {
         [field: SerializeField]
-        public CreatureData Data { get; private set; }
+        public CreatureData CreatureData { get; private set; }
+        [field: SerializeField]
+        public StatsManager StatsManager { get; private set; }
         [field: SerializeField]
         public NavMeshAgent NavMeshAgent { get; private set; }
         [field: SerializeField]

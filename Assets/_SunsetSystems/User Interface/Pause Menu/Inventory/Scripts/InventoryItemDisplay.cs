@@ -3,6 +3,7 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -46,8 +47,9 @@ namespace SunsetSystems.UI
             Debug.Log($"Equipping item {_itemEntry._item.ReadableID}!");
             if (_itemEntry._item is EquipableItem item)
             {
-                if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
-                    Debug.LogError($"Failed to equip item {item.ReadableID} for character {CharacterSelector.SelectedCharacterKey}!");
+                throw new NotImplementedException();
+                //if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
+                //    Debug.LogError($"Failed to equip item {item.ReadableID} for character {CharacterSelector.SelectedCharacterKey}!");
             }
         }
 

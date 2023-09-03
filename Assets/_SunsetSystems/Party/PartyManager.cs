@@ -20,14 +20,14 @@ namespace SunsetSystems.Party
     [RequireComponent(typeof(UniqueId))]
     public class PartyManager : InitializedSingleton<PartyManager>, ISaveable, IResetable
     {
-        [field: SerializeField]
-        private Dictionary<string, ICreature> _activeParty;
+        [SerializeField]
+        private Dictionary<string, ICreature> _activeParty = new();
         public static ICreature MainCharacter => Instance._activeParty.TryGetValue(Instance._mainCharacterKey, out ICreature creature) ? creature : null;
         public static List<ICreature> ActiveParty => Instance._activeParty.Values.ToList();
         public static List<ICreature> Companions => Instance._activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
-        private Dictionary<string, CreatureData> _creatureDataCache;
+        private Dictionary<string, CreatureData> _creatureDataCache = new();
         public static List<CreatureData> AllCoterieMembers => new(Instance._creatureDataCache.Values);
 
         private string _mainCharacterKey;
@@ -155,7 +155,6 @@ namespace SunsetSystems.Party
         {
             Debug.Log($"Recruited {creatureData.DatabaseID} to party!");
             Instance._creatureDataCache.Add(creatureData.DatabaseID, creatureData);
-            InventoryManager.AddCoterieMemberEquipment(creatureData.DatabaseID, creatureData);
             ExperienceManager.AddCreatureToExperienceManager(creatureData.DatabaseID);
             OnPartyMemberRecruited?.Invoke(creatureData.DatabaseID, creatureData);
         }
@@ -169,7 +168,7 @@ namespace SunsetSystems.Party
         {
             RecruitCharacter(mainCharacterData);
             Instance._mainCharacterKey = mainCharacterData.DatabaseID;
-            InventoryManager.Instance.SetMoney(mainCharacterData.Money);
+            InventoryManager.Instance.SetMoney(0);
             if (TryAddMemberToActiveRoster(Instance._mainCharacterKey) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
         }

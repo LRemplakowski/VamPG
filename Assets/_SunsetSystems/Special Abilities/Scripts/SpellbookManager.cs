@@ -17,7 +17,7 @@ namespace SunsetSystems.Spellbook
     {
         [SerializeField]
         private Creature _owner;
-        private ref Disciplines Disciplines => ref _owner.References.Data.Stats.Disciplines;
+        private ref Disciplines Disciplines => ref _owner.References.StatsManager.Stats.Disciplines;
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 

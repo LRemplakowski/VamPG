@@ -22,12 +22,14 @@ namespace SunsetSystems.Entities.Characters
                 return _owner;
             }
         }
-        private StatsData Data => Owner.References.Data.Stats;
 
-        public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
-        public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);
-        public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
-        public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
+        [field: SerializeField]
+        public StatsData Stats { get; private set; }
+
+        public Tracker Health => Stats.Trackers.GetTracker(TrackerType.Health);
+        public Tracker Willpower => Stats.Trackers.GetTracker(TrackerType.Willpower);
+        public Tracker Hunger => Stats.Trackers.GetTracker(TrackerType.Hunger);
+        public Tracker Humanity => Stats.Trackers.GetTracker(TrackerType.Humanity);
 
         public StatsManager Instance { get; protected set; }
 
@@ -82,12 +84,12 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            return Data.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
         }
 
         public int GetInitiative()
         {
-            return Data.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
+            return Stats.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
         }
 
         public bool IsAlive()
@@ -97,12 +99,12 @@ namespace SunsetSystems.Entities.Characters
 
         public AttributeSkillPool GetDefensePool()
         {
-            return new AttributeSkillPool(Data.Attributes.GetAttribute(AttributeType.Dexterity), Data.Skills.GetSkill(SkillType.Athletics));
+            return new AttributeSkillPool(Stats.Attributes.GetAttribute(AttributeType.Dexterity), Stats.Skills.GetSkill(SkillType.Athletics));
         }
 
         public AttributeSkillPool GetAttackPool()
         {
-            return new AttributeSkillPool(Data.Attributes.GetAttribute(GetWeaponAttribute()), Data.Skills.GetSkill(GetWeaponSkill()));
+            return new AttributeSkillPool(Stats.Attributes.GetAttribute(GetWeaponAttribute()), Stats.Skills.GetSkill(GetWeaponSkill()));
         }
 
         private AttributeType GetWeaponAttribute()
@@ -117,7 +119,7 @@ namespace SunsetSystems.Entities.Characters
 
         public DisciplinePower GetDisciplinePower(string powerID)
         {
-            foreach (Discipline discipline in Data.Disciplines.GetDisciplines())
+            foreach (Discipline discipline in Stats.Disciplines.GetDisciplines())
             {
                 DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ID.Equals(powerID));
                 if (power != null)
@@ -128,8 +130,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)
         {
-            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
-            Skill s = Data.Skills.GetSkill(skill);
+            CreatureAttribute a = Stats.Attributes.GetAttribute(attribute);
+            Skill s = Stats.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -143,8 +145,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc, bool useHunger = false)
         {
-            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
-            Skill s = Data.Skills.GetSkill(skill);
+            CreatureAttribute a = Stats.Attributes.GetAttribute(attribute);
+            Skill s = Stats.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -165,18 +167,18 @@ namespace SunsetSystems.Entities.Characters
 
         public List<CreatureAttribute> GetAttributes()
         {
-            return Data.Attributes.GetAttributeList();
+            return Stats.Attributes.GetAttributeList();
         }
 
         public HealthData GetHealthData()
         {
-            HealthData.HealthDataBuilder builder = new(Data.Trackers.GetTracker(TrackerType.Health).GetValue());
+            HealthData.HealthDataBuilder builder = new(Stats.Trackers.GetTracker(TrackerType.Health).GetValue());
             return builder.Create();
         }
 
         public void ApplyEffect(AttributeEffect effect)
         {
-            Data.Attributes.GetAttribute(effect.AffectedProperty).AddModifier(new(effect.ModifierValue, effect.ModifierType, effect.GetHashCode().ToString()));
+            Stats.Attributes.GetAttribute(effect.AffectedProperty).AddModifier(new(effect.ModifierValue, effect.ModifierType, effect.GetHashCode().ToString()));
         }
 
         public void ApplyEffect(SkillEffect effect)

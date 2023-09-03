@@ -52,12 +52,12 @@ namespace SunsetSystems.Data
 
         public void SetAttribueValue(AttributeType attribute, int value)
         {
-            _playerCharacterData.Stats.Attributes.GetAttribute(attribute).SetValue(value);
+            //_playerCharacterData.Stats.Attributes.GetAttribute(attribute).SetValue(value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
-            _playerCharacterData.Stats.Skills.GetSkill(skill).SetValue(value);
+            //_playerCharacterData.Stats.Skills.GetSkill(skill).SetValue(value);
         }
 
         public void SetCharacterName(string characterName)

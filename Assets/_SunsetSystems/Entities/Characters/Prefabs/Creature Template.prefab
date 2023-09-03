@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 6294523937178330853}
   - {fileID: 8213438480378527713}
+  - {fileID: 2550384045447636604}
   - {fileID: 7137076084159866363}
   - {fileID: 7744861580169095031}
   - {fileID: 656867900587021158}
@@ -241,7 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245806abe119594e8c2f606fac983d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Data>k__BackingField: {fileID: 1290703859712372180}
+  <CreatureData>k__BackingField: {fileID: 0}
+  <StatsManager>k__BackingField: {fileID: 0}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
   <NavMeshObstacle>k__BackingField: {fileID: 3551420083429788374}
 --- !u!1 &4380623037722673601
@@ -429,6 +431,59 @@ MonoBehaviour:
   _raycastOrigin: {fileID: 6596153777422388182}
   defaultRaycastOriginY: 1.5
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
+--- !u!1 &6912376922156523433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2550384045447636604}
+  - component: {fileID: 1675144160413098596}
+  m_Layer: 0
+  m_Name: Equipment Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2550384045447636604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6912376922156523433}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1675144160413098596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6912376922156523433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e082960e592f6a94f846c9aec191cb8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1 &7300718193759435166
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,65 +573,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _owner: {fileID: 0}
---- !u!1 &8446532587378983079
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6294523937178330853}
-  - component: {fileID: 1290703859712372180}
-  m_Layer: 0
-  m_Name: Data
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6294523937178330853
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8446532587378983079}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2900274695709765927}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1290703859712372180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8446532587378983079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 299360a0a2810c94d9b078d013b991b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FirstName: Debug
-  LastName: Test
-  _id: DEBUG_TEST
-  <PortraitAssetRef>k__BackingField:
-    m_AssetGUID: 5b0c29a19f7687e45ab155f6db5f4a39
-    m_SubObjectName: 
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_EditorAssetChanged: 0
-  <Faction>k__BackingField: 2
-  <BodyType>k__BackingField: 0
-  <CreatureType>k__BackingField: 0
-  UmaPresetFileName: 
-  animatorControllerResourceName: 
-  Stats:
+  <Stats>k__BackingField:
     Trackers:
       health:
         _maxValue: 0
@@ -791,5 +788,62 @@ MonoBehaviour:
         baseValue: 0
         disciplineType: 0
         knownPowers: []
+--- !u!1 &8446532587378983079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6294523937178330853}
+  - component: {fileID: 8264689728060061147}
+  m_Layer: 0
+  m_Name: Data
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6294523937178330853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8446532587378983079}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8264689728060061147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8446532587378983079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa1fd86d99f3a14f97cbd9179006ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstName: Foo
+  LastName: Bar
+  _id: 
+  <PortraitAssetRef>k__BackingField:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  <Faction>k__BackingField: 0
+  <BodyType>k__BackingField: 0
+  <CreatureType>k__BackingField: 0
+  UmaPresetFileName: 
+  animatorControllerResourceName: 
   UseEquipmentPreset: 0
   Money: 0

@@ -4,19 +4,17 @@ using UnityEngine.AI;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
-using SunsetSystems.Spellbook;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Entities.Creatures.Interfaces;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
     public class Creature : PersistentEntity, ICreature, ICombatant, ICreatureTemplateProvider
     {
-        public new Faction Faction => References.Data.Faction;
-
         [SerializeField, ReadOnly]
         protected GridElement _currentGridPosition;
         public GridElement CurrentGridPosition
@@ -44,30 +42,6 @@ namespace SunsetSystems.Entities.Characters
                     _ = PerformAction(new Idle(this));
                 }
                 return _actionQueue;
-            }
-        }
-
-        public IWeapon CurrentWeapon => throw new System.NotImplementedException();
-
-        public IWeapon PrimaryWeapon => throw new System.NotImplementedException();
-
-        public IWeapon SecondaryWeapon => throw new System.NotImplementedException();
-
-        public Vector3 AimingOrigin => throw new System.NotImplementedException();
-
-        public bool IsInCover => throw new System.NotImplementedException();
-
-        public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
-
-        public ICreatureTemplate CreatureTemplate => References.GetComponentInChildren<CreatureData>();
-
-        public new ICreatureReferences References
-        {
-            get
-            {
-                if (_references is not ICreatureReferences)
-                    _references = GetComponent<ICreatureReferences>();
-                return _references as ICreatureReferences;
             }
         }
 
@@ -106,7 +80,18 @@ namespace SunsetSystems.Entities.Characters
         }
         #endregion
 
-        #region Actions and control
+        #region ICreature
+        public new Faction Faction => References.CreatureData.Faction;
+        public new ICreatureReferences References
+        {
+            get
+            {
+                if (_references is not ICreatureReferences)
+                    _references = GetComponent<ICreatureReferences>();
+                return _references as ICreatureReferences;
+            }
+        }
+
         public void ForceToPosition(Vector3 position)
         {
             ClearAllActions();
@@ -122,31 +107,6 @@ namespace SunsetSystems.Entities.Characters
             ActionQueue.Clear();
             ActionQueue.Enqueue(new Idle(this));
         }
-
-        //public bool RotateTowardsTarget(Transform target)
-        //{
-        //    if (target == null)
-        //        return true;
-        //    Vector3 direction = (target.position - transform.position).normalized;
-        //    Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * LOOK_TOWARDS_ROTATION_SPEED);
-        //    float dot = Quaternion.Dot(transform.rotation, lookRotation);
-        //    return dot >= 0.999f || dot <= -0.999f;
-        //}
-
-        //public async Task FaceTarget(Transform target)
-        //{
-        //    bool agentState = Agent.enabled;
-        //    bool ObstacleState = NavMeshObstacle.enabled;
-        //    Agent.enabled = true;
-        //    NavMeshObstacle.enabled = false;
-        //    while (!RotateTowardsTarget(target))
-        //    {
-        //        await new WaitForUpdate();
-        //    }
-        //    Agent.enabled = agentState;
-        //    NavMeshObstacle.enabled = ObstacleState;
-        //}
 
         public EntityAction PeekActionFromQueue()
         {
@@ -171,6 +131,20 @@ namespace SunsetSystems.Entities.Characters
             });
         }
 
+        public void InjectDataFromTemplate(ICreatureTemplate template)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
+
+        #region ICombatant
+        public IWeapon CurrentWeapon => throw new System.NotImplementedException();
+        public IWeapon PrimaryWeapon => throw new System.NotImplementedException();
+        public IWeapon SecondaryWeapon => throw new System.NotImplementedException();
+        public Vector3 AimingOrigin => throw new System.NotImplementedException();
+        public bool IsInCover => throw new System.NotImplementedException();
+        public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
+
         public bool TakeDamage(int amount)
         {
             throw new System.NotImplementedException();
@@ -179,6 +153,32 @@ namespace SunsetSystems.Entities.Characters
         public int GetAttributeValue(AttributeType attributeType)
         {
             throw new System.NotImplementedException();
+        }
+        #endregion
+
+        #region ICreatureTemplateProvider
+        public ICreatureTemplate CreatureTemplate => new TemplateFromInstance(this);
+
+        private class TemplateFromInstance : ICreatureTemplate
+        {
+            public TemplateFromInstance(ICreature instance)
+            {
+
+            }
+
+            public string DatabaseID => throw new System.NotImplementedException();
+
+            public string ReadableID => throw new System.NotImplementedException();
+
+            public string FullName => throw new System.NotImplementedException();
+
+            public Faction Faction => throw new System.NotImplementedException();
+
+            public BodyType BodyType => throw new System.NotImplementedException();
+
+            public CreatureType CreatureType => throw new System.NotImplementedException();
+
+            public AssetReferenceSprite PortraitAssetRef => throw new System.NotImplementedException();
         }
         #endregion
     }

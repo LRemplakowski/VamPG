@@ -533,7 +533,7 @@ namespace ChaseMacMillan.CurveDesigner
 #endif
         public void Recalculate()
         {
-            positionCurve.Recalculate();
+            positionCurve?.Recalculate();
             var secondaryCurves = extrudeSampler.points;
             if (secondaryCurves.Count > 0)
             {

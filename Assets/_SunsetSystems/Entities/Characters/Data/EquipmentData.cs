@@ -5,6 +5,7 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System;
 using Sirenix.Serialization;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -18,14 +19,14 @@ namespace SunsetSystems.Entities.Characters
         public const string SLOT_HANDS = "SLOT_HANDS";
         public const string SLOT_TRINKET = "SLOT_TRINKET";
 
-        [SerializeField]
-        public Dictionary<string, EquipmentSlot> EquipmentSlots { get; private set; }
-
+        [OdinSerialize]
+        public Dictionary<string, IEquipmentSlot> EquipmentSlots;
+        [ShowInInspector, ReadOnly]
         private string _selectedWeapon;
 
-        public static Dictionary<string, EquipmentSlot> GetSlotsPreset()
+        public static Dictionary<string, IEquipmentSlot> GetSlotsPreset()
         {
-            Dictionary<string, EquipmentSlot> equipmentSlots = new();
+            Dictionary<string, IEquipmentSlot> equipmentSlots = new();
             equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
             equipmentSlots.Add(SLOT_WEAPON_SECONDARY, new EquipmentSlot(ItemCategory.WEAPON, "Secondary Weapon", SLOT_WEAPON_SECONDARY));
             equipmentSlots.Add(SLOT_CHEST, new EquipmentSlot(ItemCategory.CLOTHING, "Chest", SLOT_CHEST));

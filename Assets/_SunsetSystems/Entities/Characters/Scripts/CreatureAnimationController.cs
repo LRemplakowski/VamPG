@@ -1,25 +1,25 @@
 ﻿using SunsetSystems.Entities.Characters;
-using Sirenix.OdinInspector;
-using SunsetSystems.Combat;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
 using UMA;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
 
 namespace SunsetSystems.Animation
 {
-    public class CreatureAnimationController : MonoBehaviour
+    public class CreatureAnimationController : SerializedMonoBehaviour
     {
         const float movementAnimationSmoothTime = 0.1f;
 
-        [SerializeField]
+        [SerializeField, Required]
+        private ICreature owner;
+        [SerializeField, Required]
         private Animator animator;
-        [SerializeField]
+        [SerializeField, Required]
         private NavMeshAgent agent;
-        [SerializeField]
+        [SerializeField, Required]
         private RigBuilder rigBuilder;
-        private StatsManager _statsManager;
 
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
         private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
@@ -33,18 +33,13 @@ namespace SunsetSystems.Animation
 
         private void Start()
         {
-            animator = GetComponentInChildren<Animator>();
-            agent = GetComponent<NavMeshAgent>();
-            rigBuilder = GetComponent<RigBuilder>();
             rigBuilder.layers.Clear();
             rigBuilder.enabled = false;
-            _statsManager ??= GetComponent<StatsManager>();
-            _statsManager.OnCreatureDied += OnDeath;
         }
 
         private void OnDestroy()
         {
-            _statsManager.OnCreatureDied -= OnDeath;
+
         }
 
         private void OnDeath(Creature deceased)
@@ -55,8 +50,8 @@ namespace SunsetSystems.Animation
         private Rig InitializeRigLayer()
         {
             Rig layer = new GameObject("RigLayer").AddComponent<Rig>();
-            layer.transform.parent = transform;
-            UMAData umaData = GetComponent<UMAData>();
+            layer.transform.SetParent(rigBuilder.transform);
+            UMAData umaData = owner.References.GetComponentInChildren<UMAData>();
 
             rightHandConstraint = new GameObject("RightHandIK").AddComponent<TwoBoneIKConstraint>();
             rightHandConstraint.transform.parent = layer.transform;

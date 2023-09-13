@@ -52,14 +52,17 @@ namespace SunsetSystems.Combat
 
             for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
             {
-                for (int z = 0; z < LevelGrid.Instance.GetHeight(); z++)
+                for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
                 {
-                    GridPosition gridPosition = new GridPosition(x, z);
+                    for (int z = 0; z < LevelGrid.Instance.GetDepth(); z++)
+                    {
+                        GridPosition gridPosition = new(x, y, z);
 
-                    Transform gridSystemVisualSingleTransform = 
-                        Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldPosition(gridPosition), Quaternion.Euler(90, 0, 0));
+                        Transform gridSystemVisualSingleTransform =
+                            Instantiate(gridSystemVisualSinglePrefab, LevelGrid.Instance.GetWorldPosition(gridPosition), Quaternion.Euler(90, 0, 0));
 
-                    gridSystemVisualSingleArray[x, z] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                        gridSystemVisualSingleArray[x, z] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                    }
                 }
             }
             //UnitSystem.Instance.OnSelectedActionChanged += UnitSystem_OnSelectedActionChanged;
@@ -85,22 +88,25 @@ namespace SunsetSystems.Combat
 
             for (int x = -range; x <= range; x++)
             {
-                for (int z = -range; z <= range; z++)
+                for (int y = -range; y <= range; y++)
                 {
-                    GridPosition testGridPosition = gridPosition + new GridPosition(x, z);
-
-                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                    for (int z = -range; z <= range; z++)
                     {
-                        continue;
-                    }
+                        GridPosition testGridPosition = gridPosition + new GridPosition(x, y, z);
 
-                    int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
-                    if (testDistance > range)
-                    {
-                        continue;
-                    }
+                        if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                        {
+                            continue;
+                        }
 
-                    gridPositionList.Add(testGridPosition);
+                        int testDistance = Mathf.Abs(x) + Mathf.Abs(z);
+                        if (testDistance > range)
+                        {
+                            continue;
+                        }
+
+                        gridPositionList.Add(testGridPosition);
+                    }
                 }
             }
 

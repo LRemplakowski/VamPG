@@ -8,11 +8,13 @@ namespace SunsetSystems
     public struct GridPosition : IEquatable<GridPosition>
     {
         public int x;
+        public int y;
         public int z;
 
-        public GridPosition(int x, int z)
+        public GridPosition(int x, int y, int z)
         {
             this.x = x;
+            this.y = y;
             this.z = z;
         }
 
@@ -45,12 +47,12 @@ namespace SunsetSystems
 
         public static GridPosition operator +(GridPosition a, GridPosition b)
         {
-            return new GridPosition(a.x + b.x, a.z + b.z);
+            return new GridPosition(a.x + b.x, a.y + b.y, a.z + b.z);
         }
 
         public static GridPosition operator -(GridPosition a, GridPosition b)
         {
-            return new GridPosition(a.x - b.x, a.z - b.z);
+            return new GridPosition(a.x - b.x, a.y - b.y, a.z - b.z);
         }
 
     }

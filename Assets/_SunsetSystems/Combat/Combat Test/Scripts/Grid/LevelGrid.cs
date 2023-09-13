@@ -26,7 +26,7 @@ namespace SunsetSystems.Combat
             }
             Instance = this;
 
-            gridSystem = new GridSystem(10, 10, 2f);
+            gridSystem = new GridSystem(10, 10, 10, 2f);
         }
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
@@ -65,6 +65,8 @@ namespace SunsetSystems.Combat
         public int GetWidth() => gridSystem.GetWidth();
         
         public int GetHeight() => gridSystem.GetHeight();
+
+        public int GetDepth() => gridSystem.GetDepth();
         
         public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
         {

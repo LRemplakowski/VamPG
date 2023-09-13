@@ -1,31 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
+    [Serializable]
     public class GridSystem
     {
-        private int width;
-        private int height;
+        [SerializeField]
+        private int width, height, depth;
+        [SerializeField]
         private float cellSize;
-        private GridObject[,] gridObjectArray;
+        private GridObject[,,] gridObjectArray;
         private LayerMask coverLayer = LayerMask.GetMask("Cover");
 
-        public GridSystem(int width, int height, float cellSize)
+        public GridSystem(int width, int depth, int height, float cellSize)
         {
             this.width = width;
+            this.depth = depth;
             this.height = height;
             this.cellSize = cellSize;
 
-            gridObjectArray = new GridObject[width, height];
+            gridObjectArray = new GridObject[width, height, depth];
 
             for (int x = 0; x < width; x++)
             {
-                for (int z = 0; z < height; z++)
+                for (int y = 0; y < height; y++)
                 {
-                    GridPosition gridPosition = new GridPosition(x, z);
-                    gridObjectArray[x, z] = new GridObject(this, gridPosition);
+                    for (int z = 0; z < depth; z++)
+                    {
+                        GridPosition gridPosition = new(x, y, z);
+                        gridObjectArray[x, y, z] = new GridObject(this, gridPosition);
+                    }
                 }
             }
         }
@@ -39,6 +46,7 @@ namespace SunsetSystems.Combat
         {
             return new GridPosition(
                 Mathf.RoundToInt(worldPosition.x / cellSize),
+                Mathf.RoundToInt(worldPosition.y / cellSize),
                 Mathf.RoundToInt(worldPosition.z / cellSize)
             );
         }
@@ -47,18 +55,21 @@ namespace SunsetSystems.Combat
         {
             for (int x = 0; x < width; x++)
             {
-                for (int z = 0; z < height; z++)
+                for (int y = 0; y < height; y++)
                 {
-                    GridPosition gridPosition = new GridPosition(x, z);
+                    for (int z = 0; z < depth; z++)
+                    {
+                        GridPosition gridPosition = new GridPosition(x, y, z);
 
-                    Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
+                        Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), Quaternion.identity);
+                    }
                 }
             }
         }
 
         public GridObject GetGridObject(GridPosition gridPosition)
         {
-            return gridObjectArray[gridPosition.x, gridPosition.z];
+            return gridObjectArray[gridPosition.x, gridPosition.y, gridPosition.z];
         }
 
         public bool IsValidGridPosition(GridPosition gridPosition)
@@ -85,6 +96,11 @@ namespace SunsetSystems.Combat
         public int GetHeight()
         {
             return height;
+        }
+
+        public int GetDepth()
+        {
+            return depth;
         }
     }
 }

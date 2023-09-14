@@ -12,8 +12,10 @@ namespace SunsetSystems.Combat
         private int width, height, depth;
         [SerializeField]
         private float cellSize;
-        private GridObject[,,] gridObjectArray;
-        private LayerMask coverLayer = LayerMask.GetMask("Cover");
+        [SerializeField]
+        private GridObject[,,] gridObjectArray = new GridObject[10,10,10];
+        [SerializeField]
+        private LayerMask coverLayer;
 
         public GridSystem(int width, int depth, int height, float cellSize)
         {

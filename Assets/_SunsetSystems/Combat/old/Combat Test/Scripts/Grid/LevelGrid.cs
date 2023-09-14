@@ -11,9 +11,10 @@ namespace SunsetSystems.Combat
 
         public event EventHandler OnAnyUnitMovedGridPosition;
 
-        [SerializeField] private Transform gridDebugObjectPrefab;
-
-        private GridSystem gridSystem;
+        [SerializeField] 
+        private Transform gridDebugObjectPrefab;
+        [SerializeField]
+        private GridSystem gridSystem = new(10, 10, 10, 2f);
 
 
         private void Awake()
@@ -26,7 +27,7 @@ namespace SunsetSystems.Combat
             }
             Instance = this;
 
-            gridSystem = new GridSystem(10, 10, 10, 2f);
+            gridSystem ??= new GridSystem(10, 10, 10, 2f);
         }
 
         public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)

@@ -16724,15 +16724,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.45758158
+      value: 0.45758155
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000001661447
+      value: -0.000000024378975
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008550102
+      value: 0.000000012545856
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -16748,15 +16748,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.45758158
+      value: 0.45758155
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000001661447
+      value: -0.000000024378975
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000008550102
+      value: 0.000000012545856
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -16766,6 +16766,10 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 8400243579288208871, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 8763309741657221742, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: _currentBoundingBox
+      value: 
+      objectReference: {fileID: 1956081071}
     - target: {fileID: 9009735172327115319, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_Name
       value: === CORE ===
@@ -16925,7 +16929,7 @@ Transform:
   m_GameObject: {fileID: 1803207932}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 8, y: 1, z: -2}
+  m_LocalPosition: {x: 8.5, y: 1, z: -2}
   m_LocalScale: {x: 1, y: 2, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17283,8 +17287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dff2ecae0dc102d43a70f2fc5355cb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boundingBoxSize: {x: 50, y: 50, z: 50}
-  _offset: {x: 0, y: 0, z: 0}
+  _boundingBoxSize: {x: 100, y: 20, z: 100}
+  _offset: {x: 0, y: 10, z: 0}
   _gizmoColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1956081072
 MonoBehaviour:
@@ -17357,56 +17361,61 @@ MonoBehaviour:
   gridHeight: 10
   gridCellSize: 1
   gridAreaMask: -7
+  gridObjectAsset:
+    m_AssetGUID: 5fd475a07782c9d4394eb94c5a7bc834
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   levels:
   - width: 100
     depth: 100
     yPosition: 0
-    levelOrigin: {x: -49.5, y: 0, z: -49.5}
+    levelOrigin: {x: -49, y: 0, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 1
-    levelOrigin: {x: -49.5, y: 1, z: -49.5}
+    levelOrigin: {x: -49, y: 1, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 2
-    levelOrigin: {x: -49.5, y: 2, z: -49.5}
+    levelOrigin: {x: -49, y: 2, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 3
-    levelOrigin: {x: -49.5, y: 3, z: -49.5}
+    levelOrigin: {x: -49, y: 3, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 4
-    levelOrigin: {x: -49.5, y: 4, z: -49.5}
+    levelOrigin: {x: -49, y: 4, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 5
-    levelOrigin: {x: -49.5, y: 5, z: -49.5}
+    levelOrigin: {x: -49, y: 5, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 6
-    levelOrigin: {x: -49.5, y: 6, z: -49.5}
+    levelOrigin: {x: -49, y: 6, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 7
-    levelOrigin: {x: -49.5, y: 7, z: -49.5}
+    levelOrigin: {x: -49, y: 7, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 8
-    levelOrigin: {x: -49.5, y: 8, z: -49.5}
+    levelOrigin: {x: -49, y: 8, z: -49}
     cellSize: 1
   - width: 100
     depth: 100
     yPosition: 9
-    levelOrigin: {x: -49.5, y: 9, z: -49.5}
+    levelOrigin: {x: -49, y: 9, z: -49}
     cellSize: 1
 --- !u!4 &1981465699
 Transform:
@@ -17417,7 +17426,7 @@ Transform:
   m_GameObject: {fileID: 1981465697}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -49.5, y: 0, z: -49.5}
+  m_LocalPosition: {x: -49, y: 0, z: -49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

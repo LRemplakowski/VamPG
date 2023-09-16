@@ -1,17 +1,24 @@
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
+using Sirenix.Serialization;
+using SunsetSystems.Core.AddressableManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Combat.Grid
 {
     public class CachedMultiLevelGrid : SerializedMonoBehaviour
     {
+        [Title("Config")]
         [SerializeField, Min(1)]
-        private int levelWidth = 10, levelDepth = 10;
+        private int levelWidth = 10;
+        [SerializeField, Min(1)]
+        private int levelDepth = 10;
         [SerializeField, Min(1)]
         private int gridHeight;
         [SerializeField, Min(1)]
@@ -19,12 +26,48 @@ namespace SunsetSystems.Combat.Grid
         [SerializeField]
         private NavMeshAreas gridAreaMask = NavMeshAreas.All;
 
-        [SerializeField]
-        private GridLevel[] levels = new GridLevel[1];
+        [Title("References")]
+        [OdinSerialize]
+        private AssetReferenceT<GridUnitObject> gridObjectAsset = null;
 
-        public Vector3 GridPositionToWorldPosition(Vector3 gridPosition)
+        [Title("Instance Data")]
+        [SerializeField, ReadOnly]
+        private GridLevel[] levels = new GridLevel[1];
+        private Dictionary<GridUnit, GridUnitObject> gridUnitGameObjects = new();
+
+        public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition)
         {
-            return transform.position + gridPosition * gridCellSize;
+            GridUnit unit = levels[gridPosition.y][gridPosition.x, gridPosition.z];
+            return transform.position + new Vector3(unit.x * unit.cellSize, unit.surfaceY, unit.z * unit.cellSize);
+        }
+
+        private void Start()
+        {
+            gridUnitGameObjects.Clear();
+            BuildGrid();
+            _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
+        }
+
+        private async Task GenerateSceneObjects(IEnumerable<GridUnit> gridUnits)
+        {
+            List<Task> tasks = new();
+            foreach (GridUnit unit in gridUnits)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    await new WaitForUpdate();
+                    Task<GameObject> instantiation = Addressables.InstantiateAsync(gridObjectAsset, transform).Task;
+                    await instantiation;
+                    GridUnitObject gridObj = instantiation.Result.GetComponent<GridUnitObject>();
+                    gridObj.InjectUnitData(unit);
+                    gridUnitGameObjects.Add(unit, gridObj);
+                }));
+            }
+            await Task.WhenAll(tasks);
+        }
+        private void OnValidate()
+        {
+            BuildGrid();
         }
 
         [Button]
@@ -50,7 +93,7 @@ namespace SunsetSystems.Combat.Grid
                     {
                         GridUnit unit = level[x, z];
                         if (unit == null)
-                            return;
+                            continue;
                         if (unit.walkable)
                         {
                             if (unit.adjacentToCover)
@@ -78,9 +121,12 @@ namespace SunsetSystems.Combat.Grid
         private float cellSize = 1f;
         public int YPosition => yPosition;
 
-        [SerializeField]
         private GridUnit[,] gridCells = new GridUnit[10, 10];
         public GridUnit[,] GridCells => gridCells;
+        private readonly HashSet<GridUnit> walkableUnits = new();
+        public HashSet<GridUnit> WalkableUnits => walkableUnits;
+        private readonly HashSet<GridUnit> coverAdjacentUnits = new();
+        public HashSet<GridUnit> CoverAdjacentUnits => coverAdjacentUnits;
 
         public GridUnit this[int x, int z]
         {
@@ -100,12 +146,14 @@ namespace SunsetSystems.Combat.Grid
 
         public GridLevel()
         {
-            gridCells = new GridUnit[10, 10];
+            gridCells = new GridUnit[width, depth];
         }
 
         public void BuildLevel(AreaMask mask)
         {
             gridCells = new GridUnit[width, depth];
+            walkableUnits.Clear();
+            coverAdjacentUnits.Clear();
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < depth; z++)
@@ -114,8 +162,16 @@ namespace SunsetSystems.Combat.Grid
                     newGridUnit.x = x;
                     newGridUnit.y = yPosition;
                     newGridUnit.z = z;
+                    newGridUnit.cellSize = cellSize;
                     VerifyIfIsWalkable(newGridUnit);
-                    VerifyIfAdjactenToCoverSource(newGridUnit);
+                    if (newGridUnit.walkable)
+                    {
+                        walkableUnits.Add(newGridUnit);
+                        VerifyIfAdjactenToCoverSource(newGridUnit);
+                        if (newGridUnit.adjacentToCover)
+                            coverAdjacentUnits.Add(newGridUnit);
+                    }
+
                     gridCells[x, z] = newGridUnit;
                 }
             }
@@ -154,5 +210,6 @@ namespace SunsetSystems.Combat.Grid
         public float surfaceY;
         public bool walkable;
         public bool adjacentToCover;
+        public float cellSize;
     }
 }

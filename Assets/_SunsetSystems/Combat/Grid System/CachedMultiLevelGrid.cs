@@ -27,8 +27,8 @@ namespace SunsetSystems.Combat.Grid
         private NavMeshAreas gridAreaMask = NavMeshAreas.All;
 
         [Title("References")]
-        [OdinSerialize]
-        private AssetReferenceT<GridUnitObject> gridObjectAsset = null;
+        [SerializeField]
+        private AssetReferenceGameObject gridObjectAsset = null;
 
         [Title("Instance Data")]
         [SerializeField, ReadOnly]
@@ -59,6 +59,7 @@ namespace SunsetSystems.Combat.Grid
                     Task<GameObject> instantiation = Addressables.InstantiateAsync(gridObjectAsset, transform).Task;
                     await instantiation;
                     GridUnitObject gridObj = instantiation.Result.GetComponent<GridUnitObject>();
+                    gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
                     gridObj.InjectUnitData(unit);
                     gridUnitGameObjects.Add(unit, gridObj);
                 }));

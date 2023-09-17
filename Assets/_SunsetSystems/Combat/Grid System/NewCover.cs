@@ -8,5 +8,7 @@ namespace SunsetSystems.Combat
     {
         [field: SerializeField]
         public NewCoverQuality Quality { get; private set; }
+
+        public Vector3 WorldPosition => transform.position;
     }
 }

@@ -12,6 +12,12 @@ namespace SunsetSystems.Combat.Grid
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
+        private GridCellState previousState = GridCellState.Default;
+        private GridCellState currentState = GridCellState.Default;
+        public GridCellState CurrentCellState => currentState;
+
+        public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.surfaceY - transform.position.y, 0);
+
         public bool InjectUnitData(GridUnit unitData)
         {
             if (this.unitData == null)
@@ -27,6 +33,36 @@ namespace SunsetSystems.Combat.Grid
             {
                 return false;
             }
+        }
+
+        public void SetGridCellState(GridCellState state, bool cachePrevious = false)
+        {
+            if (cachePrevious)
+                previousState = currentState;
+            currentState = state;
+            switch (state)
+            {
+                case GridCellState.Default:
+                    break;
+                case GridCellState.Hostile:
+                    break;
+                case GridCellState.Walkable:
+                    break;
+                case GridCellState.Sprintable:
+                    break;
+                case GridCellState.Danger:
+                    break;
+            }
+        }
+
+        public void RestoreCachedPreviousVisualState()
+        {
+            SetGridCellState(previousState);
+        }
+
+        public enum GridCellState
+        {
+            Default, Hostile, Walkable, Sprintable, Danger 
         }
     }
 }

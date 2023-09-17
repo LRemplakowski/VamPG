@@ -2,6 +2,7 @@
 {
     using Apex.AI;
     using Apex.Serialization;
+    using SunsetSystems.Combat;
     using SunsetSystems.Entities;
     using System.Collections.Generic;
     using UnityEngine;
@@ -13,11 +14,11 @@
 
         public override float Score(CreatureContext context, GridElement option)
         {
-            List<Cover> coverSourcesInGrid = context.CoverSourcesInCombatGrid;
+            List<ICover> coverSourcesInGrid = context.CoverSourcesInCombatGrid;
             float distance = float.MaxValue;
-            foreach (Cover c in coverSourcesInGrid)
+            foreach (ICover c in coverSourcesInGrid)
             {
-                float f = Vector3.Distance(option.transform.position, c.transform.position);
+                float f = Vector3.Distance(option.transform.position, c.WorldPosition);
                 if (f < distance)
                     distance = f;
             }

@@ -10,6 +10,7 @@ using SunsetSystems.Game;
 using SunsetSystems.Combat;
 using SunsetSystems.Resources;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Combat.Grid;
 
 public class CombatBehaviour : MonoBehaviour, IContextProvider
 {
@@ -108,7 +109,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     {
         if (who.Equals(Owner) && IsPlayerControlled)
         {
-            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
+            CombatManager.Instance.CurrentEncounter.MyGrid.RestoreHighlightedCellsToPreviousState();
         }
     }
 
@@ -156,7 +157,8 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
 
             if (IsPlayerControlled)
             {
-                CombatManager.Instance.CurrentEncounter.MyGrid.ActivateElementsInRangeOfActor(Owner);
+                CachedMultiLevelGrid grid = CombatManager.Instance.CurrentEncounter.MyGrid;
+                grid.HighlightCellsInRange(grid.WorldPositionToGridPosition(Owner.transform.position), Owner.MovementRange, Owner.References.NavMeshAgent);
             }
         }
     }
@@ -165,7 +167,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     {
         if (Owner.Equals(currentActor) && IsPlayerControlled)
         {
-            CombatManager.Instance.CurrentEncounter.MyGrid.ClearActiveElements();
+            CombatManager.Instance.CurrentEncounter.MyGrid.RestoreHighlightedCellsToPreviousState();
         }
     }
 

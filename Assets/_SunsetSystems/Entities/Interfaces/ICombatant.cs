@@ -15,6 +15,8 @@ namespace SunsetSystems.Entities.Interfaces
         bool IsInCover { get; }
         IList<Cover> CurrentCoverSources { get; }
 
+        int MovementRange { get; }
+
         bool TakeDamage(int amount);
 
         int GetAttributeValue(AttributeType attributeType);

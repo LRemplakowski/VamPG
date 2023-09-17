@@ -159,6 +159,8 @@ namespace SunsetSystems.Entities.Characters
         #region ICreatureTemplateProvider
         public ICreatureTemplate CreatureTemplate => new TemplateFromInstance(this);
 
+        public int MovementRange => throw new System.NotImplementedException();
+
         private class TemplateFromInstance : ICreatureTemplate
         {
             public TemplateFromInstance(ICreature instance)

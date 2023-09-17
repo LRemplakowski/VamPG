@@ -7,6 +7,7 @@ using SunsetSystems.Combat;
 using UnityEngine;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Interfaces;
+using System.Linq;
 
 public sealed class CreatureContext : IAIContext
 {
@@ -25,7 +26,7 @@ public sealed class CreatureContext : IAIContext
 
     public GridElement CurrentMoveTarget { get; set; }
 
-    public List<Cover> CoverSourcesInCombatGrid => combatManager.CurrentEncounter.MyGrid.CoverSourcesInGrid;
+    public List<ICover> CoverSourcesInCombatGrid => combatManager.CurrentEncounter.MyGrid.CachedCoverSources.ToList();
 
     public bool IsInCombat => GameManager.IsCurrentState(GameState.Combat);
 

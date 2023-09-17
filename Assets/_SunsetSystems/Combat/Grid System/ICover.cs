@@ -7,6 +7,8 @@ namespace SunsetSystems.Combat
     public interface ICover
     {
         NewCoverQuality Quality { get; }
+
+        Vector3 WorldPosition { get; }
     }
 
     public enum NewCoverQuality

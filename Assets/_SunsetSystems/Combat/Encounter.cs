@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using SunsetSystems.Game;
-using System.Threading.Tasks;
-using System.Linq;
-using Redcode.Awaiting;
+using SunsetSystems.Combat.Grid;
 
 namespace SunsetSystems.Combat
 {
-    [RequireComponent(typeof(GridController))]
     public class Encounter : MonoBehaviour, IEncounter
     {
         [field: SerializeField]
-        public GridController MyGrid { get; private set; }
+        public CachedMultiLevelGrid MyGrid { get; private set; }
         private CombatManager combatManager;
 
         [field: SerializeField, Tooltip("Creatures taking part in this encounter.")]
@@ -33,7 +30,7 @@ namespace SunsetSystems.Combat
         private void Start()
         {
             if (!MyGrid)
-                MyGrid = GetComponent<GridController>();
+                MyGrid = GetComponent<CachedMultiLevelGrid>();
             if (!combatManager)
                 combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
         }
@@ -44,6 +41,7 @@ namespace SunsetSystems.Combat
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
             GameManager.CurrentState = GameState.Combat;
+            await MyGrid.InstantiateGrid();
             _creatureCounter = Creatures.Count;
             await combatManager.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
@@ -63,7 +61,7 @@ namespace SunsetSystems.Combat
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
-            MyGrid.ClearActiveElements();
+            MyGrid.CleanupGrid();
             await combatManager.EndEncounter(this);
             GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)

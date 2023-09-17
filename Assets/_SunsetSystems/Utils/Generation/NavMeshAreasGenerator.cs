@@ -23,7 +23,7 @@ namespace UnityEngine.AI
            Walkable = 1, NotWalkable = 2, Jump = 4, 
            All = ~0,
        }
-       
+              
     #endregion
 
 #if UNITY_EDITOR

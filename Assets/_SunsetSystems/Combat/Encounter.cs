@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using SunsetSystems.Game;
 using SunsetSystems.Combat.Grid;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Combat
 {
@@ -35,6 +36,7 @@ namespace SunsetSystems.Combat
                 combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
         }
 
+        [Button]
         public async void Begin()
         {
             Debug.LogWarning("Begin encounter, do encounter start logic.");
@@ -58,6 +60,7 @@ namespace SunsetSystems.Combat
                 End();
         }
 
+        [Button]
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");

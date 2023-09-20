@@ -85,7 +85,7 @@ namespace SunsetSystems.Combat.Grid
 
         public enum GridCellState
         {
-            Default, Hostile, Walkable, Sprintable, Danger 
+            Default, Hostile, Walkable, Highlighted, Danger, NearCover
         }
     }
 }

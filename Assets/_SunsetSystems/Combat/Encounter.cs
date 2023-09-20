@@ -37,7 +37,7 @@ namespace SunsetSystems.Combat
         }
 
         [Title("Editor Utility")]
-        [Button]
+        [Button("Begin Encounter")]
         public async void Begin()
         {
             Debug.LogWarning("Begin encounter, do encounter start logic.");
@@ -46,22 +46,22 @@ namespace SunsetSystems.Combat
             GameManager.CurrentState = GameState.Combat;
             await MyGrid.InstantiateGrid();
             _creatureCounter = Creatures.Count;
-            await combatManager.BeginEncounter(this);
+            //await combatManager.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             {
-                Creatures.ForEach(c => c.References.GetComponentInChildren<StatsManager>().OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
+                Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
             }
         }
 
         private void DecrementCounterAndCheckForEncounterEnd(Creature creature)
         {
             _creatureCounter -= 1;
-            creature.References.GetComponentInChildren<StatsManager>().OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
+            creature.References.StatsManager.OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
             if (_creatureCounter <= 0)
                 End();
         }
 
-        [Button]
+        [Button("End Encounter")]
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");

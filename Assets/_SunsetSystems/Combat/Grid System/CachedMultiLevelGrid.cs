@@ -85,7 +85,10 @@ namespace SunsetSystems.Combat.Grid
                     GridUnitObject gridObj = instantiation.Result.GetComponent<GridUnitObject>();
                     gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
                     gridObj.InjectUnitData(unit);
-                    gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
+                    if (unit.adjacentToCover)
+                        gridObj.SetGridCellState(GridUnitObject.GridCellState.NearCover);
+                    else
+                        gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
                     gridUnitObjectDictionary.Add(unit, gridObj);
                     gridUnitObjectInstances.Add(gridObj);
                 }));

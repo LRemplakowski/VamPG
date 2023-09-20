@@ -1,14 +1,15 @@
 ﻿using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using UnityEngine;
 
 [Serializable]
 public abstract class DisciplineScript : ScriptableObject, IDisciplineScript
 {
-    public abstract void Activate(Creature target, Creature caster);
+    public abstract void Activate(ICombatant target, ICombatant caster);
 }
 
 public interface IDisciplineScript
 {
-    void Activate(Creature target, Creature caster);
+    void Activate(ICombatant target, ICombatant caster);
 }

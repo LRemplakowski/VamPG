@@ -4,10 +4,13 @@ using UnityEngine;
 using System.Collections.Generic;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Combat.Grid;
+using SunsetSystems.Combat;
 
 namespace AI.Scorers.Context
 {
-    public class ProvidesCoverAgainstEnemies : OptionScorerBase<GridElement, CreatureContext>
+    public class ProvidesCoverAgainstEnemies : OptionScorerBase<IGridCell, CreatureContext>
     {
         [ApexSerialization]
         public bool not = false;
@@ -18,14 +21,14 @@ namespace AI.Scorers.Context
         [ApexSerialization]
         public float coveredFromCountMultiplier = 1.0f;
 
-        public override float Score(CreatureContext context, GridElement option)
+        public override float Score(CreatureContext context, IGridCell option)
         {
             bool providesCover = false;
             int count = 0;
 
-            if (CoverDetector.IsPositionNearCover(option, out List<Cover> coverSources))
+            if (CoverDetector.IsPositionNearCover(option, out List<ICover> coverSources))
             {
-                List<Creature> enemies = new();
+                List<ICombatant> enemies = new();
                 if (context.Owner.Faction.Equals(Faction.Hostile))
                 {
                     enemies.AddRange(context.PlayerControlledCombatants);
@@ -35,10 +38,10 @@ namespace AI.Scorers.Context
                 {
                     enemies.AddRange(context.EnemyCombatants);
                 }
-                Vector3 optionPosition = option.transform.position;
-                foreach (Creature enemy in enemies)
+                Vector3 optionPosition = option.WorldPosition;
+                foreach (ICombatant enemy in enemies)
                 {
-                    Vector3 raycastOrigin = enemy.References.GetComponent<CombatBehaviour>().RaycastOrigin;
+                    Vector3 raycastOrigin = enemy.AimingOrigin;
                     float distance = Vector3.Distance(raycastOrigin, optionPosition);
                     Vector3 direction = (raycastOrigin - optionPosition).normalized;
                     RaycastHit[] hits = Physics.RaycastAll(new Ray(raycastOrigin, direction), distance, coverMask);
@@ -46,7 +49,7 @@ namespace AI.Scorers.Context
                     {
                         foreach (RaycastHit hit in hits)
                         {
-                            Cover coverSource = hit.collider.GetComponent<Cover>();
+                            ICover coverSource = hit.collider.GetComponent<ICover>();
                             if (coverSources.Contains(coverSource))
                             {
                                 providesCover = true;

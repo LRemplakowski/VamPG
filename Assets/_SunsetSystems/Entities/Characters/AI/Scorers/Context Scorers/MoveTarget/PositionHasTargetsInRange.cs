@@ -2,11 +2,13 @@
 {
     using Apex.AI;
     using Apex.Serialization;
+    using SunsetSystems.Combat.Grid;
     using SunsetSystems.Entities.Characters;
+    using SunsetSystems.Entities.Interfaces;
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class PositionHasTargetsInRange : OptionScorerBase<GridElement, CreatureContext>
+    public class PositionHasTargetsInRange : OptionScorerBase<IGridCell, CreatureContext>
     {
         [ApexSerialization]
         public bool not;
@@ -15,10 +17,10 @@
         [ApexSerialization]
         public float targetCountMultiplier = 1.0f;
 
-        public override float Score(CreatureContext context, GridElement option)
+        public override float Score(CreatureContext context, IGridCell option)
         {
             bool hasTargets = false;
-            List<Creature> targets = new();
+            List<ICombatant> targets = new();
             if (context.Owner.Faction.Equals(Faction.Hostile))
             {
                 targets.AddRange(context.FriendlyCombatants);

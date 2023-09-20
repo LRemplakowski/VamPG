@@ -1,5 +1,6 @@
 ﻿using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,20 +10,20 @@ namespace SunsetSystems.Spellbook
 {
     public static class Spellcaster
     {
-        public static Action GetPowerAction(DisciplinePower power, Creature castingActor)
+        public static Action GetPowerAction(DisciplinePower power, IMagicUser castingActor)
         {
             return power.Target switch
             {
-                Spellbook.Target.Self => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePower(power, castingActor),
-                Spellbook.Target.Friendly => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePowerAfterTargetSelection(power),
-                Spellbook.Target.Hostile => () => castingActor.GetComponentInChildren<SpellbookManager>().UsePowerAfterTargetSelection(power),
+                Spellbook.Target.Self => () => castingActor.UsePower(power, castingActor),
+                Spellbook.Target.Friendly => () => castingActor.UsePowerAfterTargetSelection(power),
+                Spellbook.Target.Hostile => () => castingActor.UsePowerAfterTargetSelection(power),
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
                 Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
                 _ => null,
             };
         }
 
-        public static bool HandleEffects(DisciplinePower discipline, Creature caster)
+        public static bool HandleEffects(DisciplinePower discipline, ICombatant caster)
         {
             switch (discipline.Target)
             {
@@ -35,7 +36,7 @@ namespace SunsetSystems.Spellbook
             return true;
         }
 
-        public static bool HandleEffects(DisciplinePower discipline, Creature caster, Creature target)
+        public static bool HandleEffects(DisciplinePower discipline, ICombatant caster, ICombatant target)
         {
             switch (discipline.Target)
             {
@@ -75,9 +76,9 @@ namespace SunsetSystems.Spellbook
             Debug.Log("Using AOE discipline " + discipline.name + "! Caster is " + caster.gameObject.name + " and origin point is " + originPoint);
         }
 
-        private static void HandleSingleTargeted(DisciplinePower discipline, Creature caster, Creature target)
+        private static void HandleSingleTargeted(DisciplinePower discipline, ICombatant caster, ICombatant target)
         {
-            Debug.Log("Using single targeted discipline " + discipline.name + "! Caster is " + caster.gameObject.name + " and target is " + target.gameObject.name);
+            Debug.Log("Using single targeted discipline " + discipline.name + "! Caster is " + caster.References.GameObject.name + " and target is " + target.References.GameObject.name);
             List<EffectWrapper> effects = discipline.GetEffects();
             foreach (EffectWrapper effect in effects)
             {
@@ -102,9 +103,9 @@ namespace SunsetSystems.Spellbook
             }
         }
 
-        private static void HandleSelfTargeted(DisciplinePower discipline, Creature caster)
+        private static void HandleSelfTargeted(DisciplinePower discipline, ICombatant caster)
         {
-            Debug.Log("Using self-targeted discipline " + discipline.name + "! Caster is " + caster.gameObject.name);
+            Debug.Log("Using self-targeted discipline " + discipline.name + "! Caster is " + caster.References.GameObject.name);
             List<EffectWrapper> effects = discipline.GetEffects();
             foreach (EffectWrapper effect in effects)
             {
@@ -129,27 +130,27 @@ namespace SunsetSystems.Spellbook
             }
         }
 
-        static void HandleAttributeEffect(EffectWrapper.AttributeEffect attributeEffect, Creature target, Creature caster)
-        {
-            target.GetComponentInChildren<StatsManager>().ApplyEffect(attributeEffect);
-        }
-
-        static void HandleScriptEffect(EffectWrapper.ScriptEffect scriptEffect, Creature target, Creature caster)
-        {
-            scriptEffect.Script.Activate(target, caster);
-        }
-
-        static void HandleTrackerEffect(EffectWrapper.TrackerEffect trackerEffect, Creature target, Creature caster)
+        static void HandleAttributeEffect(EffectWrapper.AttributeEffect attributeEffect, ICombatant target, ICombatant caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleDisciplineEffect(EffectWrapper.DisciplineEffect disciplineEffect, Creature target, Creature caster)
+        static void HandleScriptEffect(EffectWrapper.ScriptEffect scriptEffect, ICombatant target, ICombatant caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleSkillEffect(EffectWrapper.SkillEffect skillEffect, Creature target, Creature caster)
+        static void HandleTrackerEffect(EffectWrapper.TrackerEffect trackerEffect, ICombatant target, ICombatant caster)
+        {
+            throw new NotImplementedException();
+        }
+
+        static void HandleDisciplineEffect(EffectWrapper.DisciplineEffect disciplineEffect, ICombatant target, ICombatant caster)
+        {
+            throw new NotImplementedException();
+        }
+
+        static void HandleSkillEffect(EffectWrapper.SkillEffect skillEffect, ICombatant target, ICombatant caster)
         {
             throw new NotImplementedException();
         }

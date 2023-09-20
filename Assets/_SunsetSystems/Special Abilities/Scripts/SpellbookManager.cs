@@ -2,6 +2,8 @@ using Redcode.Awaiting;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Entities.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -16,12 +18,12 @@ namespace SunsetSystems.Spellbook
     public class SpellbookManager : MonoBehaviour
     {
         [SerializeField]
-        private Creature _owner;
-        private ref Disciplines Disciplines => ref _owner.References.StatsManager.Stats.Disciplines;
+        private ICombatant _owner;
+        private Disciplines Disciplines => throw new NotImplementedException();
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 
-        public static Creature PowerTarget { get; set; }
+        public static ICombatant PowerTarget { get; set; }
         public static Target RequiredTarget { get; private set; }
         private static Task targetAwaiterTask;
         private CancellationTokenSource targetAwaiterCancellation;
@@ -36,7 +38,7 @@ namespace SunsetSystems.Spellbook
             CombatManager.OnFullTurnCompleted -= DecreaseCooldowns;
         }
 
-        public void Initialize(Creature owner)
+        public void Initialize(ICombatant owner)
         {
             _owner = owner;
             ApplyPasivePowers();
@@ -57,7 +59,7 @@ namespace SunsetSystems.Spellbook
             //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner));
         }
 
-        public void UsePower(DisciplinePower power, Creature target)
+        public void UsePower(DisciplinePower power, ICombatant target)
         {
             ActionBarUI.instance.SetBarAction(default);
             if (_powersOnCooldown.ContainsKey(power))
@@ -136,7 +138,7 @@ namespace SunsetSystems.Spellbook
         private bool DeducePowerCost(DisciplinePower power)
         {
             if (_owner.Faction is Faction.PlayerControlled)
-                return _owner.GetComponentInChildren<StatsManager>().TryUseBlood(power.BloodCost);
+                throw new NotImplementedException();
             else
                 return true;
         }

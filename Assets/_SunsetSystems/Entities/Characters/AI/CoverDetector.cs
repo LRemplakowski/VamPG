@@ -4,6 +4,8 @@ using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using UnityEngine;
+using SunsetSystems.Combat.Grid;
+using SunsetSystems.Combat;
 
 public class CoverDetector : Singleton<CoverDetector>
 {
@@ -12,19 +14,19 @@ public class CoverDetector : Singleton<CoverDetector>
     [SerializeField]
     private LayerMask coverLayerMask;
 
-    public static bool IsPositionNearCover(GridElement gridPos, out List<Cover> coverSources)
+    public static bool IsPositionNearCover(IGridCell gridPos, out List<ICover> coverSources)
     {
-        coverSources = new List<Cover>();
-        Collider[] colliders = Physics.OverlapSphere(gridPos.transform.position, instance.coverDetectionRadius * gridPos.transform.localScale.x, instance.coverLayerMask);
+        coverSources = new List<ICover>();
+        Collider[] colliders = Physics.OverlapSphere(gridPos.WorldPosition, instance.coverDetectionRadius * gridPos.CellSize, instance.coverLayerMask);
         foreach (Collider col in colliders)
         {
-            if (col.TryGetComponent(out Cover cover))
+            if (col.TryGetComponent(out ICover cover))
                 coverSources.Add(cover);
         }
         return true;
     }
 
-    public static bool FiringLineObstructedByCover(ICombatant attacker, ICombatant target, out Cover coverSource)
+    public static bool FiringLineObstructedByCover(ICombatant attacker, ICombatant target, out ICover coverSource)
     {
         if (target.IsInCover)
         {
@@ -37,7 +39,7 @@ public class CoverDetector : Singleton<CoverDetector>
             {
                 foreach (RaycastHit hit in hits)
                 {
-                    coverSource = hit.collider.GetComponent<Cover>();
+                    coverSource = hit.collider.GetComponent<ICover>();
                     if (target.CurrentCoverSources.Contains(coverSource))
                     {
                         return true;

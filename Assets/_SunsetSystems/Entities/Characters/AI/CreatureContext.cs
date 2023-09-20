@@ -8,12 +8,13 @@ using UnityEngine;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Interfaces;
 using System.Linq;
+using SunsetSystems.Combat.Grid;
 
 public sealed class CreatureContext : IAIContext
 {
     private readonly CombatManager combatManager;
 
-    public CreatureContext(ICreature owner, CombatManager combatManager)
+    public CreatureContext(ICombatant owner, CombatManager combatManager)
     {
         Owner = owner;
         this.combatManager = combatManager;
@@ -24,7 +25,7 @@ public sealed class CreatureContext : IAIContext
 
     public ICombatant CurrentTarget { get; set; }
 
-    public GridElement CurrentMoveTarget { get; set; }
+    public IGridCell CurrentMoveTarget { get; set; }
 
     public List<ICover> CoverSourcesInCombatGrid => combatManager.CurrentEncounter.MyGrid.CachedCoverSources.ToList();
 
@@ -43,15 +44,15 @@ public sealed class CreatureContext : IAIContext
 
    // public List<GridElement> PositionsInRange => combatManager.CurrentEncounter.MyGrid.GetElementsInRangeOfActor(Owner);
 
-    public List<Creature> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
+    public List<ICombatant> OtherCombatants => CombatManager.Instance.Actors.FindAll(c => !c.Equals(Owner));
 
-    public List<Creature> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Faction is Faction.PlayerControlled);
+    public List<ICombatant> PlayerControlledCombatants => CombatManager.Instance.Actors.FindAll(c => c.Faction is Faction.PlayerControlled);
 
-    public List<Creature> FriendlyCombatants => CombatManager.Instance
+    public List<ICombatant> FriendlyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.References.CreatureData.Faction is Faction.Friendly);
+        .FindAll(c => c.Faction is Faction.Friendly);
 
-    public List<Creature> EnemyCombatants => CombatManager.Instance
+    public List<ICombatant> EnemyCombatants => CombatManager.Instance
         .Actors
-        .FindAll(c => c.References.CreatureData.Faction is Faction.Hostile);
+        .FindAll(c => c.Faction is Faction.Hostile);
 }

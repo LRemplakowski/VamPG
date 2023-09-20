@@ -1,6 +1,8 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Interfaces;
+using System;
 using UnityEngine;
 
 namespace SunsetSystems.Spellbook
@@ -11,15 +13,16 @@ namespace SunsetSystems.Spellbook
         [SerializeField]
         private float _composureMultiplier = 0.75f;
 
-        public override void Activate(Creature target, Creature caster)
+        public override void Activate(ICombatant target, ICombatant caster)
         {
-            AttackModifier modifier = new();
-            int casterComposure = caster.References.StatsManager.Stats.Attributes.GetAttribute(AttributeType.Composure).GetValue();
-            modifier.DamageMod = Mathf.RoundToInt(casterComposure * _composureMultiplier);
-            modifier.CriticalMod = true;
-            modifier.HitChanceMod = -0.3d;
-            Attack attack = new(target, caster, modifier);
-            caster.PerformAction(attack);
+            //AttackModifier modifier = new();
+            //int casterComposure = caster.References.StatsManager.Stats.Attributes.GetAttribute(AttributeType.Composure).GetValue();
+            //modifier.DamageMod = Mathf.RoundToInt(casterComposure * _composureMultiplier);
+            //modifier.CriticalMod = true;
+            //modifier.HitChanceMod = -0.3d;
+            //Attack attack = new(target, caster, modifier);
+            //caster.PerformAction(attack);
+            throw new NotImplementedException();
         }
     }
 }

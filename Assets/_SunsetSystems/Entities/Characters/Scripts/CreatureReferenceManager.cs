@@ -1,4 +1,5 @@
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,5 +15,7 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         public NavMeshAgent NavMeshAgent { get; private set; }
         [field: SerializeField]
         public NavMeshObstacle NavMeshObstacle { get; private set; }
+        [field: SerializeField]
+        public ICombatant CombatComponent { get; private set; }
     }
 }

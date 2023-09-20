@@ -16,6 +16,8 @@ using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Input
 {
@@ -151,21 +153,21 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasMoved)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasMoved)
                     {
-                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.References.CreatureData.DatabaseID} is not player controlled or has already moved!");
+                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.References.GameObject.name} is not player controlled or has already moved!");
                         return;
                     }
-                    if (hit.collider.TryGetComponent(out GridElement gridElement))
+                    if (hit.collider.TryGetComponent(out IGridCell gridElement))
                     {
-                        if (gridElement.Visited is not GridElement.Status.Occupied)
+                        if (gridElement.IsFree)
                         {
-                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.References.CreatureData.DatabaseID} to grid element {gridElement.gameObject.name}!");
-                            CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
+                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.References.GameObject.name} to grid element {gridElement}!");
+                            //CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
                         }
                         else
                         {
-                            Debug.Log($"Grid element {gridElement.gameObject.name} is already occupied!");
+                            Debug.Log($"Grid element {gridElement} is already occupied!");
                         }
                     }
                     else
@@ -174,27 +176,28 @@ namespace SunsetSystems.Input
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
                         return;
-                    Creature enemy = hit.collider.GetComponent<Creature>();
-                    if (enemy)
+                    ICombatant enemy = hit.collider.GetComponent<ICreature>().References.CombatComponent;
+                    if (enemy != null)
                     {
-                        if (enemy.References.CreatureData.Faction is Faction.Hostile && IsInRange(enemy))
+                        if (enemy.Faction is Faction.Hostile && IsInRange(enemy))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.References.CreatureData.DatabaseID} is attacking enemy {enemy.References.CreatureData.DatabaseID}!");
-                            CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
+                            Debug.Log($"{CombatManager.CurrentActiveActor} is attacking enemy {enemy}!");
+                            throw new NotImplementedException();
+                            //CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
                         }
                     }
                     break;
                 case BarAction.SELECT_TARGET:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
                         return;
-                    Creature powerTarget = hit.collider.GetComponent<Creature>();
-                    if (powerTarget)
+                    ICombatant powerTarget = hit.collider.GetComponent<ICreature>().References.CombatComponent;
+                    if (powerTarget != null)
                     {
                         if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.References.CreatureData.DatabaseID} is using power on enemy {powerTarget.References.CreatureData.DatabaseID}!");
+                            Debug.Log($"{CombatManager.CurrentActiveActor.References} is using power on enemy {powerTarget}!");
                             SpellbookManager.PowerTarget = powerTarget;
                         }
                     }
@@ -205,23 +208,23 @@ namespace SunsetSystems.Input
             }
         }
 
-        private bool VerifyTarget(Creature target, Spellbook.Target requiredTarget)
+        private bool VerifyTarget(ICombatant target, Spellbook.Target requiredTarget)
         {
             return requiredTarget switch
             {
                 Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
                 Spellbook.Target.Friendly => target.Faction is Faction.PlayerControlled || target.Faction is Faction.Friendly,
-                Spellbook.Target.Hostile => target.References.CreatureData.Faction is Faction.Hostile,
+                Spellbook.Target.Hostile => target.Faction is Faction.Hostile,
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
                 Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
                 _ => false,
             };
         }
 
-        private static bool IsInRange(Entity enemy)
+        private static bool IsInRange(IEntity enemy)
         {
             int maxRange = CombatManager.CurrentActiveActor.CurrentWeapon.GetRangeData().maxRange;
-            float distance = Vector3.Distance(CombatManager.CurrentActiveActor.transform.position, enemy.transform.position);
+            float distance = Vector3.Distance(CombatManager.CurrentActiveActor.References.Transform.position, enemy.References.Transform.position);
             return distance <= maxRange;
         }
 
@@ -311,44 +314,48 @@ namespace SunsetSystems.Input
                 {
                     if (!CombatManager.IsActiveActorPlayerControlled())
                         return;
+                    IGridCell gridCell;
                     if (lastHit != hit.collider)
                     {
-                        if (GridElement.IsInstance(lastHit.gameObject))
+                        gridCell = lastHit.gameObject.GetComponent<IGridCell>();
+                        if (gridCell != null)
                         {
-                            lastHit.gameObject.GetComponent<GridElement>().MouseOver = false;
+                            gridCell.Highlighted(false);
                         }
                         lastHit = hit.collider;
                     }
-                    if (GridElement.IsInstance(lastHit.gameObject))
+                    gridCell = lastHit.gameObject.GetComponent<IGridCell>();
+                    if (gridCell != null)
                     {
-                        lastHit.gameObject.GetComponent<GridElement>().MouseOver = true;
+                        gridCell.Highlighted(true);
                     }
                 }
 
                 void HandleAttackActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().HasActed)
+                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
                         return;
-                    LineRenderer lineRenderer = CombatManager.CurrentActiveActor.GetComponentInChildren<CombatBehaviour>().LineRenderer;
-                    if (lastHit != hit.collider)
-                    {
-                        lineRenderer.enabled = false;
-                        lastHit = hit.collider;
-                    }
-                    ICreature creature = lastHit.GetComponent<ICreature>();
-                    if (creature != null && creature.Faction is Faction.Hostile)
-                    {
-                        lineRenderer.positionCount = 2;
-                        throw new NotImplementedException();
-                        //lineRenderer.SetPosition(0, lineRenderer.transform.position);
-                        //lineRenderer.SetPosition(1, creature.LineTarget.position);
-                        //Color color = IsInRange(creature)
-                        //    ? Color.green
-                        //    : Color.red;
-                        //lineRenderer.startColor = color;
-                        //lineRenderer.endColor = color;
-                        //lineRenderer.enabled = true;
-                    }
+                    throw new NotImplementedException();
+                    //LineRenderer lineRenderer = CombatManager.CurrentActiveActor.LineRenderer;
+                    //if (lastHit != hit.collider)
+                    //{
+                    //    lineRenderer.enabled = false;
+                    //    lastHit = hit.collider;
+                    //}
+                    //ICreature creature = lastHit.GetComponent<ICreature>();
+                    //if (creature != null && creature.Faction is Faction.Hostile)
+                    //{
+                    //    lineRenderer.positionCount = 2;
+                    //    throw new NotImplementedException();
+                    //    //lineRenderer.SetPosition(0, lineRenderer.transform.position);
+                    //    //lineRenderer.SetPosition(1, creature.LineTarget.position);
+                    //    //Color color = IsInRange(creature)
+                    //    //    ? Color.green
+                    //    //    : Color.red;
+                    //    //lineRenderer.startColor = color;
+                    //    //lineRenderer.endColor = color;
+                    //    //lineRenderer.enabled = true;
+                    //}
                 }
             }
         }

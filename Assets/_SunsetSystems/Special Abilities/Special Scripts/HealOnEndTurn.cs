@@ -1,5 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace SunsetSystems.Spellbook
     [CreateAssetMenu(fileName = "HealOnEndTurn", menuName = "Scriptable Powers/Heal On End Turn")]
     public class HealOnEndTurn : DisciplineScript
     {
-        private List<Creature> _effectRecievers = new();
+        private List<ICombatant> _effectRecievers = new();
 
         private void OnEnable()
         {
@@ -22,7 +23,7 @@ namespace SunsetSystems.Spellbook
             CombatManager.OnFullTurnCompleted -= HealOnFullTurn;
         }
 
-        public override void Activate(Creature target, Creature caster)
+        public override void Activate(ICombatant target, ICombatant caster)
         {
             _effectRecievers ??= new();
             _effectRecievers.RemoveAll(c => c == null);
@@ -34,7 +35,7 @@ namespace SunsetSystems.Spellbook
             _effectRecievers.ForEach(c => DoHealing(c));
         }
 
-        private void DoHealing(Creature creature)
+        private void DoHealing(ICombatant creature)
         {
             StatsManager targetStatsManager = creature.References.GetComponentInChildren<StatsManager>();
             if (targetStatsManager != null && targetStatsManager.IsAlive())

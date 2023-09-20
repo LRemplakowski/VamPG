@@ -5,6 +5,7 @@ using System;
 using SunsetSystems.Game;
 using SunsetSystems.Combat.Grid;
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Combat
 {
@@ -15,7 +16,7 @@ namespace SunsetSystems.Combat
         private CombatManager combatManager;
 
         [field: SerializeField, Tooltip("Creatures taking part in this encounter.")]
-        public List<Creature> Creatures { get; private set; }
+        public List<ICombatant> Creatures { get; private set; }
 
         [SerializeField]
         private EncounterEndTrigger _encounterEndTrigger = EncounterEndTrigger.Automatic;
@@ -44,13 +45,13 @@ namespace SunsetSystems.Combat
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
             GameManager.CurrentState = GameState.Combat;
-            await MyGrid.InstantiateGrid();
+            MyGrid.EnableGrid();
             _creatureCounter = Creatures.Count;
             //await combatManager.BeginEncounter(this);
-            if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
-            {
-                Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
-            }
+            //if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
+            //{
+            //    Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
+            //}
         }
 
         private void DecrementCounterAndCheckForEncounterEnd(Creature creature)
@@ -65,7 +66,7 @@ namespace SunsetSystems.Combat
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
-            MyGrid.CleanupGrid();
+            MyGrid.DisableGrid();
             await combatManager.EndEncounter(this);
             GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)

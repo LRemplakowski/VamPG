@@ -82,7 +82,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a877a7204afd7d42a2140eb00ed8ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _owner: {fileID: 660093643310669083}
 --- !u!1 &990508043532713649
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,7 +260,6 @@ MonoBehaviour:
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
   _enablePersistence: 1
-  _currentGridPosition: {fileID: 0}
 --- !u!195 &80723574967673666
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -312,6 +310,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245806abe119594e8c2f606fac983d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 3784422555817380618}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <CombatComponent>k__BackingField
+      Entry: 10
+      Data: 0
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}

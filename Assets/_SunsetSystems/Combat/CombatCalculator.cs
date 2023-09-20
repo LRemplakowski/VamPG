@@ -116,16 +116,16 @@ namespace SunsetSystems.Combat
         private static double CalculateDodgeChance(ICombatant defender, ICombatant attacker)
         {
             double result = BASE_DODGE_CHANCE;
-            bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out Cover coverSource);
+            bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out ICover coverSource);
             if (hasCover)
             {
                 int defenderDexterity = defender.GetAttributeValue(AttributeType.Dexterity);
-                switch (coverSource.GetCoverQuality())
+                switch (coverSource.Quality)
                 {
                     case CoverQuality.Half:
                         result += COVER_MODIFIER_LOW + (defenderDexterity * 0.2d);
                         break;
-                    case CoverQuality.High:
+                    case CoverQuality.Full:
                         result += COVER_MODIFIER_HIGH + (defenderDexterity * 0.5d);
                         break;
                 }

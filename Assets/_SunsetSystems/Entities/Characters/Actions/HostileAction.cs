@@ -9,10 +9,11 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         public static event Action<ICombatant, ICombatant> OnAttackFinished;
 
+
         public ICombatant Target { get; private set; }
         protected readonly HostileActionCondition condition;
 
-        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker as ICreature, true)
+        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker.References.GetComponent<Creature>(), true)
         {
             Target = target;
             HostileActionCondition condition = new(target, attacker);

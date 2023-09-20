@@ -53,21 +53,17 @@ namespace SunsetSystems.Combat.Grid
         private void Start()
         {
             BuildGrid();
+            _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
         }
 
-        public async Task InstantiateGrid()
+        public void EnableGrid()
         {
-            await GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
+            gridUnitObjectInstances.ForEach(o => o.gameObject.SetActive(true));
         }
 
-        public void CleanupGrid()
+        public void DisableGrid()
         {
-            foreach (GridUnitObject gridObj in gridUnitObjectInstances)
-            {
-                Addressables.ReleaseInstance(gridObj.gameObject);
-            }
-            gridUnitObjectInstances.Clear();
-            gridUnitObjectDictionary.Clear();
+            gridUnitObjectInstances.ForEach(o => o.gameObject.SetActive(false));
         }
 
         private async Task GenerateSceneObjects(IEnumerable<GridUnit> gridUnits)
@@ -91,6 +87,7 @@ namespace SunsetSystems.Combat.Grid
                         gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
                     gridUnitObjectDictionary.Add(unit, gridObj);
                     gridUnitObjectInstances.Add(gridObj);
+                    gridObj.gameObject.SetActive(false);
                 }));
             }
             await Task.WhenAll(tasks);
@@ -139,6 +136,11 @@ namespace SunsetSystems.Combat.Grid
         }
 
         public GridUnitObject GetNearestGridElement(Vector3 position)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vector3Int GetNearestGridPosition(Vector3 worldPosition)
         {
             throw new NotImplementedException();
         }

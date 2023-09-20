@@ -13,24 +13,8 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class Creature : PersistentEntity, ICreature, ICombatant, ICreatureTemplateProvider
+    public class Creature : PersistentEntity, ICreature, ICreatureTemplateProvider
     {
-        [SerializeField, ReadOnly]
-        protected GridElement _currentGridPosition;
-        public GridElement CurrentGridPosition
-        {
-            get => _currentGridPosition;
-            set
-            {
-                if (_currentGridPosition)
-                {
-                    _currentGridPosition.Visited = GridElement.Status.NotVisited;
-                }
-                value.Visited = GridElement.Status.Occupied;
-                _currentGridPosition = value;
-            }
-        }
-
         private Queue<EntityAction> _actionQueue;
         private Queue<EntityAction> ActionQueue
         {
@@ -132,25 +116,6 @@ namespace SunsetSystems.Entities.Characters
         }
 
         public void InjectDataFromTemplate(ICreatureTemplate template)
-        {
-            throw new System.NotImplementedException();
-        }
-        #endregion
-
-        #region ICombatant
-        public IWeapon CurrentWeapon => throw new System.NotImplementedException();
-        public IWeapon PrimaryWeapon => throw new System.NotImplementedException();
-        public IWeapon SecondaryWeapon => throw new System.NotImplementedException();
-        public Vector3 AimingOrigin => throw new System.NotImplementedException();
-        public bool IsInCover => throw new System.NotImplementedException();
-        public IList<Cover> CurrentCoverSources => throw new System.NotImplementedException();
-
-        public bool TakeDamage(int amount)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public int GetAttributeValue(AttributeType attributeType)
         {
             throw new System.NotImplementedException();
         }

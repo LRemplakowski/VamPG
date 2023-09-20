@@ -10,5 +10,6 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         StatsManager StatsManager { get; }
         NavMeshAgent NavMeshAgent { get; }
         NavMeshObstacle NavMeshObstacle { get; }
+        ICombatant CombatComponent { get; }
     }
 }

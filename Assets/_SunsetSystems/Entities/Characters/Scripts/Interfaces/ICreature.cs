@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Interfaces
 {
-    public interface ICreature : IEntity, ICombatant
+    public interface ICreature : IEntity
     {
         new ICreatureReferences References { get; }
         Task PerformAction(EntityAction action);

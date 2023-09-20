@@ -21,18 +21,6 @@ namespace SunsetSystems.Entities.Characters
         private bool _initializedOnce;
         private bool _displayWeapons = false;
 
-        private void OnEnable()
-        {
-            CombatManager.CombatBegin += OnCombatBegin;
-            CombatManager.CombatEnd += OnCombatEnd;
-        }
-
-        private void OnDisable()
-        {
-            CombatManager.CombatBegin -= OnCombatBegin;
-            CombatManager.CombatEnd -= OnCombatEnd;
-        }
-
         private void OnCombatBegin(List<Creature> combatants)
         {
             if (!_initializedOnce)

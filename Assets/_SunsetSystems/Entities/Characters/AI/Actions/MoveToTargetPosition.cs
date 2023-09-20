@@ -1,4 +1,5 @@
 ﻿using Apex.AI;
+using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace AI.Actions
     {
         public override void Execute(CreatureContext context)
         {
-            GridElement targetPosition = context.CurrentMoveTarget;
+            IGridCell targetPosition = context.CurrentMoveTarget;
             if (targetPosition != null)
             {
                 Debug.Log("Moving to " + targetPosition);

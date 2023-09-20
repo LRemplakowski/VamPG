@@ -1,5 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Spellbook;
 using SunsetSystems.UI.Utils;
 using System;
@@ -56,7 +57,7 @@ namespace SunsetSystems.UI
 
         public void UpdateViews(List<IGameDataProvider<DisciplinePower>> data)
         {
-            Creature spellcastingActor = CombatManager.CurrentActiveActor;
+            IMagicUser spellcastingActor = CombatManager.CurrentActiveActor.MagicUser;
             foreach (IGameDataProvider<DisciplinePower> ability in data)
             {
                 AbilityView view = GetViewFromPool();

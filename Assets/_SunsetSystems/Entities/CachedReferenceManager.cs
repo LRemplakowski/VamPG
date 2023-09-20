@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities
 {
-    public class CachedReferenceManager : MonoBehaviour, IEntityReferences
+    public class CachedReferenceManager : SerializedMonoBehaviour, IEntityReferences
     {
         public Transform Transform => transform;
         public GameObject GameObject => gameObject;

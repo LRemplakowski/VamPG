@@ -31,7 +31,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override void Begin()
         {
             Debug.Log(Owner.References.GameObject.name + " attacks " + Target.References.GameObject.name);
-            ICombatant attacker = Owner;
+            ICombatant attacker = Owner.References.CombatComponent;
             ICombatant defender = Target;
             AttackResult result = CombatCalculator.CalculateAttackResult(attacker, defender, _attackModifier);
             Debug.Log($"Attack hit? {result.Successful}\n" +
@@ -40,7 +40,7 @@ namespace SunsetSystems.Entities.Characters.Actions
                 $"Attack roll: {result.HitRoll} vs difficulty {result.AttackerHitChance - result.DefenderDodgeChance}\n" +
                 $"Damage dealt: {result.Damage} - {result.DamageReduction} = {result.AdjustedDamage}");
             defender.TakeDamage(result.AdjustedDamage);
-            Finish(Target, Owner);
+            Finish(defender, attacker);
         }
     } 
 }

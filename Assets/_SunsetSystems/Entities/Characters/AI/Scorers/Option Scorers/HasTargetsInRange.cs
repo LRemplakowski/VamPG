@@ -4,6 +4,7 @@ using SunsetSystems.Entities.Characters;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using SunsetSystems.Entities.Interfaces;
 
 namespace AI.Scorers.Option
 {
@@ -15,7 +16,7 @@ namespace AI.Scorers.Option
         public override float Score(CreatureContext context)
         {
             float weaponsRange = context.Owner.CurrentWeapon.GetRangeData().maxRange;
-            List<Creature> potentialTargets = new();
+            List<ICombatant> potentialTargets = new();
             if (context.Owner.Faction.Equals(Faction.Hostile))
             {
                 potentialTargets.AddRange(context.FriendlyCombatants);
@@ -25,10 +26,9 @@ namespace AI.Scorers.Option
             {
                 potentialTargets.AddRange(context.EnemyCombatants);
             }
-            //return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.CurrentGridPosition.transform.position, target.CurrentGridPosition.transform.position) <= weaponsRange)) ?
-            //    score :
-            //    0f;
-            throw new NotImplementedException();
+            return not ^ potentialTargets.Exists(target => (Vector3.Distance(context.Owner.References.Transform.position, target.References.Transform.position) <= weaponsRange)) ?
+                score :
+                0f;
         }
     }
 }

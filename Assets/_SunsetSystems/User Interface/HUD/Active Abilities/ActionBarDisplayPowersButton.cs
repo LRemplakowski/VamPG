@@ -1,5 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Spellbook;
 using SunsetSystems.UI.Utils;
 using System.Collections;
@@ -27,14 +28,14 @@ namespace SunsetSystems.UI
 
         public void ShowDisciplinePowerDisplay()
         {
-            Creature activeActor = CombatManager.CurrentActiveActor;
+            ICombatant activeActor = CombatManager.CurrentActiveActor;
             if (activeActor == null)
             {
                 Debug.LogError("Trying to display power list, but CurrentActiveActor is null!");
                 return;
             }
             List<IGameDataProvider<DisciplinePower>> powers = new();
-            powers.AddRange(activeActor.References.StatsManager.Stats.Disciplines
+            powers.AddRange(activeActor.References.GetComponentInChildren<StatsManager>().Stats.Disciplines
                 .GetDisciplines()
                 .FindAll(d => _hashedPowerTypes.Contains(d.GetDisciplineType()))
                 // We assume that if given power has a blood cost, it's an active powers. That's a dirty hack, may fail.

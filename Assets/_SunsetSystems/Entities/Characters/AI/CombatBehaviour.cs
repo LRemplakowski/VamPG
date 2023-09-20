@@ -11,8 +11,12 @@ using SunsetSystems.Combat;
 using SunsetSystems.Resources;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Inventory;
+using SunsetSystems.Entities;
+using SunsetSystems.Spellbook;
+using Sirenix.OdinInspector;
 
-public class CombatBehaviour : MonoBehaviour, IContextProvider
+public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 {
     private CreatureContext _context;
     private CreatureContext Context
@@ -20,7 +24,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         get
         {
             if (_context == null)
-                _context = new(this.Owner, CombatManager.Instance);
+                _context = new(this, CombatManager.Instance);
             return _context;
         }
     }
@@ -34,10 +38,6 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     public LineRenderer LineRenderer { get; private set; }
 
     public Creature Owner { get; private set; }
-
-    public bool HasActed { get; set; }
-
-    public bool HasMoved { get; set; }
 
     public bool IsPlayerControlled => Context.IsPlayerControlled;
 
@@ -64,8 +64,6 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
             LineRenderer = Instantiate(ResourceLoader.GetTargetingLineRendererPrefab(), RaycastOrigin, Quaternion.identity, transform);
             LineRenderer.enabled = false;
         }
-        CombatManager.CombatBegin += OnCombatStart;
-        CombatManager.CombatEnd += OnCombatEnd;
     }
 
     #region Enable&Disable
@@ -84,16 +82,11 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     }
     #endregion
 
-    private void OnDestroy()
-    {
-        CombatManager.CombatBegin -= OnCombatStart;
-        CombatManager.CombatEnd -= OnCombatEnd;
-    }
 
     private void Start()
     {
         if (!Owner)
-            Owner = GetComponent<Creature>();
+            Owner = GetComponentInParent<Creature>();
         enabled = false;
     }
 
@@ -105,50 +98,15 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
                     CombatManager.Instance.NextRound();
     }
 
-    private void OnMovementStarted(ICombatant who)
-    {
-        if (who.Equals(Owner) && IsPlayerControlled)
-        {
-            CombatManager.Instance.CurrentEncounter.MyGrid.RestoreHighlightedCellsToPreviousState();
-        }
-    }
-
-    private void OnMovementFinished(ICombatant who)
-    {
-        if (who.Equals(Owner))
-        {
-            HasMoved = true;
-        }
-    }
-
     private void OnHostileActionFinished(ICombatant target, ICombatant performer)
     {
-        if (performer.Equals(Owner))
+        if (performer.Equals(this))
         {
             HasActed = true;
         }
     }
 
-    private void OnCombatStart(List<Creature> creaturesInCombat)
-    {
-        if (creaturesInCombat.Contains(Owner))
-        {
-            enabled = true;
-            Move.onMovementStarted += OnMovementStarted;
-            Move.onMovementFinished += OnMovementFinished;
-            HasMoved = false;
-            HasActed = false;
-        }
-    }
-
-    private void OnCombatEnd()
-    {
-        enabled = false;
-        Move.onMovementStarted -= OnMovementStarted;
-        Move.onMovementFinished -= OnMovementFinished;
-    }
-
-    private void OnCombatRoundBegin(Creature currentActor)
+    private void OnCombatRoundBegin(ICombatant currentActor)
     {
         if (Owner.Equals(currentActor))
         {
@@ -163,7 +121,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
         }
     }
 
-    private void OnCombatRoundEnd(Creature currentActor)
+    private void OnCombatRoundEnd(ICombatant currentActor)
     {
         if (Owner.Equals(currentActor) && IsPlayerControlled)
         {
@@ -175,5 +133,61 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider
     {
         return Context;
     }
+
+    #region ICombatant
+    [field: SerializeField]
+    public IMagicUser MagicUser { get; private set; }
+    public IWeapon CurrentWeapon => throw new NotImplementedException();
+
+    public IWeapon PrimaryWeapon => throw new NotImplementedException();
+
+    public IWeapon SecondaryWeapon => throw new NotImplementedException();
+
+    public Vector3 AimingOrigin => throw new NotImplementedException();
+
+    public bool IsInCover => throw new NotImplementedException();
+
+    public IList<ICover> CurrentCoverSources => throw new NotImplementedException();
+
+    public int MovementRange => throw new NotImplementedException();
+    [field: ShowInInspector, ReadOnly]
+    public bool HasActed { get; private set; }
+    [field: ShowInInspector, ReadOnly]
+    public bool HasMoved { get; private set; }
+
+    public string ID => Owner.ID;
+
+    public string Name => Owner.Name;
+
+    public Faction Faction => Owner.Faction;
+
+    public IEntityReferences References => Owner.References;
+
+    public bool TakeDamage(int amount)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetAttributeValue(AttributeType attributeType)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void MoveToGridPosition(int x, int y, int z)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void MoveToGridPosition(GridUnitObject gridObject)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void MoveToGridPosition(GridUnit gridUnit)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
 }
 

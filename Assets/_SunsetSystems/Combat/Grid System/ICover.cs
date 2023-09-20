@@ -6,12 +6,12 @@ namespace SunsetSystems.Combat
 {
     public interface ICover
     {
-        NewCoverQuality Quality { get; }
+        CoverQuality Quality { get; }
 
         Vector3 WorldPosition { get; }
     }
 
-    public enum NewCoverQuality
+    public enum CoverQuality
     {
         None, Half, Full
     }

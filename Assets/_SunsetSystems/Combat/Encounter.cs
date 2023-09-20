@@ -20,7 +20,7 @@ namespace SunsetSystems.Combat
         [SerializeField]
         private EncounterEndTrigger _encounterEndTrigger = EncounterEndTrigger.Automatic;
 
-        [Header("Optional")]
+        [Title("Optional")]
         [SerializeField, Tooltip("(Optional) Custom logic run before the start of the encounter.")]
         private AbstractEncounterLogic encounterStartLogic;
         [SerializeField, Tooltip("(Optional) Custom logic run after the end of the encounter.")]
@@ -36,6 +36,7 @@ namespace SunsetSystems.Combat
                 combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
         }
 
+        [Title("Editor Utility")]
         [Button]
         public async void Begin()
         {

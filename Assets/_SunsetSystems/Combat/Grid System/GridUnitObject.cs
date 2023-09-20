@@ -1,4 +1,7 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Core;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Combat.Grid
@@ -8,7 +11,9 @@ namespace SunsetSystems.Combat.Grid
         [SerializeField]
         private BoxCollider cellCollider;
         [SerializeField]
-        private SpriteRenderer cellRenderer;
+        private MeshRenderer cellRenderer;
+        [SerializeField]
+        private Dictionary<GridCellState, IMaterialConfig> gridCellMaterialConfigs = new();
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
@@ -40,18 +45,36 @@ namespace SunsetSystems.Combat.Grid
             if (cachePrevious)
                 previousState = currentState;
             currentState = state;
-            switch (state)
+            if (gridCellMaterialConfigs.TryGetValue(state, out IMaterialConfig value))
+                SetCellMaterialParams(value.PropertyOverrides);
+        }
+
+        private void SetCellMaterialParams(IEnumerable<MaterialPropertyData> propertyData)
+        {
+            Material mat = cellRenderer.material;
+            foreach (MaterialPropertyData data in propertyData)
             {
-                case GridCellState.Default:
-                    break;
-                case GridCellState.Hostile:
-                    break;
-                case GridCellState.Walkable:
-                    break;
-                case GridCellState.Sprintable:
-                    break;
-                case GridCellState.Danger:
-                    break;
+                switch (data.PropertyType)
+                {
+                    case MaterialPropertyType.Float:
+                        mat.SetFloat(data.PropertyName, data.GetValue<float>());
+                        break;
+                    case MaterialPropertyType.Int:
+                        mat.SetInteger(data.PropertyName, data.GetValue<int>());
+                        break;
+                    case MaterialPropertyType.Vector:
+                        mat.SetVector(data.PropertyName, data.GetValue<Vector4>());
+                        break;
+                    case MaterialPropertyType.Matrix:
+                        mat.SetMatrix(data.PropertyName, data.GetValue<Matrix4x4>());
+                        break;
+                    case MaterialPropertyType.Texture:
+                        mat.SetTexture(data.PropertyName, data.GetValue<Texture>());
+                        break;
+                    default:
+                        Debug.LogError($"Invalid MaterialPropretyType {Enum.GetName(typeof(MaterialPropertyType), data.PropertyType)}!");
+                        break;
+                }
             }
         }
 

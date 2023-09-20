@@ -296,16 +296,16 @@ namespace SunsetSystems.Input
 
             void HandleCombatPointerPosition(RaycastHit hit)
             {
-                ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
-                switch (selectedBarAction.actionType)
-                {
-                    case BarAction.MOVE:
-                        HandleMoveActionPointerPosition();
-                        break;
-                    case BarAction.ATTACK:
-                        HandleAttackActionPointerPosition();
-                        break;
-                }
+                throw new NotImplementedException();
+                //switch (selectedBarAction.actionType)
+                //{
+                //    case BarAction.MOVE:
+                //        HandleMoveActionPointerPosition();
+                //        break;
+                //    case BarAction.ATTACK:
+                //        HandleAttackActionPointerPosition();
+                //        break;
+                //}
 
                 void HandleMoveActionPointerPosition()
                 {

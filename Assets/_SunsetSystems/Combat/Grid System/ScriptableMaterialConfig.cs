@@ -28,8 +28,6 @@ namespace SunsetSystems.Core
         public IEnumerable<MaterialPropertyData> PropertyOverrides => propertyOverrides.AsEnumerable();
 
         #region Editor
-#if UNITY_EDITOR
-#pragma warning disable IDE0051 // Remove unused private members
         private void OnMaterialChanged()
         {
             addPropertyOverride = "Property Name";
@@ -55,7 +53,6 @@ namespace SunsetSystems.Core
         {
             return materialParamData.Keys.Except(propertyOverrides.Select(p => p.PropertyName)).ToList();
         }
-#pragma warning restore IDE0051 // Remove unused private members
 
         private void OnValidate()
         {
@@ -80,7 +77,6 @@ namespace SunsetSystems.Core
             }
         }
     }
-#endif
     #endregion
 
     [Serializable]
@@ -99,7 +95,7 @@ namespace SunsetSystems.Core
         [SerializeField, ShowIf("@PropertyType == UnityEngine.MaterialPropertyType.Matrix")]
         private Matrix4x4 matrixValue;
         [SerializeField, ShowIf("@PropertyType == UnityEngine.MaterialPropertyType.Texture")]
-        private AssetReferenceTexture textureValue;
+        private Texture textureValue;
 
         public MaterialPropertyData(string PropertyName, MaterialPropertyType PropertyType)
         {
@@ -110,27 +106,24 @@ namespace SunsetSystems.Core
             vectorValue = default;
             matrixValue = default;
             textureValue = default;
-            
         }
 
         public object GetValue()
         {
-            return null;
+            return PropertyType switch
+            {
+                MaterialPropertyType.Float => floatValue,
+                MaterialPropertyType.Int => intValue,
+                MaterialPropertyType.Vector => vectorValue,
+                MaterialPropertyType.Matrix => matrixValue,
+                MaterialPropertyType.Texture => textureValue,
+                _ => null,
+            };
         }
 
         public T GetValue<T>()
         {
             return (T) GetValue();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is MaterialPropertyData data && PropertyName == data.PropertyName;
-        }
-
-        public override int GetHashCode()
-        {
-            return PropertyName.GetHashCode();
         }
     }
 }

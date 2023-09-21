@@ -216,6 +216,26 @@ namespace SunsetSystems.Entities.Data
             return result;
         }
 
+        public static Skills DeepCopy(Skills existing)
+        {
+            Skills result = new();
+            //PHYSICAL
+            result.athletics = new Skill(existing.athletics);
+            result.brawl = new Skill(existing.brawl);
+            result.craft = new Skill(existing.craft);
+            result.drive = new Skill(existing.drive);
+            result.firearms = new Skill(existing.firearms);
+            result.larceny = new Skill(existing.larceny);
+            result.melee = new Skill(existing.melee);
+            result.stealth = new Skill(existing.stealth);
+            result.survival = new Skill(existing.survival);
+            //SOCIAL
+            result.animalKen = new Skill(existing.animalKen);
+            result.etiquette = new Skill(existing.etiquette);
+            result.insight = new Skill(existing.insight);
+            return result;
+        }
+
         public Skill GetSkill(SkillType type)
         {
             return type switch

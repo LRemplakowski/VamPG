@@ -36,8 +36,64 @@ Transform:
   - {fileID: 7744861580169095031}
   - {fileID: 656867900587021158}
   - {fileID: 1410214241305694170}
+  - {fileID: 482763929595618258}
   m_Father: {fileID: 1617358537211728380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &389672268198153684
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 482763929595618258}
+  - component: {fileID: 3703066370810871723}
+  m_Layer: 0
+  m_Name: UMA Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &482763929595618258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389672268198153684}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3703066370810871723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 389672268198153684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70c5469f8b1d794a9cc6f53d6a8cc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
+  umaRoot: {fileID: 1203071946431115676}
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -179,7 +235,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fff0960ef4ea6e04eac66b4a7fd2189d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RigLayers: []
+  m_RigLayers:
+  - m_Rig: {fileID: 0}
+    m_Active: 1
   m_Effectors: []
 --- !u!1 &3834732813004800264
 GameObject:
@@ -315,6 +373,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
+    - {fileID: 1675144160413098596}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -323,6 +382,9 @@ MonoBehaviour:
     - Name: <CombatComponent>k__BackingField
       Entry: 10
       Data: 0
+    - Name: <EquipmentComponent>k__BackingField
+      Entry: 10
+      Data: 1
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
@@ -624,7 +686,230 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: EquipmentData
+      Entry: 7
+      Data: SunsetSystems.Entities.Characters.EquipmentData, SunsetSystems
+    - Name: EquipmentSlots
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Entities.Characters.EquipmentSlotID,
+        SunsetSystems],[SunsetSystems.Inventory.IEquipmentSlot, SunsetSystems]],
+        mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Entities.Characters.EquipmentSlotID,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 2|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Primary Weapon
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 1
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 7
+      Data: 3|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Secondary Weapon
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 1
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 1
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 4|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Chest
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 2
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 2
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: 5|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Boots
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 3
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 7
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 7
+      Data: 6|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Hands
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 4
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 6
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 7
+      Data: 7|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+    - Name: <Name>k__BackingField
+      Entry: 1
+      Data: Trinket
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 5
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 10
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  ItemEquipped:
+    _PersistentCalls:
+    - _Target: {fileID: 3703066370810871723}
+      _MethodName: OnItemEquipped
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Inventory.Data.IEquipableItem, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  ItemUnequipped:
+    _PersistentCalls:
+    - _Target: {fileID: 3703066370810871723}
+      _MethodName: OnItemUnequipped
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Inventory.Data.IEquipableItem, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &7300718193759435166
 GameObject:
   m_ObjectHideFlags: 0
@@ -940,7 +1225,7 @@ GameObject:
   - component: {fileID: 6294523937178330853}
   - component: {fileID: 8264689728060061147}
   m_Layer: 0
-  m_Name: Data
+  m_Name: Creature Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -973,6 +1258,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa1fd86d99f3a14f97cbd9179006ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   FirstName: Foo
   LastName: Bar
   _id: 
@@ -984,5 +1278,4 @@ MonoBehaviour:
   <Faction>k__BackingField: 0
   <BodyType>k__BackingField: 0
   <CreatureType>k__BackingField: 0
-  UmaPresetFileName: 
-  animatorControllerResourceName: 
+  <BaseUmaRecipes>k__BackingField: []

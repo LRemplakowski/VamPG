@@ -1,4 +1,5 @@
 using SunsetSystems.Audio;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
@@ -90,7 +91,7 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("GiveItem")]
         public static void GiveItem(string itemID)
         {
-            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out BaseItem item))
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
                 InventoryManager.Instance.GiveItemToPlayer(new(item));
             else
                 Debug.LogError($"Dialogue command GiveItem: Could not find item {itemID} in the ItemDatabase instance!");
@@ -101,7 +102,7 @@ namespace SunsetSystems.Dialogue
         {
             if (count <= 0)
                 throw new ArgumentException("Item count cannot be less than 1!");
-            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out BaseItem item))
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
                 InventoryManager.Instance.GiveItemToPlayer(new(item, count));
             else
                 Debug.LogError($"Dialogue command GiveItemCount: Could not find item {itemID} in the ItemDatabase instance!");

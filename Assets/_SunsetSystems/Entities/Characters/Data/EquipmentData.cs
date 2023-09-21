@@ -12,35 +12,28 @@ namespace SunsetSystems.Entities.Characters
     [Serializable]
     public struct EquipmentData
     {
-        public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
-        public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
-        public const string SLOT_CHEST = "SLOT_CHEST";
-        public const string SLOT_BOOTS = "SLOT_BOOTS";
-        public const string SLOT_HANDS = "SLOT_HANDS";
-        public const string SLOT_TRINKET = "SLOT_TRINKET";
-
         [OdinSerialize]
-        public Dictionary<string, IEquipmentSlot> EquipmentSlots;
+        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots;
         [ShowInInspector, ReadOnly]
-        private string _selectedWeapon;
+        private EquipmentSlotID _selectedWeapon;
 
-        public static Dictionary<string, IEquipmentSlot> GetSlotsPreset()
+        public static Dictionary<EquipmentSlotID, IEquipmentSlot> GetSlotsPreset()
         {
-            Dictionary<string, IEquipmentSlot> equipmentSlots = new();
-            equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
-            equipmentSlots.Add(SLOT_WEAPON_SECONDARY, new EquipmentSlot(ItemCategory.WEAPON, "Secondary Weapon", SLOT_WEAPON_SECONDARY));
-            equipmentSlots.Add(SLOT_CHEST, new EquipmentSlot(ItemCategory.CLOTHING, "Chest", SLOT_CHEST));
-            equipmentSlots.Add(SLOT_BOOTS, new EquipmentSlot(ItemCategory.SHOES, "Boots", SLOT_BOOTS));
-            equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
-            equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
+            Dictionary<EquipmentSlotID, IEquipmentSlot> equipmentSlots = new();
+            equipmentSlots.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
+            equipmentSlots.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
+            equipmentSlots.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
+            equipmentSlots.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
+            equipmentSlots.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
+            equipmentSlots.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
             return equipmentSlots;
         }
 
         public EquipmentData(InventoryConfig config)
         {
             EquipmentSlots = GetSlotsPreset();
-            _selectedWeapon = SLOT_WEAPON_PRIMARY;
-            foreach (string key in config.Equipment.EquipmentSlots.Keys)
+            _selectedWeapon = EquipmentSlotID.PrimaryWeapon;
+            foreach (EquipmentSlotID key in config.Equipment.EquipmentSlots.Keys)
             {
                 if (EquipmentSlots.ContainsKey(key))
                 {
@@ -49,13 +42,23 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
+        public EquipmentData(EquipmentData existing)
+        {
+            EquipmentSlots = new();
+            _selectedWeapon = existing._selectedWeapon;
+            foreach (EquipmentSlotID id in Enum.GetValues(typeof(EquipmentSlotID)))
+            {
+                EquipmentSlots.Add(id, new EquipmentSlot(existing.EquipmentSlots[id]));
+            }
+        }
+
         public void SetSelectedWeapon(SelectedWeapon weapon)
         {
             _selectedWeapon = weapon switch
             {
-                SelectedWeapon.Primary => SLOT_WEAPON_PRIMARY,
-                SelectedWeapon.Secondary => SLOT_WEAPON_SECONDARY,
-                _ => SLOT_WEAPON_PRIMARY,
+                SelectedWeapon.Primary => EquipmentSlotID.PrimaryWeapon,
+                SelectedWeapon.Secondary => EquipmentSlotID.SecondaryWeapon,
+                _ => EquipmentSlotID.PrimaryWeapon,
             };
         }
 
@@ -66,54 +69,22 @@ namespace SunsetSystems.Entities.Characters
 
         public Weapon GetPrimaryWeapon()
         {
-            return EquipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
+            return EquipmentSlots[EquipmentSlotID.PrimaryWeapon].GetEquippedItem() as Weapon;
         }
 
         public Weapon GetSecondaryWeapon()
         {
-            return EquipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
-        }
-
-        public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)
-        {
-            List<string> result = new();
-            switch (category)
-            {
-                case ItemCategory.OTHER:
-                    break;
-                case ItemCategory.WEAPON:
-                    result.Add(SLOT_WEAPON_PRIMARY);
-                    result.Add(SLOT_WEAPON_SECONDARY);
-                    break;
-                case ItemCategory.CLOTHING:
-                    result.Add(SLOT_CHEST);
-                    break;
-                case ItemCategory.OUTER_CLOTHING:
-                    break;
-                case ItemCategory.HEADWEAR:
-                    break;
-                case ItemCategory.FACEWEAR:
-                    break;
-                case ItemCategory.GLOVES:
-                    result.Add(SLOT_HANDS);
-                    break;
-                case ItemCategory.SHOES:
-                    result.Add(SLOT_BOOTS);
-                    break;
-                case ItemCategory.TROUSERS:
-                    break;
-                case ItemCategory.CONSUMABLE:
-                    break;
-                case ItemCategory.TRINKET:
-                    result.Add(SLOT_TRINKET);
-                    break;
-            }
-            return result;
+            return EquipmentSlots[EquipmentSlotID.SecondaryWeapon].GetEquippedItem() as Weapon;
         }
     }
 
     public enum SelectedWeapon
     {
         Primary, Secondary
+    }
+
+    public enum EquipmentSlotID
+    {
+        PrimaryWeapon, SecondaryWeapon, Chest, Boots, Hands, Trinket
     }
 }

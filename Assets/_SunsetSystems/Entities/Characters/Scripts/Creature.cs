@@ -4,12 +4,11 @@ using UnityEngine.AI;
 using SunsetSystems.Entities.Characters.Actions;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
-using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Inventory;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using UnityEngine.AddressableAssets;
+using UMA;
+using SunsetSystems.Entities.Data;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -117,7 +116,9 @@ namespace SunsetSystems.Entities.Characters
 
         public void InjectDataFromTemplate(ICreatureTemplate template)
         {
-            throw new System.NotImplementedException();
+            References.CreatureData.CopyFromTemplate(template);
+            References.StatsManager.CopyFromTemplate(template);
+            References.EquipmentComponent.CopyFromTemplate(template);
         }
         #endregion
 
@@ -130,22 +131,42 @@ namespace SunsetSystems.Entities.Characters
         {
             public TemplateFromInstance(ICreature instance)
             {
-
+                DatabaseID = instance.References.CreatureData.DatabaseID;
+                ReadableID = instance.References.CreatureData.ReadableID;
+                FirstName = instance.References.CreatureData.FirstName;
+                LastName = instance.References.CreatureData.LastName;
+                Faction = instance.Faction;
+                BodyType = instance.References.CreatureData.BodyType;
+                CreatureType = instance.References.CreatureData.CreatureType;
+                PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
+                BaseUmaRecipes = instance.References.CreatureData.BaseUmaRecipes;
+                EquipmentData = instance.References.EquipmentComponent.EquipmentData;
+                StatsData = new(instance.References.StatsManager.Stats);
             }
 
-            public string DatabaseID => throw new System.NotImplementedException();
+            public string DatabaseID { get; }
 
-            public string ReadableID => throw new System.NotImplementedException();
+            public string ReadableID { get; }
 
-            public string FullName => throw new System.NotImplementedException();
+            public string FullName => $"{FirstName} {LastName}".Trim();
 
-            public Faction Faction => throw new System.NotImplementedException();
+            public string FirstName { get; }
 
-            public BodyType BodyType => throw new System.NotImplementedException();
+            public string LastName { get; }
 
-            public CreatureType CreatureType => throw new System.NotImplementedException();
+            public Faction Faction { get; }
 
-            public AssetReferenceSprite PortraitAssetRef => throw new System.NotImplementedException();
+            public BodyType BodyType { get; }
+
+            public CreatureType CreatureType { get; }
+
+            public AssetReferenceSprite PortraitAssetRef { get; }
+
+            public List<UMARecipeBase> BaseUmaRecipes { get; }
+
+            public EquipmentData EquipmentData { get; }
+
+            public StatsData StatsData { get; }
         }
         #endregion
     }

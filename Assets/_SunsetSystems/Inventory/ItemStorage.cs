@@ -48,7 +48,7 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        private bool DoesInventoryContainItem(BaseItem item)
+        private bool DoesInventoryContainItem(IBaseItem item)
         {
             return _contents.Any(entry => entry._item.DatabaseID.Equals(item.DatabaseID));
         }
@@ -91,13 +91,13 @@ namespace SunsetSystems.Inventory
     public class InventoryEntry : IGameDataProvider<InventoryEntry>
     {
         [SerializeField]
-        public BaseItem _item;
+        public IBaseItem _item;
         [SerializeField]
         public int _stackSize;
 
-        public InventoryEntry(BaseItem item) : this(item, 1) { }
+        public InventoryEntry(IBaseItem item) : this(item, 1) { }
 
-        public InventoryEntry(BaseItem item, int stackSize)
+        public InventoryEntry(IBaseItem item, int stackSize)
         {
             this._item = item;
             this._stackSize = stackSize;

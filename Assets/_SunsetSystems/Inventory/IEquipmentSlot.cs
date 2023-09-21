@@ -1,3 +1,4 @@
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,10 +10,12 @@ namespace SunsetSystems.Inventory
     {
         ItemCategory AcceptedCategory { get; }
 
-        EquipableItem GetEquippedItem();
+        IEquipableItem GetEquippedItem();
 
-        bool TryEquipItem(EquipableItem item);
+        EquipmentSlotID ID { get; }
 
-        bool TryUnequipItem(EquipableItem item);
+        bool TryEquipItem(IEquipableItem item);
+
+        bool TryUnequipItem(IEquipableItem item);
     }
 }

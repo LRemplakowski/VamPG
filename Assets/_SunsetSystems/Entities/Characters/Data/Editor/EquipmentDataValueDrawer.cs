@@ -2,7 +2,6 @@ using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Editor
@@ -12,22 +11,22 @@ namespace SunsetSystems.Entities.Characters.Editor
         protected override void DrawPropertyLayout(GUIContent label)
         {
             EquipmentData data = this.ValueEntry.SmartValue;
-            ICollection<string> slotKeys = data.EquipmentSlots?.Keys;
+            ICollection<EquipmentSlotID> slotKeys = data.EquipmentSlots?.Keys;
             if (slotKeys == null)
             {
                 data.EquipmentSlots = EquipmentData.GetSlotsPreset();
                 slotKeys = data.EquipmentSlots.Keys;
             }
 
-            foreach (string key in slotKeys)
+            foreach (EquipmentSlotID key in slotKeys)
             {
                 SirenixEditorGUI.BeginInlineBox();
                 string itemName = "Empty";
                 if (data.EquipmentSlots[key] != null)
                 {
-                    EquipableItem item = data.EquipmentSlots[key].GetEquippedItem();
+                    IEquipableItem item = data.EquipmentSlots[key].GetEquippedItem();
                     if (item != null)
-                        itemName = item.name;
+                        itemName = item.Name;
                 }
                 SirenixEditorFields.TextField(new GUIContent($"{key}"), itemName);
                 SirenixEditorGUI.EndInlineBox();

@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Utils.Extensions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine.AddressableAssets;
+using System.Collections.Generic;
+using UMA;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -16,11 +18,11 @@ namespace SunsetSystems.Entities.Characters
         public string DatabaseID { get; private set; } = "";
         [SerializeField]
         private string _name = "New";
-        public string Name { get => _name; }
+        public string FirstName { get => _name; }
         [SerializeField]
         private string _lastName = "Creature";
         public string LastName { get => _lastName; }
-        public string FullName { get => $"{Name} {LastName}".Trim(); }
+        public string FullName { get => $"{FirstName} {LastName}".Trim(); }
         [SerializeField]
         private bool _overrideReadableID;
         [SerializeField, ReadOnly, HideIf("_overrideReadableID")]
@@ -32,14 +34,11 @@ namespace SunsetSystems.Entities.Characters
         public AssetReferenceSprite PortraitAssetRef { get; private set; }
         [SerializeField]
         private StatsConfig _statsConfig;
-        public StatsConfig StatsAsset { get => _statsConfig; }
+        public StatsData StatsData => new(_statsConfig);
         [field: SerializeField]
         public InventoryConfig EquipmentConfig { get; private set; }
         [field: SerializeField]
-        public string UmaPresetFileName { get; private set; }
-        [SerializeField]
-        private RuntimeAnimatorController _animatorController;
-        public RuntimeAnimatorController AnimatorController => _animatorController;
+        public List<UMARecipeBase> BaseUmaRecipes { get; private set; }
         [SerializeField]
         private Faction _creatureFaction;
         public Faction Faction { get => _creatureFaction; }
@@ -52,6 +51,8 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private bool _useEquipmentPreset;
         public bool UseEquipmentPreset => _useEquipmentPreset;
+        [field: SerializeField]
+        public EquipmentData EquipmentData { get; private set; }
 
         private void OnEnable()
         {
@@ -59,8 +60,6 @@ namespace SunsetSystems.Entities.Characters
             //    _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
             //if (EquipmentConfig == null)
             //    EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
-            if (_animatorController == null)
-                _animatorController = ResourceLoader.GetFallbackAnimator();
 #if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {

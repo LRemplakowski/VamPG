@@ -6,6 +6,7 @@ using SunsetSystems.Entities.Data;
 using SunsetSystems.Spellbook;
 using System;
 using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
+using SunsetSystems.Entities.Characters.Interfaces;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -126,6 +127,11 @@ namespace SunsetSystems.Entities.Characters
                     return power;
             }
             return null;
+        }
+
+        public void CopyFromTemplate(ICreatureTemplate template)
+        {
+            Stats = new(template.StatsData);
         }
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)

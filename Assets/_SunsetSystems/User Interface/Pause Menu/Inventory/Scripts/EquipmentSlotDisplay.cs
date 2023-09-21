@@ -1,9 +1,12 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace SunsetSystems.Inventory.UI
@@ -15,13 +18,20 @@ namespace SunsetSystems.Inventory.UI
         [SerializeField]
         private Image _itemIcon;
 
-        public void UpdateView(IGameDataProvider<EquipmentSlot> dataProvider)
+        private AssetReferenceSprite lastLoadedSprite;
+
+        public async void UpdateView(IGameDataProvider<EquipmentSlot> dataProvider)
         {
+            if (lastLoadedSprite != null)
+                AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _cachedSlotData = dataProvider.Data;
-            EquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
+            IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
             {
-                _itemIcon.sprite = itemInSlot.Icon;
+                lastLoadedSprite = itemInSlot.Icon;
+                Task<Sprite> iconTask = AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
+                await iconTask;
+                _itemIcon.sprite = iconTask.Result;
                 _itemIcon.gameObject.SetActive(true);
             }
             else

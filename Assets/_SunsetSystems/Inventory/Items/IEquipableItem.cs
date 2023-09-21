@@ -5,5 +5,8 @@ using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
 {
+    public interface IEquipableItem : IBaseItem
+    {
 
+    }
 }

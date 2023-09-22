@@ -26,7 +26,7 @@ namespace SunsetSystems.Core.UMA
         private GameObject umaRoot;
         [SerializeField]
         private HashSet<UMARecipeBase> defaultRecipes = new();
-
+        [SerializeField, ReadOnly]
         private DynamicCharacterAvatar umaAvatar;
 
         [Button]
@@ -71,13 +71,7 @@ namespace SunsetSystems.Core.UMA
         {
             if (item is IWearable wearable)
             {
-                foreach (UMARecipeBase recipe in wearable.WornRecipes)
-                {
-                    if (recipe is UMATextRecipe textRecipe)
-                    {
-                        umaAvatar.SetSlot(textRecipe);
-                    }
-                }
+                umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
             }
         }
 
@@ -85,13 +79,7 @@ namespace SunsetSystems.Core.UMA
         {
             if (item is IWearable wearable)
             {
-                foreach (UMARecipeBase recipe in wearable.WornRecipes)
-                {
-                    if (recipe is UMATextRecipe textRecipe)
-                    {
-                        // foo
-                    }
-                }
+                umaAvatar.UnloadWardrobeCollectionGroup(wearable.WearableWardrobe.wardrobeSlot);
             }
         }
     }

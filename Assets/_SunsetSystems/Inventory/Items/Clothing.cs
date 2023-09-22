@@ -9,5 +9,10 @@ namespace SunsetSystems.Inventory.Data
         {
             ItemCategory = ItemCategory.CLOTHING;
         }
+
+        private void OnValidate()
+        {
+            ItemCategory = ItemCategory.CLOTHING;
+        }
     }
 }

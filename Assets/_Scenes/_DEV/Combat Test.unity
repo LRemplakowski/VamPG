@@ -241,6 +241,17 @@ Transform:
   - {fileID: 1586268251}
   m_Father: {fileID: 169125446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &73619215 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3703066370810871723, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+  m_PrefabInstance: {fileID: 85489480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70c5469f8b1d794a9cc6f53d6a8cc5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &74298611
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
     - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[0]
@@ -369,8 +380,12 @@ PrefabInstance:
       value: '"path":"<EquipmentComponent>k__BackingField","value":$eref:1'
       objectReference: {fileID: 0}
     - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"<UMAManager>k__BackingField","value":$eref:2'
+      objectReference: {fileID: 0}
+    - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
@@ -380,6 +395,10 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
       value: 
       objectReference: {fileID: 1851530309}
+    - target: {fileID: 265292995897044542, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 73619215}
     - target: {fileID: 660093643310669083, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -444,6 +463,32 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 1675144160413098596, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+    - target: {fileID: 1675144160413098596, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675144160413098596, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      value: '"path":"EquipmentData","value":{"$id":0,"$type":"SunsetSystems.Entities.Characters.EquipmentData,
+        SunsetSystems","EquipmentSlots":{"$id":1,"$type":"System.Collections.Generic.Dictionary`2[[SunsetSystems.Entities.Characters.EquipmentSlotID,
+        SunsetSystems],[SunsetSystems.Inventory.IEquipmentSlot, SunsetSystems]],
+        mscorlib","comparer":{"$id":2,"$type":"System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Entities.Characters.EquipmentSlotID,
+        SunsetSystems]], mscorlib","$rlength":0,"$rcontent":[]},"$rlength":6,"$rcontent":[{"$k":0,"$v":{"$id":3,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":0,"_acceptedCategory":1,"_equippedItem":null}},{"$k":1,"$v":{"$id":4,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":1,"_acceptedCategory":1,"_equippedItem":null}},{"$k":2,"$v":{"$id":5,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":2,"_acceptedCategory":2,"_equippedItem":null}},{"$k":3,"$v":{"$id":6,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":3,"_acceptedCategory":7,"_equippedItem":null}},{"$k":4,"$v":{"$id":7,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":4,"_acceptedCategory":6,"_equippedItem":null}},{"$k":5,"$v":{"$id":8,"$type":"SunsetSystems.Inventory.EquipmentSlot,
+        SunsetSystems","<ID>k__BackingField":5,"_acceptedCategory":10,"_equippedItem":null}}]}}'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1675144160413098596, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703066370810871723, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: umaAvatar
+      value: 
+      objectReference: {fileID: 1107809024}
     - target: {fileID: 3703066370810871723, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -456,6 +501,22 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 4678919013744510610, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+    - target: {fileID: 4678919013744510610, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4678919013744510610, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      value: '"path":"owner","value":$eref:0'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4678919013744510610, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4678919013744510610, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1487132187}
     - target: {fileID: 5773463509673429870, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
       propertyPath: _id
       value: 0b3345cc-7681-4f62-a40f-3191fc9769c1
@@ -19113,6 +19174,126 @@ MonoBehaviour:
       _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
       Raw: 0
       valuesConverted: 0
+    - name: Hair
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothing_chest
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothing_legs
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: lipstick
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothing_feet
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothing_waist
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
   predefinedDNA:
     PreloadValues: []
   loadPathType: 0
@@ -19877,6 +20058,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245806abe119594e8c2f606fac983d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1487132187 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 660093643310669083, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+  m_PrefabInstance: {fileID: 85489480}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73b22f8c2271d145bc8febb14901db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1492133065

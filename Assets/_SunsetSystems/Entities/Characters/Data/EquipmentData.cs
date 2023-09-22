@@ -1,21 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System;
 using Sirenix.Serialization;
-using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters;
 
-namespace SunsetSystems.Entities.Characters
+namespace SunsetSystems.Equipment
 {
     [Serializable]
-    public struct EquipmentData
+    public class EquipmentData : Object
     {
-        [OdinSerialize]
-        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots;
-        [ShowInInspector, ReadOnly]
-        private EquipmentSlotID _selectedWeapon;
+        [field: OdinSerialize]
+        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
         public static Dictionary<EquipmentSlotID, IEquipmentSlot> GetSlotsPreset()
         {
@@ -32,7 +27,6 @@ namespace SunsetSystems.Entities.Characters
         public EquipmentData(InventoryConfig config)
         {
             EquipmentSlots = GetSlotsPreset();
-            _selectedWeapon = EquipmentSlotID.PrimaryWeapon;
             foreach (EquipmentSlotID key in config.Equipment.EquipmentSlots.Keys)
             {
                 if (EquipmentSlots.ContainsKey(key))
@@ -45,46 +39,15 @@ namespace SunsetSystems.Entities.Characters
         public EquipmentData(EquipmentData existing)
         {
             EquipmentSlots = new();
-            _selectedWeapon = existing._selectedWeapon;
-            foreach (EquipmentSlotID id in Enum.GetValues(typeof(EquipmentSlotID)))
+            foreach (EquipmentSlotID id in existing.EquipmentSlots.Keys)
             {
-                EquipmentSlots.Add(id, new EquipmentSlot(existing.EquipmentSlots[id]));
+                EquipmentSlots[id] = new EquipmentSlot(existing.EquipmentSlots[id]);
             }
         }
 
-        public void SetSelectedWeapon(SelectedWeapon weapon)
+        public EquipmentData()
         {
-            _selectedWeapon = weapon switch
-            {
-                SelectedWeapon.Primary => EquipmentSlotID.PrimaryWeapon,
-                SelectedWeapon.Secondary => EquipmentSlotID.SecondaryWeapon,
-                _ => EquipmentSlotID.PrimaryWeapon,
-            };
+            EquipmentSlots = GetSlotsPreset();
         }
-
-        public Weapon GetSelectedWeapon()
-        {
-            return EquipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
-        }
-
-        public Weapon GetPrimaryWeapon()
-        {
-            return EquipmentSlots[EquipmentSlotID.PrimaryWeapon].GetEquippedItem() as Weapon;
-        }
-
-        public Weapon GetSecondaryWeapon()
-        {
-            return EquipmentSlots[EquipmentSlotID.SecondaryWeapon].GetEquippedItem() as Weapon;
-        }
-    }
-
-    public enum SelectedWeapon
-    {
-        Primary, Secondary
-    }
-
-    public enum EquipmentSlotID
-    {
-        PrimaryWeapon, SecondaryWeapon, Chest, Boots, Hands, Trinket
     }
 }

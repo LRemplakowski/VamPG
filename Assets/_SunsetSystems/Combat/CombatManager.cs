@@ -8,6 +8,8 @@ using Redcode.Awaiting;
 using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Party;
+using SunsetSystems.Animation;
 
 namespace SunsetSystems.Combat
 {
@@ -83,12 +85,12 @@ namespace SunsetSystems.Combat
             CurrentEncounter = encounter;
             turnCounter = 0;
             Actors = new();
-            Actors.AddRange(encounter.Creatures);
-            //Actors.AddRange(PartyManager.ActiveParty);
-            throw new NotImplementedException();
+            Actors.AddRange(encounter.Creatures.Select(c => c.References.CombatComponent));
+            Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatComponent));
             CombatBegin?.Invoke(Actors);
-            //Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(true));
-            await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
+            Actors.ForEach(c => c.References.GetComponentInChildren<CreatureAnimationController>().SetCombatAnimationsActive(true));
+            MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
+            await new WaitForSeconds(1f);
             NextRound();
         }
 
@@ -105,19 +107,13 @@ namespace SunsetSystems.Combat
             CurrentEncounter = null;
         }
 
-        private static async Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
+        private void MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
-            List<Task> moveTasks = new();
             foreach (ICombatant c in actors)
             {
-                moveTasks.Add(Task.Run(async () =>
-                {
-                await new WaitForUpdate();
                 Vector3Int gridPosition = currentEncounter.MyGrid.GetNearestGridPosition(c.References.Transform.position);
                 c.MoveToGridPosition(gridPosition);
-                }));
             }
-            await Task.WhenAll(moveTasks);
         }
 
         public bool IsBeforeFirstRound()

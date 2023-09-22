@@ -11,7 +11,7 @@ namespace SunsetSystems.Experience
         private ExperienceType _experienceType;
         public void ApplyReward(int amount)
         {
-            PartyManager.AllCoterieMembers.ForEach(cd => ExperienceManager.TryAwardExperience(cd.DatabaseID, amount, _experienceType));
+            PartyManager.Instance.AllCoterieMembers.ForEach(cd => ExperienceManager.TryAwardExperience(cd.DatabaseID, amount, _experienceType));
         }
     }
 }

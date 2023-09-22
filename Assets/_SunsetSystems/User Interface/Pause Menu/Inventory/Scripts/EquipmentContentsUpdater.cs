@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<EquipmentSlot>
+    public class EquipmentContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<IEquipmentSlot>
     {
         [SerializeField]
         private EquipmentSlotDisplay _slotPrefab;
@@ -28,9 +28,9 @@ namespace SunsetSystems.Inventory.UI
             
         }
 
-        public void UpdateViews(List<IGameDataProvider<EquipmentSlot>> data)
+        public void UpdateViews(List<IGameDataProvider<IEquipmentSlot>> data)
         {
-            foreach (IGameDataProvider<EquipmentSlot> slot in data)
+            foreach (IGameDataProvider<IEquipmentSlot> slot in data)
             {
                 EquipmentSlotDisplay view = _slotViews[slot.Data.ID];
                 view.UpdateView(slot);

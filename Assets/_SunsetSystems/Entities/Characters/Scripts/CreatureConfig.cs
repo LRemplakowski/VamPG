@@ -8,6 +8,7 @@ using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using UMA;
+using SunsetSystems.Equipment;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -52,7 +53,7 @@ namespace SunsetSystems.Entities.Characters
         private bool _useEquipmentPreset;
         public bool UseEquipmentPreset => _useEquipmentPreset;
         [field: SerializeField]
-        public EquipmentData EquipmentData { get; private set; }
+        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
 
         private void OnEnable()
         {

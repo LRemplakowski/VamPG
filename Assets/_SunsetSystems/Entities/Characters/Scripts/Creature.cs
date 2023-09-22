@@ -9,6 +9,7 @@ using SunsetSystems.Entities.Creatures.Interfaces;
 using UnityEngine.AddressableAssets;
 using UMA;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Equipment;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -84,9 +85,11 @@ namespace SunsetSystems.Entities.Characters
 
         public void ClearAllActions()
         {
-            EntityAction currentAction = ActionQueue.Peek();
-            if (currentAction != null)
+            EntityAction currentAction = ActionQueue.Dequeue();
+            while (currentAction != null)
+            {
                 currentAction.Abort();
+            }
             ActionQueue.Clear();
             ActionQueue.Enqueue(new Idle(this));
         }
@@ -101,15 +104,15 @@ namespace SunsetSystems.Entities.Characters
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
-        public Task PerformAction(EntityAction action)
+        public Task PerformAction(EntityAction action, bool clearQueue = false)
         {
-            if (action.IsPriority)
+            if (action.IsPriority || clearQueue)
                 ClearAllActions();
             ActionQueue.Enqueue(action);
             return Task.Run(async () =>
             {
                 await new WaitForUpdate();
-                while (!action.IsFinished())
+                while (action.ActionFinished is false)
                     await new WaitForUpdate();
             });
         }
@@ -140,7 +143,7 @@ namespace SunsetSystems.Entities.Characters
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
                 BaseUmaRecipes = instance.References.CreatureData.BaseUmaRecipes;
-                EquipmentData = instance.References.EquipmentComponent.EquipmentData;
+                EquipmentSlotsData = instance.References.EquipmentComponent.EquipmentSlots;
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 
@@ -164,7 +167,7 @@ namespace SunsetSystems.Entities.Characters
 
             public List<UMARecipeBase> BaseUmaRecipes { get; }
 
-            public EquipmentData EquipmentData { get; }
+            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
 
             public StatsData StatsData { get; }
         }

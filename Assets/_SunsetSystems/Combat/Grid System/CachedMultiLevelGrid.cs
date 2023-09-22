@@ -39,6 +39,9 @@ namespace SunsetSystems.Combat.Grid
         private readonly HashSet<ICover> cachedCoverSourcesInGrid = new();
         public ImmutableHashSet<ICover> CachedCoverSources => new(cachedCoverSourcesInGrid);
 
+        private bool rushGrid = false;
+        private bool gridFinished = false;
+
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition)
         {
             GridUnit unit = levels[gridPosition.y][gridPosition.x, gridPosition.z];
@@ -47,17 +50,29 @@ namespace SunsetSystems.Combat.Grid
 
         public Vector3Int WorldPositionToGridPosition(Vector3 worldPosition)
         {
-            return Vector3Int.zero;
+            Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
+            Vector3Int gridPosition = Vector3Int.zero;
+            localPosition.x = Mathf.Clamp(localPosition.x, 0, levelWidth * gridCellSize);
+            localPosition.y = Mathf.Clamp(localPosition.y, 0, gridHeight * gridCellSize);
+            localPosition.z = Mathf.Clamp(localPosition.z, 0, levelDepth * gridCellSize);
+            gridPosition.x = Mathf.RoundToInt(localPosition.x / gridCellSize);
+            gridPosition.y = Mathf.RoundToInt(localPosition.y / gridCellSize);
+            gridPosition.z = Mathf.RoundToInt(localPosition.z / gridCellSize);
+            return gridPosition;
         }
 
         private void Start()
         {
             BuildGrid();
+            rushGrid = false;
+            gridFinished = false;
             _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
         }
 
-        public void EnableGrid()
+        public async Task EnableGrid()
         {
+            rushGrid = true;
+            await new WaitUntil(() => gridFinished);
             gridUnitObjectInstances.ForEach(o => o.gameObject.SetActive(true));
         }
 
@@ -70,28 +85,28 @@ namespace SunsetSystems.Combat.Grid
         {
             gridUnitObjectDictionary.Clear();
             gridUnitObjectInstances.Clear();
-            List<Task> tasks = new();
+            Dictionary<GridUnit, Task<GameObject>> tasks = new();
             foreach (GridUnit unit in gridUnits)
             {
-                tasks.Add(Task.Run(async () =>
-                {
-                    await new WaitForUpdate();
-                    Task<GameObject> instantiation = Addressables.InstantiateAsync(gridObjectAsset, transform).Task;
-                    await instantiation;
-                    GridUnitObject gridObj = instantiation.Result.GetComponent<GridUnitObject>();
-                    gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
-                    gridObj.InjectUnitData(unit);
-                    if (unit.adjacentToCover)
-                        gridObj.SetGridCellState(GridUnitObject.GridCellState.NearCover);
-                    else
-                        gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
-                    gridUnitObjectDictionary.Add(unit, gridObj);
-                    gridUnitObjectInstances.Add(gridObj);
-                    gridObj.gameObject.SetActive(false);
-                }));
+                tasks.Add(unit, Addressables.InstantiateAsync(gridObjectAsset, transform).Task);
             }
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks.Values);
+            foreach (GridUnit unit in tasks.Keys)
+            {
+                GridUnitObject gridObj = tasks[unit].Result.GetComponent<GridUnitObject>();
+                gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
+                gridObj.InjectUnitData(unit);
+                if (unit.adjacentToCover)
+                    gridObj.SetGridCellState(GridUnitObject.GridCellState.NearCover);
+                else
+                    gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
+                gridUnitObjectDictionary.Add(unit, gridObj);
+                gridUnitObjectInstances.Add(gridObj);
+                gridObj.gameObject.SetActive(false);
+            }
+            gridFinished = true;
         }
+
         private void OnValidate()
         {
             BuildGrid();
@@ -135,14 +150,40 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
-        public GridUnitObject GetNearestGridElement(Vector3 position)
+        public GridUnitObject GetNearestGridCell(Vector3 position)
         {
             throw new NotImplementedException();
         }
 
         public Vector3Int GetNearestGridPosition(Vector3 worldPosition)
         {
-            throw new NotImplementedException();
+            Vector3Int bestGridPos = WorldPositionToGridPosition(worldPosition);
+            GridUnit unit = levels[bestGridPos.y][bestGridPos.x, bestGridPos.z];
+            if (unit.walkable)
+            {
+                return bestGridPos;
+            }
+            else
+            {
+                unit = CrawlForNearestWalkablePosition(unit);
+                return new Vector3Int(unit.x, unit.y, unit.z);
+            }
+
+            GridUnit CrawlForNearestWalkablePosition(GridUnit unit)
+            {
+                GridUnit result = levels.First(l => l.WalkableUnits.FirstOrDefault() != null).WalkableUnits.First();
+                int gridDistance = int.MaxValue;
+                foreach (GridUnit gridUnit in levels.SelectMany(level => level.WalkableUnits))
+                {
+                    int newDistance = Mathf.Abs(gridUnit.x - unit.x) + (Mathf.Abs(gridUnit.y - unit.y) * 2) + Mathf.Abs(gridUnit.z - unit.z);
+                    if (newDistance < gridDistance)
+                    {
+                        gridDistance = newDistance;
+                        result = gridUnit;
+                    }
+                }
+                return result;
+            }
         }
 
         public void HighlightCellsInRange(Vector3Int gridPosition, int range, NavMeshAgent agent)

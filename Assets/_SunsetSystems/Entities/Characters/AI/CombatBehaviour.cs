@@ -175,7 +175,8 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 
     public void MoveToGridPosition(int x, int y, int z)
     {
-        throw new NotImplementedException();
+        Vector3 worldPosition = CombatManager.Instance.CurrentEncounter.MyGrid.GridPositionToWorldPosition(new Vector3Int(x, y, z));
+        _ = Owner.PerformAction(new Move(Owner, worldPosition, null));
     }
 
     public void MoveToGridPosition(GridUnitObject gridObject)

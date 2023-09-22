@@ -12,6 +12,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// Priority actions clear action queue upon assignment.
         /// </summary>
         public bool IsPriority { get; protected set; }
+        public bool ActionFinished { get; protected set; } = false;
         protected ICreature Owner { get; }
         protected List<Condition> conditions = new List<Condition>();
 
@@ -34,7 +35,11 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Do any relevant cleanup.
         /// </summary>
-        public abstract void Abort();
+        public virtual void Abort()
+        {
+            conditions.Clear();
+            ActionFinished = true;
+        }
 
         public virtual bool IsFinished()
         {
@@ -56,6 +61,7 @@ namespace SunsetSystems.Entities.Characters.Actions
                 }
             }
             this.Abort();
+            ActionFinished = true;
             return true;
         }
 

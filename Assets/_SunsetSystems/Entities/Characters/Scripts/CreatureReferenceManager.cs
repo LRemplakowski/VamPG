@@ -20,7 +20,7 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         [field: SerializeField]
         public ICombatant CombatComponent { get; private set; }
         [field: SerializeField]
-        public IEquipment EquipmentComponent { get; private set; }
+        public IEquipmentManager EquipmentComponent { get; private set; }
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
     }

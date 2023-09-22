@@ -196,15 +196,15 @@ namespace SunsetSystems.Dialogue
             string speakerID;
             if (characterName == null || string.IsNullOrWhiteSpace(characterName))
             {
-                speakerID = PartyManager.MainCharacter.ID;
-                characterName = PartyManager.MainCharacter.Name;
+                speakerID = PartyManager.Instance.MainCharacter.ID;
+                characterName = PartyManager.Instance.MainCharacter.Name;
             }
             else
             {
                 if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
                 {
-                    speakerID = PartyManager.MainCharacter.ID;
-                    characterName = PartyManager.MainCharacter.Name;
+                    speakerID = PartyManager.Instance.MainCharacter.ID;
+                    characterName = PartyManager.Instance.MainCharacter.Name;
                 }
             }
             Sprite sprite = this.GetSpeakerPortrait(speakerID);

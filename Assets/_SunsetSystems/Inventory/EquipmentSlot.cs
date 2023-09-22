@@ -4,14 +4,14 @@ using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 
-namespace SunsetSystems.Inventory
+namespace SunsetSystems.Equipment
 {
     [System.Serializable]
     public class EquipmentSlot : IEquipmentSlot, IGameDataProvider<EquipmentSlot>
     {
         [field: SerializeField, ReadOnly]
         public EquipmentSlotID ID { get; private set; }
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private ItemCategory _acceptedCategory;
         public ItemCategory AcceptedCategory { get => _acceptedCategory; }
 

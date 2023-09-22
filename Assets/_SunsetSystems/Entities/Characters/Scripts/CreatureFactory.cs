@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace SunsetSystems.Entities.Creatures
         [SerializeField]
         private AssetReference creaturePrefabReference;
 
+        [Button]
         public async Task<ICreature> Create(ICreatureTemplate creatureTemplate)
         {
             ICreature newInstance = await GetNewCreatureInstance();

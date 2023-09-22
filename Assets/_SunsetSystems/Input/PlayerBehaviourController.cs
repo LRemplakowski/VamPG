@@ -124,7 +124,7 @@ namespace SunsetSystems.Input
 
             void HandleNoSelectionExplorationInput()
             {
-                ICreature mainCharacter = PartyManager.MainCharacter;
+                ICreature mainCharacter = PartyManager.Instance.MainCharacter;
                 if (mainCharacter == null)
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
@@ -139,10 +139,10 @@ namespace SunsetSystems.Input
                 }
                 else
                 {
-                    creatures.Add(PartyManager.MainCharacter);
+                    creatures.Add(PartyManager.Instance.MainCharacter);
                 }
-                if (PartyManager.ActiveParty.Count > 1)
-                    creatures.AddRange(PartyManager.Companions);
+                if (PartyManager.Instance.ActiveParty.Count > 1)
+                    creatures.AddRange(PartyManager.Instance.Companions);
                 MoveCreaturesToPosition(creatures, hit.point);
             }
         }
@@ -299,7 +299,6 @@ namespace SunsetSystems.Input
 
             void HandleCombatPointerPosition(RaycastHit hit)
             {
-                throw new NotImplementedException();
                 //switch (selectedBarAction.actionType)
                 //{
                 //    case BarAction.MOVE:
@@ -375,7 +374,9 @@ namespace SunsetSystems.Input
                 stoppingDistance += (i % 2) * _followerStoppingDistance;
                 ICreature creature = creatures[i];
                 if (creature != null)
-                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance));
+                {
+                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance), true);
+                }
             }
         }
     }

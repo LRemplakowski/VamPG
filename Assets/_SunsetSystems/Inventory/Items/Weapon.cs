@@ -1,12 +1,15 @@
 using Sirenix.OdinInspector;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory.Data
 {
     [CreateAssetMenu(fileName = "New Weapon", menuName = "Sunset Inventory/Items/Weapon")]
     public class Weapon : EquipableItem, IWeapon
     {
+        [field: SerializeField]
+        public AssetReferenceGameObject EquippedInstanceAsset { get; private set; }
         [field: SerializeField]
         public int DamageModifier { get; private set; } = 0;
         [field: SerializeField]
@@ -24,6 +27,11 @@ namespace SunsetSystems.Inventory.Data
         protected int optimalRange = 0, rangeFalloff = 0;
 
         private void Awake()
+        {
+            ItemCategory = ItemCategory.WEAPON;
+        }
+
+        private void OnValidate()
         {
             ItemCategory = ItemCategory.WEAPON;
         }

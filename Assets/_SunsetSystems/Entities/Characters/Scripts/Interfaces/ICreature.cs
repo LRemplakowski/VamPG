@@ -9,7 +9,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
     public interface ICreature : IEntity
     {
         new ICreatureReferences References { get; }
-        Task PerformAction(EntityAction action);
+        Task PerformAction(EntityAction action, bool clearQueue = false);
         bool HasActionsInQueue();
 
         void ForceToPosition(Vector3 position);

@@ -18,7 +18,7 @@ namespace SunsetSystems
             get
             {
                 if (string.IsNullOrEmpty(_selectedCharacterKey))
-                    _selectedCharacterKey = PartyManager.MainCharacter.ID;
+                    _selectedCharacterKey = PartyManager.Instance.MainCharacter.ID;
                 return _selectedCharacterKey;
             }
         }
@@ -35,18 +35,18 @@ namespace SunsetSystems
 
         public void NextCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
-            currentIndex = currentIndex + 1 < PartyManager.AllCoterieMembers.Count ? currentIndex + 1 : 0;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].DatabaseID;
+            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
+            currentIndex = currentIndex + 1 < PartyManager.Instance.AllCoterieMembers.Count ? currentIndex + 1 : 0;
+            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex].DatabaseID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }
 
         public void PreviousCharacter()
         {
-            int currentIndex = PartyManager.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
-            currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.AllCoterieMembers.Count - 1;
-            _selectedCharacterKey = PartyManager.AllCoterieMembers[currentIndex].DatabaseID;
+            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
+            currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.Instance.AllCoterieMembers.Count - 1;
+            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex].DatabaseID;
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }

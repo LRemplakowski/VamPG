@@ -1,5 +1,7 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Equipment;
+using SunsetSystems.Equipment.UI;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
@@ -45,7 +47,7 @@ namespace SunsetSystems.UI
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
-                List<IGameDataProvider<EquipmentSlot>> slots = new();
+                List<IGameDataProvider<IEquipmentSlot>> slots = new();
                 throw new NotImplementedException();
                 //if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
                 //{

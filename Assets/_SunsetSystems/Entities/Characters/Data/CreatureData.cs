@@ -1,15 +1,15 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Data;
-using SunsetSystems.Resources;
 using SunsetSystems.Utils.Extensions;
 using System;
+using System.Collections.Generic;
+using UMA;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class CreatureData : MonoBehaviour
+    public class CreatureData : SerializedMonoBehaviour
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
@@ -25,21 +25,18 @@ namespace SunsetSystems.Entities.Characters
         public BodyType BodyType { get; private set; }
         [field: SerializeField]
         public CreatureType CreatureType { get; private set; }
-        public string UmaPresetFileName;
-        public TextAsset UmaPreset => ResourceLoader.GetUmaPreset(UmaPresetFileName);
-        public string animatorControllerResourceName;
-        public RuntimeAnimatorController AnimatorControllerAsset => ResourceLoader.GetAnimatorController(animatorControllerResourceName);
+        [field: SerializeField]
+        public List<UMARecipeBase> BaseUmaRecipes { get; private set; }
 
-        public void CopyFromConfig(CreatureConfig config)
+        public void CopyFromTemplate(ICreatureTemplate template)
         {
-            FirstName = config.Name;
-            LastName = config.LastName;
-            _id = config.ReadableID;
-            Faction = config.Faction;
-            BodyType = config.BodyType;
-            CreatureType = config.CreatureType;
-            UmaPresetFileName = config.UmaPresetFileName;
-            animatorControllerResourceName = config.AnimatorController.name;
+            FirstName = template.FirstName;
+            LastName = template.LastName;
+            _id = template.ReadableID;
+            Faction = template.Faction;
+            BodyType = template.BodyType;
+            CreatureType = template.CreatureType;
+            BaseUmaRecipes = template.BaseUmaRecipes;
         }
     }
 }

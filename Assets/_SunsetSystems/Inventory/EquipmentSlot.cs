@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
@@ -9,9 +10,7 @@ namespace SunsetSystems.Inventory
     public class EquipmentSlot : IEquipmentSlot, IGameDataProvider<EquipmentSlot>
     {
         [field: SerializeField, ReadOnly]
-        public string Name { get; private set; }
-        [field: SerializeField, ReadOnly]
-        public string ID { get; private set; }
+        public EquipmentSlotID ID { get; private set; }
         [SerializeField]
         private ItemCategory _acceptedCategory;
         public ItemCategory AcceptedCategory { get => _acceptedCategory; }
@@ -19,14 +18,20 @@ namespace SunsetSystems.Inventory
         public EquipmentSlot Data => this;
 
         [SerializeField]
-        private EquipableItem _equippedItem;
+        private IEquipableItem _equippedItem;
 
-        public EquipmentSlot(ItemCategory acceptedCategory, string name, string id)
+        public EquipmentSlot(ItemCategory acceptedCategory, EquipmentSlotID id)
         {
             this._acceptedCategory = acceptedCategory;
-            this.Name = name;
             this.ID = id;
             _equippedItem = null;
+        }
+
+        public EquipmentSlot(IEquipmentSlot slot)
+        {
+            this._acceptedCategory = slot.AcceptedCategory;
+            this.ID = slot.ID;
+            _equippedItem = slot.GetEquippedItem();
         }
 
         public EquipmentSlot()
@@ -34,12 +39,12 @@ namespace SunsetSystems.Inventory
 
         }
 
-        public EquipableItem GetEquippedItem()
+        public IEquipableItem GetEquippedItem()
         {
             return _equippedItem;
         }
 
-        public bool TryEquipItem(EquipableItem item)
+        public bool TryEquipItem(IEquipableItem item)
         {
             if (!_acceptedCategory.Equals(item.ItemCategory))
                 return false;
@@ -59,7 +64,7 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public bool TryUnequipItem(EquipableItem item)
+        public bool TryUnequipItem(IEquipableItem item)
         {
             if (_equippedItem == null)
                 return false;

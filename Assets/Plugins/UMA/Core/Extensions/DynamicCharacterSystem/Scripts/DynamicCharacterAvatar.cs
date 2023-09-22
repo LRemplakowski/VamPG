@@ -562,7 +562,7 @@ namespace UMA.CharacterSystem
                 {
                     // Unfortunately we must unpack the prefab or it will blow up.
                     GameObject go = PrefabUtility.GetOutermostPrefabInstanceRoot(this.gameObject);
-                    UnityEditor.PrefabUtility.UnpackPrefabInstance(go, UnityEditor.PrefabUnpackMode.Completely, UnityEditor.InteractionMode.AutomatedAction);
+                    //UnityEditor.PrefabUtility.UnpackPrefabInstance(go, UnityEditor.PrefabUnpackMode.Completely, UnityEditor.InteractionMode.AutomatedAction);
                 }
                 CleanupGeneratedData();
                 activeRace.SetRaceData();

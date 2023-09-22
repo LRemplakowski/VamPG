@@ -1,16 +1,18 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Journal;
 using SunsetSystems.Resources;
 using SunsetSystems.UI.Utils;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>
+    public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>, IBaseItem
     {
         [field: SerializeField]
-        public string ReadableID { get; protected set; }
+        public string Name { get; protected set; }
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; }
         [field: SerializeField, ReadOnly]
@@ -20,7 +22,7 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField]
         public GameObject Prefab { get; protected set; }
         [field: SerializeField]
-        public Sprite Icon { get; protected set; }
+        public AssetReferenceSprite Icon { get; protected set; }
         [field: SerializeField]
         public bool Stackable { get; protected set; }
 
@@ -29,14 +31,9 @@ namespace SunsetSystems.Inventory.Data
         private void OnEnable()
         {
 #if UNITY_EDITOR
-            if (string.IsNullOrWhiteSpace(ReadableID))
+            if (string.IsNullOrWhiteSpace(Name))
             {
-                ReadableID = name;
-                EditorUtility.SetDirty(this);
-            }
-            if (Icon == null)
-            {
-                Icon = ResourceLoader.GetFallbackIcon();
+                Name = name;
                 EditorUtility.SetDirty(this);
             }
             if (string.IsNullOrWhiteSpace(DatabaseID))
@@ -47,8 +44,7 @@ namespace SunsetSystems.Inventory.Data
 
         private void Reset()
         {
-            ReadableID = name;
-            Icon = ResourceLoader.GetFallbackIcon();
+            Name = name;
             AssignNewID();
         }
 

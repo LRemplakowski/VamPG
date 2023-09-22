@@ -96,14 +96,14 @@ namespace SunsetSystems.Data
         {
             return _playerCharacterData.BodyType switch
             {
-                BodyType.M => _selectedBackground switch
+                BodyType.Male => _selectedBackground switch
                 {
                     PlayerCharacterBackground.Agent => ResourceLoader.GetMaleAgentAsset(),
                     PlayerCharacterBackground.Convict => ResourceLoader.GetMaleConvictAsset(),
                     PlayerCharacterBackground.Journalist => ResourceLoader.GetMaleJournalistAsset(),
                     _ => ResourceLoader.GetDefaultCreatureAsset(),
                 },
-                BodyType.F => _selectedBackground switch
+                BodyType.Female => _selectedBackground switch
                 {
                     PlayerCharacterBackground.Agent => ResourceLoader.GetFemaleAgentAsset(),
                     PlayerCharacterBackground.Convict => ResourceLoader.GetFemaleConvictAsset(),

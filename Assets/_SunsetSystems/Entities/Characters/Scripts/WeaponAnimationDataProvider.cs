@@ -9,10 +9,6 @@ namespace SunsetSystems.Animation
     [RequireComponent(typeof(RigTransform))]
     public class WeaponAnimationDataProvider : MonoBehaviour
     {
-        [field:SerializeField]
-        public Vector3 PositionOffset { get; private set; }
-        [field: SerializeField]
-        public Vector3 RotationOffset { get; private set; }
         [field: SerializeField]
         public Transform RightHandIK { get; private set; }
         [field: SerializeField]

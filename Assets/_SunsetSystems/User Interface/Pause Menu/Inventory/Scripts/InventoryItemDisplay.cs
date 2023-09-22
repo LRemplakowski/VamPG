@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
@@ -6,6 +7,7 @@ using SunsetSystems.UI.Utils;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -20,13 +22,18 @@ namespace SunsetSystems.UI
         [SerializeField]
         private TextMeshProUGUI _stackSize;
 
-        public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
+        private AssetReferenceSprite lastLoadedSprite;
+
+        public async void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
+            if (lastLoadedSprite != null)
+                AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.Data;
-                _icon.sprite = _itemEntry._item.Icon;
+                lastLoadedSprite = _itemEntry._item.Icon;
+                _icon.sprite = await AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
                 _icon.gameObject.SetActive(true);
                 if (_itemEntry._item.Stackable)
                 {
@@ -44,7 +51,7 @@ namespace SunsetSystems.UI
         public void OnClick()
         {
             //TODO: Handle equip item in double click or right click context menu
-            Debug.Log($"Equipping item {_itemEntry._item.ReadableID}!");
+            Debug.Log($"Equipping item {_itemEntry._item.Name}!");
             if (_itemEntry._item is EquipableItem item)
             {
                 throw new NotImplementedException();

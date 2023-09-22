@@ -20,7 +20,7 @@ namespace SunsetSystems.Entities.Data
             this.Generation = statsAsset.Generation;
             this.BloodPotency = statsAsset.BloodPotency;
             this.Attributes = Attributes.DeepCopy(statsAsset.Attributes);
-            this.Skills = statsAsset.Skills;
+            this.Skills = Skills.DeepCopy(statsAsset.Skills);
             this.Disciplines = Disciplines.DeepCopy(statsAsset.Disciplines);
         }
 

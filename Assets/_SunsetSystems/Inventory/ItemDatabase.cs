@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace SunsetSystems
+namespace SunsetSystems.Core.Database
 {
     [CreateAssetMenu(fileName = "New Item Database", menuName = "Sunset Inventory/Item Database")]
     public class ItemDatabase : ScriptableObject
     {
         [SerializeField]
-        private Dictionary<string, BaseItem> _objectiveRegistry = new();
+        private Dictionary<string, IBaseItem> _itemRegistry = new();
         [SerializeField]
-        private Dictionary<string, string> _objectiveAccessorRegistry = new();
+        private Dictionary<string, string> _itemAccessorRegistry = new();
 
         public static ItemDatabase Instance { get; private set; }
 
@@ -29,46 +29,46 @@ namespace SunsetSystems
         {
             Instance = this;
             List<string> keysToDelete = new();
-            foreach (string key in _objectiveRegistry.Keys)
+            foreach (string key in _itemRegistry.Keys)
             {
-                if (_objectiveRegistry[key] == null)
+                if (_itemRegistry[key] == null)
                     keysToDelete.Add(key);
             }
-            keysToDelete.ForEach(key => _objectiveRegistry.Remove(key));
-            _objectiveAccessorRegistry = new();
-            _objectiveRegistry.Values.ToList().ForEach(baseItem => _objectiveAccessorRegistry.Add(baseItem.ReadableID, baseItem.DatabaseID));
+            keysToDelete.ForEach(key => _itemRegistry.Remove(key));
+            _itemAccessorRegistry = new();
+            _itemRegistry.Values.ToList().ForEach(baseItem => _itemAccessorRegistry.Add(baseItem.Name, baseItem.DatabaseID));
         }
 
-        public bool TryGetEntry(string objectiveID, out BaseItem baseItem)
+        public bool TryGetEntry(string objectiveID, out IBaseItem baseItem)
         {
-            return _objectiveRegistry.TryGetValue(objectiveID, out baseItem);
+            return _itemRegistry.TryGetValue(objectiveID, out baseItem);
         }
 
-        public bool TryGetEntryByReadableID(string readableID, out BaseItem baseItem)
+        public bool TryGetEntryByReadableID(string readableID, out IBaseItem baseItem)
         {
-            return TryGetEntry(_objectiveAccessorRegistry[readableID], out baseItem);
+            return TryGetEntry(_itemAccessorRegistry[readableID], out baseItem);
         }
 
         public bool Register(BaseItem baseItem)
         {
-            if (_objectiveRegistry.ContainsKey(baseItem.DatabaseID))
+            if (_itemRegistry.ContainsKey(baseItem.DatabaseID))
             {
-                _objectiveAccessorRegistry = new();
-                _objectiveRegistry.Values.ToList().ForEach(item => _objectiveAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
+                _itemAccessorRegistry = new();
+                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
                 return false;
             }
-            _objectiveRegistry.Add(baseItem.DatabaseID, baseItem);
-            _objectiveAccessorRegistry = new();
-            _objectiveRegistry.Values.ToList().ForEach(item => _objectiveAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
+            _itemRegistry.Add(baseItem.DatabaseID, baseItem);
+            _itemAccessorRegistry = new();
+            _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
             return true;
         }
 
         public void Unregister(BaseItem baseItem)
         {
-            if (_objectiveRegistry.Remove(baseItem.DatabaseID))
+            if (_itemRegistry.Remove(baseItem.DatabaseID))
             {
-                _objectiveAccessorRegistry = new();
-                _objectiveRegistry.Values.ToList().ForEach(item => _objectiveAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
+                _itemAccessorRegistry = new();
+                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
             }
         }
     }

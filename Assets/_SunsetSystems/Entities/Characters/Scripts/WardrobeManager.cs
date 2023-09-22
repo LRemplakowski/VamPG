@@ -28,7 +28,7 @@ namespace SunsetSystems.Entities.Characters
             if (combatants.Contains(_owner))
             {
                 _displayWeapons = true;
-                UpdateWardrobe(_characterID);
+                UpdateWardrobe();
             }
             else
             {
@@ -41,7 +41,7 @@ namespace SunsetSystems.Entities.Characters
             if (!_initializedOnce)
                 Initialize();
             _displayWeapons = false;
-            UpdateWardrobe(_characterID);
+            UpdateWardrobe();
         }
 
         private void Initialize()
@@ -54,7 +54,7 @@ namespace SunsetSystems.Entities.Characters
             _initializedOnce = true;
         }    
 
-        public void UpdateWardrobe(string characterID)
+        public void UpdateWardrobe()
         {
             if (!_initializedOnce)
                 Initialize();
@@ -90,8 +90,6 @@ namespace SunsetSystems.Entities.Characters
             {
                 Debug.Log($"Enabling weapon IK for {gameObject.name}!");
                 _animationController.EnableIK(ikData);
-                weapon.localPosition = ikData.PositionOffset;
-                weapon.localEulerAngles = ikData.RotationOffset;
             }
         }
 

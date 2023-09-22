@@ -1,5 +1,7 @@
+using SunsetSystems.Core.UMA;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Equipment;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,5 +19,9 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         public NavMeshObstacle NavMeshObstacle { get; private set; }
         [field: SerializeField]
         public ICombatant CombatComponent { get; private set; }
+        [field: SerializeField]
+        public IEquipment EquipmentComponent { get; private set; }
+        [field: SerializeField]
+        public IUMAManager UMAManager { get; private set; }
     }
 }

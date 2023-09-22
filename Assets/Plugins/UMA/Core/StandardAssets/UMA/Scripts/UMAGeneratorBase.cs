@@ -267,9 +267,8 @@ namespace UMA
 					var originalPos = umaTransform.localPosition;
                     var animator = umaData.animator;
 
-                    umaTransform.SetParent(null, false);
-					umaTransform.localRotation = Quaternion.identity;
-					umaTransform.localPosition = Vector3.zero;
+					umaTransform.rotation = Quaternion.identity;
+					umaTransform.position = Vector3.zero;
 					
 					if (animator == null)
 					{
@@ -280,7 +279,6 @@ namespace UMA
 						animator.runtimeAnimatorController = umaData.animationController;
 						umaData.animator = animator;
 
-						umaTransform.SetParent(oldParent, false);
 						umaTransform.localRotation = originalRot;
 						umaTransform.localPosition = originalPos;
 					}

@@ -1,4 +1,5 @@
 using SunsetSystems.Data;
+using SunsetSystems.Entities.Characters;
 using System.Threading.Tasks;
 using UnityEngine;
 

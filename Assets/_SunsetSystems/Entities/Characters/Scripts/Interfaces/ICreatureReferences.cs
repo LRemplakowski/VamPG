@@ -1,3 +1,4 @@
+using SunsetSystems.Core.UMA;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
@@ -13,5 +14,6 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         NavMeshObstacle NavMeshObstacle { get; }
         ICombatant CombatComponent { get; }
         IEquipment EquipmentComponent { get; }
+        IUMAManager UMAManager { get; }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SunsetSystems.Inventory.Data
 {
     [CreateAssetMenu(fileName = "New Gloves", menuName = "Sunset Inventory/Items/Gloves")]
-    public class Gloves : AbstractArmor
+    public class Gloves : WearableItem
     {
         private void Awake()
         {

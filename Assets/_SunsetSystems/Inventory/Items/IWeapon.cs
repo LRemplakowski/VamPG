@@ -2,7 +2,7 @@ using SunsetSystems.Inventory.Data;
 
 namespace SunsetSystems.Inventory
 {
-    public interface IWeapon
+    public interface IWeapon : IEquipableItem
     {
         WeaponType WeaponType { get; }
 

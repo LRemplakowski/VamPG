@@ -91,7 +91,20 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: defaultRecipes
+      Entry: 7
+      Data: 0|System.Collections.Generic.HashSet`1[[UMA.UMARecipeBase, UMA_Core]],
+        System.Core
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   umaRoot: {fileID: 1203071946431115676}
 --- !u!1 &880835672601238623
@@ -374,6 +387,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
     - {fileID: 1675144160413098596}
+    - {fileID: 3703066370810871723}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -385,6 +399,9 @@ MonoBehaviour:
     - Name: <EquipmentComponent>k__BackingField
       Entry: 10
       Data: 1
+    - Name: <UMAManager>k__BackingField
+      Entry: 10
+      Data: 2
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
@@ -720,9 +737,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 2|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Primary Weapon
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 0
@@ -747,9 +761,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 3|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Secondary Weapon
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 1
@@ -774,9 +785,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 4|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Chest
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 2
@@ -801,9 +809,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 5|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Boots
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 3
@@ -828,9 +833,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 6|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Hands
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 4
@@ -855,9 +857,6 @@ MonoBehaviour:
     - Name: $v
       Entry: 7
       Data: 7|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
-    - Name: <Name>k__BackingField
-      Entry: 1
-      Data: Trinket
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 5

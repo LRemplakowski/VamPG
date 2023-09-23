@@ -11,28 +11,26 @@ using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Party;
 using SunsetSystems.Animation;
 using SunsetSystems.Entities.Characters.Actions;
+using UltEvents;
 
 namespace SunsetSystems.Combat
 {
     [RequireComponent(typeof(Tagger))]
-    public class CombatManager : Singleton<CombatManager>
+    public class CombatManager : SerializedMonoBehaviour
     {
-        public delegate void CombatBeginHandler(List<ICombatant> creaturesInCombat);
-        public static event CombatBeginHandler CombatBegin;
-        public delegate void CombatEndHandler();
-        public static event CombatEndHandler CombatEnd;
-        public delegate void ActiveActorChangedHandler(ICombatant newActor, ICombatant previousActor);
-        public static event ActiveActorChangedHandler ActiveActorChanged;
-        public delegate void CombatRoundBeginHandler(ICombatant currentActor);
-        public static event CombatRoundBeginHandler CombatRoundBegin;
-        public delegate void CombatRoundEndHandler(ICombatant currentActor);
-        public static event CombatRoundEndHandler CombatRoundEnd;
-        public static event Action OnFullTurnCompleted;
+        public static CombatManager Instance { get; private set; }
+
+        public UltEvent<IEnumerable<ICombatant>> CombatBegin;
+        public UltEvent CombatEnd;
+        public UltEvent<ICombatant, ICombatant> ActiveActorChanged;
+        public UltEvent<ICombatant> CombatRoundBegin;
+        public UltEvent<ICombatant> CombatRoundEnd;
+        public UltEvent OnFullTurnCompleted;
 
         private int turnCounter;
 
-        private static ICombatant _currentActiveActor;
-        public static ICombatant CurrentActiveActor
+        private ICombatant _currentActiveActor;
+        public ICombatant CurrentActiveActor
         {
             get => _currentActiveActor;
             private set
@@ -49,6 +47,11 @@ namespace SunsetSystems.Combat
 
         [field: ShowInInspector, ReadOnly]
         public List<ICombatant> Actors { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         public void SetCurrentActiveActor(int index)
         {
@@ -86,8 +89,8 @@ namespace SunsetSystems.Combat
             CurrentEncounter = encounter;
             turnCounter = 0;
             Actors = new();
-            Actors.AddRange(encounter.Creatures.Select(c => c.References.CombatComponent));
-            Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatComponent));
+            Actors.AddRange(encounter.Creatures.Select(c => c.References.CombatBehaviour));
+            Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
             CombatBegin?.Invoke(Actors);
             Actors.ForEach(c => c.References.GetComponentInChildren<CreatureAnimationController>().SetCombatAnimationsActive(true));
             MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
@@ -128,7 +131,7 @@ namespace SunsetSystems.Combat
             return turnCounter == 1;
         }
 
-        public static bool IsActiveActorPlayerControlled()
+        public bool IsActiveActorPlayerControlled()
         {
             return _currentActiveActor != null ? CurrentActiveActor.IsPlayerControlled : false;
         }

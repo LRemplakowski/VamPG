@@ -1,103 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Apex.AI;
-using Apex.AI.Components;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Game;
 using SunsetSystems.Combat;
-using SunsetSystems.Resources;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Inventory;
-using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;
 using Sirenix.OdinInspector;
 using System.Threading.Tasks;
+using System.Linq;
 
-public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
+public class CombatBehaviour : SerializedMonoBehaviour, ICombatant
 {
-    private CreatureContext _context;
-    private CreatureContext Context
-    {
-        get
-        {
-            if (_context == null)
-                _context = new(this, CombatManager.Instance);
-            return _context;
-        }
-    }
+    [Title("Config")]
+    [SerializeField]
+    private float defaultRaycastOriginY = 1.5f;
 
+    [Title("References")]
     [SerializeField]
     private Transform _raycastOrigin;
     public Vector3 RaycastOrigin => _raycastOrigin.position;
-    [SerializeField]
-    private float defaultRaycastOriginY = 1.5f;
     [field: SerializeField]
     public LineRenderer LineRenderer { get; private set; }
+    [field: SerializeField]
+    public ICreature Owner { get; private set; }
+    [field: SerializeField]
+    public IMagicUser MagicUser { get; private set; }
 
-    public Creature Owner { get; private set; }
-
-    public bool IsPlayerControlled => Context.IsPlayerControlled;
-
-    private void Reset()
-    {
-        if (!_raycastOrigin)
-        {
-            _raycastOrigin = new GameObject("RaycastOrigin").transform;
-            _raycastOrigin.parent = this.transform;
-            _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
-        }
-    }
-
-    private void Awake()
-    {
-        if (!_raycastOrigin)
-        {
-            _raycastOrigin = new GameObject("RaycastOrigin").transform;
-            _raycastOrigin.parent = this.transform;
-            _raycastOrigin.localPosition = new Vector3(0, defaultRaycastOriginY, 0);
-        }
-        if (!LineRenderer)
-        {
-            LineRenderer = Instantiate(ResourceLoader.GetTargetingLineRendererPrefab(), RaycastOrigin, Quaternion.identity, transform);
-            LineRenderer.enabled = false;
-        }
-    }
+    public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
     #region Enable&Disable
     private void OnEnable()
     {
         HostileAction.OnAttackFinished += OnHostileActionFinished;
-        CombatManager.CombatRoundBegin += OnCombatRoundBegin;
-        CombatManager.CombatRoundEnd += OnCombatRoundEnd;
+        CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
+        CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
     }
 
     private void OnDisable()
     {
         HostileAction.OnAttackFinished -= OnHostileActionFinished;
-        CombatManager.CombatRoundBegin -= OnCombatRoundBegin;
-        CombatManager.CombatRoundEnd -= OnCombatRoundEnd;
+        CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
+        CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
     }
     #endregion
-
-
-    private void Start()
-    {
-        if (!Owner)
-            Owner = GetComponentInParent<Creature>();
-        enabled = false;
-    }
-
-    private void Update()
-    {
-        if (GameManager.IsCurrentState(GameState.Combat) && Owner != null && CombatManager.CurrentActiveActor != null)
-            if (!IsPlayerControlled && Owner.Equals(CombatManager.CurrentActiveActor))
-                if (HasMoved && HasActed)
-                    CombatManager.Instance.NextRound();
-    }
 
     private void OnHostileActionFinished(ICombatant target, ICombatant performer)
     {
@@ -109,7 +56,7 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 
     private void OnCombatRoundBegin(ICombatant currentActor)
     {
-        if (Owner.Equals(currentActor))
+        if (currentActor.Equals(this))
         {
             HasMoved = false;
             HasActed = false;
@@ -117,40 +64,34 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
             if (IsPlayerControlled)
             {
                 CachedMultiLevelGrid grid = CombatManager.Instance.CurrentEncounter.MyGrid;
-                grid.HighlightCellsInRange(grid.WorldPositionToGridPosition(Owner.transform.position), Owner.MovementRange, Owner.References.NavMeshAgent);
+                grid.HighlightCellsInRange(grid.WorldPositionToGridPosition(Owner.References.Transform.position), MovementRange, Owner.References.NavMeshAgent);
             }
         }
     }
 
     private void OnCombatRoundEnd(ICombatant currentActor)
     {
-        if (Owner.Equals(currentActor) && IsPlayerControlled)
+        if (currentActor.Equals(this) && IsPlayerControlled)
         {
             CombatManager.Instance.CurrentEncounter.MyGrid.RestoreHighlightedCellsToPreviousState();
         }
     }
 
-    public IAIContext GetContext(Guid aiId)
-    {
-        return Context;
-    }
-
     #region ICombatant
-    [field: SerializeField]
-    public IMagicUser MagicUser { get; private set; }
-    public IWeapon CurrentWeapon => throw new NotImplementedException();
+    public IWeapon CurrentWeapon => Owner.References.WeaponManager.GetSelectedWeapon();
 
-    public IWeapon PrimaryWeapon => throw new NotImplementedException();
+    public IWeapon PrimaryWeapon => Owner.References.WeaponManager.GetPrimaryWeapon();
 
-    public IWeapon SecondaryWeapon => throw new NotImplementedException();
+    public IWeapon SecondaryWeapon => Owner.References.WeaponManager.GetSecondaryWeapon();
 
-    public Vector3 AimingOrigin => throw new NotImplementedException();
+    public Vector3 AimingOrigin => RaycastOrigin;
 
-    public bool IsInCover => throw new NotImplementedException();
+    public bool IsInCover => CurrentCoverSources.Count > 0;
 
-    public IList<ICover> CurrentCoverSources => throw new NotImplementedException();
+    public IList<ICover> CurrentCoverSources => new List<ICover>();
 
-    public int MovementRange => throw new NotImplementedException();
+    public int MovementRange => Owner.References.StatsManager.GetCombatSpeed();
+    [field: Title("Combat Runtime")]
     [field: ShowInInspector, ReadOnly]
     public bool HasActed { get; private set; }
     [field: ShowInInspector, ReadOnly]
@@ -164,16 +105,19 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 
     public IEntityReferences References => Owner.References;
 
+    public EntityAction PeekCurrentAction => Owner.PeekCurrentAction;
+
     public Transform Transform => Owner.Transform;
 
     public bool TakeDamage(int amount)
     {
-        throw new NotImplementedException();
+        Owner.References.StatsManager.TakeDamage(amount);
+        return true;
     }
 
     public int GetAttributeValue(AttributeType attributeType)
     {
-        throw new NotImplementedException();
+        return Owner.References.StatsManager.GetAttributes().FirstOrDefault(attribute => attribute.AttributeType == attributeType).GetValue();
     }
 
     public Task PerformAction(EntityAction action, bool clearQueue = false) => Owner.PerformAction(action, clearQueue);

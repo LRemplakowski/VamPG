@@ -76,6 +76,8 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
+        public EntityAction PeekCurrentAction => _actionQueue.Peek();
+
         public void ForceToPosition(Vector3 position)
         {
             ClearAllActions();
@@ -114,7 +116,7 @@ namespace SunsetSystems.Entities.Characters
         {
             References.CreatureData.CopyFromTemplate(template);
             References.StatsManager.CopyFromTemplate(template);
-            References.EquipmentComponent.CopyFromTemplate(template);
+            References.EquipmentManager.CopyFromTemplate(template);
         }
 
         public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
@@ -139,7 +141,7 @@ namespace SunsetSystems.Entities.Characters
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
                 BaseUmaRecipes = instance.References.CreatureData.BaseUmaRecipes;
-                EquipmentSlotsData = instance.References.EquipmentComponent.EquipmentSlots;
+                EquipmentSlotsData = instance.References.EquipmentManager.EquipmentSlots;
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 

@@ -10,6 +10,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         Transform Transform { get; }
 
         Task PerformAction(EntityAction action, bool clearQueue = false);
+        EntityAction PeekCurrentAction { get;  }
 
         T GetComponent<T>() where T : Component;
         T GetComponentInChildren<T>() where T : Component;

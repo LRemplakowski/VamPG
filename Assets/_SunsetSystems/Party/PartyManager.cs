@@ -114,9 +114,10 @@ namespace SunsetSystems.Party
             }
             else
             {
-                Creature creature = CreatureInitializer.InitializeCreature(data, position, Instance._creatureParent, Quaternion.identity);
-                return creature;
+                //Creature creature = CreatureInitializer.InitializeCreature(data, position, Instance._creatureParent, Quaternion.identity);
+                //return creature;
             }
+            return null;
         }
 
         public void RecruitCharacter(CreatureData creatureData)

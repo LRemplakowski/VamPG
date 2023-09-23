@@ -57,7 +57,7 @@ namespace SunsetSystems.UI
 
         public void UpdateViews(List<IGameDataProvider<DisciplinePower>> data)
         {
-            IMagicUser spellcastingActor = CombatManager.CurrentActiveActor.MagicUser;
+            IMagicUser spellcastingActor = CombatManager.Instance.CurrentActiveActor.MagicUser;
             foreach (IGameDataProvider<DisciplinePower> ability in data)
             {
                 AbilityView view = GetViewFromPool();

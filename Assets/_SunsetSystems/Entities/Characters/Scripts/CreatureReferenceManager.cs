@@ -18,9 +18,11 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         [field: SerializeField]
         public NavMeshObstacle NavMeshObstacle { get; private set; }
         [field: SerializeField]
-        public ICombatant CombatComponent { get; private set; }
+        public ICombatant CombatBehaviour { get; private set; }
         [field: SerializeField]
-        public IEquipmentManager EquipmentComponent { get; private set; }
+        public IEquipmentManager EquipmentManager { get; private set; }
+        [field: SerializeField]
+        public IWeaponManager WeaponManager { get; private set; }
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
     }

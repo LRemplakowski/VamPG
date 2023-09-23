@@ -167,6 +167,7 @@ MonoBehaviour:
       Entry: 10
       Data: 0
   weaponParent: {fileID: 1187578031712813030}
+  weaponInstance: {fileID: 0}
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +212,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a877a7204afd7d42a2140eb00ed8ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 660093643310669083}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _owner
+      Entry: 10
+      Data: 0
 --- !u!1 &990508043532713649
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,21 +461,25 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
     - {fileID: 1675144160413098596}
+    - {fileID: 7860156406871809602}
     - {fileID: 3703066370810871723}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: <CombatComponent>k__BackingField
+    - Name: <CombatBehaviour>k__BackingField
       Entry: 10
       Data: 0
-    - Name: <EquipmentComponent>k__BackingField
+    - Name: <EquipmentManager>k__BackingField
       Entry: 10
       Data: 1
-    - Name: <UMAManager>k__BackingField
+    - Name: <WeaponManager>k__BackingField
       Entry: 10
       Data: 2
+    - Name: <UMAManager>k__BackingField
+      Entry: 10
+      Data: 3
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
@@ -672,6 +690,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7137076084159866363}
   - component: {fileID: 3784422555817380618}
+  - component: {fileID: 1441048649891615095}
   m_Layer: 0
   m_Name: Combat Behaviour
   m_TagString: Untagged
@@ -708,9 +727,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4012d143d6f334c48a5a8d14484ddf22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastOrigin: {fileID: 6596153777422388182}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 660093643310669083}
+    - {fileID: 3067086792877250132}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <Owner>k__BackingField
+      Entry: 10
+      Data: 0
+    - Name: <MagicUser>k__BackingField
+      Entry: 10
+      Data: 1
   defaultRaycastOriginY: 1.5
+  _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
+  aiComponent: {fileID: 1441048649891615095}
+--- !u!114 &1441048649891615095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5165274126658692935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 939582531, guid: 6012f3241c1c1f7409c44769fc0a1db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiConfigs:
+  - aiId: f49fbd97-4d3d-488a-87e3-29f8b01248d5
+    intervalMin: 1
+    intervalMax: 1
+    startDelayMin: 0
+    startDelayMax: 0
+    isActive: 1
 --- !u!1 &6912376922156523433
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,10 +820,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: EquipmentData
-      Entry: 7
-      Data: SunsetSystems.Equipment.EquipmentData, SunsetSystems
-    - Name: EquipmentSlots
+    - Name: <EquipmentSlots>k__BackingField
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Equipment.EquipmentSlotID,
         SunsetSystems],[SunsetSystems.Equipment.IEquipmentSlot, SunsetSystems]],
@@ -934,9 +987,6 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
       Data: 
     - Name: 
       Entry: 8

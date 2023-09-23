@@ -28,7 +28,7 @@ namespace SunsetSystems.UI
 
         public void ShowDisciplinePowerDisplay()
         {
-            ICombatant activeActor = CombatManager.CurrentActiveActor;
+            ICombatant activeActor = CombatManager.Instance.CurrentActiveActor;
             if (activeActor == null)
             {
                 Debug.LogError("Trying to display power list, but CurrentActiveActor is null!");

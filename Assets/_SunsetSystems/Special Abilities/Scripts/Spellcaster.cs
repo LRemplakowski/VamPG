@@ -23,7 +23,7 @@ namespace SunsetSystems.Spellbook
             };
         }
 
-        public static bool HandleEffects(DisciplinePower discipline, ICombatant caster)
+        public static bool HandleEffects(DisciplinePower discipline, IMagicUser caster)
         {
             switch (discipline.Target)
             {
@@ -36,7 +36,7 @@ namespace SunsetSystems.Spellbook
             return true;
         }
 
-        public static bool HandleEffects(DisciplinePower discipline, ICombatant caster, ICombatant target)
+        public static bool HandleEffects(DisciplinePower discipline, IMagicUser caster, ICombatant target)
         {
             switch (discipline.Target)
             {
@@ -55,7 +55,7 @@ namespace SunsetSystems.Spellbook
             return true;
         }
 
-        public static bool HandleEffects(DisciplinePower discipline, Creature caster, Vector3 originPoint)
+        public static bool HandleEffects(DisciplinePower discipline, IMagicUser caster, Vector3 originPoint)
         {
             switch (discipline.Target)
             {
@@ -71,12 +71,12 @@ namespace SunsetSystems.Spellbook
             return true;
         }
 
-        private static void HandleAOE(DisciplinePower discipline, Creature caster, Vector3 originPoint)
+        private static void HandleAOE(DisciplinePower discipline, IMagicUser caster, Vector3 originPoint)
         {
-            Debug.Log("Using AOE discipline " + discipline.name + "! Caster is " + caster.gameObject.name + " and origin point is " + originPoint);
+            Debug.Log("Using AOE discipline " + discipline.name + "! Caster is " + caster.References.GameObject.name + " and origin point is " + originPoint);
         }
 
-        private static void HandleSingleTargeted(DisciplinePower discipline, ICombatant caster, ICombatant target)
+        private static void HandleSingleTargeted(DisciplinePower discipline, IMagicUser caster, ICombatant target)
         {
             Debug.Log("Using single targeted discipline " + discipline.name + "! Caster is " + caster.References.GameObject.name + " and target is " + target.References.GameObject.name);
             List<EffectWrapper> effects = discipline.GetEffects();
@@ -103,7 +103,7 @@ namespace SunsetSystems.Spellbook
             }
         }
 
-        private static void HandleSelfTargeted(DisciplinePower discipline, ICombatant caster)
+        private static void HandleSelfTargeted(DisciplinePower discipline, IMagicUser caster)
         {
             Debug.Log("Using self-targeted discipline " + discipline.name + "! Caster is " + caster.References.GameObject.name);
             List<EffectWrapper> effects = discipline.GetEffects();
@@ -112,45 +112,45 @@ namespace SunsetSystems.Spellbook
                 switch (effect.EffectType)
                 {
                     case EffectType.Attribute:
-                        HandleAttributeEffect(effect.attributeEffect, caster, caster);
+                        HandleAttributeEffect(effect.attributeEffect, caster.References.CombatBehaviour, caster);
                         break;
                     case EffectType.Skill:
-                        HandleSkillEffect(effect.skillEffect, caster, caster);
+                        HandleSkillEffect(effect.skillEffect, caster.References.CombatBehaviour, caster);
                         break;
                     case EffectType.Discipline:
-                        HandleDisciplineEffect(effect.disciplineEffect, caster, caster);
+                        HandleDisciplineEffect(effect.disciplineEffect, caster.References.CombatBehaviour, caster);
                         break;
                     case EffectType.Tracker:
-                        HandleTrackerEffect(effect.trackerEffect, caster, caster);
+                        HandleTrackerEffect(effect.trackerEffect, caster.References.CombatBehaviour, caster);
                         break;
                     case EffectType.ScriptDriven:
-                        HandleScriptEffect(effect.scriptEffect, caster, caster);
+                        HandleScriptEffect(effect.scriptEffect, caster.References.CombatBehaviour, caster);
                         break;
                 }
             }
         }
 
-        static void HandleAttributeEffect(EffectWrapper.AttributeEffect attributeEffect, ICombatant target, ICombatant caster)
+        static void HandleAttributeEffect(EffectWrapper.AttributeEffect attributeEffect, ICombatant target, IMagicUser caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleScriptEffect(EffectWrapper.ScriptEffect scriptEffect, ICombatant target, ICombatant caster)
+        static void HandleScriptEffect(EffectWrapper.ScriptEffect scriptEffect, ICombatant target, IMagicUser caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleTrackerEffect(EffectWrapper.TrackerEffect trackerEffect, ICombatant target, ICombatant caster)
+        static void HandleTrackerEffect(EffectWrapper.TrackerEffect trackerEffect, ICombatant target, IMagicUser caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleDisciplineEffect(EffectWrapper.DisciplineEffect disciplineEffect, ICombatant target, ICombatant caster)
+        static void HandleDisciplineEffect(EffectWrapper.DisciplineEffect disciplineEffect, ICombatant target, IMagicUser caster)
         {
             throw new NotImplementedException();
         }
 
-        static void HandleSkillEffect(EffectWrapper.SkillEffect skillEffect, ICombatant target, ICombatant caster)
+        static void HandleSkillEffect(EffectWrapper.SkillEffect skillEffect, ICombatant target, IMagicUser caster)
         {
             throw new NotImplementedException();
         }

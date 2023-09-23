@@ -878,6 +878,17 @@ Transform:
   - {fileID: 1413494483}
   m_Father: {fileID: 1839884314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &117017476 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8264689728060061147, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+  m_PrefabInstance: {fileID: 1843114902}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa1fd86d99f3a14f97cbd9179006ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &119232619
 GameObject:
   m_ObjectHideFlags: 0
@@ -21990,9 +22001,49 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: _mainCharacterKey
+      value: Gringo Bingo
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[0]
+      value: '"path":"_activeParty","add_keys":{"$id":0,"$type":"System.Object[],
+        mscorlib","$rlength":2,"$rcontent":[{"$id":1,"$type":"System.String, mscorlib","Gringo
+        Bingo"},$iref:1]},"remove_keys":null'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[1]
+      value: '"path":"_activeParty.{\"Gringo Bingo\"}","value":$eref:0'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"_creatureDataCache","add_keys":{"$id":0,"$type":"System.Object[],
+        mscorlib","$rlength":1,"$rcontent":[{"$id":1,"$type":"System.String, mscorlib","Gringo
+        Bingo"}]},"remove_keys":null'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[3]
+      value: '"path":"_creatureDataCache.{\"Gringo Bingo\"}","value":$eref:1'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1592034383}
+    - target: {fileID: 3484579786852749948, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 117017476}
     - target: {fileID: 3920058784672259451, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -26547,6 +26598,17 @@ Transform:
   - {fileID: 498078835}
   m_Father: {fileID: 1939893399}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1592034383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 660093643310669083, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
+  m_PrefabInstance: {fileID: 1843114902}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c73b22f8c2271d145bc8febb14901db8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1602491294
 GameObject:
   m_ObjectHideFlags: 0

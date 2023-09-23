@@ -13,16 +13,16 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// </summary>
         public bool IsPriority { get; protected set; }
         public bool ActionFinished { get; protected set; } = false;
-        protected ICreature Owner { get; }
+        protected IActionPerformer Owner { get; }
         protected List<Condition> conditions = new List<Condition>();
 
-        public EntityAction(ICreature owner)
+        public EntityAction(IActionPerformer owner)
         {
             Owner = owner;
             IsPriority = false;
         }
 
-        public EntityAction(ICreature owner, bool isPriority) : this(owner)
+        public EntityAction(IActionPerformer owner, bool isPriority) : this(owner)
         {
             IsPriority = isPriority;
         }
@@ -43,6 +43,8 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public virtual bool IsFinished()
         {
+            if (ActionFinished)
+                return true;
             if (conditions.Count == 0)
             {
                 Debug.LogError("Aborting action, no conditions present");
@@ -60,9 +62,8 @@ namespace SunsetSystems.Entities.Characters.Actions
                     return false;
                 }
             }
-            this.Abort();
             ActionFinished = true;
-            return true;
+            return ActionFinished;
         }
 
         public override string ToString()

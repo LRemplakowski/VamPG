@@ -1,6 +1,5 @@
 ﻿using SunsetSystems.Combat;
 using UnityEngine;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -31,7 +30,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override void Begin()
         {
             Debug.Log(Owner.References.GameObject.name + " attacks " + Target.References.GameObject.name);
-            ICombatant attacker = Owner.References.CombatComponent;
+            ICombatant attacker = Owner;
             ICombatant defender = Target;
             AttackResult result = CombatCalculator.CalculateAttackResult(attacker, defender, _attackModifier);
             Debug.Log($"Attack hit? {result.Successful}\n" +

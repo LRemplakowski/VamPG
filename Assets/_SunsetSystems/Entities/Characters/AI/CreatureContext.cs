@@ -9,6 +9,7 @@ using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Interfaces;
 using System.Linq;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Characters.Actions;
 
 public sealed class CreatureContext : IAIContext
 {
@@ -21,7 +22,7 @@ public sealed class CreatureContext : IAIContext
     }
 
     public ICombatant Owner { get; private set; }
-    public ICreature ActionPerformer => Owner as ICreature;
+    public IActionPerformer ActionPerformer => Owner;
 
     public ICombatant CurrentTarget { get; set; }
 

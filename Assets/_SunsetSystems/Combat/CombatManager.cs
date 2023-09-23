@@ -10,6 +10,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Party;
 using SunsetSystems.Animation;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Combat
 {
@@ -109,10 +110,11 @@ namespace SunsetSystems.Combat
 
         private void MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
-            foreach (ICombatant c in actors)
+            foreach (ICombatant combatant in actors)
             {
-                Vector3Int gridPosition = currentEncounter.MyGrid.GetNearestGridPosition(c.References.Transform.position);
-                c.MoveToGridPosition(gridPosition);
+                Vector3Int gridPosition = currentEncounter.MyGrid.GetNearestGridPosition(combatant.References.Transform.position);
+                Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
+                _ = combatant.PerformAction(new Move(combatant, currentEncounter.MyGrid.GridPositionToWorldPosition(gridPosition), 0f));
             }
         }
 

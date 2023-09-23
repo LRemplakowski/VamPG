@@ -15,6 +15,7 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Entities;
 using SunsetSystems.Spellbook;
 using Sirenix.OdinInspector;
+using System.Threading.Tasks;
 
 public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 {
@@ -163,6 +164,8 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
 
     public IEntityReferences References => Owner.References;
 
+    public Transform Transform => Owner.Transform;
+
     public bool TakeDamage(int amount)
     {
         throw new NotImplementedException();
@@ -173,21 +176,10 @@ public class CombatBehaviour : MonoBehaviour, IContextProvider, ICombatant
         throw new NotImplementedException();
     }
 
-    public void MoveToGridPosition(int x, int y, int z)
-    {
-        Vector3 worldPosition = CombatManager.Instance.CurrentEncounter.MyGrid.GridPositionToWorldPosition(new Vector3Int(x, y, z));
-        _ = Owner.PerformAction(new Move(Owner, worldPosition, null));
-    }
+    public Task PerformAction(EntityAction action, bool clearQueue = false) => Owner.PerformAction(action, clearQueue);
 
-    public void MoveToGridPosition(GridUnitObject gridObject)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void MoveToGridPosition(GridUnit gridUnit)
-    {
-        throw new NotImplementedException();
-    }
+    public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
+    public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
 
     #endregion
 }

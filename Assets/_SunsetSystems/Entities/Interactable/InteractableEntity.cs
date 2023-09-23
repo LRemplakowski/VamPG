@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Characters.Interfaces;
+﻿using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace SunsetSystems.Entities.Interactable
             get => _interactionDistance;
             set => _interactionDistance = value;
         }
-        public ICreature TargetedBy { get; set; }
+        public IActionPerformer TargetedBy { get; set; }
 
         private bool _interacted;
         public bool Interacted

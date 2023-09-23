@@ -45,7 +45,7 @@ namespace SunsetSystems.Combat
             GameManager.CurrentState = GameState.Combat;
             await MyGrid.EnableGrid();
             _creatureCounter = Creatures.Count;
-            await CombatManager.Instance.BeginEncounter(this);
+            _ = CombatManager.Instance.BeginEncounter(this);
             //if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             //{
             //    Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);

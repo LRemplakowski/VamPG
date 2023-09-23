@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Characters.Interfaces;
+﻿using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine;
 
 public interface IInteractable
@@ -21,7 +22,7 @@ public interface IInteractable
         set;
     }
 
-    ICreature TargetedBy
+    IActionPerformer TargetedBy
     {
         get;
         set;

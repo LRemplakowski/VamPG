@@ -1,13 +1,15 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interfaces
 {
-    public interface ICombatant : IEntity
+    public interface ICombatant : IEntity, IActionPerformer
     {
         IMagicUser MagicUser { get; }
 
@@ -28,10 +30,5 @@ namespace SunsetSystems.Entities.Interfaces
         bool TakeDamage(int amount);
 
         int GetAttributeValue(AttributeType attributeType);
-
-        void MoveToGridPosition(int x, int y, int z);
-        void MoveToGridPosition(Vector3Int gridPosition) => MoveToGridPosition(gridPosition.x, gridPosition.y, gridPosition.z);
-        void MoveToGridPosition(GridUnitObject gridObject);
-        void MoveToGridPosition(GridUnit gridUnit);
     }
 }

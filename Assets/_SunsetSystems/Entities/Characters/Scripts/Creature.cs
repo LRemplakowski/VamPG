@@ -49,7 +49,7 @@ namespace SunsetSystems.Entities.Characters
 
         public void Update()
         {
-            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            if (ActionQueue.Peek() is Idle && ActionQueue.Count > 1)
             {
                 ActionQueue.Dequeue();
                 ActionQueue.Peek().Begin();
@@ -71,7 +71,7 @@ namespace SunsetSystems.Entities.Characters
             get
             {
                 if (_references is not ICreatureReferences)
-                    _references = GetComponent<ICreatureReferences>();
+                    _references = base.GetComponent<ICreatureReferences>();
                 return _references as ICreatureReferences;
             }
         }
@@ -85,11 +85,7 @@ namespace SunsetSystems.Entities.Characters
 
         public void ClearAllActions()
         {
-            EntityAction currentAction = ActionQueue.Dequeue();
-            while (currentAction != null)
-            {
-                currentAction.Abort();
-            }
+            ActionQueue.Dequeue().Abort();
             ActionQueue.Clear();
             ActionQueue.Enqueue(new Idle(this));
         }
@@ -104,17 +100,14 @@ namespace SunsetSystems.Entities.Characters
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
-        public Task PerformAction(EntityAction action, bool clearQueue = false)
+        public async Task PerformAction(EntityAction action, bool clearQueue = false)
         {
             if (action.IsPriority || clearQueue)
                 ClearAllActions();
             ActionQueue.Enqueue(action);
-            return Task.Run(async () =>
-            {
+            await new WaitForUpdate();
+            while (action.ActionFinished is false)
                 await new WaitForUpdate();
-                while (action.ActionFinished is false)
-                    await new WaitForUpdate();
-            });
         }
 
         public void InjectDataFromTemplate(ICreatureTemplate template)
@@ -123,6 +116,9 @@ namespace SunsetSystems.Entities.Characters
             References.StatsManager.CopyFromTemplate(template);
             References.EquipmentComponent.CopyFromTemplate(template);
         }
+
+        public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
+        public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
         #endregion
 
         #region ICreatureTemplateProvider

@@ -125,6 +125,11 @@ public class CombatBehaviour : SerializedMonoBehaviour, ICombatant
     public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
     public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
 
+    public void SignalEndTurn()
+    {
+        CombatManager.Instance.NextRound();
+    }
+
     #endregion
 }
 

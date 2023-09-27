@@ -54,7 +54,7 @@ namespace SunsetSystems.Entities.Characters
                 ActionQueue.Dequeue();
                 ActionQueue.Peek().Begin();
             }
-            else if (ActionQueue.Peek().IsFinished())
+            else if (ActionQueue.Peek().EvaluateActionFinished())
             {
                 ActionQueue.Dequeue();
                 if (ActionQueue.Count == 0)

@@ -41,7 +41,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             ActionFinished = true;
         }
 
-        public virtual bool IsFinished()
+        public virtual bool EvaluateActionFinished()
         {
             if (ActionFinished)
                 return true;

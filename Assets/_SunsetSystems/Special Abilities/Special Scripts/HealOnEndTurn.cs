@@ -16,12 +16,14 @@ namespace SunsetSystems.Spellbook
         {
             _effectRecievers = new();
             
-            CombatManager.Instance.OnFullTurnCompleted += HealOnFullTurn;
+            if (CombatManager.Instance != null)
+                CombatManager.Instance.OnFullTurnCompleted += HealOnFullTurn;
         }
 
         private void OnDestroy()
         {
-            CombatManager.Instance.OnFullTurnCompleted -= HealOnFullTurn;
+            if (CombatManager.Instance != null)
+                CombatManager.Instance.OnFullTurnCompleted -= HealOnFullTurn;
         }
 
         public override void Activate(ICombatant target, ICombatant caster)

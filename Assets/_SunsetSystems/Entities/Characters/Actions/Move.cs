@@ -70,9 +70,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             }
         }
 
-        public override bool IsFinished()
+        public override bool EvaluateActionFinished()
         {
-            bool finished = base.IsFinished();
+            bool finished = base.EvaluateActionFinished();
             if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()))
             {
                 //rotationTask.Start();

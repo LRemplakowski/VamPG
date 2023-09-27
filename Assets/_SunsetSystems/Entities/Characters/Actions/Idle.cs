@@ -16,7 +16,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         }
 
-        public override bool IsFinished()
+        public override bool EvaluateActionFinished()
         {
             return false;
         }

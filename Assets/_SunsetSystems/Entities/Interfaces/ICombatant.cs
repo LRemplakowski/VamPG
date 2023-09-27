@@ -30,5 +30,7 @@ namespace SunsetSystems.Entities.Interfaces
         bool TakeDamage(int amount);
 
         int GetAttributeValue(AttributeType attributeType);
+
+        void SignalEndTurn();
     }
 }

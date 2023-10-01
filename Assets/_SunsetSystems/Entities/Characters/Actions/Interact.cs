@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         private readonly IInteractable target;
         private bool _aborted;
 
-        public Interact(IInteractable target, ICreature owner) : base(owner, true)
+        public Interact(IInteractable target, IActionPerformer owner) : base(owner, true)
         {
             this.target = target;
             conditions.Add(new InteractionComplete(target));
@@ -24,14 +24,14 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public async override void Begin()
         {
-            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position);
+            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.Transform.position);
             if (distance > target.InteractionDistance)
             {
                 Task move = Owner.PerformAction(new Move(Owner, target.InteractionTransform.position, target.InteractionDistance));
                 this.IsPriority = false;
                 _ = Owner.PerformAction(this);
                 await move;
-                distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position);
+                distance = Vector3.Distance(target.InteractionTransform.position, Owner.Transform.position);
                 if (distance > target.InteractionDistance)
                     Abort();
                 else

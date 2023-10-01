@@ -1,31 +1,57 @@
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class EquipmentManager : SerializedMonoBehaviour, IEquipment
+    public class EquipmentManager : SerializedMonoBehaviour, IEquipmentManager
     {
-        [Title("Data")]
-        [SerializeField]
-        public EquipmentData EquipmentData { get; private set; }
+        [field: Title("Data")]
+        [field: SerializeField]
+        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
         [Title("Events")]
         public UltEvent<IEquipableItem> ItemEquipped;
         public UltEvent<IEquipableItem> ItemUnequipped;
 
-        [Title("Editor Utility")]
-        [Button]
-        public void EquipItem(EquipmentSlotID slotID, IEquipableItem item)
+        private void Start()
+        {
+            foreach (IEquipableItem item in EquipmentSlots.Values.Select(slot => slot.GetEquippedItem()))
+            {
+                if (item == null)
+                    continue;
+                ItemEquipped?.InvokeSafe(item);
+            }
+        }
+
+        private void OnValidate()
+        {
+            if (EquipmentSlots == null || EquipmentSlots.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length-1)
+            {
+                EquipmentSlots = new();
+                EquipmentSlots.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
+                EquipmentSlots.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
+                EquipmentSlots.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
+                EquipmentSlots.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
+                EquipmentSlots.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
+                EquipmentSlots.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+            }
+        }
+
+        public bool EquipItem(EquipmentSlotID slotID, IEquipableItem item)
         {
             if (ValidateItem(slotID, item))
             {
-                if (EquipmentData.EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+                if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
                 {
                     if (slot.GetEquippedItem() != null)
                     {
@@ -38,23 +64,25 @@ namespace SunsetSystems.Entities.Characters
                     if (slot.TryEquipItem(item))
                     {
                         ItemEquipped?.InvokeSafe(item);
+                        return true;
                     }
                 }
             }
+            return false;
         }
 
-        [Button]
-        public void UnequipItem(EquipmentSlotID slotID)
+        public bool UnequipItem(EquipmentSlotID slotID)
         {
-            if (EquipmentData.EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+            if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
             {
-                slot.TryUnequipItem(slot.GetEquippedItem());
+                return slot.TryUnequipItem(slot.GetEquippedItem());
             }
+            return false;
         }
 
         private bool ValidateItem(EquipmentSlotID slotID, IEquipableItem item)
         {
-            if (EquipmentData.EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+            if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
             {
                 return slot.AcceptedCategory == item.ItemCategory;
             }
@@ -63,7 +91,12 @@ namespace SunsetSystems.Entities.Characters
 
         public void CopyFromTemplate(ICreatureTemplate template)
         {
-            EquipmentData = template.EquipmentData;
+            if (EquipmentSlots == null)
+                EquipmentSlots = new();
+            foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
+            {
+                EquipmentSlots[key] = new EquipmentSlot(template.EquipmentSlotsData[key]);
+            }
         }
     }
 }

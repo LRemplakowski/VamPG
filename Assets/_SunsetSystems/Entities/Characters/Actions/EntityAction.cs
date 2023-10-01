@@ -12,16 +12,17 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// Priority actions clear action queue upon assignment.
         /// </summary>
         public bool IsPriority { get; protected set; }
-        protected ICreature Owner { get; }
+        public bool ActionFinished { get; protected set; } = false;
+        protected IActionPerformer Owner { get; }
         protected List<Condition> conditions = new List<Condition>();
 
-        public EntityAction(ICreature owner)
+        public EntityAction(IActionPerformer owner)
         {
             Owner = owner;
             IsPriority = false;
         }
 
-        public EntityAction(ICreature owner, bool isPriority) : this(owner)
+        public EntityAction(IActionPerformer owner, bool isPriority) : this(owner)
         {
             IsPriority = isPriority;
         }
@@ -34,10 +35,16 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Do any relevant cleanup.
         /// </summary>
-        public abstract void Abort();
-
-        public virtual bool IsFinished()
+        public virtual void Abort()
         {
+            conditions.Clear();
+            ActionFinished = true;
+        }
+
+        public virtual bool EvaluateActionFinished()
+        {
+            if (ActionFinished)
+                return true;
             if (conditions.Count == 0)
             {
                 Debug.LogError("Aborting action, no conditions present");
@@ -55,8 +62,8 @@ namespace SunsetSystems.Entities.Characters.Actions
                     return false;
                 }
             }
-            this.Abort();
-            return true;
+            ActionFinished = true;
+            return ActionFinished;
         }
 
         public override string ToString()

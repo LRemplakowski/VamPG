@@ -1,4 +1,5 @@
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Equipment;
 using System.Collections;
 using System.Collections.Generic;
 using UMA;
@@ -22,7 +23,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         AssetReferenceSprite PortraitAssetRef { get; }
         List<UMARecipeBase> BaseUmaRecipes { get; }
 
-        EquipmentData EquipmentData { get; }
+        Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
         StatsData StatsData { get; }
     }
 }

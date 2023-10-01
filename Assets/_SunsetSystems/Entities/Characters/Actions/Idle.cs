@@ -4,7 +4,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 {
     public class Idle : EntityAction
     {
-        public Idle(ICreature owner) : base(owner) { }
+        public Idle(IActionPerformer owner) : base(owner) { }
 
         public override void Abort()
         {
@@ -16,7 +16,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         }
 
-        public override bool IsFinished()
+        public override bool EvaluateActionFinished()
         {
             return false;
         }

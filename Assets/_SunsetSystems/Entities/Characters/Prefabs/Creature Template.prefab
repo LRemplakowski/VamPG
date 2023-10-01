@@ -37,6 +37,7 @@ Transform:
   - {fileID: 656867900587021158}
   - {fileID: 1410214241305694170}
   - {fileID: 482763929595618258}
+  - {fileID: 2593631097689478263}
   m_Father: {fileID: 1617358537211728380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389672268198153684
@@ -107,6 +108,66 @@ MonoBehaviour:
       Data: 
   umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   umaRoot: {fileID: 1203071946431115676}
+  umaAvatar: {fileID: 0}
+--- !u!1 &680196556232561751
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2593631097689478263}
+  - component: {fileID: 7860156406871809602}
+  m_Layer: 0
+  m_Name: Weapon Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2593631097689478263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680196556232561751}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7860156406871809602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680196556232561751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28d607bdd01f4ed4aaf38442b46f4dee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1675144160413098596}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: equipmentManager
+      Entry: 10
+      Data: 0
+  weaponParent: {fileID: 1187578031712813030}
+  weaponInstance: {fileID: 0}
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,6 +212,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a877a7204afd7d42a2140eb00ed8ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 660093643310669083}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _owner
+      Entry: 10
+      Data: 0
 --- !u!1 &990508043532713649
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,21 +461,25 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
     - {fileID: 1675144160413098596}
+    - {fileID: 7860156406871809602}
     - {fileID: 3703066370810871723}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: <CombatComponent>k__BackingField
+    - Name: <CombatBehaviour>k__BackingField
       Entry: 10
       Data: 0
-    - Name: <EquipmentComponent>k__BackingField
+    - Name: <EquipmentManager>k__BackingField
       Entry: 10
       Data: 1
-    - Name: <UMAManager>k__BackingField
+    - Name: <WeaponManager>k__BackingField
       Entry: 10
       Data: 2
+    - Name: <UMAManager>k__BackingField
+      Entry: 10
+      Data: 3
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
@@ -612,6 +690,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7137076084159866363}
   - component: {fileID: 3784422555817380618}
+  - component: {fileID: 1441048649891615095}
   m_Layer: 0
   m_Name: Combat Behaviour
   m_TagString: Untagged
@@ -648,9 +727,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4012d143d6f334c48a5a8d14484ddf22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _raycastOrigin: {fileID: 6596153777422388182}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 660093643310669083}
+    - {fileID: 3067086792877250132}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <Owner>k__BackingField
+      Entry: 10
+      Data: 0
+    - Name: <MagicUser>k__BackingField
+      Entry: 10
+      Data: 1
   defaultRaycastOriginY: 1.5
+  _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
+  aiComponent: {fileID: 1441048649891615095}
+--- !u!114 &1441048649891615095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5165274126658692935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 939582531, guid: 6012f3241c1c1f7409c44769fc0a1db7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aiConfigs:
+  - aiId: f49fbd97-4d3d-488a-87e3-29f8b01248d5
+    intervalMin: 1
+    intervalMax: 1
+    startDelayMin: 0
+    startDelayMax: 0
+    isActive: 1
 --- !u!1 &6912376922156523433
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,17 +820,14 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: EquipmentData
+    - Name: <EquipmentSlots>k__BackingField
       Entry: 7
-      Data: SunsetSystems.Entities.Characters.EquipmentData, SunsetSystems
-    - Name: EquipmentSlots
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Entities.Characters.EquipmentSlotID,
-        SunsetSystems],[SunsetSystems.Inventory.IEquipmentSlot, SunsetSystems]],
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Equipment.EquipmentSlotID,
+        SunsetSystems],[SunsetSystems.Equipment.IEquipmentSlot, SunsetSystems]],
         mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Entities.Characters.EquipmentSlotID,
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Equipment.EquipmentSlotID,
         SunsetSystems]], mscorlib
     - Name: 
       Entry: 12
@@ -736,7 +849,7 @@ MonoBehaviour:
       Data: 0
     - Name: $v
       Entry: 7
-      Data: 2|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 2|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 0
@@ -760,7 +873,7 @@ MonoBehaviour:
       Data: 1
     - Name: $v
       Entry: 7
-      Data: 3|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 3|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 1
@@ -784,7 +897,7 @@ MonoBehaviour:
       Data: 2
     - Name: $v
       Entry: 7
-      Data: 4|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 4|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 2
@@ -808,7 +921,7 @@ MonoBehaviour:
       Data: 3
     - Name: $v
       Entry: 7
-      Data: 5|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 5|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 3
@@ -832,7 +945,7 @@ MonoBehaviour:
       Data: 4
     - Name: $v
       Entry: 7
-      Data: 6|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 6|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 4
@@ -856,7 +969,7 @@ MonoBehaviour:
       Data: 5
     - Name: $v
       Entry: 7
-      Data: 7|SunsetSystems.Inventory.EquipmentSlot, SunsetSystems
+      Data: 7|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 5
@@ -878,9 +991,6 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   ItemEquipped:
     _PersistentCalls:
     - _Target: {fileID: 3703066370810871723}
@@ -895,9 +1005,33 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+    - _Target: {fileID: 7860156406871809602}
+      _MethodName: OnItemEquipped
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Inventory.Data.IEquipableItem, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   ItemUnequipped:
     _PersistentCalls:
     - _Target: {fileID: 3703066370810871723}
+      _MethodName: OnItemUnequipped
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Inventory.Data.IEquipableItem, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 7860156406871809602}
       _MethodName: OnItemUnequipped
       _PersistentArguments:
       - _Type: 14

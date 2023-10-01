@@ -29,6 +29,11 @@ namespace SunsetSystems.Core.UMA
         [SerializeField, ReadOnly]
         private DynamicCharacterAvatar umaAvatar;
 
+        private void Start()
+        {
+            umaAvatar.BuildCharacter();
+        }
+
         [Button]
         public void PrepareUMA()
         {
@@ -58,6 +63,7 @@ namespace SunsetSystems.Core.UMA
                 umaAvatar.raceAnimationControllers.animators.Add(maleAnimator);
                 umaAvatar.raceAnimationControllers.animators.Add(femaleAnimator);
             }
+            umaAvatar.BuildCharacter();
         }
 
         public void InjectDefaultRecipes(List<UMARecipeBase> defaultRecipes)
@@ -72,6 +78,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
+                umaAvatar.UpdateUMA();
+                umaAvatar.BuildCharacter();
             }
         }
 
@@ -80,6 +88,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.UnloadWardrobeCollectionGroup(wearable.WearableWardrobe.wardrobeSlot);
+                umaAvatar.UpdateUMA();
+                umaAvatar.BuildCharacter();
             }
         }
     }

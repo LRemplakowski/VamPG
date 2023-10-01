@@ -1,5 +1,6 @@
 using SunsetSystems.Animation;
 using SunsetSystems.Combat;
+using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
 using System;
 using System.Collections.Generic;
@@ -69,28 +70,28 @@ namespace SunsetSystems.Entities.Characters
                 return;
             }
 
-            Weapon selectedWeapons = data.GetSelectedWeapon();
-            if (selectedWeapons == null)
-            {
-                Debug.LogWarning($"No weapon selected for {gameObject.name}!");
-                _animationController.DisableIK();
-                return;
-            }
+            //Weapon selectedWeapons = data.GetSelectedWeapon();
+            //if (selectedWeapons == null)
+            //{
+            //    Debug.LogWarning($"No weapon selected for {gameObject.name}!");
+            //    _animationController.DisableIK();
+            //    return;
+            //}
             
-            if (_rightClavicle == null)
-            {
-                UMAData umaData = GetComponent<UMAData>();
-                _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
-            }
+            //if (_rightClavicle == null)
+            //{
+            //    UMAData umaData = GetComponent<UMAData>();
+            //    _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
+            //}
 
-            Transform weapon = Instantiate(selectedWeapons.Prefab).transform;
-            weapon.SetParent(_rightClavicle);
-            _cachedWardrobeData.CurrentWeapon = weapon;
-            if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
-            {
-                Debug.Log($"Enabling weapon IK for {gameObject.name}!");
-                _animationController.EnableIK(ikData);
-            }
+            //Transform weapon = Instantiate(selectedWeapons.Prefab).transform;
+            //weapon.SetParent(_rightClavicle);
+            //_cachedWardrobeData.CurrentWeapon = weapon;
+            //if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
+            //{
+            //    Debug.Log($"Enabling weapon IK for {gameObject.name}!");
+            //    _animationController.EnableIK(ikData);
+            //}
         }
 
         private void RemoveWardrobe()

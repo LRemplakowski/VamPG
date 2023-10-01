@@ -105,7 +105,7 @@ namespace SunsetSystems.Persistence
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
-            await new WaitUntil(() => PartyManager.MainCharacter != null);
+            await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
             //await new WaitForSeconds(2f);
             //PartyManager.MainCharacter?.gameObject.SetActive(false);
             await new WaitForSeconds(2);
@@ -124,7 +124,7 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.MainCharacter.References.GameObject.SetActive(true);
+            PartyManager.Instance.MainCharacter.References.GameObject.SetActive(true);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
@@ -134,7 +134,7 @@ namespace SunsetSystems.Persistence
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSpawnWaypoint.transform.position);
-            PartyManager.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordEnterCameraPosition);
             _cameraControl.ForceRotation(_landlordEnterCameraRotation);
             await new WaitForFixedUpdate();
@@ -149,7 +149,7 @@ namespace SunsetSystems.Persistence
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSinkWaypoint.transform.position);
-            PartyManager.MainCharacter.ForceToPosition(_pcLandlordSinkWaypoint.transform.position);
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordSinkWaypoint.transform.position);
             _cameraControl.ForceToPosition(_landlordSinkCameraPosition);
             _cameraControl.ForceRotation(_landlordSinkCameraRotation);
             await new WaitForFixedUpdate();
@@ -183,7 +183,7 @@ namespace SunsetSystems.Persistence
             _kieran.gameObject.SetActive(true);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
@@ -200,7 +200,7 @@ namespace SunsetSystems.Persistence
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
-            PartyManager.MainCharacter.ForceToPosition(_pcFridgeWaypoint.transform.position);
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcFridgeWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicFridgeWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranFridgeWaypoint.transform.position);
             _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
@@ -221,8 +221,8 @@ namespace SunsetSystems.Persistence
 
         public void RecruitKieran()
         {
-            PartyManager.RecruitCharacter(_kieran.References.CreatureData);
-            PartyManager.AddCreatureAsActivePartyMember(_kieran);
+            PartyManager.Instance.RecruitCharacter(_kieran.References.CreatureData);
+            PartyManager.Instance.AddCreatureAsActivePartyMember(_kieran);
         }
 
         public async void MoveDominicToDoorAndDestroy()

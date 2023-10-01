@@ -1,4 +1,3 @@
-using Apex;
 using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
@@ -6,6 +5,7 @@ using SunsetSystems.Persistence;
 using System;
 using SunsetSystems.Data;
 using CleverCrow.Fluid.UniqueIds;
+using Sirenix.Utilities;
 
 namespace SunsetSystems.Dialogue
 {
@@ -93,12 +93,9 @@ namespace SunsetSystems.Dialogue
             {
                 Clear();
             }
-            _floats.AddRange(floats);
-            _strings.AddRange(strings);
-            _bools.AddRange(bools);
-            _floats.Apply(kv => _variables.Add(kv.Key, kv.Value));
-            _strings.Apply(kv => _variables.Add(kv.Key, kv.Value));
-            _bools.Apply(kv => _variables.Add(kv.Key, kv.Value));
+            floats.Keys.ForEach(key => _floats.Add(key, floats[key]));
+            strings.Keys.ForEach(key => _strings.Add(key, strings[key]));
+            bools.Keys.ForEach(key => _bools.Add(key, bools[key]));
         }
 
         public override void SetValue(string variableName, string stringValue)

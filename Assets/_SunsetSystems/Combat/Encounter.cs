@@ -6,17 +6,17 @@ using SunsetSystems.Game;
 using SunsetSystems.Combat.Grid;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters.Interfaces;
 
 namespace SunsetSystems.Combat
 {
-    public class Encounter : MonoBehaviour, IEncounter
+    public class Encounter : SerializedMonoBehaviour, IEncounter
     {
         [field: SerializeField]
         public CachedMultiLevelGrid MyGrid { get; private set; }
-        private CombatManager combatManager;
 
         [field: SerializeField, Tooltip("Creatures taking part in this encounter.")]
-        public List<ICombatant> Creatures { get; private set; }
+        public List<ICreature> Creatures { get; private set; } = new();
 
         [SerializeField]
         private EncounterEndTrigger _encounterEndTrigger = EncounterEndTrigger.Automatic;
@@ -33,8 +33,6 @@ namespace SunsetSystems.Combat
         {
             if (!MyGrid)
                 MyGrid = GetComponent<CachedMultiLevelGrid>();
-            if (!combatManager)
-                combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
         }
 
         [Title("Editor Utility")]
@@ -45,9 +43,9 @@ namespace SunsetSystems.Combat
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
             GameManager.CurrentState = GameState.Combat;
-            MyGrid.EnableGrid();
+            await MyGrid.EnableGrid();
             _creatureCounter = Creatures.Count;
-            //await combatManager.BeginEncounter(this);
+            _ = CombatManager.Instance.BeginEncounter(this);
             //if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             //{
             //    Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
@@ -67,7 +65,7 @@ namespace SunsetSystems.Combat
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
             MyGrid.DisableGrid();
-            await combatManager.EndEncounter(this);
+            await CombatManager.Instance.EndEncounter(this);
             GameManager.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
                 await encounterEndLogic.Perform();

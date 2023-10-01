@@ -9,18 +9,18 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentSlotDisplay : Button, IUserInterfaceView<EquipmentSlot>
+    public class EquipmentSlotDisplay : Button, IUserInterfaceView<IEquipmentSlot>
     {
         [SerializeField, ReadOnly]
-        private EquipmentSlot _cachedSlotData;
+        private IEquipmentSlot _cachedSlotData;
         [SerializeField]
         private Image _itemIcon;
 
         private AssetReferenceSprite lastLoadedSprite;
 
-        public async void UpdateView(IGameDataProvider<EquipmentSlot> dataProvider)
+        public async void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
         {
             if (lastLoadedSprite != null)
                 AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);

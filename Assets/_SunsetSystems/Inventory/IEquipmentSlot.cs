@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems.Inventory
+namespace SunsetSystems.Equipment
 {
     public interface IEquipmentSlot
     {
@@ -17,5 +17,10 @@ namespace SunsetSystems.Inventory
         bool TryEquipItem(IEquipableItem item);
 
         bool TryUnequipItem(IEquipableItem item);
+    }
+
+    public enum EquipmentSlotID
+    {
+        PrimaryWeapon, SecondaryWeapon, Chest, Boots, Hands, Trinket, Invalid
     }
 }

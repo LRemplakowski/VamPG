@@ -1,6 +1,9 @@
 using Redcode.Awaiting;
+using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Entities.Interfaces;
 using System;
@@ -15,10 +18,12 @@ namespace SunsetSystems.Spellbook
     /// <summary>
     /// Component to be added to creature to manage individual powers known by the creature.
     /// </summary>
-    public class SpellbookManager : MonoBehaviour
+    public class SpellbookManager : SerializedMonoBehaviour, IMagicUser
     {
         [SerializeField]
-        private ICombatant _owner;
+        private ICreature _owner;
+        public ICreatureReferences References => _owner.References;
+
         private Disciplines Disciplines => throw new NotImplementedException();
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
@@ -30,18 +35,17 @@ namespace SunsetSystems.Spellbook
 
         private void OnEnable()
         {
-            CombatManager.OnFullTurnCompleted += DecreaseCooldowns;
+            CombatManager.Instance.OnFullTurnCompleted += DecreaseCooldowns;
+        }
+
+        private void Start()
+        {
+            ApplyPasivePowers();
         }
 
         private void OnDisable()
         {
-            CombatManager.OnFullTurnCompleted -= DecreaseCooldowns;
-        }
-
-        public void Initialize(ICombatant owner)
-        {
-            _owner = owner;
-            ApplyPasivePowers();
+            CombatManager.Instance.OnFullTurnCompleted -= DecreaseCooldowns;
         }
 
         private async void ApplyPasivePowers()
@@ -59,6 +63,11 @@ namespace SunsetSystems.Spellbook
             //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner));
         }
 
+        public void UsePower(DisciplinePower power, IMagicUser castingActor)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UsePower(DisciplinePower power, ICombatant target)
         {
             ActionBarUI.instance.SetBarAction(default);
@@ -68,7 +77,7 @@ namespace SunsetSystems.Spellbook
             {
                 if (DeducePowerCost(power))
                 {
-                    Spellcaster.HandleEffects(power, _owner, target);
+                    Spellcaster.HandleEffects(power, this, target);
                     StartCooldown(power);
                 }
             }

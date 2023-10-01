@@ -20,7 +20,7 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField, TextArea]
         public string ItemDescription { get; protected set; }
         [field: SerializeField]
-        public GameObject Prefab { get; protected set; }
+        public AssetReferenceGameObject WorldSpaceRepresentation { get; protected set; }
         [field: SerializeField]
         public AssetReferenceSprite Icon { get; protected set; }
         [field: SerializeField]

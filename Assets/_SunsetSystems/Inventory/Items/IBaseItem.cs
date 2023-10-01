@@ -12,5 +12,6 @@ namespace SunsetSystems.Inventory.Data
         bool Stackable { get; }
         ItemCategory ItemCategory { get; }
         AssetReferenceSprite Icon { get; }
+        AssetReferenceGameObject WorldSpaceRepresentation { get; }
     }
 }

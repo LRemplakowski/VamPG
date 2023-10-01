@@ -9,6 +9,7 @@ using SunsetSystems.Entities.Creatures.Interfaces;
 using UnityEngine.AddressableAssets;
 using UMA;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Equipment;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -48,12 +49,12 @@ namespace SunsetSystems.Entities.Characters
 
         public void Update()
         {
-            if (ActionQueue.Peek().GetType() == typeof(Idle) && ActionQueue.Count > 1)
+            if (ActionQueue.Peek() is Idle && ActionQueue.Count > 1)
             {
                 ActionQueue.Dequeue();
                 ActionQueue.Peek().Begin();
             }
-            else if (ActionQueue.Peek().IsFinished())
+            else if (ActionQueue.Peek().EvaluateActionFinished())
             {
                 ActionQueue.Dequeue();
                 if (ActionQueue.Count == 0)
@@ -70,10 +71,12 @@ namespace SunsetSystems.Entities.Characters
             get
             {
                 if (_references is not ICreatureReferences)
-                    _references = GetComponent<ICreatureReferences>();
+                    _references = base.GetComponent<ICreatureReferences>();
                 return _references as ICreatureReferences;
             }
         }
+
+        public EntityAction PeekCurrentAction => _actionQueue.Peek();
 
         public void ForceToPosition(Vector3 position)
         {
@@ -84,9 +87,7 @@ namespace SunsetSystems.Entities.Characters
 
         public void ClearAllActions()
         {
-            EntityAction currentAction = ActionQueue.Peek();
-            if (currentAction != null)
-                currentAction.Abort();
+            ActionQueue.Dequeue().Abort();
             ActionQueue.Clear();
             ActionQueue.Enqueue(new Idle(this));
         }
@@ -101,25 +102,25 @@ namespace SunsetSystems.Entities.Characters
             return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
         }
 
-        public Task PerformAction(EntityAction action)
+        public async Task PerformAction(EntityAction action, bool clearQueue = false)
         {
-            if (action.IsPriority)
+            if (action.IsPriority || clearQueue)
                 ClearAllActions();
             ActionQueue.Enqueue(action);
-            return Task.Run(async () =>
-            {
+            await new WaitForUpdate();
+            while (action.ActionFinished is false)
                 await new WaitForUpdate();
-                while (!action.IsFinished())
-                    await new WaitForUpdate();
-            });
         }
 
         public void InjectDataFromTemplate(ICreatureTemplate template)
         {
             References.CreatureData.CopyFromTemplate(template);
             References.StatsManager.CopyFromTemplate(template);
-            References.EquipmentComponent.CopyFromTemplate(template);
+            References.EquipmentManager.CopyFromTemplate(template);
         }
+
+        public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
+        public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
         #endregion
 
         #region ICreatureTemplateProvider
@@ -140,7 +141,7 @@ namespace SunsetSystems.Entities.Characters
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
                 BaseUmaRecipes = instance.References.CreatureData.BaseUmaRecipes;
-                EquipmentData = instance.References.EquipmentComponent.EquipmentData;
+                EquipmentSlotsData = instance.References.EquipmentManager.EquipmentSlots;
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 
@@ -164,7 +165,7 @@ namespace SunsetSystems.Entities.Characters
 
             public List<UMARecipeBase> BaseUmaRecipes { get; }
 
-            public EquipmentData EquipmentData { get; }
+            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
 
             public StatsData StatsData { get; }
         }

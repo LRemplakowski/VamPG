@@ -1,4 +1,5 @@
 using SunsetSystems.Inventory.Data;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory
 {
@@ -8,6 +9,8 @@ namespace SunsetSystems.Inventory
 
         RangeData GetRangeData();
         DamageData GetDamageData();
+
+        AssetReferenceGameObject EquippedInstanceAsset { get; }
     }
 
     public struct RangeData

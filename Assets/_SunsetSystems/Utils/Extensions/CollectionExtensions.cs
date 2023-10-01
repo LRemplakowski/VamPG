@@ -10,6 +10,8 @@ namespace SunsetSystems.Utils.Extensions
         public static T GetRandom<T>(this IEnumerable<T> enumerable)
         {
             int enumerableCount = enumerable.Count();
+            if (enumerableCount <= 0)
+                return default;
             int itemIndex = Random.Range(0, enumerableCount - 1);
             return enumerable.ElementAt(itemIndex);
         }

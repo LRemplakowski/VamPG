@@ -13,42 +13,43 @@ namespace SunsetSystems.Entities.Characters.Actions
         private readonly NavMeshAgent navMeshAgent;
         private readonly NavMeshObstacle navMeshObstacle;
         private Vector3 destination;
-        public static event Action<ICreature> onMovementFinished;
-        public static Action<ICreature> onMovementStarted;
+        public static event Action<IActionPerformer> OnMovementFinished;
+        public static Action<IActionPerformer> OnMovementStarted;
         private float stoppingDistance;
         private Transform rotationTarget;
-        private Task rotationTask;
+        //private Task rotationTask;
 
-        public Move(ICreature owner, Vector3 destination, float stoppingDistance) : base(owner, true)
+        public Move(IActionPerformer owner, Vector3 destination, float stoppingDistance) : base(owner, true)
         {
-            this.navMeshAgent = owner.References.GetComponent<NavMeshAgent>();
-            this.navMeshObstacle = owner.References.GetComponent<NavMeshObstacle>();
+            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
+            this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
             this.stoppingDistance = stoppingDistance;
         }
 
-        public Move(Creature owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)
+        public Move(IActionPerformer owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)
         {
             this.rotationTarget = rotationTarget;
-            rotationTask = new Task(RotateToTarget);
+            //rotationTask = new Task(RotateToTarget);
         }
 
-        private async void RotateToTarget()
-        {
-            //await Owner.FaceTarget(rotationTarget);
-            await Task.Yield();
-        }
+        //private async void RotateToTarget()
+        //{
+        //    //await Owner.FaceTarget(rotationTarget);
+        //    await Task.Yield();
+        //}
 
         public override void Abort()
         {
+            base.Abort();
             navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
-            //navMeshAgent.enabled = false;
-            //navMeshObstacle.enabled = true;
+            navMeshAgent.enabled = false;
+            navMeshObstacle.enabled = true;
             navMeshAgent.stoppingDistance = 0f;
-            if (onMovementFinished != null)
-                onMovementFinished.Invoke(this.Owner);
+            if (OnMovementFinished != null)
+                OnMovementFinished.Invoke(this.Owner);
         }
 
         public override void Begin()
@@ -56,19 +57,25 @@ namespace SunsetSystems.Entities.Characters.Actions
             navMeshObstacle.enabled = false;
             navMeshAgent.enabled = true;
             navMeshAgent.ResetPath();
-            navMeshAgent.SetDestination(destination);
-            navMeshAgent.isStopped = false;
-            navMeshAgent.stoppingDistance = stoppingDistance;
-            if (onMovementStarted != null)
-                onMovementStarted.Invoke(this.Owner);
+            if (navMeshAgent.SetDestination(destination)) 
+            {
+                navMeshAgent.isStopped = false;
+                navMeshAgent.stoppingDistance = stoppingDistance;
+                if (OnMovementStarted != null)
+                    OnMovementStarted.Invoke(this.Owner);
+            }
+            else
+            {
+                Abort();
+            }
         }
 
-        public override bool IsFinished()
+        public override bool EvaluateActionFinished()
         {
-            bool finished = base.IsFinished();
+            bool finished = base.EvaluateActionFinished();
             if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()))
             {
-                rotationTask.Start();
+                //rotationTask.Start();
             }
             if (finished)
             {

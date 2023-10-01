@@ -124,7 +124,7 @@ namespace SunsetSystems.Input
 
             void HandleNoSelectionExplorationInput()
             {
-                ICreature mainCharacter = PartyManager.MainCharacter;
+                ICreature mainCharacter = PartyManager.Instance.MainCharacter;
                 if (mainCharacter == null)
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
@@ -139,10 +139,10 @@ namespace SunsetSystems.Input
                 }
                 else
                 {
-                    creatures.Add(PartyManager.MainCharacter);
+                    creatures.Add(PartyManager.Instance.MainCharacter);
                 }
-                if (PartyManager.ActiveParty.Count > 1)
-                    creatures.AddRange(PartyManager.Companions);
+                if (PartyManager.Instance.ActiveParty.Count > 1)
+                    creatures.AddRange(PartyManager.Instance.Companions);
                 MoveCreaturesToPosition(creatures, hit.point);
             }
         }
@@ -153,16 +153,16 @@ namespace SunsetSystems.Input
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasMoved)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasMoved)
                     {
-                        Debug.Log($"Move bar action failed! Current actor {CombatManager.CurrentActiveActor.References.GameObject.name} is not player controlled or has already moved!");
+                        Debug.Log($"Move bar action failed! Current actor {CombatManager.Instance.CurrentActiveActor.References.GameObject.name} is not player controlled or has already moved!");
                         return;
                     }
                     if (hit.collider.TryGetComponent(out IGridCell gridElement))
                     {
                         if (gridElement.IsFree)
                         {
-                            Debug.Log($"Moving {CombatManager.CurrentActiveActor.References.GameObject.name} to grid element {gridElement}!");
+                            Debug.Log($"Moving {CombatManager.Instance.CurrentActiveActor.References.GameObject.name} to grid element {gridElement}!");
                             //CombatManager.CurrentActiveActor.PerformAction(new Move(CombatManager.CurrentActiveActor, gridElement.WorldPosition, 0f));
                         }
                         else
@@ -176,28 +176,28 @@ namespace SunsetSystems.Input
                     }
                     break;
                 case BarAction.ATTACK:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasActed)
                         return;
-                    ICombatant enemy = hit.collider.GetComponent<ICreature>().References.CombatComponent;
+                    ICombatant enemy = hit.collider.GetComponent<ICreature>().References.CombatBehaviour;
                     if (enemy != null)
                     {
                         if (enemy.Faction is Faction.Hostile && IsInRange(enemy))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor} is attacking enemy {enemy}!");
+                            Debug.Log($"{CombatManager.Instance.CurrentActiveActor} is attacking enemy {enemy}!");
                             throw new NotImplementedException();
                             //CombatManager.CurrentActiveActor.PerformAction(new Attack(enemy, CombatManager.CurrentActiveActor));
                         }
                     }
                     break;
                 case BarAction.SELECT_TARGET:
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasActed)
                         return;
-                    ICombatant powerTarget = hit.collider.GetComponent<ICreature>().References.CombatComponent;
+                    ICombatant powerTarget = hit.collider.GetComponent<ICreature>().References.CombatBehaviour;
                     if (powerTarget != null)
                     {
                         if (VerifyTarget(powerTarget, SpellbookManager.RequiredTarget))
                         {
-                            Debug.Log($"{CombatManager.CurrentActiveActor.References} is using power on enemy {powerTarget}!");
+                            Debug.Log($"{CombatManager.Instance.CurrentActiveActor.References} is using power on enemy {powerTarget}!");
                             SpellbookManager.PowerTarget = powerTarget;
                         }
                     }
@@ -212,7 +212,7 @@ namespace SunsetSystems.Input
         {
             return requiredTarget switch
             {
-                Spellbook.Target.Self => target.Equals(CombatManager.CurrentActiveActor),
+                Spellbook.Target.Self => target.Equals(CombatManager.Instance.CurrentActiveActor),
                 Spellbook.Target.Friendly => target.Faction is Faction.PlayerControlled || target.Faction is Faction.Friendly,
                 Spellbook.Target.Hostile => target.Faction is Faction.Hostile,
                 Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
@@ -223,8 +223,8 @@ namespace SunsetSystems.Input
 
         private static bool IsInRange(IEntity enemy)
         {
-            int maxRange = CombatManager.CurrentActiveActor.CurrentWeapon.GetRangeData().maxRange;
-            float distance = Vector3.Distance(CombatManager.CurrentActiveActor.References.Transform.position, enemy.References.Transform.position);
+            int maxRange = CombatManager.Instance.CurrentActiveActor.CurrentWeapon.GetRangeData().maxRange;
+            float distance = Vector3.Distance(CombatManager.Instance.CurrentActiveActor.References.Transform.position, enemy.References.Transform.position);
             return distance <= maxRange;
         }
 
@@ -299,7 +299,6 @@ namespace SunsetSystems.Input
 
             void HandleCombatPointerPosition(RaycastHit hit)
             {
-                throw new NotImplementedException();
                 //switch (selectedBarAction.actionType)
                 //{
                 //    case BarAction.MOVE:
@@ -312,7 +311,7 @@ namespace SunsetSystems.Input
 
                 void HandleMoveActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled())
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled())
                         return;
                     IGridCell gridCell;
                     if (lastHit != hit.collider)
@@ -333,7 +332,7 @@ namespace SunsetSystems.Input
 
                 void HandleAttackActionPointerPosition()
                 {
-                    if (!CombatManager.IsActiveActorPlayerControlled() || CombatManager.CurrentActiveActor.HasActed)
+                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasActed)
                         return;
                     throw new NotImplementedException();
                     //LineRenderer lineRenderer = CombatManager.CurrentActiveActor.LineRenderer;
@@ -375,7 +374,9 @@ namespace SunsetSystems.Input
                 stoppingDistance += (i % 2) * _followerStoppingDistance;
                 ICreature creature = creatures[i];
                 if (creature != null)
-                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance));
+                {
+                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance), true);
+                }
             }
         }
     }

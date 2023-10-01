@@ -78,6 +78,12 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
+        [Button]
+        public void ForceInjectMaterialDataFromConfig(IMaterialConfig config)
+        {
+            SetCellMaterialParams(config.PropertyOverrides);
+        }
+
         public void RestoreCachedPreviousVisualState()
         {
             SetGridCellState(previousState);

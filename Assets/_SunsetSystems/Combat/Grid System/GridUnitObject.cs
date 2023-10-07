@@ -49,9 +49,13 @@ namespace SunsetSystems.Combat.Grid
                 SetCellMaterialParams(value.PropertyOverrides);
         }
 
-        private void SetCellMaterialParams(IEnumerable<MaterialPropertyData> propertyData)
+        private void SetCellMaterialParams(IEnumerable<MaterialPropertyData> propertyData, bool useSharedMaterial = false)
         {
-            Material mat = cellRenderer.material;
+            Material mat;
+            if (useSharedMaterial)
+                mat = cellRenderer.sharedMaterial;
+            else
+                mat = cellRenderer.material;
             foreach (MaterialPropertyData data in propertyData)
             {
                 switch (data.PropertyType)
@@ -81,7 +85,7 @@ namespace SunsetSystems.Combat.Grid
         [Button]
         public void ForceInjectMaterialDataFromConfig(IMaterialConfig config)
         {
-            SetCellMaterialParams(config.PropertyOverrides);
+            SetCellMaterialParams(config.PropertyOverrides, true);
         }
 
         public void RestoreCachedPreviousVisualState()

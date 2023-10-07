@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01baf7c717d01c945983b1ff61452a01, type: 3}
-  m_Name: GridCellMaterialWalkableConfig
+  m_Name: GridCellMaterialRunHalfCoverConfig
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 2800000, guid: 1b4e8e634953b8c40b5cc2377cf5b5d6, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -34,7 +35,7 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 71
+      Data: 72
     - Name: 
       Entry: 7
       Data: 
@@ -496,6 +497,30 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
+      Data: _Noise_scale
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: _Noise_intensity
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
       Data: _Border_width
     - Name: $v
       Entry: 3
@@ -521,30 +546,6 @@ MonoBehaviour:
     - Name: $k
       Entry: 1
       Data: _Grid_opacity
-    - Name: $v
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: _Noise_scale
-    - Name: $v
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: _Noise_intensity
     - Name: $v
       Entry: 3
       Data: 0
@@ -592,6 +593,30 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
+      Data: _Grid_fill_shape_opacity
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: _Grid_fill_shape_intensity
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
       Data: _Whirl_influence
     - Name: $v
       Entry: 3
@@ -605,18 +630,6 @@ MonoBehaviour:
     - Name: $k
       Entry: 1
       Data: _Angle
-    - Name: $v
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: _Grid_fill_shape_opacity
     - Name: $v
       Entry: 3
       Data: 0
@@ -796,18 +809,6 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: _Center
-    - Name: $v
-      Entry: 3
-      Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
       Data: _Grid_fill_shape_ST
     - Name: $v
       Entry: 3
@@ -833,6 +834,18 @@ MonoBehaviour:
     - Name: $k
       Entry: 1
       Data: _Grid_fill_shape_HDR
+    - Name: $v
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: _Center
     - Name: $v
       Entry: 3
       Data: 2
@@ -899,19 +912,205 @@ MonoBehaviour:
         SunsetSystems]], System.Core
     - Name: 
       Entry: 12
-      Data: 16
+      Data: 17
     - Name: 
       Entry: 7
       Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
     - Name: <PropertyName>k__BackingField
       Entry: 1
-      Data: _Noise_intensity
+      Data: _Center
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 2
+    - Name: floatValue
+      Entry: 4
+      Data: 0
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0.5
+    - Name: 
+      Entry: 4
+      Data: 0.5
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_fill_shape
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 4
+    - Name: floatValue
+      Entry: 4
+      Data: 0
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Fill_intensity
     - Name: <PropertyType>k__BackingField
       Entry: 3
       Data: 0
     - Name: floatValue
       Entry: 4
-      Data: 1
+      Data: 0.5
     - Name: intValue
       Entry: 3
       Data: 0
@@ -998,13 +1197,850 @@ MonoBehaviour:
       Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
     - Name: <PropertyName>k__BackingField
       Entry: 1
-      Data: _Noise_scale
+      Data: _Grid_fill_color
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 2
+    - Name: floatValue
+      Entry: 4
+      Data: 0
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 255
+    - Name: 
+      Entry: 4
+      Data: 255
+    - Name: 
+      Entry: 4
+      Data: 255
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_fill_radius
     - Name: <PropertyType>k__BackingField
       Entry: 3
       Data: 0
     - Name: floatValue
       Entry: 4
-      Data: 40
+      Data: 2
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Angle
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 1000
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Whirl_influence
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 0
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_color
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 2
+    - Name: floatValue
+      Entry: 4
+      Data: 0
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 89
+    - Name: 
+      Entry: 4
+      Data: 255
+    - Name: 
+      Entry: 4
+      Data: 255
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_intensity
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 0.5
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Noise_intensity
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 0.1
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_fill_shape_intensity
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 2
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Grid_fill_shape_opacity
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 0.02
+    - Name: intValue
+      Entry: 3
+      Data: 0
+    - Name: vectorValue
+      Entry: 7
+      Data: UnityEngine.Vector4, UnityEngine.CoreModule
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: matrixValue
+      Entry: 7
+      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
+    - Name: m00
+      Entry: 4
+      Data: 0
+    - Name: m10
+      Entry: 4
+      Data: 0
+    - Name: m20
+      Entry: 4
+      Data: 0
+    - Name: m30
+      Entry: 4
+      Data: 0
+    - Name: m01
+      Entry: 4
+      Data: 0
+    - Name: m11
+      Entry: 4
+      Data: 0
+    - Name: m21
+      Entry: 4
+      Data: 0
+    - Name: m31
+      Entry: 4
+      Data: 0
+    - Name: m02
+      Entry: 4
+      Data: 0
+    - Name: m12
+      Entry: 4
+      Data: 0
+    - Name: m22
+      Entry: 4
+      Data: 0
+    - Name: m32
+      Entry: 4
+      Data: 0
+    - Name: m03
+      Entry: 4
+      Data: 0
+    - Name: m13
+      Entry: 4
+      Data: 0
+    - Name: m23
+      Entry: 4
+      Data: 0
+    - Name: m33
+      Entry: 4
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: textureValue
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
+    - Name: <PropertyName>k__BackingField
+      Entry: 1
+      Data: _Fill_opacity
+    - Name: <PropertyType>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: floatValue
+      Entry: 4
+      Data: 0.04
     - Name: intValue
       Entry: 3
       Data: 0
@@ -1184,13 +2220,13 @@ MonoBehaviour:
       Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
     - Name: <PropertyName>k__BackingField
       Entry: 1
-      Data: _Border_width
+      Data: _Noise_scale
     - Name: <PropertyType>k__BackingField
       Entry: 3
       Data: 0
     - Name: floatValue
       Entry: 4
-      Data: 0.94
+      Data: 20
     - Name: intValue
       Entry: 3
       Data: 0
@@ -1277,13 +2313,13 @@ MonoBehaviour:
       Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
     - Name: <PropertyName>k__BackingField
       Entry: 1
-      Data: _Grid_color
+      Data: _Border_width
     - Name: <PropertyType>k__BackingField
       Entry: 3
-      Data: 2
+      Data: 0
     - Name: floatValue
       Entry: 4
-      Data: 0
+      Data: 0.91
     - Name: intValue
       Entry: 3
       Data: 0
@@ -1292,16 +2328,16 @@ MonoBehaviour:
       Data: UnityEngine.Vector4, UnityEngine.CoreModule
     - Name: 
       Entry: 4
-      Data: 140
+      Data: 0
     - Name: 
       Entry: 4
       Data: 0
     - Name: 
       Entry: 4
-      Data: 255
+      Data: 0
     - Name: 
       Entry: 4
-      Data: 255
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -1459,940 +2495,10 @@ MonoBehaviour:
       Entry: 8
       Data: 
     - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Grid_fill_color
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 2
-    - Name: floatValue
-      Entry: 4
-      Data: 0
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 255
-    - Name: 
-      Entry: 4
-      Data: 6
-    - Name: 
-      Entry: 4
-      Data: 236
-    - Name: 
-      Entry: 4
-      Data: 255
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Grid_fill_radius
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 1
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Fill_intensity
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 0.5
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Fill_opacity
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 0.5
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Grid_intensity
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 1
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Grid_fill_shape
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 4
-    - Name: floatValue
-      Entry: 4
-      Data: 0
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Grid_fill_shape_opacity
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 0
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Center
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 2
-    - Name: floatValue
-      Entry: 4
-      Data: 0
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0.5
-    - Name: 
-      Entry: 4
-      Data: 0.5
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Whirl_influence
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 0.3
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: SunsetSystems.Core.MaterialPropertyData, SunsetSystems
-    - Name: <PropertyName>k__BackingField
-      Entry: 1
-      Data: _Angle
-    - Name: <PropertyType>k__BackingField
-      Entry: 3
-      Data: 0
-    - Name: floatValue
-      Entry: 4
-      Data: 1000
-    - Name: intValue
-      Entry: 3
-      Data: 0
-    - Name: vectorValue
-      Entry: 7
-      Data: UnityEngine.Vector4, UnityEngine.CoreModule
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: matrixValue
-      Entry: 7
-      Data: UnityEngine.Matrix4x4, UnityEngine.CoreModule
-    - Name: m00
-      Entry: 4
-      Data: 0
-    - Name: m10
-      Entry: 4
-      Data: 0
-    - Name: m20
-      Entry: 4
-      Data: 0
-    - Name: m30
-      Entry: 4
-      Data: 0
-    - Name: m01
-      Entry: 4
-      Data: 0
-    - Name: m11
-      Entry: 4
-      Data: 0
-    - Name: m21
-      Entry: 4
-      Data: 0
-    - Name: m31
-      Entry: 4
-      Data: 0
-    - Name: m02
-      Entry: 4
-      Data: 0
-    - Name: m12
-      Entry: 4
-      Data: 0
-    - Name: m22
-      Entry: 4
-      Data: 0
-    - Name: m32
-      Entry: 4
-      Data: 0
-    - Name: m03
-      Entry: 4
-      Data: 0
-    - Name: m13
-      Entry: 4
-      Data: 0
-    - Name: m23
-      Entry: 4
-      Data: 0
-    - Name: m33
-      Entry: 4
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: textureValue
-      Entry: 6
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
       Entry: 13
       Data: 
     - Name: 
       Entry: 8
       Data: 
   material: {fileID: 2100000, guid: 063d082e4f9db5842b663bb4743b8f51, type: 2}
-  addPropertyOverride: _ZWrite
+  addPropertyOverride: Property Name

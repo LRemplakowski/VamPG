@@ -28,7 +28,7 @@ namespace SunsetSystems.AI
             while (enabled)
             {
                 if (context.IsMyTurn is false)
-                    await new WaitForUpdate();
+                    await new WaitForSeconds(1f);
                 EntityAction nextAction = DecideWhatToDo();
                 if (nextAction is null)
                 {
@@ -47,7 +47,7 @@ namespace SunsetSystems.AI
             {
                 CachedMultiLevelGrid grid = context.CurrentGrid;
                 Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
-                GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>()).GetRandom();
+                GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>(), out _).GetRandom();
                 if (target != null)
                     return new Move(context.ActionPerformer, grid.GridPositionToWorldPosition(target.GridPosition), 0f);
                 else

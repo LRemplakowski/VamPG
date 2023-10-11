@@ -51,9 +51,9 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 11400000, guid: 71e79dd4b0bfdee4097a4b3faf9ef40a, type: 2}
-    - {fileID: 11400000, guid: 4d82dbf3ca9583d4baf1e53e920d66c9, type: 2}
-    - {fileID: 11400000, guid: 039e37d5c3a821b45b4a2ebd79fe693a, type: 2}
-    - {fileID: 11400000, guid: d81944a93d9c6f24b89abb30708173cc, type: 2}
+    - {fileID: 11400000, guid: ceebe63f514fcbd478df3f110cf4eb66, type: 2}
+    - {fileID: 11400000, guid: 0dce03fa450d78d458590dc43a2435a4, type: 2}
+    - {fileID: 11400000, guid: b5a86f68da8c8c24f8f02974c69dda55, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -61,18 +61,12 @@ MonoBehaviour:
     SerializationNodes:
     - Name: gridCellMaterialConfigs
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Combat.Grid.GridUnitObject+GridCellState,
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData,
         SunsetSystems],[SunsetSystems.Core.IMaterialConfig, SunsetSystems]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Combat.Grid.GridUnitObject+GridCellState,
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData,
         SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
     - Name: 
       Entry: 8
       Data: 
@@ -83,8 +77,17 @@ MonoBehaviour:
       Entry: 7
       Data: 
     - Name: $k
+      Entry: 7
+      Data: SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData, SunsetSystems
+    - Name: BaseState
       Entry: 3
       Data: 0
+    - Name: SubState
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: $v
       Entry: 10
       Data: 0
@@ -95,8 +98,17 @@ MonoBehaviour:
       Entry: 7
       Data: 
     - Name: $k
+      Entry: 7
+      Data: SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData, SunsetSystems
+    - Name: BaseState
       Entry: 3
-      Data: 2
+      Data: 1
+    - Name: SubState
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: $v
       Entry: 10
       Data: 1
@@ -107,8 +119,17 @@ MonoBehaviour:
       Entry: 7
       Data: 
     - Name: $k
+      Entry: 7
+      Data: SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData, SunsetSystems
+    - Name: BaseState
       Entry: 3
-      Data: 3
+      Data: 2
+    - Name: SubState
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: $v
       Entry: 10
       Data: 2
@@ -119,8 +140,17 @@ MonoBehaviour:
       Entry: 7
       Data: 
     - Name: $k
+      Entry: 7
+      Data: SunsetSystems.Combat.Grid.GridUnitObject+GridCellStateData, SunsetSystems
+    - Name: BaseState
       Entry: 3
-      Data: 5
+      Data: 3
+    - Name: SubState
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: $v
       Entry: 10
       Data: 3

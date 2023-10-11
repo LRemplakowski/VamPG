@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3433944188136048430}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.045739044, y: -0.69157404, z: -0.72024757, w: -0.0296116}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.0298, y: 0.0819, z: 0.0316}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33,7 +33,38 @@ Transform:
   - {fileID: 4311771588498527983}
   - {fileID: 4311771588130104558}
   m_Father: {fileID: 4311771589533457230}
-  m_LocalEulerAnglesHint: {x: -83.464, y: 69.821, z: -248.512}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3728453309283139180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4535897705801591106}
+  m_Layer: 0
+  m_Name: Projectile Origin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4535897705801591106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728453309283139180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0302, y: 0.1362, z: 0.218}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4311771589533457230}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4311771588130104559
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,6 +139,7 @@ GameObject:
   - component: {fileID: 4311771589533457229}
   - component: {fileID: 4311771589533457228}
   - component: {fileID: 5072326689769255405}
+  - component: {fileID: 4572247415946227043}
   m_Layer: 0
   m_Name: Fancy Pistol
   m_TagString: UMAIgnore
@@ -129,6 +161,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 437173007106246554}
+  - {fileID: 4535897705801591106}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4311771589533457229
@@ -179,6 +212,30 @@ MonoBehaviour:
   IgnoreTag: UMAIgnore
   setScale: 0
   MountOnStart: 1
+--- !u!114 &4572247415946227043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311771589533457231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c754a9bd43cbee419aaa2c763b1aac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  <MuzzleFlashOrigin>k__BackingField: {fileID: 4535897705801591106}
+  <ProjectileOrigin>k__BackingField: {fileID: 4535897705801591106}
+  <WeaponAnimationData>k__BackingField: {fileID: 4311771589533457228}
 --- !u!1001 &4311771588982162007
 PrefabInstance:
   m_ObjectHideFlags: 0

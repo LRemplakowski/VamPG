@@ -1,6 +1,7 @@
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,12 @@ namespace SunsetSystems.Combat.Grid
 
         private bool rushGrid = false;
         private bool gridFinished = false;
+
+        public GridUnit this[int x, int y, int z]
+        {
+            get => levels[y][x, z];
+            set => levels[y][x, z] = value;
+        }
 
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition)
         {
@@ -96,10 +103,6 @@ namespace SunsetSystems.Combat.Grid
                 GridUnitObject gridObj = tasks[unit].Result.GetComponent<GridUnitObject>();
                 gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
                 gridObj.InjectUnitData(unit);
-                if (unit.adjacentToCover)
-                    gridObj.SetGridCellState(GridUnitObject.GridCellState.NearCover);
-                else
-                    gridObj.SetGridCellState(GridUnitObject.GridCellState.Default);
                 gridUnitObjectDictionary.Add(unit, gridObj);
                 gridUnitObjectInstances.Add(gridObj);
                 gridObj.gameObject.SetActive(false);
@@ -152,7 +155,8 @@ namespace SunsetSystems.Combat.Grid
 
         public GridUnitObject GetNearestGridCell(Vector3 position)
         {
-            throw new NotImplementedException();
+            Vector3Int gridPosition = GetNearestGridPosition(position);
+            return gridUnitObjectDictionary[this[gridPosition.x, gridPosition.y, gridPosition.z]];
         }
 
         public Vector3Int GetNearestGridPosition(Vector3 worldPosition)
@@ -186,24 +190,32 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
-        public void HighlightCellsInRange(Vector3Int gridPosition, int range, NavMeshAgent agent)
+        public void HighlightCellsInRange(Vector3Int gridPosition, ICombatant combatant, NavMeshAgent agent)
         {
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 gridUnitObjectDictionary[unit].RestoreCachedPreviousVisualState();
             }
             currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, range, agent));
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange, agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 GridUnitObject unitObj = gridUnitObjectDictionary[unit];
-                if (unitObj.CurrentCellState == GridUnitObject.GridCellState.Default)
-                    unitObj.SetGridCellState(GridUnitObject.GridCellState.Walkable, true);
+                float distanceToUnit = distanceToUnitDictionary[unit];
+                if (distanceToUnit <= combatant.MovementRange)
+                {
+                    unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Walkable, GridUnitObject.GridCellSubState.Default, true);
+                }
+                else if (distanceToUnit <= combatant.SprintRange)
+                {
+                    unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Sprintable, GridUnitObject.GridCellSubState.Default, true);
+                }
             }
         }
 
-        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, int range, NavMeshAgent agent)
+        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, int range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
         {
+            distanceToUnitDictionary = new();
             List<GridUnit> unitsInRange = new();
             // Calculate the path
             NavMeshPath path = new();
@@ -229,7 +241,10 @@ namespace SunsetSystems.Combat.Grid
                                 pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
                             }
                             if (pathLength <= maxGridDistance)
+                            {
                                 unitsInRange.Add(unit);
+                                distanceToUnitDictionary[unit] = pathLength;
+                            }
                         }
                         path.ClearCorners();
                     }

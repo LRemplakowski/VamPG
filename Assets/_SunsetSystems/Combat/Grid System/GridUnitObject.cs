@@ -13,13 +13,14 @@ namespace SunsetSystems.Combat.Grid
         [SerializeField]
         private MeshRenderer cellRenderer;
         [SerializeField]
-        private Dictionary<GridCellState, IMaterialConfig> gridCellMaterialConfigs = new();
+        private Dictionary<GridCellStateData, IMaterialConfig> gridCellMaterialConfigs = new();
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
-        private GridCellState previousState = GridCellState.Default;
-        private GridCellState currentState = GridCellState.Default;
-        public GridCellState CurrentCellState => currentState;
+        private GridCellStateData defaultState = new();
+        private GridCellBaseState previousState = GridCellBaseState.Default;
+        private GridCellBaseState currentState = GridCellBaseState.Default;
+        public GridCellBaseState CurrentCellState => currentState;
 
         public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.surfaceY - transform.position.y, 0);
 
@@ -32,6 +33,12 @@ namespace SunsetSystems.Combat.Grid
                 Vector3 worldPosition = transform.TransformPoint(unitData.x, unitData.y, unitData.z);
                 worldPosition.y = unitData.surfaceY;
                 transform.position = worldPosition;
+                defaultState = new()
+                {
+                    BaseState = GridCellBaseState.Default,
+                    SubState = GridCellSubState.Default,
+                };
+                SetGridCellState(defaultState, false);
                 return true;
             }
             else
@@ -40,12 +47,17 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
-        public void SetGridCellState(GridCellState state, bool cachePrevious = false)
+        public void SetGridCellState(GridCellStateData stateData, bool cachePrevious = false)
+        {
+            SetGridCellState(stateData.BaseState, stateData.SubState, cachePrevious);
+        }
+
+        public void SetGridCellState(GridCellBaseState state, GridCellSubState subState = GridCellSubState.Default, bool cachePrevious = false)
         {
             if (cachePrevious)
                 previousState = currentState;
             currentState = state;
-            if (gridCellMaterialConfigs.TryGetValue(state, out IMaterialConfig value))
+            if (gridCellMaterialConfigs.TryGetValue(new(state, subState), out IMaterialConfig value))
                 SetCellMaterialParams(value.PropertyOverrides);
         }
 
@@ -93,9 +105,26 @@ namespace SunsetSystems.Combat.Grid
             SetGridCellState(previousState);
         }
 
-        public enum GridCellState
+        public struct GridCellStateData
         {
-            Default, Hostile, Walkable, Highlighted, Danger, NearCover
+            public GridCellBaseState BaseState;
+            public GridCellSubState SubState;
+
+            public GridCellStateData(GridCellBaseState BaseState, GridCellSubState SubState)
+            {
+                this.BaseState = BaseState;
+                this.SubState = SubState;
+            }
+        }
+
+        public enum GridCellBaseState
+        {
+            Default, Highlight, Walkable, Sprintable
+        }
+
+        public enum GridCellSubState
+        {
+            Default, Hostile, Friendly, HalfCover, FullCover
         }
     }
 }

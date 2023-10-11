@@ -61,6 +61,7 @@ namespace SunsetSystems.Combat
             CurrentActiveActor = c;
         }
 
+        [Button]
         public void NextRound()
         {
             if (CurrentActiveActor != null)

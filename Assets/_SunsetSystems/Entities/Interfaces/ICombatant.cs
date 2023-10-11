@@ -24,6 +24,7 @@ namespace SunsetSystems.Entities.Interfaces
         IList<ICover> CurrentCoverSources { get; }
 
         int MovementRange { get; }
+        int SprintRange { get; }
         bool HasMoved { get; }
         bool HasActed { get; }
 

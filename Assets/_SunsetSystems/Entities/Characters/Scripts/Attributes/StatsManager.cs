@@ -85,7 +85,8 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            //return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            return 5;
         }
 
         public int GetInitiative()

@@ -63,7 +63,7 @@ namespace SunsetSystems.Input.CameraControl
         }
         private float _internalZoomSpeed = 4;
 
-        void Start()
+        private void Start()
         {
             if(_moveTarget != Vector3.zero){
                 _moveTarget = transform.position;
@@ -150,7 +150,7 @@ namespace SunsetSystems.Input.CameraControl
         public void InjectSaveData(object data)
         {
             CameraSaveData saveData = data as CameraSaveData;
-            _currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
+            //_currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
             ForceToPosition(saveData.RigPosition);
             _moveTarget = saveData.CameraMoveTarget;
         }

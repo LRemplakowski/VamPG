@@ -5,12 +5,15 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interfaces
 {
     public interface ICombatant : IEntity, IActionPerformer
     {
+        UltEvent OnChangedGridPosition { get; set; }
+
         IMagicUser MagicUser { get; }
 
         bool IsPlayerControlled { get; }

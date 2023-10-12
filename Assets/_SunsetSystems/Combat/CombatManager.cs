@@ -116,9 +116,9 @@ namespace SunsetSystems.Combat
         {
             foreach (ICombatant combatant in actors)
             {
-                Vector3Int gridPosition = currentEncounter.MyGrid.GetNearestGridPosition(combatant.References.Transform.position);
+                Vector3Int gridPosition = currentEncounter.MyGrid.GetNearestWalkableGridPosition(combatant.References.Transform.position);
                 Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
-                _ = combatant.PerformAction(new Move(combatant, currentEncounter.MyGrid.GridPositionToWorldPosition(gridPosition), 0f));
+                _ = combatant.PerformAction(new Move(combatant, currentEncounter.MyGrid[gridPosition], currentEncounter.MyGrid));
             }
         }
 

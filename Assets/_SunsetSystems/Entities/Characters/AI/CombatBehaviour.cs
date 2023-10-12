@@ -11,6 +11,7 @@ using Sirenix.OdinInspector;
 using System.Threading.Tasks;
 using System.Linq;
 using SunsetSystems.AI;
+using UltEvents;
 
 namespace SunsetSystems.Combat
 {
@@ -97,6 +98,10 @@ namespace SunsetSystems.Combat
 
         public int MovementRange => Owner.References.StatsManager.GetCombatSpeed();
         public int SprintRange => MovementRange * 2;
+        [field: Title("Events")]
+        [field: SerializeField]
+        public UltEvent OnChangedGridPosition { get; set; }
+
         [field: Title("Combat Runtime")]
         [field: ShowInInspector, ReadOnly]
         public bool HasActed { get; private set; }

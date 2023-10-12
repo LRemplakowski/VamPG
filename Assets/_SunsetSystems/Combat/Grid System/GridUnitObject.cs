@@ -22,16 +22,16 @@ namespace SunsetSystems.Combat.Grid
         private GridCellBaseState currentState = GridCellBaseState.Default;
         public GridCellBaseState CurrentCellState => currentState;
 
-        public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.surfaceY - transform.position.y, 0);
+        public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.SurfaceY - transform.position.y, 0);
 
         public bool InjectUnitData(GridUnit unitData)
         {
             if (this.unitData == null)
             {
                 this.unitData = unitData;
-                cellCollider.size = new Vector3(unitData.cellSize, 0.1f, unitData.cellSize);
-                Vector3 worldPosition = transform.TransformPoint(unitData.x, unitData.y, unitData.z);
-                worldPosition.y = unitData.surfaceY;
+                cellCollider.size = new Vector3(unitData.CellSize, 0.1f, unitData.CellSize);
+                Vector3 worldPosition = transform.TransformPoint(unitData.X, unitData.Y, unitData.Z);
+                worldPosition.y = unitData.SurfaceY;
                 transform.position = worldPosition;
                 defaultState = new()
                 {

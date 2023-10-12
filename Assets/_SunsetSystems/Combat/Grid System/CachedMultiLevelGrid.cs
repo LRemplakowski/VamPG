@@ -40,7 +40,7 @@ namespace SunsetSystems.Combat.Grid
         private readonly HashSet<ICover> cachedCoverSourcesInGrid = new();
         public ImmutableHashSet<ICover> CachedCoverSources => new(cachedCoverSourcesInGrid);
 
-        private bool rushGrid = false;
+        // Grid initialization
         private bool gridFinished = false;
 
         public GridUnit this[int x, int y, int z]
@@ -49,10 +49,28 @@ namespace SunsetSystems.Combat.Grid
             set => levels[y][x, z] = value;
         }
 
+        public GridUnit this[Vector3Int position]
+        {
+            get => this[position.x, position.y, position.z];
+            set => this[position.x, position.y, position.z] = value;
+        }
+
+        private void Start()
+        {
+            BuildGrid();
+            gridFinished = false;
+            _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
+        }
+
+        private void OnValidate()
+        {
+            BuildGrid();
+        }
+
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition)
         {
             GridUnit unit = levels[gridPosition.y][gridPosition.x, gridPosition.z];
-            return transform.position + new Vector3(unit.x * unit.cellSize, unit.surfaceY, unit.z * unit.cellSize);
+            return transform.position + new Vector3(unit.X * unit.CellSize, unit.SurfaceY, unit.Z * unit.CellSize);
         }
 
         public Vector3Int WorldPositionToGridPosition(Vector3 worldPosition)
@@ -68,17 +86,9 @@ namespace SunsetSystems.Combat.Grid
             return gridPosition;
         }
 
-        private void Start()
-        {
-            BuildGrid();
-            rushGrid = false;
-            gridFinished = false;
-            _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
-        }
-
+        #region Grid Initialization
         public async Task EnableGrid()
         {
-            rushGrid = true;
             await new WaitUntil(() => gridFinished);
             gridUnitObjectInstances.ForEach(o => o.gameObject.SetActive(true));
         }
@@ -101,18 +111,13 @@ namespace SunsetSystems.Combat.Grid
             foreach (GridUnit unit in tasks.Keys)
             {
                 GridUnitObject gridObj = tasks[unit].Result.GetComponent<GridUnitObject>();
-                gridObj.gameObject.name = $"Pos: {unit.x};{unit.y};{unit.z}";
+                gridObj.gameObject.name = $"Pos: {unit.X};{unit.Y};{unit.Z}";
                 gridObj.InjectUnitData(unit);
                 gridUnitObjectDictionary.Add(unit, gridObj);
                 gridUnitObjectInstances.Add(gridObj);
                 gridObj.gameObject.SetActive(false);
             }
             gridFinished = true;
-        }
-
-        private void OnValidate()
-        {
-            BuildGrid();
         }
 
         [Button]
@@ -127,6 +132,7 @@ namespace SunsetSystems.Combat.Grid
                 levels[y] = level;
             }
         }
+        #endregion
 
         private void OnDrawGizmosSelected()
         {
@@ -140,46 +146,46 @@ namespace SunsetSystems.Combat.Grid
                         GridUnit unit = level[x, z];
                         if (unit == null)
                             continue;
-                        if (unit.walkable)
+                        if (unit.Walkable)
                         {
-                            if (unit.adjacentToCover)
+                            if (unit.AdjacentToCover)
                                 Gizmos.color = Color.yellow;
                             else
                                 Gizmos.color = Color.blue;
-                            Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.surfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                            Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.SurfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
                         }
                     }
                 }
             }
         }
 
-        public GridUnitObject GetNearestGridCell(Vector3 position)
+        public GridUnitObject GetNearestWalkableGridCell(Vector3 position)
         {
-            Vector3Int gridPosition = GetNearestGridPosition(position);
+            Vector3Int gridPosition = GetNearestWalkableGridPosition(position);
             return gridUnitObjectDictionary[this[gridPosition.x, gridPosition.y, gridPosition.z]];
         }
 
-        public Vector3Int GetNearestGridPosition(Vector3 worldPosition)
+        public Vector3Int GetNearestWalkableGridPosition(Vector3 worldPosition)
         {
             Vector3Int bestGridPos = WorldPositionToGridPosition(worldPosition);
             GridUnit unit = levels[bestGridPos.y][bestGridPos.x, bestGridPos.z];
-            if (unit.walkable)
+            if (unit.Walkable)
             {
                 return bestGridPos;
             }
             else
             {
                 unit = CrawlForNearestWalkablePosition(unit);
-                return new Vector3Int(unit.x, unit.y, unit.z);
+                return new Vector3Int(unit.X, unit.Y, unit.Z);
             }
 
-            GridUnit CrawlForNearestWalkablePosition(GridUnit unit)
+            GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo)
             {
                 GridUnit result = levels.First(l => l.WalkableUnits.FirstOrDefault() != null).WalkableUnits.First();
                 int gridDistance = int.MaxValue;
                 foreach (GridUnit gridUnit in levels.SelectMany(level => level.WalkableUnits))
                 {
-                    int newDistance = Mathf.Abs(gridUnit.x - unit.x) + (Mathf.Abs(gridUnit.y - unit.y) * 2) + Mathf.Abs(gridUnit.z - unit.z);
+                    int newDistance = Mathf.Abs(gridUnit.X - relativeTo.X) + (Mathf.Abs(gridUnit.Y - relativeTo.Y) * 2) + Mathf.Abs(gridUnit.Z - relativeTo.Z);
                     if (newDistance < gridDistance)
                     {
                         gridDistance = newDistance;
@@ -197,23 +203,23 @@ namespace SunsetSystems.Combat.Grid
                 gridUnitObjectDictionary[unit].RestoreCachedPreviousVisualState();
             }
             currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange, agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (gridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 GridUnitObject unitObj = gridUnitObjectDictionary[unit];
                 float distanceToUnit = distanceToUnitDictionary[unit];
-                if (distanceToUnit <= combatant.MovementRange)
+                if (distanceToUnit <= combatant.MovementRange + (gridCellSize / 2))
                 {
                     unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Walkable, GridUnitObject.GridCellSubState.Default, true);
                 }
-                else if (distanceToUnit <= combatant.SprintRange)
+                else if (distanceToUnit <= combatant.SprintRange + (gridCellSize / 2))
                 {
                     unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Sprintable, GridUnitObject.GridCellSubState.Default, true);
                 }
             }
         }
 
-        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, int range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
+        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
         {
             distanceToUnitDictionary = new();
             List<GridUnit> unitsInRange = new();
@@ -227,7 +233,7 @@ namespace SunsetSystems.Combat.Grid
                 foreach (GridUnit unit in level.WalkableUnits)
                 {
                     // Calculate the grid distance between gridPosition and unit's position
-                    int gridDistance = Mathf.Abs(gridPosition.x - unit.x) + Mathf.Abs(gridPosition.z - unit.z);
+                    int gridDistance = Mathf.Abs(gridPosition.x - unit.X) + Mathf.Abs(gridPosition.z - unit.Z);
 
                     if (gridDistance <= maxGridDistance)
                     {
@@ -243,6 +249,7 @@ namespace SunsetSystems.Combat.Grid
                             if (pathLength <= maxGridDistance)
                             {
                                 unitsInRange.Add(unit);
+                                Debug.Log($"Found unit in movement range! Grid pos:[{unit.X};{unit.Y};{unit.Z}]; Distance to unit: {pathLength}", gridUnitObjectDictionary[unit]);
                                 distanceToUnitDictionary[unit] = pathLength;
                             }
                         }
@@ -255,7 +262,7 @@ namespace SunsetSystems.Combat.Grid
 
         public void RestoreHighlightedCellsToPreviousState()
         {
-
+            currentlyHighlitedGridUnits.ForEach(unit => gridUnitObjectDictionary[unit].RestoreCachedPreviousVisualState());
         }
     }
 
@@ -310,16 +317,16 @@ namespace SunsetSystems.Combat.Grid
                 for (int z = 0; z < depth; z++)
                 {
                     GridUnit newGridUnit = new();
-                    newGridUnit.x = x;
-                    newGridUnit.y = yPosition;
-                    newGridUnit.z = z;
-                    newGridUnit.cellSize = cellSize;
+                    newGridUnit.X = x;
+                    newGridUnit.Y = yPosition;
+                    newGridUnit.Z = z;
+                    newGridUnit.CellSize = cellSize;
                     VerifyIfIsWalkable(newGridUnit);
-                    if (newGridUnit.walkable)
+                    if (newGridUnit.Walkable)
                     {
                         walkableUnits.Add(newGridUnit);
                         VerifyIfAdjactenToCoverSource(newGridUnit, coverSourcesCache);
-                        if (newGridUnit.adjacentToCover)
+                        if (newGridUnit.AdjacentToCover)
                             coverAdjacentUnits.Add(newGridUnit);
                     }
                     gridCells[x, z] = newGridUnit;
@@ -330,22 +337,22 @@ namespace SunsetSystems.Combat.Grid
             {
                 for (int i = 0; i < cellSize * 10; i++)
                 {
-                    if (NavMesh.SamplePosition(levelOrigin + new Vector3(unit.x * cellSize, .1f * i, unit.z * cellSize), out NavMeshHit hit, .05f, mask))
+                    if (NavMesh.SamplePosition(levelOrigin + new Vector3(unit.X * cellSize, .1f * i, unit.Z * cellSize), out NavMeshHit hit, .05f, mask))
                     {
-                        unit.surfaceY = hit.position.y;
-                        unit.walkable = true;
+                        unit.SurfaceY = hit.position.y;
+                        unit.Walkable = true;
                     }
                 }
             }
 
             void VerifyIfAdjactenToCoverSource(GridUnit unit, HashSet<ICover> coverSourcesCache)
             {
-                Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.x * cellSize, cellSize / 2, unit.z * cellSize);
+                Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.X * cellSize, cellSize / 2, unit.Z * cellSize);
                 if (Physics.BoxCast(gridUnitCenter, Vector3.one * cellSize / 4, Vector3.forward, out RaycastHit lastHit, Quaternion.identity, cellSize))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
-                        unit.adjacentToCover = true;
+                        unit.AdjacentToCover = true;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -353,7 +360,7 @@ namespace SunsetSystems.Combat.Grid
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
-                        unit.adjacentToCover = true;
+                        unit.AdjacentToCover = true;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -361,7 +368,7 @@ namespace SunsetSystems.Combat.Grid
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
-                        unit.adjacentToCover = true;
+                        unit.AdjacentToCover = true;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -369,7 +376,7 @@ namespace SunsetSystems.Combat.Grid
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
-                        unit.adjacentToCover = true;
+                        unit.AdjacentToCover = true;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -380,11 +387,13 @@ namespace SunsetSystems.Combat.Grid
     [Serializable]
     public class GridUnit
     {
-        public int x, y, z;
-        public Vector3Int GridPosition => new(x, y, z);
-        public float surfaceY;
-        public bool walkable;
-        public bool adjacentToCover;
-        public float cellSize;
+        public int X, Y, Z;
+        public Vector3Int GridPosition => new(X, Y, Z);
+        public float SurfaceY;
+        public bool Walkable;
+        public bool AdjacentToCover;
+        public bool Occupied => Occupier != null;
+        public ICombatant Occupier;
+        public float CellSize;
     }
 }

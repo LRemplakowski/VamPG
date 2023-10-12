@@ -1,5 +1,7 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+﻿using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,6 +28,18 @@ namespace SunsetSystems.Entities.Characters.Actions
             conditions.Add(new Destination(navMeshAgent));
             this.destination = destination;
             this.stoppingDistance = stoppingDistance;
+        }
+
+        public Move(ICombatant owner, GridUnit gridCell, CachedMultiLevelGrid gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0f)
+        {
+            gridCell.Occupier = owner;
+            owner.OnChangedGridPosition += ClearOccupierFromCell;
+
+            void ClearOccupierFromCell()
+            {
+                gridCell.Occupier = null;
+                owner.OnChangedGridPosition -= ClearOccupierFromCell;
+            }
         }
 
         public Move(IActionPerformer owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)

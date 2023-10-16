@@ -17,11 +17,6 @@ namespace SunsetSystems.Combat.Grid
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
-        private GridCellStateData defaultState = new();
-        private GridCellBaseState previousState = GridCellBaseState.Default;
-        private GridCellBaseState currentState = GridCellBaseState.Default;
-        public GridCellBaseState CurrentCellState => currentState;
-
         public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.SurfaceY - transform.position.y, 0);
 
         public bool InjectUnitData(GridUnit unitData)
@@ -33,12 +28,7 @@ namespace SunsetSystems.Combat.Grid
                 Vector3 worldPosition = transform.TransformPoint(unitData.X, unitData.Y, unitData.Z);
                 worldPosition.y = unitData.SurfaceY;
                 transform.position = worldPosition;
-                defaultState = new()
-                {
-                    BaseState = GridCellBaseState.Default,
-                    SubState = GridCellSubState.Default,
-                };
-                SetGridCellState(defaultState, false);
+                UpdateCellState();
                 return true;
             }
             else
@@ -47,18 +37,13 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
-        public void SetGridCellState(GridCellStateData stateData, bool cachePrevious = false)
+        public void UpdateCellState()
         {
-            SetGridCellState(stateData.BaseState, stateData.SubState, cachePrevious);
-        }
-
-        public void SetGridCellState(GridCellBaseState state, GridCellSubState subState = GridCellSubState.Default, bool cachePrevious = false)
-        {
-            if (cachePrevious)
-                previousState = currentState;
-            currentState = state;
-            if (gridCellMaterialConfigs.TryGetValue(new(state, subState), out IMaterialConfig value))
+            GridCellStateData stateData = CellStateEvaluator.EvaluateState(unitData);
+            if (gridCellMaterialConfigs.TryGetValue(stateData, out IMaterialConfig value))
+            {
                 SetCellMaterialParams(value.PropertyOverrides);
+            }
         }
 
         private void SetCellMaterialParams(IEnumerable<MaterialPropertyData> propertyData, bool useSharedMaterial = false)
@@ -100,11 +85,6 @@ namespace SunsetSystems.Combat.Grid
             SetCellMaterialParams(config.PropertyOverrides, true);
         }
 
-        public void RestoreCachedPreviousVisualState()
-        {
-            SetGridCellState(previousState);
-        }
-
         public struct GridCellStateData
         {
             public GridCellBaseState BaseState;
@@ -125,6 +105,55 @@ namespace SunsetSystems.Combat.Grid
         public enum GridCellSubState
         {
             Default, Hostile, Friendly, HalfCover, FullCover
+        }
+
+        private static class CellStateEvaluator
+        {
+            public static GridCellStateData EvaluateState(GridUnit gridUnit)
+            {
+                GridCellStateData result = new();
+                EvaluateBaseState(gridUnit, ref result);
+                EvaluateSubState(gridUnit, ref result);
+                return result;
+
+                static void EvaluateBaseState(GridUnit gridUnit, ref GridCellStateData result)
+                {
+                    result.BaseState = GridCellBaseState.Default;
+                    if (gridUnit.Walkable)
+                    {
+                        if (gridUnit.IsInSprintRange)
+                            result.BaseState = GridCellBaseState.Sprintable;
+                        if (gridUnit.IsInMoveRange)
+                            result.BaseState = GridCellBaseState.Walkable;
+                    }
+                    if (gridUnit.Highlighted)
+                        result.BaseState = GridCellBaseState.Highlight;
+                }
+
+                static void EvaluateSubState(GridUnit gridUnit, ref GridCellStateData result)
+                {
+                    result.SubState = GridCellSubState.Default;
+                    if (gridUnit.AdjacentToCover)
+                    {
+                        switch (gridUnit.CoverQuality)
+                        {
+                            case CoverQuality.Half:
+                                result.SubState = GridCellSubState.HalfCover;
+                                break;
+                            case CoverQuality.Full:
+                                result.SubState = GridCellSubState.FullCover;
+                                break;
+                        }
+                    }
+                    if (gridUnit.Occupied)
+                    {
+                        if (gridUnit.Occupier.Faction is Faction.Hostile)
+                            result.SubState = GridCellSubState.Hostile;
+                        else
+                            result.SubState = GridCellSubState.Friendly;
+                    }
+                }
+            }
         }
     }
 }

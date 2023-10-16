@@ -37,6 +37,7 @@ namespace SunsetSystems.Combat.Grid
         private readonly List<GridUnitObject> gridUnitObjectInstances = new();
         private readonly Dictionary<GridUnit, GridUnitObject> gridUnitObjectDictionary = new();
         private readonly List<GridUnit> currentlyHighlitedGridUnits = new();
+        private readonly Queue<GridUnit> dirtyUnits = new();
         private readonly HashSet<ICover> cachedCoverSourcesInGrid = new();
         public ImmutableHashSet<ICover> CachedCoverSources => new(cachedCoverSourcesInGrid);
 
@@ -60,6 +61,15 @@ namespace SunsetSystems.Combat.Grid
             BuildGrid();
             gridFinished = false;
             _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
+        }
+
+        private void Update()
+        {
+            while (dirtyUnits.Count > 0)
+            {
+                GridUnit unit = dirtyUnits.Dequeue();
+                gridUnitObjectDictionary[unit].UpdateCellState();
+            }
         }
 
         private void OnValidate()
@@ -200,21 +210,23 @@ namespace SunsetSystems.Combat.Grid
         {
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
-                gridUnitObjectDictionary[unit].RestoreCachedPreviousVisualState();
+                unit.IsInMoveRange = false;
+                unit.IsInSprintRange = false;
             }
             currentlyHighlitedGridUnits.Clear();
             currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (gridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
-                GridUnitObject unitObj = gridUnitObjectDictionary[unit];
                 float distanceToUnit = distanceToUnitDictionary[unit];
                 if (distanceToUnit <= combatant.MovementRange + (gridCellSize / 2))
                 {
-                    unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Walkable, GridUnitObject.GridCellSubState.Default, true);
+                    unit.IsInMoveRange = true;
+                    dirtyUnits.Enqueue(unit);
                 }
-                else if (distanceToUnit <= combatant.SprintRange + (gridCellSize / 2))
+                if (distanceToUnit <= combatant.SprintRange + (gridCellSize / 2))
                 {
-                    unitObj.SetGridCellState(GridUnitObject.GridCellBaseState.Sprintable, GridUnitObject.GridCellSubState.Default, true);
+                    unit.IsInSprintRange = true;
+                    dirtyUnits.Enqueue(unit);
                 }
             }
         }
@@ -262,7 +274,12 @@ namespace SunsetSystems.Combat.Grid
 
         public void RestoreHighlightedCellsToPreviousState()
         {
-            currentlyHighlitedGridUnits.ForEach(unit => gridUnitObjectDictionary[unit].RestoreCachedPreviousVisualState());
+            foreach (GridUnit unit in currentlyHighlitedGridUnits)
+            {
+                unit.IsInSprintRange = false;
+                unit.IsInMoveRange = false;
+                dirtyUnits.Enqueue(unit);
+            }
         }
     }
 
@@ -391,9 +408,14 @@ namespace SunsetSystems.Combat.Grid
         public Vector3Int GridPosition => new(X, Y, Z);
         public float SurfaceY;
         public bool Walkable;
+        public bool IsInMoveRange;
+        public bool IsInSprintRange;
         public bool AdjacentToCover;
+        public CoverQuality CoverQuality;
         public bool Occupied => Occupier != null;
         public ICombatant Occupier;
         public float CellSize;
+
+        public bool Highlighted;
     }
 }

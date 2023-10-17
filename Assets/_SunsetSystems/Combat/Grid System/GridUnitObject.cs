@@ -85,6 +85,23 @@ namespace SunsetSystems.Combat.Grid
             SetCellMaterialParams(config.PropertyOverrides, true);
         }
 
+        [Button]
+        public void FillUnitStateDictionary()
+        {
+            foreach (GridCellBaseState baseState in Enum.GetValues(typeof(GridCellBaseState)))
+            {
+                foreach (GridCellSubState subState in Enum.GetValues(typeof(GridCellSubState)))
+                {
+                    GridCellStateData data = new()
+                    {
+                        BaseState = baseState,
+                        SubState = subState,
+                    };
+                    gridCellMaterialConfigs.TryAdd(data, null);
+                }
+            }
+        }
+
         public struct GridCellStateData
         {
             public GridCellBaseState BaseState;

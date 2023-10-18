@@ -29,25 +29,25 @@ namespace SunsetSystems.Input
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnInventory += OnInventory;
-            PlayerInputHandler.OnCharacterSheet += OnCharacterSheet;
-            PlayerInputHandler.OnEscape += OnEscape;
-            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
-            PlayerInputHandler.OnJournal += OnJournal;
-            PlayerInputHandler.OnHighlightInteractables += OnHighlightInteractables;
-            PlayerInputHandler.OnHelp += OnShowHelp;
+            SunsetInputHandler.OnInventory += OnInventory;
+            SunsetInputHandler.OnCharacterSheet += OnCharacterSheet;
+            SunsetInputHandler.OnEscape += OnEscape;
+            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnJournal += OnJournal;
+            SunsetInputHandler.OnHighlightInteractables += OnHighlightInteractables;
+            SunsetInputHandler.OnHelp += OnShowHelp;
             IInitialized.RegisterInitialization(this);
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnInventory -= OnInventory;
-            PlayerInputHandler.OnCharacterSheet -= OnCharacterSheet;
-            PlayerInputHandler.OnEscape -= OnEscape;
-            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
-            PlayerInputHandler.OnJournal -= OnJournal;
-            PlayerInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
-            PlayerInputHandler.OnHelp -= OnShowHelp;
+            SunsetInputHandler.OnInventory -= OnInventory;
+            SunsetInputHandler.OnCharacterSheet -= OnCharacterSheet;
+            SunsetInputHandler.OnEscape -= OnEscape;
+            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnJournal -= OnJournal;
+            SunsetInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
+            SunsetInputHandler.OnHelp -= OnShowHelp;
             IInitialized.UnregisterInitialization(this);
         }
 
@@ -162,19 +162,19 @@ namespace SunsetSystems.Input
 
         private void SwitchPauseAndOpenScreen(PauseMenuScreen screen)
         {
-            if (GameManager.CurrentState == GameState.Menu)
+            if (GameManager.Instance.CurrentState == GameState.Menu)
                 return;
             PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
-            if (GameManager.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
+            if (GameManager.Instance.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
             {
                 Debug.Log("Resuming game");
-                GameManager.CurrentState = GameState.Exploration;
+                GameManager.Instance.CurrentState = GameState.Exploration;
                 pauseUI.gameObject.SetActive(false);
             }
             else
             {
                 Debug.Log("Pausing game");
-                GameManager.CurrentState = GameState.GamePaused;
+                GameManager.Instance.CurrentState = GameState.GamePaused;
                 pauseUI.gameObject.SetActive(true);
                 pauseUI.OpenMenuScreen(screen);
             }

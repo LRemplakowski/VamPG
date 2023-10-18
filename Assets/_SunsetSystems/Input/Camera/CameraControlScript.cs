@@ -89,7 +89,7 @@ namespace SunsetSystems.Input.CameraControl
             }
             Vector2 value = context.ReadValue<Vector2>();
             _moveDirection = new Vector3(value.x, 0, value.y);
-            if (GameManager.CurrentState == GameState.Conversation){
+            if (GameManager.Instance.CurrentState == GameState.Conversation){
                 _moveDirection = Vector3.zero;
             }
         }
@@ -103,10 +103,10 @@ namespace SunsetSystems.Input.CameraControl
             if (!(context.performed || context.canceled)){
                 return;
             }
-            if (GameManager.CurrentState == GameState.Conversation){
+            if (GameManager.Instance.CurrentState == GameState.Conversation){
                 _zoomDirection = Vector2.zero;
             }
-            else if (GameManager.CurrentState == GameState.Combat){
+            else if (GameManager.Instance.CurrentState == GameState.Combat){
                 _zoomDirection = context.ReadValue<Vector2>();
                 currentZoom = Mathf.Clamp(_currentZoomAmount - _zoomDirection.y, zoomMin, zoomMax);
             }

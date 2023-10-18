@@ -25,9 +25,10 @@ namespace SunsetSystems.Combat.Grid
             {
                 this.unitData = unitData;
                 cellCollider.size = new Vector3(unitData.CellSize, 0.1f, unitData.CellSize);
-                Vector3 worldPosition = transform.TransformPoint(unitData.X, unitData.Y, unitData.Z);
-                worldPosition.y = unitData.SurfaceY;
-                transform.position = worldPosition;
+                Vector3 cellPosition = new Vector3(unitData.X, unitData.Y, unitData.Z) * unitData.CellSize;
+                cellPosition.y = unitData.SurfaceY;
+                transform.localPosition = cellPosition;
+                cellRenderer.transform.localScale = Vector3.one * unitData.CellSize;
                 UpdateCellState();
                 return true;
             }

@@ -42,7 +42,7 @@ namespace SunsetSystems.Combat
             Debug.LogWarning("Begin encounter, do encounter start logic.");
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
-            GameManager.CurrentState = GameState.Combat;
+            GameManager.Instance.CurrentState = GameState.Combat;
             await MyGrid.EnableGrid();
             _creatureCounter = Creatures.Count;
             _ = CombatManager.Instance.BeginEncounter(this);
@@ -66,7 +66,7 @@ namespace SunsetSystems.Combat
             Debug.LogWarning("End encounter, do encounter end logic.");
             MyGrid.DisableGrid();
             await CombatManager.Instance.EndEncounter(this);
-            GameManager.CurrentState = GameState.Exploration;
+            GameManager.Instance.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
                 await encounterEndLogic.Perform();
         }

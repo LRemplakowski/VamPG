@@ -66,13 +66,13 @@ namespace SunsetSystems.Dialogue
                 view.gameObject.SetActive(true);
             }
             _dialogueRunner.StartDialogue(startNode);
-            GameManager.CurrentState = GameState.Conversation;
+            GameManager.Instance.CurrentState = GameState.Conversation;
             return true;
         }   
 
         public void CleanupAfterDialogue()
         {
-            GameManager.CurrentState = GameState.Exploration;
+            GameManager.Instance.CurrentState = GameState.Exploration;
             foreach (DialogueViewBase view in _dialogueRunner.dialogueViews)
             {
                 view.gameObject.SetActive(false);

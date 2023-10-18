@@ -20,6 +20,14 @@ namespace SunsetSystems.Combat
     {
         public static CombatManager Instance { get; private set; }
 
+        [field: Title("Runtime")]
+        [field: SerializeField]
+        public Encounter CurrentEncounter { get; private set; }
+
+        [field: ShowInInspector, ReadOnly]
+        public List<ICombatant> Actors { get; private set; }
+
+        [Title("Events")]
         public UltEvent<IEnumerable<ICombatant>> CombatBegin;
         public UltEvent CombatEnd;
         public UltEvent<ICombatant, ICombatant> ActiveActorChanged;
@@ -42,12 +50,6 @@ namespace SunsetSystems.Combat
         }
         private ICombatant FirstActor;
 
-        [field: SerializeField]
-        public Encounter CurrentEncounter { get; private set; }
-
-        [field: ShowInInspector, ReadOnly]
-        public List<ICombatant> Actors { get; private set; }
-
         private void Awake()
         {
             Instance = this;
@@ -61,6 +63,7 @@ namespace SunsetSystems.Combat
             CurrentActiveActor = c;
         }
 
+        [Title("Editor")]
         [Button]
         public void NextRound()
         {

@@ -12,6 +12,6 @@ namespace SunsetSystems.Combat.Grid
 
         float CellSize { get; }
 
-        void Highlighted(bool value);
+        bool Highlighted { get; set; }
     }
 }

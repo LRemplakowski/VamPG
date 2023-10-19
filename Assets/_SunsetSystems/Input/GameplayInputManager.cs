@@ -22,6 +22,9 @@ namespace SunsetSystems.Input
 {
     public class GameplayInputManager : SerializedMonoBehaviour
     {
+        [Title("References")]
+        [SerializeField]
+        private Dictionary<GameState, IGameplayInputHandler> gameplayInputHandlers = new();
         private Vector2 mousePosition;
         private Collider lastHit;
         private const int raycastRange = 100;
@@ -29,15 +32,9 @@ namespace SunsetSystems.Input
         private LayerMask _raycastTargetMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
-        [SerializeField]
-        private bool _useSelection;
-        [SerializeField]
-        private Selection _selection;
 
         private void OnEnable()
         {
-            if (_selection)
-                _selection.gameObject.SetActive(_useSelection);
             SunsetInputHandler.OnPrimaryAction += OnPrimaryAction;
             SunsetInputHandler.OnSecondaryAction += OnSecondaryAction;
             SunsetInputHandler.OnPointerPosition += OnPointerPosition;
@@ -50,24 +47,35 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
+        private static bool DoesAnyUIHitBlockRaycasts(List<RaycastResult> hits)
+        {
+            return hits.Any((hit) => { var cg = hit.gameObject.GetComponentInParent<CanvasGroup>(); return cg != null && cg.blocksRaycasts; });
+        }
+
         private void OnPrimaryAction(InputAction.CallbackContext context)
         {
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits))
+            {
+                if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
+                    handler.HandlePrimaryAction(context);
+            }
 
         }
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if (!context.performed)
-                return;
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits))
             {
-                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
-                {
-                    Debug.Log("Raycast hit UI object!");
-                    return;
-                }
+                if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
+                    handler.HandleSecondaryAction(context);
             }
-            HandleSecondaryAction();
+        }
+
+        private void OnPointerPosition(InputAction.CallbackContext context)
+        {
+            mousePosition = context.ReadValue<Vector2>();
+            if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
+                handler.HandlePointerPosition(context);
         }
 
         private void HandleSecondaryAction()
@@ -85,10 +93,7 @@ namespace SunsetSystems.Input
                         }
                     case GameState.Exploration:
                         {
-                            if (_useSelection)
-                                HandleSelectionExplorationInput();
-                            else
-                                HandleNoSelectionExplorationInput();
+                            HandleNoSelectionExplorationInput();
                             break;
                         }
                     case GameState.Conversation:
@@ -153,7 +158,7 @@ namespace SunsetSystems.Input
 
         private void HandleCombatSecondaryAction(RaycastHit hit)
         {
-            ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.instance.GetSelectedBarAction();
+            ActionBarUI.SelectedBarAction selectedBarAction = ActionBarUI.Instance.GetSelectedBarAction();
             switch (selectedBarAction.actionType)
             {
                 case BarAction.MOVE:
@@ -232,21 +237,6 @@ namespace SunsetSystems.Input
             return distance <= maxRange;
         }
 
-        private void OnPointerPosition(InputAction.CallbackContext context)
-        {
-            if (!context.performed)
-                return;
-            mousePosition = context.ReadValue<Vector2>();
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits))
-            {
-                if (hits.Any(hit => hit.gameObject.GetComponentInParent<CanvasGroup>()?.blocksRaycasts ?? false))
-                {
-                    return;
-                }
-            }
-            HandlePointerPosition();
-        }
-
         private void HandlePointerPosition()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -323,14 +313,14 @@ namespace SunsetSystems.Input
                         gridCell = lastHit.gameObject.GetComponent<IGridCell>();
                         if (gridCell != null)
                         {
-                            gridCell.Highlighted(false);
+                            gridCell.Highlighted = false;
                         }
                         lastHit = hit.collider;
                     }
                     gridCell = lastHit.gameObject.GetComponent<IGridCell>();
                     if (gridCell != null)
                     {
-                        gridCell.Highlighted(true);
+                        gridCell.Highlighted = true;
                     }
                 }
 

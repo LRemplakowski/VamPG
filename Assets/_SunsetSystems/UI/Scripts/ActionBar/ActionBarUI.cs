@@ -1,19 +1,20 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionBarUI : MonoBehaviour
+public class ActionBarUI : SerializedMonoBehaviour
 {
     private SelectedBarAction selected;
-    private static readonly SelectedBarAction DEFAULT = new SelectedBarAction(BarAction.MOVE);
+    private static readonly SelectedBarAction DEFAULT = new(BarAction.MOVE);
 
-    public static ActionBarUI instance;
+    public static ActionBarUI Instance;
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else if (instance != this)
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
             Destroy(this.gameObject);
     }
 

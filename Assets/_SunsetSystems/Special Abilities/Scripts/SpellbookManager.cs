@@ -70,7 +70,7 @@ namespace SunsetSystems.Spellbook
 
         public void UsePower(DisciplinePower power, ICombatant target)
         {
-            ActionBarUI.instance.SetBarAction(default);
+            ActionBarUI.Instance.SetBarAction(default);
             if (_powersOnCooldown.ContainsKey(power))
                 return;
             if (Disciplines.GetDisciplines().Any(d => d.GetKnownPowers().Contains(power)))

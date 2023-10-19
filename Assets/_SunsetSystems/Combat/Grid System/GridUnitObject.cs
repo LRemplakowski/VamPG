@@ -25,9 +25,8 @@ namespace SunsetSystems.Combat.Grid
             {
                 this.unitData = unitData;
                 cellCollider.size = new Vector3(unitData.CellSize, 0.1f, unitData.CellSize);
-                Vector3 cellPosition = new Vector3(unitData.X, unitData.Y, unitData.Z) * unitData.CellSize;
-                cellPosition.y = unitData.SurfaceY;
-                transform.localPosition = cellPosition;
+                Vector3 cellPosition = unitData.WorldPosition;
+                transform.localPosition = transform.InverseTransformPoint(cellPosition);
                 cellRenderer.transform.localScale = Vector3.one * unitData.CellSize;
                 UpdateCellState();
                 return true;
@@ -163,7 +162,7 @@ namespace SunsetSystems.Combat.Grid
                                 break;
                         }
                     }
-                    if (gridUnit.Occupied)
+                    if (gridUnit.IsOccupied)
                     {
                         if (gridUnit.Occupier.Faction is Faction.Hostile)
                             result.SubState = GridCellSubState.Hostile;

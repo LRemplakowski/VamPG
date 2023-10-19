@@ -38,7 +38,7 @@ namespace SunsetSystems.UI
         public void InvokeCachedAction()
         {
             OnAbilityPick?.Invoke();
-            ActionBarUI.instance.SetBarAction((int)BarAction.SELECT_TARGET);
+            ActionBarUI.Instance.SetBarAction((int)BarAction.SELECT_TARGET);
             _cachedAction?.Invoke();
         }
 

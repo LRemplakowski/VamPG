@@ -13,7 +13,7 @@ namespace SunsetSystems.Combat
     public class Encounter : SerializedMonoBehaviour, IEncounter
     {
         [field: SerializeField]
-        public CachedMultiLevelGrid MyGrid { get; private set; }
+        public GridManager GridManager { get; private set; }
 
         [field: SerializeField, Tooltip("Creatures taking part in this encounter.")]
         public List<ICreature> Creatures { get; private set; } = new();
@@ -29,12 +29,6 @@ namespace SunsetSystems.Combat
 
         private int _creatureCounter = 0;
 
-        private void Start()
-        {
-            if (!MyGrid)
-                MyGrid = GetComponent<CachedMultiLevelGrid>();
-        }
-
         [Title("Editor Utility")]
         [Button("Begin Encounter")]
         public async void Begin()
@@ -43,7 +37,7 @@ namespace SunsetSystems.Combat
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
             GameManager.Instance.CurrentState = GameState.Combat;
-            await MyGrid.EnableGrid();
+            GridManager.EnableGrid();
             _creatureCounter = Creatures.Count;
             _ = CombatManager.Instance.BeginEncounter(this);
             //if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
@@ -64,7 +58,7 @@ namespace SunsetSystems.Combat
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
-            MyGrid.DisableGrid();
+            GridManager.DisableGrid();
             await CombatManager.Instance.EndEncounter(this);
             GameManager.Instance.CurrentState = GameState.Exploration;
             if (encounterEndLogic)

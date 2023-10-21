@@ -16,7 +16,7 @@ namespace SunsetSystems.AI
         [field: SerializeField, Required]
         public IActionPerformer ActionPerformer { get; private set; }
 
-        public CachedMultiLevelGrid CurrentGrid => CombatManager.Instance.CurrentEncounter.MyGrid;
+        public GridManager GridManager => CombatManager.Instance.CurrentEncounter.GridManager;
 
         public IEnumerable<ICombatant> FriendlyCombatants => CombatManager.Instance.Actors.FindAll(actor => actor.Faction is Faction.Friendly || actor.Faction is Faction.PlayerControlled);
 

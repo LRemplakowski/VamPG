@@ -45,7 +45,7 @@ namespace SunsetSystems.AI
         {
             if (context.CanMove)
             {
-                CachedMultiLevelGrid grid = context.CurrentGrid;
+                GridManager grid = context.GridManager;
                 Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
                 GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>(), out _).GetRandom();
                 if (target != null)

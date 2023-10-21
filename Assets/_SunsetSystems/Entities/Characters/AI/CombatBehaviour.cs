@@ -68,7 +68,7 @@ namespace SunsetSystems.Combat
 
                 if (IsPlayerControlled)
                 {
-                    CachedMultiLevelGrid grid = CombatManager.Instance.CurrentEncounter.MyGrid;
+                    GridManager grid = CombatManager.Instance.CurrentEncounter.GridManager;
                     grid.HighlightCellsInRange(grid.WorldPositionToGridPosition(Owner.References.Transform.position), this, Owner.References.NavMeshAgent);
                 }
             }
@@ -79,7 +79,7 @@ namespace SunsetSystems.Combat
         {
             if (currentActor.Equals(this) && IsPlayerControlled)
             {
-                CombatManager.Instance.CurrentEncounter.MyGrid.RestoreHighlightedCellsToPreviousState();
+                CombatManager.Instance.CurrentEncounter.GridManager.RestoreHighlightedCellsToPreviousState();
             }
         }
 

@@ -10,7 +10,7 @@ namespace SunsetSystems.AI
     {
         ICombatant Owner { get; }
         IActionPerformer ActionPerformer { get; }
-        CachedMultiLevelGrid CurrentGrid { get; }
+        GridManager GridManager { get; }
 
         IEnumerable<ICombatant> FriendlyCombatants { get; }
         IEnumerable<ICombatant> HostileCombatants { get; }

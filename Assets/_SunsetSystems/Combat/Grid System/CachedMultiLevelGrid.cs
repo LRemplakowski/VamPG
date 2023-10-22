@@ -58,6 +58,10 @@ namespace SunsetSystems.Combat.Grid
             private set => this[position.x, position.y, position.z] = value;
         }
 
+        [Title("Editor Utility")]
+        [SerializeField]
+        private bool showGizmosWhenNotSelected = false;
+
         private void Start()
         {
             BuildGrid();
@@ -175,6 +179,8 @@ namespace SunsetSystems.Combat.Grid
 
         private void OnDrawGizmosSelected()
         {
+            if (showGizmosWhenNotSelected)
+                return;
             Gizmos.color = Color.blue;
             foreach (GridLevel level in levels)
             {
@@ -192,6 +198,34 @@ namespace SunsetSystems.Combat.Grid
                             else
                                 Gizmos.color = Color.blue;
                             Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.SurfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (showGizmosWhenNotSelected)
+            {
+                Gizmos.color = Color.blue;
+                foreach (GridLevel level in levels)
+                {
+                    for (int x = 0; x < levelWidth; x++)
+                    {
+                        for (int z = 0; z < levelDepth; z++)
+                        {
+                            GridUnit unit = level[x, z];
+                            if (unit == null)
+                                continue;
+                            if (unit.Walkable)
+                            {
+                                if (unit.AdjacentToCover)
+                                    Gizmos.color = Color.yellow;
+                                else
+                                    Gizmos.color = Color.blue;
+                                Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.SurfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                            }
                         }
                     }
                 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Combat.Grid
 {
-    public class GridUnitObject : SerializedMonoBehaviour
+    public class GridUnitObject : SerializedMonoBehaviour, IGridCell
     {
         [SerializeField]
         private BoxCollider cellCollider;
@@ -17,14 +17,23 @@ namespace SunsetSystems.Combat.Grid
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
-        public Vector3 WorldPosition => transform.position + new Vector3(0, unitData.SurfaceY - transform.position.y, 0);
+        public Vector3Int GridPosition => unitData.GridPosition;
+        public Vector3 WorldPosition => transform.position;
+
+        public bool IsOccupied => unitData.IsOccupied;
+
+        public bool IsFree => unitData.IsFree;
+
+        public float CellSize => unitData.CellSize;
+
+        public bool Highlighted => unitData.Highlighted;
 
         public bool InjectUnitData(GridUnit unitData)
         {
             if (this.unitData == null)
             {
                 this.unitData = unitData;
-                cellCollider.size = new Vector3(unitData.CellSize, 0.1f, unitData.CellSize);
+                cellCollider.size = new Vector3(unitData.CellSize, cellCollider.size.y, unitData.CellSize);
                 Vector3 cellPosition = unitData.WorldPosition;
                 transform.localPosition = transform.InverseTransformPoint(cellPosition);
                 cellRenderer.transform.localScale = Vector3.one * unitData.CellSize;

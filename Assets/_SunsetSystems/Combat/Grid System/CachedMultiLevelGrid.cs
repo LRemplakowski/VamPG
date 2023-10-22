@@ -4,6 +4,7 @@ using Sirenix.Utilities;
 using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace SunsetSystems.Combat.Grid
         private int gridHeight;
         [SerializeField, Min(1)]
         private float gridCellSize = 1f;
+        public float GridCellSize => gridCellSize;
         [SerializeField]
         private NavMeshAreas gridAreaMask = NavMeshAreas.All;
 
@@ -36,10 +38,10 @@ namespace SunsetSystems.Combat.Grid
 
         private readonly List<GridUnitObject> gridUnitObjectInstances = new();
         private readonly Dictionary<GridUnit, GridUnitObject> gridUnitObjectDictionary = new();
-        private readonly List<GridUnit> currentlyHighlitedGridUnits = new();
+
         private readonly Queue<GridUnit> dirtyUnits = new();
         private readonly HashSet<ICover> cachedCoverSourcesInGrid = new();
-        public ImmutableHashSet<ICover> CachedCoverSources => new(cachedCoverSourcesInGrid);
+        public HashSet<ICover> CachedCoverSources => cachedCoverSourcesInGrid;
 
         // Grid initialization
         private bool gridFinished = false;
@@ -47,13 +49,13 @@ namespace SunsetSystems.Combat.Grid
         public GridUnit this[int x, int y, int z]
         {
             get => levels[y][x, z];
-            set => levels[y][x, z] = value;
+            private set => levels[y][x, z] = value;
         }
 
         public GridUnit this[Vector3Int position]
         {
             get => this[position.x, position.y, position.z];
-            set => this[position.x, position.y, position.z] = value;
+            private set => this[position.x, position.y, position.z] = value;
         }
 
         private void Start()
@@ -94,6 +96,33 @@ namespace SunsetSystems.Combat.Grid
             gridPosition.y = Mathf.RoundToInt(localPosition.y / gridCellSize);
             gridPosition.z = Mathf.RoundToInt(localPosition.z / gridCellSize);
             return gridPosition;
+        }
+
+        public GridUnitObject GetCellGameObject(GridUnit unit)
+        {
+            return gridUnitObjectDictionary[unit];
+        }
+
+        public GridUnitObject GetCellGameObject(Vector3Int cellPosition)
+        {
+            return gridUnitObjectDictionary[this[cellPosition]];
+        }
+
+        public IEnumerable<GridUnit> GetAllWalkableGridUnits()
+        {
+            return levels.SelectMany(level => level.WalkableUnits.Where(unit => unit.IsFree));
+        }
+
+        public void MarkCellDirty(IGridCell cell)
+        {
+            if (cell is GridUnit gridUnit)
+            {
+                dirtyUnits.Enqueue(gridUnit);
+            }
+            else
+            {
+                dirtyUnits.Enqueue(this[cell.GridPosition]);
+            }
         }
 
         #region Grid Initialization
@@ -166,119 +195,6 @@ namespace SunsetSystems.Combat.Grid
                         }
                     }
                 }
-            }
-        }
-
-        public GridUnitObject GetNearestWalkableGridCell(Vector3 position)
-        {
-            Vector3Int gridPosition = GetNearestWalkableGridPosition(position);
-            return gridUnitObjectDictionary[this[gridPosition.x, gridPosition.y, gridPosition.z]];
-        }
-
-        public Vector3Int GetNearestWalkableGridPosition(Vector3 worldPosition)
-        {
-            Vector3Int bestGridPos = WorldPositionToGridPosition(worldPosition);
-            GridUnit unit = levels[bestGridPos.y][bestGridPos.x, bestGridPos.z];
-            if (unit.Walkable)
-            {
-                return bestGridPos;
-            }
-            else
-            {
-                unit = CrawlForNearestWalkablePosition(unit);
-                return unit.GridPosition;
-            }
-
-            GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo)
-            {
-                GridUnit result = levels.First(l => l.WalkableUnits.FirstOrDefault() != null).WalkableUnits.First();
-                float gridDistance = float.MaxValue;
-                foreach (GridUnit gridUnit in levels.SelectMany(level => level.WalkableUnits))
-                {
-                    float newDistance = Mathf.Abs((gridUnit.GridPosition - relativeTo.GridPosition).magnitude);
-                    if (newDistance < gridDistance)
-                    {
-                        gridDistance = newDistance;
-                        result = gridUnit;
-                    }
-                }
-                return result;
-            }
-        }
-
-        public void HighlightCellsInRange(Vector3Int gridPosition, ICombatant combatant, NavMeshAgent agent)
-        {
-            foreach (GridUnit unit in currentlyHighlitedGridUnits)
-            {
-                unit.IsInMoveRange = false;
-                unit.IsInSprintRange = false;
-            }
-            currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (gridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
-            foreach (GridUnit unit in currentlyHighlitedGridUnits)
-            {
-                float distanceToUnit = distanceToUnitDictionary[unit];
-                if (distanceToUnit <= combatant.MovementRange + (gridCellSize / 2))
-                {
-                    unit.IsInMoveRange = true;
-                    dirtyUnits.Enqueue(unit);
-                }
-                if (distanceToUnit <= combatant.SprintRange + (gridCellSize / 2))
-                {
-                    unit.IsInSprintRange = true;
-                    dirtyUnits.Enqueue(unit);
-                }
-            }
-        }
-
-        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
-        {
-            distanceToUnitDictionary = new();
-            List<GridUnit> unitsInRange = new();
-            // Calculate the path
-            NavMeshPath path = new();
-            // Calculate the maximum grid distance within range
-            float maxGridDistance = range * gridCellSize;
-
-            foreach (GridLevel level in levels)
-            {
-                foreach (GridUnit unit in level.WalkableUnits)
-                {
-                    // Calculate the grid distance between gridPosition and unit's position
-                    int gridDistance = Mathf.Abs(gridPosition.x - unit.GridPosition.x) + Mathf.Abs(gridPosition.z - unit.GridPosition.z);
-
-                    if (gridDistance <= maxGridDistance)
-                    {
-                        Vector3 unitWorldPosition = GridPositionToWorldPosition(unit.GridPosition);
-                        if (agent.CalculatePath(unitWorldPosition, path))
-                        {
-                            // Calculate path length
-                            float pathLength = 0;
-                            for (int i = 1; i < path.corners.Length; i++)
-                            {
-                                pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-                            }
-                            if (pathLength <= maxGridDistance)
-                            {
-                                unitsInRange.Add(unit);
-                                Debug.Log($"Found unit in movement range! Grid pos:[{unit.GridPosition}]; Distance to unit: {pathLength}", gridUnitObjectDictionary[unit]);
-                                distanceToUnitDictionary[unit] = pathLength;
-                            }
-                        }
-                        path.ClearCorners();
-                    }
-                }
-            }
-            return unitsInRange;
-        }
-
-        public void RestoreHighlightedCellsToPreviousState()
-        {
-            foreach (GridUnit unit in currentlyHighlitedGridUnits)
-            {
-                unit.IsInSprintRange = false;
-                unit.IsInMoveRange = false;
-                dirtyUnits.Enqueue(unit);
             }
         }
     }

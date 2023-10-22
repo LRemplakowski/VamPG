@@ -9793,8 +9793,8 @@ MonoBehaviour:
     m_ActionName: Player/CameraZoom[/Mouse/scroll]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: PrimaryAction
         m_Mode: 0
         m_Arguments:
@@ -9809,8 +9809,8 @@ MonoBehaviour:
     m_ActionName: Player/Click[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: PointerPosition
         m_Mode: 0
         m_Arguments:
@@ -9832,7 +9832,19 @@ MonoBehaviour:
     m_ActionId: f601cab9-9997-42cd-8ce6-415bfea5e206
     m_ActionName: UI/Point[/Mouse/position]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
+        m_MethodName: InventoryAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 73be0c94-55bc-420a-a277-b86ba3a225f3
     m_ActionName: Player/Inventory[/Keyboard/i]
   - m_PersistentCalls:
@@ -9857,8 +9869,8 @@ MonoBehaviour:
     m_ActionName: UI/RightHold[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: EscapeAction
         m_Mode: 0
         m_Arguments:
@@ -9873,8 +9885,8 @@ MonoBehaviour:
     m_ActionName: Player/Escape[/Keyboard/escape]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: CharacterSheetAction
         m_Mode: 0
         m_Arguments:
@@ -9913,8 +9925,8 @@ MonoBehaviour:
     m_ActionName: Player/LeftMouseHold[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: SecondaryAction
         m_Mode: 0
         m_Arguments:
@@ -9929,8 +9941,8 @@ MonoBehaviour:
     m_ActionName: Player/RightClick[/Mouse/rightButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: JournalAction
         m_Mode: 0
         m_Arguments:
@@ -10008,13 +10020,25 @@ MonoBehaviour:
     m_ActionId: 10e81493-2520-40b5-bdbe-0e5abc3595f6
     m_ActionName: UI/SkipDialogue[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
+        m_MethodName: SkipDialogueAction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: b430a763-75d6-4ca3-b8da-f1c7000e8ece
     m_ActionName: Player/SkipDialogue[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: HighlightInteractablesAction
         m_Mode: 0
         m_Arguments:
@@ -10029,8 +10053,8 @@ MonoBehaviour:
     m_ActionName: Player/HighlightInteractables[/Keyboard/tab]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
+      - m_Target: {fileID: 4684825997953639188}
+        m_TargetAssemblyTypeName: SunsetInputHandler, SunsetSystems
         m_MethodName: Help
         m_Mode: 0
         m_Arguments:
@@ -10397,6 +10421,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  _raycastTargetMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &5791569988653741682
 GameObject:
   m_ObjectHideFlags: 0
@@ -10812,8 +10839,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 320
   _followerStoppingDistance: 1.5
-  _useSelection: 0
-  _selection: {fileID: 2620954162959014537}
 --- !u!1 &6577855825162117976
 GameObject:
   m_ObjectHideFlags: 0

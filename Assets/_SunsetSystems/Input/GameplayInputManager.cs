@@ -255,7 +255,7 @@ namespace SunsetSystems.Input
                         }
                     case GameState.Combat:
                         {
-                            HandleCombatPointerPosition(hit);
+                            //HandleCombatPointerPosition(hit);
                             break;
                         }
                     case GameState.Conversation:
@@ -288,67 +288,6 @@ namespace SunsetSystems.Input
                 if (interactable != null)
                 {
                     interactable.IsHoveredOver = true;
-                }
-            }
-
-            void HandleCombatPointerPosition(RaycastHit hit)
-            {
-                //switch (selectedBarAction.actionType)
-                //{
-                //    case BarAction.MOVE:
-                //        HandleMoveActionPointerPosition();
-                //        break;
-                //    case BarAction.ATTACK:
-                //        HandleAttackActionPointerPosition();
-                //        break;
-                //}
-
-                void HandleMoveActionPointerPosition()
-                {
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled())
-                        return;
-                    IGridCell gridCell;
-                    if (lastHit != hit.collider)
-                    {
-                        gridCell = lastHit.gameObject.GetComponent<IGridCell>();
-                        if (gridCell != null)
-                        {
-                            gridCell.Highlighted = false;
-                        }
-                        lastHit = hit.collider;
-                    }
-                    gridCell = lastHit.gameObject.GetComponent<IGridCell>();
-                    if (gridCell != null)
-                    {
-                        gridCell.Highlighted = true;
-                    }
-                }
-
-                void HandleAttackActionPointerPosition()
-                {
-                    if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasActed)
-                        return;
-                    throw new NotImplementedException();
-                    //LineRenderer lineRenderer = CombatManager.CurrentActiveActor.LineRenderer;
-                    //if (lastHit != hit.collider)
-                    //{
-                    //    lineRenderer.enabled = false;
-                    //    lastHit = hit.collider;
-                    //}
-                    //ICreature creature = lastHit.GetComponent<ICreature>();
-                    //if (creature != null && creature.Faction is Faction.Hostile)
-                    //{
-                    //    lineRenderer.positionCount = 2;
-                    //    throw new NotImplementedException();
-                    //    //lineRenderer.SetPosition(0, lineRenderer.transform.position);
-                    //    //lineRenderer.SetPosition(1, creature.LineTarget.position);
-                    //    //Color color = IsInRange(creature)
-                    //    //    ? Color.green
-                    //    //    : Color.red;
-                    //    //lineRenderer.startColor = color;
-                    //    //lineRenderer.endColor = color;
-                    //    //lineRenderer.enabled = true;
-                    //}
                 }
             }
         }

@@ -11,11 +11,27 @@ namespace SunsetSystems.Input
 {
     public class CombatInputHandler : SerializedMonoBehaviour, IGameplayInputHandler
     {
+        [SerializeField]
+        private LayerMask _raycastTargetMask;
+        private const int raycastRange = 100;
         private Collider lastPointerHit;
+        private Vector2 mousePosition;
 
         public void HandlePointerPosition(InputAction.CallbackContext context)
         {
-            throw new System.NotImplementedException();
+            if (context.performed is false)
+                return;
+            mousePosition = context.ReadValue<Vector2>();
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            CombatManager.Instance.CurrentEncounter.GridManager.ClearHighlightedCell();
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask, QueryTriggerInteraction.Ignore))
+            {
+                if (lastPointerHit == null)
+                {
+                    lastPointerHit = hit.collider;
+                }
+                HandlePointerOverActionTarget(hit);
+            }
         }
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
@@ -28,8 +44,11 @@ namespace SunsetSystems.Input
             throw new System.NotImplementedException();
         }
 
-        private void HandleCombatPointerPosition(RaycastHit hit)
+        private void HandlePointerOverActionTarget(RaycastHit hit)
         {
+            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
+                return;
+            HandleMoveActionPointerPosition();
             //switch (selectedBarAction.actionType)
             //{
             //    case BarAction.MOVE:
@@ -44,20 +63,10 @@ namespace SunsetSystems.Input
             {
                 if (!CombatManager.Instance.IsActiveActorPlayerControlled())
                     return;
-                GridUnitObject gridCell;
-                if (lastPointerHit != hit.collider)
-                {
-                    gridCell = lastPointerHit.gameObject.GetComponent<GridUnitObject>();
-                    if (gridCell != null)
-                    {
-                        CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell, false);
-                    }
-                    lastPointerHit = hit.collider;
-                }
-                gridCell = lastPointerHit.gameObject.GetComponent<GridUnitObject>();
+                IGridCell gridCell = hit.collider.gameObject.GetComponent<GridUnitObject>();
                 if (gridCell != null)
                 {
-                    CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell, true);
+                    CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell);
                 }
             }
 

@@ -69,7 +69,7 @@ namespace SunsetSystems.Combat
                 if (IsPlayerControlled)
                 {
                     GridManager grid = CombatManager.Instance.CurrentEncounter.GridManager;
-                    grid.HighlightCellsInRange(grid.WorldPositionToGridPosition(Owner.References.Transform.position), this, Owner.References.NavMeshAgent);
+                    grid.ShowCellsInMovementRange(grid.WorldPositionToGridPosition(Owner.References.Transform.position), this);
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace SunsetSystems.Combat
         {
             if (currentActor.Equals(this) && IsPlayerControlled)
             {
-                CombatManager.Instance.CurrentEncounter.GridManager.RestoreHighlightedCellsToPreviousState();
+                CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
             }
         }
 

@@ -1,9 +1,10 @@
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.AI;
+using System.Linq;
+using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Combat.Grid
 {
@@ -22,6 +23,9 @@ namespace SunsetSystems.Combat.Grid
         [SerializeField]
         private CachedMultiLevelGrid managedGrid;
 
+        private GridUnit currentlyHighlightedCell;
+        private readonly List<GridUnit> currentlyHighlitedGridUnits = new();
+
 
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition) => managedGrid.GridPositionToWorldPosition(gridPosition);
         public Vector3Int WorldPositionToGridPosition(Vector3 worldPosition) => managedGrid.WorldPositionToGridPosition(worldPosition);
@@ -37,29 +41,128 @@ namespace SunsetSystems.Combat.Grid
             managedGrid.DisableGrid();
         }
 
-        public void HighlightCell(GridUnitObject gridUnitObject, bool highlight)
+        public void HighlightCell(IGridCell gridCell)
         {
+            ClearHighlightedCell();
+            GridUnit cellData = this[gridCell.GridPosition];
+            cellData.Highlighted = true;
+            currentlyHighlightedCell = cellData;
+            managedGrid.MarkCellDirty(currentlyHighlightedCell);
+        }
 
+        public void ClearHighlightedCell()
+        {
+            currentlyHighlightedCell.Highlighted = false;
+            managedGrid.MarkCellDirty(currentlyHighlightedCell);
+            currentlyHighlightedCell = null;
         }
 
         public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
         {
-            return managedGrid.GetCellsInRange(gridPosition, range, agent, out distanceToUnitDictionary);
+            distanceToUnitDictionary = new();
+            List<GridUnit> unitsInRange = new();
+            // Calculate the path
+            NavMeshPath path = new();
+            // Calculate the maximum grid distance within range
+            float maxGridDistance = range * managedGrid.GridCellSize;
+
+            foreach (GridUnit unit in managedGrid.GetAllWalkableGridUnits())
+            {
+                // Calculate the grid distance between gridPosition and unit's position
+                int gridDistance = Mathf.Abs(gridPosition.x - unit.GridPosition.x) + Mathf.Abs(gridPosition.z - unit.GridPosition.z);
+
+                if (gridDistance <= maxGridDistance)
+                {
+                    Vector3 unitWorldPosition = GridPositionToWorldPosition(unit.GridPosition);
+                    if (agent.CalculatePath(unitWorldPosition, path))
+                    {
+                        // Calculate path length
+                        float pathLength = 0;
+                        for (int i = 1; i < path.corners.Length; i++)
+                        {
+                            pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+                        }
+                        if (pathLength <= maxGridDistance)
+                        {
+                            unitsInRange.Add(unit);
+                            Debug.Log($"Found unit in movement range! Grid pos:[{unit.GridPosition}]; Distance to unit: {pathLength}", managedGrid.GetCellGameObject(unit));
+                            distanceToUnitDictionary[unit] = pathLength;
+                        }
+                    }
+                    path.ClearCorners();
+                }
+            }
+            return unitsInRange;
         }
 
-        internal void HighlightCellsInRange(Vector3Int vector3Int, CombatBehaviour combatBehaviour, NavMeshAgent navMeshAgent)
+        public void ShowCellsInMovementRange(Vector3Int gridPosition, ICombatant combatant)
         {
-            throw new NotImplementedException();
+            HideCellsInMovementRange();
+            NavMeshAgent agent = combatant.References.GetComponent<NavMeshAgent>();
+            currentlyHighlitedGridUnits.Clear();
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
+            foreach (GridUnit unit in currentlyHighlitedGridUnits)
+            {
+                float distanceToUnit = distanceToUnitDictionary[unit];
+                if (distanceToUnit <= combatant.MovementRange + (managedGrid.GridCellSize / 2))
+                {
+                    unit.IsInMoveRange = true;
+                    managedGrid.MarkCellDirty(unit);
+                }
+                if (distanceToUnit <= combatant.SprintRange + (managedGrid.GridCellSize / 2))
+                {
+                    unit.IsInSprintRange = true;
+                    managedGrid.MarkCellDirty(unit);
+                }
+            }
         }
 
-        internal void RestoreHighlightedCellsToPreviousState()
+        public void HideCellsInMovementRange()
         {
-            throw new NotImplementedException();
+            foreach (GridUnit unit in currentlyHighlitedGridUnits)
+            {
+                unit.IsInSprintRange = false;
+                unit.IsInMoveRange = false;
+                managedGrid.MarkCellDirty(unit);
+            }
         }
 
-        internal Vector3Int GetNearestWalkableGridPosition(Vector3 position)
+        public GridUnitObject GetNearestWalkableGridCell(Vector3 position)
         {
-            throw new NotImplementedException();
+            Vector3Int gridPosition = GetNearestWalkableGridPosition(position);
+            return managedGrid.GetCellGameObject(gridPosition);
+        }
+
+        public Vector3Int GetNearestWalkableGridPosition(Vector3 position)
+        {
+            Vector3Int bestGridPos = WorldPositionToGridPosition(position);
+            GridUnit unit = this[bestGridPos.x, bestGridPos.y, bestGridPos.z];
+            if (unit.Walkable)
+            {
+                return bestGridPos;
+            }
+            else
+            {
+                unit = CrawlForNearestWalkablePosition(unit, managedGrid);
+                return unit.GridPosition;
+            }
+
+            static GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo, CachedMultiLevelGrid managedGrid)
+            {
+                IEnumerable<GridUnit> allWalkableUnits = managedGrid.GetAllWalkableGridUnits();
+                GridUnit result = allWalkableUnits.FirstOrDefault();
+                float gridDistance = float.MaxValue;
+                foreach (GridUnit gridUnit in allWalkableUnits)
+                {
+                    float newDistance = Mathf.Abs((gridUnit.GridPosition - relativeTo.GridPosition).magnitude);
+                    if (newDistance < gridDistance)
+                    {
+                        gridDistance = newDistance;
+                        result = gridUnit;
+                    }
+                }
+                return result;
+            }
         }
     }
 }

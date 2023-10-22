@@ -50,6 +50,18 @@ namespace SunsetSystems.Combat.Grid
             managedGrid.MarkCellDirty(currentlyHighlightedCell);
         }
 
+        public void HandleCombatantMovedIntoGridCell(ICombatant combatant, IGridCell cell)
+        {
+            GridUnit cellObject = this[cell.GridPosition];
+            cellObject.Occupier = combatant;
+            managedGrid.MarkCellDirty(cellObject);
+        }
+
+        public void ClearOccupierFromCell(IGridCell cell)
+        {
+            this[cell.GridPosition].Occupier = null;
+        }
+
         public void ClearHighlightedCell()
         {
             if (currentlyHighlightedCell == null)

@@ -66,6 +66,7 @@ namespace SunsetSystems.Combat.Grid
         {
             BuildGrid();
             gridFinished = false;
+            dirtyUnits.Clear();
             _ = GenerateSceneObjects(levels.SelectMany(level => level.WalkableUnits));
         }
 
@@ -74,7 +75,8 @@ namespace SunsetSystems.Combat.Grid
             while (dirtyUnits.Count > 0)
             {
                 GridUnit unit = dirtyUnits.Dequeue();
-                gridUnitObjectDictionary[unit].UpdateCellState();
+                if (gridUnitObjectDictionary.TryGetValue(unit, out GridUnitObject gridGameObject))
+                    gridGameObject.UpdateCellState();
             }
         }
 
@@ -114,7 +116,7 @@ namespace SunsetSystems.Combat.Grid
 
         public IEnumerable<GridUnit> GetAllWalkableGridUnits()
         {
-            return levels.SelectMany(level => level.WalkableUnits.Where(unit => unit.IsFree));
+            return levels.SelectMany(level => level.WalkableUnits);
         }
 
         public void MarkCellDirty(IGridCell cell)

@@ -54,7 +54,7 @@ namespace SunsetSystems.Input
 
         private void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits))
+            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits)) is false)
             {
                 if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                     handler.HandlePrimaryAction(context);
@@ -64,7 +64,7 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits))
+            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits)) is false)
             {
                 if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                     handler.HandleSecondaryAction(context);

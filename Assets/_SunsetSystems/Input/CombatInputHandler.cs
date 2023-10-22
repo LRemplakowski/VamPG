@@ -1,6 +1,8 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,12 +33,26 @@ namespace SunsetSystems.Input
                     lastPointerHit = hit.collider;
                 }
                 HandlePointerOverActionTarget(hit);
+                lastPointerHit = hit.collider;
             }
         }
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
         {
-            throw new System.NotImplementedException();
+            if (context.performed is false)
+                return;
+            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
+                return;
+            if (lastPointerHit != null)
+            {
+                IGridCell gridCell = lastPointerHit.gameObject.GetComponent<GridUnitObject>();
+                if (gridCell != null)
+                {
+                    ICombatant currentCombatant = CombatManager.Instance.CurrentActiveActor;
+                    if (gridCell.IsFree && currentCombatant.HasMoved is false)
+                        currentCombatant.PerformAction(new Move(currentCombatant, gridCell, CombatManager.Instance.CurrentEncounter.GridManager));
+                }
+            }
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
@@ -49,15 +65,6 @@ namespace SunsetSystems.Input
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
             HandleMoveActionPointerPosition();
-            //switch (selectedBarAction.actionType)
-            //{
-            //    case BarAction.MOVE:
-            //        HandleMoveActionPointerPosition();
-            //        break;
-            //    case BarAction.ATTACK:
-            //        HandleAttackActionPointerPosition();
-            //        break;
-            //}
 
             void HandleMoveActionPointerPosition()
             {
@@ -68,33 +75,6 @@ namespace SunsetSystems.Input
                 {
                     CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell);
                 }
-            }
-
-            void HandleAttackActionPointerPosition()
-            {
-                if (!CombatManager.Instance.IsActiveActorPlayerControlled() || CombatManager.Instance.CurrentActiveActor.HasActed)
-                    return;
-                throw new NotImplementedException();
-                //LineRenderer lineRenderer = CombatManager.CurrentActiveActor.LineRenderer;
-                //if (lastHit != hit.collider)
-                //{
-                //    lineRenderer.enabled = false;
-                //    lastHit = hit.collider;
-                //}
-                //ICreature creature = lastHit.GetComponent<ICreature>();
-                //if (creature != null && creature.Faction is Faction.Hostile)
-                //{
-                //    lineRenderer.positionCount = 2;
-                //    throw new NotImplementedException();
-                //    //lineRenderer.SetPosition(0, lineRenderer.transform.position);
-                //    //lineRenderer.SetPosition(1, creature.LineTarget.position);
-                //    //Color color = IsInRange(creature)
-                //    //    ? Color.green
-                //    //    : Color.red;
-                //    //lineRenderer.startColor = color;
-                //    //lineRenderer.endColor = color;
-                //    //lineRenderer.enabled = true;
-                //}
             }
         }
     }

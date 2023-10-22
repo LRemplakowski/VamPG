@@ -52,6 +52,8 @@ namespace SunsetSystems.Combat.Grid
 
         public void ClearHighlightedCell()
         {
+            if (currentlyHighlightedCell == null)
+                return;
             currentlyHighlightedCell.Highlighted = false;
             managedGrid.MarkCellDirty(currentlyHighlightedCell);
             currentlyHighlightedCell = null;

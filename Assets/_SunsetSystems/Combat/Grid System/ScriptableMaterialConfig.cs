@@ -23,15 +23,17 @@ namespace SunsetSystems.Core
         [SerializeField, ValueDropdown("GetParamNamesExcludingExisting"), InlineButton("AddOverride", SdfIconType.Plus, "Add")]
         private string addPropertyOverride = "Property Name";
         [Title("Existing Overrides")]
-        [SerializeField, Searchable]
+        [SerializeField, Searchable, HideIf("@this.propertyOverrides != null")]
         private HashSet<MaterialPropertyData> propertyOverrides = new();
-        public IEnumerable<MaterialPropertyData> PropertyOverrides => propertyOverrides.AsEnumerable();
+        [SerializeField, Searchable]
+        private List<MaterialPropertyData> propertyOverrideList;
+        public IEnumerable<MaterialPropertyData> PropertyOverrides => propertyOverrideList.AsEnumerable();
 
         #region Editor
         private void OnMaterialChanged()
         {
             addPropertyOverride = "Property Name";
-            propertyOverrides = new();
+            propertyOverrideList = new();
         }
 
         private void AddOverride()
@@ -42,22 +44,28 @@ namespace SunsetSystems.Core
                 return;
             }
             MaterialPropertyData data = new(addPropertyOverride, materialParamData[addPropertyOverride]);
-            bool success = propertyOverrides.Add(data);
-            if (success)
-                addPropertyOverride = "Property Name";
-            else
+            if (propertyOverrideList.Any(d => d.PropertyName == data.PropertyName))
+            {
                 Debug.LogError($"Material Property Override for property {addPropertyOverride} already exists!");
+            }
+            else
+            {
+                propertyOverrideList.Add(data);
+                addPropertyOverride = "Property Name";
+            }
         }
 
         private List<string> GetParamNamesExcludingExisting()
         {
-            return materialParamData.Keys.Except(propertyOverrides.Select(p => p.PropertyName)).ToList();
+            return materialParamData.Keys.Except(propertyOverrideList.Select(p => p.PropertyName)).ToList();
         }
 
         private void OnValidate()
         {
+            if (propertyOverrideList == null || propertyOverrideList.Count == 0)
+                propertyOverrideList = propertyOverrides.ToList();
             materialParamData = new();
-            propertyOverrides ??= new();
+            propertyOverrideList ??= new();
             foreach (MaterialPropertyType propertyType in Enum.GetValues(typeof(MaterialPropertyType)))
             {
                 if (propertyType == MaterialPropertyType.ConstantBuffer || propertyType == MaterialPropertyType.ComputeBuffer)

@@ -9,6 +9,8 @@ using UnityEngine.AddressableAssets;
 using System.Collections.Generic;
 using UMA;
 using SunsetSystems.Equipment;
+using System;
+using SunsetSystems.Inventory.Data;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -52,15 +54,11 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private bool _useEquipmentPreset;
         public bool UseEquipmentPreset => _useEquipmentPreset;
-        [field: SerializeField]
+        [field: SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
 
         private void OnEnable()
         {
-            //if (_statsConfig == null)
-            //    _statsConfig = UnityEngine.Resources.Load<StatsConfig>("DEBUG/DebugStats");
-            //if (EquipmentConfig == null)
-            //    EquipmentConfig = UnityEngine.Resources.Load<InventoryConfig>("DEBUG/Default Inventory");
 #if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {
@@ -80,6 +78,16 @@ namespace SunsetSystems.Entities.Characters
             _defaultReadableID = FullName.ToCamelCase();
             if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
                 CreatureDatabase.Instance?.RegisterConfig(this);
+            if (EquipmentSlotsData == null || EquipmentSlotsData.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length - 1)
+            {
+                EquipmentSlotsData = new();
+                EquipmentSlotsData.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
+                EquipmentSlotsData.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
+                EquipmentSlotsData.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
+                EquipmentSlotsData.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
+                EquipmentSlotsData.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
+                EquipmentSlotsData.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+            }
         }
 
         private void Reset()

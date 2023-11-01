@@ -25,13 +25,14 @@ namespace SunsetSystems.Core.UMA
         [SerializeField, Required]
         private GameObject umaRoot;
         [SerializeField]
-        private HashSet<UMARecipeBase> defaultRecipes = new();
+        private List<UMARecipeBase> defaultRecipes = new();
         [SerializeField, ReadOnly]
         private DynamicCharacterAvatar umaAvatar;
 
         private void Start()
         {
-            umaAvatar.BuildCharacter();
+            if (umaAvatar == null)
+                PrepareUMA();
         }
 
         [Button]
@@ -47,7 +48,6 @@ namespace SunsetSystems.Core.UMA
                 umaAvatar = umaRoot.AddComponent<DynamicCharacterAvatar>();
                 umaAvatar.umaData = umaData;
                 umaAvatar.predefinedDNA = new();
-                umaAvatar.ChangeRace(umaConfig.BodyRaceData[BodyType.Male].raceName, true);
                 DynamicCharacterAvatar.RaceAnimator maleAnimator = new()
                 {
                     raceName = umaConfig.BodyRaceData[BodyType.Male].raceName,
@@ -62,7 +62,11 @@ namespace SunsetSystems.Core.UMA
                 };
                 umaAvatar.raceAnimationControllers.animators.Add(maleAnimator);
                 umaAvatar.raceAnimationControllers.animators.Add(femaleAnimator);
+                umaAvatar.ChangeRace(umaConfig.BodyRaceData[BodyType.Male].raceName, true);
+                umaAvatar.SetAnimatorController();
             }
+            umaAvatar.WardrobeRecipes.Clear();
+            umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
             umaAvatar.BuildCharacter();
         }
 
@@ -70,7 +74,7 @@ namespace SunsetSystems.Core.UMA
         {
             this.defaultRecipes.AddRange(defaultRecipes);
             umaAvatar.WardrobeRecipes.Clear();
-            umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.ToList());
+            umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
         }
 
         public void OnItemEquipped(IEquipableItem item)

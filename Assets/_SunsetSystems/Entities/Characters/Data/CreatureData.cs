@@ -33,6 +33,7 @@ namespace SunsetSystems.Entities.Characters
             FirstName = template.FirstName;
             LastName = template.LastName;
             _id = template.ReadableID;
+            PortraitAssetRef = template.PortraitAssetRef;
             Faction = template.Faction;
             BodyType = template.BodyType;
             CreatureType = template.CreatureType;

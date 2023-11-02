@@ -116,6 +116,7 @@ namespace SunsetSystems.Entities.Characters
         {
             References.CreatureData.CopyFromTemplate(template);
             References.StatsManager.CopyFromTemplate(template);
+            References.UMAManager.InjectDefaultRecipes(template.BaseUmaRecipes);
             References.EquipmentManager.CopyFromTemplate(template);
         }
 

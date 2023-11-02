@@ -1,5 +1,6 @@
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
@@ -17,28 +18,62 @@ namespace SunsetSystems.AI
     {
         [SerializeField, Required]
         private IDecisionContext context;
+        [ShowInInspector, ReadOnly]
+        private bool performingLogic = false;
+
+        private EntityAction performedAction;
 
         private void OnEnable()
         {
-            _ = PerformAILogic();
+            performingLogic = false;
+            CombatManager.Instance.CombatBegin += OnCombatBegin;
+            CombatManager.Instance.CombatEnd += OnCombatEnd;
         }
 
-        private async Task PerformAILogic()
+        private void OnDisable()
         {
-            while (enabled)
+            CombatManager.Instance.CombatBegin -= OnCombatBegin;
+            CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            performingLogic = false;
+        }
+
+        private void Update()
+        {
+            if (performingLogic is false || context.IsMyTurn is false)
+                return;
+            if (performedAction == null)
             {
-                if (context.IsMyTurn is false)
-                    await new WaitForSeconds(1f);
                 EntityAction nextAction = DecideWhatToDo();
-                if (nextAction is null)
+                if (nextAction != null)
                 {
-                    context.Owner.SignalEndTurn();
+                    performedAction = nextAction;
+                    context.ActionPerformer.PerformAction(performedAction);
                 }
                 else
                 {
-                    await context.ActionPerformer.PerformAction(nextAction);
+                    context.Owner.SignalEndTurn();
                 }
             }
+            else
+            {
+                if (performedAction.ActionFinished)
+                {
+                    performedAction = null;
+                }
+            }
+        }
+
+        private void OnCombatBegin(IEnumerable<ICombatant> combatants)
+        {
+            if (combatants.Contains(context.Owner))
+            {
+                performingLogic = true;
+            }
+        }
+        
+        private void OnCombatEnd()
+        {
+            performingLogic = false;
         }
 
         private EntityAction DecideWhatToDo()
@@ -56,7 +91,7 @@ namespace SunsetSystems.AI
             else if (context.CanAct)
             {
                 ICombatant target = context.FriendlyCombatants
-                    .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon.GetRangeData().maxRange)
+                    .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
                     .GetRandom();
                 if (target != null)
                     return new Attack(target, context.Owner);

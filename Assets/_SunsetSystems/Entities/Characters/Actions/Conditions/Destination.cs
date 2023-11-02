@@ -30,13 +30,5 @@
 
             return false;
         }
-
-        public override string ToString()
-        {
-            string condition = "Type<Destination>:\n" +
-                "Distance to target: " + agent.remainingDistance + "\n" +
-                "Agent has path? " + agent.hasPath;
-            return condition;
-        }
     }
 }

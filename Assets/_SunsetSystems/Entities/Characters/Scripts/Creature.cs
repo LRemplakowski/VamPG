@@ -10,6 +10,7 @@ using UnityEngine.AddressableAssets;
 using UMA;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -112,6 +113,7 @@ namespace SunsetSystems.Entities.Characters
                 await new WaitForUpdate();
         }
 
+        [Button]
         public void InjectDataFromTemplate(ICreatureTemplate template)
         {
             References.CreatureData.CopyFromTemplate(template);

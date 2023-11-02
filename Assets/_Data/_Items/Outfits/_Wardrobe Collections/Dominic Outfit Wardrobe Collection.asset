@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae7341e07d1b8f41aa37f5e2c910168, type: 3}
+  m_Name: Dominic Outfit Wardrobe Collection
+  m_EditorClassIdentifier: 
+  label: 
+  resourcesOnly: 0
+  recipeType: WardrobeCollection
+  DisplayValue: 
+  compatibleRaces:
+  - VampireMale
+  wardrobeRecipeThumbs:
+  - race: VampireMale
+    filename: 
+    thumb: {fileID: 21300000, guid: ad4422f9c24a1d8408c3f14d6478a86d, type: 3}
+  wardrobeSlot: FullOutfit
+  Hides: []
+  HideTags: []
+  suppressWardrobeSlots: []
+  activeWardrobeSet: []
+  MeshHideAssets: []
+  OverrideDNA:
+    PreloadValues: []
+  recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Dominic Outfit
+    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothing_chest","colors":[255,255,255,255,0,0,0,0,250,250,250,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false}],"wardrobeSet":[],"raceAnimatorController":""}'
+  coverImages:
+  - {fileID: 21300000, guid: 9c9a4bc04609c62428392eb5ead1f685, type: 3}
+  - {fileID: 21300000, guid: c13828597679d0b48bdf3f20d5462564, type: 3}
+  wardrobeCollection:
+    sets:
+    - targetRace: VampireMale
+      wardrobeSet:
+      - slot: OuterClothing
+        recipe: suit01_Recipe
+      - slot: Chest
+        recipe: shirt01_Recipe
+      - slot: Legs
+        recipe: suit pants_Recipe
+      - slot: Neck
+        recipe: tie_loose_Recipe
+      - slot: Feet
+        recipe: chopper_shoes01_Recipe
+  arbitraryRecipes: []

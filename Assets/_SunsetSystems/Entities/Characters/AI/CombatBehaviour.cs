@@ -34,7 +34,9 @@ namespace SunsetSystems.Combat
 
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
-        #region Enable&Disable
+        private EntityAction currentAction;
+
+        #region Unity Messages
         private void OnEnable()
         {
             HostileAction.OnAttackFinished += OnHostileActionFinished;
@@ -47,6 +49,21 @@ namespace SunsetSystems.Combat
             HostileAction.OnAttackFinished -= OnHostileActionFinished;
             CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
+        }
+
+        private void Update()
+        {
+            if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
+            {
+                if (currentAction != null && currentAction.ActionFinished)
+                {
+                    currentAction = null;
+                }
+                if (currentAction == null && HasMoved && HasActed)
+                {
+                    SignalEndTurn();
+                }
+            }
         }
         #endregion
 
@@ -131,17 +148,31 @@ namespace SunsetSystems.Combat
             return Owner.References.StatsManager.GetAttributes().FirstOrDefault(attribute => attribute.AttributeType == attributeType).GetValue();
         }
 
-        public Task PerformAction(EntityAction action, bool clearQueue = false) => Owner.PerformAction(action, clearQueue);
+        public Task PerformAction(EntityAction action, bool clearQueue = false)
+        {
+            currentAction = action;
+            Debug.Log($"Beginning action {action}");
+            if (action is Move)
+                HasMoved = true;
+            else
+                HasActed = true;
+            return Owner.PerformAction(action, clearQueue);
+        }
 
         public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
         public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
 
         public void SignalEndTurn()
         {
-            CombatManager.Instance.NextRound();
+            if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
+                CombatManager.Instance.NextRound();
         }
-
         #endregion
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} - {Owner}";
+        }
     }
 }
 

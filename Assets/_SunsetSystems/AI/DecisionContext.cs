@@ -26,6 +26,6 @@ namespace SunsetSystems.AI
 
         public bool CanAct => Owner.HasActed is false;
 
-        public bool IsMyTurn => CombatManager.Instance.CurrentActiveActor.Equals(Owner);
+        public bool IsMyTurn => CombatManager.Instance.CurrentActiveActor?.Equals(Owner) ?? false;
     }
 }

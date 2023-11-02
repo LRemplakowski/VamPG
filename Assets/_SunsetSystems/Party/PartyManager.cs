@@ -14,6 +14,7 @@ using SunsetSystems.Dialogue;
 using SunsetSystems.Data;
 using UMA;
 using SunsetSystems.Entities.Characters.Interfaces;
+using Sirenix.Utilities;
 
 namespace SunsetSystems.Party
 {
@@ -60,6 +61,7 @@ namespace SunsetSystems.Party
             Instance = this;
             _unique ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
+            _activeCoterieMemberKeys.AddRange(_activeParty.Keys);
         }
 
         protected void OnDestroy()

@@ -36,5 +36,9 @@ namespace SunsetSystems.Entities.Interfaces
         int GetAttributeValue(AttributeType attributeType);
 
         void SignalEndTurn();
+
+        bool MoveToGridPosition(Vector3Int gridPosition);
+
+        bool AttackCreatureUsingCurrentWeapon(ICombatant target);
     }
 }

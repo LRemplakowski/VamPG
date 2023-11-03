@@ -45,12 +45,15 @@ namespace SunsetSystems.Input
                 return;
             if (lastPointerHit != null)
             {
-                IGridCell gridCell = lastPointerHit.gameObject.GetComponent<GridUnitObject>();
+                IGridCell gridCell = lastPointerHit.gameObject.GetComponent<IGridCell>();
                 if (gridCell != null)
                 {
                     ICombatant currentCombatant = CombatManager.Instance.CurrentActiveActor;
                     if (gridCell.IsFree && currentCombatant.HasMoved is false)
-                        currentCombatant.PerformAction(new Move(currentCombatant, gridCell, CombatManager.Instance.CurrentEncounter.GridManager));
+                    {
+                        currentCombatant.MoveToGridPosition(gridCell.GridPosition);
+                        CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
+                    }
                 }
             }
         }

@@ -99,7 +99,6 @@ namespace SunsetSystems.Combat.Grid
                         if (pathLength <= maxGridDistance)
                         {
                             unitsInRange.Add(unit);
-                            Debug.Log($"Found unit in movement range! Grid pos:[{unit.GridPosition}]; Distance to unit: {pathLength}", managedGrid.GetCellGameObject(unit));
                             distanceToUnitDictionary[unit] = pathLength;
                         }
                     }

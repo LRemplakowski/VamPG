@@ -41,26 +41,7 @@ namespace SunsetSystems.AI
         {
             if (performingLogic is false || context.IsMyTurn is false)
                 return;
-            if (performedAction == null)
-            {
-                EntityAction nextAction = DecideWhatToDo();
-                if (nextAction != null)
-                {
-                    performedAction = nextAction;
-                    context.ActionPerformer.PerformAction(performedAction);
-                }
-                else
-                {
-                    context.Owner.SignalEndTurn();
-                }
-            }
-            else
-            {
-                if (performedAction.ActionFinished)
-                {
-                    performedAction = null;
-                }
-            }
+            DecideWhatToDo();
         }
 
         private void OnCombatBegin(IEnumerable<ICombatant> combatants)
@@ -76,7 +57,7 @@ namespace SunsetSystems.AI
             performingLogic = false;
         }
 
-        private EntityAction DecideWhatToDo()
+        private void DecideWhatToDo()
         {
             if (context.CanMove)
             {
@@ -84,9 +65,7 @@ namespace SunsetSystems.AI
                 Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
                 GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>(), out _).GetRandom();
                 if (target != null)
-                    return new Move(context.ActionPerformer, grid.GridPositionToWorldPosition(target.GridPosition), 0f);
-                else
-                    return null;
+                    context.Owner.MoveToGridPosition(target.GridPosition);
             }
             else if (context.CanAct)
             {
@@ -94,11 +73,8 @@ namespace SunsetSystems.AI
                     .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
                     .GetRandom();
                 if (target != null)
-                    return new Attack(target, context.Owner);
-                else
-                    return null;
+                    context.Owner.AttackCreatureUsingCurrentWeapon(target);
             }
-            return null;
         }
     }
 }

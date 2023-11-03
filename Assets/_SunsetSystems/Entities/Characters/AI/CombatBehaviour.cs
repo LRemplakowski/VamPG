@@ -145,7 +145,7 @@ namespace SunsetSystems.Combat
 
         public int GetAttributeValue(AttributeType attributeType)
         {
-            return Owner.References.StatsManager.GetAttributes().FirstOrDefault(attribute => attribute.AttributeType == attributeType).GetValue();
+            return Owner.References.StatsManager.GetAttributes().FirstOrDefault(attribute => attribute.AttributeType == attributeType)?.GetValue() ?? 1;
         }
 
         public Task PerformAction(EntityAction action, bool clearQueue = false)
@@ -166,6 +166,18 @@ namespace SunsetSystems.Combat
         {
             if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
                 CombatManager.Instance.NextRound();
+        }
+
+        public bool MoveToGridPosition(Vector3Int gridPosition)
+        {
+            GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
+            GridUnit gridUnit = gridManager[gridPosition];
+            return true;
+        }
+
+        public bool AttackCreatureUsingCurrentWeapon(ICombatant target)
+        {
+            throw new System.NotImplementedException();
         }
         #endregion
 

@@ -30,7 +30,6 @@ namespace SunsetSystems.Combat
         [Title("Events")]
         public UltEvent<IEnumerable<ICombatant>> CombatBegin;
         public UltEvent CombatEnd;
-        public UltEvent<ICombatant, ICombatant> ActiveActorChanged;
         public UltEvent<ICombatant> CombatRoundBegin;
         public UltEvent<ICombatant> CombatRoundEnd;
         public UltEvent OnFullTurnCompleted;
@@ -45,7 +44,6 @@ namespace SunsetSystems.Combat
             {
                 ICombatant previous = _currentActiveActor;
                 _currentActiveActor = value;
-                ActiveActorChanged?.Invoke(value, previous);
             }
         }
         private ICombatant FirstActor;

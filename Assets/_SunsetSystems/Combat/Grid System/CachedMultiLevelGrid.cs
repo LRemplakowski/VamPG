@@ -199,7 +199,7 @@ namespace SunsetSystems.Combat.Grid
                                 Gizmos.color = Color.yellow;
                             else
                                 Gizmos.color = Color.blue;
-                            Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.SurfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                            Gizmos.DrawWireCube(transform.position + new Vector3(x, 0f, z) * gridCellSize + new Vector3(0, unit.SurfaceY, 0), new Vector3(gridCellSize, .1f, gridCellSize));
                         }
                     }
                 }

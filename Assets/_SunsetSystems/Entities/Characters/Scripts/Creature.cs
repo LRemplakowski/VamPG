@@ -78,6 +78,7 @@ namespace SunsetSystems.Entities.Characters
         }
 
         public EntityAction PeekCurrentAction => _actionQueue.Peek();
+        public bool HasActionsQueued => PeekCurrentAction is not Idle || _actionQueue.Count > 1;
 
         public void ForceToPosition(Vector3 position)
         {

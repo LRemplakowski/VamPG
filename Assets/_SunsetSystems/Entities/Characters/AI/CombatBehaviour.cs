@@ -34,8 +34,6 @@ namespace SunsetSystems.Combat
 
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
-        private EntityAction currentAction;
-
         #region Unity Messages
         private void OnEnable()
         {
@@ -55,11 +53,7 @@ namespace SunsetSystems.Combat
         {
             if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
             {
-                if (currentAction != null && currentAction.ActionFinished)
-                {
-                    currentAction = null;
-                }
-                if (currentAction == null && HasMoved && HasActed)
+                if (HasActionsQueued is false && HasMoved && HasActed && IsPlayerControlled is false)
                 {
                     SignalEndTurn();
                 }
@@ -135,6 +129,8 @@ namespace SunsetSystems.Combat
 
         public EntityAction PeekCurrentAction => Owner.PeekCurrentAction;
 
+        public bool HasActionsQueued => Owner.HasActionsQueued;
+
         public Transform Transform => Owner.Transform;
 
         public bool TakeDamage(int amount)
@@ -150,12 +146,6 @@ namespace SunsetSystems.Combat
 
         public Task PerformAction(EntityAction action, bool clearQueue = false)
         {
-            currentAction = action;
-            Debug.Log($"Beginning action {action}");
-            if (action is Move)
-                HasMoved = true;
-            else
-                HasActed = true;
             return Owner.PerformAction(action, clearQueue);
         }
 
@@ -170,9 +160,22 @@ namespace SunsetSystems.Combat
 
         public bool MoveToGridPosition(Vector3Int gridPosition)
         {
+            if (HasMoved)
+                return false;
             GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
             GridUnit gridUnit = gridManager[gridPosition];
-            return true;
+            if (gridUnit.IsInSprintRange)
+            {
+                HasActed = true;
+                HasMoved = true;
+                _ = PerformAction(new Move(this, gridUnit, gridManager));
+            }
+            else if (gridUnit.IsInMoveRange)
+            {
+                HasMoved = true;
+                _ = PerformAction(new Move(this, gridUnit, gridManager));
+            }
+            return false;
         }
 
         public bool AttackCreatureUsingCurrentWeapon(ICombatant target)

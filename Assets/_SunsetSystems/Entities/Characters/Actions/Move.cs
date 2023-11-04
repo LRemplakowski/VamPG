@@ -30,7 +30,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             this.stoppingDistance = stoppingDistance;
         }
 
-        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0f)
+        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0.05f)
         {
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
             owner.OnChangedGridPosition += ClearOccupierFromCell;

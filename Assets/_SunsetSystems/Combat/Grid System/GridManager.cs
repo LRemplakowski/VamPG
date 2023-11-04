@@ -30,7 +30,6 @@ namespace SunsetSystems.Combat.Grid
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition) => managedGrid.GridPositionToWorldPosition(gridPosition);
         public Vector3Int WorldPositionToGridPosition(Vector3 worldPosition) => managedGrid.WorldPositionToGridPosition(worldPosition);
 
-
         public async void EnableGrid()
         {
             await managedGrid.EnableGrid();
@@ -60,6 +59,7 @@ namespace SunsetSystems.Combat.Grid
         public void ClearOccupierFromCell(IGridCell cell)
         {
             this[cell.GridPosition].Occupier = null;
+            managedGrid.MarkCellDirty(cell);
         }
 
         public void ClearHighlightedCell()

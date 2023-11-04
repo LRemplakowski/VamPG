@@ -37,14 +37,12 @@ namespace SunsetSystems.Combat
         #region Unity Messages
         private void OnEnable()
         {
-            HostileAction.OnAttackFinished += OnHostileActionFinished;
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
         }
 
         private void OnDisable()
         {
-            HostileAction.OnAttackFinished -= OnHostileActionFinished;
             CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
         }
@@ -61,14 +59,6 @@ namespace SunsetSystems.Combat
         }
         #endregion
 
-        private void OnHostileActionFinished(ICombatant target, ICombatant performer)
-        {
-            if (performer.Equals(this))
-            {
-                HasActed = true;
-            }
-        }
-
         [Button]
         private void OnCombatRoundBegin(ICombatant currentActor)
         {
@@ -80,7 +70,7 @@ namespace SunsetSystems.Combat
                 if (IsPlayerControlled)
                 {
                     GridManager grid = CombatManager.Instance.CurrentEncounter.GridManager;
-                    grid.ShowCellsInMovementRange(grid.WorldPositionToGridPosition(Owner.References.Transform.position), this);
+                    grid.ShowCellsInMovementRange(grid.WorldPositionToGridPosition(References.Transform.position), this);
                 }
             }
         }
@@ -88,10 +78,7 @@ namespace SunsetSystems.Combat
         [Button]
         private void OnCombatRoundEnd(ICombatant currentActor)
         {
-            if (currentActor.Equals(this) && IsPlayerControlled)
-            {
-                CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
-            }
+
         }
 
         #region ICombatant
@@ -164,15 +151,28 @@ namespace SunsetSystems.Combat
                 return false;
             GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
             GridUnit gridUnit = gridManager[gridPosition];
-            if (gridUnit.IsInSprintRange)
+            if (IsPlayerControlled)
             {
-                HasActed = true;
-                HasMoved = true;
-                _ = PerformAction(new Move(this, gridUnit, gridManager));
+                if (gridUnit.IsInSprintRange)
+                {
+                    HasActed = true;
+                    HasMoved = true;
+                    OnChangedGridPosition?.Invoke();
+                    CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
+                    _ = PerformAction(new Move(this, gridUnit, gridManager));
+                }
+                else if (gridUnit.IsInMoveRange)
+                {
+                    HasMoved = true;
+                    OnChangedGridPosition?.Invoke();
+                    CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
+                    _ = PerformAction(new Move(this, gridUnit, gridManager));
+                }
             }
-            else if (gridUnit.IsInMoveRange)
+            else
             {
                 HasMoved = true;
+                OnChangedGridPosition?.Invoke();
                 _ = PerformAction(new Move(this, gridUnit, gridManager));
             }
             return false;
@@ -180,7 +180,11 @@ namespace SunsetSystems.Combat
 
         public bool AttackCreatureUsingCurrentWeapon(ICombatant target)
         {
-            throw new System.NotImplementedException();
+            if (HasActed)
+                return false;
+            HasActed = true;
+            _ = PerformAction(new Attack(target, this));
+            return true;
         }
         #endregion
 

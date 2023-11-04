@@ -41,7 +41,8 @@ namespace SunsetSystems.AI
         {
             if (performingLogic is false || context.IsMyTurn is false)
                 return;
-            DecideWhatToDo();
+            if (context.Owner.HasActionsQueued is false)
+                DecideWhatToDo();
         }
 
         private void OnCombatBegin(IEnumerable<ICombatant> combatants)
@@ -74,6 +75,8 @@ namespace SunsetSystems.AI
                     .GetRandom();
                 if (target != null)
                     context.Owner.AttackCreatureUsingCurrentWeapon(target);
+                else
+                    context.Owner.SignalEndTurn();
             }
         }
     }

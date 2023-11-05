@@ -25,8 +25,9 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
             this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
+            NavMesh.SamplePosition(destination, out var hit, 1f, NavMesh.AllAreas);
             conditions.Add(new Destination(navMeshAgent));
-            this.destination = destination;
+            this.destination = hit.position;
             this.stoppingDistance = stoppingDistance;
         }
 

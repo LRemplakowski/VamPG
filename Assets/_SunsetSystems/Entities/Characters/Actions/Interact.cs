@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Interact : EntityAction
     {
         private readonly IInteractable target;

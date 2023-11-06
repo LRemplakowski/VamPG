@@ -164,7 +164,7 @@ namespace SunsetSystems.Input
         {
             if (GameManager.Instance.CurrentState == GameState.Menu)
                 return;
-            PauseMenuUI pauseUI = gameplayUIParent.PauseMenuUI;
+            PauseMenuController pauseUI = gameplayUIParent.PauseMenuUI;
             if (GameManager.Instance.IsCurrentState(GameState.GamePaused) && pauseUI.CurrentActiveScreen == screen)
             {
                 Debug.Log("Resuming game");

@@ -64,7 +64,7 @@ namespace SunsetSystems.AI
             {
                 GridManager grid = context.GridManager;
                 Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
-                GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>(), out _).GetRandom();
+                GridUnit target = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponentInChildren<NavMeshAgent>(), out _).FindAll(cell => cell.IsOccupied is false).GetRandom();
                 if (target != null)
                     context.Owner.MoveToGridPosition(target.GridPosition);
             }

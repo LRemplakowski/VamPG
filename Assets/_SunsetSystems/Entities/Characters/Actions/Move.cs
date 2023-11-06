@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Combat.Grid;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
@@ -10,10 +11,12 @@ using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Move : EntityAction
     {
         private readonly NavMeshAgent navMeshAgent;
         private readonly NavMeshObstacle navMeshObstacle;
+        [ShowInInspector, ReadOnly]
         private Vector3 destination;
         public static event Action<IActionPerformer> OnMovementFinished;
         public static Action<IActionPerformer> OnMovementStarted;
@@ -31,7 +34,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             this.stoppingDistance = stoppingDistance;
         }
 
-        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0.05f)
+        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0f)
         {
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
             owner.OnChangedGridPosition += ClearOccupierFromCell;
@@ -58,7 +61,6 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override void Abort()
         {
             base.Abort();
-            navMeshAgent.velocity = Vector3.zero;
             navMeshAgent.isStopped = true;
             navMeshAgent.enabled = false;
             navMeshObstacle.enabled = true;

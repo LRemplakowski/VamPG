@@ -12,9 +12,9 @@ namespace SunsetSystems.UI
     public class GameplayUIManager : MonoBehaviour
     {
         [field: SerializeField]
-        public InGameUI InGameUI { get; private set; }
+        public HUDController InGameUI { get; private set; }
         [field: SerializeField]
-        public PauseMenuUI PauseMenuUI { get; private set; }
+        public PauseMenuController PauseMenuUI { get; private set; }
         [field: SerializeField]
         public ContainerGUI ContainerGUI { get; private set; }
         [field: SerializeField]

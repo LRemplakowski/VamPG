@@ -2,6 +2,7 @@
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Idle : EntityAction
     {
         public Idle(IActionPerformer owner) : base(owner) { }

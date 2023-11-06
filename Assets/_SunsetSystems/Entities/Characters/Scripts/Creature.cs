@@ -16,6 +16,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class Creature : PersistentEntity, ICreature, ICreatureTemplateProvider
     {
+        [ShowInInspector, ReadOnly]
         private Queue<EntityAction> _actionQueue;
         private Queue<EntityAction> ActionQueue
         {

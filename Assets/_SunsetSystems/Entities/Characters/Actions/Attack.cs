@@ -4,6 +4,7 @@ using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Attack : HostileAction
     {
         private AttackModifier _attackModifier;

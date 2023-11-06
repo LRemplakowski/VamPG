@@ -153,16 +153,16 @@ namespace SunsetSystems.Combat
             GridUnit gridUnit = gridManager[gridPosition];
             if (IsPlayerControlled)
             {
-                if (gridUnit.IsInSprintRange)
+                if (gridUnit.IsInMoveRange)
                 {
-                    HasActed = true;
                     HasMoved = true;
                     OnChangedGridPosition?.Invoke();
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
                 }
-                else if (gridUnit.IsInMoveRange)
+                else if (gridUnit.IsInSprintRange)
                 {
+                    HasActed = true;
                     HasMoved = true;
                     OnChangedGridPosition?.Invoke();
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();

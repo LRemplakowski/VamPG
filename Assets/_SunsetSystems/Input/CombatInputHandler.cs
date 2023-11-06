@@ -1,11 +1,7 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +9,10 @@ namespace SunsetSystems.Input
 {
     public class CombatInputHandler : SerializedMonoBehaviour, IGameplayInputHandler
     {
+        [Title("References")]
+        [SerializeField, Required]
+        private PlayerCombatActionManager selectedActionManager;
+        [Title("Config")]
         [SerializeField]
         private LayerMask _raycastTargetMask;
         private const int raycastRange = 100;

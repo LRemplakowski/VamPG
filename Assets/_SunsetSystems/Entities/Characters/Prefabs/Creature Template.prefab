@@ -92,22 +92,10 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes:
-    - Name: defaultRecipes
-      Entry: 7
-      Data: 0|System.Collections.Generic.HashSet`1[[UMA.UMARecipeBase, UMA_Core]],
-        System.Core
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
+    SerializationNodes: []
   umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   umaRoot: {fileID: 1203071946431115676}
+  defaultRecipes: []
   umaAvatar: {fileID: 0}
 --- !u!1 &680196556232561751
 GameObject:
@@ -340,7 +328,8 @@ GameObject:
   - component: {fileID: 80723574967673666}
   - component: {fileID: 3551420083429788374}
   - component: {fileID: 265292995897044542}
-  m_Layer: 0
+  - component: {fileID: 8614383970203172438}
+  m_Layer: 8
   m_Name: Creature Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -484,6 +473,29 @@ MonoBehaviour:
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
   <NavMeshObstacle>k__BackingField: {fileID: 3551420083429788374}
+--- !u!136 &8614383970203172438
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834732813004800264}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &4380623037722673601
 GameObject:
   m_ObjectHideFlags: 0
@@ -746,6 +758,8 @@ MonoBehaviour:
   defaultRaycastOriginY: 1.5
   _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
+  <OnChangedGridPosition>k__BackingField:
+    _PersistentCalls: []
 --- !u!1 &6912376922156523433
 GameObject:
   m_ObjectHideFlags: 0

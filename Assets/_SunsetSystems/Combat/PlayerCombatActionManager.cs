@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,7 @@ namespace SunsetSystems.Combat
 {
     public class PlayerCombatActionManager : SerializedMonoBehaviour
     {
+        [field: ShowInInspector, ReadOnly]
         public SelectedCombatActionData SelectedActionData { get; private set; }
 
         public void OnCombatActionSelected(SelectedCombatActionData actionData)
@@ -15,9 +17,11 @@ namespace SunsetSystems.Combat
         }
     }
 
+    [Serializable]
     public struct SelectedCombatActionData
     {
-        public readonly CombatActionType ActionType;
+        [field: ShowInInspector, ReadOnly]
+        public CombatActionType ActionType { get; private set; }
 
         public SelectedCombatActionData(CombatActionType ActionType)
         {

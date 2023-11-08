@@ -458,7 +458,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Click"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""86b97aa0-db6e-4428-a27e-7552b836bf4f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -467,16 +467,16 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Point"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""f601cab9-9997-42cd-8ce6-415bfea5e206"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Escape"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""f99799ad-213e-494e-b8b2-c3e206865e37"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -485,7 +485,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""RightClick"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""be1d8881-715b-4137-bef3-3ee94d4fba5b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -494,7 +494,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""CharacterSheet"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""bcdbc2b7-5e1a-4c81-9c41-712d92be8d3b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -503,7 +503,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Inventory"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""28e02958-5bd3-4244-90a1-82dc6fd13e4a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -512,7 +512,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Journal"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""263e4935-ca30-49b4-a709-fcc32432ea21"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -521,7 +521,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""SkipDialogue"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""10e81493-2520-40b5-bdbe-0e5abc3595f6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -532,7 +532,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""name"": ""Scroll"",
                     ""type"": ""Value"",
                     ""id"": ""96522dbe-f560-44ea-b7f9-867121f3cde1"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true

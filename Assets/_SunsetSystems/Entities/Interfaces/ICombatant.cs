@@ -40,5 +40,9 @@ namespace SunsetSystems.Entities.Interfaces
         bool MoveToGridPosition(Vector3Int gridPosition);
 
         bool AttackCreatureUsingCurrentWeapon(ICombatant target);
+
+        float PerformAttackAnimation();
+
+        float PerformTakeHitAnimation();
     }
 }

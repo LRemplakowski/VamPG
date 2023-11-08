@@ -20,6 +20,12 @@ namespace SunsetSystems.Combat
         [Title("Config")]
         [SerializeField]
         private float defaultRaycastOriginY = 1.5f;
+        [SerializeField]
+        private string attackAnimationTrigger;
+        private int attackAnimationTriggerHash;
+        [SerializeField]
+        private string takeHitAnimationTrigger;
+        private int takeHitAnimationTriggerHash;
 
         [Title("References")]
         [SerializeField]
@@ -39,6 +45,12 @@ namespace SunsetSystems.Combat
         {
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
+        }
+
+        private void Start()
+        {
+            attackAnimationTriggerHash = Animator.StringToHash(attackAnimationTrigger);
+            takeHitAnimationTriggerHash = Animator.StringToHash(takeHitAnimationTrigger);
         }
 
         private void OnDisable()
@@ -185,6 +197,24 @@ namespace SunsetSystems.Combat
             HasActed = true;
             _ = PerformAction(new Attack(target, this));
             return true;
+        }
+
+        /// <summary>
+        /// Instructs combatant to perform attack animation with current weapon.
+        /// </summary>
+        /// <returns>Animation duration</returns>
+        public float PerformAttackAnimation()
+        {
+            return 0f;
+        }
+
+        /// <summary>
+        /// Instructs combatant to perform getting hit animation.
+        /// </summary>
+        /// <returns>Animation duration</returns>
+        public float PerformTakeHitAnimation()
+        {
+            return 0f;
         }
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,9 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Priority actions clear action queue upon assignment.
         /// </summary>
+        [ShowInInspector]
+        private string name => this.ToString();
+        [field: ShowInInspector]
         public bool IsPriority { get; protected set; }
         public bool ActionFinished { get; protected set; } = false;
         protected IActionPerformer Owner { get; }

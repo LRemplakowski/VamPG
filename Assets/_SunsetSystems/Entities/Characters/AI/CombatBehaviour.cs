@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using SunsetSystems.AI;
 using UltEvents;
+using SunsetSystems.Animation;
 
 namespace SunsetSystems.Combat
 {
@@ -33,18 +34,22 @@ namespace SunsetSystems.Combat
         public Vector3 RaycastOrigin => _raycastOrigin.position;
         [field: SerializeField]
         public LineRenderer LineRenderer { get; private set; }
-        [field: SerializeField]
+        [field: SerializeField, Required]
         public ICreature Owner { get; private set; }
-        [field: SerializeField]
+        [field: SerializeField, Required]
         public IMagicUser MagicUser { get; private set; }
+        [SerializeField, Required]
+        private CreatureAnimationController animationController;
 
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
         #region Unity Messages
         private void OnEnable()
         {
+            CombatManager.Instance.CombatBegin += OnCombatBegin;
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
+            CombatManager.Instance.CombatEnd += OnCombatEnd;
         }
 
         private void Start()
@@ -71,23 +76,28 @@ namespace SunsetSystems.Combat
         }
         #endregion
 
-        [Button]
+        private void OnCombatBegin(IEnumerable<ICombatant> actorsInCombat)
+        {
+            if (actorsInCombat.Contains(this))
+            {
+                animationController.SetCombatAnimationsActive(true);
+            }
+        }
+
+        private void OnCombatEnd()
+        {
+            animationController.SetCombatAnimationsActive(false);
+        }
+
         private void OnCombatRoundBegin(ICombatant currentActor)
         {
             if (currentActor.Equals(this))
             {
                 HasMoved = false;
                 HasActed = false;
-
-                if (IsPlayerControlled)
-                {
-                    GridManager grid = CombatManager.Instance.CurrentEncounter.GridManager;
-                    grid.ShowCellsInMovementRange(grid.WorldPositionToGridPosition(References.Transform.position), this);
-                }
             }
         }
 
-        [Button]
         private void OnCombatRoundEnd(ICombatant currentActor)
         {
 
@@ -165,14 +175,14 @@ namespace SunsetSystems.Combat
             GridUnit gridUnit = gridManager[gridPosition];
             if (IsPlayerControlled)
             {
-                if (gridUnit.IsInMoveRange)
+                if (gridUnit.IsInMoveRange && !HasMoved)
                 {
                     HasMoved = true;
                     OnChangedGridPosition?.Invoke();
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
                 }
-                else if (gridUnit.IsInSprintRange)
+                else if (gridUnit.IsInSprintRange && !HasMoved && !HasActed)
                 {
                     HasActed = true;
                     HasMoved = true;
@@ -205,7 +215,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformAttackAnimation()
         {
-            return 0f;
+            animationController.SetTrigger(attackAnimationTriggerHash);
+            return 1f;
         }
 
         /// <summary>
@@ -214,7 +225,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformTakeHitAnimation()
         {
-            return 0f;
+            animationController.SetTrigger(takeHitAnimationTriggerHash);
+            return 1f;
         }
         #endregion
 

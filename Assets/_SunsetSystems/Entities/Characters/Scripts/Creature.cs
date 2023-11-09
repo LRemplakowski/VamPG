@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using Redcode.Awaiting;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
-using System.Threading.Tasks;
-using Redcode.Awaiting;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
-using UnityEngine.AddressableAssets;
-using UMA;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UMA;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters
 {
     public class Creature : PersistentEntity, ICreature, ICreatureTemplateProvider
     {
-        [ShowInInspector, ReadOnly]
-        private Queue<EntityAction> _actionQueue;
+        [ShowInInspector]
+        private Queue<EntityAction> _actionQueue = new();
         private Queue<EntityAction> ActionQueue
         {
             get
@@ -51,6 +51,8 @@ namespace SunsetSystems.Entities.Characters
 
         public void Update()
         {
+            if (ActionQueue.Count <= 0)
+                ActionQueue.Enqueue(new Idle(this));
             if (ActionQueue.Peek() is Idle && ActionQueue.Count > 1)
             {
                 ActionQueue.Dequeue();

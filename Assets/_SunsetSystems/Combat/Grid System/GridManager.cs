@@ -108,21 +108,22 @@ namespace SunsetSystems.Combat.Grid
             return unitsInRange;
         }
 
-        public void ShowCellsInMovementRange(Vector3Int gridPosition, ICombatant combatant)
+        public void ShowCellsInMovementRange(ICombatant combatant)
         {
             HideCellsInMovementRange();
+            Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
             NavMeshAgent agent = combatant.References.GetComponent<NavMeshAgent>();
             currentlyHighlitedGridUnits.Clear();
             currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 float distanceToUnit = distanceToUnitDictionary[unit];
-                if (distanceToUnit <= combatant.MovementRange + (managedGrid.GridCellSize / 2))
+                if (distanceToUnit <= combatant.MovementRange + (managedGrid.GridCellSize / 2) && !combatant.HasMoved)
                 {
                     unit.IsInMoveRange = true;
                     managedGrid.MarkCellDirty(unit);
                 }
-                if (distanceToUnit <= combatant.SprintRange + (managedGrid.GridCellSize / 2))
+                if (distanceToUnit <= combatant.SprintRange + (managedGrid.GridCellSize / 2) && !combatant.HasMoved && !combatant.HasActed)
                 {
                     unit.IsInSprintRange = true;
                     managedGrid.MarkCellDirty(unit);

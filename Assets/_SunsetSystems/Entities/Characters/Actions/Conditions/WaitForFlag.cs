@@ -1,17 +1,29 @@
+using Sirenix.OdinInspector;
+using System;
+
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [Serializable]
     public class WaitForFlag : Condition
     {
-        private readonly bool flag;
+        [ShowInInspector]
+        private FlagWrapper flag;
 
-        public WaitForFlag(ref bool flag)
+        public WaitForFlag(FlagWrapper flag)
         {
             this.flag = flag;
         }
 
         public override bool IsMet()
         {
-            return flag;
+            return flag.Value;
         }
+    }
+
+    [Serializable]
+    public class FlagWrapper
+    {
+        [field: ShowInInspector]
+        public bool Value { get; set; }
     }
 }

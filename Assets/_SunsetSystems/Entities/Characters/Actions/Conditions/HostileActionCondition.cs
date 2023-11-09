@@ -2,6 +2,7 @@
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [System.Serializable]
     public class HostileActionCondition : Condition
     {
         public bool Performed { get; set; }

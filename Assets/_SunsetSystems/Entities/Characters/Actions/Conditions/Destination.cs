@@ -3,6 +3,7 @@
     using UnityEngine;
     using UnityEngine.AI;
 
+    [System.Serializable]
     public class Destination : Condition
     {
         private NavMeshAgent agent;

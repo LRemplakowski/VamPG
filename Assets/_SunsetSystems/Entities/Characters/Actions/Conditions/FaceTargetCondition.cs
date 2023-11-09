@@ -1,12 +1,16 @@
-﻿using System.Collections;
+﻿using Sirenix.OdinInspector;
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [System.Serializable]
     public class FaceTargetCondition : Condition
     {
+        [ShowInInspector]
         private Vector3 faceDirection;
+        [ShowInInspector]
         private Transform rotatingTransform;
 
         public FaceTargetCondition(Transform rotatingTransform, Vector3 faceDirection)

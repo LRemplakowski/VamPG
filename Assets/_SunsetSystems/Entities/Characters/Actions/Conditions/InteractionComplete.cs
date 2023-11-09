@@ -1,8 +1,10 @@
 ﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [System.Serializable]
     public class InteractionComplete : Condition
     {
         readonly IInteractable target;
+
         public InteractionComplete(IInteractable target)
         {
             this.target = target;

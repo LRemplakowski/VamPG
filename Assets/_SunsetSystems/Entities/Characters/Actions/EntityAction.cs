@@ -2,6 +2,7 @@
 using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -18,6 +19,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public bool IsPriority { get; protected set; }
         public bool ActionFinished { get; protected set; } = false;
         protected IActionPerformer Owner { get; }
+        [ShowInInspector]
         protected List<Condition> conditions = new List<Condition>();
 
         public EntityAction(IActionPerformer owner)
@@ -55,18 +57,7 @@ namespace SunsetSystems.Entities.Characters.Actions
                 this.Abort();
                 return true;
             }
-            foreach (Condition c in conditions)
-            {
-                if (c.IsMet())
-                {
-                    continue;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            ActionFinished = true;
+            ActionFinished = conditions.All(c => c.IsMet());
             return ActionFinished;
         }
 

@@ -125,5 +125,10 @@ namespace SunsetSystems.Animation
 
             rigBuilder.enabled = false;
         }
+
+        public void SetTrigger(int hash)
+        {
+            animator.SetTrigger(hash);
+        }
     }
 }

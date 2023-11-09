@@ -3,15 +3,18 @@ using UnityEngine;
 using SunsetSystems.Entities.Interfaces;
 using System.Collections;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
     [System.Serializable]
     public class Attack : HostileAction
     {
+        [ShowInInspector]
         private AttackModifier _attackModifier;
         private IEnumerator attackRoutine;
-        private bool attackFinished = false;
+        [ShowInInspector]
+        private FlagWrapper attackFinished;
 
         public Attack(ICombatant target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
         {
@@ -20,7 +23,8 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public Attack(ICombatant target, ICombatant attacker) : base(target, attacker)
         {
-            conditions.Add(new WaitForFlag(ref attackFinished));
+            attackFinished = new() { Value = false };
+            conditions.Add(new WaitForFlag(attackFinished));
         }
 
         public override void Abort()
@@ -66,7 +70,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             float waitForTakeHitFinish = defender.PerformTakeHitAnimation();
             yield return new WaitForSeconds(Mathf.Max(waitForAttackFinish, waitForTakeHitFinish));
             defender.TakeDamage(attackResult.AdjustedDamage);
-            attackFinished = true;
+            attackFinished.Value = true;
         }
     } 
 }

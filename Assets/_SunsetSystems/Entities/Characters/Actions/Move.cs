@@ -4,8 +4,6 @@ using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,10 +19,9 @@ namespace SunsetSystems.Entities.Characters.Actions
         public static event Action<IActionPerformer> OnMovementFinished;
         public static Action<IActionPerformer> OnMovementStarted;
         private float stoppingDistance;
-        private Transform rotationTarget;
         //private Task rotationTask;
 
-        public Move(IActionPerformer owner, Vector3 destination, float stoppingDistance) : base(owner, true)
+        public Move(IActionPerformer owner, Vector3 destination, float stoppingDistance = .1f) : base(owner, true)
         {
             this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
             this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
@@ -34,7 +31,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             this.stoppingDistance = stoppingDistance;
         }
 
-        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition), 0f)
+        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition))
         {
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
             owner.OnChangedGridPosition += ClearOccupierFromCell;
@@ -45,18 +42,6 @@ namespace SunsetSystems.Entities.Characters.Actions
                 owner.OnChangedGridPosition -= ClearOccupierFromCell;
             }
         }
-
-        public Move(IActionPerformer owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)
-        {
-            this.rotationTarget = rotationTarget;
-            //rotationTask = new Task(RotateToTarget);
-        }
-
-        //private async void RotateToTarget()
-        //{
-        //    //await Owner.FaceTarget(rotationTarget);
-        //    await Task.Yield();
-        //}
 
         public override void Abort()
         {
@@ -90,10 +75,6 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override bool EvaluateActionFinished()
         {
             bool finished = base.EvaluateActionFinished();
-            if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()))
-            {
-                //rotationTask.Start();
-            }
             if (finished)
             {
                 return true;

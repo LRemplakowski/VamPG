@@ -47,21 +47,16 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             base.Abort();
             navMeshAgent.isStopped = true;
-            navMeshAgent.enabled = false;
-            navMeshObstacle.enabled = true;
-            navMeshAgent.stoppingDistance = 0f;
             if (OnMovementFinished != null)
                 OnMovementFinished.Invoke(this.Owner);
         }
 
         public override void Begin()
         {
-            navMeshObstacle.enabled = false;
-            navMeshAgent.enabled = true;
+            navMeshAgent.isStopped = false;
             navMeshAgent.ResetPath();
             if (navMeshAgent.SetDestination(destination)) 
             {
-                navMeshAgent.isStopped = false;
                 navMeshAgent.stoppingDistance = stoppingDistance;
                 if (OnMovementStarted != null)
                     OnMovementStarted.Invoke(this.Owner);
@@ -69,19 +64,6 @@ namespace SunsetSystems.Entities.Characters.Actions
             else
             {
                 Abort();
-            }
-        }
-
-        public override bool EvaluateActionFinished()
-        {
-            bool finished = base.EvaluateActionFinished();
-            if (finished)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }

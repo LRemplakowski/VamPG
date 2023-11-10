@@ -13,6 +13,7 @@ using System.Linq;
 using SunsetSystems.AI;
 using UltEvents;
 using SunsetSystems.Animation;
+using SunsetSystems.Equipment;
 
 namespace SunsetSystems.Combat
 {
@@ -32,6 +33,8 @@ namespace SunsetSystems.Combat
         [SerializeField]
         private Transform _raycastOrigin;
         public Vector3 RaycastOrigin => _raycastOrigin.position;
+        [SerializeField, Required]
+        private IWeaponManager weaponManager;
         [field: SerializeField]
         public LineRenderer LineRenderer { get; private set; }
         [field: SerializeField, Required]
@@ -78,6 +81,8 @@ namespace SunsetSystems.Combat
 
         private void OnCombatBegin(IEnumerable<ICombatant> actorsInCombat)
         {
+            weaponManager.SetSelectedWeapon(SelectedWeapon.Primary);
+            animationController.SetCombatAnimationsActive(true);
             if (actorsInCombat.Contains(this))
             {
                 animationController.SetCombatAnimationsActive(true);

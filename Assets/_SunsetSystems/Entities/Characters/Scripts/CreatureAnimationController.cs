@@ -5,6 +5,8 @@ using UnityEngine.Animations.Rigging;
 using UMA;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Inventory.Data;
+using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Animation
 {
@@ -12,6 +14,7 @@ namespace SunsetSystems.Animation
     {
         const float movementAnimationSmoothTime = 0.1f;
 
+        [Title("References")]
         [SerializeField, Required]
         private ICreature owner;
         [SerializeField, Required]
@@ -40,11 +43,6 @@ namespace SunsetSystems.Animation
         private void OnDestroy()
         {
 
-        }
-
-        private void OnDeath(Creature deceased)
-        {
-            animator.SetTrigger("Die");
         }
 
         private Rig InitializeRigLayer()
@@ -129,6 +127,11 @@ namespace SunsetSystems.Animation
         public void SetTrigger(int hash)
         {
             animator.SetTrigger(hash);
+        }
+
+        public void SetInteger(int hash, int value)
+        {
+            animator.SetInteger(hash, value);
         }
     }
 }

@@ -30,10 +30,6 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override void Abort()
         {
             base.Abort();
-            if (Owner.Faction is Faction.PlayerControlled)
-            {
-                Owner.References.GetComponentInChildren<LineRenderer>().enabled = false;
-            }
             if (attackRoutine != null)
                 (Owner as MonoBehaviour).StopCoroutine(attackRoutine);
         }

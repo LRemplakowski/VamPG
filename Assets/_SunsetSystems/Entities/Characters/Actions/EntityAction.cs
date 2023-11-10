@@ -58,6 +58,8 @@ namespace SunsetSystems.Entities.Characters.Actions
                 return true;
             }
             ActionFinished = conditions.All(c => c.IsMet());
+            if (ActionFinished)
+                Abort();
             return ActionFinished;
         }
 

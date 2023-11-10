@@ -93,8 +93,7 @@ namespace SunsetSystems.Combat
             Actors = new();
             Actors.AddRange(encounter.Creatures.Select(c => c.References.CombatBehaviour));
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
-            CombatBegin?.Invoke(Actors);
-            Actors.ForEach(c => c.References.GetComponentInChildren<CreatureAnimationController>().SetCombatAnimationsActive(true));
+            CombatBegin?.InvokeSafe(Actors);
             MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             await new WaitForSeconds(1f);
             NextRound();
@@ -113,7 +112,7 @@ namespace SunsetSystems.Combat
             CurrentEncounter = null;
         }
 
-        private void MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
+        private static void MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
             foreach (ICombatant combatant in actors)
             {

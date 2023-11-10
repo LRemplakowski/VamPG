@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Animation;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System.Collections;
@@ -11,14 +12,28 @@ namespace SunsetSystems.Equipment
 {
     public class WeaponManager : SerializedMonoBehaviour, IWeaponManager
     {
+        [Title("References")]
         [SerializeField, Required]
         private IEquipmentManager equipmentManager;
         [SerializeField, Required]
         private Transform weaponParent;
+        [SerializeField, Required]
+        private CreatureAnimationController animationController;
+        [Title("Config")]
+        [SerializeField]
+        private string weaponAnimationTypeParam;
+        private int weaponAnimationTypeParamHash;
+        [Title("Debug Info")]
         [ShowInInspector, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
         [SerializeField, ReadOnly]
         private GameObject weaponInstance;
+
+        private void Start()
+        {
+            weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
+            SetSelectedWeapon(SelectedWeapon.None);
+        }
 
         [Button]
         public void SetSelectedWeapon(SelectedWeapon weapon)
@@ -35,6 +50,8 @@ namespace SunsetSystems.Equipment
                 selectedWeapon = newSelectedWeapon;
                 _ = RebuildWeaponInstance();
             }
+            if (weapon != SelectedWeapon.None)
+                animationController.SetInteger(weaponAnimationTypeParamHash, (int)(GetSelectedWeapon()?.WeaponType ?? 0));
         }
 
         private async Task RebuildWeaponInstance()

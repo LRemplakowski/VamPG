@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator PerformAttack(ICombatant attacker, ICombatant defender, AttackResult attackResult)
         {
-            faceTargetSubaction = new(attacker, defender.Transform);
+            faceTargetSubaction = new(attacker, defender.Transform, 180f);
             faceTargetSubaction.Begin();
             while (faceTargetSubaction.EvaluateActionFinished() is false)
                 yield return null;

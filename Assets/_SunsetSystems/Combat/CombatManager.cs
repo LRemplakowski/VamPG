@@ -91,7 +91,7 @@ namespace SunsetSystems.Combat
             CurrentEncounter = encounter;
             turnCounter = 0;
             Actors = new();
-            Actors.AddRange(encounter.Creatures.Select(c => c.References.CombatBehaviour));
+            Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
             CombatBegin?.InvokeSafe(Actors);
             MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);

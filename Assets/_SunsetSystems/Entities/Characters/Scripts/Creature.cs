@@ -92,8 +92,8 @@ namespace SunsetSystems.Entities.Characters
 
         public void ClearAllActions()
         {
-            ActionQueue.Dequeue().Abort();
-            ActionQueue.Clear();
+            while (ActionQueue.Count > 0)
+                ActionQueue.Dequeue().Abort();
             ActionQueue.Enqueue(new Idle(this));
         }
 

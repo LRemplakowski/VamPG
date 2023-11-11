@@ -9,6 +9,8 @@ namespace SunsetSystems.Entities.Characters.Actions
 {
     public class FaceTarget : EntityAction
     {
+        private const float MARGIN_OF_ERROR = 0.01f;
+
         [ShowInInspector]
         private readonly Transform ownerTransform;
         [ShowInInspector]
@@ -27,7 +29,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             ownerTransform = owner.Transform;
             this.lookDirection = lookDirection;
             this.rotationSpeed = rotationSpeed;
-            conditions.Add(new FaceTargetCondition(ownerTransform, lookDirection));
+            conditions.Add(new FaceTargetCondition(ownerTransform, lookDirection, MARGIN_OF_ERROR));
         }
 
         public override void Abort()
@@ -47,7 +49,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             float dotProduct = Vector3.Dot(ownerTransform.forward, lookDirection);
             Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
-            while (dotProduct < 1f)
+            while (dotProduct < 1f - MARGIN_OF_ERROR)
             {
                 ownerTransform.rotation = Quaternion.RotateTowards(ownerTransform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
                 yield return null;

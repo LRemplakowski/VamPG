@@ -12,16 +12,19 @@ namespace SunsetSystems.Entities.Characters.Actions.Conditions
         private Vector3 faceDirection;
         [ShowInInspector]
         private Transform rotatingTransform;
+        [ShowInInspector]
+        private float marginOfError;
 
-        public FaceTargetCondition(Transform rotatingTransform, Vector3 faceDirection)
+        public FaceTargetCondition(Transform rotatingTransform, Vector3 faceDirection, float marginOfError = 0.1f)
         {
             this.rotatingTransform = rotatingTransform;
             this.faceDirection = faceDirection.normalized;
+            this.marginOfError = marginOfError;
         }
 
         public override bool IsMet()
         {
-            return Vector3.Dot(rotatingTransform.forward, faceDirection) >= 1f;
+            return !(Vector3.Dot(rotatingTransform.forward, faceDirection) < 1f - marginOfError);
         }
 
         public override string ToString()

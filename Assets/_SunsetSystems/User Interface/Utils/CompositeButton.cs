@@ -57,6 +57,8 @@ namespace UnityEngine.UI
             DoStateTransition(base.currentSelectionState, instant: false);
         }
 
+
+
         protected override void DoStateTransition(SelectionState state, bool instant)
         {
             if (!gameObject.activeInHierarchy)
@@ -179,6 +181,26 @@ namespace UnityEngine.UI
                 animationTriggers.Animator.ResetTrigger(animationTriggers.DisabledTriggerHash);
                 animationTriggers.Animator.SetTrigger(triggerHash);
             }
+        }
+
+        public override Selectable FindSelectableOnLeft()
+        {
+            return this;
+        }
+
+        public override Selectable FindSelectableOnRight()
+        {
+            return this;
+        }
+
+        public override Selectable FindSelectableOnUp()
+        {
+            return this;
+        }
+
+        public override Selectable FindSelectableOnDown()
+        {
+            return this;
         }
     }
 

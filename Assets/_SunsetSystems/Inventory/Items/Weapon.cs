@@ -16,6 +16,8 @@ namespace SunsetSystems.Inventory.Data
         public DamageType DamageType { get; private set; }
         [field: SerializeField]
         public WeaponType WeaponType { get; private set; }
+        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
+        public WeaponFireMode FireMode { get; private set; }
         [field: SerializeField]
         public AttributeType AssociatedAttribute { get; private set; }
         [field: SerializeField]
@@ -53,10 +55,5 @@ namespace SunsetSystems.Inventory.Data
             data.damageType = DamageType;
             return data;
         }
-    }
-
-    public enum WeaponType
-    {
-        Melee, Ranged
     }
 }

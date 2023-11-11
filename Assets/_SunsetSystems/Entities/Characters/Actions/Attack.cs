@@ -15,6 +15,8 @@ namespace SunsetSystems.Entities.Characters.Actions
         private IEnumerator attackRoutine;
         [ShowInInspector]
         private FlagWrapper attackFinished;
+        [ShowInInspector]
+        private FaceTarget faceTargetSubaction;
 
         public Attack(ICombatant target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
         {
@@ -58,9 +60,9 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator PerformAttack(ICombatant attacker, ICombatant defender, AttackResult attackResult)
         {
-            FaceTarget faceTarget = new(attacker, defender.Transform);
-            faceTarget.Begin();
-            while (faceTarget.EvaluateActionFinished() is false)
+            faceTargetSubaction = new(attacker, defender.Transform);
+            faceTargetSubaction.Begin();
+            while (faceTargetSubaction.EvaluateActionFinished() is false)
                 yield return null;
             float waitForAttackFinish = attacker.PerformAttackAnimation();
             float waitForTakeHitFinish = defender.PerformTakeHitAnimation();

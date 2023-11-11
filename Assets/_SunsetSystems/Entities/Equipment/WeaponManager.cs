@@ -2,8 +2,6 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Animation;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -12,6 +10,8 @@ namespace SunsetSystems.Equipment
 {
     public class WeaponManager : SerializedMonoBehaviour, IWeaponManager
     {
+        private const string FIRE_WEAPON_EVENT = "FIRE_WEAPON";
+
         [Title("References")]
         [SerializeField, Required]
         private IEquipmentManager equipmentManager;
@@ -27,7 +27,7 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
         [SerializeField, ReadOnly]
-        private GameObject weaponInstance;
+        private IWeaponInstance weaponInstance;
 
         private void Start()
         {
@@ -61,17 +61,17 @@ namespace SunsetSystems.Equipment
             weaponInstance = await InstantiateCurrentWeapon();
         }
 
-        private async Task<GameObject> InstantiateCurrentWeapon()
+        private async Task<IWeaponInstance> InstantiateCurrentWeapon()
         {
             if (selectedWeapon != EquipmentSlotID.Invalid)
-                return await Addressables.InstantiateAsync(GetSelectedWeapon().EquippedInstanceAsset, weaponParent).Task;
+                return (await Addressables.InstantiateAsync(GetSelectedWeapon().EquippedInstanceAsset, weaponParent).Task).GetComponent<IWeaponInstance>();
             else
                 return null;
         }
 
         private void ReleaseCurrentWeaponInstance()
         {
-            Addressables.ReleaseInstance(weaponInstance);
+            Addressables.ReleaseInstance(weaponInstance.GameObject);
         }
 
         public IWeapon GetSelectedWeapon()
@@ -123,6 +123,12 @@ namespace SunsetSystems.Equipment
                         break;
                 }
             }
+        }
+
+        public void OnAnimationEvent(string eventType)
+        {
+            if (string.Equals(eventType, FIRE_WEAPON_EVENT))
+                weaponInstance.FireWeapon();
         }
     }
 }

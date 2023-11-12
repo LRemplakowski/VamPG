@@ -125,7 +125,7 @@ namespace SunsetSystems.Core
                 MaterialPropertyType.Vector => vectorValue,
                 MaterialPropertyType.Matrix => matrixValue,
                 MaterialPropertyType.Texture => textureValue,
-                _ => null,
+                _ => 0,
             };
         }
 

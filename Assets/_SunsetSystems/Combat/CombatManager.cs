@@ -91,17 +91,17 @@ namespace SunsetSystems.Combat
             CurrentEncounter = encounter;
             turnCounter = 0;
             Actors = new();
-            Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
+            Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
             CombatBegin?.InvokeSafe(Actors);
-            MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
+            await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             await new WaitForSeconds(1f);
             NextRound();
         }
 
         private ICombatant DecideFirstActor(List<ICombatant> creatures)
         {
-            creatures.OrderByDescending(creature => creature.References.GetComponentInChildren<StatsManager>().GetInitiative());
+            //creatures.OrderByDescending(creature => creature.References.GetComponentInChildren<StatsManager>().GetInitiative());
             return creatures[0];
         }
 
@@ -112,14 +112,16 @@ namespace SunsetSystems.Combat
             CurrentEncounter = null;
         }
 
-        private static void MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
+        private static Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
+            List<Task> tasks = new();
             foreach (ICombatant combatant in actors)
             {
                 Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.Transform.position);
                 Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
-                _ = combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager));
+                tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager)));
             }
+            return Task.WhenAll(tasks);
         }
 
         public bool IsBeforeFirstRound()

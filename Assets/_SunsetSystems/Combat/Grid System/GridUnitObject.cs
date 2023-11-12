@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Combat.Grid
@@ -17,6 +18,9 @@ namespace SunsetSystems.Combat.Grid
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
 
+        private IMaterialConfig defaultCellStateConfig;
+        private static MaterialPropertyNameAndTypeComparer propertyNameAndTypeComparer = new();
+
         public Vector3Int GridPosition => unitData.GridPosition;
         public Vector3 WorldPosition => transform.position;
 
@@ -27,6 +31,12 @@ namespace SunsetSystems.Combat.Grid
         public float CellSize => unitData.CellSize;
 
         public bool Highlighted => unitData.Highlighted;
+
+        private void Start()
+        {
+            defaultCellStateConfig = gridCellMaterialConfigs[new() { BaseState = GridCellBaseState.Default, SubState = GridCellSubState.Default }];
+            propertyNameAndTypeComparer ??= new();
+        }
 
         public bool InjectUnitData(GridUnit unitData)
         {
@@ -62,7 +72,8 @@ namespace SunsetSystems.Combat.Grid
                 mat = cellRenderer.sharedMaterial;
             else
                 mat = cellRenderer.material;
-            foreach (MaterialPropertyData data in propertyData)
+            //IEnumerable<MaterialPropertyData> foo = propertyData.Union(defaultCellStateConfig.PropertyOverrides, propertyNameAndTypeComparer);
+            foreach (MaterialPropertyData data in propertyData.Union(defaultCellStateConfig.PropertyOverrides, propertyNameAndTypeComparer))
             {
                 switch (data.PropertyType)
                 {
@@ -179,6 +190,19 @@ namespace SunsetSystems.Combat.Grid
                             result.SubState = GridCellSubState.Friendly;
                     }
                 }
+            }
+        }
+
+        private class MaterialPropertyNameAndTypeComparer : EqualityComparer<MaterialPropertyData>
+        {
+            public override bool Equals(MaterialPropertyData first, MaterialPropertyData second)
+            {
+                return first.PropertyName == first.PropertyName && second.PropertyType == second.PropertyType;
+            }
+
+            public override int GetHashCode(MaterialPropertyData obj)
+            {
+                return (obj.PropertyName, obj.PropertyType).GetHashCode();
             }
         }
     }

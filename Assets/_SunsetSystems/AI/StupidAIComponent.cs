@@ -69,16 +69,15 @@ namespace SunsetSystems.AI
                 {
                     case Inventory.WeaponType.Melee:
                         target = FindGridPositionAdjacentToClosestEnemy(grid, currentGridPosition);
-                        target ??= FindRandomGridPositionInMovementRange(grid, currentGridPosition);
                         if (target != null)
-                        {
                             context.Owner.MoveToGridPosition(target.GridPosition);
-                        }
                         break;
                     case Inventory.WeaponType.Ranged:
                         target = FindRandomGridPositionInMovementRange(grid, currentGridPosition);
                         if (target != null)
                             context.Owner.MoveToGridPosition(target.GridPosition);
+                        else
+                            context.Owner.SignalEndTurn();
                         break;
                 }
             }
@@ -114,27 +113,36 @@ namespace SunsetSystems.AI
             float distance = float.MaxValue;
             foreach (ICombatant enemy in context.FriendlyCombatants)
             {
-                if (Vector3.Distance(context.Owner.Transform.position, enemy.Transform.position) < distance)
+                float newDistance = Vector3.Distance(context.Owner.Transform.position, enemy.Transform.position);
+                if (newDistance < distance)
+                {
                     nearestEnemy = enemy;
+                    distance = newDistance;
+                }
             }
             GridUnit unit = null;
             distance = float.MaxValue;
+            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.GetComponent<NavMeshAgent>(), out _);
             if (nearestEnemy != null)
             {
                 Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(nearestEnemy.Transform.position);
-                for (int x = -1; x < 1; x++)
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, nearestEnemy.References.GetComponent<NavMeshAgent>(), out _);
+                IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
+                foreach (GridUnit commonUnit in commonElements)
                 {
-                    for (int z = -1; z < 1; z++)
+                    if (commonUnit != null && commonUnit.IsFree)
                     {
-                        GridUnit newUnit = grid[enemyGridPosition + new Vector3Int(x, 0, z)];
-                        if (unit.IsFree)
+                        float distanceToCommonUnit = Vector3Int.Distance(currentGridPosition, commonUnit.GridPosition);
+                        if (distanceToCommonUnit < distance)
                         {
-                            if (Vector3Int.Distance(newUnit.GridPosition, currentGridPosition) < distance)
-                                unit = newUnit;
+                            unit = commonUnit;
+                            distance = distanceToCommonUnit;
                         }
                     }
                 }
             }
+            if (unit == null)
+                unit = FindRandomGridPositionInMovementRange(grid, currentGridPosition);
             return unit;
         }
 
@@ -148,6 +156,8 @@ namespace SunsetSystems.AI
                     result = grid[currentGridPosition + new Vector3Int(x, 0, z)].Occupier;
                     if (result != null && (result.Faction == Faction.PlayerControlled || result.Faction == Faction.Friendly))
                         return result;
+                    else
+                        result = null;
                 }
             }
             return result;

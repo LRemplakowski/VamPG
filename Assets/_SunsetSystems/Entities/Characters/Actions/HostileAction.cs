@@ -14,7 +14,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         [ShowInInspector]
         protected ICombatant Target { get; }
 
-        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker, true)
+        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker, false)
         {
             Owner = attacker;
             Target = target;

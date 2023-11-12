@@ -83,7 +83,7 @@ namespace SunsetSystems.Combat.Grid
             foreach (GridUnit unit in managedGrid.GetAllWalkableGridUnits())
             {
                 // Calculate the grid distance between gridPosition and unit's position
-                int gridDistance = Mathf.Abs(gridPosition.x - unit.GridPosition.x) + Mathf.Abs(gridPosition.z - unit.GridPosition.z);
+                float gridDistance = (new Vector2(gridPosition.x, gridPosition.z) - new Vector2(unit.GridPosition.x, unit.GridPosition.z)).magnitude;
 
                 if (gridDistance <= maxGridDistance)
                 {

@@ -15,6 +15,7 @@ using UltEvents;
 using SunsetSystems.Animation;
 using SunsetSystems.Equipment;
 using Sirenix.Utilities;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Combat
 {
@@ -232,10 +233,67 @@ namespace SunsetSystems.Combat
         {
             if (HasActed)
                 return false;
-            HasActed = true;
-            HasMoved = true;
-            _ = PerformAction(new Attack(target, this));
-            return true;
+            IWeapon currentWeapon = weaponManager.GetSelectedWeapon();
+            if (currentWeapon.WeaponType is WeaponType.Melee)
+            {
+                GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
+                Vector3Int currentGridPosition = gridManager.WorldPositionToGridPosition(Transform.position);
+                Vector3Int targetGridPosition = gridManager.WorldPositionToGridPosition(target.Transform.position);
+                if (Vector3Int.Distance(targetGridPosition, currentGridPosition) < 1.5f)
+                {
+                    HasActed = true;
+                    HasMoved = true;
+                    _ = PerformAction(new Attack(target, this));
+                    return true;
+                }
+                else
+                {
+                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetComponent<NavMeshAgent>());
+                    gridManager.ShowCellsInMovementRange(this);
+                    if (nearestUnitInRangeAdjacentToTarget != null && MoveToGridPosition(nearestUnitInRangeAdjacentToTarget.GridPosition))
+                    {
+                        HasMoved = true;
+                        HasActed = true;
+                        _ = PerformAction(new Attack(target, this));
+                        return true;
+                    }
+                    gridManager.HideCellsInMovementRange();
+                }
+            }
+            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().maxRange)
+            {
+                HasActed = true;
+                HasMoved = true;
+                _ = PerformAction(new Attack(target, this));
+                return true;
+            }
+            return false;
+        }
+
+        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, NavMeshAgent navMeshAgent)
+        {
+            GridUnit unit = null;
+            float distance = float.MaxValue;
+            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navMeshAgent, out _);
+            if (target != null)
+            {
+                Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(target.Transform.position);
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetComponent<NavMeshAgent>(), out _);
+                IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
+                foreach (GridUnit commonUnit in commonElements)
+                {
+                    if (commonUnit != null && commonUnit.IsFree)
+                    {
+                        float distanceToCommonUnit = Vector3Int.Distance(currentGridPosition, commonUnit.GridPosition);
+                        if (distanceToCommonUnit < distance)
+                        {
+                            unit = commonUnit;
+                            distance = distanceToCommonUnit;
+                        }
+                    }
+                }
+            }
+            return unit;
         }
 
         /// <summary>

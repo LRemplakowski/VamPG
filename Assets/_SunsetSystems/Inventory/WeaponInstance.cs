@@ -23,8 +23,10 @@ namespace SunsetSystems.Equipment
         [Button]
         public void FireWeapon()
         {
-            muzzleFlash.Play();
-            AudioManager.Instance.PlaySFXOneShot(shotSFX);
+            if (muzzleFlash != null)
+                muzzleFlash.Play();
+            if (shotSFX != null)
+                AudioManager.Instance.PlaySFXOneShot(shotSFX);
         }
     }
 }

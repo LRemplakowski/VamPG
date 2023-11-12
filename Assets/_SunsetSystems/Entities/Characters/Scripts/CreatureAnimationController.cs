@@ -12,8 +12,6 @@ namespace SunsetSystems.Animation
 {
     public class CreatureAnimationController : SerializedMonoBehaviour
     {
-        const float movementAnimationSmoothTime = 0.1f;
-
         [Title("References")]
         [SerializeField, Required]
         private ICreature owner;
@@ -31,8 +29,6 @@ namespace SunsetSystems.Animation
         private TwoBoneIKConstraint rightHandConstraint, leftHandConstraint;
 
         private bool _initializedOnce = false;
-
-        private float _vLastFrame;
 
         private void Start()
         {
@@ -80,11 +76,7 @@ namespace SunsetSystems.Animation
 
         private void Update()
         {
-            float deltaV = agent.velocity.magnitude - _vLastFrame;
-            float deltaTime = Time.deltaTime;
-            float accelerationNormalized = deltaV / Mathf.Abs(deltaV / deltaTime);
             animator.SetFloat("Speed", agent.velocity.magnitude / agent.speed);
-            //animator.SetFloat("acceleration", accelerationNormalized);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)
@@ -132,6 +124,11 @@ namespace SunsetSystems.Animation
         public void SetInteger(int hash, int value)
         {
             animator.SetInteger(hash, value);
+        }
+
+        public void SetBool(int hash, bool value)
+        {
+            animator.SetBool(hash, value);
         }
     }
 }

@@ -3,6 +3,8 @@ using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Equipment;
+using SunsetSystems.Inventory;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,14 +20,16 @@ namespace SunsetSystems.AI
 
         public GridManager GridManager => CombatManager.Instance.CurrentEncounter.GridManager;
 
-        public IEnumerable<ICombatant> FriendlyCombatants => CombatManager.Instance.Actors.FindAll(actor => actor.Faction is Faction.Friendly || actor.Faction is Faction.PlayerControlled);
+        public List<ICombatant> FriendlyCombatants => CombatManager.Instance.Actors.FindAll(actor => actor.Faction is Faction.Friendly || actor.Faction is Faction.PlayerControlled);
 
-        public IEnumerable<ICombatant> HostileCombatants => CombatManager.Instance.Actors.FindAll(actor => actor.Faction is Faction.Hostile);
+        public List<ICombatant> HostileCombatants => CombatManager.Instance.Actors.FindAll(actor => actor.Faction is Faction.Hostile);
 
         public bool CanMove => Owner.HasMoved is false;
 
         public bool CanAct => Owner.HasActed is false;
 
         public bool IsMyTurn => CombatManager.Instance.CurrentActiveActor?.Equals(Owner) ?? false;
+
+        public WeaponType CurrentWeaponType => Owner.References.GetComponentInChildren<IWeaponManager>().GetSelectedWeapon().WeaponType;
     }
 }

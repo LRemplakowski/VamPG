@@ -217,6 +217,37 @@ namespace UltEvents
             }
         }
 
+        /// <summary>
+        /// Invokes all <see cref="DynamicCalls"/> then all <see cref="PersistentCalls"/>.
+        /// <para></para>
+        /// See also: <seealso cref="InvokeSafeDynamicFirst"/> and <seealso cref="UltEventUtils.InvokeX{T0}(UltEvent{T0}, T0)"/>.
+        /// </summary>
+        public virtual void InvokeDynamicFirst(T0 parameter0)
+        {
+            CacheParameter(parameter0);
+            if (_DynamicCalls != null)
+                _DynamicCalls(parameter0);
+            InvokePersistentCalls();
+        }
+
+        /// <summary>
+        /// Invokes all <see cref="DynamicCalls"/> then all <see cref="PersistentCalls"/>inside a try/catch block
+        /// which logs any exceptions that are thrown.
+        /// <para></para>
+        /// See also: <seealso cref="InvokeDynamicFirst"/> and <seealso cref="UltEventUtils.InvokeX{T0}(UltEvent{T0}, T0)"/>.
+        /// </summary>
+        public virtual void InvokeSafeDynamicFirst(T0 parameter0)
+        {
+            try
+            {
+                InvokeDynamicFirst(parameter0);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+        }
+
         /************************************************************************************************************************/
     }
 }

@@ -14,6 +14,7 @@ using SunsetSystems.AI;
 using UltEvents;
 using SunsetSystems.Animation;
 using SunsetSystems.Equipment;
+using Sirenix.Utilities;
 
 namespace SunsetSystems.Combat
 {
@@ -28,6 +29,9 @@ namespace SunsetSystems.Combat
         [SerializeField]
         private string takeHitAnimationTrigger;
         private int takeHitAnimationTriggerHash;
+        [SerializeField]
+        private string hasCoverAnimationBoolean;
+        private int hasCoverAnimationBooleanHash;
 
         [Title("References")]
         [SerializeField]
@@ -59,6 +63,7 @@ namespace SunsetSystems.Combat
         {
             attackAnimationTriggerHash = Animator.StringToHash(attackAnimationTrigger);
             takeHitAnimationTriggerHash = Animator.StringToHash(takeHitAnimationTrigger);
+            hasCoverAnimationBooleanHash = Animator.StringToHash(hasCoverAnimationBoolean);
         }
 
         private void OnDisable()
@@ -82,7 +87,6 @@ namespace SunsetSystems.Combat
         private void OnCombatBegin(IEnumerable<ICombatant> actorsInCombat)
         {
             weaponManager.SetSelectedWeapon(SelectedWeapon.Primary);
-            animationController.SetCombatAnimationsActive(true);
             if (actorsInCombat.Contains(this))
             {
                 animationController.SetCombatAnimationsActive(true);
@@ -172,6 +176,12 @@ namespace SunsetSystems.Combat
                 CombatManager.Instance.NextRound();
         }
 
+        [Button]
+        public bool MoveToGridPosition(GridUnitObject gridObject)
+        {
+            return MoveToGridPosition(gridObject.GridPosition);
+        }
+
         public bool MoveToGridPosition(Vector3Int gridPosition)
         {
             if (HasMoved)
@@ -186,6 +196,10 @@ namespace SunsetSystems.Combat
                     OnChangedGridPosition?.Invoke();
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
+                    CurrentCoverSources.Clear();
+                    CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
+                    animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                    return true;
                 }
                 else if (gridUnit.IsInSprintRange && !HasMoved && !HasActed)
                 {
@@ -194,6 +208,10 @@ namespace SunsetSystems.Combat
                     OnChangedGridPosition?.Invoke();
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
+                    CurrentCoverSources.Clear();
+                    CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
+                    animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                    return true;
                 }
             }
             else
@@ -201,15 +219,21 @@ namespace SunsetSystems.Combat
                 HasMoved = true;
                 OnChangedGridPosition?.Invoke();
                 _ = PerformAction(new Move(this, gridUnit, gridManager));
+                CurrentCoverSources.Clear();
+                CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
+                animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                return true;
             }
             return false;
         }
 
+        [Button]
         public bool AttackCreatureUsingCurrentWeapon(ICombatant target)
         {
             if (HasActed)
                 return false;
             HasActed = true;
+            HasMoved = true;
             _ = PerformAction(new Attack(target, this));
             return true;
         }

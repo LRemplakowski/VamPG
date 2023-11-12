@@ -7,23 +7,19 @@ using UnityEngine;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Combat;
 
-public class CoverDetector : Singleton<CoverDetector>
+public class CoverDetector : MonoBehaviour
 {
     [SerializeField]
     private float coverDetectionRadius = 1f;
     [SerializeField]
     private LayerMask coverLayerMask;
 
-    public static bool IsPositionNearCover(IGridCell gridPos, out List<ICover> coverSources)
+    private static CoverDetector instance;
+
+    private void Start()
     {
-        coverSources = new List<ICover>();
-        Collider[] colliders = Physics.OverlapSphere(gridPos.WorldPosition, instance.coverDetectionRadius * gridPos.CellSize, instance.coverLayerMask);
-        foreach (Collider col in colliders)
-        {
-            if (col.TryGetComponent(out ICover cover))
-                coverSources.Add(cover);
-        }
-        return true;
+        if (instance == null)
+            instance = this;
     }
 
     public static bool FiringLineObstructedByCover(ICombatant attacker, ICombatant target, out ICover coverSource)

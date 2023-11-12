@@ -23,6 +23,6 @@ namespace SunsetSystems.Animation
 
     public enum WeaponAnimationType
     {
-        Brawl = 0, Pistol = 1, Rifle = 2, Melee = 4
+        Brawl = 0, Pistol = 1, Rifle = 2, MeleeOneHanded = 4, MeleeTwoHanded = 5
     }
 }

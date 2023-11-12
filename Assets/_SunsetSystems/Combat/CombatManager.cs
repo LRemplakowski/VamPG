@@ -82,7 +82,7 @@ namespace SunsetSystems.Combat
                 turnCounter++;
                 OnFullTurnCompleted?.Invoke();
             }
-            CombatRoundBegin?.Invoke(CurrentActiveActor);
+            CombatRoundBegin?.InvokeSafeDynamicFirst(CurrentActiveActor);
             Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " begins round " + turnCounter + "!");
         }
 

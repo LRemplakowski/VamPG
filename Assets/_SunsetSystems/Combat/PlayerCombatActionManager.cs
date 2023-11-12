@@ -15,19 +15,7 @@ namespace SunsetSystems.Combat
         [field: ShowInInspector, ReadOnly]
         public SelectedCombatActionData SelectedActionData { get; private set; }
 
-        private void OnEnable()
-        {
-            CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
-            CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
-        }
-
-        private void OnDisable()
-        {
-            CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
-            CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
-        }
-
-        private void OnCombatRoundBegin(ICombatant actor)
+        public void OnCombatRoundBegin(ICombatant actor)
         {
             if (actor.Faction == Faction.PlayerControlled)
             {
@@ -36,7 +24,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        private void OnCombatRoundEnd(ICombatant actor)
+        public void OnCombatRoundEnd(ICombatant actor)
         {
             if (actor.Faction == Faction.PlayerControlled)
             {

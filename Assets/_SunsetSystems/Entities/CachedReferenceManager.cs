@@ -14,32 +14,36 @@ namespace SunsetSystems.Entities
 
         private readonly Dictionary<Type, Component> cachedReferences = new();
 
-        public new T GetComponent<T>() where T : Component
+        public new T GetComponent<T>()
         {
             if (cachedReferences.TryGetValue(typeof(T), out Component value))
             {
-                return value as T;
+                if (value is T result)
+                    return result;
             }
             else
             {
                 T component = base.GetComponent<T>();
-                cachedReferences[typeof(T)] = component;
+                cachedReferences[typeof(T)] = component as Component;
                 return component;
             }
+            return default;
         }
 
-        public new T GetComponentInChildren<T>() where T : Component
+        public new T GetComponentInChildren<T>()
         {
             if (cachedReferences.TryGetValue(typeof(T), out Component value))
             {
-                return value as T;
+                if (value is T result)
+                    return result;
             }
             else
             {
                 T component = base.GetComponentInChildren<T>();
-                cachedReferences[typeof(T)] = component;
+                cachedReferences[typeof(T)] = component as Component;
                 return component;
             }
+            return default;
         }
     }
 }

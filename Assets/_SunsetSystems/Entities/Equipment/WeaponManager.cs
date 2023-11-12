@@ -50,8 +50,6 @@ namespace SunsetSystems.Equipment
                 selectedWeapon = newSelectedWeapon;
                 _ = RebuildWeaponInstance();
             }
-            if (weapon != SelectedWeapon.None)
-                animationController.SetInteger(weaponAnimationTypeParamHash, (int)(GetSelectedWeapon()?.WeaponType ?? 0));
         }
 
         private async Task RebuildWeaponInstance()
@@ -59,11 +57,15 @@ namespace SunsetSystems.Equipment
             if (weaponInstance != null)
                 ReleaseCurrentWeaponInstance();
             weaponInstance = await InstantiateCurrentWeapon();
+            if (weaponInstance != null)
+                animationController.SetInteger(weaponAnimationTypeParamHash, (int)(weaponInstance.WeaponAnimationData.AnimationType));
+            else
+                animationController.SetInteger(weaponAnimationTypeParamHash, (int)WeaponAnimationType.Brawl);
         }
 
         private async Task<IWeaponInstance> InstantiateCurrentWeapon()
         {
-            if (selectedWeapon != EquipmentSlotID.Invalid)
+            if (selectedWeapon != EquipmentSlotID.Invalid || GetSelectedWeapon().EquippedInstanceAsset != null)
                 return (await Addressables.InstantiateAsync(GetSelectedWeapon().EquippedInstanceAsset, weaponParent).Task).GetComponent<IWeaponInstance>();
             else
                 return null;

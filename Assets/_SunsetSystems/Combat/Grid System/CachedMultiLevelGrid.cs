@@ -316,7 +316,9 @@ namespace SunsetSystems.Combat.Grid
             void VerifyIfAdjactenToCoverSource(GridUnit unit, HashSet<ICover> coverSourcesCache)
             {
                 Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.GridPosition.x * cellSize, cellSize / 2, unit.GridPosition.z * cellSize);
-                if (Physics.BoxCast(gridUnitCenter, Vector3.one * cellSize / 4, Vector3.forward, out RaycastHit lastHit, Quaternion.identity, cellSize))
+                Vector3 boxCastExtentsForward = new(cellSize / 4, cellSize / 2, .1f);
+                Vector3 boxCastExtentsSideways = new(.1f, cellSize / 2, cellSize / 4);
+                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsForward, Vector3.forward, out RaycastHit lastHit, Quaternion.identity, cellSize + 0.1f))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
@@ -324,7 +326,7 @@ namespace SunsetSystems.Combat.Grid
                         coverSourcesCache.Add(cover);
                     }
                 }
-                if (Physics.BoxCast(gridUnitCenter, Vector3.one * cellSize / 4, Vector3.right, out lastHit, Quaternion.identity, cellSize))
+                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsSideways, Vector3.right, out lastHit, Quaternion.identity, cellSize + 0.1f))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
@@ -332,7 +334,7 @@ namespace SunsetSystems.Combat.Grid
                         coverSourcesCache.Add(cover);
                     }
                 }
-                if (Physics.BoxCast(gridUnitCenter, Vector3.one * cellSize / 4, Vector3.back, out lastHit, Quaternion.identity, cellSize))
+                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsForward, Vector3.back, out lastHit, Quaternion.identity, cellSize + 0.1f))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
@@ -340,7 +342,7 @@ namespace SunsetSystems.Combat.Grid
                         coverSourcesCache.Add(cover);
                     }
                 }
-                if (Physics.BoxCast(gridUnitCenter, Vector3.one * cellSize / 4, Vector3.left, out lastHit, Quaternion.identity, cellSize))
+                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsSideways, Vector3.left, out lastHit, Quaternion.identity, cellSize + 0.1f))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {

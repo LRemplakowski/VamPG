@@ -72,7 +72,6 @@ namespace SunsetSystems.Combat.Grid
                 mat = cellRenderer.sharedMaterial;
             else
                 mat = cellRenderer.material;
-            //IEnumerable<MaterialPropertyData> foo = propertyData.Union(defaultCellStateConfig.PropertyOverrides, propertyNameAndTypeComparer);
             foreach (MaterialPropertyData data in propertyData.Union(defaultCellStateConfig.PropertyOverrides, propertyNameAndTypeComparer))
             {
                 switch (data.PropertyType)

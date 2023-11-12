@@ -318,11 +318,14 @@ namespace SunsetSystems.Combat.Grid
                 Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.GridPosition.x * cellSize, cellSize / 2, unit.GridPosition.z * cellSize);
                 Vector3 boxCastExtentsForward = new(cellSize / 4, cellSize / 2, .1f);
                 Vector3 boxCastExtentsSideways = new(.1f, cellSize / 2, cellSize / 4);
+                CoverQuality coverQuality = CoverQuality.None;
                 if (Physics.BoxCast(gridUnitCenter, boxCastExtentsForward, Vector3.forward, out RaycastHit lastHit, Quaternion.identity, cellSize + 0.1f))
                 {
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
                         unit.AdjacentToCover = true;
+                        unit.AdjacentCoverSources.Add(cover);
+                        coverQuality = cover.Quality;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -331,6 +334,8 @@ namespace SunsetSystems.Combat.Grid
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
                         unit.AdjacentToCover = true;
+                        unit.AdjacentCoverSources.Add(cover);
+                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -339,6 +344,8 @@ namespace SunsetSystems.Combat.Grid
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
                         unit.AdjacentToCover = true;
+                        unit.AdjacentCoverSources.Add(cover);
+                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
                         coverSourcesCache.Add(cover);
                     }
                 }
@@ -347,9 +354,12 @@ namespace SunsetSystems.Combat.Grid
                     if (lastHit.collider.TryGetComponent(out ICover cover))
                     {
                         unit.AdjacentToCover = true;
+                        unit.AdjacentCoverSources.Add(cover);
+                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
                         coverSourcesCache.Add(cover);
                     }
                 }
+                unit.CoverQuality = coverQuality;
             }
         }
     }
@@ -363,6 +373,7 @@ namespace SunsetSystems.Combat.Grid
         public bool IsInMoveRange;
         public bool IsInSprintRange;
         public bool AdjacentToCover;
+        public List<ICover> AdjacentCoverSources = new();
         public CoverQuality CoverQuality;
         public ICombatant Occupier;
         public bool IsOccupied => Occupier != null;

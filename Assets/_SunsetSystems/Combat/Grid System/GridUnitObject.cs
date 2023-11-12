@@ -17,6 +17,8 @@ namespace SunsetSystems.Combat.Grid
         private Dictionary<GridCellStateData, IMaterialConfig> gridCellMaterialConfigs = new();
         [ShowInInspector, ReadOnly]
         private GridUnit unitData = null;
+        [ShowInInspector, ReadOnly]
+        private GridCellStateData currentCellState;
 
         private IMaterialConfig defaultCellStateConfig;
         private static MaterialPropertyNameAndTypeComparer propertyNameAndTypeComparer = new();
@@ -58,8 +60,8 @@ namespace SunsetSystems.Combat.Grid
 
         public void UpdateCellState()
         {
-            GridCellStateData stateData = CellStateEvaluator.EvaluateState(unitData);
-            if (gridCellMaterialConfigs.TryGetValue(stateData, out IMaterialConfig value))
+            currentCellState = CellStateEvaluator.EvaluateState(unitData);
+            if (gridCellMaterialConfigs.TryGetValue(currentCellState, out IMaterialConfig value))
             {
                 SetCellMaterialParams(value.PropertyOverrides);
             }

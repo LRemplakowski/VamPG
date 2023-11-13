@@ -24,6 +24,7 @@ namespace SunsetSystems.Entities.Interfaces
         Vector3 AimingOrigin { get; }
 
         bool IsInCover { get; }
+        bool IsAlive { get; }
         IList<ICover> CurrentCoverSources { get; }
 
         int MovementRange { get; }

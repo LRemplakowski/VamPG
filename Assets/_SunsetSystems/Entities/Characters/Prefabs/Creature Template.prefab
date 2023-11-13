@@ -1112,7 +1112,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af099b1f4bd5a34b851456c4b291b66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _owner: {fileID: 0}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _owner: {fileID: 660093643310669083}
+  OnCreatureDied:
+    _PersistentCalls:
+    - _Target: {fileID: 4678919013744510610}
+      _MethodName: SetTrigger
+      _PersistentArguments:
+      - _Type: 2
+        _Int: 0
+        _String: Die
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   <Stats>k__BackingField:
     Trackers:
       health:

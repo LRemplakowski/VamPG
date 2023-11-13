@@ -116,6 +116,11 @@ namespace SunsetSystems.Animation
             rigBuilder.enabled = false;
         }
 
+        public void SetTrigger(string name)
+        {
+            SetTrigger(Animator.StringToHash(name));
+        }
+
         public void SetTrigger(int hash)
         {
             animator.SetTrigger(hash);

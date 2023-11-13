@@ -153,6 +153,8 @@ namespace SunsetSystems.Party
             bool result = _activeCoterieMemberKeys.Add(memberID);
             if (result)
                 OnActivePartyChanged?.Invoke(_activeCoterieMemberKeys);
+            else
+                Debug.LogError("foo");
             return result;
         }
 

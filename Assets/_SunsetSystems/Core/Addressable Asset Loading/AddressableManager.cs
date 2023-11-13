@@ -18,9 +18,12 @@ namespace SunsetSystems.Core.AddressableManagement
 
         public async Task<T> LoadAssetAsync<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
         {
-            if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle _))
+            if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {
+                if (handle.IsDone is false)
+                    await handle.Task;
                 return Addressables.LoadAssetAsync<T>(assetReference).Result;
+                    
             }
             else
             {

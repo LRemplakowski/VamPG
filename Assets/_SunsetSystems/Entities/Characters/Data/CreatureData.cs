@@ -9,7 +9,7 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class CreatureData : SerializedMonoBehaviour
+    public class CreatureData : MonoBehaviour
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";

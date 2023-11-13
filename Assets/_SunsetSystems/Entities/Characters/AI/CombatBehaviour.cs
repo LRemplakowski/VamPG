@@ -123,6 +123,7 @@ namespace SunsetSystems.Combat
         public Vector3 AimingOrigin => RaycastOrigin;
 
         public bool IsInCover => CurrentCoverSources.Count > 0;
+        public bool IsAlive => Owner.References.StatsManager.IsAlive();
 
         public IList<ICover> CurrentCoverSources => new List<ICover>();
 

@@ -124,6 +124,9 @@ namespace SunsetSystems.Entities.Characters
             References.StatsManager.CopyFromTemplate(template);
             References.UMAManager.InjectDefaultRecipes(template.BaseUmaRecipes);
             References.EquipmentManager.CopyFromTemplate(template);
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
         public new T GetComponent<T>() where T : Component => References.GetComponent<T>();

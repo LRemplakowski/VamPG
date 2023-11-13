@@ -40,13 +40,13 @@ namespace SunsetSystems.Combat
             GridManager.EnableGrid();
             _creatureCounter = Creatures.Count;
             _ = CombatManager.Instance.BeginEncounter(this);
-            //if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
-            //{
-            //    Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
-            //}
+            if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
+            {
+                Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
+            }
         }
 
-        private void DecrementCounterAndCheckForEncounterEnd(Creature creature)
+        private void DecrementCounterAndCheckForEncounterEnd(ICreature creature)
         {
             _creatureCounter -= 1;
             creature.References.StatsManager.OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;

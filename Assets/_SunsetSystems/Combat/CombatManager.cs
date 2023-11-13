@@ -26,6 +26,7 @@ namespace SunsetSystems.Combat
 
         [field: ShowInInspector, ReadOnly]
         public List<ICombatant> Actors { get; private set; }
+        public List<ICombatant> LivingActors => Actors.FindAll(a => a.IsAlive);
 
         [Title("Events")]
         public UltEvent<IEnumerable<ICombatant>> CombatBegin;
@@ -56,8 +57,11 @@ namespace SunsetSystems.Combat
         public void SetCurrentActiveActor(int index)
         {
             ICombatant c = null;
-            if (index < Actors.Count)
-                c = Actors[index];
+            var livingActors = LivingActors;
+            if (index < livingActors.Count)
+            {
+                c = livingActors[index];
+            }
             CurrentActiveActor = c;
         }
 
@@ -70,14 +74,14 @@ namespace SunsetSystems.Combat
                 CombatRoundEnd?.Invoke(CurrentActiveActor);
                 Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " finished round " + turnCounter + "!");
                 int index = Actors.IndexOf(CurrentActiveActor);
-                SetCurrentActiveActor(++index < Actors.Count ? index : 0);
+                SetCurrentActiveActor(++index < LivingActors.Count ? index : 0);
             }
             else
             {
                 FirstActor = DecideFirstActor(Actors);
                 CurrentActiveActor = FirstActor;
             }
-            if (CurrentActiveActor == FirstActor)
+            if (LivingActors.IndexOf(CurrentActiveActor) == 0)
             {
                 turnCounter++;
                 OnFullTurnCompleted?.Invoke();
@@ -146,9 +150,25 @@ namespace SunsetSystems.Combat
 
         public List<ICombatant> GetCombatantsInTurnOrder()
         {
-            int currentActorIndex = Actors.IndexOf(CurrentActiveActor);
-            ICombatant[] offsetCopy = new ICombatant[Actors.Count];
-            Array.Copy(Actors.ToArray(), currentActorIndex, offsetCopy, 0, Actors.Count);
+            var livingActors = LivingActors;
+            if (livingActors.Count <= 0)
+                return livingActors;
+            int currentActorIndex;
+            if (livingActors.Contains(CurrentActiveActor))
+            {
+                currentActorIndex = livingActors.IndexOf(CurrentActiveActor);
+            }
+            else
+            {
+                return livingActors;
+            }
+            int copyOffset = livingActors.Count - currentActorIndex;
+            ICombatant[] offsetCopy = new ICombatant[livingActors.Count];
+            Array.Copy(livingActors.ToArray(), currentActorIndex, offsetCopy, 0, copyOffset);
+            for (int i = copyOffset; i < livingActors.Count; i++)
+            {
+                offsetCopy[^i] = livingActors[i - copyOffset];
+            }
             return offsetCopy.ToList();
         }
     }

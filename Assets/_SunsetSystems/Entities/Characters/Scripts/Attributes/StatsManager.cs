@@ -7,10 +7,12 @@ using SunsetSystems.Spellbook;
 using System;
 using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
 using SunsetSystems.Entities.Characters.Interfaces;
+using UltEvents;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class StatsManager : MonoBehaviour
+    public class StatsManager : SerializedMonoBehaviour
     {
         [SerializeField, HideInInspector]
         private Creature _owner;
@@ -24,7 +26,10 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        [field: SerializeField]
+        [Title("Events")]
+        public UltEvent<ICreature> OnCreatureDied = new();
+        [field: Title("Debug")]
+        [field: SerializeField, ReadOnly]
         public StatsData Stats { get; private set; }
 
         public Tracker Health => Stats.Trackers.GetTracker(TrackerType.Health);
@@ -34,11 +39,9 @@ namespace SunsetSystems.Entities.Characters
 
         public StatsManager Instance { get; protected set; }
 
-        public event Action<Creature> OnCreatureDied;
-
         private void OnValidate()
         {
-            _owner ??= GetComponent<Creature>();
+            _owner ??= GetComponentInParent<Creature>();
         }
 
         public void Initialize(Creature owner)
@@ -99,26 +102,6 @@ namespace SunsetSystems.Entities.Characters
             return Health.GetValue() > 0;
         }
 
-        public AttributeSkillPool GetDefensePool()
-        {
-            return new AttributeSkillPool(Stats.Attributes.GetAttribute(AttributeType.Dexterity), Stats.Skills.GetSkill(SkillType.Athletics));
-        }
-
-        public AttributeSkillPool GetAttackPool()
-        {
-            return new AttributeSkillPool(Stats.Attributes.GetAttribute(GetWeaponAttribute()), Stats.Skills.GetSkill(GetWeaponSkill()));
-        }
-
-        private AttributeType GetWeaponAttribute()
-        {
-            return AttributeType.Composure;
-        }
-
-        private SkillType GetWeaponSkill()
-        {
-            return SkillType.Firearms;
-        }
-
         public DisciplinePower GetDisciplinePower(string powerID)
         {
             foreach (Discipline discipline in Stats.Disciplines.GetDisciplines())
@@ -163,13 +146,6 @@ namespace SunsetSystems.Entities.Characters
             }
 
             return Roll.d10(normalDice, hungerDice, dc);
-        }
-
-        public Outcome GetAttackRoll(int dc, bool useHunger)
-        {
-            AttributeType weaponAttribute = GetWeaponAttribute();
-            SkillType weaponSkill = GetWeaponSkill();
-            return GetSkillRoll(weaponAttribute, weaponSkill, dc, useHunger);
         }
 
         public List<CreatureAttribute> GetAttributes()

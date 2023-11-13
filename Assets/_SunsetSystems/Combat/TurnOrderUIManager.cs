@@ -45,9 +45,9 @@ namespace SunsetSystems.Combat.UI
             turnOrderPortraits.ForEach(p => p.transform.parent.gameObject.SetActive(false));
         }
 
-        public void OnCombatRoundBegin()
+        public async void OnCombatRoundBegin()
         {
-            _ = UpdatePortraits();
+            await UpdatePortraits();
         }
 
         private async Task UpdatePortraits()
@@ -64,6 +64,8 @@ namespace SunsetSystems.Combat.UI
                 else
                 {
                     ICombatant combatantAtIndex = combatantsInOrder[i];
+                    if (combatantAtIndex == null)
+                        continue;
                     AssetReferenceSprite portraitRef = combatantAtIndex.References.GetComponentInChildren<CreatureData>().PortraitAssetRef;
                     newPortraitReferences.Add(portraitRef);
                     Task<Sprite> portraitTask = AddressableManager.Instance.LoadAssetAsync(portraitRef);

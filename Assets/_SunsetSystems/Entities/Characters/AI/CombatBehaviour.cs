@@ -303,7 +303,7 @@ namespace SunsetSystems.Combat
         public float PerformAttackAnimation()
         {
             animationController.SetTrigger(attackAnimationTriggerHash);
-            return 1f;
+            return 2f;
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace SunsetSystems.Combat
         public float PerformTakeHitAnimation()
         {
             animationController.SetTrigger(takeHitAnimationTriggerHash);
-            return 1f;
+            return 2f;
         }
         #endregion
 

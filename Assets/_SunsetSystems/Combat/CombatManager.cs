@@ -144,9 +144,12 @@ namespace SunsetSystems.Combat
             return turnCounter;
         }
 
-        public class CombatEventData
+        public List<ICombatant> GetCombatantsInTurnOrder()
         {
-
+            int currentActorIndex = Actors.IndexOf(CurrentActiveActor);
+            ICombatant[] offsetCopy = new ICombatant[Actors.Count];
+            Array.Copy(Actors.ToArray(), currentActorIndex, offsetCopy, 0, Actors.Count);
+            return offsetCopy.ToList();
         }
     }
 }

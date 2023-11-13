@@ -126,6 +126,7 @@ namespace SunsetSystems.Entities.Characters
             References.EquipmentManager.CopyFromTemplate(template);
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
 #endif
         }
 

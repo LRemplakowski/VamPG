@@ -93,10 +93,10 @@ namespace SunsetSystems.Combat
             switch (selectedWeapon.WeaponType)
             {
                 case WeaponType.Melee:
-                    damage = Mathf.RoundToInt(attacker.GetAttributeValue(AttributeType.Strength) * weaponDamageMod);
+                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().damageModifier) * weaponDamageMod);
                     break;
                 case WeaponType.Ranged:
-                    damage = Mathf.RoundToInt(attacker.GetAttributeValue(AttributeType.Composure) * weaponDamageMod);
+                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().damageModifier) * weaponDamageMod);
                     break;
             }
             damage = Mathf.Clamp(damage, 1, int.MaxValue);

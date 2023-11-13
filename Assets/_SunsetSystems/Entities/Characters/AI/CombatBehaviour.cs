@@ -161,7 +161,7 @@ namespace SunsetSystems.Combat
 
         public int GetAttributeValue(AttributeType attributeType)
         {
-            return Owner.References.StatsManager.GetAttributes().FirstOrDefault(attribute => attribute.AttributeType == attributeType)?.GetValue() ?? 1;
+            return Owner.References.StatsManager.GetAttribute(attributeType)?.GetValue() ?? 0;
         }
 
         public Task PerformAction(EntityAction action, bool clearQueue = false)

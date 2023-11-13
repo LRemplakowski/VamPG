@@ -9,6 +9,7 @@ using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
 using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
 using Sirenix.OdinInspector;
+using System.Linq;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -29,7 +30,7 @@ namespace SunsetSystems.Entities.Characters
         [Title("Events")]
         public UltEvent<ICreature> OnCreatureDied = new();
         [field: Title("Debug")]
-        [field: SerializeField, ReadOnly]
+        [field: SerializeField]
         public StatsData Stats { get; private set; }
 
         public Tracker Health => Stats.Trackers.GetTracker(TrackerType.Health);
@@ -41,12 +42,13 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnValidate()
         {
-            _owner ??= GetComponentInParent<Creature>();
+            if (_owner == null)
+                _owner = GetComponentInParent<Creature>();
         }
 
-        public void Initialize(Creature owner)
+        private void Start()
         {
-            this._owner = owner;
+            OnValidate();
         }
 
         public void TakeDamage(int damage)
@@ -78,7 +80,7 @@ namespace SunsetSystems.Entities.Characters
             OnCreatureDied?.Invoke(Owner);
         }
 
-        internal void Heal(int amount)
+        public void Heal(int amount)
         {
             int currentDamage = Health.SuperficialDamage;
             currentDamage -= amount;
@@ -153,6 +155,11 @@ namespace SunsetSystems.Entities.Characters
             return Stats.Attributes.GetAttributeList();
         }
 
+        public CreatureAttribute GetAttribute(AttributeType attributeType)
+        {
+            return GetAttributes().FirstOrDefault(a => a.AttributeType == attributeType);
+        }
+
         public HealthData GetHealthData()
         {
             HealthData.HealthDataBuilder builder = new(Stats.Trackers.GetTracker(TrackerType.Health).GetValue());
@@ -166,12 +173,12 @@ namespace SunsetSystems.Entities.Characters
 
         public void ApplyEffect(SkillEffect effect)
         {
-            throw new NotImplementedException();
+
         }
 
         public void ApplyEffect(DisciplineEffect effect)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

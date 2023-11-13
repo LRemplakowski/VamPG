@@ -153,23 +153,26 @@ namespace SunsetSystems.Combat
             var livingActors = LivingActors;
             if (livingActors.Count <= 0)
                 return livingActors;
-            int currentActorIndex;
-            if (livingActors.Contains(CurrentActiveActor))
-            {
-                currentActorIndex = livingActors.IndexOf(CurrentActiveActor);
-            }
-            else
-            {
-                return livingActors;
-            }
-            int copyOffset = livingActors.Count - currentActorIndex;
+            int currentActorIndex = livingActors.IndexOf(CurrentActiveActor);
             ICombatant[] offsetCopy = new ICombatant[livingActors.Count];
-            Array.Copy(livingActors.ToArray(), currentActorIndex, offsetCopy, 0, copyOffset);
-            for (int i = copyOffset; i < livingActors.Count; i++)
-            {
-                offsetCopy[^i] = livingActors[i - copyOffset];
-            }
+            offsetCopy = ShiftLeft(livingActors.ToArray(), currentActorIndex);
             return offsetCopy.ToList();
+        }
+
+        private static ICombatant[] ShiftLeft(ICombatant[] array, int shiftAmount)
+        {
+            int length = array.Length;
+            ICombatant[] result = new ICombatant[array.Length];
+            // Ensure shiftAmount is within the range of the array length
+            shiftAmount = shiftAmount % length;
+
+            // Shift indices to the left by X positions
+            for (int i = 0; i < length; i++)
+            {
+                int newIndex = (i - shiftAmount + length) % length;
+                result[newIndex] = array[i];
+            }
+            return result;
         }
     }
 }

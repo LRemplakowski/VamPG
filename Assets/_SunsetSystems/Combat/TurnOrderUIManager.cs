@@ -25,6 +25,8 @@ namespace SunsetSystems.Combat.UI
         private List<AssetReferenceSprite> portraitReferences = new();
         private IEnumerator animatePortraitArrows;
 
+        private bool firstIteration = false;
+
         private void OnEnable()
         {
             if (animatePortraitArrows != null)
@@ -80,8 +82,10 @@ namespace SunsetSystems.Combat.UI
                 Image image = turnOrderPortraits[i];
                 image.sprite = spriteLoadingTasks[i].Result;
                 image.transform.parent.gameObject.SetActive(true);
-                await Task.Delay(500);
+                if (!firstIteration)
+                    await Task.Delay(500);
             }
+            firstIteration = true;
             portraitReferences.ForEach(reference => AddressableManager.Instance.ReleaseAsset(reference));
             portraitReferences = newPortraitReferences;
         }

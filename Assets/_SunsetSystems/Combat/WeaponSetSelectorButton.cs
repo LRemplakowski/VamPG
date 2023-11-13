@@ -1,21 +1,22 @@
+using Sirenix.OdinInspector;
+using SunsetSystems.Equipment;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems
+namespace SunsetSystems.Combat.UI
 {
-    public class WeaponSetSelectorButton : MonoBehaviour
+    public class WeaponSetSelectorButton : SerializedMonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [SerializeField]
+        private SelectedWeapon associatedWeapon;
 
-        // Update is called once per frame
-        void Update()
+        public static event Action<SelectedWeapon> OnWeaponSelected;
+
+        public void OnClick()
         {
-        
+            OnWeaponSelected?.Invoke(associatedWeapon);
         }
     }
 }

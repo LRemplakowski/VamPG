@@ -234,7 +234,7 @@ namespace SunsetSystems.Combat
             if (HasActed)
                 return false;
             IWeapon currentWeapon = weaponManager.GetSelectedWeapon();
-            if (currentWeapon.WeaponType is WeaponType.Melee)
+            if (currentWeapon == null || currentWeapon.WeaponType is WeaponType.Melee)
             {
                 GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
                 Vector3Int currentGridPosition = gridManager.WorldPositionToGridPosition(Transform.position);

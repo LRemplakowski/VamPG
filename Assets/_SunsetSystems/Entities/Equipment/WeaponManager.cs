@@ -1,5 +1,8 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Animation;
+using SunsetSystems.Combat;
+using SunsetSystems.Combat.UI;
+using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System.Threading.Tasks;
@@ -19,6 +22,8 @@ namespace SunsetSystems.Equipment
         private Transform weaponParent;
         [SerializeField, Required]
         private CreatureAnimationController animationController;
+        [SerializeField, Required]
+        private ICombatant owner;
         [Title("Config")]
         [SerializeField]
         private string weaponAnimationTypeParam;
@@ -29,14 +34,30 @@ namespace SunsetSystems.Equipment
         [SerializeField, ReadOnly]
         private IWeaponInstance weaponInstance;
 
+        private void OnEnable()
+        {
+            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
+        }
+
+        private void OnDisable()
+        {
+            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
+        }
+
         private void Start()
         {
             weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
             SetSelectedWeapon(SelectedWeapon.None);
         }
 
+        private void OnWeaponSelected(SelectedWeapon weapon)
+        {
+            if (CombatManager.Instance.CurrentActiveActor == owner)
+                SetSelectedWeapon(weapon);
+        }
+
         [Button]
-        public void SetSelectedWeapon(SelectedWeapon weapon)
+        public async void SetSelectedWeapon(SelectedWeapon weapon)
         {
             EquipmentSlotID newSelectedWeapon = weapon switch
             {
@@ -48,7 +69,7 @@ namespace SunsetSystems.Equipment
             if (newSelectedWeapon != selectedWeapon)
             {
                 selectedWeapon = newSelectedWeapon;
-                _ = RebuildWeaponInstance();
+                await RebuildWeaponInstance();
             }
         }
 
@@ -65,7 +86,7 @@ namespace SunsetSystems.Equipment
 
         private async Task<IWeaponInstance> InstantiateCurrentWeapon()
         {
-            if (selectedWeapon != EquipmentSlotID.Invalid || GetSelectedWeapon().EquippedInstanceAsset != null)
+            if (selectedWeapon != EquipmentSlotID.Invalid && GetSelectedWeapon()?.EquippedInstanceAsset != null)
                 return (await Addressables.InstantiateAsync(GetSelectedWeapon().EquippedInstanceAsset, weaponParent).Task).GetComponent<IWeaponInstance>();
             else
                 return null;
@@ -74,11 +95,14 @@ namespace SunsetSystems.Equipment
         private void ReleaseCurrentWeaponInstance()
         {
             Addressables.ReleaseInstance(weaponInstance.GameObject);
+            weaponInstance = null;
         }
 
         public IWeapon GetSelectedWeapon()
         {
-            return equipmentManager.EquipmentSlots[selectedWeapon].GetEquippedItem() as IWeapon;
+            if (equipmentManager.EquipmentSlots.TryGetValue(selectedWeapon, out IEquipmentSlot slot))
+                return slot.GetEquippedItem() as IWeapon;
+            return null;
         }
 
         public IWeapon GetPrimaryWeapon()

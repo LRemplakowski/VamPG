@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.5
+  m_fontSize: 47.05
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 3177371568888610670}
   - component: {fileID: 5368430831185478494}
   - component: {fileID: 4384638616463667291}
+  - component: {fileID: 8023947621245284525}
   m_Layer: 5
   m_Name: Weapon Set Button
   m_TagString: Untagged
@@ -255,7 +256,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3177371568888610670}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8023947621245284525}
+        m_TargetAssemblyTypeName: SunsetSystems.Combat.UI.WeaponSetSelectorButton,
+          SunsetSystems
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &4384638616463667291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,3 +290,25 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8023947621245284525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6677578874641113139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5eb64e1dd900a4e92920eaf1a92d03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  associatedWeapon: 1

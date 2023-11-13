@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SunsetSystems.Combat.UI
@@ -75,7 +76,7 @@ namespace SunsetSystems.Combat.UI
 
         public void OnCombatRoundEnd()
         {
-            childrenButtons.ForEach(button => button.OnDeselect(null));
+            childrenButtons.ForEach(button => button.OnDeselect(new(EventSystem.current)));
         }
 
         public void SelectCombatAction(SelectedCombatActionData actionData)

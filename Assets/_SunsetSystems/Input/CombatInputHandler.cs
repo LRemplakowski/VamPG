@@ -116,7 +116,7 @@ namespace SunsetSystems.Input
                 if (targetableHit != null)
                 {
                     ICombatant combatant = targetableHit.gameObject.GetComponent<ICreature>()?.References.CombatBehaviour;
-                    if (combatant != null)
+                    if (combatant != null && combatant.IsAlive)
                     {
                         CombatManager.Instance.CurrentActiveActor.AttackCreatureUsingCurrentWeapon(combatant);
                     }

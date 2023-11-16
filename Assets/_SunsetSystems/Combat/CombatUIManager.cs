@@ -41,6 +41,7 @@ namespace SunsetSystems.Combat.UI
 
         public async void OnCombatRoundBegin(ICombatant combatant)
         {
+            EventSystem.current.SetSelectedGameObject(null);
             childrenButtons.ForEach(button => button.interactable = combatant.Faction is Faction.PlayerControlled);
             if (combatant.Faction == Faction.PlayerControlled)
             {
@@ -76,7 +77,7 @@ namespace SunsetSystems.Combat.UI
 
         public void OnCombatRoundEnd()
         {
-            childrenButtons.ForEach(button => button.OnDeselect(new(EventSystem.current)));
+
         }
 
         public void SelectCombatAction(SelectedCombatActionData actionData)

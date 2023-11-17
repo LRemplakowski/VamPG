@@ -19,9 +19,10 @@ namespace SunsetSystems.Combat.UI
             combatManager = CombatManager.Instance;
         }
 
-        private void UpdateHealthDisplay()
+        public void UpdateHealthDisplay()
         {
             HealthData data = combatManager.CurrentActiveActor.References.GetComponentInChildren<StatsManager>().GetHealthData();
+            healthText.text = $"HP: {data.maxHealth - data.superficialDamage}/{data.maxHealth}";
         }
     }
 }

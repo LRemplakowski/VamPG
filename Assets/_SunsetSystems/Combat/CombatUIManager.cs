@@ -16,12 +16,17 @@ namespace SunsetSystems.Combat.UI
 {
     public class CombatUIManager : SerializedMonoBehaviour
     {
+        [Title("References")]
+        [SerializeField]
+        private Image currentActorPortrait;
+        [SerializeField]
+        private PlayerHealthDisplay currentActorHealth;
+
+        [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
 
         private List<Selectable> childrenButtons = new();
 
-        [SerializeField]
-        private Image currentActorPortrait;
         private AssetReferenceSprite spriteReference;
 
         private void OnEnable()
@@ -39,14 +44,15 @@ namespace SunsetSystems.Combat.UI
             childrenButtons.ForEach(b => b.interactable = false);
         }
 
-        public async void OnCombatRoundBegin(ICombatant combatant)
+        public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
             childrenButtons.ForEach(button => button.interactable = combatant.Faction is Faction.PlayerControlled);
             if (combatant.Faction == Faction.PlayerControlled)
             {
-                await UpdateCurrentActorPortrait(combatant);
+                _ = UpdateCurrentActorPortrait(combatant);
             }
+            currentActorHealth.UpdateHealthDisplay();
         }
 
         private async Task UpdateCurrentActorPortrait(ICombatant actor)

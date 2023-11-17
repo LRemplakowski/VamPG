@@ -106,7 +106,7 @@ namespace SunsetSystems.Combat.UI
                     yield return null;
                 }
                 if (i <= 0)
-                    i = animatedArrows.Count - 1;
+                    i = animatedArrows.Count;
             }
         }
     }

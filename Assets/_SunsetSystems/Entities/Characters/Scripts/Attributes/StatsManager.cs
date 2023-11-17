@@ -161,7 +161,9 @@ namespace SunsetSystems.Entities.Characters
 
         public HealthData GetHealthData()
         {
-            HealthData.HealthDataBuilder builder = new(Stats.Trackers.GetTracker(TrackerType.Health).GetValue());
+            HealthData.HealthDataBuilder builder = new(Health.MaxValue);
+            builder.SetSuperficialDamage(Health.SuperficialDamage);
+            builder.SetAggravatedDamage(Health.AggravatedDamage);
             return builder.Create();
         }
 

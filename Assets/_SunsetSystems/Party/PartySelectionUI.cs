@@ -1,4 +1,4 @@
-using Entities.Characters.Data;
+using SunsetSystems.Entities.Characters;
 using Sirenix.OdinInspector;
 using UnityEngine;
 

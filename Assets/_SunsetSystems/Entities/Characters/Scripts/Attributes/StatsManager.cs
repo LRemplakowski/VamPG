@@ -1,4 +1,3 @@
-using Entities.Characters.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Dice;
@@ -179,6 +178,43 @@ namespace SunsetSystems.Entities.Characters
         public void ApplyEffect(DisciplineEffect effect)
         {
 
+        }
+    }
+
+    public struct HealthData
+    {
+        public readonly int maxHealth, superficialDamage, aggravatedDamage;
+
+        private HealthData(int maxHealth, int superficialDamage, int aggravatedDamage)
+        {
+            this.maxHealth = maxHealth;
+            this.superficialDamage = superficialDamage;
+            this.aggravatedDamage = aggravatedDamage;
+        }
+
+        public class HealthDataBuilder
+        {
+            private int maxHealth, superficialDamage = 0, aggravatedDamage = 0;
+
+            public HealthDataBuilder(int maxHealth)
+            {
+                this.maxHealth = maxHealth;
+            }
+
+            public void SetSuperficialDamage(int superficialDamage)
+            {
+                this.superficialDamage = superficialDamage;
+            }
+
+            public void SetAggravatedDamage(int aggravatedDamage)
+            {
+                this.aggravatedDamage = aggravatedDamage;
+            }
+
+            public HealthData Create()
+            {
+                return new HealthData(maxHealth, superficialDamage, aggravatedDamage);
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Entities.Characters.Data;
+using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Party.UI
 {

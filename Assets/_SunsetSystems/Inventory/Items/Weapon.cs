@@ -18,6 +18,8 @@ namespace SunsetSystems.Inventory.Data
         public WeaponType WeaponType { get; private set; }
         [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
         public WeaponFireMode FireMode { get; private set; }
+        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
+        public int MaxAmmo { get; private set; } = 3;
         [field: SerializeField]
         public AttributeType AssociatedAttribute { get; private set; }
         [field: SerializeField]

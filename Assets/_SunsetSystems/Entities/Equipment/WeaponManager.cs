@@ -5,6 +5,7 @@ using SunsetSystems.Combat.UI;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -31,29 +32,59 @@ namespace SunsetSystems.Equipment
         [Title("Debug Info")]
         [ShowInInspector, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
-        [SerializeField, ReadOnly]
+        [ShowInInspector, ReadOnly]
         private IWeaponInstance weaponInstance;
+        [ShowInInspector, ReadOnly]
+        private Dictionary<IWeapon, WeaponAmmoData> weaponsAmmoData = new();
 
         private void OnEnable()
         {
             WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
+            CombatManager.Instance.CombatBegin += OnCombatStart;
         }
 
         private void OnDisable()
         {
             WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
+            CombatManager.Instance.CombatBegin -= OnCombatStart;
         }
 
         private void Start()
         {
             weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
             SetSelectedWeapon(SelectedWeapon.None);
+            weaponsAmmoData ??= new();
         }
 
         private void OnWeaponSelected(SelectedWeapon weapon)
         {
             if (CombatManager.Instance.CurrentActiveActor == owner)
                 SetSelectedWeapon(weapon);
+        }
+
+        private void OnCombatStart(IEnumerable<ICombatant> combatants)
+        {
+            weaponsAmmoData.Clear();
+            IWeapon primaryWeapon = GetPrimaryWeapon();
+            if (primaryWeapon != null && primaryWeapon.WeaponType == WeaponType.Ranged)
+            {
+                WeaponAmmoData primaryWeaponAmmoData = new()
+                {
+                    MaxAmmo = primaryWeapon.MaxAmmo,
+                    CurrentAmmo = primaryWeapon.MaxAmmo
+                };
+                weaponsAmmoData.Add(primaryWeapon, primaryWeaponAmmoData);
+            }
+            IWeapon secondaryWeapon = GetSecondaryWeapon();
+            if (secondaryWeapon != null && secondaryWeapon.WeaponType == WeaponType.Ranged)
+            {
+                WeaponAmmoData secondaryWeaponAmmoData = new()
+                {
+                    MaxAmmo = primaryWeapon.MaxAmmo,
+                    CurrentAmmo = primaryWeapon.MaxAmmo
+                };
+                weaponsAmmoData.Add(secondaryWeapon, secondaryWeaponAmmoData);
+            }
         }
 
         [Button]
@@ -115,6 +146,34 @@ namespace SunsetSystems.Equipment
             return equipmentManager.EquipmentSlots[EquipmentSlotID.SecondaryWeapon].GetEquippedItem() as IWeapon;
         }
 
+        public bool UseAmmoFromSelectedWeapon(int count)
+        {
+            IWeapon selectedWeapon = GetSelectedWeapon();
+            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee)
+                return true;
+            if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
+            {
+                if (ammoData.CurrentAmmo < count)
+                    return false;
+                ammoData.CurrentAmmo -= count;
+                weaponsAmmoData[selectedWeapon] = ammoData;
+                return true;
+            }
+            return false;
+        }
+
+        public void ReloadSelectedWeapon()
+        {
+            IWeapon selectedWeapon = GetSelectedWeapon();
+            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee)
+                return;
+            if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
+            {
+                ammoData.CurrentAmmo = ammoData.MaxAmmo;
+                weaponsAmmoData[selectedWeapon] = ammoData;
+            }
+        }
+
         public void OnItemEquipped(IEquipableItem item)
         {
             if (item is IWeapon weapon)
@@ -155,6 +214,11 @@ namespace SunsetSystems.Equipment
         {
             if (string.Equals(eventType, FIRE_WEAPON_EVENT))
                 weaponInstance.FireWeapon();
+        }
+
+        private struct WeaponAmmoData
+        {
+            public int CurrentAmmo, MaxAmmo;
         }
     }
 }

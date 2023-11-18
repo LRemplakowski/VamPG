@@ -21,6 +21,8 @@ namespace SunsetSystems.Combat.UI
         private Image currentActorPortrait;
         [SerializeField]
         private PlayerHealthDisplay currentActorHealth;
+        [SerializeField]
+        private ResourceBarDisplay apBar, bpBar;
 
         [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
@@ -51,8 +53,22 @@ namespace SunsetSystems.Combat.UI
             if (combatant.Faction == Faction.PlayerControlled)
             {
                 _ = UpdateCurrentActorPortrait(combatant);
+                currentActorHealth.UpdateHealthDisplay();
+                apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
+                bpBar.UpdateActiveChunks(combatant.References.GetComponentInChildren<StatsManager>().Hunger.GetValue());
+                combatant.OnUsedActionPoint += OnActionUsed;
+                combatant.OnSpentBloodPoint += OnBloodPointSpent;
             }
-            currentActorHealth.UpdateHealthDisplay();
+        }
+
+        private void OnActionUsed(ICombatant combatant)
+        {
+            apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
+        }
+
+        private void OnBloodPointSpent(ICombatant combatant)
+        {
+            bpBar.UpdateActiveChunks(combatant.References.GetComponentInChildren<StatsManager>().Hunger.GetValue());
         }
 
         private async Task UpdateCurrentActorPortrait(ICombatant actor)
@@ -81,9 +97,10 @@ namespace SunsetSystems.Combat.UI
             }
         }
 
-        public void OnCombatRoundEnd()
+        public void OnCombatRoundEnd(ICombatant combatant)
         {
-
+            combatant.OnUsedActionPoint -= OnActionUsed;
+            combatant.OnSpentBloodPoint -= OnBloodPointSpent;
         }
 
         public void SelectCombatAction(SelectedCombatActionData actionData)

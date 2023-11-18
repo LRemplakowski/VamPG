@@ -8,6 +8,7 @@ namespace SunsetSystems.Inventory
     {
         WeaponType WeaponType { get; }
         WeaponFireMode FireMode { get; }
+        int MaxAmmo { get; }
 
         RangeData GetRangeData();
         DamageData GetDamageData();

@@ -12,7 +12,9 @@ namespace SunsetSystems.Entities.Interfaces
 {
     public interface ICombatant : IEntity, IActionPerformer
     {
-        UltEvent OnChangedGridPosition { get; set; }
+        UltEvent<ICombatant> OnChangedGridPosition { get; set; }
+        UltEvent<ICombatant> OnUsedActionPoint { get; set; }
+        UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
 
         IMagicUser MagicUser { get; }
 
@@ -33,17 +35,15 @@ namespace SunsetSystems.Entities.Interfaces
         bool HasActed { get; }
 
         bool TakeDamage(int amount);
-
         int GetAttributeValue(AttributeType attributeType);
-
         void SignalEndTurn();
 
         bool MoveToGridPosition(Vector3Int gridPosition);
-
         bool AttackCreatureUsingCurrentWeapon(ICombatant target);
+        bool ReloadCurrentWeapon();
+
 
         float PerformAttackAnimation();
-
         float PerformTakeHitAnimation();
     }
 }

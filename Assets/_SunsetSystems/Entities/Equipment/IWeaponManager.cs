@@ -11,6 +11,9 @@ namespace SunsetSystems.Equipment
         IWeapon GetSelectedWeapon();
         IWeapon GetPrimaryWeapon();
         IWeapon GetSecondaryWeapon();
+
+        bool UseAmmoFromSelectedWeapon(int count);
+        void ReloadSelectedWeapon();
     }
 
     public enum SelectedWeapon

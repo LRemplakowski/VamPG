@@ -36,7 +36,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
             owner.OnChangedGridPosition += ClearOccupierFromCell;
 
-            void ClearOccupierFromCell()
+            void ClearOccupierFromCell(ICombatant combatant)
             {
                 gridInstance.ClearOccupierFromCell(gridCell);
                 owner.OnChangedGridPosition -= ClearOccupierFromCell;

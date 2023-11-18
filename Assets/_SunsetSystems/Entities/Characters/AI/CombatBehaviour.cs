@@ -131,7 +131,11 @@ namespace SunsetSystems.Combat
         public int SprintRange => MovementRange * 2;
         [field: Title("Events")]
         [field: SerializeField]
-        public UltEvent OnChangedGridPosition { get; set; }
+        public UltEvent<ICombatant> OnChangedGridPosition { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
 
         [field: Title("Combat Runtime")]
         [field: ShowInInspector, ReadOnly]
@@ -195,35 +199,38 @@ namespace SunsetSystems.Combat
                 if (gridUnit.IsInMoveRange && !HasMoved)
                 {
                     HasMoved = true;
-                    OnChangedGridPosition?.Invoke();
+                    OnChangedGridPosition?.Invoke(this);
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
                     CurrentCoverSources.Clear();
                     CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
                     animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                    OnUsedActionPoint?.InvokeSafe(this);
                     return true;
                 }
                 else if (gridUnit.IsInSprintRange && !HasMoved && !HasActed)
                 {
                     HasActed = true;
                     HasMoved = true;
-                    OnChangedGridPosition?.Invoke();
+                    OnChangedGridPosition?.Invoke(this);
                     CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
                     _ = PerformAction(new Move(this, gridUnit, gridManager));
                     CurrentCoverSources.Clear();
                     CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
                     animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                    OnUsedActionPoint?.InvokeSafe(this);
                     return true;
                 }
             }
             else
             {
                 HasMoved = true;
-                OnChangedGridPosition?.Invoke();
+                OnChangedGridPosition?.Invoke(this);
                 _ = PerformAction(new Move(this, gridUnit, gridManager));
                 CurrentCoverSources.Clear();
                 CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
                 animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
+                OnUsedActionPoint?.InvokeSafe(this);
                 return true;
             }
             return false;
@@ -245,6 +252,7 @@ namespace SunsetSystems.Combat
                     HasActed = true;
                     HasMoved = true;
                     _ = PerformAction(new Attack(target, this));
+                    OnUsedActionPoint?.InvokeSafe(this);
                     return true;
                 }
                 else
@@ -256,19 +264,29 @@ namespace SunsetSystems.Combat
                         HasMoved = true;
                         HasActed = true;
                         _ = PerformAction(new Attack(target, this));
+                        OnUsedActionPoint?.InvokeSafe(this);
                         return true;
                     }
                     gridManager.HideCellsInMovementRange();
                 }
             }
-            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().maxRange)
+            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().maxRange && weaponManager.UseAmmoFromSelectedWeapon(1))
             {
                 HasActed = true;
                 HasMoved = true;
                 _ = PerformAction(new Attack(target, this));
+                OnUsedActionPoint?.InvokeSafe(this);
                 return true;
             }
             return false;
+        }
+
+        public bool ReloadCurrentWeapon()
+        {
+            if (HasActed)
+                return false;
+            weaponManager.ReloadSelectedWeapon();
+            return true;
         }
 
         private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, NavMeshAgent navMeshAgent)

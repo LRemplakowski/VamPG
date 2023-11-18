@@ -671,6 +671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1196649890567166628}
+  - component: {fileID: 1426166311781026888}
   m_Layer: 5
   m_Name: Blood Points
   m_TagString: Untagged
@@ -701,6 +702,35 @@ RectTransform:
   m_AnchoredPosition: {x: 102, y: 0}
   m_SizeDelta: {x: 240, y: 35}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1426166311781026888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376215096999026040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746be901e3b70954699d6716b9d73dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  activeChunks:
+  - {fileID: 2327664893371781841}
+  - {fileID: 578821009438721396}
+  - {fileID: 1272032777863682270}
+  - {fileID: 5011694225544754593}
+  - {fileID: 4952955325678978283}
+  - {fileID: 8636587847218447573}
+  chunkStateLerpTime: 0.5
 --- !u!1 &1457456403253255013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2644,7 +2674,7 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!1 &5564610724646318890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2654,6 +2684,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9066136883464439613}
+  - component: {fileID: 3238215857817052187}
   m_Layer: 5
   m_Name: Action Points
   m_TagString: Untagged
@@ -2684,6 +2715,31 @@ RectTransform:
   m_AnchoredPosition: {x: -102, y: 0}
   m_SizeDelta: {x: 240, y: 35}
   m_Pivot: {x: 1, y: 0}
+--- !u!114 &3238215857817052187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564610724646318890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 746be901e3b70954699d6716b9d73dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  activeChunks:
+  - {fileID: 7733893866096268099}
+  - {fileID: 6771051350048898903}
+  chunkStateLerpTime: 0.5
 --- !u!1 &5675549769070491866
 GameObject:
   m_ObjectHideFlags: 0

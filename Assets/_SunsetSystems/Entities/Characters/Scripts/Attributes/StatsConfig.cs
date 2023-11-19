@@ -16,8 +16,7 @@ namespace SunsetSystems.Entities.Data
         public int Generation = 12;
         public int BloodPotency = 1;
         public Attributes Attributes = Attributes.Initialize();
-        public Skills Skills = Skills.Initialize();
-        public Disciplines Disciplines = Disciplines.Initialize();   
+        public Skills Skills = Skills.Initialize();  
     }
 
     [Serializable]

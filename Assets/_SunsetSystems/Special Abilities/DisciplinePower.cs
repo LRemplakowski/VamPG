@@ -13,21 +13,6 @@ namespace SunsetSystems.Spellbook
     [System.Serializable, CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
     public class DisciplinePower : ScriptableObject, IGameDataProvider<DisciplinePower>
     {
-        private const string typeTooltip = "Drzewo dyscyplin do którego należy dyscyplina.";
-        private const string levelTooltip = "Minimalny poziom potrzebny do wykupienia dyscypliny. Ma znaczenie tylko dla rozwoju postaci.";
-        private const string secondaryTypeTooltip = "Wymagany przy amalgamatach.";
-        private const string secondaryLevelTooltip = "Wymagany przy amalgamatach. Używany tylko jeśli Secondary Type nie jest Invalid. Ma znaczenie tylko przy rozwoju postaci.";
-        private const string _targetTooltip = "Cel na jaki wpływa dyscyplina.";
-        private const string rangeTooltip = "Zasięg w jakim może być użyta dyscyplina.";
-        private const string hasDisciplinePoolString = "Czy moc posiada dice pool niezbędny do skutecznej aktywacji.";
-        private const string disciplineRollDifficultyTooltip = "ST jakie musi przerzucić użytkownik by skutecznie aktywować dyscyplinę.";
-        private const string hasAttackPoolTooltip = "Czy moc posiada odrębną pule kości dla ataku. Ma znaczenie tylko dla mocy o celu innym niż Self.";
-        private const string defensePoolTooltip = "Czy moc posiada pulę kości dla broniącego się celu. "
-            + "Ma znaczenie tylko dla mocy o celu innym niż Self. "
-            + "Ta pula kości będzie sporna z Attack Pool lub, jeśli moc go nie posiada, Discipline Pool. "
-            + "Właściwość zostanie zignorowana jeśli dyscyplina nie ma żadnej z tych puli kości.";
-        private const string targetableCreatureTypeTooltip = "Rodzaj istot na jakie może wpływać moc. Ma znaczenie tylko dla dyscyplin o celu innym niż Self.";
-
         [field: SerializeField]
         public string PowerName { get; private set; }
         [field: SerializeField, MultiLineProperty]
@@ -41,47 +26,47 @@ namespace SunsetSystems.Spellbook
         [SerializeField, ReadOnly]
         private string _id;
         public string ID => _id;
-        [SerializeField, Tooltip(typeTooltip)]
+        [SerializeField]
         private DisciplineType type = DisciplineType.Invalid;
         public DisciplineType Type { get => type; }
-        [SerializeField, Range(1, 5), Tooltip(levelTooltip)]
+        [SerializeField, Range(1, 5)]
         private int level = 1;
         public int Level { get => level; }
-        [SerializeField, Tooltip(secondaryTypeTooltip)]
+        [SerializeField]
         private DisciplineType secondaryType = DisciplineType.Invalid;
         public DisciplineType SecondaryType { get => secondaryType; }
-        [SerializeField, Range(0, 5), Tooltip(secondaryLevelTooltip)]
+        [SerializeField, Range(0, 5)]
         private int secondaryLevel;
         public int SecondaryLevel { get => secondaryLevel; }
 
-        [SerializeField, Tooltip(_targetTooltip)]
+        [SerializeField]
         private Target _target = Target.Self;
         public Target Target { get => _target; }
-        [SerializeField, Tooltip(rangeTooltip)]
+        [SerializeField]
         private Range range = Range.Ranged;
         public Range Range { get => range; }
-        [SerializeField, Tooltip(hasDisciplinePoolString)]
+        [SerializeField]
         private bool hasDiciplinePool = false;
         public bool HasDisciplinePool { get => hasDiciplinePool; }
         [SerializeField, ShowIf("HasDisciplinePool")]
         private DicePool disciplinePool = new DicePool();
         public DicePool DisciplinePool { get => disciplinePool; }
-        [SerializeField, Tooltip(disciplineRollDifficultyTooltip)]
+        [SerializeField]
         private int disciplineRollDifficulty = 0;
         public int DisciplineRollDifficulty { get => disciplineRollDifficulty; }
-        [SerializeField, Tooltip(hasAttackPoolTooltip)]
+        [SerializeField]
         private bool hasAttackPool = false;
         public bool HasAttackPool { get => hasAttackPool; }
         [SerializeField, ShowIf("HasAttackPool")]
         private DicePool attackPool = new DicePool();
         public DicePool AttackPool { get => attackPool; }
-        [SerializeField, Tooltip(defensePoolTooltip)]
+        [SerializeField]
         private bool _hasDefensePool = false;
         public bool HasDefensePool { get => _hasDefensePool; }
         [SerializeField, ShowIf("HasDefensePool")]
         private DicePool _defensePool = new DicePool();
         public DicePool DefensePool { get => _defensePool; }
-        [SerializeField, Tooltip(targetableCreatureTypeTooltip)]
+        [SerializeField]
         private TargetableCreatureType _targetableCreatureType = TargetableCreatureType.Any;
         public TargetableCreatureType TargetableCreatureType { get => _targetableCreatureType; }
 

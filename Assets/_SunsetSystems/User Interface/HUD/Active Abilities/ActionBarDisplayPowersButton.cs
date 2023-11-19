@@ -35,12 +35,12 @@ namespace SunsetSystems.UI
                 return;
             }
             List<IGameDataProvider<DisciplinePower>> powers = new();
-            powers.AddRange(activeActor.References.GetComponentInChildren<StatsManager>().Stats.Disciplines
-                .GetDisciplines()
-                .FindAll(d => _hashedPowerTypes.Contains(d.GetDisciplineType()))
-                // We assume that if given power has a blood cost, it's an active powers. That's a dirty hack, may fail.
-                .SelectMany(d => d.GetKnownPowers().FindAll(p => p.BloodCost > 0)));
-            _powersDisplay.DisplayAbilities(powers, _powersDisplayHookPoint);
+            //powers.AddRange(activeActor.References.GetComponentInChildren<StatsManager>().Stats.Disciplines
+            //    .GetDisciplines()
+            //    .FindAll(d => _hashedPowerTypes.Contains(d.GetDisciplineType()))
+            //    // We assume that if given power has a blood cost, it's an active powers. That's a dirty hack, may fail.
+            //    .SelectMany(d => d.GetKnownPowers().FindAll(p => p.BloodCost > 0)));
+            //_powersDisplay.DisplayAbilities(powers, _powersDisplayHookPoint);
         }
     }
 }

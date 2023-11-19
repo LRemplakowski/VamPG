@@ -103,17 +103,6 @@ namespace SunsetSystems.Entities.Characters
             return Health.GetValue() > 0;
         }
 
-        public DisciplinePower GetDisciplinePower(string powerID)
-        {
-            foreach (Discipline discipline in Stats.Disciplines.GetDisciplines())
-            {
-                DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ID.Equals(powerID));
-                if (power != null)
-                    return power;
-            }
-            return null;
-        }
-
         public void CopyFromTemplate(ICreatureTemplate template)
         {
             Stats = new(template.StatsData);

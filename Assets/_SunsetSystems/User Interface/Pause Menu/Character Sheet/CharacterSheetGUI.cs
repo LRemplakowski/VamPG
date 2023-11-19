@@ -34,8 +34,8 @@ namespace SunsetSystems.UI
             skills.AddRange(data.Skills?.GetSkillList() ?? new());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IGameDataProvider<BaseStat>> disciplines = new();
-            disciplines.AddRange(data.Disciplines?.GetDisciplines() ?? new());
-            _disciplines.UpdateViews(disciplines);
+            //disciplines.AddRange(data.Disciplines?.GetDisciplines() ?? new());
+            //_disciplines.UpdateViews(disciplines);
         }
     }
 }

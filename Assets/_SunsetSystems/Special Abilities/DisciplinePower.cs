@@ -1,17 +1,15 @@
 ﻿using Sirenix.OdinInspector;
-using SunsetSystems.Entities;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Resources;
 using SunsetSystems.UI;
 using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Spellbook
 {
     [System.Serializable, CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
-    public class DisciplinePower : ScriptableObject, IGameDataProvider<DisciplinePower>
+    public class DisciplinePower : SerializedScriptableObject, IGameDataProvider<DisciplinePower>
     {
         [field: SerializeField]
         public string PowerName { get; private set; }
@@ -22,18 +20,18 @@ namespace SunsetSystems.Spellbook
         [field: SerializeField]
         public int Cooldown { get; private set; }
         [field: SerializeField]
-        public Sprite Icon { get; private set; }
+        public AssetReferenceSprite Icon { get; private set; }
         [SerializeField, ReadOnly]
-        private string _id;
+        private string _id = Guid.NewGuid().ToString();
         public string ID => _id;
         [SerializeField]
-        private DisciplineType type = DisciplineType.Invalid;
+        private DisciplineType type;
         public DisciplineType Type { get => type; }
         [SerializeField, Range(1, 5)]
         private int level = 1;
         public int Level { get => level; }
         [SerializeField]
-        private DisciplineType secondaryType = DisciplineType.Invalid;
+        private DisciplineType secondaryType;
         public DisciplineType SecondaryType { get => secondaryType; }
         [SerializeField, Range(0, 5)]
         private int secondaryLevel;
@@ -48,7 +46,7 @@ namespace SunsetSystems.Spellbook
         [SerializeField]
         private bool hasDiciplinePool = false;
         public bool HasDisciplinePool { get => hasDiciplinePool; }
-        [SerializeField, ShowIf("HasDisciplinePool")]
+        [SerializeField, ShowIf("HasDisciplinePool"), InlineProperty]
         private DicePool disciplinePool = new DicePool();
         public DicePool DisciplinePool { get => disciplinePool; }
         [SerializeField]
@@ -57,13 +55,13 @@ namespace SunsetSystems.Spellbook
         [SerializeField]
         private bool hasAttackPool = false;
         public bool HasAttackPool { get => hasAttackPool; }
-        [SerializeField, ShowIf("HasAttackPool")]
+        [SerializeField, ShowIf("HasAttackPool"), InlineProperty]
         private DicePool attackPool = new DicePool();
         public DicePool AttackPool { get => attackPool; }
         [SerializeField]
         private bool _hasDefensePool = false;
         public bool HasDefensePool { get => _hasDefensePool; }
-        [SerializeField, ShowIf("HasDefensePool")]
+        [SerializeField, ShowIf("HasDefensePool"), InlineProperty]
         private DicePool _defensePool = new DicePool();
         public DicePool DefensePool { get => _defensePool; }
         [SerializeField]
@@ -78,17 +76,8 @@ namespace SunsetSystems.Spellbook
         {
             _powerTooltip._title = this.PowerName;
             _powerTooltip._description = this.PowerDescription;
-        }
-
-        private void Awake()
-        {
-            if (string.IsNullOrEmpty(_id))
+            if (string.IsNullOrWhiteSpace(_id))
                 _id = Guid.NewGuid().ToString();
-        }
-
-        private void OnEnable()
-        {
-            Icon ??= ResourceLoader.GetFallbackIcon();
         }
 
         public List<EffectWrapper> GetEffects()
@@ -101,14 +90,11 @@ namespace SunsetSystems.Spellbook
         [System.Serializable]
         public class EffectWrapper
         {
-            private const string effectTypeTooltip = "Typ efektu. Na jaką właściwość ma wpływać lub czy ma być obsługiwany osobnym skryptem.";
-            private const string affectedCreatureTooltip = "Na kogo ma wpłynąć efekt. Nie ma znaczenia jeśli cel mocy jest Self.";
-
             //Discipline variables
-            [SerializeField, Tooltip(effectTypeTooltip)]
+            [SerializeField]
             private EffectType effectType;
             public EffectType EffectType { get => effectType; }
-            [SerializeField, Tooltip(affectedCreatureTooltip)]
+            [SerializeField]
             private AffectedCreature _affectedCreature = AffectedCreature.Self;
             public AffectedCreature AffectedCreature { get => _affectedCreature; }
             [SerializeField]
@@ -135,7 +121,7 @@ namespace SunsetSystems.Spellbook
                 };
             }
             
-            [ShowIf("effectType", EffectType.Attribute)]
+            [ShowIf("@this.effectType", EffectType.Attribute), InlineProperty]
             public AttributeEffect attributeEffect = new AttributeEffect();
             [System.Serializable]
             public class AttributeEffect : Effect
@@ -154,7 +140,7 @@ namespace SunsetSystems.Spellbook
                 public int ModifierValue { get => modifierValue; }
             }
 
-            [ShowIf("effectType", EffectType.Skill)]
+            [ShowIf("@this.effectType", EffectType.Skill), InlineProperty]
             public SkillEffect skillEffect = new();
             [System.Serializable]
             public class SkillEffect : Effect
@@ -173,6 +159,7 @@ namespace SunsetSystems.Spellbook
                 public int ModifierValue { get => modifierValue; }
             }
 
+            [ShowIf("@this.effectType", EffectType.Discipline), InlineProperty]
             public DisciplineEffect disciplineEffect = new DisciplineEffect();
             [System.Serializable]
             public class DisciplineEffect : Effect
@@ -191,6 +178,7 @@ namespace SunsetSystems.Spellbook
                 public int ModifierValue { get => modifierValue; }
             }
 
+            [ShowIf("@this.effectType", EffectType.Tracker), InlineProperty]
             public TrackerEffect trackerEffect = new TrackerEffect();
             [System.Serializable]
             public class TrackerEffect : Effect
@@ -212,13 +200,14 @@ namespace SunsetSystems.Spellbook
                 public int ModifierValue { get => modifierValue; }
             }
 
+            [ShowIf("@this.effectType", EffectType.ScriptDriven), InlineProperty]
             public ScriptEffect scriptEffect = new();
             [System.Serializable]
             public class ScriptEffect : Effect
             {
-                [SerializeReference, RequireInterface(typeof(IDisciplineScript))]
-                private UnityEngine.Object _script;
-                public IDisciplineScript Script { get => _script as IDisciplineScript; }
+                [SerializeField, SerializeReference]
+                private IDisciplineScript _script;
+                public IDisciplineScript Script { get => _script; }
             }
 
 
@@ -257,16 +246,22 @@ namespace SunsetSystems.Spellbook
             private FieldType firstPool, secondPool;
             public FieldType FirstPool { get => firstPool; }
             public FieldType SecondPool { get => secondPool; }
-            [SerializeField]
-            private AttributeType attribute, secondAttribute;
+            [SerializeField, ShowIf("@this.firstPool == FieldType.Attribute")]
+            private AttributeType attribute;
+            [SerializeField, ShowIf("@this.secondPool == FieldType.Attribute")]
+            private AttributeType secondAttribute;
             public AttributeType Attribute { get => attribute; }
             public AttributeType SecondAttribute { get => secondAttribute; }
-            [SerializeField]
-            private SkillType skill, secondSkill;
+            [SerializeField, ShowIf("@this.firstPool == FieldType.Skill")]
+            private SkillType skill;
+            [SerializeField, ShowIf("@this.secondPool == FieldType.Skill")]
+            private SkillType secondSkill;
             public SkillType Skill { get => skill; }
             public SkillType SecondSkill { get => secondSkill; }
-            [SerializeField]
-            private DisciplineType discipline, secondDiscipline;
+            [SerializeField, ShowIf("@this.firstPool == FieldType.Discipline")]
+            private DisciplineType discipline;
+            [SerializeField, ShowIf("@this.secondPool == FieldType.Discipline")]
+            private DisciplineType secondDiscipline;
             public DisciplineType Discipline { get => discipline; }
             public DisciplineType SecondDiscipline { get => secondDiscipline; }
         }

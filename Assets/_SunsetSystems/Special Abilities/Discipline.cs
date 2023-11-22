@@ -12,7 +12,7 @@ namespace SunsetSystems.Spellbook
         private int baseValue = 0;
 
         [SerializeField, ReadOnly]
-        private DisciplineType disciplineType = DisciplineType.Invalid;
+        private DisciplineType disciplineType;
 
         public override string Name => disciplineType.ToString();
 
@@ -40,11 +40,6 @@ namespace SunsetSystems.Spellbook
         }
 
         public List<DisciplinePower> GetKnownPowers() => knownPowers;
-
-        public Discipline() : this(DisciplineType.Invalid)
-        {
-
-        }
 
         public Discipline(DisciplineType disciplineType)
         {

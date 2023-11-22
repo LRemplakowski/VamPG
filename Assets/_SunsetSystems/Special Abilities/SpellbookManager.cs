@@ -23,8 +23,8 @@ namespace SunsetSystems.Spellbook
         [SerializeField]
         private ICreature _owner;
         public ICreatureReferences References => _owner.References;
-
-        private Disciplines Disciplines => throw new NotImplementedException();
+        [field: SerializeField]
+        private List<DisciplinePower> Disciplines { get; set; }
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 
@@ -48,24 +48,17 @@ namespace SunsetSystems.Spellbook
             CombatManager.Instance.OnFullTurnCompleted -= DecreaseCooldowns;
         }
 
-        private async void ApplyPasivePowers()
+        private void ApplyPasivePowers()
         {
-            await Task.Yield();
-            //await new WaitForBackgroundThread();
-            //List<DisciplinePower> powers = new();
-            //foreach (Discipline discipline in Disciplines.GetDisciplines())
-            //{
-            //    await new WaitForSeconds(1f);
-            //    List<DisciplinePower> passivePowers = discipline.GetKnownPowers()?.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
-            //    powers.AddRange(passivePowers);
-            //}
-            //await new WaitForUpdate();
-            //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner));
+            List<DisciplinePower> powers = new();
+            List<DisciplinePower> passivePowers = Disciplines.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
+            powers.AddRange(passivePowers);
+            powers.ForEach(p => Spellcaster.HandleEffects(p, _owner.References.CombatBehaviour.MagicUser));
         }
 
         public void UsePower(DisciplinePower power, IMagicUser castingActor)
         {
-            throw new NotImplementedException();
+            UsePower(power, castingActor.References.CombatBehaviour);
         }
 
         public void UsePower(DisciplinePower power, ICombatant target)
@@ -73,7 +66,7 @@ namespace SunsetSystems.Spellbook
             ActionBarUI.Instance.SetBarAction(default);
             if (_powersOnCooldown.ContainsKey(power))
                 return;
-            if (Disciplines.GetDisciplines().Any(d => d.GetKnownPowers().Contains(power)))
+            if (Disciplines.Contains(power))
             {
                 if (DeducePowerCost(power))
                 {
@@ -124,7 +117,7 @@ namespace SunsetSystems.Spellbook
 
         public bool GetIsPowerKnown(DisciplinePower power)
         {
-            return Disciplines.GetDisciplines().Any(d => d.GetKnownPowers().Contains(power));
+            return Disciplines.Contains(power);
         }
 
         private void DecreaseCooldowns()
@@ -146,10 +139,11 @@ namespace SunsetSystems.Spellbook
 
         private bool DeducePowerCost(DisciplinePower power)
         {
-            if (_owner.Faction is Faction.PlayerControlled)
-                throw new NotImplementedException();
-            else
-                return true;
+            return true;
+            //if (_owner.Faction is Faction.PlayerControlled)
+            //    throw new NotImplementedException();
+            //else
+            //    return true;
         }
     }
 }

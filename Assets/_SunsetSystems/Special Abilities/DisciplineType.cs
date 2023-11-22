@@ -3,7 +3,7 @@
 [Flags]
 public enum DisciplineType
 {
-    Animalism = 1,
+    Animalism = 1 << 0,
     Auspex = 1 << 1,
     BloodSorcery = 1 << 2,
     Celerity = 1 << 3,
@@ -22,5 +22,4 @@ public enum DisciplineType
     Medicine = 1 << 16,
     Larceny = 1 << 17,
     Intimidation = 1 << 18,
-    Invalid = 0
 }

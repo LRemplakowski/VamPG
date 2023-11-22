@@ -379,7 +379,7 @@ namespace SunsetSystems.Entities.Data
                 DisciplineType.Medicine => medicine,
                 DisciplineType.Larceny => larceny,
                 DisciplineType.Intimidation => intimidation,
-                _ => new(DisciplineType.Invalid),
+                _ => throw new NotImplementedException(),
             };
         }
 

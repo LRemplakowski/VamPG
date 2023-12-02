@@ -8,6 +8,9 @@ namespace SunsetSystems.Spellbook
     [System.Serializable]
     public class Discipline : BaseStat
     {
+        [field: SerializeField]
+        public Sprite Icon { get; private set; }
+
         [SerializeField, Range(0, 5)]
         private int baseValue = 0;
 
@@ -39,7 +42,7 @@ namespace SunsetSystems.Spellbook
             }
         }
 
-        public List<DisciplinePower> GetKnownPowers() => knownPowers;
+        public List<DisciplinePower> GetKnownPowers() => new(knownPowers);
 
         public Discipline(DisciplineType disciplineType)
         {

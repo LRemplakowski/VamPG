@@ -24,7 +24,7 @@ namespace SunsetSystems.Spellbook
         private ICreature _owner;
         public ICreatureReferences References => _owner.References;
         [field: SerializeField]
-        private List<DisciplinePower> Disciplines { get; set; }
+        private List<Discipline> Disciplines { get; set; }
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 
@@ -32,6 +32,16 @@ namespace SunsetSystems.Spellbook
         public static Target RequiredTarget { get; private set; }
         private static Task targetAwaiterTask;
         private CancellationTokenSource targetAwaiterCancellation;
+
+        private void Reset()
+        {
+            _owner = GetComponentInParent<ICreature>();
+            Disciplines = new();
+            foreach (DisciplineType disciplineType in Enum.GetValues(typeof(DisciplineType)))
+            {
+                Disciplines.Add(new Discipline(disciplineType));
+            }
+        }
 
         private void OnEnable()
         {
@@ -51,7 +61,7 @@ namespace SunsetSystems.Spellbook
         private void ApplyPasivePowers()
         {
             List<DisciplinePower> powers = new();
-            List<DisciplinePower> passivePowers = Disciplines.FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
+            List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
             powers.AddRange(passivePowers);
             powers.ForEach(p => Spellcaster.HandleEffects(p, _owner.References.CombatBehaviour.MagicUser));
         }
@@ -66,13 +76,10 @@ namespace SunsetSystems.Spellbook
             ActionBarUI.Instance.SetBarAction(default);
             if (_powersOnCooldown.ContainsKey(power))
                 return;
-            if (Disciplines.Contains(power))
+            if (GetIsPowerKnown(power) && DeducePowerCost(power))
             {
-                if (DeducePowerCost(power))
-                {
-                    Spellcaster.HandleEffects(power, this, target);
-                    StartCooldown(power);
-                }
+                Spellcaster.HandleEffects(power, this, target);
+                StartCooldown(power);
             }
             else
             {
@@ -117,7 +124,7 @@ namespace SunsetSystems.Spellbook
 
         public bool GetIsPowerKnown(DisciplinePower power)
         {
-            return Disciplines.Contains(power);
+            return Disciplines.Any(d => d.GetKnownPowers().Contains(power));
         }
 
         private void DecreaseCooldowns()

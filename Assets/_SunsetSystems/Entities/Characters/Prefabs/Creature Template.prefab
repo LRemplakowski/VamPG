@@ -157,9 +157,6 @@ MonoBehaviour:
     - Name: owner
       Entry: 10
       Data: 1
-    - Name: weaponInstance
-      Entry: 6
-      Data: 
   weaponParent: {fileID: 1187578031712813030}
   animationController: {fileID: 4678919013744510610}
   weaponAnimationTypeParam: WeaponAnimationType
@@ -172,7 +169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7744861580169095031}
-  - component: {fileID: 3067086792877250132}
+  - component: {fileID: 1441128836294789900}
   m_Layer: 0
   m_Name: Spellbook Manager
   m_TagString: Untagged
@@ -195,7 +192,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2900274695709765927}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3067086792877250132
+--- !u!114 &1441128836294789900
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,6 +217,65 @@ MonoBehaviour:
     - Name: _owner
       Entry: 10
       Data: 0
+  <Icon>k__BackingField: {fileID: 0}
+  <Disciplines>k__BackingField:
+  - baseValue: 0
+    disciplineType: 1
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 2
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 4
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 8
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 16
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 32
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 64
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 128
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 256
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 512
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 1024
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 2048
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 4096
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 8192
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 16384
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 32768
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 65536
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 131072
+    knownPowers: []
+  - baseValue: 0
+    disciplineType: 262144
+    knownPowers: []
 --- !u!1 &990508043532713649
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,7 +824,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 7860156406871809602}
     - {fileID: 660093643310669083}
-    - {fileID: 3067086792877250132}
+    - {fileID: 1441128836294789900}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -791,6 +847,10 @@ MonoBehaviour:
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
   animationController: {fileID: 4678919013744510610}
   <OnChangedGridPosition>k__BackingField:
+    _PersistentCalls: []
+  <OnUsedActionPoint>k__BackingField:
+    _PersistentCalls: []
+  <OnSpentBloodPoint>k__BackingField:
     _PersistentCalls: []
 --- !u!1 &6912376922156523433
 GameObject:
@@ -1273,83 +1333,6 @@ MonoBehaviour:
       technology:
         baseValue: 0
         skillType: 134217728
-    Disciplines:
-      animalism:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      auspex:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      bloodSorcery:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      celerity:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      dominate:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      fortitude:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      obfuscate:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      oblivion:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      potence:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      presence:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      protean:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      athletics:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      firearms:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      melee:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      streetwise:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      insight:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      medicine:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      larceny:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
-      intimidation:
-        baseValue: 0
-        disciplineType: 0
-        knownPowers: []
 --- !u!1 &8446532587378983079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,15 +1377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efa1fd86d99f3a14f97cbd9179006ae5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   FirstName: Foo
   LastName: Bar
   _id: 

@@ -14,6 +14,8 @@ namespace SunsetSystems.Equipment
         [SerializeField]
         private VisualEffect muzzleFlash;
         [SerializeField]
+        private ParticleSystem particleSystem;
+        [SerializeField]
         private AudioClip shotSFX;
         [field: SerializeField]
         public WeaponAnimationDataProvider WeaponAnimationData { get; private set; }
@@ -25,6 +27,8 @@ namespace SunsetSystems.Equipment
         {
             if (muzzleFlash != null)
                 muzzleFlash.Play();
+            if (particleSystem != null)
+                particleSystem.Play();
             if (shotSFX != null)
                 AudioManager.Instance.PlaySFXOneShot(shotSFX);
         }

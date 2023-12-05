@@ -93,6 +93,6 @@ namespace SunsetSystems.Combat
 
     public enum CombatActionType
     {
-        Move, RangedAtk, MeleeAtk, Feed, Reload
+        Move, RangedAtk, MeleeAtk, Feed, Reload, UseDiscipline
     }
 }

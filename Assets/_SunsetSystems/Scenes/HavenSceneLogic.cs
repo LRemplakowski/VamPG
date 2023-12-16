@@ -3,6 +3,7 @@ using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Data;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Dialogue.Interfaces;
+using SunsetSystems.Entities.Creatures;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -20,6 +21,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
+using UnityEngine.InputSystem;
+using NPOI.Util;
+using System.Runtime.InteropServices;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Persistence
 {
@@ -34,6 +39,8 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Header("Prologue")]
+        [Button]
+        private ICreatureTemplate creatureTemplate;
         [SerializeField]
         private GameObject _desireeOnBed;
         [SerializeField]
@@ -88,6 +95,7 @@ namespace SunsetSystems.Persistence
         private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
         private CameraControlScript _cameraControl;
+        
 
         protected override void Awake()
         {
@@ -105,10 +113,14 @@ namespace SunsetSystems.Persistence
         {
             await base.StartSceneAsync(data);
             await new WaitForUpdate();
+            await CreatureFactory.Instance.Create(creatureTemplate);
             await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
-            //await new WaitForSeconds(2f);
+            ICreature _desiree = PartyManager.Instance.GetPartyMemberByID(creatureTemplate.ReadableID);
+            CreatureData _desireedata = PartyManager.Instance.GetPartyMemberDataByID(creatureTemplate.ReadableID);
+            PartyManager.Instance.RecruitMainCharacter(_desireedata);
+            PartyManager.Instance.MainCharacter.References.GameObject.SetActive(false);
             //PartyManager.MainCharacter?.gameObject.SetActive(false);
-            await new WaitForSeconds(2);
+            await new WaitForSeconds(2f);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _ = Task.Run(async () =>
             {
@@ -117,7 +129,7 @@ namespace SunsetSystems.Persistence
                 _cameraControl.ForceRotation(_cameraStartRotation);
             });
         }
-
+    
         private async Task MovePCToPositionAfterDialogue()
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
@@ -128,6 +140,8 @@ namespace SunsetSystems.Persistence
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
+
+        
 
         public async void BringKevinForVisit()
         {

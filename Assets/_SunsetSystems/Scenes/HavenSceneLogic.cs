@@ -25,6 +25,7 @@ using UnityEngine.InputSystem;
 using NPOI.Util;
 using System.Runtime.InteropServices;
 using Sirenix.OdinInspector;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Persistence
 {
@@ -38,9 +39,9 @@ namespace SunsetSystems.Persistence
         private Transform _startPosition;
         [SerializeField]
         private Vector3 _cameraStartPoint, _cameraStartRotation;
-        [Header("Prologue")]
-        [Button]
-        private ICreatureTemplate creatureTemplate;
+        [Title("Prologue")]
+        [SerializeField]
+        private Creature creaturePrefab;
         [SerializeField]
         private GameObject _desireeOnBed;
         [SerializeField]
@@ -103,31 +104,28 @@ namespace SunsetSystems.Persistence
             HavenDialogueCommands.HavenSceneLogic = this;
         }
 
-        private void Start()
+        protected override void Start()
         {
             this.TryFindFirstGameObjectWithTag(TagConstants.CAMERA_RIG, out GameObject cameraControlGO);
             _cameraControl = cameraControlGO?.GetComponent<CameraControlScript>();
+            base.Start();
         }
 
-        public async override Task StartSceneAsync(LevelLoadingData data)
+        public async override Task StartSceneAsync()
         {
-            await base.StartSceneAsync(data);
+            await base.StartSceneAsync();
             await new WaitForUpdate();
-            await CreatureFactory.Instance.Create(creatureTemplate);
-            await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
-            ICreature _desiree = PartyManager.Instance.GetPartyMemberByID(creatureTemplate.ReadableID);
-            CreatureData _desireedata = PartyManager.Instance.GetPartyMemberDataByID(creatureTemplate.ReadableID);
-            PartyManager.Instance.RecruitMainCharacter(_desireedata);
-            PartyManager.Instance.MainCharacter.References.GameObject.SetActive(false);
-            //PartyManager.MainCharacter?.gameObject.SetActive(false);
+            ICreatureTemplate templateFromPrefab = creaturePrefab.CreatureTemplate;
+            await CreatureFactory.Instance.Create(templateFromPrefab);
+            ICreature _desiree = await CreatureFactory.Instance.Create(templateFromPrefab);
+            CreatureData _desireeData = _desiree.References.CreatureData;
+            PartyManager.Instance.RecruitMainCharacter(_desireeData);
+            _desiree.References.GameObject.SetActive(false);
+            GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
-            DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
-            _ = Task.Run(async () =>
-            {
-                await new WaitForUpdate();
-                _cameraControl.ForceToPosition(_cameraStartPoint);
-                _cameraControl.ForceRotation(_cameraStartRotation);
-            });
+            //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
+            _cameraControl.ForceToPosition(_cameraStartPoint);
+            _cameraControl.ForceRotation(_cameraStartRotation);
         }
     
         private async Task MovePCToPositionAfterDialogue()

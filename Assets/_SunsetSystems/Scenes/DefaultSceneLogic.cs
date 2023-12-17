@@ -14,7 +14,7 @@ namespace SunsetSystems.Persistence
         [field: SerializeField]
         public UltEvent OnSceneStart { get; private set; }
 
-        public async override Task StartSceneAsync(LevelLoadingData data)
+        public async override Task StartSceneAsync()
         {
             await Task.Yield();
         }

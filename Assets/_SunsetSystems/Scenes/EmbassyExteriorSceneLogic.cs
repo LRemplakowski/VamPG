@@ -18,9 +18,9 @@ namespace SunsetSystems
 
         private bool _firstVisit = true;
 
-        public async override Task StartSceneAsync(LevelLoadingData data)
+        public async override Task StartSceneAsync()
         {
-            await base.StartSceneAsync(data);
+            await base.StartSceneAsync();
             if (_firstVisit)
                 DialogueManager.Instance.StartDialogue(_sceneStartDialogueNode, _sceneDialogueProject);
         }

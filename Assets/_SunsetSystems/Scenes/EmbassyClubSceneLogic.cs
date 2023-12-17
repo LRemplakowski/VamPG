@@ -21,9 +21,9 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
         EmbassyClubDialogueCommands.sceneLogic = this;
     }
 
-    public override Task StartSceneAsync(LevelLoadingData data)
+    public override Task StartSceneAsync()
     {
-        return base.StartSceneAsync(data);
+        return base.StartSceneAsync();
     }
 
     private void DoRecruitAnastasia()

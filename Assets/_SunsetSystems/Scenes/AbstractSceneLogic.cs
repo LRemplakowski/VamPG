@@ -2,11 +2,12 @@ using UnityEngine;
 using System.Threading.Tasks;
 using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Data;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Persistence
 {
     [RequireComponent(typeof(UniqueId))]
-    public abstract class AbstractSceneLogic : MonoBehaviour, ISaveable
+    public abstract class AbstractSceneLogic : SerializedMonoBehaviour, ISaveable
     {
         [SerializeField]
         protected UniqueId unique;
@@ -23,7 +24,12 @@ namespace SunsetSystems.Persistence
             unique ??= GetComponent<UniqueId>();
         }
 
-        public abstract Task StartSceneAsync(LevelLoadingData data);
+        protected async virtual void Start()
+        {
+            await StartSceneAsync();
+        }
+
+        public abstract Task StartSceneAsync();
 
         public abstract object GetSaveData();
 

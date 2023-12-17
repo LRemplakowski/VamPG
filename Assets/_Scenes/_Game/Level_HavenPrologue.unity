@@ -1778,7 +1778,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -875.5634, y: -0, z: -1751.1268}
+    textureOffset: {x: 0, y: 0, z: 0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -19128,11 +19128,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19160,11 +19160,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -21424,7 +21424,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -875.5634, y: -0, z: -1751.1268}
+    textureOffset: {x: 0, y: 0, z: 0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -41080,6 +41080,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75818da2ed25a3c44ad66f98b86da20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _kitchenSink
+      Entry: 6
+      Data: 
+    - Name: _phone
+      Entry: 6
+      Data: 
+    - Name: _landlord
+      Entry: 6
+      Data: 
+    - Name: _landlordDialogue
+      Entry: 6
+      Data: 
   unique: {fileID: 2042823494}
   _defaultEntryWaypoint: {fileID: 1591118380}
   <OnSceneStart>k__BackingField:
@@ -41089,6 +41110,7 @@ MonoBehaviour:
   _startPosition: {fileID: 1591118379}
   _cameraStartPoint: {x: 3.405309, y: 0.251, z: 1.884679}
   _cameraStartRotation: {x: 0, y: 46.404, z: 0}
+  creaturePrefab: {fileID: 660093643310669083, guid: 5fd475a07782c9d4394eb94c5a7bc834, type: 3}
   _desireeOnBed: {fileID: 0}
   _handgun: {fileID: 6672455340073717584}
   _crowbar: {fileID: 1513787326}

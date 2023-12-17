@@ -13,7 +13,13 @@ namespace SunsetSystems.Entities.Creatures
         [SerializeField]
         private AssetReference creaturePrefabReference;
 
-        public static CreatureFactory Instance { get; internal set; }
+        public static CreatureFactory Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
 
         [Button]
         public async Task<ICreature> Create(ICreatureTemplate creatureTemplate)

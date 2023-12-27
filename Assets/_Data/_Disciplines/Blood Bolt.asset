@@ -70,7 +70,37 @@ MonoBehaviour:
     discipline: 0
     secondDiscipline: 0
   _targetableCreatureType: 2
-  effects: []
+  effects:
+  - effectType: 3
+    _affectedCreature: 1
+    duration: 1
+    rounds: 0
+    attributeEffect:
+      propertyModifier: 0
+      affectedProperty: 0
+      modifierType: 0
+      modifierValue: 0
+    skillEffect:
+      propertyModifier: 0
+      affectedProperty: 0
+      modifierType: 0
+      modifierValue: 0
+    disciplineEffect:
+      propertyModifier: 0
+      affectedProperty: 0
+      modifierType: 0
+      modifierValue: 0
+    trackerEffect:
+      propertyModifier: 0
+      affectedProperty: 0
+      affectedValue: 1
+      modifierType: 0
+      modifierValue: 3
+    scriptEffect:
+      _script:
+        rid: -2
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }

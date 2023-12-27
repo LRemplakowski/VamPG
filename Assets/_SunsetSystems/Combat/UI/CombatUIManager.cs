@@ -23,6 +23,8 @@ namespace SunsetSystems.Combat.UI
         private PlayerHealthDisplay currentActorHealth;
         [SerializeField]
         private ResourceBarDisplay apBar, bpBar;
+        [SerializeField]
+        private ActiveAbilitiesDisplayManager disciplineBar;
 
         [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
@@ -56,6 +58,7 @@ namespace SunsetSystems.Combat.UI
                 currentActorHealth.UpdateHealthDisplay();
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.GetComponentInChildren<StatsManager>().Hunger.GetValue());
+                disciplineBar.ShowAbilities(combatant);
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
             }

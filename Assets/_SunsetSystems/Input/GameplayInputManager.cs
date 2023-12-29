@@ -73,11 +73,10 @@ namespace SunsetSystems.Input
 
         private void OnPointerPosition(InputAction.CallbackContext context)
         {
-            mousePosition = context.ReadValue<Vector2>();
             if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                 handler.HandlePointerPosition(context);
         }
-
+        /*
         private void HandleSecondaryAction()
         {
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -317,5 +316,6 @@ namespace SunsetSystems.Input
     public enum PlayerInputMode
     {
         Default, TargetSelection
+    }*/
     }
 }

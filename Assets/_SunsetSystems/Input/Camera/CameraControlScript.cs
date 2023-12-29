@@ -79,7 +79,7 @@ namespace SunsetSystems.Input.CameraControl
 
         public void ForceRotation(Vector3 eulerAngles)
         {
-            throw new NotImplementedException();
+            Debug.Log("Forcing camera to specified rotation");
         }
         
         public void OnMove(InputAction.CallbackContext context)

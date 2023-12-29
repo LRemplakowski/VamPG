@@ -101,7 +101,7 @@ namespace SunsetSystems.Persistence
         protected override void Awake()
         {
             base.Awake();
-            HavenDialogueCommands.HavenSceneLogic = this;
+            //HavenDialogueCommands.HavenSceneLogic = this;
         }
 
         protected override void Start()
@@ -116,25 +116,23 @@ namespace SunsetSystems.Persistence
             await base.StartSceneAsync();
             await new WaitForUpdate();
             ICreatureTemplate templateFromPrefab = creaturePrefab.CreatureTemplate;
-            await CreatureFactory.Instance.Create(templateFromPrefab);
             ICreature _desiree = await CreatureFactory.Instance.Create(templateFromPrefab);
             CreatureData _desireeData = _desiree.References.CreatureData;
             PartyManager.Instance.RecruitMainCharacter(_desireeData);
-            _desiree.References.GameObject.SetActive(false);
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
             //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _cameraControl.ForceToPosition(_cameraStartPoint);
             _cameraControl.ForceRotation(_cameraStartRotation);
         }
-    
-        private async Task MovePCToPositionAfterDialogue()
+
+        /*private async Task MovePCToPositionAfterDialogue(ICreature _desiree)
         {
             SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            PartyManager.Instance.MainCharacter.References.GameObject.SetActive(true);
+            _desiree.References.GameObject.SetActive(true);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }
@@ -266,9 +264,9 @@ namespace SunsetSystems.Persistence
             public static HavenSceneLogic HavenSceneLogic;
 
             [YarnCommand("GetUpFromBedDesiree")]
-            public async static void GetUpFromBedDesiree()
+            public async static void GetUpFromBedDesiree(ICreature _desiree)
             {
-                await HavenSceneLogic.MovePCToPositionAfterDialogue();
+                await HavenSceneLogic.MovePCToPositionAfterDialogue(_desiree);
             }
 
             [YarnCommand("EnableInteractionsAfterPhoneCall")]
@@ -347,6 +345,6 @@ namespace SunsetSystems.Persistence
             {
                 HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
             }
-        }
+        }*/
     }
 }

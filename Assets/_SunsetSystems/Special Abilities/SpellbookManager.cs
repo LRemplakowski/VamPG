@@ -26,6 +26,8 @@ namespace SunsetSystems.Spellbook
         [field: SerializeField]
         private List<Discipline> Disciplines { get; set; }
 
+        public IEnumerable<DisciplinePower> KnownPowers => Disciplines.SelectMany(d => d.GetKnownPowers());
+
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 
         public static ICombatant PowerTarget { get; set; }

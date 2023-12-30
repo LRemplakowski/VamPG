@@ -9,6 +9,8 @@ namespace SunsetSystems.Spellbook
     {
         ICreatureReferences References { get; }
 
+        IEnumerable<DisciplinePower> KnownPowers { get; }
+
         void UsePower(DisciplinePower power, IMagicUser castingActor);
         void UsePowerAfterTargetSelection(DisciplinePower power);
     }

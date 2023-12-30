@@ -13,6 +13,10 @@ namespace SunsetSystems.Spellbook
     {
         [field: SerializeField]
         public string PowerName { get; private set; }
+        [field: SerializeField]
+        public AssetReferenceSprite PowerIcon { get; private set; }
+        [field: SerializeField]
+        public AssetReference PowerGUIButtonAsset { get; private set; }
         [field: SerializeField, MultiLineProperty]
         public string PowerDescription { get; private set; }
         [field: SerializeField]

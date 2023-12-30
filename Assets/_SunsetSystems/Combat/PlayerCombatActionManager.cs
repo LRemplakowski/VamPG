@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Spellbook;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -82,12 +83,20 @@ namespace SunsetSystems.Combat
     [Serializable]
     public struct SelectedCombatActionData
     {
-        [field: ShowInInspector, ReadOnly]
+        [field: SerializeField]
         public CombatActionType ActionType { get; private set; }
+        [field: SerializeField, ShowIf("@this.ActionType == CombatActionType.UseDiscipline")]
+        public DisciplinePower DisciplinePowerData { get; private set; }
 
-        public SelectedCombatActionData(CombatActionType ActionType)
+        public SelectedCombatActionData(CombatActionType ActionType) : this(ActionType, null)
+        {
+
+        }
+
+        public SelectedCombatActionData(CombatActionType ActionType, DisciplinePower DisciplinePowerData)
         {
             this.ActionType = ActionType;
+            this.DisciplinePowerData = DisciplinePowerData;
         }
     }
 

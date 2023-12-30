@@ -4,6 +4,7 @@ using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Spellbook;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -92,6 +93,9 @@ namespace SunsetSystems.Input
                 case CombatActionType.Reload:
                     HandleReloadCombatAction();
                     break;
+                case CombatActionType.UseDiscipline:
+                    HandleUseDisciplineCombatAction();
+                    break;
             }
 
             void HandleMoveCombatAction()
@@ -135,6 +139,12 @@ namespace SunsetSystems.Input
 
             void HandleReloadCombatAction()
             {
+
+            }
+
+            void HandleUseDisciplineCombatAction()
+            {
+                DisciplinePower selectedDisciplinePower = selectedActionManager.SelectedActionData.DisciplinePowerData;
 
             }
         }

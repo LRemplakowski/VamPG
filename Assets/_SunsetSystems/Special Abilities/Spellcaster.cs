@@ -10,19 +10,6 @@ namespace SunsetSystems.Spellbook
 {
     public static class Spellcaster
     {
-        public static Action GetPowerAction(DisciplinePower power, IMagicUser castingActor)
-        {
-            return power.Target switch
-            {
-                Spellbook.Target.Self => () => castingActor.UsePower(power, castingActor),
-                Spellbook.Target.Friendly => () => castingActor.UsePowerAfterTargetSelection(power),
-                Spellbook.Target.Hostile => () => castingActor.UsePowerAfterTargetSelection(power),
-                Spellbook.Target.AOE_Friendly => throw new NotImplementedException(),
-                Spellbook.Target.AOE_Hostile => throw new NotImplementedException(),
-                _ => null,
-            };
-        }
-
         public static bool HandleEffects(DisciplinePower discipline, IMagicUser caster)
         {
             switch (discipline.Target)

@@ -12,6 +12,5 @@ namespace SunsetSystems.Spellbook
         IEnumerable<DisciplinePower> KnownPowers { get; }
 
         void UsePower(DisciplinePower power, IMagicUser castingActor);
-        void UsePowerAfterTargetSelection(DisciplinePower power);
     }
 }

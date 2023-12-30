@@ -23,8 +23,6 @@ namespace SunsetSystems.Spellbook
         public int BloodCost { get; private set; }
         [field: SerializeField]
         public int Cooldown { get; private set; }
-        [field: SerializeField]
-        public AssetReferenceSprite Icon { get; private set; }
         [SerializeField, ReadOnly]
         private string _id = Guid.NewGuid().ToString();
         public string ID => _id;

@@ -75,7 +75,6 @@ namespace SunsetSystems.Spellbook
 
         public void UsePower(DisciplinePower power, ICombatant target)
         {
-            ActionBarUI.Instance.SetBarAction(default);
             if (_powersOnCooldown.ContainsKey(power))
                 return;
             if (GetIsPowerKnown(power) && DeducePowerCost(power))
@@ -87,31 +86,6 @@ namespace SunsetSystems.Spellbook
             {
                 Debug.LogError($"Attempting to use power {power.PowerName} but it is not known by the user!");
             }
-        }
-
-        public async void UsePowerAfterTargetSelection(DisciplinePower power)
-        {
-            RequiredTarget = power.Target;
-            await new WaitForBackgroundThread();
-            if (targetAwaiterTask != null)
-            {
-                targetAwaiterCancellation.Cancel();
-                targetAwaiterTask = null;
-            }
-            targetAwaiterCancellation = new();
-            targetAwaiterTask = Task.Run(async () =>
-            {
-                while (PowerTarget == null)
-                {
-                    await new WaitForSeconds(0.1f);
-                }
-            }, targetAwaiterCancellation.Token);
-            await targetAwaiterTask;
-            if (targetAwaiterTask.IsCanceled)
-                return;
-            targetAwaiterTask = null;
-            await new WaitForUpdate();
-            UsePower(power, PowerTarget);
         }
 
         private void StartCooldown(DisciplinePower power)

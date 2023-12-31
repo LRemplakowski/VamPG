@@ -19,7 +19,7 @@ using UnityEngine.AI;
 
 namespace SunsetSystems.Combat
 {
-    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant
+    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable
     {
         [Title("Config")]
         [SerializeField]
@@ -112,6 +112,25 @@ namespace SunsetSystems.Combat
         {
 
         }
+
+        #region ITargetable
+        public IEffectHandler EffectHandler => throw new System.NotImplementedException();
+
+        public bool IsFriendlyTowards(ICombatant other)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsHostileTowards(ICombatant other)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool IsMe(ICombatant other)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
 
         #region ICombatant
         public IWeapon CurrentWeapon => Owner.References.WeaponManager.GetSelectedWeapon();

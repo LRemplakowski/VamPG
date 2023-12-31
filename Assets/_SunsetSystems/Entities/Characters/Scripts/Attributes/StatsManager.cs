@@ -2,9 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Dice;
 using SunsetSystems.Entities.Data;
-using SunsetSystems.Spellbook;
-using System;
-using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
 using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
 using Sirenix.OdinInspector;
@@ -154,21 +151,6 @@ namespace SunsetSystems.Entities.Characters
             builder.SetSuperficialDamage(Health.SuperficialDamage);
             builder.SetAggravatedDamage(Health.AggravatedDamage);
             return builder.Create();
-        }
-
-        public void ApplyEffect(AttributeEffect effect)
-        {
-            Stats.Attributes.GetAttribute(effect.AffectedProperty).AddModifier(new(effect.ModifierValue, effect.ModifierType, effect.GetHashCode().ToString()));
-        }
-
-        public void ApplyEffect(SkillEffect effect)
-        {
-
-        }
-
-        public void ApplyEffect(DisciplineEffect effect)
-        {
-
         }
     }
 

@@ -145,7 +145,15 @@ namespace SunsetSystems.Input
             void HandleUseDisciplineCombatAction()
             {
                 DisciplinePower selectedDisciplinePower = selectedActionManager.SelectedActionData.DisciplinePowerData;
-
+                IMagicUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
+                if (targetableHit != null)
+                {
+                    ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
+                    if (target != null && selectedDisciplinePower.IsValidTarget(target, currentActorSpellcaster))
+                    {
+                        currentActorSpellcaster.UsePower(selectedDisciplinePower, target);
+                    }
+                }
             }
         }
 

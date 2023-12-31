@@ -22,6 +22,8 @@ namespace SunsetSystems.Spellbook
     {
         [SerializeField]
         private ICreature _owner;
+        [SerializeField]
+        private IEffectHandler selfEffectHandler;
         public ICreatureReferences References => _owner.References;
         [field: SerializeField]
         private List<Discipline> Disciplines { get; set; }
@@ -29,11 +31,6 @@ namespace SunsetSystems.Spellbook
         public IEnumerable<DisciplinePower> KnownPowers => Disciplines.SelectMany(d => d.GetKnownPowers());
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
-
-        public static ICombatant PowerTarget { get; set; }
-        public static Target RequiredTarget { get; private set; }
-        private static Task targetAwaiterTask;
-        private CancellationTokenSource targetAwaiterCancellation;
 
         private void Reset()
         {
@@ -62,29 +59,38 @@ namespace SunsetSystems.Spellbook
 
         private void ApplyPasivePowers()
         {
-            List<DisciplinePower> powers = new();
-            List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
-            powers.AddRange(passivePowers);
-            powers.ForEach(p => Spellcaster.HandleEffects(p, _owner.References.CombatBehaviour.MagicUser));
+            Debug.LogWarning("PASSIVE POWERS NOT IMPLEMENTED");
+            //List<DisciplinePower> powers = new();
+            //List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
+            //powers.AddRange(passivePowers);
+            //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner.References.CombatBehaviour.MagicUser));
         }
 
-        public void UsePower(DisciplinePower power, IMagicUser castingActor)
-        {
-            UsePower(power, castingActor.References.CombatBehaviour);
-        }
-
-        public void UsePower(DisciplinePower power, ICombatant target)
+        public bool UsePower(DisciplinePower power, ITargetable target)
         {
             if (_powersOnCooldown.ContainsKey(power))
-                return;
+                return false;
             if (GetIsPowerKnown(power) && DeducePowerCost(power))
             {
-                Spellcaster.HandleEffects(power, this, target);
+                foreach(var effect in power.GetEffects())
+                {
+                    switch (effect.AffectedEffectHandler)
+                    {
+                        case AffectedHandler.Caster:
+                            selfEffectHandler.HandleEffect(effect, this);
+                            break;
+                        case AffectedHandler.Target:
+                            target.EffectHandler.HandleEffect(effect, this);
+                            break;
+                    }
+                }
                 StartCooldown(power);
+                return true;
             }
             else
             {
                 Debug.LogError($"Attempting to use power {power.PowerName} but it is not known by the user!");
+                return false;
             }
         }
 

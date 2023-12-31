@@ -1,4 +1,5 @@
 using SunsetSystems.Entities.Creatures.Interfaces;
+using SunsetSystems.Entities.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,6 @@ namespace SunsetSystems.Spellbook
 
         IEnumerable<DisciplinePower> KnownPowers { get; }
 
-        void UsePower(DisciplinePower power, IMagicUser castingActor);
+        bool UsePower(DisciplinePower power, ITargetable target);
     }
 }

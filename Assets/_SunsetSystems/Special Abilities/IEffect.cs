@@ -2,15 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems
+namespace SunsetSystems.Spellbook
 {
     public interface IEffect
     {
-        bool ApplyEffect(IEffectTarget target);
+        AffectedHandler AffectedEffectHandler { get; }
+
+        bool ApplyEffect(IEffectHandler handler);
     }
 
-    public interface IEffectTarget
+    public enum AffectedValue
     {
-        void HandleEffect(IEffect effect);
+        MaxValue,
+        CurrentValue
+    }
+
+    public enum EffectModifier
+    {
+        StaticValue,
+        LevelBased,
+        RollBased
+    }
+
+    public enum FieldType
+    {
+        Attribute,
+        Skill,
+        Discipline
+    }
+
+    public enum AffectedHandler
+    {
+        Caster,
+        Target
     }
 }

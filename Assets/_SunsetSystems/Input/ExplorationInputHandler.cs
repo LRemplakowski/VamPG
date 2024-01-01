@@ -34,6 +34,8 @@ namespace SunsetSystems.Input
         private LayerMask _raycastTargetMask;
         [SerializeField]
         private float _followerStoppingDistance = 1.0f;
+        [SerializeField]
+        List<ISelectable> selectables;
 
         public void HandlePointerPosition(InputAction.CallbackContext context)
         {
@@ -52,9 +54,6 @@ namespace SunsetSystems.Input
                 IInteractable interactable = null;
                 if (lastHit != hit.collider)
                 {
-                    interactable = lastHit.gameObject
-                        .GetComponents<IInteractable>()?
-                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
                     if (interactable != null)
                     {
                         interactable.IsHoveredOver = false;
@@ -117,10 +116,11 @@ namespace SunsetSystems.Input
             void HandleSelectionExplorationInput()
             {
                 List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                ICreature currentLead;
+                Creature currentLead;
                 if (selectables.Count > 0)
                 {
                     currentLead = selectables[0].GetCreature();
+                    EventSystem.current.SetSelectedGameObject(currentLead.GameObject);
                 }
                 else
                 {

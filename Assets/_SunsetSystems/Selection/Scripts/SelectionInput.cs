@@ -12,8 +12,6 @@ namespace InsaneSystems.RTSSelection
     [RequireComponent(typeof(Selection))]
     public class SelectionInput : Singleton<SelectionInput>
     {
-        [SerializeField]
-        Selection selection;
         SelectionRect SelectionRect => this.FindFirstComponentWithTag<SelectionRect>(TagConstants.SELECTION_RECT);
 
         Vector2 startMousePosition = new();
@@ -35,6 +33,7 @@ namespace InsaneSystems.RTSSelection
 
         private void Start()
         {
+            Selection selection = null;
             if (selection == null)
                 selection = GetComponent<Selection>();
         }
@@ -53,6 +52,7 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClick()
         {
+            Selection selection = null;
             startMousePosition = new Vector2(mousePosition.x, mousePosition.y);
             selection.StartSelection();
             SelectionRect.EnableRect(startMousePosition);
@@ -60,6 +60,7 @@ namespace InsaneSystems.RTSSelection
 
         private void HandleClickRelease()
         {
+            Selection selection = null;
             selection.FinishSelection(startMousePosition, mousePosition);
             SelectionRect.DisableRect();
         }

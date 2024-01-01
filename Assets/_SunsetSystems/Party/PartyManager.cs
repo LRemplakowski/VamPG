@@ -12,9 +12,13 @@ using SunsetSystems.Inventory;
 using SunsetSystems.Experience;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Data;
+using UnityEngine.Events;
 using UMA;
 using SunsetSystems.Entities.Characters.Interfaces;
 using Sirenix.Utilities;
+using UnityEditor.TerrainTools;
+using SunsetSystems.Entities.Creatures;
+using NPOI.WP.UserModel;
 
 namespace SunsetSystems.Party
 {
@@ -45,6 +49,9 @@ namespace SunsetSystems.Party
 
         [SerializeField]
         private Transform _creatureParent;
+
+        [SerializeField]
+        private ICreatureTemplate creaturePrefab;
 
         private Dictionary<string, Vector3> _partyPositions = null;
 
@@ -137,16 +144,20 @@ namespace SunsetSystems.Party
         }
 
         [Button]
-        public void RecruitMainCharacter(CreatureData mainCharacterData)
+        public void RecruitMainCharacter(CreatureData mainCharacterData, ICreature creature)
         {
             RecruitCharacter(mainCharacterData);
             _mainCharacterKey = mainCharacterData.FullName;
             InventoryManager.Instance.SetMoney(0);
-            if (TryAddMemberToActiveRoster(_mainCharacterKey) == false)
+            if (TryAddMemberToActiveRoster(_mainCharacterKey, creature) == false)
                 Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
+            else if (TryAddMemberToActiveRoster(_mainCharacterKey, creature) == true)
+            {
+                _activeParty.Add(_mainCharacterKey, MainCharacter);
+            }
         }
 
-        public bool TryAddMemberToActiveRoster(string memberID)
+        public bool TryAddMemberToActiveRoster(string memberID, ICreature creature)
         {
             if (_creatureDataCache.ContainsKey(memberID) == false)
                 Debug.LogError("Trying to add character to roster but character " + memberID + " is not yet recruited!");
@@ -154,14 +165,14 @@ namespace SunsetSystems.Party
             if (result)
                 OnActivePartyChanged?.Invoke(_activeCoterieMemberKeys);
             else
-                Debug.LogError("foo");
+                _activeParty.Add(_mainCharacterKey, creature);
             return result;
         }
 
         [Button]
         public void AddCreatureAsActivePartyMember(ICreature creature)
         {
-            if (TryAddMemberToActiveRoster(creature.References.CreatureData.FullName))
+            if (TryAddMemberToActiveRoster(creature.References.CreatureData.FullName, creature))
             {
                 _activeParty.Add(creature.References.CreatureData.FullName, creature);
             }

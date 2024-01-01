@@ -31,7 +31,7 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
         anastasiaDialogue.gameObject.SetActive(false);
         anastasiaCompanion.References.GameObject.SetActive(true);
         PartyManager.Instance.RecruitCharacter(anastasiaCompanion);
-        PartyManager.Instance.AddCreatureAsActivePartyMember(anastasiaCompanion);
+        //PartyManager.Instance.AddCreatureAsActivePartyMember(anastasiaCompanion);
     }
 
     public static class EmbassyClubDialogueCommands

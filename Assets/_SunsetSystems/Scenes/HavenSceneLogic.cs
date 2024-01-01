@@ -26,6 +26,7 @@ using NPOI.Util;
 using System.Runtime.InteropServices;
 using Sirenix.OdinInspector;
 using SunsetSystems.Game;
+using UnityEngine.Events;
 
 namespace SunsetSystems.Persistence
 {
@@ -41,7 +42,7 @@ namespace SunsetSystems.Persistence
         private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Title("Prologue")]
         [SerializeField]
-        private Creature creaturePrefab;
+        private ICreatureTemplate creaturePrefab;
         [SerializeField]
         private GameObject _desireeOnBed;
         [SerializeField]
@@ -96,7 +97,6 @@ namespace SunsetSystems.Persistence
         private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
         private CameraControlScript _cameraControl;
-        
 
         protected override void Awake()
         {
@@ -115,10 +115,8 @@ namespace SunsetSystems.Persistence
         {
             await base.StartSceneAsync();
             await new WaitForUpdate();
-            ICreatureTemplate templateFromPrefab = creaturePrefab.CreatureTemplate;
-            ICreature _desiree = await CreatureFactory.Instance.Create(templateFromPrefab);
-            CreatureData _desireeData = _desiree.References.CreatureData;
-            PartyManager.Instance.RecruitMainCharacter(_desireeData);
+            ICreature _desiree = await CreatureFactory.Instance.Create(creaturePrefab);
+            PartyManager.Instance.RecruitMainCharacter(_desiree.References.CreatureData, _desiree);
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
             //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);

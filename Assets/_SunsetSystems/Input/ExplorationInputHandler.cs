@@ -77,34 +77,7 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, _raycastTargetMask))
             {
-                HandleSelectionExplorationInput();
-            }
-            else
-            {
                 HandleNoSelectionExplorationInput();
-            }
-
-            void HandleSelectionExplorationInput()
-            {
-                List<ISelectable> selectables = Selection.Instance.GetAllSelected();
-                ICreature currentLead;
-                if (selectables.Count > 0)
-                {
-                    currentLead = selectables[0].GetCreature();
-                    Debug.Log("Character selected!");
-                }
-                else
-                {
-                    return;
-                }
-                if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                {
-                    currentLead.PerformAction(new Interact(interactable, currentLead));
-                }
-                else
-                {
-                    MoveCurrentSelectionToPositions(hit);
-                }
             }
 
             void HandleNoSelectionExplorationInput()
@@ -114,10 +87,7 @@ namespace SunsetSystems.Input
                     return;
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
                 List<ICreature> creatures = new();
-                IInteractable interactable = hit.collider.gameObject
-                        .GetComponents<IInteractable>()?
-                        .FirstOrDefault(interactable => (interactable as MonoBehaviour).enabled);
-                if (interactable != null)
+                if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
                     mainCharacter.PerformAction(new Interact(interactable, mainCharacter));
                     creatures.Add(null);

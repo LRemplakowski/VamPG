@@ -1,21 +1,26 @@
-﻿using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
 using System;
 using System.Collections.Generic;
+using UltEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public abstract class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
+    public class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
     {
         public static readonly List<IInteractable> InteractablesInScene = new();
 
+        [field: Title("References")]
+        [field: SerializeField]
+        public IInteractionHandler InteractionHandler { get; set; }
         [SerializeField]
         private Collider _interactionCollider;
         [field: SerializeField]
         public GameObject HoverHighlight { get; set; }
 
+        [Title("Config")]
+        [ShowInInspector, ReadOnly]
         private bool _isHoveredOver;
         public bool IsHoveredOver
         {
@@ -82,7 +87,8 @@ namespace SunsetSystems.Entities.Interactable
         [SerializeField]
         private bool _interactableOnce = false;
 
-        public UnityEvent OnInteractionTriggered;
+        [Title("Events")]
+        public UltEvent<bool> OnInteractionTriggered;
 
         protected override void OnValidate()
         {
@@ -130,15 +136,13 @@ namespace SunsetSystems.Entities.Interactable
                 return;
             IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
-            HandleInteraction();
-            OnInteractionTriggered?.Invoke();
+            bool result = InteractionHandler.HandleInteraction(TargetedBy);
+            OnInteractionTriggered?.Invoke(result);
             Interacted = true;
             TargetedBy = null;
             if (_interactableOnce)
                 this.Interactable = false;
         }
-
-        protected abstract void HandleInteraction();
 
         public void OnDrawGizmosSelected()
         {

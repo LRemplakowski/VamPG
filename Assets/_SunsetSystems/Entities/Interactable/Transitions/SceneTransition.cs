@@ -4,10 +4,12 @@ using SunsetSystems.Input.CameraControl;
 using System.Threading.Tasks;
 using UnityEngine;
 using SunsetSystems.LevelUtility;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Persistence
 {
-    public class SceneTransition : InteractableEntity, ITransition
+    public class SceneTransition : SerializedMonoBehaviour, IInteractionHandler, ITransition
     {
         [SerializeField]
         private string _sceneName;
@@ -30,10 +32,10 @@ namespace SunsetSystems.Persistence
 
         private Task loadingTask = null;
 
-        protected override void HandleInteraction()
+        public bool HandleInteraction(IActionPerformer interactee)
         {
             if (loadingTask != null)
-                return;
+                return false;
             Debug.Log("Interacting with area transition!");
             switch (_type)
             {
@@ -47,6 +49,7 @@ namespace SunsetSystems.Persistence
                     _ = MoveToArea();
                     break;
             }
+            return true;
         }
 
         public void MoveToScene(LevelLoadingData data)

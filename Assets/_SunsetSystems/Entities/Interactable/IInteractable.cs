@@ -1,5 +1,6 @@
 ﻿using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Interactable;
 using UnityEngine;
 
 public interface IInteractable
@@ -43,6 +44,12 @@ public interface IInteractable
     bool Interactable
     {
         get;
+        set;
+    }
+
+    IInteractionHandler InteractionHandler
+    {
+        get; 
         set;
     }
 

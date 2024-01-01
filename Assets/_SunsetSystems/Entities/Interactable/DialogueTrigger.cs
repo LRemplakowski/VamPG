@@ -6,10 +6,11 @@ using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class DialogueEntity : InteractableEntity, IDialogueSource
+    public class DialogueTrigger : PersistentEntity, IInteractionHandler, IDialogueSource
     {
         [SerializeField]
         private bool _fadeOutBeforeDialogue;
@@ -26,7 +27,7 @@ namespace SunsetSystems.Entities.Interactable
 
         public override object GetPersistenceData()
         {
-            DialogueEntityPersistenceData persistenceData = new(base.GetPersistenceData() as InteractableEntityPersistenceData);
+            DialogueTriggerPersistenceData persistenceData = new(base.GetPersistenceData() as DialogueTriggerPersistenceData);
             persistenceData.EntryNode = EntryNode;
             return persistenceData;
         }
@@ -34,11 +35,11 @@ namespace SunsetSystems.Entities.Interactable
         public override void InjectPersistenceData(object data)
         {
             base.InjectPersistenceData(data);
-            DialogueEntityPersistenceData persistenceData = data as DialogueEntityPersistenceData;
+            DialogueTriggerPersistenceData persistenceData = data as DialogueTriggerPersistenceData;
             EntryNode = persistenceData?.EntryNode;
         }
 
-        public async void StartDialogue(string dialogueID)
+        public void StartDialogue(string dialogueID)
         {
             if (_fadeOutBeforeDialogue)
             {
@@ -47,22 +48,22 @@ namespace SunsetSystems.Entities.Interactable
             DialogueManager.Instance.StartDialogue(dialogueID, _dialogueProject);
         }
 
-        protected override void HandleInteraction()
+        public bool HandleInteraction(IActionPerformer interactee)
         {
             StartDialogue(EntryNode);
+            return true;
         }
 
-        protected class DialogueEntityPersistenceData : InteractableEntityPersistenceData
+        protected class DialogueTriggerPersistenceData : PersistenceData
         {
             public string EntryNode;
 
-            public DialogueEntityPersistenceData(InteractableEntityPersistenceData persistenceData)
+            public DialogueTriggerPersistenceData(PersistenceData defaultData)
             {
-                Interactable = persistenceData.Interactable;
-                GameObjectActive = persistenceData.GameObjectActive;
+                this.GameObjectActive = defaultData.GameObjectActive;
             }
 
-            public DialogueEntityPersistenceData()
+            public DialogueTriggerPersistenceData()
             {
 
             }

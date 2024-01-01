@@ -65,7 +65,7 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Waypoint _landlordSpawnWaypoint, _landlordSinkWaypoint, _pcLandlordVisitWaypoint, _pcLandlordSinkWaypoint;
         [SerializeField]
-        private DefaultInteractable _apartmentDoorLandlordInteraction;
+        private IInteractable _apartmentDoorLandlordInteraction;
         [SerializeField]
         private string _landlordVisitDialogueEntryNode;
         [SerializeField]
@@ -82,7 +82,7 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private InteractableDoors _havenDoors;
         [SerializeField]
-        private DialogueEntity _bathroomDoorsDialogue;
+        private DialogueTrigger _bathroomDoorsDialogue;
         [SerializeField]
         private InteractableDoors _bathroomDoors;
         [Header("Action")]

@@ -1,10 +1,11 @@
 using UnityEngine;
 using SunsetSystems.Journal;
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class InteractableObjectiveTrigger : InteractableEntity, IObjectiveTrigger
+    public class ObjectiveTrigger : SerializedMonoBehaviour, IObjectiveTrigger, IInteractionHandler
     {
         [SerializeReference, Required]
         private Quest _associatedQuest;
@@ -12,9 +13,8 @@ namespace SunsetSystems.Entities.Interactable
         private Objective _objective;
         private bool ObjectiveActive = false;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             if (_objective != null)
             {
                 _objective.OnObjectiveActive -= OnObjectiveActive;
@@ -24,9 +24,8 @@ namespace SunsetSystems.Entities.Interactable
             }
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
-            base.OnDestroy();
             if (_objective != null)
             {
                 _objective.OnObjectiveActive -= OnObjectiveActive;
@@ -49,16 +48,18 @@ namespace SunsetSystems.Entities.Interactable
             return ObjectiveActive;
         }
 
-        protected override void HandleInteraction()
+        public bool HandleInteraction(IActionPerformer interactee)
         {
             if (CheckCompletion(_objective))
             {
                 Debug.Log($"Completed objective {_objective}!");
                 _objective.Complete();
+                return true;
             }
             else
             {
                 Debug.Log($"Objective {_objective} is not active!");
+                return false;
             }
         }
     }

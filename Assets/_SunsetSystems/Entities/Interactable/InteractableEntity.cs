@@ -115,6 +115,11 @@ namespace SunsetSystems.Entities.Interactable
             InteractablesInScene.Add(this);
         }
 
+        private void OnDisable()
+        {
+            InteractablesInScene.Remove(this);
+        }
+
         protected override void Start()
         {
             base.Start();

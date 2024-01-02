@@ -21,7 +21,7 @@ namespace SunsetSystems.Persistence
 
         public object GetData(string dataKey)
         {
-            if (_persistenceDataDictionary.TryGetValue(dataKey, out object data))
+            if (dataKey != null && _persistenceDataDictionary.ContainsKey(dataKey) && _persistenceDataDictionary.TryGetValue(dataKey, out object data))
                 return data;
             return null;
         }

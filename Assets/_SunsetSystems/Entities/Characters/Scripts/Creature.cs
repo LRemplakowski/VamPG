@@ -5,6 +5,7 @@ using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UMA;
@@ -14,7 +15,7 @@ using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class Creature : PersistentEntity, ICreature, ICreatureTemplateProvider
+    public class Creature : PersistentEntity, ICreature
     {
         [ShowInInspector]
         private Queue<EntityAction> _actionQueue = new();
@@ -102,11 +103,6 @@ namespace SunsetSystems.Entities.Characters
             return ActionQueue.Peek();
         }
 
-        public bool HasActionsInQueue()
-        {
-            return !ActionQueue.Peek().GetType().IsAssignableFrom(typeof(Idle)) || ActionQueue.Count > 1;
-        }
-
         public async Task PerformAction(EntityAction action, bool clearQueue = false)
         {
             if (action.IsPriority || clearQueue)
@@ -120,6 +116,7 @@ namespace SunsetSystems.Entities.Characters
         [Button]
         public void InjectDataFromTemplate(ICreatureTemplate template)
         {
+            gameObject.name = template.FullName;
             References.CreatureData.CopyFromTemplate(template);
             References.StatsManager.CopyFromTemplate(template);
             References.UMAManager.InjectDefaultRecipes(template.BaseUmaRecipes);
@@ -137,8 +134,7 @@ namespace SunsetSystems.Entities.Characters
         #region ICreatureTemplateProvider
         public ICreatureTemplate CreatureTemplate => new TemplateFromInstance(this);
 
-        public int MovementRange => throw new System.NotImplementedException();
-
+        [Serializable]
         private class TemplateFromInstance : ICreatureTemplate
         {
             public TemplateFromInstance(ICreature instance)
@@ -151,8 +147,8 @@ namespace SunsetSystems.Entities.Characters
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
-                BaseUmaRecipes = instance.References.CreatureData.BaseUmaRecipes;
-                EquipmentSlotsData = instance.References.EquipmentManager.EquipmentSlots;
+                BaseUmaRecipes = new(instance.References.CreatureData.BaseUmaRecipes);
+                EquipmentSlotsData = new(instance.References.EquipmentManager.EquipmentSlots);
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 

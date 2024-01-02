@@ -6,13 +6,11 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Interfaces
 {
-    public interface ICreature : IEntity, IActionPerformer
+    public interface ICreature : IEntity, IActionPerformer, ICreatureTemplateProvider
     {
         new ICreatureReferences References { get; }
-        bool HasActionsInQueue();
 
         void ForceToPosition(Vector3 position);
-
         void InjectDataFromTemplate(ICreatureTemplate template);
     }
 }

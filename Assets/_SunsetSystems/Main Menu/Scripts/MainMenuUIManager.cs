@@ -11,6 +11,8 @@ namespace SunsetSystems.MainMenu
     {
         [SerializeField]
         private GameObject debugUi;
+        [SerializeField]
+        private GameStarter gameStarter;
 
         // Start is called before the first frame update
         private void Start()
@@ -21,12 +23,12 @@ namespace SunsetSystems.MainMenu
 
         public void StartGameDebug()
         {
-            GameStarter.Instance.InitializeGameDebug();
+            //GameStarter.Instance.InitializeGameDebug();
         }
 
         public void StartGameJam()
         {
-            GameStarter.Instance.InitializeGameJam();
+            gameStarter.StartGame();
         }
 
         public void QuitGame()

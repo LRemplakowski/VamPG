@@ -39,9 +39,10 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public void UpadteLoadingBar(float value) => loadingScreen.SetLoadingProgress(value);
 
-        public void EnableAndResetLoadingScreen()
+        public async void EnableAndResetLoadingScreen()
         {
             loadingScreen.gameObject.SetActive(true);
+            await loadingScreen.LoadRandomLoadingScreen();
         }
 
         public void DisableLoadingScreen()

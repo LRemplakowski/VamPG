@@ -42,8 +42,6 @@ namespace SunsetSystems.Persistence
         private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Title("Prologue")]
         [SerializeField]
-        private ICreatureTemplate creaturePrefab;
-        [SerializeField]
         private GameObject _desireeOnBed;
         [SerializeField]
         private GameObject _handgun;
@@ -115,8 +113,6 @@ namespace SunsetSystems.Persistence
         {
             await base.StartSceneAsync();
             await new WaitForUpdate();
-            ICreature _desiree = await CreatureFactory.Instance.Create(creaturePrefab);
-            PartyManager.Instance.RecruitMainCharacter(_desiree.References.CreatureData, _desiree);
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
             //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);

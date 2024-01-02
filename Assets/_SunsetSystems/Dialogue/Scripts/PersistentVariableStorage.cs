@@ -78,7 +78,8 @@ namespace SunsetSystems.Dialogue
 
         public void InjectSaveData(object data)
         {
-            DialogueSaveData savedData = data as DialogueSaveData;
+            if (data is not DialogueSaveData savedData)
+                return;
             SetAllVariables(savedData._floats, savedData._strings, savedData._bools);
         }
 

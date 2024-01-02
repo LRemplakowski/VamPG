@@ -1,9 +1,7 @@
+using System.Collections.Generic;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using System.Collections;
-using System.Collections.Generic;
 using UMA;
-using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters.Interfaces

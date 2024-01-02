@@ -1,64 +1,61 @@
-﻿using SunsetSystems.Entities.Characters;
-using UI.CharacterPortraits;
-using UnityEngine;
-using SunsetSystems.Utils;
+﻿using System;
 using System.Collections.Generic;
-using SunsetSystems.Persistence;
-using System;
 using System.Linq;
-using CleverCrow.Fluid.UniqueIds;
+using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using SunsetSystems.Inventory;
-using SunsetSystems.Experience;
-using SunsetSystems.Dialogue;
-using SunsetSystems.Data;
-using UnityEngine.Events;
-using UMA;
-using SunsetSystems.Entities.Characters.Interfaces;
 using Sirenix.Utilities;
-using UnityEditor.TerrainTools;
+using SunsetSystems.Data;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
-using NPOI.WP.UserModel;
+using SunsetSystems.Experience;
+using SunsetSystems.Inventory;
+using SunsetSystems.Persistence;
+using UltEvents;
+using UnityEngine;
 
 namespace SunsetSystems.Party
 {
-    [RequireComponent(typeof(UniqueId))]
     public class PartyManager : SerializedMonoBehaviour, ISaveable, IResetable
     {
         public static PartyManager Instance { get; private set; }
 
+        [field: SerializeField, ReadOnly, Title("Persistence")]
+        public string DataKey { get; private set; }
+
+        [Title("References")]
         [SerializeField]
+        private Transform _creatureParent;
+
+        [Title("Runtime")]
+        [SerializeField, ReadOnly]
         private Dictionary<string, ICreature> _activeParty = new();
         public ICreature MainCharacter => _activeParty.TryGetValue(Instance._mainCharacterKey, out ICreature creature) ? creature : null;
         public List<ICreature> ActiveParty => _activeParty.Values.ToList();
         public List<ICreature> Companions => _activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private HashSet<string> _activeCoterieMemberKeys = new();
-        [SerializeField]
-        private Dictionary<string, CreatureData> _creatureDataCache = new();
-        public List<CreatureData> AllCoterieMembers => _creatureDataCache.Values.ToList();
+        [SerializeField, ReadOnly]
+        private HashSet<string> _coterieMemberKeysCache = new();
+        public List<string> AllCoterieMembers => _coterieMemberKeysCache.ToList();
         [SerializeField, ReadOnly]
         private string _mainCharacterKey;
 
-        public static Action<string, CreatureData> OnPartyMemberRecruited;
-        public static Action<IEnumerable<string>> OnActivePartyChanged;
-
-        [SerializeField, Required]
-        private UniqueId _unique;
-        public string DataKey => _unique.Id;
-
-        [SerializeField]
-        private Transform _creatureParent;
-
-        [SerializeField]
-        private ICreatureTemplate creaturePrefab;
-
+        private Dictionary<string, ICreatureTemplate> _cachedPartyTemplates = new();
         private Dictionary<string, Vector3> _partyPositions = null;
+
+        [Title("Events")]
+        public UltEvent<IEnumerable<ICreature>> OnActivePartyInitialized = new();
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(DataKey))
+                DataKey = Guid.NewGuid().ToString();
+        }
 
         public void ResetOnGameStart()
         {
             _activeParty = new();
-            _creatureDataCache = new();
+            _coterieMemberKeysCache = new();
             _mainCharacterKey = "";
             _activeCoterieMemberKeys = new();
         }
@@ -66,7 +63,6 @@ namespace SunsetSystems.Party
         protected void Awake()
         {
             Instance = this;
-            _unique ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
             _activeCoterieMemberKeys.AddRange(_activeParty.Keys);
         }
@@ -81,41 +77,35 @@ namespace SunsetSystems.Party
             return _activeParty[key];
         }
 
-        public CreatureData GetPartyMemberDataByID(string key)
-        {
-            if (_creatureDataCache.TryGetValue(key, out CreatureData data))
-                return data;
-            else
-                return new();
-        }
-
         public bool IsRecruitedMember(string key)
         {
-            return _creatureDataCache.ContainsKey(key);
+            return _coterieMemberKeysCache.Contains(key);
         }
 
-        public void InitializePartyAtPosition(Vector3 position)
+        public async void InitializePartyAtPosition(Vector3 position)
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                CreatureData data = Instance._creatureDataCache[key];
-                Instance._activeParty.Add(key, InitializePartyMember(data, position));
+                ICreatureTemplate data = _cachedPartyTemplates[key];
+                _activeParty.Add(key, await InitializePartyMember(data, position));
             }
+            OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        public void InitializePartyAtPositions(List<Vector3> positions)
+        public async void InitializePartyAtPositions(List<Vector3> positions)
         {
             int index = 0;
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                CreatureData data = _creatureDataCache[key];
+                ICreatureTemplate data = _cachedPartyTemplates[key];
                 Vector3 position = positions[index];
-                _activeParty.Add(key, InitializePartyMember(data, position));
+                _activeParty.Add(key, await InitializePartyMember(data, position));
                 index++;
             }
+            OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        protected Creature InitializePartyMember(CreatureData data, Vector3 position)
+        private async Task<ICreature> InitializePartyMember(ICreatureTemplate data, Vector3 position)
         {
             if (data == null)
             {
@@ -123,59 +113,50 @@ namespace SunsetSystems.Party
             }
             else
             {
-                //Creature creature = CreatureInitializer.InitializeCreature(data, position, Instance._creatureParent, Quaternion.identity);
-                //return creature;
+                ICreature memberInstance = await CreatureFactory.Instance.Create(data);
+                memberInstance.Transform.SetParent(_creatureParent);
+                memberInstance.ForceToPosition(position);
+                return memberInstance;
             }
-            return null;
         }
 
-        public void RecruitCharacter(CreatureData creatureData)
+        public void UpdatePartyMemberTemplateFromInstance(ICreature memberInstance)
         {
-            Debug.Log($"Recruited {creatureData.FullName} to party!");
-            _creatureDataCache.Add(creatureData.FullName, creatureData);
-            ExperienceManager.AddCreatureToExperienceManager(creatureData.FullName);
-            OnPartyMemberRecruited?.Invoke(creatureData.FullName, creatureData);
+            _cachedPartyTemplates[memberInstance.ID] = memberInstance.CreatureTemplate;
+        }    
+
+        public void RecruitCharacter(ICreatureTemplate memberTemplate)
+        {
+            Debug.Log($"Recruited {memberTemplate.FullName} to party!");
+            _coterieMemberKeysCache.Add(memberTemplate.DatabaseID);
+            _cachedPartyTemplates.Add(memberTemplate.DatabaseID, memberTemplate);
+            ExperienceManager.AddCreatureToExperienceManager(memberTemplate.FullName);
         }
 
+        [Title("Editor Utility")]
         [Button]
         public void RecruitCharacter(ICreature creature)
         {
-            RecruitCharacter(creature.References.CreatureData);
+            Debug.Log($"Recruited {creature.References.CreatureData.FullName} to party!");
+            _coterieMemberKeysCache.Add(creature.ID);
+            TryAddMemberToActiveRoster(creature.ID, creature);
+            ExperienceManager.AddCreatureToExperienceManager(creature.ID);
         }
 
         [Button]
-        public void RecruitMainCharacter(CreatureData mainCharacterData, ICreature creature)
+        public void RecruitMainCharacter(ICreatureTemplate mainCharTemplate)
         {
-            RecruitCharacter(mainCharacterData);
-            _mainCharacterKey = mainCharacterData.FullName;
+            _mainCharacterKey = mainCharTemplate.DatabaseID;
+            RecruitCharacter(mainCharTemplate);
+            _activeCoterieMemberKeys.Add(_mainCharacterKey);
             InventoryManager.Instance.SetMoney(0);
-            if (TryAddMemberToActiveRoster(_mainCharacterKey, creature) == false)
-                Debug.LogError("Trying to recruit Main Character but Main Character already exists!");
-            else if (TryAddMemberToActiveRoster(_mainCharacterKey, creature) == true)
-            {
-                _activeParty.Add(_mainCharacterKey, MainCharacter);
-            }
         }
 
         public bool TryAddMemberToActiveRoster(string memberID, ICreature creature)
         {
-            if (_creatureDataCache.ContainsKey(memberID) == false)
-                Debug.LogError("Trying to add character to roster but character " + memberID + " is not yet recruited!");
             bool result = _activeCoterieMemberKeys.Add(memberID);
-            if (result)
-                OnActivePartyChanged?.Invoke(_activeCoterieMemberKeys);
-            else
-                _activeParty.Add(_mainCharacterKey, creature);
+            _activeParty.Add(memberID, creature);
             return result;
-        }
-
-        [Button]
-        public void AddCreatureAsActivePartyMember(ICreature creature)
-        {
-            if (TryAddMemberToActiveRoster(creature.References.CreatureData.FullName, creature))
-            {
-                _activeParty.Add(creature.References.CreatureData.FullName, creature);
-            }
         }
 
         public bool TryRemoveMemberFromActiveRoster(string memberID)
@@ -186,29 +167,18 @@ namespace SunsetSystems.Party
                 return false;
             }
             bool result = _activeCoterieMemberKeys.Remove(memberID);
-            if (result)
-                OnActivePartyChanged?.Invoke(_activeCoterieMemberKeys);
+            if (_activeParty.TryGetValue(memberID, out ICreature memberInstance))
+            {
+                UpdatePartyMemberTemplateFromInstance(memberInstance);
+                CreatureFactory.Instance.DestroyCreature(memberInstance);
+            }
             return result;
-        }
-
-        public bool UpdateCreatureData(CreatureData data)
-        {
-            if (_activeCoterieMemberKeys.Contains(data.FullName))
-            {
-                _creatureDataCache[data.FullName] = data;
-                return true;
-            }
-            else
-            {
-                Debug.LogWarning("No cached party member with name " + data.FullName + " found!");
-                return false;
-            }
         }
 
         public object GetSaveData()
         {
             PartySaveData saveData = new();
-            saveData.CreatureDataCache = new(_creatureDataCache);
+            saveData.CachedPartyTemplates = new(_cachedPartyTemplates);
             saveData.ActiveMemberKeys = new(_activeCoterieMemberKeys);
             saveData.MainCharacterKey = _mainCharacterKey;
             Dictionary<string, Vector3> partyPositions = new();
@@ -223,8 +193,10 @@ namespace SunsetSystems.Party
         public void InjectSaveData(object data)
         {
             PartySaveData saveData = data as PartySaveData;
-            _creatureDataCache = new();
-            saveData.CreatureDataCache.Keys.ToList().ForEach(key => _creatureDataCache.Add(key, saveData.CreatureDataCache[key]));
+            _coterieMemberKeysCache = new();
+            _cachedPartyTemplates = new();
+            saveData.CachedPartyTemplates.Keys.ToList().ForEach(key => _cachedPartyTemplates.Add(key, saveData.CachedPartyTemplates[key]));
+            _coterieMemberKeysCache.AddRange(_cachedPartyTemplates.Keys);
             _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
             _mainCharacterKey = saveData.MainCharacterKey;
             _activeParty = new();
@@ -243,7 +215,7 @@ namespace SunsetSystems.Party
     public class PartySaveData
     {
         public Dictionary<string, Vector3> PartyPositions;
-        public Dictionary<string, CreatureData> CreatureDataCache;
+        public Dictionary<string, ICreatureTemplate> CachedPartyTemplates;
         public HashSet<string> ActiveMemberKeys;
         public string MainCharacterKey;
     }

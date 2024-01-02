@@ -9,9 +9,10 @@ namespace SunsetSystems.Experience
     {
         [SerializeField]
         private ExperienceType _experienceType;
+
         public void ApplyReward(int amount)
         {
-            PartyManager.Instance.AllCoterieMembers.ForEach(cd => ExperienceManager.TryAwardExperience(cd.DatabaseID, amount, _experienceType));
+            PartyManager.Instance.AllCoterieMembers.ForEach(coterieMemberID => ExperienceManager.TryAwardExperience(coterieMemberID, amount, _experienceType));
         }
     }
 }

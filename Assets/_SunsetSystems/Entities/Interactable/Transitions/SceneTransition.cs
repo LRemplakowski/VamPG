@@ -54,6 +54,7 @@ namespace SunsetSystems.Persistence
 
         public void MoveToScene(LevelLoadingData data)
         {
+            SaveLoadManager.UpdateRuntimeDataCache();
             //loadingTask = LevelLoader.Instance.LoadGameLevel(data);
         }
 

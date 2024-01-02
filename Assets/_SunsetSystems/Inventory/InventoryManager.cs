@@ -90,8 +90,8 @@ namespace SunsetSystems.Inventory
 
         public void InjectSaveData(object data)
         {
-            InventorySaveData saveData = data as InventorySaveData;
-            this._playerInventory ??= GetComponent<ItemStorage>();
+            if (data is not InventorySaveData saveData)
+                return;
             this._playerInventory.AddItems(saveData.InventoryContents);
             this._money = saveData.Money;
         }

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
+using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using UltEvents;
 using UnityEngine;
@@ -15,22 +17,28 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private float loadingCrossfadeTime = 1f;
         [SerializeField]
-        private UltEvent OnLoadingStart, OnLoadingEnd;
+        private Camera loadingCamera;
+
+        public static event Action OnLevelLoadStart, OnLevelLoadEnd;
 
         public async Task LoadNewScene(SceneLoadingData data)
         {
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
-            OnLoadingStart?.InvokeSafe();
+            loadingCamera.gameObject.SetActive(true);
+            SaveLoadManager.UpdateRuntimeDataCache();
+            OnLevelLoadStart?.Invoke();
             loadingScreenUI.EnableAndResetLoadingScreen();
-            await new WaitForUpdate();
+            await new WaitForSeconds(.5f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data);
+            await new WaitForUpdate();
+            SaveLoadManager.InjectRuntimeDataIntoSaveables();
+            OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();
-            OnLoadingEnd?.InvokeSafe();
             await new WaitForUpdate();
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
-
         }
 
         private async Task DoSceneLoading(SceneLoadingData data)

@@ -1,11 +1,12 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Party;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace SunsetSystems
+namespace SunsetSystems.UI
 {
-    public class CharacterSelector : MonoBehaviour
+    public class CharacterSelector : SerializedMonoBehaviour
     {
         [SerializeField]
         private TextMeshProUGUI _selectedCharacterText;
@@ -35,18 +36,18 @@ namespace SunsetSystems
 
         public void NextCharacter()
         {
-            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
+            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.Equals(SelectedCharacterKey));
             currentIndex = currentIndex + 1 < PartyManager.Instance.AllCoterieMembers.Count ? currentIndex + 1 : 0;
-            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex].DatabaseID;
+            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex];
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }
 
         public void PreviousCharacter()
         {
-            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.DatabaseID.Equals(SelectedCharacterKey));
+            int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.Equals(SelectedCharacterKey));
             currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.Instance.AllCoterieMembers.Count - 1;
-            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex].DatabaseID;
+            _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex];
             OnSelectedCharacterChanged?.Invoke();
             UpdateSelectedText();
         }

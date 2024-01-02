@@ -4,6 +4,8 @@ using System;
 using SunsetSystems.Persistence;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
+using UltEvents;
+using SunsetSystems.Core.SceneLoading;
 
 namespace SunsetSystems.Game
 {
@@ -15,6 +17,7 @@ namespace SunsetSystems.Game
 
         public static event Action<GameState> OnGameStateChanged;
 
+        [Title("Runtime")]
         [SerializeField]
         private GameState _gameState;
         public GameState CurrentState
@@ -30,6 +33,12 @@ namespace SunsetSystems.Game
             }
         }
 
+        [Title("Events")]
+        // Called when level is done loading & all the persistent data already is injected
+        public UltEvent OnLevelStart = new();
+        // Called when we start to unload the current level and all the persistent data has been cached
+        public UltEvent OnLevelExit = new();
+
         public string DataKey => _uniqueId.Id;
 
         private UniqueId _uniqueId;
@@ -43,11 +52,25 @@ namespace SunsetSystems.Game
             if (_uniqueId == null)
                 _uniqueId = GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
+            LevelLoader.OnLevelLoadEnd += GameLevelStart;
+            LevelLoader.OnLevelLoadStart += GameLevelEnd;
         }
 
         private void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
+            LevelLoader.OnLevelLoadEnd -= GameLevelStart;
+            LevelLoader.OnLevelLoadStart -= GameLevelEnd;
+        }
+
+        private void GameLevelStart()
+        {
+            OnLevelStart?.InvokeSafe();
+        }
+
+        private void GameLevelEnd()
+        {
+            OnLevelExit?.InvokeSafe();
         }
 
         public string GetLanguage()

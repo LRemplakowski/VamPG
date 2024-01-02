@@ -28,11 +28,7 @@ namespace SunsetSystems.Core.SceneLoading.UI
         private AssetReferenceT<LoadingScreenProviderConfig> loadingScreenProviderReference;
         private LoadingScreenProviderConfig loadingScreenProviderConfig;
 
-        public delegate void LoadingScreenHandler();
-        public static event LoadingScreenHandler LoadingScreenEnabled;
-        public static event LoadingScreenHandler LoadingScreenDisabled;
-
-        private async void OnEnable()
+        private void OnEnable()
         {
             if (loadingBar == null)
                 loadingBar = GetComponentInChildren<Slider>();
@@ -44,14 +40,16 @@ namespace SunsetSystems.Core.SceneLoading.UI
                 continueButton = GetComponentInChildren<Button>();
             loadingBar.value = 0f;
             continueButton.gameObject.SetActive(false);
-            loadingScreenProviderConfig = await AddressableManager.Instance.LoadAssetAsync(loadingScreenProviderReference);
-            backgroundImage.sprite = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
-            LoadingScreenEnabled?.Invoke();
         }
 
         private void OnDisable()
         {
-            loadingScreenProviderConfig.ReleaseLoadingScreens();
+            ReleaseReferences();            
+        }
+
+        private void ReleaseReferences()
+        {
+            loadingScreenProviderConfig?.ReleaseLoadingScreens();
             AddressableManager.Instance.ReleaseAsset(loadingScreenProviderReference);
         }
 
@@ -88,7 +86,13 @@ namespace SunsetSystems.Core.SceneLoading.UI
         private void DisableLoadingScreen()
         {
             this.gameObject.SetActive(false);
-            LoadingScreenDisabled?.Invoke();
+        }
+
+        public async Task LoadRandomLoadingScreen()
+        {
+            ReleaseReferences();
+            loadingScreenProviderConfig = await AddressableManager.Instance.LoadAssetAsync(loadingScreenProviderReference);
+            backgroundImage.sprite = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
         }
     }
 }

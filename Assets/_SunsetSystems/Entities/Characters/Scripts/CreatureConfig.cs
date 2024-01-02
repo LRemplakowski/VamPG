@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using SunsetSystems.Entities.Data;
-using SunsetSystems.Resources;
-using SunsetSystems.Utils;
 using Sirenix.OdinInspector;
 using SunsetSystems.Utils.Extensions;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -15,7 +13,7 @@ using SunsetSystems.Inventory.Data;
 namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
-    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplate
+    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplateProvider
     {
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; } = "";
@@ -56,6 +54,8 @@ namespace SunsetSystems.Entities.Characters
         public bool UseEquipmentPreset => _useEquipmentPreset;
         [field: SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
+
+        public ICreatureTemplate CreatureTemplate => new TemplateFromCreatureAsset(this);
 
         private void OnEnable()
         {
@@ -108,6 +108,51 @@ namespace SunsetSystems.Entities.Characters
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
+        }
+
+        [Serializable]
+        private class TemplateFromCreatureAsset : ICreatureTemplate
+        {
+            public string DatabaseID { get; }
+
+            public string ReadableID { get; }
+
+            public string FullName { get; }
+
+            public string FirstName { get; }
+
+            public string LastName { get; }
+
+            public Faction Faction { get; }
+
+            public BodyType BodyType { get; }
+
+            public CreatureType CreatureType { get; }
+
+            public AssetReferenceSprite PortraitAssetRef { get; }
+
+            public List<UMARecipeBase> BaseUmaRecipes { get; }
+
+            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
+
+            public StatsData StatsData { get; }
+
+            public TemplateFromCreatureAsset(CreatureConfig asset)
+            {
+                this.DatabaseID = asset.DatabaseID;
+                this.ReadableID = asset.ReadableID;
+                this.FullName = asset.FullName;
+                this.FirstName = asset.FirstName;
+                this.LastName = asset.LastName;
+                this.Faction = asset.Faction;
+                this.BodyType = asset.BodyType;
+                this.CreatureType = asset.CreatureType;
+                this.PortraitAssetRef = asset.PortraitAssetRef;
+                this.BaseUmaRecipes = new(asset.BaseUmaRecipes);
+                this.EquipmentSlotsData = new(asset.EquipmentSlotsData);
+                this.StatsData = new(asset.StatsData);
+            }
+
         }
     }
 }

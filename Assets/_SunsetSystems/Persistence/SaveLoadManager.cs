@@ -14,7 +14,7 @@ namespace SunsetSystems.Persistence
 
         private static GlobalPersistenceData _saveData = new();
 
-        public static void SaveObjects()
+        public static void CreateNewSaveFileAndSaveObjects()
         {
             if (_saveData == null)
                 _saveData = new();

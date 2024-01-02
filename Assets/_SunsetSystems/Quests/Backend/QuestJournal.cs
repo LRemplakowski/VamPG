@@ -262,7 +262,8 @@ namespace SunsetSystems.Journal
 
         public void InjectSaveData(object data)
         {
-            QuestJournalSaveData saveData = data as QuestJournalSaveData;
+            if (data is not QuestJournalSaveData saveData)
+                return;
             _activeQuests = new();
             saveData.ActiveQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _activeQuests.Add(questID, quest); });
             _completedQuests = new();

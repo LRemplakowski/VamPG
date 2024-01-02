@@ -149,7 +149,8 @@ namespace SunsetSystems.Input.CameraControl
 
         public void InjectSaveData(object data)
         {
-            CameraSaveData saveData = data as CameraSaveData;
+            if (data is not CameraSaveData saveData)
+                return;
             //_currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
             ForceToPosition(saveData.RigPosition);
             _moveTarget = saveData.CameraMoveTarget;

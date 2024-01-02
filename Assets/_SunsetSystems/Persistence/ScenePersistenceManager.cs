@@ -11,7 +11,7 @@ namespace SunsetSystems.Persistence
     public class ScenePersistenceManager : MonoBehaviour, ISaveable
     {
         [ReadOnly, ShowInInspector]
-        private HashSet<IPersistentEntity> persistentEntitiesSet = new();
+        private HashSet<IPersistentObject> persistentEntitiesSet = new();
         [SerializeField, ReadOnly]
         private UniqueId _unique;
 
@@ -23,7 +23,7 @@ namespace SunsetSystems.Persistence
         {
             ScenePersistenceData data = new();
             Dictionary<string, object> persistenceData = new();
-            foreach (IPersistentEntity persistentEntity in persistentEntitiesSet)
+            foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
             {
                 if (persistenceData.TryAdd(persistentEntity.PersistenceID, persistentEntity.GetPersistenceData()) == false)
                 {
@@ -41,7 +41,7 @@ namespace SunsetSystems.Persistence
         {
             ScenePersistenceData savedData = data as ScenePersistenceData;
             object entityData = null;
-            foreach (IPersistentEntity persistentEntity in persistentEntitiesSet)
+            foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
             {
                 if (savedData?.PersistentData?.TryGetValue(persistentEntity.PersistenceID, out entityData) ?? false)
                     persistentEntity.InjectPersistenceData(entityData);
@@ -50,7 +50,7 @@ namespace SunsetSystems.Persistence
             }
         }
 
-        public void Register(IPersistentEntity persistentEntity)
+        public void Register(IPersistentObject persistentEntity)
         {
             if (string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
             {
@@ -60,7 +60,7 @@ namespace SunsetSystems.Persistence
             persistentEntitiesSet.Add(persistentEntity);
         }
 
-        public void Unregister(IPersistentEntity persistentEntity)
+        public void Unregister(IPersistentObject persistentEntity)
         {
             persistentEntitiesSet.Remove(persistentEntity);
         }

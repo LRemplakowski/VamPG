@@ -1,32 +1,17 @@
-using Redcode.Awaiting;
-using SunsetSystems.Core.SceneLoading.UI;
-using SunsetSystems.Data;
-using SunsetSystems.Dialogue;
-using SunsetSystems.Dialogue.Interfaces;
-using SunsetSystems.Entities.Creatures;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Enviroment;
-using SunsetSystems.Entities.Interactable;
-using SunsetSystems.Input.CameraControl;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
-using SunsetSystems.LevelUtility;
-using SunsetSystems.MainMenu;
-using SunsetSystems.Party;
-using SunsetSystems.UI;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
+using Sirenix.OdinInspector;
+using SunsetSystems.Dialogue.Interfaces;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Interactable;
+using SunsetSystems.Game;
+using SunsetSystems.Input.CameraControl;
+using SunsetSystems.Inventory.Data;
+using SunsetSystems.LevelUtility;
 using UnityEngine;
 using Yarn.Unity;
-using UnityEngine.InputSystem;
-using NPOI.Util;
-using System.Runtime.InteropServices;
-using Sirenix.OdinInspector;
-using SunsetSystems.Game;
-using UnityEngine.Events;
 
 namespace SunsetSystems.Persistence
 {
@@ -79,12 +64,12 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Waypoint _pcCoverWaypoint;
         [SerializeField]
-        private InteractableDoors _havenDoors;
+        private DoorController _havenDoors;
         [SerializeField]
         private DialogueTrigger _bathroomDoorsDialogue;
         [SerializeField]
-        private InteractableDoors _bathroomDoors;
-        [Header("Action")]
+        private DoorController _bathroomDoors;
+        [Title("Action")]
         [SerializeField]
         private Creature _dominic;
         [SerializeField]

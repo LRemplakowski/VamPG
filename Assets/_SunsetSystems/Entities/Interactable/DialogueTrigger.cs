@@ -1,8 +1,6 @@
 ﻿using Sirenix.OdinInspector;
-using Redcode.Awaiting;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Dialogue.Interfaces;
-using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
@@ -10,7 +8,7 @@ using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class DialogueTrigger : PersistentEntity, IInteractionHandler, IDialogueSource
+    public class DialogueTrigger : SerializedMonoBehaviour, IInteractionHandler, IDialogueSource
     {
         [SerializeField]
         private bool _fadeOutBeforeDialogue;
@@ -25,20 +23,6 @@ namespace SunsetSystems.Entities.Interactable
         [field: SerializeField]
         public string EntryNode { get; set; }
 
-        public override object GetPersistenceData()
-        {
-            DialogueTriggerPersistenceData persistenceData = new(base.GetPersistenceData() as DialogueTriggerPersistenceData);
-            persistenceData.EntryNode = EntryNode;
-            return persistenceData;
-        }
-
-        public override void InjectPersistenceData(object data)
-        {
-            base.InjectPersistenceData(data);
-            DialogueTriggerPersistenceData persistenceData = data as DialogueTriggerPersistenceData;
-            EntryNode = persistenceData?.EntryNode;
-        }
-
         public void StartDialogue(string dialogueID)
         {
             if (_fadeOutBeforeDialogue)
@@ -52,21 +36,6 @@ namespace SunsetSystems.Entities.Interactable
         {
             StartDialogue(EntryNode);
             return true;
-        }
-
-        protected class DialogueTriggerPersistenceData : PersistenceData
-        {
-            public string EntryNode;
-
-            public DialogueTriggerPersistenceData(PersistenceData defaultData)
-            {
-                this.GameObjectActive = defaultData.GameObjectActive;
-            }
-
-            public DialogueTriggerPersistenceData()
-            {
-
-            }
         }
     }
 }

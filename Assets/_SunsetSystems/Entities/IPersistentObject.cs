@@ -1,6 +1,8 @@
-namespace SunsetSystems.Entities.Interfaces
+using System.Collections.Generic;
+
+namespace SunsetSystems.Persistence
 {
-    public interface IPersistentEntity : IEntity
+    public interface IPersistentObject
     {
         object GetPersistenceData();
 
@@ -9,5 +11,7 @@ namespace SunsetSystems.Entities.Interfaces
         string PersistenceID { get; }
 
         string GameObjectName { get; }
+
+        List<IPersistentComponent> PersistentComponents { get; }
     }
 }

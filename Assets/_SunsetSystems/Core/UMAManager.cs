@@ -72,9 +72,11 @@ namespace SunsetSystems.Core.UMA
 
         public void InjectDefaultRecipes(List<UMARecipeBase> defaultRecipes)
         {
-            this.defaultRecipes.AddRange(defaultRecipes);
+            if (defaultRecipes != null && defaultRecipes.Count > 0)
+                this.defaultRecipes.AddRange(defaultRecipes);
             umaAvatar.WardrobeRecipes.Clear();
             umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
+            PrepareUMA();
         }
 
         public void OnItemEquipped(IEquipableItem item)

@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using UltEvents;
@@ -13,7 +14,7 @@ namespace SunsetSystems.Entities.Interactable
 
         [field: Title("References")]
         [field: SerializeField]
-        public IInteractionHandler InteractionHandler { get; set; }
+        public List<IInteractionHandler> InteractionHandlers { get; set; }
         [SerializeField]
         private Collider _interactionCollider;
         [field: SerializeField]
@@ -99,6 +100,10 @@ namespace SunsetSystems.Entities.Interactable
             }
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
+            if (_references == null)
+                _references = GetComponent<IEntityReferences>();
+            if (InteractionHandlers == null)
+                InteractionHandlers = new();
         }
 
         protected override void Awake()
@@ -135,13 +140,18 @@ namespace SunsetSystems.Entities.Interactable
                 Interacted = false;
         }
 
-        public void Interact()
+        public virtual void Interact()
         {
             if (!Interactable)
                 return;
             IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
-            bool result = InteractionHandler.HandleInteraction(TargetedBy);
+            bool result = false;
+            foreach (IInteractionHandler handler in InteractionHandlers)
+            {
+                if (handler.HandleInteraction(TargetedBy))
+                    result = true;
+            }    
             OnInteractionTriggered?.Invoke(result);
             Interacted = true;
             TargetedBy = null;

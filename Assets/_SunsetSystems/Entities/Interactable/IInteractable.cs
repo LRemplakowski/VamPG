@@ -1,4 +1,5 @@
-﻿using SunsetSystems.Entities.Characters.Actions;
+﻿using System.Collections.Generic;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
 using UnityEngine;
@@ -47,7 +48,7 @@ public interface IInteractable
         set;
     }
 
-    IInteractionHandler InteractionHandler
+    List<IInteractionHandler> InteractionHandlers
     {
         get; 
         set;

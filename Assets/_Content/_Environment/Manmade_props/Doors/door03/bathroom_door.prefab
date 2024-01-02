@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4858457029234095027}
   - component: {fileID: 7363549319578438250}
   - component: {fileID: 1206634403651007068}
-  - component: {fileID: 7016400798426151755}
-  - component: {fileID: 468955975492992419}
   - component: {fileID: 8362780428356386524}
   - component: {fileID: 5598340278945951286}
+  - component: {fileID: 7746767884310121506}
+  - component: {fileID: 720800799709296587}
   m_Layer: 0
   m_Name: bathroom_door
   m_TagString: Untagged
@@ -80,65 +80,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7016400798426151755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1772037835463075424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c7fe7285ea4b794bb70a9e7822167e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 1206634403651007068}
-  _reverseAnimation: 0
---- !u!114 &468955975492992419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1772037835463075424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 5598340278945951286}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: _references
-      Entry: 10
-      Data: 0
-  <Faction>k__BackingField: 0
-  _unique: {fileID: 8362780428356386524}
-  _enablePersistence: 1
-  _interactionCollider: {fileID: 7363549319578438250}
-  <HoverHighlight>k__BackingField: {fileID: 0}
-  _interactionDistance: 0.26
-  _interactionTransform: {fileID: 4858457029234095027}
-  _interactable: 0
-  _nameplateName: Bathroom Door
-  _interactableOnce: 0
-  OnInteractionTriggered:
-    m_PersistentCalls:
-      m_Calls: []
-  _fadeOutBeforeDialogue: 0
-  _fadeTimes: {x: 0, y: 0, z: 0}
-  _onAfterFadeout:
-    m_PersistentCalls:
-      m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: bathroomDoors
 --- !u!114 &8362780428356386524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +114,100 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+--- !u!114 &7746767884310121506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772037835463075424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _animator: {fileID: 0}
+  _reverseAnimation: 0
+  _unique: {fileID: 0}
+--- !u!114 &720800799709296587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772037835463075424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 7746767884310121506}
+    - {fileID: 5598340278945951286}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 1
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 8362780428356386524}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 7363549319578438250}
+  <HoverHighlight>k__BackingField: {fileID: 0}
+  _interactionDistance: 2
+  _interactionTransform: {fileID: 4858457029234095027}
+  _interactable: 0
+  _nameplateName: 
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    _PersistentCalls: []
 --- !u!1001 &8885319871031935083
 PrefabInstance:
   m_ObjectHideFlags: 0

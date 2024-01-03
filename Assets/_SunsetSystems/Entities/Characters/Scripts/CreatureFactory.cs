@@ -1,3 +1,4 @@
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -25,6 +26,7 @@ namespace SunsetSystems.Entities.Creatures
         public async Task<ICreature> Create(ICreatureTemplate creatureTemplate)
         {
             ICreature newInstance = await GetNewCreatureInstance();
+            await new WaitForUpdate();
             newInstance.InjectDataFromTemplate(creatureTemplate);
             return newInstance;
         }

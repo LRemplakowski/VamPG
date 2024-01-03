@@ -2372,6 +2372,18 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._X
+      value: 2.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._Y
+      value: 0.251
+      objectReference: {fileID: 0}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._Z
+      value: 2.42
+      objectReference: {fileID: 0}
     - target: {fileID: 149369048673526681, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -19220,6 +19232,10 @@ PrefabInstance:
       propertyPath: m_Value
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7294060555853319670, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: _id
+      value: 5e1220bf-982b-4c23-8552-ac9feb491323
+      objectReference: {fileID: 0}
     - target: {fileID: 7342646674096674829, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -19838,6 +19854,11 @@ Cloth:
   - {x: 0.6666667, y: 0.16666667, z: 0.16666667}
   - {x: 0.5, y: 0.5, z: 0}
   m_VirtualParticleIndices: 
+--- !u!1 &358087618 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0ab30b2f018e2014bb0883ad096c0d55, type: 3}
+  m_PrefabInstance: {fileID: 358087613}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &358853192
 GameObject:
   m_ObjectHideFlags: 0
@@ -20840,6 +20861,11 @@ PrefabInstance:
 --- !u!4 &434049926 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7682641822229357283, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
+  m_PrefabInstance: {fileID: 434049925}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &434049927 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
   m_PrefabInstance: {fileID: 434049925}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &436562256
@@ -22809,14 +22835,6 @@ PrefabInstance:
     - target: {fileID: 8615270128421518650, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.Prefab
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28169,34 +28187,6 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -6.7083263
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.3924788
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.2290955
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -28206,6 +28196,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6782112333398131214, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7066486438860346000, guid: a54fde34eec40964b94d71ee0aba9889, type: 3}
+      propertyPath: NoCoroutines
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -40619,14 +40613,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -42905,50 +42891,6 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _nameplateName
-      value: Bathroom Doors
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _interactionDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: _interactionTransform
-      value: 
-      objectReference: {fileID: 2098243039}
-    - target: {fileID: 0}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: <HoverHighlight>k__BackingField
-      value: 
-      objectReference: {fileID: 853837789}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModifications.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModifications.Array.data[0]
-      value: '"path":"_references","value":$eref:0'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModifications.Array.data[1]
-      value: '"path":"<InteractionHandler>k__BackingField","value":$eref:1'
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
-      value: 
-      objectReference: {fileID: 781100931855757375}
-    - target: {fileID: 0}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -43610,6 +43552,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1924565558464771129, guid: 7ae8c85697375b34daa4d74d615db444, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1493672629717164986}
+    - targetCorrespondingSourceObject: {fileID: 1924565558464771129, guid: 7ae8c85697375b34daa4d74d615db444, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1493672629717164987}
     - targetCorrespondingSourceObject: {fileID: 7576716498005219940, guid: 7ae8c85697375b34daa4d74d615db444, type: 3}
       insertIndex: -1
       addedObject: {fileID: 78058996}
@@ -43683,7 +43628,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
+  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
   <EntryNode>k__BackingField: shower
 --- !u!65 &1493672629717164981
 BoxCollider:
@@ -43749,9 +43694,9 @@ MonoBehaviour:
   ObjectiveCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1493672629717164980}
+      - m_Target: {fileID: 1493672629717164987}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
-          Assembly-CSharp
+          SunsetSystems
         m_MethodName: set_Interactable
         m_Mode: 6
         m_Arguments:
@@ -43796,6 +43741,69 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+--- !u!114 &1493672629717164987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493672629717164979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1493672629717164986}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 1493672629717164985}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 1493672629717164981}
+  <HoverHighlight>k__BackingField: {fileID: 358087618}
+  _interactionDistance: 0.5
+  _interactionTransform: {fileID: 18836936}
+  _interactable: 0
+  _nameplateName: Take a shower
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    _PersistentCalls: []
 --- !u!1001 &1509601878154191782
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45243,10 +45251,6 @@ PrefabInstance:
     - target: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: serializationData.Prefab
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4264640439043287197, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
@@ -47081,9 +47085,6 @@ PrefabInstance:
       addedObject: {fileID: 7338327342520421205}
     - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7338327342520421204}
-    - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7338327342520421206}
     - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
       insertIndex: -1
@@ -47094,6 +47095,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7338327342520421209}
+    - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7338327342520421204}
+    - targetCorrespondingSourceObject: {fileID: 7245826543667888666, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7338327342520421210}
   m_SourcePrefab: {fileID: 100100000, guid: 06715726cc603e249a5c3e8181b409eb, type: 3}
 --- !u!1 &7338327342520421203 stripped
 GameObject:
@@ -47126,7 +47133,7 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
+  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
   <EntryNode>k__BackingField: bathroomSink
 --- !u!135 &7338327342520421205
 SphereCollider:
@@ -47171,9 +47178,9 @@ MonoBehaviour:
   ObjectiveCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7338327342520421204}
+      - m_Target: {fileID: 7338327342520421210}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
-          Assembly-CSharp
+          SunsetSystems
         m_MethodName: set_Interactable
         m_Mode: 6
         m_Arguments:
@@ -47206,9 +47213,9 @@ MonoBehaviour:
   ObjectiveCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7338327342520421204}
+      - m_Target: {fileID: 7338327342520421210}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
-          Assembly-CSharp
+          SunsetSystems
         m_MethodName: set_Interactable
         m_Mode: 6
         m_Arguments:
@@ -47253,6 +47260,73 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+--- !u!114 &7338327342520421210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7338327342520421203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 7338327342520421209}
+    - {fileID: 7338327342520421204}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 7338327342520421208}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 7338327342520421205}
+  <HoverHighlight>k__BackingField: {fileID: 434049927}
+  _interactionDistance: 0.5
+  _interactionTransform: {fileID: 738240379}
+  _interactable: 0
+  _nameplateName: Sink
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    _PersistentCalls: []
 --- !u!1001 &7494043096629272503
 PrefabInstance:
   m_ObjectHideFlags: 0

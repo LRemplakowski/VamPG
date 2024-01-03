@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b0110000000650071007500690070006d0065006e0074004d0061006e006100670065007200000000000b01050000006f0077006e006500720001000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 1675144160413098596}
     - {fileID: 3784422555817380618}
@@ -150,7 +150,13 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: equipmentManager
+      Entry: 10
+      Data: 0
+    - Name: owner
+      Entry: 10
+      Data: 1
   weaponParent: {fileID: 1187578031712813030}
   animationController: {fileID: 4678919013744510610}
   weaponAnimationTypeParam: WeaponAnimationType
@@ -199,15 +205,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b01060000005f006f0077006e006500720000000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 660093643310669083}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: _owner
+      Entry: 10
+      Data: 0
+    - Name: selfEffectHandler
+      Entry: 6
+      Data: 
   <Disciplines>k__BackingField:
   - <Icon>k__BackingField: {fileID: 0}
     baseValue: 0
@@ -344,7 +356,7 @@ Transform:
   m_GameObject: {fileID: 1203071946431115676}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -400,7 +412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -485,15 +497,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b010b0000005f007200650066006500720065006e0063006500730000000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 265292995897044542}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
   _enablePersistence: 1
@@ -532,8 +560,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b01200000003c0043006f006d006200610074004200650068006100760069006f00750072003e006b005f005f004200610063006b0069006e0067004600690065006c006400000000000b01210000003c00450071007500690070006d0065006e0074004d0061006e0061006700650072003e006b005f005f004200610063006b0069006e0067004600690065006c006400010000000b011e0000003c0057006500610070006f006e004d0061006e0061006700650072003e006b005f005f004200610063006b0069006e0067004600690065006c006400020000000b011b0000003c0055004d0041004d0061006e0061006700650072003e006b005f005f004200610063006b0069006e0067004600690065006c00640003000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
     - {fileID: 1675144160413098596}
@@ -543,7 +571,19 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: <CombatBehaviour>k__BackingField
+      Entry: 10
+      Data: 0
+    - Name: <EquipmentManager>k__BackingField
+      Entry: 10
+      Data: 1
+    - Name: <WeaponManager>k__BackingField
+      Entry: 10
+      Data: 2
+    - Name: <UMAManager>k__BackingField
+      Entry: 10
+      Data: 3
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
   <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
@@ -751,15 +791,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b01050000006f0077006e006500720000000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 660093643310669083}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: owner
+      Entry: 10
+      Data: 0
   animator: {fileID: 153986963061837018}
   agent: {fileID: 80723574967673666}
   rigBuilder: {fileID: 3758664395462481180}
@@ -810,8 +853,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 0b010d00000077006500610070006f006e004d0061006e006100670065007200000000000b01160000003c004f0077006e00650072003e006b005f005f004200610063006b0069006e0067004600690065006c006400010000000b011a0000003c004d00610067006900630055007300650072003e006b005f005f004200610063006b0069006e0067004600690065006c00640002000000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 7860156406871809602}
     - {fileID: 660093643310669083}
@@ -820,7 +863,16 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: weaponManager
+      Entry: 10
+      Data: 0
+    - Name: <Owner>k__BackingField
+      Entry: 10
+      Data: 1
+    - Name: <MagicUser>k__BackingField
+      Entry: 10
+      Data: 2
   defaultRaycastOriginY: 1.5
   attackAnimationTrigger: AttackWithWeapon
   takeHitAnimationTrigger: TakeHit
@@ -879,14 +931,185 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 01011f0000003c00450071007500690070006d0065006e00740053006c006f00740073003e006b005f005f004200610063006b0069006e0067004600690065006c0064002f0000000001a3000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e00440069006300740069006f006e00610072007900600032005b005b00530075006e00730065007400530079007300740065006d0073002e00450071007500690070006d0065006e0074002e00450071007500690070006d0065006e00740053006c006f007400490044002c002000530075006e00730065007400530079007300740065006d0073005d002c005b00530075006e00730065007400530079007300740065006d0073002e00450071007500690070006d0065006e0074002e004900450071007500690070006d0065006e00740053006c006f0074002c002000530075006e00730065007400530079007300740065006d0073005d005d002c0020006d00730063006f0072006c00690062000000000001010800000063006f006d00700061007200650072002f010000000175000000530079007300740065006d002e0043006f006c006c0065006300740069006f006e0073002e00470065006e0065007200690063002e0045006e0075006d0045007100750061006c0069007400790043006f006d0070006100720065007200600031005b005b00530075006e00730065007400530079007300740065006d0073002e00450071007500690070006d0065006e0074002e00450071007500690070006d0065006e00740053006c006f007400490044002c002000530075006e00730065007400530079007300740065006d0073005d005d002c0020006d00730063006f0072006c0069006200010000000600000000000000000705060600000000000000042e1d010200000024006b000000000000000000010102000000240076002f020000000134000000530075006e00730065007400530079007300740065006d0073002e00450071007500690070006d0065006e0074002e00450071007500690070006d0065006e00740053006c006f0074002c002000530075006e00730065007400530079007300740065006d007300020000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640000000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f007200790001000000000000002d010d0000005f00650071007500690070007000650064004900740065006d000505042e1d010200000024006b000100000000000000010102000000240076003002000000030000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640001000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f007200790001000000000000002d010d0000005f00650071007500690070007000650064004900740065006d000505042e1d010200000024006b000200000000000000010102000000240076003002000000040000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640002000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f007200790002000000000000002d010d0000005f00650071007500690070007000650064004900740065006d000505042e1d010200000024006b000300000000000000010102000000240076003002000000050000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640003000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f007200790007000000000000002d010d0000005f00650071007500690070007000650064004900740065006d000505042e1d010200000024006b000400000000000000010102000000240076003002000000060000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640004000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f007200790006000000000000002d010d0000005f00650071007500690070007000650064004900740065006d000505042e1d010200000024006b000500000000000000010102000000240076003002000000070000001d01130000003c00490044003e006b005f005f004200610063006b0069006e0067004600690065006c00640005000000000000001d01110000005f0061006300630065007000740065006400430061007400650067006f00720079000a000000000000002d010d0000005f00650071007500690070007000650064004900740065006d0005050705
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: <EquipmentSlots>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Equipment.EquipmentSlotID,
+        SunsetSystems],[SunsetSystems.Equipment.IEquipmentSlot, SunsetSystems]],
+        mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Equipment.EquipmentSlotID,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 6
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 7
+      Data: 2|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 0
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 1
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 7
+      Data: 3|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 1
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 1
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 7
+      Data: 4|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 2
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 2
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 7
+      Data: 5|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 3
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 7
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 7
+      Data: 6|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 4
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 6
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 5
+    - Name: $v
+      Entry: 7
+      Data: 7|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
+    - Name: <ID>k__BackingField
+      Entry: 3
+      Data: 5
+    - Name: _acceptedCategory
+      Entry: 3
+      Data: 10
+    - Name: _equippedItem
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   ItemEquipped:
     _PersistentCalls:
     - _Target: {fileID: 3703066370810871723}
@@ -984,7 +1207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

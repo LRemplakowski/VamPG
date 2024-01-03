@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System.Collections;
@@ -14,8 +15,7 @@ namespace SunsetSystems.Core.UMA
 {
     public interface IUMAManager
     {
-        void PrepareUMA();
-        void InjectDefaultRecipes(List<UMARecipeBase> defaultRecipes);
+        void BuildUMAFromTemplate(ICreatureTemplate template);
     }
 
     public class UMAManager : SerializedMonoBehaviour, IUMAManager
@@ -35,19 +35,23 @@ namespace SunsetSystems.Core.UMA
                 PrepareUMA();
         }
 
-        [Button]
-        public void PrepareUMA()
+        public void BuildUMAFromTemplate(ICreatureTemplate template)
         {
-            if (umaRoot.TryGetComponent(out UMAData umaData) is false)
-            {
-                umaData = umaRoot.AddComponent<UMAData>();
-            }
+            SetBodyType(template.BodyType);
+            InjectDefaultRecipes(template.BaseUmaRecipes);
+            umaAvatar.UpdatePending();
+            umaAvatar.BuildCharacter();
+        }
+
+        [Button]
+        private void PrepareUMA()
+        {
             umaAvatar = umaRoot.GetComponent<DynamicCharacterAvatar>();
             if (umaAvatar == null)
             {
                 umaAvatar = umaRoot.AddComponent<DynamicCharacterAvatar>();
-                umaAvatar.umaData = umaData;
-                umaAvatar.predefinedDNA = new();
+                umaAvatar.RacePreset = umaConfig.BodyRaceData[BodyType.Female].raceName;
+                umaAvatar.Initialize();
                 DynamicCharacterAvatar.RaceAnimator maleAnimator = new()
                 {
                     raceName = umaConfig.BodyRaceData[BodyType.Male].raceName,
@@ -62,21 +66,26 @@ namespace SunsetSystems.Core.UMA
                 };
                 umaAvatar.raceAnimationControllers.animators.Add(maleAnimator);
                 umaAvatar.raceAnimationControllers.animators.Add(femaleAnimator);
-                umaAvatar.ChangeRace(umaConfig.BodyRaceData[BodyType.Male].raceName, true);
                 umaAvatar.SetAnimatorController();
             }
             umaAvatar.WardrobeRecipes.Clear();
             umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
+            umaAvatar.UpdatePending();
             umaAvatar.BuildCharacter();
         }
 
-        public void InjectDefaultRecipes(List<UMARecipeBase> defaultRecipes)
+        private void SetBodyType(BodyType bodyType)
         {
-            if (defaultRecipes != null && defaultRecipes.Count > 0)
-                this.defaultRecipes.AddRange(defaultRecipes);
+            umaAvatar.ChangeRace(umaConfig.BodyRaceData[bodyType], DynamicCharacterAvatar.ChangeRaceOptions.useDefaults, true);
+        }
+
+        private void InjectDefaultRecipes(List<UMARecipeBase> defaultRecipes)
+        {
+            if (defaultRecipes == null || defaultRecipes.Count <= 0)
+                return;
+            this.defaultRecipes.AddRange(defaultRecipes);
             umaAvatar.WardrobeRecipes.Clear();
             umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
-            PrepareUMA();
         }
 
         public void OnItemEquipped(IEquipableItem item)

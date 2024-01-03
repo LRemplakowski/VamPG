@@ -119,7 +119,7 @@ namespace SunsetSystems.Entities.Characters
             gameObject.name = template.FullName;
             References.CreatureData.CopyFromTemplate(template);
             References.StatsManager.CopyFromTemplate(template);
-            References.UMAManager.InjectDefaultRecipes(template.BaseUmaRecipes);
+            References.UMAManager.BuildUMAFromTemplate(template);
             References.EquipmentManager.CopyFromTemplate(template);
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);

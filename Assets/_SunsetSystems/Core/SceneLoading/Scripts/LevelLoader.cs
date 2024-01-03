@@ -24,6 +24,7 @@ namespace SunsetSystems.Core.SceneLoading
         public async Task LoadNewScene(SceneLoadingData data)
         {
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            await new WaitForUpdate();
             loadingCamera.gameObject.SetActive(true);
             SaveLoadManager.UpdateRuntimeDataCache();
             OnLevelLoadStart?.Invoke();
@@ -33,6 +34,7 @@ namespace SunsetSystems.Core.SceneLoading
             await DoSceneLoading(data);
             await new WaitForUpdate();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
+            await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);

@@ -29,6 +29,8 @@ namespace SunsetSystems.Input
 
         public void HandlePointerPosition(InputAction.CallbackContext context)
         {
+            if (context.performed is false)
+                return;
             mousePosition = context.ReadValue<Vector2>();
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask, QueryTriggerInteraction.Collide))
@@ -60,6 +62,8 @@ namespace SunsetSystems.Input
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
         {
+            if (context.performed is false)
+                return;
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask))
             {
@@ -90,6 +94,8 @@ namespace SunsetSystems.Input
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
         {
+            if (context.performed is false)
+                return;
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask))
             {

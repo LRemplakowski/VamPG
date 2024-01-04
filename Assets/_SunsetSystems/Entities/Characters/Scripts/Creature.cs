@@ -70,6 +70,7 @@ namespace SunsetSystems.Entities.Characters
         #endregion
 
         #region ICreature
+        public MonoBehaviour CoroutineRunner => this;
         public new Faction Faction => References.CreatureData.Faction;
         public new ICreatureReferences References
         {

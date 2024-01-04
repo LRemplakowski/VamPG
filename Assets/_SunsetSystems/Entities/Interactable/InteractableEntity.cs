@@ -134,29 +134,23 @@ namespace SunsetSystems.Entities.Interactable
             _interactionCollider.enabled = Interactable;
         }
 
-        protected virtual void LateUpdate()
-        {
-            if (TargetedBy == null)
-                Interacted = false;
-        }
-
         public virtual void Interact()
         {
             if (!Interactable)
                 return;
             IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
+            Interacted = true;
+            TargetedBy = null;
+            if (_interactableOnce)
+                this.Interactable = false;
             bool result = false;
             foreach (IInteractionHandler handler in InteractionHandlers)
             {
                 if (handler.HandleInteraction(TargetedBy))
                     result = true;
-            }    
+            }
             OnInteractionTriggered?.Invoke(result);
-            Interacted = true;
-            TargetedBy = null;
-            if (_interactableOnce)
-                this.Interactable = false;
         }
 
         public void OnDrawGizmosSelected()

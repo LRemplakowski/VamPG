@@ -8,6 +8,7 @@ namespace SunsetSystems.Entities.Characters.Actions
     public interface IActionPerformer
     {
         Transform Transform { get; }
+        MonoBehaviour CoroutineRunner { get; }
 
         Task PerformAction(EntityAction action, bool clearQueue = false);
         EntityAction PeekCurrentAction { get;  }

@@ -133,6 +133,7 @@ namespace SunsetSystems.Combat
         #endregion
 
         #region ICombatant
+        public MonoBehaviour CoroutineRunner => Owner.CoroutineRunner;
         public IWeapon CurrentWeapon => Owner.References.WeaponManager.GetSelectedWeapon();
 
         public IWeapon PrimaryWeapon => Owner.References.WeaponManager.GetPrimaryWeapon();

@@ -1,9 +1,8 @@
+using System;
 using SunsetSystems.Dice;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
-using System;
-using System.Collections.Generic;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -71,18 +70,17 @@ namespace SunsetSystems.Dialogue
 
         private static int GetStatValueFromString(string statName)
         {
-            //AttributeType attributeType = GetAttributeTypeFromString(statName);
-            //if (attributeType != AttributeType.Invalid)
-            //{
-            //    return PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
-            //}
-            //SkillType skillType = GetSkillTypeFromString(statName);
-            //if (skillType != SkillType.Invalid)
-            //{
-            //    return PartyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
-            //}
-            //return 1;
-            throw new NotImplementedException();
+            AttributeType attributeType = GetAttributeTypeFromString(statName);
+            if (attributeType != AttributeType.Invalid)
+            {
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetAttribute(attributeType).GetValue();
+            }
+            SkillType skillType = GetSkillTypeFromString(statName);
+            if (skillType != SkillType.Invalid)
+            {
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetSkill(skillType).GetValue();
+            }
+            return 1;
         }
 
         private static AttributeType GetAttributeTypeFromString(string attributeTypeString)

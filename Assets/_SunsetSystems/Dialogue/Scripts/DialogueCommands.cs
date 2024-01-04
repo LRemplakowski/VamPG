@@ -1,13 +1,11 @@
+using System;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.Database;
-using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -50,17 +48,15 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("IncreaseHunger")]
         public static void IncreaseHunger(string characterID, int value)
         {
-            //ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            //character.StatsManager.TryUseBlood(value);
-            throw new NotImplementedException();
+            ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            character.References.StatsManager.TryUseBlood(value);
         }
 
         [YarnCommand("DecreaseHunger")]
         public static void DecreaseHunger(string characterID, int value)
         {
-            //Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            //character.StatsManager.RegainBlood(value);
-            throw new NotImplementedException();
+            ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            character.References.StatsManager.RegainBlood(value);
         }
 
         [YarnCommand("AddMoney")]

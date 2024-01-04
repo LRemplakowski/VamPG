@@ -145,6 +145,16 @@ namespace SunsetSystems.Entities.Characters
             return GetAttributes().FirstOrDefault(a => a.AttributeType == attributeType);
         }
 
+        public List<Skill> GetSkills()
+        {
+            return Stats.Skills.GetSkillList();
+        }
+
+        public Skill GetSkill(SkillType skillType)
+        {
+            return GetSkills().FirstOrDefault(s => s.SkillType == skillType);
+        }
+
         public HealthData GetHealthData()
         {
             HealthData.HealthDataBuilder builder = new(Health.MaxValue);

@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace SunsetSystems.Entities
 {
     [CreateAssetMenu(fileName = "Creature Database", menuName = "Entities/Creature Database")]
-    public class CreatureDatabase : ScriptableObject
+    public class CreatureDatabase : SerializedScriptableObject
     {
         [SerializeField]
         private Dictionary<string, CreatureConfig> _creatureRegistry = new();
@@ -18,13 +19,15 @@ namespace SunsetSystems.Entities
 
         public bool TryGetConfig(string accessorID, out CreatureConfig config)
         {
-            config = null;
             accessorID ??= "";
             if (_accessorRegistry.ContainsKey(accessorID))
             {
                 return _creatureRegistry.TryGetValue(_accessorRegistry[accessorID], out config);
             }
-            return false;
+            else
+            {
+                return _creatureRegistry.TryGetValue(accessorID, out config);
+            }
         }
 
         public bool RegisterConfig(CreatureConfig config)

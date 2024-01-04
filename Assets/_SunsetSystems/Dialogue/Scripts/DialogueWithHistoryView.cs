@@ -191,23 +191,23 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private void UpdateSpeakerPhoto(string characterName)
+        private async void UpdateSpeakerPhoto(string characterName)
         {
             string speakerID;
             if (characterName == null || string.IsNullOrWhiteSpace(characterName))
             {
-                speakerID = PartyManager.Instance.MainCharacter.ID;
+                speakerID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
                 characterName = PartyManager.Instance.MainCharacter.Name;
             }
             else
             {
                 if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
                 {
-                    speakerID = PartyManager.Instance.MainCharacter.ID;
+                    speakerID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
                     characterName = PartyManager.Instance.MainCharacter.Name;
                 }
             }
-            Sprite sprite = this.GetSpeakerPortrait(speakerID);
+            Sprite sprite = await this.GetSpeakerPortrait(speakerID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;

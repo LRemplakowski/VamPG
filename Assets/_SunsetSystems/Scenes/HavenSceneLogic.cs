@@ -2,14 +2,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.SceneLoading.UI;
+using SunsetSystems.Dialogue;
 using SunsetSystems.Dialogue.Interfaces;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;
+using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.LevelUtility;
+using SunsetSystems.Party;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -37,7 +42,7 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private List<InteractableEntity> _interactablesToEnableAfterPhoneCall = new();
         [SerializeField]
-        private IDialogueSource _kitchenSink;
+        private IInteractable _kitchenSink;
         [SerializeField]
         private string landlordDialogueEntryNode;
         [SerializeField]
@@ -66,14 +71,14 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private DoorController _havenDoors;
         [SerializeField]
-        private DialogueTrigger _bathroomDoorsDialogue;
+        private IInteractable _bathroomDoorsDialogue;
         [SerializeField]
         private DoorController _bathroomDoors;
         [Title("Action")]
         [SerializeField]
-        private Creature _dominic;
+        private ICreature _dominic;
         [SerializeField]
-        private Creature _kieran;
+        private ICreature _kieran;
         [SerializeField]
         private Waypoint _dominicWaypoint, _kieranWaypoint, _dominicFridgeWaypoint, _kieranFridgeWaypoint, _pcFridgeWaypoint, _dominicDoorWaypoint;
         [SerializeField]
@@ -84,7 +89,7 @@ namespace SunsetSystems.Persistence
         protected override void Awake()
         {
             base.Awake();
-            //HavenDialogueCommands.HavenSceneLogic = this;
+            HavenDialogueCommands.HavenSceneLogic = this;
         }
 
         protected override void Start()
@@ -100,14 +105,14 @@ namespace SunsetSystems.Persistence
             await new WaitForUpdate();
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
-            //DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
             _cameraControl.ForceToPosition(_cameraStartPoint);
             _cameraControl.ForceRotation(_cameraStartRotation);
+            DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
         }
 
-        /*private async Task MovePCToPositionAfterDialogue(ICreature _desiree)
+        private async Task MovePCToPositionAfterDialogue(ICreature _desiree)
         {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
@@ -116,7 +121,7 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeInAsync(.5f);
         }
 
-        
+
 
         public async void BringKevinForVisit()
         {
@@ -149,27 +154,23 @@ namespace SunsetSystems.Persistence
 
         private void DisableSinkInteraction()
         {
-            //_kitchenSink.Interactable = false;
-            throw new NotImplementedException();
+            _kitchenSink.Interactable = false;
         }
 
         private void KillTheLandlord()
         {
-            //_landlord.StatsManager.Die();
-            throw new NotImplementedException();
+            _landlord.References.StatsManager.Die();
         }
 
         public async void BargeIn()
         {
-            //SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-            //await fade.DoFadeOutAsync(.5f);
+            SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
+            await fade.DoFadeOutAsync(.5f);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            _havenDoors.Interactable = true;
-            _havenDoors.Interact();
-            _havenDoors.Interactable = false;
-            _dominic.gameObject.SetActive(true);
-            _kieran.gameObject.SetActive(true);
+            _havenDoors.Open = true;
+            _dominic.References.GameObject.SetActive(true);
+            _kieran.References.GameObject.SetActive(true);
             _coffeeTableTransform.position = _tablePositionForCover;
             _coffeeTableTransform.eulerAngles = _tableRotationForCover;
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
@@ -178,11 +179,11 @@ namespace SunsetSystems.Persistence
             _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
             _cameraControl.ForceRotation(_cameraRotationDominicEnter);
-            //_ = PartyManager.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
+            //_ = PartyManager.Instance.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
             //_ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
             //_ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
             await new WaitForFixedUpdate();
-            //await fade.DoFadeInAsync(.5f);
+            await fade.DoFadeInAsync(.5f);
         }
 
         private async void MoveActorsAndCameraToFridgeConfig()
@@ -210,28 +211,26 @@ namespace SunsetSystems.Persistence
 
         public void RecruitKieran()
         {
-            PartyManager.Instance.RecruitCharacter(_kieran.References.CreatureData);
-            PartyManager.Instance.AddCreatureAsActivePartyMember(_kieran);
+            PartyManager.Instance.RecruitCharacter(_kieran);
         }
 
         public async void MoveDominicToDoorAndDestroy()
         {
             await _dominic.PerformAction(new Move(_dominic, _dominicDoorWaypoint.transform.position, .4f));
-            _dominic.ClearAllActions();
-            Destroy(_dominic.gameObject);
+            Destroy(_dominic.References.GameObject);
         }
 
 
 
-        public async void QuitGame()
-        {
-            SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
-            await loading.DoFadeOutAsync(.5f);
-            //await LevelLoader.Instance.UnloadGameScene();
-            this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
-            this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
-            await loading.DoFadeInAsync(.5f);
-        }
+        //public async void QuitGame()
+        //{
+        //    SceneLoadingUIManager loading = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+        //    await loading.DoFadeOutAsync(.5f);
+        //    //await LevelLoader.Instance.UnloadGameScene();
+        //    this.FindFirstComponentWithTag<MainMenuUIManager>(TagConstants.MAIN_MENU_UI).gameObject.SetActive(true);
+        //    this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI).gameObject.SetActive(false);
+        //    await loading.DoFadeInAsync(.5f);
+        //}
 
         private class HavenSceneData : SceneLogicData
         {
@@ -259,9 +258,7 @@ namespace SunsetSystems.Persistence
             public static void OpenBathroomDoors()
             {
                 HavenSceneLogic._bathroomDoorsDialogue.Interactable = false;
-                HavenSceneLogic._bathroomDoors.Interactable = true;
-                HavenSceneLogic._bathroomDoors.Interact();
-                HavenSceneLogic._bathroomDoors.Interactable = false;
+                HavenSceneLogic._bathroomDoors.Open = true;
             }
 
             [YarnCommand("DestroyBathroomDoors")]
@@ -286,7 +283,7 @@ namespace SunsetSystems.Persistence
             [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
             public static void SetPhoneDialogueToLandlordDialogue()
             {
-                throw new NotImplementedException();
+                Debug.LogError("FOO");
             }
 
             [YarnCommand("EnableApartmentDoorLandlordDialogue")]
@@ -307,10 +304,10 @@ namespace SunsetSystems.Persistence
                 HavenSceneLogic.KillTheLandlord();
             }
 
-            [YarnCommand("AddBobbyPinToInventory")] 
+            [YarnCommand("AddBobbyPinToInventory")]
             public static void AddBobbyPinToInventory()
             {
-                Debug.LogException(new NotImplementedException());
+                Debug.LogError("Should add bobby pin to inventory");
             }
 
             [YarnCommand("DisableInteractionsBeforeDominic")]
@@ -324,6 +321,6 @@ namespace SunsetSystems.Persistence
             {
                 HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
             }
-        }*/
+        }
     }
 }

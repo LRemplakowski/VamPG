@@ -40,6 +40,9 @@ namespace SunsetSystems.Journal
             _questRegistry.TryAdd(quest.ID, quest);
             _questAccessorRegistry = new();
             _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
             return true;
         }
 
@@ -79,6 +82,9 @@ namespace SunsetSystems.Journal
                 _questAccessorRegistry = new();
                 _questRegistry.Values.ToList().ForEach(q => _questAccessorRegistry.TryAdd(q.ReadableID, q.ID));
             }
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

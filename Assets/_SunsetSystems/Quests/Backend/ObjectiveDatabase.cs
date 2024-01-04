@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Journal;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using UnityEngine;
 namespace SunsetSystems
 {
     [CreateAssetMenu(fileName = "Objective Database", menuName = "Sunset Journal/Objective Database")]
-    public class ObjectiveDatabase : ScriptableObject
+    public class ObjectiveDatabase : SerializedScriptableObject
     {
         [SerializeField]
         private Dictionary<string, Objective> _objectiveRegistry = new();
@@ -61,6 +62,9 @@ namespace SunsetSystems
             _objectiveRegistry.Add(objective.DatabaseID, objective);
             _objectiveAccessorRegistry = new();
             _objectiveRegistry.Values.ToList().ForEach(o => _objectiveAccessorRegistry.TryAdd(o.ReadableID, o.DatabaseID));
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
             return true;
         }
 
@@ -71,6 +75,9 @@ namespace SunsetSystems
                 _objectiveAccessorRegistry = new();
                 _objectiveRegistry.Values.ToList().ForEach(q => _objectiveAccessorRegistry.TryAdd(q.ReadableID, q.DatabaseID));
             }
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

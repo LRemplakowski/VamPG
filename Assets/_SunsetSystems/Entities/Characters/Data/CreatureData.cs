@@ -9,11 +9,11 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class CreatureData : MonoBehaviour
+    public class CreatureData : SerializedMonoBehaviour
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
-        public string ReadableID => FullName.ToPascalCase();
+        public string ReadableID { get; private set; }
         [SerializeField]
         private string _id;
         public string DatabaseID => _id;
@@ -33,6 +33,7 @@ namespace SunsetSystems.Entities.Characters
             FirstName = template.FirstName;
             LastName = template.LastName;
             _id = template.ReadableID;
+            ReadableID = template.ReadableID;
             PortraitAssetRef = template.PortraitAssetRef;
             Faction = template.Faction;
             BodyType = template.BodyType;

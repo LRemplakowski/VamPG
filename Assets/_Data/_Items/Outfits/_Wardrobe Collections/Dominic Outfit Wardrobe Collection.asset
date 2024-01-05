@@ -21,8 +21,9 @@ MonoBehaviour:
   wardrobeRecipeThumbs:
   - race: VampireMale
     filename: 
-    thumb: {fileID: 21300000, guid: ad4422f9c24a1d8408c3f14d6478a86d, type: 3}
+    thumb: {fileID: 0}
   wardrobeSlot: FullOutfit
+  Appended: 0
   Hides: []
   HideTags: []
   suppressWardrobeSlots: []
@@ -31,7 +32,8 @@ MonoBehaviour:
   OverrideDNA:
     PreloadValues: []
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Dominic Outfit
-    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothing_chest","colors":[255,255,255,255,0,0,0,0,31,30,30,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false},{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false}],"wardrobeSet":[],"raceAnimatorController":""}'
+    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothing_chest","colors":[255,255,255,255,0,0,0,0,31,30,30,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"Suit
+    color","colors":[45,45,45,255,0,0,0,0,19,253,26,255,0,0,0,0,32,38,223,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false}],"wardrobeSet":[],"raceAnimatorController":""}'
   coverImages:
   - {fileID: 21300000, guid: 9c9a4bc04609c62428392eb5ead1f685, type: 3}
   - {fileID: 21300000, guid: c13828597679d0b48bdf3f20d5462564, type: 3}
@@ -39,20 +41,22 @@ MonoBehaviour:
     sets:
     - targetRace: VampireMale
       wardrobeSet:
-      - slot: OuterClothing
-        recipe: suit01_Recipe
-      - slot: Chest
-        recipe: shirt01_Recipe
-      - slot: Neck
-        recipe: tie_loose_Recipe
-      - slot: Feet
-        recipe: chopper_shoes01_Recipe
       - slot: Face
         recipe: aviators01_Recipe
       - slot: Hair
         recipe: hair01_Recipe
       - slot: Complexion
         recipe: Dominic_facial_hair_overlay
+      - slot: OuterClothing
+        recipe: suit01_Recipe
+      - slot: Chest
+        recipe: shirt01_Recipe 1
+      - slot: Neck
+        recipe: tie_loose_Recipe
       - slot: Legs
         recipe: suit pants_Recipe
+      - slot: Feet
+        recipe: chopper_shoes01_Recipe
+      - slot: WristL
+        recipe: watch_Recipe
   arbitraryRecipes: []

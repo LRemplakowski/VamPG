@@ -1,58 +1,41 @@
 ﻿using SunsetSystems.Entities.Interactable;
-using SunsetSystems.Data;
 using SunsetSystems.Input.CameraControl;
 using System.Threading.Tasks;
 using UnityEngine;
 using SunsetSystems.LevelUtility;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Persistence;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Core.SceneLoading
 {
     public class SceneTransition : SerializedMonoBehaviour, IInteractionHandler, ITransition
     {
         [SerializeField]
-        private string _sceneName;
-
-        [SerializeField]
-        private int _sceneIndex;
-
-        [SerializeField]
         private TransitionType _type;
-        [SerializeField]
-        private string _targetEntryPointTag;
-        [SerializeField]
-        private string _targetBoundingBoxTag;
-        [SerializeField]
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
+        private SceneLoadingData sceneToLoad;
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private Waypoint _targetEntryPoint;
-        [SerializeField]
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private BoundingBox _targetBoundingBox;
-        [SerializeField]
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private CameraControlScript _cameraControlScript;
-
-        private Task loadingTask = null;
 
         public bool HandleInteraction(IActionPerformer interactee)
         {
-            if (loadingTask != null)
-                return false;
             Debug.Log("Interacting with area transition!");
             switch (_type)
             {
-                case TransitionType.indexTransition:
-                    MoveToScene(new IndexLoadingData(_sceneIndex, _targetEntryPointTag, _targetBoundingBoxTag));
+                case TransitionType.SceneTransition:
                     break;
-                case TransitionType.nameTransition:
-                    MoveToScene(new NameLoadingData(_sceneName, _targetEntryPointTag, _targetBoundingBoxTag));
-                    break;
-                case TransitionType.internalTransition:
-                    _ = MoveToArea();
+                case TransitionType.InternalTransition:
                     break;
             }
             return true;
         }
 
-        public void MoveToScene(LevelLoadingData data)
+        public void MoveToScene(SceneLoadingData data)
         {
             SaveLoadManager.UpdateRuntimeDataCache();
             //loadingTask = LevelLoader.Instance.LoadGameLevel(data);
@@ -78,6 +61,6 @@ namespace SunsetSystems.Persistence
 
     public enum TransitionType
     {
-        indexTransition, nameTransition, internalTransition
+        SceneTransition, InternalTransition
     }
 }

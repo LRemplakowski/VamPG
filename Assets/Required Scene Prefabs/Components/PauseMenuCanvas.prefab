@@ -264,6 +264,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a80ae54b045ef842b9e177a32393249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   _selectedCharacterText: {fileID: 5660386311181598532}
   OnSelectedCharacterChanged:
     m_PersistentCalls:
@@ -308,7 +317,7 @@ RectTransform:
   m_GameObject: {fileID: 1408822314930400574}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3042725610146644383}
@@ -318,7 +327,7 @@ RectTransform:
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1408822314930400563
 Canvas:
   m_ObjectHideFlags: 0
@@ -372,9 +381,8 @@ MonoBehaviour:
   settings: {fileID: 483213852408409792}
   characterSheet: {fileID: 4123745926646975937}
   _characterSelector: {fileID: 1192368040699502288}
-  OnReturnToMenu:
-    m_PersistentCalls:
-      m_Calls: []
+  _onReturnToMenu:
+    _PersistentCalls: []
 --- !u!1 &2294251220906920955
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 0
+  m_MinHeight: -1
   m_PreferredWidth: -1
   m_PreferredHeight: 150
   m_FlexibleWidth: -1

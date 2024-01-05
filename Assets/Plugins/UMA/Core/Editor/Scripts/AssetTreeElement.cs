@@ -23,6 +23,7 @@ namespace UMA.Controls
 		public int IsResourceCount;
 		public int IsAddrCount;
 		public int Keepcount;
+		public int IgnoreCount;
 
 
 		// detail item
@@ -37,6 +38,8 @@ namespace UMA.Controls
 		{
 			Checked = val;
 		}
+
+	
 
 		public AssetTreeElement (string name, int depth, int id) : base (name, depth, id)
 		{

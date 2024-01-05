@@ -68,8 +68,9 @@ namespace UMA.Editors
             whiteLabels.normal.textColor = Color.white;
             blackLabels.normal.textColor = Color.black;
 
-            Tools.current = Tool.None;
-            Tools.hidden = true;
+            
+           // Tools.current = Tool.None;
+           // Tools.hidden = true;
             EditorApplication.LockReloadAssemblies();
 #if UNITY_2019_1_OR_NEWER
             SceneView.duringSceneGui += this.OnSceneGUI;
@@ -85,16 +86,15 @@ namespace UMA.Editors
 #else
             SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
 #endif
-            Cleanup();
+            CleanUp();
         }
 
         private void OnDestroy()
         {
-            Cleanup();
+            CleanUp();
+         }
 
-        }
-
-        private void Cleanup()
+        private void CleanUp()
         {
             // Guard against Unity calling this via update multiple times even after
             // it's been removed from the event. Only happens on Mac.
@@ -130,6 +130,11 @@ namespace UMA.Editors
         public override void OnInspectorGUI()
         {
             EditorGUILayout.LabelField("Mesh Selector Utilities", EditorStyles.largeLabel, GUILayout.MaxHeight(25) );
+#if UNITY_2021_2_OR_NEWER
+            GUIHelper.BeginVerticalPadded(10, new Color(0.55f, 0.25f, 0.25f));
+            SceneWindow(0);
+            GUIHelper.EndVerticalPadded(10);
+#endif
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, GUIStyle.none);
             GUILayout.Space(20);
 
@@ -262,17 +267,30 @@ namespace UMA.Editors
             EditorGUI.EndDisabledGroup();
 
             GUILayout.Space(20);
-            textureMap = EditorGUILayout.ObjectField("Set From Texture Map", textureMap, typeof(Texture2D), false) as Texture2D;                
-            if (GUILayout.Button("Calculate occlusion from texture."))
+            if (GUILayout.Button("Export Occlusion Map"))
+            {
+                GeometryUVEditorWindow.Init(_Source, true);
+            }
+            EditorGUILayout.LabelField(new GUIContent("Occlusion Map (Optional)", "Use this texture to attempt to automatically detect occluded triangles"));
+            textureMap = EditorGUILayout.ObjectField("Set From Occluaion Map", textureMap, typeof(Texture2D), false) as Texture2D;                
+            if (GUILayout.Button("Add to Occlusion from texture."))
             {
                 if (_Source != null)
                 {
-                    if (textureMap == null)
+                    if (ValidateTexture(textureMap))
                     {
-                        EditorUtility.DisplayDialog("Warning", "A readable texture must be selected before processing.", "OK");
+                        _Source.UpdateFromTexture(textureMap);
                     }
-                    else
+                }              
+                    }
+
+            if (GUILayout.Button("Set Occlusion from texture (clears existing)"))
+            {
+                if (_Source != null)
+                {
+                    if (ValidateTexture(textureMap))
                     {
+                        ClearAll();
                         _Source.UpdateFromTexture(textureMap);
                     }
                 }              
@@ -281,9 +299,24 @@ namespace UMA.Editors
             GUILayout.Space(20);
             if (GUILayout.Button(new GUIContent("View UV Layout", "Brings up a window displaying the uv layout of the currently selected object and export to texture options.")))
             {
-                GeometryUVEditorWindow.Init(_Source);
+                GeometryUVEditorWindow.Init(_Source,false);
             }
             GUILayout.EndScrollView();
+        }
+
+        public bool ValidateTexture(Texture2D textureMap)
+        {
+            if (textureMap == null)
+            {
+                EditorUtility.DisplayDialog("Warning", "A readable texture must be selected before processing.", "OK");
+                return false;
+            }
+            else if (!textureMap.isReadable)
+            {
+                EditorUtility.DisplayDialog("Warning", "Texture is not readable. Please set the read/write flag on the texture import settings.", "OK");
+                return false;
+            }
+            return true;
         }
 
         private void UpdateShadingMode(bool wireframeOn)
@@ -333,7 +366,7 @@ namespace UMA.Editors
             if (doneEditing)
             {
                 SaveSelection(_Source.selectedTriangles);
-                Cleanup();
+                CleanUp();
             }
         }
             
@@ -463,13 +496,17 @@ namespace UMA.Editors
         {
             const float WindowHeight = 140;
             const float WindowWidth = 380;
-            const float Margin = 20;
+            const float Margin = 40;
 
             ResetLabelStart();
 
             Handles.BeginGUI();
+#if !UNITY_2021_2_OR_NEWER
 
-            GUI.Window(1, new Rect(SceneView.lastActiveSceneView.position.width -(WindowWidth+Margin), SceneView.lastActiveSceneView.position.height - (WindowHeight+Margin), WindowWidth, WindowHeight), SceneWindow, "UMA Mesh Hide Geometry Selector");
+            Rect WinRect = new Rect(SceneView.lastActiveSceneView.position.width - (WindowWidth + Margin), SceneView.lastActiveSceneView.position.height - (WindowHeight + Margin),WindowWidth, WindowHeight);
+
+            GUI.Window(1,WinRect, SceneWindow, "UMA Mesh Hide Geometry Selector");
+#endif
             DrawNextLabel("Left click and drag to area select");
             DrawNextLabel("Hold SHIFT while dragging to paint");
             DrawNextLabel("Hold CTRL while dragging to paint inverse");
@@ -573,8 +610,8 @@ namespace UMA.Editors
                     screenSelectionRect.max = HandleUtility.GUIPointToScreenPixelCoordinate(new Vector2(selectionRect.xMax, selectionRect.yMin));
 
 
-                    int[] triangles = _Source.meshAsset.asset.meshData.submeshes[0].triangles;
-                    for(int i = 0; i < triangles.Length; i+=3 )
+                    int[] triangles = _Source.meshAsset.asset.meshData.submeshes[_Source.meshAsset.asset.subMeshIndex].nativeTriangles.ToArray();
+                    for (int i = 0; i < triangles.Length; i+=3 )
                     {
                         bool found = false;
                         Vector3 center = new Vector3();

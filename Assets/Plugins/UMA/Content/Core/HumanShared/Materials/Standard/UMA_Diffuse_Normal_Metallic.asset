@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   translateSRP: 1
   material: {fileID: 2100000, guid: 2db8991bb8fd75f4eb02f3ee57a55f37, type: 2}
+  secondPass: {fileID: 0}
   materialType: 1
   channels:
   - channelType: 4
@@ -26,7 +27,7 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 1
     textureFormat: 0
-    materialPropertyName: _NormalMap
+    materialPropertyName: _BumpMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -34,7 +35,7 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 0
     textureFormat: 0
-    materialPropertyName: _MaskMap
+    materialPropertyName: _MetallicGlossMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -47,3 +48,5 @@ MonoBehaviour:
   shaderParms: []
   MaskWithCurrentColor: 0
   maskMultiplier: {r: 1, g: 1, b: 1, a: 1}
+  MaterialName: 
+  ShaderName: 

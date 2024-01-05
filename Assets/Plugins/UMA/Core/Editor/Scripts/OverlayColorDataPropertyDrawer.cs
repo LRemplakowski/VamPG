@@ -6,13 +6,13 @@ using UMA.CharacterSystem;
 using System.Text.RegularExpressions;
 using System.Reflection;
 using System.Collections;
+using UnityEditor.UIElements;
 
 namespace UMA.Editors
 {
 	[CustomPropertyDrawer(typeof(OverlayColorData),true)]
 	public class OverlayColorDataPropertyDrawer : PropertyDrawer
 	{
-		bool showAdvanced;
 		GUIContent Modulate = new GUIContent("Multiplier");
 		GUIContent Additive = new GUIContent("Additive");
 		GUIContent Channels = new GUIContent("Channel Count");
@@ -62,25 +62,32 @@ namespace UMA.Editors
 			if (name.isExpanded)
 			{
 				EditorGUILayout.PropertyField(property.FindPropertyRelative("name"));
+                EditorGUILayout.PropertyField(property.FindPropertyRelative("isBaseColor"));
 
-				if (ocd != null)
+                if (ocd != null)
 				{
 					string Name = property.FindPropertyRelative("name").stringValue;
 					int ChannelCount = EditorGUILayout.IntSlider(Channels, ocd.channelCount, 0, 16);
 					if (ChannelCount != ocd.channelCount)
 					{
 						ocd.SetChannels(ChannelCount);
-						EditorUtility.SetDirty(dca);
+                        if (dca != null)
+                        {
+                            EditorUtility.SetDirty(dca);
+                        }
 					}
 				}
 
-				showAdvanced = EditorGUILayout.Toggle("Show Extended Ranges", showAdvanced);
+				SerializedProperty showAdvancedProperty = property.FindPropertyRelative("showAdvanced");
+				EditorGUILayout.PropertyField(showAdvancedProperty);
+				//showAdvanced = EditorGUILayout.Toggle("Show Extended Ranges", showAdvanced);
 
 				GUILayout.Space(5);
 
+
 				for (int i = 0; i < mask.arraySize; i++)
 				{
-					if (showAdvanced)
+					if (showAdvancedProperty.boolValue)
 					{
 						var channelMask = mask.GetArrayElementAtIndex(i);
 						var channelColor = ToVector4(channelMask.colorValue);
@@ -151,11 +158,6 @@ namespace UMA.Editors
 		}
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			/*var name = property.FindPropertyRelative("name");
-			if (!name.isExpanded)
-			{
-				return (EditorGUIUtility.singleLineHeight * 3f) - 2f;
-			}*/
 			return -2f;
 		}
 
@@ -169,27 +171,15 @@ namespace UMA.Editors
 		{
 			return new Vector4(color.r, color.g, color.b, color.a);
 		}
-	}
+
+    }
 	public class PropertyDrawerUtility
 	{
 		public static OverlayColorData GetOverlayDataAsset(System.Reflection.FieldInfo fieldInfo, SerializedProperty property)
 		{ 
 			DynamicCharacterAvatar dca = property.serializedObject.targetObject as DynamicCharacterAvatar;
-
-
 			return new OverlayColorData();
-			/* T actualObject = null;
-			if (obj.GetType().IsArray)
-			{
-				var index = System.Convert.ToInt32(new string(property.propertyPath.Where(c => char.IsDigit(c)).ToArray()));
-				actualObject = ((T[])obj)[index];
-			}
-			else
-			{
-				actualObject = obj as T;
-			}
-			
-			return actualObject; */
+
 		}
 	}
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Unity.Burst;
 #if UNITY_2019_3_OR_NEWER
 using Unity.Collections;
 #endif
@@ -26,7 +27,6 @@ namespace UMA
 
         private static void CleanupNativeArrays()
         {
-			//Debug.Log("Cleaned up SkinnedMesh Arrays in mesh combiner");
             if (nativeBoneWeights.IsCreated) nativeBoneWeights.Dispose();
             if (nativeBonesPerVertex.IsCreated) nativeBonesPerVertex.Dispose();
         }
@@ -40,6 +40,7 @@ namespace UMA
 			public UMAMeshData meshData;
 			public int[] targetSubmeshIndices;
 			public BitArray[] triangleMask;
+            public SlotData slotData;
 		}
 
 		private enum MeshComponents
@@ -74,13 +75,35 @@ namespace UMA
 		static NativeArray<BoneWeight1> nativeBoneWeights;
 		static NativeArray<byte> nativeBonesPerVertex;
 
+		public static List<UMABlendShape> GetBlendshapeSources(UMAMeshData meshData, UMAData.UMARecipe recipe)
+        {
+			List<UMABlendShape> sourceShapes;
+			if (meshData.blendShapes != null && meshData.blendShapes.Length > 0)
+			{
+				sourceShapes = new List<UMABlendShape>(meshData.blendShapes);
+			}
+			else
+			{
+				sourceShapes = new List<UMABlendShape>();
+			}
+			if (recipe.BlendshapeSlots.ContainsKey(meshData.SlotName))
+			{
+				List<UMAMeshData> addlBlendShapes = recipe.BlendshapeSlots[meshData.SlotName];
+				foreach (var md in addlBlendShapes)
+				{
+					sourceShapes.AddRange(md.blendShapes);
+				}
+			}
+			return sourceShapes;
+		}
+
 		/// <summary>
 		/// Combines a set of meshes into the target mesh.
 		/// </summary>
 		/// <param name="target">Target.</param>
 		/// <param name="sources">Sources.</param>
 		/// <param name="blendShapeSettings">BlendShape Settings.</param>
-		public static void CombineMeshes(UMAMeshData target, CombineInstance[] sources, BlendShapeSettings blendShapeSettings = null)
+		public static void CombineMeshes(UMAMeshData target, CombineInstance[] sources, BlendShapeSettings blendShapeSettings, UMAData.UMARecipe recipe, int currentRenderer)
 		{
 			if (blendShapeSettings == null)
 				blendShapeSettings = new BlendShapeSettings();
@@ -97,12 +120,17 @@ namespace UMA
 			AnalyzeSources(sources, subMeshTriangleLength, ref vertexCount, ref boneWeightCount, ref bindPoseCount, ref transformHierarchyCount, ref meshComponents);
 
 			if(!blendShapeSettings.ignoreBlendShapes)
-				AnalyzeBlendShapeSources(sources, blendShapeSettings, ref meshComponents, out blendShapeNames);
+				AnalyzeBlendShapeSources(sources, blendShapeSettings, ref meshComponents, out blendShapeNames, recipe);
 
-			int[][] submeshTriangles = new int[subMeshCount][];
+			//int[][] submeshTriangles = new int[subMeshCount][];
+
+			List<NativeArray<int>> submeshTriangles = new System.Collections.Generic.List<NativeArray<int>>(subMeshTriangleLength.Length);
 			for (int i = 0; i < subMeshTriangleLength.Length; i++)
 			{
-				submeshTriangles[i] = target.GetSubmeshBuffer(subMeshTriangleLength[i], i);
+				if (subMeshTriangleLength[i] > 0)
+				{
+					submeshTriangles.Add(target.GetSubmeshBuffer(subMeshTriangleLength[i], i));
+				}
 				subMeshTriangleLength[i] = 0;
 			}
 
@@ -167,6 +195,7 @@ namespace UMA
 
 			foreach (var source in sources)
 			{
+                // source.meshData.sl
 				int sourceVertexCount = source.meshData.vertices.Length;
 				BuildBoneWeights(source.meshData, nativeBoneWeights, nativeBonesPerVertex, vertexIndex, boneWeightIndex, sourceVertexCount, source.meshData.boneNameHashes, source.meshData.bindPoses, bonesCollection, bindPoses, bonesList);
 				Array.Copy(source.meshData.vertices, 0, vertices, vertexIndex, sourceVertexCount);
@@ -253,56 +282,58 @@ namespace UMA
 
 				if (has_blendShapes) 
 				{
-					if (source.meshData.blendShapes != null && source.meshData.blendShapes.Length > 0) 
+					// calculate the group of blendshapes
+					// use that instead of source.meshData.blendShapes.
+					List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
+					// 	int sourceBlendShapeLength = source.meshData.blendShapes.Length;
+					// for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
+					foreach(UMABlendShape ubs in sourceShapes)
 					{
-						int sourceBlendShapeLength = source.meshData.blendShapes.Length;
-						for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
+						string shapeName = ubs.shapeName;// source.meshData.blendShapes[shapeIndex].shapeName;
+
+						//If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
+						if (!blendShapeSettings.loadAllBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
+							continue;
+
+						#region BlendShape Baking
+						if (BakeBlendShape(blendShapeSettings.blendShapes, ubs /*source.meshData.blendShapes[shapeIndex]*/, ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
+							continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
+						#endregion
+
+						//If our dictionary contains the shape name, which it should
+						if (blendShapeNames.ContainsKey(shapeName))
 						{
-							string shapeName = source.meshData.blendShapes[shapeIndex].shapeName;
+							//UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
+							int i = blendShapeNames[shapeName].index;
 
-							//If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
-							if (!blendShapeSettings.loadAllBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
-								continue;
-
-#region BlendShape Baking
-							if(BakeBlendShape(blendShapeSettings.blendShapes, source.meshData.blendShapes[shapeIndex], ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
-								continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
-#endregion
-							
-							//If our dictionary contains the shape name, which it should
-							if (blendShapeNames.ContainsKey(shapeName))
+							if (blendShapes[i].frames.Length != ubs.frames.Length)
 							{
-								UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
-								int i = blendShapeNames[shapeName].index;
-
-								if (blendShapes[i].frames.Length != sourceBlendShapes[shapeIndex].frames.Length)
-								{
-									if (Debug.isDebugBuild)
-										Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
-									break;
-								}
-
-								for (int frameIndex = 0; frameIndex < sourceBlendShapes[shapeIndex].frames.Length; frameIndex++)
-								{
-									Array.Copy(sourceBlendShapes[shapeIndex].frames[frameIndex].deltaVertices, 0, blendShapes[i].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
-
-									Vector3[] sourceDeltaNormals = sourceBlendShapes[shapeIndex].frames[frameIndex].deltaNormals;
-									Vector3[] sourceDeltaTangents = sourceBlendShapes[shapeIndex].frames[frameIndex].deltaTangents;
-
-									//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
-									if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
-										Array.Copy(sourceDeltaNormals, 0, blendShapes[i].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
-
-									if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
-										Array.Copy(sourceDeltaTangents, 0, blendShapes[i].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
-								}
+								if (Debug.isDebugBuild)
+									Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
+								break;
 							}
-							else
+
+							for (int frameIndex = 0; frameIndex < ubs.frames.Length; frameIndex++)
 							{
-								if(Debug.isDebugBuild)
-									Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
+								Array.Copy(ubs.frames[frameIndex].deltaVertices, 0, blendShapes[i].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
+
+								Vector3[] sourceDeltaNormals = ubs.frames[frameIndex].deltaNormals;
+								Vector3[] sourceDeltaTangents = ubs.frames[frameIndex].deltaTangents;
+
+								//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
+								if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
+									Array.Copy(sourceDeltaNormals, 0, blendShapes[i].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
+
+								if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
+									Array.Copy(sourceDeltaTangents, 0, blendShapes[i].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
 							}
 						}
+						else
+						{
+							if (Debug.isDebugBuild)
+								Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
+						}
+
 					}
 				}
 				if (has_clothSkinning)
@@ -345,22 +376,30 @@ namespace UMA
 					}
 				}
 
-				for (int i = 0; i < source.meshData.subMeshCount; i++)
+                source.slotData.vertexOffset = vertexIndex;
+                source.slotData.skinnedMeshRenderer = currentRenderer;
+
+                for (int i = 0; i < source.meshData.subMeshCount; i++)
 				{
 					if (source.targetSubmeshIndices[i] >= 0)
 					{
-						int[] subTriangles = source.meshData.submeshes[i].triangles;
+						NativeArray<int> subTriangles = source.meshData.submeshes[i].GetTriangles();
 						int triangleLength = subTriangles.Length;
 						int destMesh = source.targetSubmeshIndices[i];
+                        source.slotData.submeshIndex = destMesh;
 
-						if (source.triangleMask == null)
+                        if (source.triangleMask == null)
 						{
+
 							CopyIntArrayAdd(subTriangles, 0, submeshTriangles[destMesh], subMeshTriangleLength[destMesh], triangleLength, vertexIndex);
 							subMeshTriangleLength[destMesh] += triangleLength;
 						}
 						else
 						{
-							MaskedCopyIntArrayAdd(subTriangles, 0, submeshTriangles[destMesh], subMeshTriangleLength[destMesh], triangleLength, vertexIndex, source.triangleMask[i] );
+							if (!MaskedCopyIntArrayAdd(subTriangles, 0, submeshTriangles[destMesh], subMeshTriangleLength[destMesh], triangleLength, vertexIndex, source.triangleMask[i] ))
+                            {
+								Debug.LogWarning("Error copying int array on slot: " + source.meshData.SlotName);
+                            }
 							subMeshTriangleLength[destMesh] += (triangleLength - (UMAUtils.GetCardinality(source.triangleMask[i])*3));
 						}
 					}
@@ -414,7 +453,8 @@ namespace UMA
 			target.umaBoneCount = boneCount;
 			for (int i = 0; i < subMeshCount; i++)
 			{
-				target.submeshes[i].triangles = submeshTriangles[i];
+				target.submeshes[i].SetTriangles(null);
+				target.submeshes[i].nativeTriangles = submeshTriangles[i];
 			}
 			target.boneNameHashes = bonesList.ToArray();
 		}
@@ -430,7 +470,7 @@ namespace UMA
 #endif
 			target.colors32 = source.colors32;
 			target.normals = source.normals;
-			target.rootBoneHash = source.rootBoneHash;
+			target.rootBoneHash = source.rootBoneHash; 
 			target.subMeshCount = source.subMeshCount;
 			target.tangents = source.tangents;
 			target.umaBoneCount = source.umaBoneCount;
@@ -442,7 +482,7 @@ namespace UMA
 			target.vertexCount = source.vertexCount;
 			target.vertices = source.vertices;
 			target.blendShapes = source.blendShapes;
-			target.SlotName = source.SlotName + " (shallow copy)";
+			target.SlotName = source.SlotName;
 			target.ManagedBonesPerVertex = source.ManagedBonesPerVertex;
 			target.ManagedBoneWeights = source.ManagedBoneWeights;
 
@@ -453,12 +493,13 @@ namespace UMA
 				for (int i = 0; i < source.subMeshCount; i++)
 				{
 
-					int sourceLength = source.submeshes[i].triangles.Length;
+					int sourceLength = source.submeshes[i].GetTriangles().Length;
 					int triangleLength = sourceLength - (UMAUtils.GetCardinality(triangleMask[i]) * 3);
-					int[] destTriangles = new int[triangleLength];
+					NativeArray<int> destTriangles = new NativeArray<int>(triangleLength, Allocator.Persistent);
 
-					MaskedCopyIntArrayAdd(source.submeshes[i].triangles, 0, destTriangles, 0, sourceLength, 0, triangleMask[i]);
-					target.submeshes[i].triangles = destTriangles;
+					MaskedCopyIntArrayAdd(source.submeshes[i].GetTriangles(), 0, destTriangles, 0, sourceLength, 0, triangleMask[i]);
+					target.submeshes[i].SetTriangles(null);
+					target.submeshes[i].nativeTriangles = destTriangles;
 				}
 			}
 			else
@@ -598,7 +639,9 @@ namespace UMA
 			dest.x = source.collisionSphereDistance;
 			dest.y = source.maxDistance;
 		}
-
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
 		private static void MergeSortedTransforms(UMATransform[] mergedTransforms, ref int len1, UMATransform[] umaTransforms)
 		{
 			int newBones = 0;
@@ -661,7 +704,7 @@ namespace UMA
 			}
 		}
 
-		private static void AnalyzeBlendShapeSources(CombineInstance[] sources, BlendShapeSettings blendShapeSettings, ref MeshComponents meshComponents, out Dictionary<string, BlendShapeVertexData> blendShapeNames)
+		private static void AnalyzeBlendShapeSources(CombineInstance[] sources, BlendShapeSettings blendShapeSettings, ref MeshComponents meshComponents, out Dictionary<string, BlendShapeVertexData> blendShapeNames, UMAData.UMARecipe recipe)
 		{
 			blendShapeNames = new Dictionary<string, BlendShapeVertexData>();
 
@@ -672,16 +715,17 @@ namespace UMA
 
 			foreach (var source in sources)
 			{
+				// get source blendshapes...
 				//If we find a blendshape on this mesh then lets add it to the blendShapeNames hash to get all the unique names
-				if (source.meshData.blendShapes == null)
+				List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
+
+				if (sourceShapes.Count == 0)
 					continue;
 
-				if (source.meshData.blendShapes.Length == 0)
-					continue;
-
-				for (int shapeIndex = 0; shapeIndex < source.meshData.blendShapes.Length; shapeIndex++)
+				foreach(UMABlendShape ubs in sourceShapes)
+				// for (int shapeIndex = 0; shapeIndex < source.meshData.blendShapes.Length; shapeIndex++)
 				{
-					string shapeName = source.meshData.blendShapes[shapeIndex].shapeName;
+					string shapeName = ubs.shapeName;// source.meshData.blendShapes[shapeIndex].shapeName;
 
 					//if we are baking this blendshape then skip and don't add to the blendshape names.
 					BlendShapeData data;
@@ -700,18 +744,18 @@ namespace UMA
 						blendShapeNames.Add(shapeName, newData);
 					}
 
-					blendShapeNames[shapeName].hasNormals |= source.meshData.blendShapes[shapeIndex].frames[0].HasNormals();
-					blendShapeNames[shapeName].hasTangents |= source.meshData.blendShapes[shapeIndex].frames[0].HasTangents();
+					blendShapeNames[shapeName].hasNormals |= ubs.frames[0].HasNormals();
+					blendShapeNames[shapeName].hasTangents |= ubs.frames[0].HasTangents();
 
-					if (source.meshData.blendShapes[shapeIndex].frames.Length > blendShapeNames[shapeName].frameCount)
+					if (ubs.frames.Length > blendShapeNames[shapeName].frameCount)
 					{
-						blendShapeNames[shapeName].frameCount = source.meshData.blendShapes[shapeIndex].frames.Length;
+						blendShapeNames[shapeName].frameCount = ubs.frames.Length;
 						blendShapeNames[shapeName].frameWeights = new float[blendShapeNames[shapeName].frameCount];
 
 						for (int i = 0; i < blendShapeNames[shapeName].frameCount; i++)
 						{
 							//technically two sources could have different frame weights for the same blendshape, but then thats a problem with the source.
-							blendShapeNames[shapeName].frameWeights[i] = source.meshData.blendShapes[shapeIndex].frames[i].frameWeight;
+							blendShapeNames[shapeName].frameWeights[i] = ubs.frames[i].frameWeight;
 						}
 					}
 				}
@@ -774,8 +818,9 @@ namespace UMA
 				{
 					if (source.targetSubmeshIndices[i] >= 0)
 					{
-						int triangleLength = (source.triangleMask == null) ? source.meshData.submeshes[i].triangles.Length :
-							(source.meshData.submeshes[i].triangles.Length - (UMAUtils.GetCardinality(source.triangleMask[i]) * 3));
+						int subTriangleLen = source.meshData.submeshes[i].GetTriangles().Length;
+						int triangleLength = (source.triangleMask == null) ? subTriangleLen :
+							(subTriangleLen - (UMAUtils.GetCardinality(source.triangleMask[i]) * 3));
 
 						subMeshTriangleLength[source.targetSubmeshIndices[i]] += triangleLength;
 					}
@@ -859,7 +904,7 @@ namespace UMA
 #endif
 		}
 
-		private struct BoneIndexEntry
+		private class BoneIndexEntry
 		{
 			public int index;
 			public List<int> indices;
@@ -889,7 +934,11 @@ namespace UMA
 			}
 		}
 
-		private static bool CompareSkinningMatrices(Matrix4x4 m1, ref Matrix4x4 m2)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+
+        private static bool CompareSkinningMatrices(Matrix4x4 m1, ref Matrix4x4 m2)
 		{
 			if (Mathf.Abs(m1.m00 - m2.m00) > 0.0001) return false;
 			if (Mathf.Abs(m1.m01 - m2.m01) > 0.0001) return false;
@@ -941,7 +990,10 @@ namespace UMA
 			}
 		}
 
-		private static void CopyColorsToColors32(Color[] source, int sourceIndex, Color32[] dest, int destIndex, int count)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void CopyColorsToColors32(Color[] source, int sourceIndex, Color32[] dest, int destIndex, int count)
 		{
 			while (count-- > 0)
 			{
@@ -950,7 +1002,10 @@ namespace UMA
 			}
 		}
 
-		private static void FillArray(Vector4[] array, int index, int count, Vector4 value)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void FillArray(Vector4[] array, int index, int count, Vector4 value)
 		{
 			while (count-- > 0)
 			{
@@ -958,7 +1013,10 @@ namespace UMA
 			}
 		}
 
-		private static void FillArray(Vector3[] array, int index, int count, Vector3 value)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void FillArray(Vector3[] array, int index, int count, Vector3 value)
 		{
 			while (count-- > 0)
 			{
@@ -966,7 +1024,10 @@ namespace UMA
 			}
 		}
 
-		private static void FillArray(Vector2[] array, int index, int count, Vector2 value)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void FillArray(Vector2[] array, int index, int count, Vector2 value)
 		{
 			while (count-- > 0)
 			{
@@ -974,7 +1035,10 @@ namespace UMA
 			}
 		}
 
-		private static void FillArray(Color[] array, int index, int count, Color value)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void FillArray(Color[] array, int index, int count, Color value)
 		{
 			while (count-- > 0)
 			{
@@ -982,7 +1046,10 @@ namespace UMA
 			}
 		}
 
-		private static void FillArray(Color32[] array, int index, int count, Color32 value)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void FillArray(Color32[] array, int index, int count, Color32 value)
 		{
 			while (count-- > 0)
 			{
@@ -990,7 +1057,11 @@ namespace UMA
 			}
 		}
 
-		private static void CopyIntArrayAdd(int[] source, int sourceIndex, int[] dest, int destIndex, int count, int add)
+
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        private static void CopyIntArrayAdd(NativeArray<int> source, int sourceIndex, NativeArray<int> dest, int destIndex, int count, int add)
 		{
 			for (int i = 0; i < count; i++)
 			{
@@ -998,24 +1069,46 @@ namespace UMA
 			}
 		}
 
-		public static void MaskedCopyIntArrayAdd(int[] source, int sourceIndex, int[] dest, int destIndex, int count, int add, BitArray mask)
+#if UMA_BURSTCOMPILE
+		[BurstCompile]
+#endif
+        public static bool MaskedCopyIntArrayAdd(NativeArray<int> source, int sourceIndex, NativeArray<int> dest, int destIndex, int count, int add, BitArray mask)
 		{
-			if ((mask.Count*3) != source.Length || (mask.Count*3) != count)
+			if ((mask.Count*3) != source.Length)
 			{
 				if (Debug.isDebugBuild)
-					Debug.LogError("MaskedCopyIntArrayAdd: mask and source count do not match!");
-				return;
+					Debug.LogError("MaskedCopyIntArrayAdd: mask count  (" + (mask.Count * 3) + ") and source length ("+source.Length+") do not match!");
+				return false;
 			}
-                
+			if ((mask.Count * 3) != count)
+			{
+				if (Debug.isDebugBuild)
+					Debug.LogError("MaskedCopyIntArrayAdd: mask count ("+(mask.Count*3)+") and count "+count+" do not match");
+				return false;
+			}
+
+
 			for (int i = 0; i < count; i+=3)
 			{
 				if (!mask[(i/3)])
 				{
+                    if (destIndex+2 > dest.Length)
+                    {
+                        Debug.Log("destIndex+2 > dest.Length");
+                        return false;
+                    }
+                    if (sourceIndex + 2 > source.Length)
+                    {
+                        Debug.Log("sourceIndex + 2 > source.Length");
+                        return false;
+                    }
+
 					dest[destIndex++] = source[sourceIndex + i + 0] + add;
 					dest[destIndex++] = source[sourceIndex + i + 1] + add;
 					dest[destIndex++] = source[sourceIndex + i + 2] + add;
 				}
 			}
+			return true;
 		}
 
 		private static T[] EnsureArrayLength<T>(T[] oldArray, int newLength)

@@ -5,6 +5,8 @@ using UnityEditor.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using UMA.CharacterSystem;
+using Unity.Collections;
+using static UMA.UMAUtils;
 
 namespace UMA.Editors
 {
@@ -167,8 +169,8 @@ namespace UMA.Editors
 				source.AssetSlotName = newObj.slotName;
 				source.Initialize();
 				UpdateMeshPreview();
-				AssetDatabase.SaveAssets();
 				EditorUtility.SetDirty(target);
+				AssetDatabase.SaveAssets();
 				return true;
 			}
 			return false;
@@ -197,8 +199,11 @@ namespace UMA.Editors
 			_meshPreview.vertices = _meshData.vertices;
 			_meshPreview.subMeshCount = _meshData.subMeshCount;
 
-			for(int i = 0; i < _meshData.subMeshCount; i++)
-				_meshPreview.SetTriangles(_meshData.submeshes[i].triangles, i);
+			for (int i = 0; i < _meshData.subMeshCount; i++)
+			{
+                var tris = _meshData.submeshes[i].getBaseTriangles();
+				_meshPreview.SetIndices(tris, MeshTopology.Triangles, i);
+			}
 
 			ResetPreviewCamera();
 		}
@@ -234,19 +239,21 @@ namespace UMA.Editors
 
 			for (int i = 0; i < sourceData.subMeshCount; i++)
 			{
+				NativeArray<int> subMeshTriangles = sourceData.submeshes[i].GetTriangles();
+
 				List<int> newTriangles = new List<int>();
 				for (int j = 0; j < triangleFlags[i].Count; j++)
 				{
 					if (!triangleFlags[i][j])
 					{
-						newTriangles.Add(sourceData.submeshes[i].triangles[(j*3) + 0]);
-						newTriangles.Add(sourceData.submeshes[i].triangles[(j*3) + 1]);
-						newTriangles.Add(sourceData.submeshes[i].triangles[(j*3) + 2]);
+						newTriangles.Add(subMeshTriangles[(j*3) + 0]);
+						newTriangles.Add(subMeshTriangles[(j*3) + 1]);
+						newTriangles.Add(subMeshTriangles[(j*3) + 2]);
 					}
 				}
 				_meshData.submeshes[i] = new SubMeshTriangles();
-				_meshData.submeshes[i].triangles = new int[newTriangles.Count];
-				newTriangles.CopyTo(_meshData.submeshes[i].triangles);
+				_meshData.submeshes[i].SetTriangles(new int[newTriangles.Count]);
+				//	.triangles = new int[newTriangles.Count];
 			}
 		}
 
@@ -401,8 +408,10 @@ namespace UMA.Editors
 			if (_meshPreview == null)
 				return;
 
-			if( _material == null )
-				_material = AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
+			if (_material == null)
+			{
+				_material = GetDefaultDiffuseMaterial();
+			}
 
 			_drag = Drag2D(_drag, r);
 

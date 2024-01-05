@@ -13,7 +13,7 @@ namespace UMA.CharacterSystem.Editors
 	{		
 		public static bool showHelp = false;
 		public static bool showWardrobe = false;
-		public static bool showEditorCustomization = false;
+		public static bool showEditorCustomization = true;
 		public static bool showPrefinedDNA = false;
 
 		public static int currentcolorfilter=0;
@@ -34,6 +34,7 @@ namespace UMA.CharacterSystem.Editors
 			baseColorNames.Clear();
 			baseColorNames.AddRange(new string[] { "skin","hair","eyes"});
 			thisDCA = target as DynamicCharacterAvatar;
+			/*
 			if (thisDCA.context == null)
 			{
 				thisDCA.context = UMAContextBase.Instance;
@@ -52,7 +53,7 @@ namespace UMA.CharacterSystem.Editors
 				//this will set also the existing Editorcontext if there is one
 				if (thisDCA.context.gameObject.transform.parent.gameObject.name == "UMAEditorContext")
 					thisDCA.CreateEditorContext();
-			}
+			}*/
 			_racePropDrawer.thisDCA = thisDCA;
 			_wardrobePropDrawer.thisDCA = thisDCA;
 			_animatorPropDrawer.thisDCA = thisDCA;
@@ -96,7 +97,8 @@ namespace UMA.CharacterSystem.Editors
 
 		public override void OnInspectorGUI()
 		{
-			serializedObject.Update();
+            thisDCA = target as DynamicCharacterAvatar;
+            serializedObject.Update();
 
 			EditorGUI.BeginChangeCheck();
 			showHelp = EditorGUILayout.Toggle("Show Help", showHelp);
@@ -105,17 +107,46 @@ namespace UMA.CharacterSystem.Editors
 				serializedObject.ApplyModifiedProperties();
 			}
 
+            if (Application.isPlaying)
+            {
+                BeginVerticalPadded();
+                EditorGUILayout.LabelField("Force Regenerate (Playtime)", EditorStyles.boldLabel);
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button("Full Build"))
+                {
+                    thisDCA.BuildCharacter(true);
+                }
+                if (GUILayout.Button("Textures"))
+                {
+                    thisDCA.ForceUpdate(false, true, false);
+                }
+                if (GUILayout.Button("DNA"))
+                {
+                    thisDCA.ForceUpdate(true, false, false);
+                }
+                if (GUILayout.Button("Mesh"))
+                {
+                    thisDCA.ForceUpdate(false, false, true);
+                }
+                EditorGUILayout.EndHorizontal();
+                EndVerticalPadded();
+            }
+
+            EditorGUI.BeginChangeCheck();
 			Editor.DrawPropertiesExcluding(serializedObject, new string[] { "hide","BundleCheck", "loadBlendShapes","activeRace","defaultChangeRaceOptions","cacheCurrentState", "rebuildSkeleton", "preloadWardrobeRecipes", "raceAnimationControllers",
 				/* Editor Only Fields */ "editorTimeGeneration",
 				"characterColors","BoundsOffset","_buildCharacterEnabled","keepAvatar","KeepAnimatorController",
 				/*LoadOtions fields*/ "defaultLoadOptions", "loadPathType", "loadPath", "loadFilename", "loadString", "loadFileOnStart", "waitForBundles", /*"buildAfterLoad",*/
 				/*SaveOptions fields*/ "defaultSaveOptions", "savePathType","savePath", "saveFilename", "makeUniqueFilename","ensureSharedColors", 
-				/*Moved into AdvancedOptions*/"context","umaData","umaRecipe", "umaAdditionalRecipes","umaGenerator", "animationController", "defaultRendererAsset",
+				/*Moved into AdvancedOptions*/"context","umaData","umaRecipe", "umaAdditionalRecipes","umaGenerator", "animationController", "defaultRendererAsset","forceRebindAnimator",
 				/*Moved into CharacterEvents*/"CharacterCreated", "CharacterBegun", "CharacterUpdated", "CharacterDestroyed", "CharacterDnaUpdated", "RecipeUpdated", "AnimatorStateSaved", "AnimatorStateRestored","WardrobeAdded","WardrobeRemoved",
 				/*PlaceholderOptions fields*/"showPlaceholder", "previewModel", "customModel", "customRotation", "previewColor", "AtlasResolutionScale","DelayUnload","predefinedDNA","alwaysRebuildSkeleton", "umaRecipe"});
-
-			//The base DynamicAvatar properties- get these early because changing the race changes someof them
-			SerializedProperty context = serializedObject.FindProperty("context");
+            if (EditorGUI.EndChangeCheck())
+            {
+                serializedObject.ApplyModifiedProperties();
+            }
+             //The base DynamicAvatar properties- get these early because changing the race changes someof them
+            SerializedProperty context = serializedObject.FindProperty("context");
 			SerializedProperty umaData = serializedObject.FindProperty("umaData");
 			SerializedProperty umaGenerator = serializedObject.FindProperty("umaGenerator");
 			SerializedProperty umaRecipe = serializedObject.FindProperty("umaRecipe");
@@ -144,7 +175,7 @@ namespace UMA.CharacterSystem.Editors
                     }
                 }
 
-				if (okToProcess)
+				if (okToProcess && thisDCA.editorTimeGeneration)
 				{
 					thisDCA.ChangeRace((string)thisRaceSetter.FindPropertyRelative("name").stringValue, DynamicCharacterAvatar.ChangeRaceOptions.useDefaults, true);
 					//Changing the race may cause umaRecipe, animationController to change so forcefully update these too
@@ -226,7 +257,53 @@ namespace UMA.CharacterSystem.Editors
 						}
 					}
 				}
+				if (GUILayout.Button("Regen"))
+                {
+					UpdateCharacter();
+                }
 				EditorGUILayout.EndHorizontal();
+				if (EditorApplication.isPlayingOrWillChangePlaymode)
+				{
+					EditorGUILayout.BeginHorizontal();
+					if (GUILayout.Button("Save Avatar Definition"))
+                    {
+						string fileName = EditorUtility.SaveFilePanel("Save Avatar Definition", "", "", "adf");
+						if (!string.IsNullOrEmpty(fileName))
+						{
+							try
+							{
+								AvatarDefinition adf = thisDCA.GetAvatarDefinition(false, false);
+								string charstr = adf.ToCompressedString("|");
+								System.IO.File.WriteAllText(fileName, charstr);
+							}
+							catch (Exception ex)
+							{
+								Debug.LogException(ex);
+								EditorUtility.DisplayDialog("Error", "Error writing avatar definition file: " + ex.Message, "OK");
+							}
+						}
+					}
+					if (GUILayout.Button("Load Avatar Definition"))
+                    {
+						string fileName = EditorUtility.OpenFilePanel("Load Avatar Definition", "", "adf");
+						if (!string.IsNullOrEmpty(fileName))
+						{
+							try
+							{
+								string presetstring = System.IO.File.ReadAllText(fileName);
+								AvatarDefinition adf = AvatarDefinition.FromCompressedString(presetstring, '|');
+								thisDCA.LoadAvatarDefinition(adf);
+								thisDCA.BuildCharacter(false);
+							}
+							catch (Exception ex)
+							{
+								Debug.LogException(ex);
+								EditorUtility.DisplayDialog("Error", "Error writing preset file: " + ex.Message, "OK");
+							}
+						}
+					}
+					EditorGUILayout.EndHorizontal();
+				}
 				EditorGUI.BeginChangeCheck();
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("editorTimeGeneration"));
 				if (EditorGUI.EndChangeCheck())
@@ -254,7 +331,7 @@ namespace UMA.CharacterSystem.Editors
 					{
 						thisDCA.ClearSlots();
 						thisDCA.LoadDefaultWardrobe();
-						thisDCA.BuildCharacter(true);
+						thisDCA.BuildCharacter(false);
 					}
 					else
 					{
@@ -276,7 +353,32 @@ namespace UMA.CharacterSystem.Editors
 				EditorGUI.BeginChangeCheck();
 				if (newCharacterColors.isExpanded)
 				{
-					currentcolorfilter = EditorGUILayout.Popup("Filter Colors", currentcolorfilter, colorfilters);
+                    var charcol = thisDCA.characterColors._colors;
+					int baseColors = 0;
+					foreach(var c in charcol)
+					{
+						if (c != null)
+						{
+							if (c.isBaseColor)
+							{
+								baseColors++;
+							}
+                        }
+					}
+
+					if (baseColors == 0 && charcol.Count > 0 )
+					{
+						foreach(var c in charcol)
+						{
+							if (baseColorNames.Contains(c.name.ToLower()))
+							{
+                                c.isBaseColor = true;
+                                baseColors++;
+                            }
+						}
+					}
+
+                    currentcolorfilter = EditorGUILayout.Popup("Filter Colors", currentcolorfilter, colorfilters);
 
 					n_newArraySize = EditorGUILayout.DelayedIntField(new GUIContent("Size"), n_origArraySize);
 					EditorGUILayout.Space();
@@ -286,7 +388,22 @@ namespace UMA.CharacterSystem.Editors
 						for (int i = 0; i < n_origArraySize; i++)
 						{
 							SerializedProperty currentColor = newCharacterColors.GetArrayElementAtIndex(i);
-							if (currentcolorfilter == 0 && !baseColorNames.Contains(currentColor.displayName.ToLower())) continue;
+							// What a hack. 
+							var col = thisDCA.characterColors._colors[i];
+							if (col == null)
+							{
+								continue;
+							}
+							
+
+							if (currentcolorfilter == 0)
+							{
+								if (!col.isBaseColor)
+								{
+									continue;
+                                }
+							}
+							//&& !baseColorNames.Contains(currentColor.displayName.ToLower())) continue;
 							if (currentcolorfilter == 2 && currentColor.displayName.ToLower().Contains("colordna")) continue;
 							EditorGUILayout.PropertyField(newCharacterColors.GetArrayElementAtIndex(i));
 						}
@@ -602,6 +719,8 @@ namespace UMA.CharacterSystem.Editors
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("BundleCheck"));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("AtlasResolutionScale"));
 				EditorGUILayout.PropertyField(serializedObject.FindProperty("defaultRendererAsset"));
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("rawAvatar"));
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("forceRebindAnimator"));
 
 				if (EditorGUI.EndChangeCheck())
 				{
@@ -667,11 +786,12 @@ namespace UMA.CharacterSystem.Editors
 				serializedObject.ApplyModifiedProperties();
 			}
 
-			if (Application.isPlaying)
+			if (Application.isPlaying || thisDCA.editorTimeGeneration)
 			{
 				showWardrobe = EditorGUILayout.Foldout(showWardrobe, "Current Wardrobe");
 				if (showWardrobe)
 				{
+					string DeleteMe = null;
 
 					EditorGUI.indentLevel++;
 					Dictionary<string, UMATextRecipe> currentWardrobe = thisDCA.WardrobeRecipes;
@@ -683,11 +803,43 @@ namespace UMA.CharacterSystem.Editors
 						EditorGUILayout.LabelField(item.Key, GUILayout.Width(88.0f));
 						EditorGUILayout.TextField(item.Value.DisplayValue + " (" + item.Value.name + ")");
 						EditorGUI.EndDisabledGroup();
-						if (GUILayout.Button("Inspect", EditorStyles.toolbarButton, GUILayout.Width(40)))
+						if (GUILayout.Button("Inspect", EditorStyles.toolbarButton, GUILayout.Width(52)))
 						{
 							InspectorUtlity.InspectTarget(item.Value);
 						}
+						if (GUILayout.Button("X",EditorStyles.toolbarButton,GUILayout.Width(18)))
+                        {
+							DeleteMe = item.Key;
+                        }
 						GUILayout.EndHorizontal();
+					}
+
+					if (!string.IsNullOrEmpty(DeleteMe))
+                    {
+						currentWardrobe.Remove(DeleteMe);
+						thisDCA.BuildCharacter(true);
+                    }
+
+					GUILayout.Space(10);
+					GUILayout.Label("Additive Recipes");
+					GUILayout.Space(10);
+					Dictionary<string,List<UMATextRecipe>> additiveWardrobe = thisDCA.AdditiveRecipes;
+
+					foreach (KeyValuePair<string,List<UMATextRecipe>> additem in additiveWardrobe)
+					{
+						foreach (UMATextRecipe item in additem.Value)
+						{
+							GUILayout.BeginHorizontal();
+							EditorGUI.BeginDisabledGroup(true);
+							EditorGUILayout.LabelField(additem.Key, GUILayout.Width(88.0f));
+							EditorGUILayout.TextField(item.DisplayValue + " (" + item.name + ")");
+							EditorGUI.EndDisabledGroup();
+							if (GUILayout.Button("Inspect", EditorStyles.toolbarButton, GUILayout.Width(52)))
+							{
+								InspectorUtlity.InspectTarget(item);
+							}
+							GUILayout.EndHorizontal();
+						}
 					}
 					EditorGUI.indentLevel--;
 				}
@@ -726,7 +878,10 @@ namespace UMA.CharacterSystem.Editors
 			void GenerateSingleUMA(bool rebuild=false)
 			{
 				if (Application.isPlaying)
+                {
+                    thisDCA.BuildCharacter(rebuild);
 					return;
+                }
 
 				if (thisDCA.editorTimeGeneration == false)
 					return;

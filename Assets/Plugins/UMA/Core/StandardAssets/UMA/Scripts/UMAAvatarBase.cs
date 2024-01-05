@@ -82,6 +82,7 @@ namespace UMA
 			{
 				umaData.umaGenerator = umaGenerator;
 			}
+			
 			if (CharacterCreated != null) umaData.CharacterCreated = CharacterCreated;
 			if (CharacterBegun != null) umaData.CharacterBegun = CharacterBegun;
 			if (CharacterDestroyed != null) umaData.CharacterDestroyed = CharacterDestroyed;
@@ -180,6 +181,7 @@ namespace UMA
 					umaData.skeleton = null;
 				}
 				umaData.SetRenderers(null);
+				umaData.SetRendererAssets(null);
 				umaData.animator = null;
 				umaData.firstBake = true;
 			}

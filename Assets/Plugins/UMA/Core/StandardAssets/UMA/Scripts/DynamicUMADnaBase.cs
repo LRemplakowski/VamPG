@@ -69,7 +69,7 @@ namespace UMA
 			{
 				if (uda != null)
 				{
-					DynamicDNADictionary.Add(uda.name, uda);
+                        DynamicDNADictionary.Add(uda.name, uda);
 				}
 			}
 
@@ -126,6 +126,7 @@ namespace UMA
 		public abstract override void SetValue(int idx, float value);
 
 		public abstract int ImportUMADnaValues(UMADnaBase umaDna);
+
 
 		public virtual void SetDnaTypeHash(int typeHash)
 		{

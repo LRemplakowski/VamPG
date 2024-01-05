@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+
+
 
 namespace UMA
 {
@@ -24,6 +27,7 @@ namespace UMA
         public bool IsAssetBundle;
 		public bool IsAddressable;
 		public bool IsAlwaysLoaded;
+        public bool Ignore; // does not go into adressables or resources.
 		public string AddressableGroup;
 		public string AddressableAddress
         {
@@ -167,6 +171,15 @@ namespace UMA
 #endif
         }
 
+        public static  string TranslatedName(string Name)
+        {
+#if UMA_INDEX_LC
+            return Name.ToLower();
+#else
+            return Name;
+#endif
+        }
+
         public static string GetEvilName(Object o)
         {
             if (!o)
@@ -177,24 +190,28 @@ namespace UMA
             {
                 SlotDataAsset sd = o as SlotDataAsset;
                 if (!string.IsNullOrEmpty(sd.slotName))
-                    return sd.slotName;
+                {
+                    return TranslatedName(sd.slotName);
+                }
             }
             if (o is OverlayDataAsset)
             {
                 OverlayDataAsset od = o as OverlayDataAsset;
                 if (!string.IsNullOrEmpty(od.overlayName))
-                    return od.overlayName;
+                {
+                    return TranslatedName(od.overlayName);
+                }
             }
             if (o is RaceData)
             {
                 RaceData rd = o as RaceData;
                 if (!string.IsNullOrEmpty(rd.raceName))
                 {
-                    return rd.raceName;
+                    return TranslatedName(rd.raceName);
                 }
             }
 
-            return o.name;
+            return TranslatedName(o.name);
         }
 
         public string EvilName
@@ -267,7 +284,7 @@ namespace UMA
             }
         }
 
-        #region Methods (edit time)
+#region Methods (edit time)
 #if UNITY_EDITOR
 
         public string ToString(string SortOrder)
@@ -343,8 +360,8 @@ namespace UMA
         }
 
 #endif
-        #endregion
-        #region Constructors
+#endregion
+#region Constructors
         public AssetItem(System.Type Type, string Name, string Path, Object Item)
         {
             if (Type == null) return;

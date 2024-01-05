@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using UnityEngine.Serialization;
+using System.Collections.Generic;
 
 namespace UMA
 {
@@ -17,7 +19,67 @@ namespace UMA
 
         public enum CompressionSettings { None, Fast, HighQuality };
         public bool translateSRP;
-        public Material material;
+
+        [SerializeField]
+        [FormerlySerializedAs("material")]
+        private Material _material;
+
+        [Serializable]
+        public struct SRPMaterial
+        {
+            public UMAUtils.PipelineType SRP;
+            public Material material;
+        };
+
+        public List<SRPMaterial> srpMaterials = new List<SRPMaterial>();
+        private Dictionary<UMAUtils.PipelineType, Material> _srpMaterialLookup = new Dictionary<UMAUtils.PipelineType, Material>();
+
+        public Material  material
+        {
+            get 
+            {
+                var pipe = UMAUtils.DetectPipeline();   
+                if (_srpMaterialLookup.ContainsKey(pipe))
+                {
+                    return _srpMaterialLookup[pipe];
+                }
+                else
+                {
+                    // NO SrpMaterials in the list, so just return the material
+                    if (srpMaterials.Count == 0)
+                    {
+                        _srpMaterialLookup.Add(pipe, _material);
+                        return _material;
+                    }
+
+                    if (_srpMaterialLookup.Count == 0)
+                    {
+                        foreach (var srpMat in srpMaterials)
+                        {
+                            _srpMaterialLookup.Add(srpMat.SRP, srpMat.material);
+                        }
+                    }
+                    if (_srpMaterialLookup.ContainsKey(pipe))
+                    {
+                        return _srpMaterialLookup[pipe];
+                    }
+                    else
+                    {
+                        // Just stick the default material in there.
+                        _srpMaterialLookup.Add(pipe, _material);
+                        return _material;
+                    }
+                }
+            }
+            set { _material = value; }
+        }
+
+
+
+
+        [Tooltip("Used as a second pass when 'Use Existing Textures' is set. Leave null for most cases.")]
+        public Material secondPass;
+
         public MaterialType materialType = MaterialType.Atlas;
         public MaterialChannel[] channels;
 
@@ -36,11 +98,18 @@ namespace UMA
         public bool MaskWithCurrentColor;
         [Tooltip("The current color is multiplied by this color to determine the masking color when 'MaskWithCurrentColor' is checked.")]
         public Color maskMultiplier = Color.white;
+
+        [Tooltip("Used by addressables when stripping materials")]
+        public string MaterialName;
+        [Tooltip("Used by addressables when stripping materials")]
+        public string ShaderName;
+
         public enum MaterialType
         {
-            Atlas = 1,
+            Atlas = 1, 
             NoAtlas = 2,
-            UseExistingTexture = 4
+            UseExistingMaterial = 4,
+            UseExistingTextures = 8
         }
 
         public enum ChannelType
@@ -91,10 +160,24 @@ namespace UMA
 			UMA.CustomAssetUtility.CreateAsset<UMAMaterial>();
 		}
 #endif
-		/// <summary>
-		/// Is the UMAMaterial based on a procedural material (substance)?
-		/// </summary>
-		public bool IsProcedural()
+
+        private bool isGeneratedTextures
+        {
+            get
+            {
+                return materialType == MaterialType.Atlas || materialType == MaterialType.NoAtlas;
+            }
+        }
+
+        public bool isNoAtlas()
+        {
+            return materialType == MaterialType.Atlas;
+        }
+
+        /// <summary>
+        /// Is the UMAMaterial based on a procedural material (substance)?
+        /// </summary>
+        public bool IsProcedural()
 		{
 			#if (UNITY_STANDALONE || UNITY_IOS || UNITY_ANDROID || UNITY_PS4 || UNITY_XBOXONE) && !UNITY_2017_3_OR_NEWER //supported platforms for procedural materials
 			if ((material != null) && (material is ProceduralMaterial))
@@ -108,8 +191,7 @@ namespace UMA
         {
             get
             {
-                if (channels == null) return true;
-                return channels.Length == 0;
+                return channels == null ? true : channels.Length == 0;
             }
         }
 
@@ -122,44 +204,7 @@ namespace UMA
         /// <returns></returns>
         public bool Equals(UMAMaterial material)
         {
-            if (this.name == material.name)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-            /*
-            if (this.GetInstanceID() == material.GetInstanceID())
-            {
-                return true;
-            }
-            else
-            {
-				if (this.material.name != material.material.name)
-					return false;
-				//if (this.material.shader != material.material.shader)
-				//	return false;
-                if (this.material.renderQueue != material.material.renderQueue)
-                    return false;
-				if (this.materialType != material.materialType)
-					return false;
-				if (this.channels.Length != material.channels.Length)
-					return false;
-				for (int i = 0; i < this.channels.Length; i++)
-				{
-					MaterialChannel thisChannel = this.channels[i];
-					MaterialChannel otherChannel = material.channels[i];
-					if (thisChannel.channelType != otherChannel.channelType)
-						return false;
-					if (thisChannel.materialPropertyName != otherChannel.materialPropertyName)
-						return false;
-				}
-
-				return true;
-            }
-            */
+            return name == material.name;
         }
 
     }

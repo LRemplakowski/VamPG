@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
@@ -9,18 +10,31 @@ namespace UMA.Editors
 	[CanEditMultipleObjects]
 	public class SlotDataAssetInspector : Editor
 	{
-		static string[] RegularSlotFields = new string[] { "slotName", "CharacterBegun", "SlotAtlassed", "DNAApplied", "CharacterCompleted", "_slotDNALegacy","tags","isWildCardSlot","Races"};
-		static string[] WildcardSlotFields = new string[] { "slotName", "CharacterBegun", "SlotAtlassed", "DNAApplied", "CharacterCompleted", "_slotDNALegacy", "tags", "isWildCardSlot", "Races", "_rendererAsset", "maxLOD", "useAtlasOverlay", "overlayScale", "animatedBoneNames", "_slotDNA", "meshData", "subMeshIndex", };
+		static string[] RegularSlotFields = new string[] { "slotName", "CharacterBegun", "SlotAtlassed", "SlotProcessed", "SlotBeginProcessing", "DNAApplied", "CharacterCompleted", "_slotDNALegacy","tags","isWildCardSlot","Races","smooshOffset", "smooshExpand"};
+		static string[] WildcardSlotFields = new string[] { "slotName", "CharacterBegun", "SlotAtlassed", "SlotProcessed", "SlotBeginProcessing", "DNAApplied", "CharacterCompleted", "_slotDNALegacy", "tags", "isWildCardSlot", "Races", "_rendererAsset", "maxLOD", "useAtlasOverlay", "overlayScale", "animatedBoneNames", "_slotDNA", "meshData", "subMeshIndex", };
 		SerializedProperty slotName;
 		SerializedProperty CharacterBegun;
 		SerializedProperty SlotAtlassed;
-		SerializedProperty DNAApplied;
+		SerializedProperty SlotProcessed;
+        SerializedProperty SlotBeginProcessing;
+        SerializedProperty DNAApplied;
 		SerializedProperty CharacterCompleted;
 		SerializedProperty MaxLOD;
+		SerializedProperty isClippingPlane;
+        SerializedProperty smooshOffset;
+        SerializedProperty smooshExpand;
 		SlotDataAsset slot;
+		SlotDataAsset.Welding lastWeld = null;
+        SlotDataAsset WeldToSlot = null;
 
+        bool CopyNormals;
+		bool CopyBoneWeights;
+		bool AverageNormals;
+		private int selectedRaceIndex = -1;
+		private List<RaceData> foundRaces = new List<RaceData>();
+		private List<string> foundRaceNames = new List<string>();
 
-        [MenuItem("Assets/Create/UMA/Core/Custom Slot Asset")]
+		[MenuItem("Assets/Create/UMA/Core/Custom Slot Asset")]
         public static void CreateCustomSlotAssetMenuItem()
         {
         	CustomAssetUtility.CreateAsset<SlotDataAsset>("", true, "Custom");
@@ -33,13 +47,14 @@ namespace UMA.Editors
 			wildcard.isWildCardSlot = true;
 			wildcard.slotName = "WildCard";
 			EditorUtility.SetDirty(wildcard);
-			AssetDatabase.SaveAssets();
+			string path = AssetDatabase.GetAssetPath(wildcard.GetInstanceID());
+			AssetDatabase.ImportAsset(path);
 			EditorUtility.DisplayDialog("UMA", "Wildcard slot created. You should first change the SlotName in the inspector, and then add it to the global library or to a scene library", "OK");
 		}
 
 		private void OnDestroy()
 		{
-			// AssetDatabase.SaveAssets();
+
 		}
 
 		void OnEnable()
@@ -48,9 +63,16 @@ namespace UMA.Editors
 			CharacterBegun = serializedObject.FindProperty("CharacterBegun");
 			SlotAtlassed = serializedObject.FindProperty("SlotAtlassed");
 			DNAApplied = serializedObject.FindProperty("DNAApplied");
+			SlotProcessed = serializedObject.FindProperty("SlotProcessed");
+			SlotBeginProcessing = serializedObject.FindProperty("SlotBeginProcessing");
 			CharacterCompleted = serializedObject.FindProperty("CharacterCompleted");
 			MaxLOD = serializedObject.FindProperty("maxLOD");
+            isClippingPlane = serializedObject.FindProperty("isClippingPlane");	
+            smooshExpand = serializedObject.FindProperty("smooshExpand");
+            smooshOffset = serializedObject.FindProperty("smooshOffset");
 			slot = (target as SlotDataAsset);
+			SetRaceLists();
+
 			InitTagList(slot);
 		}
 
@@ -78,21 +100,106 @@ namespace UMA.Editors
 			};
 		}
 
+		public void SetRaceLists()
+		{
+			UMAContextBase ubc = UMAContext.Instance;
+			if (ubc != null)
+			{
+				RaceData[] raceDataArray = ubc.GetAllRaces();
+				foundRaces.Clear();
+				foundRaceNames.Clear();
+				foundRaces.Add(null);
+				foundRaceNames.Add("None Set");
+				foreach (RaceData race in raceDataArray)
+				{
+					if (race != null && race.raceName != "RaceDataPlaceholder")
+					{
+						foundRaces.Add(race);
+						foundRaceNames.Add(race.raceName);
+					}
+				}
+			}
+		}
+
+		private void UpdateSourceAsset(SlotDataAsset sda)
+		{
+			if (sda != null)
+			{
+				lastWeld = slot.CalculateWelds(sda, CopyNormals, CopyBoneWeights, AverageNormals);
+			}
+		}
+
 		public override void OnInspectorGUI()
         {
+			if (slot == null)
+			{
+				OnEnable();
+			}
+            bool forceUpdate = false;
+			SlotDataAsset targetAsset = target as SlotDataAsset;
 			serializedObject.Update();
 
 			EditorGUI.BeginChangeCheck();
+			GUILayout.BeginHorizontal();
 			EditorGUILayout.DelayedTextField(slotName);
+			if (GUILayout.Button("Use Obj Name",GUILayout.Width(90)))
+            {
+				foreach (var t in targets)
+				{
+					var slotDataAsset = t as SlotDataAsset;
+					slotDataAsset.slotName = slotDataAsset.name;
+					EditorUtility.SetDirty(slotDataAsset);
+					GUI.changed = true;
+				}
+			}
+			GUILayout.EndHorizontal();
 			if ((target as SlotDataAsset).isWildCardSlot)
 			{
 				EditorGUILayout.HelpBox("This is a wildcard slot", MessageType.Info);
 			}
 			 
+			EditorGUILayout.LabelField($"UtilitySlot: " + targetAsset.isUtilitySlot);
+			 
 			if (slot.isWildCardSlot)
 				Editor.DrawPropertiesExcluding(serializedObject, WildcardSlotFields);
 			else
 				Editor.DrawPropertiesExcluding(serializedObject, RegularSlotFields);
+
+            GUILayout.Space(10);
+            GUIHelper.BeginVerticalPadded(10, new Color(0.75f, 0.875f, 1f));
+            EditorGUILayout.HelpBox("Smooshing is a feature that conforms one slot to another using a clipping plane. Smoosh Offset is used to adjust the offset of the conforming vertexes to help assist conforming and fitting. Smoosh Expand expands scales the vertexes. ", MessageType.Info);
+
+            var currentTarget = target as SlotDataAsset;
+
+            forceUpdate = EditorGUI.EndChangeCheck();
+            EditorGUILayout.PropertyField(smooshOffset);
+            EditorGUILayout.PropertyField(smooshExpand);
+
+            //GUILayout.BeginHorizontal();
+            /*GUILayout.Label("Smoosh Offset", GUILayout.Width(100));
+            currentTarget.smooshOffset.x = EditorGUILayout.DelayedFloatField("X", currentTarget.smooshOffset.x, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+            currentTarget.smooshOffset.y = EditorGUILayout.DelayedFloatField("Y", currentTarget.smooshOffset.y, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+            currentTarget.smooshOffset.z = EditorGUILayout.DelayedFloatField("Z", currentTarget.smooshOffset.z, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+           // GUILayout.EndHorizontal();
+           // GUILayout.BeginHorizontal();
+            GUILayout.Label("Smoosh Expand", GUILayout.Width(100));
+            currentTarget.smooshOffset.x = EditorGUILayout.DelayedFloatField("X", currentTarget.smooshOffset.x, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+            currentTarget.smooshOffset.y = EditorGUILayout.DelayedFloatField("Y", currentTarget.smooshOffset.y, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+            currentTarget.smooshOffset.z = EditorGUILayout.DelayedFloatField("Z", currentTarget.smooshOffset.z, GUILayout.Width(50),GUILayout.ExpandWidth(false));
+            //GUILayout.EndHorizontal(); */
+            if (GUILayout.Button("Save and Test Smoosh"))
+            {
+                UMAUpdateProcessor.UpdateSlot(target as SlotDataAsset, false);
+                EditorUtility.SetDirty(target);
+                AssetDatabase.SaveAssetIfDirty(target);
+                string path = AssetDatabase.GetAssetPath(target.GetInstanceID());
+                AssetDatabase.ImportAsset(path);
+                forceUpdate = true;
+            }
+            EditorGUI.BeginChangeCheck();
+           // EditorGUILayout.PropertyField(smooshOffset);
+            //EditorGUILayout.PropertyField(smooshExpand);
+            GUIHelper.EndVerticalPadded(10);
 			GUILayout.Space(10);
 			slot.tagList.DoLayoutList();
 
@@ -104,7 +211,9 @@ namespace UMA.Editors
 				if (!slot.isWildCardSlot)
 				{
 					EditorGUILayout.PropertyField(SlotAtlassed);
-					EditorGUILayout.PropertyField(DNAApplied); 
+					EditorGUILayout.PropertyField(DNAApplied);
+                    EditorGUILayout.PropertyField(SlotBeginProcessing);
+                    EditorGUILayout.PropertyField(SlotProcessed);
 				}
 				EditorGUILayout.PropertyField(CharacterCompleted);
 			}
@@ -128,7 +237,7 @@ namespace UMA.Editors
 				}
 			}
 
-			if (!(target as SlotDataAsset).isWildCardSlot)
+			if (!slot.isWildCardSlot)
 			{
 				GUILayout.Space(20);
 				Rect updateDropArea = GUILayoutUtility.GetRect(0.0f, 50.0f, GUILayout.ExpandWidth(true));
@@ -142,13 +251,87 @@ namespace UMA.Editors
 				GUILayout.Space(10);
 				AnimatedBoneDropAreaGUI(boneDropArea);
 			}
+
 			serializedObject.ApplyModifiedProperties();
-			if (EditorGUI.EndChangeCheck())
+
+            #region WELDS
+
+
+			selectedRaceIndex = EditorGUILayout.Popup("Select Base Slot by Race", selectedRaceIndex, foundRaceNames.ToArray());
+			if (selectedRaceIndex <= 0)
+			{
+				EditorGUILayout.HelpBox("Select a slot by race quickly, or use manual selection below", MessageType.Info);
+			}
+			else
+			{ 
+				UMAData.UMARecipe baseRecipe = new UMAData.UMARecipe();
+				foundRaces[selectedRaceIndex].baseRaceRecipe.Load(baseRecipe, UMAContextBase.Instance);
+
+				foreach (SlotData sd in baseRecipe.slotDataList)
+				{
+					if (sd != null && sd.asset != null)
+					{
+						if (GUILayout.Button(string.Format("{0} ({1})", sd.asset.name, sd.slotName)))
+						{
+							// UpdateSourceAsset(sd.asset);
+							WeldToSlot = sd.asset;
+						}
+					}
+				}
+			}
+
+			GUILayout.Space(12);
+
+
+
+			WeldToSlot = EditorGUILayout.ObjectField("Drop slot here to create weld",WeldToSlot, typeof(SlotDataAsset),false) as SlotDataAsset;
+
+
+			CopyBoneWeights = EditorGUILayout.Toggle("Copy Boneweights", CopyBoneWeights);
+			CopyNormals = EditorGUILayout.Toggle("Copy Normals", CopyNormals);
+			AverageNormals = EditorGUILayout.Toggle("Average Normals", AverageNormals);
+			GUILayout.Box("Warning! averaging normals will update both slots!",GUILayout.ExpandWidth(true));
+
+			if (WeldToSlot == null)
+			{
+				EditorGUI.BeginDisabledGroup(true);
+			}
+			if (GUILayout.Button("Perform Weld"))
+			{
+                lastWeld = slot.CalculateWelds(WeldToSlot, CopyNormals, CopyBoneWeights,AverageNormals);
+                forceUpdate = true;
+            }
+            if (WeldToSlot == null)
+            {
+				EditorGUI.EndDisabledGroup();
+            }
+
+			int lastWeldCount = 0;
+			int lastWeldMismatch = 0;
+			if (lastWeld != null) 
+			{
+				lastWeldCount = lastWeld.WeldPoints.Count;
+				lastWeldMismatch = lastWeld.MisMatchCount;
+			}
+
+            if (lastWeld != null)
+            {
+            GUILayout.Label($"Last Weld: {lastWeldCount} points, {lastWeld.MisMatchCount} mismatches", GUILayout.ExpandWidth(true));
+            }
+            else
+            {
+                GUILayout.Label($"Last Weld: None", GUILayout.ExpandWidth(true));
+            }
+            #endregion
+
+            if (EditorGUI.EndChangeCheck() || forceUpdate)
 			{
 				EditorUtility.SetDirty(target);
-				AssetDatabase.SaveAssets();
-				UMAUpdateProcessor.UpdateSlot(target as SlotDataAsset);
-			}
+				AssetDatabase.SaveAssetIfDirty(target);
+				string path = AssetDatabase.GetAssetPath(target.GetInstanceID());
+				AssetDatabase.ImportAsset(path);
+				UMAUpdateProcessor.UpdateSlot(target as SlotDataAsset, false);
+			}	
         }
 
         private void AnimatedBoneDropAreaGUI(Rect dropArea)
@@ -158,26 +341,25 @@ namespace UMA.Editors
                 AddAnimatedBone(obj.name);
         }
 
-        private void UpdateSlotDropAreaGUI(Rect dropArea)
-        {
-            GameObject obj = DropAreaGUI(dropArea);
-            if (obj != null)
-            {
-                SkinnedMeshRenderer skinnedMesh = obj.GetComponent<SkinnedMeshRenderer>();
-                if (skinnedMesh != null)
-                {
-                    Debug.Log("Updating SlotDataAsset with SkinnedMeshRenderer...");
-                    UpdateSlotData(skinnedMesh);
+		private void UpdateSlotDropAreaGUI(Rect dropArea)
+		{
+			GameObject obj = DropAreaGUI(dropArea);
+			if (obj != null)
+			{
+				SkinnedMeshRenderer skinnedMesh = obj.GetComponent<SkinnedMeshRenderer>();
+				if (skinnedMesh != null)
+				{
+					UpdateSlotData(slot.normalReferenceMesh, skinnedMesh);
 					GUI.changed = true;
-                    Debug.Log("Update Complete!");
-                }
-                else
-                    EditorUtility.DisplayDialog("Error", "No skinned mesh renderer found!", "Ok");
-            }
-                
-        }
+					EditorUtility.DisplayDialog("Complete", "Update completed","OK");
+				}
+				else
+					EditorUtility.DisplayDialog("Error", "No skinned mesh renderer found!", "Ok");
+			}
 
-        private GameObject DropAreaGUI(Rect dropArea)
+		}
+
+		private GameObject DropAreaGUI(Rect dropArea)
 		{
 			var evt = Event.current;
 
@@ -210,7 +392,6 @@ namespace UMA.Editors
 			}
             return null;
 		}
-
 		private void AddAnimatedBone(string animatedBone)
 		{
 			var hash = UMASkeleton.StringToHash(animatedBone);
@@ -225,17 +406,17 @@ namespace UMA.Editors
 				}
 			}			
 		}
+		private void UpdateSlotData(SkinnedMeshRenderer seamsMesh, SkinnedMeshRenderer skinnedMesh)
+		{
+			SlotDataAsset slot = target as SlotDataAsset;
 
-        private void UpdateSlotData(SkinnedMeshRenderer skinnedMesh)
-        {
-            SlotDataAsset slot = target as SlotDataAsset;
+			string existingRootBone = slot.meshData.RootBoneName;
 
-            string existingRootBone = slot.meshData.RootBoneName;
-
-            UMASlotProcessingUtil.UpdateSlotData(slot, skinnedMesh, slot.material, null, existingRootBone,true);
-			AssetDatabase.SaveAssets();
+			UMASlotProcessingUtil.UpdateSlotData(slot, skinnedMesh, slot.material, seamsMesh, existingRootBone, true);
+			string path = AssetDatabase.GetAssetPath(target.GetInstanceID());
+			AssetDatabase.ImportAsset(path);
 			UMAUpdateProcessor.UpdateSlot(slot);
-        }
+		}
     }
 }
 #endif

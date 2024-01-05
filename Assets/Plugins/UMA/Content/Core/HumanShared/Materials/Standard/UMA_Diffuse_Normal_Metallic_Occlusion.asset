@@ -18,7 +18,7 @@ MonoBehaviour:
   channels:
   - channelType: 4
     textureFormat: 0
-    materialPropertyName: _BaseColorMap
+    materialPropertyName: _MainTex
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 1
     textureFormat: 0
-    materialPropertyName: _NormalMap
+    materialPropertyName: _BumpMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -34,13 +34,21 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 0
     textureFormat: 0
-    materialPropertyName: _MaskMap
+    materialPropertyName: _MetallicGlossMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
     ConvertRenderTexture: 0
     NonShaderTexture: 0
-  MipMapBias: 0.13
+  - channelType: 0
+    textureFormat: 0
+    materialPropertyName: _OcclusionMap
+    sourceTextureName: 
+    Compression: 0
+    DownSample: 0
+    ConvertRenderTexture: 0
+    NonShaderTexture: 0
+  MipMapBias: 0
   AnisoLevel: 1
   MatFilterMode: 1
   Compression: 0

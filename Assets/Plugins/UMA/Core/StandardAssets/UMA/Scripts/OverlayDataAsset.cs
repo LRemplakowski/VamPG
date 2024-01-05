@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.Rendering;
 
 namespace UMA
 {
@@ -27,11 +28,28 @@ namespace UMA
 			Normal = 0,
 			Cutout = 1,
 		}
+
+		public enum OverlayBlend
+		{
+			Normal = 0,
+			Multiply = BlendOp.Multiply,
+			Overlay = BlendOp.Overlay,
+			Screen = BlendOp.Screen,
+			Darken = BlendOp.Darken,
+			Lighten = BlendOp.Lighten,
+			ColorDodge = BlendOp.ColorDodge,
+			ColorBurn = BlendOp.ColorBurn,
+			SoftLight = BlendOp.SoftLight,
+			HardLight = BlendOp.HardLight,
+			Subtract = BlendOp.Subtract
+		}
+
 		/// <summary>
 		/// How should this overlay be processed.
 		/// </summary>
 		[Tooltip("Normal or Cutout overlay type. This determines whether or not to use a cutout shader during the texture merging process.")]
 		public OverlayType overlayType;
+
 		/// <summary>
 		/// Destination rectangle for drawing overlay textures.
 		/// </summary>
@@ -47,12 +65,16 @@ namespace UMA
 		/// Array of textures required for the overlay material.
 		/// </summary>
 		[Tooltip("Array of textures required for the overlay material.")]
-		public Texture[] textureList = new Texture[0];
-		/// <summary>
-		/// Use this to identify what kind of overlay this is and what it fits
-		/// Eg. BaseMeshSkin, BaseMeshOverlays, GenericPlateArmor01
-		/// </summary>
-		[Tooltip("Use this to identify what kind of overlay this is and what it fits.")]
+		public Texture[] textureList = new Texture[1];
+
+        [Tooltip("Overlay Blend Mode. Not used on the base overlay. Similar to standard blend modes on paint apps. Use the alpha channel ")]
+        public OverlayBlend[] overlayBlend = new OverlayBlend[1];
+
+        /// <summary>
+        /// Use this to identify what kind of overlay this is and what it fits
+        /// Eg. BaseMeshSkin, BaseMeshOverlays, GenericPlateArmor01
+        /// </summary>
+        [Tooltip("Use this to identify what kind of overlay this is and what it fits.")]
 		public string[] tags;
 
 		/// <summary>
@@ -90,6 +112,23 @@ namespace UMA
 				if (textureList == null)
 					return 0;	
 				return textureList.Length;
+			}
+		}
+
+		public OverlayBlend GetBlend(int channel)
+		{
+			if (channel >= overlayBlend.Length)
+			{
+				return OverlayBlend.Normal;
+			}
+			return overlayBlend[channel];
+		}
+
+		public void ValidateBlendList()
+		{
+			if (overlayBlend.Length != textureList.Length)
+			{
+				overlayBlend = new OverlayBlend[textureList.Length];
 			}
 		}
 

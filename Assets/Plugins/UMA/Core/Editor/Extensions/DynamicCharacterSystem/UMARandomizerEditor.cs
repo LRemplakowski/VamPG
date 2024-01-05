@@ -142,7 +142,8 @@ namespace UMA.Editors
 					{
 						rws.Colors.Remove(delme);
 						EditorUtility.SetDirty(this.target);
-						AssetDatabase.SaveAssets();
+						string path = AssetDatabase.GetAssetPath(target.GetInstanceID());
+						AssetDatabase.ImportAsset(path);
 					}
 				}
 				else
@@ -155,7 +156,11 @@ namespace UMA.Editors
 
 		public void RandomAvatarGUI(RandomAvatar ra)
 		{
-			bool del = false;
+            if (ra.raceData == null)
+			{
+                ra.raceData = UMAAssetIndexer.Instance.GetAsset<RaceData>(ra.RaceName);
+            }
+            bool del = false;
 			GUIHelper.FoldoutBar(ref ra.GuiFoldout, ra.RaceName, out del);
 			if (ra.GuiFoldout)
 			{
@@ -278,7 +283,8 @@ namespace UMA.Editors
 			if (GUI.changed)
 			{
 				EditorUtility.SetDirty(currentTarget);
-				AssetDatabase.SaveAssets();
+				string path = AssetDatabase.GetAssetPath(currentTarget.GetInstanceID());
+				AssetDatabase.ImportAsset(path);
 			}
 		}
 
@@ -350,7 +356,8 @@ namespace UMA.Editors
 			if (ChangeCount > 0)
 			{
 				EditorUtility.SetDirty(currentTarget);
-				AssetDatabase.SaveAssets();
+				string path = AssetDatabase.GetAssetPath(currentTarget.GetInstanceID());
+				AssetDatabase.ImportAsset(path);
 			}
 		}
 

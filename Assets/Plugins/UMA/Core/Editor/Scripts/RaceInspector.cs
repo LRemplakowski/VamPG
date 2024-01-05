@@ -56,7 +56,8 @@ namespace UMA.Editors
 				doSave = false;
 				lastActionTime = Time.realtimeSinceStartup;
 				EditorUtility.SetDirty(race);
-				AssetDatabase.SaveAssets();
+				string path = AssetDatabase.GetAssetPath(race.GetInstanceID());
+				AssetDatabase.ImportAsset(path);
 				UMAUpdateProcessor.UpdateRace(race);
 			}
 		}
@@ -348,7 +349,7 @@ namespace UMA.Editors
 					//editing a race will require a context too because we need to get the base recipes and their slots
 					if (UMAContextBase.Instance == null)
 					{
-						EditorUMAContextBase = UMAContextBase.CreateEditorContext();
+						// EditorUMAContextBase = UMAContextBase.CreateEditorContext();
 					}
 					UMAData.UMARecipe thisBaseRecipe = (baseRaceRecipe.objectReferenceValue as UMARecipeBase).GetCachedRecipe(UMAContextBase.Instance);
 					SlotData[] thisBaseSlots = thisBaseRecipe.GetAllSlots();

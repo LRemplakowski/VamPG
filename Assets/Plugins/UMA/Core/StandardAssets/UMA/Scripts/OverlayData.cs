@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using static UMA.OverlayDataAsset;
 
 namespace UMA
 {
@@ -20,10 +21,18 @@ namespace UMA
 		/// </summary>
 		public Rect rect;
 
-		#if (UNITY_STANDALONE || UNITY_IOS || UNITY_ANDROID || UNITY_PS4 || UNITY_XBOXONE) && !UNITY_2017_3_OR_NEWER //supported platforms for procedural materials
+		public bool Tiling; // Only works for composite materials. 
+
+        public bool Supressed = false;
+
+#if UNITY_EDITOR
+		public Vector2 editorReferenceTextureSize = Vector2.zero;
+#endif
+
+#if (UNITY_STANDALONE || UNITY_IOS || UNITY_ANDROID || UNITY_PS4 || UNITY_XBOXONE) && !UNITY_2017_3_OR_NEWER //supported platforms for procedural materials
         //https://docs.unity3d.com/Manual/ProceduralMaterials.html
 		protected ProceduralTexture[] generatedTextures = null;
-        #endif
+#endif
 
 		const string proceduralSizeProperty = "$outputsize";
 
@@ -92,6 +101,112 @@ namespace UMA
 				return asset.textureList;
 			}
 		}
+
+		private OverlayBlend[] blendOverrides;
+
+		public Vector4 GetUV()
+		{
+			Vector4 uv = new Vector4(0,0, 1, 1);
+
+			if (rect.width == 0 || rect.height == 0)
+			{
+				return uv;
+			}
+			else if (rect.width > 1.0f)
+			{
+				if (asset.textureList.Length > 0 && asset.textureList[0] != null)
+				{
+                    uv.x = rect.x / asset.textureList[0].width;
+					uv.y = rect.y / asset.textureList[0].height;
+                    uv.z = rect.width / asset.textureList[0].width;
+                    uv.w = rect.height / asset.textureList[0].height;
+                }
+            }
+			else
+			{
+				uv = new Vector4(rect.x, rect.y, rect.width, rect.height);
+			}
+			return uv;
+		}
+
+		public OverlayBlend[] textureBlendArray
+		{
+			get
+			{
+				if (blendOverrides != null)
+				{
+					return blendOverrides;
+				}
+				return asset.overlayBlend;
+			}
+		}
+
+		public void SetOverlayBlendsLength(int count)
+		{
+			blendOverrides = new OverlayBlend[count];
+		}
+
+		public int GetOverlayBlendsLength()
+		{
+            if (blendOverrides != null)
+			{
+                return blendOverrides.Length;
+            }
+            return asset.overlayBlend.Length;
+        }
+
+		/// <summary>
+		/// Have to be careful, because we can be merging recipes that have mismatched texture lists
+		/// </summary>
+		/// <param name="ChannelNumber"></param>
+		/// <param name="overlayBlend"></param>
+        public void SetOverlayBlend(int ChannelNumber, OverlayBlend overlayBlend)
+        {
+            if (asset.textureList == null) return;
+            if (ChannelNumber >= asset.textureList.Length) return;
+
+            if (blendOverrides == null || blendOverrides.Length != asset.textureList.Length)
+            {
+                blendOverrides = new OverlayBlend[asset.textureList.Length];
+                for (int i = 0; i < blendOverrides.Length; i++)
+                {
+                    blendOverrides[i] = asset.GetBlend(i);
+                }
+            }
+
+			if (ChannelNumber < blendOverrides.Length)
+			{
+				blendOverrides[ChannelNumber] = overlayBlend;
+			}
+        }
+
+        public OverlayBlend GetOverlayBlend(int ChannelNumber)
+		{
+			if (blendOverrides != null)
+			{
+				if (ChannelNumber >= blendOverrides.Length)
+				{
+					return OverlayBlend.Normal;
+				}	
+				return blendOverrides[ChannelNumber];
+			}
+
+			if (ChannelNumber >= asset.overlayBlend.Length)
+			{
+				return OverlayBlend.Normal;
+			}
+			return asset.overlayBlend[ChannelNumber];
+		}
+
+		public Texture GetTexture(int ChannelNumber)
+        {
+			if (ChannelNumber < asset.textureList.Length)
+            {
+				return asset.textureList[ChannelNumber];
+            }
+			return null;
+        }
+
 		public int pixelCount
 		{
 			get
@@ -163,6 +278,14 @@ namespace UMA
 			res.Scale = Scale;
 			if (colorData != null)
 				res.colorData = colorData.Duplicate();
+			if (blendOverrides != null)
+			{
+                res.blendOverrides = new OverlayBlend[blendOverrides.Length];
+                for (int i = 0; i < blendOverrides.Length; i++)
+				{
+					res.blendOverrides[i] = blendOverrides[i];
+                }
+            }
 			return res;
 		}
 

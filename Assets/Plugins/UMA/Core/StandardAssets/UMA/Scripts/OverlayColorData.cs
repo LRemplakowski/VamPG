@@ -24,21 +24,63 @@ namespace UMA
 		public UMAMaterialPropertyBlock PropertyBlock; // may be null.
 #if UNITY_EDITOR
 		public bool foldout;
+		public bool showAdvanced;
+		public bool isBaseColor = false;
 #endif
 		public Color color
 		{
 			get
 			{
 				if (channelMask.Length < 1)
-					return Color.white;
-				return channelMask[0];
+                {
+                    return Color.white;
+                }
+
+                return channelMask[0];
 			}
 			set
 			{
 				if (channelMask.Length > 0)
-					channelMask[0] = value;
-			}
+                {
+                    channelMask[0] = value;
+                }
+            }
 		}
+
+		public Color Add
+        {
+			get
+            {
+				if (channelAdditiveMask.Length < 1)
+                {
+                    return EmptyAdditive;
+                }
+
+                return channelAdditiveMask[0];
+            }
+        }
+
+
+		public Color GetTint(int channel)
+		{
+			if (channel < channelMask.Length)
+            {
+                return channelMask[channel];
+            }
+
+            return Color.white;
+		}
+
+		public Color GetAdditive(int channel)
+        {
+			if (channel < channelAdditiveMask.Length)
+            {
+                return channelAdditiveMask[channel];
+            }
+
+            return EmptyAdditive;
+		}
+
 		public int channelCount { get { return channelMask.Length; } }
 		public bool isDefault(int Channel)
 		{
@@ -85,7 +127,11 @@ namespace UMA
 		{
 			var res = new OverlayColorData();
 			res.name = name;
- 
+#if UNITY_EDITOR
+			res.foldout = foldout;
+			res.isBaseColor = isBaseColor;
+#endif
+
 			res.channelMask = new Color[channelMask.Length];
 			for (int i = 0; i < channelMask.Length; i++)
 			{
@@ -121,8 +167,12 @@ namespace UMA
       {
          get
          {
-            if (HasName() && name != UNSHARED) return true;
-            return false;
+            if (HasName() && name != UNSHARED)
+                {
+                    return true;
+                }
+
+                return false;
          }
       }
 
@@ -154,8 +204,12 @@ namespace UMA
         {
 			get
             {
-				if (PropertyBlock == null) return false;
-				return PropertyBlock.shaderProperties.Count > 0;
+				if (PropertyBlock == null)
+                {
+                    return false;
+                }
+
+                return PropertyBlock.shaderProperties.Count > 0;
             }
         }
 
@@ -231,19 +285,26 @@ namespace UMA
 			{
 				if (cd2)
 				{
-					if (cd2.channelMask.Length != cd1.channelMask.Length) return false;
-						
-					for (int i = 0; i < cd1.channelMask.Length; i++)
+					if (cd2.channelMask.Length != cd1.channelMask.Length)
+                    {
+                        return false;
+                    }
+
+                    for (int i = 0; i < cd1.channelMask.Length; i++)
 					{
 						if (DifferentColor(cd1.channelMask[i], cd2.channelMask[i]))
-							return false;
-					}
+                        {
+                            return false;
+                        }
+                    }
 
 					for (int i = 0; i < cd1.channelAdditiveMask.Length; i++)
 					{
 						if (DifferentColor(cd1.channelAdditiveMask[i], cd2.channelAdditiveMask[i]))
-							return false;
-					}
+                        {
+                            return false;
+                        }
+                    }
 					return true;
 				}
 				return false;
@@ -257,17 +318,25 @@ namespace UMA
 			{
 				if (cd2)
 				{
-					if (cd2.channelMask.Length != cd1.channelMask.Length) return true;
-					for (int i = 0; i < cd1.channelMask.Length; i++)
+					if (cd2.channelMask.Length != cd1.channelMask.Length)
+                    {
+                        return true;
+                    }
+
+                    for (int i = 0; i < cd1.channelMask.Length; i++)
 					{
 						if (DifferentColor(cd1.channelMask[i], cd2.channelMask[i]))
-							return true;
-					}
+                        {
+                            return true;
+                        }
+                    }
 					for (int i = 0; i < cd1.channelAdditiveMask.Length; i++)
 					{
 						if (DifferentColor(cd1.channelAdditiveMask[i], cd2.channelAdditiveMask[i]))
-							return true;
-					}
+                        {
+                            return true;
+                        }
+                    }
 					
 					return false;
 				}
@@ -344,7 +413,11 @@ namespace UMA
 			for (int i = 0; i < channelAdditiveMask.Length; i++)
 			{
 				dest.channelAdditiveMask[i] = channelAdditiveMask[i];
-			}			
+			}
+
+#if UNITY_EDITOR
+            dest.isBaseColor = isBaseColor;
+#endif
 		}
 		public void AssignFrom(OverlayColorData src)
 		{
@@ -373,6 +446,9 @@ namespace UMA
 					PropertyBlock.shaderProperties.Add(up.Clone());
 				}
 			}
-		}
-	}
+#if UNITY_EDITOR
+			isBaseColor = src.isBaseColor;
+#endif
+        }
+    }
 }

@@ -56,10 +56,11 @@ namespace UMA.Editors
 		public string errmsg = "";
 		public List<string> Tags = new List<string>();
 		public bool showTags;
-		public bool nameAfterMaterial=true;
+		public bool nameAfterMaterial=false;
 		public List<BoneName> KeepBones = new List<BoneName>();
 		private ReorderableList boneList;
 		private bool boneListInitialized;
+		public string BoneStripper;
 
 		string GetAssetFolder()
 		{
@@ -115,10 +116,12 @@ namespace UMA.Editors
 		private void InitBoneList()
 		{
 			boneList = new ReorderableList(KeepBones,typeof(BoneName), true, true, true, true);
-			boneList.drawHeaderCallback = (Rect rect) => {
+            boneList.drawHeaderCallback = (Rect rect) =>
+            {
 				EditorGUI.LabelField(rect, "Keep Bones Containing");
 			};
-			boneList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) => {
+            boneList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
+            {
 				rect.y += 2;
 				KeepBones[index].strValue = EditorGUI.TextField(new Rect(rect.x + 10, rect.y, rect.width - 10, EditorGUIUtility.singleLineHeight), KeepBones[index].strValue);
 			};
@@ -153,6 +156,7 @@ namespace UMA.Editors
 			addToGlobalLibrary = EditorGUILayout.Toggle("Add To Global Library", addToGlobalLibrary);
 			EditorGUILayout.EndHorizontal();
 			calcTangents = EditorGUILayout.Toggle("Calculate Tangents", calcTangents);
+			BoneStripper = EditorGUILayout.TextField("Strip from Bones:", BoneStripper);
 			boneList.DoLayoutList();
 			GUIHelper.EndVerticalPadded(10);
 			DoDragDrop();
@@ -318,12 +322,18 @@ namespace UMA.Editors
 
         private SlotDataAsset CreateSlot()
 		{
-			if(slotName == null || slotName == ""){
+            if (slotName == null || slotName == "")
+            {
 				Debug.LogError("slotName must be specified.");
 				return null;
 			}
 
 			SlotDataAsset sd = CreateSlot_Internal();
+            if (sd == null)
+            {
+                return null;
+            }
+
 			UMAUpdateProcessor.UpdateSlot(sd);
 			return sd;
 		}
@@ -358,7 +368,7 @@ namespace UMA.Editors
 			
 			if (material == null)
 			{
-				Debug.LogWarning("No UMAMaterial specified, you need to specify that later.");
+				Debug.LogError("No UMAMaterial specified! You must specify an UMAMaterial to build a slot.");
 				return null;
 			}
 
@@ -379,8 +389,20 @@ namespace UMA.Editors
             {
 				KeepList.Add(b.strValue);
             }
-
-			SlotDataAsset slot = UMASlotProcessingUtil.CreateSlotData(AssetDatabase.GetAssetPath(slotFolder), GetAssetFolder(), GetAssetName(),GetSlotName(slotMesh),nameAfterMaterial, slotMesh, material, normalReferenceMesh,KeepList, RootBone, binarySerialization,calcTangents);
+			if (!string.IsNullOrEmpty(BoneStripper))
+			{
+				int stripCount = 0;
+				foreach (Transform t in slotMesh.bones)
+				{
+					if (t.name.Contains(BoneStripper))
+					{
+						t.name = t.name.Replace(BoneStripper, "");
+						stripCount++;
+					}
+				}
+				Debug.Log("Stripped " + stripCount + " Bones");
+			}
+			SlotDataAsset slot = UMASlotProcessingUtil.CreateSlotData(AssetDatabase.GetAssetPath(slotFolder), GetAssetFolder(), GetAssetName(),GetSlotName(slotMesh),nameAfterMaterial, slotMesh, material, normalReferenceMesh,KeepList, RootBone, binarySerialization,calcTangents,BoneStripper);
 			slot.tags = Tags.ToArray();
 			return slot;
 		}

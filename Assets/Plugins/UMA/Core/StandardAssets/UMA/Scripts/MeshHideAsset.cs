@@ -42,7 +42,7 @@ namespace UMA
 				}
             }
         } 
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private SlotDataAsset _asset;
 
 		public bool HasReference
@@ -67,7 +67,7 @@ namespace UMA
                 _assetSlotName = value;
             }
         }
-        [SerializeField, HideInInspector]
+        [SerializeField]
         private string _assetSlotName = "";
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace UMA
             _triangleFlags = new BitArray[slot.meshData.subMeshCount];
             for (int i = 0; i < slot.meshData.subMeshCount; i++)
             {
-                _triangleFlags[i] = new BitArray(slot.meshData.submeshes[i].triangles.Length / 3);
+                _triangleFlags[i] = new BitArray(slot.meshData.submeshes[i].GetTriangles().Length / 3);
             }
         }
 
@@ -349,12 +349,21 @@ namespace UMA
                 final[i] = new BitArray(flags[0][i]);
             }
 
+            BitArray[] baseSubmeshFlags = flags[0];
+
             for (int i = 1; i < flags.Count; i++)
-            {
-                for (int j = 0; j < flags[i].Length; j++)
+            {              
+                BitArray[] SubmeshFlags = flags[i];
+
+                for (int j = 0; j < SubmeshFlags.Length; j++)
                 {
-                    if (flags[i][j].Count == flags[0][j].Count)
-                        final[j].Or(flags[i][j]);
+                    if (j < baseSubmeshFlags.Length)
+                    {
+                        if (SubmeshFlags[j] != null && baseSubmeshFlags[j] != null && SubmeshFlags[j].Count == baseSubmeshFlags[j].Count)
+                        {
+                            final[j].Or(SubmeshFlags[j]);
+                        }
+                    }
                 }
             }
 

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -59,11 +59,33 @@ namespace UMA
 
 		public void AddDNA(string Name, float Value)
 		{
+            foreach(DnaValue value in PreloadValues)
+            {
+                if (value.Name.Equals(Name))
+                {
+                    value.Value = Value;
+                    return; 
+                }
+            }
+            // If not found, add new one
 			PreloadValues.Add(new DnaValue(Name, Value));
 		}
 		public void Clear()
         {
 			PreloadValues.Clear();
+        }
+
+        public float GetValue(string Name)
+        {
+            if (ContainsName(Name))
+            {
+                foreach(DnaValue value in PreloadValues)
+                {
+                    if (value.Name == Name)
+                        return value.Value;
+                }
+            }
+            return 0;
         }
 
 		public UMAPredefinedDNA Clone()

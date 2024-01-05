@@ -27,6 +27,7 @@ namespace UMA.PoseTools
 		private int neckHash = 0;
 		private int headHash = 0;
 
+		private bool standAlone = false;
 		private bool initialized = false;
 		[System.NonSerialized]
 		public int SlotUpdateVsCharacterUpdate;
@@ -43,6 +44,9 @@ namespace UMA.PoseTools
 		public float mutualGazeRange = 0.10f;
 		public float MinSaccadeDelay = 0.25f;
 		public float MaxSaccadeMagnitude = 15f;
+		public float minSaccade = -0.6f;
+		public float maxSaccade = 0.6f;
+		public bool allowUpDownSaccades = false;
 
 		public Animator animator;
 		private float[] LastValues;
@@ -89,6 +93,12 @@ namespace UMA.PoseTools
 						umaData.CharacterBegun.AddListener(CharacterBegun);
 						umaData.CharacterUpdated.AddListener(UmaData_OnCharacterUpdated);
 					}
+					else
+                    {
+						standAlone = true;
+						animator = gameObject.GetComponentInChildren<Animator>();
+						SetupBones();
+					}
 				}
 			}
 
@@ -118,6 +128,7 @@ namespace UMA.PoseTools
 
 				if (umaData.animator != null)
 				{
+					animator = umaData.animator;
 					jaw = animator.GetBoneTransform(HumanBodyBones.Jaw);
 					if (jaw != null)
 						jawHash = UMAUtils.StringToHash(jaw.name);
@@ -175,10 +186,13 @@ namespace UMA.PoseTools
 
         void Update()
 		{
-			if (!initialized || umaData == null)
+			if (standAlone != true)
 			{
-				Initialize();
-				return;
+				if (!initialized || umaData == null)
+				{
+					Initialize();
+					return;
+				}
 			}
 
 			if (!processing)
@@ -186,6 +200,8 @@ namespace UMA.PoseTools
 
 			if (_mainCameraTransform != null && useDisableDistance && (_mainCameraTransform.position - transform.position).sqrMagnitude > (disableDistance * disableDistance))
 				return;
+
+			if (umaData == null || umaData.skeleton == null || umaData.skeleton.boneHashData.Count == 0) return;
 
 			// Fix for animation systems which require consistent values frame to frame
 			Quaternion headRotation = Quaternion.identity;
@@ -201,7 +217,8 @@ namespace UMA.PoseTools
 			}
 
 			// Need to reset bones here if we want Mecanim animation
-			expressionSet.RestoreBones(umaData.skeleton, logResetErrors);
+			if (expressionSet != null)
+				expressionSet.RestoreBones(umaData.skeleton, logResetErrors);
 
 			if (!overrideMecanimNeck && neckHash != 0)
 				umaData.skeleton.SetRotation(neckHash, neckRotation);
@@ -221,36 +238,62 @@ namespace UMA.PoseTools
 		void LateUpdate()
 		{
 			if (!processing)
+            {
 				return;
+            }
 
 			if (!initialized)
+            {
 				return;
+            }
 
 			if (umaData == null || umaData.skeleton == null)
+            {
 				return;
+            }
 
 			if (_mainCameraTransform != null && useDisableDistance && (_mainCameraTransform.position - transform.position).sqrMagnitude > (disableDistance * disableDistance))
+            {
 				return;
+            }
 
 			if (enableSaccades)
+            {
 				UpdateSaccades();
+            }
 
 			if (enableBlinking)
+            {
 				UpdateBlinking();
+            }
 
 			float[] values = Values;
 
 			MecanimJoint mecanimMask = MecanimJoint.None;
 			if (!overrideMecanimNeck)
+            {
 				mecanimMask |= MecanimJoint.Neck;
+            }
+
 			if (!overrideMecanimHead)
+            {
 				mecanimMask |= MecanimJoint.Head;
+            }
+
 			if (!overrideMecanimJaw)
+            {
 				mecanimMask |= MecanimJoint.Jaw;
+            }
+
 			if (!overrideMecanimEyes)
+            {
 				mecanimMask |= MecanimJoint.Eye;
+            }
+
 			if (!overrideMecanimHands)
+            {
 				mecanimMask |= MecanimJoint.Hands;
+            }
 
 			if (overrideMecanimJaw)
 			{
@@ -356,19 +399,35 @@ namespace UMA.PoseTools
 				float timeProgress = Time.deltaTime / saccadeDuration;
 				float progressRate = 1.5f - 3f * Mathf.Pow(saccadeProgress - 0.5f, 2);
 				saccadeProgress += timeProgress * progressRate;
-
+				ClampSaccades();
 				leftEyeIn_Out = Mathf.Lerp(saccadeTargetPrev.x, saccadeTarget.x, saccadeProgress);
-				leftEyeUp_Down = Mathf.Lerp(saccadeTargetPrev.y, saccadeTarget.y, saccadeProgress);
 				rightEyeIn_Out = Mathf.Lerp(-saccadeTargetPrev.x, -saccadeTarget.x, saccadeProgress);
-				rightEyeUp_Down = Mathf.Lerp(saccadeTargetPrev.y, saccadeTarget.y, saccadeProgress);
-			} else
+				if (allowUpDownSaccades)
+				{
+					leftEyeUp_Down = Mathf.Lerp(saccadeTargetPrev.y, saccadeTarget.y, saccadeProgress);
+					rightEyeUp_Down = Mathf.Lerp(saccadeTargetPrev.y, saccadeTarget.y, saccadeProgress);
+				}
+			}
+			else
 			{
+				ClampSaccades();
 				leftEyeIn_Out = saccadeTarget.x;
-				leftEyeUp_Down = saccadeTarget.y;
 				rightEyeIn_Out = -saccadeTarget.x;
-				rightEyeUp_Down = saccadeTarget.y;
+				if (allowUpDownSaccades)
+                {
+					rightEyeUp_Down = saccadeTarget.y;
+					leftEyeUp_Down = saccadeTarget.y;
+				}
 			}
 		}
+
+		private void ClampSaccades()
+        {
+			if (saccadeTarget.x > maxSaccade)
+				saccadeTarget.x = maxSaccade;
+			if (saccadeTarget.x < minSaccade)
+				saccadeTarget.x = minSaccade;
+        }
 
 		protected void UpdateBlinking()
 		{

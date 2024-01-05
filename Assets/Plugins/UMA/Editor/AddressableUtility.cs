@@ -5,7 +5,6 @@ using UnityEditor;
 #if !UMA_NOASMDEF
 using UnityEditor.AddressableAssets.Settings;
 using UnityEditor.AddressableAssets.Settings.GroupSchemas;
-using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace UMA
@@ -92,6 +91,7 @@ namespace UMA
 
             foreach (var group in AddressableSettings.groups)
             {
+                if (group == null) continue;
                 if (group.HasSchema<PlayerDataGroupSchema>())
                     continue;
 

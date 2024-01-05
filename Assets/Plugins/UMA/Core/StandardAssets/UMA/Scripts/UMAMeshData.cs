@@ -1,6 +1,6 @@
 #if !UNITY_STANDALONE
 #undef USE_UNSAFE_CODE
-#endif 
+#endif
 
 using System;
 using System.Collections.Generic;
@@ -10,16 +10,45 @@ using UnityEngine.Profiling;
 using Unity.Collections;
 using UnityEngine.Serialization;
 using System.Text;
+using System.Runtime.InteropServices;
+using UnityEngine.Rendering;
 
 namespace UMA
 {
 	[Serializable]
-	/// <summary>
-	/// UMA version of Unity mesh triangle data.
-	/// </summary>
-	public struct SubMeshTriangles
+    /// <summary>
+    /// UMA version of Unity mesh triangle data.
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct SubMeshTriangles
 	{
-		public int[] triangles;
+		[SerializeField]
+		private int[] triangles;
+
+		public int[] getBaseTriangles()
+		{
+			return triangles;
+		}
+
+		public void SetTriangles(int[] tris)
+		{
+			triangles = tris;
+			if (nativeTriangles.IsCreated)
+			{
+				nativeTriangles.Dispose();
+			}
+		}
+
+		public NativeArray<int> nativeTriangles;
+
+		public NativeArray<int> GetTriangles()
+        {
+			if (nativeTriangles.IsCreated == false)
+		    {
+				nativeTriangles = new NativeArray<int>(triangles,Allocator.Persistent);
+            }
+			return nativeTriangles;
+		}
 	}
 
 	/// <summary>
@@ -86,7 +115,8 @@ namespace UMA
 	/// This is only used for compatibility in UMA 2.11
 	/// </summary>
 	[Serializable]
-	public struct UMABoneWeight
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct UMABoneWeight
 	{
 		public int boneIndex0;
 		public int boneIndex1;
@@ -149,8 +179,18 @@ namespace UMA
 		public static bool isAllZero(Vector3[] deltas)
 		{
 			if (deltas == null)
-				return true;
+            {
+                return true;
+            }
 
+            if (deltas.Length > 0)
+            {
+                return false;
+            }
+
+#if !ASSUME_EXPORTERS_KNOW_WHAT_THEY_ARE_DOING
+            return true;
+#else
 			for(int i = 0; i < deltas.Length; i++)
 			{
 				if (deltas[i].sqrMagnitude > 0.0001f)
@@ -158,11 +198,13 @@ namespace UMA
 			}
 
 			return true;
+#endif
 		}
 	}
 
 	[Serializable]
-	public class UMABlendShape
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public class UMABlendShape
 	{
 		public string shapeName;
 		public UMABlendFrame[] frames;
@@ -172,6 +214,7 @@ namespace UMA
 	/// UMA version of Unity mesh data.
 	/// </summary>
 	[Serializable]
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public class UMAMeshData
 	{
 		public Matrix4x4[] bindPoses;
@@ -217,14 +260,16 @@ namespace UMA
 
 		// Static shared data to reduce garbage
 		// See: http://feedback.unity3d.com/suggestions/allow-mesh-data-to-have-a-length
-		private static UMAMeshData bufferLockOwner = null;
-		private static bool buffersInitialized = false;
-		private static bool haveBackingArrays = false;
+//private static UMAMeshData bufferLockOwner = null;
+//private static bool buffersInitialized = false;
+//private static bool haveBackingArrays = false;
 #if UMA_32BITBUFFERS
 		const int MAX_VERTEX_COUNT = 262144;
 #else
 		const int MAX_VERTEX_COUNT = 65534;
 #endif
+
+#if NO_BAD_BUFFERS
 		static List<Vector3> gVertices = new List<Vector3>(MAX_VERTEX_COUNT);
 		static Vector3[] gVerticesArray;
 		static List<Vector3> gNormals = new List<Vector3>(MAX_VERTEX_COUNT);
@@ -241,7 +286,7 @@ namespace UMA
 		static Vector2[] gUV4Array;
 		static List<Color32> gColors32 = new List<Color32>(MAX_VERTEX_COUNT);
 		static Color32[] gColors32Array;
-
+#endif
 		/*
 		const int UNUSED_SUBMESH = -1;
 		static List<int>[] gSubmeshTris = {
@@ -273,6 +318,7 @@ namespace UMA
 #if USE_UNSAFE_CODE
 		static BoneWeight[] gBoneWeightsArray = new BoneWeight[MAX_VERTEX_COUNT];
 #endif
+#if NO_BAD_BUFFERS
 
 		/// <summary>
 		/// Does this UMAMeshData own the shared buffers?
@@ -351,16 +397,62 @@ namespace UMA
 				Debug.LogWarning("Unable to claim UMAMeshData global buffers!");
 			return false;
 		}
+#endif
+
+		public static Dictionary<int, NativeArray<int>> SubmeshBuffers = new Dictionary<int, NativeArray<int>>();
+
+
+		static UMAMeshData()
+		{
+			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
+		}
+
+        private static void CurrentDomain_DomainUnload(object sender, EventArgs e)
+        {
+			CleanupGlobalBuffers();
+        }
+
+        public static void CleanupGlobalBuffers()
+        {
+			foreach (var d in SubmeshBuffers.Values)
+			{
+				if (d.IsCreated)
+				{
+					d.Dispose();
+				}
+			}
+			SubmeshBuffers = new Dictionary<int, NativeArray<int>>();
+        }
 
 		/// <summary>
 		/// Get an array for submesh triangle data.
 		/// </summary>
 		/// <returns>Either a shared or allocated int array for submesh triangles.</returns>
-		public int[] GetSubmeshBuffer(int size, int submeshIndex)
+		public NativeArray<int> GetSubmeshBuffer(int size, int submeshIndex)
 		{
-			return new int[size];
+			if (size < 1)
+            {
+				throw new Exception("Submesh has 0 size!!! Submesh: " + submeshIndex);
+            }
+			if (!SubmeshBuffers.ContainsKey(submeshIndex))
+            {
+				var n = new NativeArray<int>(size,Allocator.Persistent);
+				SubmeshBuffers.Add(submeshIndex, n);
+            }
+			if (SubmeshBuffers[submeshIndex].Length < size)
+            {
+				if (SubmeshBuffers[submeshIndex].IsCreated)
+				{
+					SubmeshBuffers[submeshIndex].Dispose();
+				}
+				SubmeshBuffers[submeshIndex] = new NativeArray<int>(size, Allocator.Persistent);
+			}
+
+			return SubmeshBuffers[submeshIndex].GetSubArray(0, size);
+			//return new int[size];
 		}
 
+#if NO_BAD_BUFFERS
 		/// <summary>
 		/// Releases the static buffers.
 		/// </summary>
@@ -396,7 +488,7 @@ namespace UMA
 			}
 			FreeBoneWeights();
 		}
-
+#endif
 		public void PrepareVertexBuffers(int size)
 		{
 			vertexCount = size;
@@ -460,12 +552,13 @@ namespace UMA
 			submeshes = new SubMeshTriangles[subMeshCount];
 			for (int i = 0; i < subMeshCount; i++)
 			{
-				submeshes[i].triangles = sharedMesh.GetTriangles(i);
+				submeshes[i].SetTriangles(sharedMesh.GetTriangles(i));
 			}
-
-			//Create the blendshape data on the slot asset from the unity mesh
-#region Blendshape
-			blendShapes = new UMABlendShape[sharedMesh.blendShapeCount];
+            //SubMeshDescriptor subMeshDescriptor = new SubMeshDescriptor(0, submeshes[i].GetTriangles().Length, MeshTopology.Triangles);
+            //mesh.SetSubMesh(i, subMeshDescriptor);
+            //Create the blendshape data on the slot asset from the unity mesh
+            #region Blendshape
+            blendShapes = new UMABlendShape[sharedMesh.blendShapeCount];
 
 			Vector3[] deltaVertices;
 			Vector3[] deltaNormals;
@@ -520,8 +613,10 @@ namespace UMA
 			clothSkinning = cloth.coefficients;
 			clothSkinningSerialized = new Vector2[clothSkinning.Length];
 			for (int i = 0; i < clothSkinning.Length; i++)
-				SkinnedMeshCombiner.ConvertData(ref clothSkinning[i], ref clothSkinningSerialized[i]);
-		}
+            {
+                SkinnedMeshCombiner.ConvertData(ref clothSkinning[i], ref clothSkinningSerialized[i]);
+            }
+        }
 
 		/// <summary>
 		/// Validates the skinned transform hierarchy.
@@ -530,11 +625,28 @@ namespace UMA
 		/// <param name="bones">Transforms.</param>
 		public void UpdateBones(Transform rootBone, Transform[] bones)
 		{
+			Transform lastBone = null;
 			rootBone = FindRoot(rootBone, bones);
 			
 			var requiredBones = new Dictionary<Transform, UMATransform>();
 			foreach (var bone in bones)
 			{
+				if (bone == null)    
+                {
+					if (Debug.isDebugBuild)
+                    {
+						if (lastBone != null)
+                        {
+							Debug.Log("Bone is null updating skinned mesh. Last good bone is " + lastBone.name);
+                        }
+						else
+                        {
+							Debug.Log("Bone is null updating skinned mesh. Last good bone is null");
+						}
+					}
+					continue;
+                }
+				lastBone = bone;
 				if (requiredBones.ContainsKey(bone)) continue;
 				var boneIterator = bone.parent;
 				var boneIteratorChild = bone;
@@ -564,13 +676,19 @@ namespace UMA
 
 		private static Transform RecursiveFindBone(Transform bone, string raceRoot)
 		{
-			if (bone.name == raceRoot) return bone;
-			for (int i = 0; i < bone.childCount; i++)
+			if (bone.name == raceRoot)
+            {
+                return bone;
+            }
+
+            for (int i = 0; i < bone.childCount; i++)
 			{
 				var result = RecursiveFindBone(bone.GetChild(i), raceRoot);
 				if (result != null)
-					return result;
-			}
+                {
+                    return result;
+                }
+            }
 			return null;
 		}
 
@@ -599,13 +717,16 @@ namespace UMA
 		/// </summary>
 		/// <param name="renderer">Target renderer.</param>
 		/// <param name="skeleton">Skeleton.</param>
-		public void ApplyDataToUnityMesh(SkinnedMeshRenderer renderer, UMASkeleton skeleton)
+		public void ApplyDataToUnityMesh(SkinnedMeshRenderer renderer, UMASkeleton skeleton, UMAData.UMARecipe recipe)
 		{
 			if (renderer == null)
 			{
 				if (Debug.isDebugBuild)
-					Debug.LogError("Renderer is null!");
-				return;
+                {
+                    Debug.LogError("Renderer is null!");
+                }
+
+                return;
 			}
 
 			CreateTransforms(skeleton);
@@ -619,26 +740,32 @@ namespace UMA
 			if (UnityEditor.PrefabUtility.IsAddedComponentOverride(renderer))
 			{
 				if (Debug.isDebugBuild)
-					Debug.LogError("Cannot apply changes to prefab!");
-			}
+                {
+                    Debug.LogError("Cannot apply changes to prefab!");
+                }
+            }
 			if (mesh != null)
 			{
 				if (UnityEditor.AssetDatabase.IsSubAsset(mesh))
 				{
 					if (Debug.isDebugBuild)
-						Debug.LogError("Cannot apply changes to asset mesh!");
-				}
+                    {
+                        Debug.LogError("Cannot apply changes to asset mesh!");
+                    }
+                }
 			}
 #endif
 			mesh.subMeshCount = 1;
 			mesh.triangles = new int[0];
 
+#if NO_BAD_BUFFERS
 			if (OwnSharedBuffers())
 			{
 				ApplySharedBuffers(mesh);
 			}
 			else
 			{
+#endif
 				NativeArray<Vector3> verts = new NativeArray<Vector3>(vertices, Allocator.Temp);
 				mesh.SetVertices(verts);
 #if false
@@ -652,35 +779,47 @@ namespace UMA
 				mesh.uv3 = uv3;
 				mesh.uv4 = uv4;
 				mesh.colors32 = colors32;
-			}
+#if NO_BAD_BUFFERS
+		}
+#endif
 			mesh.bindposes = bindPoses;
 
+#if true
 			var subMeshCount = submeshes.Length;
 			mesh.subMeshCount = subMeshCount;
+			var Descriptors = new SubMeshDescriptor[subMeshCount];
 			for (int i = 0; i < subMeshCount; i++)
 			{
-				/*
-				bool sharedBuffer = false;
-				for (int j = 0; j < gSubmeshTris.Length; j++)
-				{
-					if (gSubmeshTriIndices[j] == i)
-					{
-						sharedBuffer = true;
-#if VALIDATE_TRIANGLES
-#else
-#endif
-						mesh.SetTriangles(gSubmeshTris[j], i);
-						gSubmeshTriIndices[j] = UNUSED_SUBMESH;
-						break;
-					}
-				}
-
-				if (!sharedBuffer)*/
-				mesh.SetTriangles(submeshes[i].triangles, i);
+                mesh.SetIndices(submeshes[i].GetTriangles(),MeshTopology.Triangles,i);
 			}
+#else
+			// TODO: Gather all the triangles and vertexes here into a native arrays and then set them all at once.
+			int[] triangles = new int[0];
+
+            mesh.Clear();
+
+            mesh.SetVertexBufferParams(vertices.Length, GetVertexLayout());
+            mesh.SetVertexBufferData(vertices, 0, 0, vertexCount);
+
+            mesh.SetIndexBufferParams(indexCount, IndexFormat.UInt32);
+            mesh.SetIndexBufferData(meshData.Indices.AsArray(), 0, 0, indexCount);
+            mesh.SetIndexBufferData(triangles,0,0, triangles.Length, MeshUpdateFlags.DontValidateIndices);
+			mesh.SetIndexBufferParams(triangles.Length, UnityEngine.Rendering.IndexFormat.UInt32);
+
+            var subMeshCount = submeshes.Length;
+            mesh.subMeshCount = subMeshCount;
+            var Descriptors = new SubMeshDescriptor[subMeshCount];
+            for (int i = 0; i < subMeshCount; i++)
+            {
+                Descriptors[i] = new SubMeshDescriptor(0, submeshes[i].GetTriangles().Length, MeshTopology.Triangles);
+            }
+            mesh.SetSubMeshes(Descriptors, 0, subMeshCount,MeshUpdateFlags.DontValidateIndices);
+#endif            
+			//SubMeshDescriptor subMeshDescriptor = new SubMeshDescriptor(0, submeshes[i].GetTriangles().Length, MeshTopology.Triangles);
+			//mesh.SetSubMesh(i, subMeshDescriptor);
 
 			//Apply the blendshape data from the slot asset back to the combined UMA unity mesh.
-#region Blendshape
+			#region Blendshape
 			mesh.ClearBlendShapes();
 			if (blendShapes != null && blendShapes.Length > 0)
 			{
@@ -743,6 +882,22 @@ namespace UMA
 			}
 		}
 
+        private VertexAttributeDescriptor[] GetVertexLayout()
+        {
+			List<VertexAttributeDescriptor> list = new List<VertexAttributeDescriptor>();
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.Position, VertexAttributeFormat.Float32, 4, stream: 0));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.Normal, VertexAttributeFormat.Float32, 4, stream: 1));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.Tangent, VertexAttributeFormat.Float32, 4, stream: 2));
+		//	list.Add(new VertexAttributeDescriptor(VertexAttribute.Color, VertexAttributeFormat.Float32, 4, stream: 3));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 4, stream: 4));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.TexCoord1, VertexAttributeFormat.Float32, 4, stream: 5));
+		//	list.Add(new VertexAttributeDescriptor(VertexAttribute.TexCoord2, VertexAttributeFormat.Float32, 4, stream: 6));
+		//	list.Add(new VertexAttributeDescriptor(VertexAttribute.TexCoord3, VertexAttributeFormat.Float32, 4, stream: 7));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.BlendWeight, VertexAttributeFormat.Float32, 4, stream: 8));
+			list.Add(new VertexAttributeDescriptor(VertexAttribute.BlendIndices, VertexAttributeFormat.Float32, 4, stream: 9));
+			return list.ToArray();
+        }
+
         private void SetBoneWeightsFromMeshData(Mesh mesh)
         {
 #if USE_NATIVE_ARRAYS
@@ -757,17 +912,44 @@ namespace UMA
                 // until the end of the frame. 
 				if (ManagedBonesPerVertex == null || ManagedBonesPerVertex.Length < 1 || ManagedBoneWeights == null || ManagedBoneWeights.Length < 1)
                 {
-					Debug.LogError("Error! Boneweights and BonesPerVertex is invalid. The slot must be regenerated.");
+					Debug.LogError("Error! Boneweights and BonesPerVertex is invalid. The slot must be regenerated. ("+this.SlotName+")");
 					return;
                 }
                 var unityBonesPerVertex = new NativeArray<byte>(ManagedBonesPerVertex, Allocator.Persistent);
                 var unityBoneWeights = new NativeArray<BoneWeight1>(ManagedBoneWeights, Allocator.Persistent);
-                mesh.SetBoneWeights(unityBonesPerVertex, unityBoneWeights);
+#if validateBoneWeights
+				string theSlot = this.SlotName;
+				if (mesh.vertexCount == 0)
+                {
+					Debug.LogError("Mesh has no vertexes setting bone weights!");
+                }
+				if (mesh.vertexCount != ManagedBonesPerVertex.Length)
+				{
+					Debug.LogError("Error validating ManagedBonesPerVertex - count and vertex count do not match!");
+				}
+
+				for(int i=0;i<ManagedBonesPerVertex.Length;i++)
+                {
+					if (ManagedBonesPerVertex[i] == 0)
+                    {
+						Debug.LogError("Boneweights are invalid - " + i + " has no weights!");
+						break;
+                    }
+                }
+
+				if (mesh.vertexCount != ManagedBonesPerVertex.Length)
+				{
+					Debug.LogError("Error validating ManagedBonesPerVertex - count and vertex count do not match!");
+				}
+
+
+#endif
+				mesh.SetBoneWeights(unityBonesPerVertex, unityBoneWeights);
                 unityBonesPerVertex.Dispose();
                 unityBoneWeights.Dispose();
             }
 #endif
-        }
+			}
 
         private void ValidateNativeBuffers()
         {
@@ -805,6 +987,29 @@ namespace UMA
 #endif
         }
 
+		public Mesh ToUnityMesh()
+        {
+			Mesh mesh = new Mesh();
+			mesh.vertices = vertices;
+			mesh.normals = normals;
+			mesh.tangents = tangents;
+			mesh.uv = uv;
+			mesh.uv2 = uv2;
+			mesh.uv3 = uv3;
+			mesh.uv4 = uv4;
+			mesh.colors32 = colors32;
+			mesh.bindposes = bindPoses;
+
+			var subMeshCount = submeshes.Length;
+			mesh.subMeshCount = subMeshCount;
+			for (int i = 0; i < subMeshCount; i++)
+			{
+                int[] tris = submeshes[i].getBaseTriangles();
+                mesh.SetTriangles(tris, i);
+			}
+			return mesh;
+		}
+
         /// <summary>
         /// Applies the data to a Unity mesh.
         /// </summary>
@@ -831,7 +1036,8 @@ namespace UMA
 			mesh.subMeshCount = subMeshCount;
 			for (int i = 0; i < subMeshCount; i++)
 			{
-				mesh.SetTriangles(submeshes[i].triangles, i);
+				//mesh.SetTriangles(submeshes[i].triangles, i);
+				mesh.SetIndices(submeshes[i].GetTriangles(), MeshTopology.Triangles, i);
 			}
 
 			renderer.bones = bones;
@@ -919,6 +1125,14 @@ namespace UMA
 
 		public void FreeBoneWeights()
         {
+			foreach(var sm in submeshes)
+            {
+				if (sm.nativeTriangles.IsCreated)
+                {
+                    sm.nativeTriangles.Dispose();
+                }
+            }
+
 #if USE_NATIVE_ARRAYS
 			if (LoadedBoneweights)
 			{
@@ -940,6 +1154,7 @@ namespace UMA
 			skeleton.EnsureBoneHierarchy();
 		}
 
+#if NO_BAD_BUFFERS
 		private void ApplySharedBuffers(Mesh mesh)
 		{
 			// Thanks for providing these awesome List<> methods rather than listening
@@ -986,7 +1201,7 @@ namespace UMA
 			}
 
 		}
-
+#endif
 		private void ComputeBoneNameHashes(Transform[] bones)
 		{
 			boneNameHashes = new int[bones.Length];
@@ -1049,6 +1264,49 @@ namespace UMA
 			umaBones = newList.ToArray();
 		}
 
+
+		public UMAMeshData ShallowCopy(Vector3[] ReplacementVerts)
+		{
+			UMAMeshData newMeshData = new UMAMeshData();
+
+			newMeshData.SlotName = SlotName;
+
+			if (ReplacementVerts != null)
+			{
+				newMeshData.vertices = ReplacementVerts;
+			}
+			else
+			{
+				newMeshData.vertices = vertices;
+			}
+
+			newMeshData.ManagedBonesPerVertex = ManagedBonesPerVertex;
+			newMeshData.ManagedBoneWeights = ManagedBoneWeights;
+			newMeshData.bindPoses = bindPoses;
+			newMeshData.normals = normals;
+			newMeshData.tangents = tangents;
+			newMeshData.colors32 = colors32;
+			newMeshData.uv = uv;
+			newMeshData.uv2 = uv2;
+			newMeshData.uv3 = uv3;
+			newMeshData.uv4 = uv4;
+			newMeshData.blendShapes = blendShapes;
+			newMeshData.clothSkinning = clothSkinning;
+			newMeshData.clothSkinningSerialized = clothSkinningSerialized;
+			newMeshData.submeshes = submeshes;
+			newMeshData.bones = bones;
+			newMeshData.rootBone = rootBone;
+			newMeshData.umaBones = umaBones;
+			newMeshData.umaBoneCount = umaBoneCount;
+			newMeshData.rootBoneHash = rootBoneHash;
+			newMeshData.boneNameHashes = boneNameHashes;
+			newMeshData.subMeshCount = subMeshCount;
+			newMeshData.vertexCount = vertexCount;
+			newMeshData.RootBoneName = RootBoneName;
+
+			return newMeshData;
+		}
+
 		/// <summary>
 		/// Creates a deep copy of an UMAMeshData object.
 		/// </summary>
@@ -1057,6 +1315,7 @@ namespace UMA
 		{
 			UMAMeshData newMeshData = new UMAMeshData();
 
+			newMeshData.SlotName = SlotName; 
 			if (ManagedBonesPerVertex != null)
             {
 				newMeshData.ManagedBonesPerVertex = new byte[ManagedBonesPerVertex.Length];
@@ -1245,7 +1504,7 @@ namespace UMA
 					for (int i = 0; i < submeshes.Length; i++)
 					{
 						SubMeshTriangles smt = submeshes[i];
-						foreach(int tri in smt.triangles)
+						foreach(int tri in smt.GetTriangles())
                         {
 							if (tri >= vertexCount)
                             {

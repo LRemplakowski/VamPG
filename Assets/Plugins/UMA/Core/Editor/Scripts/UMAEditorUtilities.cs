@@ -25,6 +25,7 @@ namespace UMA
 		private const string umaLocation = "RelativeUMA";
 		private const string DefineSymbol_32BitBuffers = "UMA_32BITBUFFERS";
 		private const string DefineSymbol_Addressables = "UMA_ADDRESSABLES";
+		private const string DefineSymbol_BurstCompile = "UMA_BURSTCOMPILE";
 		//private const string DefineSymbol_AsmDef = "UMA_ASMDEF";
 		public const string ConfigToggle_LeanMeanSceneFiles = "UMA_CLEANUP_GENERATED_DATA_ON_SAVE";
 		public const string ConfigToggle_UseSharedGroup = "UMA_ADDRESSABLES_USE_SHARED_GROUP";
@@ -35,6 +36,7 @@ namespace UMA
 		public const string ConfigToggle_IncludeOther = "UMA_SHAREDGROUP_INCLUDEOTHERINDEXED";
 		public const string ConfigToggle_StripUmaMaterials = "UMA_SHAREDGROUP_STRIPUMAMATERIALS";
 		public const string ConfigToggle_PostProcessAllAssets = "UMA_POSTPROCESS_ALL_ASSETS";
+		public const string ConfigToggle_IndexAutoRepair = "UMA_INDEX_AUTOREPAIR";
 		private static string DNALocation = "UMA/";
 
         static UMAEditorUtilities()
@@ -133,6 +135,7 @@ namespace UMA
 
 			ConfigToggle(ConfigToggle_PostProcessAllAssets, "Postprocess All Assets", "When assets in unity are moved, this will fix their paths in the index. This can be very slow.", false);
 			ConfigToggle(ConfigToggle_LeanMeanSceneFiles, "Clean/Regen on Save", "When using edit-time UMA's the geometry is stored in scene files. Enabling this cleans them up before saving, and regenerates after saving, making your scene files squeaky clean.", true);
+			ConfigToggle(ConfigToggle_IndexAutoRepair, "Auto Repair Index", "When enabled, the index will be repaired automatically when items are not found. This can be slow, so it is recommended to only enable this if you have a team of artists checking in work simultaneously.", false);
 
 			EditorGUI.BeginChangeCheck();
 			EditorGUILayout.Space();
@@ -147,7 +150,7 @@ namespace UMA
 
 			var defineSymbols = new HashSet<string>(PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup).Split(';'));
 
-
+			DefineSymbolToggle(defineSymbols, DefineSymbol_BurstCompile, "Use Burst Compile", "This activates the burst compiler for UMA.");
 			DefineSymbolToggle(defineSymbols, DefineSymbol_32BitBuffers, "Use 32bit buffers", "This allows meshes bigger than 64k vertices");
 			DefineSymbolToggle(defineSymbols, DefineSymbol_Addressables, "Use Addressables", "This activates the code that loads from asset bundles using addressables.");
 
@@ -218,7 +221,13 @@ namespace UMA
 			}
 			GUILayout.Label("Note: If you include recipes or other items, you will need to manually load them using LoadLabelList!", EditorStyles.miniLabel);
 			ConfigToggle(ConfigToggle_StripUmaMaterials, "Strip UMAMaterials", "In some versions of Unity, using an SRP can cause each bundle to include the compiled shaders. This will stop that from happening.", false);
-			ConfigToggle(ConfigToggle_IncludeRecipes, "Include Recipes", "Include recipes in shared group generation", false);
+			ConfigToggle(ConfigToggle_IncludeRecipes, "Include Recipes", "Include recipes in shared group generation",
+#if UMA_ALWAYS_INCLUDE_RECIPES //VES added
+				true
+#else
+				false
+#endif
+			);
 			ConfigToggle(ConfigToggle_IncludeOther, "Include all other types", "Include all other types in index in shared group generation", false);
 
 			GUI.enabled = true;
@@ -257,6 +266,11 @@ namespace UMA
 			return GetConfigValue(DefineSymbol_Addressables, false);
 		}
 
+		public static bool IsAutoRepairIndex()
+		{
+            return GetConfigValue(ConfigToggle_IndexAutoRepair, false);
+        }
+
 		public static bool IsAsmdef(HashSet<string> defineSymbols, string Symbol)
         {
 			return (defineSymbols.Contains(Symbol));
@@ -273,12 +287,22 @@ namespace UMA
 
 		private static void SetConfigValue(string toggleId, bool value)
 		{
+#if UMA_ALWAYS_INCLUDE_RECIPES //VES added
+			if(toggleId == ConfigToggle_IncludeRecipes) {
+				value = true;
+			}
+#endif
 			//TODO: obviously not the right place!
 			EditorPrefs.SetBool(toggleId, value);
 		}
 
 		public static bool GetConfigValue(string toggleId, bool defaultValue)
 		{
+#if UMA_ALWAYS_INCLUDE_RECIPES //VES added
+			if(toggleId == ConfigToggle_IncludeRecipes) {
+				return true;
+			}
+#endif
 			//TODO: obviously not the right place!
 			return EditorPrefs.GetBool(toggleId, defaultValue);
 		}

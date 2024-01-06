@@ -18,6 +18,6 @@ namespace SunsetSystems.Equipment
 
     public enum SelectedWeapon
     {
-        None, Primary, Secondary
+        None = 1, Primary = 2, Secondary = 3
     }
 }

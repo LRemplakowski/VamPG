@@ -1,12 +1,9 @@
-using Sirenix.OdinInspector;
-using Sirenix.Utilities;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Inventory.Data;
 using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
@@ -70,6 +67,8 @@ namespace SunsetSystems.Core.UMA
             }
             umaAvatar.WardrobeRecipes.Clear();
             umaAvatar.AddAdditionalSerializedRecipes(this.defaultRecipes.Distinct().ToList());
+            umaAvatar.UpdatePending();
+            umaAvatar.BuildCharacter(true);
         }
 
         private void SetBodyType(BodyType bodyType)

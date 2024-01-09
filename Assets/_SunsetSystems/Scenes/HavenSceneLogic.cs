@@ -105,6 +105,7 @@ namespace SunsetSystems.Persistence
             await new WaitForUpdate();
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
+            PartyManager.Instance.MainCharacter.References.GameObject.SetActive(false);
             _cameraControl.ForceToPosition(_cameraStartPoint);
             _cameraControl.ForceRotation(_cameraStartRotation);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
@@ -242,9 +243,9 @@ namespace SunsetSystems.Persistence
             public static HavenSceneLogic HavenSceneLogic;
 
             [YarnCommand("GetUpFromBedDesiree")]
-            public async static void GetUpFromBedDesiree(ICreature _desiree)
+            public async static void GetUpFromBedDesiree()
             {
-                await HavenSceneLogic.MovePCToPositionAfterDialogue(_desiree);
+                await HavenSceneLogic.MovePCToPositionAfterDialogue(PartyManager.Instance.MainCharacter);
             }
 
             [YarnCommand("EnableInteractionsAfterPhoneCall")]

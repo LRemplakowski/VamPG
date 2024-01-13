@@ -3846,7 +3846,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -0, y: -0, z: -0}
+    textureOffset: {x: -32.363003, y: -0, z: -64.726006}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -21821,11 +21821,11 @@ PrefabInstance:
       objectReference: {fileID: 6002621442208826797, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21877,11 +21877,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -25345,7 +25345,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -0, y: -0, z: -0}
+    textureOffset: {x: -32.363003, y: -0, z: -64.726006}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -67319,7 +67319,40 @@ MonoBehaviour:
   forceRebindAnimator: 0
   preloadWardrobeRecipes:
     loadDefaultRecipes: 1
-    recipes: []
+    recipes:
+    - _recipeName: pullover01_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: shirt02_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: suit pants_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: watch_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: hair01_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: aviators02_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+      - VampireFemale
+    - _recipeName: moustache01_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: shoes_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
   raceAnimationControllers:
     defaultAnimationController: {fileID: 9100000, guid: b6baf64b1736249499205b779ee9dcba, type: 2}
     animators:
@@ -67349,7 +67382,7 @@ MonoBehaviour:
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
-      isBaseColor: 0
+      isBaseColor: 1
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
       _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
@@ -67371,7 +67404,7 @@ MonoBehaviour:
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
-      isBaseColor: 0
+      isBaseColor: 1
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
       _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
@@ -67488,6 +67521,70 @@ MonoBehaviour:
       Raw: 0
       valuesConverted: 0
     - name: headgear
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      showAdvanced: 0
+      isBaseColor: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: clothes_chest
+      channelMask:
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      showAdvanced: 0
+      isBaseColor: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: suit pants
+      channelMask:
+      - {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      showAdvanced: 0
+      isBaseColor: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: hair
       channelMask:
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}

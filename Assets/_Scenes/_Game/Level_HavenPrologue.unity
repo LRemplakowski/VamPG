@@ -3846,7 +3846,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -32.363003, y: -0, z: -64.726006}
+    textureOffset: {x: -0, y: -0, z: -0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -4704,7 +4704,8 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 1ac87d322eb773e40b284e4e45ec577c, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 714049807816842502, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2229964783034051436, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
@@ -4714,9 +4715,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 6939177878673411203}
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1654185702}
     - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1654185703}
@@ -4732,6 +4730,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1654185707}
+    - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1654185708}
   m_SourcePrefab: {fileID: 100100000, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
 --- !u!4 &297820107 stripped
 Transform:
@@ -21821,11 +21822,11 @@ PrefabInstance:
       objectReference: {fileID: 6002621442208826797, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000021097142
+      value: -0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000148675605
+      value: 0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21877,11 +21878,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000021097142
+      value: -0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000148675605
+      value: 0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -25345,7 +25346,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -32.363003, y: -0, z: -64.726006}
+    textureOffset: {x: -0, y: -0, z: -0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -26578,6 +26579,11 @@ PrefabInstance:
 --- !u!4 &553209691 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
+  m_PrefabInstance: {fileID: 553209690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &553209692 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
   m_PrefabInstance: {fileID: 553209690}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &553325932
@@ -32002,7 +32008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &851448337
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -38709,7 +38715,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1124927096
 Transform:
   m_ObjectHideFlags: 0
@@ -45573,6 +45579,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1513787330}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1513787331}
   m_SourcePrefab: {fileID: 100100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
 --- !u!4 &1513787325 stripped
 Transform:
@@ -45610,7 +45619,7 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 3a300edd68167e04dba0756b00ca557a, type: 3}
+  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
   <EntryNode>k__BackingField: crowbar
 --- !u!135 &1513787328
 SphereCollider:
@@ -45631,7 +45640,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.30341172
+  m_Radius: 0.64
   m_Center: {x: 0.00000016391277, y: 0.00000001071021, z: 0.00000047683716}
 --- !u!114 &1513787329
 MonoBehaviour:
@@ -45667,6 +45676,73 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+--- !u!114 &1513787331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513787326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 1513787330}
+    - {fileID: 1513787327}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 1513787329}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 1513787328}
+  <HoverHighlight>k__BackingField: {fileID: 553209692}
+  _interactionDistance: 2
+  _interactionTransform: {fileID: 1513787325}
+  _interactable: 1
+  _nameplateName: Crowbar
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    _PersistentCalls: []
 --- !u!1 &1517089279
 GameObject:
   m_ObjectHideFlags: 0
@@ -48710,27 +48786,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2229964783034051436, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
   m_PrefabInstance: {fileID: 297820106}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1654185702
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 297820108}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.38, y: 1.6510924, z: 1.6912264}
-  m_Center: {x: 0.0000000038875756, y: 0.8597794, z: 0.17988375}
 --- !u!114 &1654185703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48775,9 +48830,9 @@ MonoBehaviour:
   ObjectiveActive:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654185703}
+      - m_Target: {fileID: 1654185707}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
-          Assembly-CSharp
+          SunsetSystems
         m_MethodName: ResetInteraction
         m_Mode: 1
         m_Arguments:
@@ -48794,9 +48849,9 @@ MonoBehaviour:
   ObjectiveCompleted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1654185703}
+      - m_Target: {fileID: 1654185707}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
-          Assembly-CSharp
+          SunsetSystems
         m_MethodName: set_Interactable
         m_Mode: 6
         m_Arguments:
@@ -48899,7 +48954,7 @@ MonoBehaviour:
   <Faction>k__BackingField: 0
   _unique: {fileID: 1654185705}
   _enablePersistence: 1
-  _interactionCollider: {fileID: 1654185702}
+  _interactionCollider: {fileID: 0}
   <HoverHighlight>k__BackingField: {fileID: 236378142}
   _interactionDistance: 2
   _interactionTransform: {fileID: 1654185701}
@@ -48908,6 +48963,28 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!64 &1654185708
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297820108}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4660583110585335718, guid: f495df7484a926447898f94ccfdec5c8, type: 3}
 --- !u!1001 &1659057526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60694,7 +60771,8 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 4f52422408e94c64caba7488ca48e7c9, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -60785,8 +60863,8 @@ MonoBehaviour:
       Entry: 3
       Data: 2
     - Name: _equippedItem
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 0
     - Name: 
       Entry: 8
       Data: 
@@ -63590,7 +63668,10 @@ MonoBehaviour:
     SerializationNodes: []
   umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   umaRoot: {fileID: 2171089488952045912}
-  defaultRecipes: []
+  defaultRecipes:
+  - {fileID: 11400000, guid: 243efb54cc2cfb447bf1c3108b874fb0, type: 2}
+  - {fileID: 11400000, guid: 2c36b44be6f9fc84099f2260489961e8, type: 2}
+  - {fileID: 11400000, guid: c001f4494bc15554e9ef363bbd0e9a50, type: 2}
   umaAvatar: {fileID: 9196147857124597986}
 --- !u!4 &4525027818173207991
 Transform:
@@ -63943,6 +64024,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 5363628252765409761}
+    - {fileID: 5363628252765409756}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -63970,7 +64052,10 @@ MonoBehaviour:
         SunsetSystems]], mscorlib
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -69454,14 +69539,18 @@ MonoBehaviour:
   LastName: Edevane
   _id: kieran
   <PortraitAssetRef>k__BackingField:
-    m_AssetGUID: 
-    m_SubObjectName: 
-    m_SubObjectType: 
+    m_AssetGUID: 70bc4c917f198ac499c25a7a47767e38
+    m_SubObjectName: kieran_edevane
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     m_EditorAssetChanged: 0
   <Faction>k__BackingField: 3
   <BodyType>k__BackingField: 0
   <CreatureType>k__BackingField: 2
-  <BaseUmaRecipes>k__BackingField: []
+  <BaseUmaRecipes>k__BackingField:
+  - {fileID: 11400000, guid: 243efb54cc2cfb447bf1c3108b874fb0, type: 2}
+  - {fileID: 11400000, guid: 2c36b44be6f9fc84099f2260489961e8, type: 2}
+  - {fileID: 11400000, guid: c001f4494bc15554e9ef363bbd0e9a50, type: 2}
 --- !u!114 &9073991936063692639
 MonoBehaviour:
   m_ObjectHideFlags: 0

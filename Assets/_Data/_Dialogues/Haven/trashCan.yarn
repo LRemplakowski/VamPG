@@ -1,32 +1,17 @@
-﻿title: trashCan
+﻿title: TrashCan
 tags:
 ---
-<<if visited("takeCover")==true>>
-<<jump trashCanAfterDominic>>
+<<if $kieraninparty == false>>
+    [Old takeout boxes and receipts fill the bin.]
 <<else>>
-<<jump trashCanBeforeDominic>>
+    [Sifting through your trash, you find a bar tab receipt for the Embassy, a nightclub on the Las Vegas Strip. By the looks of it, you had a fun night.]
+    {$pcname} I found our next spot. Club Embassy off the Strip.
+    {$kieran} [He frowns; you can tell he is surprised.] Curious... My Sire owns the place, in a sense.
+    {$pcname} "...In a sense?"
+    {$kieran} I'll share what I know on the way. We need to hurry and investigate; tonight is the first and only chance you will be afforded to prove yourself or die trying. Do not fail, please. You hold more than just your own fate within your hands…
+    <<if $coveredinblood == true>>
+        {$kieran} Pardon me, but we wouldn't be allowed within sight of the place, with how you appear. Please, clean yourself up before we depart. I would recommend a quick shower, but...
+    <<endif>>
 <<endif>>
-===
-title: trashCanAfterDominic
----
-[nomarkup][Sifting through your trash, you find a bar tab receipt for the Embassy, a nightclub on the Las Vegas Strip. By the looks of it, you had a fun night.][/nomarkup] #line:051fc17
--> Continue  #line:09d5a1a 
-{$pcName}: I found our next spot. Club Embassy off the Strip. #line:0c4f927 
--> Continue #line:0104e61 
-{$kieran}: \[He scratches his head.\] You're kidding. My sire sort of owns the place. #line:017d4d0 
--> Continue #line:02860c3 
-{$pcName}: "Sort of?" #line:08ad533 
--> Continue #line:02cd65c 
-{$kieran}: I'll tell you in the car. You're driving. #line:0215a42 
--> Continue #line:085ddd6 
-<<if $bloodsoaked is true>>
-{$kieran}: You should change first. I'd recommend a shower, but well… #line:0c55a7b 
-<<endif>>
--> Continue #line:057e769 
-<<CompleteObjective "MAIN_SATURDAY_START" "FIGURE_OUT_WHERE_YOU_WERE">>
-===
-title: trashCanBeforeDominic
----
-[nomarkup][Old takeout boxes and receipts.][/nomarkup] #line:04daf56 
--> Continue #line:0c9cece 
+<<CompleteObjective ("MAIN_SATURDAY_START","FIGURE_OUT_WHERE_YOU_WERE")>>
 ===

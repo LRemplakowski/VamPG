@@ -1,0 +1,14 @@
+﻿title: GunCase
+tags:
+---
+<<set $gun to true>>
+[You pick up the 9mm Handgun Arthur bought you to keep you safe. The metal is normally cool in your hands, but now it suspiciously has no temperature.]
+-> (Dexterity + Firearms) [Clean gun.]
+    <<if Roll("Dexterity","Firearms") >= 3>>
+        (Success) {$pcname} [Good as new.] +1 Weapon Damage.
+    <<else>>
+        (Failure) BANG! [You got careless, putting a bullet hole in the ceiling.]
+        {$pcname} [Definitely not getting my security deposit back.]
+    <<endif>>
+-> [Walk away.]
+===

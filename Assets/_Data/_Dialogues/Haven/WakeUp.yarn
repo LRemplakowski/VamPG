@@ -1,0 +1,56 @@
+﻿title: Initialization
+tags:
+---
+<<declare $journal = "Journal:">>
+<<declare $pcname = "Desiree">>
+<<declare $beast = "The Beast:">>
+<<declare $exspouse = "Arthur:">>
+<<declare $landlord = "Kevin:">>
+<<declare $sheriff = "Dominic:">>
+<<declare $kieran = "Kieran:">>
+<<declare $brujah = true>>
+<<declare $potence = true>>
+<<declare $strangeinsight = false>>
+<<declare $bathroomdoordestroyed = false>>
+<<declare $kevinmurdered = false>>
+<<declare $crowbar = false>>
+<<declare $key = false>>
+<<declare $gun = false>>
+<<declare $vomit = false>>
+<<declare $coveredinblood = false>>
+<<declare $police = false>>
+<<declare $kevinunintimidated = false>>
+<<declare $kevinunseduced = false>>
+<<declare $kevinunsympathetic = false>>
+<<declare $bobbypin = false>>
+<<declare $smallmoney = false>>
+<<declare $dominicshot = false>>
+<<declare $gotweapon = false>>
+<<declare $doorvisitedonce = false>>
+<<declare $pizzaeaten = false>>
+<<declare $kieraninparty = false>>
+<<jump Journal>>
+===
+title: Journal
+tags:
+---
+{$journal} Saturday, June 14th, 1986. I am Desiree Bardot. A PI working in the heart of  Las Vegas. In another life, I was a respected journalist bringing accountability to those in power, but now, I often find myself digging up dirt for those same powerbrokers. When I can find work, that is. I used to have it all: money, a career, and a “happy” marriage. Now, the only company I keep are the cockroaches as I struggle to make rent for my crummy apartment in West Vegas. Things could be worse, I suppose.
+<<jump ThePhone>>
+===
+title: ThePhone
+tags:
+---
+<<PlaySFX "phone_ring">>
+RING! RING! RING! RING! RING! RING! RING! RING!
+[The non-stop cacophony pounds at your head like a sledgehammer. You barely manage to open your eyes before the fluorescent light sears your corneas. The light… It burns…] 
+[You turn over and try to dig your face deeper into the rough upholstery of the old couch, but you can already tell that you’re not going to be able to fall back asleep. Not like this. You’re far too hungry, besides.]
+[Swallowing, your tongue sits like a dry, shriveled lump of meat in your mouth. You’re parched and ravenous, the need for sustenance quickly becoming the sole concern at the forefront of your mind. Your stomach echoes this need, its aching emptiness only compounding your discomfort. You’re willing to eat almost anything, at this point...]
+{$pcname} [Kill me.]
+[You’ve never been this hungover in your life. It’s worse than that one time in college. Strangest of all, the metallic taste of iron lingers in the back of your throat…]
+[Your body wants - no, it demands - more of that taste. And as you lie there, any attempt at movement rendered languid and slow by the hangover, your mind catches up with it. The situation is dire; you need to find more. Of what, exactly? Your conscious mind remains unsure…]
+[At least you’re still alive. It would be best not to sit and wait for death to come and take you. You sit up, the lethargy making your limbs feel as if they are suspended in some thick, viscous goo as your feet, still slipped into your boots, make contact with the floor. Upright, finally. Shaking your head, you attempt to come to your senses and find your balance - standing up on your own two feet.]
+{$pcname} [What happened last night?]
+<<StartQuest "MAIN_SATURDAY_START">>
+<<GetUpFromBedDesiree>>
+<<stop>>
+===

@@ -1,17 +1,16 @@
-﻿title: pizza
+﻿title: Pizza
 tags:
 ---
-[nomarkup][It's been out for two days now but you're so hungry.][/nomarkup] #line:05deeea 
--> {$pcName}: \[Grab a slice.\] #line:0b08af1 
-    <<jump pizzaEat>>
--> {$pcName}: \[Walk away.\] #line:0a67a1a 
-===
-title: pizzaEat
----
-[nomarkup][As soon as the cheese hits your mouth, you are hit by a wave of nausea. You can't tell if it's because it was left out, or a lingering effect of the hangover. Your gut churns, pushing a reddish slurry up and out into the sink. Now, you're only hungrier.][/nomarkup] #line:0868496 
--> Continue #line:0fa1cbc 
-<<set $vomited to true>>
-<<set $sinkRepairdModifier to 1>>
-{$innerVoice}: Ugh, I feel disgusting. I need a shower. #line:064afcc 
--> Continue #line:0c8b961 
+<<if $pizzaeaten == false>>
+    [It’s been out for two days now, but you’re starving. You could eat a horse. And the stable it sleeps in. As they say, when you’re hungry, anything tastes good.]
+        -> [Grab a slice.] 
+            <<set $vomit to true>>
+            [As soon as the cheese hits your mouth, you are hit by a wave of intense nausea. Even worse than the one you felt upon waking up. Your gut churns, pushing a reddish slurry up and out into the sink. Something about the aftertaste is enticing to you, for some reason…] +1 Hunger.
+            {$pcname} [Oh my god… what is happening? Am I dying? What happened last night?!]
+            [Your thoughts swirl in mesmerizing fractals, like a kaleidoscope of half-baked ideas and jumbled memories - requiring gargantuan effort to sift through and make sense of… But eventually, you are able to reach a conclusion - you’re dying. Or not. But you're sure something isn’t right.]
+            <<set $pizzaeaten to true>>
+        -> [Walk away.]
+<<else>>
+    [The pizza box is empty, but even if it wasn't, you don't think you could stomach another slice.]
+<<endif>>
 ===

@@ -1,70 +1,35 @@
-﻿title: shower
+﻿title: Shower
 tags:
 ---
-[nomarkup][Ready to relax in a hot shower, you open the shower curtain, only to find a one-eyed corpse half staring back at you. As if this night couldn't get any worse.][/nomarkup] #line:0b235ad 
--> Continue #line:07a843a 
-{$innerVoice}: No! Oh god, please, no! #line:0267002 
--> {$pcName}: \[Intelligence + Medicine\] \[Find the cause of death.\] #line:019d0da 
-    <<jump findCause>>
--> {$pcName}: \[Wits + Streetwise\] \[Fleece the body.\] #line:0ff8d9d 
-    <<jump searchBody>>
--> {$pcName}: \[Walk away.\] #line:0994e23 
-    <<jump afterBodyInteraction>>
+[Ready to soak in the relaxing spray of hot water upon your skin, you open the shower curtain, only to find a one-eyed corpse in a pool of old blood half-staring back at you. Your stomach sinks. As if this night couldn't get any worse.]
+{$pcname} [No! Oh god, please, no!]
+-> (Intelligence + Medicine) [Find the cause of death.] <<if visited("CauseofDeath") == false>>
+    <<jump CauseofDeath>>
+-> (Wits + Streetwise) [Fleece the body.] <<if visited("FleeceBody") == false>>
+    <<jump FleeceBody>>
+-> [Walk away.]
+    <<CompleteObjective ("MAIN_SATURDAY_START","TAKE_SHOWER")>>
 ===
-title: findCause
+title: CauseofDeath
+tags:
 ---
-<<if Roll("intelligence","medicine") >= 2>>
-[nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. Due to his complexion, he most likely died of blood loss.][/nomarkup] #success #line:0afffb6 
+<<if Roll("Intelligence","Medicine") >= 3>>
+    (Success) [In addition to his missing eye, he has several bruises and gashes across his face and neck. Due to his complexion, he most likely died of blood loss.]
 <<else>>
-[nomarkup][You're not sure why he died specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure #line:02d0269 
+    (Failure) [You're not sure why he died, specifically, but the missing eye and hole in his neck certainly didn't help.]
 <<endif>>
--> Continue #line:0817ff3 
-<<jump afterBodyInteraction>>
+<<jump Shower>>
 ===
-title: searchBody
+title: FleeceBody
+tags:
 ---
-<<if Roll("wits","streetwise") >= 1>>
-[nomarkup][You find his wallet and ID - his name is Diego Vazguez.][/nomarkup] #success #line:06abb8d 
-<<AddMoney 10>>
+<<if Roll("Wits","Streetwise") >= 3>>
+    (Success) [You find his wallet and ID: his name is Diego Vazguez.]
+    <<set $smallmoney to true>>
 <<else>>
-[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials - DV.][/nomarkup] #line:0dfae54 
+    (Failure) [You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.]
 <<endif>>
--> Continue #line:0b260be 
-[nomarkup][You find a black and white photo of him holding a baby.][/nomarkup] #line:0baa1ed 
--> Continue #line:09c650b 
-{$innerVoice}: Poor bastard. #line:084e723 
--> Continue #line:096ff61 
-<<jump afterBodyInteraction>>
-===
-title: afterBodyInteraction
----
-{$innerVoice}: What do I do? #line:0b96ec1 
--> {$innerVoice}: I need to turn myself in. #line:0106b38 
-    {$beast}: On the other hand, think about it this way: it won't do anything to help him. He's already dead. #line:0a715e5 
-    -> Continue #line:04a5df0 
-    <<jump thatVoiceAgain>>
--> {$innerVoice}: I'm not going to jail. #line:02baf0d 
-    {$beast}: Not if I can do something about it. #line:07347cc 
-    -> Continue #line:0742689 
-    <<jump thatVoiceAgain>>
-===
-title: thatVoiceAgain
----
-{$innerVoice}: There's that voice again. #line:0994259 
--> Continue #line:046b39c 
-[nomarkup][KNOCK. KNOCK. KNOCK.][/nomarkup] #line:065851a 
-<<PlaySFX "door_knock_light">>
--> Continue #line:0d67453 
-[nomarkup][It's coming from the front door.][/nomarkup] #line:0154ead 
--> Continue #line:05cc1c5 
-{$innerVoice}: Who is that? #line:082ed34 
--> Continue #line:04965bb 
-{$beast}: Just ignore it. I don't want more witnesses. #line:00fd9fe 
--> Continue #line:0a0744c 
-[nomarkup][BANG! BANG! BANG!][/nomarkup] #line:0968222 
-<<PlaySFX "door_knock_heavy">>
--> Continue #line:02d7037 
-[nomarkup][They're getting more aggressive.][/nomarkup] #line:07f0684 
-<<set $hasTimeToCleanGun to false>>
--> Continue #line:060dd7e 
+[You find a black and white photo of him holding a baby.]
+{$pcname} [Poor bastard.]
+<<jump Shower>>
 ===

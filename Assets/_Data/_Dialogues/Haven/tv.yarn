@@ -1,19 +1,9 @@
-﻿title: tv
+﻿title: TV
 tags:
 ---
-<<if visited("takeCover")==true>>
-<<jump tvAfterDominic>>
+<<if $kieraninparty == false>>
+    [You don’t have time to watch TV.]
 <<else>>
-<<jump tvBeforeDominic>>
+    {$kieran} ...Disappointing. This will not help your case, nor will it help mine. [-1 Kieran Influence]
 <<endif>>
-===
-title: tvAfterDominic
----
-{$kieran}: You're seriously watching TV right now!? \[Whispering to himself\] Oh my god I'm gonna die. #line:08682ac 
--> Continue #line:011a7df 
-===
-title: tvBeforeDominic
----
-[nomarkup][You don't have time to watch TV.][/nomarkup] #line:0b46f5f 
--> Continue #line:087d535 
 ===

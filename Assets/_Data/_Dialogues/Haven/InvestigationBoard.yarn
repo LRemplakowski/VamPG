@@ -4,9 +4,9 @@ tags:
 <<if $kieraninparty == false>>
     [Your investigation board is empty save for a blank map of the city, some scribbled notes, and the overdue bills you've posted as fearful motivation. Hopefully, things will pick up soon.]
     <<if GetAttributeSkillPoolSize("Intelligence","Finance") <= 3>>
-        You don’t know much about budgeting, and it shows.
+        You don't know much about budgeting, and it shows.
     <<else>>
-        You have about a month and a half - maybe two - of savings left before you’ll have had to choose between eating and keeping the lights on.   
+        You have about a month and a half - maybe two - of savings left before you'll have had to choose between eating and keeping the lights on.   
     <<endif>>
     <<set $investigationboardvisited to true>>
 <<elseif $kieraninparty == true>>

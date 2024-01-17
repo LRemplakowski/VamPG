@@ -16,11 +16,11 @@ tags:
 <<if $coveredinblood == true>>
     [Blood is smeared over your tired, sagging eyes. Your clothes are soaked red. Upon closer inspection, you see that your canines have grown into long fangs. This has to be a dream. A nightmare. How else does anything that is happening to you make sense?]
 <<else>>
-    [The bags under your eyes are the most prominent they’ve ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.]
+    [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup]
 <<endif>>
-{$pcname} [What’s happening to me?]
+{$pcname} [nomarkup][What's happening to me?][/nomarkup]
 <<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 3>>
-    [This can’t be, it just…can’t. What you’re beginning to think you are, they’re not real. It has to be the hangover messing with you.]
+    [This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.]
 <<endif>>
 <<jump BathroomSink>>
 ===
@@ -28,7 +28,7 @@ title: SinkClutter
 tags:
 ---
 [Sifting through your cosmetic products, you find a Bobby Pin on the counter.]
-<<set $bobbypin to true>>
+<<set $bobbyPin to true>>
 {$pcname} [Wish I had this sooner.]
 <<jump BathroomSink>>
 ===
@@ -36,6 +36,6 @@ title: MedCabinet
 tags:
 ---
 [You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.]
-{$pcname} [What’s the worst some more liver damage is gonna do?]
+{$pcname} [What's the worst some more liver damage is gonna do?]
 <<jump BathroomSink>>
 ===

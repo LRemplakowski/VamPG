@@ -49,14 +49,14 @@ title: BathroomDoorKick
 position: 567,-63
 ---
 <<if $potence == true>>
-    [nomarkup][You kick the door with a meager amount of force. To your shock, with very little effort, it goes flying off its hinges and into the bathroom beyond. You were never a particularly strong person, so something like this happening is downright fantastical. Or maybe you're still dreaming? From your state, though, it's closer to a nightmare than anything pleasant… At the very least, if it is, you can count on waking up safely in your bed after all this is over…][/nomarkup] #success
-    {$pcname} [nomarkup][The fuck…?][/nomarkup]
+    [nomarkup][You kick the door with a meager amount of force. To your shock, with very little effort, it goes flying off its hinges and into the bathroom beyond. You were never a particularly strong person, so something like this happening is downright fantastical. Or maybe you're still dreaming? From your state, though, it's closer to a nightmare than anything pleasant... At the very least, if it is, you can count on waking up safely in your bed after all this is over...][/nomarkup] #success
+    {$pcname} [nomarkup][The fuck...?][/nomarkup]
     <<set $bathroomdoordestroyed to true>>
     <<CompleteObjective ("MAIN_SATURDAY_START","ENTER_BATHROOM")>>
     -> Continue.
 <<else>>
     <<if Roll("Strength","Brawl") >= (6 - $strangeInsightModifier)>>
-        [nomarkup][You assault the locked door with several weak strikes of your boot. Thud, thud, thud… It feels like an eternity, before the door budges.][/nomarkup] #success
+        [nomarkup][You assault the locked door with several weak strikes of your boot. Thud, thud, thud... It feels like an eternity, before the door budges.][/nomarkup] #success
         <<set $bathroomdoordestroyed to true>> 
         <<if $kevinmurdered == true>>
             {$pcname} [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. Strangely enough, even after all that, you don't feel the least bit fatigued.][/nomarkup]
@@ -69,7 +69,7 @@ position: 567,-63
         <<if $kevinmurdered == true>>
             [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #failure
         <<else>>
-            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more… Your wallet will thank you.][/nomarkup] #failure
+            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more... Your wallet will thank you.][/nomarkup] #failure
         <<endif>>
         -> Continue.
         <<jump DoorVisit>> 

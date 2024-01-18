@@ -22,14 +22,14 @@ tags:
         [An American's best friend.]
         -> [Get the crowbar.]
             <<set $crowbar to true>>
-            [Things are gonna get… sticky.]
+            [Things are gonna get... sticky.]
             <<jump DominicKieranScene>>
         -> [Search for something else to use as a weapon.]
             [Even if you get creative, that's not gonna help.]
             <<jump GetWeapons>>
     -> [Get the crowbar.]
         <<set $crowbar to true>>
-        [Things are gonna get… sticky.]
+        [Things are gonna get... sticky.]
         -> [Get your gun.]
             <<set $gun to true>>
             [An American's best friend.]
@@ -51,7 +51,7 @@ tags:
 <<elseif $gun == true && $crowbar == false>>
     -> [Get the crowbar.]
         <<set $crowbar to true>>
-        [Things are gonna get… sticky.]
+        [Things are gonna get... sticky.]
         <<jump DominicKieranScene>>
     -> [Search for something else to use as a weapon.]
         [Even if you get creative, that's not gonna help.]
@@ -69,7 +69,7 @@ tags:
 CRACK. [The door bursts open, with two men behind it barging into the room.]
 [One of them is tall and well-built, his skin unnaturally pale and dark brown hair windswept. Clad in a black suit made from some kind of expensive fabric shimmering faintly in your apartment lights. Adorned with a little gold pin on one of his suit flaps, the ensemble is brought together - or apart - by the red silk tie dangling from the unbuttoned collar of his white formal shirt.]
 [The buckle of his belt is big, featuring a bull's head stamped onto it - similar to what cowboys wear. When he steps closer, you hear a jingle. Glancing down for a split-second, you catch a glimpse of his steel-toed cowboy boots - spurs and all, but quickly refocus your gaze on his face.]
-[You are only met with your own reflection in his black aviators, as you attempt to catch his eye, though. He doesn't hold any weapon, either, but there is something intimidating about his presence, nonetheless - enough that you can almost feel the hairs on the back of your neck stand on end…]
+[You are only met with your own reflection in his black aviators, as you attempt to catch his eye, though. He doesn't hold any weapon, either, but there is something intimidating about his presence, nonetheless - enough that you can almost feel the hairs on the back of your neck stand on end...]
 [The other one is unnervingly pale, too. A little bit shorter and more slender in contrast. He holds his pistol at the ready, scanning the room for additional threats - his brown hair swept to one side and out of his field of vision.]
 [Unlike his “friend”, he looks tense; his posture is textbook, but his gait is stiff. A glimmer of gold catches your eye as he turns - a circular pendant hung around the collar of his sweater.]
 {$sheriff} Ooooh! Looks like someone's been busy. [The man in sunglasses has an audible Texan accent.]
@@ -96,7 +96,7 @@ CRACK. [The door bursts open, with two men behind it barging into the room.]
     <<endif>>
     <<set $gotweapon to true>>
 <<if $dominicshot == true>>
-    {$sheriff} [He briefly inspects the hole in his suit - clearly somewhat annoyed.] Damn… this was a new suit…
+    {$sheriff} [He briefly inspects the hole in his suit - clearly somewhat annoyed.] Damn... this was a new suit...
 <<else>>
     {$sheriff} Nice try, kid.
 <<endif>>
@@ -116,9 +116,9 @@ CRACK. [The door bursts open, with two men behind it barging into the room.]
 [One question in particular sticks out to me the most.]
 -> {$pcname} What's happening to me?
     [Dominic cackles, releasing a puff of smoke.]
-{$kieran} Confusion is to be expected, given the nature of your… predicament.
+{$kieran} Confusion is to be expected, given the nature of your... predicament.
 {$sheriff} [He's calmed down, but is still chuckling.] You mean you still haven't figured it out yet? Damn, your Sire really did you dirty. Well, no sense in pussyfooting around it. You're a vampire.
-{$pcname} [That's… that's impossible.] A… what?
+{$pcname} [That's... that's impossible.] A... what?
 {$sheriff} Don't act like you didn't hear me.
 {$kieran} It would be best for you to collect yourself, miss Bardot. ‘Kindred' is the term used in sophisticated circles.
 {$sheriff} Technically, yes. If you're a nerd.
@@ -161,9 +161,9 @@ tags:
 title: SireInfo
 tags:
 ---
-{$sheriff} Well not to get all “the birds and the bees” on you, but your Sire is… well.
+{$sheriff} Well not to get all “the birds and the bees” on you, but your Sire is... well.
 {$kieran} The person who did this to you.
-{$sheriff} Your vampire daddy… or mommy. Don't want to assume.
+{$sheriff} Your vampire daddy... or mommy. Don't want to assume.
 -> {$pcname} Who is my Sire?
     {$sheriff}  We were hoping you knew. Wanted to kill you both in one fell swoop. [He sighs.] Things can never be easy.  
 <<jump AnyOtherQuestions>>
@@ -223,13 +223,13 @@ tags:
 [Kieran walks around the room, but stops at the investigation board.]
 {$sheriff} This is new, Kieran got my reference. Wouldn't have guessed that our tastes are so similar. [He sighs.] Let's just get this over with. Promise I'll make it quick. [He draws his .44 Auto Mag pistol. He is perhaps a little too enthusiastic as he steps towards you.]
 {$beast} I have to do something. Otherwise, I'm done for, and the party's barely even started yet.
-[If there ever was a time for self preservation it'd be now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the refrigerator. Behind his sunglasses, he's far too chipper for a man holding a gun to your head. You hear the safety click, and you close your eyes. This is it… In reality, the sound lasts only a second, but it feels like an eternity as you await the shot that ends you for good.]
-{$pcname} [Arthur…]
-{$beast} … is he here? No. I need to stop it with the useless sentimentality and think about myself, first and foremost. There <i>has</i> to be a way to survive this. Think!
+[If there ever was a time for self preservation it'd be now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the refrigerator. Behind his sunglasses, he's far too chipper for a man holding a gun to your head. You hear the safety click, and you close your eyes. This is it... In reality, the sound lasts only a second, but it feels like an eternity as you await the shot that ends you for good.]
+{$pcname} [Arthur...]
+{$beast} ... is he here? No. I need to stop it with the useless sentimentality and think about myself, first and foremost. There <i>has</i> to be a way to survive this. Think!
 {$sheriff} I want you to know: despite appearances, I'm not into this.
 {$beast} Don't lie to yourself, you ass. You enjoy it more than you want to admit.
 {$kieran} [Kieran speaks up, staring intently at the investigation board.] Could we delay the execution for a moment? It seems miss Bardot has a knack for investigations.
-{$sheriff} [He looks back at Kieran, hand still firm around your neck.] … And?
+{$sheriff} [He looks back at Kieran, hand still firm around your neck.] ... And?
 {$beast} Kick him in the balls, now! While he's distracted. Just like in the self-defense classes.
 {$kieran} The deed is done. Miss Bardot has been Embraced, and we concluded we cannot do much to amend this situation beyond an execution. This may no longer be the case, given what I am looking at... 
 {$sheriff} Oh? Do tell.
@@ -243,16 +243,16 @@ tags:
 {$beast} I'm not a child, dickwad. 
 {$kieran} Like you stated, she is not experienced in our ways. Tracking her down would not be challenging. Especially now, when we know of her identity and appearance. [He looks straight at you - cold, clinical, and evaluating.] Should she prove herself capable, the Praxis will surely find a place for her. If not, then consider this a take-away rather than drive-thru.
 {$sheriff} [Dominic stays silent for a few moments before his cheeky smile returns. He lets go of your throat as quickly as he grabbed it, causing you to drop to the floor.] You've convinced me, but she's your responsibility. She fucks up?  Your ass is on the line too. I hope whatever ulterior motive you have is worth it.
-{$kieran} [Kieran blinks several times - it seems that making this argument may have been ill-advised, after all.] … This is not exactly what I had in mind…
+{$kieran} [Kieran blinks several times - it seems that making this argument may have been ill-advised, after all.] ... This is not exactly what I had in mind...
 {$sheriff} [He grins, showing nearly all his teeth in satisfaction.] I know.
 -> {$pcname} Thanks, I guess.
-    {$sheriff}  That's the spirit. [He pats you in the arm - like you're his best friend. It makes you feel even more uncomfortable.] You should be thanking Kieran, though. I do have one condition. Because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else… [He points at his gun.]
+    {$sheriff}  That's the spirit. [He pats you in the arm - like you're his best friend. It makes you feel even more uncomfortable.] You should be thanking Kieran, though. I do have one condition. Because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else... [He points at his gun.]
 -> {$pcname} I'm nobody's pet.
-    {$sheriff} Whatever you want to call it. Better behave though, unless you wanna be put down like a rabid dog. You should be thanking Kieran. I do have one condition, though, because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else… [He points at his gun.]
+    {$sheriff} Whatever you want to call it. Better behave though, unless you wanna be put down like a rabid dog. You should be thanking Kieran. I do have one condition, though, because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else... [He points at his gun.]
 {$pcname} That's impossible! I don't even remember where I was last night.
-{$kieran} … I'm sure we will find some way to manage. [He says, looking at you.]
-{$sheriff} Well… hate to be an asshole, but that's not my problem. At least, not anymore, thanks to yours truly. [He grins again at Kieran.]
-{$kieran} [He takes a deep breath, trying to compose himself once more.] … We will start with the basics. I'm sure that the answer to our question is around here somewhere.
+{$kieran} ... I'm sure we will find some way to manage. [He says, looking at you.]
+{$sheriff} Well... hate to be an asshole, but that's not my problem. At least, not anymore, thanks to yours truly. [He grins again at Kieran.]
+{$kieran} [He takes a deep breath, trying to compose himself once more.] ... We will start with the basics. I'm sure that the answer to our question is around here somewhere.
 {$sheriff} [He taps his foot a couple of times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.] You know, I don't want to tell you how to do your job - it would be against my code of ethics. 	Besides, I like to see Kieran squirm at the sheer thought that he may not survive to see the next evening. But I	can give you a clue. Free of charge. Just don't get used to it. [In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.
 {$pcname} Ow!
 [He grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.]
@@ -261,9 +261,9 @@ tags:
     {$sheriff} [He looks like a wine taster savoring your blood.] Ah, of course you're a Brujah.
 <<endif>> 
 {$pcname} What's that supposed to mean?
-{$kieran} Similar to how humans have ethnicities, Kindred have certain… classifications applicable to us. We call them Clans. You come from an ancient bloodline of Kindred known for their... strong convictions for the cause.
+{$kieran} Similar to how humans have ethnicities, Kindred have certain... classifications applicable to us. We call them Clans. You come from an ancient bloodline of Kindred known for their... strong convictions for the cause.
 {$sheriff} So it's not your fault you're annoying.
-{$pcname} [Coming from this guy of all people…]
+{$pcname} [Coming from this guy of all people...]
 {$sheriff} Mmmm, based on the potency of your blood, your Sire is not somebody to be messed with, so best of luck, you two.
 {$sheriff} I'm off. I'll send a team to clean up soon. Pleasure to finally meet you, Desiree. I'll check in later. [He lowers his shades a bit and winks.] 
 <<CompleteObjective ("MAIN_SATURDAY_START","TAKE_COVER")>>
@@ -274,7 +274,7 @@ tags:
     {$kieran} Not unlike several thousands of people and Kindred in the Valley.
 {$kieran} Please, attempt to reconstruct recent events with me, miss Bardot. This is your flat, correct? Recall your most recent memory of this place before today. Is there anything that is here and was not before? Anything missing or different, and if so, can you name it? Aside from the dead people, of course.
 {$pcname} [You rub your temple. The clinical tone of the questions is not dissimilar to the kind of prodding inquiry one would receive in therapy. Sadly, you seem to come up short - no matter how hard you try. You sigh and shake your head.]	
-{$kieran} [He stares at you, analyzing your every move.] Nothing? That's alright… One's memory may be feeble at times - especially if the event one is remembering is traumatizing. Next, we should search the apartment. Perhaps something will jog your mind.
+{$kieran} [He stares at you, analyzing your every move.] Nothing? That's alright... One's memory may be feeble at times - especially if the event one is remembering is traumatizing. Next, we should search the apartment. Perhaps something will jog your mind.
 [Before the conversation comes to an end, you feel the need to say one last thing:]
 -> {$pcname} Thanks for saving me.
     {$kieran} [He raises his head a bit.] This isn't sympathy, so please don't take it as such. My good will extends only as far as your resolve. [+1 Kieran Influence]

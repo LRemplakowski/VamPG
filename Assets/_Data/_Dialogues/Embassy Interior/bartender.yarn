@@ -12,7 +12,7 @@ Bartender: Sorry about that. What can I get you?
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Oh come on, a little bit of bile and blood never hurt anyone. Or clogged toilet.
             <<if $landlordKilled ==1>>
-                -> {$pcName}: Can't say that about clogged sink though…
+                -> {$pcName}: Can't say that about clogged sink though...
             <<endif>>
     <<endif>>
 <<endif>>

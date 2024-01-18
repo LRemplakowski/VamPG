@@ -4,8 +4,8 @@ tags:
 <<StartQuest "FIX_SINK">>
 {$journal} I can't live like this anymore.
 <<if $vomit == true>>
-    [You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual… Like you're terminally ill.]
-    [The idea fills you with dread… How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either. You have no choice but to wait and hope that it's not as serious as it looks… You're not ready to die.]
+    [You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual... Like you're terminally ill.]
+    [The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either. You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.]
     -> (Resolve + Craft) [Repair it yourself.]
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>
             (Success) [As you open up the U-Pipe, what is undeniably cold blood squirts out. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.]
@@ -17,7 +17,7 @@ tags:
             <<set $key to true>>
             <<set $police to true>>
         <<endif>>
-        [You find the source of the clog, the Bathroom Key and an… eyeball? Your eyes widen, horrified. How did that get in here? Whose eyeball is this? And most importantly, where are they?]
+        [You find the source of the clog, the Bathroom Key and an... eyeball? Your eyes widen, horrified. How did that get in here? Whose eyeball is this? And most importantly, where are they?]
         {$pcname} [What the fuck?]
         -> [Throw the eye quickly back into the sink in a panic.]
             [A wet PLOP is audible as it splashes into the half-full, bloodstained sink. It bobs up and down, chaotically spinning until the pupil of its deep brown iris settles on you. Its gaze feels almost accusatory.]
@@ -29,9 +29,9 @@ tags:
         -> [Eat the eye.]
             [You hesitantly fit the whole eyeball into your mouth. Chewing on it, a slimy, viscous fluid squirts in between your teeth. It's grotesque, but oddly satisfying.] -1 Hunger.
             [You stare at your now-empty, bloodstained palm. A crushing wave of negative emotion washes over you. You feel like bursting into tears.]
-            {$pcname} [Is this… guilt? Grief? But why?]
+            {$pcname} [Is this... guilt? Grief? But why?]
             {$pcname} [What is happening to me?]
-            {$pcname} […]
+            {$pcname} [...]
             <<if $coveredinblood == true>>
                 {$pcname} [I need a shower.]
             <<endif>>
@@ -50,7 +50,7 @@ tags:
             <<set $key to true>>
             <<set $police to true>>
         <<endif>>
-        [You find the source of the clog, the Bathroom Key and an… eyeball? Your eyes widen, horrified. How did that get in here? Whose eyeball is this? And most importantly, where are they?]
+        [You find the source of the clog, the Bathroom Key and an... eyeball? Your eyes widen, horrified. How did that get in here? Whose eyeball is this? And most importantly, where are they?]
         {$pcname} [What the fuck?]
         -> [Throw the eye quickly back into the sink in a panic.]
             [A wet PLOP is audible as it splashes into the half-full, bloodstained sink. It bobs up and down, chaotically spinning until the pupil of its deep brown iris settles on you. Its gaze feels almost accusatory.]
@@ -61,9 +61,9 @@ tags:
         -> [Eat the eye.]
             [You hesitantly fit the whole eyeball into your mouth. Chewing on it, a slimy, viscous fluid squirts in between your teeth. It's grotesque, but oddly satisfying.] -1 Hunger.
             [You stare at your now-empty, bloodstained palm. A crushing wave of negative emotion washes over you. You feel like bursting into tears.]
-            {$pcname} [Is this… guilt? Grief? But why?]
+            {$pcname} [Is this... guilt? Grief? But why?]
             {$pcname} [What is happening to me?]
-            {$pcname} […]
+            {$pcname} [...]
             <<if $coveredinblood == true>>
                 {$pcname} [I need a shower.]
             <<endif>>

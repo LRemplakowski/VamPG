@@ -4,7 +4,7 @@ position: 136,-238
 <<declare $dianaMet to true>>
 <<deckare $dianaOffice to false>>
 [nomarkup][Despite the sea of UK memorabilia, for the first time tonight you hear an authentic British accent slice through the crowd.][/nomarkup]
-{$diana}: … and I had to tell the bloke I've seen bigger willies on the chihuahuas.
+{$diana}: ... and I had to tell the bloke I've seen bigger willies on the chihuahuas.
 [nomarkup][Desiree is walking down the alley with the man whose corpse was in her shower. They exchange drunken flirty lines. They are being led by a mysterious woman.]
 {$diana}: Not much further.
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -25,7 +25,7 @@ title: tellAboutVision
     -> {$pcName}: Not like that.
 <<endif>>
 {$kieran}: Diana's here almost every night. Hardly surprising you recognize her.
--> {$pcName}: She led… us into the alley. Last thing I remember.
+-> {$pcName}: She led... us into the alley. Last thing I remember.
     <<jump meetingDiana>>
 ===
 title: approachDiana
@@ -39,7 +39,7 @@ title: approachDiana
     {$kieran}: \[Kieran nods back.][+1 Kieran Reputation\]
     <<ModifyInfluence (1,$kieran)>>
     <<jump dianaApproached>>
--> {$pcName}: Geez, don't act like I'm some psycho killer…
+-> {$pcName}: Geez, don't act like I'm some psycho killer...
     {$kieran}: The corpse in your bathroom makes me worried. \[-1 Kieran Reputation\]
     <<ModifyInfluence (-1,$kieran)>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>

@@ -41,15 +41,15 @@ title: kieranDominicRelations
 <<if GetCompanionInfluence("$kieran")>=2>>
     {$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>>
-    {$kieran}: … but now that I think of it, I like his company more.
+    {$kieran}: ... but now that I think of it, I like his company more.
 <<else>>
-    {$kieran}: To be honest, I don't know if the change is for better or for worse yet…
+    {$kieran}: To be honest, I don't know if the change is for better or for worse yet...
 <<endif>>
     -> {$pcName}: Order?
     {$kieran}: My Sire wanted me to get more experience in the field, so here I am, coping with bad jokes and forced adoptions.
-        -> {$pcName}: Forced… what?
+        -> {$pcName}: Forced... what?
         {$kieran}: Sorry. Didn't want to sound rude. But technically you're my adoptive Childe, at least for the night.
-            -> {$pcName}: This sounds… awkward.
+            -> {$pcName}: This sounds... awkward.
                 {$kieran}: You're telling me.
                 <<jump kieranDialogue>>
 ===
@@ -83,7 +83,7 @@ title: drinks
 <<elseif GetCompanionInfluence("$kieran")<=-2>>
     {$kieran}: ... so no, I'm not interested.
 <<else>>
-    {$kieran}: ... but I don't know if it'll be… appropriate.
+    {$kieran}: ... but I don't know if it'll be... appropriate.
 <<endif>>
 <<jump kieranDialogue>>
 ===
@@ -115,7 +115,7 @@ title: catherinaCharacteristics
     -> {$pcName}: Just gathering data.
     [nomarkup][He looks at you reluctantly][/nomarkup]
     <<if GetCompanionInfluence("$kieran")>=2>>
-        {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring… every young Kindred would like to have her as a Sire.
+        {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring... every young Kindred would like to have her as a Sire.
         -> {$pcName}: Whoa, I didn't expect that. 
             <<ModifyInfluence ($kieran,+1)>>
             {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
@@ -123,7 +123,7 @@ title: catherinaCharacteristics
             {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
             <<jump kieransSire>>
         ->  {$pcName}: You're painting her as if she was some kind of ideal.
-            {$kieran}: Uh… sorry… maybe a little.
+            {$kieran}: Uh... sorry... maybe a little.
             <<jump kieransSire>>
         ->  {$pcName}: You must exaggerate.
             <<ModifyInfluence ($kieran,-1)>>
@@ -139,7 +139,7 @@ title: catherinaCharacteristics
 ===
 title: catherinasAge
 ---
-{$kieran}: Let me think… she's been around for nearly 500 years.
+{$kieran}: Let me think... she's been around for nearly 500 years.
 -> Continue
 [nomarkup][at first you don't know what to say, other than blinking your eyes in surprise][/nomarkup]
 -> Continue

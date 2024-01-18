@@ -5,8 +5,8 @@ tags:
 <<declare $goldBug to false>>
 <<declare $goldBugCombination to false>>
 <<declare $goldBugPassword to false>>
-[nomarkup][Bookcase is filled with a myriad of items. Not only books, but it also nests big TV, radio, some vases… There are modern books on the shelves, but also several occult tomes line the wall, and the faint scent of lignin permeates the air. These books must be pretty old. There are also several scrolls. You don't know if they are made from paper or parchment. You even find a traditional quill that is gaining the dust in one of the shelf compartments. It's a weird fusion of new and old.][/nomarkup]
-{$kieran}: Oh my… do you see these books?
+[nomarkup][Bookcase is filled with a myriad of items. Not only books, but it also nests big TV, radio, some vases... There are modern books on the shelves, but also several occult tomes line the wall, and the faint scent of lignin permeates the air. These books must be pretty old. There are also several scrolls. You don't know if they are made from paper or parchment. You even find a traditional quill that is gaining the dust in one of the shelf compartments. It's a weird fusion of new and old.][/nomarkup]
+{$kieran}: Oh my... do you see these books?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: What, not alphabetized and color-coded, poindexter?
     [nomarkup][Kieran just rolls his eyes.][/nomarkup]
@@ -87,13 +87,13 @@ title: bookcaseTVAnaTenderMoment
 title: bookcaseRadio
 ---
 [nomarkup][The radio comes to life. It seems that the broadcast is already in progress.][/nomarkup]
-Radio: Thank you for your insight Josh! It's always good to know what is happening in the city! Aaaaand… in the other news…
+Radio: Thank you for your insight Josh! It's always good to know what is happening in the city! Aaaaand... in the other news...
 [nomarkup][You know that voice - it's local late night audition - Olive Branch. It's broadcasted for nearly a decade already. You believe that the name of the woman you hear in the radio is Olive Richmond. If someone knows about some important events that take place in the city it's 100% Olive. Shame your death probably wasn't as important to others as it was for you.][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Oh! It's Olive time! \[She clapped her hands a little - not because of mockery. She seems to be a genuine fan.\]
 <<endif>>
 [nomarkup][Kieran scratched his chin and rolled up his sleeve.][/nomarkup]
-{$kieran}: It can't be that late… \[he looks at the clock shield making big eyes of surprise.\] Oh… it is that late… we need to hurry, I don't think that Ms Richmond would have any useful information for us.
+{$kieran}: It can't be that late... \[he looks at the clock shield making big eyes of surprise.\] Oh... it is that late... we need to hurry, I don't think that Ms Richmond would have any useful information for us.
 <<if GetIsPartyMemberRecruited($anastasia) is true>>    
     [nomarkup][You turn the radio off much to Anastasia's disappointment.][/nomarkup]
     <<jump bookcase>>
@@ -108,7 +108,7 @@ title: bookcaseOccultSuccess
 -> [nomarkup][Take the book.][/nomarkup]
     [nomarkup][Kieran stops you before you could touch the cover.][/nomarkup]
     <<jump theBookOfTheLaw>>
--> {$pcName}: Diana has quite big collection. This one… The Book of the Law \[You point at it\] … seems to be used especially often.
+-> {$pcName}: Diana has quite big collection. This one... The Book of the Law \[You point at it\] ... seems to be used especially often.
     [nomarkup][Kieran looks for a while at the book you pointed out.][/nomarkup]
     {$kieran}: Liber AL vel Legis by Aleister Crowley. Good eyes. \[+1 Kieran influence\]
     <<modifyInfluence (1,$kieran)>>
@@ -142,8 +142,8 @@ title: bookcaseAcademicsSuccess
 ===
 title: poeBookExamine
 ---
-[nomarkup][Poe was considered a master of ciphers during his time… maybe a safe combination is hidden within one of his short stories? You open the book looking for answers… or maybe a nudges? Hard to say… The Gold-Bug is marked. You look at the text sifting through it quickly.][/nomarkup]
-[nomarkup][You see a set of signs and numbers… your knowledge of the literature would be useful in here…][/nomarkup]
+[nomarkup][Poe was considered a master of ciphers during his time... maybe a safe combination is hidden within one of his short stories? You open the book looking for answers... or maybe a nudges? Hard to say... The Gold-Bug is marked. You look at the text sifting through it quickly.][/nomarkup]
+[nomarkup][You see a set of signs and numbers... your knowledge of the literature would be useful in here...][/nomarkup]
 [nomarkup]53‡‡†305))6*;4826)4‡.)4‡);80<br>6*;48†8¶60))85;1‡(;:‡*8†83(88)<br>5*†;46(;88*96*?;8)*‡(;485);5*†<br>2:*‡(;4956*2(5*-4)8¶8*;40692<br>85);)6†8)4‡‡;1(‡9;48081;8:8‡1<br>;48†85;4)485†528806*81(‡9;48<br>;(88;4(‡?34;48)4‡;161;:188;‡?;[/nomarkup]
 [nomarkup][You look for the decryption key which was present in the story, as well as the solution, but the pages on which those would be are ripped from the book.][/nomarkup]
 <<jump poeBookExamineQuestions>>
@@ -180,7 +180,7 @@ title: poeBookExamineMentalSuccess
 ---
 [nomarkup]A good glass in the bishop's hostel in the devil's seat<br>forty-one degrees and thirteen minutes<br>northeast and by north<br>main branch seventh limb east side<br>shoot from the left eye of the death's-head<br>a bee line from the tree through the shot fifty feet out.[/nomarkup]
 (set $goldBugCombination to true)
-{$kieran}: My… do you think there is a code for a safe hidden in this riddle?
+{$kieran}: My... do you think there is a code for a safe hidden in this riddle?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][Anastasia sighs.][/nomarkup]
     {$anastasia}: Why do you people are always cloaks and daggers? Couldn't she keep a note with the safe code straight on her desk?
@@ -192,7 +192,7 @@ title: poeBookExamineMentalSuccess
 ===
 title: poeExamineFailure
 ---
-[nomarkup][It's of no use. You can spend entire evening trying to break the code, but all you gain is a headache… or maybe a lack of it since by the next night you won't have any head that will cause the ache.][/nomarkup] #failure
+[nomarkup][It's of no use. You can spend entire evening trying to break the code, but all you gain is a headache... or maybe a lack of it since by the next night you won't have any head that will cause the ache.][/nomarkup] #failure
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineInvestigationRoll
@@ -242,7 +242,7 @@ title: poeMissingPagesDexterityFailure
     {$anastasia}: Graceful as a swan. \[She chuckles.\]
 <<endif>>
 {$kieran}: You're alright?
--> {$pcName}: Yes, I'm fine…
+-> {$pcName}: Yes, I'm fine...
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineFailureAwareness

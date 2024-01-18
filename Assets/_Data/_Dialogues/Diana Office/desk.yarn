@@ -35,7 +35,7 @@ title: throwAsh
 ---
 [nomarkup][Ash inside the ashtray is stubborn as a mule. Through the years of use it doesn't want to simply go away - you'll probably need to wash it to see clearly what is in it's bottom. But you can work with what you see. You squint your eyes trying to decipher the inscription surrounding Union Jack.][/nomarkup]
 <<if Roll("resolve","awareness") >=3>>
-    -> {$pcName}: Spreading the anarchy in Las Vegas since 19… \[It's a miracle you were able to read nearly entire sentence.\]
+    -> {$pcName}: Spreading the anarchy in Las Vegas since 19... \[It's a miracle you were able to read nearly entire sentence.\]
         {$kieran}: It's probably the year when Diana started. 1969.
         <<set $safeCode to true>>
         [nomarkup][Yout put the ashtray back on the desk.][/nomarkup]
@@ -68,11 +68,11 @@ title: inspectBuds
 title: deskBook
 ---
 [nomarkup][Nothing of particular interest. Well mayba aside from the biography of Anton LaVey with several bookmarks. When you picked it up Kieran chuckled. You raise your brows looking at him.][/nomarkup]
-{$kieran}: I'm sorry. It's… I've met the guy in the past. Quite a showman to be honest. Don't ask. I was on… an investigation of sorts.
+{$kieran}: I'm sorry. It's... I've met the guy in the past. Quite a showman to be honest. Don't ask. I was on... an investigation of sorts.
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: It sounds like everyone in here is a PI. Quite popular pastime.
     [nomarkup][Kieran shooks his head][/nomarkup]
-    {$kieran}: No, no it wasn't anything like that. I was searching… for something.
+    {$kieran}: No, no it wasn't anything like that. I was searching... for something.
     {$anastasia}: Still sounds like PI to me.
     [nomarkup][Kieran sighs.][/nomarkup]
 <<endif>>
@@ -141,7 +141,7 @@ title: hackingFailure
 ===
 title: computerDestroyed
 ---
-[nomarkup][You are pissed… everything tonight is going completely haywire with your life and this soulless machine is only adding up to the pile. You aren't even sure when your fist punched the screen and broke the glass. The pain of cut skin and the smell of burned circuits has brought you back to senses. It's a miracle that your show of anger didn't cause a power shortage. Somehow you feel better, but you can't shrug off the feeling that the person that punched the screen wasn't you.][/nomarkup]
+[nomarkup][You are pissed... everything tonight is going completely haywire with your life and this soulless machine is only adding up to the pile. You aren't even sure when your fist punched the screen and broke the glass. The pain of cut skin and the smell of burned circuits has brought you back to senses. It's a miracle that your show of anger didn't cause a power shortage. Somehow you feel better, but you can't shrug off the feeling that the person that punched the screen wasn't you.][/nomarkup]
 <<DealDamage ($pcName,2,"superficial")>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Haha! Straight between the eyes!
@@ -196,12 +196,12 @@ title: olderLogs
 ===
 title: searchQuerry
 ---
-[nomarkup][Computer grinds the files in search of anything “safe” related. And… bingo! You find that Diana ordered one some time ago and the other file indicates that the code is set to 1969.][/nomarkup]
+[nomarkup][Computer grinds the files in search of anything “safe” related. And... bingo! You find that Diana ordered one some time ago and the other file indicates that the code is set to 1969.][/nomarkup]
 <<jump accessGranted>>
 ===
 title: deskDrawers
 ---
-[nomarkup][Not much in here. Most of them contain paper, writing utensils, some various tokens… in one there was even an unopened pack of the Embassy cigarettes. There is one drawer that remains locked to you. You see a keyhole. But lock doesn't look too complicated.][/nomarkup]
+[nomarkup][Not much in here. Most of them contain paper, writing utensils, some various tokens... in one there was even an unopened pack of the Embassy cigarettes. There is one drawer that remains locked to you. You see a keyhole. But lock doesn't look too complicated.][/nomarkup]
 -> [nomarkup][Pick the drawer open.][Dexterity + Larceny][/nomarkup]
     <<if Roll("strenth","larceny") >=2>>
         <<jump drawerLockpickSuccess>>
@@ -227,7 +227,7 @@ title: drawerStrengthSuccess
 ===
 title: drawerFailure
 ---
-[nomarkup][The lock seems to be more than you thought. What secrets it may hide if it is as resilient as armored safe? You'll never know… this is getting more and more annoying. As if everything around you is sworn to stay in your way.][/nomarkup]
+[nomarkup][The lock seems to be more than you thought. What secrets it may hide if it is as resilient as armored safe? You'll never know... this is getting more and more annoying. As if everything around you is sworn to stay in your way.][/nomarkup]
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup]
         <<DecreaseWillpower ($pcName, 1)>>

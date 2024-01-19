@@ -8,6 +8,7 @@ namespace SunsetSystems.Inventory.Data
     public interface IBaseItem
     {
         string Name { get; }
+        string ReadableID { get; }
         string DatabaseID { get; }
         bool Stackable { get; }
         ItemCategory ItemCategory { get; }

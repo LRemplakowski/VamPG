@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Constants;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
@@ -53,6 +54,7 @@ namespace SunsetSystems.Dialogue
             Instance?._dialogueRunner.SetDialogueViews(views.ToArray());
         }
 
+        [Button]
         public bool StartDialogue(string startNode, YarnProject project = null)
         {
             if (project != null)

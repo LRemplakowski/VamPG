@@ -3,36 +3,36 @@ tags:
 ---
 KNOCK. KNOCK. KNOCK.
 <<if $bathroomdoordestroyed == true>>
-    {$landlord} The fuck did you do? Was there a reason you felt the need to damage my property? Jesus... I'm billing you for the damages, and I expect the payment to be on time.
+    {$landlord}: The fuck did you do? Was there a reason you felt the need to damage my property? Jesus... I'm billing you for the damages, and I expect the payment to be on time.
     [It's disappointing that the first thing that your landlord notices is the state of the apartment, rather than the fact that you look inches from death. Kevin certainly isn't the kind of person you would expect basic human decency from, though.]
 <<else>>
     <<if $vomit == true>>
-        {$landlord} [Kevin covers his nose.] Gah, you look and smell like shit. I hope you're not contagious.
+        {$landlord}: [Kevin covers his nose.] Gah, you look and smell like shit. I hope you're not contagious.
     <<else>>
-        {$landlord} [Kevin covers his nose.] Gah, what the hell is that smell?
-        {$pcname} What do you mean?
-        {$landlord} You don't smell that? Smells like... nevermind. Let me take a look at that sink.
+        {$landlord}: [Kevin covers his nose.] Gah, what the hell is that smell?
+        {$pcname}: What do you mean?
+        {$landlord}: You don't smell that? Smells like... nevermind. Let me take a look at that sink.
     <<endif>>
     [As he bends over to examine the pipes under the sink, you find yourself staring at Kevin's exposed neck. You swear you can see his pulse through the spider web of veins under his skin.]
     [He looks appetizing - but not in a sexual way. You don't feel aroused. Anxious, more like, but not nervous. Instead, it's an anticipatory feeling - like your emotions know something that you do not have the foresight to predict... Your stomach aches, the hunger gnawing at your insides without mercy. You lean closer. Why are you doing this?]
-    {$beast} I'm so hungry...
-    {$landlord} Here we go.
+    {$beast}: I'm so hungry...
+    {$landlord}: Here we go.
     [Kevin leverages his wrench and loosens a bolt. As the pipe opens, blood sprays him, leaving him soaked. The Bathroom Key and an eyeball fall onto Kevin's chest. He jumps up - eyes wide in horror.]
-    {$landlord} UGH!
-    {$beast} FEED!
+    {$landlord}: UGH!
+    {$beast}: FEED!
     [Kevin brings his attention to you, clearly in shock. The blood soaking his body only makes him more appetizing - the iron smell like a siren's call to your senses. You catch yourself licking your lips.]
-    {$landlord} Stay away! Monster!
+    {$landlord}: Stay away! Monster!
     [Kevin starts to rush towards the door.]
-    {$beast} YOU CAN'T RUN FROM ME!
+    {$beast}: YOU CAN'T RUN FROM ME!
     [You pounce on Kevin as a matter of instinct, sinking your teeth into his neck. Wet, warm blood flows down your throat. This is what you've been craving.] Set Hunger to 0.
     <<set $kevinmurdered to true>>
     <<set $police to true>>
     [When you retract your bite, his limp body falls to the ground with a sickening thud. The shock of what you've just done hits you all at once.]
-    {$pcname} [Holy fuck! What did I-?]
+    {$pcname}: [Holy fuck! What did I-?]
     -> (Intelligence + Medicine) [Try to save him.]
         <<if Roll("Intelligence","Medicine") >= 3>>
             (Success) [You cover up the wound with a dish rag and administer CPR. Kevin's eyes flutter open. Through exasperated breaths and gurgles you hear him struggle to speak.]
-            {$landlord} [He's gurgling, choking on his own blood.] You... bitch! [His eyes go blank, the light fading from them as he breathes his last breath. At least he died how he lived.]
+            {$landlord}: [He's gurgling, choking on his own blood.] You... bitch! [His eyes go blank, the light fading from them as he breathes his last breath. At least he died how he lived.]
         <<else>>
             (Failure) [You try to administer CPR, but hear the crack of his ribs snapping with the first press of your palms. Shit. What little of his blood remains pools on the floor.]
         <<endif>>

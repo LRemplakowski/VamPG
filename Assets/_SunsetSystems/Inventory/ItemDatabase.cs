@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace SunsetSystems.Core.Database
 {
     [CreateAssetMenu(fileName = "New Item Database", menuName = "Sunset Inventory/Item Database")]
-    public class ItemDatabase : ScriptableObject
+    public class ItemDatabase : SerializedScriptableObject
     {
         [SerializeField]
         private Dictionary<string, IBaseItem> _itemRegistry = new();
@@ -39,9 +40,9 @@ namespace SunsetSystems.Core.Database
             _itemRegistry.Values.ToList().ForEach(baseItem => _itemAccessorRegistry.Add(baseItem.Name, baseItem.DatabaseID));
         }
 
-        public bool TryGetEntry(string objectiveID, out IBaseItem baseItem)
+        public bool TryGetEntry(string itemID, out IBaseItem baseItem)
         {
-            return _itemRegistry.TryGetValue(objectiveID, out baseItem);
+            return _itemRegistry.TryGetValue(itemID, out baseItem);
         }
 
         public bool TryGetEntryByReadableID(string readableID, out IBaseItem baseItem)

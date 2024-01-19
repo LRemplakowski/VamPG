@@ -13,6 +13,8 @@ namespace SunsetSystems.Inventory.Data
     {
         [field: SerializeField]
         public string Name { get; protected set; }
+        [field: SerializeField]
+        public string ReadableID { get; private set; }
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; }
         [field: SerializeField, ReadOnly]
@@ -28,18 +30,15 @@ namespace SunsetSystems.Inventory.Data
 
         public BaseItem Data => this;
 
-        private void OnEnable()
+        private void OnValidate()
         {
-#if UNITY_EDITOR
             if (string.IsNullOrWhiteSpace(Name))
-            {
                 Name = name;
-                EditorUtility.SetDirty(this);
-            }
+            if (string.IsNullOrEmpty(ReadableID))
+                ReadableID = Name;
             if (string.IsNullOrWhiteSpace(DatabaseID))
                 AssignNewID();
             ItemDatabase.Instance?.Register(this);
-#endif
         }
 
         private void Reset()

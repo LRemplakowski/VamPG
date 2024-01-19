@@ -2,7 +2,7 @@
 tags:
 ---
 [Ready to soak in the relaxing spray of hot water upon your skin, you open the shower curtain, only to find a one-eyed corpse in a pool of old blood half-staring back at you. Your stomach sinks. As if this night couldn't get any worse.]
-{$pcname} [No! Oh god, please, no!]
+{$pcname}: [No! Oh god, please, no!]
 -> (Intelligence + Medicine) [Find the cause of death.] <<if visited("CauseofDeath") == false>>
     <<jump CauseofDeath>>
 -> (Wits + Streetwise) [Fleece the body.] <<if visited("FleeceBody") == false>>
@@ -30,6 +30,6 @@ tags:
     (Failure) [You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.]
 <<endif>>
 [You find a black and white photo of him holding a baby.]
-{$pcname} [Poor bastard.]
+{$pcname}: [Poor bastard.]
 <<jump Shower>>
 ===

@@ -18,7 +18,7 @@ tags:
 <<else>>
     [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup]
 <<endif>>
-{$pcname} [nomarkup][What's happening to me?][/nomarkup]
+{$pcname}: [nomarkup][What's happening to me?][/nomarkup]
 <<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 3>>
     [nomarkup][This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.][/nomarkup]
 <<endif>>
@@ -29,13 +29,13 @@ tags:
 ---
 [nomarkup][Sifting through your cosmetic products, you find a Bobby Pin on the counter.][/nomarkup]
 <<set $bobbyPin to true>>
-{$pcname} [nomarkup][Wish I had this sooner.][/nomarkup]
+{$pcname}: [nomarkup][Wish I had this sooner.][/nomarkup]
 <<jump BathroomSink>>
 ===
 title: MedCabinet
 tags:
 ---
 [nomarkup][You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.][/nomarkup]
-{$pcname} [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup]
+{$pcname}: [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup]
 <<jump BathroomSink>>
 ===

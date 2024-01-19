@@ -115,5 +115,18 @@ namespace SunsetSystems.Dialogue
         {
             throw new NotImplementedException();
         }
+
+        [YarnCommand("GiveItem")]
+        public static void GiveItemToPlayer(string itemID)
+        {
+            if (ItemDatabase.Instance.TryGetEntry(itemID, out IBaseItem item))
+            {
+                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(item));
+            }
+            else
+            {
+                Debug.LogError($"Dialogue tried to give item {itemID} to player, but there is no such item in Item Database!");
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Data;
+using System.Linq;
 
 namespace SunsetSystems.Inventory
 {
@@ -49,7 +50,12 @@ namespace SunsetSystems.Inventory
             PlayerInventory.AddItem(item);
         }
 
-        public static void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
+        public bool GetInventoryContainsItemWithReadableID(string itemID)
+        {
+            return _playerInventory.Contents.Any(entry => entry._item.ReadableID == itemID);
+        }
+
+        public void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
         {
             if (from.TryRemoveItem(item))
             {

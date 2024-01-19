@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using SunsetSystems.Dice;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
@@ -123,6 +124,18 @@ namespace SunsetSystems.Dialogue
         public static int GetBloodPoints(string characterID)
         {
             throw new NotImplementedException();
+        }
+
+        [YarnFunction ("GetHasItem")]
+        public static bool GetHasItem(string itemID)
+        {
+            return InventoryManager.Instance.GetInventoryContainsItemWithReadableID(itemID);
+        }
+
+        [YarnFunction("GetIsCompanionInParty")]
+        public static bool GetIsCompanionInParty(string characterID)
+        {
+            return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == characterID);
         }
     }
 }

@@ -1,56 +1,56 @@
 ﻿title: PhoneCall
 tags:
 ---
-[You pick up the phone. The last voice you want to hear in the disoriented wake of a drunken bender blares out the line: your ex-husband. At the very least, he can't see you right now - something you're exceedingly thankful for.]
+[nomarkup][You pick up the phone. The last voice you want to hear in the disoriented wake of a drunken bender blares out the line: your ex-husband. At the very least, he can't see you right now - something you're exceedingly thankful for.][/nomarkup]
 {$exspouse}: Hey Dez, how you been? I was starting to worry. You didn't pick up earlier today.
-[The worst part is, you know the concern is sincere.]
+[nomarkup][The worst part is, you know the concern is sincere.][/nomarkup]
 -> {$pcname}: ...Good.
     {$exspouse}: Glad to hear you're adjusting.
 -> {$pcname}: Not going to lie to you, I've been better.
     {$exspouse}: I'm sorry to hear that. This has been hard on both of us.
-    {$pcname}: [Yeah, “both of us.”]
-    [...you almost say, but something stops you. He has been nothing but kind, throughout all of this, after all.] 
--> {$pcname}: [Hang up.]
-    [You hear Arthur desperately mutter some syllables before you hang up the line.]
+    {$pcname}: [nomarkup][Yeah, “both of us.”][/nomarkup]
+    [nomarkup][...you almost say, but something stops you. He has been nothing but kind, throughout all of this, after all.][/nomarkup] 
+-> {$pcname}: [nomarkup][Hang up.][/nomarkup]
+    [nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup]
     <<jump AfterPhoneCall>>
 {$exspouse}: Listen, I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you.
 -> {$pcname}: (Charisma + Persuasion) I'm working on it, give me some time.
     <<if Roll("Charisma","Persuasion") >= 2>>
-        {$exspouse}: Okay. I trust you. Just keep me updated, alright? You know better than anyone I'm not exactly swimming in cash here. [He awkwardly chuckles.] #success
-        {$pcname}: [Guilt hits you like a bag of bricks. He doesn't deserve this. You can feel your throat closing up with emotion. Just have to get a few more words out.] Will do.
-        {$exspouse}: I'll let you get to it then. Bye Dez. I lo- [He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated if he had gone through with it.]
+        {$exspouse}: Okay. I trust you. Just keep me updated, alright? You know better than anyone I'm not exactly swimming in cash here. [He awkwardly chuckles.][/nomarkup] #success
+        {$pcname}: [nomarkup][Guilt hits you like a bag of bricks. He doesn't deserve this. You can feel your throat closing up with emotion. Just have to get a few more words out.][/nomarkup] Will do.
+        {$exspouse}: I'll let you get to it then. Bye Dez. I lo- [He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated if he had gone through with it.][/nomarkup]
         <<jump AfterPhoneCall>>
     <<else>>
         {$exspouse}: That's what you said a month ago. Look, I only gave it to you to help you get on your feet. The last thing I want to do is take my ex to court, but I don't know what else to do. #failure
         -> {$pcname}: I understand where you're coming from. I'm sorry.
-            {$exspouse}: It's okay. I know you're good for it. Just keep me updated, alright? You know better than anyone I'm not exactly swimming in cash here. [He awkwardly chuckles, but you can hear the stress in his voice.]
-            {$pcname}: [Guilt hits you like a bag of bricks. He doesn't deserve this. You can feel your throat closing up with emotion. Just have to get a few more words out.] Will do.
-            {$exspouse}: I'll let you get to it then. Bye Dez. I lo- [He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated if he had gone through with it.]
+            {$exspouse}: It's okay. I know you're good for it. Just keep me updated, alright? You know better than anyone I'm not exactly swimming in cash here. [He awkwardly chuckles, but you can hear the stress in his voice.][/nomarkup]
+            {$pcname}: [nomarkup][Guilt hits you like a bag of bricks. He doesn't deserve this. You can feel your throat closing up with emotion. Just have to get a few more words out.][/nomarkup] Will do.
+            {$exspouse}: I'll let you get to it then. Bye Dez. I lo- [He quickly catches his mistake and hangs up the phone. Just force of habit, you tell yourself. The worst part is, you would have reciprocated if he had gone through with it.][/nomarkup]
             <<jump AfterPhoneCall>>
         -> {$pcname}: Fuck off with your vague threats.
             {$exspouse}: Let's not escalate things Dez. I don't want to fight with you anymore.
             {$pcname}: Quit it. You always say this, positioning yourself as the voice of reason - the arbiter of all that is good and just so that next to you, I just look like a monster...
-            {$exspouse}: Desiree, I... [There are a few long moments of silence on the other end of the line.]
-            -> [Wait for him to finish his sentence.]
+            {$exspouse}: Desiree, I... [nomarkup][There are a few long moments of silence on the other end of the line.][/nomarkup]
+            -> [nomarkup][Wait for him to finish his sentence.][/nomarkup]
                 {$exspouse}: ...I'm sorry. I can't do this.
-                [A moment later, and all that remains is the hum of the dial tone. He's hung up.]
+                [nomarkup][A moment later, and all that remains is the hum of the dial tone. He's hung up.][/nomarkup]
                 <<jump AfterPhoneCall>>
-            -> [Hang up.]
-                [You hear Arthur desperately mutter some syllables before you hang up the line.]
+            -> [nomarkup][Hang up.][/nomarkup]
+                [nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup]
                 <<jump AfterPhoneCall>>
-        -> {$pcname}: [Hang up.]
-            [You hear Arthur desperately mutter some syllables before you hang up the line.]
+        -> {$pcname}: [nomarkup][Hang up.][/nomarkup]
+            [nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup]
             <<jump AfterPhoneCall>>
     <<endif>>
--> [Hang up.]
-    [You hear Arthur desperately mutter some syllables before you hang up the line.]
+-> [nomarkup][Hang up.][/nomarkup]
+    [nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup]
     <<jump AfterPhoneCall>>
 ===
 title: AfterPhoneCall
 tags:
 ---
-[You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to dream about living the quintessential suburban fantasy, with a white-picket fence and two or three kids running around in the backyard, but when it came time to commit to that plan, you weren't ready, and Arthur never pressed. Sometimes, you wish he had. At least then, you would have known where things stood before it all fell apart...]
-{$pcname}: [Ugh.]
-[Your headache is getting worse by the minute. You rub your fingers against your temple to no avail. You need something to take the edge off.] 
+[nomarkup][You didn't want things to end like this. You wish he never gave you that loan, but you also know you'd have never been able to start your agency without it. You used to dream about living the quintessential suburban fantasy, with a white-picket fence and two or three kids running around in the backyard, but when it came time to commit to that plan, you weren't ready, and Arthur never pressed. Sometimes, you wish he had. At least then, you would have known where things stood before it all fell apart...][/nomarkup]
+{$pcname}: [nomarkup][Ugh.][/nomarkup]
+[nomarkup][Your headache is getting worse by the minute. You rub your fingers against your temple to no avail. You need something to take the edge off.][/nomarkup] 
 <<CompleteObjective ("MAIN_SATURDAY_START","ANSWER_PHONE")>>
 ===

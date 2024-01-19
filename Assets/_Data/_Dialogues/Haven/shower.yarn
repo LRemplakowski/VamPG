@@ -1,22 +1,22 @@
 ﻿title: Shower
 tags:
 ---
-[Ready to soak in the relaxing spray of hot water upon your skin, you open the shower curtain, only to find a one-eyed corpse in a pool of old blood half-staring back at you. Your stomach sinks. As if this night couldn't get any worse.]
-{$pcname}: [No! Oh god, please, no!]
--> (Intelligence + Medicine) [Find the cause of death.] <<if visited("CauseofDeath") == false>>
+[nomarkup][Ready to soak in the relaxing spray of hot water upon your skin, you open the shower curtain, only to find a one-eyed corpse in a pool of old blood half-staring back at you. Your stomach sinks. As if this night couldn't get any worse.][/nomarkup]
+{$pcname}: [nomarkup][No! Oh god, please, no!][/nomarkup]
+-> (Intelligence + Medicine) [nomarkup][Find the cause of death.][/nomarkup] <<if visited("CauseofDeath") == false>>
     <<jump CauseofDeath>>
--> (Wits + Streetwise) [Fleece the body.] <<if visited("FleeceBody") == false>>
+-> (Wits + Streetwise) [nomarkup][Fleece the body.][/nomarkup] <<if visited("FleeceBody") == false>>
     <<jump FleeceBody>>
--> [Walk away.]
+-> [nomarkup][Walk away.][/nomarkup]
     <<CompleteObjective ("MAIN_SATURDAY_START","TAKE_SHOWER")>>
 ===
 title: CauseofDeath
 tags:
 ---
 <<if Roll("Intelligence","Medicine") >= 3>>
-    (Success) [In addition to his missing eye, he has several bruises and gashes across his face and neck. Due to his complexion, he most likely died of blood loss.]
+    [nomarkup][In addition to his missing eye, he has several bruises and gashes across his face and neck. Due to his complexion, he most likely died of blood loss.][/nomarkup] #success
 <<else>>
-    (Failure) [You're not sure why he died, specifically, but the missing eye and hole in his neck certainly didn't help.]
+    [nomarkup][You're not sure why he died, specifically, but the missing eye and hole in his neck certainly didn't help.][/nomarkup] #failure
 <<endif>>
 <<jump Shower>>
 ===
@@ -24,12 +24,12 @@ title: FleeceBody
 tags:
 ---
 <<if Roll("Wits","Streetwise") >= 3>>
-    (Success) [You find his wallet and ID: his name is Diego Vazguez.]
+    [nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success
     <<set $smallmoney to true>>
 <<else>>
-    (Failure) [You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.]
+    [nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup] #failure
 <<endif>>
-[You find a black and white photo of him holding a baby.]
-{$pcname}: [Poor bastard.]
+[nomarkup][You find a black and white photo of him holding a baby.][/nomarkup]
+{$pcname}: [nomarkup][Poor bastard.][/nomarkup]
 <<jump Shower>>
 ===

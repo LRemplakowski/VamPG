@@ -322,6 +322,12 @@ namespace SunsetSystems.Persistence
             {
                 HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
             }
+
+            [YarnCommand("RecruitKieran")]
+            public static void RecruitKieran()
+            {
+                HavenSceneLogic.RecruitKieran();
+            }
         }
     }
 }

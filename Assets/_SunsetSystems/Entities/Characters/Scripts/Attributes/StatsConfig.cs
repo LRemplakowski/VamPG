@@ -232,6 +232,22 @@ namespace SunsetSystems.Entities.Data
             result.animalKen = new Skill(existing.animalKen);
             result.etiquette = new Skill(existing.etiquette);
             result.insight = new Skill(existing.insight);
+            result.intimidation = new Skill(existing.intimidation);
+            result.leadership = new Skill(existing.leadership);
+            result.performance = new Skill(existing.performance);
+            result.persuasion = new Skill(existing.persuasion);
+            result.streetwise = new Skill(existing.streetwise);
+            result.subterfuge = new Skill(existing.subterfuge);
+            //MENTAL
+            result.academics = new Skill(existing.academics);
+            result.awarness = new Skill(existing.awarness);
+            result.finance = new Skill(existing.finance);
+            result.investigation = new Skill(existing.investigation);
+            result.medicine = new Skill(existing.medicine);
+            result.occult = new Skill(existing.occult);
+            result.politics = new Skill(existing.politics);
+            result.science = new Skill(existing.science);
+            result.technology = new Skill(existing.technology);
             return result;
         }
 

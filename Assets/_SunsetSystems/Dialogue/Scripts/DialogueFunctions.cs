@@ -74,12 +74,12 @@ namespace SunsetSystems.Dialogue
             AttributeType attributeType = GetAttributeTypeFromString(statName);
             if (attributeType != AttributeType.Invalid)
             {
-                return PartyManager.Instance.MainCharacter.References.StatsManager.GetAttribute(attributeType).GetValue();
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetAttribute(attributeType)?.GetValue() ?? 0;
             }
             SkillType skillType = GetSkillTypeFromString(statName);
             if (skillType != SkillType.Invalid)
             {
-                return PartyManager.Instance.MainCharacter.References.StatsManager.GetSkill(skillType).GetValue();
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetSkill(skillType)?.GetValue() ?? 0;
             }
             return 1;
         }

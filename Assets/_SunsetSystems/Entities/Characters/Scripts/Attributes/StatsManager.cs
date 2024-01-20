@@ -142,7 +142,12 @@ namespace SunsetSystems.Entities.Characters
 
         public CreatureAttribute GetAttribute(AttributeType attributeType)
         {
-            return GetAttributes().FirstOrDefault(a => a.AttributeType == attributeType);
+            foreach (CreatureAttribute attribute in GetAttributes())
+            {
+                if (attributeType == attribute.AttributeType)
+                    return attribute;
+            }
+            return null;
         }
 
         public List<Skill> GetSkills()
@@ -152,7 +157,12 @@ namespace SunsetSystems.Entities.Characters
 
         public Skill GetSkill(SkillType skillType)
         {
-            return GetSkills().FirstOrDefault(s => s.SkillType == skillType);
+            foreach (Skill skill in GetSkills())
+            {
+                if (skillType == skill.SkillType)
+                    return skill;
+            }
+            return null;
         }
 
         public HealthData GetHealthData()

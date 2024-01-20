@@ -144,8 +144,8 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
-            waitForLineContinueTask = WaitForProceedToNextLine();
-            await waitForLineContinueTask;
+            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Contains("lastLine") is false))
+                await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
 
             async Task WaitForProceedToNextLine()

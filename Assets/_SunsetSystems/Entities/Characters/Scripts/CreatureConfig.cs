@@ -69,6 +69,7 @@ namespace SunsetSystems.Entities.Characters
 #endif
         }
 
+        [Button("Force Validate")]
         private void OnValidate()
         {
             if (string.IsNullOrWhiteSpace(DatabaseID))

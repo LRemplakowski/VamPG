@@ -41,6 +41,9 @@ namespace SunsetSystems.Entities
             _creatureRegistry.TryAdd(config.DatabaseID, config);
             _accessorRegistry = new();
             _creatureRegistry.Values.ToList().ForEach(c => _accessorRegistry.TryAdd(c.ReadableID, c.DatabaseID));
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
             return true;
         }
 

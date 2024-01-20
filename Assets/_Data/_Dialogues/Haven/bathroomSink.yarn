@@ -8,7 +8,7 @@ tags:
 -> [nomarkup][Search the medicine cabinet.][/nomarkup] <<if visited("MedCabinet") == false>> #line:078e486 
     <<jump MedCabinet>>
 -> [nomarkup][Walk away.][/nomarkup]  #line:0e48216 
-    <<CompleteObjective ("MAIN_SATURDAY_START","GRAB_MEDS_2")>>
+    <<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS_2">>
 ===
 title: MirrorLook
 tags:

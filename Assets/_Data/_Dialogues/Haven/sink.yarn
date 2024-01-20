@@ -6,7 +6,8 @@ tags:
 <<if $vomit == true>>
     [nomarkup][You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual... Like you're terminally ill.][/nomarkup] #line:0f33850 
     [nomarkup][The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either. You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup] #line:0afd30e 
-    -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup] #line:06dccdb 
+    -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup] #line:06dccdb
+        <<CompleteObjective "FIX_SINK" "REPAIR_SINK">>   
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>
             [nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.][/nomarkup] #success #line:0b08312 
             <<set $key to true>>
@@ -39,7 +40,8 @@ tags:
     -> [nomarkup][Walk away.][/nomarkup] #line:0b9f479 
 <<else>>
     [nomarkup][The sink is clogged. Again. You get what you pay for, and this shitty apartment just about cleans you out each time rent is due. It's a pile of crap, but at the very least, it's your pile of crap.][/nomarkup] #line:0f4b5be 
-    -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup] #line:052c893 
+    -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup] #line:052c893
+        <<CompleteObjective "FIX_SINK" "REPAIR_SINK">>  
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>
             [nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.][/nomarkup] #success #line:0c0b51c 
             <<set $key to true>>
@@ -69,6 +71,5 @@ tags:
             <<endif>>
             -> [nomarkup][Walk away.][/nomarkup] #line:0e1b8f6 
     -> [nomarkup][Walk away.][/nomarkup] #line:009d6b5 
-<<endif>>
-<<CompleteObjective ("FIX_SINK","REPAIR_SINK")>>   
+<<endif>> 
 ===

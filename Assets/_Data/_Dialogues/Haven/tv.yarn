@@ -1,7 +1,7 @@
 ﻿title: TV
 tags:
 ---
-<<if $kieraninparty == false>>
+<<if GetIsCompanionInParty("COMPANION_KIERAN")>>
     [nomarkup][You don't have time to watch TV.][/nomarkup] #line:0537fee 
 <<else>>
     {$kieran}: ...Disappointing. This will not help your case, nor will it help mine. [nomarkup][-1 Kieran Influence][/nomarkup] #line:0d04613 

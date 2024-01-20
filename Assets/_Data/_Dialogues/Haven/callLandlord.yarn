@@ -17,13 +17,13 @@ position: -328,-104
         {$landlord}: I'll have to charge you a... uh... a late night fee. $200. #line:07f776e 
         -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:025fbad 
             [nomarkup][He hangs up.][/nomarkup] #line:0de55de 
-            <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+            <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
             <<stop>>
         -> {$pcname}: You're trying to rip me off! #line:04a227e 
             {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:007cdae 
             {$pcname}: Fine. I'll take it. #line:00c3d3c 
             -> [nomarkup][Hang up.][/nomarkup] #line:0bdecac 
-                <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+                <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
                 <<stop>>
     -> {$pcname}: (Manipulation + Persuasion) Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:04d20e9 
         <<jump ManipPersKevin>>
@@ -44,13 +44,13 @@ position: 408,-214
     {$landlord}: I'll have to charge you a... uh... a late night fee. $200. #line:084f44f 
     -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:0fd8cc0 
         [nomarkup][He hangs up.][/nomarkup] #line:0b9713d 
-        <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+        <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
         <<stop>>
     -> {$pcname}: You're trying to rip me off! #line:0d8d5ab 
         {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:0a3d777 
         {$pcname}: Fine. I'll take it. #line:060be9f 
         -> [nomarkup][Hang up.][/nomarkup] #line:013fa6e 
-            <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+            <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
             <<stop>>
 -> (Manipulation + Persuasion) {$pcname}: Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:00f7434 
     <<jump ManipPersKevin>>
@@ -70,7 +70,7 @@ position: 113,-107
     {$landlord}: Ah, but I've said I would teach you, didn't I? Just let me get dressed. Think you can hold it together until I get there? #line:047c5ab 
     {$pcname}: Sure. Please, don't keep me waiting. [nomarkup][You say this through teeth gritted in a smile that doesn't reach your eyes. It's a saccharine-sweet, enthusiastic tone - your customer service voice.][/nomarkup]   #line:0722619 
     [nomarkup][He hangs up.][/nomarkup] #line:006c4c6 
-    <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+    <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
     <<stop>>
 <<else>>
     {$landlord}: Don't act like we're friends. You don't even know my last name. I only let you sign the lease because I pitied you. I guess I'll extend my pity one last time, but after that, you're on your own. #failure #line:0bc3d9f 
@@ -91,7 +91,7 @@ position: 157,51
     {$landlord}: I'll be right over. [nomarkup][You can hear the smug grin in his voice. Disgusting.][/nomarkup] #line:0062c38 
     {$pcname}: Okay. #line:0e48e85 
     [nomarkup][He hangs up.][/nomarkup] #line:042db95 
-    <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+    <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
     <<stop>>
 <<else>>
     {$landlord}: Nice try, dear. I know I'm a catch, but I don't stick my dick in divorcees. Too much baggage. I guess I'll help just because you don't have any other man in your life, but keep your hands to yourself. Frankly, I'm out of your league. #failure #line:0d976d4 
@@ -109,7 +109,7 @@ position: 85,-289
     [nomarkup][Well, that seemed to shut him up. You just hope he never actually gets around to looking into your claim...][/nomarkup] #line:0ab4692 
     {$pcname}: Now you do. #line:02c982c 
     -> [nomarkup][Hang up.][/nomarkup] #line:0a463c8 
-        <<CompleteObjective ("FIX_SINK","CALL_LANDLORD")>>   
+        <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
         <<stop>>
 <<else>>
     {$landlord}: [nomarkup][He snorts out a laugh on the other end.][/nomarkup] You're trying to intimidate me? After I put a roof over your head? Get the fuck out of here with your empty threats. #failure #line:0401975 

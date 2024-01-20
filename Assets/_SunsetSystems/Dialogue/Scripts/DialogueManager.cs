@@ -3,10 +3,13 @@ using SunsetSystems.Constants;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UltEvents;
 using UnityEngine;
+using UnityEngine.Events;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -18,6 +21,11 @@ namespace SunsetSystems.Dialogue
         private DialogueRunner _dialogueRunner;
         [field: SerializeField]
         public float DefaultTypewriterValue { get; private set; } = 15f;
+
+        public UnityEvent OnDialogueStarted => _dialogueRunner.onDialogueStart;
+        public UnityEvent OnDialogueFinished => _dialogueRunner.onDialogueComplete;
+        public UnityEvent<string> OnNodeStarted => _dialogueRunner.onNodeStart;
+        public UnityEvent<string> OnNodeFinished => _dialogueRunner.onNodeComplete;
 
         protected override void Awake()
         {

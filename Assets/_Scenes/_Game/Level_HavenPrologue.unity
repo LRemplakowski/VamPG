@@ -21776,6 +21776,10 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 5045928394722330574, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 5372352759082298837, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 5372352759082298837, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 5602180026248705786, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -21878,11 +21882,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21958,11 +21962,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -26609,15 +26613,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26658,6 +26662,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -42252,6 +42260,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: InvestigationBoard
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!65 &1292147315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45749,6 +45765,25 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: Crowbar
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls:
+    - _Target: {fileID: 1513787326}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &1513787328
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -48982,6 +49017,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: TV
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!114 &1654185704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49135,7 +49178,7 @@ MonoBehaviour:
   _interactionTransform: {fileID: 1654185701}
   _interactable: 0
   _nameplateName: TV
-  _interactableOnce: 0
+  _interactableOnce: 1
   OnInteractionTriggered:
     _PersistentCalls: []
 --- !u!64 &1654185708
@@ -54806,6 +54849,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: Pizza
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!114 &1948786696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59482,6 +59533,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       insertIndex: -1
       addedObject: {fileID: 781100931855757376}
+    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 781100931855757377}
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
 --- !u!4 &781100931855757369 stripped
 Transform:
@@ -59559,6 +59613,54 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: BathroomDoorStart
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
+--- !u!114 &781100931855757377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781100931855757373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: 6951283254bfa2f46bf324f17d93225d, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls:
+    - _Target: {fileID: 781100931855757372}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls: []
 --- !u!1001 &808362554433068549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60467,6 +60569,14 @@ MonoBehaviour:
         m_CallState: 2
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: Shower
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!65 &1493672629717164981
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -63059,6 +63169,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: PhoneStartNode
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &3648448450239223759
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -63656,7 +63774,7 @@ PrefabInstance:
     - target: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
     - target: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: <EntryNode>k__BackingField
       value: LandlordVisit
@@ -64215,6 +64333,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: Sink
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &5363628252765409757
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -66362,6 +66488,25 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: GunCase
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls:
+    - _Target: {fileID: 6672455340073717584}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &6672455340073717590
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -67212,6 +67357,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: BathroomSink
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &7338327342520421205
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -68329,6 +68482,14 @@ MonoBehaviour:
         m_CallState: 2
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: 'TakeCover '
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!65 &7762869251854723825
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -69351,6 +69512,14 @@ MonoBehaviour:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   <EntryNode>k__BackingField: TrashCan
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!135 &8629123247756599237
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -69551,7 +69720,7 @@ MonoBehaviour:
   _interactionTransform: {fileID: 8629123247756599234}
   _interactable: 0
   _nameplateName: Trashcan
-  _interactableOnce: 0
+  _interactableOnce: 1
   OnInteractionTriggered:
     _PersistentCalls: []
 --- !u!114 &8629123247756599242

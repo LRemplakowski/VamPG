@@ -1,4 +1,12 @@
-﻿title: PhoneCall
+﻿title: PhoneStartNode
+---
+<<if visited("PhoneCall") == true>>
+    <<jump CallLandlord>>
+<<else>>
+    <<jump PhoneCall>>
+<<endif>>
+===
+title: PhoneCall
 tags:
 ---
 [nomarkup][You pick up the phone. The last voice you want to hear in the disoriented wake of a drunken bender blares out the line: your ex-husband. At the very least, he can't see you right now - something you're exceedingly thankful for.][/nomarkup]

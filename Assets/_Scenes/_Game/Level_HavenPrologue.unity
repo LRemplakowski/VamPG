@@ -3846,7 +3846,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -99.7412, y: -0, z: -199.4824}
+    textureOffset: {x: -0, y: -0, z: -0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -21835,11 +21835,11 @@ PrefabInstance:
       objectReference: {fileID: 6002621442208826797, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21895,11 +21895,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.000000021097142
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.0000000148675605
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -25375,7 +25375,7 @@ MonoBehaviour:
     invertFade: 0
     distanceFadeStart: 10000
     distanceFadeEnd: 10000
-    textureOffset: {x: -99.7412, y: -0, z: -199.4824}
+    textureOffset: {x: -0, y: -0, z: -0}
     falloffMode: 0
     maskMode: 0
     materialMask: {fileID: 0}
@@ -36624,9 +36624,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1030060245}
-    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1030060244}
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
 --- !u!4 &1030060239 stripped
@@ -36723,7 +36720,7 @@ MonoBehaviour:
       Data: 
   <Faction>k__BackingField: 0
   _unique: {fileID: 1030060242}
-  _enablePersistence: 1
+  _enablePersistence: 0
   _interactionCollider: {fileID: 1030060243}
   <HoverHighlight>k__BackingField: {fileID: 0}
   _interactionDistance: 2
@@ -36733,34 +36730,6 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
---- !u!114 &1030060245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030060240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _fadeOutBeforeDialogue: 0
-  _fadeTimes: {x: 0, y: 0, z: 0}
-  _onAfterFadeout:
-    m_PersistentCalls:
-      m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: bathroomDoors
 --- !u!1 &1032844421
 GameObject:
   m_ObjectHideFlags: 0
@@ -42201,8 +42170,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: corkboard
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: InvestigationBoard
 --- !u!65 &1292147315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42222,8 +42191,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.19, y: 3.06, z: 4.2}
-  m_Center: {x: 0, y: 1.48, z: 0}
+  m_Size: {x: 0.19, y: 1, z: 1.27}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &1292147316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45648,8 +45617,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: crowbar
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: Crowbar
 --- !u!135 &1513787328
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -48841,8 +48810,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: tv
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: TV
 --- !u!114 &1654185704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54610,8 +54579,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: pizza
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: Pizza
 --- !u!114 &1948786696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56635,7 +56604,7 @@ MonoBehaviour:
     - {fileID: 5363628252765409762}
     - {fileID: 3648448450239223758}
     - {fileID: 6120044013454617943}
-    - {fileID: 7561659343739744581}
+    - {fileID: 0}
     - {fileID: 4264640439043287197}
     - {fileID: 781100931855757372}
     - {fileID: 465638474998200223}
@@ -59331,8 +59300,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: bathroomDoors
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: BathroomDoorStart
 --- !u!1001 &808362554433068549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -60239,8 +60208,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: shower
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: Shower
 --- !u!65 &1493672629717164981
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -62821,8 +62790,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: PickUp
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: PhoneStartNode
 --- !u!135 &3648448450239223759
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -63330,7 +63299,7 @@ PrefabInstance:
       objectReference: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
     - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[0]
@@ -63341,8 +63310,16 @@ PrefabInstance:
       value: '"path":"<InteractionHandlers>k__BackingField.[0]","value":$eref:1'
       objectReference: {fileID: 0}
     - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"<PersistentComponents>k__BackingField","length":1'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[3]
+      value: '"path":"<PersistentComponents>k__BackingField.[0]","value":$eref:2'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
@@ -63352,14 +63329,26 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
       value: 
       objectReference: {fileID: 4264640439043287193}
+    - target: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 4264640439043287196}
     - target: {fileID: 3437433400046334296, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 3437433400046334296, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
     - target: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: _dialogueProject
+      value: 
+      objectReference: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+    - target: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3625698332589342564, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: <EntryNode>k__BackingField
+      value: LandlordVisit
+      objectReference: {fileID: 0}
     - target: {fileID: 4030266691944660807, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -63909,8 +63898,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: sink
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: Sink
 --- !u!135 &5363628252765409757
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -65999,8 +65988,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: gun
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: GunCase
 --- !u!135 &6672455340073717590
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -66809,8 +66798,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: bathroomSink
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: BathroomSink
 --- !u!135 &7338327342520421205
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -67201,7 +67190,6 @@ GameObject:
   - component: {fileID: 6690402467861222158}
   - component: {fileID: 6803072770359352946}
   - component: {fileID: 3047719399553633818}
-  - component: {fileID: 7561659343739744581}
   m_Layer: 8
   m_Name: Kevin
   m_TagString: Untagged
@@ -67209,34 +67197,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7561659343739744581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7561659343739744580}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _fadeOutBeforeDialogue: 0
-  _fadeTimes: {x: 1, y: 1, z: 1}
-  _onAfterFadeout:
-    m_PersistentCalls:
-      m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: landlordVisit
 --- !u!1001 &7565405586536767497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67941,8 +67901,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: takeCover
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: 'TakeCover '
 --- !u!65 &7762869251854723825
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -68953,8 +68913,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 7545569452688597077, guid: 0f53e0688a8ba8c47b380f7b037f9a09, type: 3}
-  <EntryNode>k__BackingField: trashCan
+  _dialogueProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
+  <EntryNode>k__BackingField: TrashCan
 --- !u!135 &8629123247756599237
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@ tags:
 <<if $vomit == true>>
     [nomarkup][You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual... Like you're terminally ill.][/nomarkup]
     [nomarkup][The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either. You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup]
-    -> (Resolve + Craft) [Repair it yourself.][/nomarkup]
+    -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup]
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>
             [nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.][/nomarkup] #success
             <<set $key to true>>

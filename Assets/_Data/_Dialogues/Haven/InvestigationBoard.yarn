@@ -11,9 +11,9 @@ tags:
 <<else>>
     [nomarkup][Your investigation board is empty save for a blank map of the city, some scribbled notes, and the overdue bills you've posted as fearful motivation. Hopefully, things will pick up soon.][/nomarkup]
     <<if GetAttributeSkillPoolSize("Intelligence","Finance") <= 3>>
-        You don't know much about budgeting, and it shows.
+        [nomarkup][You don't know much about budgeting, and it shows.][/nomarkup]
     <<else>>
-        You have about a month and a half - maybe two - of savings left before you'll have had to choose between eating and keeping the lights on.   
+        [nomarkup][You have about a month and a half - maybe two - of savings left before you'll have had to choose between eating and keeping the lights on.][/nomarkup]  
     <<endif>>
 <<endif>>
 ===

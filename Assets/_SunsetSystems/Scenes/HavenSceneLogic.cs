@@ -40,8 +40,6 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Weapon _handgunItem;
         [SerializeField]
-        private List<InteractableEntity> _interactablesToEnableAfterPhoneCall = new();
-        [SerializeField]
         private IInteractable _kitchenSink;
         [SerializeField]
         private string landlordDialogueEntryNode;
@@ -205,7 +203,6 @@ namespace SunsetSystems.Persistence
 
         private void DisableInteractionsBeforeDominic()
         {
-            _interactablesToEnableAfterPhoneCall.ForEach(i => i.Interactable = false);
             _gun.GetComponent<IInteractable>().Interactable = true;
             _crowbar.GetComponent<IInteractable>().Interactable = true;
         }
@@ -246,13 +243,6 @@ namespace SunsetSystems.Persistence
             public async static void GetUpFromBedDesiree()
             {
                 await HavenSceneLogic.MovePCToPositionAfterDialogue(PartyManager.Instance.MainCharacter);
-            }
-
-            [YarnCommand("EnableInteractionsAfterPhoneCall")]
-            public static void EnableInteractionsAfterPhoneCall()
-            {
-                HavenSceneLogic._bathroomDoorsDialogue.Interactable = true;
-                HavenSceneLogic._interactablesToEnableAfterPhoneCall.ForEach(interactable => interactable.Interactable = true);
             }
 
             [YarnCommand("OpenBathroomDoors")]

@@ -4733,6 +4733,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1654185708}
+    - targetCorrespondingSourceObject: {fileID: 6488116079306607907, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1654185709}
   m_SourcePrefab: {fileID: 100100000, guid: 5d88c0080c6bc934484fae42f3663f99, type: 3}
 --- !u!4 &297820107 stripped
 Transform:
@@ -27105,7 +27108,7 @@ PrefabInstance:
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.size
       value: 3
@@ -42450,6 +42453,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
     _PersistentCalls:
     - _Target: {fileID: 1292147319}
       _MethodName: set_Interactable
@@ -42462,10 +42469,6 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
-  OnObjectiveInactive:
-    _PersistentCalls: []
-  OnObjectiveCompleted:
-    _PersistentCalls: []
 --- !u!1 &1293972574
 GameObject:
   m_ObjectHideFlags: 0
@@ -45704,6 +45707,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1513787331}
+    - targetCorrespondingSourceObject: {fileID: 100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1513787334}
   m_SourcePrefab: {fileID: 100100000, guid: c56b9df7cee41024aaf65cae7565754f, type: 3}
 --- !u!4 &1513787325 stripped
 Transform:
@@ -45865,6 +45871,46 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!114 &1513787334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1513787326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 1513787331}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &1517089279
 GameObject:
   m_ObjectHideFlags: 0
@@ -49114,6 +49160,46 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4660583110585335718, guid: f495df7484a926447898f94ccfdec5c8, type: 3}
+--- !u!114 &1654185709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297820108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 1654185707}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1001 &1659057526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54641,6 +54727,7 @@ GameObject:
   - component: {fileID: 1948786696}
   - component: {fileID: 1948786697}
   - component: {fileID: 1948786698}
+  - component: {fileID: 1948786699}
   m_Layer: 8
   m_Name: pizza_stack
   m_TagString: Untagged
@@ -54817,9 +54904,49 @@ MonoBehaviour:
   _interactionTransform: {fileID: 1737959616}
   _interactable: 0
   _nameplateName: Old Pizza
-  _interactableOnce: 0
+  _interactableOnce: 1
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!114 &1948786699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948786692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 1948786698}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &1951840762
 GameObject:
   m_ObjectHideFlags: 0
@@ -56789,14 +56916,6 @@ MonoBehaviour:
   _crowbar: {fileID: 1513787326}
   _gun: {fileID: 6672455340073717584}
   _handgunItem: {fileID: 11400000, guid: b48d208275eb99d4291ecfa3e000f4e7, type: 2}
-  _interactablesToEnableAfterPhoneCall:
-  - {fileID: 6672455340073717593}
-  - {fileID: 781100931855757372}
-  - {fileID: 5363628252765409762}
-  - {fileID: 1948786698}
-  - {fileID: 1292147319}
-  - {fileID: 1654185707}
-  - {fileID: 1513787331}
   landlordDialogueEntryNode: CallLandlord
   _landlordSpawnWaypoint: {fileID: 635217289}
   _landlordSinkWaypoint: {fileID: 1904968515}
@@ -64044,6 +64163,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7882509761131045221, guid: 120c72f0d13e329489f9c82d36836d3f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5363628252765409762}
+    - targetCorrespondingSourceObject: {fileID: 7882509761131045221, guid: 120c72f0d13e329489f9c82d36836d3f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5363628252765409765}
   m_SourcePrefab: {fileID: 100100000, guid: 120c72f0d13e329489f9c82d36836d3f, type: 3}
 --- !u!4 &5363628252765409752 stripped
 Transform:
@@ -64299,6 +64421,46 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!114 &5363628252765409765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5363628252765409755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 5363628252765409762}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!114 &5402228883482169896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66158,6 +66320,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4110440452341636520, guid: edba94a8cd1526443819afc315533931, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6672455340073717593}
+    - targetCorrespondingSourceObject: {fileID: 4110440452341636520, guid: edba94a8cd1526443819afc315533931, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6672455340073717594}
   m_SourcePrefab: {fileID: 100100000, guid: edba94a8cd1526443819afc315533931, type: 3}
 --- !u!1 &6672455340073717584 stripped
 GameObject:
@@ -66315,10 +66480,50 @@ MonoBehaviour:
   _interactionDistance: 1
   _interactionTransform: {fileID: 2045106882}
   _interactable: 0
-  _nameplateName: 
+  _nameplateName: Handgun
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!114 &6672455340073717594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6672455340073717584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 6672455340073717593}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1001 &6677229543808662299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -69104,6 +69309,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7080420438952308454, guid: 0da590d65825b29469c596dcce812ed5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8629123247756599241}
+    - targetCorrespondingSourceObject: {fileID: 7080420438952308454, guid: 0da590d65825b29469c596dcce812ed5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8629123247756599242}
   m_SourcePrefab: {fileID: 100100000, guid: 0da590d65825b29469c596dcce812ed5, type: 3}
 --- !u!4 &8629123247756599234 stripped
 Transform:
@@ -69346,6 +69554,46 @@ MonoBehaviour:
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
+--- !u!114 &8629123247756599242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8629123247756599235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: cb0a7a34e9fd2524bb86d579cff2ea1e, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 8629123247756599241}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!120 &8630072054454796464
 LineRenderer:
   serializedVersion: 2

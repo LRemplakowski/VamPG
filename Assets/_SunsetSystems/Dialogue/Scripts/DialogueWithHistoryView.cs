@@ -144,7 +144,8 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
-            await WaitForProceedToNextLine();
+            waitForLineContinueTask = WaitForProceedToNextLine();
+            await waitForLineContinueTask;
             onDialogueLineFinished?.Invoke();
 
             async Task WaitForProceedToNextLine()
@@ -304,6 +305,7 @@ namespace SunsetSystems.Dialogue
             _clampScrollbarNextFrame = true;
             AudioManager.Instance.PlayTypewriterEnd();
             _requestedLineInterrupt = true;
+            RunNextLine();
             requestInterrupt?.Invoke();
         }
 

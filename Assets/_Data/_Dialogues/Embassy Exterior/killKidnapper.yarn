@@ -6,17 +6,17 @@ position: 490,264
 {$kieran}: Here I thought we could at least make it inside before running into problems. You seem to be a big trouble magnet.
 -> {$pcName}: Do you ever stop complaining?
 {$kieran}: When I'm not under the threat of death.
--> Continue
+
 [nomarkup][The man shuffles to his feet, stumbling.][/nomarkup]
--> Continue
+
 Drunk Guy: \[Slurring\] Oh my God! You killed them! I'm gonna call the cops!
--> Continue
+
 {$kieran}: Not even a thank you? 
--> Continue
+
 {$beast}: The nerd is right, he should be thankful.
--> Continue
+
 Drunk Guy: I'm a pacifist. I have a principled stance against violence of any kind.
--> Continue
+
 {$kieran}: How quaint.
 <<jump drunkardOptions>>
 ===
@@ -37,14 +37,14 @@ position: 40,-74
 ---
 <<if Roll("Manipulation","streetwise")>=2>>
     Drunk Guy: You guys did save me. I guess I can let it slide. #success
-    -> Continue
+    
     {$kieran}: We appreciate the gratitude.
     <<jump drunkardSuccess>>
 <<else>>
     Drunk Guy: Still doesn't make it right for you to kill them. That's why we have a criminal justice system. #failure
-    -> Continue
+    
     {$innerVoice}: He's right but at the same time naive.
-    -> Continue
+    
     {$kieran}: And where was that system when you were nearly kidnapped?
     <<jump drunkardOptions>>
 <<endif>>
@@ -54,14 +54,14 @@ position: -109,-294
 ---
 <<if Roll("strenght","intimidation")>=2>>
     Drunk Guy: I hope you're bluffing, but you did just kill three people in front of me. #success
-    -> Continue
+    
     [nomarkup][You don't even need to say anything, the both of you just stare him down. Ever so slightly puffing your chest.][/nomarkup]
-    -> Continue
+    
     {$beast}: He's afraid. I can smell it.
     <<jump drunkardSuccess>>
 <<else>>
     Drunk Guy: I'm not scared of death. I'd rather die than betray my beliefs. #failure
-    -> Continue
+    
     {$kieran}: Great, a martyr.
     <<jump drunkardOptions>>
 <<endif>>
@@ -72,16 +72,16 @@ position: 341,-14
 <<if UseDiscipline("dominate")>=1>>
     [nomarkup][The man's eyes glaze over on Kieran's words.][/nomarkup] #success
     <<set $disciplineUse to true>>
-    -> Continue
+    
     Drunk Guy: Huh, where am I?
-    -> Continue
+    
     {$kieran}: You were just walking home.
-    -> Continue
+    
     Drunk Guy: Thanks stranger, you're right. I miss my bed. Mmm, bed.
     <<jump drunkardSuccess>>
 <<else>>
     Drunk Guy: You're not going to gaslight me into forgetting murder. #failure
-    -> Continue
+    
     {$kieran}: Looks like I'm losing my touch.
     <<jump drunkardOptions>>
 <<endif>>
@@ -90,18 +90,18 @@ title: killTheDrunkard
 position: -328,-137
 ---
 Drunk Guy: Why are you looking at me like that? Stay away!
--> Continue
+
 [nomarkup][The man attempts to feel, but it's no use. Already in a weakened state, he goes down with one blow.][/nomarkup]
--> Continue
+
 {$beast}: Yes, no witnesses. Nice and clean.
--> Continue
+
 {$kieran}: What a waste. What was even the point of saving him?
 <<jump kieranComment>>
 ===
 title: drunkardSuccess
 position: -140,238
 ---
--> Continue
+
 [nomarkup][The man limps away into the night.][/nomarkup]
 <<jump kieranComment>>
 ===

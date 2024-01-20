@@ -16,7 +16,7 @@ position: 91,-139
 {$pcname}: [nomarkup][Where did I put that key?][/nomarkup]
 <<set $doorvisitedonce to true>>
 <<CompleteObjective ("MAIN_SATURDAY_START","GRAB_MEDS")>>
--> Continue.
+.
 ===
 title: DoorVisit
 tags:
@@ -53,7 +53,7 @@ position: 567,-63
     {$pcname}: [nomarkup][The fuck...?][/nomarkup]
     <<set $bathroomdoordestroyed to true>>
     <<CompleteObjective ("MAIN_SATURDAY_START","ENTER_BATHROOM")>>
-    -> Continue.
+    .
 <<else>>
     <<if Roll("Strength","Brawl") >= (6 - $strangeInsightModifier)>>
         [nomarkup][You assault the locked door with several weak strikes of your boot. Thud, thud, thud... It feels like an eternity, before the door budges.][/nomarkup] #success
@@ -64,14 +64,14 @@ position: 567,-63
             {$pcname}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. You curse under your breath. Strangely enough, even after all that, you don't feel the least bit fatigued. Surveying the damage, you curse under your breath. If your landlord sees that, he'll be pissed.][/nomarkup]
         <<endif>>
         <<CompleteObjective ("MAIN_SATURDAY_START","ENTER_BATHROOM")>>
-        -> Continue.
+        .
     <<else>>
         <<if $kevinmurdered == true>>
             [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #failure
         <<else>>
             [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more... Your wallet will thank you.][/nomarkup] #failure
         <<endif>>
-        -> Continue.
+        .
         <<jump DoorVisit>> 
     <<endif>>
 <<endif>>
@@ -86,12 +86,12 @@ position: 545,316
     {$pcname}: [nomarkup][Ow! What the fuck!?][/nomarkup]
 <<endif>>
 <<CompleteObjective ("MAIN_SATURDAY_START","ENTER_BATHROOM")>>
--> Continue.
+.
 ===
 title: BathroomDoorUnlock
 position: 606,144
 ---
 [nomarkup][You turn the key in the lock, pushing open the bathroom door.][/nomarkup]
 <<CompleteObjective ("MAIN_SATURDAY_START","ENTER_BATHROOM")>>
--> Continue.
+.
 ===

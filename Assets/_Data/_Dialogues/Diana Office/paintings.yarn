@@ -58,7 +58,7 @@ title: paintingAwarenessSuccess
 title: successContinued
 ---
 <<set $safeDiscovered to true>>
--> Continue
+
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Jackpot! Now we just have to pry it open.
 <<endif>>
@@ -82,7 +82,7 @@ title: stampExamine
         <<endif>>
     <<else>>
     {$kieran}: I hope it's something important, not just "I've got a feeling". We don't have time for art admiration.
-    -> Continue
+    
         <<if GetIsPartyMemberRecruited($anastasia) is true>>
             {$anastasia}: It's not even that pretty to look at. \[She cocks her head to the side like she'd like to see the canvas in another direction.\]
         <<endif>>

@@ -4,7 +4,7 @@ tags:
 {$kieran}: Yes? We don't have much time before our heads roll.
 -> {$pcName}: I think we can spare a few minutes to talk.
     [nomarkup][Kieran sights.][/nomarkup]
-    -> Continue
+    
     {$kieran}: Okay. As long as it'll help our investigation, I'm all answers. So ask.
     <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
     [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions to ask. Just to be sure if they are true or false.][/nomarkup]
@@ -37,7 +37,7 @@ tags:
 title: kieranDominicRelations
 ---
 {$kieran}: Is it that obvious? \[he sighs\] Let's say that I didn't want to tag along with him, and he didn't want a partner. But an order is an order, so what could I do?
--> Continue
+
 <<if GetCompanionInfluence("$kieran")>=2>>
     {$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>>
@@ -77,7 +77,7 @@ title: kieransAge
 title: drinks
 ---
 {$kieran}: Technically, we can't drink alcohol...
--> Continue
+
 <<if GetCompanionInfluence("$kieran")>=2>>
     {$kieran}: ... but I can show you some tricks on how to make it work.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>
@@ -90,7 +90,7 @@ title: drinks
 title: kieransRing
 ---
 [nomarkup][Kieran looks at his hand and hides it quickly][/nomarkup]
--> Continue
+
 {$kieran}: Just a memento, nothing more.
     <<if GetAttributeSkillPoolSize("wits","insight")>=5>>
     -> {$pcName}: Seems to be more than that to me.
@@ -119,7 +119,7 @@ title: catherinaCharacteristics
         -> {$pcName}: Whoa, I didn't expect that. 
             <<ModifyInfluence ($kieran,+1)>>
             {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
-            -> Continue
+            
             {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
             <<jump kieransSire>>
         ->  {$pcName}: You're painting her as if she was some kind of ideal.
@@ -140,9 +140,9 @@ title: catherinaCharacteristics
 title: catherinasAge
 ---
 {$kieran}: Let me think... she's been around for nearly 500 years.
--> Continue
+
 [nomarkup][at first you don't know what to say, other than blinking your eyes in surprise][/nomarkup]
--> Continue
+
 {$kieran}: She's not the oldest around you know.
 <<jump kieransSire>>
 ===

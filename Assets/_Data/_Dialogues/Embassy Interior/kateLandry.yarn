@@ -78,9 +78,9 @@ title: kateNudgesTowardAnastasia
 position: 308,190
 ---
 {$sforza}: Name's Anastasia. She's one of us. Shown up the past few nights, but hasn't done the courtesy of introducing herself. I've been keeping an eye on her. Hasn't caused any problems to my knowledge, but she might be your gal.
--> Continue
+
 {$kieran}: You're tolerating poachers in your domain?
--> Continue
+
 {$sforza}: She hasn't poached yet just lurking. I've been sniffing her out. Think she's staking out the place, or she's helplessly in love with my staff. Either way, if you saved me the hassle of dealing, I'd be grateful.
 ===
 title: subsequentInteractions
@@ -90,11 +90,11 @@ title: subsequentInteractions
 <<else>>
     <<if $anastasiaIntroduced ==false>>
         {$sforza}: Pleasure to finally make your acquaintance, Anastasia.
-        -> Continue
+        
         [nomarkup][Anastasia raises an eyebrow, but keeps her bearings.][/nomarkup]
-        -> Continue
+        
         {$anastasia}: Likewise, Caterina.
-        -> Continue
+        
         [nomarkup][She kisses Kate's hand. Kate wipes it off on the table.][/nomarkup]
     <<endif>>
 <<endif>>
@@ -136,7 +136,7 @@ title: whatDianaDid
 {$sforza}: You should talk to her about that then.
 -> {$pcName}: She ran to her office before I had the chance.
     [nomarkup][Kate cocks her head to the side.][/nomarkup]
-    -> Continue
+    
     {$sforza}: Curious. She's probably just busy.
     <<set $kateAlleyTalk to true>>
     <<jump subsequentInteractions>>
@@ -153,10 +153,10 @@ title: whatDianaDid
 title: howSheStarted
 ---
 {$sforza}: Diana owns the place, piccola mia. I just look after it. It was a gift from our “beloved”... 
--> Continue
+
 [nomarkup][She chews on that word.][/nomarkup]
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-    -> Continue
+    
     {$anastasia}: \[Whispering\] I believe her.
 <<endif>>
 <<jump additionalQuestions>>
@@ -183,7 +183,7 @@ title: katePrinceOpinion
 title: princeExplained
 ---
 {$sforza}: Ah, it's so refreshing to have someone as oblivious to politics as you. But frankly, I don't have time to teach you everything you need to know.
--> Continue
+
 {$kieran}: The Prince is the head figure in charge of the Camarilla's capital-D Domain here in Las Vegas - nearly the entire valley aside from Henderson and Sunset Manor is under our control. I'll tell you more when we've finished this investigation of ours.
 <<jump additionalQuestions>>
 ===
@@ -200,9 +200,9 @@ title: previousPrince
 title: whatIsSabbat
 ---
     {$kieran}: A bunch of savages.
-    -> Continue
+    
     [nomarkup][Kates gestures towards Kieran in approval.][/nomarkup]
-    -> Continue
+    
     {$sforza}: A dangerous, misguided organization that rejects the Traditions and laws that keep our kind from becoming animals. Benedic didn't see them as a serious threat and now you know what happened to him. Someone in your position, the less you know about them. The better.
     <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
         {$anastasia}: It's just the natural order of things. \[she shrugged\]

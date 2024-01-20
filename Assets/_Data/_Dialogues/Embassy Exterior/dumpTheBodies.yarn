@@ -3,26 +3,26 @@ tags:
 ---
 <<declare $toldKieranAboutVision to false>>
 [nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup]
--> Continue
+
 {$innerVoice}: Must've come by here last night.
--> Continue
+
 {$beast}: Turn back.
--> Continue
+
 <<jump flashback>>
 ===
 title: flashback
 ---
 [nomarkup][Desiree is walking down the alley with the man whose corpse was in her shower. They exchange drunken flirty lines. They are being led by a mysterious woman.][/nomarkup]
--> Continue
+
 Mysterious Woman: This way.
 <<jump kieranInterrupts>>
 ===
 title: kieranInterrupts
 ---
 [nomarkup][Kieran stands before you waving his hand before your eyes][/nomarkup]
--> Continue
+
 {$kieran}: You there?
--> Continue
+
 [nomarkup][You catch your bearings. Kieran's gravelly but annoying voice grounding you.][/nomarkup]
 -> {$pcName}: Yeah.
     {$kieran}: What happened? You looked like a deer in the headlights for a moment there.

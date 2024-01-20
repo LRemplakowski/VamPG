@@ -68,7 +68,7 @@ title: dianaApproachedSuccess
 {$diana}: What all do you remember about last night? #success
 -> {$pcName}: Enough to know things got pretty crazy.
     {$diana}: \[Chuckling\] That's a word for it.
-    -> Continue
+    
     {$diana}: ... Say want to come to my office, for a drink?
     <<set $dianaOffice to true>>
     <<jump dianaInvitation>>
@@ -91,7 +91,7 @@ title: dianaThreatenedSuccess
 title: dianaThreatenedFailure
 ---
 [nomarkup][The crowd around the bar side-eyes you for making a scene. Everyone is uncomfortable.][/nomarkup] #failure
--> Continue
+
     {$diana}: Sod off before I have you thrown out. \[To the crowd\] Some gals just can't handle their liquor, am I right?
     <<jump blownOffByDiana>>
 ===
@@ -103,7 +103,7 @@ title: blownOffByDiana
 ---
 -> {$pcName}: You're not just gonna blow me off!   
     [nomarkup][She, in fact, blows you off. A barely-subdued anger washes over you.][/nomarkup]
-    -> Continue
+    
         {$beast}: I will [nomarkup]<i>not</i>[/nomarkup] be casually brushed aside like some insignificant fool.
         //cut to black, Diana dissapears//
 ===

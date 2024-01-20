@@ -39,7 +39,7 @@ namespace SunsetSystems.Core.SceneLoading
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();
-            await new WaitForUpdate();
+            await new WaitForSeconds(.1f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
         }
 

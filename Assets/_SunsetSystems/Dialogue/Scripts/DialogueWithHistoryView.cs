@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Yarn.Unity;
+using UnityEngine.EventSystems;
 
 namespace SunsetSystems.Dialogue
 {
@@ -19,6 +20,8 @@ namespace SunsetSystems.Dialogue
     {
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
+        [SerializeField]
+        private Button _proceedToNextLineButton;
         [SerializeField, Required]
         private Scrollbar _scrollbar;
         [SerializeField, Required]
@@ -58,6 +61,7 @@ namespace SunsetSystems.Dialogue
         private bool _clampScrollbarNextFrame;
         private bool _requestedLineInterrupt = false;
         private bool _optionsPresented = false;
+        private bool _canProceedToNextLine = false;
 
         public void Cleanup()
         {
@@ -119,6 +123,7 @@ namespace SunsetSystems.Dialogue
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            _canProceedToNextLine = false;
             _requestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
             UpdateSpeakerPhoto(dialogueLine.CharacterName);
@@ -139,7 +144,21 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
+            await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
+
+            async Task WaitForProceedToNextLine()
+            {
+                _proceedToNextLineButton.gameObject.SetActive(true);
+                await new WaitUntil(() => _canProceedToNextLine);
+            }
+        }
+
+        public void RunNextLine()
+        {
+            _canProceedToNextLine = true;
+            _proceedToNextLineButton.gameObject.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         private async Task TypewriteText(LocalizedLine line)

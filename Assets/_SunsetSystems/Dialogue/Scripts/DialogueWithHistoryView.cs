@@ -50,6 +50,7 @@ namespace SunsetSystems.Dialogue
 
         private const string ROLL_SUCCESS_TAG = "success";
         private const string ROLL_FAIL_TAG = "failure";
+        private const string LAST_LINE_TAG = "lastline";
         private const string ALWAYS_SHOW_OPTION = "showAlways";
 
         public event Action OnOptionsPresented, OnOptionSelectedCustom;
@@ -144,7 +145,7 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
-            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Contains("lastLine") is false))
+            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => string.Equals(tag, LAST_LINE_TAG)) is false))
                 await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
 

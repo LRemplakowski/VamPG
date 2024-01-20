@@ -2,11 +2,16 @@ using UnityEngine;
 using SunsetSystems.Utils;
 using UnityEngine.Audio;
 using SunsetSystems.Constants;
+using SunsetSystems.Game;
+using System;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Audio
 {
-    public class AudioManager : Singleton<AudioManager>
+    public class AudioManager : SerializedMonoBehaviour
     {
+        public static AudioManager Instance { get; private set; }
+
         [SerializeField]
         private AudioMixer _audioMixer;
         [SerializeField]
@@ -19,13 +24,30 @@ namespace SunsetSystems.Audio
         [field: SerializeField]
         public float SFXDefaultValue { get; private set; } = .5f;
 
+        private void Awake()
+        {
+            if (Instance == null)
+                Instance = this;
+        }
+
         private void Start()
         {
             if (PlayerPrefs.HasKey(SettingsConstants.MUSIC_VOLUME_KEY))
                 SetMusicVolume(PlayerPrefs.GetFloat(SettingsConstants.MUSIC_VOLUME_KEY));
             if (PlayerPrefs.HasKey(SettingsConstants.SFX_VOLUME_KEY))
                 SetSFXVolume(PlayerPrefs.GetFloat(SettingsConstants.SFX_VOLUME_KEY));
-            PlayMenuMusic();
+            OnGameStateChanged(GameManager.Instance.CurrentState);
+            GameManager.OnGameStateChanged += OnGameStateChanged;
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.OnGameStateChanged -= OnGameStateChanged;
+        }
+
+        private void OnGameStateChanged(GameState newGameState)
+        {
+            _soundtrackController.PlayStatePlaylist(newGameState);
         }
 
         public void PlaySFXOneShot(string sfxName)
@@ -51,16 +73,6 @@ namespace SunsetSystems.Audio
         public void StopSFXPlayback()
         {
             _sfxController.StopSFX();
-        }
-
-        public void PlayMenuMusic()
-        {
-            _soundtrackController.PlayMenuPlaylist();
-        }
-
-        public void PlayGameplayMusic()
-        {
-            _soundtrackController.PlayGamePlaylist();
         }
 
         public void SetMusicVolume(float volume)

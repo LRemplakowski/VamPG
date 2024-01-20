@@ -135,7 +135,14 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetIsCompanionInParty")]
         public static bool GetIsCompanionInParty(string characterID)
         {
-            return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == characterID);
+            try
+            {
+                return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == characterID);
+            }
+            catch (NullReferenceException)
+            {
+                return true;
+            }
         }
     }
 }

@@ -75,7 +75,7 @@ namespace SunsetSystems.Dialogue
         public static void RemoveMoney(float value)
         {
             if (InventoryManager.Instance.TryRemoveMoney(value) == false)
-                throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
+                Debug.LogError($"Money amount {value} is greater than current funds! Check money amount before removing money!");
         }
 
         [YarnCommand("PlaySFX")]
@@ -97,7 +97,10 @@ namespace SunsetSystems.Dialogue
         public static void GiveItemCount(string itemID, int count)
         {
             if (count <= 0)
-                throw new ArgumentException("Item count cannot be less than 1!");
+            {
+                Debug.LogError("Item count cannot be less than 1!");
+                return;
+            }
             if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
                 InventoryManager.Instance.GiveItemToPlayer(new(item, count));
             else
@@ -114,19 +117,6 @@ namespace SunsetSystems.Dialogue
         public static void DecreaseWillpower(string characterID, int value)
         {
             throw new NotImplementedException();
-        }
-
-        [YarnCommand("GiveItem")]
-        public static void GiveItemToPlayer(string itemID)
-        {
-            if (ItemDatabase.Instance.TryGetEntry(itemID, out IBaseItem item))
-            {
-                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(item));
-            }
-            else
-            {
-                Debug.LogError($"Dialogue tried to give item {itemID} to player, but there is no such item in Item Database!");
-            }
         }
     }
 }

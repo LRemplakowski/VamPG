@@ -16,7 +16,6 @@ position: 91,-139
 {$pcname}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34 
 <<set $doorvisitedonce to true>>
 <<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS">>
-. #line:00745ae 
 ===
 title: DoorVisit
 tags:
@@ -53,7 +52,6 @@ position: 567,-63
     {$pcname}: [nomarkup][The fuck...?][/nomarkup] #line:0898b88 
     <<set $bathroomdoordestroyed to true>>
     <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
-    . #line:0f1ea66 
 <<else>>
     <<if Roll("Strength","Brawl") >= (6 - $strangeInsightModifier)>>
         [nomarkup][You assault the locked door with several weak strikes of your boot. Thud, thud, thud... It feels like an eternity, before the door budges.][/nomarkup] #success #line:0a62dfb 
@@ -64,14 +62,12 @@ position: 567,-63
             {$pcname}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. You curse under your breath. Strangely enough, even after all that, you don't feel the least bit fatigued. Surveying the damage, you curse under your breath. If your landlord sees that, he'll be pissed.][/nomarkup] #line:0981350 
         <<endif>>
         <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
-        . #line:07cdf4e 
     <<else>>
         <<if $kevinmurdered == true>>
             [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #failure #line:0082b73 
         <<else>>
             [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more... Your wallet will thank you.][/nomarkup] #failure #line:0ca4ae0 
         <<endif>>
-        . #line:0a0f0f8 
         <<jump DoorVisit>> 
     <<endif>>
 <<endif>>
@@ -86,12 +82,10 @@ position: 545,316
     {$pcname}: [nomarkup][Ow! What the fuck!?][/nomarkup] #line:0e0fb25 
 <<endif>>
 <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
-. #line:08ad95c 
 ===
 title: BathroomDoorUnlock
 position: 606,144
 ---
 [nomarkup][You turn the key in the lock, pushing open the bathroom door.][/nomarkup] #line:09dd832 
 <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
-. #line:0cb0f91 
 ===

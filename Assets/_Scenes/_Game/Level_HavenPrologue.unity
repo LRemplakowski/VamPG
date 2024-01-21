@@ -64711,6 +64711,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4264640439043287196}
+    - targetCorrespondingSourceObject: {fileID: 8669574892900375537, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4264640439043287198}
   m_SourcePrefab: {fileID: 100100000, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
 --- !u!4 &4264640439043287192 stripped
 Transform:
@@ -64779,6 +64782,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4264640439043287198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4264640439043287195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: 4930398f579bc7b48931192cf7d9c33b, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls: []
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls:
+    - _Target: {fileID: 4264640439043287197}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!114 &4284661884787900312
 MonoBehaviour:
   m_ObjectHideFlags: 0

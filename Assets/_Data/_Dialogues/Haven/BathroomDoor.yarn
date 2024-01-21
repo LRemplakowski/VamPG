@@ -1,7 +1,12 @@
 ﻿title: BathroomDoorStart
 position: -209,38
 ---
+<<declare $strangeInsightModifier to 0>>
+<<if CurrentObjective("MAIN_SATURDAY_START","GRAB_MEDS")>>
+    <<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS">>
+<<endif>>
 <<if visited("DoorFirstVisit")>>
+    [nomarkup][The door knob still doesn't budge. It's locked.][/nomarkup] #line:0506090  
     <<jump DoorVisit>>
 <<else>>
     <<jump DoorFirstVisit>>
@@ -11,17 +16,16 @@ title: DoorFirstVisit
 tags:
 position: 91,-139
 ---
-<<declare $strangeInsightModifier to 0>>
-[nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup] #line:0d2188f 
-{$pcname}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34 
-<<set $doorvisitedonce to true>>
-<<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS">>
+[nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup] #line:0d2188f
+<<if $key is false>>
+    {$pcname}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34
+<<endif>> 
+<<jump DoorVisit>>
 ===
 title: DoorVisit
 tags:
 position: 114,94
 ---
-[nomarkup][The door knob still doesn't budge. It's locked.][/nomarkup] #line:0506090 
 -> [nomarkup][Knock.][/nomarkup] <<if visited("BathroomDoorKnock") == false>> #line:05c9288 
     <<jump BathroomDoorKnock>>
 -> [nomarkup](Strength + Brawl) [Try to kick the door open.][/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 

@@ -52,11 +52,11 @@ position: 408,-214
         -> [nomarkup][Hang up.][/nomarkup] #line:013fa6e 
             <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
             <<stop>>
--> (Manipulation + Persuasion) {$pcname}: Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:00f7434 
+-> {$pcname}: (Manipulation + Persuasion)  Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:00f7434 
     <<jump ManipPersKevin>>
--> (Charisma + Subterfuge) {$pcname}: [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:02f51cf 
+-> {$pcname}: (Charisma + Subterfuge) [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:02f51cf 
     <<jump ChaSubtKevin>>
--> (Manipulation + Intimidation) {$pcname}: Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:0ab194f 
+-> {$pcname}: (Manipulation + Intimidation) Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:0ab194f 
     <<jump ManipIntimKevin>>
 ===     
 title: ManipPersKevin

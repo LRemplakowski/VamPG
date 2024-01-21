@@ -13,6 +13,8 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Yarn.Unity;
 using UnityEngine.EventSystems;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Dialogue
 {
@@ -185,13 +187,16 @@ namespace SunsetSystems.Dialogue
             _lineHistoryStringBuilder
                 .AppendLine("");
             bool appended = AppendRollPrefix(line);
-            if (line.CharacterName != null && string.IsNullOrWhiteSpace(line.CharacterName) == false)
+            if (string.IsNullOrWhiteSpace(line.CharacterName) == false)
             {
                 if (appended == false)
                     _lineHistoryStringBuilder.Append("<size=26>");
                 appended = true;
+                string speakerName = line.CharacterName;
+                if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
+                    speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
-                    .Append($"<color=\"red\">{line.CharacterName}:</color>");
+                    .Append($"<color=\"red\">{speakerName}:</color>");
             }
             if (appended)
                 _lineHistoryStringBuilder.AppendLine("</size>");
@@ -212,23 +217,25 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private async void UpdateSpeakerPhoto(string characterName)
+        private async void UpdateSpeakerPhoto(string characterID)
         {
-            string speakerID;
-            if (characterName == null || string.IsNullOrWhiteSpace(characterName))
+            string characterName = characterID;
+            if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                speakerID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.Name;
+                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+            }
+            else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
+            {
+                characterID = config.ReadableID;
+                characterName = config.FullName;
             }
             else
             {
-                if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
-                {
-                    speakerID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                    characterName = PartyManager.Instance.MainCharacter.Name;
-                }
+                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             }
-            Sprite sprite = await this.GetSpeakerPortrait(speakerID);
+            Sprite sprite = await this.GetSpeakerPortrait(characterID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;
@@ -238,7 +245,7 @@ namespace SunsetSystems.Dialogue
             else
             {
                 _photoParent.SetActive(false);
-                Debug.LogError($"Cannot find portrait for creature with ID {speakerID} and no placeholder portrait found!");
+                Debug.LogError($"Cannot find portrait for creature with ID {characterID} and no placeholder portrait found!");
             }
         }
 

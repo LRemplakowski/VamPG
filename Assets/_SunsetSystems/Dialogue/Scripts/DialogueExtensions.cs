@@ -22,8 +22,10 @@ namespace SunsetSystems.Dialogue
             {
                 if (CreatureDatabase.Instance.TryGetConfig(lastID, out CreatureConfig previousConfig))
                 {
+                    if (previousConfig.PortraitAssetRef == config.PortraitAssetRef && lastLoadedSprite != null)
+                        return lastLoadedSprite;
                     lastLoadedSprite = null;
-                    AddressableManager.Instance.ReleaseAsset(previousConfig.PortraitAssetRef);
+                    //AddressableManager.Instance.ReleaseAsset(previousConfig.PortraitAssetRef);
                 }
                 lastID = speakerID;
                 lastLoadedSprite = await AddressableManager.Instance.LoadAssetAsync(config.PortraitAssetRef);

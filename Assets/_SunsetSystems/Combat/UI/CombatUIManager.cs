@@ -83,8 +83,8 @@ namespace SunsetSystems.Combat.UI
                 currentActorPortrait.sprite = sprite;
                 if (currentActorPortrait.color == Color.clear)
                     StartCoroutine(ShowPortrait());
-                if (spriteReference != null)
-                    AddressableManager.Instance.ReleaseAsset(spriteReference);
+                //if (spriteReference != null)
+                //    AddressableManager.Instance.ReleaseAsset(spriteReference);
                 spriteReference = newSpriteRef;
             }
         }

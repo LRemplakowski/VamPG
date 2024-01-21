@@ -2,6 +2,7 @@ using Sirenix.Utilities;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -18,6 +19,11 @@ namespace SunsetSystems.Core.AddressableManagement
 
         public async Task<T> LoadAssetAsync<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
         {
+            if (assetReference.RuntimeKeyIsValid() is false)
+            {
+                Debug.LogError("Requested to load asset with null reference!");
+                return null;
+            }
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {
                 if (handle.IsDone is false)

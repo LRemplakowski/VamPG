@@ -86,7 +86,7 @@ namespace SunsetSystems.Combat.UI
                     await Task.Delay(500);
             }
             firstIteration = true;
-            portraitReferences.ForEach(reference => AddressableManager.Instance.ReleaseAsset(reference));
+            //portraitReferences.ForEach(reference => AddressableManager.Instance.ReleaseAsset(reference));
             portraitReferences = newPortraitReferences;
         }
 

@@ -25,7 +25,6 @@ namespace SunsetSystems.Core.SceneLoading.UI
         private FadeScreenAnimator transitionAnimator;
         [Title("Asset References")]
         [SerializeField]
-        private AssetReferenceT<LoadingScreenProviderConfig> loadingScreenProviderReference;
         private LoadingScreenProviderConfig loadingScreenProviderConfig;
 
         private void OnEnable()
@@ -44,13 +43,7 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         private void OnDisable()
         {
-            ReleaseReferences();            
-        }
-
-        private void ReleaseReferences()
-        {
-            loadingScreenProviderConfig?.ReleaseLoadingScreens();
-            AddressableManager.Instance.ReleaseAsset(loadingScreenProviderReference);
+            loadingScreenProviderConfig.ReleaseLoadingScreens();           
         }
 
         private void Start()
@@ -90,8 +83,6 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public async Task LoadRandomLoadingScreen()
         {
-            ReleaseReferences();
-            loadingScreenProviderConfig = await AddressableManager.Instance.LoadAssetAsync(loadingScreenProviderReference);
             backgroundImage.sprite = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
         }
     }

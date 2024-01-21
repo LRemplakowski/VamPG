@@ -27,8 +27,8 @@ namespace SunsetSystems.UI
         public async void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
-            if (lastLoadedSprite != null)
-                AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
+            //if (lastLoadedSprite != null)
+                //AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.Data;

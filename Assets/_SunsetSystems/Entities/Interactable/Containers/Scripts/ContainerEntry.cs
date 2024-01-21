@@ -24,8 +24,8 @@ namespace SunsetSystems.Inventory.UI
 
         public async Task SetEntryContent(InventoryEntry content, ItemStorage storage)
         {
-            if (lastLoadedSprite != null)
-                AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
+            //if (lastLoadedSprite != null)
+            //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _content = content;
             _storage = storage;
             _text.text = content._item.Name;

@@ -22,8 +22,8 @@ namespace SunsetSystems.Equipment.UI
 
         public async void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
         {
-            if (lastLoadedSprite != null)
-                AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
+            //if (lastLoadedSprite != null)
+            //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _cachedSlotData = dataProvider.Data;
             IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)

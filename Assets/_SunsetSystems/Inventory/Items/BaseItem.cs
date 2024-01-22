@@ -30,6 +30,7 @@ namespace SunsetSystems.Inventory.Data
 
         public BaseItem Data => this;
 
+        [Button("Force Validate")]
         private void OnValidate()
         {
             if (string.IsNullOrWhiteSpace(Name))

@@ -38,7 +38,7 @@ namespace SunsetSystems.Core.Database
             }
             keysToDelete.ForEach(key => _itemRegistry.Remove(key));
             _itemAccessorRegistry = new();
-            _itemRegistry.Values.ToList().ForEach(baseItem => _itemAccessorRegistry.Add(baseItem.Name, baseItem.DatabaseID));
+            _itemRegistry.Values.ToList().ForEach(baseItem => _itemAccessorRegistry.Add(baseItem.ReadableID, baseItem.DatabaseID));
         }
 
 #if UNITY_EDITOR

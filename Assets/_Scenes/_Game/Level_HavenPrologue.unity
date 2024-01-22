@@ -31367,6 +31367,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1368790507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &807026665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 807026666}
+  m_Layer: 0
+  m_Name: Objective Triggers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &807026666
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807026665}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1042534089}
+  m_Father: {fileID: 2042823493}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &813161217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37047,6 +37079,137 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1292147312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1042534088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1042534089}
+  - component: {fileID: 1042534090}
+  m_Layer: 0
+  m_Name: Player Has Crowbar And Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1042534089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042534088}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 807026666}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1042534090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042534088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae309f4e25703f345a9d56557fbda361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: b48d208275eb99d4291ecfa3e000f4e7, type: 2}
+    - {fileID: 11400000, guid: 4887b1be59d667f49b71ceca04bfbc70, type: 2}
+    - {fileID: 11400000, guid: 653f5e6fd8bd7b34f99db81072d803dc, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: requiredItems
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems
+    - Name: requiredItems
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: requiredCount
+      Entry: 3
+      Data: 1
+    - Name: countingLogic
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems
+    - Name: requiredItems
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: requiredCount
+      Entry: 3
+      Data: 1
+    - Name: countingLogic
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  objectiveToTrigger: {fileID: 11400000, guid: 204d4d3e302e833468c5767391fadb49, type: 2}
 --- !u!1 &1048363594
 GameObject:
   m_ObjectHideFlags: 0
@@ -57504,7 +57667,6 @@ GameObject:
   - component: {fileID: 2042823492}
   - component: {fileID: 2042823494}
   - component: {fileID: 2042823495}
-  - component: {fileID: 2042823496}
   m_Layer: 0
   m_Name: HavenSceneLogic
   m_TagString: Untagged
@@ -57620,6 +57782,7 @@ Transform:
   m_Children:
   - {fileID: 11974418}
   - {fileID: 268577893}
+  - {fileID: 807026666}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2042823494
@@ -57648,105 +57811,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tag: SCENE_LOGIC
---- !u!114 &2042823496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2042823491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae309f4e25703f345a9d56557fbda361, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 11400000, guid: b48d208275eb99d4291ecfa3e000f4e7, type: 2}
-    - {fileID: 11400000, guid: 4887b1be59d667f49b71ceca04bfbc70, type: 2}
-    - {fileID: 11400000, guid: 653f5e6fd8bd7b34f99db81072d803dc, type: 2}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: requiredItems
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 7
-      Data: 1|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
-        SunsetSystems
-    - Name: requiredItems
-      Entry: 7
-      Data: 2|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 2
-    - Name: 
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: requiredCount
-      Entry: 3
-      Data: 1
-    - Name: countingLogic
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 3|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
-        SunsetSystems
-    - Name: requiredItems
-      Entry: 7
-      Data: 4|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 10
-      Data: 2
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: requiredCount
-      Entry: 3
-      Data: 1
-    - Name: countingLogic
-      Entry: 3
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  objectiveToTrigger: {fileID: 11400000, guid: 204d4d3e302e833468c5767391fadb49, type: 2}
 --- !u!1 &2045106881
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,8 @@ position: -328,-104
         {$landlord}: I'll have to charge you a... uh... a late night fee. $200. #line:07f776e 
         -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:025fbad 
             [nomarkup][He hangs up.][/nomarkup] #line:0de55de 
-            <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
+            <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">> 
+            <<RemoveMoney 200>>  
             <<stop>>
         -> {$pcname}: You're trying to rip me off! #line:04a227e 
             {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:007cdae 

@@ -4,7 +4,7 @@ tags:
 [nomarkup][You pick up the 9mm Handgun Arthur bought you to keep you safe. The metal is normally cool in your hands, but now it suspiciously has no temperature.][/nomarkup] #line:020c521 
 -> (Dexterity + Firearms) [nomarkup][Clean the gun.][/nomarkup] #line:0f5c611 
     <<if Roll("Dexterity","Firearms") >= 3>>
-        {$pcname}: [Good as new.] +1 Weapon Damage. #success #line:0e1f39e 
+        {$pcname}: [nomarkup][Good as new.][/nomarkup] +1 Weapon Damage. #success #line:0e1f39e 
         <<GiveItem "IT_WPN_RN_HANDGUN_CLN">>
     <<else>>
         BANG! [nomarkup][You got careless, putting a bullet hole in the ceiling.][/nomarkup] #failure #line:0c4c45e 

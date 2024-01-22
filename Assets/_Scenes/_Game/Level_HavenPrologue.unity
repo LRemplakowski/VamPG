@@ -22043,11 +22043,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000025896137
+      value: 0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000001707581
+      value: -0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -22123,11 +22123,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000025896137
+      value: 0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000001707581
+      value: -0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -60185,7 +60185,7 @@ PrefabInstance:
       objectReference: {fileID: 853837789}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[0]
@@ -60197,11 +60197,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModifications.Array.data[2]
+      value: '"path":"<PersistentComponents>k__BackingField","length":2'
+      objectReference: {fileID: 0}
+    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[3]
       value: '"path":"<PersistentComponents>k__BackingField.[0]","value":$eref:2'
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: serializationData.PrefabModifications.Array.data[4]
+      value: '"path":"<PersistentComponents>k__BackingField.[1]","value":$eref:3'
+      objectReference: {fileID: 0}
+    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
@@ -60215,6 +60223,10 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
       value: 
       objectReference: {fileID: 781100931855757371}
+    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
+      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[3]
+      value: 
+      objectReference: {fileID: 781100931855757379}
     - target: {fileID: 1206634403651007068, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Controller
       value: 
@@ -60492,6 +60504,17 @@ MonoBehaviour:
         _Object: {fileID: 0}
     - _Target: {fileID: 1124927095}
       _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 781100931855757372}
+      _MethodName: set_Interactable
       _PersistentArguments:
       - _Type: 1
         _Int: 0
@@ -61576,6 +61599,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 1493672629717164986}
+    - {fileID: 1493672629717164980}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -61603,7 +61627,10 @@ MonoBehaviour:
         SunsetSystems]], mscorlib
     - Name: 
       Entry: 12
-      Data: 0
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -65293,6 +65320,19 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3648448450239223763}
+        m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
+          SunsetSystems
+        m_MethodName: set_Interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5363628252765409762}
         m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
           SunsetSystems
         m_MethodName: set_Interactable

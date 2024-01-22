@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using SunsetSystems.Dice;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
@@ -137,7 +139,10 @@ namespace SunsetSystems.Dialogue
         {
             try
             {
-                return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == characterID);
+                if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
+                    return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == config.DatabaseID);
+                else
+                    return false;
             }
             catch (NullReferenceException)
             {

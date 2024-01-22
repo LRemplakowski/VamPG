@@ -25,7 +25,7 @@ tags:
 ---
 <<if Roll("Wits","Streetwise") >= 3>>
     :[nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success #line:0d4bee2 
-    <<set $smallmoney to true>>
+    <<AddMoney 50>>
 <<else>>
     :[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup] #failure #line:0544c71 
 <<endif>>

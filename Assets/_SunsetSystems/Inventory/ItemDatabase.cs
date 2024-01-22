@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,22 @@ namespace SunsetSystems.Core.Database
             _itemRegistry.Values.ToList().ForEach(baseItem => _itemAccessorRegistry.Add(baseItem.Name, baseItem.DatabaseID));
         }
 
+#if UNITY_EDITOR
+        [Button]
+        private void FindAllItems()
+        {
+            UnityEditor.EditorUtility.SetDirty(this);
+            _itemRegistry = new();
+            _itemAccessorRegistry = new();
+            foreach (string path in UnityEditor.AssetDatabase.GetAllAssetPaths())
+            {
+                BaseItem item = UnityEditor.AssetDatabase.LoadAssetAtPath<BaseItem>(path);
+                if (item != null)
+                    Register(item);
+            }
+        }
+#endif
+
         public bool TryGetEntry(string itemID, out IBaseItem baseItem)
         {
             return _itemRegistry.TryGetValue(itemID, out baseItem);
@@ -52,24 +69,30 @@ namespace SunsetSystems.Core.Database
 
         public bool Register(BaseItem baseItem)
         {
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
             if (_itemRegistry.ContainsKey(baseItem.DatabaseID))
             {
                 _itemAccessorRegistry = new();
-                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
+                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
                 return false;
             }
             _itemRegistry.Add(baseItem.DatabaseID, baseItem);
             _itemAccessorRegistry = new();
-            _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
+            _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
             return true;
         }
 
         public void Unregister(BaseItem baseItem)
         {
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
             if (_itemRegistry.Remove(baseItem.DatabaseID))
             {
                 _itemAccessorRegistry = new();
-                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.Name, item.DatabaseID));
+                _itemRegistry.Values.ToList().ForEach(item => _itemAccessorRegistry.Add(item.ReadableID, item.DatabaseID));
             }
         }
     }

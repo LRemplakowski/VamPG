@@ -8,7 +8,6 @@ tags:
 -> [nomarkup][Search the medicine cabinet.][/nomarkup] <<if visited("MedCabinet") == false>> #line:078e486 
     <<jump MedCabinet>>
 -> [nomarkup][Walk away.][/nomarkup]  #line:0e48216 
-    <<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS_2">>
 ===
 title: MirrorLook
 tags:
@@ -37,5 +36,6 @@ tags:
 ---
 [nomarkup][You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.][/nomarkup] #line:068c180 
 {$pcname}: [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup] #line:0d1c5fe 
+<<CompleteObjective "MAIN_SATURDAY_START" "GRAB_MEDS_2">>
 <<jump BathroomSink>>
 ===

@@ -21,6 +21,7 @@ tags:
 <<CompleteObjective "MAIN_SATURDAY_START" "TAKE_COVER">>
 {$pcname}: [nomarkup][Oh my God! What if it's the cops?][/nomarkup] #line:0952dab 
 {$beast}: Who cares? It's them or me. #line:0773750 
+<<KieranDominicBargeIn>>
 CRACK. [nomarkup][The door bursts open, with two men behind it barging into the room.][/nomarkup] #line:08e78bb 
 [nomarkup][One of them is tall and well-built, his skin unnaturally pale and dark brown hair windswept. Clad in a black suit made from some kind of expensive fabric shimmering faintly in your apartment lights. Adorned with a little gold pin on one of his suit flaps, the ensemble is brought together - or apart - by the red silk tie dangling from the unbuttoned collar of his white formal shirt.][/nomarkup] #line:087aa79 
 [nomarkup][The buckle of his belt is big, featuring a bull's head stamped onto it - similar to what cowboys wear. When he steps closer, you hear a jingle. Glancing down for a split-second, you catch a glimpse of his steel-toed cowboy boots - spurs and all, but quickly refocus your gaze on his face.][/nomarkup] #line:0b3c1d6 
@@ -55,6 +56,7 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 <<else>>
     {$sheriff}: Nice try, kid. #line:0216dcc 
 <<endif>>
+<<HandleAltercationWithDominic>>
 {$sheriff}: [nomarkup][He saunters towards you, pinning you to the fridge, but he doesn't even raise his hands.][/nomarkup] Now, do you want to do this the easy way, or the hard way? #line:07bce9b 
 -> [nomarkup][Drop your weapon.][/nomarkup] <<if $gotweapon == true>> #line:0bbfd00 
     {$sheriff}: Sharp. #line:01ea142 

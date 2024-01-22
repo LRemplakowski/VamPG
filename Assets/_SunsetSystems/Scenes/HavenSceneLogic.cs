@@ -201,12 +201,6 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeInAsync(.5f);
         }
 
-        private void DisableInteractionsBeforeDominic()
-        {
-            _gun.GetComponent<IInteractable>().Interactable = true;
-            _crowbar.GetComponent<IInteractable>().Interactable = true;
-        }
-
         public void RecruitKieran()
         {
             PartyManager.Instance.RecruitCharacter(_kieran);
@@ -276,16 +270,22 @@ namespace SunsetSystems.Persistence
                 Debug.LogError("Should add bobby pin to inventory");
             }
 
-            [YarnCommand("DisableInteractionsBeforeDominic")]
-            public static void DisableInteractionsBeforeDominic()
+            [YarnCommand("KieranDominicBargeIn")]
+            public static void KieranDominicBargeIn()
             {
-                HavenSceneLogic.DisableInteractionsBeforeDominic();
+                HavenSceneLogic.BargeIn();
             }
 
             [YarnCommand("HandleAltercationWithDominic")]
             public static void HandleAltercationWithDominic()
             {
                 HavenSceneLogic.MoveActorsAndCameraToFridgeConfig();
+            }
+
+            [YarnCommand("MakeDominicLeave")]
+            public static void MakeDominicLeave()
+            {
+                HavenSceneLogic.MoveDominicToDoorAndDestroy();
             }
         }
     }

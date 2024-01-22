@@ -64,10 +64,10 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 [nomarkup][He lights a cigarette, blowing the smoke in your face. It makes your eyes burn, and instinctively, you try to lean away. Unfortunately, there is nowhere to go that isn't pressed further against the fridge. As Dominic's eyes track you, his smile sends a chill down your spine.][/nomarkup] #line:03b1db4 
 {$sheriff}: You've proven to be quite the headache. [nomarkup][He taps the ash from his cigarette.][/nomarkup] I'll be honest with you, I'm gonna kill you, but I'm debating whether I should just go ahead and do it now, or drag you off to let my wife decide. [nomarkup][He falls silent for a second, allowing himself to breathe in another dose of thick, tar-laden smoke from his cigarette.][/nomarkup]  #line:0ac98e8 
 {$beast}: It's run, fight, or die. #line:0d33789 
-[You dig your nails into your flesh, hoping the pain will stop the voice plaguing your mind with unwanted advice. You're gonna have to think clearly to get out of this one.][/nomarkup] #line:0a56473 
-{$sheriff}: How about this: [He points at you with his cigarette.][/nomarkup] I bet you have several questions. I'll answer them so you can at least make peace with your death. Can't have any more ghosts chasing my tail. [He spreads his arms a little with a grin.][/nomarkup] I'm a taken man. #line:0a31205 
+[nomarkup][You dig your nails into your flesh, hoping the pain will stop the voice plaguing your mind with unwanted advice. You're gonna have to think clearly to get out of this one.][/nomarkup] #line:0a56473 
+{$sheriff}: How about this: [nomarkup][He points at you with his cigarette.][/nomarkup] I bet you have several questions. I'll answer them so you can at least make peace with your death. Can't have any more ghosts chasing my tail. [nomarkup][He spreads his arms a little with a grin.][/nomarkup] I'm a taken man. #line:0a31205 
 [nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it, either. Not with the other guy lurking around. You don't want to die here. Not now. The man waits, patiently watching you as a trail of smoke rises from the lit cigarette dangling out of his mouth.][/nomarkup] #line:08c7fca 
-{$pcname}: [I need to bide my time.][/nomarkup] #line:0712ce8 
+{$pcname}: [nomarkup][I need to bide my time.][/nomarkup] #line:0712ce8 
 [nomarkup][One question in particular sticks out to me the most.][/nomarkup] #line:0858164 
 -> {$pcname}: What's happening to me? #line:09bdeb5 
     [nomarkup][Dominic cackles, releasing a puff of smoke.][/nomarkup] #line:0f6a534 
@@ -91,7 +91,7 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
     <<jump WhoAreYou>>
 -> {$pcname}: How did you find me? <<if visited("HowFindMe") == false>> #line:004b038 
     <<jump HowFindMe>>
--> {$pcname}: What happens now? [END][/nomarkup] #line:08f5d82 
+-> {$pcname}: What happens now? [nomarkup][END][/nomarkup] #line:08f5d82 
     <<jump DropButt>>
 === 
 title: WantToKill
@@ -208,7 +208,7 @@ tags:
 {$kieran}: ... I'm sure we will find some way to manage. [nomarkup][He says, looking at you.][/nomarkup] #line:05082d0 
 {$sheriff}: Well... hate to be an asshole, but that's not my problem. At least, not anymore, thanks to yours truly. [nomarkup][He grins again at Kieran.][/nomarkup] #line:0e52fa3 
 {$kieran}: [nomarkup][He takes a deep breath, trying to compose himself once more.][/nomarkup] ... We will start with the basics. I'm sure that the answer to our question is around here somewhere. #line:0e57234 
-{$sheriff}: [nomarkup][He taps his foot a couple of times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.][/nomarkup] You know, I don't want to tell you how to do your job - it would be against my code of ethics. 	Besides, I like to see Kieran squirm at the sheer thought that he may not survive to see the next evening. But I can give you a clue. Free of charge. Just don't get used to it. [nomarkup][In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.][/nomarkup] #line:0820197 
+{$sheriff}: [nomarkup][He taps his foot a couple of times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.][/nomarkup] You know, I don't want to tell you how to do your job - it would be against my code of ethics. Besides, I like to see Kieran squirm at the sheer thought that he may not survive to see the next evening. But I can give you a clue. Free of charge. Just don't get used to it. [nomarkup][In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.][/nomarkup] #line:0820197 
 {$pcname}: Ow! #line:00955f7 
 [nomarkup][He grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.][/nomarkup] #line:0044c8d 
 {$pcname}: [nomarkup][Why is he...? The fuck?][/nomarkup] #line:0a7c040 
@@ -230,7 +230,7 @@ tags:
 {$kieran}: Please, attempt to reconstruct recent events with me, miss Bardot. This is your flat, correct? Recall your most recent memory of this place before today. Is there anything that is here and was not before? Anything missing or different, and if so, can you name it? Aside from the dead people, of course. #line:0b61e19 
 {$pcname}: [nomarkup][You rub your temple. The clinical tone of the questions is not dissimilar to the kind of prodding inquiry one would receive in therapy. Sadly, you seem to come up short - no matter how hard you try. You sigh and shake your head.][/nomarkup]	 #line:020d9cc 
 {$kieran}: [nomarkup][He stares at you, analyzing your every move.][/nomarkup] Nothing? That's alright... One's memory may be feeble at times - especially if the event one is remembering is traumatizing. Next, we should search the apartment. Perhaps something will jog your mind. #line:0fd0013 
-[Before the conversation comes to an end, you feel the need to say one last thing:][/nomarkup] #line:097de2e 
+[nomarkup][Before the conversation comes to an end, you feel the need to say one last thing:][/nomarkup] #line:097de2e 
 -> {$pcname}: Thanks for saving me. #line:095235a 
     {$kieran}: [nomarkup][He raises his head a bit.][/nomarkup] This isn't sympathy, so please don't take it as such. My good will extends only as far as your resolve. [nomarkup][+1 Kieran Influence][/nomarkup] #line:07a4702 
 -> {$pcname}: So you're my jailor. #line:0cebb89 

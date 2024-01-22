@@ -10,23 +10,23 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private Objective _objective;
-        //[SerializeField]
-        //private ValueType _valueType;
-        //private bool StringValue => _valueType == ValueType.StringValue;
-        //private bool IntValue => _valueType == ValueType.IntValue;
-        //private bool BoolValue => _valueType == ValueType.BoolValue;
-        //[SerializeField, ShowIf("StringValue")]
-        //private string _stringKey;
-        //[SerializeField, ShowIf("StringValue")]
-        //private string _stringValue;
-        //[SerializeField, ShowIf("IntValue")]
-        //private string _intKey;
-        //[SerializeField, ShowIf("IntValue")]
-        //private int _intValue;
-        //[SerializeField, ShowIf("BoolValue")]
-        //private string _boolKey;
-        //[SerializeField, ShowIf("BoolValue")]
-        //private bool _boolValue;
+        [SerializeField]
+        private ValueType _valueType;
+        private bool StringValue => _valueType == ValueType.StringValue;
+        private bool IntValue => _valueType == ValueType.IntValue;
+        private bool BoolValue => _valueType == ValueType.BoolValue;
+        [SerializeField, ShowIf("StringValue")]
+        private string _stringKey;
+        [SerializeField, ShowIf("StringValue")]
+        private string _stringValue;
+        [SerializeField, ShowIf("IntValue")]
+        private string _intKey;
+        [SerializeField, ShowIf("IntValue")]
+        private int _intValue;
+        [SerializeField, ShowIf("BoolValue")]
+        private string _boolKey;
+        [SerializeField, ShowIf("BoolValue")]
+        private bool _boolValue;
 
         [SerializeField]
         private Dictionary<string, string> _strings;

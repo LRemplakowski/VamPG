@@ -21871,11 +21871,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21951,11 +21951,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -57531,6 +57531,7 @@ MonoBehaviour:
     - {fileID: 5363628252765409762}
     - {fileID: 3648448450239223758}
     - {fileID: 6120044013454617943}
+    - {fileID: 4264640439043287193}
     - {fileID: 4264640439043287197}
     - {fileID: 781100931855757372}
     - {fileID: 465638474998200223}
@@ -57550,20 +57551,20 @@ MonoBehaviour:
       Entry: 10
       Data: 2
     - Name: _landlordDialogue
-      Entry: 6
-      Data: 
-    - Name: _apartmentDoorLandlordInteraction
       Entry: 10
       Data: 3
-    - Name: _bathroomDoorsDialogue
+    - Name: _apartmentDoorLandlordInteraction
       Entry: 10
       Data: 4
-    - Name: _dominic
+    - Name: _bathroomDoorsDialogue
       Entry: 10
       Data: 5
-    - Name: _kieran
+    - Name: _dominic
       Entry: 10
       Data: 6
+    - Name: _kieran
+      Entry: 10
+      Data: 7
   unique: {fileID: 2042823494}
   _defaultEntryWaypoint: {fileID: 1591118380}
   <OnSceneStart>k__BackingField:
@@ -57656,10 +57657,96 @@ MonoBehaviour:
   m_GameObject: {fileID: 2042823491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83adb01e984234f42b9600e13748d850, type: 3}
+  m_Script: {fileID: 11500000, guid: ae309f4e25703f345a9d56557fbda361, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objective: {fileID: 11400000, guid: 204d4d3e302e833468c5767391fadb49, type: 2}
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: b48d208275eb99d4291ecfa3e000f4e7, type: 2}
+    - {fileID: 11400000, guid: 4887b1be59d667f49b71ceca04bfbc70, type: 2}
+    - {fileID: 11400000, guid: 653f5e6fd8bd7b34f99db81072d803dc, type: 2}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: requiredItems
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 1|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems
+    - Name: requiredItems
+      Entry: 7
+      Data: 2|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: requiredCount
+      Entry: 3
+      Data: 1
+    - Name: countingLogic
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|SunsetSystems.Journal.ItemPosessionObjectiveTrigger+ItemObjectiveData,
+        SunsetSystems
+    - Name: requiredItems
+      Entry: 7
+      Data: 4|System.Collections.Generic.List`1[[SunsetSystems.Inventory.Data.IBaseItem,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: requiredCount
+      Entry: 3
+      Data: 1
+    - Name: countingLogic
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  objectiveToTrigger: {fileID: 11400000, guid: 204d4d3e302e833468c5767391fadb49, type: 2}
 --- !u!1 &2045106881
 GameObject:
   m_ObjectHideFlags: 0

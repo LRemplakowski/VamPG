@@ -129,7 +129,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction ("GetHasItem")]
         public static bool GetHasItem(string itemID)
         {
-            return InventoryManager.Instance.GetInventoryContainsItemWithReadableID(itemID);
+            return InventoryManager.Instance.GetInventoryContainsItemWithReadableID(itemID, out _);
         }
 
         [YarnFunction("GetIsCompanionInParty")]

@@ -56,9 +56,19 @@ namespace SunsetSystems.Inventory
             PlayerInventory.AddItem(item);
         }
 
-        public bool GetInventoryContainsItemWithReadableID(string itemID)
+        public bool GetInventoryContainsItemWithReadableID(string itemID, out int count)
         {
-            return _playerInventory.Contents.Any(entry => entry._item.ReadableID == itemID);
+            count = 0;
+            var items = _playerInventory.Contents.FindAll(entry => entry._item.ReadableID == itemID);
+            if (items != null && items.Count() > 0)
+            {
+                count = items.Count();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)

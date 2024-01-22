@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 using SunsetSystems.UI.Utils;
+using UltEvents;
 
 namespace SunsetSystems.Inventory
 {
@@ -14,6 +15,8 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private List<InventoryEntry> _contents = new();
         public List<InventoryEntry> Contents => _contents;
+
+        public UltEvent<InventoryEntry> OnItemAdded, OnItemRemoved;
 
         private void OnValidate()
         {
@@ -45,6 +48,7 @@ namespace SunsetSystems.Inventory
                 {
                     _contents.Add(itemEntry);
                 }
+                OnItemAdded?.InvokeSafe(itemEntry);
             }
         }
 
@@ -68,6 +72,7 @@ namespace SunsetSystems.Inventory
                     existing._stackSize -= entry._stackSize;
                     if (existing._stackSize <= 0)
                         _contents.Remove(existing);
+                    OnItemRemoved?.InvokeSafe(entry);
                     return true;
                 }
                 else

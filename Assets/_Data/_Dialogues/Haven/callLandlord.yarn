@@ -14,11 +14,11 @@ position: -328,-104
     {$landlord}: [nomarkup][You can hear his contempt through the phone.][/nomarkup] Again? There's no way. I just fixed it last week. You must be washing grease down the drain. Not my problem. Hire a plumber. #line:085cb16 
     -> {$pcname}: I'll pay you for your time. #line:02582fe 
         [nomarkup][Now you're speaking his language.][/nomarkup] #line:0a8bcc3 
-        {$landlord}: I'll have to charge you a... uh... a late night fee. $200. #line:07f776e 
+        {$landlord}: I'll have to charge you a... uh... a late night fee. $50. #line:07f776e 
         -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:025fbad 
             [nomarkup][He hangs up.][/nomarkup] #line:0de55de 
             <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">> 
-            <<RemoveMoney 200>>  
+            <<RemoveMoney 50>>  
             <<stop>>
         -> {$pcname}: You're trying to rip me off! #line:04a227e 
             {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:007cdae 

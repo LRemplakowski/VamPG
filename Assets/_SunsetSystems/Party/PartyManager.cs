@@ -149,7 +149,7 @@ namespace SunsetSystems.Party
             _mainCharacterKey = mainCharTemplate.DatabaseID;
             RecruitCharacter(mainCharTemplate);
             _activeCoterieMemberKeys.Add(_mainCharacterKey);
-            InventoryManager.Instance.SetMoney(200);
+            InventoryManager.Instance.SetMoney(55);
         }
 
         public bool TryAddMemberToActiveRoster(string memberID, ICreature creature)

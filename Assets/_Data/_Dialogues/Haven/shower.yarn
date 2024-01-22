@@ -8,7 +8,7 @@ tags:
 -> (Wits + Streetwise) [nomarkup][Fleece the body.][/nomarkup] <<if visited("FleeceBody") == false>> #line:03acf5e 
     <<jump FleeceBody>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0684ec1 
-    <<CompleteObjective ("MAIN_SATURDAY_START","TAKE_SHOWER")>>
+    <<CompleteObjective "MAIN_SATURDAY_START" "TAKE_SHOWER">>
 ===
 title: CauseofDeath
 tags:
@@ -24,10 +24,10 @@ title: FleeceBody
 tags:
 ---
 <<if Roll("Wits","Streetwise") >= 3>>
-    [nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success #line:0d4bee2 
+    :[nomarkup][You find his wallet and ID: his name is Diego Vazguez.][/nomarkup] #success #line:0d4bee2 
     <<set $smallmoney to true>>
 <<else>>
-    [nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup] #failure #line:0544c71 
+    :[nomarkup][You find his wallet and ID, but his name is partially smeared in blood. You can only make out his initials: DV.][/nomarkup] #failure #line:0544c71 
 <<endif>>
 [nomarkup][You find a black and white photo of him holding a baby.][/nomarkup] #line:0b217be 
 {$pcname}: [nomarkup][Poor bastard.][/nomarkup] #line:06db650 

@@ -8,12 +8,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Data;
 using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Inventory
 {
     [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
-    public class InventoryManager : Singleton<InventoryManager>, ISaveable, IResetable
+    public class InventoryManager : SerializedMonoBehaviour, ISaveable, IResetable
     {
+        public static InventoryManager Instance { get; private set; }
+
         [SerializeField]
         private ItemStorage _playerInventory;
         [SerializeField]
@@ -29,9 +32,12 @@ namespace SunsetSystems.Inventory
             _money = 0;
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
             if (!_playerInventory)
                 _playerInventory = GetComponent<ItemStorage>();
             if (!_playerInventory)

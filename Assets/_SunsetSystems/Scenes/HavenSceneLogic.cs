@@ -258,31 +258,6 @@ namespace SunsetSystems.Persistence
                 HavenSceneLogic._bathroomDoors.gameObject.SetActive(false);
             }
 
-            [YarnCommand("HandleGunTaken")]
-            public static void HandleGunTaken()
-            {
-                HavenSceneLogic._handgun.gameObject.SetActive(false);
-                InventoryManager.PlayerInventory.AddItem(new(HavenSceneLogic._handgunItem));
-            }
-
-            [YarnCommand("HandleCrowbarTaken")]
-            public static void HandleCrowbarTaken()
-            {
-                HavenSceneLogic._crowbar.SetActive(false);
-            }
-
-            [YarnCommand("SetPhoneDialogueToLandlordDialogue")]
-            public static void SetPhoneDialogueToLandlordDialogue()
-            {
-                Debug.LogError("FOO");
-            }
-
-            [YarnCommand("EnableApartmentDoorLandlordDialogue")]
-            public static void EnableApartmentDoorLandlordDialogue()
-            {
-                HavenSceneLogic._apartmentDoorLandlordInteraction.Interactable = true;
-            }
-
             [YarnCommand("MoveLandlordAndPCToSinkPositions")]
             public async static void MoveLandlordAndPCToSinkPositions()
             {

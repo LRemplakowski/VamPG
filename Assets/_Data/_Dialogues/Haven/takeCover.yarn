@@ -7,15 +7,18 @@ tags:
 -> {$pcname}: [nomarkup][I'm not going to jail.][/nomarkup] #line:0d8572f 
     {$beast}: Not if I can do something about it. #line:0859767 
 {$pcname}: [nomarkup][There's that voice again.][/nomarkup] #line:0a2a5ee 
+<<PlaySFX "door_knock_heavy">>
 BANG! BANG! BANG! #line:08bca26 
 [nomarkup][It's coming from the front door.][/nomarkup] #line:05cb373 
 {$beast}: Just ignore it. I don't want more witnesses. #line:0ca6bb4 
+<<PlaySFX "door_knock_heavy">>
 BANG! BANG! BANG! BANG! #line:0f18873 
+<<jump DominicKieranScene>>
 ===
 title: DominicKieranScene
 tags:
 ---
-<<CompleteObjective ("MAIN_SATURDAY_START","GRAB_WEAPONS")>>
+<<CompleteObjective "MAIN_SATURDAY_START" "TAKE_COVER">>
 {$pcname}: [nomarkup][Oh my God! What if it's the cops?][/nomarkup] #line:0952dab 
 {$beast}: Who cares? It's them or me. #line:0773750 
 CRACK. [nomarkup][The door bursts open, with two men behind it barging into the room.][/nomarkup] #line:08e78bb 

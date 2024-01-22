@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Journal;
-using SunsetSystems.Resources;
 using SunsetSystems.UI.Utils;
 using UnityEditor;
 using UnityEngine;

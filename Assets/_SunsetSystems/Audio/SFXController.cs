@@ -1,5 +1,5 @@
 using Redcode.Awaiting;
-using SunsetSystems.Resources;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +8,10 @@ using UnityEngine;
 namespace SunsetSystems.Audio
 {
     [RequireComponent(typeof(AudioSource))]
-    public class SFXController : MonoBehaviour
+    public class SFXController : SerializedMonoBehaviour
     {
+        [SerializeField, Required]
+        private SFXResourceCache sceneSFXCacheAsset;
         [SerializeField]
         private AudioSource _sfxSource, _typewriterSource;
 
@@ -51,8 +53,10 @@ namespace SunsetSystems.Audio
 
         public void PlayOneShot(string sfxName)
         {
-            AudioClip clip = ResourceLoader.GetSFX(sfxName);
-            PlayOneShot(clip);
+            if (sceneSFXCacheAsset.SfxAssetCache.TryGetValue(sfxName, out AudioClip clip))
+                PlayOneShot(clip);
+            else
+                Debug.LogError($"No clip with name {sfxName} found in scene SFX Cache!");
         }
 
         public void PlayOneShot(AudioClip clip)

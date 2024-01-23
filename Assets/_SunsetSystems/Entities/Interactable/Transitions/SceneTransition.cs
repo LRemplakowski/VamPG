@@ -28,6 +28,7 @@ namespace SunsetSystems.Core.SceneLoading
             switch (_type)
             {
                 case TransitionType.SceneTransition:
+                    MoveToScene(sceneToLoad);
                     break;
                 case TransitionType.InternalTransition:
                     break;
@@ -38,7 +39,7 @@ namespace SunsetSystems.Core.SceneLoading
         public void MoveToScene(SceneLoadingData data)
         {
             SaveLoadManager.UpdateRuntimeDataCache();
-            //loadingTask = LevelLoader.Instance.LoadGameLevel(data);
+            _ = LevelLoader.Instance.LoadNewScene(data);
         }
 
         public async Task MoveToArea()

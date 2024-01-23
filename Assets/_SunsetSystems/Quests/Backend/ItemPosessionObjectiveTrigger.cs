@@ -45,7 +45,7 @@ namespace SunsetSystems.Journal
 
         private void OnItemAddedToPlayerInventory(InventoryEntry itemEntry)
         {
-            if (requiredItems.Any(requiredItem => requiredItem == itemEntry._item) is false)
+            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.GetRequiredItems().Contains(itemEntry._item)) is false)
                 return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
@@ -80,32 +80,36 @@ namespace SunsetSystems.Journal
             [SerializeField]
             private ItemCountLogic countingLogic;
 
+            public IEnumerable<IBaseItem> GetRequiredItems()
+            {
+                return requiredItems.AsEnumerable();
+            }
+
             public bool HasRequiredItems()
             {
-                bool hasRequiredItems = false;
                 int itemCount = 0;
                 foreach (IBaseItem item in requiredItems)
                 {
                     if (InventoryManager.Instance.GetInventoryContainsItemWithReadableID(item.ReadableID, out int count))
                     {
+                        bool hasRequiredItems;
                         switch (countingLogic)
                         {
                             case ItemCountLogic.CountOneType:
                                 hasRequiredItems = count >= requiredCount;
                                 if (hasRequiredItems)
-                                    goto HasItems;
+                                    return true;
                                 break;
                             case ItemCountLogic.CountAllTypes:
                                 itemCount += count;
                                 hasRequiredItems = itemCount >= requiredCount;
                                 if (hasRequiredItems)
-                                    goto HasItems;
+                                    return true;
                                 break;
                         }
                     }
                 }
-                HasItems:
-                return hasRequiredItems;
+                return false;
             }
 
             private enum ItemCountLogic

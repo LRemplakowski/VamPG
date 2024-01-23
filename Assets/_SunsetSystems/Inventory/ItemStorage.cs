@@ -5,14 +5,16 @@ using System.Linq;
 using System;
 using SunsetSystems.UI.Utils;
 using UltEvents;
+using Sirenix.Serialization;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Inventory
 {
-    public class ItemStorage : MonoBehaviour
+    public class ItemStorage : SerializedMonoBehaviour
     {
         [SerializeField]
         private List<ItemCategory> _acceptedItemTypes = new();
-        [SerializeField]
+        [OdinSerialize]
         private List<InventoryEntry> _contents = new();
         public List<InventoryEntry> Contents => _contents;
 
@@ -95,7 +97,7 @@ namespace SunsetSystems.Inventory
     [Serializable]
     public class InventoryEntry : IGameDataProvider<InventoryEntry>
     {
-        [SerializeField]
+        [OdinSerialize]
         public IBaseItem _item;
         [SerializeField]
         public int _stackSize;

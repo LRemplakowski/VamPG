@@ -140,7 +140,7 @@ namespace SunsetSystems.Dialogue
             try
             {
                 if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
-                    return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.ReadableID == config.DatabaseID);
+                    return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.DatabaseID == config.DatabaseID);
                 else
                     return false;
             }

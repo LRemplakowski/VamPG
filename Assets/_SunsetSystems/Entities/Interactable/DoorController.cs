@@ -41,6 +41,7 @@ namespace SunsetSystems.Entities.Interactable
                 _unique = GetComponent<UniqueId>();
         }
 
+        [Button]
         private void TriggerStateChange()
         {
             Open = !Open;

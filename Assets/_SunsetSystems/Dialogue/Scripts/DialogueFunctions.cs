@@ -6,6 +6,7 @@ using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
+using UnityEngine;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -137,17 +138,13 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetIsCompanionInParty")]
         public static bool GetIsCompanionInParty(string characterID)
         {
-            try
+            foreach (var partyMember in PartyManager.Instance.ActiveParty)
             {
-                if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
-                    return PartyManager.Instance.ActiveParty.Any(c => c.References.CreatureData.DatabaseID == config.DatabaseID);
-                else
-                    return false;
+                Debug.Log($"Comparing party member IDs! {partyMember.References.CreatureData.ReadableID} == {characterID} ? {partyMember.References.CreatureData.ReadableID == characterID}");
+                if (partyMember.References.CreatureData.ReadableID == characterID)
+                    return true;
             }
-            catch (NullReferenceException)
-            {
-                return true;
-            }
+            return false;
         }
     }
 }

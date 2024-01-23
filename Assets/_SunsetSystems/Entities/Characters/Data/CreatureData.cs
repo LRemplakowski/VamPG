@@ -13,10 +13,10 @@ namespace SunsetSystems.Entities.Characters
     {
         public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
+        [field: SerializeField, ReadOnly]
         public string ReadableID { get; private set; }
-        [SerializeField]
-        private string _id;
-        public string DatabaseID => _id;
+        [field: SerializeField, ReadOnly]
+        public string DatabaseID { get; private set; }
         [field: SerializeField]
         public AssetReferenceSprite PortraitAssetRef { get; private set; }
         [field: SerializeField]
@@ -32,7 +32,7 @@ namespace SunsetSystems.Entities.Characters
         {
             FirstName = template.FirstName;
             LastName = template.LastName;
-            _id = template.ReadableID;
+            DatabaseID = template.DatabaseID;
             ReadableID = template.ReadableID;
             PortraitAssetRef = template.PortraitAssetRef;
             Faction = template.Faction;

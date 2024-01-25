@@ -1,13 +1,13 @@
 ﻿title: kieranDialogue
 tags: 
 ---
-{$kieran}: Yes? We don't have much time before our heads roll.
--> {$pcName}: I think we can spare a few minutes to talk.
-    [nomarkup][Kieran sights.][/nomarkup]
-    
-    {$kieran}: Okay. As long as it'll help our investigation, I'm all answers. So ask.
+{$kieran}: Yes? Please make it quick; there is not much time we can spare before our heads roll.
+-> {$pcName}: I think we can spare a few minutes to.
+{$kieran}: [nomarkup][Kieran sights.][/nomarkup] Okay. As long as it'll help our investigation, I'm all answers. So ask.
     <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
-    [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions to ask. Just to be sure if they are true or false.][/nomarkup]
+    [nomarkup][You’ve read enough vampire fiction to have some idea of a couple extra questions to ask.][/nomarkup]
+    -> {$pcName}: So… How many of the stereotypes about vampires are true? Like we sleep in coffins, or have super speed, are averted by crosses and so on?
+        <<jump occultQuestions>>
     <<endif>>
     -> {$pcName}: You and Dominic don't seem to get along.
         <<jump kieranDominicRelations>>
@@ -29,79 +29,77 @@ tags:
         <<jump wantToKnowMoreAboutKieran>>
     -> {$pcName}: I think that some thanks are in order. <<if visited("thanks") ==false>>
         <<jump thanks>>
-    -> {$pcName}: I keep hearing this voice in my head...
-        <<jump beastExplained>>
     -> {$pcName}: Maybe later
         {$kieran}: OK, it's not like I'm going anywhere.
 ===
 title: kieranDominicRelations
 ---
-{$kieran}: Is it that obvious? \[he sighs\] Let's say that I didn't want to tag along with him, and he didn't want a partner. But an order is an order, so what could I do?
-
+{$kieran}: Is it that obvious? [nomarkup][He sighs.][/nomarkup] Let’s just say that I didn’t want to tag along with him. And he didn’t want a partner. We all have our duties to uphold, however.
 <<if GetCompanionInfluence("$kieran")>=2>>
-    {$kieran}: To some extent, I feel relief that I don't have to deal with his stupid jokes anymore.
+    {$kieran}: As bad as this situation is, I am happy to be relieved from the company of that...manchild at last. I’m still worried it might be my [nomarkup]<i>last</i>[/nomarkup] night, but a few more of his jokes, and I may have lost my temper.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>>
-    {$kieran}: ... but now that I think of it, I like his company more.
+    {$kieran}: Out of the two evils, you actually seem to cause me more anguish.
 <<else>>
-    {$kieran}: To be honest, I don't know if the change is for better or for worse yet...
+    {$kieran}: To be honest, I do not know if the exchange is for better or worse quite yet…
 <<endif>>
-    -> {$pcName}: Order?
-    {$kieran}: My Sire wanted me to get more experience in the field, so here I am, coping with bad jokes and forced adoptions.
+    -> {$pcName}: Duties?
+    {$kieran}: My Sire wished to test my capabilities in the field. I was ordered to aid Dominic in apprehending you, but instead here I am, coping with bad jokes and forced accountings.
         -> {$pcName}: Forced... what?
-        {$kieran}: Sorry. Didn't want to sound rude. But technically you're my adoptive Childe, at least for the night.
+        {$kieran}: Accounting is a term for a period of time when a Childe and their deeds are the responsibility of their Sire - adoptive or otherwise. You are my adoptive Childe, for this night at least. Thus, you are under an Accounting, of sorts.
             -> {$pcName}: This sounds... awkward.
-                {$kieran}: You're telling me.
+                {$kieran}: If you mean the implication that I am your father now, then yes. It is.
                 <<jump kieranDialogue>>
 ===
 title: vampisismExplained
 ---
-{$kieran}: Yes, I know, it does sound crazy. I'd love to talk about the details, but we don't have much time right now. Besides, theory is theory, but practice is much better.
+{$kieran}: Exist, yes. So do many of the myriad of myths and monsters you were told to be wary of, as a child. Unfortunately, however, introductions to those will have to wait, too.
     -> {$pcName}: Not even a crash course?
-        {$kieran}: You had it in your apartment.
+        {$kieran}: The one you had back in your apartment wasn’t sufficient?
         -> {$pcName}: You know, I don't think that this crash course gave me more then additional headache.
-            {$kieran}: Yes, I know, but we don't have time for more in-depth tutorials right now.
+            {$kieran}: Lead lodged in your head would give you a much bigger one. [nomarkup][He gives you a meaningful look.][/nomarkup] I understand what you are saying, but we have to get going.
             <<jump kieranDialogue>>
 ===
 title: willHeKillUs
 ---
-{$kieran}: I don't want to get your hopes up, but even if he doesn't want to, he'll be forced to do so.
-    -> {$pcName}: Those are some harsh laws, there.
-        {$kieran}: Harsh enough sustain our society through the centuries while remaining hidden from mortal eyes, that is.
+{$kieran}: That deal was sealed the moment Dominic left the room. He was not lying; he is bound by our laws. They are normally exceedingly harsh and inflexible, but Dominic agreed to bend the rules because he has a bigger fish to fry, here. Those laws are not a subject for vast interpretation, only conditional pardon for a good reason.
+    -> {$pcName}: I saw just how harsh firsthand. I thought I was going to die.
+        {$kieran}: You were going to, yes.
+        {$pcName}: [nomarkup][The next sentence out of your mouth is dripping with sarcasm.][/nomarkup] Nice to know that was never in doubt.
+        {$kieran}: Harsh they may be, but they serve their purpose well. These rules have maintained our society for centuries, keeping mortals unaware of our existence.
+        -> {$pcName}: Fiction about us still exists, though.
+            {$kieran}: Ah, but the general public believes us to be just that: a fiction. Even you, for all your investigative expertise, were completely clueless prior to us kicking down your door. I would wager that our laws are sufficient, in that light.
         <<jump kieranDialogue>>
 ===
 title: kieransAge
 ---
-{$kieran}: Just about old enough to be your adoptive Sire, it seems. \[he chuckles\] Yes, I know, you didn't ask about that. I'm around 55 right now. I've been a Kindred since 1972. The older you get, the faster time seems to move, so in other Kindred's eyes, I'm barely older than you.
+{$kieran}: Old enough to know that age holds no relevance to one's maturity, other than giving people more time to experience the world. That is to say, around 45. I have been a Kindred since 1972, but my entire lifetime is barely a drop in the bucket, to many other Kindred.
 <<jump kieranDialogue>>
 ===
 title: drinks
 ---
 {$kieran}: Technically, we can't drink alcohol...
-
 <<if GetCompanionInfluence("$kieran")>=2>>
-    {$kieran}: ... but I can show you some tricks on how to make it work.
+    {$kieran}: ... but I just may take you up on it, if only for the purpose of showing you a workaround. Not all mortal pleasures have to be forfeit.
 <<elseif GetCompanionInfluence("$kieran")<=-2>>
-    {$kieran}: ... so no, I'm not interested.
+    {$kieran}: ...and no amount would make it worth your prolonged company.
 <<else>>
-    {$kieran}: ... but I don't know if it'll be... appropriate.
+    {$kieran}: … but I don’t know if it’ll be… appropriate.
 <<endif>>
 <<jump kieranDialogue>>
 ===
 title: kieransRing
 ---
-[nomarkup][Kieran looks at his hand and hides it quickly][/nomarkup]
-
-{$kieran}: Just a memento, nothing more.
+{$kieran}: [nomarkup][Kieran glances at his hand and hides it quickly][/nomarkup] Just a memento, nothing more.
     <<if GetAttributeSkillPoolSize("wits","insight")>=5>>
     -> {$pcName}: Seems to be more than that to me.
-        {$kieran}: \[His face goes stone cold\] This isn't pertinent to our investigation.
+        {$kieran}: [nomarkup][His face goes stone cold][/nomarkup] This is [nomarkup]<i>not</i>[/nomarkup] pertinent to our investigation.
     <<else>>
         <<jump kieranDialogue>>
     <<endif>>
 ===
 title: kieransSire
 ---
-{$kieran}: Maybe. Depends on what you want to know.
+{$kieran}: Maybe. Depends on what would you like to know.
     -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>>
         <<jump catherinaCharacteristics>>
     -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>>
@@ -115,48 +113,109 @@ title: catherinaCharacteristics
     -> {$pcName}: Just gathering data.
     [nomarkup][He looks at you reluctantly][/nomarkup]
     <<if GetCompanionInfluence("$kieran")>=2>>
-        {$kieran}: She's far better then most of the Sires I know. \[his eyes go a little cloudy\] Beautiful and caring... every young Kindred would like to have her as a Sire.
+        {$kieran}: Kate is far better then most of the Sires I know. [nomarkup][His eyes go a little cloudy - for the first time you see him so dreamy.][/nomarkup] Beautiful and caring… every young Kindred would be lucky to have her as a Sire.
         -> {$pcName}: Whoa, I didn't expect that. 
-            <<ModifyInfluence ($kieran,+1)>>
-            {$kieran}: Yes, I know. As of now you've met only me and Dominic, and as you no doubt already know he isn't the best example. No matter what he says. Or thinks about himself.\[Kieran influence +1\]
-            
-            {$kieran}: \[he looks around\] Just remember not to talk ill about his wife in his presence; he'll skin you alive.
+            <<ModifyInfluence 1 $kieran>>
+            {$kieran}: I don't quite understand why it’s so surprising that I admire a woman such as her. [nomarkup][His eyes focus back on you.][/nomarkup] But speaking of hierarchies, please remember that Dominic's attitude towards the Prince is his privilege only. And do not speak ill of her in his presence; he’ll skin you alive. [nomarkup][Kieran influence +1][/nomarkup]
             <<jump kieransSire>>
         ->  {$pcName}: You're painting her as if she was some kind of ideal.
             {$kieran}: Uh... sorry... maybe a little.
+            <<if Roll ("Wits","Awareness")>=3>>
+            [nomarkup][He looks sideways, like he wants to add something, but is hesitant to do so.][/nomarkup]
+            -> {$pcName}: There’s something more than that. I can see it.
+                {$kieran}: [nomarkup][He… blushes a bit? There’s definitely more pink tone to his rather pale complexion.][/nomarkup] It’s not important to our investigation.
             <<jump kieransSire>>
-        ->  {$pcName}: You must exaggerate.
-            <<ModifyInfluence ($kieran,-1)>>
-            {$kieran}: No I'm not! You don't even know her as good as I do! \[Kieran influence -1\]
+        ->  {$pcName}: You must be exaggerating.
+            <<ModifyInfluence -1 $kieran>>
+            {$kieran}: [nomarkup][He frowns deeply.][/nomarkup] No, I really am not. You know nothing about the matter, so kindly keep her name out of your mouth. [nomarkup][Kieran influence -1\][/nomarkup]
+            <<ModifyInfluence -1 $kieran>>
             <<jump kieransSire>>
     <<elseif GetCompanionInfluence("$kieran")<=-2>>
-        {$kieran}: I don't want to sound rude, but I don't know how it may be relevant to our investigation.
+        {$kieran}: I don’t want to sound rude, but I’m not certain how this is relevant to the ongoing investigation.
         <<jump kieransSire>>
     <<else>>
-        {$kieran}: Other than that I won't say. I'm not a gossip type of person.
+        {$kieran}: Other than that, I won’t say. Gossip just is not the way I like to spend my time.
     <<endif>>
     <<jump kieransSire>>
 ===
 title: catherinasAge
 ---
-{$kieran}: Let me think... she's been around for nearly 500 years.
-
+{$kieran}: Let me think… [nomarkup][He pauses for a while, glancing upward as he calculates her age in his head.][/nomarkup] She’s been around for nearly 500 years, and is what we call an Elder. A being to be respected, possessing a sum of experience and wisdom both of us can only dream of.
 [nomarkup][at first you don't know what to say, other than blinking your eyes in surprise][/nomarkup]
-
-{$kieran}: She's not the oldest around you know.
+{$kieran}: [nomarkup][Kieran chuckles seeing your reaction.][/nomarkup] She is not the oldest around, you know - probably not even in this city. There are much older Kindred lurking in the shadows. Especially in Europe.
 <<jump kieransSire>>
 ===
 title: wantToKnowMoreAboutKieran
 ---
-{$kieran}: Sorry Desiree, but it'll have to wait. It's unimportant right now. Not that I don't like to talk about myself.
+{$kieran}: Sorry Desiree, but it will have to wait. It is unimportant right now. Not that I do not like to talk about myself.
 <<jump kieranDialogue>>
 ===
 title: thanks
 ---
-{$kieran}: Don't thank me just yet. We still need to pull through in that investigation of ours. The last thing I want is to become Dominic's target practice.
-    -> {$pcName}: I bet. Me neither. The prospect isn't appealing in any way. Especially with this hand cannon of his.
+{$kieran}: Let’s not get ahead of ourselves. We still need to pull through with a sound conclusion to this investigation of ours. The last thing I want is to become Dominic’s target practice.
+    -> {$pcName}: I bet. And me neither. Just the thought of it is painful. Lead pellets have to be excruciating -  especially with that hand cannon of his.
         {$kieran}: Well then? Let's get to it.
         -> {$pcName}: Wait, I have some questions!
             <<jump kieranDialogue>>
         -> End dialogue.
+===
+title: occultQuestions
+---
+{$kieran}: Most cannot be warded away with any religious symbols, though there are some anomalous occurrences of this being a trait developed following the Embrace. We also don’t tend to sleep in coffins, but there is no accounting for taste. Not judging, of course. As for the super speed - and strength, those are a few abilities that Kindred do have. Training to hone them is a necessity, though. Never forget this.
+-> {$pcName}: So I’m some kind of… let’s call it a superhero in the making? Can you teach me everything you mentioned just now?
+{$kieran}: Sadly, the answer is once again no. I do not know all of those powers, myself. I am sure you will find a suitable teacher, when the time comes, however. But being Brujah, the powers you possess are quite common amongst Kindred.
+-> {$pcName}: Being Brujah… So the powers you get are based on your Clan?
+    <<jump superhero>>
+-> {$pcName}: What’s your Clan?
+    <<jump kieransClan>>
+-> {$pcName}: How could I have been unaware of powers like these until I was told?
+    <<jump unaware>>
+-> {$pcName}: There was something else I wanted to ask.
+    <<jump kieranDialogue>>
+===
+title: superhero
+---
+    {$kieran}: That is correct, though there are those anomalous individuals for whom the blood goes a bit awry. The Clanless. They can have any combination of powers - even those typically exclusive to a particular bloodline.
+    -> {$pcName}: Sounds like a hell of a good deal, to me.
+        {$kieran}: Not so. The Clanless are shunned, both on a political and social level, and sometimes even hunted and killed.
+        -> {$pcName}: Hunted and killed? Why?
+        {$kieran}: [nomarkup][He huffs out a sigh.][/nomarkup] It’s a long, convoluted story, but what it boils down to is the perception and belief that they are harbingers of ruin - a sort of vampiric apocalypse: Gehenna.
+        -> {$pcName}: Certainly sounds ominous. How common exactly are these doomsayers?
+        {$kieran}: Abundant. There exist pessimists in most places. Turn that doubt to fear of what’s to come, and well…
+        -> {$pcName}: Yikes. Forget I asked.
+        <<jump occultQuestions>>
+===
+title: kieransClan
+---
+{$kieran}: [nomarkup][He winces. He knew that one was coming, eventually.][/nomarkup] I would rather not say. Not at this juncture, at least.
+<<if Roll ("Resolve","Persuasion") >=4>>
+-> {$pcName}: Then which juncture?
+    {$kieran}: [nomarkup][A heavy, beleaguered sigh.][/nomarkup] Fine. I’m a Tremere. #success
+    -> {$pcName}: Cool. That means absolutely nothing to me.
+        <<jump occultQuestions>>
+    -> {$pcName}: [nomarkup][You raise an eyebrow in question.][/nomarkup] Care to elaborate?
+        <<if GetCompanionInfluence("$kieran")>=2>>
+            {$kieran}: Tremere are a Clan of blood mages, renowned for our loyalty and skill, but simultaneously distrusted by broader Kindred society due to our secrecy. That is, our magic is an indispensable resource of any Camarilla Domain, but as much as it brings us fortune, it also serves to isolate us…
+        <<elseif GetCompanionInfluence("$kieran")=2>>
+            {$kieran}: The first thing you must know when attempting to learn about the Tremere is that we are highly secretive - often for good reason…
+        <<else>>
+            {$kieran}: No. Figure it out on your own time.
+        <<endif>>
+    {$kieran}: Dominic was correct. You are indeed annoying. But no. [nomarkup][-1 Kieran Influence][/nomarkup] #failure
+    <<ModifyInfluence -1 $kieran>>
+-> {$pcName}: [nomarkup][Leave it be.][/nomarkup] Alright, then.
+    {$kieran}: [nomarkup][He visibly relaxes, his posture and expression softening.][+1 Kieran Influence][/nomarkup]
+    <<ModifyInfluence 1 $kieran>>
+===
+title: unaware
+---
+{$kieran}: Well, some powers are subtler than others in their usage and effects. It is difficult to detect a supernatural charm or allure, for instance, whereas something like super speed or strength is leagues more noticeable. Moreover, it is a fact that your powers are available to you innately through your Sire, but their initial distribution can be any arrangement. Causes for these varieties in skill levels are not well-understood.
+<<if $disciplineUse = true>>
+-> {$pcName}: Aww… Let me guess… is this one of those Discipline things you mentioned earlier?
+    {$kieran}: [nomarkup][He grins, looking almost impressed you remembered that.][/nomarkup] Sharp. Yes, it is. [nomarkup][+1 Kieran influence][/nomarkup]
+    <<ModifyInfluence 1 $kieran>>
+    <<jump occultQuestions>>
+<<else>>
+    <<jump occultQuestions>>
+<<endif>>
 ===

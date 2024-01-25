@@ -3,47 +3,42 @@ tags:
 ---
 <<declare $toldKieranAboutVision to false>>
 [nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup]
-
 {$innerVoice}: Must've come by here last night.
-
 {$beast}: Turn back.
-
 <<jump flashback>>
 ===
 title: flashback
 ---
-[nomarkup][Desiree is walking down the alley with the man whose corpse was in her shower. They exchange drunken flirty lines. They are being led by a mysterious woman.][/nomarkup]
-
-Mysterious Woman: This way.
+[nomarkup][You is walk down the alley with the man whose corpse was in your shower. You exchange drunken flirty lines, until he decides to hug her from behind. You feel your breath go hot. He leans against your for support, and you holds him up. Waiting for them at the end of the alleyway, where the passage opens up to the street is a woman.][/nomarkup]
+Mysterious Woman: Surprise, sweetie.
 <<jump kieranInterrupts>>
 ===
 title: kieranInterrupts
 ---
-[nomarkup][Kieran stands before you waving his hand before your eyes][/nomarkup]
-
-{$kieran}: You there?
-
-[nomarkup][You catch your bearings. Kieran's gravelly but annoying voice grounding you.][/nomarkup]
+[nomarkup][Kieran stands before you, waving his hand before your eyes…][/nomarkup]
+{$kieran}: Miss Bardot, can you hear me? 
+[nomarkup][You catch your bearings, Kieran’s voice grounding you.][/nomarkup]
+{$kieran}: You spaced out for a while. Is everything alright?
 -> {$pcName}: Yeah.
     {$kieran}: What happened? You looked like a deer in the headlights for a moment there.
--> {$pcName}: I had some sort of “vision.”
-    <<set $toldKieranAboutVision to true>>
-    <<jump toldAboutVision>>
--> {$pcName}: Don't worry about it.
-    <<jump dontTellAboutVision>>
+    -> {$pcName}: I had some sort of “vision.”
+        <<set $toldKieranAboutVision to true>>
+        <<jump toldAboutVision>>
+    -> {$pcName}: Don't worry about it.
+        <<jump dontTellAboutVision>>
 ===
 title: toldAboutVision
 ---
-{$kieran}: \[Laughing\] Don't tell me Dominic was wrong, and you're actually a Malkavian. \[+1 Influence\]
-<<ModifyInfluence (1,"kieran")>>
+{$kieran}: [nomarkup][He laughs.][/nomarkup] Don't tell me Dominic was wrong, and you're actually a Malkavian. [nomarkup][+1 Kieran Influence][/nomarkup]
+<<ModifyInfluence 1 $kieran>>
 -> {$pcName}: What's a Malkavian?
-{$kieran}: Don't worry about it. At least for now. Tell me about this vision.
+{$kieran}: Another Bloodline of Kindred, just as the Brujah are. Might be of relevelace later, so keep the name in mind. Tell me about this vision.
 -> {$pcName}: I was in this alley last night with the guy...
 {$kieran}: The one in your shower.
 -> {$pcName}: ... A woman was with us too.
-{$kieran}: Could be your Sire. Hopefully she's dumb enough to stick around. 
+{$kieran}: Could be your Sire. It seems as if we are hot on her trail, if your recollection is to be trusted. That certainly would be a stroke of luck I wouldn’t turn my nose up at. [nomarkup][His expression visibly brightens just the tiniest bit, at the notion. It’s a proverbial light at the end of the tunnel - something to latch onto.][/nomarkup]
 ===
 title: dontTellAboutVision
 ---
-{$kieran}: \[Incredulous\] Okay...? Just try to not let it happen again. We're on a crunch here.
+{$kieran}: [nomarkup][He sounds incredulous.][/nomarkup] Your dissociation is one thing, but withholding potentially helpful information is another. It did not seem like nothing. If you’re sure, though… I will take your word for it. Do your best to maintain focus. We are running short on time.
 ===

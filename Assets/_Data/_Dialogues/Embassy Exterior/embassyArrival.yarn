@@ -2,13 +2,11 @@
 tags:
 ---
 [nomarkup][You arrive at Embassy. The city's best (and only) British rock club. An ominous red glow from the neon Union Jack illuminates the sidewalk.][/nomarkup]
-{$kieran}: As I was saying, before you decided to bombard me with whatever that is you consider music, Embassy is my Sire Kate's Domain, but on the books, the club is run by her ghoul, Diana.
+{$kieran}: As I was saying prior to you wresting control of the radio to blast that discordant cacophony you call music, the Embassy is my Sire, Kate’s Domain. On the books, however, the club is run by her ghoul, Diana.
 -> {$pcName}: You're telling me "ghouls" are real too? <<if visited("vampiricWeaknesses") == false>>
     <<jump vampiricWeaknesses>>
 -> {$pcName}: You've mentioned it a few times now. What do you mean by 'domain'? <<if visited("whatIsDomain") == false>>
     <<jump whatIsDomain>>
--> {$pcName}: I keep hearing this voice in my head. <<if visited("musicTastes") == false>>
-    <<jump beastExplained>>
 -> {$pcName}: You don't like my music? <<if visited("musicTastes") == false>>
     <<jump musicTastes>>
 -> {$pcName}: Let's go.
@@ -17,55 +15,55 @@ tags:
 title: vampiricWeaknesses
 position: 217,-136
 ---
-{$kieran}: You'll find out a lot of things you thought were just fairy tales are real, and most of them are out to kill you.
-
-{$kieran}: Ghouls, not so much. When a mortal drinks of our blood, they become subservient to us. They can even live as long as us so long as they don't bite the hands that feeds them.
+{$kieran}: Being Kindred is uncharted territory for you, miss Bardot. A re-evaluation of your beliefs would be prudent. [nomarkup][He takes a brief pause.][/nomarkup] When a mortal drinks some of a Kindred’s blood, they become creatures subservient to us - ghouls. They share the longevity of their master, given they do not bite the hand that feeds them...
 -> {$pcName}: So we do live forever?
-    {$kieran}: If we're smart, but we're not gonna make it past tonight if we don't get a move on. I don't plan on dying anytime soon. Let alone by Dominic's hand.
+    {$kieran}: Those who keep away from trouble most certainly can live long enough to feel so, but we do not share this prospect in our current situation, miss Bardot. I will gladly answer the questions you have about Kindred as soon as we are off the hook.
 -> {$pcName}: What does it take to kill us?
-    {$kieran}: Sunlight, fire, decapitation, Dominic's jokes.
-    -> {$pcName}: Can I not eat garlic bread anymore? That doesn't seem like a life worth living.
-    {$kieran}: It won't kill you, but I doubt you'll find it as satiating as it used to be. Sorry. I miss cookies, myself.
-    
-    [nomarkup][He gazes off into the distance. Despite your situation, this is the most forlorn you've seen him.][/nomarkup]
-    
+    {$kieran}: Sunlight, fire, decapitation… Dominic’s jokes. [nomarkup][He adds this with an irritated amusement.][/nomarkup] Though most of the time, getting on the bad side of someone more influential is enough. But there are things worse than death, miss Bardot. Death is merciful. We are not immune to the pain brought by torture - physical or otherwise.
+    <<if Roll ("Intelligence","Occult") >=4>>
+        <<jump stakes>>
+    <<else>>
+        <<jump garlicBread>>
+    <<endif>>
+===
+title: garlicBread
+---
+-> {$pcName}: Can I not eat garlic bread anymore? That doesn't seem like a life worth living.
+    {$kieran}: [nomarkup][Your remark puts a blink-and-you-miss-it smile on his usual stiff and borderline pessimistic expression.][/nomarkup] I miss food as well - cookies, in particular. That being said, life without those indulgences will not kill you. Kindred can no longer take in food as humans do. Our digestive system finds anything but blood...troubling.
     {$innerVoice}: Fuck! I didn't even think about desserts.
     <<jump embassyArrival>>
 ===
 title: whatIsDomain
 ---
-{$kieran}: Well, if the Domain isn't self explanatory for you, then imagine that you have a really big house. You treat that house as your fortress and it gives you shelter, sometimes sustenance and most importantly it's the only place where you feel really safe. That's a Domain.
+{$kieran}: The basic concept is identical to the original meaning of the word: a region or territory controlled by a ruler or governmental body. This generally still holds true in Kindred society. Domain is only bestowed upon people who have proven themselves in some significant way.
     -> {$pcName}: Do you have one?
-    [nomarkup][Kieran looks at you, definitely thinking how to answer you to this seemingly easy question][/nomarkup]
-    
-    {$kieran}: No. At least not [nomarkup]<i>yet</i>[/nomarkup].
+        {$kieran}: [nomarkup][Kieran is taken aback by the bluntness of the question, but recovers quickly.][/nomarkup] No, miss Bardot. I do not.
         -> {$pcName}: Touchy topic?
-        {$kieran}: No. Not at all. It's just... I'd like to have one, but among our kind I'm considered barely a child. So any claim I'd make would be not treated seriously.
-        
-        {$beast}: As you say... blind guiding the deaf?
-        <<jump embassyArrival>>
+            {$kieran}: No. Not at all. I’m only surprised you would assume I might have one after such an explanation. I’m not a young man, but I am a very young Kindred. One that is yet to earn the standing and influence necessary to claim a Domain.
+            {$beast}: Blind leading the blind, as one would say?
+            <<jump embassyArrival>>
 ===
 title: musicTastes
 position: 164,153
 ---
-{$kieran}: No. Especially when I'm trying to think about how to save both our hides.
+{$kieran}: I usually pay it no mind, but I was trying to ponder solutions to our predicament. I couldn’t concentrate. I am sorry if I sounded unpleasant.
 -> {$pcName}: I was trying to calm down.
-    {$kieran}: Look, I know this is a lot to process, but we're in the same boat right now. If we want to live to see another night, we need to work together to achieve that.
+    {$kieran}: Look, I know this is a lot to process, but we’re in the same boat right now. If we want to live to see another night, we need to work together to achieve that.
 -> {$pcName}: I was trying to tune you out.
-    {$kieran}: You'll see how well that works out for you. \[-1 Kieran Influence\]
+    {$kieran}: By all means. See how well that works out for you. \[-1 Kieran Influence\]
     <<ModifyInfluence (-1,"kieran")>>
-{$kieran}: Don't get me wrong, I'm trying to help. I'm sorry if it sounds patronizing, but I've got more experience with Kindred than you.
-<<jump embassyArrival>>
-===
-title:beastExplained
----
-{$kieran}: foo
-<<jump embassyArrival>>
+{$kieran}: [nomarkup][He sighs wearily.][/nomarkup] Do not get me wrong. I am trying to help. I know it may sound patronizing, but I have more experience with Kindred than you. Aside from that, in light of our laws, I am responsible for you, so I may as well give you some advice so that we can avoid such disasters in the future. You may not like it - I know I didn’t - but this is how things must be done.
 ===
 title: letsGo
 position: -52,-156
 ---
 {$kieran}: We should head in through the back.
 -> {$pcName}: Why?
-    {$kieran}: That's the special entrance for our kind. It's best if we remain inconspicuous.
+    {$kieran}: That is the special entrance for our kind. It is best if we remain as inconspicuous as possible. We have enough problems already.
+===
+title: stakes
+---
+-> {$pcName}: What about stakes?
+    {$kieran}: A stake to the heart will only immobilize us, invoking a paralysis that we cannot escape from without assistance.
+<<jump garlicBread>>
 ===

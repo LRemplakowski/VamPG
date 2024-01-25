@@ -3,11 +3,19 @@ tags:
 ---
 <<if CurrentObjective("NEVER_TRUST", "DUMP_BODIES")==true>>
     [nomarkup][One by one, you heave the bodies into the dumpster. There's a soft clank as they hit the metal.][/nomarkup]
-    
-    {$pcName}: Won't these be found?
-    
-    {$kieran}: We have a lot of drop points like this across the city. Dominic's team will handle it.
+    -> {$pcName}: Won't these be found?
+    {$kieran}: We have a lot of drop points like this across the city. See that logo? [nomarkup][He points to a faded picture on the side of a dumpster. It looks like it belongs to Ardus Enterprises.][/nomarkup]You can dispose of bodies in dumpsters with it. No questions asked.
+    <<jump financeRoll>>
 <<else>>
     [nomarkup][An old, weathered dumpster with the Ardus Enterprises logo on it. You're not sure if it's blood or rust lining the sides.][/nomarkup]
+    <<jump financeRoll>>
 <<endif>>
+===
+title: financeRoll
+---
+<<if (Roll("Intelligence","Streetwise") >= 3) or (Roll("Intelligence","Finance") >= 3)>>
+[nomarkup][Ardus Enterprises is a large trash processing company that cleans most of Vegas’s districts. These days, they also push hard for the Yucca Mountain Nuclear Waste Repository. In the past, you heard, and even investigated, some stories about bodies found in the dumpsters. Even in smaller containers next to private houses…][/nomarkup]
+[nomarkup][You can’t help but wonder how many of those corpses were created due to vampiric influence in the city. Do the Kindred have some kind of connection to Ardus? Did they strike a mutual agreement? The questions are piling up one after another - just like the bodies you throw into a dumpster's hungry maw to most likely never be seen again.][/nomarkup]
+<<else>>
+-> End dialogue.
 ===

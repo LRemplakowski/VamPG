@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.IO;
 using System.Text;
 
@@ -12,7 +11,7 @@ namespace ChaseMacMillan.CurveDesigner
         public static void DoExport(GameObject gameObject, bool makeSubmeshes)
         {
             string meshName = gameObject.name;
-            string fileName = EditorUtility.SaveFilePanel("Export .obj file", "", meshName, "obj");
+            string fileName = UnityEditor.EditorUtility.SaveFilePanel("Export .obj file", "", meshName, "obj");
 
             ObjExporterScript.Start();
 

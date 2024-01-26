@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChaseMacMillan.CurveDesigner
@@ -160,10 +158,10 @@ namespace ChaseMacMillan.CurveDesigner
         {
             var initialLocked = isPointLocked;
             bool? isLocked = null;
-            float initialWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 370;
-            bool currentLockState = EditorGUILayout.Toggle("Tangents Locked", initialLocked);
-            EditorGUIUtility.labelWidth = initialWidth;
+            float initialWidth = UnityEditor.EditorGUIUtility.labelWidth;
+            UnityEditor.EditorGUIUtility.labelWidth = 370;
+            bool currentLockState = UnityEditor.EditorGUILayout.Toggle("Tangents Locked", initialLocked);
+            UnityEditor.EditorGUIUtility.labelWidth = initialWidth;
             if (initialLocked != currentLockState)
                 isLocked = currentLockState;
 
@@ -171,11 +169,11 @@ namespace ChaseMacMillan.CurveDesigner
             var initialPos = GetPositionLocal(PointGroupIndex.Position);
             var initialRight = GetPositionLocal(PointGroupIndex.RightTangent);
 
-            var leftTangentOffset = EditorGUILayout.Vector3Field("Left Tangent", initialLeft - initialPos) - initialLeft + initialPos;
-            var positionOffset = EditorGUILayout.Vector3Field("Position", initialPos) - initialPos;
-            var rightTangentOffset = EditorGUILayout.Vector3Field("Right Tangent", initialRight - initialPos) - initialRight + initialPos;
+            var leftTangentOffset = UnityEditor.EditorGUILayout.Vector3Field("Left Tangent", initialLeft - initialPos) - initialLeft + initialPos;
+            var positionOffset = UnityEditor.EditorGUILayout.Vector3Field("Position", initialPos) - initialPos;
+            var rightTangentOffset = UnityEditor.EditorGUILayout.Vector3Field("Right Tangent", initialRight - initialPos) - initialRight + initialPos;
 
-            EditorGUIUtility.SetWantsMouseJumping(1);
+            UnityEditor.EditorGUIUtility.SetWantsMouseJumping(1);
 
             if (isLocked == initialLocked && initialLeft == leftTangentOffset && initialPos == positionOffset && initialRight == rightTangentOffset)
                 return;

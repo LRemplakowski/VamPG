@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.HighDefinition;
 
 [ExecuteAlways]
 public class AlanWindZoneToShader : MonoBehaviour
@@ -8,11 +6,6 @@ public class AlanWindZoneToShader : MonoBehaviour
     private WindZone windZone;
 
     void Update()
-    {
-        ApplySettings();
-    }
-
-    void OnValidate()
     {
         ApplySettings();
     }

@@ -19,7 +19,7 @@ namespace SunsetSystems.UI
             get
             {
                 if (string.IsNullOrEmpty(_selectedCharacterKey))
-                    _selectedCharacterKey = PartyManager.Instance.MainCharacter.ID;
+                    _selectedCharacterKey = PartyManager.Instance.MainCharacter.References.CreatureData.DatabaseID;
                 return _selectedCharacterKey;
             }
         }
@@ -31,7 +31,7 @@ namespace SunsetSystems.UI
 
         private void UpdateSelectedText()
         {
-            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(SelectedCharacterKey).Name;
+            _selectedCharacterText.text = PartyManager.Instance.GetPartyMemberByID(SelectedCharacterKey).References.CreatureData.FullName;
         }
 
         public void NextCharacter()

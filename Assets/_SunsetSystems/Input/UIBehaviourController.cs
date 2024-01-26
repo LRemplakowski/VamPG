@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Interactable;
@@ -15,8 +16,7 @@ using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
 {
-    [RequireComponent(typeof(Tagger))]
-    public class UIBehaviourController : MonoBehaviour, IInitialized
+    public class UIBehaviourController : SerializedMonoBehaviour
     {
         [SerializeField]
         private GameplayUIManager gameplayUIParent;
@@ -36,7 +36,6 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnJournal += OnJournal;
             SunsetInputHandler.OnHighlightInteractables += OnHighlightInteractables;
             SunsetInputHandler.OnHelp += OnShowHelp;
-            IInitialized.RegisterInitialization(this);
         }
 
         private void OnDisable()
@@ -48,12 +47,6 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnJournal -= OnJournal;
             SunsetInputHandler.OnHighlightInteractables -= OnHighlightInteractables;
             SunsetInputHandler.OnHelp -= OnShowHelp;
-            IInitialized.UnregisterInitialization(this);
-        }
-
-        private void Start()
-        {
-            Initialize();
         }
 
         private void Update()
@@ -86,19 +79,6 @@ namespace SunsetSystems.Input
                     gameplayUIParent.DisableNameplate();
                 }
             }
-        }
-
-        public void Initialize()
-        {
-            if (!gameplayUIParent)
-                gameplayUIParent = this.FindFirstComponentWithTag<GameplayUIManager>(TagConstants.GAMEPLAY_UI);
-            if (!gameManager)
-                gameManager = this.FindFirstComponentWithTag<GameManager>(TagConstants.GAME_MANAGER);
-        }
-
-        public void LateInitialize()
-        {
-
         }
 
         private void OnSecondaryAction(InputAction.CallbackContext context)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using System.Linq;
 
 namespace ChaseMacMillan.CurveDesigner
@@ -28,14 +27,14 @@ namespace ChaseMacMillan.CurveDesigner
             bool oldClosedLoop = mainPoint.value.isClosedLoop;
             bool oldAutomaticTangents = mainPoint.value.automaticTangents;
             float oldTangentSmoothing = mainPoint.value.automaticTangentSmoothing;
-            bool newClosedLoop = EditorGUILayout.Toggle("IsClosedLoop",oldClosedLoop);
-            bool newAutomaticTangents = EditorGUILayout.Toggle("AutoTangents",oldAutomaticTangents);
+            bool newClosedLoop = UnityEditor.EditorGUILayout.Toggle("IsClosedLoop",oldClosedLoop);
+            bool newAutomaticTangents = UnityEditor.EditorGUILayout.Toggle("AutoTangents",oldAutomaticTangents);
             mainPoint.value.isClosedLoop = newClosedLoop;
             mainPoint.value.automaticTangents = newAutomaticTangents;
             bool didSmoothingChange = false;
             if (oldAutomaticTangents)
             {
-                float newTangentSmoothing = EditorGUILayout.Slider("AutoTangents",oldTangentSmoothing,BezierCurve.tangentSmoothingMin,1);
+                float newTangentSmoothing = UnityEditor.EditorGUILayout.Slider("AutoTangents",oldTangentSmoothing,BezierCurve.tangentSmoothingMin,1);
                 didSmoothingChange = newTangentSmoothing != oldTangentSmoothing;
                 mainPoint.value.automaticTangentSmoothing = newTangentSmoothing;
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChaseMacMillan.CurveDesigner
@@ -62,14 +61,14 @@ namespace ChaseMacMillan.CurveDesigner
         public virtual void SelectEdit(Curve3D curve, List<SamplerPointType> selectedPoints,SamplerPointType mainPoint)
         {
             float originalDistance = mainPoint.GetDistance(curve.positionCurve);
-            float distanceOffset = EditorGUILayout.FloatField("Distance", originalDistance) - originalDistance;
-            KeyframeInterpolationMode newInterpolation = (KeyframeInterpolationMode)EditorGUILayout.EnumPopup("Interpolation",mainPoint.InterpolationMode);
+            float distanceOffset = UnityEditor.EditorGUILayout.FloatField("Distance", originalDistance) - originalDistance;
+            KeyframeInterpolationMode newInterpolation = (KeyframeInterpolationMode)UnityEditor.EditorGUILayout.EnumPopup("Interpolation",mainPoint.InterpolationMode);
             if (newInterpolation != mainPoint.InterpolationMode)
                 foreach (var i in selectedPoints)
                     i.InterpolationMode = newInterpolation;
             if (distanceOffset == 0)
                 return;
-            EditorGUIUtility.SetWantsMouseJumping(1);
+            UnityEditor.EditorGUIUtility.SetWantsMouseJumping(1);
             PointOnCurveClickCommand.ClampOffset(distanceOffset, curve, selectedPoints);
         }
 #endif

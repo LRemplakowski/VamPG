@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChaseMacMillan.CurveDesigner
@@ -29,13 +28,13 @@ namespace ChaseMacMillan.CurveDesigner
 #if UNITY_EDITOR
         public override void ConstantField(Rect rect)
         {
-            constValue = Constrain(EditorGUI.FloatField(rect, GetLabel(), constValue));
+            constValue = Constrain(UnityEditor.EditorGUI.FloatField(rect, GetLabel(), constValue));
         }
         public override void SelectEdit(Curve3D curve, List<FloatSamplerPoint> selectedPoints,FloatSamplerPoint mainPoint)
         {
             float originalValue = mainPoint.value;
-            EditorGUIUtility.SetWantsMouseJumping(1);
-            float fieldVal=EditorGUILayout.FloatField(GetLabel(), originalValue);
+            UnityEditor.EditorGUIUtility.SetWantsMouseJumping(1);
+            float fieldVal= UnityEditor.EditorGUILayout.FloatField(GetLabel(), originalValue);
             float valueOffset = fieldVal-originalValue;
             float minChange = float.MaxValue;
             foreach (var i in selectedPoints)

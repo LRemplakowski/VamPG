@@ -28,8 +28,8 @@ namespace SunsetSystems.UI
 
         private void Start()
         {
-            //_characterSelector.SetActive(true);
-            //_characterSelector.SetActive(false);
+            _characterSelector.SetActive(true);
+            _characterSelector.SetActive(false);
         }
 
         public async void QuitToMenu()

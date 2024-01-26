@@ -6,7 +6,7 @@ using UnityEngine.Profiling;
 
 namespace ChaseMacMillan.CurveDesigner
 {
-
+#if UNITY_EDITOR
     [CustomEditor(typeof(Curve3D))]
     public class Curve3DInspector : Sirenix.OdinInspector.Editor.OdinEditor
     {
@@ -405,10 +405,11 @@ namespace ChaseMacMillan.CurveDesigner
                     IMGUI();
                     break;
             }
-            Tools.hidden = closestElementToCursor != null && (GUIUtility.hotControl==controlID || GUIUtility.hotControl==0);
+            Tools.hidden = closestElementToCursor != null && (GUIUtility.hotControl == controlID || GUIUtility.hotControl == 0);
             curve3d.CopyRotations();
             Profiler.EndSample();
         }
+
         private const float smallDist = 5;
         private const float bigDist = 20;
         ClickHitData GetClosestElementToCursor(Composite root, Vector2 clickPosition)
@@ -456,4 +457,5 @@ namespace ChaseMacMillan.CurveDesigner
             return low;
         }
     }
+#endif
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ChaseMacMillan.CurveDesigner
@@ -18,7 +17,7 @@ namespace ChaseMacMillan.CurveDesigner
 #if UNITY_EDITOR
         public override void ConstantField(Rect rect)
         {
-            constValue = EditorGUI.ColorField(rect, GetLabel(), constValue);
+            constValue = UnityEditor.EditorGUI.ColorField(rect, GetLabel(), constValue);
         }
         public override void SelectEdit(Curve3D curve, List<ColorSamplerPoint> selectedPoints, ColorSamplerPoint mainPoint)
         {
@@ -27,7 +26,7 @@ namespace ChaseMacMillan.CurveDesigner
                 var originalValue = mainPoint.value;
                 var label = new GUIContent();
                 label.text = GetLabel();
-                var newColor = EditorGUILayout.ColorField(label, originalValue, showEyedropper: false, showAlpha: true, hdr: false);
+                var newColor = UnityEditor.EditorGUILayout.ColorField(label, originalValue, showEyedropper: false, showAlpha: true, hdr: false);
                 selectedPoints[0].value = newColor;
             }
             base.SelectEdit(curve, selectedPoints, mainPoint);

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
@@ -97,7 +99,7 @@ namespace ChaseMacMillan.CurveDesigner
         [NonSerialized]
         public EditModeCategories editModeCategories = new EditModeCategories();
 
-        #region guistyles
+#region guistyles
 #if UNITY_EDITOR
         private bool stylesInitialized = false;
         public void TryInitStyles()
@@ -136,7 +138,7 @@ namespace ChaseMacMillan.CurveDesigner
         public GUIStyle shurikenCustomDataWindow;
         public GUIStyle dropdownStyle;
 #endif
-        #endregion
+#endregion
 
         public bool placeLockedPoints = true;
         public SplitInsertionNeighborModification splitInsertionBehaviour = SplitInsertionNeighborModification.DoNotModifyNeighbors;

@@ -1,47 +1,39 @@
 ﻿title: meetingKate
 position: -178,-136
 ---
-<<declare $sforza to "foo">>
-<<declare $anastasia to "bar">>
-<<declare $clanRevealed to false>>
-<<declare $anastasiaIntroduced to false>>
-<<declare $kateAlleyTalk to false>>
-<<declare $kateSentUs to false>>
-<<declare $kateDealsWithBouncer to false>>
-[nomarkup][The woman before you's corset is so tight you're convinced her organs are in her throat.][/nomarkup]
-{$innerVoice}: Guess she doesn't have much use for them.
+[nomarkup][The woman before you looks like she is in her mid-40s, but beautiful despite beginning to show her age on her face. She’s wearing a corset heavily embroidered with gold - tied so tight you’re convinced her organs are in her throat. Its pattern shows proud peacocks ostentatiously presenting their tail feathers. Her dark red hair cascades downwards towards that cinched waistline, the same hue as the short dress she is wearing. Decorated with sequins, said garment shimmers slightly, reflecting the light around her. And out of that flared skirt poke slender and pale legs, adorned with a pair of lace stockings.][/nomarkup]
+[nomarkup][Following a simple once-over, your eyes are drawn to her crimson red nails encircling the brim of a glass containing a dark red liquid that may pass for wine, but you get a feeling it’s something far more sinister… The soft red light that illuminates her heavy, but comfortable armchair is dim but ominous. This is the perch of a ruler, the throne which declares her the red queen of this place…][/nomarkup]
+{$innerVoice}: This waistline… geez… good thing she doesn’t need to breathe…
 <<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
-    {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who's your friend?
+    {$sforza}:Kieran. Back so soon? Hope Dominic didn’t run you off. Who’s your friend? [nomarkup][Her eyes are turned on you. She speaks with a strange manner and accent you can’t quite place. Something European, perhaps?][/nomarkup]
 <<else>>
-    {$sforza}: Kieran, back so soon. Hope Dominic didn't run you off. Who are your friends?
-    {$anastasia}: Anastasia, your high holiness miss majesty.
-    {$sforza}: \[Deadpan\] Cute. Thank you for finally doing the courtesy of introducing yourself, and for keeping your hands off my staff.
+    {$sforza}: Kieran, back so soon? Hope Dominic didn’t run you off. Who are your friends? [nomarkup][Her eyes are turned on you. She speaks with a strange manner and accent you can’t quite place. Something European, perhaps?][/nomarkup]
+    {$anastasia}: I am Anastasia, your High Holiness Miss Majesty. [nomarkup][She sinks into a deep curtsy - clearly mocking, much to Kieran’s dismay.][/nomarkup]
+    {$sforza}: [nomarkup][Deadpan][/nomarkup] Adorable. What a surprise and a pleasure for you to finally do me the courtesy of introducing yourself! And what a delight you turned out to be my dear, I cannot imagine why we didn’t get together sooner. Were you afraid that I’d bite? [nomarkup][Kate’s smile doesn’t reach her eyes, but she allows this particular insult to go unpunished.][/nomarkup]
 <<endif>>
-[nomarkup][Kieran's demeanor noticeably changes around Kate, he's more skittish and docile than his usual self.][/nomarkup]
-{$kieran}: \[Clears his throat\] This is the lick we were meant to “deal with.” \[Incredulous, she lifts an eyebrow.\]
-{$sforza}: I see Dominic's trying to start another Court scandal. Does Sam know?
-{$kieran}: \[A nervous chuckle\] I'll leave their marital drama up to them. She's a PI. He thinks she can be of some use. Her first task is to find her sire to minimize the scandal.
-{$sforza}: Interesting.
-[nomarkup][She gives you an ocular pat down, eyeing the length of your figure.][/nomarkup]
-{$sforza}: \[Scowls\] I suppose if Dominic thinks you're worth breaking the Traditions, I'll give you the benefit of the doubt. See how well you handle this test.
+[nomarkup][Kieran’s demeanor noticeably changes around Kate; he’s more skittish and docile than his usual self, looking up at Kate with a dose of admiration akin to a believer beholding his goddess. On some level, it appears absurd, given what you know of the man, and you debate whether or not you should avert your eyes.][/nomarkup]
+{$kieran}: [nomarkup][He clears his throat upon noticing your gaze. He’s clearly embarrassed.][/nomarkup] Good evening Kate. You surely remember that Dominic decided to take me with him on one of his “missions”. This is the fledgling we were tasked with apprehending.
+{$sforza}: [nomarkup][Incredulous, she lifts an eyebrow.][/nomarkup] I see Dominic is trying to start another Court scandal. How nice of him. Does Prince Douglas know?
+{$kieran}: [nomarkup][He chuckles nervously.][/nomarkup] I’ll leave their marital drama up to them. But she probably knows. And if not now, then she will soon. As for your guest… [nomarkup][He turns to you.][/nomarkup] Meet miss Desiree Bardot. She’s a PI. Dominic is of the opinion that she has enough potential for a simple execution to be a waste. Her first task is to find her Sire to minimize the scandal.
+[nomarkup][This is not how events unfolded in your apartment. It was Kieran who needed to convince Dominic of her competence, not the other way around. Moreover, Kieran’s omission of your deadline is… glaring, to say the least. You feel a heavy iron knot tightening in your gut. How bad is the current situation if Kieran feels the need to hide the truth from even his Sire?][/nomarkup]
+{$beast}: So fond of her. And still able to lie in her face to cover his ass.
+{$sforza}: Interesting. [nomarkup][She gives you an ocular pat down, eyeing the length of your figure, and smiles this time a smile that reaches her eyes.][/nomarkup] I suppose if Dominic believes you’re worth breaking the Traditions over, then you must be something special?. Good luck with this little test my dear, come back if you succeed? And tell me all about it, I’m so curious!
 -> {$pcName}: Thanks.
-    {$sforza}: At least you know your manners. That helps. \[+1 Kieran Influence\]
-     <<ModifyInfluence (1,"kieran")>>
+    {$sforza}: At least you know your manners. That helps. [nomarkup][+1 Kieran Influence][/nomarkup]
+    <<ModifyInfluence 1 $kieran>>
     <<jump questionsAboutLastNight>>
--> {$pcName}: How generous of you.
-    {$sforza}: \[Laughs\] My dear, you should learn to bite your tongue if you want to survive your new life. Not all Kindred are as level headed as me. \[-1 Kieran Influence\]
-     <<ModifyInfluence (-1,"kieran")>>
-    <<if ($clanRevealed)==true>>
-        {$kieran}: What do you expect from a Brujah?
-        {$sforza}: \[Sighs\] I'd recommend not being such a stereotype.
-    <<endif>>
+-> {$pcName}: How generous of you. [nomarkup][You say with a dose of sarcasm.][/nomarkup]
+    {$sforza}: [nomarkup][She laughs, yet her tone is far from amused.][/nomarkup] My dear, you should learn to be more guarded with your intentions if you want to make something of your new life. Not all Kindred are as nice as I am, some think that the solution to a wounded pride is a missing tooth.. [nomarkup][-1 Kieran Influence][/nomarkup]
+    <<ModifyInfluence -1 $kieran>>
+    {$kieran}: She does have a fiery temperament, but… it’s to be expected, given her Blood.
+    {$sforza}: Brujah? [nomarkup][She sighs and rolls her eyes.][/nomarkup] I would heartily endorse some anger management classes and, if you would like to live a long prosperous life, to not lean on excuses.
     <<jump questionsAboutLastNight>>
 ===
 title: questionsAboutLastNight
 position: 6,20
 ---
 {$pcName}: I came by here last night. Do you remember me? Who I was with?
-{$sforza}: Now that you mention it, I did spot you. \[An amused grin\] You were being quite flagrant with a gentlemen on the dance floor. Had to have poor Diana stay late to mop to keep it floor from getting all “sticky.” \[Laughing\] Maybe he's your sire. You did refer to him as “daddy” the entire evening.
+{$sforza}: I see a lot of faces my dear, this is a popular club! But- I can see that this is serious allow me to recall… [nomarkup][Her lips curl in an amused grin as her eyes drift off to the side, her focus turning towards her own memories.][/nomarkup] Ah, yes I do remember someone mentioning a woman of your description. You’re quite famous around these parts, I remember saying that if you were to stop by your first drink would be on me. Thank you for that article on the Golden Lion my dear, it has brought me no end of amusement. I was told you found yourself something of a partner in crime and left before anyone had the opportunity. [nomarkup][She makes a wide, sweeping gesture with her hand, chuckling.][/nomarkup] Maybe he’s your Sire?
 {$innerVoice}: \[Your face flushes red. Apparently even vampires can be embarrassed. It's mixed with guilt.\]
 {$kieran}: Maybe, but I think that's most likely the guy we found in her apartment. What was left of him anyway.
 {$sforza}: Making a mess already, piccola mia. Hopefully Kieran can teach you how to behave. I like to think I taught him well.

@@ -3,20 +3,15 @@ tags:
 ---
 <<declare $windowBroken to false>>
 [nomarkup][You see a faint purple glow emanating from a high-up window in the brick.][/nomarkup]
-
-{$kieran}: Has to be Diana's office. She likes things 'moody'.
-
+{$kieran}: This must be near Diana's office. She prefers things to be “moody”.
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
 {$anastasia}: You and her have a lot in common.
 <<endif>>
 -> [nomarkup][Climb up the HVAC.][Dexterity + Athletics][/nomarkup]
     {$kieran}: Be careful!
-    
     <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-        {$anastasia}: \[Cough\] Pussy. \[Cough. Cough.\]
-        
+        {$anastasia}: [nomarkup][She coughs.][/nomarkup] Pussy.
         {$kieran}: Yes Miss Goth Queen, so far you have been very forthcoming about your preferences.
-        
     <<endif>>
     <<if Roll ("dexterity","Athletics" >=2)>>
         <<jump climbingSuccess>>
@@ -27,18 +22,15 @@ tags:
 ===
 title: climbingSuccess
 ---
-[nomarkup][You gracefully scale the brick before you, push the window open, and slide inside.][/nomarkup] #success
-
-{$kieran}: She left her window unlocked. Curious?
+[nomarkup][You gracefully scale the brick before you, push the window open, and slide inside.][/nomarkup] #succes
+{$kieran}: She left her window unlocked. Interesting…
 ===
 title: climbingFailure
 ---
 [nomarkup][You violently chuck yourself up the wall, vaulting head first through the glass.][+1 Superficial Damage][/nomarkup]
 <<DealDamage($pcName, 1, "Superficial")>>
-
 {$kieran}: Ow!
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-    
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>> 
     {$anastasia}: Smooth.
 <<endif>>
 <<set $windowBroken to true>>

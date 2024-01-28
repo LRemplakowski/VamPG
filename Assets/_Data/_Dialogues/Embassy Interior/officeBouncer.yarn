@@ -2,75 +2,58 @@ title: officeBouncer
 position: 136,-238
 ---
 //if $kateDealsWithBouncer==1 there is no bouncer//
-<<declare $kateSentUs to false>>
+<<set $talkedToBouncer to true>>
 [nomarkup][An intimidating, almost stereotypical Bouncer in a tight neck black T-shirt and sunglasses crosses his arms before you.][/nomarkup]
-
-Office Bouncer: \[Terse\] Private area.
-    
-    {$beast}: \[scoff\] He thinks he's the authority here. Time to reassert mine.
-    <<if $dianaOffice ==true>>
-        -> {$pcName}: I need to speak to Diana.
-            <<jump bouncerAnswers>>
+Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms. Foster is not taking any visitors at the moment.
+<<if $dianaOffice ==true>>
+    -> {$pcName}: She’s expecting me.
+    [nomarkup][He glares through his shades.][/nomarkup] Ms. Foster is not taking any visitors at the moment.
+<<else>>
+    {$kieran}: Sorry to bother you.
+<<endif>>
+<<if $kateAlleyTalk ==true>>
+    -> {$pcName}: Kate sent us.
+    <<jump officeBouncerKateSentUs>>
+<<endif>>
+<<if $drink ==true>>
+    -> {$pcName}: You've been working all night. Here, a drink. (Manipulation + Persuasion)
+    <<if Roll("Manipulation","Persuasion" >=3)>>
+        <<jump drinkSuccess>>
     <<else>>
-        
-        {$kieran}: Sorry to bother you.
+        <<jump drinkFailure>>
     <<endif>>
-    <<if $kateAlleyTalk ==true>>
-        -> {$pcName}: Kate sent us.
-            <<jump officeBouncerKateSentUs>>
-    <<endif>>
-    <<if $drink ==true>>
-        -> {$pcName}: You've been working all night. Here, a drink. \[Manipulation + Persuasion\]
-        <<if Roll("manipulation","persuasion" >=3)>>
-            <<jump drinkSuccess>>
-        <<else>>
-            <<jump drinkFailure>>
-        <<endif>>
-    <<endif>>
-===
-title: bouncerAnswers
----
-Office Bouncer: Ms. Foster is not taking any visitors at the moment.
--> {$pcName}: She's expecting me.
-    Office Bouncer: \[Glaring through his shades.\] Ms. Foster is not taking any visitors at the moment.
+<<endif>>
 ===
 title: officeBouncerKateSentUs
 ---
 [nomarkup][The man doesn't react at all to this information.][/nomarkup]
-
-   {$kieran}: Did you hear her?
-   
-        Office Bouncer: ... Ms. Foster is not taking any visitors at the moment.
-        
-            {$kieran}:  Kate isn't going to like this.
-            
-              [nomarkup][A bead of sweat forms off the Bouncer's head but he doesn't budge][/nomarkup]
-              <<set $kateSentUs to true>>
+{$kieran}: Did you hear her? Last time I checked, you were not deaf. Quite the opposite.
+Office Bouncer: ... Ms. Foster is not taking any visitors at the moment.
+{$kieran}: Kate isn’t going to like this. And you of all people, George, should be acutely aware of what happens when she is sufficiently angry. That is a fate I would not wish on my worst enemy…
+[nomarkup][A bead of sweat forms off the Bouncer's head but he doesn't budge][/nomarkup]
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: Oh, let me guess. [nomarkup][She tries to mimic the bouncer’s voice.][/nomarkup] Ms. Foster is not taking any visitors at the moment.
+<<endif>>
 ===
 title: drinkSuccess
 ---
-[nomarkup][The Bouncer scans the room nervously.][/nomarkup] #success
-
-Office Bouncer: I shouldn't drink on duty.
-
+Office Bouncer: [nomarkup][The Bouncer scans the room nervously.][/nomarkup] I shouldn't drink on duty. #success
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-{$anastasia}: But you want to.
+    {$anastasia}: But you want to.
 <<endif>>
 -> {$pcName}: Come on. Nobody's looking.
-    [nomarkup][Without a word, the Bouncer grabs the drinks and greedily drinks it in one gulp.][/nomarkup]
-    
-    <<if $benzos ==true>>
-        Office Bouncer: I don't feel so well...
-        
-        //cut to black, bouncer dissapears//
-        <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-            {$anastasia}: What a lightweight. 
-        <<endif>>
-    <<else>>
-        Office Bouncer: Thanks!
+[nomarkup][Without a word, the Bouncer grabs the drinks and greedily drinks it in one gulp.][/nomarkup]
+<<if $benzos ==true>>
+    Office Bouncer: I don't feel so well...
+    //cut to black, bouncer dissapears//
+    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+        {$anastasia}: What a lightweight. Back where I come from, we drink vodka like water.
     <<endif>>
+<<else>>
+    Office Bouncer: Thanks!
+<<endif>>
 ===
 title: drinkFailure
 ---
-Office Bouncer: I'm not allowed to drink at work.
+Office Bouncer: I'm not allowed to drink at work. #failure
 ===

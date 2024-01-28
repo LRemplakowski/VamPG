@@ -11,6 +11,7 @@ title: anastasiaInitial
 tags:
 position: -407,-310
 ---
+<<set $anaTalkedTo to true>>
 [nomarkup][Before you is a woman decked out in studded leather garments and steel-toed cleats. A “punk”, if your memory of the lingo serves. Some knowledge of the various subcultures present in the city is useful for a PI, after all. Whatever group she belongs to, there are altogether too many studs affixed to her clothing. Maybe it’s supposed to make her look “hard”. Her long black hair is kept out of her face with a red headband adorned with a metallic silver crown. It glimmers slightly in the club’s lights as she shifts to lean forward over the bar with a sultry smirk. It’s hard not to notice how her muscles flex as she does this; the woman is clearly an athletic sort. The bartender, on the other hand, looks quite uncomfortable…][/nomarkup]
 {$bartender}: ... I should get back to work.
 {$anastasia}: You're working right now, silly. Come on, let me buy you a drink. [nomarkup][She talks with a heavy accent, Russian perhaps? No. It’s similar, but there’s a different quality to it that’s hard to describe.][/nomarkup]
@@ -22,10 +23,10 @@ position: -407,-310
     {$anastasia}: [nomarkup][The woman in black furrows her brows.][/nomarkup] Then why didn’t you just say so?Then why didn't you just say so?
     {$bartender}: Because I didn’t know how to do it without hurting you. And that’s about that. [nomarkup][She’s waiting for something, anything, to break the silence that now fills the air…][/nomarkup]
 <<if CurrentMoney >=5>>
--> {$pcName}: I'll have a Bloody Mary.
+-> {$pcName}: I'll have a Bloody Mary. (Pay 5$)
     {$bartender}: Coming right up! [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup]
     <<GiveItem("DRINK_BLOODY_MARY")>>
-    <<set CurrentMoney to -5>>
+    <<set CurrentMoney -5>>
 <<endif>>
 -> [nomarkup][Say nothing.][/nomarkup]
     {$bartender}: [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup] Go away. Just, leave me alone, please...
@@ -37,46 +38,48 @@ position: -130,38
 ---
 -> [nomarkup][Something’s off about her.](Intelligence + Medicine)[/nomarkup]
 <<if Roll("Intelligence","Medicine") >= 3>>
-    [nomarkup][You notice the distinctive windy sounds of the flow of breath coming from everyone at the bar except Anastasia.][/nomarkup] #success
+    [nomarkup][Glancing over her, you notice her skin is blanched unusually pale. Her diaphragm isn’t moving, either.][/nomarkup] #success
     <<set $anaIsVampire to true>>
-        <<jump anastasiaKnowIsKindred>>
+    <<jump anastasiaKnowIsKindred>>
+//<<elseif GetDiscipline "Auspex" == true>>
+    //[nomarkup][You notice the distinctive windy sounds of the flow of breath coming from everyone at the bar except Anastasia.][/nomarkup]
+    //<<set $anaIsVampire to true>>
+    //<<jump anastasiaKnowIsKindred>>
 <<else>>
     {$anastasia}: If you're gonna stare at my tits, at least flirt with me first. #failure
-    {$kieran}: \[flustered\] Sorry about that.
-    
-        <<jump anastasiaAddressingPC>>
+    {$kieran}: I just wonder why you are here. I don’t know you, and if I do not know you, the owner of this place does not know you either. Which is a mistake on your part. And a transgression.
+    {$anastasia}: Oh my. Was that a threat? Going to kick me out?
+    [nomarkup][Kieran is staring intently at you, like he’s trying to convey something without any words.][/nomarkup]
+    <<jump insightRoll>>
 <<endif>>
 ===
-title: anastasiaIsBreathing
+title: insightRoll
 ---
-<<if RollSingle("AUSPEX") >= 3>>
-    [nomarkup][You notice the distinctive windy sounds of the flow of breath coming from everyone at the bar except Anastasia.][/nomarkup] #success
-    <<set $anastasiaNatureKnown to true>>
-    
-        <<jump anastasiaKnowIsKindred>>
+<<if Roll("Intelligence","Insight")>=3>>
+    <<set $anaIsVampire to true>>
+    [nomarkup][Judging from the way he chose to speak to her just now… Those were strong words, and getting Kate involved? Could she possibly be a vampire, too?][/nomarkup]
+    <<jump anastasiaKnowIsKindred>>
 <<else>>
-    {$anastasia}: If you're gonna stare at my tits, at least flirt with me first. #failure
-    {$kieran}: \[flustered\] Sorry about that.
-    
-        <<jump anastasiaAddressingPC>>
+    {$kieran}: I know what you are.
+    {$anastasia}: What? A lesbian? Anyone a mile away could tell you that.
+    {$kieran}: No, a Kindred. And you should be aware of the laws we adhere to.
+    {$anastasia}: [nomarkup][She rolls her eyes.][/nomarkup] Gosh… your panties are in a bunch, aren’t they?
+    <<jump anaIsSire>>
 <<endif>>
 ===
 title: anastasiaSubsequent
 position: 138,93
 ---
-<<if $anastasiaNatureKnown is true>>
-{$anastasia}: Miss me already? So you did need my help.
+<<if $anaIsVampire is true>>
+{$anastasia}: Miss me already? So you did need my help, after all…
 -> {$pcName}: You know what? Sure. Why not?
     [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup]
-    
-        <<RecruitAnastasia()>>
+    <<RecruitAnastasia()>>
 -> {$pcName}: Sorry, but I'm gonna have to pass.
     {$anastasia}: Your loss, toots.
-    {$kieran}: A sensible decision, for once.
-    
+    {$kieran}: A sensible decision, for once. [/nomarkup][He nods once, indicating his approval.][nomarkup]
 <<else>>
 {$anastasia}: Look you're cute and all, but I don't like people who blow their first chance.
-
 <<endif>>
 ===
 title: anastasiaKnowIsKindred
@@ -87,21 +90,21 @@ position: -323,308
 -> {$pcName}: No. A vampire.
 {$anastasia}: ...
 {$anastasia}: Pretty and blunt. I like you.
+<<jump anaIsSire>>
+===
+title: anaIsSire
+---
 -> {$pcName}: Are you my Sire?
-[nomarkup][Anastasia is caught by surprise, bursting into laughter - almost like music to your ears.][/nomarkup]
-{$anastasia}: I'm too old to be having kids. I'll be your mommy though if you ask nicely.
-[nomarkup][She winks at you.][/nomarkup]
+{$anastasia}: [nomarkup][She is caught by surprise, bursting into laughter - almost like music to your ears.][/nomarkup] I’m too old to be having kids, but I’ll be your mommy though if you ask nicely. [nomarkup][She winks at you.][/nomarkup]
 -> {$pcName}: I don't believe you.
-    {$anastasia}: Look I'm sorry your Sire didn't come back with the milk but that's not my problem.
+{$anastasia}: Look I'm sorry your Sire didn't come back with the milk but that's not my problem.
 -> {$pcName}: Then who is my Sire, if it's not you?
-    {$anastasia}: How should I know? Other Kindred's bed affairs are none of my business as long as I'm not involved.
+{$anastasia}: How should I know? Other Kindred's bed affairs are none of my business as long as I'm not involved.
 {$anastasia}: I am amused by this whole ordeal. How about I help you out and then once we get this mess sorted you and I will go grab a few “drinks”? 
 -> {$pcName}: You know what? Sure. Why not?
     [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup]
-    
-        <<RecruitAnastasia()>>
+    <<RecruitAnastasia()>>
 -> {$pcName}: Sorry, but I'm gonna have to pass.
     {$anastasia}: Your loss, toots.
-    {$kieran}: A sensible decision, for once.
-    
+    {$kieran}: A sensible decision, for once. [nomarkup][He nods once, indicating his approval.][/nomarkup]
 ===

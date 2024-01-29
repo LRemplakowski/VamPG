@@ -189,8 +189,8 @@ namespace SunsetSystems.Dialogue
             bool appended = AppendRollPrefix(line);
             if (string.IsNullOrWhiteSpace(line.CharacterName) == false)
             {
-                if (appended == false)
-                    _lineHistoryStringBuilder.Append("<size=26>");
+                //if (appended == false)
+                //    _lineHistoryStringBuilder.Append("<size=26>");
                 appended = true;
                 string speakerName = line.CharacterName;
                 if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
@@ -198,8 +198,8 @@ namespace SunsetSystems.Dialogue
                 _lineHistoryStringBuilder
                     .Append($"<color=\"red\">{speakerName}:</color>");
             }
-            if (appended)
-                _lineHistoryStringBuilder.AppendLine("</size>");
+            //if (appended)
+            //    _lineHistoryStringBuilder.AppendLine("</size>");
             _lineHistoryStringBuilder
                 .AppendLine(line.TextWithoutCharacterName.Text);
             return _lineHistoryStringBuilder.ToString();
@@ -209,7 +209,7 @@ namespace SunsetSystems.Dialogue
         {
             if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
                 return false;
-            _lineHistoryStringBuilder.Append("<size=26>");
+            //_lineHistoryStringBuilder.Append("<size=26>");
             if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
                 _lineHistoryStringBuilder.Append("(Success) ");
             else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))

@@ -10,9 +10,9 @@ tags:
     <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the paintings more closely.](Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>>
     <<jump paintingAwarenessRoll>>
--> [nomarkup][Try to dig up some information about art trade from your brain.][/nomarkup]<<if visited("paintingIntelligenceRoll") == false>>
+-> [nomarkup][Try to dig up some information about art trade from your brain.](Intelligence+Finance)[/nomarkup]<<if visited("paintingIntelligenceRoll") == false>>
     <<jump paintingIntelligenceRoll>>
--> [nomarkup][Those seem to be completely out of place... you wonder why...][/nomarkup]<<if visited("paintingWitsSuccess") == false>>  
+-> [nomarkup][Those seem to be completely out of place... you wonder why...](Wits+Insight)[/nomarkup]<<if visited("paintingWitsSuccess") == false>>  
     <<jump paintingWitsRoll>>
 <<if $paintingsPutDown ==true>>
     -> [nomarkup][Examine the safe.][/nomarkup]<<if visited("safeExamine") == false>>
@@ -29,7 +29,7 @@ title: paintingAwarenessRoll
 <<if Roll("resolve","awareness") >=(3-$paintingsOutOfPlace)>>
     <<jump paintingAwarenessSuccess>>
 <<else>>
-    <<jump paintingFailure>>
+    <<jump paintingAwarenessFailure>>
 <<endif>>
 ===
 title: paintingIntelligenceRoll
@@ -37,7 +37,7 @@ title: paintingIntelligenceRoll
 <<if Roll("inteligence","finance") >=(4-$paintingsOutOfPlace)>>
     <<jump paintingIntelligenceSuccess>>
 <<else>>
-    <<jump paintingFailure>>
+    <<jump paintingIntelligenceFailure>>
 <<endif>>
 ===
 title: paintingWitsRoll
@@ -45,7 +45,7 @@ title: paintingWitsRoll
 <<if Roll("wits","insight") >=3>>
     <<jump paintingWitsSuccess>>
 <<else>>
-    <<jump paintingFailure>>
+    <<jump paintingWitsFailure>>
 <<endif>>
 ===
 title: paintingAwarenessSuccess
@@ -61,35 +61,39 @@ title: successContinued
 <<endif>>
 {$kieran}: As long as we’re missing the correct combination, prying it open would take the entire night... or several.
 <<if $paintingsDestroyed ==false>>
+    -> [nomarkup][Look at the paintings.][/nomarkup]
+        <<jump opinionsStart>>
     -> [nomarkup][Examine the stamp.][/nomarkup]
-    <<jump stampExamine>>
+        <<jump paintingSuccessExamination>>
 <<endif>>
 -> [nomarkup][Examine the safe.][/nomarkup]
     <<jump safeExamine>>
 -> [Step away.]
 ===
-title: stampExamine
+title: opinionsStart
 ---
 {$kieran}: Did you find something?
 -> {$pcName}: I'm not sure. Call it a gut feeling.
-    <<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
+<<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
     {$kieran}: I'll leave you to it then. Your gut instincts have proven useful before, right? Maybe they’ll help us here, too. [nomarkup][He looks at the painting with curiosity, frowning slightly. He doesn’t seem to like its style; instead, he is attempting to answer a fundamental question at the core of this case: What kind of person would own a piece of artwork as hideous as this?][/nomarkup]
-        <<if GetIsPartyMemberRecruited($anastasia) is true>>
-            {$anastasia}: My, our dear stuffy, moralistic nerd is finally acknowledging the utility of gut instincts. Oh, the humanity! The irrationality! Have seven trumpets just sounded? Because THE END IS NIGH! [nomarkup][The back of her hand flies to her forehead, as if fainting in a dramatic fashion.][/nomarkup]
-            {$kieran}: Now, now. No need for doomsaying. I’m simply acknowledging that the beginnings of an idea can come from less tangible and reliable sources than the conclusions which come out of them. That is, a hunch does not hold up in court, but its presence can be a valid reason to begin gathering up the evidence that supports a similar conclusion - just so long as one’s confirmation bias does not get in the way of a sound argument.
-            {$anastasia}: Y’know, for once, I’m sorry I made the joke in the first place…
-            {$kieran}: I’ve done my job well, then.
-        <<endif>>
-    <<else>>
-        {$kieran}: I hope it’s something important, and not just a hunch. We don’t have time for art connoisseurship - but something this abstract could hardly be called art.
-        <<if GetIsPartyMemberRecruited($anastasia) is true>>
-            {$anastasia}: Connoisseur here. My verdict: It’s fucking horrendous. [nomarkup][She cocks her head to the side like she'd like to see the canvas in another direction, then grins.][/nomarkup] But that’s what makes it a god-damn masterpiece…
-            {$kieran}: I’m sorry? I don’t follow.
-            {$anastasia}: It’s worthwhile specifically because it gets this kinda reaction out of people like you. It’s a temple to the terrible. A shrine of shit! And I. Am. Here. For. It!
-            {$kieran}: Riiight. [nomarkup][By the look on his face, the confusion has gone, now replaced with a desire to move on.][/nomarkup]
-            <<jump paintingsOpinion>>
-        <<endif>>
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: My, our dear stuffy, moralistic nerd is finally acknowledging the utility of gut instincts. Oh, the humanity! The irrationality! Have seven trumpets just sounded? Because THE END IS NIGH! [nomarkup][The back of her hand flies to her forehead, as if fainting in a dramatic fashion.][/nomarkup]
+        {$kieran}: Now, now. No need for doomsaying. I’m simply acknowledging that the beginnings of an idea can come from less tangible and reliable sources than the conclusions which come out of them. That is, a hunch does not hold up in court, but its presence can be a valid reason to begin gathering up the evidence that supports a similar conclusion - just so long as one’s confirmation bias does not get in the way of a sound argument.
+        {$anastasia}: Y’know, for once, I’m sorry I made the joke in the first place…
+        {$kieran}: I’ve done my job well, then.
+        <<jump paintingsOpinion>> <<if visited("aintingsOpinion") == false>>
     <<endif>>
+<<else>>
+    {$kieran}: I hope it’s something important, and not just a hunch. We don’t have time for art connoisseurship - but something this abstract could hardly be called art.
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Connoisseur here. My verdict: It’s fucking horrendous. [nomarkup][She cocks her head to the side like she'd like to see the canvas in another direction, then grins.][/nomarkup] But that’s what makes it a god-damn masterpiece…
+        {$kieran}: I’m sorry? I don’t follow.
+        {$anastasia}: It’s worthwhile specifically because it gets this kinda reaction out of people like you. It’s a temple to the terrible. A shrine of shit! And I. Am. Here. For. It!
+        {$kieran}: Riiight. [nomarkup][By the look on his face, the confusion has gone, now replaced with a desire to move on.][/nomarkup]
+        <<jump paintingsOpinion>> <<if visited("aintingsOpinion") == false>>
+    <<endif>>
+<<endif>>
+<<jump paintingSuccessExamination>>
 ===
 title: paintingsOpinion
 ---
@@ -106,11 +110,6 @@ title: paintingsOpinion
     {$kieran}: Okay, I’ll bite. What is the purpose of a piece of art, if it doesn't “mean” anything, in your view?
     {$anastasia}: [nomarkup][She shrugs.][/nomarkup] Doesn’t need one. If it’s created by someone that can think and feel - someone that has a sense of self - then that’s enough. That’s art. The product and expression of the creative spirit - nothing more, and nothing less.
     {$kieran}: You know what? I may be able to get behind that particular definition…
--> {$pcName}: My opinion is that I don’t have one.
-    {$kieran}: Then why bring up the subject? (-1 Kieran Influence)
-    <<ModifyInfluence -1 $kieran>>
-    {$anastasia}: Yeah, kinda lame.
-    <<ModifyInfluence -1 $anastasia>>
 -> {$pcName}: [nomarkup][No, I don’t.][/nomarkup]
     {$kieran}: We don’t have time for this, anyhow. Let us return to the task at hand.
 <<set $artTalk to true>>
@@ -122,39 +121,60 @@ title: paintingIntelligenceSuccess
 <<set $safeDiscovered to true>>
 <<jump successContinued>>
 ===
+title: paintingIntelligenceFailure
+---
+<<if $artTalk == true>>
+    [nomarkup][Regardless of your opinion, you’re almost certain that these paintings can’t have been worth much.][/nomarkup] #failure
+    <<jump paintings>>
+<<else>>
+    [nomarkup][These paintings had to have been picked up at a garage sale, or even more likely, fished out of a dumpster, because there isn’t any value here to speak of.][/nomarkup] #failure
+    <<jump opinionsStart>>
+<<endif>>
+===
 title: paintingWitsSuccess
 ---
-[nomarkup][This painting is here on purpose. It's not a simple wall decoration. It's here for a reason. It just doesn't sit with Diana proudly painting herself as a british punk rocker. Otherwise she'd just place Sex Pistols or The Exploited posters on the wall. Maybe there's something worth looking for behind one part of this poliptich? You go with your gut, and dislodge one of the paintings. You were right. There's a paper stamp on the back. And the safe...][/nomarkup] #success
+[nomarkup][This painting is not just a simple wall decoration. It’s here for a reason. It doesn’t mesh well with the image of Diana as a British punk rocker. She’d just place Sex Pistols or The Exploited posters on the wall if she wanted to express that portion of her identity. Maybe there’s something worth looking for behind one part of this polyptych? You go with your gut, and dislodge its frame. You were right. There’s a safe tucked away in an alcove behind where the artwork was displayed, as well as a paper stamp on the back of the canvas.][/nomarkup] #success
 <<set $safeDiscovered to true>>
 <<jump successContinued>>
-=== 
+===
+title: paintingWitsFailure
+---
+[nomarkup][You stand in the middle of the office, waiting for the universe to bring ideas and revelations to you. You anticipate their grandeur, almost to herald the arrival of that first bit of understanding as to why you feel this way, but… None ever come. Your eyes refocus, only to be met with Anastasia’s hand being waved mere inches in front of your face.][/nomarkup] #failure
+<<if $artTalk == true>>
+    <<jump opinionsStart>>
+<<else>>
+    {$kieran}: You’ve been standing there for ten minutes with a blank look on your face. How exactly does this aid us in our investigation?
+    -> {$pcName}: Oh, sorry about that. [nomarkup][You respond sheepishly. You would be red with embarrassment, if such a thing were still possible.][/nomarkup]
+    <<jump paintings>>
+<<endif>>
+===
 title: paintingSuccessExamination
 ---
 <<set $aidanFoster to true>>
-<<set $dateCode to true>>
+<<set $safeCode to true>>
 <<set $vibrantVistas to true>>
--> [nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup]
-{$kieran}: Vibrant Vistas Gallery... the address... I believe it's somewhere in the Art's District. And the date. 17th June 1969. Probably a date when it was bought.
+[nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup]
+{$kieran}: Vibrant Vistas Gallery… the address… I believe it’s somewhere in the Arts District. And the date. The 17th of June, 1969. Probably when it was bought.
 <<if GetIsPartyMemberRecruited($anastasia) is true and $paintingsAreDestroyed ==true>>
-    {$anastasia}: Great! Now we know where we can find more pieces to rip and shred our appreciation for. \[She chuckles.\]
+    {$anastasia}: Great! Now we know where we can find more art to tear into. [nomarkup][She chuckles.][/nomarkup]
 <<endif>>
-[nomarkup][Your attention goes to small handwritten note on the stamp - “For my beloved Diana for one of her most important days in her life. Aidan Foster.”][/nomarkup]
--> {$pcName}: Did you heard of any Aidan Foster by any chance?
+[nomarkup][Your attention is caught by a small handwritten note on the stamp - “For my beloved Diana, on one of the most important days in her life. - Aidan Foster.”][/nomarkup]
+-> {$pcName}: Does the name Aidan Foster ring any bells?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: \[Anastasia shooks her head.\] Not that I pay any attention to the guys. \[She shrugged.\]
+    {$anastasia}: [nomarkup][Anastasia shakes her head.][/nomarkup] Sorry, I don’t swing that way. [nomarkup][She shrugged.][/nomarkup]
+    [nomarkup][Kieran on the other hand looks like he is thinking.][/nomarkup]
 <<endif>>
-[nomarkup][Kieran on the other hand looks like he is thinking.][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Our nerd guy seems to have an idea though.
-    {$kieran}: You're right ms Goth Queen. I have.
+    {$anastasia}: Our pet nerd seems to have an idea though.
+    {$kieran}: You’re right, Ms Goth Queen. I have. I believe that Aidan Foster was Diana’s husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. When I was Kate’s ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy’s name on it. Asking her about it was not the correct decision.
 <<endif>>
-{$kieran}: I believe that Aidan Foster was Diana's husband. Rather touchy topic for her. He died in 'nam in 1972 from what I recall. Killed in action. Once I accidentally asked her about it. When I was Kate's ghoul I was helping Diana from time to time with the papers and stumbled upon a mail with the guys name.
+{$kieran}: [nomarkup][He looks as if he is deep in thought.][/nomarkup] I believe that Aidan Foster was Diana’s husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. When I was Kate’s ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy’s name on it. Asking her about it was not the correct decision.
 -> {$pcName}: Good to know. May be important. Thanks Kieran.
 <<if $paintingsAreDestroyed ==false>>
     [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup]
 <<endif>>
 ===
-title: paintingFailure
+title: paintingAwarenessFailure
 ---
 [nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, leaving you bewildered and disoriented, but you can’t seem to take your eyes off of the swirling shades.][/nomarkup] #failure
 {$kieran}: …ardot? Miss Bardot!
@@ -166,14 +186,14 @@ title: paintingFailure
 ===
 title: paintingsDestroyed
 ---
-[nomarkup][Paintings are't a big obstacle to you. They are just plain canvas hanged on wall. You punch the frame and rip the canvas leaving miserable shreds as a witness to your growing frustration. Somehow you feel better...and terrified. This act was something not entirely in your control.][/nomarkup]
+[nomarkup][Flimsy old paintings aren't a difficult obstacle for you to overcome. Just plain canvas stretched over a wooden frame, then hung on a wall. That you, in all your senseless rage are staring at, nostrils flaring with each unnecessary breath, every muscle in your body tensing - ready to strike. In a single swift motion, you punch through the frame, ripping and tearing at the canvas - leaving miserable shreds as a witness to your growing frustration. Somehow, you feel better...and terrified. This act was something not entirely in your control.][/nomarkup]
 <<set $safeDiscovered to true>>
 <<set $paintingsAreDestroyed to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Such depths of aggression and viciousness. I like it. You should make your own exhibition one day. \[Anastasia grins\]
+    {$anastasia}: Such depths of emotion! The viciousness on display was captivating. You should make your own exhibition one day. [nomarkup][She grins.][/nomarkup]
 <<endif>>
-{$kieran}: Why did you do that? Is it how you conduct investigations? \[Kieran influence -1\]
-<<ModifyInfluence (-1, $kieran)>>
+{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.](Kieran influence -1)[nomarkup]
+<<ModifyInfluence -1 $kieran>>
 -> {$pcName}: I... don't know what came over me. <<if visited("beastTalk") == false>>
     <<jump beastTalk>>
 -> {$pcName}: Normally no. But I'm pissed. <<if visited("beastTalk") == false>>
@@ -181,22 +201,21 @@ title: paintingsDestroyed
 ===
 title: beastTalk
 ---
-[nomarkup][Kieran frowns, and it isn't this frown of anger or judging, rather of concern][/nomarkup]
-{$kieran}: I know what you are talking about. Just try to suppress those impulses. Otherwise we may end up without anything to cling on regarding our investigation.
+{$kieran}: [nomarkup][He frowns, not out of anger or judgment, but concern.][/nomarkup] I know what you are talking about. Just try to suppress those impulses. Otherwise, we may end up with no leads at all, in this investigation.
 -> {$pcName}: Is there something you're not telling me?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Probably a lot. I guess he tries to hide the facts about the Beast inside of you.
+    {$anastasia}: Probably a lot. He wants to hide the facts about the Beast inside of you for as long as he can. But we all have to face our natures eventually.
 <<endif>>
-{$kieran}: Yes, but not because I'm afraid to talk about it or I want to hide anything. It's just a... complicated concept.
+{$kieran}: I’m not trying to hide anything. It’s just a… complicated concept.
 <<if (GetCompanionInfluence($kieran) >4)>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$kieran}: And she had a lot of them tonight. I just don't want to overburden her. \[did you just heard genuine... concern in his voice?\]
-        {$beast}: No, it's not concern, he's just toying with my feelings. He wasn't particularly “concerned” when I had gun next to my head. All he does is complaining.
-        [nomarkup][Anastasia laughs at what Kieran said.][/nomarkup]
-        {$anastasia}: Complicated? Whats complicated about it? Listen girl, when you hear it just follow your gut. Don't listen to him. He'll just hinder your REAL potential.
+        {$kieran}: You have experienced a lot of… confrontations, tonight. I don’t want to overburden you. [nomarkup][Did you just hear genuine concern in his voice…?][/nomarkup]
+        {$beast}: No, he doesn’t care. Not about who I really am. Just toying with my feelings. Face it, he wasn’t particularly ‘concerned’ when I had a gun against my head, and he wouldn’t be again if something similar happened now.
+        {$anastasia}: [nomarkup][She bursts out laughing.][/nomarkup] Complicated? What’s so complicated about it? Listen, when you hear it, just follow your gut. Don’t listen to him. He’ll just hinder your REAL potential.
         {$beast}: I like that girl. She talks sense.
-        {$kieran}: Listen Anastasia, I said to her that I'm going to help her and this is what I do. If she'll just run rampage...
-        {$anastasia}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. Not that I care about it.
+        {$kieran}: [nomarkup][He squints at Anastasia, his eyebrows furrowing.][/nomarkup] Listen Anastasia, I gave her my word that I am going to help her, and I do not appreciate your efforts to sabotage that trust. Moreover, if she listens to you, then she’ll have an even more difficult time adjusting than she would have, otherwise.
+        {$anastasia}: Yes Kieran, I know. Your ass is on the line, you repeat it all the time. Not that I care all that much whether you live or die.
+        {$kieran}: We know; you’ve made it apparent that you don’t care about much of anything at all… [nomarkup][He continues to argue, and you get the impression that if you don’t stop them both, they will continue bickering until dawn catches you all unawares.][/nomarkup]
         <<jump anaAndKieranConflict>>
     <<else>>
         {$kieran}: You had a lot of them tonight. I just don't want to overburden you. \[did you just heard genuine... concern in his voice?\]
@@ -221,13 +240,17 @@ title: beastTalk
 ===
 title: anaAndKieranConflict
 ---
-[nomarkup][you see that Kieran will continue and you get a feeling that if you don't stop them both they will just argue till dawn catches you here][/nomarkup]
 {$innerVoice}: Shit...
-{$beast}: If they won't stop I'm gonna be dead...
--> {$pcName}: Listen guys... BOTH of you. It's my investigation and we'll do as I say alright? It's not only his ass on the line, but mine too.
-    [nomarkup][Anastasia and Kieran focus on you, then stare at each other][/nomarkup]
-    {$kieran}: We'll end this conversation at another time.
-    {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust.
+{$beast}: I don’t wanna die…
+-> {$pcName}: [nomarkup][You briefly clear your throat, before projecting an authoritative, firm voice.][/nomarkup] Listen up, guys… BOTH of you. This is my investigation and we’ll do as I say, alright? It’s not only his ass on the line, but mine too.(Resolve+Leadership)
+<<if Roll ("Resolve","Leadership")>=2>>
+    [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #success
+    {$kieran}: We’ll finish this conversation at another, more opportune, time.
+    {$anastasia}: I’ll hold you to that. I’m eager to crush all your stupid arguments to dust.
+<<else>>
+    {$kieran}: [nomarkup][He looks unimpressed.][/nomarkup] (-1 Kieran Influence)
+    <<ModifyInfluence -1 $kieran>>
+    {$anastasia}: [nomarkup][She snorts out a laugh.][/nomarkup] Trigger happy, much?
 -> {$pcName}: Kieran, do you really want to roll around in her mud till dawn?
     [nomarkup][Kieran looks at you and shooks his head][/nomarkup]
     {$kieran}: You're right. It's not a good place or time for a philosophical discussion. \[+1 Kieran influence\]
@@ -251,5 +274,6 @@ title: safeExamine
 [nomarkup][It looks just like a normal, civilian- use, wall-mounted safe. There's nothing out of the ordinary about it. At the center of its door lies one knob requiring a 4 digit code to open. Time is limited, and it would take ages to guess the combination with how many possibilities there are.][/nomarkup]
 <<if Roll ("Intelligence","Academics")>=4>>
     [nomarkup][Ten thousand, to be exact.][/nomarkup]
+<<endif>>
 <<jump paintings>>
 ===

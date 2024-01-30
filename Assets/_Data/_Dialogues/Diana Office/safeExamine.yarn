@@ -23,28 +23,28 @@
 ===
 title: safeResolveRoll
 ---
-<<if roll("resolve","larceny" >=6)>>
+<<if Roll("Resolve","Larceny")>=6>>
     <<jump safeOpenedwoCode>>
 <<else>>
-    <<jump safeFailure>>
+    <<jump safeResolveFailure>>
 <<endif>>
 ===
 title: safeStrengthRoll
 ---
-<<if roll("strength","larceny" >=6)>>
+<<if Roll("Strength","Larceny")>=6>>
     <<jump safeForceOpened>>
 <<else>>
-    <<jump safeFailure>>
+    <<jump safeStrenghtFailure>>
 <<endif>>
 ===
 title: safeOpenedwoCode
 ---
-[nomarkup][Despite all odds you try to open the safe without any combination. Risky, but what's better place to take risks than Vegas? You've seen how people crack open the safes in films. Why not try it yourself? You stick one of your ears to the chilly metal and cautiously rotate the knob expecting to hear a click. It is a difficult task demanding your full attention. Even Kieran went silent as if he knew what are you up to. After several minutes later you hear the last click and the doors are opened.][/nomarkup] #success
+[nomarkup][Determined, you attempt to open the safe without any combination. Risky, but what's a better place to take risks than Vegas? You’ve seen how people crack open safes in films. Why not try it yourself? You stick one of your ears against the chilly metal and cautiously rotate the knob, expecting to hear a click. It is a difficult task demanding your full attention. Even Anastasia goes silent as if she knows what you are up to. Several minutes later, you hear the last click of the lock components settling into place, and the doors are opened.][/nomarkup] #success
 <<jump safeOpened>>
 ===
 title: safeForceOpened
 ---
-[nomarkup][Good thing you didn't forget the old crowbar from your home. It'll be handy in here. You jimmy the crowbar in the slit between it's frame and the doors applying force. You wouldn't make it without that tool. There's just not enough space for fingers. You use wall to push this improvised lever. Good thing your body is undead - otherwise after several takes you'd be exhausted. Finally you feel the lock giving up to your brute strength.][/nomarkup] #success
+[nomarkup][Good thing you didn’t forget the old crowbar you keep stashed in your home. It’ll be handy, here. You jimmy the crowbar into the slit between the safe’s frame and the doors - applying a gradually increasing amount of force. Using the wall to push this improvised lever forth, you make several attempts, thankful that your body is undead - otherwise you’d be exhausted - until finally, you feel the lock give in to your brute strength.][/nomarkup] #success
 <<jump safeOpened>>
 ===
 title: safeFailure
@@ -56,26 +56,25 @@ title: safeFailure
 ===
 title: safeOpenedwCode
 ---
-[nomarkup][You deftly enter the code by rotating the knob. Lock obediently opens. There is one thing left to do...][/nomarkup]
+[nomarkup][You hear the click of the mechanical lock opening.][/nomarkup]
 <<jump safeOpened>>
 ===
 title: safeOpened
 tags:
 ---
--> {$pcName}: Open sesame! \[You exclaim with satisfaction opening the safe doors\]
-    [nomarkup][The safe contains - as they always do - some cash. Also some documents and closed, ornate casket. There's also a gun lying inside as well as some ammunition. The ammunition is .45 caliber - not what's your gun is using. One thing is out of the ordinary... a vial with strangely red liquid...][/nomarkup]
-    {$kieran}: Great work! \[You hear Kieran's joyful - for the first time this night - voice behind you.\]
-    <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: That was smooth as butter. Let's dig into contents. Do we split the spoils?
-        [nomarkup][Kieran grimaces.][/nomarkup]
-        {$kieran}: I will not take Diana's money and I suggest you do it the same.
-    <<endif>>
-    <<jump safeQuestions>>
+-> {$pcName}: Open sesame! [nomarkup][You exclaim with satisfaction, opening the safe doors.][/nomarkup]
+[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some ammunition: .45 caliber - not what your gun is using. However, there is one thing that catches your eye… a vial containing a vivid red liquid…][/nomarkup]
+{$kieran}: Great work! [nomarkup][You hear Kieran's voice, excited - for the first time this night - behind you.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils?
+    {$kieran}: [nomarkup][He grimaces.][/nomarkup] I will not take Diana's money, and I suggest you do not, either.
+<<endif>>
+<<jump safeQuestions>>
 ===
 title: safeQuestions
 ---
 -> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if visited("safeGunExamine") == false>>
-    <<if Roll("intelligence","firearms") >=3>>
+    <<if Roll("Intelligence","Firearms") >=3>>
         <<jump safeGunExamine>>
     <<else>>
         <<jump safeGunExamineFail>>
@@ -83,13 +82,7 @@ title: safeQuestions
 -> [nomarkup][Examine the documents.][/nomarkup]
     <<jump safeDocumentsExamine>>
 -> [nomarkup][Examine the vial.][Intelligence + Medicine][/nomarkup] <<if visited("safeBloodIdentified") == false>>
-    <<if Roll("intelligence","medicine") >=3>>
-        <<jump safeBloodIdentified>>
-    <<else>>
-        <<jump safeBloodFailure>>
-    <<endif>>
--> [nomarkup][Examine the vial.][Wits + Investigation][/nomarkup] <<if visited("safeBloodIdentified") == false>>
-    <<if Roll("wits","investigation") >=3>>
+    <<if Roll("Intelligence","Medicine") >=3>>
         <<jump safeBloodIdentified>>
     <<else>>
         <<jump safeBloodFailure>>
@@ -99,84 +92,104 @@ title: safeQuestions
 ===
 title: safeGunExamine
 ---
-[nomarkup][The gun is standard issue Colt 1911A1. The magazine is full, but safety is engaged. The only difference between normal gun and this one is that this one doesn't have any serial number.][/nomarkup]
+[nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success
+<<jump safeQuestions>>
+===
+title: safeGunExamineFail
+---
+[nomarkup][It’s a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. At least, you think so…][/nomarkup] #failure
 <<jump safeQuestions>>
 ===
 title: safeDocumentsExamine
 ---
-[nomarkup][You rummage through documents. Nothing interesting. Just financial stuff and other similar things. When you flipped several pages one, folded and being loosely stuck between them fell to the floor. You pick it up to examine it.][/nomarkup]
-Love Letter: My beloved Diana,
-My little ray of light in darkness of my heart.
-The only person that can stave my Beast away.
-I can't stand to see you used by that Wasp you call your Master.
-I want us to be and live together.
-Away from all this nonsense, from Jyhad and everything else.
-Just you - and me. Together in the night.
-With love, Lucia
+[nomarkup][You rummage through the documents. Nothing particularly interesting. Just financial records and the like. But when you flip through one of the stapled packets, a folded up piece of paper that had been loosely stuck between its pages falls to the floor. You pick it up to examine it.][/nomarkup]
+Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away.
+I can’t stand to see you used by that insect of a Kindred you call your Master any longer. Like a mosquito, or some hungry parasite, she doesn’t just sting, she bites and drains and takes and bleeds you dry until there is nothing left of you nor the woman you used to be - the woman I love…
+So fight it. Fight the bond she has forced on you, the chains that bind you to her - choose me, and in doing so, the freedom you deserve. But above all else, choose yourself, Dove. 
+I want us to live together - be together as equals, such that we’ll be bonded only through trust and love rather than coercion and obligation. I promise that once the last of your bindings are broken, we will escape and make our home far, far away from here - from Jyhad and the pressures foisted upon us by wicked institutions. 
+It will be just you - and me. Together in the night.
+With love, 
+Lucia
 <<set $luciaLoveLetter to true>>
-[nomarkup][You hear a sound from the downstairs. A sound that you can't mistake with anything else. A gunfire.][/nomarkup]
+[nomarkup][Just as you finish reading the letter, a sharp sound rings out from the club downstairs - a sound that cannot be mistaken for anything else. A gunshot.][/nomarkup]
 {$kieran}: What the hell?
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: FINALLY! Some action! \[She exclaimed with much more enthusiasm than she should.\]
+    {$anastasia}: [nomarkup][She pumps her fist in the air with a loud, enthusiastic whoop.][/nomarkup] FINALLY! Some action!
 <<endif>>
-{$kieran}: That didn't sound good... We need to leave. Now. \[Kieran looks concerned.\]
+{$kieran}: That didn't sound good... We need to leave. Now. [nomarkup][Kieran looks concerned.][/nomarkup]
+<<jump safeQuestions>>
 ===
 title: safeBloodIdentified
 ---
-[nomarkup][You take the bottle and examine it more closely. At first it may seem to be a weird, red wine. But on closer inspection it is behaving really strange. It's not wine - it's blood.][/nomarkup]
--> {$pcName}: I think I found... blood?
-[nomarkup][Kieran looks at the vial you are holding in your hand.][/nomarkup]
-{$kieran}: I think it's not an ordinary blood. Let me.
-[nomarkup][Kieran takes the vial from your hand and uncorks the glass receptacle, tilting it gently towards his palm. He allows a droplet of the viscous fluid to splash upon his skin, then quickly tastes it. A puzzled expression flashes across his features, his brows furrowed, as he reseals the vial.][/nomarkup]
+[nomarkup][You take the bottle and examine it more closely. At first, it appears to be a thick, red wine. But on closer inspection, it’s far too viscous. It's not wine at all - it's blood.][/nomarkup] #success
+-> {$pcName}: I think I found… blood?
+{$pcName}: I don’t think that’s ordinary blood. Let me. [nomarkup][He holds out his hand expectantly.][/nomarkup]
 <<jump bloodVialRolls>>
 ===
 title: bloodVialRolls
 ---
-<<if Roll("intelligence","occult") or Roll("wits","awareness") >=4>>
-    -> {$pcName}: Did you just do the same thing that Dominic did back in my apartment?
-        <<jump bloodVialSuccess>>
-<<else>>
-    -> {$pcName}: It was evidence!
-        <<jump bloodVialFailure>>
-<<endif>>
+-> {$pcName}: Hold on, what are you going to do with it?
+    {$kieran}: Please, I know that you do not trust me, but we don’t have time to argue. (-1 Kieran Influence)
+    <<ModifyInfluence -1 $kieran>>
+    -> [nomarkup][Give Kieran the vial.][/nomarkup]
+    <<jump bloodVialSuccess>>
+-> [nomarkup][Give Kieran the vial.][/nomarkup]
+    <<jump bloodVialSuccess>>
 ===
 title: bloodVialSuccess
 ---
-{$kieran}: Yes. It's a little but useful trick. \[Kieran Influence +1\]
-<<modifyInfluence (1,$kieran)>>
--> {$pcName}: Can I do that?
-    [nomarkup][Kieran shakes his head][/nomarkup]
-    {$kieran}: It's something only my Clan can do.
-    <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: That's what he said.
-    <<endif>>
-    <<jump safeContinuation>>
+[nomarkup][Without another word, you place the vial in the palm of Kieran’s waiting hand.][/nomarkup]
+[nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup]
+<<if Roll ("Intelligence","Occult") >=4 or Roll ("Wits","Awareness") >=4>>
+    -> {$pcName}: Did you just do the same thing that Dominic did back in my apartment?
+    {$kieran}: Yes. It's a little but useful trick. (Kieran Influence +1)
+    <<modifyInfluence 1 $kieran>>
+    -> {$pcName}: Can I learn to do that?
+        {$kieran}: [He shakes his head.] Unfortunately for you, it’s something only my Clan is allowed to learn.
+        <<if GetIsPartyMemberRecruited($anastasia) is true>>
+            {$anastasia}: In other words, spooky magic shit.
+        <<endif>>
+<<else>>
+<<jump bloodVialFailure>>
+<<endif>>
+<<jump safeContinuation>>
 ===
 title: bloodVialFailure
 ---
--> {$pcName}: It was evidence!
-    {$kieran}: Trust me, I know what I'm doing.
+-> {$pcName}: That was evidence!
+    {$kieran}: Trust me, I know what I’m doing.
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: Tremere and trust. Isn't that a little counter-intuitive?
+        {$anastasia}: Your Clan and trust, huh? They don’t really go together, do they?
     <<endif>>
-    <<jump safeContinuation>>
+<<jump safeContinuation>>
 ===
 title: safeContinuation
 ---
-{$kieran}: Brujah blood. Could be yours, or...
-[nomarkup][It doesn't take a rocket scientist to understand what he's implying.][/nomarkup]
+{$kieran}:  Brujah blood. Could be yours, or… [nomarkup][He trails off, quietly muttering.][/nomarkup]
+[nomarkup][It doesn’t take a rocket scientist to understand what he’s implying.][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: You done, twinkle toes?
     {$kieran}: Pretty much, yes.
 <<endif>>
-{$kieran}: We don't have time for more detailed examination right now. It'll have to suffice. I suggest you to hold onto it. At least for the time being.
+{$kieran}: Well, we don’t have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot, at least for the time being.
+<<jump safeQuestions>>
 ===
 title: takeSafeMoney
 ---
 -> {$pcName}: I need to pay my bills Kieran.
-{$kieran}: That's not a good reason to steal! \[Kieran influence -2\]
--> {$pcName}: In my situation it is. Besides. We already did bigger sins than that today.
-[nomarkup][As you stuff the money into your pockets he shooks his head really disappointed.][/nomarkup]
+{$kieran}: That is by no means a good enough reason to steal! [nomarkup][Kieran influence -2][/nomarkup]
+-> {$pcName}: In my situation, it is. Besides, we’ve already committed graver sins than that, today.
+[nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup]
 <<jump safeQuestions>>
 <<giveMoney (500)>>
+===
+title: safeResolveFailure
+---
+[nomarkup][Despite your best efforts, you give up after several minutes of fruitless fiddling with the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure
+<<jump safeExamine>>
+===
+title: safeStrenghtFailure
+---
+[nomarkup][Despite your best efforts, you give up after several minutes of fruitless conflict with the door to the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure
+<<jump safeExamine>>
 ===

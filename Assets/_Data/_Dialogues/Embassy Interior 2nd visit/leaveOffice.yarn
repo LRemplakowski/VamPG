@@ -1,0 +1,75 @@
+﻿title: leaveOffice
+tags:
+---
+[nomarkup][You turn the doorknob, nudging the wooden barrier to entry open just the tiniest bit - enough for you to peek your head out and look around.][/nomarkup]
+-> [nomarkup][Scan the lounge from your spot here.][/nomarkup]
+    <<jump peekWitsRoll>>
+-> [nomarkup][Peek your head out to get a better look.](Wits+Awareness)[/nomarkup]
+    <<jump peekResolveRoll>>
+-> [nomarkup][Go in blind. What’s the worst that could happen?][/nomarkup]
+    <<jump urraNaMintarn>>
+===
+title: peekWitsRoll
+---
+<<if Roll ("Wits","Awareness")>=(3+$brokenWindow)>>
+    <<jump peekWitsSuccess>>
+<<else>>
+    <<jump peekWitsFailure>>
+<<endif>>
+===
+title: peekWitsSuccess
+---
+[nomarkup][You glance around the lounge, eyes catching on the muzzle-flashes of the assailants’ guns. They’re firing wildly, but that just means you have a chance to slip into the back alley unnoticed.][/nomarkup] #success
+<<jump urraNaMintarn>>
+===
+title: peekWitsFailure
+---
+[nomarkup][Your eyes go wide as a flash of light momentarily blinds you, and the sound of rapid gunfire leaves you disorientated. It’ll be better not to move until you’re sure you won’t catch a stray bullet.][/nomarkup] #failure
+<<jump urraNaMintarn>>
+===
+title: peekResolveRoll
+---
+<<if Roll ("Resolve","Composure")>=(4+$brokenWindow)>>
+    <<jump peekResolveSuccess>>
+<<else>>
+    <<jump peekResolveFailure>>
+<<endif>>
+===
+title: peekResolveSuccess
+---
+[nomarkup][As you peer out around the bar, your eyes turn towards what windows and small reflective surfaces remain unbroken, surveying your surroundings as best you can in such a low-visibility environment. It looks like you can make it to the Alley Door, if you’re fast.][/nomarkup]
+<<if Roll ("Wits","Streetwise")>=4>>
+    [nomarkup][You catch a glimpse of a few of the assailants in the washed out, smokey lighting of the Embassy. One of them, a tall person with tanned skin and long brown hair, isn't carrying a gun. Their eyes are narrowed as they saunter through the club without an ounce of visible fear of being shot. They have a strikingly beautiful profile, though what catches your interest in that moment is the sacred heart tattoo on their neck, and the raise of one corner of their lips in a smirk. They shout something - almost catching your eyes before you duck down behind cover again.][/nomarkup]
+    <<set $tattooSpotter to true>>
+    -> {$pcName}: Gang members?
+    {$kieran}: What gave you that idea?
+    -> {$pcName}: It’s just a guess. Aren’t there gangs that require their members to get tattoos and such…? [nomarkup][You pause for a moment.][/nomarkup] Never mind, I didn’t see it on anyone else, so probably not. The important thing is, one of them - the one standing out front - wasn’t carrying a gun at all.
+    {$kieran}: Hm… curious.
+    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+        {$anastasia}: Penny for your thoughts, Kiki?
+        {$kieran}: My thoughts? I think we might be looking at something a lot bigger than just a couple hooligans deciding to shoot up the local club, here…
+    <<endif>>
+<<endif>>
+<<jump urraNaMintarn>>
+===
+title: peekResolveFailure
+---
+[nomarkup][Peeking out for just a moment, you feel a slight breeze next to your ear and an impact somewhere behind you - ducking down instinctively behind cover to compose yourself after that bullet nearly grazed you.][/nomarkup]
+<<jump urraNaMintarn>>
+===
+title: urraNaMintarn
+---
+[nomarkup][You turn to Kieran, nodding once to indicate that you’re ready.][/nomarkup]
+{$kieran}: You’re not thinking of fighting them, are you?
+-> {$pcName}: [nomarkup][You shake your head.][/nomarkup] No, of course not. There’s a point where bravery becomes stupidity, and I think we’ve passed it.
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: Neither of you have any balls. Where’s your sense of adventure, pencil pusher? [nomarkup][She cracks her neck, her eyes reflecting the scattered lights with a certain bloodthirsty intensity you haven’t seen in a while - and never mixed with this much enthusiasm. If anything, she seems like she has too much of a sense of adventure.][/nomarkup]
+<<endif>>
+{$kieran}: Just making sure. Any stairs we’ll have to get through?
+-> {$pcName}: Not this time. There’s a door to the back alley, I think it’s our best bet, in terms of an exit.
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: And we’re just going to run for it? It might be a bit far for our little nerd, here. I bet his knees are already shaking. Just remember, I can easily carry you, if you need assistance, Kiki.
+    {$kieran}: Just remember, people can always surprise you, Anastasia.
+    {$anastasia}: [nomarkup][She blinks, staring at Kieran for a beat or two with wide eyes - muzzle fire harshly lighting the side of her face, which is then split by a smirk yet again.][/nomarkup] You just might… Kieran. Alright, let’s move!
+<<endif>>
+===

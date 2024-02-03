@@ -1,29 +1,6 @@
 ﻿title: Initialization
 tags:
 ---
-<<declare $journal = "Journal">>
-<<declare $pcname = "pcName">>
-<<declare $beast = "INNER_BEAST">>
-<<declare $exspouse = "Arthur Bardot">>
-<<declare $landlord = "landlord">>
-<<declare $sheriff = "sheriff">>
-<<declare $kieran = "COMPANION_KIERAN">>
-<<declare $brujah = true>>
-<<declare $potence = true>>
-<<declare $strangeinsight = false>>
-<<declare $bathroomdoordestroyed = false>>
-<<declare $kevinmurdered = false>>
-<<declare $key = false>>
-<<declare $vomit = false>>
-<<declare $coveredinblood = false>>
-<<declare $police = false>>
-<<declare $bobbyPin = false>>
-<<declare $smallmoney = false>>
-<<declare $dominicshot = false>>
-<<declare $gotweapon = false>>
-<<declare $doorvisitedonce = false>>
-<<declare $pizzaeaten = false>>
-<<declare $kieraninparty = false>>
 <<jump Journal>>
 ===
 title: Journal
@@ -40,11 +17,11 @@ RING! RING! RING! RING! RING! RING! RING! RING! #line:000849d
 [nomarkup][The non-stop cacophony pounds at your head like a sledgehammer. You barely manage to open your eyes before the fluorescent light sears your corneas. The light... It burns...][/nomarkup]  #line:000d606 
 [nomarkup][You turn over and try to dig your face deeper into the rough upholstery of the old couch, but you can already tell that you're not going to be able to fall back asleep. Not like this. You're far too hungry, besides.][/nomarkup] #line:036285f 
 [nomarkup][Swallowing, your tongue sits like a dry, shriveled lump of meat in your mouth. You're parched and ravenous, the need for sustenance quickly becoming the sole concern at the forefront of your mind. Your stomach echoes this need, its aching emptiness only compounding your discomfort. You're willing to eat almost anything, at this point...][/nomarkup] #line:086b256 
-{$pcname}: [nomarkup][Kill me.][/nomarkup] #line:0d51755 
+{$pcName}: [nomarkup][Kill me.][/nomarkup] #line:0d51755 
 [nomarkup][You've never been this hungover in your life. It's worse than that one time in college. Strangest of all, the metallic taste of iron lingers in the back of your throat...][/nomarkup] #line:0ebc172 
 [nomarkup][Your body wants - no, it demands - more of that taste. And as you lie there, any attempt at movement rendered languid and slow by the hangover, your mind catches up with it. The situation is dire; you need to find more. Of what, exactly? Your conscious mind remains unsure...][/nomarkup] #line:0740d4c 
 [nomarkup][At least you're still alive. It would be best not to sit and wait for death to come and take you. You sit up, the lethargy making your limbs feel as if they are suspended in some thick, viscous goo as your feet, still slipped into your boots, make contact with the floor. Upright, finally. Shaking your head, you attempt to come to your senses and find your balance - standing up on your own two feet.][/nomarkup] #line:0f933d2 
-{$pcname}: [nomarkup][What happened last night?][/nomarkup] #line:0b00b20 
+{$pcName}: [nomarkup][What happened last night?][/nomarkup] #line:0b00b20 
 <<StartQuest "MAIN_SATURDAY_START">>
 <<GetUpFromBedDesiree>>
 <<stop>>

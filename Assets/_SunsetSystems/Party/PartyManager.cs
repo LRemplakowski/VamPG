@@ -27,17 +27,17 @@ namespace SunsetSystems.Party
         private Transform _creatureParent;
 
         [Title("Runtime")]
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private Dictionary<string, ICreature> _activeParty = new();
         public ICreature MainCharacter => _activeParty.TryGetValue(Instance._mainCharacterKey, out ICreature creature) ? creature : null;
         public List<ICreature> ActiveParty => _activeParty.Values.ToList();
         public List<ICreature> Companions => _activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
-        [SerializeField, ReadOnly]
-        private HashSet<string> _activeCoterieMemberKeys = new();
-        [SerializeField, ReadOnly]
-        private HashSet<string> _coterieMemberKeysCache = new();
+        [SerializeField]
+        private List<string> _activeCoterieMemberKeys = new();
+        [SerializeField]
+        private List<string> _coterieMemberKeysCache = new();
         public List<string> AllCoterieMembers => _coterieMemberKeysCache.ToList();
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private string _mainCharacterKey;
 
         private Dictionary<string, ICreatureTemplate> _cachedPartyTemplates = new();
@@ -144,19 +144,20 @@ namespace SunsetSystems.Party
         }
 
         [Button]
-        public void RecruitMainCharacter(ICreatureTemplate mainCharTemplate)
+        public void RecruitMainCharacter(ICreatureTemplateProvider mainCharTemplate)
         {
-            _mainCharacterKey = mainCharTemplate.DatabaseID;
-            RecruitCharacter(mainCharTemplate);
+            var template = mainCharTemplate.CreatureTemplate;
+            _mainCharacterKey = template.DatabaseID;
+            RecruitCharacter(template);
             _activeCoterieMemberKeys.Add(_mainCharacterKey);
             InventoryManager.Instance.SetMoney(55);
         }
 
         public bool TryAddMemberToActiveRoster(string memberID, ICreature creature)
         {
-            bool result = _activeCoterieMemberKeys.Add(memberID);
+            _activeCoterieMemberKeys.Add(memberID);
             _activeParty.Add(memberID, creature);
-            return result;
+            return true;
         }
 
         public bool TryRemoveMemberFromActiveRoster(string memberID)
@@ -216,7 +217,7 @@ namespace SunsetSystems.Party
     {
         public Dictionary<string, Vector3> PartyPositions;
         public Dictionary<string, ICreatureTemplate> CachedPartyTemplates;
-        public HashSet<string> ActiveMemberKeys;
+        public List<string> ActiveMemberKeys;
         public string MainCharacterKey;
     }
 }

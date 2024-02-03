@@ -61,7 +61,7 @@ namespace SunsetSystems.Data
         public async void StartGame()
         {
             SaveLoadManager.SetSaveID(new());
-            PartyManager.Instance.RecruitMainCharacter(_playerCharacterTemplate.CreatureTemplate);
+            PartyManager.Instance.RecruitMainCharacter(_playerCharacterTemplate);
             OnGameStart?.Invoke();
             await LevelLoader.Instance.LoadNewScene(startSceneData);
         }

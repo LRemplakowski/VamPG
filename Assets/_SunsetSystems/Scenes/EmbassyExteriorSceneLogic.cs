@@ -21,8 +21,8 @@ namespace SunsetSystems
         public async override Task StartSceneAsync()
         {
             await base.StartSceneAsync();
-            if (_firstVisit)
-                DialogueManager.Instance.StartDialogue(_sceneStartDialogueNode, _sceneDialogueProject);
+            //if (_firstVisit)
+            //    DialogueManager.Instance.StartDialogue(_sceneStartDialogueNode, _sceneDialogueProject);
         }
 
         public override object GetSaveData()

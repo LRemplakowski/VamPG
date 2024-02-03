@@ -2,43 +2,43 @@
 tags:
 ---
 <<declare $toldKieranAboutVision to false>>
-[nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup]
-{$innerVoice}: Must've come by here last night.
-{$beast}: Turn back.
+[nomarkup][As you round the corner, a force comes over you that makes you stop in your tracks. Déjà Vu.][/nomarkup] #line:0659906 
+{$innerVoice}: Must've come by here last night. #line:01f1384 
+{$beast}: Turn back. #line:02f8b5a 
 <<jump flashback>>
 ===
 title: flashback
 ---
-[nomarkup][You is walk down the alley with the man whose corpse was in your shower. You exchange drunken flirty lines, until he decides to hug her from behind. You feel your breath go hot. He leans against your for support, and you holds him up. Waiting for them at the end of the alleyway, where the passage opens up to the street is a woman.][/nomarkup]
-Mysterious Woman: Surprise, sweetie.
+[nomarkup][You is walk down the alley with the man whose corpse was in your shower. You exchange drunken flirty lines, until he decides to hug her from behind. You feel your breath go hot. He leans against your for support, and you holds him up. Waiting for them at the end of the alleyway, where the passage opens up to the street is a woman.][/nomarkup] #line:0c2c0f6 
+Mysterious Woman: Surprise, sweetie. #line:066a4a7 
 <<jump kieranInterrupts>>
 ===
 title: kieranInterrupts
 ---
-[nomarkup][Kieran stands before you, waving his hand before your eyes…][/nomarkup]
-{$kieran}: Miss Bardot, can you hear me? 
-[nomarkup][You catch your bearings, Kieran’s voice grounding you.][/nomarkup]
-{$kieran}: You spaced out for a while. Is everything alright?
--> {$pcName}: Yeah.
-    {$kieran}: What happened? You looked like a deer in the headlights for a moment there.
-    -> {$pcName}: I had some sort of “vision.”
+[nomarkup][Kieran stands before you, waving his hand before your eyes...][/nomarkup] #line:033a717 
+{$kieran}: Miss Bardot, can you hear me?  #line:0276754 
+[nomarkup][You catch your bearings, Kieran's voice grounding you.][/nomarkup] #line:05445cd 
+{$kieran}: You spaced out for a while. Is everything alright? #line:05ffba6 
+-> {$pcName}: Yeah. #line:0b7d0ed 
+    {$kieran}: What happened? You looked like a deer in the headlights for a moment there. #line:0c2cfbb 
+    -> {$pcName}: I had some sort of “vision.” #line:07814b4 
         <<set $toldKieranAboutVision to true>>
         <<jump toldAboutVision>>
-    -> {$pcName}: Don't worry about it.
+    -> {$pcName}: Don't worry about it. #line:04dd301 
         <<jump dontTellAboutVision>>
 ===
 title: toldAboutVision
 ---
-{$kieran}: [nomarkup][He laughs.][/nomarkup] Don't tell me Dominic was wrong, and you're actually a Malkavian. [nomarkup][+1 Kieran Influence][/nomarkup]
+{$kieran}: [nomarkup][He laughs.][/nomarkup] Don't tell me Dominic was wrong, and you're actually a Malkavian. [nomarkup][+1 Kieran Influence][/nomarkup] #line:094a46c 
 <<ModifyInfluence 1 $kieran>>
--> {$pcName}: What's a Malkavian?
-{$kieran}: Another Bloodline of Kindred, just as the Brujah are. Might be of relevelace later, so keep the name in mind. Tell me about this vision.
--> {$pcName}: I was in this alley last night with the guy...
-{$kieran}: The one in your shower.
--> {$pcName}: ... A woman was with us too.
-{$kieran}: Could be your Sire. It seems as if we are hot on her trail, if your recollection is to be trusted. That certainly would be a stroke of luck I wouldn’t turn my nose up at. [nomarkup][His expression visibly brightens just the tiniest bit, at the notion. It’s a proverbial light at the end of the tunnel - something to latch onto.][/nomarkup]
+-> {$pcName}: What's a Malkavian? #line:0bb2389 
+{$kieran}: Another Bloodline of Kindred, just as the Brujah are. Might be of relevelace later, so keep the name in mind. Tell me about this vision. #line:017c8bd 
+-> {$pcName}: I was in this alley last night with the guy... #line:0e53e4b 
+{$kieran}: The one in your shower. #line:088ce81 
+-> {$pcName}: ... A woman was with us too. #line:06a1d4a 
+{$kieran}: Could be your Sire. It seems as if we are hot on her trail, if your recollection is to be trusted. That certainly would be a stroke of luck I wouldn't turn my nose up at. [nomarkup][His expression visibly brightens just the tiniest bit, at the notion. It's a proverbial light at the end of the tunnel - something to latch onto.][/nomarkup] #line:083b5f9 
 ===
 title: dontTellAboutVision
 ---
-{$kieran}: [nomarkup][He sounds incredulous.][/nomarkup] Your dissociation is one thing, but withholding potentially helpful information is another. It did not seem like nothing. If you’re sure, though… I will take your word for it. Do your best to maintain focus. We are running short on time.
+{$kieran}: [nomarkup][He sounds incredulous.][/nomarkup] Your dissociation is one thing, but withholding potentially helpful information is another. It did not seem like nothing. If you're sure, though... I will take your word for it. Do your best to maintain focus. We are running short on time. #line:04c605f 
 ===

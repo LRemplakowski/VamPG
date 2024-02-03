@@ -1,16 +1,13 @@
-﻿using SunsetSystems.Entities.Characters;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations.Rigging;
 using UMA;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Inventory.Data;
-using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Animation
 {
-    public class CreatureAnimationController : SerializedMonoBehaviour
+    public class AnimationManager : SerializedMonoBehaviour
     {
         [Title("References")]
         [SerializeField, Required]
@@ -22,6 +19,12 @@ namespace SunsetSystems.Animation
         [SerializeField, Required]
         private RigBuilder rigBuilder;
 
+        [Title("Config")]
+        [SerializeField]
+        private float moveThreshold = .5f;
+        [SerializeField]
+        private float positionDeltaTolerance = 2f;
+
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
         private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
 
@@ -30,15 +33,70 @@ namespace SunsetSystems.Animation
 
         private bool _initializedOnce = false;
 
+        private Vector2 velocity;
+        private Vector2 smoothDeltaPosition;
+
+        private Transform MotionTransform => agent.transform;
+
         private void Start()
         {
             rigBuilder.layers.Clear();
             rigBuilder.enabled = false;
+
+            animator.applyRootMotion = true;
+            agent.updatePosition = false;
+            agent.updateRotation = true;
+        }
+
+        private void Update()
+        {
+            SynchronizeAnimatorWithNavMeshAgent();
+        }
+
+        private void OnAnimatorMove()
+        {
+            Vector3 rootPosition = animator.rootPosition;
+            rootPosition.y = agent.nextPosition.y;
+            MotionTransform.position = rootPosition;
+            agent.nextPosition = rootPosition;
+            MotionTransform.rotation = animator.rootRotation;
         }
 
         private void OnDestroy()
         {
 
+        }
+
+        private void SynchronizeAnimatorWithNavMeshAgent()
+        {
+            Vector3 worldPositionDelta = agent.nextPosition - MotionTransform.position;
+            worldPositionDelta.y = 0;
+
+            float deltaX = Vector3.Dot(MotionTransform.right, worldPositionDelta);
+            float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
+            Vector2 positionDelta = new(deltaX, deltaY);
+
+            float positionSmoothing = Mathf.Min(1, Time.deltaTime / .1f);
+            smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
+
+            velocity = smoothDeltaPosition / Time.deltaTime;
+
+            if (agent.remainingDistance <= agent.stoppingDistance)
+            {
+                velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
+            }
+
+            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius;
+
+            animator.SetBool("IsMoving", shouldMove);
+            //animator.SetFloat("MoveX", velocity.x);
+            animator.SetFloat("MoveY", velocity.magnitude);
+
+            float deltaMagnitude = worldPositionDelta.magnitude;
+            if (deltaMagnitude > agent.radius)
+            {
+                MotionTransform.position = Vector3.Lerp((animator.rootPosition), agent.nextPosition, positionSmoothing);
+            }
         }
 
         private Rig InitializeRigLayer()
@@ -72,11 +130,6 @@ namespace SunsetSystems.Animation
         public void SetCombatAnimationsActive(bool isCombat)
         {
             animator.SetBool("IsCombat", isCombat);
-        }
-
-        private void Update()
-        {
-            animator.SetFloat("Speed", agent.velocity.magnitude / agent.speed);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)

@@ -9,8 +9,8 @@ namespace SunsetSystems.Entities
 {
     public class CachedReferenceManager : SerializedMonoBehaviour, IEntityReferences
     {
-        public Transform Transform => transform;
-        public GameObject GameObject => gameObject;
+        public virtual Transform Transform => transform;
+        public virtual GameObject GameObject => gameObject;
 
         private readonly Dictionary<Type, Component> cachedReferences = new();
 

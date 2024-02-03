@@ -10,13 +10,14 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Interfaces
 {
-    public interface ICombatant : IEntity, IActionPerformer
+    public interface ICombatant : IActionPerformer
     {
         UltEvent<ICombatant> OnChangedGridPosition { get; set; }
         UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
 
         IMagicUser MagicUser { get; }
+        Faction Faction { get; }
 
         bool IsPlayerControlled { get; }
         IWeapon CurrentWeapon { get; }

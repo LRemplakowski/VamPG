@@ -9,6 +9,8 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
 {
     public class CreatureReferenceManager : CachedReferenceManager, ICreatureReferences
     {
+        public override Transform Transform => NavMeshAgent.transform;
+
         [field: SerializeField]
         public CreatureData CreatureData { get; private set; }
         [field: SerializeField]

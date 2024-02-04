@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SunsetSystems.Entities.Creatures.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -9,6 +10,7 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         Transform Transform { get; }
         MonoBehaviour CoroutineRunner { get; }
+        ICreatureReferences References { get; }
 
         Task PerformAction(EntityAction action, bool clearQueue = false);
         EntityAction PeekCurrentAction { get;  }

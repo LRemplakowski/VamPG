@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 153986963061837018}
   - component: {fileID: 3758664395462481180}
   - component: {fileID: 8145936593445724197}
+  - component: {fileID: 9211325346875014012}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -375,7 +376,7 @@ Animator:
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -433,6 +434,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+--- !u!195 &9211325346875014012
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203071946431115676}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 4
+  m_Acceleration: 6
+  avoidancePriority: 50
+  m_AngularSpeed: 360
+  m_StoppingDistance: 0.33
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 5
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &3834732813004800264
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +467,6 @@ GameObject:
   - component: {fileID: 1617358537211728380}
   - component: {fileID: 5773463509673429870}
   - component: {fileID: 660093643310669083}
-  - component: {fileID: 80723574967673666}
   - component: {fileID: 265292995897044542}
   - component: {fileID: 8614383970203172438}
   m_Layer: 8
@@ -525,28 +547,6 @@ MonoBehaviour:
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
   _enablePersistence: 1
---- !u!195 &80723574967673666
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3834732813004800264}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 4
-  m_Acceleration: 6
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0.1
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 5
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &265292995897044542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
       Data: 3
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
-  <NavMeshAgent>k__BackingField: {fileID: 80723574967673666}
+  <NavMeshAgent>k__BackingField: {fileID: 9211325346875014012}
 --- !u!136 &8614383970203172438
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -804,8 +804,10 @@ MonoBehaviour:
       Entry: 10
       Data: 0
   animator: {fileID: 153986963061837018}
-  agent: {fileID: 80723574967673666}
+  agent: {fileID: 9211325346875014012}
   rigBuilder: {fileID: 3758664395462481180}
+  moveThreshold: 0.5
+  positionDeltaTolerance: 2
 --- !u!1 &5165274126658692935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,7 +1424,8 @@ MonoBehaviour:
     SerializationNodes: []
   FirstName: Dominic
   LastName: Evans
-  _id: sheriff
+  <ReadableID>k__BackingField: 
+  <DatabaseID>k__BackingField: 
   <PortraitAssetRef>k__BackingField:
     m_AssetGUID: 9b40029073c43c1428ac5e7a5ef5ad05
     m_SubObjectName: dominic_dialog

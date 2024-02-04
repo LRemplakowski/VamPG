@@ -14,7 +14,7 @@ namespace SunsetSystems.Entities.Characters
     public class WardrobeManager : MonoBehaviour
     {
         private Creature _owner;
-        private CreatureAnimationController _animationController;
+        private AnimationManager _animationController;
         private Transform _rightClavicle, _leftHand;
         private DynamicCharacterAvatar _dca;
         private string _characterID;
@@ -51,7 +51,7 @@ namespace SunsetSystems.Entities.Characters
             _owner = GetComponentInParent<Creature>();
             _dca = _owner.References.GetComponentInChildren<DynamicCharacterAvatar>();
             _characterID = _owner.References.CreatureData.DatabaseID;
-            _animationController = _owner.References.GetComponentInChildren<CreatureAnimationController>();
+            _animationController = _owner.References.GetComponentInChildren<AnimationManager>();
             _initializedOnce = true;
         }    
 

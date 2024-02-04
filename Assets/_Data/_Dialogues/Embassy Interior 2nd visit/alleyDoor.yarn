@@ -1,0 +1,94 @@
+﻿title: alleyDoor
+tags:
+---
+[nomarkup][Seems like a few others had the same idea, themselves rushing to exit through the heavy metal door. If you go now, you might be able to slip your foot through to keep it from closing again…][/nomarkup]
+-> [nomarkup][Rush and use your foot to block the door from closing.](Dexterity+Athletics)[/nomarkup]
+    <<jump alleyDexRoll>>
+-> [nomarkup][Let the door close.][/nomarkup]
+    <<if $carryingNPC == 1>>
+    [nomarkup][You place the doe-eyed, injured man down gently before taking on the door.][/nomarkup]
+    <<endif>>
+    <<jump alleyDoorForcing>>
+===
+title: alleyDexRoll
+---
+<<if Roll("Dexterity","Athletics")>=(3+$carryingNPC)>>
+    <<jump alleyDexSuccess>>
+<<else>>
+    <<jump alleyDexFailure>>
+<<endif>>
+===
+title: alleyDexSuccess
+---
+[nomarkup][You dart forward, slipping your foot into the quickly narrowing gap between the door and its frame - holding the passage open for yourself and the rest of your group to make it into the alleyway.][/nomarkup] #success
+===
+title: alleyDexFailure>
+---
+[nomarkup][You dart forward, but you aren’t quick enough to slip your foot into the gap between the door and its frame - the metal barrier slamming firmly closed in your face, instead.][/nomarkup] #failure
+<<jump alleyDoorForcing>>
+===
+title: alleyDoorForcing
+---
+[nomarkup][The doors are made from steel. It will not be easy to force them open.][/nomarkup]
+-> [nomarkup][Open the door with brute force.](Strength+Athletics)[/nomarkup]
+    <<jump alleyDoorForcingStrRoll>>
+-> [nomarkup][Pry the door open with help of the crowbar.](Strength+Melee)[/nomarkup]
+    <<jump alleyDoorForcingMeleeRoll>>
+===
+title: alleyDoorForcingStrRoll
+---
+<<set $rollMofifier to 0>>
+<<if GetPlayerHasDiscipline ("Potence")>>
+    <<set $rollModifier to 2>>
+<<endif>>
+<<if Roll("Strength","Athletics")>=(4-$rollModifier)>>
+    <<jump alleyDoorForcingStrSuccess>>
+<<else>>
+    <<jump alleyDoorForcingStrFailure>>
+<<endif>>
+===
+title: alleyDoorForcingStrSuccess
+---
+[nomarkup][Thinking quickly, you grab the door handle and ram your shoulder against the door, shoving it open and following it into the alleyway.][/nomarkup] #success
+===
+title: lleyDoorForcingStrFailure
+---
+[nomarkup][You find the doorknob, but it’s been jammed. You only have a few seconds to struggle with it before you have to move - the lights of the club revealing your location…][/nomarkup] #failure
+<<jump noDice>>
+===
+title: alleyDoorForcingMeleeRoll
+---
+<<set $rollMofifier to 0>>
+<<if GetPlayerHasDiscipline ("Potence")>>
+    <<set $rollModifier to 2>>
+<<endif>>
+<<if Roll("Strength","Melee")>=(4-$rollModifier)>>
+    <<jump alleyDoorForcingMeleeSuccess>>
+<<else>>
+    <<jump alleyDoorForcingMeleeFailure>>
+<<endif>>
+===
+title: alleyDoorForcingMeleeSuccess
+---
+[nomarkup][Thinking quickly, you pull out your trusty crowbar, prying open the door before shoving it open the rest of the way into the alley.][/nomarkup] #success
+===
+title: alleyDoorForcingMeleeFailure
+---
+[nomarkup][You try to slip the crowbar into the gap between the door and its frame, but you can’t force a wide enough slot for the metal tip to fit into.][/nomarkup] #failure
+<<jump noDice>>
+===
+title: noDice
+---
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: Seems like you’re having some trouble, there. Let me. Oh, and step back a little.
+    {$anastasia}: [nomarkup][She saunters up to the metal door, giving it one singular side kick - strong enough to bust the door wide open, as well as place a hefty dent in the metal.][/nomarkup] Voila. Open sesame, or whatever the fuck.
+<<else>>
+{$kieran}: Since it seems we have no other option, I must step up. [nomarkup][He produces a pocket knife, bringing the blade up to his palm and wrist - making several criss-crossing incisions so that his hand and several inches of his forearm are coated in blood. Then, approaching the doorway, he smears an area of the metal barrier close to the doorknob in blood, before removing his hand.][/nomarkup] Don’t touch anything. Not for a few minutes.
+[nomarkup][As you wait, before your very eyes, the door corrodes, slowly reducing the metal into steaming sludge, and leaving a hole wide enough for you to stick your arm through.][/nomarkup]
+-> {$pcName}: What now?
+{$kieran}: Well, you should be able to reach the doorknob on the other side and turn it, now, opening the door.
+-> {$pcName}: [nomarkup][Phew. That’s a relief.][/nomarkup] And lemme guess: You can’t teach this to me, either?
+{$kieran}: [nomarkup][He chuckles.][/nomarkup] My, you do catch on quickly, miss Bardot. But we should get moving. After you…
+[nomarkup][With some apprehension, you reach your arm through the hole eaten in the metal, feeling around for the doorknob on the other side. Once you have it, though, freedom is only a quick turn and a push away, as you step into the alleyway.][/nomarkup]
+<<endif>>
+===

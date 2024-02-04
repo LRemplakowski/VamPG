@@ -13,22 +13,18 @@ namespace SunsetSystems.Entities.Characters.Actions
     public class Move : EntityAction
     {
         private readonly NavMeshAgent navMeshAgent;
-        private readonly NavMeshObstacle navMeshObstacle;
         [ShowInInspector, ReadOnly]
         private Vector3 destination;
         public static event Action<IActionPerformer> OnMovementFinished;
         public static Action<IActionPerformer> OnMovementStarted;
-        private float stoppingDistance;
         //private Task rotationTask;
 
-        public Move(IActionPerformer owner, Vector3 destination, float stoppingDistance = .1f) : base(owner, true)
+        public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, true)
         {
-            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
-            this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
+            this.navMeshAgent = owner.References.NavMeshAgent;
             NavMesh.SamplePosition(destination, out var hit, 1f, NavMesh.AllAreas);
             conditions.Add(new Destination(navMeshAgent));
             this.destination = hit.position;
-            this.stoppingDistance = stoppingDistance;
         }
 
         public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition))
@@ -57,7 +53,6 @@ namespace SunsetSystems.Entities.Characters.Actions
             navMeshAgent.ResetPath();
             if (navMeshAgent.SetDestination(destination)) 
             {
-                navMeshAgent.stoppingDistance = stoppingDistance;
                 if (OnMovementStarted != null)
                     OnMovementStarted.Invoke(this.Owner);
             }

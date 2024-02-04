@@ -134,7 +134,7 @@ namespace SunsetSystems.Input
                 ICreature creature = creatures[i];
                 if (creature != null)
                 {
-                    creature.PerformAction(new Move(creature, hit.position, stoppingDistance), true);
+                    creature.PerformAction(new Move(creature, hit.position), true);
                     Debug.Log("Moved Creature");
                 }
             }

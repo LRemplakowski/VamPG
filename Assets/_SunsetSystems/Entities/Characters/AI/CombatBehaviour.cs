@@ -16,6 +16,7 @@ using SunsetSystems.Animation;
 using SunsetSystems.Equipment;
 using Sirenix.Utilities;
 using UnityEngine.AI;
+using SunsetSystems.Entities.Creatures.Interfaces;
 
 namespace SunsetSystems.Combat
 {
@@ -47,7 +48,7 @@ namespace SunsetSystems.Combat
         [field: SerializeField, Required]
         public IMagicUser MagicUser { get; private set; }
         [SerializeField, Required]
-        private CreatureAnimationController animationController;
+        private AnimationManager animationController;
 
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
@@ -169,7 +170,7 @@ namespace SunsetSystems.Combat
 
         public Faction Faction => Owner.Faction;
 
-        public IEntityReferences References => Owner.References;
+        public ICreatureReferences References => Owner.References;
 
         public EntityAction PeekCurrentAction => Owner.PeekCurrentAction;
 

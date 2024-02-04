@@ -208,7 +208,7 @@ namespace SunsetSystems.Persistence
 
         public async void MoveDominicToDoorAndDestroy()
         {
-            await _dominic.PerformAction(new Move(_dominic, _dominicDoorWaypoint.transform.position, .4f));
+            await _dominic.PerformAction(new Move(_dominic, _dominicDoorWaypoint.transform.position));
             Destroy(_dominic.References.GameObject);
         }
 

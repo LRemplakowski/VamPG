@@ -22,7 +22,7 @@ namespace SunsetSystems.Equipment
         [SerializeField, Required]
         private Transform weaponParent;
         [SerializeField, Required]
-        private CreatureAnimationController animationController;
+        private AnimationManager animationController;
         [SerializeField, Required]
         private ICombatant owner;
         [Title("Config")]

@@ -3428,7 +3428,11 @@ MonoBehaviour:
   preloadWardrobeRecipes:
     loadDefaultRecipes: 1
     recipes:
-    - _recipeName: watch_Recipe
+    - _recipeName: hair_Recipe
+      _enabledInDefaultWardrobe: 1
+      _compatibleRaces:
+      - VampireMale
+    - _recipeName: Dominic_facial_hair_overlay
       _enabledInDefaultWardrobe: 1
       _compatibleRaces:
       - VampireMale
@@ -3687,6 +3691,28 @@ MonoBehaviour:
       - {r: 1, g: 1, b: 1, a: 1}
       - {r: 1, g: 1, b: 1, a: 1}
       channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      PropertyBlock:
+        alwaysUpdate: 0
+        serializedProperties: []
+      foldout: 0
+      showAdvanced: 0
+      isBaseColor: 0
+      _name: 
+      _color: {r: 1, g: 1, b: 1, a: 1}
+      _metallicGloss: {r: 0, g: 0, b: 0, a: 0}
+      Raw: 0
+      valuesConverted: 0
+    - name: hair
+      channelMask:
+      - {r: 0.7830189, g: 0.04801533, b: 0.04801533, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      - {r: 1, g: 1, b: 1, a: 1}
+      channelAdditiveMask:
+      - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}
       - {r: 0, g: 0, b: 0, a: 0}

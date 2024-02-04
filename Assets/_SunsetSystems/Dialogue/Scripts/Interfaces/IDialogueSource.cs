@@ -6,6 +6,6 @@ namespace SunsetSystems.Dialogue.Interfaces
 {
     public interface IDialogueSource
     {
-        void StartDialogue(string dialogueID);
+        void StartDialogue();
     }
 }

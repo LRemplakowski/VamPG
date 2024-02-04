@@ -29,14 +29,14 @@ namespace SunsetSystems.Entities.Interactable
         public UltEvent<string> OnNodeStarted;
         public UltEvent<string> OnNodeFinished;
 
-        public void StartDialogue(string dialogueID)
+        public void StartDialogue()
         {
             if (_fadeOutBeforeDialogue)
             {
                 _onAfterFadeout?.Invoke();
             }
             SubscribeToDialogueEvents();
-            DialogueManager.Instance.StartDialogue(dialogueID, _dialogueProject);
+            DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
         }
 
         private void SubscribeToDialogueEvents()
@@ -78,7 +78,7 @@ namespace SunsetSystems.Entities.Interactable
 
         public bool HandleInteraction(IActionPerformer interactee)
         {
-            StartDialogue(EntryNode);
+            StartDialogue();
             return true;
         }
     }

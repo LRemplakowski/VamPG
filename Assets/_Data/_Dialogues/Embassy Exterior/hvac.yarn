@@ -1,37 +1,37 @@
 ﻿title: hvac
 tags:
 ---
-<<declare $windowBroken to 0>>
-[nomarkup][You see a faint purple glow emanating from a high-up window in the brick.][/nomarkup]
-{$kieran}: This must be near Diana's office. She prefers things to be “moody”.
+<<declare $windowBroken to false>>
+[nomarkup][You see a faint purple glow emanating from a high-up window in the brick.][/nomarkup] #line:05df37e 
+{$kieran}: This must be near Diana's office. She prefers things to be “moody”. #line:0cb93d1 
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-{$anastasia}: You and her have a lot in common.
+{$anastasia}: You and her have a lot in common. #line:058493b 
 <<endif>>
--> [nomarkup][Climb up the HVAC.][Dexterity + Athletics][/nomarkup]
-    {$kieran}: Be careful!
+-> [nomarkup][Climb up the HVAC.][Dexterity + Athletics][/nomarkup] #line:0725c2d 
+    {$kieran}: Be careful! #line:07d5dc3 
     <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-        {$anastasia}: [nomarkup][She coughs.][/nomarkup] Pussy.
-        {$kieran}: Yes Miss Goth Queen, so far you have been very forthcoming about your preferences.
+        {$anastasia}: [nomarkup][She coughs.][/nomarkup] Pussy. #line:0f31569 
+        {$kieran}: Yes Miss Goth Queen, so far you have been very forthcoming about your preferences. #line:0040703 
     <<endif>>
-    <<if Roll ("dexterity","Athletics" >=2)>>
+    <<if Roll ("dexterity","Athletics") >=2>>
         <<jump climbingSuccess>>
     <<else>>
         <<jump climbingFailure>>
     <<endif>>
--> [nomarkup][Step away.][/nomarkup]
+-> [nomarkup][Step away.][/nomarkup] #line:02f68f2 
 ===
 title: climbingSuccess
 ---
-[nomarkup][You gracefully scale the brick before you, push the window open, and slide inside.][/nomarkup] #succes
-{$kieran}: She left her window unlocked. Interesting…
+[nomarkup][You gracefully scale the brick before you, push the window open, and slide inside.][/nomarkup] #succes #line:0fcb458 
+{$kieran}: She left her window unlocked. Interesting... #line:0ce81ee 
 ===
 title: climbingFailure
 ---
-[nomarkup][You violently chuck yourself up the wall, vaulting head first through the glass.][+1 Superficial Damage][/nomarkup]
+[nomarkup][You violently chuck yourself up the wall, vaulting head first through the glass.][+1 Superficial Damage][/nomarkup] #line:0959a99 
 <<DealDamage($pcName, 1, "Superficial")>>
-{$kieran}: Ow!
+{$kieran}: Ow! #line:068d42f 
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>> 
-    {$anastasia}: Smooth.
+    {$anastasia}: Smooth. #line:0166d67 
 <<endif>>
-<<set $windowBroken to 1>>
+<<set $windowBroken to true>>
 ===

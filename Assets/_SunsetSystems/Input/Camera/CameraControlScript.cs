@@ -65,9 +65,7 @@ namespace SunsetSystems.Input.CameraControl
 
         private void Start()
         {
-            if(_moveTarget != Vector3.zero){
-                _moveTarget = transform.position;
-            }
+            _moveTarget = transform.position;
             currentZoom = defaultZoom;
         }
 

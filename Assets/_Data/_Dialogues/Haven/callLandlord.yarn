@@ -10,27 +10,27 @@ position: -328,-104
     <<set $police to false>>
 -> [nomarkup][Call the landlord.][/nomarkup] #line:091198c 
     {$landlord}: Sunset Acres Apartments, how can I help you? #line:0da365f 
-    {$pcname}: Hey Kevin, it's Desiree. Sink is clogged again. #line:0ce9bbc 
+    {$pcName}: Hey Kevin, it's Desiree. Sink is clogged again. #line:0ce9bbc 
     {$landlord}: [nomarkup][You can hear his contempt through the phone.][/nomarkup] Again? There's no way. I just fixed it last week. You must be washing grease down the drain. Not my problem. Hire a plumber. #line:085cb16 
-    -> {$pcname}: I'll pay you for your time. #line:02582fe 
+    -> {$pcName}: I'll pay you for your time. #line:02582fe 
         [nomarkup][Now you're speaking his language.][/nomarkup] #line:0a8bcc3 
         {$landlord}: I'll have to charge you a... uh... a late night fee. $50. #line:07f776e 
-        -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:025fbad 
+        -> {$pcName}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:025fbad 
             [nomarkup][He hangs up.][/nomarkup] #line:0de55de 
             <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">> 
             <<RemoveMoney 50>>  
             <<stop>>
-        -> {$pcname}: You're trying to rip me off! #line:04a227e 
+        -> {$pcName}: You're trying to rip me off! #line:04a227e 
             {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:007cdae 
-            {$pcname}: Fine. I'll take it. #line:00c3d3c 
+            {$pcName}: Fine. I'll take it. #line:00c3d3c 
             -> [nomarkup][Hang up.][/nomarkup] #line:0bdecac 
                 <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
                 <<stop>>
-    -> {$pcname}: (Manipulation + Persuasion) Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:04d20e9 
+    -> {$pcName}: (Manipulation + Persuasion) Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:04d20e9 
         <<jump ManipPersKevin>>
-    -> {$pcname}: (Charisma + Subterfuge) [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:07b9762 
+    -> {$pcName}: (Charisma + Subterfuge) [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:07b9762 
         <<jump ChaSubtKevin>>
-    -> {$pcname}: (Manipulation + Intimidation) Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:03c2954 
+    -> {$pcName}: (Manipulation + Intimidation) Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:03c2954 
         <<jump ManipIntimKevin>>
 -> [nomarkup][Hang up and walk away.][/nomarkup] #line:02d6236 
     <<stop>>
@@ -40,24 +40,24 @@ tags:
 position: 408,-214
 ---
 {$landlord}: So, anything else you have to offer? #line:07f16fa 
--> {$pcname}: I'll pay you for your time. #line:045f732 
+-> {$pcName}: I'll pay you for your time. #line:045f732 
     [nomarkup][Now you're speaking his language.][/nomarkup] #line:03a346a 
     {$landlord}: I'll have to charge you a... uh... a late night fee. $200. #line:084f44f 
-    -> {$pcname}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:0fd8cc0 
+    -> {$pcName}: [nomarkup][You grit your teeth.][/nomarkup] Sure. #line:0fd8cc0 
         [nomarkup][He hangs up.][/nomarkup] #line:0b9713d 
         <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
         <<stop>>
-    -> {$pcname}: You're trying to rip me off! #line:0d8d5ab 
+    -> {$pcName}: You're trying to rip me off! #line:0d8d5ab 
         {$landlord}: I'm a capitalist. Take it or leave it. I'm going back to bed. #line:0a3d777 
-        {$pcname}: Fine. I'll take it. #line:060be9f 
+        {$pcName}: Fine. I'll take it. #line:060be9f 
         -> [nomarkup][Hang up.][/nomarkup] #line:013fa6e 
             <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
             <<stop>>
--> {$pcname}: (Manipulation + Persuasion)  Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:00f7434 
+-> {$pcName}: (Manipulation + Persuasion)  Please, Kevin? I'm just trying to get my life together here. <<if visited("ManipPersKevin") == false>> #line:00f7434 
     <<jump ManipPersKevin>>
--> {$pcname}: (Charisma + Subterfuge) [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:02f51cf 
+-> {$pcName}: (Charisma + Subterfuge) [nomarkup][You spend several moments gathering up the willpower to make your voice sound more appealing - or the closest thing to what you assume is appealing to this man that you can muster.][/nomarkup] What if I make it worth your while? <<if visited("ChaSubtKevin") == false>> #line:02f51cf 
     <<jump ChaSubtKevin>>
--> {$pcname}: (Manipulation + Intimidation) Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:0ab194f 
+-> {$pcName}: (Manipulation + Intimidation) Kevin, you know I'm friends with tenant lawyers right? <<if visited("ManipIntimKevin") == false>> #line:0ab194f 
     <<jump ManipIntimKevin>>
 ===     
 title: ManipPersKevin
@@ -67,16 +67,16 @@ position: 113,-107
 <<if Roll("Manipulation","Persuasion") >= (3 + $kevinRollModifier)>>
     {$landlord}: It must be hard for you, not having a man in your life. Wearing the pants is more difficult than you'd expect, huh? Guess I'll have to help out - show you the ropes. #success #line:048fb02 
     [nomarkup][In response, you make an expression that is equal parts revolted, frustrated, and perturbed. Why does the world have to go out of its way to remind you that people with opinions like this still exist? You swallow the emotion with some effort.][/nomarkup] #line:0897496 
-    {$pcname}: Yeah, it's been difficult. But you don't want to hear about the woes of a poor, depressed divorcee... #line:07e8328 
+    {$pcName}: Yeah, it's been difficult. But you don't want to hear about the woes of a poor, depressed divorcee... #line:07e8328 
     {$landlord}: Ah, but I've said I would teach you, didn't I? Just let me get dressed. Think you can hold it together until I get there? #line:047c5ab 
-    {$pcname}: Sure. Please, don't keep me waiting. [nomarkup][You say this through teeth gritted in a smile that doesn't reach your eyes. It's a saccharine-sweet, enthusiastic tone - your customer service voice.][/nomarkup]   #line:0722619 
+    {$pcName}: Sure. Please, don't keep me waiting. [nomarkup][You say this through teeth gritted in a smile that doesn't reach your eyes. It's a saccharine-sweet, enthusiastic tone - your customer service voice.][/nomarkup]   #line:0722619 
     [nomarkup][He hangs up.][/nomarkup] #line:006c4c6 
     <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
     <<stop>>
 <<else>>
     {$landlord}: Don't act like we're friends. You don't even know my last name. I only let you sign the lease because I pitied you. I guess I'll extend my pity one last time, but after that, you're on your own. #failure #line:0bc3d9f 
     <<set $kevinRollModifier to inc($kevinRollModifier)>>
-    {$pcname}: [nomarkup][What an asshole.][/nomarkup] #line:0180d1b 
+    {$pcName}: [nomarkup][What an asshole.][/nomarkup] #line:0180d1b 
     <<jump ContinueCallLandlord>>
 <<endif>>  
 ===
@@ -86,18 +86,18 @@ position: 157,51
 ---
 <<if Roll("Charisma","Subterfuge") >= (3 + $kevinRollModifier)>>
     {$landlord}: Oh... anything you say? #failure #line:0a58c93 
-    {$pcname}: Anything. #line:0477191 
-    {$pcname}: [nomarkup][Ew! I can't believe I'm doing this...][/nomarkup] #line:0b6a82f 
+    {$pcName}: Anything. #line:0477191 
+    {$pcName}: [nomarkup][Ew! I can't believe I'm doing this...][/nomarkup] #line:0b6a82f 
     [nomarkup][You hold back a gag.][/nomarkup] #line:052e8d8 
     {$landlord}: I'll be right over. [nomarkup][You can hear the smug grin in his voice. Disgusting.][/nomarkup] #line:0062c38 
-    {$pcname}: Okay. #line:0e48e85 
+    {$pcName}: Okay. #line:0e48e85 
     [nomarkup][He hangs up.][/nomarkup] #line:042db95 
     <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
     <<stop>>
 <<else>>
     {$landlord}: Nice try, dear. I know I'm a catch, but I don't stick my dick in divorcees. Too much baggage. I guess I'll help just because you don't have any other man in your life, but keep your hands to yourself. Frankly, I'm out of your league. #failure #line:0d976d4 
     <<set $kevinRollModifier to inc($kevinRollModifier)>>
-    {$pcname}: [nomarkup][What an asshole, “Out of your league.” Really? You wonder how many more delusions about himself and how desirable he is are swirling about in that canister of hot air he calls a brain...][/nomarkup] #line:0d33f1a 
+    {$pcName}: [nomarkup][What an asshole, “Out of your league.” Really? You wonder how many more delusions about himself and how desirable he is are swirling about in that canister of hot air he calls a brain...][/nomarkup] #line:0d33f1a 
     <<jump ContinueCallLandlord>>
 <<endif>> 
 ===
@@ -108,13 +108,13 @@ position: 85,-289
 <<if Roll("Manipulation","Intimidation") >= (3 + $kevinRollModifier)>>
     {$landlord}: Oh, I didn't know that. I'll um... I'll be right over. #success #line:04512a2 
     [nomarkup][Well, that seemed to shut him up. You just hope he never actually gets around to looking into your claim...][/nomarkup] #line:0ab4692 
-    {$pcname}: Now you do. #line:02c982c 
+    {$pcName}: Now you do. #line:02c982c 
     -> [nomarkup][Hang up.][/nomarkup] #line:0a463c8 
         <<CompleteObjective "FIX_SINK" "CALL_LANDLORD">>   
         <<stop>>
 <<else>>
     {$landlord}: [nomarkup][He snorts out a laugh on the other end.][/nomarkup] You're trying to intimidate me? After I put a roof over your head? Get the fuck out of here with your empty threats. #failure #line:0401975 
-    {$pcname}: [nomarkup][And I'm paying through the nose for that same roof.][/nomarkup] You done? #line:0fadf17 
+    {$pcName}: [nomarkup][And I'm paying through the nose for that same roof.][/nomarkup] You done? #line:0fadf17 
     {$landlord}: Yeah. #line:0e83964 
     <<set $kevinRollModifier to inc($kevinRollModifier)>>
     <<jump ContinueCallLandlord>>

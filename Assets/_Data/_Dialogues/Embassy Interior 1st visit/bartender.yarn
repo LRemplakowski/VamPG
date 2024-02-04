@@ -2,7 +2,7 @@ title: bartenderDialogue
 position: 136,-238
 ---
 <<if $anaTalkedTo == true>>
-    Bartender: [nomarkup][She’s drying a glass with a dishrag. Looking up from her work, she spots you on the other side of the counter.][/nomarkup] Sorry about that. What can I get you?
+    Bartender: [nomarkup][She's drying a glass with a dishrag. Looking up from her work, she spots you on the other side of the counter.][/nomarkup] Sorry about that. What can I get you?
     <<if $drink ==false>>
     -> {$pcName}: I'll have a Bloody Mary.
         <<set CurrentMoney -5>>
@@ -14,9 +14,9 @@ position: 136,-238
         <<endif>>
     <<endif>>
     -> {$pcName}: So, what can you tell me about Diana?
-        Bartender: She’s nice enough. Been seeing someone who kinda gives me a bad feeling, but I can’t put my finger on why.
+        Bartender: She's nice enough. Been seeing someone who kinda gives me a bad feeling, but I can't put my finger on why.
         -> {$pcName}: Bad feeling?
-            Bartender: Very suspicious - always skulking around. She only visits her office when Kate isn’t here.
+            Bartender: Very suspicious - always skulking around. She only visits her office when Kate isn't here.
     -> {$pcName}: Nothing, nevermind.
 <<endif>>
 ===

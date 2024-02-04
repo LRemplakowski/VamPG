@@ -1,5 +1,6 @@
 ﻿// UltEvents // Copyright 2021 Kybernetik //
 
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UltEvents
@@ -23,8 +24,7 @@ namespace UltEvents
     public class TriggerEvents3D : MonoBehaviour
     {
         /************************************************************************************************************************/
-
-        [SerializeField]
+        [SerializeField, Title("Events")]
         private TriggerEvent3D _TriggerEnterEvent;
 
         /// <summary>Invoked by <see cref="OnTriggerEnter"/>.</summary>
@@ -95,5 +95,31 @@ namespace UltEvents
         }
 
         /************************************************************************************************************************/
+        [SerializeField, Title("Editor")]
+        private bool visualizeTrigger = true;
+        [SerializeField, ShowIf("visualizeTrigger")]
+        private Color gizmoColor = Color.green;
+        [SerializeField, HideInInspector]
+        private Collider myCollider;
+
+        private void OnValidate()
+        {
+            if (myCollider == null)
+                myCollider = GetComponent<Collider>();
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (visualizeTrigger && myCollider != null)
+            {
+                Gizmos.color = gizmoColor;
+                if (myCollider is BoxCollider box)
+                {
+                    Matrix4x4 rotationMatrix = Matrix4x4.TRS(box.transform.position, box.transform.rotation, box.transform.lossyScale);
+                    Gizmos.matrix = rotationMatrix;
+                    Gizmos.DrawCube(box.center, box.size);
+                }
+            }
+        }
     }
 }

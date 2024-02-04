@@ -10,7 +10,7 @@ KNOCK. KNOCK. KNOCK. #line:015551b
         {$landlord}: [nomarkup][Kevin covers his nose.][/nomarkup] Gah, you look and smell like shit. I hope you're not contagious. #line:0838c3a 
     <<else>>
         {$landlord}: [nomarkup][Kevin covers his nose.][/nomarkup] Gah, what the hell is that smell? #line:0320b76 
-        {$pcname}: What do you mean? #line:0f76088 
+        {$pcName}: What do you mean? #line:0f76088 
         {$landlord}: You don't smell that? Smells like... nevermind. Let me take a look at that sink. #line:0d4e2b8 
     <<endif>>
     [nomarkup][As he bends over to examine the pipes under the sink, you find yourself staring at Kevin's exposed neck. You swear you can see his pulse through the spider web of veins under his skin.][/nomarkup] #line:095fa15 
@@ -28,7 +28,7 @@ KNOCK. KNOCK. KNOCK. #line:015551b
     <<set $kevinmurdered to true>>
     <<set $police to true>>
     [nomarkup][When you retract your bite, his limp body falls to the ground with a sickening thud. The shock of what you've just done hits you all at once.][/nomarkup] #line:0e5ffa4 
-    {$pcname}: [nomarkup][Holy fuck! What did I-?][/nomarkup] #line:0c6778e 
+    {$pcName}: [nomarkup][Holy fuck! What did I-?][/nomarkup] #line:0c6778e 
     -> (Intelligence + Medicine) [nomarkup][Try to save him.][/nomarkup] #line:036197c 
         <<if Roll("Intelligence","Medicine") >= 3>>
             (Success) [nomarkup][You cover up the wound with a dish rag and administer CPR. Kevin's eyes flutter open. Through exasperated breaths and gurgles you hear him struggle to speak.][/nomarkup] #line:0e0c834 

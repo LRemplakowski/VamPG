@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[ExecuteAlways]
-public class AlanWindZoneToShader : MonoBehaviour
+public class WindzoneToShader : MonoBehaviour
 {
     private WindZone windZone;
 

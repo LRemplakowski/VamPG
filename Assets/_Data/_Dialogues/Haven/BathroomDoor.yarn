@@ -18,7 +18,7 @@ position: 91,-139
 ---
 [nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup] #line:0d2188f
 <<if $key is false>>
-    {$pcname}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34
+    {$pcName}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34
 <<endif>> 
 <<jump DoorVisit>>
 ===
@@ -41,7 +41,7 @@ position: 439,-259
 ---
 KNOCK! KNOCK! KNOCK! #line:0705409 
 [nomarkup][Unsurprisingly, there's no answer.][/nomarkup] #line:0fdd8d6 
-{$pcname}: [nomarkup][Why did I do that?][/nomarkup] #line:0e20ed7 
+{$pcName}: [nomarkup][Why did I do that?][/nomarkup] #line:0e20ed7 
 <<if GetAttributeSkillPoolSize("Wits","Insight") >= 5>>
     [nomarkup][You feel the strangest sense that you shouldn't go in there. A shiver runs down your spine.][/nomarkup] #line:0e82241 
     <<set $strangeInsightModifier to 1>>
@@ -53,7 +53,7 @@ position: 567,-63
 ---
 <<if $potence == true>>
     [nomarkup][You kick the door with a meager amount of force. To your shock, with very little effort, it goes flying off its hinges and into the bathroom beyond. You were never a particularly strong person, so something like this happening is downright fantastical. Or maybe you're still dreaming? From your state, though, it's closer to a nightmare than anything pleasant... At the very least, if it is, you can count on waking up safely in your bed after all this is over...][/nomarkup] #success #line:0237eef 
-    {$pcname}: [nomarkup][The fuck...?][/nomarkup] #line:0898b88 
+    {$pcName}: [nomarkup][The fuck...?][/nomarkup] #line:0898b88 
     <<set $bathroomdoordestroyed to true>>
     <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
 <<else>>
@@ -61,9 +61,9 @@ position: 567,-63
         [nomarkup][You assault the locked door with several weak strikes of your boot. Thud, thud, thud... It feels like an eternity, before the door budges.][/nomarkup] #success #line:0a62dfb 
         <<set $bathroomdoordestroyed to true>> 
         <<if $kevinmurdered == true>>
-            {$pcname}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. Strangely enough, even after all that, you don't feel the least bit fatigued.][/nomarkup] #line:0365229 
+            {$pcName}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. Strangely enough, even after all that, you don't feel the least bit fatigued.][/nomarkup] #line:0365229 
         <<else>>
-            {$pcname}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. You curse under your breath. Strangely enough, even after all that, you don't feel the least bit fatigued. Surveying the damage, you curse under your breath. If your landlord sees that, he'll be pissed.][/nomarkup] #line:0981350 
+            {$pcName}: [nomarkup][Just a little more, and it comes off its hinges, diligently kicked in by your boot. You curse under your breath. Strangely enough, even after all that, you don't feel the least bit fatigued. Surveying the damage, you curse under your breath. If your landlord sees that, he'll be pissed.][/nomarkup] #line:0981350 
         <<endif>>
         <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
     <<else>>
@@ -83,7 +83,7 @@ position: 545,316
     [nomarkup][You jimmy the crowbar just right. With a little elbow grease, you hear a CREAK, and the door glides open.][/nomarkup] #success #line:0495901 
 <<else>>
     [nomarkup][Perhaps you were a little too eager. The door shatters! Splinters jam into your flesh.] [+1 Superficial Damage][/nomarkup] #failure #line:0033fa6 
-    {$pcname}: [nomarkup][Ow! What the fuck!?][/nomarkup] #line:0e0fb25 
+    {$pcName}: [nomarkup][Ow! What the fuck!?][/nomarkup] #line:0e0fb25 
 <<endif>>
 <<CompleteObjective "MAIN_SATURDAY_START" "ENTER_BATHROOM">>
 ===

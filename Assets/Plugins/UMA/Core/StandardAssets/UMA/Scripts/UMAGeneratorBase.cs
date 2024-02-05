@@ -299,7 +299,7 @@ namespace UMA
 					var originalPos = umaTransform.localPosition;
                     var animator = umaData.animator;
 
-                    umaTransform.SetParent(null, false);
+                    //umaTransform.SetParent(null, false);
 					umaTransform.localRotation = Quaternion.identity;
 					umaTransform.localPosition = Vector3.zero;
 					
@@ -315,7 +315,7 @@ namespace UMA
 						animator.runtimeAnimatorController = umaData.animationController;
 						umaData.animator = animator;
 
-						umaTransform.SetParent(oldParent, false);
+						//umaTransform.SetParent(oldParent, false);
 						umaTransform.localRotation = originalRot;
 						umaTransform.localPosition = originalPos;
 					}
@@ -332,7 +332,7 @@ namespace UMA
 							SetAvatar(umaData, animator);
 						}
 
-						umaTransform.SetParent(oldParent, false);
+						//umaTransform.SetParent(oldParent, false);
 						umaTransform.localRotation = originalRot;
 						umaTransform.localPosition = originalPos;
 

@@ -659,12 +659,12 @@ namespace UMA.CharacterSystem
                     ugb.UpdateSlots(umaData);
                     return;
                 } */ // TODO: Fix this
-                if (UnityEditor.PrefabUtility.IsPartOfPrefabInstance(gameObject.transform))
-                {
-                    // Unfortunately we must unpack the prefab or it will blow up.
-                    GameObject go = PrefabUtility.GetOutermostPrefabInstanceRoot(this.gameObject);
-                    UnityEditor.PrefabUtility.UnpackPrefabInstance(go, UnityEditor.PrefabUnpackMode.OutermostRoot, UnityEditor.InteractionMode.AutomatedAction);
-                }
+                //if (UnityEditor.PrefabUtility.IsPartOfPrefabInstance(gameObject.transform))
+                //{
+                //    // Unfortunately we must unpack the prefab or it will blow up.
+                //    GameObject go = PrefabUtility.GetOutermostPrefabInstanceRoot(this.gameObject);
+                //    UnityEditor.PrefabUtility.UnpackPrefabInstance(go, UnityEditor.PrefabUnpackMode.OutermostRoot, UnityEditor.InteractionMode.AutomatedAction);
+                //}
                 CleanupGeneratedData();
                 activeRace.SetRaceData();
                 if (activeRace.racedata != null)

@@ -1,7 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using System;
 using UnityEngine;
@@ -16,7 +15,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         [ShowInInspector, ReadOnly]
         private Vector3 destination;
         public static event Action<IActionPerformer> OnMovementFinished;
-        public static Action<IActionPerformer> OnMovementStarted;
+        public static event Action<IActionPerformer> OnMovementStarted;
         //private Task rotationTask;
 
         public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, true)

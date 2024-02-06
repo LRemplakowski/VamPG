@@ -86,10 +86,10 @@ namespace SunsetSystems.Animation
                 velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
             }
 
-            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius;
+            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance;
 
             animator.SetBool("IsMoving", shouldMove);
-            //animator.SetFloat("MoveX", velocity.x);
+            animator.SetFloat("MoveX", velocity.x);
             animator.SetFloat("MoveY", velocity.magnitude);
 
             float deltaMagnitude = worldPositionDelta.magnitude;

@@ -126,16 +126,25 @@ namespace SunsetSystems.Input
 
         private void MoveCreaturesToPosition(List<ICreature> creatures, Vector3 samplingPoint)
         {
-            float stoppingDistance = 0f;
             for (int i = 0; i < creatures.Count; i++)
             {
-                NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
-                stoppingDistance += (i % 2) * _followerStoppingDistance;
-                ICreature creature = creatures[i];
-                if (creature != null)
+                if (i == 0)
                 {
-                    creature.PerformAction(new Move(creature, hit.position), true);
-                    Debug.Log("Moved Creature");
+                    NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
+                    ICreature creature = creatures[i];
+                    if (creature != null)
+                    {
+                        creature.PerformAction(new Move(creature, hit.position), true);
+                        Debug.Log("Moved Creature");
+                    }
+                }
+                else
+                {
+                    ICreature creature = creatures[i];
+                    if (creature != null)
+                    {
+                        creature.PerformAction(new Follow(creature, creatures[0].References.NavMeshAgent));
+                    }
                 }
             }
         }

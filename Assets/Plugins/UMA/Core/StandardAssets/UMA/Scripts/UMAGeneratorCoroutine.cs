@@ -121,6 +121,11 @@ namespace UMA
 			{
 				generatedMaterialLookup.Clear();
 			}
+			if (umaData == null)
+            {
+				Debug.LogError($"null kurwa w Uma generator coroutine");
+				return;
+            }
 			backUpTexture = umaData.backUpTextures();
 			umaData.CleanTextures();
 			generatedMaterials = new List<UMAData.GeneratedMaterial>(20);
@@ -478,7 +483,12 @@ namespace UMA
 				var tempMaterialDef = material.materialFragments[atlasElementIndex];
 				if (tempMaterialDef.isRectShared)
 					continue;
-				
+				var textureList = tempMaterialDef.baseOverlay.textureList;
+				if (textureList == null)
+                {
+					Debug.LogError($"Null texture list for {tempMaterialDef.slotData.slotName} slot overlay!");
+					continue;
+                }
 				int width = Mathf.FloorToInt(tempMaterialDef.baseOverlay.textureList[0].width * material.resolutionScale.x * tempMaterialDef.slotData.overlayScale);
 				int height = Mathf.FloorToInt(tempMaterialDef.baseOverlay.textureList[0].height * material.resolutionScale.y * tempMaterialDef.slotData.overlayScale);
 				

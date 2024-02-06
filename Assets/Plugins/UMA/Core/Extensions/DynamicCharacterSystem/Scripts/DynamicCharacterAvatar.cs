@@ -497,8 +497,14 @@ namespace UMA.CharacterSystem
         public override void Start()
         {
             InitialStartup();
+            StartCoroutine(ForceUpdateUMAAfterSeconds(.5f));
         }
 
+        private IEnumerator ForceUpdateUMAAfterSeconds(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            ForceUpdate(true, true, true);
+        }
 
         public void InitialStartup()
         {
@@ -528,7 +534,6 @@ namespace UMA.CharacterSystem
 			Debug.Log("Start on DynamicCharacterAvatar: " + gameObject.name);
 #endif
             AddCharacterStateCache("NULL");
-            InitializeAvatar();
 
 
             umaData.blendShapeSettings.ignoreBlendShapes = !loadBlendShapes;

@@ -59,7 +59,7 @@ namespace SunsetSystems.Animation
             rootPosition.y = agent.nextPosition.y;
             MotionTransform.position = rootPosition;
             agent.nextPosition = rootPosition;
-            MotionTransform.rotation = animator.rootRotation;
+            //MotionTransform.rotation = animator.rootRotation;
         }
 
         private void OnDestroy()
@@ -76,7 +76,7 @@ namespace SunsetSystems.Animation
             float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
             Vector2 positionDelta = new(deltaX, deltaY);
 
-            float positionSmoothing = Mathf.Min(1, Time.deltaTime / .1f);
+            float positionSmoothing = Mathf.Min(1f, Time.deltaTime / .15f);
             smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
 
             velocity = smoothDeltaPosition / Time.deltaTime;
@@ -86,16 +86,16 @@ namespace SunsetSystems.Animation
                 velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
             }
 
-            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance;
+            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2;
 
             animator.SetBool("IsMoving", shouldMove);
-            animator.SetFloat("MoveX", velocity.x);
-            animator.SetFloat("MoveY", velocity.magnitude);
+            //animator.SetFloat("MoveX", velocity.x);
+            animator.SetFloat("MoveY", velocity.magnitude / 3);
 
             float deltaMagnitude = worldPositionDelta.magnitude;
             if (deltaMagnitude > agent.radius)
             {
-                MotionTransform.position = Vector3.Lerp((animator.rootPosition), agent.nextPosition, positionSmoothing);
+                MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
             }
         }
 

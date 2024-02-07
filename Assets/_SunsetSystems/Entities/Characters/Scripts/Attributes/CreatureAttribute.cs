@@ -4,11 +4,11 @@ using Sirenix.OdinInspector;
 [System.Serializable]
 public class CreatureAttribute : BaseStat
 {
-    [SerializeField, Range(1, 5)]
+    [SerializeField, Range(1, 50)]
     private int _baseValue = 1;
     [SerializeField, ReadOnly]
     private AttributeType _attributeType;
-    public int Value { get => GetValue(); }
+    public int Value => GetValue();
     public AttributeType AttributeType { get => _attributeType; }
 
     public override string Name => AttributeType.ToString();

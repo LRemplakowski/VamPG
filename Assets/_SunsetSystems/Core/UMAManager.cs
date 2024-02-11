@@ -36,7 +36,8 @@ namespace SunsetSystems.Core.UMA
         {
             SetBodyType(template.BodyType);
             InjectDefaultRecipes(template.BaseUmaRecipes);
-            umaAvatar.ForceUpdate(true, true, true);
+            umaAvatar.UpdatePending();
+            umaAvatar.BuildCharacter();
         }
 
         [Button]
@@ -89,7 +90,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
-                umaAvatar.ForceUpdate(true, true, true);
+                umaAvatar.UpdateUMA();
+                umaAvatar.BuildCharacter();
             }
         }
 
@@ -98,7 +100,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.UnloadWardrobeCollectionGroup(wearable.WearableWardrobe.wardrobeSlot);
-                umaAvatar.ForceUpdate(true, true, true);
+                umaAvatar.UpdateUMA();
+                umaAvatar.BuildCharacter();
             }
         }
     }

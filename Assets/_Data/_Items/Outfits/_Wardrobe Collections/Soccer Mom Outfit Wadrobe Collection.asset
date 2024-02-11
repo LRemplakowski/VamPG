@@ -32,10 +32,24 @@ MonoBehaviour:
   OverrideDNA:
     PreloadValues: []
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Soccer Mom Outfit
-    Wadrobe Collection","race":"","dna":[],"characterColors":[],"wardrobeSet":[],"raceAnimatorController":""}'
+    Wadrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothes_chest","colors":[0,103,24,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"Hair","colors":[72,45,29,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"headgear","colors":[60,109,151,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"clothes_legs","colors":[199,113,186,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false}],"wardrobeSet":[],"raceAnimatorController":""}'
   coverImages: []
   wardrobeCollection:
     sets:
     - targetRace: VampireFemale
-      wardrobeSet: []
+      wardrobeSet:
+      - slot: Chest
+        recipe: t-shirt_female01_Recipe
+      - slot: Hair
+        recipe: ponytail01_Recipe
+      - slot: Complexion
+        recipe: female_facial_hair_recipe
+      - slot: Helmet
+        recipe: baseball_cap01_Recipe
+      - slot: Legs
+        recipe: slim_pants02_Recipe
+      - slot: Feet
+        recipe: sneakers_Recipe
+      - slot: Shoulders
+        recipe: bomber_jacket_f01_Recipe
   arbitraryRecipes: []

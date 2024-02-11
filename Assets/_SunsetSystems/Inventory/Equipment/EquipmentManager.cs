@@ -23,13 +23,18 @@ namespace SunsetSystems.Entities.Characters
         public UltEvent<IEquipableItem> ItemEquipped;
         public UltEvent<IEquipableItem> ItemUnequipped;
 
-        private void Start()
+        private IEnumerator Start()
         {
-            foreach (IEquipableItem item in EquipmentSlots.Values.Select(slot => slot.GetEquippedItem()))
+            yield return new WaitForSeconds(.1f);
+            foreach (EquipmentSlotID slotID in EquipmentSlots.Keys)
             {
-                if (item == null)
-                    continue;
-                ItemEquipped?.InvokeSafe(item);
+                if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+                {
+                    var item = slot.GetEquippedItem();
+                    if (item != null)
+                        ItemEquipped?.InvokeSafe(item);
+                    yield return null;
+                }
             }
         }
 

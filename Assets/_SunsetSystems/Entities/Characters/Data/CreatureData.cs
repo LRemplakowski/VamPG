@@ -39,6 +39,9 @@ namespace SunsetSystems.Entities.Characters
             BodyType = template.BodyType;
             CreatureType = template.CreatureType;
             BaseUmaRecipes = template.BaseUmaRecipes;
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
     }
 }

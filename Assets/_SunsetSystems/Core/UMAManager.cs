@@ -34,10 +34,15 @@ namespace SunsetSystems.Core.UMA
 
         public void BuildUMAFromTemplate(ICreatureTemplate template)
         {
+            if (umaAvatar == null)
+                PrepareUMA();
             SetBodyType(template.BodyType);
             InjectDefaultRecipes(template.BaseUmaRecipes);
             umaAvatar.UpdatePending();
             umaAvatar.BuildCharacter();
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
         [Button]

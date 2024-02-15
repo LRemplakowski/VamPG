@@ -7,6 +7,7 @@ using SunsetSystems.Combat.Grid;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Interfaces;
+using UltEvents;
 
 namespace SunsetSystems.Combat
 {
@@ -29,6 +30,10 @@ namespace SunsetSystems.Combat
 
         private int _creatureCounter = 0;
 
+        [Title("Events")]
+        public UltEvent OnEncounterStart = new();
+        public UltEvent OnEncounterEnd = new();
+
         [Title("Editor Utility")]
         [Button("Begin Encounter")]
         public async void Begin()
@@ -38,6 +43,7 @@ namespace SunsetSystems.Combat
                 await encounterStartLogic.Perform();
             GameManager.Instance.CurrentState = GameState.Combat;
             GridManager.EnableGrid();
+            OnEncounterStart?.InvokeSafe();
             _creatureCounter = Creatures.Count;
             _ = CombatManager.Instance.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
@@ -63,6 +69,7 @@ namespace SunsetSystems.Combat
             GameManager.Instance.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
                 await encounterEndLogic.Perform();
+            OnEncounterEnd?.InvokeSafe();
         }
 
         private enum EncounterEndTrigger

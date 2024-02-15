@@ -103,6 +103,9 @@ namespace SunsetSystems.Entities.Characters
         public void CopyFromTemplate(ICreatureTemplate template)
         {
             Stats = new(template.StatsData);
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)

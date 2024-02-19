@@ -89,7 +89,12 @@ namespace SunsetSystems.Entities.Characters
         {
             ClearAllActions();
             Debug.Log($"Forcing Creature {gameObject.name} to position: {position}");
-            References.GetComponent<NavMeshAgent>().Warp(position);
+            References.NavMeshAgent.Warp(position);
+        }
+
+        public void ForceToPosition(Transform positionTransform)
+        {
+            ForceToPosition(positionTransform.position);
         }
 
         public void ClearAllActions()

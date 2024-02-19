@@ -27,7 +27,7 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 [nomarkup][You are only met with your own reflection in his black aviators, as you attempt to catch his eye, though. He doesn't hold any weapon, either, but there is something intimidating about his presence, nonetheless - enough that you can almost feel the hairs on the back of your neck stand on end...][/nomarkup] #line:0b2eb3f 
 [nomarkup][The other one is unnervingly pale, too. A little bit shorter and more slender in contrast. He holds his pistol at the ready, scanning the room for additional threats - his brown hair swept to one side and out of his field of vision.][/nomarkup] #line:0a06fbc 
 [nomarkup][Unlike his “friend”, he looks tense; his posture is textbook, but his gait is stiff. A glimmer of gold catches your eye as he turns - a circular pendant hung around the collar of his sweater.][/nomarkup] #line:0ef1df2 
-{$sheriff}: Ooooh! Looks like someone's been busy. [nomarkup][The man in sunglasses has an audible Texan accent.][/nomarkup] #line:01e8e04 
+{$sheriff}: Hello M'am, we know you are in here somewhere… [nomarkup][He widens his nostrils and sniffs the air.][/nomarkup] …and it smells like you've been busy! [nomarkup][The man in sunglasses has an audible Texan accent.][/nomarkup] #line:01e8e04 
 {$kieran}: There is no point in hiding, miss Bardot. This is not a conversation that you wish to delay. #line:0518162 
 {$beast}: Who are they to barge into my home like this? Let's show them some manners. #line:025adfd 
 -> (Dexterity + Brawl) [nomarkup][Punch the intruder.][/nomarkup] #line:007495a 
@@ -51,35 +51,35 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
     <<endif>>
     <<set $gotweapon to true>>
 <<if $dominicshot == true>>
-    {$sheriff}: [nomarkup][He briefly inspects the hole in his suit - clearly somewhat annoyed.][/nomarkup] Damn... this was a new suit... #line:0ed0c61 
+    {$sheriff}: [nomarkup][He briefly inspects the hole in his crisp, clean, and well-pressed suit, a blackened hold forming where the fabric has been burned by the bullet. His expression shifts to aggravation and disappointment - clearly somewhat annoyed.][/nomarkup] Hell… #line:0ed0c61 
 <<else>>
     {$sheriff}: Nice try, kid. #line:0216dcc 
 <<endif>>
 <<HandleAltercationWithDominic>>
-{$sheriff}: [nomarkup][He saunters towards you, pinning you to the fridge, but he doesn't even raise his hands.][/nomarkup] Now, do you want to do this the easy way, or the hard way? #line:07bce9b 
+{$sheriff}: [nomarkup][He saunters towards you, pinning you to the fridge, but he doesn't even raise his hands.][/nomarkup] I don't want to be a dick, but we can do it the easy way or the hard way. Your choice. #line:07bce9b 
 -> [nomarkup][Drop your weapon.][/nomarkup] <<if $gotweapon == true>> #line:0bbfd00 
     {$sheriff}: Sharp. #line:01ea142 
 -> [nomarkup][Run.][/nomarkup] #line:0ef42d5 
     [nomarkup][Before you have the chance to even take a step, Dominic seemingly reads your mind, moving with inhuman speed to block your exit.][/nomarkup] #line:0b4ff3e 
-{$sheriff}: [nomarkup][He clicks his tongue, but keeps his devilish smirk.][/nomarkup] You sure know how to party. I'll give you that. #line:07a7163 
-[nomarkup][He lights a cigarette, blowing the smoke in your face. It makes your eyes burn, and instinctively, you try to lean away. Unfortunately, there is nowhere to go that isn't pressed further against the fridge. As Dominic's eyes track you, his smile sends a chill down your spine.][/nomarkup] #line:03b1db4 
-{$sheriff}: You've proven to be quite the headache. [nomarkup][He taps the ash from his cigarette.][/nomarkup] I'll be honest with you, I'm gonna kill you, but I'm debating whether I should just go ahead and do it now, or drag you off to let my wife decide. [nomarkup][He falls silent for a second, allowing himself to breathe in another dose of thick, tar-laden smoke from his cigarette.][/nomarkup]  #line:0ac98e8 
+{$sheriff}: [nomarkup][He clicks his tongue, but keeps his devilish smirk.][/nomarkup] You sure know how to make an impression. I'll give you that. #line:07a7163 
+[nomarkup][The imposing man pulls out a cigarette and lights it. A zippo lighter in his hand who's flickering flame reflects on his sunglasses. The small flame so close to you makes you recoil instinctively and as it dances in his lenses you can feel your stomach crawl with discomfort. You find yourself cornered unfortunately, there is nowhere to go that isn't pressed further against the fridge. As Dominic's eyes track you, his smile sends a chill down your spine.][/nomarkup] #line:03b1db4 
+{$sheriff}: Ya'll've proven to be quite the headache. [nomarkup][He taps the ash from his cigarette.][/nomarkup]  I'm gonna be honest with you, you're not walkin' away from this, but I'm debatin' whether I should just go ahead and do it now, or drag you off and let my wife decide. Not that I have many options to choose from. [nomarkup][He falls silent for a second, allowing himself to breathe in another dose of thick, tar-laden smoke from his cigarette.][/nomarkup]  #line:0ac98e8 
 {$beast}: It's run, fight, or die. #line:0d33789 
 [nomarkup][You dig your nails into your flesh, hoping the pain will stop the voice plaguing your mind with unwanted advice. You're gonna have to think clearly to get out of this one.][/nomarkup] #line:0a56473 
-{$sheriff}: How about this: [nomarkup][He points at you with his cigarette.][/nomarkup] I bet you have several questions. I'll answer them so you can at least make peace with your death. Can't have any more ghosts chasing my tail. [nomarkup][He spreads his arms a little with a grin.][/nomarkup] I'm a taken man. #line:0a31205 
+{$sheriff}: How about this: [nomarkup][He points at you with his cigarette.][/nomarkup] I bettin' you have questions. I'll answer them so you can at least make peace with God or the Devil before your death. That's the least I can do for you in your situation. #line:0a31205 
 [nomarkup][Several thoughts rush through your head at once. You know you can't take them, and it doesn't look like you can make a run for it, either. Not with the other guy lurking around. You don't want to die here. Not now. The man waits, patiently watching you as a trail of smoke rises from the lit cigarette dangling out of his mouth.][/nomarkup] #line:08c7fca 
 {$pcName}: [nomarkup][I need to bide my time.][/nomarkup] #line:0712ce8 
 [nomarkup][One question in particular sticks out to me the most.][/nomarkup] #line:0858164 
 -> {$pcName}: What's happening to me? #line:09bdeb5 
-    [nomarkup][Dominic cackles, releasing a puff of smoke.][/nomarkup] #line:0f6a534 
+[nomarkup][The man in sunglasses has a contemplative look on his face, checking you over and looking for something, releasing a puff of smoke as he does.][/nomarkup] #line:0f6a534 
 {$kieran}: Confusion is to be expected, given the nature of your... predicament. #line:04357d2 
-{$sheriff}: [nomarkup][He's calmed down, but is still chuckling.][/nomarkup] You mean you still haven't figured it out yet? Damn, your Sire really did you dirty. Well, no sense in pussyfooting around it. You're a vampire. #line:0d32d70 
+{$sheriff}: [nomarkup][He seems to have come to a decision.][/nomarkup] You mean you still haven't figured it out yet? Well shit, your Daddy really did you dirty. I hate to be a guy to tell you this, but you're a vampire. #line:0d32d70 
 {$pcName}: [nomarkup][That's... that's impossible.][/nomarkup] A... what? #line:0c2651e 
-{$sheriff}: Don't act like you didn't hear me. #line:0d8b5d9 
+{$sheriff}: Yes M'am, you heard me. As unbelievable as it sounds from the guy that just barged into your apartment uninvited… [nomarkup][Dominic grimaces, the absurdity of the situation settling in on him as he shakes his head to dispel the feeling.][/nomarkup] #line:0d8b5d9 
 {$kieran}: It would be best for you to collect yourself, miss Bardot. 'Kindred' is the term used in sophisticated circles. #line:015f79e 
-{$sheriff}: Technically, yes. If you're a nerd. #line:0903793 
+{$sheriff}: Technically, yes. It's a name for uh… higher echelons of our society. You can stick with a vampire though. Just be careful who you call that way. #line:0903793 
 {$kieran}: Her first impression should not be as crude as her brutal and unceremonious introduction to this life. #line:0e428b7 
-{$sheriff}: [nomarkup][He responds with a shit-eating grin.][/nomarkup] Well, her time in “this life”, as you put it, won't be long enough to have an impression in the first place. At least now she knows she didn't kill for no reason. She was hungry. #line:00482a8 
+{$sheriff}: [nomarkup][He responds with a grin.][/nomarkup] Well, her time in “this life”, as you put it, won't be long enough to have an impression in the first place. At least now she knows she didn't kill for no reason. She was hungry. #line:00482a8 
 [nomarkup][The crazy part is that it somewhat makes sense. Not that it makes you feel any better. At least you have a more substantive explanation than this being a dream, or that you had gone totally bonkers.][/nomarkup] #line:0d0fe7d 
 {$sheriff}: Any other questions? #line:0ebaa58 
 -> {$pcName}: Why do you want to kill me? <<if visited("WantToKill") == false>> #line:046bb83 
@@ -98,11 +98,11 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 title: WantToKill
 tags:
 ---
-{$sheriff}: I don't <i>want</i> to kill you, per se. That's just the law of the land. The cookie crumbles as it will. Besides, you already killed someone in cold blood. Isn't that reason enough for justice to be served?		 #line:0047c12 
+{$sheriff}: Darlin' I don't want to kill you. That's just the law of the land. The way it's gotta be. Besides, you already killed someone in cold blood. Isn't that reason enough for justice to be served?		 #line:0047c12 
 {$kieran}: Nobody takes kindly to wanton misconduct in their territory, miss Bardot. The circumstances of your transgressions are the sole reason we are exercising any form of lenience, here. #line:073bfde 
-{$sheriff}: Well, there's that, but it's not like we're saints either. Let's just say, we have a way of doing things, and unfortunately, your blood sucking is gonna fuck up our blood sucking if we don't put a stop to it. No hard feelings.	  #line:0fb68b5 
+{$sheriff}: Well, there's that, but it's not like we're saints either. Let's just say, we have our own way of doing things, and unfortunately, your blood-sucking is gonna fuck up our blood-sucking if we don't put a stop to it. No hard feelings - it's nothing personal.	  #line:0fb68b5 
 {$pcName}: The 'law of the land'? #line:0d27bba 
-{$sheriff}: Yes ma'am. Sorry, but I don't make the rules here. It's out of my hands. #line:0690936 
+{$sheriff}: Yes ma'am. Sorry, but I don't make the rules here. It's out of my hands. I'm just making sure everyone else is following them to the letter. #line:0690936 
 {$kieran}: There is no time for prolonged debate on the issue of your existence, currently, that is. #line:0c47f00 
 {$pcName}: [nomarkup][Well, shit.][/nomarkup] #line:0fdec00 
 <<jump AnyOtherQuestions>>
@@ -111,7 +111,7 @@ title: HowItHappened
 tags:
 ---
 {$kieran}: We call it the Embrace. Your Sire killed you by draining all of your blood, and then gave you new life with theirs. #line:025fe58 
-{$sheriff}: Not as kinky as it sounds. Be thankful you don't remember it.  #line:0b4003d 
+{$sheriff}: Not as kinky as it sounds. Be thankful you don't remember it. It's usually quite a dire experience. Like bein' killed and such.  #line:0b4003d 
 <<jump AnyOtherQuestions>>
 ===
 title: SireInfo
@@ -119,9 +119,9 @@ tags:
 ---
 {$sheriff}: Well not to get all “the birds and the bees” on you, but your Sire is... well. #line:071f51b 
 {$kieran}: The person who did this to you. #line:07e49d8 
-{$sheriff}: Your vampire daddy... or mommy. Don't want to assume. #line:080498a 
+{$sheriff}: Your vampire momma… or daddy. Impolite to assume. #line:080498a 
 -> {$pcName}: Who is my Sire? #line:0643754 
-    {$sheriff}:  We were hoping you knew. Wanted to kill you both in one fell swoop. [nomarkup][He sighs.][/nomarkup] Things can never be easy.   #line:06d335b 
+    {$sheriff}:  God only knows if you don't. Wanted to kill you both in one fell swoop. [nomarkup][He sighs.][/nomarkup] Things can never be easy.   #line:06d335b 
 <<jump AnyOtherQuestions>>
 ===
 title: WhoAreYou
@@ -132,9 +132,9 @@ tags:
 {$sheriff}: Sure you can. #line:0d2b8f2 
 {$kieran}: [nomarkup][He sighs, glaring tired daggers at Dominic.][/nomarkup] #line:091e88b 
 -> {$pcName}: And you have a wife? #line:0269912 
-    {$sheriff}: [nomarkup][He laughs.][/nomarkup] You sound surprised, but since you asked: my wife, Sam, is the Prince who rules Vegas' vampires. Well, the cool ones anyway. What can I say? I like 'em powerful. Doesn't hurt that she's easy on the eyes, either. [nomarkup][He sighs.][/nomarkup] Pity. She would have liked you. She likes spunk. #line:084d5ca 
-    {$kieran}: [nomarkup][Kieran raises an eyebrow.][/nomarkup] Hm. I was under the impression that Prince Douglas had made it clear you are to address her by her full title - <i>especially</i> in work settings?   #line:078a912 
-    {$sheriff}: [nomarkup][He turns slowly to Kieran.][/nomarkup] Listen here, you little shit. I'm having a conversation at the moment, so will you let me get on with it? #line:0145688 
+    {$sheriff}: [nomarkup][He laughs.][/nomarkup] You sound surprised, but since you asked: my wife, Sam, is the Prince who rules Vegas' vampires. What can I say? I like 'em powerful. [nomarkup][He sighs.][/nomarkup] Pity you're not gonna meet her. I think she would'a liked you. Even despite… well. Everythin' else. #line:084d5ca 
+    {$kieran}: Why do you prolong the inevitable Sheriff Evans? You’re just making this worse for everyone.   #line:078a912 
+    {$sheriff}: [nomarkup][He turns slowly to Kieran.][/nomarkup] … Kieran, I’m pretendin’ I didn’t hear you say that so we can continue to be friends. Do you mind if I continue my conversation? #line:0145688 
     {$kieran}: Sure, you can. [nomarkup][Kieran's response is accompanied by a sly smile.][/nomarkup] #line:00b762d 
 <<jump AnyOtherQuestions>>
 ===
@@ -143,9 +143,9 @@ tags:
 ---
 {$sheriff}: We have our ways. #line:0eb9708 
 {$kieran}: We got an anonymous tip. #line:0d7d448 
-{$sheriff}: Man, why you gotta give up our ways? #line:01a1e9a 
-{$kieran}: [nomarkup][He shrugs.][/nomarkup] It doesn't require a genius to make the connection. #line:01e4458 
-{$sheriff}: My, you're annoying tonight - more so than usual. #line:0c954e6 
+{$sheriff}: Oh-why you gotta give up our ways? #line:01a1e9a 
+{$kieran}: [nomarkup][He shrugs.][/nomarkup] It does not require a genius to link two points together, mister Evans. #line:01e4458 
+{$sheriff}: My, why you pickin’ tonight of all nights to get yourself a spine. You’re gettin’ on my nerves Kieran - more than usual. #line:0c954e6 
 <<jump AnyOtherQuestions>>
 ===
 title: AnyOtherQuestions
@@ -169,22 +169,21 @@ title: DropButt
 tags:
 ---
 <<if $kevinmurdered == true>>
-    {$sheriff}: [nomarkup][He drops the cigarette butt in the pool of Kevins' blood mixed with the slurry from the sink. It quenches with a near-silent hiss.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus, but unfortunately for you I have plans tonight and am already running late. I hereby sentence you to Death 2: Electric Boogaloo. #line:0fd6d0a 
+    {$sheriff}: [nomarkup][He drops the cigarette butt in the pool of Kevins' blood mixed with the slurry from the sink. It quenches with a near-silent hiss.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus but I can’t let you run around. Think of it rather that this nightmare will be over soon. #line:0fd6d0a 
 <<elseif $coveredinblood == true>>
-    {$sheriff}: [nomarkup][He drops the cigarette butt in the pool of bloody slop from the sink. It quenches with a near-silent hiss.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus, but unfortunately for you I have plans tonight and am already running late. I hereby sentence you to Death 2: Electric Boogaloo. #line:08a18af 
+    {$sheriff}: [nomarkup][He drops the cigarette butt in the pool of bloody slop from the sink. It quenches with a near-silent hiss.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus but I can’t let you run around. Think of it rather that this nightmare will be over soon. #line:08a18af 
 <<else>>
-    {$sheriff}: [nomarkup][He drops the cigarette butt on the ground and quenches it with the heel of his shoe.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus, but unfortunately for you I have plans tonight and am already running late. I hereby sentence you to Death 2: Electric Boogaloo. #line:0c962fb 
+    {$sheriff}: [nomarkup][He drops the cigarette butt on the ground and quenches it with the heel of his shoe.][/nomarkup] Well, my friend, it looks like our time has come to an end. I'd have loved to introduce you to the missus but I can’t let you run around. Think of it rather that this nightmare will be over soon. #line:0c962fb 
 <<endif>>
-{$kieran}:  [nomarkup][He sighs softly.][/nomarkup] Enough demolition has been done to this flat to justify a sequel, I cannot deny that. #line:08d9bfd 
 [nomarkup][Kieran walks around the room, but stops at the investigation board.][/nomarkup] #line:07ed8d2 
-{$sheriff}: This is new, Kieran got my reference. Wouldn't have guessed that our tastes are so similar. [nomarkup][He sighs.][/nomarkup] Let's just get this over with. Promise I'll make it quick. [nomarkup][He draws his .44 Auto Mag pistol. He is perhaps a little too enthusiastic as he steps towards you.][/nomarkup] #line:0d5416f 
+{$sheriff}: [nomarkup][He sighs.][/nomarkup] Let's just get this over with. I'll make it quick. [nomarkup][He draws his .44 Auto Mag pistol. He is perhaps a little too enthusiastic as he steps towards you.][/nomarkup] #line:0d5416f 
 {$beast}: I have to do something. Otherwise, I'm done for, and the party's barely even started yet. #line:09c66c6 
 [nomarkup][If there ever was a time for self preservation it'd be now. You reach for your weapon, but Dominic rushes you and pins you by the throat to the refrigerator. Behind his sunglasses, he's far too chipper for a man holding a gun to your head. You hear the safety click, and you close your eyes. This is it... In reality, the sound lasts only a second, but it feels like an eternity as you await the shot that ends you for good.][/nomarkup] #line:024b59c 
 {$pcName}: [nomarkup][Arthur...][/nomarkup] #line:0a40283 
 {$beast}: ... is he here? No. I need to stop it with the useless sentimentality and think about myself, first and foremost. There <i>has</i> to be a way to survive this. Think! #line:011edba 
-{$sheriff}: I want you to know: despite appearances, I'm not into this. #line:063df2d 
+{$sheriff}: Any last words? I want you to know: despite appearances, I'm really not into this. #line:063df2d 
 {$beast}: Don't lie to yourself, you ass. You enjoy it more than you want to admit. #line:0a04b53 
-{$kieran}: [nomarkup][Kieran speaks up, staring intently at the investigation board.][/nomarkup] Could we delay the execution for a moment? It seems miss Bardot has a knack for investigations. #line:063cb21 
+{$kieran}: [nomarkup][Kieran speaks up, staring intently at the investigation board.][/nomarkup] Please, could we delay the execution for a moment, Sheriff Evans? You remember Miss Bardot, she has a knack for investigations. #line:063cb21 
 {$sheriff}: [nomarkup][He looks back at Kieran, hand still firm around your neck.][/nomarkup] ... And? #line:008cb19 
 {$beast}: Kick him in the balls, now! While he's distracted. Just like in the self-defense classes. #line:03aa13b 
 {$kieran}: The deed is done. Miss Bardot has been Embraced, and we concluded we cannot do much to amend this situation beyond an execution. This may no longer be the case, given what I am looking at...  #line:04446cd 
@@ -195,33 +194,34 @@ tags:
 <<if GetAttributeSkillPoolSize("Composure","Insight") >= 4>>
     [nomarkup][Kieran is leveraging Dominic's pride in his ability to do his job. To admit that staying hidden that long is not a feat to be impressed by would be equivalent to Dominic admitting that he is not a competent investigator.][/nomarkup] #line:0f02589 
 <<endif>>
-{$sheriff}: [nomarkup][He slightly loosens his iron grip, but remains steadfast. His brow furrows, and you can practically see the cogs in his mind beginning to spin.][/nomarkup] I see why Kate keeps you around, Kieran. You make good points, but Sam would be pissed if she found out I let a fledgling who can't even change their own diaper traipse around her Domain. #line:06849b0 
+{$sheriff}: [nomarkup][He slightly loosens his iron grip, but remains steadfast. His brow furrows, and you can practically see the cogs in his mind beginning to spin.][/nomarkup]  I see why Kate keeps you around, Kieran. You make good points, but Sam would be pissed if she found out I allowed a fledgling who couldn’t pour piss outta a boot with the instructions on the heel to fuck her Praxis. #line:06849b0 
 {$beast}: I'm not a child, dickwad.  #line:00fd1ad 
 {$kieran}: Like you stated, she is not experienced in our ways. Tracking her down would not be challenging. Especially now, when we know of her identity and appearance. [nomarkup][He looks straight at you - cold, clinical, and evaluating.][/nomarkup] Should she prove herself capable, the Praxis will surely find a place for her. If not, then consider this a take-away rather than drive-thru. #line:0faa771 
-{$sheriff}: [nomarkup][Dominic stays silent for a few moments before his cheeky smile returns. He lets go of your throat as quickly as he grabbed it, causing you to drop to the floor.][/nomarkup] You've convinced me, but she's your responsibility. She fucks up?  Your ass is on the line too. I hope whatever ulterior motive you have is worth it. #line:04eea9b 
+{$sheriff}: [nomarkup][Dominic stays silent for a few moments before his cheeky smile returns; he sighs, shakes his head and takes a step back. The hand around your throat gone as quickly as he grabbed it, causing you to drop to the floor.][/nomarkup]
+{$sheriff}: You’ve convinced me, but she’s your responsibility. Come hell or high water you’re in this together. I hope whatever ulterior motive ya’ll have is worth it. #line:04eea9b 
 {$kieran}: [nomarkup][Kieran blinks several times - it seems that making this argument may have been ill-advised, after all.][/nomarkup] ... This is not exactly what I had in mind... #line:0a63aa8 
-{$sheriff}: [nomarkup][He grins, showing nearly all his teeth in satisfaction.][/nomarkup] I know. #line:0349719 
+{$sheriff}: [nomarkup][He grins, showing nearly all his teeth in satisfaction.][/nomarkup] Oh son I know. #line:0349719 
 -> {$pcName}: Thanks, I guess. #line:0f24878 
-    {$sheriff}:  That's the spirit. [nomarkup][He pats you in the arm - like you're his best friend. It makes you feel even more uncomfortable.][/nomarkup] You should be thanking Kieran, though. I do have one condition. Because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else... [nomarkup][He points at his gun.][/nomarkup] #line:08fe248 
+    {$sheriff}:  That's the spirit. [nomarkup][He pats you in the arm - like you're his best friend. It makes you feel even more uncomfortable.][/nomarkup] It’s not me you should be givin’ thanks to. I do have one condition. Because I ain’t goin’ home to my wife having broken too many Traditions, can’t have the rabble start thinking I’m handing out hall passes like hot cakes. You need to find your sire. Tonight. [nomarkup][You watch as lowers his sunglasses slightly and you see his eyebrows rise over the rims of his sunglasses, a serious look on his face.][/nomarkup] #line:08fe248 
 -> {$pcName}: I'm nobody's pet. #line:0df7461 
-    {$sheriff}: Whatever you want to call it. Better behave though, unless you wanna be put down like a rabid dog. You should be thanking Kieran. I do have one condition, though, because I can't go home to my wife having broken too many Traditions, lest the rabble starts thinking I'm handing out hall passes willy-nilly. You need to find your sire. Tonight. Or else... [nomarkup][He points at his gun.][/nomarkup] #line:0cceb90 
+    {$sheriff}: I think you might be darlin’. Think whatever you want, but better behave unless you wanna be put down like a rabid dog. You should be thanking Kieran. I do have one condition, though, because I can’t go home to my wife having broken too many Traditions, lest the rabble starts thinking I’m handing out hall passes like hot cakes. You need to find your sire. Tonight. We clear? [nomarkup][You watch as lowers his sunglasses slightly and you see his eyebrows rise over the rims of his sunglasses, a serious look on his face.][/nomarkup] #line:0cceb90 
 {$pcName}: That's impossible! I don't even remember where I was last night. #line:0df954f 
 {$kieran}: ... I'm sure we will find some way to manage. [nomarkup][He says, looking at you.][/nomarkup] #line:05082d0 
-{$sheriff}: Well... hate to be an asshole, but that's not my problem. At least, not anymore, thanks to yours truly. [nomarkup][He grins again at Kieran.][/nomarkup] #line:0e52fa3 
+{$sheriff}: Well… hate to tell you, but that ain’t my problem. But you’ve got a shot now don’t ya? Give thanks to your new best friend. [nomarkup][He grins again at Kieran.][/nomarkup] #line:0e52fa3 
 {$kieran}: [nomarkup][He takes a deep breath, trying to compose himself once more.][/nomarkup] ... We will start with the basics. I'm sure that the answer to our question is around here somewhere. #line:0e57234 
-{$sheriff}: [nomarkup][He taps his foot a couple of times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.][/nomarkup] You know, I don't want to tell you how to do your job - it would be against my code of ethics. Besides, I like to see Kieran squirm at the sheer thought that he may not survive to see the next evening. But I can give you a clue. Free of charge. Just don't get used to it. [nomarkup][In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.][/nomarkup] #line:0820197 
+{$sheriff}: [nomarkup][He taps his foot a couple of times, glancing at the ground. The spurs of his cowboy boots jingle lightly in response.][/nomarkup] You know, I don’t want to tell ya’ how to do your job - it would be against my code of ethics. 	Besides, I like to see Kieran squirm at the sheer thought that he may not survive to see the next evening. But I can give you a clue. Free of charge. Just don’t get used to it.  [nomarkup][In a flash, he pulls out a knife and cuts your palm open. Thick, dark blood slowly leaks out.][/nomarkup] #line:0820197 
 {$pcName}: Ow! #line:00955f7 
 [nomarkup][He grips your hand and slurps up a glob of blood. As his tongue makes contact with the slash, it seals before you.][/nomarkup] #line:0044c8d 
 {$pcName}: [nomarkup][Why is he...? The fuck?][/nomarkup] #line:0a7c040 
 <<if $brujah == true>>
-    {$sheriff}: [nomarkup][He looks like a wine taster savoring your blood.][/nomarkup] Ah, of course you're a Brujah. #line:0af945a 
+    {$sheriff}: [nomarkup][He looks like a wine taster savoring your blood.][/nomarkup] Ah, ‘course you’re a Brujah. #line:0af945a 
 <<endif>> 
 {$pcName}: What's that supposed to mean? #line:0dc424c 
 {$kieran}: Similar to how humans have ethnicities, Kindred have certain... classifications applicable to us. We call them Clans. You come from an ancient bloodline of Kindred known for their... strong convictions for the cause. #line:0efa0eb 
-{$sheriff}: So it's not your fault you're annoying. #line:06773aa 
+{$sheriff}: So it’s not your fault you’re the kind only a Sire could love. #line:06773aa 
 {$pcName}: [nomarkup][Coming from this guy of all people...][/nomarkup] #line:0d9a94d 
 {$sheriff}: Mmmm, based on the potency of your blood, your Sire is not somebody to be messed with, so best of luck, you two. #line:073f51b 
-{$sheriff}: I'm off. I'll send a team to clean up soon. Pleasure to finally meet you, Desiree. I'll check in later. [nomarkup][He lowers his shades a bit and winks.][/nomarkup]  #line:079d346 
+{$sheriff}: I’m off. I'll send a team to clean up soon. Pleasure to finally meet you, Desiree. I’ll be in touch. [nomarkup][He lowers his shades a bit and winks.][/nomarkup]  #line:079d346 
 {$kieran}: Well then. [nomarkup][His breath takes a short halt as he is looking at his watch.][/nomarkup] We are on the clock, miss Bardot. We have approximately nine hours so let's make the best of it. [nomarkup][He looks back up at you.][/nomarkup] Do you remember anything, whatsoever, from the last 24 hours? #line:0ba7936 
 -> {$pcName}: I wish I did. #line:0c089cd 
     {$kieran}: That makes two of us. Sadly, it does not help us, either. #line:0f914a5 

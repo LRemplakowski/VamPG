@@ -38,7 +38,10 @@ namespace SunsetSystems.UI
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
                 List<IGameDataProvider<InventoryEntry>> items = new();
-                items.AddRange(InventoryManager.PlayerInventory.Contents);
+                foreach (InventoryEntry entry in InventoryManager.PlayerInventory.Contents)
+                {
+                    items.Add(entry);
+                }
                 _inventoryContentsUpdater.UpdateViews(items);
             }
         }
@@ -48,14 +51,14 @@ namespace SunsetSystems.UI
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
                 List<IGameDataProvider<IEquipmentSlot>> slots = new();
-                throw new NotImplementedException();
-                //if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
-                //{
-                //    foreach (string key in data.EquipmentSlots.Keys)
-                //    {
-                //        slots.Add(data.EquipmentSlots[key]);
-                //    }
-                //}
+                var memberEquipment = PartyManager.Instance.GetPartyMemberByID(characterKey).References.EquipmentManager;
+                if (memberEquipment != null)
+                {
+                    foreach (EquipmentSlotID key in memberEquipment.EquipmentSlots.Keys)
+                    {
+                        slots.Add(memberEquipment.EquipmentSlots[key]);
+                    }
+                }
                 _equipmentContentsUpdater.UpdateViews(slots);
             }
         }

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SunsetSystems.Equipment
 {
     [System.Serializable]
-    public class EquipmentSlot : IEquipmentSlot, IGameDataProvider<EquipmentSlot>
+    public class EquipmentSlot : IEquipmentSlot
     {
         [field: SerializeField, ReadOnly]
         public EquipmentSlotID ID { get; private set; }
@@ -15,7 +15,7 @@ namespace SunsetSystems.Equipment
         private ItemCategory _acceptedCategory;
         public ItemCategory AcceptedCategory { get => _acceptedCategory; }
 
-        public EquipmentSlot Data => this;
+        public IEquipmentSlot Data => this;
 
         [SerializeField]
         private IEquipableItem _equippedItem;

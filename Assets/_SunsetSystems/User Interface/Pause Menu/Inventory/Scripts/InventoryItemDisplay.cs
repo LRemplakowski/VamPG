@@ -63,7 +63,7 @@ namespace SunsetSystems.UI
         private void ResetView()
         {
             _icon.gameObject.SetActive(false);
-            _itemEntry = null;
+            //_itemEntry = null;
             _stackSize.gameObject.SetActive(false);
             interactable = false;
         }

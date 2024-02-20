@@ -1,12 +1,13 @@
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.UI.Utils;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Equipment
 {
-    public interface IEquipmentSlot
+    public interface IEquipmentSlot : IGameDataProvider<IEquipmentSlot>
     {
         ItemCategory AcceptedCategory { get; }
 

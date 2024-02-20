@@ -56,6 +56,11 @@ namespace SunsetSystems.Inventory
             PlayerInventory.AddItem(item);
         }
 
+        public bool TakeItemFromPlayer(IBaseItem item, int amount)
+        {
+            return PlayerInventory.TryRemoveItem(new(item, amount));
+        }
+
         public bool GetInventoryContainsItemWithReadableID(string itemID, out int count)
         {
             count = 0;

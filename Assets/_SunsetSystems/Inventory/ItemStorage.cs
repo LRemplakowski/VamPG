@@ -15,8 +15,8 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private List<ItemCategory> _acceptedItemTypes = new();
         [OdinSerialize]
-        private List<InventoryEntry> _contents = new();
-        public List<InventoryEntry> Contents => _contents;
+        private Dictionary<string, InventoryEntry> _contents = new();
+        public List<InventoryEntry> Contents => _contents.Values.ToList();
 
         public UltEvent<InventoryEntry> OnItemAdded, OnItemRemoved;
 
@@ -24,10 +24,18 @@ namespace SunsetSystems.Inventory
         {
             if (_acceptedItemTypes.Count() > 0)
             {
-                _contents
-                    .FindAll(entry => entry != null && entry._item != null)
-                    .FindAll(entry => !_acceptedItemTypes.Contains(entry._item.ItemCategory))
-                    .ForEach(item => _contents.Remove(item));
+                List<string> keysToRemove = new();
+                foreach (string key in _contents.Keys)
+                {
+                    if (_contents.TryGetValue(key, out var value) && _acceptedItemTypes.Contains(value._item.ItemCategory) is false)
+                    {
+                        keysToRemove.Add(key);
+                    }
+                }
+                foreach (string key in keysToRemove)
+                {
+                    _contents.Remove(key);
+                }
             }
         }
 
@@ -38,17 +46,19 @@ namespace SunsetSystems.Inventory
 
         public void AddItem(InventoryEntry itemEntry)
         {
-            if (itemEntry == null || itemEntry._item == null)
+            if (itemEntry._item == null)
                 return;
             if (IsItemTypeAccepted(itemEntry._item.ItemCategory))
             {
-                if (DoesInventoryContainItem(itemEntry._item))
+                string entryID = itemEntry._item.DatabaseID;
+                if (_contents.TryGetValue(entryID, out InventoryEntry storedItem))
                 {
-                    _contents.Find(existing => existing._item.DatabaseID.Equals(itemEntry._item.DatabaseID))._stackSize += itemEntry._stackSize;
+                    storedItem._stackSize += itemEntry._stackSize;
+                    _contents[entryID] = storedItem;
                 }
                 else
                 {
-                    _contents.Add(itemEntry);
+                    _contents[entryID] = itemEntry;
                 }
                 OnItemAdded?.InvokeSafe(itemEntry);
             }
@@ -56,7 +66,7 @@ namespace SunsetSystems.Inventory
 
         private bool DoesInventoryContainItem(IBaseItem item)
         {
-            return _contents.Any(entry => entry._item.DatabaseID.Equals(item.DatabaseID));
+            return _contents.TryGetValue(item.DatabaseID, out _);
         }
 
         public bool TryRemoveItems(List<InventoryEntry> itemEntries)
@@ -66,14 +76,15 @@ namespace SunsetSystems.Inventory
 
         public bool TryRemoveItem(InventoryEntry entry)
         {
-            if (DoesInventoryContainItem(entry._item))
+            if (_contents.TryGetValue(entry._item.DatabaseID, out InventoryEntry existing))
             {
-                InventoryEntry existing = _contents.Find(existingEntry => existingEntry._item.DatabaseID.Equals(entry._item.DatabaseID));
                 if (existing._stackSize >= entry._stackSize)
                 {
                     existing._stackSize -= entry._stackSize;
                     if (existing._stackSize <= 0)
-                        _contents.Remove(existing);
+                        _contents.Remove(existing._item.DatabaseID);
+                    else
+                        _contents[existing._item.DatabaseID] = existing;
                     OnItemRemoved?.InvokeSafe(entry);
                     return true;
                 }
@@ -95,7 +106,7 @@ namespace SunsetSystems.Inventory
     }
 
     [Serializable]
-    public class InventoryEntry : IGameDataProvider<InventoryEntry>
+    public struct InventoryEntry : IGameDataProvider<InventoryEntry>
     {
         [OdinSerialize]
         public IBaseItem _item;

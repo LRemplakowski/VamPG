@@ -535,8 +535,8 @@ namespace UMA.CharacterSystem
 #endif
             AddCharacterStateCache("NULL");
 
-
-            umaData.blendShapeSettings.ignoreBlendShapes = !loadBlendShapes;
+            if (umaData != null)
+                umaData.blendShapeSettings.ignoreBlendShapes = !loadBlendShapes;
 
             if (animationController == null)
             {

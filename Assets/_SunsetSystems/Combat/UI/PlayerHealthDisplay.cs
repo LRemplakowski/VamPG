@@ -21,7 +21,7 @@ namespace SunsetSystems.Combat.UI
 
         public void UpdateHealthDisplay()
         {
-            HealthData data = combatManager.CurrentActiveActor.References.GetComponentInChildren<StatsManager>().GetHealthData();
+            HealthData data = combatManager.CurrentActiveActor.References.GetCachedComponentInChildren<StatsManager>().GetHealthData();
             healthText.text = $"HP: {data.maxHealth - data.superficialDamage}/{data.maxHealth}";
         }
     }

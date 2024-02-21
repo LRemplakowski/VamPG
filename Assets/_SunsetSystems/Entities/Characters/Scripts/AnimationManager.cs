@@ -103,7 +103,7 @@ namespace SunsetSystems.Animation
         {
             Rig layer = new GameObject("RigLayer").AddComponent<Rig>();
             layer.transform.SetParent(rigBuilder.transform);
-            UMAData umaData = owner.References.GetComponentInChildren<UMAData>();
+            UMAData umaData = owner.References.GetCachedComponentInChildren<UMAData>();
 
             rightHandConstraint = new GameObject("RightHandIK").AddComponent<TwoBoneIKConstraint>();
             rightHandConstraint.transform.parent = layer.transform;

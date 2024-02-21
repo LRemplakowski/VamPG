@@ -194,8 +194,8 @@ namespace SunsetSystems.Combat
             return Owner.PerformAction(action, clearQueue);
         }
 
-        public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
-        public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
+        public new T GetComponent<T>() where T : Component => References.GetCachedComponent<T>();
+        public new T GetComponentInChildren<T>() where T : Component => References.GetCachedComponentInChildren<T>();
 
         public void SignalEndTurn()
         {
@@ -278,7 +278,7 @@ namespace SunsetSystems.Combat
                 }
                 else
                 {
-                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetComponent<NavMeshAgent>());
+                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<NavMeshAgent>());
                     gridManager.ShowCellsInMovementRange(this);
                     if (nearestUnitInRangeAdjacentToTarget != null && MoveToGridPosition(nearestUnitInRangeAdjacentToTarget.GridPosition))
                     {
@@ -318,7 +318,7 @@ namespace SunsetSystems.Combat
             if (target != null)
             {
                 Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(target.Transform.position);
-                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetComponent<NavMeshAgent>(), out _);
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<NavMeshAgent>(), out _);
                 IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
                 foreach (GridUnit commonUnit in commonElements)
                 {

@@ -68,7 +68,7 @@ namespace SunsetSystems.Combat.UI
                     ICombatant combatantAtIndex = combatantsInOrder[i];
                     if (combatantAtIndex == null)
                         continue;
-                    AssetReferenceSprite portraitRef = combatantAtIndex.References.GetComponentInChildren<CreatureData>().PortraitAssetRef;
+                    AssetReferenceSprite portraitRef = combatantAtIndex.References.GetCachedComponentInChildren<CreatureData>().PortraitAssetRef;
                     newPortraitReferences.Add(portraitRef);
                     Task<Sprite> portraitTask = AddressableManager.Instance.LoadAssetAsync(portraitRef);
                     spriteLoadingTasks.Add(portraitTask);

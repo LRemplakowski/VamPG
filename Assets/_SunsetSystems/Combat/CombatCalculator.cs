@@ -34,7 +34,7 @@ namespace SunsetSystems.Combat
             double critRoll = 0;
 
             float heightDifference = attacker.References.Transform.position.y - defender.References.Transform.position.y;
-            if (heightDifference > 2f && attacker.References.GetComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+            if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
             {
                 attackModifier.HitChanceMod += .1d;
                 attackModifier.DamageMod += 2;

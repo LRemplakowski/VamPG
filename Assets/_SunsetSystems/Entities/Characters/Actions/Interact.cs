@@ -16,17 +16,15 @@ namespace SunsetSystems.Entities.Characters.Actions
         private readonly NavMeshAgent navMeshAgent;
         [ShowInInspector, ReadOnly]
         private Vector3 destination;
-        private float stoppingDistance;
         private IEnumerator delayedInteractionCoroutine;
 
-        public Interact(IInteractable target, IActionPerformer owner) : base(owner, true)
+        public Interact(IActionPerformer owner, IInteractable target) : base(owner, true)
         {
             this.target = target;
             conditions.Add(new InteractionComplete(target));
             this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
             NavMesh.SamplePosition(target.InteractionTransform.position, out var hit, 1f, NavMesh.AllAreas);
             this.destination = hit.position;
-            this.stoppingDistance = target.InteractionDistance - 0.01f;
         }
 
         public override void Abort()
@@ -48,7 +46,6 @@ namespace SunsetSystems.Entities.Characters.Actions
                 if (navMeshAgent.SetDestination(destination))
                 {
                     conditions.Add(new Destination(navMeshAgent));
-                    navMeshAgent.stoppingDistance = stoppingDistance;
                     delayedInteractionCoroutine = InteractWhenCloseEnough();
                     Owner.CoroutineRunner.StartCoroutine(delayedInteractionCoroutine);
                 }

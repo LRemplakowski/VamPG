@@ -49,9 +49,9 @@ namespace SunsetSystems.Entities.Characters
         {
             Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
             _owner = GetComponentInParent<Creature>();
-            _dca = _owner.References.GetComponentInChildren<DynamicCharacterAvatar>();
+            _dca = _owner.References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
             _characterID = _owner.References.CreatureData.DatabaseID;
-            _animationController = _owner.References.GetComponentInChildren<AnimationManager>();
+            _animationController = _owner.References.GetCachedComponentInChildren<AnimationManager>();
             _initializedOnce = true;
         }    
 

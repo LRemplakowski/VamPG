@@ -175,7 +175,7 @@ title: hackingFailure
 title: computerDestroyed
 ---
 [nomarkup][You are pissed... Everything in your life tonight is going completely haywire, and this soulless machine is only adding to the distress. Your vision goes red. You don't even remember punching the  screen and breaking the glass - only the pain of lacerated skin and the smell of burnt circuitry has brought you back to your senses.][/nomarkup]
-<<DealDamage ($pcName,2,"superficial")>>
+<<DealDamage $pcName 2>>
 <<if Roll ("Intelligence","Science")>=3>>
     [nomarkup][It's a miracle that your outburst didn't cause a power shortage.][/nomarkup]
 <<endif>>

@@ -30,6 +30,6 @@ namespace SunsetSystems.AI
 
         public bool IsMyTurn => CombatManager.Instance.CurrentActiveActor?.Equals(Owner) ?? false;
 
-        public WeaponType CurrentWeaponType => Owner.References.GetComponentInChildren<IWeaponManager>().GetSelectedWeapon().WeaponType;
+        public WeaponType CurrentWeaponType => Owner.References.GetCachedComponentInChildren<IWeaponManager>().GetSelectedWeapon().WeaponType;
     }
 }

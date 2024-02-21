@@ -57,7 +57,7 @@ namespace SunsetSystems.Combat.UI
                 _ = UpdateCurrentActorPortrait(combatant);
                 currentActorHealth.UpdateHealthDisplay();
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
-                bpBar.UpdateActiveChunks(combatant.References.GetComponentInChildren<StatsManager>().Hunger.GetValue());
+                bpBar.UpdateActiveChunks(combatant.References.GetCachedComponentInChildren<StatsManager>().Hunger.GetValue());
                 disciplineBar.ShowAbilities(combatant);
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
@@ -71,7 +71,7 @@ namespace SunsetSystems.Combat.UI
 
         private void OnBloodPointSpent(ICombatant combatant)
         {
-            bpBar.UpdateActiveChunks(combatant.References.GetComponentInChildren<StatsManager>().Hunger.GetValue());
+            bpBar.UpdateActiveChunks(combatant.References.GetCachedComponentInChildren<StatsManager>().Hunger.GetValue());
         }
 
         private async Task UpdateCurrentActorPortrait(ICombatant actor)

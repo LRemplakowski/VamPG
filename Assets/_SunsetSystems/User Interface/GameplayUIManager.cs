@@ -12,8 +12,6 @@ namespace SunsetSystems.UI
     public class GameplayUIManager : MonoBehaviour
     {
         [field: SerializeField]
-        public HUDController InGameUI { get; private set; }
-        [field: SerializeField]
         public PauseMenuController PauseMenuUI { get; private set; }
         [field: SerializeField]
         public ContainerGUI ContainerGUI { get; private set; }
@@ -32,7 +30,7 @@ namespace SunsetSystems.UI
                 return;
             }
             Vector3 screenPoint = Camera.main.WorldToScreenPoint(nameplateReciever.NameplateWorldPosition);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(InGameUI.transform as RectTransform, screenPoint, Camera.main, out Vector2 nameplatePosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(this.transform as RectTransform, screenPoint, Camera.main, out Vector2 nameplatePosition);
             HoverNameplate.transform.position = screenPoint;
             HoverNameplate.SetNameplateText(nameplateReciever.NameplateText);
             HoverNameplate.gameObject.SetActive(true);

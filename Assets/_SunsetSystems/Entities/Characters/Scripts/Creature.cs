@@ -70,6 +70,7 @@ namespace SunsetSystems.Entities.Characters
         #endregion
 
         #region ICreature
+        public new Transform Transform => References.Transform;
         public MonoBehaviour CoroutineRunner => this;
         public new Faction Faction => References.CreatureData.Faction;
         public new ICreatureReferences References
@@ -139,8 +140,8 @@ namespace SunsetSystems.Entities.Characters
             InjectDataFromTemplate(templateProvider.CreatureTemplate);
         }
 
-        public new T GetComponent<T>() where T : Component => References.GetComponent<T>();
-        public new T GetComponentInChildren<T>() where T : Component => References.GetComponentInChildren<T>();
+        public new T GetComponent<T>() where T : Component => References.GetCachedComponent<T>();
+        public new T GetComponentInChildren<T>() where T : Component => References.GetCachedComponentInChildren<T>();
         #endregion
 
         #region ICreatureTemplateProvider

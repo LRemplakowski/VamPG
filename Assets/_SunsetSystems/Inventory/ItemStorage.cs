@@ -12,16 +12,20 @@ namespace SunsetSystems.Inventory
 {
     public class ItemStorage : SerializedMonoBehaviour
     {
+        [Title("Data")]
         [SerializeField]
         private List<ItemCategory> _acceptedItemTypes = new();
-        [OdinSerialize]
+        [SerializeField]
         private Dictionary<string, InventoryEntry> _contents = new();
         public List<InventoryEntry> Contents => _contents.Values.ToList();
-
-        public UltEvent<InventoryEntry> OnItemAdded, OnItemRemoved;
+        [Title("Events")]
+        public UltEvent<InventoryEntry> OnItemAdded;
+        public UltEvent<InventoryEntry> OnItemRemoved;
 
         private void OnValidate()
         {
+            if (_contents == null)
+                _contents = new();
             if (_acceptedItemTypes.Count() > 0)
             {
                 List<string> keysToRemove = new();

@@ -40,7 +40,7 @@ namespace SunsetSystems.Spellbook
 
         private void DoHealing(ICombatant creature)
         {
-            StatsManager targetStatsManager = creature.References.GetComponentInChildren<StatsManager>();
+            StatsManager targetStatsManager = creature.References.GetCachedComponentInChildren<StatsManager>();
             if (targetStatsManager != null && targetStatsManager.IsAlive())
             {
                 int amount = UnityEngine.Random.Range(1, 3);

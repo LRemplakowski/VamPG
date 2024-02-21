@@ -1,5 +1,6 @@
 using System.Collections;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,12 +14,12 @@ namespace SunsetSystems.Entities.Characters.Actions
         private IEnumerator followCoroutine;
         private bool following;
 
-        public Follow(IActionPerformer owner, NavMeshAgent followTarget) : base(owner)
+        public Follow(IActionPerformer owner, IEntity followTarget) : base(owner)
         {
-            this.followTarget = followTarget;
+            this.followTarget = followTarget.References.GetCachedComponentInChildren<NavMeshAgent>();
             myAgent = owner.References.NavMeshAgent;
             following = false;
-            conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(followTarget, myAgent));
+            conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(this.followTarget, myAgent));
         }
 
         public override void Abort()

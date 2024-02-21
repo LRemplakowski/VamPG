@@ -110,7 +110,7 @@ namespace SunsetSystems.Inventory
         public object GetSaveData()
         {
             InventorySaveData saveData = new();
-            saveData.InventoryContents = _playerInventory.Contents;
+            saveData.InventoryContents = _playerInventory.Contents ?? new();
             saveData.Money = _money;
             return saveData;
         }

@@ -67,84 +67,46 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask))
             {
-                HandleNoSelectionExplorationInput();
+                MoveToPositionOrInteract();
             }
 
-            void HandleNoSelectionExplorationInput()
+            void MoveToPositionOrInteract()
             {
                 ICreature mainCharacter = PartyManager.Instance.MainCharacter;
                 if (mainCharacter == null)
+                {
+                    Debug.LogError("MAIN CHARACTER IS NULL!!! WHAT THE FUCK?!");
                     return;
+                }
                 // Main Character should always take the lead since it's a first entry in ActiveParty list
                 List<ICreature> creatures = new();
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
-                    _ = mainCharacter.PerformAction(new Interact(interactable, mainCharacter));
-                    creatures.Add(null);
+                    _ = mainCharacter.PerformAction(new Interact(mainCharacter, interactable));
                 }
                 else
                 {
-                    creatures.Add(PartyManager.Instance.MainCharacter);
+                    _ = mainCharacter.PerformAction(new Move(mainCharacter, hit.point));
                 }
                 if (PartyManager.Instance.ActiveParty.Count > 1)
                     creatures.AddRange(PartyManager.Instance.Companions);
-                MoveCreaturesToPosition(creatures, hit.point);
+                MoveCreaturesToPosition(creatures);
             }
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
         {
-            if (context.performed is false)
-                return;
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask))
-            {
-                HandleNoSelectionExplorationInput();
-            }
-
-            void HandleNoSelectionExplorationInput()
-            {
-                ICreature mainCharacter = PartyManager.Instance.MainCharacter;
-                if (mainCharacter == null)
-                    return;
-                // Main Character should always take the lead since it's a first entry in ActiveParty list
-                List<ICreature> creatures = new();
-                if (hit.collider.TryGetComponent(out IInteractable interactable))
-                {
-                    _ = mainCharacter.PerformAction(new Interact(interactable, mainCharacter));
-                    creatures.Add(null);
-                }
-                else
-                {
-                    creatures.Add(PartyManager.Instance.MainCharacter);
-                }
-                if (PartyManager.Instance.ActiveParty.Count > 1)
-                    creatures.AddRange(PartyManager.Instance.Companions);
-                MoveCreaturesToPosition(creatures, hit.point);
-            }
+            Debug.LogWarning("Secondary action not implemented!");
         }
 
-        private void MoveCreaturesToPosition(List<ICreature> creatures, Vector3 samplingPoint)
+        private void MoveCreaturesToPosition(List<ICreature> creatures)
         {
             for (int i = 0; i < creatures.Count; i++)
             {
-                if (i == 0)
+                ICreature creature = creatures[i];
+                if (creature != null)
                 {
-                    NavMesh.SamplePosition(samplingPoint, out NavMeshHit hit, 2.0f, NavMesh.AllAreas);
-                    ICreature creature = creatures[i];
-                    if (creature != null)
-                    {
-                        creature.PerformAction(new Move(creature, hit.position), true);
-                        Debug.Log("Moved Creature");
-                    }
-                }
-                else
-                {
-                    ICreature creature = creatures[i];
-                    if (creature != null)
-                    {
-                        creature.PerformAction(new Follow(creature, creatures[0].References.NavMeshAgent));
-                    }
+                    creature.PerformAction(new Follow(creature, PartyManager.Instance.MainCharacter));
                 }
             }
         }

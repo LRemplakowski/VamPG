@@ -1,0 +1,59 @@
+﻿title: alleyArrival
+tags:
+---
+<<set $rollModifier to 0>>
+[nomarkup][The alley smells like blood, death, and burnt rubber. A person slumped against the brick wall tilts their head up just enough to make direct eye contact as the door slams closed behind you. Sirens can be heard wailing not too far from here.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Shit! It’s the fuzz. Let’s get the hell out of here.
+    {$kieran}: You’re welcome to leave, but I cannot until we find her Sire. I’m not going back to Dominic empty-handed.
+<<else>>
+    -> {$pcName}: Let's get out of here.
+        {$kieran}: Not until we find your Sire. I’m not going back to Dominic empty-handed.
+<<endif>>
+-> {$pcName}: Aren’t you worried about the police?
+    {$kieran}: Your Primogen has us covered.
+    -> {$pcName}: Primogen?
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Are we seriously doing this right now?
+    <<endif>>
+    {$kieran}: You'll find out soon enough.
+-> {$pcName}: We need to move. Sooner, rather than later.
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Finally, a sensible idea.
+<<endif>>
+//2 ghouls approach//
+<<jump ghoulsApproach>>
+===
+title: ghoulsApproach
+---
+Ghoul: Got some stragglers, Karl.
+-> {$pcName}: We just killed all of your friends, in there. Do you really want to try us? (Charisma + Intimidation)
+    <<jump charismaGhoulsRoll>>
+-> {$pcName}: [nomarkup][Draw your weapon.][/nomarkup]
+    <<jump ghoulsCombat>>
+===
+title: charismaGhoulsRoll
+---
+<<if Roll("Charisma","Intimidation") >=3>>
+    <<jump charismaGhoulsSuccess>>
+<<else>>
+    <<jump charismaGhoulsFailure>>
+<<endif>>
+===
+title: charismaGhoulsSuccess
+---
+Karl: You make a good point. Pretend you didn't see us, and we won't say anything? #success
+{$kieran}: Deal.
+//ghouls run away, dialog ends//
+===
+title: charismaGhoulsFailure
+---
+Karl: They didn't have you in point-blank range like I do.
+//initiate combat//
+===
+title: ghoulsCombat
+---
+Karl: Oooo, looks like these ones have some bite.
+Ghoul: Terrible pun, Karl.
+//initiate combat//
+===

@@ -1,0 +1,119 @@
+﻿title: endFlashback
+tags:
+---
+{$kieran}: You are spacing out again? Again? Right now? 
+[nomarkup][Your senses come to. The person, no, the monster who did this to you is standing directly before you.][/nomarkup]
+{$diana}: Your Childe just killed some of our men.
+{$lucia}: I'm almost proud.
+-> [nomarkup][Sneak up on the pair.](Dexterity + Stealth)[/nomarkup]
+    <<jump dianaLuciaDexRoll>>
+-> {pcName}: Who has the most to lose now?
+    <<jump looser>>
+===
+title: dianaLuciaDexRoll
+---
+<<if Roll("Dexterity","Stealth") >=3>>
+    <<jump dianaLuciaDexSuccess>>
+<<else>>
+    <<jump dianaLuciaDexFailure>>
+<<endif>>
+===
+title: dianaLuciaDexSuccess
+---
+[nomarkup][You approach Lucia from behind.][/nomarkup] #success
+//+dmg agains Lucia, or make Lucia wounded at the start of the fight//
+-> {pcName}: Who has the most to lose now?
+<<jump>>
+===
+title: dianaLuciaDexFailure
+---
+//stepping on broken glass SFX//
+[nomarkup][You step on a glass bottle..][/nomarkup] #failure
+<<jump looser>>
+===
+title: looser
+---
+{$lucia}: Ah there you are, my blood. So glad you could make it. [nomarkup][She isn’t surprised to see you. If anything she looks pleased.][/nomarkup]
+{$beast}: Arrogant bitch. I need to show her her place. Who does she think she is?
+[nomarkup][There’s so much you want to say to her. The woman who killed you. Ironically, you have to admit that since dying, you’ve never felt more alive. In the moment though only one thing comes to mind.][/nomarkup]
+-> {pcName}: Take me with you.
+    <<set $wannabeDefector to true>>
+    <<jump wannabeDefector>>
+-> [nomarkup][Charge at her.](Strength + Brawl)[/nomarkup]
+    <<jump chargeStrRoll>>
+-> {pcName}: You’ll get what’s coming to you. 
+    <<jump youHadThatComing>>
+===
+title: wannabeDefector
+---
+[nomarkup][There’s a shift in the air as you deliver those words. Nobody was expecting that.][/nomarkup]
+{$kieran}: Turncoat. \[-1 Kieran Influence\]
+<<ModifyInfluence -1 $kieran>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Bahahaha! [She can’t get a word out. She’s cackling so hard.]
+<<endif>>
+<<jump vanComes>>
+===
+title: chargeStrRoll
+---
+<<if Roll("Strength","Brawl") >=6>>
+    <<jump chargeStrSuccess>>
+<<else>>
+    <<jump chargeStrFailure>>
+<<endif>>
+===
+title: chargeStrSuccess
+---
+[nomarkup][You crash into her.][/nomarkup] #success
+//+dmg agains Lucia, or make Lucia wounded at the start of the fight, cumulative with earlier//
+<<jump vanComes>>
+===
+title:  chargeStrFailure
+---
+[nomarkup][You were a little too eager. You barrel past Lucia and end up falling into a pile of trash.][/nomarkup] #failure
+<<DealDamage $pcName 1>>
+{$lucia}: Hah! How disappointing.
+<<jump vanComes>>
+===
+title: youHadThatComing
+---
+{$lucia}: Will I now? I’m looking forward to it.
+<<jump vanComes>>
+===
+title: vanComes
+---
+//SFX for screeching tires, black van comes into the scene, ghouls come out of it//
+[nomarkup][As if on cue, a van rips through the concrete. There’s a loud SCREECH as the brakes hit a sudden stop before Lucia. The doors fly open before her. What you assume to be ghouls are at the ready with assault weapons, waiting for a cue.][/nomarkup]
+{$lucia}: I’m flattered love. Truly. But now isn’t the time.  So close, but you still have yet to prove your worth. 
+[nomarkup][One of the ghouls takes her by the hand to guide her into the van. Diana tries to follow, but the ghouls stand in her way.][/nomarkup]
+{$diana}: What the fuck? Let me pass.
+[nomarkup][The ghouls do not budge.][/nomarkup]
+{$diana}: Lucia!
+{$lucia}: Sorry love. You’ve outlived your usefulness. Tada. [nomarkup][She signals to the ghouls to close the doors.][/nomarkup]
+{$diana}: You bitch! I loved you! I ruined my whole life and you betrayed me like this! [nomarkup][The punk before you is distraught. In a way, you know how it feels.][/nomarkup] This is all your fault!
+-> {pcName}: Mine? You’re joking right?
+    {$diana}: If you hadn’t shown up she would have Embraced me instead! I should be the one being tested!
+    //initiate combat//
+-> {pcName}: She would have abandoned you either way. Surrender. (Manipulation + Leadership)
+-> {pcName}: I could say the same to you.
+    {$diana}: You don’t even appreciate what’s she given you. Yet you rub my face in it.
+    //initiate combat//
+===
+title: dianaManipRoll
+---
+<<if Roll("Manipulation","Leadership") >=6>>
+    <<jump dianaManipSuccess>>
+<<else>>
+    <<jump dianaManipFailure>>
+<<endif>>
+===
+title: dianaManipSuccess
+---
+{$diana}: [nomarkup][You watch those words weigh upon her face. There’s a painful period of silence as she’s lost in reflection.][/nomarkup] You - you’re right. #success
+<<jump dominicArrival>>
+===
+title: dianaManipFailure
+---
+{$diana}: How would you even know that? You don’t know her like I do.
+//initiate combat//
+===

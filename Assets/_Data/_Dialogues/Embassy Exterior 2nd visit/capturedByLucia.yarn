@@ -1,0 +1,57 @@
+﻿title: capturedByLucia
+tags:
+---
+//PC is tied to the chair, Lucia is leaning towards him, Diego lies on his side on the floor//
+[nomarkup][Manicured nails hold your jaw in place, lighting turning it side to side as you’re inspected. You can hear the soft whimpering of the man who was shoved onto you coming to and the draft from the window makes you shiver. Your eyes and mouth are completely dry making it hard to close your eyes, even if the woman puppeteering you wasn’t staring holes into them.][/nomarkup]
+{$lucia}: Well then. I suppose there’s no sense in putting it off. Desiree, do you have any specific method you prefer? Strangulation, impersonal, very tidy. Gunshot, slow, messy hm. Perhaps not that one. Exsanguination, personal, clean… Hm.
+{$diana}: Lucia?
+{$lucia}: Shhh, I’m thinking dove. Be quiet, please.
+//Lucia makes walks around the chair//
+[nomarkup][She lets go of your chin and walks around you, alerting you to the fact you’re in a chair as her nails drag along your neck and just under your ear.][/nomarkup]
+//she leans again to whisper in the PCs ear//
+{$lucia}: Desiree?
+[nomarkup][You feel lips press against your ear in a whisper.][/nomarkup]
+{$lucia}: I asked you a question.
+//she stands straight again//
+<<jump deathOptions>>
+===
+title: deathOptions
+---
+-> {pcName}: Strangulation. <<if visited("strangulation") == false>>
+    <<jump strangulation>>
+-> {pcName}: Gunshot.
+    <<jump gunshot>>
+-> {pcName}: Exsanguination.
+    <<jump exsanguination>>
+===
+title: strangulation
+---
+{$lucia}: Hm. Did I say that was an option?
+-> {pcName}: Are you going to do it or not?
+{$lucia}: No.
+<<jump deathOptions>>
+===
+title: gunshot
+---
+{$lucia}: No. No. Too messy.
+-> {pcName}: Then why did you fucking offer it? I’m fucking tired of listening to -
+//Lucia hits PC//
+[nomarkup][Your jaw explodes in pain as your head is thrown to the side nearly knocking you out of the chain. You blink as your ears rink and dizziness overtakes you, your inner ear reeling. You feel something in your mouth sort of… pop.][/nomarkup]
+-> {pcName}: G-guh-f -
+[nomarkup][You run your tongue along your teeth and feel it rolling something hard around in your mouth. When you spit a viscus mixture of blood and saliva comes out along with a molar. Fuck.][/nomarkup]
+<<set $missingTooth to true>>
+{$lucia}: Oh no. No, I won’t have you talking back.
+<<jump deathOptions>>
+===
+title: exsanguination
+---
+//Lucia leans again to the PC//
+[nomarkup][Lucia leans in close putting her cheek against yours so that you’re both staring at the open door that would get you out of your apartment.][/nomarkup]
+-> {pcName}: I don’t really have a choice- do I?
+{$lucia}: You do, I just expect you to choose the right one.
+[nomarkup][The man on the floor groans and you hear him inhale shakily and start to cry. Sounds of quiet weeping the backing music as Lucia hums to herself.][/nomarkup]
+-> {pcName}: Why me?
+{$lucia}: Oh sweetie… You’re going to be so much fun when you wake up.
+[nomarkup][Her fangs sink into your neck with a sharp needle-like pain. You can hear her sucking on the side of her neck and her swallowing your blood, your fingers, toes, legs, arms, and eventually everything except your head goes numb. Your eyes stare out the open door with a dawning sense of apathy. You’re not tied to the chair. You aren’t being held down. You could walk out but you don’t. You continue to sit there as the world slowly fades and nothing matters anymore.][/nomarkup]
+//fade to black, end flashback, back to embassy exterior where flashback started//
+===

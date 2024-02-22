@@ -2,6 +2,10 @@
 tags:
 ---
 <<set $rollModifier to 0>>
+<<declare $missingTooth to false>>
+<<declare $numberOfDrinks to 0>>
+<<declare $drinkSuccess to false>>
+<<declare $wannabeDefector to false>>
 [nomarkup][The alley smells like blood, death, and burnt rubber. A person slumped against the brick wall tilts their head up just enough to make direct eye contact as the door slams closed behind you. Sirens can be heard wailing not too far from here.][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Shit! It’s the fuzz. Let’s get the hell out of here.

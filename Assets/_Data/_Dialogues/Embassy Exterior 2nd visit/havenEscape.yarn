@@ -1,0 +1,69 @@
+﻿title: havenEscape
+tags:
+---
+[nomarkup][You barely manage to get your bearings as you duck under Diana and exit the apartment. You hit the railing and look out over the parking lot to see… no one is coming. There’s a van and a motorcycle in the parking lot but otherwise it’s completely empty. Your only hope is to run.][/nomarkup]
+-> [nomarkup][Try to run on the road.](Dexterity + Athletics)[/nomarkup]
+    <<jump escapeDexRoll>>
+===
+title: escapeDexRoll
+---
+<<if Roll("Dexterity","Athletics") >=3>>
+    <<jump escapeDexSuccess>>
+<<else>>
+    <<jump escapeDexFailure>>
+<<endif>>
+===
+title: escapeDexSuccess
+---
+[nomarkup][Jumping over the fence you dash towards the open road, trying to look around for phone booth. Nothing there. You grit your teeth and turn back to see that the woman, Lucia, is slowly walking towards you.][/nomarkup] #success
+-> [nomarkup][Try to short-wire one of the vehicles in the parking.](Resolve + Larceny)[/nomarkup]
+    <<jump escapeResRoll>>
+===
+title: escapeDexFailure
+---
+[nomarkup][You make to jump the low fence and your foot gets caught and sends you sprawling on the pavement. You get up preparing to run only to feel a hand grip around your neck.][/nomarkup] #failure
+{$lucia}: This is rather unbecoming dear, let’s head back inside.
+[nomarkup][Your vision starts to swim with black spots as you’re dragged back inside the apartment.][/nomarkup]
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===
+title: escapeResRoll
+---
+<<if Roll("Resolve","Larceny") >=4>>
+    <<jump escapeResSuccess>>
+<<else>>
+    <<jump escapeResFailure>>
+<<endif>>
+===
+title: escapeResSuccess
+---
+[nomarkup][Looking around you spot a motorcycle lying on its side. You rip at it until you can see the ignition wires and bite at them. Ill-advised sure, but better to die later than now. You twist the wires together and practically cry when you hear the engine stutter to life.][nomarkup] #success
+{$lucia}: Oh that’s a neat trick dear.
+-> {$pcName}: Fuck-fuck fuck!
+{$lucia}: Hm, yes quite.
+<<jump nearlyEscaped>>
+===
+title: escapeResFailure
+---
+[nomarkup][You spot a motorcycle and race towards it. Your fingers grasp the ignition panel as you desperately try to rip it open. It doesn’t budge.][/nomarkup] #failure
+{$lucia}: Would you like a few seconds to keep trying? Or shall we just go inside.
+-> {$pcName}: Just- gimmie a- come on!
+{$lucia}: Three…
+[nomarkup][You pull open the panel and see the wires underneath and immediately pull at them with your teeth feeling a slight buzz.][/nomarkup]
+{$lucia}: Two...
+[nomarkup][Twisting them together with your fingers you blind away the sweat dripping into your eyes as you look over at the woman. She nods at you with an encouraging smile. What the absolute fuck.][/nomarkup]
+{$lucia}: One!
+[nomarkup][You rev the engine and throw it in reverse and feel the wind in your hair - only to realize that you no longer feel the bike under you. A fraction of a second later your head slams into the pavement and you feel a blackout for a second.][/nomarkup]
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===
+title: nearlyEscaped
+---
+[nomarkup][Without looking back at the woman slowly sauntering towards you, you step on the gas - just in time to see a hand lightly being placed on the front of the motorcycle. A woman with dark hair rolling her shoulders and raising an eyebrow, one hand placed on the bike headlight with the front wheel between her legs. She’s holding it in place as she stares at you placidly.][/nomarkup]
+{$lucia}: Are we done here? I think we’re done. 
+[nomarkup][You stare at her, as she smiles at you. Her manicured fingernails tapping against the headlight.][/nomarkup]
+{$lucia}: Take. Your foot. Off. The gas.
+[nomarkup][You can’t help it. You take your foot off the gas. She smiles wanly at you and walking around puts a hand on your shoulder. Pulling you off the bike and walking you towards the apartment. You feel your vision starting to blur and go dark.][/nomarkup]
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===

@@ -2,46 +2,46 @@
 position: -72,177
 ---
 //scene starts in PC's car near the dumpsters behind the Embassy//
-[nomarkup][You’ve tracked Diego Vazguez to the Embassy. He’s outside taking a smoke break, hands in his pockets. The dingy smell of trash and stale fluids hits you immediately as you open the van window. A woman with blonde hair sits in the passenger seat alongside you. She’s telling you about a job she needs you to finish.][/nomarkup]
-{$diana}: I noticed it about a week ago, about half our books have been wrong for nearly eight months now. This arsehole clearly knew something, and these aren’t the kind of people I want to fuck around with. And you’re sure that this is where he is?
--> {$pcName}: A lot of things have gone wrong for me lately but this isn’t one of them. He’s there.
-{$diana}: What, had a bad evening?
--> {$pcName}: [You snort as you push open the door] The worst.
+[nomarkup][You’ve tracked Diego Vazguez to the Embassy. He’s outside taking a smoke break, hands in his pockets. The dingy smell of trash and stale fluids hits you immediately as you open the van window. A woman with blonde hair sits in the passenger seat alongside you. She’s telling you about a job she needs you to finish.][/nomarkup] #line:0ec2da1 
+{$diana}: I noticed it about a week ago, about half our books have been wrong for nearly eight months now. This arsehole clearly knew something, and these aren’t the kind of people I want to fuck around with. And you’re sure that this is where he is? #line:0e03cc4 
+-> {$pcName}: A lot of things have gone wrong for me lately but this isn’t one of them. He’s there. #line:0c2e7e6 
+{$diana}: What, had a bad evening? #line:09930eb 
+-> {$pcName}: [You snort as you push open the door] The worst. #line:0ee6859 
 //PC comes out of the car with Diana//
-[nomarkup][Diana moves as if to get out as well and you hold a hand up to her through the window and shake your head. She’ll only spook him, she nods to you and settles back down. Rubbing the back of her neck and looking down the alley. It smells distinctly of grim and tar, the scent coming on strong from in the alley, you can see dumpsters out back have been piled high with trash and Diego lights up a cigarette before shaking out the lighter.][/nomarkup]
-{$innerVoice}: Talk to him, gain his trust and lead him back to the van. Simple enough. [nomarkup][Your eyes soften a bit with a smile as you walk over, sitting on your hip as you force a sway into your step. The man looking up and catching you as you do.][/nomarkup]
--> [nomarkup][Approach With Diana.][/nomarkup]
+[nomarkup][Diana moves as if to get out as well and you hold a hand up to her through the window and shake your head. She’ll only spook him, she nods to you and settles back down. Rubbing the back of her neck and looking down the alley. It smells distinctly of grim and tar, the scent coming on strong from in the alley, you can see dumpsters out back have been piled high with trash and Diego lights up a cigarette before shaking out the lighter.][/nomarkup] #line:05dada1 
+{$innerVoice}: Talk to him, gain his trust and lead him back to the van. Simple enough. [nomarkup][Your eyes soften a bit with a smile as you walk over, sitting on your hip as you force a sway into your step. The man looking up and catching you as you do.][/nomarkup] #line:0053a5d 
+-> [nomarkup][Approach With Diana.][/nomarkup] #line:043c71d 
     <<jump approachWithDiana>>
--> [nomarkup][Approach without Diana.][/nomarkup]
+-> [nomarkup][Approach without Diana.][/nomarkup] #line:025e8e4 
     <<jump approachWithoutDiana>>
 ===
 title: approachWithDiana
 position: 192,182
 ---
-[nomarkup][You walk down the alleyway with Diana, seeing the flash of a cigarette being thrown as he spots Diana, without waiting for even a seconds notice he starts sprinting towards you both, blowing past the two of you before you even have the chance to try and catch him. Both of you caught completely off guard as he gets a headstart on you.][/nomarkup]
--> [nomarkup][Jump to the chase.][/nomarkup]
+[nomarkup][You walk down the alleyway with Diana, seeing the flash of a cigarette being thrown as he spots Diana, without waiting for even a seconds notice he starts sprinting towards you both, blowing past the two of you before you even have the chance to try and catch him. Both of you caught completely off guard as he gets a headstart on you.][/nomarkup] #line:085464c 
+-> [nomarkup][Jump to the chase.][/nomarkup] #line:08ffdaa 
 <<jump chaseOptions>>
 ===
 title: approachWithoutDiana
 ---
-{$diego}: Hey.
--> {$pcName}: Hey, yourself. 
+{$diego}: Hey. #line:01928ce 
+-> {$pcName}: Hey, yourself.  #line:0d58e1e 
 <<if Roll("Wits","Awareness") >=3>>
-    [nomarkup][Diego scans you up and down, his eyes lingering on your hips, as you step the line of sight travels up your waist and over your chest to rest on your shoulders.][/nomarkup]
-    {$innerVoice}: Arthur used to rest his head on my shoulder when he needed to recharge. I miss the closeness we used to have.
-    [nomarkup][You can see a bit of Arthur in Diego, now that he’s looking at you. Maybe in the way he stands? You brush some of your hair behind your ear. Diego’s eyes widen slightly before lowering as he smirks.][/nomarkup]
+    [nomarkup][Diego scans you up and down, his eyes lingering on your hips, as you step the line of sight travels up your waist and over your chest to rest on your shoulders.][/nomarkup] #line:0bcc124 
+    {$innerVoice}: Arthur used to rest his head on my shoulder when he needed to recharge. I miss the closeness we used to have. #line:06f5e6e 
+    [nomarkup][You can see a bit of Arthur in Diego, now that he’s looking at you. Maybe in the way he stands? You brush some of your hair behind your ear. Diego’s eyes widen slightly before lowering as he smirks.][/nomarkup] #line:029f854 
 <<endif>>
 <<jump interactions>>
 ===
 title: interactions
 ---
--> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if visited("cigRoll") == false>>
+-> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if visited("cigRoll") == false>> #line:06b4ac7 
     <<jump cigRoll>>
--> [nomarkup][Check him out.][/nomarkup] <<if visited("checkout") == false>>
+-> [nomarkup][Check him out.][/nomarkup] <<if visited("checkout") == false>> #line:0d46036 
     <<jump checkout>>
--> [nomarkup][Confront Diego.][/nomarkup]
+-> [nomarkup][Confront Diego.][/nomarkup] #line:0795fa7 
     <<jump chase>>
--> [nomarkup][Try to catch him.][/nomarkup]
+-> [nomarkup][Try to catch him.][/nomarkup] #line:0f94977 
     <<jump theVan>>
 ===
 title: cigRoll
@@ -55,112 +55,112 @@ title: cigRoll
 ===
 title: cigSuccess
 ---
-[nomarkup][He gets you a cig, lights it. This will buy some time. There is a wedding ring on his right hand.][/nomarkup] #success
--> {$pcName}: I’m Des, nice to meet you. <<if visited("introduction") == false>>
+[nomarkup][He gets you a cig, lights it. This will buy some time. There is a wedding ring on his right hand.][/nomarkup] #success #line:0f37119 
+-> {$pcName}: I’m Des, nice to meet you. <<if visited("introduction") == false>> #line:036f294 
     <<jump introduction>>
--> {$pcName}: Are you married? I see a wedding ring on your finger. <<if visited("married") == false>>
+-> {$pcName}: Are you married? I see a wedding ring on your finger. <<if visited("married") == false>> #line:0a38f95 
     <<jump married>>
--> {$pcName}: Nice scar. I bet it has a good story behind it. <<if visited("scar") == false>>
+-> {$pcName}: Nice scar. I bet it has a good story behind it. <<if visited("scar") == false>> #line:024876f 
     <<jump scar>>
 <<jump interactions>>
 ===
 title: introduction
 ---
-{$diego}: Diego, what brings a broad like you all the way out her’ this evening? [nomarkup][He looks you over with a curious glance. He’s not really disguising it either, curious and interested.][/nomarkup]
--> {$pcName}: Got tired of being inside the club. No smoking policy really something else.
-{$diego}: [nomarkup][His eyes go half-lidded and he raises an eyebrow, clearly not convinced. He purses his lips and nods towards you.][/nomarkup] You really think I’mma believe that?
--> {$pcName}: Not for a second. [nomarkup][You blow a lung full smoke away from him.][/nomarkup] I got tired of trying to drink in peace. Kids really have no idea what it means to try and drink alone.
-{$diego}: No, no they do not. Entonces.. [nomarkup][He gestures between himself and you, his shoulders raising questioningly.][/nomarkup]
--> {$pcName}: Still figuring that out. Shoot your shot Diego.
-{$diego}: [nomarkup][He nods a couple of times both to you and to himself a little wink of one of his eyes as he suppresses a smirk. Nodding to himself and raising his cigarette to his lips.][/nomarkup] Alright Des, no tengo más planes. Soy todo oídos.
+{$diego}: Diego, what brings a broad like you all the way out her’ this evening? [nomarkup][He looks you over with a curious glance. He’s not really disguising it either, curious and interested.][/nomarkup] #line:0f04aea 
+-> {$pcName}: Got tired of being inside the club. No smoking policy really something else. #line:0d885ab 
+{$diego}: [nomarkup][His eyes go half-lidded and he raises an eyebrow, clearly not convinced. He purses his lips and nods towards you.][/nomarkup] You really think I’mma believe that? #line:01657d7 
+-> {$pcName}: Not for a second. [nomarkup][You blow a lung full smoke away from him.][/nomarkup] I got tired of trying to drink in peace. Kids really have no idea what it means to try and drink alone. #line:0157f34 
+{$diego}: No, no they do not. Entonces.. [nomarkup][He gestures between himself and you, his shoulders raising questioningly.][/nomarkup] #line:0f242df 
+-> {$pcName}: Still figuring that out. Shoot your shot Diego. #line:02a95c8 
+{$diego}: [nomarkup][He nods a couple of times both to you and to himself a little wink of one of his eyes as he suppresses a smirk. Nodding to himself and raising his cigarette to his lips.][/nomarkup] Alright Des, no tengo más planes. Soy todo oídos. #line:06517b8 
 <<jump cigSuccess>>
 ===
 title: married
 ---
-{$diego}: [nomarkup][He looks down at the ring and swallows][/nomarkup] Doesn’t matter now. Guess it didn’t matter much then.
+{$diego}: [nomarkup][He looks down at the ring and swallows][/nomarkup] Doesn’t matter now. Guess it didn’t matter much then. #line:07a146e 
 <<jump cigSuccess>>
 ===
 title: scar
 ---
-{$diego}: Noticed that? Got into a fight with my old la - with Elizabeth - my ex-wife. [nomarkup][He puts emphasis onto the word ex like it’s something he’s been thinking about a lot lately.][/nomarkup]
--> {$pcName}: Oh? I’m sorry to hear that.
-{$diego}: I just thought more money would make our little girl's life easier. Turns out-
--> {$pcName}: That wasn’t the case?
-{$diego}: And now she blames me. Hindsight and all.
+{$diego}: Noticed that? Got into a fight with my old la - with Elizabeth - my ex-wife. [nomarkup][He puts emphasis onto the word ex like it’s something he’s been thinking about a lot lately.][/nomarkup] #line:04d1279 
+-> {$pcName}: Oh? I’m sorry to hear that. #line:0f13245 
+{$diego}: I just thought more money would make our little girl's life easier. Turns out- #line:03b9527 
+-> {$pcName}: That wasn’t the case? #line:05d2e18 
+{$diego}: And now she blames me. Hindsight and all. #line:08fa589 
 <<jump cigSuccess>>
 ===
 title: checkout
 ---
-[nomarkup][Your eyes slide along Diego’s body and he puffs himself up a little bit, clearly appreciating the attention.][/nomarkup]
+[nomarkup][Your eyes slide along Diego’s body and he puffs himself up a little bit, clearly appreciating the attention.][/nomarkup] #line:05f32ee 
 <<if Roll("Wits","Streetwise") >=(2-$rollModifier)>>
-    [nomarkup][You cast your eyes along him and find that despite not having an obviously impressive build he’s got some muscle to him. You see his leather jacket move strangely and notice what looks like a knife holdered in a pocket. Otherwise he’s unarmed.][/nomarkup]
-    {$diego}: Ves algo que te gusta?
-    -> {$pcName}: And I’m looking to see a little more of it.
-    [nomarkup][Maybe it’s the dim lighting but it looks like Diego’s cheeks ever so slightly flush even while you hold eye contact with him.][/nomarkup]
-    {$diego}: Don’t let me get in the way of your and your goal then. Si vas a ver, ve.
-    {$innerVoice}: Don’t worry Diego, you won’t.
+    [nomarkup][You cast your eyes along him and find that despite not having an obviously impressive build he’s got some muscle to him. You see his leather jacket move strangely and notice what looks like a knife holdered in a pocket. Otherwise he’s unarmed.][/nomarkup] #line:0dd3f92 
+    {$diego}: Ves algo que te gusta? #line:0a546cd 
+    -> {$pcName}: And I’m looking to see a little more of it. #line:0008ce7 
+    [nomarkup][Maybe it’s the dim lighting but it looks like Diego’s cheeks ever so slightly flush even while you hold eye contact with him.][/nomarkup] #line:0122c87 
+    {$diego}: Don’t let me get in the way of your and your goal then. Si vas a ver, ve. #line:073874f 
+    {$innerVoice}: Don’t worry Diego, you won’t. #line:060d47c 
     <<jump interactions>>
 <<else>>
-    [nomarkup][You look him over and he catches your eyes as they settle on his hip, he ever so slightly tilts into the attention with a grin. When he looks into your eyes he sees something that would imply that wasn’t what you where looking for and he takes a small step back, trying to give you and him some space.][/nomarkup]
+    [nomarkup][You look him over and he catches your eyes as they settle on his hip, he ever so slightly tilts into the attention with a grin. When he looks into your eyes he sees something that would imply that wasn’t what you where looking for and he takes a small step back, trying to give you and him some space.][/nomarkup] #line:080e046 
     <<jump interactions>>
 <<endif>>
 ===
 title: chase
 ---
-[nomarkup][Your eyes scan along Diego and he watches you back, each of you trying to gauge the other's intent.][/nomarkup]
-{$diego}: Déjate de mamadas. I don’t know if I like that look.
+[nomarkup][Your eyes scan along Diego and he watches you back, each of you trying to gauge the other's intent.][/nomarkup] #line:0552e80 
+{$diego}: Déjate de mamadas. I don’t know if I like that look. #line:0da3675 
 <<if visited("checkout") == true>>
-    [nomarkup][He came here unarmed, probably looking to feel disconnected to his job. Looking to have something to take his mind off his work.][/nomarkup]
+    [nomarkup][He came here unarmed, probably looking to feel disconnected to his job. Looking to have something to take his mind off his work.][/nomarkup] #line:0eed270 
 <<elseif visited("cigRoll") == true>>
-    [nomarkup][Diego’s lonely, he’s looking for someone to empathize with him and then leave him alone to get his life together. As unlikely as that is to work.][/nomarkup]
-    -> {$pcName}: Do you want to spend the night with me?
+    [nomarkup][Diego’s lonely, he’s looking for someone to empathize with him and then leave him alone to get his life together. As unlikely as that is to work.][/nomarkup] #line:03d8e10 
+    -> {$pcName}: Do you want to spend the night with me? #line:0c8803b 
         <<jump lureDiego>>
 <<endif>>
--> {$pcName}: Would you rather I just leave it here? I’m not sure what to talk about now.
+-> {$pcName}: Would you rather I just leave it here? I’m not sure what to talk about now. #line:01fc877 
     <<jump cutToTheChase>>
 ===
 title: lureDiego
 ---
-{$diego}: [nomarkup][He purses his lips as he stares at you, his eyes searching yours as his posture shifts and he closes in on himself slightly.][/nomarkup] A tempting offer, but one I’ll pass on.
--> {$pcName}: I thought you wanted me?
-    {$diego}: [nomarkup][You can feel confusion color your voice as Diego turns you down. He’s not interested? Then why was he coming onto you?][/nomarkup] You’re beautiful, but I have a wife, and despite it all, I plan to go back to her as an honest man.
-    -> {$pcName}: It’s one night, she’d never know. [nomarkup][You wonder for a moment why you’re saying this, you never had any intention of being with anyone other than Arthur yourself. Yet somehow it feels like you’re being judged.][/nomarkup]
-    {$diego}: Morra- Des. I’d know.
--> [nomarkup][What the fuck!?][/nomarkup]
-    [nomarkup][You can feel your face pinch as you get rejected, the automatic reaction of anger filling your face as it turns a bit red. Diego looks at you with a smile and then looks away, clearing his throat.][/nomarkup]
-    {$diego}: Sorry ‘bout leading you on there. But no.
-    -> {$pcName}: So why then?
-    {$diego}: You’ve got this wicked look in your eye, thought you’d understand you know?
-    -> {$pcName}: Sure, but all the other… I wouldn’t have asked if you weren’t into it.
-    {$diego}: [nomarkup][He nods a couple times and looks at the ground][nomarkup] It’s sporting, you know?
+{$diego}: [nomarkup][He purses his lips as he stares at you, his eyes searching yours as his posture shifts and he closes in on himself slightly.][/nomarkup] A tempting offer, but one I’ll pass on. #line:09bf9ca 
+-> {$pcName}: I thought you wanted me? #line:039a603 
+    {$diego}: [nomarkup][You can feel confusion color your voice as Diego turns you down. He’s not interested? Then why was he coming onto you?][/nomarkup] You’re beautiful, but I have a wife, and despite it all, I plan to go back to her as an honest man. #line:0e38d98 
+    -> {$pcName}: It’s one night, she’d never know. [nomarkup][You wonder for a moment why you’re saying this, you never had any intention of being with anyone other than Arthur yourself. Yet somehow it feels like you’re being judged.][/nomarkup] #line:08ceca6 
+    {$diego}: Morra- Des. I’d know. #line:0b53b0d 
+-> [nomarkup][What the fuck!?][/nomarkup] #line:03cad2e 
+    [nomarkup][You can feel your face pinch as you get rejected, the automatic reaction of anger filling your face as it turns a bit red. Diego looks at you with a smile and then looks away, clearing his throat.][/nomarkup] #line:09e6077 
+    {$diego}: Sorry ‘bout leading you on there. But no. #line:0a8e601 
+    -> {$pcName}: So why then? #line:015e2ae 
+    {$diego}: You’ve got this wicked look in your eye, thought you’d understand you know? #line:04755ca 
+    -> {$pcName}: Sure, but all the other… I wouldn’t have asked if you weren’t into it. #line:0efbb28 
+    {$diego}: [nomarkup][He nods a couple times and looks at the ground][nomarkup] It’s sporting, you know? #line:051843e 
     <<if visited("married") == true>>
-        {$diego}: But I’m never going to cheat on Elizabeth. I don’t care if she never comes back to me, she’s my lady. I’m not going to do that to her.
-        [nomarkup][You can’t help but think about Arthur, hoping that he’ll have that kind of devotion to you. It strikes you for a moment that you’re in the same position as Diego, but unlike him if you can get the money Diana is offering you might have your Diego back.][/nomarkup]
-        -> {$pcName}: Shit man.
-        {$diego}: Ah what can I say? I love my old lady.
+        {$diego}: But I’m never going to cheat on Elizabeth. I don’t care if she never comes back to me, she’s my lady. I’m not going to do that to her. #line:0fb531c 
+        [nomarkup][You can’t help but think about Arthur, hoping that he’ll have that kind of devotion to you. It strikes you for a moment that you’re in the same position as Diego, but unlike him if you can get the money Diana is offering you might have your Diego back.][/nomarkup] #line:0202e93 
+        -> {$pcName}: Shit man. #line:015e93c 
+        {$diego}: Ah what can I say? I love my old lady. #line:0cc1654 
     <<endif>>
--> {$pcName}: Why?
-    {$diego}: Sometimes you see a pretty woman and she seems interested, seems rude to reject her right away.
-    -> {$pcName}: You could have just said something.
-    {$diego}: [nomarkup][Diego flashes his ring.][/nomarkup] I think this speaks for me.
-    -> {$pcName}: You have some devotion to your ex-wife. What’d she do to earn all that?
-    {$diego}: Best woman in the fuckin’ world my Elizabeth. There’s no replacing such a wicked fine woman, not for me.
-    [nomarkup][You think about Arthur and how your last few talks have ended. You can’t help but feel a pang in your chest as he’d brought up the divorce papers, wondering to yourself how you’ll turn it around with him. You don’t want to leave him, don’t want to leave that relationship but what can you do? You’re sinking, drowning in an inability to move forward.][/nomarkup]
-    {$diego}: Sorry.
-    -> {$pcName}: You don’t need to apologize.
-    {$diego}: I do, just not to you.
+-> {$pcName}: Why? #line:0e45bd8 
+    {$diego}: Sometimes you see a pretty woman and she seems interested, seems rude to reject her right away. #line:0812bfd 
+    -> {$pcName}: You could have just said something. #line:0123056 
+    {$diego}: [nomarkup][Diego flashes his ring.][/nomarkup] I think this speaks for me. #line:09a52ca 
+    -> {$pcName}: You have some devotion to your ex-wife. What’d she do to earn all that? #line:00c17d9 
+    {$diego}: Best woman in the fuckin’ world my Elizabeth. There’s no replacing such a wicked fine woman, not for me. #line:0f720a3 
+    [nomarkup][You think about Arthur and how your last few talks have ended. You can’t help but feel a pang in your chest as he’d brought up the divorce papers, wondering to yourself how you’ll turn it around with him. You don’t want to leave him, don’t want to leave that relationship but what can you do? You’re sinking, drowning in an inability to move forward.][/nomarkup] #line:0d418d9 
+    {$diego}: Sorry. #line:0f8bc90 
+    -> {$pcName}: You don’t need to apologize. #line:0e14491 
+    {$diego}: I do, just not to you. #line:0c36b45 
 <<jump cutToTheChase>>
 ===
 title: cutToTheChase
 ---
-{$diego}: Is that what you wanted to ask me about morra?
--> {$pcName}: No. No it isn’t Diego.
-{$diego}: [nomarkup][Diego sighs and looks down at his boots][/nomarkup] You sure it isn’t Desiree?
+{$diego}: Is that what you wanted to ask me about morra? #line:042bb18 
+-> {$pcName}: No. No it isn’t Diego. #line:0a3a728 
+{$diego}: [nomarkup][Diego sighs and looks down at his boots][/nomarkup] You sure it isn’t Desiree? #line:09b1c6a 
 <<if visited("scar") == true>>
-    -> {$pcName}: First step on the way out is to clean up your debts Diego. You don’t want this mess riding on Elizabeth’s conscience.
-    {$diego}: Don’t say her name, don’t do that to me. [nomarkup][He presses his hand against his eyes.][/nomarkup]
+    -> {$pcName}: First step on the way out is to clean up your debts Diego. You don’t want this mess riding on Elizabeth’s conscience. #line:0fe4f36 
+    {$diego}: Don’t say her name, don’t do that to me. [nomarkup][He presses his hand against his eyes.][/nomarkup] #line:0278566 
 <<endif>>
--> {$pcName}: I have a client who’s interested in talking to you Mr. Vaguez, they think you took quite a lot of money from them. You know anything about that? (Charisma + Leadership)
+-> {$pcName}: I have a client who’s interested in talking to you Mr. Vaguez, they think you took quite a lot of money from them. You know anything about that? (Charisma + Leadership) #line:0d7f123 
     <<jump leadershipRoll>>
 ===
 title: leadershipRoll
@@ -169,22 +169,23 @@ title: leadershipRoll
     <<jump leadershipSuccess>>
 <<else>>
     <<jump leadershipFailure>>
+<<endif>>
 ===
 title: leadershipSuccess
 ---
-{$diego}: I don’t think so bebezota. Sorry. [nomarkup][He flicks the cig he had been smoking to the ground and snuffs it out with his heel, brushing past you and walking away.][/nomarkup] #success
-{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup]
+{$diego}: I don’t think so bebezota. Sorry. [nomarkup][He flicks the cig he had been smoking to the ground and snuffs it out with his heel, brushing past you and walking away.][/nomarkup] #success #line:029c2a3 
+{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #line:00acd50 
 <<jump chaseOptions>>
 ===
 title: leadershipFailure
 ---
-{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #failure
+{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #failure #line:0c91ded 
 <<jump chaseOptions>>
 ===
 title: chaseOptions
 ---
 //Diego starts to run//
--> [nomarkup][Go after him as fast as you can.](Dexterity + Athletics)[/nomarkup]
+-> [nomarkup][Go after him as fast as you can.](Dexterity + Athletics)[/nomarkup] #line:0406e6a 
     <<jump dexChaseRoll>>
 ===
 title: dexChaseRoll
@@ -197,19 +198,19 @@ title: dexChaseRoll
 ===
 title: dexChaseSuccess
 ---
-[nomarkup][You move, turning on your heel to avoid the lit cigarette coming towards you. As you pivot to move towards Diego you can see that he’s started to move faster away from you, noticing the pace of your footsteps and reacting by breaking out into a run. You find yourself sprinting after him, air fast and hot in your lungs as you try to out run his initial sprint.][/nomarkup] #success
+[nomarkup][You move, turning on your heel to avoid the lit cigarette coming towards you. As you pivot to move towards Diego you can see that he’s started to move faster away from you, noticing the pace of your footsteps and reacting by breaking out into a run. You find yourself sprinting after him, air fast and hot in your lungs as you try to out run his initial sprint.][/nomarkup] #success #line:06984e1 
 <<jump tackleTry>>
 ===
 title: dexChaseFailure
 ---
-[nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure
+[nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure #line:064459e 
 <<DealDamage $pcName 1>>
-[nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup]
+[nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19 
 <<jump tackleTry>>
 ===
 title: tackleTry
 ---
--> [nomarkup][Try to tackle him.](Stamina + Brawl)[/nomarkup]
+-> [nomarkup][Try to tackle him.](Stamina + Brawl)[/nomarkup] #line:02080e9 
 <<jump stamChaseRoll>>
 ===
 title: stamChaseRoll
@@ -222,73 +223,73 @@ title: stamChaseRoll
 ===
 title: stamChaseSuccess
 ---
-[nomarkup][Chasing him down in the dinghy alleyway you can feel rainwater and what you hope is just general grim seeping into your pantleg as it splashes. You grit your teeth and push through it. Slamming into Deigo from behind him and pinning him against the van doors.][/nomarkup] #success
+[nomarkup][Chasing him down in the dinghy alleyway you can feel rainwater and what you hope is just general grim seeping into your pantleg as it splashes. You grit your teeth and push through it. Slamming into Deigo from behind him and pinning him against the van doors.][/nomarkup] #success #line:0f14512 
 <<jump theVan>>
 ===
 title: stamChaseFailure
 ---
-[nomarkup][You sprint after Diego as he collides off the Van, you hear Diana shout from inside and the sound of the passenger side door opening just as you dash past her, running Diego down as he tries to get out of the way and further down the back streets towards the main road. You gras his jacket and he slips out of it, finding yourself running after him with your arms full of leather. Diana’s feet pounding behind you.][/nomarkup] #failure
+[nomarkup][You sprint after Diego as he collides off the Van, you hear Diana shout from inside and the sound of the passenger side door opening just as you dash past her, running Diego down as he tries to get out of the way and further down the back streets towards the main road. You gras his jacket and he slips out of it, finding yourself running after him with your arms full of leather. Diana’s feet pounding behind you.][/nomarkup] #failure #line:0b64cec 
 ===
 title: theVan
 ---
 //Diego is pushed into the van//
-[nomarkup][You look a little closer at the man who’s been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You’ve been skimming the documents that you've been given and looked into Diego’s background - a nobody. Got caught up in something he didn’t understand; ultimately it’s unlikely he’ll walk away from this unscathed, but that isn’t your problem.][/omarkup]
-{$diana}: Where can we take him that’ll be private?
--> {$pcName}: [nomarkup][You can feel the sigh building up in your chest.][/nomarkup] I know a place.
-[nomarkup][The van is a large black vehicle that has had its plates changed. Diana moves towards the driver’s door and stops.][/nomarkup]
-{$diana}: Babes, you didn’t say- what’s the address?
--> {$pcName}: It’s (apartment address).
+[nomarkup][You look a little closer at the man who’s been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You’ve been skimming the documents that you've been given and looked into Diego’s background - a nobody. Got caught up in something he didn’t understand; ultimately it’s unlikely he’ll walk away from this unscathed, but that isn’t your problem.][/omarkup] #line:0c75ce4 
+{$diana}: Where can we take him that’ll be private? #line:05df103 
+-> {$pcName}: [nomarkup][You can feel the sigh building up in your chest.][/nomarkup] I know a place. #line:010d1be 
+[nomarkup][The van is a large black vehicle that has had its plates changed. Diana moves towards the driver’s door and stops.][/nomarkup] #line:0c0a848 
+{$diana}: Babes, you didn’t say- what’s the address? #line:0783432 
+-> {$pcName}: It’s (apartment address). #line:040a5e9 
 //car starts to move through the streets//
-[nomarkup][You shove the doors open and muscle the man you just ran down inside. He looks a little out of it and doesn’t resist. You take a few minutes to seatbelt him in and turn his face to get a better look at his eyes. Diego's head lists.][/nomarkup]
+[nomarkup][You shove the doors open and muscle the man you just ran down inside. He looks a little out of it and doesn’t resist. You take a few minutes to seatbelt him in and turn his face to get a better look at his eyes. Diego's head lists.][/nomarkup] #line:06af709 
 <<if Roll("Intelligence","Medicine") >=3>>
-    [nomarkup][Diego’s pupils are wide, his gaze is unfocused, and his pulse is slow. Calm despite the situation. As you touch the side of his face, he doesn’t react in the slightest.][/nomarkup]
+    [nomarkup][Diego’s pupils are wide, his gaze is unfocused, and his pulse is slow. Calm despite the situation. As you touch the side of his face, he doesn’t react in the slightest.][/nomarkup] #line:089182b 
 <<endif>>
 <<if Roll("Wits","Awareness") >=3>>
-    [nomarkup][You hear Diana talking “We’re headed to (apartment). Should be done in about 25. I’ll call you.”][/nomarkup]
-    [nomarkup][A check in? Makes sense, but who’s she calling?][/nomarkup]
+    [nomarkup][You hear Diana talking “We’re headed to (apartment). Should be done in about 25. I’ll call you.”][/nomarkup] #line:0f5da9c 
+    [nomarkup][A check in? Makes sense, but who’s she calling?][/nomarkup] #line:06da673 
 <<endif>>
-[nomarkup][You sit in the car with Diana as the city scrolls by. Giving her directions as she quietly watches the road. You can hear the soft breathing of the knocked-out Diego but you suspect he might have been given something since he’s no longer resisting.][/nomarkup]
-{$diana}: You know my boss speaks very highly of you. She said that you’re the best investigator anyone’s ever seen, gotta say glad you’re on our side.
--> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... validated.]
+[nomarkup][You sit in the car with Diana as the city scrolls by. Giving her directions as she quietly watches the road. You can hear the soft breathing of the knocked-out Diego but you suspect he might have been given something since he’s no longer resisting.][/nomarkup] #line:02b5dba 
+{$diana}: You know my boss speaks very highly of you. She said that you’re the best investigator anyone’s ever seen, gotta say glad you’re on our side. #line:02e2d70 
+-> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... validated.] #line:013b09d 
     <<jump pcValidated>>
--> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... vindicated.]
+-> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... vindicated.] #line:0a4d926 
     <<jump pcVindicated>>
--> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... venerated.]
+-> {$pcName}: Thanks I- [You look out at the road and can’t help but feel... venerated.] #line:0658d29 
     <<jump pcVenerated>>
 ===
 title: pcValidated
 ---
-[nomarkup][It seems that your skills are not that bad. You’ve got plenty of time to train, but compared to your previous job they are just somewhat alike.][/nomarkup]
--> {$pcName}: - think this is how I’m going to start clawing my way back to where I started. This isn’t where I pictured myself being, I’ll be honest, and it is somewhere I want to be again -
-{$diana}: But it’ll get you where you want to go?
--> {$pcName}: Exactly.
-{$diana}: I respect that.
+[nomarkup][It seems that your skills are not that bad. You’ve got plenty of time to train, but compared to your previous job they are just somewhat alike.][/nomarkup] #line:0ead108 
+-> {$pcName}: - think this is how I’m going to start clawing my way back to where I started. This isn’t where I pictured myself being, I’ll be honest, and it is somewhere I want to be again - #line:0aba814 
+{$diana}: But it’ll get you where you want to go? #line:0f1cfc8 
+-> {$pcName}: Exactly. #line:0f9f215 
+{$diana}: I respect that. #line:0fab94e 
 <<jump wrapUpVan>>
 ===
 title: pcVindicated
 ---
-[nomarkup][Diana’s words make you even more convinced that private investigator is a job that fits you like a glove. You feel a wave of certainty you haven't felt for a long time.][/nomarkup]
--> {$pcName}: - get the feeling this is the sort of work I’m meant to do. I wish things had worked out with the Sands, but rooting out corruption- it works well for me.
-{$diana}: Fighting corruption feels good, I can understand that. Sometimes it’s the only thing we can do is pick the battles we can win and lay low otherwise.
--> {$pcName}: You sound like you know what you’re talking about?
-{$diana}: Sometimes you make a decision when you don’t have all the evidence and it doesn’t work out how you’d hoped. I’ve made a lot of choices that I now know are mistakes.
-{$innerVoice}: God knows you understand that.
-[nomarkup][You remember standing in court as a gavel is struck a feeling of numb disbelief spreading over you. Stacks of court summons sitting on your desk.][/nomarkup]
--> {$pcName}: Hindsight is always the clearest view.
+[nomarkup][Diana’s words make you even more convinced that private investigator is a job that fits you like a glove. You feel a wave of certainty you haven't felt for a long time.][/nomarkup] #line:00dc997 
+-> {$pcName}: - get the feeling this is the sort of work I’m meant to do. I wish things had worked out with the Sands, but rooting out corruption- it works well for me. #line:0179377 
+{$diana}: Fighting corruption feels good, I can understand that. Sometimes it’s the only thing we can do is pick the battles we can win and lay low otherwise. #line:01fd063 
+-> {$pcName}: You sound like you know what you’re talking about? #line:017ca04 
+{$diana}: Sometimes you make a decision when you don’t have all the evidence and it doesn’t work out how you’d hoped. I’ve made a lot of choices that I now know are mistakes. #line:027c19a 
+{$innerVoice}: God knows you understand that. #line:0f085cc 
+[nomarkup][You remember standing in court as a gavel is struck a feeling of numb disbelief spreading over you. Stacks of court summons sitting on your desk.][/nomarkup] #line:05710a6 
+-> {$pcName}: Hindsight is always the clearest view. #line:0d57ad1 
 <<jump wrapUpVan>>
 ===
 title: pcVenerated
 ---
-[nomarkup][Yes, you feel that’s a compliment, and from one of your clients no less. It feels good.][/nomarkup]
--> {$pcName}: - it’s good to finally have a win. I’ve been losing for so long.
-{$diana}: Yeah? I saw your article in the Sands and the retracement of it. Didn’t go well?
--> {$pcName}: I’m not allowed to talk about that Diana. [nomarkup][You can just imagine another fleet of missives and court summons in the mail.][/nomarkup] But I think you can draw a pretty clear picture.
-{$diana}: Well, if it’s any consultation, my boss thinks well of you. And, this is just me, I thought it was badass as hell. Taking on someone like that? It takes a pair of brass balls love.
--> {$pcName}: Thanks.
+[nomarkup][Yes, you feel that’s a compliment, and from one of your clients no less. It feels good.][/nomarkup] #line:0629172 
+-> {$pcName}: - it’s good to finally have a win. I’ve been losing for so long. #line:080163a 
+{$diana}: Yeah? I saw your article in the Sands and the retracement of it. Didn’t go well? #line:0fad1e3 
+-> {$pcName}: I’m not allowed to talk about that Diana. [nomarkup][You can just imagine another fleet of missives and court summons in the mail.][/nomarkup] But I think you can draw a pretty clear picture. #line:0f1af6c 
+{$diana}: Well, if it’s any consultation, my boss thinks well of you. And, this is just me, I thought it was badass as hell. Taking on someone like that? It takes a pair of brass balls love. #line:0a90db8 
+-> {$pcName}: Thanks. #line:055caed 
 <<jump wrapUpVan>>
 ===
 title: wrapUpVan
 ---
-[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup]
+[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup] #line:02fc3bf 
 <<jump havenJobArrival>>
 ===

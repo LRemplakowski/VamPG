@@ -1,9 +1,9 @@
 ﻿title: theAttack
 tags:
 ---
-{$diana}: Shit.
-[nomarkup][You feel yourself being shoved further into your apartment as a warm body falls on top of you. Bleached blonde hair coloring your vision as you tumble.][/nomarkup]
--> [nomarkup][Try to withstand the unconscious man weight.](Strength + Athletics)[/nomarkup]
+{$diana}: Shit. #line:0e61ac9 
+[nomarkup][You feel yourself being shoved further into your apartment as a warm body falls on top of you. Bleached blonde hair coloring your vision as you tumble.][/nomarkup] #line:010ddf1 
+-> [nomarkup][Try to withstand the unconscious man weight.](Strength + Athletics)[/nomarkup] #line:06e574e 
     <<jump attackStrRoll>>
 ===
 title: attackStrRoll
@@ -16,21 +16,21 @@ title: attackStrRoll
 ===
 title: attackStrSuccess
 ---
-[nomarkup][You catch yourself as the warm body of a man slides over you and hits the floor with a dull thud.][/nomarkup] #success
+[nomarkup][You catch yourself as the warm body of a man slides over you and hits the floor with a dull thud.][/nomarkup] #success #line:0afc493 
 <<jump luciaShowsUp>>
 ===
 title: attackStrFailure
 ---
-[nomarkup][You turn just in time to find yourself holding the man from the van in your arms. His warmth leaches into your arms and you try to handle his dead weight.][/nomarkup] #failure
+[nomarkup][You turn just in time to find yourself holding the man from the van in your arms. His warmth leaches into your arms and you try to handle his dead weight.][/nomarkup] #failure #line:0ab9395 
 <<jump luciaShowsUp>>
 ===
 title: luciaShowsUp
 ---
-{$lucia}: Surprise, sweetie. Don’t worry- this won’t hurt much.
-[nomarkup][She smiles and you can see stark white teeth in the dark. Intent and lust present on her face as she looks at you. You stomach churns as you look towards the door where Diana stands as a silhouette between you and freedom.][/nomarkup]
-{$diana}: Don’t make this harder than it has to be.
-{$lucia}: And it really doesn’t have to be that hard, just relax it’ll all be over soon.
--> {$pcName}: Did you fucking set me up?! [nomarkup][Try to run.](Dexterity + Athletics)[/nomarkup]
+{$sire}: Surprise, sweetie. Don’t worry- this won’t hurt much. #line:0acec7e 
+[nomarkup][She smiles and you can see stark white teeth in the dark. Intent and lust present on her face as she looks at you. You stomach churns as you look towards the door where Diana stands as a silhouette between you and freedom.][/nomarkup] #line:0f2788f 
+{$diana}: Don’t make this harder than it has to be. #line:08b133f 
+{$sire}: And it really doesn’t have to be that hard, just relax it’ll all be over soon. #line:0705a01 
+-> {$pcName}: Did you fucking set me up?! [nomarkup][Try to run.](Dexterity + Athletics)[/nomarkup] #line:0b305aa 
     <<jump attackDexRoll>>
 ===
 title: attackDexRoll
@@ -43,12 +43,12 @@ title: attackDexRoll
 ===
 title: attackDexSuccess
 ---
-[nomarkup][You dart backwards, your head swimming as you try to keep your balance. Maneuvering yourself and the man has become a herculean task by you managing to make it past Diana and out towards the parking lot.][/nomarkup]
+[nomarkup][You dart backwards, your head swimming as you try to keep your balance. Maneuvering yourself and the man has become a herculean task by you managing to make it past Diana and out towards the parking lot.][/nomarkup] #line:0dcd70f 
 <<jump havenEscape>>
 //scene changes to Haven exterior//
 ===
 title: attackDexFailure
 ---
-[nomarkup][You move backwards directly into Diana who shoves you full force forwards sending you sprawling into the brown eyed woman, Lucia, before you.][/nomarkup]
+[nomarkup][You move backwards directly into Diana who shoves you full force forwards sending you sprawling into the brown eyed woman, Lucia, before you.][/nomarkup] #line:0805dbf 
 <<jump failedEscape>>
 ===

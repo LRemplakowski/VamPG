@@ -194,7 +194,7 @@ title: previousPrince
     <<jump whatAreTraditions>>
 -> {$pcName}: Camarilla?
     <<jump camarillaExplained>>
--> {pcName}: Final Death?
+-> {$pcName}: Final Death?
     <<jump finalDeathExplained>>
 ===
 title: whatIsSabbat
@@ -279,7 +279,7 @@ title: getToOffice
 ---
 <<if $kateAlleyTalk == false>>
     {$sforza}: That's very nice Desiree. 
-    -> {pcName}: She led me into the alley last night.
+    -> {$pcName}: She led me into the alley last night.
     <<set kateAlleyTalk to true>>
     {$sforza}: You should talk to her about that, then.
     -> {$pcName}: She ran off into her office before I had the chance.

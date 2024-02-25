@@ -245,18 +245,18 @@ title: anaAndKieranConflict
 -> {$pcName}: [nomarkup][Find the will to assert yourself.](Resolve+Leadership)[/nomarkup]
 [nomarkup][Kieran and Anastasia continue to argue as you briefly clear your throat, readying yourself to take on the mantle of being the sole adult in the room... What will you say?][/nomarkup]
 <<if Roll ("Resolve","Leadership")>=2>>
-    -> {pcName}: [nomarkup][You straighten up where you stand, before projecting an authoritative, firm voice.][/nomarkup] Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. #success
+    -> {$pcName}: [nomarkup][You straighten up where you stand, before projecting an authoritative, firm voice.][/nomarkup] Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. #success
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup]
     {$kieran}: We'll finish this conversation at another, more opportune, time.
     {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust.
 <<else>>
-    -> {pcName}: [nomarkup][You straighten up where you stand, before releasing an impressively loud shout.][/nomarkup] SHUT UP!!! #failure
+    -> {$pcName}: [nomarkup][You straighten up where you stand, before releasing an impressively loud shout.][/nomarkup] SHUT UP!!! #failure
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup]
     {$kieran}: That was exceedingly rude. We're helping you with this investigation, and this is the thanks we get? (-1 Kieran Influence)
     <<ModifyInfluence -1 $kieran>>
     {$anastasia}: [nomarkup][She whistles in appreciation, turning her head to regard Kieran.][/nomarkup] Speak for yourself. Nice lung capacity, Bumblebee. (+1 Anastasia Influence)
     <<ModifyInfluence 1 $anastasia>>
-    -> {pcName}: Bumblebee?
+    -> {$pcName}: Bumblebee?
     {$kieran}: Your clothing, miss Bardot. I think our companion here is referring to the color scheme and pattern.
     [nomarkup][You look down at the black and yellow striped sweater you slipped into before exiting your apartment.][/nomarkup]
     <<if (GetCompanionInfluence($kieran) >=4)>>
@@ -267,17 +267,17 @@ title: anaAndKieranConflict
     -> {$pcName}: Oh, thank you. I'm so glad you think so.
     {$kieran}: [nomarkup][He smiles pleasantly and politely - the usual display.][/nomarkup] You are quite welcome. Being honest and forthcoming with the small things does tend to have its merits, after all...
     <<if (GetCompanionInfluence($kieran) >=4)>>
-        -> {pcName}: [nomarkup][I think he might be warming up to me, a little...][/nomarkup]
+        -> {$pcName}: [nomarkup][I think he might be warming up to me, a little...][/nomarkup]
     <<else>>
         -> {$pcName}: [nomarkup][Well, fuck you, too, I guess. Sarcasm can only go so far to communicate a point...][/nomarkup]
     <<endif>>
 <<endif>>
--> {pcName}: [nomarkup][You straighten up where you stand, breathing in, then out in an attempt to calm and center yourself, before beginning to speak slowly and clearly in an unwavering monotone.][/nomarkup] Anastasia, Kieran... Please refrain from fighting on my behalf.
+-> {$pcName}: [nomarkup][You straighten up where you stand, breathing in, then out in an attempt to calm and center yourself, before beginning to speak slowly and clearly in an unwavering monotone.][/nomarkup] Anastasia, Kieran... Please refrain from fighting on my behalf.
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another, then back at you.][/nomarkup]
     {$anastasia}: [nomarkup][She raises an eyebrow with a smirk.][/nomarkup] Why? You gotta give a good reason, kid.
-    -> {pcName}: Very well. It is only that... When you act so emotional and childish while invoking my name, I cannot help but think that I mistakenly stumbled into a daycare, rather than one of the Vegas Strip's finest night clubs.
+    -> {$pcName}: Very well. It is only that... When you act so emotional and childish while invoking my name, I cannot help but think that I mistakenly stumbled into a daycare, rather than one of the Vegas Strip's finest night clubs.
     {$anastasia}: I am not a child. But if I was, that'd make you a fetus, little miss Desiree-conciler the pacifier.
-    -> {pcName}: That being said, Kieran is my adoptive Sire, and if any information pertinent to this investigation comes up, I trust him to relay it to me when his judgment deems the time to be right.
+    -> {$pcName}: That being said, Kieran is my adoptive Sire, and if any information pertinent to this investigation comes up, I trust him to relay it to me when his judgment deems the time to be right.
 ===
 title: examineScraps
 ---

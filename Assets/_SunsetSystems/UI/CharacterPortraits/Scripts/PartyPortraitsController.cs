@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace UI.CharacterPortraits
     {
         [SerializeField]
         private GameObject portraitPrefab;
+        [ShowInInspector]
         private readonly List<PortraitController> portraits = new();
 
         public void AddPortrait(Sprite portrait)

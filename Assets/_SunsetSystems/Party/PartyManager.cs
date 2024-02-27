@@ -45,6 +45,7 @@ namespace SunsetSystems.Party
 
         [Title("Events")]
         public UltEvent<IEnumerable<ICreature>> OnActivePartyInitialized = new();
+        public UltEvent<string> OnPartyMemberRecruited = new();
 
         private void OnValidate()
         {
@@ -130,6 +131,7 @@ namespace SunsetSystems.Party
             Debug.Log($"Recruited {memberTemplate.FullName} to party!");
             _coterieMemberKeysCache.Add(memberTemplate.DatabaseID);
             _cachedPartyTemplates.Add(memberTemplate.DatabaseID, memberTemplate);
+            OnPartyMemberRecruited?.InvokeSafe(memberTemplate.DatabaseID);
             ExperienceManager.AddCreatureToExperienceManager(memberTemplate.FullName);
         }
 

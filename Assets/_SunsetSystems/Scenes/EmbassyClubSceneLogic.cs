@@ -1,6 +1,3 @@
-using Redcode.Awaiting;
-using SunsetSystems.Data;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Party;
 using SunsetSystems.Persistence;
@@ -12,8 +9,6 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
 {
     [SerializeField]
     private ICreature anastasiaCompanion;
-    [SerializeField]
-    private Creature anastasiaDialogue;
 
     protected override void Awake()
     {
@@ -28,10 +23,7 @@ public class EmbassyClubSceneLogic : DefaultSceneLogic
 
     private void DoRecruitAnastasia()
     {
-        anastasiaDialogue.gameObject.SetActive(false);
-        anastasiaCompanion.References.GameObject.SetActive(true);
         PartyManager.Instance.RecruitCharacter(anastasiaCompanion);
-        //PartyManager.Instance.AddCreatureAsActivePartyMember(anastasiaCompanion);
     }
 
     public static class EmbassyClubDialogueCommands

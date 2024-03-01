@@ -144,13 +144,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a1a3efd8e885446a13fd602376e584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoneName: 
-  ID: 
-  Position: {x: 0, y: 0, z: 0}
-  Orientation: {x: 0, y: 0, z: 0, w: 0}
+  BoneName: CC_Base_R_Hand
+  ID: WEAPON
+  Position: {x: 7, y: 8, z: -5}
+  Orientation: {x: -0.00000003090862, y: -0.70710677, z: -0.70710677, w: 0.00000003090862}
   IgnoreTag: UMAIgnore
-  setScale: 1
-  MountOnStart: 0
+  setScale: 0
+  MountOnStart: 1
 --- !u!114 &4978411923176655394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,8 +175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be75397a8292ac646a6b4381949facec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <RightHandIK>k__BackingField: {fileID: 0}
-  <LeftHandIK>k__BackingField: {fileID: 0}
+  <RightHandIK>k__BackingField: {fileID: 2771864775208913011}
+  <LeftHandIK>k__BackingField: {fileID: 1108741060565536137}
   <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
   <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
   <AnimationType>k__BackingField: 0
@@ -201,10 +201,13 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+  bulletVelocity: 3
+  bulletLifetime: 5
   projectileOrigin: {fileID: 0}
   muzzleFlash: {fileID: 0}
+  bulletPrefab: {fileID: 0}
   shotSFX: {fileID: 0}
-  <WeaponAnimationData>k__BackingField: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 8640589930458614055}
 --- !u!1001 &2700224788388912445
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13798,10 +13798,13 @@ MonoBehaviour:
       Data: 
   <DataKey>k__BackingField: 1ec02663-28dd-4c21-b7ee-e48414a099f9
   _creatureParent: {fileID: 375571750532069242}
+  _defaultPartyLayer: Party Member
   _activeCoterieMemberKeys: []
   _coterieMemberKeysCache: []
   _mainCharacterKey: 
   OnActivePartyInitialized:
+    _PersistentCalls: []
+  OnPartyMemberRecruited:
     _PersistentCalls: []
 --- !u!114 &789996444019793790
 MonoBehaviour:
@@ -14112,7 +14115,7 @@ MonoBehaviour:
   _raycastTargetMask:
     serializedVersion: 2
     m_Bits: 320
-  _followerStoppingDistance: 1
+  _companionFollowDistance: 1
 --- !u!1 &1841230875796473284
 GameObject:
   m_ObjectHideFlags: 0
@@ -16557,7 +16560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -16.009872
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16565,23 +16568,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: 21.89
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8174156
+      value: -0.40870786
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.57604843
+      value: -0.28802425
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000021097142
+      value: 0.70790267
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000148675605
+      value: -0.49887252
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28483,6 +28486,10 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 2273498713780293014, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
+    - target: {fileID: 2275065812151078787, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2275065812151078787, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
     - target: {fileID: 2298811889804545558, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

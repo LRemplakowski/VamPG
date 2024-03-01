@@ -10,15 +10,17 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         private readonly NavMeshAgent followTarget;
         private readonly NavMeshAgent myAgent;
+        private readonly float followDistance;
 
         private IEnumerator followCoroutine;
         private bool following;
 
-        public Follow(IActionPerformer owner, IEntity followTarget) : base(owner)
+        public Follow(IActionPerformer owner, IEntity followTarget, float followDistance) : base(owner)
         {
             this.followTarget = followTarget.References.GetCachedComponentInChildren<NavMeshAgent>();
             myAgent = owner.References.NavMeshAgent;
             following = false;
+            this.followDistance = followDistance;
             conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(this.followTarget, myAgent));
         }
 
@@ -44,7 +46,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             while (following)
             {
                 myAgent.isStopped = false;
-                myAgent.destination = followTarget.transform.position;
+                myAgent.destination = followTarget.transform.position - ((followTarget.transform.position - myAgent.transform.position).normalized * followDistance);
                 yield return null;
             }
         }

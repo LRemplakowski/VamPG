@@ -5,7 +5,6 @@ using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Party;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 
@@ -23,7 +22,7 @@ namespace SunsetSystems.Input
         [SerializeField]
         private LayerMask _raycastTargetMask;
         [SerializeField]
-        private float _followerStoppingDistance = 1.0f;
+        private float _companionFollowDistance = 1.0f;
         [SerializeField]
         List<ISelectable> selectables;
 
@@ -106,7 +105,7 @@ namespace SunsetSystems.Input
                 ICreature creature = creatures[i];
                 if (creature != null)
                 {
-                    creature.PerformAction(new Follow(creature, PartyManager.Instance.MainCharacter));
+                    creature.PerformAction(new Follow(creature, PartyManager.Instance.MainCharacter, _companionFollowDistance));
                 }
             }
         }

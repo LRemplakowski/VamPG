@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
@@ -25,6 +24,10 @@ namespace SunsetSystems.Party
         [Title("References")]
         [SerializeField]
         private Transform _creatureParent;
+
+        [Title("Config")]
+        [SerializeField, ValueDropdown("GetLayerNames")]
+        private string _defaultPartyLayer;
 
         [Title("Runtime")]
         [SerializeField]
@@ -51,6 +54,11 @@ namespace SunsetSystems.Party
         {
             if (string.IsNullOrWhiteSpace(DataKey))
                 DataKey = Guid.NewGuid().ToString();
+        }
+
+        private string[] GetLayerNames()
+        {
+            return Enumerable.Range(0, 31).Select(index => LayerMask.LayerToName(index)).Where(layerName => !string.IsNullOrEmpty(layerName)).ToArray();
         }
 
         public void ResetOnGameStart()
@@ -117,6 +125,8 @@ namespace SunsetSystems.Party
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data);
                 memberInstance.Transform.SetParent(_creatureParent);
                 memberInstance.ForceToPosition(position);
+                memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
+                memberInstance.References.NavMeshAgent.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }

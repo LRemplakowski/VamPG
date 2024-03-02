@@ -119,27 +119,46 @@ namespace SunsetSystems.Input
             {
                 if (targetableHit != null)
                 {
-                    ICombatant combatant = targetableHit.gameObject.GetComponent<ICreature>()?.References.CombatBehaviour;
-                    if (combatant != null && combatant.IsAlive)
+                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
+                    if (attackTarget != null && attackTarget.IsAlive)
                     {
-                        CombatManager.Instance.CurrentActiveActor.AttackCreatureUsingCurrentWeapon(combatant);
+                        var currentActor = CombatManager.Instance.CurrentActiveActor;
+                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
+                        {
+                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
+                        }
                     }
                 }
             }
 
             void HandleMeleeAttackCombatAction()
             {
-
+                if (targetableHit != null)
+                {
+                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
+                    if (attackTarget != null && attackTarget.IsAlive)
+                    {
+                        var currentActor = CombatManager.Instance.CurrentActiveActor;
+                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Melee)
+                        {
+                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
+                        }
+                    }
+                }
             }
 
             void HandleFeedCombatAction()
             {
-
+                Debug.Log("Om non nom");
             }
 
             void HandleReloadCombatAction()
             {
-
+                var currentActor = CombatManager.Instance.CurrentActiveActor;
+                if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
+                {
+                    currentActor.ReloadCurrentWeapon();
+                }
             }
 
             void HandleUseDisciplineCombatAction()

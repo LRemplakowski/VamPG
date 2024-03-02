@@ -307,6 +307,7 @@ namespace SunsetSystems.Combat
             if (HasActed)
                 return false;
             weaponManager.ReloadSelectedWeapon();
+            HasActed = true;
             return true;
         }
 

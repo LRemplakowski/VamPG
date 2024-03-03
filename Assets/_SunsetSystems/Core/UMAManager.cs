@@ -98,6 +98,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
+                umaAvatar.UpdatePending();
+                umaAvatar.BuildCharacter(true);
             }
         }
 
@@ -105,9 +107,9 @@ namespace SunsetSystems.Core.UMA
         {
             if (item is IWearable wearable)
             {
-                umaAvatar.UnloadWardrobeCollectionGroup(wearable.WearableWardrobe.wardrobeSlot);
-                //umaAvatar.UpdateUMA();
-                //umaAvatar.BuildCharacter();
+                umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
+                umaAvatar.UpdatePending();
+                umaAvatar.BuildCharacter(true);
             }
         }
     }

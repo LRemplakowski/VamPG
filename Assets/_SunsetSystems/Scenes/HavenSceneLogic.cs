@@ -114,7 +114,8 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            _desiree.References.GameObject.SetActive(true);
+            _desiree.Transform.SetPositionAndRotation(_startPosition.position, Quaternion.identity);
+            _desiree.References.NavMeshAgent.Warp(_startPosition.position);
             await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
         }

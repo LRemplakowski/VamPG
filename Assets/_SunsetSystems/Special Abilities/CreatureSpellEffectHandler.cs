@@ -8,5 +8,10 @@ namespace SunsetSystems.Spellbook
         {
             effect.ApplyEffect(this);
         }
+
+        public EffectHandlerSceneContext GetContext()
+        {
+            return new();
+        }
     }
 }

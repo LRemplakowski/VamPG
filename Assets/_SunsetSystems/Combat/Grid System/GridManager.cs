@@ -111,7 +111,7 @@ namespace SunsetSystems.Combat.Grid
         public void ShowCellsInMovementRange(ICombatant combatant)
         {
             HideCellsInMovementRange();
-            Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
+            Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.BodyTransform.position);
             NavMeshAgent agent = combatant.References.NavMeshAgent;
             currentlyHighlitedGridUnits.Clear();
             currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));

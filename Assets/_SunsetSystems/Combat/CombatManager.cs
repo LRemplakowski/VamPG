@@ -121,7 +121,7 @@ namespace SunsetSystems.Combat
             List<Task> tasks = new();
             foreach (ICombatant combatant in actors)
             {
-                Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.Transform.position);
+                Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.BodyTransform.position);
                 Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
                 tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager)));
             }

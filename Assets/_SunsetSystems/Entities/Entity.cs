@@ -11,8 +11,6 @@ namespace SunsetSystems.Entities
         public virtual string Name => gameObject.name;
         public abstract IEntityReferences References { get; }
 
-        public Transform Transform => this.transform;
-        public GameObject GameObject => this.gameObject;
 
         [field: SerializeField, Title("Entity Setup"), HideIf("@this is Creature")]
         public Faction Faction { get; private set; }

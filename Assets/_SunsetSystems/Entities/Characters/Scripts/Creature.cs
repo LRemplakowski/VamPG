@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using UMA;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -70,7 +69,7 @@ namespace SunsetSystems.Entities.Characters
         #endregion
 
         #region ICreature
-        public new Transform Transform => References.Transform;
+        public Transform Transform => References.Transform;
         public MonoBehaviour CoroutineRunner => this;
         public new Faction Faction => References.CreatureData.Faction;
         public new ICreatureReferences References

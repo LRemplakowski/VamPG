@@ -1,16 +1,11 @@
-using Redcode.Awaiting;
-using Sirenix.OdinInspector;
-using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Creatures.Interfaces;
-using SunsetSystems.Entities.Data;
-using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Creatures.Interfaces;
+using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Spellbook
@@ -77,10 +72,16 @@ namespace SunsetSystems.Spellbook
                     switch (effect.AffectedEffectHandler)
                     {
                         case AffectedHandler.Caster:
-                            selfEffectHandler.HandleEffect(effect, this);
+                            if (effect.ValidateTarget(selfEffectHandler.GetContext()))
+                                selfEffectHandler.HandleEffect(effect, this);
+                            else
+                                Debug.LogError($"Target {_owner} is invalid for effect {effect}!");
                             break;
                         case AffectedHandler.Target:
-                            target.EffectHandler.HandleEffect(effect, this);
+                            if (effect.ValidateTarget(target.EffectHandler.GetContext()))
+                                target.EffectHandler.HandleEffect(effect, this);
+                            else
+                                Debug.LogError($"Target {target} is invalid for effect {effect}!");
                             break;
                     }
                 }

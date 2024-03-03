@@ -11,7 +11,7 @@ namespace SunsetSystems.Spellbook
 
         public EffectHandlerSceneContext GetContext()
         {
-            return new();
+            return new(this);
         }
     }
 }

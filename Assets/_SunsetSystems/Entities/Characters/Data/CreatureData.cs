@@ -40,7 +40,10 @@ namespace SunsetSystems.Entities.Characters
             CreatureType = template.CreatureType;
             BaseUmaRecipes = template.BaseUmaRecipes;
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
 #endif
         }
     }

@@ -98,7 +98,10 @@ namespace SunsetSystems.Entities.Characters
                 EquipmentSlots[key] = new EquipmentSlot(template.EquipmentSlotsData[key]);
             }
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
 #endif
         }
     }

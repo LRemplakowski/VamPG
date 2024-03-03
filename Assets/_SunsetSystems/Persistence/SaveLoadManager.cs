@@ -14,6 +14,11 @@ namespace SunsetSystems.Persistence
 
         private static GlobalPersistenceData _saveData = new();
 
+        public static void ForceCreateNewSaveData()
+        {
+            _saveData = new();
+        }
+
         public static void CreateNewSaveFileAndSaveObjects()
         {
             if (_saveData == null)
@@ -35,6 +40,8 @@ namespace SunsetSystems.Persistence
 
         public static void UpdateRuntimeDataCache()
         {
+            if (_saveData == null)
+                _saveData = new();
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
                 _saveData.UpdateSaveData(saveable);

@@ -41,7 +41,10 @@ namespace SunsetSystems.Core.UMA
             umaAvatar.UpdatePending();
             umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
 #endif
         }
 
@@ -95,8 +98,6 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
-                umaAvatar.UpdateUMA();
-                umaAvatar.BuildCharacter();
             }
         }
 
@@ -105,8 +106,8 @@ namespace SunsetSystems.Core.UMA
             if (item is IWearable wearable)
             {
                 umaAvatar.UnloadWardrobeCollectionGroup(wearable.WearableWardrobe.wardrobeSlot);
-                umaAvatar.UpdateUMA();
-                umaAvatar.BuildCharacter();
+                //umaAvatar.UpdateUMA();
+                //umaAvatar.BuildCharacter();
             }
         }
     }

@@ -63,6 +63,7 @@ namespace SunsetSystems.Data
             SaveLoadManager.SetSaveID(new());
             PartyManager.Instance.RecruitMainCharacter(_playerCharacterTemplate);
             OnGameStart?.Invoke();
+            SaveLoadManager.ForceCreateNewSaveData();
             await LevelLoader.Instance.LoadNewScene(startSceneData);
         }
 

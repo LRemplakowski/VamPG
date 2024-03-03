@@ -129,8 +129,11 @@ namespace SunsetSystems.Entities.Characters
             References.UMAManager.BuildUMAFromTemplate(template);
             References.EquipmentManager.CopyFromTemplate(template);
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
+            }
 #endif
         }
 

@@ -9,8 +9,6 @@ using SunsetSystems.Core.SceneLoading;
 
 namespace SunsetSystems.Game
 {
-    [RequireComponent(typeof(UniqueId))]
-    [RequireComponent(typeof(Tagger))]
     public class GameManager : SerializedMonoBehaviour, ISaveable
     {
         public static GameManager Instance { get; private set; }
@@ -39,9 +37,7 @@ namespace SunsetSystems.Game
         // Called when we start to unload the current level and all the persistent data has been cached
         public UltEvent OnLevelExit = new();
 
-        public string DataKey => _uniqueId.Id;
-
-        private UniqueId _uniqueId;
+        public string DataKey => DataKeyConstants.GAME_MANAGER_DATA_KEY;
 
         protected void Awake()
         {
@@ -49,8 +45,6 @@ namespace SunsetSystems.Game
                 Instance = this;
             else
                 Destroy(gameObject);
-            if (_uniqueId == null)
-                _uniqueId = GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
             LevelLoader.OnLevelLoadEnd += GameLevelStart;
             LevelLoader.OnLevelLoadStart += GameLevelEnd;

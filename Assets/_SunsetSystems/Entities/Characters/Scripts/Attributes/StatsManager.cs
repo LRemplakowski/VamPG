@@ -104,7 +104,10 @@ namespace SunsetSystems.Entities.Characters
         {
             Stats = new(template.StatsData);
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
 #endif
         }
 

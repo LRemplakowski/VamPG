@@ -196,7 +196,7 @@ namespace SunsetSystems.Dialogue
                 if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
                     speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
-                    .Append($"<color=\"red\">{speakerName}:</color>");
+                    .Append($"<color=\"red\">{speakerName}: </color>");
             }
             //if (appended)
             //    _lineHistoryStringBuilder.AppendLine("</size>");

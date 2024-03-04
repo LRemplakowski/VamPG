@@ -44,6 +44,9 @@ namespace SunsetSystems.Spellbook
         private Target _target = Target.Self;
         public Target Target { get => _target; }
         [SerializeField]
+        private Duration _duration = Duration.Immediate;
+        public Duration Duration => _duration;
+        [SerializeField]
         private Range range = Range.Ranged;
         public Range Range { get => range; }
         [SerializeField]

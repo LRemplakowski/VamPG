@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
@@ -55,10 +56,8 @@ namespace SunsetSystems.Spellbook
         private void ApplyPasivePowers()
         {
             Debug.LogWarning("PASSIVE POWERS NOT IMPLEMENTED");
-            //List<DisciplinePower> powers = new();
-            //List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.GetEffects().All(e => e.Duration == Duration.Passive));
-            //powers.AddRange(passivePowers);
-            //powers.ForEach(p => Spellcaster.HandleEffects(p, _owner.References.CombatBehaviour.MagicUser));
+            List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.Target is Target.Self && p.Duration is Duration.Passive);
+            //passivePowers.ForEach(p => p.GetEffects().ForEach(e => selfEffectHandler.HandleEffect(e));
         }
 
         public bool UsePower(DisciplinePower power, ITargetable target)

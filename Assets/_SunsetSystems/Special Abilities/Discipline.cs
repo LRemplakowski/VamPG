@@ -38,7 +38,7 @@ namespace SunsetSystems.Spellbook
             catch (ArgumentOutOfRangeException e)
             {
                 Debug.LogException(e);
-                return null;
+                return ScriptableObject.CreateInstance<DisciplinePower>();
             }
         }
 

@@ -2839,7 +2839,7 @@ namespace UMA.CharacterSystem
                 }
                 if (controllerToUse == null)
                 {
-                    Debug.LogError("Unable to find animator! This will not be good.");
+                    Debug.LogError($"Unable to find animator! This will not be good. GameObject: {gameObject}");
                 }
             }
             //changing the animationController in 5.6 resets the rotation of this game object

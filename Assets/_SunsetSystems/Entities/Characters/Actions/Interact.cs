@@ -22,7 +22,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             this.target = target;
             conditions.Add(new InteractionComplete(target));
-            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
+            this.navMeshAgent = owner.References.NavMeshAgent;
             NavMesh.SamplePosition(target.InteractionTransform.position, out var hit, 1f, NavMesh.AllAreas);
             this.destination = hit.position;
         }

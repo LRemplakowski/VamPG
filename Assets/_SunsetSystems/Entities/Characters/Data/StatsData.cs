@@ -24,12 +24,12 @@ namespace SunsetSystems.Entities.Data
 
         public StatsData(StatsData data)
         {
-            this.Trackers = data.Trackers;
+            this.Trackers = Trackers.DeepCopy(data.Trackers);
             this.Clan = data.Clan;
             this.Generation = data.Generation;
             this.BloodPotency = data.BloodPotency;
-            this.Attributes = data.Attributes;
-            this.Skills = data.Skills;
+            this.Attributes = Attributes.DeepCopy(data.Attributes);
+            this.Skills = Skills.DeepCopy(data.Skills);
         }
     }
 }

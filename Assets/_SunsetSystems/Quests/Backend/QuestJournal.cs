@@ -11,8 +11,10 @@ using UnityEngine;
 namespace SunsetSystems.Journal
 {
     [RequireComponent(typeof(UniqueId))]
-    public class QuestJournal : InitializedSingleton<QuestJournal>, IResetable, ISaveable
+    public class QuestJournal : SerializedMonoBehaviour, IResetable, ISaveable
     {
+        public static QuestJournal Instance { get; private set; }
+
         [SerializeField]
         private Dictionary<string, Quest> _activeQuests = new(), _completedQuests = new();
         private Dictionary<string, Dictionary<string, Objective>> _currentObjectives = new();
@@ -38,14 +40,17 @@ namespace SunsetSystems.Journal
             _currentObjectives = new();
         }
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
             _uniqueId ??= GetComponent<UniqueId>();
             ISaveable.RegisterSaveable(this);
         }
 
-        [ContextMenu("Foo")]
+        [Button]
         public void PrintObjectivesToConsole()
         {
             foreach (string key in Instance._currentObjectives.Keys)
@@ -73,23 +78,17 @@ namespace SunsetSystems.Journal
             Quest.ObjectiveFailed -= OnQuestObjectiveFailed;
         }
 
-        protected override void OnDestroy()
+        protected void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
-            base.OnDestroy();
         }
 
-        public override void Initialize()
-        {
-            
-        }
-
-        public override void LateInitialize()
+        private void OnQuestStarted(Quest quest)
         {
             OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
-        private void OnQuestStarted(Quest quest)
+        public void OnLevelStarted()
         {
             OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }

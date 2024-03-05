@@ -17,6 +17,7 @@ namespace SunsetSystems.Persistence
         public async override Task StartSceneAsync()
         {
             await Task.Yield();
+            OnSceneStart?.InvokeSafe();
         }
 
         public override void InjectSaveData(object data)
@@ -26,7 +27,7 @@ namespace SunsetSystems.Persistence
 
         public override object GetSaveData()
         {
-            return null;
+            return new SceneLogicData();
         }
 
         protected class SceneLogicData : SaveData

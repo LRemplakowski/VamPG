@@ -1,5 +1,5 @@
 ﻿title: officeBouncer
-position: 136,-238
+position: 58,-333
 ---
 //if $kateDealsWithBouncer==1 there is no bouncer//
 <<set $talkedToBouncer to true>>
@@ -15,7 +15,7 @@ Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms.
     -> {$pcName}: Kate sent us. #line:0ee6107 
     <<jump officeBouncerKateSentUs>>
 <<endif>>
-<<if GetHasItem("IT_Q_EMBASSYDRINK") is true>>
+<<if GetHasItem("IT_Q_EMBASSYDRINK") is true and visited("drinkFailure") is false>>
     -> {$pcName}: You've been working all night. Here, a drink. (Manipulation + Persuasion) #line:0d0b60d 
         <<if Roll("Manipulation","Persuasion") >=3>>
             <<jump drinkSuccess>>
@@ -25,6 +25,7 @@ Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms.
 <<endif>>
 ===
 title: officeBouncerKateSentUs
+position: -86,6
 ---
 [nomarkup][The man doesn't react at all to this information.][/nomarkup] #line:06cb9dc 
 {$kieran}: Did you hear her? Last time I checked, you were not deaf. Quite the opposite. #line:02e9baa 
@@ -36,6 +37,7 @@ Office Bouncer: ... Ms. Foster is not taking any visitors at the moment. #line:0
 <<endif>>
 ===
 title: drinkSuccess
+position: 241,17
 ---
 Office Bouncer: [nomarkup][The Bouncer scans the room nervously.][/nomarkup] I shouldn't drink on duty. #success #line:06b94f1 
 <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
@@ -43,17 +45,22 @@ Office Bouncer: [nomarkup][The Bouncer scans the room nervously.][/nomarkup] I s
 <<endif>>
 -> {$pcName}: Come on. Nobody's looking. #line:07514c0 
 [nomarkup][Without a word, the Bouncer grabs the drinks and greedily drinks it in one gulp.][/nomarkup] #line:0e7521a 
-<<if $benzos ==true>>
+<<if GetHasItem("IT_Q_BENZOS") is true>>
     Office Bouncer: I don't feel so well... #line:0e3e133 
-    //cut to black, bouncer dissapears//
-    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
-        {$anastasia}: What a lightweight. Back where I come from, we drink vodka like water. #line:09073f5 
-    <<endif>>
+    <<jump afterBouncerCutscene>>
 <<else>>
     Office Bouncer: Thanks! #line:00b692b 
 <<endif>>
 ===
 title: drinkFailure
+position: 399,-286
 ---
 Office Bouncer: I'm not allowed to drink at work. #failure #line:05bd021 
+===
+title: afterBouncerCutscene
+position: 246,222
+---
+<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    {$anastasia}: What a lightweight. Back where I come from, we drink vodka like water. #line:09073f5 
+<<endif>>
 ===

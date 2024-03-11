@@ -15,7 +15,7 @@ namespace SunsetSystems.Inventory
         [Title("Data")]
         [SerializeField]
         private List<ItemCategory> _acceptedItemTypes = new();
-        [SerializeField]
+        [OdinSerialize]
         private Dictionary<string, InventoryEntry> _contents = new();
         public List<InventoryEntry> Contents => _contents.Values.ToList();
         [Title("Events")]
@@ -48,6 +48,7 @@ namespace SunsetSystems.Inventory
             itemEntries?.ForEach(entry => AddItem(entry));
         }
 
+        [Button]
         public void AddItem(InventoryEntry itemEntry)
         {
             if (itemEntry._item == null)
@@ -112,9 +113,8 @@ namespace SunsetSystems.Inventory
     [Serializable]
     public struct InventoryEntry : IGameDataProvider<InventoryEntry>
     {
-        [OdinSerialize]
+        [NonSerialized, OdinSerialize, ES3Serializable]
         public IBaseItem _item;
-        [SerializeField]
         public int _stackSize;
 
         public InventoryEntry(IBaseItem item) : this(item, 1) { }

@@ -8,12 +8,17 @@ namespace SunsetSystems.UI
 {
     public class CharacterSelector : SerializedMonoBehaviour
     {
+        [Title("References")]
         [SerializeField]
         private TextMeshProUGUI _selectedCharacterText;
-        private static string _selectedCharacterKey = "";
 
+        [Title("Events")]
         [SerializeField]
         private UnityEvent OnSelectedCharacterChanged;
+
+        [Title("Runtime")]
+        [ShowInInspector]
+        private static string _selectedCharacterKey = "";
         public static string SelectedCharacterKey 
         { 
             get
@@ -24,9 +29,19 @@ namespace SunsetSystems.UI
             }
         }
 
+        private void Awake()
+        {
+            _selectedCharacterKey = "";
+        }
+
         private void OnEnable()
         {
             UpdateSelectedText();
+        }
+
+        private void OnDestroy()
+        {
+            _selectedCharacterKey = "";
         }
 
         private void UpdateSelectedText()

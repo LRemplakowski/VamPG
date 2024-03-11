@@ -1,8 +1,6 @@
-using SunsetSystems.UI.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using SunsetSystems.UI.Utils;
 
 [Serializable]
 public abstract class BaseStat : IGameDataProvider<BaseStat>
@@ -19,7 +17,7 @@ public abstract class BaseStat : IGameDataProvider<BaseStat>
     public BaseStat(BaseStat existing)
     {
         Modifiers = new();
-        existing.Modifiers.ForEach(m  => Modifiers.Add(new(m.Value, m.Type, m.Name)));
+        existing.Modifiers?.ForEach(m  => Modifiers.Add(new(m.Value, m.Type, m.Name)));
     }
 
     public BaseStat()

@@ -18,6 +18,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         [field: ShowInInspector]
         public bool IsPriority { get; protected set; }
         public bool ActionFinished { get; protected set; } = false;
+        public bool ActionCanceled { get; protected set; } = false;
         protected IActionPerformer Owner { get; }
         [ShowInInspector]
         protected List<Condition> conditions = new List<Condition>();
@@ -41,25 +42,31 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Do any relevant cleanup.
         /// </summary>
-        public virtual void Abort()
+        public virtual void Cleanup()
         {
             conditions.Clear();
             ActionFinished = true;
         }
 
-        public virtual bool EvaluateActionFinished()
+        public virtual void Abort()
         {
-            if (ActionFinished)
+            conditions.Clear();
+            ActionCanceled = true;
+        }
+
+        public virtual bool EvaluateAction()
+        {
+            if (ActionFinished || ActionCanceled)
                 return true;
             if (conditions.Count == 0)
             {
                 Debug.LogError("Aborting action, no conditions present");
-                this.Abort();
+                Abort();
                 return true;
             }
             ActionFinished = conditions.All(c => c.IsMet());
             if (ActionFinished)
-                Abort();
+                Cleanup();
             return ActionFinished;
         }
 

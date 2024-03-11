@@ -29,9 +29,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             conditions.Add(new WaitForFlag(attackFinished));
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            base.Abort();
+            base.Cleanup();
             if (attackRoutine != null)
                 (Owner as MonoBehaviour).StopCoroutine(attackRoutine);
         }
@@ -62,7 +62,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             faceTargetSubaction = new(attacker, defender.Transform, 180f);
             faceTargetSubaction.Begin();
-            while (faceTargetSubaction.EvaluateActionFinished() is false)
+            while (faceTargetSubaction.EvaluateAction() is false)
                 yield return null;
             float waitForAttackFinish = attacker.PerformAttackAnimation();
             float waitForTakeHitFinish = defender.PerformTakeHitAnimation();

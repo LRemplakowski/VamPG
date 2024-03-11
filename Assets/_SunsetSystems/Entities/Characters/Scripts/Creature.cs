@@ -16,6 +16,7 @@ namespace SunsetSystems.Entities.Characters
 {
     public class Creature : PersistentEntity, ICreature
     {
+        [Title("Runtime")]
         [ShowInInspector]
         private Queue<EntityAction> _actionQueue = new();
         private Queue<EntityAction> ActionQueue
@@ -25,7 +26,7 @@ namespace SunsetSystems.Entities.Characters
                 if (_actionQueue == null)
                 {
                     _actionQueue = new Queue<EntityAction>();
-                    _ = PerformAction(new Idle(this));
+                    _actionQueue.Enqueue(new Idle(this));
                 }
                 return _actionQueue;
             }
@@ -55,10 +56,11 @@ namespace SunsetSystems.Entities.Characters
                 ActionQueue.Enqueue(new Idle(this));
             if (ActionQueue.Peek() is Idle && ActionQueue.Count > 1)
             {
-                ActionQueue.Dequeue();
+                var idle = ActionQueue.Dequeue();
+                idle.Abort();
                 ActionQueue.Peek().Begin();
             }
-            else if (ActionQueue.Peek().EvaluateActionFinished())
+            else if (ActionQueue.Peek().EvaluateAction())
             {
                 ActionQueue.Dequeue();
                 if (ActionQueue.Count == 0)
@@ -100,7 +102,7 @@ namespace SunsetSystems.Entities.Characters
         public void ClearAllActions()
         {
             while (ActionQueue.Count > 0)
-                ActionQueue.Dequeue().Abort();
+                ActionQueue.Dequeue().Cleanup();
             ActionQueue.Enqueue(new Idle(this));
         }
 
@@ -115,8 +117,7 @@ namespace SunsetSystems.Entities.Characters
                 ClearAllActions();
             ActionQueue.Enqueue(action);
             await new WaitForUpdate();
-            while (action.ActionFinished is false)
-                await new WaitForUpdate();
+            await new WaitUntil(() => action.ActionFinished || action.ActionCanceled);
         }
 
         [Button]

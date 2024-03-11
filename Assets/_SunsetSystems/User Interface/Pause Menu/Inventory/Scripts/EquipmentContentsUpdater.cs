@@ -1,25 +1,25 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.UI.Utils;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.UI.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<IEquipmentSlot>
+    public class EquipmentContentsUpdater : SerializedMonoBehaviour, IUserInterfaceUpdateReciever<IEquipmentSlot>
     {
         [SerializeField]
         private EquipmentSlotDisplay _slotPrefab;
 
-        [SerializeField]
-        private Dictionary<EquipmentSlotID, EquipmentSlotDisplay> _slotViews;
+        [SerializeField, DictionaryDrawerSettings(IsReadOnly = true, KeyLabel = "Slot ID", ValueLabel = "Slot View")]
+        private Dictionary<EquipmentSlotID, EquipmentSlotDisplay> _slotViews = new();
 
         private void OnValidate()
         {
+            if (_slotViews == null)
+                _slotViews = new();
             foreach (EquipmentSlotID key in EquipmentData.GetSlotsPreset().Keys)
             {
-                _slotViews?.TryAdd(key, null);
+                _slotViews.TryAdd(key, null);
             }
         }
 
@@ -32,9 +32,11 @@ namespace SunsetSystems.Equipment.UI
         {
             foreach (IGameDataProvider<IEquipmentSlot> slot in data)
             {
-                EquipmentSlotDisplay view = _slotViews[slot.Data.ID];
-                view.UpdateView(slot);
-                view.gameObject.SetActive(true);
+                if (_slotViews.TryGetValue(slot.Data.ID, out EquipmentSlotDisplay view))
+                {
+                    view.UpdateView(slot);
+                    view.gameObject.SetActive(true);
+                }
             }
         }
     }

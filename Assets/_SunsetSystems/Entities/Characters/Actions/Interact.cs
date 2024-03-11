@@ -1,9 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using System;
-using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,9 +24,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             this.destination = hit.position;
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            base.Abort();
+            base.Cleanup();
             target.Interacted = false;
             navMeshAgent.isStopped = true;
             if (delayedInteractionCoroutine != null)
@@ -38,7 +35,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public override void Begin()
         {
-            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.Transform.position);
+            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position);
             if (distance > target.InteractionDistance)
             {
                 navMeshAgent.isStopped = false;
@@ -51,7 +48,7 @@ namespace SunsetSystems.Entities.Characters.Actions
                 }
                 else
                 {
-                    Abort();
+                    Cleanup();
                 }
             }
             else
@@ -63,7 +60,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator InteractWhenCloseEnough()
         {
-            while (Vector3.Distance(target.InteractionTransform.position, Owner.Transform.position) > target.InteractionDistance)
+            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position) > target.InteractionDistance)
                 yield return null;
             navMeshAgent.isStopped = true;
             target.TargetedBy = Owner;

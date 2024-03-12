@@ -19,6 +19,8 @@ namespace SunsetSystems.Entities.Interactable
         private Collider _interactionCollider;
         [SerializeField]
         private IHighlightHandler _highlightHandler;
+        [SerializeField]
+        private GameObject _linkedGameObject;
 
         [Title("Config")]
         [SerializeField]
@@ -119,11 +121,15 @@ namespace SunsetSystems.Entities.Interactable
         private void OnEnable()
         {
             InteractablesInScene.Add(this);
+            if (_linkedGameObject != null)
+                _linkedGameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
             InteractablesInScene.Remove(this);
+            if (_linkedGameObject != null)
+                _linkedGameObject.SetActive(false);
         }
 
         protected override void Start()
@@ -176,6 +182,8 @@ namespace SunsetSystems.Entities.Interactable
         {
             InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData);
             persistenceData.Interactable = Interactable;
+            persistenceData.Interacted = _interacted;
+            persistenceData.InteractableOnce = _interactableOnce;
             return persistenceData;
         }
 
@@ -184,12 +192,18 @@ namespace SunsetSystems.Entities.Interactable
             base.InjectPersistenceData(data);
             InteractableEntityPersistenceData persistenceData = data as InteractableEntityPersistenceData;
             Interactable = persistenceData.Interactable;
+            _interacted = persistenceData.Interacted;
+            _interactableOnce = persistenceData.InteractableOnce;
+            if (_linkedGameObject)
+                _linkedGameObject.SetActive(persistenceData.GameObjectActive);
         }
 
         [Serializable]
         protected class InteractableEntityPersistenceData : PersistenceData
         {
             public bool Interactable;
+            public bool Interacted;
+            public bool InteractableOnce;
 
             public InteractableEntityPersistenceData(PersistenceData persistentEntity)
             {

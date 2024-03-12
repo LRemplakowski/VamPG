@@ -12,10 +12,14 @@ namespace SunsetSystems.Entities.Interactable
         [SerializeField, Required, AssetsOnly]
         private Material _highlightMaterial;
         [SerializeField]
+        private bool _findRenderersAtRuntime = false;
+        [SerializeField, HideIf("@this._findRenderersAtRuntime == true")]
         private List<Renderer> _highlightRenderers = new();
+        [SerializeField, ShowIf("@this._findRenderersAtRuntime == true"), Required]
+        private GameObject _rendererParent;
         [Title("Config")]
         [SerializeField, Min(0f)]
-        private float _materialLerpSpeed = 4f;
+        private float _materialLerpSpeed = 4;
 
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
@@ -28,10 +32,12 @@ namespace SunsetSystems.Entities.Interactable
 
         private void Start()
         {
+            if (_findRenderersAtRuntime && _rendererParent != null)
+                _highlightRenderers = _rendererParent.GetComponentsInChildren<Renderer>().ToList();
             foreach (Renderer renderer in _highlightRenderers)
             {
-                List<Material> defaultMaterials = new List<Material>();
-                List<Material> highlighted = new List<Material>();
+                List<Material> defaultMaterials = new();
+                List<Material> highlighted = new();
                 for (int i = 0; i < renderer.materials.Length; i++)
                 {
                     defaultMaterials.Add(renderer.materials[i]);

@@ -6,21 +6,33 @@ using SunsetSystems.LevelUtility;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Persistence;
+using System.Collections.Generic;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Party;
+using System.Collections;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Core.SceneLoading
 {
-    public class SceneTransition : SerializedMonoBehaviour, IInteractionHandler, ITransition
+    public class SceneTransition : SerializedMonoBehaviour, IInteractionHandler
     {
+        [Title("References")]
         [SerializeField]
         private TransitionType _type;
         [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
-        private SceneLoadingData sceneToLoad;
+        private SceneLoadingData _sceneToLoad;
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private Waypoint _targetEntryPoint;
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private BoundingBox _targetBoundingBox;
+
+        [Title("Configs")]
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
-        private CameraControlScript _cameraControlScript;
+        private CanvasGroup _fadeScreenCanvasGroup;
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition"), Min(0)]
+        private float _fadeScreenTime = .5f;
+
+        private IEnumerator _internalTransitionCoroutine;
 
         public bool HandleInteraction(IActionPerformer interactee)
         {
@@ -28,35 +40,73 @@ namespace SunsetSystems.Core.SceneLoading
             switch (_type)
             {
                 case TransitionType.SceneTransition:
-                    MoveToScene(sceneToLoad);
+                    MoveToScene(_sceneToLoad);
                     break;
                 case TransitionType.InternalTransition:
+                    MoveToArea(_targetEntryPoint, _targetBoundingBox);
                     break;
+                default:
+                    return false;
             }
             return true;
         }
 
-        public void MoveToScene(SceneLoadingData data)
+        private void MoveToScene(SceneLoadingData data)
         {
             SaveLoadManager.UpdateRuntimeDataCache();
             _ = LevelLoader.Instance.LoadNewScene(data);
         }
 
-        public async Task MoveToArea()
+        private void MoveToArea(Waypoint waypoint, BoundingBox cameraBoundingBox)
         {
-            //await _fadeUI.DoFadeOutAsync(.5f);
-            //List<ICreature> party = PartyManager.ActiveParty;
-            //for (int i = 0; i < party.Count; i++)
-            //{
-            //    party[i].ForceToPosition(_targetEntryPoint.transform.position);
-            //    await Task.Yield();
-            //}
-            //if (!_cameraControlScript)
-            //    _cameraControlScript = FindObjectOfType<CameraControlScript>();
-            //_cameraControlScript.CurrentBoundingBox = _targetBoundingBox;
-            //_cameraControlScript.ForceToPosition(_targetEntryPoint.transform.position);
-            //await Task.Delay(500);
-            //await _fadeUI.DoFadeInAsync(.5f);
+            if (_internalTransitionCoroutine != null)
+                StopCoroutine(_internalTransitionCoroutine);
+            _internalTransitionCoroutine = FadeOutScreenAndMoveToArea(waypoint, cameraBoundingBox);
+            StartCoroutine(_internalTransitionCoroutine);
+        }
+
+        private IEnumerator FadeOutScreenAndMoveToArea(Waypoint waypoint, BoundingBox cameraBoundingBox)
+        {
+            if (_fadeScreenTime <= 0f || _fadeScreenCanvasGroup == null)
+            {
+                var party = PartyManager.Instance.ActiveParty;
+                foreach (ICreature creature in party)
+                {
+                    creature.ForceToPosition(waypoint.transform.position);
+                }
+                var camera = GameManager.Instance.GameCamera;
+                camera.ForceToPosition(waypoint.transform.position);
+                camera.CurrentBoundingBox = cameraBoundingBox;
+            }
+            else
+            {
+                float lerp = 0f;
+                _fadeScreenCanvasGroup.gameObject.SetActive(true);
+                while (lerp < 1)
+                {
+                    lerp += Time.deltaTime * (1 / _fadeScreenTime);
+                    _fadeScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, lerp);
+                    yield return null;
+                }
+                _fadeScreenCanvasGroup.alpha = 1f;
+                var party = PartyManager.Instance.ActiveParty;
+                foreach (ICreature creature in party)
+                {
+                    creature.ForceToPosition(waypoint.transform.position);
+                }
+                var camera = GameManager.Instance.GameCamera;
+                camera.ForceToPosition(waypoint.transform.position);
+                camera.CurrentBoundingBox = cameraBoundingBox;
+                yield return new WaitForSeconds(_fadeScreenTime / 2);
+                while (lerp > 0)
+                {
+                    lerp -= Time.deltaTime * (1 / _fadeScreenTime);
+                    _fadeScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, lerp);
+                    yield return null;
+                }
+                _fadeScreenCanvasGroup.alpha = 0f;
+                _fadeScreenCanvasGroup.gameObject.SetActive(false);
+            }
         }
     }
 

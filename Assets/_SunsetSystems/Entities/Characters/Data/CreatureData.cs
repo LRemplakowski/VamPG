@@ -1,8 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Utils.Extensions;
-using System;
-using System.Collections.Generic;
 using UMA;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -25,8 +23,6 @@ namespace SunsetSystems.Entities.Characters
         public BodyType BodyType { get; private set; }
         [field: SerializeField]
         public CreatureType CreatureType { get; private set; }
-        [field: SerializeField]
-        public List<UMARecipeBase> BaseUmaRecipes { get; private set; }
 
         public void CopyFromTemplate(ICreatureTemplate template)
         {
@@ -38,7 +34,6 @@ namespace SunsetSystems.Entities.Characters
             Faction = template.Faction;
             BodyType = template.BodyType;
             CreatureType = template.CreatureType;
-            BaseUmaRecipes = template.BaseUmaRecipes;
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
             {

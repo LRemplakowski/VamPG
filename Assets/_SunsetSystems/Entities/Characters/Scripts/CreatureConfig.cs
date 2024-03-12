@@ -9,6 +9,7 @@ using UMA;
 using SunsetSystems.Equipment;
 using System;
 using SunsetSystems.Inventory.Data;
+using UMA.CharacterSystem;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -39,7 +40,7 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public InventoryConfig EquipmentConfig { get; private set; }
         [field: SerializeField]
-        public List<UMARecipeBase> BaseUmaRecipes { get; private set; }
+        public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
         [SerializeField]
         private Faction _creatureFaction;
         public Faction Faction { get => _creatureFaction; }
@@ -132,7 +133,7 @@ namespace SunsetSystems.Entities.Characters
 
             public AssetReferenceSprite PortraitAssetRef { get; }
 
-            public List<UMARecipeBase> BaseUmaRecipes { get; }
+            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
 
             public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
 
@@ -149,7 +150,7 @@ namespace SunsetSystems.Entities.Characters
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
                 this.PortraitAssetRef = asset.PortraitAssetRef;
-                this.BaseUmaRecipes = new(asset.BaseUmaRecipes);
+                this.BaseLookWardrobeCollection = asset.BaseLookWardrobeCollection;
                 this.EquipmentSlotsData = new(asset.EquipmentSlotsData);
                 this.StatsData = new(asset.StatsData);
             }

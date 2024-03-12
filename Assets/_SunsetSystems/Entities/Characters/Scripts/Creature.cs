@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UMA;
+using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -163,7 +164,7 @@ namespace SunsetSystems.Entities.Characters
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
-                BaseUmaRecipes = new(instance.References.CreatureData.BaseUmaRecipes);
+                BaseLookWardrobeCollection = instance.References.UMAManager.BaseLookWardrobeCollection;
                 EquipmentSlotsData = new(instance.References.EquipmentManager.EquipmentSlots);
                 StatsData = new(instance.References.StatsManager.Stats);
             }
@@ -186,7 +187,7 @@ namespace SunsetSystems.Entities.Characters
 
             public AssetReferenceSprite PortraitAssetRef { get; }
 
-            public List<UMARecipeBase> BaseUmaRecipes { get; }
+            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
 
             public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
 

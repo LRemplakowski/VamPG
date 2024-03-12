@@ -1,16 +1,13 @@
 ﻿using CleverCrow.Fluid.UniqueIds;
 using SunsetSystems.Game;
 using SunsetSystems.Persistence;
-using SunsetSystems.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
-using System;
 
 namespace SunsetSystems.Input.CameraControl
 {
     [RequireComponent(typeof(UniqueId))]
-    [RequireComponent(typeof(Tagger))]
     public class CameraControlScript : MonoBehaviour, ISaveable
     {
         [SerializeField]
@@ -137,9 +134,8 @@ namespace SunsetSystems.Input.CameraControl
         public object GetSaveData()
         {
             CameraSaveData saveData = new();
-            saveData.CurrentBoundingBoxTag = _currentBoundingBox?.GetComponent<Tagger>().tag ?? "";
-            saveData.RigPosition = transform.position;
-            saveData.CameraMoveTarget = _moveTarget;
+            saveData.CurrentBoundingBox = _currentBoundingBox;
+            saveData.RigPosition = _moveTarget;
             return saveData;
         }
 
@@ -147,16 +143,15 @@ namespace SunsetSystems.Input.CameraControl
         {
             if (data is not CameraSaveData saveData)
                 return;
-            //_currentBoundingBox = this.FindFirstComponentWithTag<BoundingBox>(saveData.CurrentBoundingBoxTag);
+            _currentBoundingBox = saveData.CurrentBoundingBox;
             ForceToPosition(saveData.RigPosition);
-            _moveTarget = saveData.CameraMoveTarget;
         }
     }
 
     public class CameraSaveData : SaveData
     {
-        public string CurrentBoundingBoxTag;
+        public BoundingBox CurrentBoundingBox;
         public Vector3 RigPosition;
-        public Vector3 CameraMoveTarget, CameraRotationTarget;
+        public Vector3 CameraRotationTarget;
     }
 }

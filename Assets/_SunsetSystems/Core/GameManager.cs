@@ -6,6 +6,7 @@ using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
 using UltEvents;
 using SunsetSystems.Core.SceneLoading;
+using SunsetSystems.Input.CameraControl;
 
 namespace SunsetSystems.Game
 {
@@ -14,6 +15,10 @@ namespace SunsetSystems.Game
         public static GameManager Instance { get; private set; }
 
         public static event Action<GameState> OnGameStateChanged;
+
+        [field: Title("References")]
+        [field: SerializeField]
+        public CameraControlScript GameCamera { get; private set; }
 
         [Title("Runtime")]
         [SerializeField]

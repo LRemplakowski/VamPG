@@ -12,7 +12,7 @@ namespace SunsetSystems.Experience
 
         public void ApplyReward(int amount)
         {
-            PartyManager.Instance.AllCoterieMembers.ForEach(coterieMemberID => ExperienceManager.TryAwardExperience(coterieMemberID, amount, _experienceType));
+            PartyManager.Instance.AllCoterieMembers.ForEach(coterieMemberID => ExperienceManager.Instance.TryAwardExperience(coterieMemberID, amount, _experienceType));
         }
     }
 }

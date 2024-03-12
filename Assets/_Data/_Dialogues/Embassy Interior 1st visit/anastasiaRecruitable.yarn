@@ -22,7 +22,7 @@ position: -407,-310
     {$bartender}: [nomarkup][The bartender huffs out a deep sigh.][/nomarkup] Listen, I've been trying to tell you that for what? A week? #line:03bd7b5 
     {$anastasia}: [nomarkup][The woman in black furrows her brows.][/nomarkup] Then why didn't you just say so?Then why didn't you just say so? #line:020e02c 
     {$bartender}: Because I didn't know how to do it without hurting you. And that's about that. [nomarkup][She's waiting for something, anything, to break the silence that now fills the air...][/nomarkup] #line:00d7850 
-<<if GetCurrentMoney() >=5>>
+<<if GetCurrentMoney() >= 5>>
 -> {$pcName}: I'll have a Bloody Mary. (Pay 5$) #line:097575b 
     {$bartender}: Coming right up! [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup] #line:0d7a9d5 
     <<GiveItem "IT_Q_EMBASSYDRINK">>
@@ -55,7 +55,7 @@ position: -130,38
 ===
 title: insightRoll
 ---
-<<if Roll("Intelligence","Insight")>=3>>
+<<if Roll("Intelligence","Insight") >= 3>>
     <<set $anaIsVampire to true>>
     [nomarkup][Judging from the way he chose to speak to her just now... Those were strong words, and getting Kate involved? Could she possibly be a vampire, too?][/nomarkup] #line:0cf169c 
     <<jump anastasiaKnowIsKindred>>
@@ -103,7 +103,7 @@ title: anaIsSire
 {$anastasia}: I am amused by this whole ordeal. How about I help you out and then once we get this mess sorted you and I will go grab a few “drinks”?  #line:0fbc6f8 
 -> {$pcName}: You know what? Sure. Why not? #line:01f183c 
     [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup] #line:0e5b9b2 
-    <<RecruitAnastasia()>>
+    <<RecruitAnastasia>>
 -> {$pcName}: Sorry, but I'm gonna have to pass. #line:06c93f1 
     {$anastasia}: Your loss, toots. #line:0fdedb9 
     {$kieran}: A sensible decision, for once. [nomarkup][He nods once, indicating his approval.][/nomarkup] #line:01d4128 

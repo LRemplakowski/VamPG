@@ -17,22 +17,10 @@ namespace SunsetSystems.Entities.Interactable
         public List<IInteractionHandler> InteractionHandlers { get; set; }
         [SerializeField]
         private Collider _interactionCollider;
-        [field: SerializeField]
-        public GameObject HoverHighlight { get; set; }
+        [SerializeField]
+        private IHighlightHandler _highlightHandler;
 
         [Title("Config")]
-        [ShowInInspector, ReadOnly]
-        private bool _isHoveredOver;
-        public bool IsHoveredOver
-        {
-            get => _isHoveredOver;
-            set
-            {
-                _isHoveredOver = value;
-                HandleHoverHiglight();
-            }
-        }
-
         [SerializeField]
         protected float _interactionDistance = 2.0f;
         public float InteractionDistance
@@ -90,6 +78,19 @@ namespace SunsetSystems.Entities.Interactable
 
         [Title("Events")]
         public UltEvent<bool> OnInteractionTriggered;
+
+        [Title("Runtime")]
+        [ShowInInspector]
+        private bool _isHoveredOver;
+        public bool IsHoveredOver
+        {
+            get => _isHoveredOver;
+            set
+            {
+                _isHoveredOver = value;
+                HandleHoverHiglight();
+            }
+        }
 
         protected override void OnValidate()
         {
@@ -161,8 +162,8 @@ namespace SunsetSystems.Entities.Interactable
 
         private void HandleHoverHiglight()
         {
-            if (HoverHighlight != null && Interactable)
-                HoverHighlight.SetActive(IsHoveredOver);
+            if (_highlightHandler != null && Interactable)
+                _highlightHandler.SetHighlightActive(IsHoveredOver);
         }
 
         public void ResetInteraction()

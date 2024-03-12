@@ -56,7 +56,7 @@ namespace SunsetSystems.Dialogue
             return PartyManager.Instance.IsRecruitedMember(readableID);
         }
 
-        [YarnFunction("CurrentMoney")]
+        [YarnFunction("GetCurrentMoney")]
         public static float GetCurrentMoney()
         {
             return InventoryManager.Instance.GetMoneyAmount();

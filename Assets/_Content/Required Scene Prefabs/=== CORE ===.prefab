@@ -13799,7 +13799,18 @@ MonoBehaviour:
   OnActivePartyInitialized:
     _PersistentCalls: []
   OnPartyMemberRecruited:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 680596422096700416}
+      _MethodName: AddCreatureToExperienceManager
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &430337056767844286
 GameObject:
   m_ObjectHideFlags: 0
@@ -14818,7 +14829,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _playerInventory: {fileID: 7464563001163683483}
-  _money: 0
+  _money: 55
 --- !u!114 &7464563001163683483
 MonoBehaviour:
   m_ObjectHideFlags: 0

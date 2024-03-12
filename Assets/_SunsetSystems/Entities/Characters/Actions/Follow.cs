@@ -24,9 +24,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(this.followTarget, myAgent));
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            base.Abort();
+            base.Cleanup();
             if (followCoroutine != null)
                 Owner.CoroutineRunner.StopCoroutine(followCoroutine);
             myAgent.isStopped = true;

@@ -38,9 +38,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             }
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            base.Abort();
+            base.Cleanup();
             navMeshAgent.isStopped = true;
             if (OnMovementFinished != null)
                 OnMovementFinished.Invoke(this.Owner);
@@ -57,7 +57,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             }
             else
             {
-                Abort();
+                Cleanup();
             }
         }
     }

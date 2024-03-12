@@ -33,31 +33,31 @@ namespace SunsetSystems.Experience
             ISaveable.UnregisterSaveable(this);
         }
 
-        public static void AddCreatureToExperienceManager(string creatureID)
+        public void AddCreatureToExperienceManager(string creatureID)
         {
-            bool result = Instance._experienceDataCache.TryAdd(creatureID, new());
+            bool result = _experienceDataCache.TryAdd(creatureID, new());
             if (result == false)
                 Debug.LogError($"Cannot add creature to experience manager. Creature with ID {creatureID} is already tracked!");
         }
 
-        public static bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
+        public bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 data.AddExperience(amount, experienceType);
-                Instance._experienceDataCache[creatureID] = data;
+                _experienceDataCache[creatureID] = data;
             }
             return false;
         }
 
-        public static bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
+        public bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 if (data.GetCurrentExperience(experienceType) < amount)
                     return false;
                 data.RemoveExperience(amount, experienceType);
-                Instance._experienceDataCache[creatureID] = data;
+                _experienceDataCache[creatureID] = data;
                 return true;
             }
             return false;

@@ -69,11 +69,9 @@ namespace SunsetSystems.Input.CameraControl
             currentZoom = defaultZoom;
         }
 
-        public void ForceToPosition(Vector3 position)
-        {
-            _moveTarget = transform.position;
-            Debug.Log("Forcing camera to position " + position);
-        }
+        public void ForceToPosition(Vector3 position) => _moveTarget = position;
+
+        public void ForceToPosition(Transform positionSource) => _moveTarget = positionSource.position;
 
         public void ForceRotation(Vector3 eulerAngles)
         {

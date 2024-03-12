@@ -32,9 +32,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             conditions.Add(new FaceTargetCondition(ownerTransform, lookDirection, MARGIN_OF_ERROR));
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            base.Abort();
+            base.Cleanup();
             if (lookAtRoutine != null)
                 (Owner as MonoBehaviour).StopCoroutine(lookAtRoutine);
         }

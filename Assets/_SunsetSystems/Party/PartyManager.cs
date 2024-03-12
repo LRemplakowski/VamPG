@@ -173,7 +173,6 @@ namespace SunsetSystems.Party
             _coterieMemberKeysCache.Add(memberTemplate.DatabaseID);
             _cachedPartyTemplates.Add(memberTemplate.DatabaseID, memberTemplate);
             OnPartyMemberRecruited?.InvokeSafe(memberTemplate.DatabaseID);
-            ExperienceManager.AddCreatureToExperienceManager(memberTemplate.FullName);
         }
 
         [Title("Editor Utility")]
@@ -181,9 +180,9 @@ namespace SunsetSystems.Party
         public void RecruitCharacter(ICreature creature)
         {
             Debug.Log($"Recruited {creature.References.CreatureData.FullName} to party!");
-            _coterieMemberKeysCache.Add(creature.ID);
-            TryAddMemberToActiveRoster(creature.ID, creature);
-            ExperienceManager.AddCreatureToExperienceManager(creature.ID);
+            _coterieMemberKeysCache.Add(creature.References.CreatureData.DatabaseID);
+            TryAddMemberToActiveRoster(creature.References.CreatureData.DatabaseID, creature);
+            OnPartyMemberRecruited?.InvokeSafe(creature.References.CreatureData.DatabaseID);
         }
 
         [Button]
@@ -193,7 +192,6 @@ namespace SunsetSystems.Party
             _mainCharacterKey = template.DatabaseID;
             RecruitCharacter(template);
             _activeCoterieMemberKeys.Add(_mainCharacterKey);
-            InventoryManager.Instance.SetMoney(55);
         }
 
         public bool TryAddMemberToActiveRoster(string memberID, ICreature creature)

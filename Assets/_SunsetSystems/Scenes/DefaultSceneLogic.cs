@@ -1,8 +1,8 @@
-using SunsetSystems.Data;
 using UnityEngine;
 using System.Threading.Tasks;
 using UltEvents;
 using SunsetSystems.LevelUtility;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Persistence
 {
@@ -17,6 +17,7 @@ namespace SunsetSystems.Persistence
         public async override Task StartSceneAsync()
         {
             await Task.Yield();
+            GameManager.Instance.GameCamera.ForceToPosition(_defaultEntryWaypoint.transform);
             OnSceneStart?.InvokeSafe();
         }
 

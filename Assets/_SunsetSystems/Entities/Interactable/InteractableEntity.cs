@@ -72,8 +72,10 @@ namespace SunsetSystems.Entities.Interactable
         [SerializeField]
         private string _nameplateName;
         public string NameplateText => _nameplateName;
+        [SerializeField]
+        private Vector3 _nameplateOffset = new (0, 3, 0);
 
-        public Vector3 NameplateWorldPosition => transform.position + Vector3.up;
+        public Vector3 NameplateWorldPosition => transform.position + _nameplateOffset;
 
         [SerializeField]
         private bool _interactableOnce = false;

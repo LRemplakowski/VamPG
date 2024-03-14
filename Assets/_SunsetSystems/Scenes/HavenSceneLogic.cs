@@ -1,24 +1,21 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Dialogue.Interfaces;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;
-using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.LevelUtility;
 using SunsetSystems.Party;
 using UnityEngine;
 using Yarn.Unity;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Core
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {
@@ -82,7 +79,7 @@ namespace SunsetSystems.Persistence
         [SerializeField]
         private Vector3 _cameraPositionDominicEnter, _cameraRotationDominicEnter, _cameraPositionPinnedToWall, _cameraRotationPinnedToWall;
 
-        private CameraControlScript _cameraControl;
+        private CameraControlScript CameraControl => GameManager.Instance.GameCamera;
 
         protected override void Awake()
         {
@@ -92,8 +89,6 @@ namespace SunsetSystems.Persistence
 
         protected override void Start()
         {
-            this.TryFindFirstGameObjectWithTag(TagConstants.CAMERA_RIG, out GameObject cameraControlGO);
-            _cameraControl = cameraControlGO?.GetComponent<CameraControlScript>();
             base.Start();
         }
 
@@ -103,8 +98,8 @@ namespace SunsetSystems.Persistence
             await new WaitForUpdate();
             GameManager.Instance.CurrentState = GameState.Exploration;
             await new WaitForSeconds(2f);
-            _cameraControl.ForceToPosition(_cameraStartPoint);
-            _cameraControl.ForceRotation(_cameraStartRotation);
+            CameraControl.ForceToPosition(_cameraStartPoint);
+            CameraControl.ForceRotation(_cameraStartRotation);
             DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
         }
 
@@ -128,8 +123,8 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSpawnWaypoint.transform.position);
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
-            _cameraControl.ForceToPosition(_landlordEnterCameraPosition);
-            _cameraControl.ForceRotation(_landlordEnterCameraRotation);
+            CameraControl.ForceToPosition(_landlordEnterCameraPosition);
+            CameraControl.ForceRotation(_landlordEnterCameraRotation);
             await new WaitForFixedUpdate();
             //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
@@ -143,8 +138,8 @@ namespace SunsetSystems.Persistence
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSinkWaypoint.transform.position);
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordSinkWaypoint.transform.position);
-            _cameraControl.ForceToPosition(_landlordSinkCameraPosition);
-            _cameraControl.ForceRotation(_landlordSinkCameraRotation);
+            CameraControl.ForceToPosition(_landlordSinkCameraPosition);
+            CameraControl.ForceRotation(_landlordSinkCameraRotation);
             await new WaitForFixedUpdate();
             //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
             await new WaitForSeconds(.5f);
@@ -175,9 +170,9 @@ namespace SunsetSystems.Persistence
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranWaypoint.transform.position);
-            _cameraControl.ForceToPosition(_cameraPositionDominicEnter);
+            CameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
-            _cameraControl.ForceRotation(_cameraRotationDominicEnter);
+            CameraControl.ForceRotation(_cameraRotationDominicEnter);
             //_ = PartyManager.Instance.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
             //_ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
             //_ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
@@ -192,9 +187,9 @@ namespace SunsetSystems.Persistence
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcFridgeWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicFridgeWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranFridgeWaypoint.transform.position);
-            _cameraControl.ForceToPosition(_cameraPositionPinnedToWall);
+            CameraControl.ForceToPosition(_cameraPositionPinnedToWall);
             await new WaitForFixedUpdate();
-            _cameraControl.ForceRotation(_cameraRotationPinnedToWall);
+            CameraControl.ForceRotation(_cameraRotationPinnedToWall);
             //_ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
             //_ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
             //_ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);

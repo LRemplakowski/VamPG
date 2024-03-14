@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using UltEvents;
 using SunsetSystems.LevelUtility;
 using SunsetSystems.Game;
+using SunsetSystems.Persistence;
+using System;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Core
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
@@ -28,9 +30,11 @@ namespace SunsetSystems.Persistence
 
         public override object GetSaveData()
         {
-            return new SceneLogicData();
+            SceneLogicData saveData = new();
+            return saveData;
         }
 
+        [Serializable]
         protected class SceneLogicData : SaveData
         {
 

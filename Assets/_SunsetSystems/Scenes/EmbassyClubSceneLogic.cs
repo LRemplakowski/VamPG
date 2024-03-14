@@ -5,35 +5,38 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Yarn.Unity;
 
-public class EmbassyClubSceneLogic : DefaultSceneLogic
+namespace SunsetSystems.Core
 {
-    [SerializeField]
-    private ICreature anastasiaCompanion;
-
-    protected override void Awake()
+    public class EmbassyClubSceneLogic : DefaultSceneLogic
     {
-        base.Awake();
-        EmbassyClubDialogueCommands.sceneLogic = this;
-    }
+        [SerializeField]
+        private ICreature anastasiaCompanion;
 
-    public override Task StartSceneAsync()
-    {
-        return base.StartSceneAsync();
-    }
-
-    private void DoRecruitAnastasia()
-    {
-        PartyManager.Instance.RecruitCharacter(anastasiaCompanion);
-    }
-
-    public static class EmbassyClubDialogueCommands
-    {
-        public static EmbassyClubSceneLogic sceneLogic;
-
-        [YarnCommand("RecruitAnastasia")]
-        public static void RecruitAnastasia()
+        protected override void Awake()
         {
-            sceneLogic.DoRecruitAnastasia();
+            base.Awake();
+            EmbassyClubDialogueCommands.sceneLogic = this;
+        }
+
+        public override Task StartSceneAsync()
+        {
+            return base.StartSceneAsync();
+        }
+
+        private void DoRecruitAnastasia()
+        {
+            PartyManager.Instance.RecruitCharacter(anastasiaCompanion);
+        }
+
+        public static class EmbassyClubDialogueCommands
+        {
+            public static EmbassyClubSceneLogic sceneLogic;
+
+            [YarnCommand("RecruitAnastasia")]
+            public static void RecruitAnastasia()
+            {
+                sceneLogic.DoRecruitAnastasia();
+            }
         }
     }
 }

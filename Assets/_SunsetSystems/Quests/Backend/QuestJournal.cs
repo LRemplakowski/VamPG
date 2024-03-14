@@ -1,5 +1,6 @@
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
@@ -31,6 +32,7 @@ namespace SunsetSystems.Journal
         private UniqueId _uniqueId;
 
         public static event Action<List<Quest>> OnActiveQuestsChanged;
+        public static event Action<HashSet<Objective>> OnObjectiveDataInjected;
 
         public void ResetOnGameStart()
         {
@@ -268,11 +270,13 @@ namespace SunsetSystems.Journal
             _completedQuests = new();
             saveData.CompletedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _completedQuests.Add(questID, quest); });
             _currentObjectives = new();
+            HashSet<Objective> injectedObjectives = new();
             foreach (string key in saveData.CurrentObjectives.Keys)
             {
                 Dictionary<string, Objective> objectives = new();
                 saveData.CurrentObjectives[key].ForEach(objectiveID => { ObjectiveDatabase.Instance.TryGetEntry(objectiveID, out Objective objective); objectives.Add(objectiveID, objective); });
                 _currentObjectives.Add(key, objectives);
+                injectedObjectives.AddRange(objectives.Values);
             }
             _trackedQuests = new();
             saveData.TrackedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _trackedQuests.Add(quest); });
@@ -283,6 +287,7 @@ namespace SunsetSystems.Journal
                     _activeQuests[key].ForceSubscribeToObjective(objective);
                 }
             }
+            OnObjectiveDataInjected?.Invoke(injectedObjectives);
         }
 
         private class QuestJournalSaveData : SaveData

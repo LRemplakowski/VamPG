@@ -2,25 +2,26 @@ using UnityEngine;
 using System.Threading.Tasks;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
+using SunsetSystems.Persistence;
 
-namespace SunsetSystems.Persistence
+namespace SunsetSystems.Core
 {
     [RequireComponent(typeof(UniqueId))]
     public abstract class AbstractSceneLogic : SerializedMonoBehaviour, ISaveable
     {
         [SerializeField]
-        protected UniqueId unique;
+        protected UniqueId _unique;
 
-        public string DataKey => unique.Id;
+        public string DataKey => _unique.Id;
 
         protected virtual void OnValidate()
         {
-            unique ??= GetComponent<UniqueId>();
+            _unique ??= GetComponent<UniqueId>();
         }
 
         protected virtual void Awake()
         {
-            unique ??= GetComponent<UniqueId>();
+            _unique ??= GetComponent<UniqueId>();
         }
 
         protected async virtual void Start()

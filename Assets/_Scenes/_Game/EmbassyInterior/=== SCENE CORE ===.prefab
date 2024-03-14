@@ -58,8 +58,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dff2ecae0dc102d43a70f2fc5355cb55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _boundingBoxSize: {x: 7, y: 1, z: 7}
-  _offset: {x: 0.5, y: 0, z: 0}
+  _boundingBoxSize: {x: 7, y: 6, z: 7}
+  _offset: {x: 0.5, y: 2, z: 0}
   _gizmoColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &211632540765364437
 GameObject:
@@ -712,7 +712,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _type: 0
-  _sceneToLoad: {fileID: 0}
+  _sceneToLoad: {fileID: 11400000, guid: 5f0009e25521cf04fb42ab9daffd6bb8, type: 2}
   _targetEntryPoint: {fileID: 1582970179514981705}
   _targetBoundingBox: {fileID: 3448310826892030765}
   _fadeScreenCanvasGroup: {fileID: 5286174717677215912}
@@ -848,7 +848,7 @@ MonoBehaviour:
     - Name: anastasiaCompanion
       Entry: 6
       Data: 
-  unique: {fileID: 5260908270849836241}
+  _unique: {fileID: 5260908270849836241}
   _defaultEntryWaypoint: {fileID: 4625638055503104597}
   <OnSceneStart>k__BackingField:
     _PersistentCalls:
@@ -1832,6 +1832,38 @@ MonoBehaviour:
     _PersistentCalls: []
   OnNodeFinished:
     _PersistentCalls: []
+--- !u!1 &7357869514058391665
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3407980536653665834}
+  m_Layer: 0
+  m_Name: === QUEST TRIGGERS ===
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3407980536653665834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357869514058391665}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8958921066757815320}
+  m_Father: {fileID: 412658073151826774}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7393814666032933807
 GameObject:
   m_ObjectHideFlags: 0
@@ -2021,6 +2053,78 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.37666368, y: 2.5270553, z: 1.9564991}
   m_Center: {x: 0.03761512, y: 1.2623155, z: -0.005373955}
+--- !u!1 &7857720039985511558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8958921066757815320}
+  - component: {fileID: 7352656594770856892}
+  m_Layer: 0
+  m_Name: Get Into Diana's Office
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8958921066757815320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857720039985511558}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3407980536653665834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7352656594770856892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857720039985511558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b93fcde8bf128049a12c54a6b101f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objective: {fileID: 11400000, guid: 7c21401865927cc468de3520f6519043, type: 2}
+  useUltEvents: 1
+  ObjectiveActive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveInactive:
+    m_PersistentCalls:
+      m_Calls: []
+  ObjectiveCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectiveActive:
+    _PersistentCalls:
+    - _Target: {fileID: 8844031682884742544}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+  OnObjectiveInactive:
+    _PersistentCalls: []
+  OnObjectiveCompleted:
+    _PersistentCalls: []
 --- !u!1 &8721328679792091608
 GameObject:
   m_ObjectHideFlags: 0
@@ -2172,5 +2276,6 @@ Transform:
   - {fileID: 5168241024844028177}
   - {fileID: 9690441553415026}
   - {fileID: 4005699925950021924}
+  - {fileID: 3407980536653665834}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

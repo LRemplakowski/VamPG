@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -11,7 +12,7 @@ namespace SunsetSystems.Persistence
         private PlayableDirector _director;
         [SerializeField]
         private bool _playOnlyOnce;
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private PersistentDirectorComponent _persistentComponent = new();
 
         protected override void OnValidate()
@@ -23,10 +24,17 @@ namespace SunsetSystems.Persistence
 
         private void Start()
         {
-            if (_director.playOnAwake && _playOnlyOnce)
+            if (_playOnlyOnce)
             {
                 _persistentComponent.PersistenceData.Director = _director;
-                _persistentComponent.PersistenceData.StopPlayback = true;
+                if (_director.playOnAwake)
+                {
+                    _persistentComponent.PersistenceData.StopPlayback = true;
+                }
+                else
+                {
+                    _director.played += (director) => _persistentComponent.PersistenceData.StopPlayback = true;
+                }
                 PersistentComponents.Add(_persistentComponent);
             }
         }

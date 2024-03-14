@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Interactable
 {
     public class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
     {
-        public static readonly List<IInteractable> InteractablesInScene = new();
+        public static readonly HashSet<IInteractable> InteractablesInScene = new();
 
         [field: Title("References")]
         [field: SerializeField]
@@ -64,7 +64,10 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _interactable = value;
-                this.enabled = value;
+                if (_interactable)
+                    InteractablesInScene.Add(this);
+                else
+                    InteractablesInScene.Remove(this);
                 _interactionCollider.enabled = value;
             }
         }
@@ -118,6 +121,8 @@ namespace SunsetSystems.Entities.Interactable
             {
                 InteractionTransform = this.transform;
             }
+            if (Interactable)
+                InteractablesInScene.Add(this);
         }
 
         private void OnEnable()
@@ -137,7 +142,6 @@ namespace SunsetSystems.Entities.Interactable
         protected override void Start()
         {
             base.Start();
-            enabled = Interactable;
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             _interactionCollider.enabled = Interactable;
@@ -150,7 +154,6 @@ namespace SunsetSystems.Entities.Interactable
             IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
             Interacted = true;
-            TargetedBy = null;
             if (_interactableOnce)
                 this.Interactable = false;
             bool result = false;
@@ -159,6 +162,7 @@ namespace SunsetSystems.Entities.Interactable
                 if (handler.HandleInteraction(TargetedBy))
                     result = true;
             }
+            TargetedBy = null;
             OnInteractionTriggered?.Invoke(result);
         }
 

@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UltEvents;
 using UnityEngine;
@@ -14,15 +14,16 @@ namespace SunsetSystems.Journal
         private bool useUltEvents = true;
 
         [HideIf("@this.useUltEvents == true")]
-        public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted;
+        public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted, ObjectiveActiveAfterSceneLoad;
         [ShowIf("@this.useUltEvents == true")]
-        public UltEvent OnObjectiveActive, OnObjectiveInactive, OnObjectiveCompleted;
+        public UltEvent OnObjectiveActive, OnObjectiveInactive, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
 
         private void OnEnable()
         {
             _objective.OnObjectiveActive += ObjectiveActiveHandler;
             _objective.OnObjectiveInactive += ObjectiveInactiveHandler;
             _objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
+            QuestJournal.OnObjectiveDataInjected += ObjectiveDataInjectedHandler;
         }
 
         private void OnDisable()
@@ -30,6 +31,7 @@ namespace SunsetSystems.Journal
             _objective.OnObjectiveActive -= ObjectiveActiveHandler;
             _objective.OnObjectiveInactive -= ObjectiveInactiveHandler;
             _objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
+            QuestJournal.OnObjectiveDataInjected -= ObjectiveDataInjectedHandler;
         }
 
         private void ObjectiveActiveHandler(Objective obj)
@@ -54,6 +56,17 @@ namespace SunsetSystems.Journal
                 OnObjectiveCompleted?.InvokeSafe();
             else
                 ObjectiveCompleted?.Invoke();
+        }
+
+        private void ObjectiveDataInjectedHandler(HashSet<Objective> objectives)
+        {
+            if (objectives.Contains(_objective))
+            {
+                if (useUltEvents)
+                    OnObjectiveActiveAfterSceneLoad?.InvokeSafe();
+                else
+                    ObjectiveActiveAfterSceneLoad?.Invoke();
+            }
         }
     }
 }

@@ -146,5 +146,21 @@ namespace SunsetSystems.Dialogue
             }
             return false;
         }
+
+        [YarnFunction("GetFirstName")]
+        public static string GetFirstName(string characterID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+                return creatureAsset.FirstName;
+            return "";
+        }
+
+        [YarnFunction("GetLastName")]
+        public static string GetLastName(string characterID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+                return creatureAsset.LastName;
+            return "";
+        }
     }
 }

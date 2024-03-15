@@ -3,13 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
-using SunsetSystems.Experience;
-using SunsetSystems.Inventory;
-using SunsetSystems.LevelUtility;
 using SunsetSystems.Persistence;
 using UltEvents;
 using UnityEngine;
@@ -26,8 +22,6 @@ namespace SunsetSystems.Party
         [Title("References")]
         [SerializeField]
         private Transform _creatureParent;
-        [SerializeField]
-        private Waypoint _partySpawnPosition;
 
         [Title("Config")]
         [SerializeField, ValueDropdown("GetLayerNames")]
@@ -93,8 +87,9 @@ namespace SunsetSystems.Party
         {
             if (string.IsNullOrWhiteSpace(_mainCharacterKey))
                 return;
-            if (_partySpawnPosition != null)
-                InitializePartyAtPosition(_partySpawnPosition.transform.position);
+            var waypoint = WaypointManager.Instance.GetSceneEntryWaypoint();
+            if (waypoint != null)
+                InitializePartyAtPosition(waypoint.transform.position);
             else
                 InitializePartyInCreatureStorage();
         }

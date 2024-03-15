@@ -1,16 +1,14 @@
-﻿using SunsetSystems.Entities.Interactable;
-using SunsetSystems.Input.CameraControl;
-using System.Threading.Tasks;
-using UnityEngine;
-using SunsetSystems.LevelUtility;
+﻿using System.Collections;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Persistence;
-using System.Collections.Generic;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Party;
-using System.Collections;
+using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
+using SunsetSystems.Input.CameraControl;
+using SunsetSystems.LevelUtility;
+using SunsetSystems.Party;
+using SunsetSystems.Persistence;
+using UnityEngine;
 
 namespace SunsetSystems.Core.SceneLoading
 {
@@ -27,6 +25,10 @@ namespace SunsetSystems.Core.SceneLoading
         private BoundingBox _targetBoundingBox;
 
         [Title("Configs")]
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
+        private bool _overrideDefaultWaypoint = false;
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition && this._overrideDefaultWaypoint == true")]
+        private string _targetWaypointTag = "";
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private CanvasGroup _fadeScreenCanvasGroup;
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition"), Min(0)]
@@ -54,6 +56,8 @@ namespace SunsetSystems.Core.SceneLoading
         private void MoveToScene(SceneLoadingData data)
         {
             SaveLoadManager.UpdateRuntimeDataCache();
+            if (_overrideDefaultWaypoint)
+                WaypointManager.Instance.OverrideSceneWaypoint(_targetWaypointTag);
             _ = LevelLoader.Instance.LoadNewScene(data);
         }
 

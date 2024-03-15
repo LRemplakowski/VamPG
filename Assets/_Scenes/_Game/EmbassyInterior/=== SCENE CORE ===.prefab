@@ -350,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waypointTag: Backdoor Waypoint
   <FaceDirection>k__BackingField: {fileID: 0}
 --- !u!1 &1207801629094455310
 GameObject:
@@ -598,6 +599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waypointTag: WP_EMBASSY_OFFICE
   <FaceDirection>k__BackingField: {fileID: 0}
 --- !u!1 &3835714270366909503
 GameObject:
@@ -715,6 +717,8 @@ MonoBehaviour:
   _sceneToLoad: {fileID: 11400000, guid: 5f0009e25521cf04fb42ab9daffd6bb8, type: 2}
   _targetEntryPoint: {fileID: 1582970179514981705}
   _targetBoundingBox: {fileID: 3448310826892030765}
+  _overrideDefaultWaypoint: 1
+  _targetWaypointTag: WP_EMBASSY_EXIT
   _fadeScreenCanvasGroup: {fileID: 5286174717677215912}
   _fadeScreenTime: 0.5
 --- !u!1 &4111397254368776562
@@ -849,7 +853,6 @@ MonoBehaviour:
       Entry: 6
       Data: 
   _unique: {fileID: 5260908270849836241}
-  _defaultEntryWaypoint: {fileID: 4625638055503104597}
   <OnSceneStart>k__BackingField:
     _PersistentCalls:
     - _Target: {fileID: 3145759417214089073}
@@ -1111,6 +1114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waypointTag: Diana Office Exit Waypoint
   <FaceDirection>k__BackingField: {fileID: 0}
 --- !u!1 &5542332029669683204
 GameObject:
@@ -1469,6 +1473,8 @@ MonoBehaviour:
   _sceneToLoad: {fileID: 0}
   _targetEntryPoint: {fileID: 1582970179514981705}
   _targetBoundingBox: {fileID: 3448310826892030765}
+  _overrideDefaultWaypoint: 0
+  _targetWaypointTag: 
   _fadeScreenCanvasGroup: {fileID: 5286174717677215912}
   _fadeScreenTime: 0.5
 --- !u!1 &6649260884599490651
@@ -2108,6 +2114,9 @@ MonoBehaviour:
   ObjectiveCompleted:
     m_PersistentCalls:
       m_Calls: []
+  ObjectiveActiveAfterSceneLoad:
+    m_PersistentCalls:
+      m_Calls: []
   OnObjectiveActive:
     _PersistentCalls:
     - _Target: {fileID: 8844031682884742544}
@@ -2124,6 +2133,8 @@ MonoBehaviour:
   OnObjectiveInactive:
     _PersistentCalls: []
   OnObjectiveCompleted:
+    _PersistentCalls: []
+  OnObjectiveActiveAfterSceneLoad:
     _PersistentCalls: []
 --- !u!1 &8721328679792091608
 GameObject:

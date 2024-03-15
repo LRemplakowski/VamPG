@@ -5,7 +5,6 @@ using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
-using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Core.SceneLoading

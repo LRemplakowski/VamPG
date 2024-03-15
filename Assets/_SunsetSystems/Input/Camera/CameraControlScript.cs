@@ -60,15 +60,23 @@ namespace SunsetSystems.Input.CameraControl
         }
         private float _internalZoomSpeed = 4;
 
+        private bool _movedToSavedPosition = false;
+
         private void Start()
         {
             _moveTarget = transform.position;
             currentZoom = defaultZoom;
         }
 
+        public void MoveToLevelStartPosition()
+        {
+            if (_movedToSavedPosition is false)
+                ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
+        }
+
         public void ForceToPosition(Vector3 position) => _moveTarget = position;
 
-        public void ForceToPosition(Transform positionSource) => _moveTarget = positionSource.position;
+        public void ForceToPosition(Transform positionSource) => ForceToPosition(positionSource.position);
 
         public void ForceRotation(Vector3 eulerAngles)
         {
@@ -145,6 +153,7 @@ namespace SunsetSystems.Input.CameraControl
                 return;
             _currentBoundingBox = saveData.CurrentBoundingBox;
             ForceToPosition(saveData.RigPosition);
+            _movedToSavedPosition = true;
         }
     }
 

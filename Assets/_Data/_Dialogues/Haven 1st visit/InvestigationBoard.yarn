@@ -1,0 +1,19 @@
+﻿title: InvestigationBoard
+tags:
+---
+<<if GetIsCompanionInParty("COMPANION_KIERAN") == true>>
+    {$pcName}: How did you know I deal with investigations? #line:0f6a9dd 
+    {$kieran}: Your...choice of interior design. The layout of your home tells me you are someone who moves about frequently, while the contents of this board indicate you are either a workaholic or desperate, and have a minor obsession with the behavioral patterns of other people. Thus, I made a guess as to your profession: a journalist or an investigator... Or a stalker in the making. #line:0333c8f 
+    -> {$pcName}: It's an apartment, not a house. #line:001277b 
+        {$kieran}: Please do not bring the conversation here; I do not care for semantic arguments. [nomarkup][-1 Kieran Influence][/nomarkup] #line:07e5918 
+    -> {$pcName}: This is where I keep track of UFO sightings. #line:08dba13 
+        {$kieran}: And yet you did not see us coming. #line:0762700 
+<<else>>
+    [nomarkup][Your investigation board is empty save for a blank map of the city, some scribbled notes, and the overdue bills you've posted as fearful motivation. Hopefully, things will pick up soon.][/nomarkup] #line:0dafacf 
+    <<if GetAttributeSkillPoolSize("Intelligence","Finance") <= 3>>
+        [nomarkup][You don't know much about budgeting, and it shows.][/nomarkup] #line:074d29c 
+    <<else>>
+        [nomarkup][You have about a month and a half - maybe two - of savings left before you'll have had to choose between eating and keeping the lights on.][/nomarkup]   #line:07febb4 
+    <<endif>>
+<<endif>>
+===

@@ -1,0 +1,59 @@
+﻿title: window
+tags:
+---
+<<if GetIsPartyMemberRecruited($anastasia) is false>>
+    <<if Roll("Wits","Awareness") >=2>>
+        [nomarkup][You check outside the window and see a woman from the bar pulling up into the drive way. A feeling of slight unease hits you before you tamp it down, remembering the face of the gruff woman at the bar. Why she’s here is unclear and as you look at her from the window she waves at you and points at something on your door questioningly.][/nomarkup]
+    <<else>>
+        [nomarkup][You check outside the window and see the gleam of chrome as light hits the engine of a motorcycle. The figure on the bike is clearly a woman, but why she’s here is less obvious. She points at your door and you get a sense of unease and confusion.][/nomarkup]
+<<else>>
+    <<if $tattooSpotter == true>>
+        [nomarkup][You look outside the window for a moment and see a man with very long beautiful hair standing outside. He stares up at you and raises an eyebrow and you get the immediate feeling that he was waiting for you to acknowledge him.][/nomarkup]
+        <<if $wannabeDefector == true>>
+            [nomarkup][Once the pair of you lock eyes he rolls his shoulders and winks. It would be inviting if it wasn’t so clearly intentional. He gets on his bike and pats one of his thighs before wheeling around and driving away.][/nomarkup]
+        <<endif>>
+        [nomarkup][Once the pair of you lock eyes he rolls his shoulders and smiles giving you a little two-finger salute before wheeling around on his bike and driving away.][nomarkup]
+    <<endif>>
+<<endif>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: What are you lookin’ at out there? Cops?
+    -> {$pcName}: No it’s the… guy.
+    {$anastasia}: Very descriptive Desiree. Try using your words.
+    -> {$pcName}: The long-haired guy I saw at the Embassy. He was in the parking lot sitting on his bike. I think he was waiting for me to spot him.
+    {$anastasia}: Good God can they not understand that bringing work home is the last thing anyone wants to do!? She shakes her head in disgust. Gimmie a fucking break! Want me to go out there and tell him to shove his dick up his ass so he can learn what it feels like to fuck off?
+    -> {$pcName}: I mean he’s already gone but yes.
+    {$anastasia}: Alrighty Princess one ‘teaching men to take a hint’ coming up! [nomarkup][She makes for the door.][/nomarkup]
+    [nomarkup][Chuckling, you roll your eyes. Anastasia grins devilishly.][/nomarkup]
+    {$anastasia}: Knew you had it in you Princess. You alright? 
+    -> {$pcName}: I don’t feel safe in my own home anymore.
+    {$anastasia}: Oh. Yeah- yeah, that’s about right. Okay well… He’s gone. Right? So whatever he was here for didn’t involve ‘personally fucking with Desiree’. So reasonably, whatever the plan is for tonight - shooting you in the gut isn’t a part of that?
+    -> {$pcName}: Or he’d have done that.
+    {$anastasia}: Mind games. [nomarkup][She rolls her eyes.][/nomarkup] The only thing Kindred love more is politics. [nomarkup][Exhausted by her own words, she hangs her head.][/nomarkup]
+    -> {$pcName}: It’s always like this?
+    {$anastasia}: Pretty much. [nomarkup][She pulls out a fresh cigarette but thinks better of it.][/nomarkup] Sometimes you meet those not into mind games, at least for a while. [nomarkup][Her eyes grow distant before she snaps back to the present][/nomarkup] But eventually they end up like your stalker friend out there. It’s like dropping a freshwater fish into a saltwater tank, if they don’t learn to breathe the salt: they die.
+    -> {$pcName}: What about you?
+    <<jump windowWitsRoll>>
+<<endif>>
+===
+title: windowWitsRoll
+---
+<<if Roll("Wits","Leadership") >=3>>
+    <<jump windowWitsSuccess>>
+<<else>>
+    <<jump windowWitsFailure>>
+<<endif>>
+===
+title: windowWitsSuccess
+---
+{$anastasia}: What about me? Do I manipulate people?
+-> {$pcName}: Do you think you’re going to die to the salt?
+{$anastasia}: Princess I’m not a fucking fish alright? I… I don’t know. Okay? Tonight was a lot.
+-> {$pcName}: I thought you were big and bad and an expert at these things?
+{$anastasia}: I say away from the mind games. [nomarkup][Her cross jingles on her neck as she ruffles her hair.][/nomarkup] I got used to them when I was young. Chronicles 28:20 ‘And David said to Solomon his son, Be strong and of good courage, and do it: fear not, nor be dismayed: for the Loes God, even my God, will be with thee; he will not fail thee, nor forsake thee until thou hast finished all the work for the service of the house of the Lord.’ Use that shit and justify anything you want.
+-> {$pcName}: Not a big fan of Christianity?
+{$anastasia}: I don’t seem pious to you.
+-> {$pcName}: Yes. You have a lot of conviction and confidence. Pious I’m not sure. You did just preach at me.
+    {$anastasia}: Just illustrating the point Princess. But no. Not anymore.
+    -> {$pcName}: What happened?
+    {$anastasia}: I’ll tell you about it sometime but not right now.
+-> {$pcName}: No.

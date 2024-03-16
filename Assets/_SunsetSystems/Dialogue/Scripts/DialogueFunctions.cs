@@ -162,5 +162,11 @@ namespace SunsetSystems.Dialogue
                 return creatureAsset.LastName;
             return "";
         }
+
+        [YarnFunction("GetCharacterDisciplineRank")]
+        public static int GetCharacterDisciplineRank(string characterID, string disciplineID)
+        {
+            return 0;
+        }
     }
 }

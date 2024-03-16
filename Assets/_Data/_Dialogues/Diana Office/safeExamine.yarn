@@ -1,4 +1,5 @@
 ﻿title: safeExamine
+position: -171,-476
 ---
 [nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
 -> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeResolveRoll") == false>> #line:05d4917 
@@ -22,6 +23,7 @@
 -> [nomarkup][Step away.][/nomarkup] #line:0cf47c3 
 ===
 title: safeResolveRoll
+position: 274,-762
 ---
 <<if Roll("Resolve","Larceny")>=6>>
     <<jump safeOpenedwoCode>>
@@ -30,6 +32,7 @@ title: safeResolveRoll
 <<endif>>
 ===
 title: safeStrengthRoll
+position: -474,-221
 ---
 <<if Roll("Strength","Larceny")>=6>>
     <<jump safeForceOpened>>
@@ -38,16 +41,19 @@ title: safeStrengthRoll
 <<endif>>
 ===
 title: safeOpenedwoCode
+position: -378,-751
 ---
 [nomarkup][Determined, you attempt to open the safe without any combination. Risky, but what's a better place to take risks than Vegas? You've seen how people crack open safes in films. Why not try it yourself? You stick one of your ears against the chilly metal and cautiously rotate the knob, expecting to hear a click. It is a difficult task demanding your full attention. Even Anastasia goes silent as if she knows what you are up to. Several minutes later, you hear the last click of the lock components settling into place, and the doors are opened.][/nomarkup] #success #line:0da57fd 
 <<jump safeOpened>>
 ===
 title: safeForceOpened
+position: -707,-22
 ---
 [nomarkup][Good thing you didn't forget the old crowbar you keep stashed in your home. It'll be handy, here. You jimmy the crowbar into the slit between the safe's frame and the doors - applying a gradually increasing amount of force. Using the wall to push this improvised lever forth, you make several attempts, thankful that your body is undead - otherwise you'd be exhausted - until finally, you feel the lock give in to your brute strength.][/nomarkup] #success #line:05a227e 
 <<jump safeOpened>>
 ===
 title: safeFailure
+position: 14,-207
 ---
 [nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #line:008d6ba 
 <<set $satanDate to false>>
@@ -55,15 +61,17 @@ title: safeFailure
 <<jump safeExamine>>
 ===
 title: safeOpenedwCode
+position: -756,-282
 ---
 [nomarkup][You hear the click of the mechanical lock opening.][/nomarkup] #line:0f81031 
 <<jump safeOpened>>
 ===
 title: safeOpened
 tags:
+position: -1111,-157
 ---
 -> {$pcName}: Open sesame! [nomarkup][You exclaim with satisfaction, opening the safe doors.][/nomarkup] #line:0190deb 
-[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some ammunition: .45 caliber - not what your gun is using. However, there is one thing that catches your eye... a vial containing a vivid red liquid...][/nomarkup] #line:0d46450 
+[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some .45 caliber ammunition - not what your gun is using. However, there is one thing that catches your eye... a vial containing a vivid red liquid...][/nomarkup] #line:0d46450 
 {$kieran}: Great work! [nomarkup][You hear Kieran's voice, excited - for the first time this night - behind you.][/nomarkup] #line:06e7470 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils? #line:0b237a6 
@@ -72,6 +80,7 @@ tags:
 <<jump safeQuestions>>
 ===
 title: safeQuestions
+position: -898,282
 ---
 -> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if visited("safeGunExamine") == false>> #line:010783e 
     <<if Roll("Intelligence","Firearms") >=3>>
@@ -91,16 +100,19 @@ title: safeQuestions
     <<jump takeSafeMoney>>
 ===
 title: safeGunExamine
+position: -654,747
 ---
 [nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success #line:0cdcbc2 
 <<jump safeQuestions>>
 ===
 title: safeGunExamineFail
+position: -1256,686
 ---
 [nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. At least, you think so...][/nomarkup] #failure #line:099beb4 
 <<jump safeQuestions>>
 ===
 title: safeDocumentsExamine
+position: -982,799
 ---
 [nomarkup][You rummage through the documents. Nothing particularly interesting. Just financial records and the like. But when you flip through one of the stapled packets, a folded up piece of paper that had been loosely stuck between its pages falls to the floor. You pick it up to examine it.][/nomarkup] #line:03c1d1c 
 Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away. #line:0999c1e 
@@ -120,6 +132,7 @@ Lucia #line:00d2b26
 <<jump safeQuestions>>
 ===
 title: safeBloodIdentified
+position: -531,378
 ---
 [nomarkup][You take the bottle and examine it more closely. At first, it appears to be a thick, red wine. But on closer inspection, it's far too viscous. It's not wine at all - it's blood.][/nomarkup] #success #line:024ce18 
 -> {$pcName}: I think I found... blood? #line:00843d3 
@@ -127,6 +140,7 @@ title: safeBloodIdentified
 <<jump bloodVialRolls>>
 ===
 title: bloodVialRolls
+position: -125,525
 ---
 -> {$pcName}: Hold on, what are you going to do with it? #line:04960dc 
     {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #line:0c20ec5 
@@ -137,6 +151,7 @@ title: bloodVialRolls
     <<jump bloodVialSuccess>>
 ===
 title: bloodVialSuccess
+position: -45,814
 ---
 [nomarkup][Without another word, you place the vial in the palm of Kieran's waiting hand.][/nomarkup] #line:045718d 
 [nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #line:03c693e 
@@ -150,11 +165,12 @@ title: bloodVialSuccess
             {$anastasia}: In other words, spooky magic shit. #line:0ed285a 
         <<endif>>
 <<else>>
-<<jump bloodVialFailure>>
+    <<jump bloodVialFailure>>
 <<endif>>
 <<jump safeContinuation>>
 ===
 title: bloodVialFailure
+position: -245,1149
 ---
 -> {$pcName}: That was evidence! #line:0255b57 
     {$kieran}: Trust me, I know what I'm doing. #line:0d7c422 
@@ -164,6 +180,7 @@ title: bloodVialFailure
 <<jump safeContinuation>>
 ===
 title: safeContinuation
+position: -370,798
 ---
 {$kieran}:  Brujah blood. Could be yours, or... [nomarkup][He trails off, quietly muttering.][/nomarkup] #line:0ef449e 
 [nomarkup][It doesn't take a rocket scientist to understand what he's implying.][/nomarkup] #line:0c3d335 
@@ -175,20 +192,23 @@ title: safeContinuation
 <<jump safeQuestions>>
 ===
 title: takeSafeMoney
+position: -284,185
 ---
 -> {$pcName}: I need to pay my bills Kieran. #line:0212bfb 
 {$kieran}: That is by no means a good enough reason to steal! [nomarkup][Kieran influence -2][/nomarkup] #line:0a341aa 
 -> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
 [nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #line:0e13ecd 
 <<jump safeQuestions>>
-<<giveMoney (500)>>
+<<GiveMoney (500)>>
 ===
 title: safeResolveFailure
+position: 282,-547
 ---
 [nomarkup][Despite your best efforts, you give up after several minutes of fruitless fiddling with the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:0b8b221 
 <<jump safeExamine>>
 ===
 title: safeStrenghtFailure
+position: -297,5
 ---
 [nomarkup][Despite your best efforts, you give up after several minutes of fruitless conflict with the door to the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:050d36f 
 <<jump safeExamine>>

@@ -20,7 +20,7 @@ tags:
     <<jump bookcaseTV>>
 -> [nomarkup][Turn on the radio.][/nomarkup] <<if visited("bookcaseRadio") == false>> #line:0f01e3f 
     <<jump bookcaseRadio>>
--> [nomarkup][Examine Poe's book.]<<if visited("bookcaseAcademicsRoll") == true>> #line:0de685b 
+-> [nomarkup][Examine Poe's book.] <<if visited("bookcaseAcademicsRoll") == true>> #line:0de685b 
     <<jump poeBookExamine>>
 -> [nomarkup][Step back.][/nomarkup] #line:02ac943 
 ===

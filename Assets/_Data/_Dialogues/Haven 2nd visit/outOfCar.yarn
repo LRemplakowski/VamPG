@@ -3,9 +3,14 @@ tags:
 ---
 <<declare $diegoMoved to false>>
 <<declare $showerTaken to false>>
-<<declare $curtainRipped to false>>
+<<declare $curtainRipped to 0>>
 <<declare $phoneBroken to true>>
 <<declare $kevinMoved to false>>
+<<declare $windowBlinds to false>>
+<<declare $windowSheets to false>>
+<<declare $attemptsCounter to 0>>
+<<declare $windowCurtain to false>>
+<<declare $windowBoxes to false>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][Behind you Anastasia’s shadow falls across the peeling paint of the hallway. Cheap whiskey, leather, and nicotine swill around her as she pulls a cigarette and a half-empty book of matches out of her pockets and lights it with practiced precision before, tossing it on the ground and grinding it with her boot. Your Beast growls as she does. The fire… makes you uncomfortable. Your strength ebbs. Fire, once a bringer of light, is now your enemy. Anastasia catches your eye and shrugs. Walking up the stairs feels like it takes forever, the steps stretching out in front of you forever. Eventually, you feel your hand tremor as you reach for a doorknob, your hand starting to shake rattling it as you can’t bring yourself to open it.][/nomarkup]
     {$anastasia}: You going to open the door or what?

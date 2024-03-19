@@ -107,6 +107,14 @@ namespace SunsetSystems.Dialogue
                 Debug.LogError($"Dialogue command GiveItemCount: Could not find item {itemID} in the ItemDatabase instance!");
         }
 
+        [YarnCommand("RemoveItem")]
+        public static void RemoveItem(string itemID)
+        {
+
+            throw new NotImplementedException();
+
+        }
+
         [YarnCommand("DealDamage")]
         public static void DealDamage(string characterID, int damage, string damageType)
         {

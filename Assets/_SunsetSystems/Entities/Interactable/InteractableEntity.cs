@@ -147,6 +147,17 @@ namespace SunsetSystems.Entities.Interactable
             _interactionCollider.enabled = Interactable;
         }
 
+        public void ClearHandlers()
+        {
+            InteractionHandlers.Clear();
+        }
+
+        public void AddHandler(GameObject handler)
+        {
+            if (handler.TryGetComponent(out IInteractionHandler interactionHandler))
+                InteractionHandlers.Add(interactionHandler);
+        }
+
         public virtual void Interact()
         {
             if (!Interactable)
@@ -190,6 +201,7 @@ namespace SunsetSystems.Entities.Interactable
             persistenceData.Interactable = Interactable;
             persistenceData.Interacted = _interacted;
             persistenceData.InteractableOnce = _interactableOnce;
+            persistenceData.InteractionHandlers = InteractionHandlers;
             return persistenceData;
         }
 
@@ -200,6 +212,7 @@ namespace SunsetSystems.Entities.Interactable
             Interactable = persistenceData.Interactable;
             _interacted = persistenceData.Interacted;
             _interactableOnce = persistenceData.InteractableOnce;
+            InteractionHandlers = persistenceData.InteractionHandlers;
             if (_linkedGameObject)
                 _linkedGameObject.SetActive(persistenceData.GameObjectActive);
         }
@@ -210,6 +223,7 @@ namespace SunsetSystems.Entities.Interactable
             public bool Interactable;
             public bool Interacted;
             public bool InteractableOnce;
+            public List<IInteractionHandler> InteractionHandlers;
 
             public InteractableEntityPersistenceData(PersistenceData persistentEntity)
             {

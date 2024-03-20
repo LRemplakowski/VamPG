@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 105043839984915438}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -53.038, y: -0.0059999824, z: -6.804}
+  m_LocalPosition: {x: -53.038, y: 0, z: -6.804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -540,6 +540,72 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waypointTag: Backdoor Waypoint
   <FaceDirection>k__BackingField: {fileID: 0}
+--- !u!1 &571385486443731989
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6492136036485143147}
+  - component: {fileID: 8714708370815786088}
+  m_Layer: 0
+  m_Name: Diana Office -> Club Shootout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6492136036485143147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571385486443731989}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4005699925950021924}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8714708370815786088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571385486443731989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aeb4106db00281488d4d72bb3404da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _type: 1
+  _sceneToLoad: {fileID: 0}
+  _targetEntryPoint: {fileID: 8215834354539142354}
+  _targetBoundingBox: {fileID: 4522118962403883195}
+  _overrideDefaultWaypoint: 0
+  _targetWaypointTag: 
+  _fadeScreenCanvasGroup: {fileID: 5286174717677215912}
+  _fadeScreenTime: 0.5
+  OnAfterFadeOut:
+    _PersistentCalls:
+    - _Target: {fileID: 4265957447267675097}
+      _MethodName: StartDialogue
+      _PersistentArguments: []
 --- !u!1 &939080836552449489
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,6 +978,92 @@ MonoBehaviour:
     levelOrigin: {x: 0, y: 1, z: -32}
     cellSize: 1
   showGizmosWhenNotSelected: 1
+--- !u!1 &1639173363840695593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5862827582558609849}
+  - component: {fileID: 5119039267719511594}
+  m_Layer: 0
+  m_Name: Diana Office Shootout Exit Dialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5862827582558609849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639173363840695593}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9007024889325224525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5119039267719511594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639173363840695593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0073667097f75464188104dd09be9260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _fadeOutBeforeDialogue: 0
+  _fadeTimes: {x: 1, y: 1, z: 1}
+  _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _dialogueProject: {fileID: 7545569452688597077, guid: 8dc0e579a0e87e445996d88ddb76dd3b, type: 3}
+  <EntryNode>k__BackingField: leaveOffice
+  OnDialogueStarted:
+    _PersistentCalls: []
+  OnDialogueFinished:
+    _PersistentCalls:
+    - _Target: {fileID: 4014772322296344489}
+      _MethodName: ClearHandlers
+      _PersistentArguments: []
+    - _Target: {fileID: 4014772322296344489}
+      _MethodName: AddHandler
+      _PersistentArguments:
+      - _Type: 13
+        _Int: 0
+        _String: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 571385486443731989}
+    - _Target: {fileID: 4014772322296344489}
+      _MethodName: Interact
+      _PersistentArguments: []
+  OnNodeStarted:
+    _PersistentCalls: []
+  OnNodeFinished:
+    _PersistentCalls: []
 --- !u!1 &1742099172166281061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,7 +1324,22 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnObjectiveActive:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 4014772322296344489}
+      _MethodName: ClearHandlers
+      _PersistentArguments: []
+    - _Target: {fileID: 4014772322296344489}
+      _MethodName: AddHandler
+      _PersistentArguments:
+      - _Type: 13
+        _Int: 0
+        _String: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 1639173363840695593}
   OnObjectiveInactive:
     _PersistentCalls: []
   OnObjectiveCompleted:
@@ -2850,6 +3017,7 @@ Transform:
   - {fileID: 3204525773131063804}
   - {fileID: 8539852450715969991}
   - {fileID: 5786053898657029550}
+  - {fileID: 6492136036485143147}
   - {fileID: 5097507208761975826}
   m_Father: {fileID: 412658073151826774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3254,8 +3422,8 @@ MonoBehaviour:
   _onAfterFadeout:
     m_PersistentCalls:
       m_Calls: []
-  _dialogueProject: {fileID: 0}
-  <EntryNode>k__BackingField: 
+  _dialogueProject: {fileID: 7545569452688597077, guid: 8dc0e579a0e87e445996d88ddb76dd3b, type: 3}
+  <EntryNode>k__BackingField: escape
   OnDialogueStarted:
     _PersistentCalls: []
   OnDialogueFinished:
@@ -3519,6 +3687,7 @@ Transform:
   - {fileID: 5142650375207599061}
   - {fileID: 840136152886017161}
   - {fileID: 3683275860078029095}
+  - {fileID: 5862827582558609849}
   m_Father: {fileID: 6193579103115963031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7342219470190671060

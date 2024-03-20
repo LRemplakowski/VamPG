@@ -39986,18 +39986,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 88063c80d515c4f49947cc100045606f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4073992089608528859}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 88063c80d515c4f49947cc100045606f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8145420366492886125}
+      addedObject: {fileID: 7484982890463342560}
   m_SourcePrefab: {fileID: 100100000, guid: 88063c80d515c4f49947cc100045606f, type: 3}
 --- !u!1 &7091002425007266604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 88063c80d515c4f49947cc100045606f, type: 3}
   m_PrefabInstance: {fileID: 7973945242001925757}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &4073992089608528859
-MeshCollider:
+--- !u!65 &7484982890463342560
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -40014,41 +40011,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5927758107176084467, guid: 88063c80d515c4f49947cc100045606f, type: 3}
---- !u!114 &8145420366492886125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7091002425007266604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AgentTypeID: 0
-  m_CollectObjects: 1
-  m_Size: {x: 25, y: 10, z: 45}
-  m_Center: {x: 8, y: 2, z: -15}
-  m_LayerMask:
-    serializedVersion: 2
-    m_Bits: 321
-  m_UseGeometry: 0
-  m_DefaultArea: 0
-  m_GenerateLinks: 0
-  m_IgnoreNavMeshAgent: 1
-  m_IgnoreNavMeshObstacle: 1
-  m_OverrideTileSize: 1
-  m_TileSize: 256
-  m_OverrideVoxelSize: 1
-  m_VoxelSize: 0.04
-  m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 641c94b1af2fbb2459502f120e57f1fe, type: 2}
-  m_BuildHeightMesh: 0
+  serializedVersion: 3
+  m_Size: {x: 14, y: 0, z: 33}
+  m_Center: {x: 6, y: 0, z: -15.5}
 --- !u!4 &7576072232876474774 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 88063c80d515c4f49947cc100045606f, type: 3}

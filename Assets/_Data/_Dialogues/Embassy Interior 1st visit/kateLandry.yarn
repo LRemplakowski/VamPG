@@ -13,7 +13,7 @@ position: -540,-238
 [nomarkup][The woman before you looks like she is in her mid-40s, but beautiful despite beginning to show her age on her face. She's wearing a corset heavily embroidered with gold - tied so tight you're convinced her organs are in her throat. Its pattern shows proud peacocks ostentatiously presenting their tail feathers. Her dark red hair cascades downwards towards that cinched waistline, the same hue as the short dress she is wearing. Decorated with sequins, said garment shimmers slightly, reflecting the light around her. And out of that flared skirt poke slender and pale legs, adorned with a pair of lace stockings.][/nomarkup] #line:0455019 
 [nomarkup][Following a simple once-over, your eyes are drawn to her crimson red nails encircling the brim of a glass containing a dark red liquid that may pass for wine, but you get a feeling it's something far more sinister... The soft red light that illuminates her heavy, but comfortable armchair is dim but ominous. This is the perch of a ruler, the throne which declares her the red queen of this place...][/nomarkup] #line:0fa3ba6 
 {$innerVoice}: This waistline... geez... good thing she doesn't need to breathe... #line:04c289e 
-<<if GetIsPartyMemberRecruited("ANASTASIA") is false>>
+<<if GetIsPartyMemberRecruited($anastasia) is false>>
     {$sforza}:Kieran. Back so soon? Hope Dominic didn't run you off. Who's your friend? [nomarkup][Her eyes are turned on you. She speaks with a strange manner and accent you can't quite place. Something European, perhaps?][/nomarkup] #line:084f939 
 <<else>>
     {$sforza}: Kieran, back so soon? Hope Dominic didn't run you off. Who are your friends? [nomarkup][Her eyes are turned on you. She speaks with a strange manner and accent you can't quite place. Something European, perhaps?][/nomarkup] #line:069afd3 
@@ -43,7 +43,7 @@ position: -212,-233
 ---
 {$pcName}: I came by here last night. Do you remember me? Who I was with? #line:043906c 
 {$sforza}: I see a lot of faces my dear, this is a popular club! But- I can see that this is serious allow me to recall... [nomarkup][Her lips curl in an amused grin as her eyes drift off to the side, her focus turning towards her own memories.][/nomarkup] Ah, yes I do remember someone mentioning a woman of your description. You're quite famous around these parts, I remember saying that if you were to stop by your first drink would be on me. Thank you for that article on the Golden Lion my dear, it has brought me no end of amusement. I was told you found yourself something of a partner in crime and left before anyone had the opportunity. [nomarkup][She makes a wide, sweeping gesture with her hand, chuckling.][/nomarkup] Maybe he's your Sire? #line:04cf964 
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
 {$anastasia}: Damn, and people say [nomarkup]<i>I'm</i>[/nomarkup] messy. #line:0e2ecd9 
 <<endif>>
 [nomarkup][Your face flushes red. Apparently, even vampires can be embarrassed. It's mixed with a subtle, unshakeable sense of guilt.][/nomarkup] #line:0288115 
@@ -62,7 +62,7 @@ position: -212,-233
     [nomarkup][Kieran only reciprocates with an anxious, shallow nod.][/nomarkup] #line:02212cd 
 <<endif>>
 -> {$pcName}: Did we leave with anybody else? #line:0f44f9e 
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][She's a little too eager as she blurts this out.][/nomarkup] A “three's a crowd” situation? Or was a crowd just what you were looking for? #line:0344fa3 
     [nomarkup][Nobody knows how to respond.][/nomarkup] #line:055e8ca 
     {$anastasia}: Why are you looking at me like that? It's just a question. And greatly important to this “investigation”, too. Need to know if there's yet another corpse kicking around, right? #line:05a19b3 
@@ -81,7 +81,7 @@ position: -212,-233
 title: kateFarewell
 position: 78,-418
 ---
-<<if GetIsPartyMemberRecruited("ANASTASIA") is false and $kateRequest is false>>
+<<if GetIsPartyMemberRecruited($anastasia) is false and $kateRequest is false>>
 {$sforza}: Before you go, I may have a lead for you. See the darling down there harassing my bartender? I would suspect she would know something about this all... [nomarkup][She leans forward as her eyes crinkle with pleasure.][/nomarkup] Diana has something of a type. I do try not to judge just it remains true if I do so or not. #line:07253c8 
     <<if visited("anastasiaMeeting")==true>>
         <<set $kateRequest to true>>
@@ -142,7 +142,7 @@ position: -357,803
 {$sforza}: [nomarkup][She shrugs a little, a little pout as her long lashes brush against her full cheeks shaking her head with a slight sigh.][/nomarkup] Well yes my dear, this is her full-time job and I do try not to hire those who skirt their responsibilities. Unpleasant or not. #line:007f50e 
 -> {$pcName}: [nomarkup][You raise an eyebrow.][/nomarkup] Almost every night? #line:025186f 
 {$sforza}: I may be old, but I'm not blind. She's been seeing someone, on occasion. But it hasn't interfered with her duties, so I haven't said anything. I like her having her own life. Keeps things interesting. #line:00f510d 
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][She scoffs, rolling her eyes.][/nomarkup] How generous of you. #line:00168a4 
     {$sforza}: Anastasia were you hoping that life would include you? I can't imagine there are many reasons to insult my perhaps radical but well-meaning gifts towards a very loyal woman. She works hard and I do try not to begrudge her a dalliance at her whim. #line:00de3e1 
     {$kieran}: [nomarkup][He glares daggers at Anastasia.][/nomarkup] #line:0ec4c74 
@@ -165,7 +165,7 @@ position: -76,570
 title: howSheStarted
 position: -70,220
 ---
-<<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$sforza}: Diana owns the place, piccola mia. I just look after it. It was a gift from our ever so “beloved”... #line:0e01aad 
     {$anastasia}: [nomarkup][She whispers.][/nomarkup] I believe her. #line:0db807e 
     {$sforza}: ... Prince. She saw fit to bestow upon me this modest domain as a token of her gratitude after that nasty business with what happened to the previous Prince. I knew that The Embassy would be the perfect spot to establish a hub where Kindred could gather and socialize, a true haven for our dysfunctional little family. It required a bit of remodeling and adapting to the needs of our kind, but with Diana's help and expertise, it has blossomed. #line:02b06c7 
@@ -220,7 +220,7 @@ position: 908,-62
 ---
     {$kieran}: A bunch of savages. #line:0bd540d 
     {$sforza}: [nomarkup][Kate gestures towards Kieran in approval.][/nomarkup] A dangerous, misguided organization that rejects the Traditions, the very ones that would have prevented you from standing where you are now.. Benedic didn't see them as a serious threat, so often those with bold new ideas are... [nomarkup][She looks over your shoulder with a touch of sadness before that fades as her gaze returns to you][/nomarkup] and thus he suffered Final Death at their hands. Some advise, Desiree, free of change. If I were someone in your position, Heaven forbid, I would do my very best to know as little about them as possible. Nothing good will come for seeking out such things. Ignorance can be a shield. #line:011ca26 
-    <<if GetIsPartyMemberRecruited("ANASTASIA") is true>>
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: It's just the natural order of things. They weren't skilled enough to avoid the consequences of what they did, so they died. [nomarkup][She shrugs.][/nomarkup] #line:0b5f03a 
     <<endif>>
     <<jump previousPrince>>

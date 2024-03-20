@@ -8,6 +8,7 @@ using SunsetSystems.Input.CameraControl;
 using SunsetSystems.LevelUtility;
 using SunsetSystems.Party;
 using SunsetSystems.Persistence;
+using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Core.SceneLoading
@@ -34,7 +35,20 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition"), Min(0)]
         private float _fadeScreenTime = .5f;
 
+        [Title("Events")]
+        public UltEvent OnAfterFadeOut = new();
+
         private IEnumerator _internalTransitionCoroutine;
+
+        private void OnEnable()
+        {
+            LevelLoader.OnAfterScreenFadeOut += InvokeAfterFadeOut;
+        }
+
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterScreenFadeOut -= InvokeAfterFadeOut;
+        }
 
         public bool HandleInteraction(IActionPerformer interactee)
         {
@@ -73,6 +87,7 @@ namespace SunsetSystems.Core.SceneLoading
         {
             if (_fadeScreenTime <= 0f || _fadeScreenCanvasGroup == null)
             {
+                InvokeAfterFadeOut();
                 var party = PartyManager.Instance.ActiveParty;
                 foreach (ICreature creature in party)
                 {
@@ -92,6 +107,7 @@ namespace SunsetSystems.Core.SceneLoading
                     _fadeScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, lerp);
                     yield return null;
                 }
+                InvokeAfterFadeOut();
                 _fadeScreenCanvasGroup.alpha = 1f;
                 var party = PartyManager.Instance.ActiveParty;
                 foreach (ICreature creature in party)
@@ -111,6 +127,11 @@ namespace SunsetSystems.Core.SceneLoading
                 _fadeScreenCanvasGroup.alpha = 0f;
                 _fadeScreenCanvasGroup.gameObject.SetActive(false);
             }
+        }
+
+        public void InvokeAfterFadeOut()
+        {
+            OnAfterFadeOut?.InvokeSafe();
         }
     }
 

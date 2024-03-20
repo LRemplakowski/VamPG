@@ -35,9 +35,9 @@ tags:
 title: kieranDominicRelations
 ---
 {$kieran}: Is it that obvious? [nomarkup][He sighs.][/nomarkup] Let's just say that I didn't want to tag along with him. And he didn't want a partner. We all have our duties to uphold, however. #line:0d5b72a 
-<<if GetCompanionInfluence("$kieran")>=2>>
+<<if GetCompanionInfluence($kieran)>=2>>
     {$kieran}: As bad as this situation is, I am happy to be relieved from the company of that...manchild at last. I'm still worried it might be my [nomarkup]<i>last</i>[/nomarkup] night, but a few more of his jokes, and I may have lost my temper. #line:06aae8f 
-<<elseif GetCompanionInfluence("$kieran")<=-2>>> #line:0770a2d 
+<<elseif GetCompanionInfluence($kieran)<=-2>>> #line:0770a2d 
     {$kieran}: Out of the two evils, you actually seem to cause me more anguish. #line:04e607f 
 <<else>>
     {$kieran}: To be honest, I do not know if the exchange is for better or worse quite yet... #line:08cb6ce 
@@ -78,9 +78,9 @@ title: kieransAge
 title: drinks
 ---
 {$kieran}: Technically, we can't drink alcohol... #line:05fc18d 
-<<if GetCompanionInfluence("$kieran")>=2>>
+<<if GetCompanionInfluence($kieran)>=2>>
     {$kieran}: ... but I just may take you up on it, if only for the purpose of showing you a workaround. Not all mortal pleasures have to be forfeit. #line:03abe24 
-<<elseif GetCompanionInfluence("$kieran")<=-2>>
+<<elseif GetCompanionInfluence($kieran)<=-2>>
     {$kieran}: ...and no amount would make it worth your prolonged company. #line:0ddc428 
 <<else>>
     {$kieran}: ... but I don't know if it'll be... appropriate. #line:0a4ea6d 
@@ -112,7 +112,7 @@ title: catherinaCharacteristics
 {$kieran}: Why do you ask? #line:063d35e 
     -> {$pcName}: Just gathering data. #line:01e906b 
     [nomarkup][He looks at you reluctantly][/nomarkup] #line:01a73af 
-    <<if GetCompanionInfluence("$kieran")>=2>>
+    <<if GetCompanionInfluence($kieran)>=2>>
         {$kieran}: Kate is far better then most of the Sires I know. [nomarkup][His eyes go a little cloudy - for the first time you see him so dreamy.][/nomarkup] Beautiful and caring... every young Kindred would be lucky to have her as a Sire. #line:089b698 
         -> {$pcName}: Whoa, I didn't expect that.  #line:0880a7e 
             <<ModifyInfluence 1 $kieran>>
@@ -131,7 +131,7 @@ title: catherinaCharacteristics
             {$kieran}: [nomarkup][He frowns deeply.][/nomarkup] No, I really am not. You know nothing about the matter, so kindly keep her name out of your mouth. [nomarkup][Kieran influence -1\][/nomarkup] #line:0c931b3 
             <<ModifyInfluence -1 $kieran>>
             <<jump kieransSire>>
-    <<elseif GetCompanionInfluence("$kieran")<=-2>>
+    <<elseif GetCompanionInfluence($kieran)<=-2>>
         {$kieran}: I don't want to sound rude, but I'm not certain how this is relevant to the ongoing investigation. #line:065ce23 
         <<jump kieransSire>>
     <<else>>
@@ -195,9 +195,9 @@ title: kieransClan
         -> {$pcName}: Cool. That means absolutely nothing to me. #line:005c7c6 
             <<jump occultQuestions>>
         -> {$pcName}: [nomarkup][You raise an eyebrow in question.][/nomarkup] Care to elaborate? #line:04e8016 
-            <<if GetCompanionInfluence("$kieran")>=2>>
+            <<if GetCompanionInfluence($kieran)>=2>>
                 {$kieran}: Tremere are a Clan of blood mages, renowned for our loyalty and skill, but simultaneously distrusted by broader Kindred society due to our secrecy. That is, our magic is an indispensable resource of any Camarilla Domain, but as much as it brings us fortune, it also serves to isolate us... #line:0188efd 
-            <<elseif GetCompanionInfluence("$kieran")==2>>
+            <<elseif GetCompanionInfluence($kieran)==2>>
                 {$kieran}: The first thing you must know when attempting to learn about the Tremere is that we are highly secretive - often for good reason... #line:01db9ce 
             <<else>>
                 {$kieran}: No. Figure it out on your own time. #line:0149275 

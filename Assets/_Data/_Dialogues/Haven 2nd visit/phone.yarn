@@ -13,6 +13,7 @@ tags:
     <<jump phoneInt3Duct>>
 <<elseif GetAttributeSkillPoolSize("Intelligence","Technology")==3>>
     <<jump phoneInt2>>
+<<endif>>
 ===
 title: phoneInt0
 ---
@@ -58,6 +59,7 @@ title: phoneInt3Duct
         {$anastasia}: Okay sourpuss.
         -> {$pcName}: Ana...
         {$anastasia}: Shit. Sorry? Sorry.
+    <<endif>>
 -> [nomarkup][Put the phone in its cradle.][/nomarkup]
     [nomarkup][You look at the phone and immediately think better of it. There’s nothing you want to do less than call Arthur and burden him even more. Setting the phone in its cradle, you return to the rest of the apartment.][/nomarkup]
 ===

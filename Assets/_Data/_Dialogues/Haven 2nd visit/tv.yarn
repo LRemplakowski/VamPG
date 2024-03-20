@@ -6,7 +6,7 @@ tags:
     Cheryl Ahmadi: We come to you tonight looking over the Embassy where a firefight has rocked the local community, turning a once peaceful club on the Strip into a warzone. Shots were heard late this evening when a series of armed men broke through the doors and opened fire. We bring you now to the carnage left over in the wake of this horrific attack.
     Reporter: Gunshots were reported at the Embassy nightclub. Police report this can be attributed to gang violence. We’re unsure what may have prompted this, but having gotten in contact with the mayor's office he promises that he will swiftly be taking action.
     Cheryl Ahmadi: Attempts to get in contact with the owner of the Embassy have failed but all reports indicate that she was still inside when the fighting started. Can you tell me what’s happening?
-        <<if $doeEyedManAlive == true>>
+        <<if $doeEyedManAlive > 0>>
             [nomarkup][A young man with large brown eyes you recognize from the club is wrapped in a highly reflective blanket. His face looks pale and sallow but he’s clearly been attended to by a nurse and is sitting on the curb with a thousand-yard stare. The reporter makes their way over to him.][/nomarkup]
             Reporter: Yes Cheryl, we’ve been told that the front of the Embassy was hit the hardest and it’s where the majority of the casualties occurred. Young man - young man?
             Doe Eyed Man: Y…yes?
@@ -22,10 +22,10 @@ tags:
         <<endif>>
     Reporter: Yes Cheryl. Efforts are underway currently to try and clear the building of those still trapped inside, it would seem that a broken door in the back alley allowed many to escape. The fire team on duty this evening commented that it likely saved a great many people from smoke annihilation… 
     [nomarkup][The reporter drones on as you see police come and talk with the new station, saying that they suspect a string of violent crimes in the area all to be tied to a resurgence of gang violence and organized crime after a series of arrests late last year. You’re witnessing the work of your “primogen,” as Kieran put it, in real-time. You wonder how many other stories you’ve heard are flights of fancy Kindred have served to the public.][/nomarkup]
-    <<if GetHasItem ("IT_Q_VHS")>>
+    <<if GetHasItem("IT_Q_VHS")>>
         <<jump vhsTape>>
     <<endif>>
-<<elseif GetHasItem ("IT_Q_VHS")>>
+<<elseif GetHasItem("IT_Q_VHS")>>
     <<jump vhsTape>>
 <<endif>>
 ===

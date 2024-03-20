@@ -18,7 +18,8 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private Camera loadingCamera;
 
-        public static event Action OnLevelLoadStart, OnLevelLoadEnd;
+        public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad;
+        public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
 
         public async Task LoadNewScene(SceneLoadingData data)
         {
@@ -32,6 +33,7 @@ namespace SunsetSystems.Core.SceneLoading
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data);
             await new WaitForUpdate();
+            OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();

@@ -37,6 +37,7 @@ namespace SunsetSystems.Game
         }
 
         [Title("Events")]
+        public UltEvent OnBeforePersistentDataLoad = new();
         // Called when level is done loading & all the persistent data already is injected
         public UltEvent OnLevelStart = new();
         // Called when we start to unload the current level and all the persistent data has been cached
@@ -53,6 +54,7 @@ namespace SunsetSystems.Game
             ISaveable.RegisterSaveable(this);
             LevelLoader.OnLevelLoadEnd += GameLevelStart;
             LevelLoader.OnLevelLoadStart += GameLevelEnd;
+            LevelLoader.OnBeforePersistentDataLoad += BeforePersistentDataLoad;
         }
 
         private void OnDestroy()
@@ -60,6 +62,12 @@ namespace SunsetSystems.Game
             ISaveable.UnregisterSaveable(this);
             LevelLoader.OnLevelLoadEnd -= GameLevelStart;
             LevelLoader.OnLevelLoadStart -= GameLevelEnd;
+            LevelLoader.OnBeforePersistentDataLoad -= BeforePersistentDataLoad;
+        }
+
+        private void BeforePersistentDataLoad()
+        {
+            OnBeforePersistentDataLoad?.InvokeSafe();
         }
 
         private void GameLevelStart()

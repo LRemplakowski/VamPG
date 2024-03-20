@@ -3,26 +3,26 @@ tags:
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][Ana wanders through your home. Checking out the kitchen, and cabinets, looking at your mail. Eventually, she even spots an image of Arthur, smiling and happy in a picture. She smiles as she looks back at you before she sees something in your face and sets it down.][/nomarkup]
-    {$anastasia}: Kind of a shit-hole isn’t it?
-    -> {$pcName}: Thanks. You don’t look so great yourself. [nomarkup][You can feel the banter come quickly to you but there’s a heaviness as you try to go back and forth with the fast-talking woman.][/nomarkup]
+    {$anastasia}: Kind of a shit-hole isn't it?
+    -> {$pcName}: Thanks. You don't look so great yourself. [nomarkup][You can feel the banter come quickly to you but there's a heaviness as you try to go back and forth with the fast-talking woman.][/nomarkup]
     {$anastasia}: You look like you just crawled out of the grave.
     -> {$pcName}: Hell says hi.
-    {$anastasia}: [nomarkup][She snorts and tosses her hair as her lips purse.][/nomarkup] I’m not great at this emotional stuff -
+    {$anastasia}: [nomarkup][She snorts and tosses her hair as her lips purse.][/nomarkup] I'm not great at this emotional stuff -
     -> {$pcName}: I can see that.
-    {$anastasia}: Let me fucking finish okay? I’m not great at this emotional stuff, but, I can’t just leave you alone here. And I’m not sure what to do here. Movies say showering with sad music. I say we need to get something over the windows or we’re going to fucking die. Two birds with one stone? Shower and cover the windows?
+    {$anastasia}: Let me fucking finish okay? I'm not great at this emotional stuff, but, I can't just leave you alone here. And I'm not sure what to do here. Movies say showering with sad music. I say we need to get something over the windows or we're going to fucking die. Two birds with one stone? Shower and cover the windows?
     -> {$pcName}: I'll do that.
         <<jump pcChecksShower>>
     -> {$pcName}: You do that.
         <<jump anaChecksShower>>
 <<else>>
-    [nomarkup][You stand in your home staring at the bills on your counter, the sink dripping a methodical drip of water. Looking at the windows you can see that there is the very edge of a light purple along the horizon. Eventually, the sun will rise and even though you don’t feel like moving, don’t feel like rising unbidden strength comes to you. You push yourself off the counter with a need to find something to barricade yourself away from the light.][/nomarkup]
-    {$beast}: I’m not dying after one fucking night. Get a grip.
+    [nomarkup][You stand in your home staring at the bills on your counter, the sink dripping a methodical drip of water. Looking at the windows you can see that there is the very edge of a light purple along the horizon. Eventually, the sun will rise and even though you don't feel like moving, don't feel like rising unbidden strength comes to you. You push yourself off the counter with a need to find something to barricade yourself away from the light.][/nomarkup]
+    {$beast}: I'm not dying after one fucking night. Get a grip.
     [nomarkup][You find yourself staring out at your empty house, puppeteered by ambition and unable to stop yourself from moving forward.][/nomarkup]
 <<endif>>
 ===
 title: anaChecksShower
 ---
-[nomarkup][Anastasia pushes past you and opens the door to the bathroom and you hear a very low ‘fuck’.][/nomarkup]
+[nomarkup][Anastasia pushes past you and opens the door to the bathroom and you hear a very low ‘fuck'.][/nomarkup]
 {$anastasia}: Who the fuck is this guy?
 <<set $diegoMoved to true>>
 //Diego body dissapears//

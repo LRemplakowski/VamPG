@@ -2,7 +2,7 @@
 tags:
 ---
 <<set $playerNickname to "Deputee">>
-[nomarkup][Your journey is rather uneventful. Dominic is sitting behind his wheel, visibly relaxed, smoking his next cigarette. He had at least some decency to open up the window on his side so the smoke gets sucked out or is pushed behind. It looks rather hilarious that he drives with his sunglasses in the middle of the night also having dark glass of his car before him. But he seems to see just fine, only occasionally disregarding red light on the road. The engine roars soaring through the Vegas streets. It sounds like he has a real beast under the hood. Other than that the interior of the car is silent. Eerily silent even. It makes you somewhat uncomfortable - considering that several minutes earlier you survived hell. You feel as though you’re on another planet. It seems that normally talkative Sheriff doesn’t want to be intrusive and allows you to gather your thoughts in silence.][/nomarkup]
+[nomarkup][Your journey is rather uneventful. Dominic is sitting behind his wheel, visibly relaxed, smoking his next cigarette. He had at least some decency to open up the window on his side so the smoke gets sucked out or is pushed behind. It looks rather hilarious that he drives with his sunglasses in the middle of the night also having dark glass of his car before him. But he seems to see just fine, only occasionally disregarding red light on the road. The engine roars soaring through the Vegas streets. It sounds like he has a real beast under the hood. Other than that the interior of the car is silent. Eerily silent even. It makes you somewhat uncomfortable - considering that several minutes earlier you survived hell. You feel as though you're on another planet. It seems that normally talkative Sheriff doesn't want to be intrusive and allows you to gather your thoughts in silence.][/nomarkup]
 ===
 title: carInteractions
 ---
@@ -34,7 +34,7 @@ title: carInteractions
     -> {$pcName}: … maybe you could tell me something about this strange voice in my head? <<if visited("dominicBeast") == false>>
         <<jump dominicBeast>>
 <<else>>
-    -> {$pcName}: What’s your take on the Beast? <<if visited("dominicsTakeOnBeast") == false>>
+    -> {$pcName}: What's your take on the Beast? <<if visited("dominicsTakeOnBeast") == false>>
         <<jump dominicsTakeOnBeast>>    
 <<endif>>
 <<if $dominicshot == true and Roll("Wits","Awareness") >=3>>
@@ -44,43 +44,43 @@ title: carInteractions
 -> {$pcName}: So… what happens next? <<if visited("whatsNext") == false>>
     <<jump whatsNext>>
 -> [nomarkup][Stay silent.][/nomarkup]
-    {$sheriff}: We are nearly at your place. An’ hey, ‘bout the Embassy, I know it ain’t an excuse for bein’ short but I was pissed. Ain’t gonna be like that again.
+    {$sheriff}: We are nearly at your place. An' hey, ‘bout the Embassy, I know it ain't an excuse for bein' short but I was pissed. Ain't gonna be like that again.
 ===
 title: haveACigarette
 ---
-{$sheriff}: Old habits die hard? Sure, some should be in the glove compartment next to you. Remember to tell your doctor you’ve got a smoking problem won’t ya? [nomarkup][You open up the mentioned glove compartment only to find a whole carton of Camels.][/nomarkup]
+{$sheriff}: Old habits die hard? Sure, some should be in the glove compartment next to you. Remember to tell your doctor you've got a smoking problem won't ya? [nomarkup][You open up the mentioned glove compartment only to find a whole carton of Camels.][/nomarkup]
 -> {$pcName}: Yeah… I had to quit to pay the bills.
-{$sheriff}: You can take em, they’re yours Deputee. I have a whole cupboard of those in my place. Practically a connoisseur of the things.
-[nomarkup][You put a cig in your mouth and light it up with the car lighter. You take in the smoke with a deep breath into your lungs. It doesn’t give the same “kick” or “taste” as usual, but it’s still a shred of a normal life you had… seemingly like centuries ago. You close your eyes for a second allowing your senses to drift with the smoke.][/nomarkup]
-{$sheriff}: It’ll never be the same, but it feels nice don’t it? Got that rhythmic meditation shit.
--> {$pcName}: Yeah. Kinda. [nomarkup][You blow a puff of smoke. Dominic doesn’t mind.][/nomarkup]
+{$sheriff}: You can take em, they're yours Deputee. I have a whole cupboard of those in my place. Practically a connoisseur of the things.
+[nomarkup][You put a cig in your mouth and light it up with the car lighter. You take in the smoke with a deep breath into your lungs. It doesn't give the same “kick” or “taste” as usual, but it's still a shred of a normal life you had… seemingly like centuries ago. You close your eyes for a second allowing your senses to drift with the smoke.][/nomarkup]
+{$sheriff}: It'll never be the same, but it feels nice don't it? Got that rhythmic meditation shit.
+-> {$pcName}: Yeah. Kinda. [nomarkup][You blow a puff of smoke. Dominic doesn't mind.][/nomarkup]
 {$sheriff}: Chase that.
 -> {$pcName}: Is this some kind of advice?
-{$sheriff}: Might could, some folk walk the straight and narrow just fine, some of us - we need a little help now don’t we?. [nomarkup][He threw out the bud through the window and let out a sigh.][/nomarkup] Well, at least it ain’t the cancer that’ll get you in the end.
+{$sheriff}: Might could, some folk walk the straight and narrow just fine, some of us - we need a little help now don't we?. [nomarkup][He threw out the bud through the window and let out a sigh.][/nomarkup] Well, at least it ain't the cancer that'll get you in the end.
 <<jump carInteractions>>
 ===
 title: useADrink
 ---
-{$sheriff}: [nomarkup][When you end your sentence Dominic reaches out to his inner pocket and throws hip flask at your lap.][/nomarkup] Kid says she could use a drink, I’m sure you could. Take a sip why don’t ya?
--> {$pcName}: … but we can’t…
-    {$sheriff}: ‘nd who been goin’ around and told you that? Kieran? You think Stanford taught him shit about the world? Don’t believe everythin’ some fuck with a white coat tells you kiddo, that one’s for free.
-    [nomarkup][You look at Dominic and take a sip from his flask. It’s definitely blood, but it’s different. It has a heat that burns your throat but doesn’t make you want to throw up. You take the next sip… and the next.][/nomarkup]
-    {$sheriff}: What are you tryin’a do there bleed me dry? [nomarkup][He takes it from your hand and drinks himself.][/nomarkup] Don’t worry {$playerNickname} it tastes the same comin’ up as goin’ down.
+{$sheriff}: [nomarkup][When you end your sentence Dominic reaches out to his inner pocket and throws hip flask at your lap.][/nomarkup] Kid says she could use a drink, I'm sure you could. Take a sip why don't ya?
+-> {$pcName}: … but we can't…
+    {$sheriff}: ‘nd who been goin' around and told you that? Kieran? You think Stanford taught him shit about the world? Don't believe everythin' some fuck with a white coat tells you kiddo, that one's for free.
+    [nomarkup][You look at Dominic and take a sip from his flask. It's definitely blood, but it's different. It has a heat that burns your throat but doesn't make you want to throw up. You take the next sip… and the next.][/nomarkup]
+    {$sheriff}: What are you tryin'a do there bleed me dry? [nomarkup][He takes it from your hand and drinks himself.][/nomarkup] Don't worry {$playerNickname} it tastes the same comin' up as goin' down.
 -> {$pcName}: Thanks?
-    [nomarkup][You look at Dominic and take a sip from his flask. It’s definitely blood, but it’s different. It has a heat that burns your throat but doesn’t make you want to throw up. You take the next sip… and the next.][/nomarkup]
-    {$sheriff}: What are you tryin’a do there bleed me dry? [nomarkup][He takes it from your hand and drinks himself.][/nomarkup] Don’t worry {$playerNickname} it tastes the same comin’ up as goin’ down.
+    [nomarkup][You look at Dominic and take a sip from his flask. It's definitely blood, but it's different. It has a heat that burns your throat but doesn't make you want to throw up. You take the next sip… and the next.][/nomarkup]
+    {$sheriff}: What are you tryin'a do there bleed me dry? [nomarkup][He takes it from your hand and drinks himself.][/nomarkup] Don't worry {$playerNickname} it tastes the same comin' up as goin' down.
 -> {$pcName}: No, thank you…
     [nomarkup][You give him back his flask. He takes it and drinks from it.][/nomarkup]
 <<jump carInteractions>>
 ===
 title: tellAboutHer
 ---
-{$sheriff}: Ah, one of my favorite topics. Keep me on it too long and I’ll start singing’. Sure you don’t want to hear that.. [nomarkup][He tapped his ring on the steering wheel.][/nomarkup] Sure you heard about the Prince? You met with Kate and she’s about as sure on my Lady as a pitchfork in hell.. Not promisin’ it’ll be the unbiased interview you’d hope for but it’ll be somethin’ alright.
+{$sheriff}: Ah, one of my favorite topics. Keep me on it too long and I'll start singing'. Sure you don't want to hear that.. [nomarkup][He tapped his ring on the steering wheel.][/nomarkup] Sure you heard about the Prince? You met with Kate and she's about as sure on my Lady as a pitchfork in hell.. Not promisin' it'll be the unbiased interview you'd hope for but it'll be somethin' alright.
 -> {$pcName}: How old she is? <<if visited("herAge") == false>>
     <<jump herAge>>
--> {$pcName}: What’s her role in the… how was it… <<if visited("herRole") == false>>
+-> {$pcName}: What's her role in the… how was it… <<if visited("herRole") == false>>
     <<jump herRole>>
--> {$pcName}: How did you two end up together? It’s normal for Kindred to have families like that? <<if visited("normalFamily") == false>>
+-> {$pcName}: How did you two end up together? It's normal for Kindred to have families like that? <<if visited("normalFamily") == false>>
     <<jump normalFamily>>
 -> {$pcName}: Any advice before I meet her? <<if visited("anyAdvice") == false>>
     <<jump anyAdvice>>
@@ -88,39 +88,39 @@ title: tellAboutHer
 ===
 title: herAge
 ---
-{$sheriff}: You certainly know how to choose a tricky topic. It’s rude to ask about a woman's age, you know? So I never asked, I’m a gentleman mind you.[nomarkup][He looks at you with a smirk on his face.][/nomarkup]
--> {$pcName}: You’re fucking around do you?
-{$sheriff}: [nomarkup][He laughs.][/nomarkup] She’s around a hundred if you need to know. But she’s not that stiff for a century-old lady. And definitely not that much wrinkled.
+{$sheriff}: You certainly know how to choose a tricky topic. It's rude to ask about a woman's age, you know? So I never asked, I'm a gentleman mind you.[nomarkup][He looks at you with a smirk on his face.][/nomarkup]
+-> {$pcName}: You're fucking around do you?
+{$sheriff}: [nomarkup][He laughs.][/nomarkup] She's around a hundred if you need to know. But she's not that stiff for a century-old lady. And definitely not that much wrinkled.
 <<jump tellAboutHer>>
 ===
 title: herRole
 ---
-{$sheriff}: I see that Kieran started to introduce you to Kindred politics already. Domain, capital “D”. She’s the highest-rankin’ local representative of the Camarilla and I’m her humble clenched fist ready to strike when necessary.
+{$sheriff}: I see that Kieran started to introduce you to Kindred politics already. Domain, capital “D”. She's the highest-rankin' local representative of the Camarilla and I'm her humble clenched fist ready to strike when necessary.
 <<jump tellAboutHer>>
 ===
 title: normalFamily
 ---
-{$sheriff}: It’s a long story bearin’ the title “none of your business”. And it’ll stay that way Desiree, I mean it, don’t go askin’ around about it neither.. As for families no. It ain’t, but I wish it was.. We’re supernatural after all, all the bad things in the world why not have something good.. So I’m a believer, true love and all that. If there is somethin’ up there a little hard to believe he’d make somethin’ this fucked up without givin’ us a reason to fight for it.
+{$sheriff}: It's a long story bearin' the title “none of your business”. And it'll stay that way Desiree, I mean it, don't go askin' around about it neither.. As for families no. It ain't, but I wish it was.. We're supernatural after all, all the bad things in the world why not have something good.. So I'm a believer, true love and all that. If there is somethin' up there a little hard to believe he'd make somethin' this fucked up without givin' us a reason to fight for it.
 <<jump tellAboutHer>>
 ===
 title: anyAdvice
 ---
-{$sheriff}: Don’t lie, show some proper respect, mind your p’s and your q’s. She’ll like you. She’s sweet like that.
+{$sheriff}: Don't lie, show some proper respect, mind your p's and your q's. She'll like you. She's sweet like that.
 -> {$pcName}: Can you vouch for me before her?
 <<if GetCompanionInfluence ($sheriff)==1>>
-    {$sheriff}: I can do that, but you’ll owe me one, an’ I don’t mean this is a way where I want you bringin’ food to the cookout. You’ll do what I ask when I ask it. You always gotta pay your debts.
+    {$sheriff}: I can do that, but you'll owe me one, an' I don't mean this is a way where I want you bringin' food to the cookout. You'll do what I ask when I ask it. You always gotta pay your debts.
 <<elseif GetCompanionInfluence ($sheriff)>1>>
     {$sheriff}: Sure could, I can remind her how well  you handle the… circumstances.
 <<else>>
-    {$sheriff}: You ain’t leave a man the best impression. So no, kid, you’re on your own in this.
+    {$sheriff}: You ain't leave a man the best impression. So no, kid, you're on your own in this.
 <<endif>>
 <<jump carInteractions>>
 ===
 title: whyDeputee
 ---
-{$sheriff}: Because this is what you are. At least today. You did a job I normally do. This is why I’m callin’ you, Deputee. If you don’t like it I may call you Bumblebee.
--> {$pcName}: What’s with the nicknames?
-{$sheriff}: You ever been in the army kid? You do somethin’ stupid and it sticks with you, piss on an electric fence and someone’ll come up an’ call you Bloody Rain. It reminds you you’re human, despite everythin’ everyone’s sayin’ despite all the shit you’ve built up you’re human and you make mistakes. Well Deputee I can’t exactly call you Lion Fucker, so just remindin’ myself you’re like a little me. In the ways that matter
+{$sheriff}: Because this is what you are. At least today. You did a job I normally do. This is why I'm callin' you, Deputee. If you don't like it I may call you Bumblebee.
+-> {$pcName}: What's with the nicknames?
+{$sheriff}: You ever been in the army kid? You do somethin' stupid and it sticks with you, piss on an electric fence and someone'll come up an' call you Bloody Rain. It reminds you you're human, despite everythin' everyone's sayin' despite all the shit you've built up you're human and you make mistakes. Well Deputee I can't exactly call you Lion Fucker, so just remindin' myself you're like a little me. In the ways that matter
 <<jump nicknames>>
 ===
 title: nicknames
@@ -129,13 +129,13 @@ title: nicknames
     <<jump whyLionFucker>>
 -> {$pcName}: Stick to Deputee. I just might stay around you for a little bit longer. <<if visited("wantDeputee") == false and visited("wantName") == false>>
     <<jump wantDeputee>>
--> {$pcName}: I like Desiree more. It’s sweet you want me to be like you, but I don’t know you yet. <<if visited("wantDeputee") == false and visited("wantName") == false>>
+-> {$pcName}: I like Desiree more. It's sweet you want me to be like you, but I don't know you yet. <<if visited("wantDeputee") == false and visited("wantName") == false>>
 ===
 title: whyLionFucker
 ---
-{$sheriff}: We both tried to fuck the Prince, I just did it more successfully. It’s that fire Deputee. Gotta remember it’s that fire.
--> {$pcName}: Tonight? I… didn’t… do that? I’ve been a Kindred for like five hours Dominic - When did I do that?
-{$sheriff}: I don’t mean tonight.
+{$sheriff}: We both tried to fuck the Prince, I just did it more successfully. It's that fire Deputee. Gotta remember it's that fire.
+-> {$pcName}: Tonight? I… didn't… do that? I've been a Kindred for like five hours Dominic - When did I do that?
+{$sheriff}: I don't mean tonight.
 <<jump nicknames>>
 ===
 title: wantDeputee
@@ -145,7 +145,7 @@ title: wantDeputee
 title: wantName
 ---
 <<set $playerNickname to GetFirstName($pcName)>>
-{$sheriff}: Sure thing {$playerNickname}, an’ if you do change your mind… always welcome to. [nomarkup][He smiles a little looking at you.][/nomarkup]
+{$sheriff}: Sure thing {$playerNickname}, an' if you do change your mind… always welcome to. [nomarkup][He smiles a little looking at you.][/nomarkup]
 <<jump nicknames>>
 ===
 title: whatHappensWithDiana
@@ -153,36 +153,36 @@ title: whatHappensWithDiana
 <<if $dianaGoesToDominic == true>>
     {$sheriff}: [nomarkup][He looks at his driver's mirror back at silent Diana who looks on the passing streets with an absent look on her face.][/nomarkup] Do you really want to talk ‘bout this right now?
 <<else>>
-    {$sheriff}: [nomarkup][He looks at you for a second and back at the street and lets out a sigh.][/nomarkup] I don’t think you want to know that.
+    {$sheriff}: [nomarkup][He looks at you for a second and back at the street and lets out a sigh.][/nomarkup] I don't think you want to know that.
 <<endif>>
 -> {$pcName}: Just curious. Your politics are quite complicated from what I saw.
-    {$sheriff}: [nomarkup][He snorts on your remark.][/nomarkup] If you think that Diana’s case was difficult politics I’m sorry to tell you that it was the easiest political discussion in this city. Just wait when you’ll need to resolve someone’s Domain claim or trespassing case. Or like yours… [nomarkup][He looks at you.][/nomarkup] … unsanctioned Embrace. Usually, I just cut off the head of the problem, it’s cleaner. Yours will be anything but.
+    {$sheriff}: [nomarkup][He snorts on your remark.][/nomarkup] If you think that Diana's case was difficult politics I'm sorry to tell you that it was the easiest political discussion in this city. Just wait when you'll need to resolve someone's Domain claim or trespassing case. Or like yours… [nomarkup][He looks at you.][/nomarkup] … unsanctioned Embrace. Usually, I just cut off the head of the problem, it's cleaner. Yours will be anything but.
     -> {$pcName}: If it causes you so many problems why do you let me live?
-    {$sheriff}: It was because of Kieran’s arguments. You don’t remember?
+    {$sheriff}: It was because of Kieran's arguments. You don't remember?
     <<if Roll("Wits","Insight") >=4>>
-        [nomarkup][It’s hard to discern Dominic’s emotions because of his sunglasses, but you feel that he isn’t telling you the truth. At least not entirely. He isn’t dishonest with you either, it's rather something that he doesn’t understand or he doesn’t want to admit before himself.][/nomarkup]
+        [nomarkup][It's hard to discern Dominic's emotions because of his sunglasses, but you feel that he isn't telling you the truth. At least not entirely. He isn't dishonest with you either, it's rather something that he doesn't understand or he doesn't want to admit before himself.][/nomarkup]
         -> {$pcName}: Cut the crap Dominic. You were just stalling so you could hear arguments from someone else's side and have a good excuse for your decision.
-        {$sheriff}: [nomarkup][He taps his fingers on the driving wheel for several seconds.][/nomarkup] I’m not a bad guy ya know, I didn’t want to be playing cop for all eternity But my wife makes the law and I don’t trust anyone else to enforce them, not in a way that follows the spirit an’ not just the word.But I already knew you, Desiree Bardot. I know what ya’ll are capable of. I’ve read your articles in the Sands and saw your career crumble to dust, an’ all I get to do about it is smile an’ nod. Couldn’t stop that from happenin’ but I had my opinions on it, I had my thoughts. So I had my opportunity an’ here you sit, glad to know that intuition ain’t failed me yet.
+        {$sheriff}: [nomarkup][He taps his fingers on the driving wheel for several seconds.][/nomarkup] I'm not a bad guy ya know, I didn't want to be playing cop for all eternity But my wife makes the law and I don't trust anyone else to enforce them, not in a way that follows the spirit an' not just the word.But I already knew you, Desiree Bardot. I know what ya'll are capable of. I've read your articles in the Sands and saw your career crumble to dust, an' all I get to do about it is smile an' nod. Couldn't stop that from happenin' but I had my opinions on it, I had my thoughts. So I had my opportunity an' here you sit, glad to know that intuition ain't failed me yet.
         -> {$pcName}: You… know me?
-        {$sheriff}: As I said, by reputation. You’re famous {$playerNickname}.
-        -> {$pcName}: You’re a fan?
-        {$sheriff}: Now why you gotta ask that? Could say I am, could say I’m not But you dig up skeletons, an’ there’s a lot of skeletons around here that need to be dug up.
+        {$sheriff}: As I said, by reputation. You're famous {$playerNickname}.
+        -> {$pcName}: You're a fan?
+        {$sheriff}: Now why you gotta ask that? Could say I am, could say I'm not But you dig up skeletons, an' there's a lot of skeletons around here that need to be dug up.
     <<endif>>
 -> {$pcName}: I just want to know if I passed a death sentence on her.
-    {$sheriff}: Don’t go down that road or you’ll go mad. Whatever happens to Diana it’s a consequence of her own decisions… with some help from other Kindred, but you didn’t make her do nothin’. And you can’t go back now, the machine was set in motion an’ all you did was handle the final product. You can try to stop it, but it’ll most likely grind you to dust along with her.
-    -> {$pcName}: It doesn’t answer my question.
-    {$sheriff}: Yea, I know. But it’s the most elaborate answer you’ll get.
+    {$sheriff}: Don't go down that road or you'll go mad. Whatever happens to Diana it's a consequence of her own decisions… with some help from other Kindred, but you didn't make her do nothin'. And you can't go back now, the machine was set in motion an' all you did was handle the final product. You can try to stop it, but it'll most likely grind you to dust along with her.
+    -> {$pcName}: It doesn't answer my question.
+    {$sheriff}: Yea, I know. But it's the most elaborate answer you'll get.
 <<jump carInteractions>>
 ===
 title: niceCar
 ---
-{$sheriff}: You betcha. Dodge Charger, 3rd generation. Bought freshly from the assembly line in the 70s. Still in great shape after all these years, she’s a bit like me really. I can’t even count how many times it saved my unlife and how many races we’ve won. Sprints are my favorite. The only thing that isn’t original is the hood and several parts. I had to adjust this sweetie into the best street racin’ car because most usually people hear me before they see me. It’s like a trademark right now. When you hear V8 headin’ your way you can assume it’s me. And never EVER try to scratch my baby.
+{$sheriff}: You betcha. Dodge Charger, 3rd generation. Bought freshly from the assembly line in the 70s. Still in great shape after all these years, she's a bit like me really. I can't even count how many times it saved my unlife and how many races we've won. Sprints are my favorite. The only thing that isn't original is the hood and several parts. I had to adjust this sweetie into the best street racin' car because most usually people hear me before they see me. It's like a trademark right now. When you hear V8 headin' your way you can assume it's me. And never EVER try to scratch my baby.
 <<ModifyInfluence 1 $sheriff>>
 <<jump carInteractions>>
 ===
 title: badCar
 ---
-{$sheriff}: [nomarkup][He turns to you, slowly, and lowers his glasses.][/nomarkup] I recommend you rethink that statement girl. You obviously don’t know nothin’ about cars. [nomarkup][His gaze turns again to the road.][/nomarkup] What’s your car huh? Rabbit? Omni? Corolla? I have a V8 under the hood. Not some shitty I4. Yea, it drinks gas like we drink blood, but the performance? Worth every dollar you pump into the tank. [nomarkup][He snorts - visibly annoyed for some reason.][/nomarkup] … pile of junk.
+{$sheriff}: [nomarkup][He turns to you, slowly, and lowers his glasses.][/nomarkup] I recommend you rethink that statement girl. You obviously don't know nothin' about cars. [nomarkup][His gaze turns again to the road.][/nomarkup] What's your car huh? Rabbit? Omni? Corolla? I have a V8 under the hood. Not some shitty I4. Yea, it drinks gas like we drink blood, but the performance? Worth every dollar you pump into the tank. [nomarkup][He snorts - visibly annoyed for some reason.][/nomarkup] … pile of junk.
 <<ModifyInfluence -1 $sheriff>>
 <<jump carInteractions>>
 ===
@@ -194,86 +194,86 @@ title: turnOnRadio
 ===
 title: musicOpinion
 ---
--> {$pcName}: No, no… it’s okay, I’m just surprised.
+-> {$pcName}: No, no… it's okay, I'm just surprised.
     <<jump musicSurprised>>
 -> {$pcName}: What is this? And Kieran was complaining about my music!
     <<jump musicComplaining>>
 ===
 title: musicSurprised
 ---
-{$sheriff}: Surprised why? I don’t look like a guy that listens to heavy music? [nomarkup][He laughed a bit.][/nomarkup] I listened to rock and roll when it didn’t even have any name! [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] I love it. Feeds the soul. [nomarkup][He said that when percussion started blasting your ears mercilessly.][/nomarkup] If you don’t like it just switch it off, I won’t be mad about it. Not everyone likes to listen to this shit.
+{$sheriff}: Surprised why? I don't look like a guy that listens to heavy music? [nomarkup][He laughed a bit.][/nomarkup] I listened to rock and roll when it didn't even have any name! [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] I love it. Feeds the soul. [nomarkup][He said that when percussion started blasting your ears mercilessly.][/nomarkup] If you don't like it just switch it off, I won't be mad about it. Not everyone likes to listen to this shit.
 <<jump radioDecision>>
 ===
 title: musicComplaining
 ---
-{$sheriff}: He is always complainin’. Wantin’ to change the world startin’ with everyone’s choices.! That’s not what this music is about, it has so much energy that is fills you, gets to you too, doesn’t it? [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] If you don’t like it just switch it off, I won’t be mad about it. Not everyone likes to listen to this shit.
+{$sheriff}: He is always complainin'. Wantin' to change the world startin' with everyone's choices.! That's not what this music is about, it has so much energy that is fills you, gets to you too, doesn't it? [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] If you don't like it just switch it off, I won't be mad about it. Not everyone likes to listen to this shit.
 <<jump radioDecision>>
 ===
 title: radioDecision
 ---
 -> [Switch it off.]
-    [nomarkup][To Dominic’s slight disappointment you turn the radio off. Silence comes back to the car being disturbed only by the roar of the engine.][/nomarkup]
+    [nomarkup][To Dominic's slight disappointment you turn the radio off. Silence comes back to the car being disturbed only by the roar of the engine.][/nomarkup]
 -> [Leave it as it is.]
     [nomarkup][Music fills up the car. Dominic even starts to hum the melody.][/nomarkup]
 -> [Turn volume down.]
-    [nomarkup][The volume is in this sweet spot where it doesn’t make you nearly deaf listening to it and you can continue the conversation without screaming at each other.][/nomarkup]
-    {$sheriff}: You know that the base is part of it right? It’s made to be loud?
+    [nomarkup][The volume is in this sweet spot where it doesn't make you nearly deaf listening to it and you can continue the conversation without screaming at each other.][/nomarkup]
+    {$sheriff}: You know that the base is part of it right? It's made to be loud?
 <<jump carInteractions>>
 ===
 title: anaInMirror
 ---
-{$sheriff}: So’s gotta ask, her? She looks wilder than a hog. [nomarkup][He probably saw that you look back at your tail on a motorcycle.][/nomarkup]
--> {$pcName}: I don’t know yet. I’ve known her for like… several hours?
-    {$sheriff}: Reasonable answer. If you don’t know her, assume that she has some hidden agenda.
-    -> {$pcName}: And what? You’re a saint?
-    {$sheriff}: Saint Peter himself, confess your sins an’ I’ll let’cha in through the pearly gates.
+{$sheriff}: So's gotta ask, her? She looks wilder than a hog. [nomarkup][He probably saw that you look back at your tail on a motorcycle.][/nomarkup]
+-> {$pcName}: I don't know yet. I've known her for like… several hours?
+    {$sheriff}: Reasonable answer. If you don't know her, assume that she has some hidden agenda.
+    -> {$pcName}: And what? You're a saint?
+    {$sheriff}: Saint Peter himself, confess your sins an' I'll let'cha in through the pearly gates.
     -> {$pcName}: You said that.
-    {$sheriff}: I didn’t mean it about me, but you’re not wrong.
+    {$sheriff}: I didn't mean it about me, but you're not wrong.
 -> {$pcName}: She seems alright.
-    {$sheriff}: An’ what’s got you trustin’ so quickly? Think about it before you go throwin’ yourself in with the first person to extend a hand, they might just drown ya.
-    -> {$pcName}: And what guarantee I have that you won’t do the same?
-    {$sheriff}: You don’t.
--> {$pcName}: She’s a total nut job.
-    {$sheriff}: I ain’t tellin’ you you’re wrong there. Careful with the crazy ones, our condition makes a fixable problem a permanent one.
-    -> {$pcName}: You’re a nut job too. Don’t play like you’re a totally normal guy.
-    {$sheriff}: Hey now you’re tellin’ me the nightcop who hates the law ain’t doin’ alright? Detective Desiree you might just be onto me!
+    {$sheriff}: An' what's got you trustin' so quickly? Think about it before you go throwin' yourself in with the first person to extend a hand, they might just drown ya.
+    -> {$pcName}: And what guarantee I have that you won't do the same?
+    {$sheriff}: You don't.
+-> {$pcName}: She's a total nut job.
+    {$sheriff}: I ain't tellin' you you're wrong there. Careful with the crazy ones, our condition makes a fixable problem a permanent one.
+    -> {$pcName}: You're a nut job too. Don't play like you're a totally normal guy.
+    {$sheriff}: Hey now you're tellin' me the nightcop who hates the law ain't doin' alright? Detective Desiree you might just be onto me!
 <<jump carInteractions>>
 ===
 title: lookAtDiana
 ---
 [nomarkup][Diana sits behind you expressionless staring absently at the window and street passing behind it. It looks like all the will to fight has left her and you see an empty husk of a person.][/nomarkup]
-{$sheriff}: Leave’be. She gambled ‘verything an’ lost all. There's no need to make it even worse for her than it already is.
+{$sheriff}: Leave'be. She gambled ‘verything an' lost all. There's no need to make it even worse for her than it already is.
 -> {$pcName}: Will it get easier?
-    {$sheriff}: [nomarkup][He takes a long breath - though you know that he doesn’t need to breathe - and stays silent for a while then looks at you taking off his glasses entirely. You know the answer already. His face tells a lot.][/nomarkup] No. And it usually only gets worse with each passin’ year. [nomarkup][He then put the glasses on.][/nomarkup]
--> {$pcName}: So what’s the point?
-    {$sheriff}: I ain’t no philosopher, don’t you go lookin’ to me to have the answers to a question like that. You need to find the answer on your ownsome.
+    {$sheriff}: [nomarkup][He takes a long breath - though you know that he doesn't need to breathe - and stays silent for a while then looks at you taking off his glasses entirely. You know the answer already. His face tells a lot.][/nomarkup] No. And it usually only gets worse with each passin' year. [nomarkup][He then put the glasses on.][/nomarkup]
+-> {$pcName}: So what's the point?
+    {$sheriff}: I ain't no philosopher, don't you go lookin' to me to have the answers to a question like that. You need to find the answer on your ownsome.
 <<jump carInteractions>>
 ===
 title: dominicBeast
 ---
-{$sheriff}: The Beast? [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It’s a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don’t need to be discreet. If you do, just ain’t listen to em.
+{$sheriff}: The Beast? [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It's a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don't need to be discreet. If you do, just ain't listen to em.
 <<jump carInteractions>>
 ===
 title: dominicsTakeOnBeast
 ---
-{$sheriff}: I see Kieran told you about this ragin’ bull.
--> {$pcName}: Not as much as I’d like.
-{$sheriff}: Well… if you ask about my opinion… [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It’s a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don’t need to be discreet. If you do, just ain’t  listen to em.
+{$sheriff}: I see Kieran told you about this ragin' bull.
+-> {$pcName}: Not as much as I'd like.
+{$sheriff}: Well… if you ask about my opinion… [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It's a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don't need to be discreet. If you do, just ain't  listen to em.
 <<jump carInteractions>>
 ===
 title: differentSuit
 ---
-{$sheriff}: Noticed that huh? You owe me two thousand bucks you know. It was a new suit, an’ a special one at that, sewn for my fifth anniversary. [nomarkup][He turned his head on you lowering his aviators and then turned back on the road.][/nomarkup] I usually don’t show up at work in my best clothes, but your case was well… urgent.
--> {$pcName}: I’m sorry…?
-{$sheriff}: Ya’ll should be! Naw, I’m just messin’ with ya. Don’t feel bad, it was my mistake. I didn’t think that fledglin’ like you would be able to hit me, if I’m bein’ honest. But you really need to change that piece you’re usin’. It’s a friggin’ peashooter. And as you saw - useless against Kindred. I can set ya up with someone that has good prices. Even for your nearly empty wallet.
+{$sheriff}: Noticed that huh? You owe me two thousand bucks you know. It was a new suit, an' a special one at that, sewn for my fifth anniversary. [nomarkup][He turned his head on you lowering his aviators and then turned back on the road.][/nomarkup] I usually don't show up at work in my best clothes, but your case was well… urgent.
+-> {$pcName}: I'm sorry…?
+{$sheriff}: Ya'll should be! Naw, I'm just messin' with ya. Don't feel bad, it was my mistake. I didn't think that fledglin' like you would be able to hit me, if I'm bein' honest. But you really need to change that piece you're usin'. It's a friggin' peashooter. And as you saw - useless against Kindred. I can set ya up with someone that has good prices. Even for your nearly empty wallet.
 -> {$pcName}: That would be nice. Thank you.
-    {$sheriff}: [nomarkup][He starts to rummage in his pockets with one hand and gives you a card.][/nomarkup] Just tell ‘er that Dominic sent ya. She’ll set you up.
--> {$pcName}: I’ll manage. Thanks for the offer though.
+    {$sheriff}: [nomarkup][He starts to rummage in his pockets with one hand and gives you a card.][/nomarkup] Just tell ‘er that Dominic sent ya. She'll set you up.
+-> {$pcName}: I'll manage. Thanks for the offer though.
     {$sheriff}: Your call. If ya change your mind let me know.
 <<jump carInteractions>>
 ===
 title: whatsNext
 ---
-{$sheriff}: I’m not a specialist in Kindred politics, I leave that to my better half. But I think your story will go its usual track. Well… hmm… maybe not. My decision will probably cause a little scandal in the Court. But don’t you worry none about that. Kindred love to talk, gossip, and plot. You’ll just have to be careful with whom you’ll mingle, I guarantee you you’ll catch everyone's attention. [He stays silent for a minute.] And oh, I nearly forgot. Collect all the boons you can. It will help you because boons are nearly the only currency that any Kindred will accept. Without reputation or favors owed you won’t be able to survive for long. An’ for the love of all that’s holy find a group of Kindred in a similar situation to yours. Young and wantin’ to prove themselves. Nights are not easy to survive on your own. You’ll need someone you can at least depend on.
+{$sheriff}: I'm not a specialist in Kindred politics, I leave that to my better half. But I think your story will go its usual track. Well… hmm… maybe not. My decision will probably cause a little scandal in the Court. But don't you worry none about that. Kindred love to talk, gossip, and plot. You'll just have to be careful with whom you'll mingle, I guarantee you you'll catch everyone's attention. [He stays silent for a minute.] And oh, I nearly forgot. Collect all the boons you can. It will help you because boons are nearly the only currency that any Kindred will accept. Without reputation or favors owed you won't be able to survive for long. An' for the love of all that's holy find a group of Kindred in a similar situation to yours. Young and wantin' to prove themselves. Nights are not easy to survive on your own. You'll need someone you can at least depend on.
 <<jump carInteractions>>
 ===

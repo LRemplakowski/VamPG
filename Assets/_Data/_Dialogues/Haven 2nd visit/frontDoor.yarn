@@ -4,12 +4,12 @@ tags:
 KNOCK. KNOCK. KNOCK.
 [nomarkup][The sound brings up unvoluntary memories as you look at your front door.][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Who’s that?
+    {$anastasia}: Who's that?
     -> {$pcName}: I have no idea.
-    [nomarkup][You come closer feeling more comfortable with the thought that you’re not alone.][/nomarkup]
+    [nomarkup][You come closer feeling more comfortable with the thought that you're not alone.][/nomarkup]
 <<endif>>
 -> {$pcName}: Who's there?
-[nomarkup][Of course, there’s no answer. You take a deep breath trying to compose yourself and come closer to the door reading your weapon.][/nomarkup]
+[nomarkup][Of course, there's no answer. You take a deep breath trying to compose yourself and come closer to the door reading your weapon.][/nomarkup]
 <<jump doorOptions>>
 ===
 title: doorOptions
@@ -17,7 +17,7 @@ title: doorOptions
 -> [nomarkup][Open it.][/nomarkup]
     <<jump doorOpened>>
 -> [nomarkup][Look out the peephole.][/nomarkup] <<if visited("doorOpened") == false>>
-    [nomarkup][You only see the neighbor’s door across the hall. If somebody is there, they are hiding.][/nomarkup]
+    [nomarkup][You only see the neighbor's door across the hall. If somebody is there, they are hiding.][/nomarkup]
     <<jump doorOptions>>
 ===
 title: doorOpened

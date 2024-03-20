@@ -16,27 +16,27 @@ title: couchStrRoll
 ===
 title: couchStrSuccess
 ---
-[nomarkup][Shoulders slumping, you glare at the couch. It’s yet another item that needs to be dealt with.][/nomarkup] #success
+[nomarkup][Shoulders slumping, you glare at the couch. It's yet another item that needs to be dealt with.][/nomarkup] #success
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][Ana rolls her eyes and picks up the couch, lighting your load physically and metaphorically.][/nomarkup]
     {$anastasia}: Bitch I gotta sleep here too!
-    -> {$pcName}: Sure it’s a party.
-    {$anastasia}: I’ll call Daddy-Kieran and tell him you’re up late drinking with bad influences. [nomarkup][She waggles an eyebrow at you.][/nomarkup]
-    -> {$pcName}: He’s not my daddy.
+    -> {$pcName}: Sure it's a party.
+    {$anastasia}: I'll call Daddy-Kieran and tell him you're up late drinking with bad influences. [nomarkup][She waggles an eyebrow at you.][/nomarkup]
+    -> {$pcName}: He's not my daddy.
     <<if GetCompanionInfluence ($anastasia)>=1>>
         {$anastasia}: [nomarkup][She snorts.][/nomarkup] Oh you've got a thing for Dominic? Big Daddy Dommy?
-        -> {$pcName}: Absolutely Not! Get your head out of the gutter you’re going to make me sick.
+        -> {$pcName}: Absolutely Not! Get your head out of the gutter you're going to make me sick.
             <<jump notMyDaddy>>
         -> {$pcName}: Maybe I do!
             <<jump myDaddy>>
     <<else>>
         {$anastasia}: Suuuuuuuuuuuuuuure. You only do anything Kiki says because he makes fantastic points? [nomarkup][She rolls her eyes.][/nomarkup]
-        -> {$pcName}: He does, sometimes, and I don’t. Why do you have such a rivalry there anyway? What the fuck did he do to you?
-        {$anastasia}: He’s such a shithead! He’s out here with his prestigious important fucking Sire and his little rivalry with the Sheriff creating the most incestuous fucking Domain I’ve ever seen.
+        -> {$pcName}: He does, sometimes, and I don't. Why do you have such a rivalry there anyway? What the fuck did he do to you?
+        {$anastasia}: He's such a shithead! He's out here with his prestigious important fucking Sire and his little rivalry with the Sheriff creating the most incestuous fucking Domain I've ever seen.
         -> {$pcName}: What? [nomarkup][You make a face that prompts Anastasia to keep going.][/nomarkup]
-        {$anastasia}: It’s not Kieran specifically. It’s the fact that there’s nothing to him, you poke him and he folds like wet tissue and that’s what Camarilla wants. That’s what they make and eventually, you get tired of handling them like fragile butterflies and you want to rip off those wings. They just piss me the fuck off Desiree, it just… gets on my nerves that they have it so easy that having a spine isn’t mandatory for their survival. They can just float around in their perfect palace while I have to slog through the mud.
+        {$anastasia}: It's not Kieran specifically. It's the fact that there's nothing to him, you poke him and he folds like wet tissue and that's what Camarilla wants. That's what they make and eventually, you get tired of handling them like fragile butterflies and you want to rip off those wings. They just piss me the fuck off Desiree, it just… gets on my nerves that they have it so easy that having a spine isn't mandatory for their survival. They can just float around in their perfect palace while I have to slog through the mud.
         -> {$pcName}: How is that his fault?
-            {$anastasia}: It isn’t, it’s not about fault, it’s about facts.
+            {$anastasia}: It isn't, it's not about fault, it's about facts.
         -> {$pcName}: I get that.
             {$anastasia}: So even you see how fucked up that is.
     <<endif>>
@@ -44,18 +44,18 @@ title: couchStrSuccess
 ===
 title: notMyDaddy
 ---
-{$anastasia}: Desiree and The-Prince’s-Bitch sittin’ in a tree! F-U-C-K-I-N-G! First comes love then comes -
+{$anastasia}: Desiree and The-Prince's-Bitch sittin' in a tree! F-U-C-K-I-N-G! First comes love then comes -
 -> {$pcName}: Ooooh - You better fucking run -
-[nomarkup][You drop the couch.  It slams into the ground scattering dust bunnies in every direction. You off with your hands raised in the air like an old-fashioned boxer. A shit-eating grin on your face. Ana’s eyes sparkle with delight and humor.][/nomarkup]
-{$anastasia}: Oh no! I’m under attack! [nomarkup][Laughing, She holds up a couch cushion as a shield.][/nomarkup]
+[nomarkup][You drop the couch.  It slams into the ground scattering dust bunnies in every direction. You off with your hands raised in the air like an old-fashioned boxer. A shit-eating grin on your face. Ana's eyes sparkle with delight and humor.][/nomarkup]
+{$anastasia}: Oh no! I'm under attack! [nomarkup][Laughing, She holds up a couch cushion as a shield.][/nomarkup]
 ===
 title: myDaddy
 ---
-{$anastasia}: Oh fucking gross. Babes you know I’m uh… [nomarkup][She raises an eyebrow and gestures to herself.][/nomarkup]
+{$anastasia}: Oh fucking gross. Babes you know I'm uh… [nomarkup][She raises an eyebrow and gestures to herself.][/nomarkup]
 -> {$pcName}: A menace?
 {$anastasia}: A [nomarkup]<i>lavender</i>[/nomarkup] menace sweet thing.
 -> {$pcName}: Oh who could have ever guessed? Me? Never.
-{$anastasia}: [nomarkup][She rolls her eyes and looks down for a second, with a grimace.][/nomarkup] Don’t spread that around. It’s not a big deal, I don’t care that much - I mean it’s obvious right?
+{$anastasia}: [nomarkup][She rolls her eyes and looks down for a second, with a grimace.][/nomarkup] Don't spread that around. It's not a big deal, I don't care that much - I mean it's obvious right?
 <<if $kateAnastasia == true>>
     {$anastasia}: That waspy bitch - Kate? Do you think she knew?
     -> {$pcName}: Yeah I mean of course right?
@@ -63,7 +63,7 @@ title: myDaddy
     -> {$pcName}: What happened there?
         {$anastasia}: She just sorta got me on the neck you know? [nomarkup][She points to her neck where you can see a bright red lipstick mark.][/nomarkup]
         -> {$pcName}: Oh. Are you… alright?
-        {$anastasia}: Yeah, of course, it’ll come off in daysleep anyway right?
+        {$anastasia}: Yeah, of course, it'll come off in daysleep anyway right?
     -> [nomarkup][Stay silent.][/nomarkup]
         [nomarkup][Anastasia rubs at her neck and looks away, down at the floor with a grimace. Her eyes are unreadable. She shakes her head and laughs.][/nomarkup]
         {$anastasia}: So... this couch right?

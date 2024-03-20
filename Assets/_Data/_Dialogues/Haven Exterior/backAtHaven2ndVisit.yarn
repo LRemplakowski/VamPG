@@ -6,30 +6,30 @@ tags:
     [nomarkup][Looking out the window you can see Anastasia riding close by on her motorcycle, following you back to your apartment. You remember the look of disgust she gave Dominic when he offered her a ride and his snort of laughter.][/nomarkup]
 <<endif>>
 <<if $dominicHasDiana == true>>
-    [nomarkup][Diana sits in the cruiser next to Dominic. Her eyes vacantly staring at Dominic, she can barely look at you but it seems she’s not really present either way. Either due to shock or shame, she seems to be somewhat frozen looking out at the road beyond the headlights.][/nomarkup]
+    [nomarkup][Diana sits in the cruiser next to Dominic. Her eyes vacantly staring at Dominic, she can barely look at you but it seems she's not really present either way. Either due to shock or shame, she seems to be somewhat frozen looking out at the road beyond the headlights.][/nomarkup]
     -> {$pcName}: Diana?
         {$diana}: ...
         -> {$pcName}: Are you going to say anything?
         {$diana}: ...
-        {$sheriff}: Ya’ll leave each other alone back there. I don’t have the patience to break up a fight.
-        -> {$pcName}: I don’t think there’s going to be one.
-        {$sheriff}: What’re you still botherin’ her for then?
+        {$sheriff}: Ya'll leave each other alone back there. I don't have the patience to break up a fight.
+        -> {$pcName}: I don't think there's going to be one.
+        {$sheriff}: What're you still botherin' her for then?
         [nomarkup][Diana just continues to stare at him. Unresponsive.][/nomarkup]
     -> [nomarkup][Leave her be.][/nomarkup]
         [nomarkup][Diana just continues to stare at him. Unresponsive.][/nomarkup]
 <<endif>>
-{$sheriff}: And here you are. I’ll be checkin’ in on you t’morrow, don’t let me find a headache when I do. Block off the windows. Don’t let any light in or I’ll be findin’ a pile of ash tomorrow mornin’ you hear? Also with the Embassy shitstorm, I was unable to arrange a clean-up of your apartment. I’ll send someone to take care of it when they are done there.
+{$sheriff}: And here you are. I'll be checkin' in on you t'morrow, don't let me find a headache when I do. Block off the windows. Don't let any light in or I'll be findin' a pile of ash tomorrow mornin' you hear? Also with the Embassy shitstorm, I was unable to arrange a clean-up of your apartment. I'll send someone to take care of it when they are done there.
 <<if GetCompanionInfluence ($sheriff)>=1>>
     //Dominic gets out of the car//
     [nomarkup][He steps out of the car and opens up the door. Seeing your look he puts a hand on your shoulder and grimaces.][/nomarkup]
-    {$sheriff}: I said it was best you didn’t remember it.
-    -> {$pcName}: How’d you know?
-    {$sheriff}: Everyone’s been through it {$playerNickname}, no one makes it out alive. 
+    {$sheriff}: I said it was best you didn't remember it.
+    -> {$pcName}: How'd you know?
+    {$sheriff}: Everyone's been through it {$playerNickname}, no one makes it out alive. 
     [nomarkup][He squeezes your shoulder and lets it go. Stepping away so that he can slam the door shut behind you.][/nomarkup]
     //Dominic gets into the car//
 <<else>>
     [nomarkup][You sit in the car for a moment and Dominic sighs.][/nomarkup]
-    {$sheriff}: Plannin’ on getting out of the car tonight kid?
+    {$sheriff}: Plannin' on getting out of the car tonight kid?
     -> {$pcName}: Did you know it was going to be like this?
     {$sheriff}: No I did not, but I did hope. Now get out.
     [nomarkup][You push the door open and step out into the crunch of the gravel.][/nomarkup]

@@ -24,7 +24,7 @@ title: alleyDexSuccess
 ===
 title: alleyDexFailure
 ---
-[nomarkup][You dart forward, but you aren’t quick enough to slip your foot into the gap between the door and its frame - the metal barrier slamming firmly closed in your face, instead.][/nomarkup] #failure #line:0390c8c 
+[nomarkup][You dart forward, but you aren't quick enough to slip your foot into the gap between the door and its frame - the metal barrier slamming firmly closed in your face, instead.][/nomarkup] #failure #line:0390c8c 
 <<jump alleyDoorForcing>>
 ===
 title: alleyDoorForcing
@@ -53,7 +53,7 @@ title: alleyDoorForcingStrSuccess
 ===
 title: lleyDoorForcingStrFailure
 ---
-[nomarkup][You find the doorknob, but it’s been jammed. You only have a few seconds to struggle with it before you have to move - the lights of the club revealing your location…][/nomarkup] #failure #line:053f2fe 
+[nomarkup][You find the doorknob, but it's been jammed. You only have a few seconds to struggle with it before you have to move - the lights of the club revealing your location…][/nomarkup] #failure #line:053f2fe 
 <<jump noDice>>
 ===
 title: alleyDoorForcingMeleeRoll
@@ -74,20 +74,20 @@ title: alleyDoorForcingMeleeSuccess
 ===
 title: alleyDoorForcingMeleeFailure
 ---
-[nomarkup][You try to slip the crowbar into the gap between the door and its frame, but you can’t force a wide enough slot for the metal tip to fit into.][/nomarkup] #failure #line:08ad51b 
+[nomarkup][You try to slip the crowbar into the gap between the door and its frame, but you can't force a wide enough slot for the metal tip to fit into.][/nomarkup] #failure #line:08ad51b 
 <<jump noDice>>
 ===
 title: noDice
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Seems like you’re having some trouble, there. Let me. Oh, and step back a little. #line:0a8164e 
+    {$anastasia}: Seems like you're having some trouble, there. Let me. Oh, and step back a little. #line:0a8164e 
     {$anastasia}: [nomarkup][She saunters up to the metal door, giving it one singular side kick - strong enough to bust the door wide open, as well as place a hefty dent in the metal.][/nomarkup] Voila. Open sesame, or whatever the fuck. #line:03c078f 
 <<else>>
-{$kieran}: Since it seems we have no other option, I must step up. [nomarkup][He produces a pocket knife, bringing the blade up to his palm and wrist - making several criss-crossing incisions so that his hand and several inches of his forearm are coated in blood. Then, approaching the doorway, he smears an area of the metal barrier close to the doorknob in blood, before removing his hand.][/nomarkup] Don’t touch anything. Not for a few minutes. #line:0a155b6 
+{$kieran}: Since it seems we have no other option, I must step up. [nomarkup][He produces a pocket knife, bringing the blade up to his palm and wrist - making several criss-crossing incisions so that his hand and several inches of his forearm are coated in blood. Then, approaching the doorway, he smears an area of the metal barrier close to the doorknob in blood, before removing his hand.][/nomarkup] Don't touch anything. Not for a few minutes. #line:0a155b6 
 [nomarkup][As you wait, before your very eyes, the door corrodes, slowly reducing the metal into steaming sludge, and leaving a hole wide enough for you to stick your arm through.][/nomarkup] #line:0cbabb2 
 -> {$pcName}: What now? #line:0d0cf9d 
 {$kieran}: Well, you should be able to reach the doorknob on the other side and turn it, now, opening the door. #line:05a0237 
--> {$pcName}: [nomarkup][Phew. That’s a relief.][/nomarkup] And lemme guess: You can’t teach this to me, either? #line:02a361d 
+-> {$pcName}: [nomarkup][Phew. That's a relief.][/nomarkup] And lemme guess: You can't teach this to me, either? #line:02a361d 
 {$kieran}: [nomarkup][He chuckles.][/nomarkup] My, you do catch on quickly, miss Bardot. But we should get moving. After you… #line:00c61c9 
 [nomarkup][With some apprehension, you reach your arm through the hole eaten in the metal, feeling around for the doorknob on the other side. Once you have it, though, freedom is only a quick turn and a push away, as you step into the alleyway.][/nomarkup] #line:0c54a76 
 <<endif>>

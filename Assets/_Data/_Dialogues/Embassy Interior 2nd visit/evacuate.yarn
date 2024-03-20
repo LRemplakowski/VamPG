@@ -1,9 +1,9 @@
 ﻿title: evacuate
 tags:
 ---
-[nomarkup][As Anastasia’s hand balls into a fist you feel all of the muscles in your body tense, she directs with her hand and you dart out, Kieran behind you and Anastasia at the back. Her rosary glinting off the lights of the Embassy as she reaches up and grabs it.][/nomarkup] #line:0143377 
+[nomarkup][As Anastasia's hand balls into a fist you feel all of the muscles in your body tense, she directs with her hand and you dart out, Kieran behind you and Anastasia at the back. Her rosary glinting off the lights of the Embassy as she reaches up and grabs it.][/nomarkup] #line:0143377 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that’s it!! #line:028297e 
+    {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that's it!! #line:028297e 
 <<endif>>
 -> [nomarkup][Determine the least dangerous path.](Intelligence+Insight)[/nomarkup] #line:08b200e 
     <<jump evacuateIntRoll>>
@@ -24,7 +24,7 @@ title: evacuateIntSuccess
 ===
 title: evacuateIntFailure
 ---
-[nomarkup][There isn’t any rhyme or reason to how these assailants move and strike - at least, not that you can discern.][/nomarkup] #line:05c4a7e 
+[nomarkup][There isn't any rhyme or reason to how these assailants move and strike - at least, not that you can discern.][/nomarkup] #line:05c4a7e 
 <<jump evacuateAdditional>>
 ===
 title: evacuateAdditional
@@ -48,7 +48,7 @@ title: evacuateDexSuccess
 ===
 title: evacuateDexFailure
 ---
-[nomarkup][When you think no one is looking, you make a mad dash towards the door, using the blaring music of the overturned TV and the cacophonous mayhem of the gunfire as cover for your footsteps as you deftly migrate from one piece of cover to the next, but you seem to have miscalculated, because from here, there isn’t a clear path to the exit. That is, you can see your way out, but have no route to safely get to it.][/nomarkup] #failure #line:023ef1b 
+[nomarkup][When you think no one is looking, you make a mad dash towards the door, using the blaring music of the overturned TV and the cacophonous mayhem of the gunfire as cover for your footsteps as you deftly migrate from one piece of cover to the next, but you seem to have miscalculated, because from here, there isn't a clear path to the exit. That is, you can see your way out, but have no route to safely get to it.][/nomarkup] #failure #line:023ef1b 
 <<jump failureOption>>
 ===
 title: evacuateStamRoll
@@ -66,20 +66,20 @@ title: evacuateStamSuccess
 ===
 title: evacuateStamFailure
 ---
-[nomarkup][As you rush from one bit of cover to the next, sliding behind an overturned couch, you can hear the screams of other people similarly trying to find their way out. Disorientated and winded, there isn’t anywhere to safely move without running into a fleeing patron - although you can see the exit.][/nomarkup] #failure #line:0c2c756 
+[nomarkup][As you rush from one bit of cover to the next, sliding behind an overturned couch, you can hear the screams of other people similarly trying to find their way out. Disorientated and winded, there isn't anywhere to safely move without running into a fleeing patron - although you can see the exit.][/nomarkup] #failure #line:0c2c756 
 <<jump failureOption>>
 ===
 title: failureOption
 ---
-[nomarkup][As you glance about, planning your next move, your eyes are drawn to and meet the gaze of a young man, the pupils of his deep brown eyes wide with fear. He’s right next to you, having crawled into cover with the last of his strength. Bleeding profusely from his leg which he unwittingly drags behind him, he grabs onto your shirt, clinging to it desperately, and you find yourself unable to move.][nomarkup] #line:0481065 
+[nomarkup][As you glance about, planning your next move, your eyes are drawn to and meet the gaze of a young man, the pupils of his deep brown eyes wide with fear. He's right next to you, having crawled into cover with the last of his strength. Bleeding profusely from his leg which he unwittingly drags behind him, he grabs onto your shirt, clinging to it desperately, and you find yourself unable to move.][nomarkup] #line:0481065 
 <<if Roll ("Intelligence","Medicine")>=3>>
-    [nomarkup][This man isn’t going to be able to walk without treatment of some kind - that much is for certain.][/nomarkup] #line:03470eb 
+    [nomarkup][This man isn't going to be able to walk without treatment of some kind - that much is for certain.][/nomarkup] #line:03470eb 
 <<elseif Roll ("Wits","Insight")>=2>>
     [nomarkup][If you could just get him to let go…][/nomarkup] #line:09d73a4 
 <<endif>>
--> {$pcName}: [nomarkup][You place your hand in his and give him a small, kind smile - the tense muscles around your eyes relaxing as you whisper your last words to him.][/nomarkup] It’ll be okay, I’m going to try and get the police and paramedics- I’ll come back.(Manipulation+Insight) #line:0f4f0d1 
+-> {$pcName}: [nomarkup][You place your hand in his and give him a small, kind smile - the tense muscles around your eyes relaxing as you whisper your last words to him.][/nomarkup] It'll be okay, I'm going to try and get the police and paramedics- I'll come back.(Manipulation+Insight) #line:0f4f0d1 
     <<jump sootheDoeEyedRoll>>
--> {$pcName}: [nomarkup][Looking at the young man, you take his hand in both of yours and press it down on his leg.][/nomarkup] Look. You can’t walk in your current state, and I don’t know how to help you. The best shot we have at your survival is for us to go and get help.(Charisma+Leadership) #line:0282591 
+-> {$pcName}: [nomarkup][Looking at the young man, you take his hand in both of yours and press it down on his leg.][/nomarkup] Look. You can't walk in your current state, and I don't know how to help you. The best shot we have at your survival is for us to go and get help.(Charisma+Leadership) #line:0282591 
     <<jump convinceDoeEyedRoll>>
 -> {$pcName}: [nomarkup][You grab the doe-eyed man and drag him into cover.][/nomarkup] Get down! NOW!(Charisma+Intimidation) #line:00127b9 
     <<jump intimidateDoeEyedRoll>>
@@ -110,7 +110,7 @@ title: gottaStayStrong
 ===
 title: sootheDoeEyedFailure
 ---
-[nomarkup][There’s something that makes his expression sour, contorting in fear, and he scrambles to get away - out of cover and back into the smoke. You hear shouts from the front of the club as the armed assailants notice his movement. It’ll be less safe when you duck out of cover now.][/nomarkup] #line:0efe99c 
+[nomarkup][There's something that makes his expression sour, contorting in fear, and he scrambles to get away - out of cover and back into the smoke. You hear shouts from the front of the club as the armed assailants notice his movement. It'll be less safe when you duck out of cover now.][/nomarkup] #line:0efe99c 
 <<set $doeEyedManAlive to 1>>
 <<set $doeEyedManSeen to 1>>
 <<jump evacuatePhysical>>
@@ -125,7 +125,7 @@ title: convinceDoeEyedRoll
 ===
 title: convinceDoeEyedSuccess
 ---
-[nomarkup][His eyes well up, and he nods, letting go. You give him a nod in return, as well, and gesture for him to stay down. His gaze shines with fear, but you know he’ll do as he’s told.][/nomarkup] #success #line:08f211d 
+[nomarkup][His eyes well up, and he nods, letting go. You give him a nod in return, as well, and gesture for him to stay down. His gaze shines with fear, but you know he'll do as he's told.][/nomarkup] #success #line:08f211d 
 [nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too…][/nomarkup] #line:02e2440 
 <<jump gottaStayStrong>>
 ===
@@ -133,11 +133,11 @@ title: convinceDoeEyedFailure
 ---
 [nomarkup][You press down on his leg by accident, only for him to utter an ear splitting scream. Swatting your hand away, he clings ever-tighter to you as he tries to flex the muscles in his thigh - finding them unresponsive. His screams and shouts and sobbing pleas for help attract a lot of attention prior to him passing out…][/nomarkup] #failure #line:086d846 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Thank Christ that’s over. Leave him. He’ll be too much of a burden, and he’s pretty much dead where he lies, anyhow. #line:0d42640 
+    {$anastasia}: Thank Christ that's over. Leave him. He'll be too much of a burden, and he's pretty much dead where he lies, anyhow. #line:0d42640 
 <<else>>
-    [nomarkup][Anastasia barely spares him a glance, instead looking like she’s moments away from leaving. Blood pools on the ground near her shoe, only looking  down so that she can scuff her boots against the floor to stop it from leaving tracks. It’s clear to you she wants to leave.][/nomarkup] #line:0bf54d1 
+    [nomarkup][Anastasia barely spares him a glance, instead looking like she's moments away from leaving. Blood pools on the ground near her shoe, only looking  down so that she can scuff her boots against the floor to stop it from leaving tracks. It's clear to you she wants to leave.][/nomarkup] #line:0bf54d1 
 <<endif>>
-[nomarkup][Kieran stares a little too long at the blood pooling on the floor, and then at the doe eyed man.][/nomarkup] No. We are here, we cannot leave as if we didn’t see him. #line:0663f57 
+[nomarkup][Kieran stares a little too long at the blood pooling on the floor, and then at the doe eyed man.][/nomarkup] No. We are here, we cannot leave as if we didn't see him. #line:0663f57 
 -> [nomarkup][Attempt to treat his wounds.][/nomarkup] #line:06653cd 
     <<ModifyInfluence -1 $anastasia>>
     <<jump medicalAssistanceRoll>>
@@ -157,19 +157,19 @@ title: intimidateDoeEyedSuccess
 ---
 [nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #success #line:0a74ade 
 -> {$pcName}: Breathe. In. Out. In- #line:030091c 
-[nomarkup][He takes a deep breath in, but it’s interrupted by a sob lodging itself in his throat.][/nomarkup] #line:0e13fe2 
+[nomarkup][He takes a deep breath in, but it's interrupted by a sob lodging itself in his throat.][/nomarkup] #line:0e13fe2 
 -> {$pcName}: Out. #line:037fa6f 
 [nomarkup][Recomposing himself, he breathes out with you.][/nomarkup] #line:0f66f32 
--> {$pcName}: You are going to stay behind this cover and press on your leg. No matter who walks past, play dead - don’t move. #line:01eed3f 
+-> {$pcName}: You are going to stay behind this cover and press on your leg. No matter who walks past, play dead - don't move. #line:01eed3f 
 [nomarkup][He looks at you and nods, laying down and curling up so he can put pressure on his leg. His breathing seems to come easier, in this position.][/nomarkup] #line:0ee1016 
-[nomarkup][You turn to leave, knowing it’s unlikely that anyone will be coming to save him soon enough. Feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, you hesitate, but if you did - you might break down, too…][/nomarkup] #line:021872d 
+[nomarkup][You turn to leave, knowing it's unlikely that anyone will be coming to save him soon enough. Feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, you hesitate, but if you did - you might break down, too…][/nomarkup] #line:021872d 
 <<jump gottaStayStrong>>
 ===
 title: intimidateDoeEyedFailure
 ---
 [nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #line:0780adc 
--> [nomarkup][You can’t think of what else to say, and at this point, you’re panicking, too.][/nomarkup] #line:0293806 
-[nomarkup][He starts to go pale as he begins to sway - knocking into your cover, jostling it and causing the gunfire to briefly cease as you are noticed. It’ll be less safe when you duck out of cover now.][/nomarkup] #line:0cae12d 
+-> [nomarkup][You can't think of what else to say, and at this point, you're panicking, too.][/nomarkup] #line:0293806 
+[nomarkup][He starts to go pale as he begins to sway - knocking into your cover, jostling it and causing the gunfire to briefly cease as you are noticed. It'll be less safe when you duck out of cover now.][/nomarkup] #line:0cae12d 
 <<set $doeEyedManSeen to 1>>
 <<jump convinceDoeEyedFailure>>
 ===
@@ -185,64 +185,64 @@ title: medicalAssistanceRoll
 title: medicalAssistanceSuccess
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Anastasia’s belt - it should do just fine.][/nomarkup] #success #line:09a85ca 
+    [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Anastasia's belt - it should do just fine.][/nomarkup] #success #line:09a85ca 
     -> {$pcName}: Ana, give me your belt! #line:0b171bf 
-    {$anastasia}: What? Now’s not the time or place for hanky-panky… #line:0070b8b 
+    {$anastasia}: What? Now's not the time or place for hanky-panky… #line:0070b8b 
     {$kieran}: She probably only wants to slow the bleeding by using something as a tourniquet. #line:07d7111 
 <<else>>
-    [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Kieran’s belt - it should do just fine.][/nomarkup] #line:035c5ff 
+    [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Kieran's belt - it should do just fine.][/nomarkup] #line:035c5ff 
     -> {$pcName}: Kieran, give me your belt! #line:00d9b5b 
 <<endif>>
-{$kieran}: [nomarkup][He unclasps his belt.][/nomarkup] Here. I’ll block his leg. Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he’s not shot again. [nomarkup][He blocks the doe eyed man’s leg with precision and professionalism.][/nomarkup] #line:0679240 
+{$kieran}: [nomarkup][He unclasps his belt.][/nomarkup] Here. I'll block his leg. Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he's not shot again. [nomarkup][He blocks the doe eyed man's leg with precision and professionalism.][/nomarkup] #line:0679240 
 <<jump kieranHelps>>
 ===
 title: kieranHelps
 ---
 [nomarkup][It looks like Kieran has done that many times in the past.][/nomarkup] #line:0d31b4b 
-[nomarkup][With his help, you quickly treat the man. There is less blood, now - but that doesn’t mean its smell isn’t enticing to you… or your new friends. On several occasions, Kieran grimaced and averted his eyes from it.][/nomarkup] #line:0219a10 
+[nomarkup][With his help, you quickly treat the man. There is less blood, now - but that doesn't mean its smell isn't enticing to you… or your new friends. On several occasions, Kieran grimaced and averted his eyes from it.][/nomarkup] #line:0219a10 
 {$kieran}: Now, we can help him get out of here with us. #line:0c81977 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: What’s your plan, then? Are we gonna limp to safety? #line:06852d8 
+    {$anastasia}: What's your plan, then? Are we gonna limp to safety? #line:06852d8 
         -> {$pcName}: Actually, yes. #line:0a50a2f 
             {$anastasia}: [nomarkup][She gives a light snort, rolling her eyes.][/nomarkup] Alright, fine then. The stealthy approach? #line:01206bd 
             -> {$pcName}: Correct. #line:020d941 
                 <<jump physicalOptionsStealth>>
         -> {$pcName}: No. You can carry him. Right, Anastasia? #line:02449da 
             {$anastasia}: Wha- Me?! Why me? #line:0990860 
-            {$kieran}: [nomarkup][Kieran looks at her with deadeyed determination and his eyes narrow ever so slightly. The smallest of shivers flickers with fear up your spine as you see Kieran’s eyes go ever so slightly hard. Terrifying.][/nomarkup] #line:05cfbcd 
-            {$beast}: We aren’t the only ones with a temper… #line:0222485 
+            {$kieran}: [nomarkup][Kieran looks at her with deadeyed determination and his eyes narrow ever so slightly. The smallest of shivers flickers with fear up your spine as you see Kieran's eyes go ever so slightly hard. Terrifying.][/nomarkup] #line:05cfbcd 
+            {$beast}: We aren't the only ones with a temper… #line:0222485 
             -> {$pcName}: You [nomarkup]<i>were</i>[/nomarkup] the one bragging back there that you could easily haul Kieran to the exit, right? #line:088243e 
             {$anastasia}: [nomarkup][She grins.][/nomarkup] Fair enough, you got me there. But if he bleeds too much on my clothes, you owe me a new set, Kiki. #line:0b55d03 
-            {$kieran}: So that’s the price of a life to you Anastasia? #line:0261752 
-            -> {$pcName}: Because you’re my adoptive Sire, and I’m broke. #line:00df7b2 
+            {$kieran}: So that's the price of a life to you Anastasia? #line:0261752 
+            -> {$pcName}: Because you're my adoptive Sire, and I'm broke. #line:00df7b2 
             [nomarkup][His eyes flicker towards you and you can feel something almost like fear crawl into your throat.][/nomarkup] #line:0f4c121 
             <<if GetCompanionInfluence($kieran)<1>>
                 [nomarkup][The look that Kieran gives you with as you speak has a palpable weight to it. A joke made to try and lighten the tension and ease Anastasia has landed horribly with the other vampire who now looks at you with a dispassionate and almost clinical disgust.][/nomarkup] #line:0f84508 
                 -> [nomarkup][What?][/nomarkup] #line:092be39 
                 {$kieran}: I have nothing to say to that. #line:066d082 
-                -> {$pcName}: Can’t take a joke? We’re saving him, isn’t that enough? #line:0fc767c 
+                -> {$pcName}: Can't take a joke? We're saving him, isn't that enough? #line:0fc767c 
                 {$kieran}: Desiree. Stop. #line:0a70472 
             <<elseif GetCompanionInfluence($kieran)==1>>
-                {$kieran}: I’m glad you find this humorous Desiree. #line:0d60392 
-                -> {$pcName}: We’re saving him Kieran, focus on that alright? [/nomarkup][You can feel the intensity that Anastasia had when staring at the gunfire now living in Kieran.][nomarkup] #line:03a157a 
-                {$kieran}: We’ll talk about this later. #line:0dfa08c 
+                {$kieran}: I'm glad you find this humorous Desiree. #line:0d60392 
+                -> {$pcName}: We're saving him Kieran, focus on that alright? [/nomarkup][You can feel the intensity that Anastasia had when staring at the gunfire now living in Kieran.][nomarkup] #line:03a157a 
+                {$kieran}: We'll talk about this later. #line:0dfa08c 
             <<elseif GetCompanionInfluence($kieran)<=1>>
-                {$kieran}: I don’t think this is a joking matter. And I would rather not put a price tag on a man’s life. #line:0846f66 
-                -> {$pcName}: I was trying to lighten the mood, Anastasia’s doing us a favor and she didn’t even want to help him. #line:092e055 
-                {$kieran}: I know Desiree, I just hope that he didn’t hear you say that. [nomarkup][He looks at the man on Anastasia’s shoulder who seems unfocused and mostly trying to deal numb the pain by drifting in and out of consciousness.][/nomarkup] Imagine knowing you’re worth as much as someone’s shoe. I know it was a joke Desiree, it just wasn’t appreciated. #line:0081d17 
-                -> {$pcName}: I’m sorry. #line:0630ab4 
+                {$kieran}: I don't think this is a joking matter. And I would rather not put a price tag on a man's life. #line:0846f66 
+                -> {$pcName}: I was trying to lighten the mood, Anastasia's doing us a favor and she didn't even want to help him. #line:092e055 
+                {$kieran}: I know Desiree, I just hope that he didn't hear you say that. [nomarkup][He looks at the man on Anastasia's shoulder who seems unfocused and mostly trying to deal numb the pain by drifting in and out of consciousness.][/nomarkup] Imagine knowing you're worth as much as someone's shoe. I know it was a joke Desiree, it just wasn't appreciated. #line:0081d17 
+                -> {$pcName}: I'm sorry. #line:0630ab4 
                 [nomarkup][He puts a hand on your shoulder and gives you a nod.][/nomarkup] #line:03e77dd 
             <<else>>
                 -> [nomarkup][Say nothing][/nomarkup] #line:0881592 
-                [nomarkup][You feel the weight of your words settle on you as you joke about the life of the man you just saved being worth the cost of shoes. You can feel the regret color your face and you look away from Kieran’s accusatory stare.][+1 Kieran reputation][/nomarkup] #line:0b0b32e 
+                [nomarkup][You feel the weight of your words settle on you as you joke about the life of the man you just saved being worth the cost of shoes. You can feel the regret color your face and you look away from Kieran's accusatory stare.][+1 Kieran reputation][/nomarkup] #line:0b0b32e 
                 <<ModifyInfluence 1 $kieran>>
             <<endif>>
-            {$anastasia}: Alright twinkle toes, we bookin’ it? #line:0511246 
+            {$anastasia}: Alright twinkle toes, we bookin' it? #line:0511246 
             <<if GetCompanionInfluence($kieran)<=1>>
                 -> {$pcName}: You know it. #line:0c68ae4 
             <<else>>
                 <<set $carryingNPC to 1>>
-                -> {$pcName}: Let’s go, he needs to get to a hospital. #line:057c291 
+                -> {$pcName}: Let's go, he needs to get to a hospital. #line:057c291 
                 {$anastasia}: Christ almighty… #line:093240c 
             <<endif>>
             <<jump physicalOptionsRun>>
@@ -254,8 +254,8 @@ title: kieranHelps
 title: medicalAssistanceFailure
 ---
 [nomarkup][There's blood everywhere, screams, shots, you can't concentrate.][/nomarkup] #failure #line:0671482 
--> {$pcName}: Shit, shit, shit… I don’t know what to do… There wasn’t a first aid course required for my line of work… #line:03ef806 
-{$kieran}: First of all we need to stop, or suppress the bleeding… [nomarkup][He unclasps his belt.][/nomarkup] Here. I’ll block his leg.  Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he’s not shot again. [nomarkup][He blocks the doe eyed man’s leg with precision and professionalism.][/nomarkup] #line:08afeed 
+-> {$pcName}: Shit, shit, shit… I don't know what to do… There wasn't a first aid course required for my line of work… #line:03ef806 
+{$kieran}: First of all we need to stop, or suppress the bleeding… [nomarkup][He unclasps his belt.][/nomarkup] Here. I'll block his leg.  Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he's not shot again. [nomarkup][He blocks the doe eyed man's leg with precision and professionalism.][/nomarkup] #line:08afeed 
 <<jump kieranHelps>>
 ===
 title: physicalOptions
@@ -289,7 +289,7 @@ title: stealthShootingSuccess
 ===
 title: stealthShootingFailure
 ---
-[nomarkup][Slowly and carefully, you move from one bit of cover to the next, but just as you make your last dash towards the Alley Door, you’re hit by a stray bullet in the leg. It hurts like hell, but you’ll live.][+1 superficial damage][/nomarkup] #failure #line:0ff62a8 
+[nomarkup][Slowly and carefully, you move from one bit of cover to the next, but just as you make your last dash towards the Alley Door, you're hit by a stray bullet in the leg. It hurts like hell, but you'll live.][+1 superficial damage][/nomarkup] #failure #line:0ff62a8 
 ===
 title: runShootingRoll
 ---
@@ -305,5 +305,5 @@ title: runShootingSuccess
 ===
 title: runShootingFailure
 ---
-[nomarkup][Sprinting out of cover, you run with all your might, but right before you reach the Alley Door, you’re hit by a stray bullet in the leg. It hurts like hell, but you’ll live.][+1 superficial damage][/nomarkup] #failure #line:073db02 
+[nomarkup][Sprinting out of cover, you run with all your might, but right before you reach the Alley Door, you're hit by a stray bullet in the leg. It hurts like hell, but you'll live.][+1 superficial damage][/nomarkup] #failure #line:073db02 
 ===

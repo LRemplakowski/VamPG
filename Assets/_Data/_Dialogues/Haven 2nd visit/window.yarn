@@ -1,13 +1,23 @@
 ﻿title: window
 tags:
 ---
+<<if visited ("peekOutside") == false>>
+    <<jump peekOutside>>
+<<elseif GetHasItem ("IT_Q_VHS")>>
+    <<jump watchItFirst>>
+<<else>>
+    <<jump windowProofing>>
+<<endif>>
+===
+title: peekOutside
+---
 <<if GetIsPartyMemberRecruited($anastasia) is false>>
     <<if Roll("Wits","Awareness") >=2>>
         [nomarkup][You check outside the window and see a woman from the bar pulling up into the drive way. A feeling of slight unease hits you before you tamp it down, remembering the face of the gruff woman at the bar. Why she's here is unclear and as you look at her from the window she waves at you and points at something on your door questioningly.][/nomarkup]
-        <<jump windowProofing>>
+        <<jump frontDoor>>
     <<else>>
         [nomarkup][You check outside the window and see the gleam of chrome as light hits the engine of a motorcycle. The figure on the bike is clearly a woman, but why she's here is less obvious. She points at your door and you get a sense of unease and confusion.][/nomarkup]
-        <<jump windowProofing>>
+        <<jump frontDoor>>
     <<endif>>
 <<else>>
     <<if $tattooSpotter == true>>
@@ -15,7 +25,7 @@ tags:
         <<if $wannabeDefector == true>>
             [nomarkup][Once the pair of you lock eyes he rolls his shoulders and winks. It would be inviting if it wasn't so clearly intentional. He gets on his bike and pats one of his thighs before wheeling around and driving away.][/nomarkup]
         <<endif>>
-        [nomarkup][Once the pair of you lock eyes he rolls his shoulders and smiles giving you a little two-finger salute before wheeling around on his bike and driving away.][nomarkup]
+        [nomarkup][Once the pair of you lock eyes he rolls his shoulders and smiles giving you a little two-finger salute before wheeling around on his bike and driving away.][/nomarkup]
     <<endif>>
 <<endif>>
 {$anastasia}: What are you lookin' at out there? Cops?
@@ -78,7 +88,11 @@ title: doAnaKnowTheGuy
 {$anastasia}: The only description I really have is that he's got a tattoo. Not much I can really do there?
 -> {$pcName}: He's got long hair too? Tanned skin from being out in the sun?
 [nomarkup][Anastasia shakes her head.][/nomarkup]
-<<jump windowProofing>>
+<<jump frontDoor>>
+===
+title: watchItFirst
+---
+[nomarkup][The mysterious tape that you picked seconds earlier from your doorstep keeps your mind so preoccupied you can’t concentrate. The anxiety is building and you keep on thinking why it ended up here. Your mind is spinning more and more absurd and dark scenarios. You have to watch it now.][/nomarkup]
 ===
 title: windowProofing
 ---
@@ -189,6 +203,7 @@ title: unsuccesfulProofing
         {$anastasia}: It's… normal… it's the sun. We'll go into Torpor in… several minutes… we… need to run… into the bathroom, quick, before… you drop… onto the ground.
     <<endif>>
 <<endif>>
+<<jump proofingObjectiveFailed>>
 ===
 title: windowHaveSheetsAndTape
 ---

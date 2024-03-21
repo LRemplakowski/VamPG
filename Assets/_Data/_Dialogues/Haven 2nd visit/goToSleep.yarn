@@ -3,8 +3,7 @@ tags:
 ---
 //quest for light proofing the window is COMPLETE//
 [nomarkup][It has been an interesting night, to say the least. It lasted like a lifetime to you and in your case it's quite literally. You wish you would wake up from this nightmare and it'd all be over, but you can't even find rest. You turn over and over trying to make yourself comfortable and pray that any cover you've made on the window will be sufficient. But you feel so much anxiety you know you will be unable to sleep… are vampires even sleeping? What do they do during the daytime? What awaits you tomorrow? There are so many unanswered questions and the ones you've heard gave birth to other ones. You can't stop thinking.][/nomarkup]
-<<jump goToSleepOptions>>
-//quest for light proofing the window is FAILED//
+    <<jump goToSleepOptions>>
 ===
 title: goToSleepOptions
 ---
@@ -134,8 +133,10 @@ title: thinkAboutPeople
 <<endif>>
 -> [nomarkup][Dominic.][/nomarkup] <<if visited("thinkAboutDominic") == false>>
     <<jump thinkAboutDominic>>
--> [nomarkup][Kate.][/nomarkup]
--> [nomarkup][Diana.][/nomarkup]
+-> [nomarkup][Kate.][/nomarkup] <<if visited("thinkAboutKate") == false>>
+    <<jump thinkAboutKate>>
+-> [nomarkup][Diana.][/nomarkup] <<if visited("thinkAboutDiana") == false>>
+    <<jump thinkAboutDiana>>
 ===
 title: thinkAboutKieran
 ---
@@ -158,6 +159,22 @@ title: thinkAboutDominic
 [nomarkup][The so-called Sheriff. The local authority with a thing for his gun. He's the one who got you into this place for better or worse.][/nomarkup] //show Dominic's portrait in this line
 -> {$beast}: He thinks he can push people around just because he calls himself a “Sheriff”. But at least he isn't a coward. I don't like him, but for now, I need to dance to his music and bear his awful accent.
     <<jump thinkAboutPeople>>
--> {$innerVoice}: He's the guy in a difficult situation as I understand that. Being a Sheriff makes him commit really bad things, but I think that under the shell of a hard guy who enforces the law, there is a good guy who does what he needs to protect the ones he cares about.
+-> {$innerVoice}: He's the guy in a difficult situation as I understand it. Being a Sheriff makes him commit really bad things, but I think that under the shell of a hard guy who enforces the law, there is a good guy who does what he needs to protect the ones he cares about.
+    <<jump thinkAboutPeople>>
+===
+title: thinkAboutKate
+---
+[nomarkup][Kate. The real owner of the Embassy. A local celebrity among Kindred that sat on her throne before you stepped inside her club.][/nomarkup]
+-> {$beast}: The Wasp. The all-too-sweet and classy woman who in reality is a bulging parasite on someone else’s business. A beautiful predator hiding in plain sight. She’s so old it’s weird she lost control. Her seat of power will probably crumble to dust soon. All because of her self-confidence and arrogance.
+    <<jump thinkAboutPeople>>
+-> {$innerVoice}: I’m not sure what to think about her. She gives with one hand and definitely takes with the other. I don’t think that Diana wanted to escape her without any reason. I hope I’m wrong, because what other predators live out there?
+    <<jump thinkAboutPeople>>
+===
+title: thinkAboutDiana
+---
+[nomarkup][The owner, the pet? Or maybe someone trying to break free being a free spirit themselves by nature?][/nomarkup]
+-> {$beast}: Definitely a pet that bites the hand that feeds them. Whatever happened to her is her own doing. This is just an order of things. If you’re weak  you get crushed under someone else's shoe.
+    <<jump thinkAboutPeople>>
+-> {$innerVoice}: I didn’t have an occasion to know her better. I wish I did. Maybe then I would understand what happened there because I have a feeling some parts of her story were untold and didn’t give a full overview of her life. Or her decisions. I would rest easier if I knew the full picture.
     <<jump thinkAboutPeople>>
 ===

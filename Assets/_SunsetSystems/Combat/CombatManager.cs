@@ -15,7 +15,6 @@ using UltEvents;
 
 namespace SunsetSystems.Combat
 {
-    [RequireComponent(typeof(Tagger))]
     public class CombatManager : SerializedMonoBehaviour
     {
         public static CombatManager Instance { get; private set; }

@@ -50,9 +50,6 @@ namespace SunsetSystems.Entities.Characters
         [SerializeField]
         private CreatureType _creatureType;
         public CreatureType CreatureType { get => _creatureType; }
-        [SerializeField]
-        private bool _useEquipmentPreset;
-        public bool UseEquipmentPreset => _useEquipmentPreset;
         [field: SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
 
@@ -104,6 +101,7 @@ namespace SunsetSystems.Entities.Characters
 #endif
         }
 
+        [Button("Randomize ID")]
         private void AssignNewID()
         {
             DatabaseID = System.Guid.NewGuid().ToString();

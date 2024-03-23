@@ -1,5 +1,6 @@
 ﻿title: leaveOffice
 tags:
+position: -62,-258
 ---
 [nomarkup][You turn the doorknob, nudging the wooden barrier to entry open just the tiniest bit - enough for you to peek your head out and look around.][/nomarkup] #line:0a4c9db 
 -> [nomarkup][Scan the lounge from your spot here.][/nomarkup] #line:08c8e17 
@@ -10,6 +11,7 @@ tags:
     <<jump urraNaMintarn>>
 ===
 title: peekWitsRoll
+position: -311,-53
 ---
 <<if Roll ("Wits","Awareness")>=(3+$brokenWindow)>>
     <<jump peekWitsSuccess>>
@@ -18,16 +20,19 @@ title: peekWitsRoll
 <<endif>>
 ===
 title: peekWitsSuccess
+position: -201,160
 ---
 [nomarkup][You glance around the lounge, eyes catching on the muzzle-flashes of the assailants' guns. They're firing wildly, but that just means you have a chance to slip into the back alley unnoticed.][/nomarkup] #success #line:0eab2d7 
 <<jump urraNaMintarn>>
 ===
 title: peekWitsFailure
+position: -448,166
 ---
 [nomarkup][Your eyes go wide as a flash of light momentarily blinds you, and the sound of rapid gunfire leaves you disorientated. It'll be better not to move until you're sure you won't catch a stray bullet.][/nomarkup] #failure #line:0cef57c 
 <<jump urraNaMintarn>>
 ===
 title: peekResolveRoll
+position: 133,-46
 ---
 <<if Roll ("Resolve","Composure")>=(4+$brokenWindow)>>
     <<jump peekResolveSuccess>>
@@ -36,6 +41,7 @@ title: peekResolveRoll
 <<endif>>
 ===
 title: peekResolveSuccess
+position: 370,249
 ---
 [nomarkup][As you peer out around the bar, your eyes turn towards what windows and small reflective surfaces remain unbroken, surveying your surroundings as best you can in such a low-visibility environment. It looks like you can make it to the Alley Door, if you're fast.][/nomarkup] #line:01124df 
 <<if Roll ("Wits","Streetwise")>=4>>
@@ -53,11 +59,13 @@ title: peekResolveSuccess
 <<jump urraNaMintarn>>
 ===
 title: peekResolveFailure
+position: 159,181
 ---
 [nomarkup][Peeking out for just a moment, you feel a slight breeze next to your ear and an impact somewhere behind you - ducking down instinctively behind cover to compose yourself after that bullet nearly grazed you.][/nomarkup] #line:0bdce8d 
 <<jump urraNaMintarn>>
 ===
 title: urraNaMintarn
+position: -125,683
 ---
 [nomarkup][You turn to Kieran, nodding once to indicate that you're ready.][/nomarkup] #line:0e5d1fd 
 {$kieran}: You're not thinking of fighting them, are you? #line:010f2ce 

@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Follow : EntityAction
     {
         private readonly NavMeshAgent followTarget;

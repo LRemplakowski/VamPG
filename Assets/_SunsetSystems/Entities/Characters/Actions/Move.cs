@@ -11,8 +11,9 @@ namespace SunsetSystems.Entities.Characters.Actions
     [System.Serializable]
     public class Move : EntityAction
     {
-        private readonly NavMeshAgent navMeshAgent;
-        [ShowInInspector, ReadOnly]
+        [SerializeField]
+        private NavMeshAgent navMeshAgent;
+        [SerializeField, ReadOnly]
         private Vector3 destination;
         public static event Action<IActionPerformer> OnMovementFinished;
         public static event Action<IActionPerformer> OnMovementStarted;

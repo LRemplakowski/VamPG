@@ -1,13 +1,16 @@
-﻿using SunsetSystems.Entities.Interfaces;
+﻿using Sirenix.Serialization;
+using SunsetSystems.Entities.Interfaces;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     [System.Serializable]
     public class HostileActionCondition : Condition
     {
+        [field: SerializeField]
         public bool Performed { get; set; }
-
-        private readonly ICombatant target, performer;
+        [OdinSerialize]
+        private ICombatant target, performer;
 
         public HostileActionCondition(ICombatant target, ICombatant performer)
         {

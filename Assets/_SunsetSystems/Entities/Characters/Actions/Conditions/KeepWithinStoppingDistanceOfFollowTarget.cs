@@ -5,8 +5,10 @@ namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public class KeepWithinStoppingDistanceOfFollowTarget : Condition
     {
-        private readonly NavMeshAgent followTarget;
-        private readonly NavMeshAgent myAgent;
+        [SerializeField]
+        private NavMeshAgent followTarget;
+        [SerializeField]
+        private NavMeshAgent myAgent;
 
         public KeepWithinStoppingDistanceOfFollowTarget(NavMeshAgent followTarget, NavMeshAgent myAgent)
         {

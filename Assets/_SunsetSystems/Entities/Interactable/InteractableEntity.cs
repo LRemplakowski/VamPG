@@ -112,6 +112,10 @@ namespace SunsetSystems.Entities.Interactable
                 _references = GetComponent<IEntityReferences>();
             if (InteractionHandlers == null)
                 InteractionHandlers = new();
+            //IHH added
+            if (_highlightHandler == null)
+                _highlightHandler = GetComponent<IHighlightHandler>();
+
         }
 
         protected override void Awake()
@@ -123,6 +127,10 @@ namespace SunsetSystems.Entities.Interactable
             }
             if (Interactable)
                 InteractablesInScene.Add(this);
+            //Added IHH
+            if (_highlightHandler == null)
+                _highlightHandler = GetComponent<IHighlightHandler>();
+
         }
 
         private void OnEnable()
@@ -188,6 +196,8 @@ namespace SunsetSystems.Entities.Interactable
             if (_highlightHandler != null && Interactable)
                 _highlightHandler.SetHighlightActive(IsHoveredOver);
         }
+
+
 
         public void ResetInteraction()
         {

@@ -1,12 +1,13 @@
 using Sirenix.OdinInspector;
 using System;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     [Serializable]
     public class WaitForFlag : Condition
     {
-        [ShowInInspector]
+        [SerializeField]
         private FlagWrapper flag;
 
         public WaitForFlag(FlagWrapper flag)
@@ -23,7 +24,7 @@ namespace SunsetSystems.Entities.Characters.Actions.Conditions
     [Serializable]
     public class FlagWrapper
     {
-        [field: ShowInInspector]
+        [field: SerializeField]
         public bool Value { get; set; }
     }
 }

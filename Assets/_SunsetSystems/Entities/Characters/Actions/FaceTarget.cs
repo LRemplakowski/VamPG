@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class FaceTarget : EntityAction
     {
         private const float MARGIN_OF_ERROR = 0.01f;

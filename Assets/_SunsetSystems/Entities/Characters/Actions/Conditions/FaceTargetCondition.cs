@@ -8,11 +8,11 @@ namespace SunsetSystems.Entities.Characters.Actions.Conditions
     [System.Serializable]
     public class FaceTargetCondition : Condition
     {
-        [ShowInInspector]
+        [SerializeField]
         private Vector3 faceDirection;
-        [ShowInInspector]
+        [SerializeField]
         private Transform rotatingTransform;
-        [ShowInInspector]
+        [SerializeField]
         private float marginOfError;
 
         public FaceTargetCondition(Transform rotatingTransform, Vector3 faceDirection, float marginOfError = 0.1f)

@@ -1,5 +1,6 @@
 ﻿title: evacuate
 tags:
+position: -323,-660
 ---
 [nomarkup][As Anastasia's hand balls into a fist you feel all of the muscles in your body tense, she directs with her hand and you dart out, Kieran behind you and Anastasia at the back. Her rosary glinting off the lights of the Embassy as she reaches up and grabs it.][/nomarkup] #line:0143377 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -9,6 +10,7 @@ tags:
     <<jump evacuateIntRoll>>
 ===
 title: evacuateIntRoll
+position: -509,-433
 ---
 <<if Roll("Intelligence","Insight")>=3>>
     <<jump evacuateIntSuccess>>
@@ -17,17 +19,20 @@ title: evacuateIntRoll
 <<endif>>
 ===
 title: evacuateIntSuccess
+position: -510,-224
 ---
 [nomarkup][Determining where not to be can be just as important as moving silently. Having seen the patterns of their movement, you are able to easily pick out a path to the backdoor that completely avoids the insurgency.][/nomarkup] #line:0a8fccb 
 <<set $bestPathFound to 1>>
 <<jump evacuateAdditional>>
 ===
 title: evacuateIntFailure
+position: -166,-433
 ---
 [nomarkup][There isn't any rhyme or reason to how these assailants move and strike - at least, not that you can discern.][/nomarkup] #line:05c4a7e 
 <<jump evacuateAdditional>>
 ===
 title: evacuateAdditional
+position: -152,-219
 ---
 -> [nomarkup][Sneak to the exit.](Dexterity+Stealth)[/nomarkup] #line:074b1d5 
     <<jump evacuateDexRoll>>
@@ -35,6 +40,7 @@ title: evacuateAdditional
     <<jump evacuateStamRoll>>
 ===
 title: evacuateDexRoll
+position: -160,40
 ---
 <<if Roll("Dexterity","Stealth")>=(3-$bestPathFound)>>
     <<jump evacuateDexSuccess>>
@@ -43,15 +49,18 @@ title: evacuateDexRoll
 <<endif>>
 ===
 title: evacuateDexSuccess
+position: -354,280
 ---
 [nomarkup][Staying out of sight as wood chips fly overhead, you carefully pick your way towards the back of the club. The crackle of music filters in from the overturned TV, making your steps inaudible between it and the intermittent gunfire as you carefully navigate your way to the Alley Door.][/nomarkup] #success #line:0744b80 
 ===
 title: evacuateDexFailure
+position: 25,271
 ---
 [nomarkup][When you think no one is looking, you make a mad dash towards the door, using the blaring music of the overturned TV and the cacophonous mayhem of the gunfire as cover for your footsteps as you deftly migrate from one piece of cover to the next, but you seem to have miscalculated, because from here, there isn't a clear path to the exit. That is, you can see your way out, but have no route to safely get to it.][/nomarkup] #failure #line:023ef1b 
 <<jump failureOption>>
 ===
 title: evacuateStamRoll
+position: 189,-192
 ---
 <<if Roll("Stamina","Athletics")>=(3-$bestPathFound)>>
     <<jump evacuateStamSuccess>>
@@ -60,16 +69,19 @@ title: evacuateStamRoll
 <<endif>>
 ===
 title: evacuateStamSuccess
+position: 539,-208
 ---
 [nomarkup][Moving quickly without caring if you are seen, you race through the club as a spray of bullets tail you. Swiftly moving in and out of cover, your mad dash proves a success as you reach the Alley Door.][/nomarkup] #success #line:09f8fe6 
 <<set $ranForIt to 1>>
 ===
 title: evacuateStamFailure
+position: 374,33
 ---
 [nomarkup][As you rush from one bit of cover to the next, sliding behind an overturned couch, you can hear the screams of other people similarly trying to find their way out. Disorientated and winded, there isn't anywhere to safely move without running into a fleeing patron - although you can see the exit.][/nomarkup] #failure #line:0c2c756 
 <<jump failureOption>>
 ===
 title: failureOption
+position: 228,476
 ---
 [nomarkup][As you glance about, planning your next move, your eyes are drawn to and meet the gaze of a young man, the pupils of his deep brown eyes wide with fear. He's right next to you, having crawled into cover with the last of his strength. Bleeding profusely from his leg which he unwittingly drags behind him, he grabs onto your shirt, clinging to it desperately, and you find yourself unable to move.][nomarkup] #line:0481065 
 <<if Roll ("Intelligence","Medicine")>=3>>
@@ -87,6 +99,7 @@ title: failureOption
     <<jump medicalAssistance>>
 ===
 title: sootheDoeEyedRoll
+position: 537,514
 ---
 <<if Roll("Manipulation","Insight")>=3>>
     <<jump sootheDoeEyedSuccess>>
@@ -95,12 +108,14 @@ title: sootheDoeEyedRoll
 <<endif>>
 ===
 title: sootheDoeEyedSuccess
+position: 547,728
 ---
 [nomarkup][He hiccups and nods, letting you go as his body fully relaxes, his eyes locked on you as hiccups spasm in his throat.][/nomarkup] #success #line:0bc185b 
 [nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too…][/nomarkup] #line:0d2fe45 
 <<jump gottaStayStrong>>
 ===
 title: gottaStayStrong
+position: 546,1141
 ---
 -> {$pcName}: [I gotta stay strong.] #line:0fd907e 
 <<ModifyInfluence -1 $kieran>>
@@ -109,6 +124,7 @@ title: gottaStayStrong
 <<jump evacuatePhysical>>
 ===
 title: sootheDoeEyedFailure
+position: 855,520
 ---
 [nomarkup][There's something that makes his expression sour, contorting in fear, and he scrambles to get away - out of cover and back into the smoke. You hear shouts from the front of the club as the armed assailants notice his movement. It'll be less safe when you duck out of cover now.][/nomarkup] #line:0efe99c 
 <<set $doeEyedManAlive to 1>>
@@ -116,6 +132,7 @@ title: sootheDoeEyedFailure
 <<jump evacuatePhysical>>
 ===
 title: convinceDoeEyedRoll
+position: 237,706
 ---
 <<if Roll("Charisma","Leadership")>=3>>
     <<jump convinceDoeEyedSuccess>>
@@ -124,12 +141,14 @@ title: convinceDoeEyedRoll
 <<endif>>
 ===
 title: convinceDoeEyedSuccess
+position: 372,926
 ---
 [nomarkup][His eyes well up, and he nods, letting go. You give him a nod in return, as well, and gesture for him to stay down. His gaze shines with fear, but you know he'll do as he's told.][/nomarkup] #success #line:08f211d 
 [nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too…][/nomarkup] #line:02e2440 
 <<jump gottaStayStrong>>
 ===
 title: convinceDoeEyedFailure
+position: 221,1198
 ---
 [nomarkup][You press down on his leg by accident, only for him to utter an ear splitting scream. Swatting your hand away, he clings ever-tighter to you as he tries to flex the muscles in his thigh - finding them unresponsive. His screams and shouts and sobbing pleas for help attract a lot of attention prior to him passing out…][/nomarkup] #failure #line:086d846 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -146,6 +165,7 @@ title: convinceDoeEyedFailure
     <<set $doeEyedManAlive to 0>>
 ===
 title: intimidateDoeEyedRoll
+position: -39,677
 ---
 <<if Roll("Charisma","Intimidation")>=3>>
     <<jump intimidateDoeEyedSuccess>>
@@ -154,6 +174,7 @@ title: intimidateDoeEyedRoll
 <<endif>>
 ===
 title: intimidateDoeEyedSuccess
+position: 86,959
 ---
 [nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #success #line:0a74ade 
 -> {$pcName}: Breathe. In. Out. In- #line:030091c 
@@ -166,6 +187,7 @@ title: intimidateDoeEyedSuccess
 <<jump gottaStayStrong>>
 ===
 title: intimidateDoeEyedFailure
+position: -95,1189
 ---
 [nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #line:0780adc 
 -> [nomarkup][You can't think of what else to say, and at this point, you're panicking, too.][/nomarkup] #line:0293806 
@@ -174,6 +196,7 @@ title: intimidateDoeEyedFailure
 <<jump convinceDoeEyedFailure>>
 ===
 title: medicalAssistanceRoll
+position: 220,1411
 ---
 <<set $doeEyedRescued to 1>>
 <<if Roll ("Resolve","Medicine")>=4>>
@@ -183,6 +206,7 @@ title: medicalAssistanceRoll
 <<endif>>
 ===
 title: medicalAssistanceSuccess
+position: 428,1628
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Anastasia's belt - it should do just fine.][/nomarkup] #success #line:09a85ca 
@@ -197,6 +221,7 @@ title: medicalAssistanceSuccess
 <<jump kieranHelps>>
 ===
 title: kieranHelps
+position: 434,1848
 ---
 [nomarkup][It looks like Kieran has done that many times in the past.][/nomarkup] #line:0d31b4b 
 [nomarkup][With his help, you quickly treat the man. There is less blood, now - but that doesn't mean its smell isn't enticing to you… or your new friends. On several occasions, Kieran grimaced and averted his eyes from it.][/nomarkup] #line:0219a10 
@@ -252,6 +277,7 @@ title: kieranHelps
             <<jump physicalOptions>>
 ===
 title: medicalAssistanceFailure
+position: 107,1671
 ---
 [nomarkup][There's blood everywhere, screams, shots, you can't concentrate.][/nomarkup] #failure #line:0671482 
 -> {$pcName}: Shit, shit, shit… I don't know what to do… There wasn't a first aid course required for my line of work… #line:03ef806 
@@ -259,6 +285,7 @@ title: medicalAssistanceFailure
 <<jump kieranHelps>>
 ===
 title: physicalOptions
+position: 537,2170
 ---
 -> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0cf3925 
     <<jump stealthShootingRoll>>
@@ -266,16 +293,19 @@ title: physicalOptions
     <<jump runShootingRoll>>
 ===
 title: physicalOptionsStealth
+position: 838,1863
 ---
 -> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0d22557 
     <<jump stealthShootingRoll>>
 ===
 title: physicalOptionsRun
+position: 293,2057
 ---
 -> [nomarkup][Sprint the rest of the way.](Stamina+Athletics)[/nomarkup] #line:085e4de 
     <<jump runShootingRoll>>
 ===
 title:stealthShootingRoll
+position: 858,2165
 ---
 <<if Roll ("Dexterity","Stealth")>=(2+$ranForIt+$doeEyedManSeen)>>
     <<jump stealthShootingSuccess>>
@@ -284,14 +314,17 @@ title:stealthShootingRoll
 <<endif>>
 ===
 title: stealthShootingSuccess
+position: 1100,2481
 ---
 [nomarkup][Staying out of sight as wood chips fly overhead, you carefully pick your way towards the back of the club. The crackle of music filters in from the overturned TV, making your steps inaudible between it and the intermittent gunfire as you carefully navigate your way to the Alley Door.][/nomarkup] #success #line:0911449 
 ===
 title: stealthShootingFailure
+position: 823,2456
 ---
 [nomarkup][Slowly and carefully, you move from one bit of cover to the next, but just as you make your last dash towards the Alley Door, you're hit by a stray bullet in the leg. It hurts like hell, but you'll live.][+1 superficial damage][/nomarkup] #failure #line:0ff62a8 
 ===
 title: runShootingRoll
+position: 426,2408
 ---
 <<if Roll ("Stamina","Athletics")>=(2+$ranForIt+$doeEyedManSeen+$doeEyedManRescued)>>
     <<jump runShootingSuccess>>
@@ -300,10 +333,12 @@ title: runShootingRoll
 <<endif>>
 ===
 title: runShootingSuccess
+position: 231,2630
 ---
 [nomarkup][Moving quickly without caring if you are seen, you race the rest of the way through the club, a spray of bullets tailing you. Swiftly moving in and out of cover, your mad dash proves a success as you reach the Alley Door.][/nomarkup] #success #line:0efe69d 
 ===
 title: runShootingFailure
+position: 480,2651
 ---
 [nomarkup][Sprinting out of cover, you run with all your might, but right before you reach the Alley Door, you're hit by a stray bullet in the leg. It hurts like hell, but you'll live.][+1 superficial damage][/nomarkup] #failure #line:073db02 
 ===

@@ -1,8 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -13,14 +13,17 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Priority actions clear action queue upon assignment.
         /// </summary>
-        [ShowInInspector]
+        [SerializeField]
         private string name => this.ToString();
-        [field: ShowInInspector]
+        [field: SerializeField]
         public bool IsPriority { get; protected set; }
+        [field: SerializeField]
         public bool ActionFinished { get; protected set; } = false;
+        [field: SerializeField]
         public bool ActionCanceled { get; protected set; } = false;
+        [field: OdinSerialize]
         protected IActionPerformer Owner { get; }
-        [ShowInInspector]
+        [SerializeField]
         protected List<Condition> conditions = new List<Condition>();
 
         public EntityAction(IActionPerformer owner)

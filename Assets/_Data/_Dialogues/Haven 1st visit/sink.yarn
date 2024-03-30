@@ -5,7 +5,8 @@ tags:
 {$journal}: I can't live like this anymore. #line:0a7a0fd 
 <<if $vomit == true>>
     [nomarkup][You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual... Like you're terminally ill.][/nomarkup] #line:0f33850 
-    [nomarkup][The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either. You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup] #line:0afd30e 
+    [nomarkup][The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either.][/nomarkup]
+    [nomarkup][You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup] #line:0afd30e 
     -> (Resolve + Craft) [nomarkup][Repair it yourself.][/nomarkup] #line:06dccdb
         <<CompleteObjective "Q_0P_FIX_SINK" "REPAIR_SINK">>   
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>

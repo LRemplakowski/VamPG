@@ -6,6 +6,7 @@
     [System.Serializable]
     public class Destination : Condition
     {
+        [SerializeField]
         private NavMeshAgent agent;
 
         private bool hasPath = false;

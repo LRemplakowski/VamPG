@@ -1,21 +1,20 @@
-﻿using SunsetSystems.Combat;
-using UnityEngine;
-using SunsetSystems.Entities.Interfaces;
-using System.Collections;
+﻿using System.Collections;
+using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
-using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
     [System.Serializable]
     public class Attack : HostileAction
     {
-        [ShowInInspector]
+        [SerializeField]
         private AttackModifier _attackModifier;
         private IEnumerator attackRoutine;
-        [ShowInInspector]
+        [SerializeField]
         private FlagWrapper attackFinished;
-        [ShowInInspector]
+        [SerializeField]
         private FaceTarget faceTargetSubaction;
 
         public Attack(ICombatant target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)

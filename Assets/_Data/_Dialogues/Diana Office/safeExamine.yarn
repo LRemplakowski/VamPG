@@ -1,7 +1,7 @@
 ﻿title: safeExamine
 position: -171,-476
 ---
-[nomarkup][It looks just like a normal, civilian use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
+[nomarkup][It looks just like a normal, civilian-use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
 -> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeResolveRoll") == false>> #line:05d4917 
     <<jump safeResolveRoll>>
 <<if $crowbar ==true>>
@@ -43,7 +43,9 @@ position: -474,-221
 title: safeOpenedwoCode
 position: -378,-751
 ---
-[nomarkup][Determined, you attempt to open the safe without any combination. Risky, but what's a better place to take risks than Vegas? You've seen how people crack open safes in films. Why not try it yourself? You stick one of your ears against the chilly metal and cautiously rotate the knob, expecting to hear a click. It is a difficult task demanding your full attention. Even Anastasia goes silent as if she knows what you are up to. Several minutes later, you hear the last click of the lock components settling into place, and the doors are opened.][/nomarkup] #success #line:0da57fd 
+[nomarkup][Determined, you attempt to open the safe without any combination. Risky, but what better place to take risks than Vegas? You’ve seen how people crack open safes in films. Why not try it yourself?][/nomarkup] #success
+[nomarkup][You stick one of your ears against the chilly metal and cautiously rotate the knob, expecting to hear a click. It’s a difficult task, demanding your full attention, and even Anastasia goes silent as you work your magic.][/nomarkup]
+[nomarkup][Several minutes later, you hear the last click of the lock components settling into place, and the doors are opened.][/nomarkup] #line:0da57fd 
 <<jump safeOpened>>
 ===
 title: safeForceOpened
@@ -71,10 +73,10 @@ tags:
 position: -1111,-157
 ---
 -> {$pcName}: Open sesame! [nomarkup][You exclaim with satisfaction, opening the safe doors.][/nomarkup] #line:0190deb 
-[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some .45 caliber ammunition - not what your gun is using. However, there is one thing that catches your eye... a vial containing a vivid red liquid...][/nomarkup] #line:0d46450 
+[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some ammunition: .45 caliber - not what your gun is using. However, one thing does catch your eye… a vial containing a vivid red liquid…][/nomarkup] #line:0d46450 
 {$kieran}: Great work! [nomarkup][You hear Kieran's voice, excited - for the first time this night - behind you.][/nomarkup] #line:06e7470 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils? #line:0b237a6 
+    {$anastasia}: [nomarkup][She pumps her fist, before inching closer to peer eagerly over your shoulder and into the safe.][/nomarkup] That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils? #line:0b237a6 
     {$kieran}: [nomarkup][He grimaces.][/nomarkup] I will not take Diana's money, and I suggest you do not, either. #line:0bec761 
 <<endif>>
 <<jump safeQuestions>>
@@ -108,16 +110,16 @@ position: -654,747
 title: safeGunExamineFail
 position: -1256,686
 ---
-[nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. At least, you think so...][/nomarkup] #failure #line:099beb4 
+[nomarkup][It’s a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. Probably.][/nomarkup] #failure #line:099beb4 
 <<jump safeQuestions>>
 ===
 title: safeDocumentsExamine
 position: -982,799
 ---
 [nomarkup][You rummage through the documents. Nothing particularly interesting. Just financial records and the like. But when you flip through one of the stapled packets, a folded up piece of paper that had been loosely stuck between its pages falls to the floor. You pick it up to examine it.][/nomarkup] #line:03c1d1c 
-Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away. #line:0999c1e 
+Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away… #line:0999c1e 
 I can't stand to see you used by that insect of a Kindred you call your Master any longer. Like a mosquito, or some hungry parasite, she doesn't just sting, she bites and drains and takes and bleeds you dry until there is nothing left of you nor the woman you used to be - the woman I love... #line:0333eda 
-So fight it. Fight the bond she has forced on you, the chains that bind you to her - choose me, and in doing so, the freedom you deserve. But above all else, choose yourself, Dove.  #line:0a132e0 
+You have spent so long under her cruel watch - nothing more than a convenient tool to be used and abused, and I think it has been long enough… So fight it. Fight the bond she has forced on you, the chains that bind you to her - choose me, and in doing so, the freedom you deserve. But above all else, choose yourself, Dove. #line:0a132e0 
 I want us to live together - be together as equals, such that we'll be bonded only through trust and love rather than coercion and obligation. I promise that once the last of your bindings are broken, we will escape and make our home far, far away from here - from Jyhad and the pressures foisted upon us by wicked institutions.  #line:06ece37 
 It will be just you - and me. Together in the night. #line:07e7453 
 With love,  #line:026c4fd 
@@ -136,7 +138,7 @@ position: -531,378
 ---
 [nomarkup][You take the bottle and examine it more closely. At first, it appears to be a thick, red wine. But on closer inspection, it's far too viscous. It's not wine at all - it's blood.][/nomarkup] #success #line:024ce18 
 -> {$pcName}: I think I found... blood? #line:00843d3 
-{$pcName}: I don't think that's ordinary blood. Let me. [nomarkup][He holds out his hand expectantly.][/nomarkup] #line:0454bb9 
+{$pcName}: I don’t think that’s ordinary blood. Allow me. [nomarkup][He holds out his hand expectantly.][/nomarkup] #line:0454bb9 
 <<jump bloodVialRolls>>
 ===
 title: bloodVialRolls
@@ -160,7 +162,7 @@ position: -45,814
     {$kieran}: Yes. It's a little but useful trick. (Kieran Influence +1) #line:01b5ea3 
     <<modifyInfluence 1 $kieran>>
     -> {$pcName}: Can I learn to do that? #line:0ced55a 
-        {$kieran}: [He shakes his head.] Unfortunately for you, it's something only my Clan is allowed to learn. #line:01aeb8a 
+        {$kieran}: [He shakes his head.] Unfortunately for you, it’s something only my Clan is permitted to learn. #line:01aeb8a 
         <<if GetIsPartyMemberRecruited($anastasia) is true>>
             {$anastasia}: In other words, spooky magic shit. #line:0ed285a 
         <<endif>>
@@ -175,7 +177,7 @@ position: -245,1149
 -> {$pcName}: That was evidence! #line:0255b57 
     {$kieran}: Trust me, I know what I'm doing. #line:0d7c422 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: Your Clan and trust, huh? They don't really go together, do they? #line:029a549 
+        {$anastasia}: Your Clan and trust, huh? Those two things go together like toothpaste and orange juice. #line:029a549 
     <<endif>>
 <<jump safeContinuation>>
 ===
@@ -188,7 +190,7 @@ position: -370,798
     {$anastasia}: You done, twinkle toes? #line:0e80d38 
     {$kieran}: Pretty much, yes. #line:02c73c1 
 <<endif>>
-{$kieran}: Well, we don't have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot, at least for the time being. #line:04e369d 
+{$kieran}: Unfortunately, we don’t have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot - at least for the time being. #line:04e369d 
 <<jump safeQuestions>>
 ===
 title: takeSafeMoney

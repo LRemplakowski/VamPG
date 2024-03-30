@@ -12,7 +12,7 @@ title: ignoredVan
 ---
 [nomarkup][The woman shoves the man into the back seat of her van and drives off.][/nomarkup] #line:05aa9ea 
 {$innerVoice}: He'll be fine. #line:00338ea 
-[nomarkup][You're not that sure.][/nomarkup] #line:08e31dc 
+[nomarkup][You’re not so sure.][/nomarkup] #line:08e31dc 
 <<FailObjective "Q_0P_NEVER_TRUST_WHITE_VAN" "O_0P_WHITE_VAN_HELP_THE_MAN">>
 ===
 title: approachKiddnaper
@@ -29,10 +29,10 @@ Soccer Mom: Can I help you? #line:07039b0
     [nomarkup][Suspicious, she looks over her shoulder the rest of her trek to her van.][/nomarkup] #line:011eb50 
 -> {$pcName}: Is he alright? (Wits + Awarness) #line:0d92186 
     <<if Roll("Wits","Awarness")>=2-$smileInsincere>>
-        [nomarkup][She's jumpy and sweating bullets. You see the shimmer of the gun she is holding to the man's side.][/nomarkup] #success #line:0b3b1fb 
+        [nomarkup][She’s jumpy and sweating bullets. Looking her over, you spy the shimmer of the gun she is holding to the man’s side.][/nomarkup] #success #line:0b3b1fb 
         {$beast}: My, you are subtle as a bag of bricks. #line:08f5d2e 
     <<else>>
-        {$pcName}: [nomarkup][You find yourself distracted by her horrible fashion choices.][/nomarkup] #failure #line:0a45fe8 
+        {$pcName}: [nomarkup][You try to discern what the problem could be, but find yourself distracted by her horrible fashion choices.][/nomarkup] #failure #line:0a45fe8 
         {$innerVoice}: Those jeans with that top? #line:04f1670 
     <<endif>>
     Soccer Mom: He's fine, why do you ask? #line:0732979 
@@ -40,7 +40,7 @@ Soccer Mom: Can I help you? #line:07039b0
     {$kieran}: He doesn't look “fine.” #line:03cfabe 
     Soccer Mom: [nomarkup][Laughing anxiously][/nomarkup] He just had a little too much to drink. #line:00eac00 
     Soccer Mom: ... #line:0f1f735 
-    [nomarkup][The stand off is palpable. She knows the jig is up.][/nomarkup] #line:0854555 
+    [nomarkup][The tension in the air brought on by the stand-off is palpable. She knows the jig is up.][/nomarkup] #line:0854555 
     Soccer Mom: Ah, fuck it! #line:0e39fbc 
 [nomarkup][The man plummets to the ground as she loosens her grip and draws her gun. Two men donned in all black emerge from her van.][/nomarkup] #line:0b4d86b 
 Soccer Mom: Get'em boys!  #line:0017b0e 

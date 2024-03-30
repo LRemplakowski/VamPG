@@ -15,12 +15,12 @@ Mysterious Woman: Surprise, sweetie. #line:066a4a7
 ===
 title: kieranInterrupts
 ---
-[nomarkup][Kieran stands before you, waving his hand before your eyes...][/nomarkup] #line:033a717 
+[nomarkup][Kieran stands in front of you, waving his hand before your eyes…][/nomarkup] #line:033a717 
 {$kieran}: Miss Bardot, can you hear me?  #line:0276754 
 [nomarkup][You catch your bearings, Kieran's voice grounding you.][/nomarkup] #line:05445cd 
 {$kieran}: You spaced out for a while. Is everything alright? #line:05ffba6 
 -> {$pcName}: Yeah. #line:0b7d0ed 
-    {$kieran}: What happened? You looked like a deer in the headlights for a moment there. #line:0c2cfbb 
+    {$kieran}: What happened? You looked like a deer in the headlights for a moment, there. #line:0c2cfbb 
     -> {$pcName}: I had some sort of “vision.” #line:07814b4 
         <<set $toldKieranAboutVision to true>>
         <<jump toldAboutVision>>
@@ -32,7 +32,7 @@ title: toldAboutVision
 {$kieran}: [nomarkup][He laughs.][/nomarkup] Don't tell me Dominic was wrong, and you're actually a Malkavian. [nomarkup][+1 Kieran Influence][/nomarkup] #line:094a46c 
 <<ModifyInfluence 1 $kieran>>
 -> {$pcName}: What's a Malkavian? #line:0bb2389 
-{$kieran}: Another Bloodline of Kindred, just as the Brujah are. Might be of relevelace later, so keep the name in mind. Tell me about this vision. #line:017c8bd 
+{$kieran}: Another Bloodline of Kindred, just as the Brujah are. Might be of relevelace later, so keep the name in mind. But please, tell me about this vision. #line:017c8bd 
 -> {$pcName}: I was in this alley last night with the guy... #line:0e53e4b 
 {$kieran}: The one in your shower. #line:088ce81 
 -> {$pcName}: ... A woman was with us too. #line:06a1d4a 

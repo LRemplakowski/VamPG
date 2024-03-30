@@ -1,12 +1,23 @@
 ﻿title: kieranDialogue
 tags: 
 ---
+[nomarkup][You drive through Vegas streets. Kieran is a cautious driver adhering to the traffic rules to the letter. He looks a little bit tense. You have time to relax, or talk.][/nomarkup]
+-> {$pcName}: Kieran May I ask you some questions?
+    <<jump askQuestions>>
+-> [Stay silent.]
+[nomarkup][You see neon lights coming closer and closer. Time for questions is over. You take a deep breath in anticipation for what is to come. You hope that you find answers to your questions there before someone kills you.][/nomarkup]
+===
+title: askQuestions
+---
 {$kieran}: Yes? Please make it quick; there is not much time we can spare before our heads roll. #line:05b0327 
 -> {$pcName}: I think we can spare a few minutes to. #line:066c97e 
-{$kieran}: [nomarkup][Kieran sights.][/nomarkup] Okay. As long as it'll help our investigation, I'm all answers. So ask. #line:0eb3799 
+===
+title: questionsKieran
+---
+{$kieran}: [nomarkup][He sights.][/nomarkup] Okay. Just so long as it will help our investigation. Go ahead and ask. #line:0eb3799 
     <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
-    [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions to ask.][/nomarkup] #line:0a5c8c0 
-    -> {$pcName}: So... How many of the stereotypes about vampires are true? Like we sleep in coffins, or have super speed, are averted by crosses and so on? #line:09868f1 
+    [nomarkup][You’ve read enough vampire fiction to have some idea of a couple extra questions you could pose.][/nomarkup] #line:0a5c8c0
+    -> {$pcName}: So… How many of the stereotypes about vampires are true? Like that we sleep in coffins, or have super speed, are averted by crosses and so on? #line:09868f1 
         <<jump occultQuestions>>
     <<endif>>
     -> {$pcName}: You and Dominic don't seem to get along. #line:0431dde 
@@ -47,33 +58,33 @@ title: kieranDominicRelations
         -> {$pcName}: Forced... what? #line:017f074 
         {$kieran}: Accounting is a term for a period of time when a Childe and their deeds are the responsibility of their Sire - adoptive or otherwise. You are my adoptive Childe, for this night at least. Thus, you are under an Accounting, of sorts. #line:07999d5 
             -> {$pcName}: This sounds... awkward. #line:0b15454 
-                {$kieran}: If you mean the implication that I am your father now, then yes. It is. #line:0f11c17 
-                <<jump kieranDialogue>>
+                {$kieran}: If you are referring to the implication that I am your father now, then yes. It is. #line:0f11c17 
+                <<jump questionsKieran>>
 ===
 title: vampisismExplained
 ---
 {$kieran}: Exist, yes. So do many of the myriad of myths and monsters you were told to be wary of, as a child. Unfortunately, however, introductions to those will have to wait, too. #line:00de44d 
     -> {$pcName}: Not even a crash course? #line:0a9b893 
         {$kieran}: The one you had back in your apartment wasn't sufficient? #line:0b6fda2 
-        -> {$pcName}: You know, I don't think that this crash course gave me more then additional headache. #line:0c0db40 
-            {$kieran}: Lead lodged in your head would give you a much bigger one. [nomarkup][He gives you a meaningful look.][/nomarkup] I understand what you are saying, but we have to get going. #line:00ec54f 
-            <<jump kieranDialogue>>
+        -> {$pcName}: You know, I don’t think that particular crash course gave me much more than an additional headache to go with the hangover. #line:0c0db40 
+            {$kieran}: Lead lodged in your skull would certainly have inflicted more discomfort. [nomarkup][He gives you a meaningful look.][/nomarkup] I understand what you are saying, but we really have to get going. #line:00ec54f 
+            <<jump questionsKieran>>
 ===
 title: willHeKillUs
 ---
-{$kieran}: That deal was sealed the moment Dominic left the room. He was not lying; he is bound by our laws. They are normally exceedingly harsh and inflexible, but Dominic agreed to bend the rules because he has a bigger fish to fry, here. Those laws are not a subject for vast interpretation, only conditional pardon for a good reason. #line:0e64241 
+{$kieran}: That deal was sealed the moment Dominic left the room. He was not lying; he is bound by our laws. They are normally exceedingly harsh and inflexible, but Dominic agreed to bend the rules because he has a bigger fish to fry, for the time being. Those laws are not frequently bent; one can generally only count on the occasional, conditional pardon for very good reason. #line:0e64241 
     -> {$pcName}: I saw just how harsh firsthand. I thought I was going to die. #line:05cbc12 
         {$kieran}: You were going to, yes. #line:0fe4bd6 
         {$pcName}: [nomarkup][The next sentence out of your mouth is dripping with sarcasm.][/nomarkup] Nice to know that was never in doubt. #line:0d63140 
         {$kieran}: Harsh they may be, but they serve their purpose well. These rules have maintained our society for centuries, keeping mortals unaware of our existence. #line:0237466 
         -> {$pcName}: Fiction about us still exists, though. #line:04c2e75 
             {$kieran}: Ah, but the general public believes us to be just that: a fiction. Even you, for all your investigative expertise, were completely clueless prior to us kicking down your door. I would wager that our laws are sufficient, in that light. #line:0ecdc63 
-        <<jump kieranDialogue>>
+        <<jump questionsKieran>>
 ===
 title: kieransAge
 ---
-{$kieran}: Old enough to know that age holds no relevance to one's maturity, other than giving people more time to experience the world. That is to say, around 45. I have been a Kindred since 1972, but my entire lifetime is barely a drop in the bucket, to many other Kindred. #line:0a081dd 
-<<jump kieranDialogue>>
+{$kieran}: Old enough to know that age holds no relevance to one's maturity, other than giving people more time to experience the world. That is to say, around 45. I have been a Kindred since 1972, but my entire lifetime is barely a drop in the bucket, compared to many other Kindred. #line:0a081dd 
+<<jump questionsKieran>>
 ===
 title: drinks
 ---
@@ -83,47 +94,46 @@ title: drinks
 <<elseif GetCompanionInfluence($kieran)<=-2>>
     {$kieran}: ...and no amount would make it worth your prolonged company. #line:0ddc428 
 <<else>>
-    {$kieran}: ... but I don't know if it'll be... appropriate. #line:0a4ea6d 
+    {$kieran}: … but I don’t know if such a thing would be… appropriate. #line:0a4ea6d 
 <<endif>>
-<<jump kieranDialogue>>
+<<jump questionsKieran>>
 ===
 title: kieransRing
 ---
-{$kieran}: [nomarkup][Kieran glances at his hand and hides it quickly][/nomarkup] Just a memento, nothing more. #line:09184f9 
+{$kieran}: [nomarkup][Kieran glances at his hand, hiding it quickly.][/nomarkup] Just a memento, nothing more. #line:09184f9 
     <<if GetAttributeSkillPoolSize("wits","insight")>=5>>
     -> {$pcName}: Seems to be more than that to me. #line:0f85d7b 
-        {$kieran}: [nomarkup][His face goes stone cold][/nomarkup] This is [nomarkup]<i>not</i>[/nomarkup] pertinent to our investigation. #line:048514c 
-    <<else>>
-        <<jump kieranDialogue>>
+        {$kieran}: [nomarkup][His face goes stone cold][/nomarkup] This line of inquiry is [nomarkup]<i>not</i>[/nomarkup] pertinent to our investigation. #line:048514c 
     <<endif>>
+<<jump questionsKieran>>
 ===
 title: kieransSire
 ---
-{$kieran}: Maybe. Depends on what would you like to know. #line:0c3afaa 
+{$kieran}: Ask your questions. I may answer. Depends on what would you like to know. #line:0c3afaa 
     -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>> #line:09f2327 
         <<jump catherinaCharacteristics>>
     -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>> #line:083cfb0 
         <<jump catherinasAge>>
     -> {$pcName}: You know what? Maybe another time. #line:026fd2e 
-        <<jump kieranDialogue>>
+        <<jump questionsKieran>>
 ===
 title: catherinaCharacteristics
 ---
 {$kieran}: Why do you ask? #line:063d35e 
     -> {$pcName}: Just gathering data. #line:01e906b 
-    [nomarkup][He looks at you reluctantly][/nomarkup] #line:01a73af 
+    [nomarkup][He looks at you reluctantly.][/nomarkup] #line:01a73af 
     <<if GetCompanionInfluence($kieran)>=2>>
-        {$kieran}: Kate is far better then most of the Sires I know. [nomarkup][His eyes go a little cloudy - for the first time you see him so dreamy.][/nomarkup] Beautiful and caring... every young Kindred would be lucky to have her as a Sire. #line:089b698 
+        {$kieran}: Kate is far better than most of the Sires I know. [nomarkup][His eyes go a little cloudy - this is the first time you have seen him look so lost in his own daydreams.][/nomarkup] Beautiful and caring... every young Kindred would be lucky to have her as a Sire. #line:089b698 
         -> {$pcName}: Whoa, I didn't expect that.  #line:0880a7e 
             <<ModifyInfluence 1 $kieran>>
-            {$kieran}: I don't quite understand why it's so surprising that I admire a woman such as her. [nomarkup][His eyes focus back on you.][/nomarkup] But speaking of hierarchies, please remember that Dominic's attitude towards the Prince is his privilege only. And do not speak ill of her in his presence; he'll skin you alive. [nomarkup][Kieran influence +1][/nomarkup] #line:04d530b 
+            {$kieran}: I don't quite understand why it's so surprising that I admire a woman such as her. [nomarkup][His eyes focus back on you.][/nomarkup] But speaking of hierarchies, please remember that Dominic's attitude towards the Prince is his privilege only. And do not speak ill of her in his presence, or he'll skin you alive. [nomarkup][Kieran influence +1][/nomarkup] #line:04d530b 
             <<jump kieransSire>>
         ->  {$pcName}: You're painting her as if she was some kind of ideal. #line:0d34725 
             {$kieran}: Uh... sorry... maybe a little. #line:02c2eea 
             <<if Roll ("Wits","Awareness")>=3>>
                 [nomarkup][He looks sideways, like he wants to add something, but is hesitant to do so.][/nomarkup] #line:0e7149d 
                 -> {$pcName}: There's something more than that. I can see it. #line:05201c6 
-                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It's not important to our investigation. #line:0473290 
+                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It’s… This isn’t important to our investigation. #line:0473290 
                 <<jump kieransSire>>
             <<endif>>
         ->  {$pcName}: You must be exaggerating. #line:01d0455 
@@ -135,21 +145,21 @@ title: catherinaCharacteristics
         {$kieran}: I don't want to sound rude, but I'm not certain how this is relevant to the ongoing investigation. #line:065ce23 
         <<jump kieransSire>>
     <<else>>
-        {$kieran}: Other than that, I won't say. Gossip just is not the way I like to spend my time. #line:0b7fef2 
+        {$kieran}: Other than that, I won’t say. Gossip just is not the way I prefer to spend my time. #line:0b7fef2 
     <<endif>>
     <<jump kieransSire>>
 ===
 title: catherinasAge
 ---
 {$kieran}: Let me think... [nomarkup][He pauses for a while, glancing upward as he calculates her age in his head.][/nomarkup] She's been around for nearly 500 years, and is what we call an Elder. A being to be respected, possessing a sum of experience and wisdom both of us can only dream of. #line:093bc71 
-[nomarkup][at first you don't know what to say, other than blinking your eyes in surprise][/nomarkup] #line:0d85064 
-{$kieran}: [nomarkup][Kieran chuckles seeing your reaction.][/nomarkup] She is not the oldest around, you know - probably not even in this city. There are much older Kindred lurking in the shadows. Especially in Europe. #line:03119e8 
+[nomarkup][At first you don't know what to say, other than blinking your eyes in surprise.][/nomarkup] #line:0d85064 
+{$kieran}: [nomarkup][He chuckles upon seeing your reaction.][/nomarkup] She is not the oldest around, you know - probably not even in this city. There are much older Kindred lurking in the shadows. Especially in Europe. #line:03119e8 
 <<jump kieransSire>>
 ===
 title: wantToKnowMoreAboutKieran
 ---
-{$kieran}: Sorry Desiree, but it will have to wait. It is unimportant right now. Not that I do not like to talk about myself. #line:08eb29b 
-<<jump kieranDialogue>>
+{$kieran}: Sorry Desiree, but it will have to wait. It is unimportant right now. Not that I do not enjoy chatting about myself. #line:08eb29b 
+<<jump questionsKieran>>
 ===
 title: thanks
 ---
@@ -157,14 +167,19 @@ title: thanks
     -> {$pcName}: I bet. And me neither. Just the thought of it is painful. Lead pellets have to be excruciating -  especially with that hand cannon of his. #line:08988b5 
         {$kieran}: Well then? Let's get to it. #line:07dd22c 
         -> {$pcName}: Wait, I have some questions! #line:0d68850 
-            <<jump kieranDialogue>>
+            <<jump questionsKieran>>
         -> End dialogue. #line:0ee9ef1 
 ===
 title: occultQuestions
 ---
 {$kieran}: Most cannot be warded away with any religious symbols, though there are some anomalous occurrences of this being a trait developed following the Embrace. We also don't tend to sleep in coffins, but there is no accounting for taste. Not judging, of course. As for the super speed - and strength, those are a few abilities that Kindred do have. Training to hone them is a necessity, though. Never forget this. #line:051f8a9 
 -> {$pcName}: So I'm some kind of... let's call it a superhero in the making? Can you teach me everything you mentioned just now? #line:0f53480 
-{$kieran}: Sadly, the answer is once again no. I do not know all of those powers, myself. I am sure you will find a suitable teacher, when the time comes, however. But being Brujah, the powers you possess are quite common amongst Kindred. #line:0748c05 
+{$kieran}: That is exactly the kind of mindset which will get you killed, Miss Bardot. One’s abilities are not toys.
+{$kieran}: And sadly, the answer is once again no. I do not know all of those powers, myself. I am sure you will find a suitable teacher, when the time comes, however. Being Brujah, the powers you possess are quite common amongst Kindred. #line:0748c05
+===
+title: occultChoices
+---
+{$kieran}: What else do you want to know?
 -> {$pcName}: Being Brujah... So the powers you get are based on your Clan? #line:0866b7b 
     <<jump superhero>>
 -> {$pcName}: What's your Clan? #line:0813c5a 
@@ -172,19 +187,19 @@ title: occultQuestions
 -> {$pcName}: How could I have been unaware of powers like these until I was told? #line:0690308 
     <<jump unaware>>
 -> {$pcName}: There was something else I wanted to ask. #line:02d6c6d 
-    <<jump kieranDialogue>>
+    <<jump questionsKieran>>
 ===
 title: superhero
 ---
-    {$kieran}: That is correct, though there are those anomalous individuals for whom the blood goes a bit awry. The Clanless. They can have any combination of powers - even those typically exclusive to a particular bloodline. #line:06ec125 
-    -> {$pcName}: Sounds like a hell of a good deal, to me. #line:025e8e2 
-        {$kieran}: Not so. The Clanless are shunned, both on a political and social level, and sometimes even hunted and killed. #line:0900073 
-        -> {$pcName}: Hunted and killed? Why? #line:05d07e1 
-        {$kieran}: [nomarkup][He huffs out a sigh.][/nomarkup] It's a long, convoluted story, but what it boils down to is the perception and belief that they are harbingers of ruin - a sort of vampiric apocalypse: Gehenna. #line:0f034e4 
-        -> {$pcName}: Certainly sounds ominous. How common exactly are these doomsayers? #line:0cbce91 
-        {$kieran}: Abundant. There exist pessimists in most places. Turn that doubt to fear of what's to come, and well... #line:0d30579 
-        -> {$pcName}: Yikes. Forget I asked. #line:0764157 
-        <<jump occultQuestions>>
+{$kieran}: That is correct, though there are those anomalous individuals for whom the blood goes a bit awry. The Clanless. They can have any combination of powers - even those typically exclusive to a particular bloodline. #line:06ec125 
+-> {$pcName}: Sounds like a hell of a good deal, to me. #line:025e8e2 
+    {$kieran}: Not so. The Clanless are shunned, both on a political and social level, and sometimes even hunted and killed. #line:0900073 
+    -> {$pcName}: Hunted and killed? Why? #line:05d07e1 
+    {$kieran}: [nomarkup][He huffs out a sigh.][/nomarkup] It's a long, convoluted story, but what it boils down to is the perception and belief that they are harbingers of ruin - a sort of vampiric apocalypse: Gehenna. #line:0f034e4 
+    -> {$pcName}: Certainly sounds ominous. How common exactly are these doomsayers? #line:0cbce91 
+    {$kieran}: Abundant. There exist pessimists in most places. Turn that doubt to fear of what's to come, and well... #line:0d30579 
+    -> {$pcName}: Yikes. Forget I asked. #line:0764157 
+    <<jump occultChoices>>
 ===
 title: kieransClan
 ---
@@ -193,7 +208,6 @@ title: kieransClan
     <<if Roll ("Resolve","Persuasion") >=4>>
         {$kieran}: [nomarkup][A heavy, beleaguered sigh.][/nomarkup] Fine. I'm a Tremere. #success #line:01fff8a 
         -> {$pcName}: Cool. That means absolutely nothing to me. #line:005c7c6 
-            <<jump occultQuestions>>
         -> {$pcName}: [nomarkup][You raise an eyebrow in question.][/nomarkup] Care to elaborate? #line:04e8016 
             <<if GetCompanionInfluence($kieran)>=2>>
                 {$kieran}: Tremere are a Clan of blood mages, renowned for our loyalty and skill, but simultaneously distrusted by broader Kindred society due to our secrecy. That is, our magic is an indispensable resource of any Camarilla Domain, but as much as it brings us fortune, it also serves to isolate us... #line:0188efd 
@@ -209,16 +223,11 @@ title: kieransClan
 -> {$pcName}: [nomarkup][Leave it be.][/nomarkup] Alright, then. #line:0d98606 
     {$kieran}: [nomarkup][He visibly relaxes, his posture and expression softening.][+1 Kieran Influence][/nomarkup] #line:064a109 
     <<ModifyInfluence 1 $kieran>>
+<<jump occultChoices>>
 ===
 title: unaware
 ---
-{$kieran}: Well, some powers are subtler than others in their usage and effects. It is difficult to detect a supernatural charm or allure, for instance, whereas something like super speed or strength is leagues more noticeable. Moreover, it is a fact that your powers are available to you innately through your Sire, but their initial distribution can be any arrangement. Causes for these varieties in skill levels are not well-understood. #line:07000e7 
-<<if $disciplineUse == true>>
--> {$pcName}: Aww... Let me guess... is this one of those Discipline things you mentioned earlier? #line:09295c1 
-    {$kieran}: [nomarkup][He grins, looking almost impressed you remembered that.][/nomarkup] Sharp. Yes, it is. [nomarkup][+1 Kieran influence][/nomarkup] #line:010708b 
-    <<ModifyInfluence 1 $kieran>>
-    <<jump occultQuestions>>
-<<else>>
-    <<jump occultQuestions>>
-<<endif>>
+{$kieran}: Well, some powers are subtler than others in their usage and effects. It is difficult to detect a supernatural charm or allure, for instance, whereas something like super speed or strength is leagues more noticeable. #line:07000e7 
+{$kieran}: Moreover, it is a fact that your powers are available to you innately through your Sire, but their initial distribution is generally varied.Causes for these fluctuations in initial skill levels of Fledglings are not well-understood.
+<<jump occultChoices>>
 ===

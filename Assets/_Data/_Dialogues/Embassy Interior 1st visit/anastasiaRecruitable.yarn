@@ -12,7 +12,9 @@ tags:
 position: -407,-310
 ---
 <<set $anaTalkedTo to true>>
-[nomarkup][Before you is a woman decked out in studded leather garments and steel-toed cleats. A “punk”, if your memory of the lingo serves. Some knowledge of the various subcultures present in the city is useful for a PI, after all. Whatever group she belongs to, there are altogether too many studs affixed to her clothing. Maybe it's supposed to make her look “hard”. Her long black hair is kept out of her face with a red headband adorned with a metallic silver crown. It glimmers slightly in the club's lights as she shifts to lean forward over the bar with a sultry smirk. It's hard not to notice how her muscles flex as she does this; the woman is clearly an athletic sort. The bartender, on the other hand, looks quite uncomfortable...][/nomarkup] #line:0e95266 
+[nomarkup][Before you is a woman decked out in studded leather garments and steel-toed cleats. A “punk”, if your memory of the lingo serves. Some knowledge of the various subcultures present in the city is useful for a PI, after all.][/nomarkup]
+[nomarkup][Whatever group she belongs to, there are altogether too many studs affixed to her clothing. Maybe it's supposed to make her look “hard”. Her long black hair is kept out of her face with a red headband adorned with a metallic silver crown. It glimmers slightly in the club's lights as she shifts to lean forward over the bar with a sultry smirk.][/nomarkup]
+[nomarkup][It's hard not to notice how her muscles flex as she does this; the woman is clearly an athletic sort. The bartender, on the other hand, looks quite uncomfortable...][/nomarkup] #line:0e95266 
 {$bartender}: ... I should get back to work. #line:09d312d 
 {$anastasia}: You're working right now, silly. Come on, let me buy you a drink. [nomarkup][She talks with a heavy accent, Russian perhaps? No. It's similar, but there's a different quality to it that's hard to describe.][/nomarkup] #line:09b479d 
 {$bartender}: ... [nomarkup][As you ponder, the woman behind the bar locks eyes with you, silently pleading for help.][/nomarkup] #line:077df12 
@@ -27,6 +29,10 @@ position: -407,-310
     {$bartender}: Coming right up! [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup] #line:0d7a9d5 
     <<GiveItem "IT_Q_EMBASSYDRINK">>
     <<RemoveMoney 5>>
+    {$kieran}: You know you won’t be able to drink it, right?
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Oh, come on. A little bit of bile and blood never hurt anyone.
+    <<endif>>
 <<endif>>
 -> [nomarkup][Say nothing.][/nomarkup] #line:06df652 
     {$bartender}: [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup] Go away. Just, leave me alone, please... #line:0626d4c 
@@ -95,12 +101,12 @@ position: -323,308
 title: anaIsSire
 ---
 -> {$pcName}: Are you my Sire? #line:08ada90 
-{$anastasia}: [nomarkup][She is caught by surprise, bursting into laughter - almost like music to your ears.][/nomarkup] I'm too old to be having kids, but I'll be your mommy though if you ask nicely. [nomarkup][She winks at you.][/nomarkup] #line:048d68c 
+{$anastasia}: [nomarkup][She’s caught by surprise, bursting into laughter - almost like music to your ears.][/nomarkup] I’m too old to be having kids, but I’ll be your mommy if you ask nicely. [nomarkup][She winks at you.][/nomarkup] #line:048d68c 
 -> {$pcName}: I don't believe you. #line:0710c86 
-{$anastasia}: Look I'm sorry your Sire didn't come back with the milk but that's not my problem. #line:0536cfc 
+{$anastasia}: Look I'm sorry your Sire didn't come back with the milk, but that's not my problem. #line:0536cfc 
 -> {$pcName}: Then who is my Sire, if it's not you? #line:09576e5 
 {$anastasia}: How should I know? Other Kindred's bed affairs are none of my business as long as I'm not involved. #line:0a6638a 
-{$anastasia}: I am amused by this whole ordeal. How about I help you out and then once we get this mess sorted you and I will go grab a few “drinks”?  #line:0fbc6f8 
+{$anastasia}: I am amused by this whole ordeal. How about I help you out and then once we get this mess sorted you and I will go grab a few “drinks”? [nomarkup][She waggles her eyebrows up and down a few times.][/nomarkup] #line:0fbc6f8 
 -> {$pcName}: You know what? Sure. Why not? #line:01f183c 
     [nomarkup][Kieran rubs his temple exasperatedly.][/nomarkup] #line:0e5b9b2 
     <<RecruitAnastasia>>

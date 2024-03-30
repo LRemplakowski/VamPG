@@ -38,8 +38,8 @@ title: approachDiana
     {$kieran}: [nomarkup][Kieran nods back.][+1 Kieran Reputation][/nomarkup] #line:0399fb7 
     <<ModifyInfluence 1 $kieran>>
     <<jump dianaApproached>>
--> {$pcName}: Geez, don't act like I'm some psycho killer... #line:02e8b49 
-    {$kieran}: The corpse in your bathroom makes me worried. [nomarkup][-1 Kieran Reputation][/nomarkup] #line:0a21169 
+-> {$pcName}: Geez, I’m not some psycho killer…  #line:02e8b49 
+    {$kieran}: The corpse in your bathroom implies otherwise. [nomarkup][-1 Kieran Reputation][/nomarkup] #line:0a21169 
     <<ModifyInfluence -1 $kieran>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Hey, you can't knock the girl for wanting to have some fun, you know? #line:0df12ed 
@@ -79,7 +79,7 @@ title: dianaThreatenedSuccess
 ---
 {$diana}: What in the bloody- #success #line:05b323b 
     -> {$pcName}: Recognize this face? #line:0fd8977 
-        {$diana}: Under different lighting I might. Let's take this to my office, I don't field complaints in a public forum. #line:0a48e2c 
+        {$diana}: Under different lighting, I might. Let's take this to my office, I don't field complaints in a public forum. #line:0a48e2c 
         <<set $dianaOffice to true>>
         <<jump dianaInvitation>>
 ===

@@ -12,12 +12,11 @@ namespace DebugTest
         public int someInt = 0;
         public float someFloat = 1.0f;
         public Vector3 someVector = Vector3.one;
-        private UniqueId unique;
+       
 
         private void Start()
         {
-            if (unique == null)
-                unique = GetComponent<UniqueId>();
+           
         }
 
 
@@ -28,7 +27,7 @@ namespace DebugTest
 
         public string GetKey()
         {
-            return unique.Id;
+            
         }
 
         public void InjectData(MonoBehaviour data)

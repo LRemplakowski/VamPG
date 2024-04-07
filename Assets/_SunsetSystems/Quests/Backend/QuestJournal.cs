@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public class QuestJournal : SerializedMonoBehaviour, IResetable, ISaveable
     {
         public static QuestJournal Instance { get; private set; }
@@ -27,9 +27,9 @@ namespace SunsetSystems.Journal
         public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Case)).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
-        public string DataKey => _uniqueId.Id;
+        public string DataKey => DataKeyConstants.QUEST_JOURNAL_DATA_KEY;
 
-        private UniqueId _uniqueId;
+     
 
         public static event Action<List<Quest>> OnActiveQuestsChanged;
         public static event Action<HashSet<Objective>> OnObjectiveDataInjected;
@@ -48,7 +48,7 @@ namespace SunsetSystems.Journal
                 Instance = this;
             else
                 Destroy(gameObject);
-            _uniqueId ??= GetComponent<UniqueId>();
+           
             ISaveable.RegisterSaveable(this);
         }
 

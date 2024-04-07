@@ -12,7 +12,7 @@ using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Inventory
 {
-    [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(DataKeyConstants))]
     public class InventoryManager : SerializedMonoBehaviour, ISaveable, IResetable
     {
         public static InventoryManager Instance { get; private set; }
@@ -21,10 +21,10 @@ namespace SunsetSystems.Inventory
         private ItemStorage _playerInventory;
         [SerializeField]
         private float _money;
-        private UniqueId _unique;
+       
         public static ItemStorage PlayerInventory => Instance._playerInventory;
 
-        public string DataKey => _unique.Id;
+        public string DataKey => DataKeyConstants.INVENTORY_MANAGER_DATA_KEY;
 
         public void ResetOnGameStart()
         {
@@ -43,7 +43,7 @@ namespace SunsetSystems.Inventory
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
             ISaveable.RegisterSaveable(this);
-            _unique ??= GetComponent<UniqueId>();
+            
         }
 
         private void OnDestroy()

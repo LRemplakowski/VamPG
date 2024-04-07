@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Experience
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public class ExperienceManager : SerializedMonoBehaviour, ISaveable
     {
         public static ExperienceManager Instance { get; private set; }
@@ -15,8 +15,8 @@ namespace SunsetSystems.Experience
         [SerializeField]
         private Dictionary<string, ExperienceData> _experienceDataCache = new();
 
-        private UniqueId _unique;
-        public string DataKey => _unique.Id;
+       
+        public string DataKey => DataKeyConstants.EXPERIENCE_MANAGER_DATA_KEY;
 
         protected void Awake()
         {
@@ -25,7 +25,7 @@ namespace SunsetSystems.Experience
             else
                 Destroy(gameObject);
             ISaveable.RegisterSaveable(this);
-            _unique ??= GetComponent<UniqueId>();
+            
         }
 
         private void OnDestroy()

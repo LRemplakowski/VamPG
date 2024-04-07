@@ -1,0 +1,1 @@
+To install the See-through Shader samples go to Unity -> Window -> Package Manager -> Select the See-through Shader package. There under "Samples" you should be able to install the examples :)

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 242848022485529599}
   - component: {fileID: 5037801929766081529}
   - component: {fileID: 6596376052569372131}
+  - component: {fileID: 5665495089059767587}
+  - component: {fileID: 1005941985498041577}
   m_Layer: 0
   m_Name: Baseball Bat
   m_TagString: UMAIgnore
@@ -67,6 +69,51 @@ MonoBehaviour:
   IgnoreTag: UMAIgnore
   setScale: 1
   MountOnStart: 0
+--- !u!114 &5665495089059767587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917026649002699604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c754a9bd43cbee419aaa2c763b1aac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  bulletVelocity: 3
+  bulletLifetime: 5
+  projectileOrigin: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  shotSFX: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 1005941985498041577}
+--- !u!114 &1005941985498041577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917026649002699604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be75397a8292ac646a6b4381949facec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RightHandIK>k__BackingField: {fileID: 3810983521185490645}
+  <LeftHandIK>k__BackingField: {fileID: 2605356833837701666}
+  <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <AnimationType>k__BackingField: 5
 --- !u!1 &2398129120241303489
 GameObject:
   m_ObjectHideFlags: 0

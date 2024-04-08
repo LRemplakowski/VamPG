@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3229099851841304077}
   - component: {fileID: 892462303281327882}
   - component: {fileID: -4274031553738271288}
+  - component: {fileID: 6929528125525903065}
+  - component: {fileID: 7895858530801634107}
   m_Layer: 0
   m_Name: combat_shotgun01
   m_TagString: UMAIgnore
@@ -67,6 +69,51 @@ MonoBehaviour:
   IgnoreTag: UMAIgnore
   setScale: 1
   MountOnStart: 0
+--- !u!114 &6929528125525903065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969856792158553354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c754a9bd43cbee419aaa2c763b1aac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  bulletVelocity: 3
+  bulletLifetime: 5
+  projectileOrigin: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  shotSFX: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 7895858530801634107}
+--- !u!114 &7895858530801634107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4969856792158553354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be75397a8292ac646a6b4381949facec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RightHandIK>k__BackingField: {fileID: 4834864521088681101}
+  <LeftHandIK>k__BackingField: {fileID: 7636448274833586593}
+  <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <AnimationType>k__BackingField: 2
 --- !u!1 &5043604685515037908
 GameObject:
   m_ObjectHideFlags: 0

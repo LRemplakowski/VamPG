@@ -73,6 +73,8 @@ GameObject:
   - component: {fileID: 1348644352024490471}
   - component: {fileID: 3569991150892675021}
   - component: {fileID: 4653169802894829219}
+  - component: {fileID: 1853665701876025843}
+  - component: {fileID: 5504051938717592980}
   m_Layer: 0
   m_Name: revolver01
   m_TagString: UMAIgnore
@@ -129,6 +131,51 @@ MonoBehaviour:
   IgnoreTag: UMAIgnore
   setScale: 1
   MountOnStart: 0
+--- !u!114 &1853665701876025843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6852021531413421872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be75397a8292ac646a6b4381949facec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RightHandIK>k__BackingField: {fileID: 2360593312449425496}
+  <LeftHandIK>k__BackingField: {fileID: 7684163418075212758}
+  <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <AnimationType>k__BackingField: 1
+--- !u!114 &5504051938717592980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6852021531413421872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c754a9bd43cbee419aaa2c763b1aac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  bulletVelocity: 3
+  bulletLifetime: 5
+  projectileOrigin: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  shotSFX: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 1853665701876025843}
 --- !u!1001 &8158125963574891681
 PrefabInstance:
   m_ObjectHideFlags: 0

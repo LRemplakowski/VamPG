@@ -42,6 +42,8 @@ GameObject:
   - component: {fileID: 3387957695981711557}
   - component: {fileID: 2353372553890298561}
   - component: {fileID: 4997573537152451506}
+  - component: {fileID: 7968432293742800065}
+  - component: {fileID: 5646594401742181568}
   m_Layer: 0
   m_Name: Kitchen Knife
   m_TagString: UMAIgnore
@@ -96,6 +98,51 @@ MonoBehaviour:
   IgnoreTag: UMAIgnore
   setScale: 0
   MountOnStart: 1
+--- !u!114 &7968432293742800065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3532234357743254712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c754a9bd43cbee419aaa2c763b1aac9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  bulletVelocity: 3
+  bulletLifetime: 5
+  projectileOrigin: {fileID: 0}
+  muzzleFlash: {fileID: 0}
+  bulletPrefab: {fileID: 0}
+  shotSFX: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 5646594401742181568}
+--- !u!114 &5646594401742181568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3532234357743254712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be75397a8292ac646a6b4381949facec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RightHandIK>k__BackingField: {fileID: 7845560284275079094}
+  <LeftHandIK>k__BackingField: {fileID: 8258779505540525647}
+  <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
+  <AnimationType>k__BackingField: 4
 --- !u!1 &4863138967800484302
 GameObject:
   m_ObjectHideFlags: 0

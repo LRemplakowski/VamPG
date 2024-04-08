@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1348644352024490471}
+  - component: {fileID: 3569991150892675021}
+  - component: {fileID: 4653169802894829219}
   m_Layer: 0
   m_Name: revolver01
-  m_TagString: Untagged
+  m_TagString: UMAIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +34,37 @@ Transform:
   - {fileID: 8556211652955517770}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3569991150892675021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6852021531413421872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4653169802894829219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6852021531413421872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a1a3efd8e885446a13fd602376e584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoneName: CC_Base_R_Hand
+  ID: WEAPON
+  Position: {x: 7, y: 8, z: -5}
+  Orientation: {x: 0.23057146, y: 0.15211216, z: -0.03651893, w: 0.9603984}
+  IgnoreTag: UMAIgnore
+  setScale: 1
+  MountOnStart: 0
 --- !u!1001 &8158125963574891681
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Priority actions clear action queue upon assignment.
         /// </summary>
-        [SerializeField]
+        [ShowInInspector]
         private string name => this.ToString();
         [field: SerializeField]
         public bool IsPriority { get; protected set; }

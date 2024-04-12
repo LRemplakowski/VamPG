@@ -15993,11 +15993,31 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: _cachedPartyTemplates
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Entities.Characters.Interfaces.ICreatureTemplate,
+        SunsetSystems]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 3|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   _creatureParent: {fileID: 375571750532069242}
   _defaultPartyLayer: Party Member
+  _mainCharacterKey: 
   _activeCoterieMemberKeys: []
   _coterieMemberKeysCache: []
-  _mainCharacterKey: 
   OnActivePartyInitialized:
     _PersistentCalls: []
   OnPartyMemberRecruited:
@@ -18522,7 +18542,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yarnProject: {fileID: 7545569452688597077, guid: 59763ae367ad6924983ce9ac62e8d6d6, type: 3}
   _variableStorage: {fileID: 8400243579288208857}
-  dialogueViews: []
+  dialogueViews:
+  - {fileID: 9014010067603856331}
   startNode: Start
   startAutomatically: 0
   runSelectedOptionAsLine: 0
@@ -18716,6 +18737,18 @@ PrefabInstance:
       propertyPath: field of view
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 1375876868037448846, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: mNoiseOffsets.x
+      value: 991.58435
+      objectReference: {fileID: 0}
+    - target: {fileID: 1375876868037448846, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: mNoiseOffsets.y
+      value: -430.88998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1375876868037448846, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
+      propertyPath: mNoiseOffsets.z
+      value: -628.6333
+      objectReference: {fileID: 0}
     - target: {fileID: 1778857398215953688, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: ZAxis
       value: 
@@ -18734,11 +18767,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5270208337379138059, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000021097142
+      value: 0.000000019454411
       objectReference: {fileID: 0}
     - target: {fileID: 5270208337379138059, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000148675605
+      value: -0.000000013709897
       objectReference: {fileID: 0}
     - target: {fileID: 5492934109133365570, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18786,7 +18819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.009872
+      value: -17.852633
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18794,23 +18827,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 21.89
+      value: -12.257225
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.40870786
+      value: 0.8156654
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.28802425
+      value: 0.57481503
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.70790267
+      value: 0.05346161
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.49887252
+      value: -0.037675425
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

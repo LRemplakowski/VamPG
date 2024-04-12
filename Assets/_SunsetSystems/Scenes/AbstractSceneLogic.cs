@@ -24,11 +24,6 @@ namespace SunsetSystems.Core
             _unique ??= GetComponent<UniqueId>();
         }
 
-        protected virtual void Start()
-        {
-
-        }
-
         public async void StartScene()
         {
             await StartSceneAsync();

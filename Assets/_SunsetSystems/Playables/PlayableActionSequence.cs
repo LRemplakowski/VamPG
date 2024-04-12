@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace SunsetSystems.Playables
 {
@@ -12,6 +13,14 @@ namespace SunsetSystems.Playables
         private IActionPerformer _actionPerformer;
         [SerializeField, ListDrawerSettings(HideAddButton = true), ReadOnly]
         private List<EntityAction> _actionSequence = new();
+
+        public void StartSequence()
+        {
+            foreach (var action in _actionSequence)
+            {
+                _actionPerformer.PerformAction(action, false);
+            }
+        }
 
 #if UNITY_EDITOR
         [Button]

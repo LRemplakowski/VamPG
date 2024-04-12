@@ -76,12 +76,12 @@ namespace SunsetSystems.Dialogue
         private void Awake()
         {
             _optionViews = new();
+            gameObject.SetActive(false);
         }
 
         private void Start()
         {
-            DialogueManager.RegisterView(this);
-            gameObject.SetActive(false);
+            //DialogueManager.RegisterView(this);
         }
 
         private void Update()

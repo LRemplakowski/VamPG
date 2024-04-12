@@ -1,7 +1,4 @@
 using SunsetSystems.Inventory;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace SunsetSystems.Equipment
 {
@@ -18,6 +15,6 @@ namespace SunsetSystems.Equipment
 
     public enum SelectedWeapon
     {
-        None = 1, Primary = 2, Secondary = 3
+        None = 0, Primary = 1, Secondary = 2
     }
 }

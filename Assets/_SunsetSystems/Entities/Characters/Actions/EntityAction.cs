@@ -22,7 +22,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         [field: SerializeField]
         public bool ActionCanceled { get; protected set; } = false;
         [field: OdinSerialize]
-        protected IActionPerformer Owner { get; }
+        protected IActionPerformer Owner { get; private set; }
         [SerializeField]
         protected List<Condition> conditions = new List<Condition>();
 

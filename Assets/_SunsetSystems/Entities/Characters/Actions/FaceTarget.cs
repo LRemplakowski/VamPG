@@ -1,8 +1,5 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
 using System.Collections;
-using System.Collections.Generic;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions
@@ -12,12 +9,13 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         private const float MARGIN_OF_ERROR = 0.01f;
 
-        [ShowInInspector]
-        private readonly Transform ownerTransform;
-        [ShowInInspector]
-        private readonly float rotationSpeed;
-        [ShowInInspector]
+        [SerializeField]
+        private Transform ownerTransform;
+        [SerializeField]
+        private float rotationSpeed;
+        [SerializeField]
         private Vector3 lookDirection;
+
         private IEnumerator lookAtRoutine;
 
         public FaceTarget(IActionPerformer owner, Transform lookAtTarget, float rotationSpeed = 90f) : this(owner, (lookAtTarget.position - owner.Transform.position).normalized, rotationSpeed)

@@ -29,6 +29,8 @@ namespace SunsetSystems.Equipment
         [SerializeField]
         private string weaponAnimationTypeParam;
         private int weaponAnimationTypeParamHash;
+        [SerializeField]
+        private bool _ignoreAmmo;
         [Title("Debug Info")]
         [ShowInInspector, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
@@ -149,7 +151,7 @@ namespace SunsetSystems.Equipment
         public bool UseAmmoFromSelectedWeapon(int count)
         {
             IWeapon selectedWeapon = GetSelectedWeapon();
-            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee)
+            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return true;
             if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
             {
@@ -165,7 +167,7 @@ namespace SunsetSystems.Equipment
         public void ReloadSelectedWeapon()
         {
             IWeapon selectedWeapon = GetSelectedWeapon();
-            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee)
+            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return;
             if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
             {

@@ -11,11 +11,12 @@ namespace SunsetSystems.Entities.Characters.Actions
     {
         [SerializeField]
         private AttackModifier _attackModifier;
-        private IEnumerator attackRoutine;
         [SerializeField]
         private FlagWrapper attackFinished;
         [SerializeField]
         private FaceTarget faceTargetSubaction;
+
+        private IEnumerator attackRoutine;
 
         public Attack(ICombatant target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
         {
@@ -25,22 +26,22 @@ namespace SunsetSystems.Entities.Characters.Actions
         public Attack(ICombatant target, ICombatant attacker) : base(target, attacker)
         {
             attackFinished = new() { Value = false };
-            conditions.Add(new WaitForFlag(attackFinished));
         }
 
         public override void Cleanup()
         {
             base.Cleanup();
             if (attackRoutine != null)
-                (Owner as MonoBehaviour).StopCoroutine(attackRoutine);
+                (Attacker as MonoBehaviour).StopCoroutine(attackRoutine);
         }
 
         public override void Begin()
         {
             if (attackRoutine != null)
                 return;
-            Debug.Log(Owner.References.GameObject.name + " attacks " + Target.References.GameObject.name);
-            ICombatant attacker = Owner;
+            conditions.Add(new WaitForFlag(attackFinished));
+            Debug.Log(Attacker.References.GameObject.name + " attacks " + Target.References.GameObject.name);
+            ICombatant attacker = Attacker;
             ICombatant defender = Target;
             AttackResult result = CombatCalculator.CalculateAttackResult(attacker, defender, _attackModifier);
             LogAttack(result);

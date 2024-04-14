@@ -13,7 +13,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         /// <summary>
         /// Priority actions clear action queue upon assignment.
         /// </summary>
-        [SerializeField]
+        [ShowInInspector]
         private string name => this.ToString();
         [field: SerializeField]
         public bool IsPriority { get; protected set; }
@@ -22,7 +22,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         [field: SerializeField]
         public bool ActionCanceled { get; protected set; } = false;
         [field: OdinSerialize]
-        protected IActionPerformer Owner { get; }
+        protected IActionPerformer Owner { get; private set; }
         [SerializeField]
         protected List<Condition> conditions = new List<Condition>();
 

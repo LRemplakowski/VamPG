@@ -1,18 +1,15 @@
-using CleverCrow.Fluid.UniqueIds;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Inventory.Data;
-using SunsetSystems.Persistence;
-using SunsetSystems.Utils;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-using SunsetSystems.Data;
 using System.Linq;
 using Sirenix.OdinInspector;
+using SunsetSystems.Data;
+using SunsetSystems.Inventory.Data;
+using SunsetSystems.Persistence;
+using UnityEngine;
 
 namespace SunsetSystems.Inventory
 {
-    [RequireComponent(typeof(ItemStorage)), RequireComponent(typeof(DataKeyConstants))]
+    [RequireComponent(typeof(ItemStorage))]
     public class InventoryManager : SerializedMonoBehaviour, ISaveable, IResetable
     {
         public static InventoryManager Instance { get; private set; }

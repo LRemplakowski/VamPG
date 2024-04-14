@@ -6,11 +6,11 @@ using SunsetSystems.Persistence;
 
 namespace SunsetSystems.Core
 {
-    [RequireComponent(typeof(DataKeyConstants))]
+    [RequireComponent(typeof(UniqueId))]
     public abstract class AbstractSceneLogic : SerializedMonoBehaviour, ISaveable
     {
         [SerializeField]
-     
+        private UniqueId _unique;
 
         public string DataKey => _unique.Id;
 
@@ -22,11 +22,6 @@ namespace SunsetSystems.Core
         protected virtual void Awake()
         {
             _unique ??= GetComponent<UniqueId>();
-        }
-
-        protected virtual void Start()
-        {
-
         }
 
         public async void StartScene()

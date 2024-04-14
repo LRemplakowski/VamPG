@@ -87,11 +87,6 @@ namespace SunsetSystems.Core
             HavenDialogueCommands.HavenSceneLogic = this;
         }
 
-        protected override void Start()
-        {
-            base.Start();
-        }
-
         public async override Task StartSceneAsync()
         {
             await base.StartSceneAsync();

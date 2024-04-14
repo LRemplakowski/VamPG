@@ -15,7 +15,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         private Vector3 destination;
         private IEnumerator delayedInteractionCoroutine;
 
-        public Interact(IActionPerformer owner, IInteractable target) : base(owner, true)
+        public Interact(IActionPerformer owner, IInteractable target) : base(owner, false)
         {
             this.target = target;
             conditions.Add(new InteractionComplete(target));

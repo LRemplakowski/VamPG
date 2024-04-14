@@ -12,6 +12,7 @@ namespace SunsetSystems.Entities.Interactable
     {
         private const string DOOR_STATE = "Open";
         private const string ANIMATION_REVERSE = "Reversed";
+        private const string COMPONENT_ID = "DoorControllerComponent";
 
         [SerializeField]
         private Animator _animator;
@@ -25,19 +26,18 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _doorState = value;
-                _animator?.SetBool(DOOR_STATE, value);
+                if (_animator != null)
+                    _animator.SetBool(DOOR_STATE, value);
             }
         }
 
-        [SerializeField, HideInInspector]
-        
-        public string DataKey => DataKeyConstants.DOOR_CONTROLLER_DATA_KEY;
+        public string ComponentID => COMPONENT_ID;
 
         private void Awake()
         {
-            _animator ??= GetComponentInChildren<Animator>();
-            _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);
-            
+            if (_animator != null)
+                _animator = GetComponentInChildren<Animator>();
+            _animator.SetBool(ANIMATION_REVERSE, _reverseAnimation);        
         }
 
         [Button]
@@ -54,7 +54,7 @@ namespace SunsetSystems.Entities.Interactable
 
         public object GetComponentPersistenceData()
         {
-            DoorsPersistenceData persistenceData = new DoorsPersistenceData()
+            DoorsPersistenceData persistenceData = new()
             {
                 DoorState = Open,
             };

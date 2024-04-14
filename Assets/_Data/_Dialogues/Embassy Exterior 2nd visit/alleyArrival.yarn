@@ -1,5 +1,6 @@
 ﻿title: alleyArrival
-tags:
+tags: 
+position: -516,-712
 ---
 <<set $rollModifier to 0>>
 <<declare $missingTooth to false>>
@@ -32,6 +33,8 @@ tags:
 <<jump ghoulsApproach>>
 ===
 title: ghoulsApproach
+tags: 
+position: -497,-462
 ---
 Ghoul: Got some stragglers, Karl. #line:0d085be 
 -> {$pcName}: We just killed all of your friends, in there. Do you really want to try us? (Charisma + Intimidation) #line:09ef5cc 
@@ -40,6 +43,8 @@ Ghoul: Got some stragglers, Karl. #line:0d085be
     <<jump ghoulsCombat>>
 ===
 title: charismaGhoulsRoll
+tags: 
+position: -685,-143
 ---
 <<if Roll("Charisma","Intimidation") >=3>>
     <<jump charismaGhoulsSuccess>>
@@ -48,17 +53,23 @@ title: charismaGhoulsRoll
 <<endif>>
 ===
 title: charismaGhoulsSuccess
+tags: 
+position: -325,30
 ---
 Karl: You make a good point. Pretend you didn't see us, and we won't say anything? #success #line:0c114ae 
 {$kieran}: Deal. #line:0a0c9bd 
 //ghouls run away, dialog ends//
 ===
 title: charismaGhoulsFailure
+tags: 
+position: 103,-153
 ---
 Karl: They didn't have you in point-blank range like I do. #line:07a5d51 
 //initiate combat//
 ===
 title: ghoulsCombat
+tags: 
+position: -255,-267
 ---
 Karl: Oooo, looks like these ones have some bite. #line:07f7a1e 
 Ghoul: Terrible pun, Karl. #line:0d90dd6 

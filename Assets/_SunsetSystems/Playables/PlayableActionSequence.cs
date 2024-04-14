@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
@@ -10,8 +11,53 @@ namespace SunsetSystems.Playables
     {
         [SerializeField]
         private IActionPerformer _actionPerformer;
-        [SerializeField, ListDrawerSettings(HideAddButton = true), ReadOnly]
+        [SerializeField]
+        private bool _loop;
+        [SerializeField]
+        private bool _playOnStart;
+        [SerializeField, ListDrawerSettings(HideAddButton = true, HideRemoveButton = false)]
         private List<EntityAction> _actionSequence = new();
+
+        private IEnumerator _sequenceCoroutine;
+
+        private void Start()
+        {
+            if (_playOnStart)
+                StartSequence();
+        }
+
+        public void StartSequence()
+        {
+            if (_sequenceCoroutine != null)
+                return;
+            _sequenceCoroutine = ActionSequence();
+            StartCoroutine(_sequenceCoroutine);
+        }
+
+        private IEnumerator ActionSequence()
+        {
+            foreach (var action in _actionSequence)
+            {
+                _actionPerformer.PerformAction(action, false);
+                while (action.ActionFinished is false && action.ActionCanceled is false)
+                    yield return null;
+            }
+            _sequenceCoroutine = null;
+            if (_loop)
+            {
+                _sequenceCoroutine = ActionSequence();
+                StartCoroutine(_sequenceCoroutine);
+            }
+        }
+
+        public void StopSequence()
+        {
+            if (_sequenceCoroutine != null)
+            {
+                StopCoroutine(_sequenceCoroutine);
+                _sequenceCoroutine = null;
+            }
+        }
 
 #if UNITY_EDITOR
         [Button]

@@ -19,7 +19,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         public static event Action<IActionPerformer> OnMovementStarted;
         //private Task rotationTask;
 
-        public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, true)
+        public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, false)
         {
             this.navMeshAgent = owner.References.NavMeshAgent;
             NavMesh.SamplePosition(destination, out var hit, 1f, NavMesh.AllAreas);

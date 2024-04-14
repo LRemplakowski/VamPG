@@ -1,22 +1,20 @@
-﻿using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Entities.Characters.Interfaces;
+﻿using System;
+using Sirenix.Serialization;
 using SunsetSystems.Entities.Interfaces;
-using System;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
-    [System.Serializable]
+    [Serializable]
     public abstract class HostileAction : EntityAction
     {
-        [ShowInInspector]
-        protected new ICombatant Owner { get; }
-        [ShowInInspector]
-        protected ICombatant Target { get; }
+        [field: OdinSerialize]
+        protected ICombatant Attacker { get; private set; }
+        [field: OdinSerialize]
+        protected ICombatant Target { get; private set; }
 
         public HostileAction(ICombatant target, ICombatant attacker) : base(attacker, false)
         {
-            Owner = attacker;
+            Attacker = attacker;
             Target = target;
         }
     }

@@ -3,7 +3,6 @@ using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Dialogue;
-using SunsetSystems.Dialogue.Interfaces;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
@@ -19,14 +18,6 @@ namespace SunsetSystems.Core
 {
     public class HavenSceneLogic : DefaultSceneLogic
     {
-        [SerializeField, ES3NonSerializable]
-        private YarnProject _sceneDialogues;
-        [SerializeField, ES3NonSerializable]
-        private string _wakeUpStartNode;
-        [SerializeField, ES3NonSerializable]
-        private Transform _startPosition;
-        [SerializeField]
-        private Vector3 _cameraStartPoint, _cameraStartRotation;
         [Title("Prologue")]
         [SerializeField]
         private GameObject _desireeOnBed;
@@ -92,10 +83,6 @@ namespace SunsetSystems.Core
             await base.StartSceneAsync();
             await new WaitForUpdate();
             GameManager.Instance.CurrentState = GameState.Exploration;
-            await new WaitForSeconds(2f);
-            CameraControl.ForceToPosition(_cameraStartPoint);
-            CameraControl.ForceRotation(_cameraStartRotation);
-            DialogueManager.Instance.StartDialogue(_wakeUpStartNode, _sceneDialogues);
         }
 
         private async Task MovePCToPositionAfterDialogue(ICreature _desiree)
@@ -104,13 +91,10 @@ namespace SunsetSystems.Core
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            _desiree.Transform.SetPositionAndRotation(_startPosition.position, Quaternion.identity);
-            _desiree.References.NavMeshAgent.Warp(_startPosition.position);
-            await new WaitForSeconds(.5f);
+            _desiree.Transform.SetPositionAndRotation(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position, Quaternion.identity);
+            _desiree.References.NavMeshAgent.Warp(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position);
             await fade.DoFadeInAsync(.5f);
         }
-
-
 
         public async void BringKevinForVisit()
         {
@@ -121,9 +105,7 @@ namespace SunsetSystems.Core
             CameraControl.ForceToPosition(_landlordEnterCameraPosition);
             CameraControl.ForceRotation(_landlordEnterCameraRotation);
             await new WaitForFixedUpdate();
-            //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordVisitWaypoint.FaceDirection);
-            await new WaitForSeconds(.5f);
-            DialogueManager.Instance.StartDialogue(_landlordVisitDialogueEntryNode, _sceneDialogues);
+            _landlordDialogue.StartDialogue();
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -136,14 +118,7 @@ namespace SunsetSystems.Core
             CameraControl.ForceToPosition(_landlordSinkCameraPosition);
             CameraControl.ForceRotation(_landlordSinkCameraRotation);
             await new WaitForFixedUpdate();
-            //_ = PartyManager.MainCharacter.FaceTarget(_pcLandlordSinkWaypoint.FaceDirection);
-            await new WaitForSeconds(.5f);
             await fade.DoFadeInAsync(.5f);
-        }
-
-        private void DisableSinkInteraction()
-        {
-            _kitchenSink.Interactable = false;
         }
 
         private void KillTheLandlord()

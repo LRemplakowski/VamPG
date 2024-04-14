@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 7849953653874778773}
   fadeScreen: {fileID: 5519115790258959161}
+  _canvasGroup: {fileID: 68120811604673955}
 --- !u!1001 &1146120912
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -352,6 +353,10 @@ PrefabInstance:
       propertyPath: transitionAnimator
       value: 
       objectReference: {fileID: 5519115790258959161}
+    - target: {fileID: 7782959878225546255, guid: c5a5274137bb34b44a7e8ba7d2c14f1e, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 7782959878225546255, guid: c5a5274137bb34b44a7e8ba7d2c14f1e, type: 3}
     - target: {fileID: 8722780014261306168, guid: c5a5274137bb34b44a7e8ba7d2c14f1e, type: 3}
       propertyPath: m_Name
       value: Loading Screen

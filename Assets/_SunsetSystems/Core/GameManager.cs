@@ -55,13 +55,13 @@ namespace SunsetSystems.Game
             LevelLoader.OnBeforePersistentDataLoad += BeforePersistentDataLoad;
         }
 
-        private void Start()
-        {
-#if UNITY_EDITOR
-            BeforePersistentDataLoad();
-            GameLevelStart();
-#endif
-        }
+//        private void Start()
+//        {
+//#if UNITY_EDITOR
+//            BeforePersistentDataLoad();
+//            GameLevelStart();
+//#endif
+//        }
 
         private void OnDestroy()
         {

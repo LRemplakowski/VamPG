@@ -99,7 +99,7 @@ namespace SunsetSystems.Core.UMA
 
         public void OnItemEquipped(IEquipableItem item)
         {
-            if (item is IWearable wearable)
+            if (item is IWearable wearable && _umaAvatar != null)
             {
                 _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
                 _umaAvatar.UpdatePending();

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
 using SunsetSystems.Persistence;
+using SunsetSystems.Game;
 
 namespace SunsetSystems.Core
 {
@@ -22,6 +23,16 @@ namespace SunsetSystems.Core
         protected virtual void Awake()
         {
             _unique ??= GetComponent<UniqueId>();
+        }
+
+        private void Start()
+        {
+            GameManager.Instance.OnLevelStart += StartScene;
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.Instance.OnLevelStart -= StartScene;
         }
 
         public async void StartScene()

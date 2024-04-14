@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Dialogue;
-using SunsetSystems.Dialogue.Interfaces;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;

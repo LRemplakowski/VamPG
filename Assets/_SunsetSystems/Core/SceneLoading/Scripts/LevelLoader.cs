@@ -18,6 +18,8 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private Camera loadingCamera;
 
+        public SceneLoadingData CurrentLevelAsset { get; private set; }
+
         public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad;
         public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
 
@@ -32,6 +34,7 @@ namespace SunsetSystems.Core.SceneLoading
             await new WaitForSeconds(.5f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data);
+            CurrentLevelAsset = data;
             await new WaitForUpdate();
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
@@ -42,6 +45,13 @@ namespace SunsetSystems.Core.SceneLoading
             loadingScreenUI.DisableLoadingScreen();
             await new WaitForSeconds(.1f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
+        }
+
+        public async Task LoadSavedGame(string saveID)
+        {
+            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            await new WaitForUpdate();
+            loadingCamera.gameObject.SetActive(true);
         }
 
         private async Task DoSceneLoading(SceneLoadingData data)

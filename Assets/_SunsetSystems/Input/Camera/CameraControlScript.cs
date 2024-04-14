@@ -7,7 +7,7 @@ using Cinemachine;
 
 namespace SunsetSystems.Input.CameraControl
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public class CameraControlScript : MonoBehaviour, ISaveable
     {
         [SerializeField]
@@ -26,8 +26,8 @@ namespace SunsetSystems.Input.CameraControl
         public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
 
         //Save/Load variables
-        private UniqueId Unique => GetComponent<UniqueId>();
-        public string DataKey => Unique.Id;
+       
+        public string DataKey => DataKeyConstants.CAMERA_CONTROL_SCRIPT_DATA_KEY;
 
 
         private void Awake()

@@ -9,7 +9,7 @@ using Sirenix.Utilities;
 
 namespace SunsetSystems.Dialogue
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
@@ -24,12 +24,12 @@ namespace SunsetSystems.Dialogue
         private readonly Dictionary<string, object> _variables = new();
 
         [SerializeField]
-        private UniqueId _unique;
-        public string DataKey => _unique.Id;
+       
+        public string DataKey => DataKeyConstants.PERSISTANT_VARIABLE_STORAGE_DATA_KEY;
 
         private void Awake()
         {
-            _unique ??= GetComponent<UniqueId>();
+          
             if (_variableInjectionConfig != null)
             {
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();

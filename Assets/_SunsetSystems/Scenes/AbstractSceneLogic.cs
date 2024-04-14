@@ -6,11 +6,11 @@ using SunsetSystems.Persistence;
 
 namespace SunsetSystems.Core
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public abstract class AbstractSceneLogic : SerializedMonoBehaviour, ISaveable
     {
         [SerializeField]
-        protected UniqueId _unique;
+     
 
         public string DataKey => _unique.Id;
 

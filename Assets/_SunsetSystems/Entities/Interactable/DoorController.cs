@@ -30,15 +30,14 @@ namespace SunsetSystems.Entities.Interactable
         }
 
         [SerializeField, HideInInspector]
-        private UniqueId _unique;
-        public string ComponentID => _unique.Id;
+        
+        public string DataKey => DataKeyConstants.DOOR_CONTROLLER_DATA_KEY;
 
         private void Awake()
         {
             _animator ??= GetComponentInChildren<Animator>();
             _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);
-            if (_unique == null)
-                _unique = GetComponent<UniqueId>();
+            
         }
 
         [Button]

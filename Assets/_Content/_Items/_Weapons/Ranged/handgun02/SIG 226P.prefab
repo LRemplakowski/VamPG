@@ -190,9 +190,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4215776954234013041}
   - component: {fileID: 5357127346402132448}
-  - component: {fileID: 943375511276347779}
-  - component: {fileID: 8531973803229103428}
   - component: {fileID: 2426193741053857858}
+  - component: {fileID: 8246740420057270508}
+  - component: {fileID: 8336330821438106918}
   m_Layer: 0
   m_Name: SIG 226P
   m_TagString: UMAIgnore
@@ -229,7 +229,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48948dfe9d76b07488dacd46a7955fa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &943375511276347779
+--- !u!114 &2426193741053857858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256572815158866881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a1a3efd8e885446a13fd602376e584, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoneName: CC_Base_R_Hand
+  ID: WEAPON
+  Position: {x: 7, y: 8, z: -5}
+  Orientation: {x: -0.00000003090862, y: -0.70710677, z: -0.70710677, w: 0.00000003090862}
+  IgnoreTag: UMAIgnore
+  setScale: 0
+  MountOnStart: 1
+--- !u!114 &8246740420057270508
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,7 +265,7 @@ MonoBehaviour:
   <LeftHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
   <RightHintLocalPosition>k__BackingField: {x: 0, y: 0, z: 0}
   <AnimationType>k__BackingField: 1
---- !u!114 &8531973803229103428
+--- !u!114 &8336330821438106918
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,30 +288,11 @@ MonoBehaviour:
     SerializationNodes: []
   bulletVelocity: 3
   bulletLifetime: 5
-  projectileOrigin: {fileID: 275692003157634560}
-  muzzleFlash: {fileID: 7557897629658197417}
+  projectileOrigin: {fileID: 361528847025129381}
+  muzzleFlash: {fileID: 0}
   bulletPrefab: {fileID: 0}
-  shotSFX: {fileID: 8300000, guid: 68c8afb8222cf574f9d5d8c6acbc5fb7, type: 3}
-  <WeaponAnimationData>k__BackingField: {fileID: 943375511276347779}
---- !u!114 &2426193741053857858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6256572815158866881}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2a1a3efd8e885446a13fd602376e584, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  BoneName: CC_Base_R_Hand
-  ID: WEAPON
-  Position: {x: 7, y: 8, z: -5}
-  Orientation: {x: -0.00000003090862, y: -0.70710677, z: -0.70710677, w: 0.00000003090862}
-  IgnoreTag: UMAIgnore
-  setScale: 0
-  MountOnStart: 1
+  shotSFX: {fileID: 0}
+  <WeaponAnimationData>k__BackingField: {fileID: 8246740420057270508}
 --- !u!1 &6929899559275216211
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3306568433422866592}
   m_Layer: 0
-  m_Name: RighHandIK
+  m_Name: RightHandIK
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

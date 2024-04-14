@@ -5,22 +5,21 @@ using UnityEngine;
 
 namespace SunsetSystems.Persistence
 {
-    [RequireComponent(typeof(UniqueId))]
+    [RequireComponent(typeof(DataKeyConstants))]
     public class PersistentSceneObject : MonoBehaviour, IPersistentObject
     {
-        public string PersistenceID => _unique.Id;
+        public string PersistenceID => DataKeyConstants.PERSISTENT_SCENE_OBJECT_DATA_KEY;
         public string GameObjectName => gameObject.name;
 
         [SerializeField, ReadOnly]
-        private UniqueId _unique;
+        
         [SerializeField]
         private List<IPersistentComponent> _persistentComponents = new();
         public List<IPersistentComponent> PersistentComponents => _persistentComponents;
 
         protected virtual void OnValidate()
         {
-            if (_unique == null)
-                _unique = GetComponent<UniqueId>();
+        
         }
 
         private void Start()

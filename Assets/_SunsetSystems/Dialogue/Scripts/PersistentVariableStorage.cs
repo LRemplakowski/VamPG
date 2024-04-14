@@ -1,15 +1,13 @@
+using System;
 using System.Collections.Generic;
+using Sirenix.Utilities;
+using SunsetSystems.Data;
+using SunsetSystems.Persistence;
 using UnityEngine;
 using Yarn.Unity;
-using SunsetSystems.Persistence;
-using System;
-using SunsetSystems.Data;
-using CleverCrow.Fluid.UniqueIds;
-using Sirenix.Utilities;
 
 namespace SunsetSystems.Dialogue
 {
-    [RequireComponent(typeof(DataKeyConstants))]
     public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]

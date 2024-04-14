@@ -1,17 +1,14 @@
-using CleverCrow.Fluid.UniqueIds;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Persistence;
-using SunsetSystems.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    [RequireComponent(typeof(DataKeyConstants))]
     public class QuestJournal : SerializedMonoBehaviour, IResetable, ISaveable
     {
         public static QuestJournal Instance { get; private set; }

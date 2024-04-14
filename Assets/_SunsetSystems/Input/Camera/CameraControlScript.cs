@@ -1,13 +1,11 @@
-﻿using CleverCrow.Fluid.UniqueIds;
+﻿using Cinemachine;
 using SunsetSystems.Game;
 using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Cinemachine;
 
 namespace SunsetSystems.Input.CameraControl
 {
-    [RequireComponent(typeof(DataKeyConstants))]
     public class CameraControlScript : MonoBehaviour, ISaveable
     {
         [SerializeField]

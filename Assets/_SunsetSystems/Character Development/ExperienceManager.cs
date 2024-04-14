@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
 using SunsetSystems.Persistence;
 using UnityEngine;
 
 namespace SunsetSystems.Experience
 {
-    [RequireComponent(typeof(DataKeyConstants))]
     public class ExperienceManager : SerializedMonoBehaviour, ISaveable
     {
         public static ExperienceManager Instance { get; private set; }

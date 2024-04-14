@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 680e8e7e2eade6b4eabb4e496b16d9ab, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &3012013
 GameObject:
   m_ObjectHideFlags: 0
@@ -20935,11 +20935,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 6476626250249751230, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 6532139928831484615, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -21015,11 +21015,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000025896137
+      value: -0.000000025896137
       objectReference: {fileID: 0}
     - target: {fileID: 7384299335110452147, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000001707581
+      value: 0.00000001707581
       objectReference: {fileID: 0}
     - target: {fileID: 7422499650402796408, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -29811,6 +29811,7 @@ GameObject:
   - component: {fileID: 738680823}
   - component: {fileID: 738680822}
   - component: {fileID: 738680821}
+  - component: {fileID: 738680824}
   m_Layer: 0
   m_Name: Area Hider_2
   m_TagString: Untagged
@@ -29905,6 +29906,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738680819}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &738680824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738680819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &742337626
 GameObject:
   m_ObjectHideFlags: 0
@@ -32185,6 +32205,7 @@ GameObject:
   - component: {fileID: 851448341}
   - component: {fileID: 851448342}
   - component: {fileID: 851448343}
+  - component: {fileID: 851448344}
   m_Layer: 0
   m_Name: Area Hider
   m_TagString: Untagged
@@ -32354,6 +32375,25 @@ MonoBehaviour:
   <Faction>k__BackingField: 0
   _unique: {fileID: 851448342}
   _enablePersistence: 1
+--- !u!114 &851448344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851448336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &852215280
 GameObject:
   m_ObjectHideFlags: 0
@@ -38928,6 +38968,7 @@ GameObject:
   - component: {fileID: 1124927101}
   - component: {fileID: 1124927102}
   - component: {fileID: 1124927103}
+  - component: {fileID: 1124927104}
   m_Layer: 0
   m_Name: Area Hider
   m_TagString: Untagged
@@ -39118,6 +39159,25 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
+--- !u!114 &1124927104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124927095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1126235171
 GameObject:
   m_ObjectHideFlags: 0
@@ -51000,7 +51060,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 65
-  m_UseGeometry: 1
+  m_UseGeometry: 0
   m_DefaultArea: 0
   m_GenerateLinks: 1
   m_IgnoreNavMeshAgent: 1
@@ -56629,6 +56689,7 @@ GameObject:
   - component: {fileID: 1970350200}
   - component: {fileID: 1970350199}
   - component: {fileID: 1970350198}
+  - component: {fileID: 1970350201}
   m_Layer: 0
   m_Name: Area Hider_1
   m_TagString: Untagged
@@ -56723,6 +56784,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1970350196}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1970350201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970350196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1973608122
 GameObject:
   m_ObjectHideFlags: 0
@@ -60321,7 +60401,6 @@ MonoBehaviour:
     SerializationNodes: []
   _animator: {fileID: 253835899}
   _reverseAnimation: 0
-  _unique: {fileID: 0}
 --- !u!114 &781100931855757380
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62773,6 +62852,14 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[3]
       value: 
       objectReference: {fileID: 4264640439043287196}
+    - target: {fileID: 1566012951089984014, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1566012951089984014, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3437433400046334296, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -62920,7 +63007,6 @@ MonoBehaviour:
     SerializationNodes: []
   _animator: {fileID: 1245284720}
   _reverseAnimation: 1
-  _unique: {fileID: 0}
 --- !u!114 &4264640439043287197 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1069000055207038313, guid: 1593eebcf1bf59748ad2181d832b29bb, type: 3}

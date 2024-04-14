@@ -201,15 +201,19 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: _highlightHandler
+      Entry: 6
+      Data: 
   <Faction>k__BackingField: 0
   _unique: {fileID: 6713558428189820793}
   _enablePersistence: 1
   _interactionCollider: {fileID: 3338932014632279863}
-  <HoverHighlight>k__BackingField: {fileID: 4030266691944660807}
+  _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
   _interactionTransform: {fileID: 70275548971246268}
   _interactable: 1
   _nameplateName: Apartment Doors
+  _nameplateOffset: {x: 0, y: 3, z: 0}
   _interactableOnce: 0
   OnInteractionTriggered:
     _PersistentCalls: []
@@ -301,13 +305,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7027540902750879044, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -1010140497525832444, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -821757019747978031, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_Name
       value: door_body
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201316731245125832, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -407,12 +427,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 13a0a46fd802a394b87a6a3ecad25ef4, type: 2}
     - target: {fileID: -7027540902750879044, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -7027540902750879044, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -1010140497525832444, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -1010140497525832444, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -821757019747978031, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -821757019747978031, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -424,7 +456,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_Layer
-      value: 0
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_IsActive
@@ -451,6 +483,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 13a0a46fd802a394b87a6a3ecad25ef4, type: 2}
     - target: {fileID: 9201316731245125832, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9201316731245125832, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
@@ -459,11 +495,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
---- !u!1 &4030266691944660807 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}
-  m_PrefabInstance: {fileID: 4264640437962015254}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4370095411042674173 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 859b0bee244f9d741af52a61402b44b9, type: 3}

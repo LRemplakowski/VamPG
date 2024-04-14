@@ -9,16 +9,16 @@ using System.Linq;
 
 namespace SunsetSystems.Entities
 {
-    [RequireComponent(typeof(DataKeyConstants))]
+    [RequireComponent(typeof(UniqueId))]
     [RequireComponent(typeof(CachedReferenceManager))]
     public class PersistentEntity : Entity, IPersistentObject
     {
         [SerializeField, ReadOnly]
-        
+        private UniqueId _unique;
         [SerializeField]
         private bool _enablePersistence = true;
-        public string DataKey => DataKeyConstants.PERSISTENT_ENTITY_DATA_KEY;
-        public override string ID => DataKey;
+        public string PersistenceID => _unique.Id;
+        public override string ID => PersistenceID;
         public string GameObjectName => gameObject.name;
 
         [field: SerializeField]
@@ -59,7 +59,8 @@ namespace SunsetSystems.Entities
 
         protected virtual void OnValidate()
         {
-            
+            if (_unique == null)
+                _unique = GetComponent<UniqueId>();
             List<IPersistentComponent> cachedComponents = new(PersistentComponents);
             cachedComponents.AddRange(GetComponents<IPersistentComponent>());
             PersistentComponents.Clear();

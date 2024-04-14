@@ -1,86 +1,115 @@
 using System;
-using UnityEngine;
+using System.Collections.Generic;
+using SunsetSystems.Core.SceneLoading;
 using UnityEngine.SceneManagement;
 
 namespace SunsetSystems.Persistence
 {
     public static class SaveLoadManager
     {
-        private const string SCENE_INDEX_ID = "SceneIndex";
-        private const string SAVE_DATA_KEY = "SAVE_DATA";
-        private const string LAST_SAVE_FILENAME = "LAST_SAVE_FILENAME";
-        private const string SAVE_META_FILE_NAME = "SunsetSave.meta";
-        private const string CURRENT_SAVE_ID = "SAVE_ID";
+        private const string META_DATA = "SAVE_META";
+        private const string GAME_DATA = "SAVE_GAME";
 
-        private static GlobalPersistenceData _saveData = new();
+        private static GlobalPersistenceData _gameData = new();
 
         public static void ForceCreateNewSaveData()
         {
-            _saveData = new();
+            _gameData = new();
         }
 
-        public static void CreateNewSaveFileAndSaveObjects()
+        public static void CreateNewSaveFile(string saveName)
         {
-            if (_saveData == null)
-                _saveData = new();
-            string filename = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}.sav";
-            ES3.Save(LAST_SAVE_FILENAME, filename, SAVE_META_FILE_NAME);
+            string date = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}";
+            string saveID = Guid.NewGuid().ToString();
+            string filename = $"{saveID}.sav";
+            SaveMetaData metaData = new()
+            {
+                SaveName = saveName,
+                SaveID = saveID,
+                SaveDate = date,
+                LevelAssetReference = LevelLoader.Instance.CurrentLevelAsset,
+            };
             UpdateRuntimeDataCache();
-            try
-            {
-                ES3.Save(SAVE_DATA_KEY, _saveData, filename);
-            }
-            catch (NotSupportedException exception)
-            {
-                Debug.LogException(exception);
-            }
-            ES3.Save(SCENE_INDEX_ID, SceneManager.GetActiveScene().buildIndex, filename);
-            ES3.Save(CURRENT_SAVE_ID, ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME), filename);
+            ES3.Save(META_DATA, metaData, filename);
+            ES3.Save(GAME_DATA, _gameData, filename);
         }
 
         public static void UpdateRuntimeDataCache()
         {
-            if (_saveData == null)
-                _saveData = new();
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                _saveData.UpdateSaveData(saveable);
+                _gameData.UpdateSaveData(saveable);
             }
         }
 
-        public static void LoadSavedDataIntoRuntime()
+        public static void LoadSavedDataIntoRuntime(string saveID)
         {
-            string saveID = ES3.Load<string>(CURRENT_SAVE_ID, SAVE_META_FILE_NAME);
-            string path = ES3.Load<string>(LAST_SAVE_FILENAME, SAVE_META_FILE_NAME);
-            if (string.IsNullOrWhiteSpace(path))
-                return;
-            if (string.Equals(saveID, ES3.Load<string>(CURRENT_SAVE_ID, path)) is false)
-                return;
-            if (_saveData == null)
-                _saveData = new();
-            _saveData.ClearSaveData();
-            ES3.LoadInto(SAVE_DATA_KEY, path, _saveData);
+            var saveFiles = ES3.GetFiles();
+            string selectedSave = "";
+            foreach (var saveFile in saveFiles)
+            {
+                if (saveFile == SaveIDToFileName(saveID))
+                {
+                    selectedSave = saveFile; 
+                }
+            }
+            _gameData.ClearSaveData();
+            _gameData = ES3.Load<GlobalPersistenceData>(GAME_DATA, selectedSave);
+        }
+
+        public static IEnumerable<SaveMetaData> GetSavesMetaData()
+        {
+            var saveFiles = ES3.GetFiles();
+            List<SaveMetaData> result = new();
+            foreach (var saveFile in saveFiles)
+            {
+                result.Add(ES3.Load<SaveMetaData>(META_DATA, saveFile));
+            }
+            return result;
         }
 
         public static void InjectRuntimeDataIntoSaveables()
         {
-            if (_saveData == null)
-                throw new NullReferenceException("GlobalSaveData instance is null!");
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                saveable.InjectSaveData(_saveData.GetData(saveable.DataKey));
+                saveable.InjectSaveData(_gameData.GetData(saveable.DataKey));
             }
         }
 
-        public static void SetSaveID(Guid guid)
+        public static SceneLoadingData GetSavedLevelAsset(string saveID)
         {
-            ES3.Save(CURRENT_SAVE_ID, guid.ToString(), SAVE_META_FILE_NAME);
+            var saveFiles = ES3.GetFiles();
+            foreach (var saveFile in saveFiles)
+            {
+                if (saveFile == SaveIDToFileName(saveID))
+                {
+                    var metaData = ES3.Load<SaveMetaData>(META_DATA, saveFile);
+                    if (metaData.SaveID == saveID)
+                        return metaData.LevelAssetReference;
+                }
+            }
+            return null;
         }
 
-        public static int GetSavedSceneIndex()
+        public static void DeleteSaveFile(string saveID)
         {
-            string path = ES3.Load<string>(LAST_SAVE_FILENAME, SAVE_META_FILE_NAME);
-            return ES3.Load<int>(SCENE_INDEX_ID, path);
+            string saveFileName = SaveIDToFileName(saveID);
+            ES3.DeleteFile(saveFileName);
+        }
+
+        private static string SaveIDToFileName(string saveID)
+        {
+            return $"{saveID}.sav";
+        }
+
+        private static string SaveFileNameToSaveID(string fileName)
+        {
+            return fileName.Split('.')[0];
+        }
+
+        public static bool HasExistingSaves()
+        {
+            return ES3.GetFiles().Length > 0;
         }
     }
 }

@@ -28,7 +28,6 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private LevelLoadingData _loadingData = new();
         public LevelLoadingData LoadingData => _loadingData;
-        public IReadOnlyList<string> AddressableScenePaths => _loadingData.ScenePaths.AsReadOnly();
 
         [Serializable]
         public struct LevelLoadingData
@@ -37,6 +36,7 @@ namespace SunsetSystems.Core.SceneLoading
             public bool ShowScenePaths;
             [SerializeField, ReadOnly, ShowIf("ShowScenePaths")]
             public List<string> ScenePaths;
+            public readonly IReadOnlyList<string> AddressableScenePaths => ScenePaths.AsReadOnly();
         }
     }
 }

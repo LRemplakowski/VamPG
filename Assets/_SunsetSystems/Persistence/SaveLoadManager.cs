@@ -21,7 +21,7 @@ namespace SunsetSystems.Persistence
         {
             string date = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}";
             string saveID = Guid.NewGuid().ToString();
-            string filename = $"{saveID}.sav";
+            string filename = SaveIDToFileName(saveID);
             SaveMetaData metaData = new()
             {
                 SaveName = saveName,
@@ -44,20 +44,11 @@ namespace SunsetSystems.Persistence
 
         public static void LoadSavedDataIntoRuntime(string saveID)
         {
-            var saveFiles = ES3.GetFiles();
-            string selectedSave = "";
-            foreach (var saveFile in saveFiles)
-            {
-                if (saveFile == SaveIDToFileName(saveID))
-                {
-                    selectedSave = saveFile; 
-                }
-            }
             _gameData.ClearSaveData();
-            _gameData = ES3.Load<GlobalPersistenceData>(GAME_DATA, selectedSave);
+            _gameData = ES3.Load<GlobalPersistenceData>(GAME_DATA, SaveIDToFileName(saveID));
         }
 
-        public static IEnumerable<SaveMetaData> GetSavesMetaData()
+        public static IEnumerable<SaveMetaData> GetAllSaveMetaData()
         {
             var saveFiles = ES3.GetFiles();
             List<SaveMetaData> result = new();
@@ -66,6 +57,11 @@ namespace SunsetSystems.Persistence
                 result.Add(ES3.Load<SaveMetaData>(META_DATA, saveFile));
             }
             return result;
+        }
+
+        public static SaveMetaData GetSaveMetaData(string saveID)
+        {
+            return ES3.Load<SaveMetaData>(SaveIDToFileName(saveID));
         }
 
         public static void InjectRuntimeDataIntoSaveables()
@@ -78,16 +74,10 @@ namespace SunsetSystems.Persistence
 
         public static SceneLoadingDataAsset.LevelLoadingData GetSavedLevelAsset(string saveID)
         {
-            var saveFiles = ES3.GetFiles();
-            foreach (var saveFile in saveFiles)
-            {
-                if (saveFile == SaveIDToFileName(saveID))
-                {
-                    var metaData = ES3.Load<SaveMetaData>(META_DATA, saveFile);
-                    if (metaData.SaveID == saveID)
-                        return metaData.LevelLoadingData;
-                }
-            }
+ 
+            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFileName(saveID));
+            if (metaData.SaveID == saveID)
+                return metaData.LevelLoadingData;
             return new();
         }
 

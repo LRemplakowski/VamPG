@@ -32,7 +32,7 @@ namespace SunsetSystems.Persistence.UI
                 _saveEntriesParent.DestroyChildren();
             }
 
-            var saveMetaData = SaveLoadManager.GetSavesMetaData();
+            var saveMetaData = SaveLoadManager.GetAllSaveMetaData();
             foreach (var metaData in saveMetaData)
             {
                 SaveEntry saveEntry = Instantiate(_saveEntryPrefab, _saveEntriesParent);

@@ -30,7 +30,7 @@ namespace SunsetSystems.UI
         public void QuitToMenu()
         {
             _onReturnToMenu?.Invoke();
-            _ = LevelLoader.Instance.BackToMainMenu();
+            LevelLoader.Instance.BackToMainMenu();
         }
 
         public void OpenMenuScreen(PauseMenuScreen screen)

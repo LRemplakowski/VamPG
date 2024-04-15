@@ -37,6 +37,7 @@ namespace SunsetSystems.Core
 
         public async void StartScene()
         {
+            await Task.Delay(1000);
             await StartSceneAsync();
         }
 

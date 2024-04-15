@@ -17,7 +17,7 @@ namespace SunsetSystems.Data
         [SerializeField]
         private GameObject _mainMenuParent;
         [SerializeField, Required]
-        private SceneLoadingData startSceneData;
+        private SceneLoadingDataAsset startSceneData;
 
         [Title("Runtime")]
         [SerializeField]

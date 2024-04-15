@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace SunsetSystems.Persistence.UI
         private SaveEntry _saveEntryPrefab;
         [SerializeField, Required]
         private Transform _saveEntriesParent;
-        [SerializeField, Required]
+        [SerializeField]
         private GameObject _newSaveGameObject;
 
         public void ShowScreen(bool includeNewSaveSlot = false)
@@ -21,8 +22,16 @@ namespace SunsetSystems.Persistence.UI
 
         private void RefreshSaveScreen(bool includeNewSaveSlot)
         {
-            _saveEntriesParent.DestroyChildren();
-            _newSaveGameObject.SetActive(includeNewSaveSlot);
+            if (_newSaveGameObject != null)
+            {
+                _saveEntriesParent.DestroyChildren(_newSaveGameObject.transform);
+                _newSaveGameObject.SetActive(includeNewSaveSlot);
+            }
+            else
+            {
+                _saveEntriesParent.DestroyChildren();
+            }
+
             var saveMetaData = SaveLoadManager.GetSavesMetaData();
             foreach (var metaData in saveMetaData)
             {
@@ -33,14 +42,14 @@ namespace SunsetSystems.Persistence.UI
 
         public void LoadSave(SaveMetaData saveMetaData)
         {
-            if (_newSaveGameObject.activeInHierarchy is false)
+            if (_newSaveGameObject == null || _newSaveGameObject.activeInHierarchy is false)
                 _ = LevelLoader.Instance.LoadSavedGame(saveMetaData.SaveID);
         }
 
         public void DeleteSave(SaveMetaData saveMetaData)
         {
             SaveLoadManager.DeleteSaveFile(saveMetaData.SaveID);
-            RefreshSaveScreen(_newSaveGameObject.activeInHierarchy);
+            RefreshSaveScreen(_newSaveGameObject != null && _newSaveGameObject.activeInHierarchy);
         }
 
         public void CreateNewSave(string saveName)

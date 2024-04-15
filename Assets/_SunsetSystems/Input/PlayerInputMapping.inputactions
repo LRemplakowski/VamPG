@@ -436,7 +436,7 @@
             "actions": [
                 {
                     "name": "Click",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "86b97aa0-db6e-4428-a27e-7552b836bf4f",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -453,54 +453,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Escape",
+                    "name": "Cancel",
                     "type": "Button",
                     "id": "f99799ad-213e-494e-b8b2-c3e206865e37",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RightClick",
-                    "type": "Button",
-                    "id": "be1d8881-715b-4137-bef3-3ee94d4fba5b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CharacterSheet",
-                    "type": "Button",
-                    "id": "bcdbc2b7-5e1a-4c81-9c41-712d92be8d3b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Inventory",
-                    "type": "Button",
-                    "id": "28e02958-5bd3-4244-90a1-82dc6fd13e4a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Journal",
-                    "type": "Button",
-                    "id": "263e4935-ca30-49b4-a709-fcc32432ea21",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SkipDialogue",
-                    "type": "Button",
-                    "id": "10e81493-2520-40b5-bdbe-0e5abc3595f6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -514,6 +469,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "RightClick",
+                    "type": "Button",
+                    "id": "ad5184e2-84c1-4a42-967b-f022816639dc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -546,62 +510,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Escape",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c5d46bd3-16fa-436b-98bf-e94d893c7840",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "RightClick",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5614afff-f30b-4170-bcb8-4f3c9670b6be",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "CharacterSheet",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6c4de99e-e69c-4688-903e-ba79acd8d006",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b9ccd05b-c07a-411f-bf67-90660f87c091",
-                    "path": "<Keyboard>/j",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Journal",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ce30613c-955b-456c-a79e-7719f4593434",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "SkipDialogue",
+                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -624,6 +533,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Scroll",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "023ee53f-c811-4fca-9dfa-e47ec599aec0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

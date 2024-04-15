@@ -458,7 +458,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Click"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""86b97aa0-db6e-4428-a27e-7552b836bf4f"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -475,54 +475,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Escape"",
+                    ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""f99799ad-213e-494e-b8b2-c3e206865e37"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RightClick"",
-                    ""type"": ""Button"",
-                    ""id"": ""be1d8881-715b-4137-bef3-3ee94d4fba5b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""CharacterSheet"",
-                    ""type"": ""Button"",
-                    ""id"": ""bcdbc2b7-5e1a-4c81-9c41-712d92be8d3b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Inventory"",
-                    ""type"": ""Button"",
-                    ""id"": ""28e02958-5bd3-4244-90a1-82dc6fd13e4a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Journal"",
-                    ""type"": ""Button"",
-                    ""id"": ""263e4935-ca30-49b4-a709-fcc32432ea21"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SkipDialogue"",
-                    ""type"": ""Button"",
-                    ""id"": ""10e81493-2520-40b5-bdbe-0e5abc3595f6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -536,6 +491,15 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""ad5184e2-84c1-4a42-967b-f022816639dc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -568,62 +532,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Escape"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c5d46bd3-16fa-436b-98bf-e94d893c7840"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""RightClick"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5614afff-f30b-4170-bcb8-4f3c9670b6be"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""CharacterSheet"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6c4de99e-e69c-4688-903e-ba79acd8d006"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b9ccd05b-c07a-411f-bf67-90660f87c091"",
-                    ""path"": ""<Keyboard>/j"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Journal"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ce30613c-955b-456c-a79e-7719f4593434"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""SkipDialogue"",
+                    ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -646,6 +555,17 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""023ee53f-c811-4fca-9dfa-e47ec599aec0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -736,13 +656,9 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
         m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
-        m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
-        m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
-        m_UI_CharacterSheet = m_UI.FindAction("CharacterSheet", throwIfNotFound: true);
-        m_UI_Inventory = m_UI.FindAction("Inventory", throwIfNotFound: true);
-        m_UI_Journal = m_UI.FindAction("Journal", throwIfNotFound: true);
-        m_UI_SkipDialogue = m_UI.FindAction("SkipDialogue", throwIfNotFound: true);
+        m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Scroll = m_UI.FindAction("Scroll", throwIfNotFound: true);
+        m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -964,26 +880,18 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Click;
     private readonly InputAction m_UI_Point;
-    private readonly InputAction m_UI_Escape;
-    private readonly InputAction m_UI_RightClick;
-    private readonly InputAction m_UI_CharacterSheet;
-    private readonly InputAction m_UI_Inventory;
-    private readonly InputAction m_UI_Journal;
-    private readonly InputAction m_UI_SkipDialogue;
+    private readonly InputAction m_UI_Cancel;
     private readonly InputAction m_UI_Scroll;
+    private readonly InputAction m_UI_RightClick;
     public struct UIActions
     {
         private @PlayerInputMapping m_Wrapper;
         public UIActions(@PlayerInputMapping wrapper) { m_Wrapper = wrapper; }
         public InputAction @Click => m_Wrapper.m_UI_Click;
         public InputAction @Point => m_Wrapper.m_UI_Point;
-        public InputAction @Escape => m_Wrapper.m_UI_Escape;
-        public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
-        public InputAction @CharacterSheet => m_Wrapper.m_UI_CharacterSheet;
-        public InputAction @Inventory => m_Wrapper.m_UI_Inventory;
-        public InputAction @Journal => m_Wrapper.m_UI_Journal;
-        public InputAction @SkipDialogue => m_Wrapper.m_UI_SkipDialogue;
+        public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
         public InputAction @Scroll => m_Wrapper.m_UI_Scroll;
+        public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -999,27 +907,15 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @Point.started += instance.OnPoint;
             @Point.performed += instance.OnPoint;
             @Point.canceled += instance.OnPoint;
-            @Escape.started += instance.OnEscape;
-            @Escape.performed += instance.OnEscape;
-            @Escape.canceled += instance.OnEscape;
-            @RightClick.started += instance.OnRightClick;
-            @RightClick.performed += instance.OnRightClick;
-            @RightClick.canceled += instance.OnRightClick;
-            @CharacterSheet.started += instance.OnCharacterSheet;
-            @CharacterSheet.performed += instance.OnCharacterSheet;
-            @CharacterSheet.canceled += instance.OnCharacterSheet;
-            @Inventory.started += instance.OnInventory;
-            @Inventory.performed += instance.OnInventory;
-            @Inventory.canceled += instance.OnInventory;
-            @Journal.started += instance.OnJournal;
-            @Journal.performed += instance.OnJournal;
-            @Journal.canceled += instance.OnJournal;
-            @SkipDialogue.started += instance.OnSkipDialogue;
-            @SkipDialogue.performed += instance.OnSkipDialogue;
-            @SkipDialogue.canceled += instance.OnSkipDialogue;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
             @Scroll.started += instance.OnScroll;
             @Scroll.performed += instance.OnScroll;
             @Scroll.canceled += instance.OnScroll;
+            @RightClick.started += instance.OnRightClick;
+            @RightClick.performed += instance.OnRightClick;
+            @RightClick.canceled += instance.OnRightClick;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1030,27 +926,15 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @Point.started -= instance.OnPoint;
             @Point.performed -= instance.OnPoint;
             @Point.canceled -= instance.OnPoint;
-            @Escape.started -= instance.OnEscape;
-            @Escape.performed -= instance.OnEscape;
-            @Escape.canceled -= instance.OnEscape;
-            @RightClick.started -= instance.OnRightClick;
-            @RightClick.performed -= instance.OnRightClick;
-            @RightClick.canceled -= instance.OnRightClick;
-            @CharacterSheet.started -= instance.OnCharacterSheet;
-            @CharacterSheet.performed -= instance.OnCharacterSheet;
-            @CharacterSheet.canceled -= instance.OnCharacterSheet;
-            @Inventory.started -= instance.OnInventory;
-            @Inventory.performed -= instance.OnInventory;
-            @Inventory.canceled -= instance.OnInventory;
-            @Journal.started -= instance.OnJournal;
-            @Journal.performed -= instance.OnJournal;
-            @Journal.canceled -= instance.OnJournal;
-            @SkipDialogue.started -= instance.OnSkipDialogue;
-            @SkipDialogue.performed -= instance.OnSkipDialogue;
-            @SkipDialogue.canceled -= instance.OnSkipDialogue;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
             @Scroll.started -= instance.OnScroll;
             @Scroll.performed -= instance.OnScroll;
             @Scroll.canceled -= instance.OnScroll;
+            @RightClick.started -= instance.OnRightClick;
+            @RightClick.performed -= instance.OnRightClick;
+            @RightClick.canceled -= instance.OnRightClick;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1135,12 +1019,8 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
     {
         void OnClick(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
-        void OnEscape(InputAction.CallbackContext context);
-        void OnRightClick(InputAction.CallbackContext context);
-        void OnCharacterSheet(InputAction.CallbackContext context);
-        void OnInventory(InputAction.CallbackContext context);
-        void OnJournal(InputAction.CallbackContext context);
-        void OnSkipDialogue(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
     }
 }

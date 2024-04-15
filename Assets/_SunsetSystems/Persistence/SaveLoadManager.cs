@@ -27,7 +27,7 @@ namespace SunsetSystems.Persistence
                 SaveName = saveName,
                 SaveID = saveID,
                 SaveDate = date,
-                LevelAssetReference = LevelLoader.Instance.CurrentLevelAsset,
+                LevelLoadingData = LevelLoader.Instance.CurrentLoadedLevel,
             };
             UpdateRuntimeDataCache();
             ES3.Save(META_DATA, metaData, filename);
@@ -76,7 +76,7 @@ namespace SunsetSystems.Persistence
             }
         }
 
-        public static SceneLoadingData GetSavedLevelAsset(string saveID)
+        public static SceneLoadingDataAsset.LevelLoadingData GetSavedLevelAsset(string saveID)
         {
             var saveFiles = ES3.GetFiles();
             foreach (var saveFile in saveFiles)
@@ -85,10 +85,10 @@ namespace SunsetSystems.Persistence
                 {
                     var metaData = ES3.Load<SaveMetaData>(META_DATA, saveFile);
                     if (metaData.SaveID == saveID)
-                        return metaData.LevelAssetReference;
+                        return metaData.LevelLoadingData;
                 }
             }
-            return null;
+            return new();
         }
 
         public static void DeleteSaveFile(string saveID)

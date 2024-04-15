@@ -29,17 +29,19 @@ namespace SunsetSystems.Persistence.UI
 
         private string GetFormattedSaveDate(string dateString)
         {
-            return "";
+            return dateString;
         }
 
+        [Button]
         public void LoadSave()
         {
-
+            _saveScreenManager.LoadSave(_saveMeta);
         }
 
+        [Button]
         public void DeleteSave()
         {
-
+            _saveScreenManager.DeleteSave(_saveMeta);
         }
     }
 }

@@ -38,12 +38,14 @@ namespace SunsetSystems.Core.SceneLoading.UI
         public async Task DoFadeOutAsync(float fadeOutTime)
         {
             _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
             await fadeScreen.FadeOut(fadeOutTime);
         }
 
         public async Task DoFadeInAsync(float fadeInTime)
         {
             _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
             await fadeScreen.FadeIn(fadeInTime);
         }
 

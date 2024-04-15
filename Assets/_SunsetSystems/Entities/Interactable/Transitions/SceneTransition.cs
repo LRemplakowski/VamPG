@@ -19,7 +19,7 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private TransitionType _type;
         [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
-        private SceneLoadingData _sceneToLoad;
+        private SceneLoadingDataAsset _sceneToLoad;
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private Waypoint _targetEntryPoint;
         [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
@@ -72,7 +72,7 @@ namespace SunsetSystems.Core.SceneLoading
             return true;
         }
 
-        private void MoveToScene(SceneLoadingData data)
+        private void MoveToScene(SceneLoadingDataAsset data)
         {
             SaveLoadManager.UpdateRuntimeDataCache();
             if (_overrideDefaultWaypoint)

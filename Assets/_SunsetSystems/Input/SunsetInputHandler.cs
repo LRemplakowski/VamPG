@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
-using SunsetSystems.Utils;
-using System;
+﻿using System;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(Tagger))]
 public class SunsetInputHandler : SerializedMonoBehaviour
 {
     [SerializeField]
@@ -24,6 +23,7 @@ public class SunsetInputHandler : SerializedMonoBehaviour
     public static event Action<InputAction.CallbackContext> OnHighlightInteractables;
     public static event Action<InputAction.CallbackContext> OnHelp;
 
+    [Button]
     private void Awake()
     {
         _playerInput.actions.actionMaps.ForEach(map => map.Enable());

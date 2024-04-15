@@ -113,6 +113,30 @@ public static class Extensions
         }
     }
 
+    public static void DestroyChildren(this Transform transform, ICollection<Transform> except)
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.Equals(transform) || except.Contains(child))
+                continue;
+            else
+                UnityEngine.Object.Destroy(child.gameObject);
+        }
+    }
+
+    public static void DestroyChildren(this Transform transform, Transform except)
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.Equals(transform) || except.Equals(child))
+                continue;
+            else
+                UnityEngine.Object.Destroy(child.gameObject);
+        }
+    }
+
     public static void DestroyChildrenImmediate(this Transform transform)
     {
         for (int i = transform.childCount - 1; i >= 0; i--)

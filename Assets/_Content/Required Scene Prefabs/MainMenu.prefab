@@ -44540,7 +44540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 7506381073774183659}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -45572,6 +45572,7 @@ GameObject:
   - component: {fileID: 634401079409615187}
   - component: {fileID: 5471676965244803364}
   - component: {fileID: 5292294903389715816}
+  - component: {fileID: 8473660272791553222}
   m_Layer: 5
   m_Name: LoadGameMenu
   m_TagString: Untagged
@@ -45615,7 +45616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _saveEntryPrefab: {fileID: 8127034607841391899, guid: e107547ad26067b43ad1aae4effa39c3, type: 3}
   _saveEntriesParent: {fileID: 7506381073774183659}
-  _newSaveGameObject: {fileID: 8440658995927112752}
+  _newSaveGameObject: {fileID: 0}
 --- !u!114 &5292294903389715816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45642,6 +45643,18 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!225 &8473660272791553222
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8440658995927112752}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1529137790610960385
 PrefabInstance:
   m_ObjectHideFlags: 0

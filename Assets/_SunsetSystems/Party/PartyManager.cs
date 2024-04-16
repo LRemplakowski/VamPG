@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
@@ -48,6 +49,8 @@ namespace SunsetSystems.Party
         [Title("Events")]
         public UltEvent<IEnumerable<ICreature>> OnActivePartyInitialized = new();
         public UltEvent<string> OnPartyMemberRecruited = new();
+
+        private bool _initializeAtSavedPositions = false;
 
         private string[] GetLayerNames()
         {
@@ -100,7 +103,11 @@ namespace SunsetSystems.Party
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
+                {
                     _activeParty.Add(key, await InitializePartyMemberInCreatureStorage(template));
+                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                        creature.ForceToPosition(savedPosition);                        
+                }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
@@ -109,23 +116,25 @@ namespace SunsetSystems.Party
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                if(_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
+                if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
+                {
                     _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
+                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                        creature.ForceToPosition(savedPosition);
+                }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        private async void InitializePartyAtPositions(List<Vector3> positions)
+        private async void InitializePartyAtSavedPositions()
         {
-            int index = 0;
-            foreach (string key in Instance._activeCoterieMemberKeys)
+            foreach (string key in _partyPositions.Keys)
             {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
-                    Vector3 position = positions[index];
+                    Vector3 position = _partyPositions[key];
                     _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
                 }
-                index++;
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
@@ -227,7 +236,7 @@ namespace SunsetSystems.Party
             Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
-                partyPositions.Add(key, _activeParty[key].References.Transform.position);
+                partyPositions.Add(key, _activeParty[key].References.BodyTransform.position);
             }
             saveData.PartyPositions = partyPositions;
             return saveData;
@@ -253,6 +262,7 @@ namespace SunsetSystems.Party
                 else
                     _partyPositions.Add(key, Vector3.zero);
             }
+            _initializeAtSavedPositions = true;
         }
     }
 

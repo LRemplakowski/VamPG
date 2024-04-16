@@ -61,7 +61,8 @@ namespace SunsetSystems.Persistence
 
         public static SaveMetaData GetSaveMetaData(string saveID)
         {
-            return ES3.Load<SaveMetaData>(SaveIDToFileName(saveID));
+            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFileName(saveID));
+            return metaData;
         }
 
         public static void InjectRuntimeDataIntoSaveables()
@@ -74,7 +75,6 @@ namespace SunsetSystems.Persistence
 
         public static SceneLoadingDataAsset.LevelLoadingData GetSavedLevelAsset(string saveID)
         {
- 
             var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFileName(saveID));
             if (metaData.SaveID == saveID)
                 return metaData.LevelLoadingData;

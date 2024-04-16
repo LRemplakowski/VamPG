@@ -80,7 +80,8 @@ namespace ES3Types
                         refMgr.Add(go, goID);
                     }
                     instance = GetOrAddComponent(go, type);
-                    refMgr.Add(instance, id);
+                    if (instance != null)
+                        refMgr.Add(instance, id);
                     break;
                 }
                 else
@@ -93,7 +94,8 @@ namespace ES3Types
                         go.AddComponent<ES3InspectorInfo>().SetMessage("This GameObject was created because Easy Save could not find a GameObject in the scene with the same instance ID as the GameObject the Component we are loading is attached to.\nTo prevent this from being created, use the LoadInto methods to tell Easy Save what Component the data should be loaded in to.");
 #endif
                         instance = GetOrAddComponent(go, type);
-                        refMgr.Add(instance, id);
+                        if (instance != null)
+                            refMgr.Add(instance, id);
                         refMgr.Add(go);
                     }
                     break;
@@ -111,8 +113,10 @@ namespace ES3Types
             var c = go.GetComponent(type);
             if (c != null)
                 return c;
-            return go.AddComponent(type);
-
+            if (typeof(Component).IsAssignableFrom(type))
+                return go.AddComponent(type);
+            else
+                return null;
             /*if (type == typeof(Transform))
                 return go.GetComponent(type);
             // Manage types which can only have a single Component attached.

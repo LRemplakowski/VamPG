@@ -54,7 +54,6 @@ namespace SunsetSystems.Core.SceneLoading
             await new WaitForUpdate();
             loadingCamera.gameObject.SetActive(true);
             OnLevelLoadStart?.Invoke();
-            SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
             loadingScreenUI.EnableAndResetLoadingScreen();
             await new WaitForSeconds(.5f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
@@ -63,6 +62,7 @@ namespace SunsetSystems.Core.SceneLoading
             CurrentLoadedLevel = saveMetaData.LevelLoadingData;
             await new WaitForUpdate();
             OnBeforePersistentDataLoad?.Invoke();
+            SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();

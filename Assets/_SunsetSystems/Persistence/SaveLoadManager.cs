@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine.SceneManagement;
 
@@ -44,8 +45,8 @@ namespace SunsetSystems.Persistence
 
         public static void LoadSavedDataIntoRuntime(string saveID)
         {
-            _gameData.ClearSaveData();
-            _gameData = ES3.Load<GlobalPersistenceData>(GAME_DATA, SaveIDToFileName(saveID));
+            //_gameData.ClearSaveData();
+            ES3.LoadInto(GAME_DATA, SaveIDToFileName(saveID), _gameData);
         }
 
         public static IEnumerable<SaveMetaData> GetAllSaveMetaData()
@@ -69,7 +70,10 @@ namespace SunsetSystems.Persistence
         {
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                saveable.InjectSaveData(_gameData.GetData(saveable.DataKey));
+                if (_gameData.TryGetData(saveable.DataKey, out object data))
+                    saveable.InjectSaveData(data);
+                else
+                    UnityEngine.Debug.Log($"There is no saved data for object {saveable}!");
             }
         }
 

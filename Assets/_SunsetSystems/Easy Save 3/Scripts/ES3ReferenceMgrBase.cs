@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 
 namespace ES3Internal
 {
     [System.Serializable]
     [DisallowMultipleComponent]
-    public abstract class ES3ReferenceMgrBase : MonoBehaviour
+    public abstract class ES3ReferenceMgrBase : SerializedMonoBehaviour
     {
         internal object _lock = new object();
 

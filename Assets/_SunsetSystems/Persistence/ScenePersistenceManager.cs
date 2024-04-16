@@ -39,14 +39,13 @@ namespace SunsetSystems.Persistence
 
         public void InjectSaveData(object data)
         {
-            ScenePersistenceData savedData = data as ScenePersistenceData;
-            object entityData = null;
-            foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
+            if (data is ScenePersistenceData persistenceData)
             {
-                if (savedData?.PersistentData?.TryGetValue(persistentEntity.PersistenceID, out entityData) ?? false)
-                    persistentEntity.InjectPersistenceData(entityData);
-                else
-                    Debug.LogError($"Could not find persistence data for entity {persistentEntity.GameObjectName}! Entity ID: {persistentEntity.PersistenceID}");
+                foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
+                {
+                    if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
+                        persistentEntity.InjectPersistenceData(entityData);
+                }
             }
         }
 
@@ -94,7 +93,7 @@ namespace SunsetSystems.Persistence
         [Serializable]
         private class ScenePersistenceData : SaveData
         {
-            public Dictionary<string, object> PersistentData;
+            public Dictionary<string, object> PersistentData = new();
         }
     }
 }

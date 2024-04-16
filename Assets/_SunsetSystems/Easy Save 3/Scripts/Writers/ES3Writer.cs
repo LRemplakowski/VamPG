@@ -342,15 +342,7 @@ public abstract class ES3Writer : IDisposable
 		WriteProperty(name,field.GetValue(objectContainingField), ES3TypeMgr.GetOrCreateES3Type(field.MemberType));
 	}
 
-    public void WritePrivateField(string name, object objectContainingField, ES3.ReferenceMode referenceMode)
-    {
-        var field = ES3Reflection.GetES3ReflectedMember(objectContainingField.GetType(), name);
-        if (field.IsNull)
-            throw new MissingMemberException("A private field named " + name + " does not exist in the type " + objectContainingField.GetType());
-        WriteProperty(name, field.GetValue(objectContainingField), ES3TypeMgr.GetOrCreateES3Type(field.MemberType), referenceMode);
-    }
-
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+	[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 	public void WritePrivateProperty(string name, object objectContainingProperty, ES3Type type)
 	{
 		var property = ES3Reflection.GetES3ReflectedProperty(objectContainingProperty.GetType(), name);
@@ -368,15 +360,7 @@ public abstract class ES3Writer : IDisposable
 		WriteProperty(name,field.GetValue(objectContainingField), type);
 	}
 
-    public void WritePrivateField(string name, object objectContainingField, ES3Type type, ES3.ReferenceMode referenceMode)
-    {
-        var field = ES3Reflection.GetES3ReflectedMember(objectContainingField.GetType(), name);
-        if (field.IsNull)
-            throw new MissingMemberException("A private field named " + name + " does not exist in the type " + objectContainingField.GetType());
-        WriteProperty(name, field.GetValue(objectContainingField), type, referenceMode);
-    }
-
-    [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+	[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
 	public void WritePrivatePropertyByRef(string name, object objectContainingProperty)
 	{
 		var property = ES3Reflection.GetES3ReflectedProperty(objectContainingProperty.GetType(), name);

@@ -152,7 +152,7 @@ namespace SunsetSystems.Entities.Characters
         public ICreatureTemplate CreatureTemplate => new TemplateFromInstance(this);
 
         [Serializable]
-        private class TemplateFromInstance : ICreatureTemplate
+        public class TemplateFromInstance : ICreatureTemplate
         {
             public TemplateFromInstance(ICreature instance)
             {
@@ -169,29 +169,34 @@ namespace SunsetSystems.Entities.Characters
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 
-            public string DatabaseID { get; }
+            public TemplateFromInstance()
+            {
 
-            public string ReadableID { get; }
+            }
+
+            public string DatabaseID { get; private set; }
+
+            public string ReadableID { get; private set; }
 
             public string FullName => $"{FirstName} {LastName}".Trim();
 
-            public string FirstName { get; }
+            public string FirstName { get; private set; }
 
-            public string LastName { get; }
+            public string LastName { get; private set; }
 
-            public Faction Faction { get; }
+            public Faction Faction { get; private set; }
 
-            public BodyType BodyType { get; }
+            public BodyType BodyType { get; private set; }
 
-            public CreatureType CreatureType { get; }
+            public CreatureType CreatureType { get; private set; }
 
-            public AssetReferenceSprite PortraitAssetRef { get; }
+            public AssetReferenceSprite PortraitAssetRef { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
+            public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
+            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
 
-            public StatsData StatsData { get; }
+            public StatsData StatsData { get; private set; }
         }
         #endregion
     }

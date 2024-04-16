@@ -111,37 +111,36 @@ namespace SunsetSystems.Entities.Characters
         }
 
         [Serializable]
-        private class TemplateFromCreatureAsset : ICreatureTemplate
+        public class TemplateFromCreatureAsset : ICreatureTemplate
         {
-            public string DatabaseID { get; }
+            public string DatabaseID { get; private set; }
 
-            public string ReadableID { get; }
+            public string ReadableID { get; private set; }
 
-            public string FullName { get; }
+            public string FullName => $"{FirstName} {LastName}".Trim();
 
-            public string FirstName { get; }
+            public string FirstName { get; private set; }
 
-            public string LastName { get; }
+            public string LastName { get; private set; }
 
-            public Faction Faction { get; }
+            public Faction Faction { get; private set; }
 
-            public BodyType BodyType { get; }
+            public BodyType BodyType { get; private set; }
 
-            public CreatureType CreatureType { get; }
+            public CreatureType CreatureType { get; private set; }
 
-            public AssetReferenceSprite PortraitAssetRef { get; }
+            public AssetReferenceSprite PortraitAssetRef { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
+            public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
+            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
 
-            public StatsData StatsData { get; }
+            public StatsData StatsData { get; private set; }
 
             public TemplateFromCreatureAsset(CreatureConfig asset)
             {
                 this.DatabaseID = asset.DatabaseID;
                 this.ReadableID = asset.ReadableID;
-                this.FullName = asset.FullName;
                 this.FirstName = asset.FirstName;
                 this.LastName = asset.LastName;
                 this.Faction = asset.Faction;
@@ -153,6 +152,10 @@ namespace SunsetSystems.Entities.Characters
                 this.StatsData = new(asset.StatsData);
             }
 
+            public TemplateFromCreatureAsset()
+            {
+
+            }
         }
     }
 }

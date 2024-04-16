@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
@@ -66,6 +67,7 @@ namespace SunsetSystems.Persistence
             }
         }
 
+        [Serializable]
         protected class PersistentObjectData
         {
             public bool ActiveState;

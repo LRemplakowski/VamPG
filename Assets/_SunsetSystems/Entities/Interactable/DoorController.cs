@@ -1,13 +1,11 @@
-using CleverCrow.Fluid.UniqueIds;
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Persistence;
-using System;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    [RequireComponent(typeof(IPersistentObject))]
     public class DoorController : SerializedMonoBehaviour, IInteractionHandler, IPersistentComponent
     {
         private const string DOOR_STATE = "Open";
@@ -37,7 +35,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_animator != null)
                 _animator = GetComponentInChildren<Animator>();
-            _animator.SetBool(ANIMATION_REVERSE, _reverseAnimation);        
+            _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);        
         }
 
         [Button]

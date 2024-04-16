@@ -68,7 +68,8 @@ namespace SunsetSystems.Entities.Interactable
                     InteractablesInScene.Add(this);
                 else
                     InteractablesInScene.Remove(this);
-                _interactionCollider.enabled = value;
+                if (_interactionCollider != null)
+                    _interactionCollider.enabled = value;
             }
         }
 
@@ -152,7 +153,8 @@ namespace SunsetSystems.Entities.Interactable
             base.Start();
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
-            _interactionCollider.enabled = Interactable;
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
         }
 
         public void ClearHandlers()
@@ -207,11 +209,13 @@ namespace SunsetSystems.Entities.Interactable
 
         public override object GetPersistenceData()
         {
-            InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData);
-            persistenceData.Interactable = Interactable;
-            persistenceData.Interacted = _interacted;
-            persistenceData.InteractableOnce = _interactableOnce;
-            persistenceData.InteractionHandlers = InteractionHandlers;
+            InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData)
+            {
+                Interactable = Interactable,
+                Interacted = _interacted,
+                InteractableOnce = _interactableOnce,
+                InteractionHandlers = InteractionHandlers
+            };
             return persistenceData;
         }
 

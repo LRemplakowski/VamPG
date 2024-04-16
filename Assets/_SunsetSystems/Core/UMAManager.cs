@@ -39,7 +39,8 @@ namespace SunsetSystems.Core.UMA
             if (_umaAvatar == null)
                 PrepareUMA();
             SetBodyType(template.BodyType);
-            LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollection);
+            if (template.BaseLookWardrobeCollection != null)
+                LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollection);
             _umaAvatar.UpdatePending();
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR

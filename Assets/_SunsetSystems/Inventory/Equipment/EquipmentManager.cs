@@ -1,13 +1,10 @@
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Equipment;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Equipment;
+using SunsetSystems.Inventory.Data;
 using UltEvents;
 using UnityEngine;
 
@@ -16,7 +13,7 @@ namespace SunsetSystems.Entities.Characters
     public class EquipmentManager : SerializedMonoBehaviour, IEquipmentManager
     {
         [field: Title("Data")]
-        [field: SerializeField]
+        [field: SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
         [Title("Events")]
@@ -39,12 +36,12 @@ namespace SunsetSystems.Entities.Characters
             {
                 EquipmentSlots = new()
                 {
-                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon) },
-                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon) },
-                    { EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest) },
-                    { EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots) },
-                    { EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands) },
-                    { EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket) }
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
                 };
             }
         }
@@ -57,8 +54,7 @@ namespace SunsetSystems.Entities.Characters
                 {
                     if (slot.GetEquippedItem() != null)
                     {
-                        IEquipableItem previousItem = slot.GetEquippedItem();
-                        if (slot.TryUnequipItem(previousItem))
+                        if (slot.TryUnequipItem(out var previousItem))
                         {
                             ItemUnequipped?.InvokeSafe(previousItem);
                         }
@@ -77,7 +73,7 @@ namespace SunsetSystems.Entities.Characters
         {
             if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
             {
-                return slot.TryUnequipItem(slot.GetEquippedItem());
+                return slot.TryUnequipItem(out var _);
             }
             return false;
         }
@@ -97,12 +93,12 @@ namespace SunsetSystems.Entities.Characters
             {
                 EquipmentSlots = new()
                 {
-                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon) },
-                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon) },
-                    { EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest) },
-                    { EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots) },
-                    { EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands) },
-                    { EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket) }
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
                 };
                 return;
             }

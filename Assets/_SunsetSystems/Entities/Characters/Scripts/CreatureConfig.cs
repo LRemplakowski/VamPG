@@ -1,15 +1,13 @@
-﻿using UnityEngine;
-using SunsetSystems.Entities.Data;
-using Sirenix.OdinInspector;
-using SunsetSystems.Utils.Extensions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using UnityEngine.AddressableAssets;
+﻿using System;
 using System.Collections.Generic;
-using UMA;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using System;
-using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Extensions;
 using UMA.CharacterSystem;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -79,13 +77,15 @@ namespace SunsetSystems.Entities.Characters
                 CreatureDatabase.Instance?.RegisterConfig(this);
             if (EquipmentSlotsData == null || EquipmentSlotsData.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length - 1)
             {
-                EquipmentSlotsData = new();
-                EquipmentSlotsData.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
-                EquipmentSlotsData.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
-                EquipmentSlotsData.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
-                EquipmentSlotsData.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
-                EquipmentSlotsData.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
-                EquipmentSlotsData.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+                EquipmentSlotsData = new()
+                {
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+                };
             }
         }
 

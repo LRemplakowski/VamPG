@@ -81,11 +81,11 @@ namespace SunsetSystems.Input
                 List<ICreature> creatures = new();
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
-                    _ = mainCharacter.PerformAction(new Interact(mainCharacter, interactable));
+                    _ = mainCharacter.PerformAction(new Interact(mainCharacter, interactable), true);
                 }
                 else
                 {
-                    _ = mainCharacter.PerformAction(new Move(mainCharacter, hit.point));
+                    _ = mainCharacter.PerformAction(new Move(mainCharacter, hit.point), true);
                 }
                 if (PartyManager.Instance.ActiveParty.Count > 1)
                     creatures.AddRange(PartyManager.Instance.Companions);

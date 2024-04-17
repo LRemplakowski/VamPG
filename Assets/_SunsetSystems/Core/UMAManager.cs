@@ -1,3 +1,4 @@
+using System.Collections;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -25,13 +26,21 @@ namespace SunsetSystems.Core.UMA
         [SerializeField, ReadOnly]
         private DynamicCharacterAvatar _umaAvatar;
 
+        private IEnumerator _updateOnNextFrame;
+
         private void Start()
         {
             if (_umaAvatar == null)
                 PrepareUMA();
             LoadDefaultWardrobeCollection(BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
             _umaAvatar.BuildCharacter(true);
+        }
+
+        private IEnumerator RebuildUmaOnNextFrame()
+        {
+            yield return null;
+            _umaAvatar.BuildCharacter(true);
+            _updateOnNextFrame = null;
         }
 
         public void BuildUMAFromTemplate(ICreatureTemplate template)
@@ -41,7 +50,6 @@ namespace SunsetSystems.Core.UMA
             SetBodyType(template.BodyType);
             if (template.BaseLookWardrobeCollection != null)
                 LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
@@ -102,9 +110,20 @@ namespace SunsetSystems.Core.UMA
         {
             if (item is IWearable wearable && _umaAvatar != null)
             {
-                _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
-                _umaAvatar.UpdatePending();
-                _umaAvatar.BuildCharacter(true);
+                if (wearable.WearableWardrobe != null)
+                {
+                    _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
+                    _umaAvatar.UmaData.Dirty();
+                    if (_updateOnNextFrame == null)
+                    {
+                        _updateOnNextFrame = RebuildUmaOnNextFrame();
+                        StartCoroutine(_updateOnNextFrame);
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Item {wearable} has a null WardrobeCollection reference!");
+                }
             }
         }
 
@@ -112,9 +131,16 @@ namespace SunsetSystems.Core.UMA
         {
             if (item is IWearable wearable)
             {
-                _umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
-                _umaAvatar.UpdatePending();
-                _umaAvatar.BuildCharacter(true);
+                if (wearable.WearableWardrobe != null)
+                {
+                    _umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
+                    _umaAvatar.UmaData.Dirty();
+                    if (_updateOnNextFrame == null)
+                    {
+                        _updateOnNextFrame = RebuildUmaOnNextFrame();
+                        StartCoroutine(_updateOnNextFrame);
+                    }
+                }
             }
         }
     }

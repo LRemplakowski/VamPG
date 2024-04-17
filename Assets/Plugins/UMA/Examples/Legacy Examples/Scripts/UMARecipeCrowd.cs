@@ -138,7 +138,7 @@ namespace UMA.Examples
 			umaAvatar.context = context;
 			umaAvatar.umaGenerator = generator;
 			umaAvatar.Initialize();
-			UMAData umaData = umaAvatar.umaData;
+			UMAData umaData = umaAvatar.UmaData;
 			umaData.atlasResolutionScale = atlasScale;
 			umaData.CharacterCreated = new UMADataEvent(CharacterCreated);
 			umaData.OnCharacterCreated += CharacterCreatedCallback;
@@ -275,7 +275,7 @@ namespace UMA.Examples
 				UMADynamicAvatar umaAvatar = child.gameObject.GetComponent<UMADynamicAvatar>();
 				if (umaAvatar == null) continue;
 
-				UMAData umaData = umaAvatar.umaData;
+				UMAData umaData = umaAvatar.UmaData;
 				umaData.umaRecipe = new UMAData.UMARecipe();
 
 				RandomizeRecipe(umaData);

@@ -683,13 +683,13 @@ namespace UMA.Examples
 
 			UMADynamicAvatar umaDynamicAvatar = newGO.AddComponent<UMADynamicAvatar>();
 			umaDynamicAvatar.Initialize();
-			umaData = umaDynamicAvatar.umaData;
+			umaData = umaDynamicAvatar.UmaData;
 			umaData.CharacterCreated = new UMADataEvent(CharacterCreated);
 			umaData.CharacterDestroyed = new UMADataEvent(CharacterDestroyed);
 			umaData.CharacterUpdated = new UMADataEvent(CharacterUpdated);
 			umaDynamicAvatar.umaGenerator = generator;
 			umaData.umaGenerator = generator;
-			var umaRecipe = umaDynamicAvatar.umaData.umaRecipe;
+			var umaRecipe = umaDynamicAvatar.UmaData.umaRecipe;
 			UMACrowdRandomSet.CrowdRaceData race = null;
 
 			if (randomPool != null && randomPool.Length > 0)
@@ -830,8 +830,8 @@ namespace UMA.Examples
 					Debug.Log("Couldn't find dynamic avatar on child: " + child.gameObject.name);
 					continue;
 				}
-				umaData = umaDynamicAvatar.umaData;
-				var umaRecipe = umaDynamicAvatar.umaData.umaRecipe;
+				umaData = umaDynamicAvatar.UmaData;
+				var umaRecipe = umaDynamicAvatar.UmaData.umaRecipe;
 				UMACrowdRandomSet.CrowdRaceData race = null;
 				
 				if (randomPool != null && randomPool.Length > 0)

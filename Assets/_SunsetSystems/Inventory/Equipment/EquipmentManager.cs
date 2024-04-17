@@ -52,15 +52,10 @@ namespace SunsetSystems.Entities.Characters
             {
                 if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
                 {
-                    if (slot.GetEquippedItem() != null)
+                    if (slot.TryEquipItem(item, out var unequipped))
                     {
-                        if (slot.TryUnequipItem(out var previousItem))
-                        {
-                            ItemUnequipped?.InvokeSafe(previousItem);
-                        }
-                    }
-                    if (slot.TryEquipItem(item))
-                    {
+                        if (unequipped != null && unequipped.ReadableID != slot.DefaultItemID)
+                            ItemUnequipped?.InvokeSafe(unequipped);
                         ItemEquipped?.InvokeSafe(item);
                         return true;
                     }
@@ -91,7 +86,33 @@ namespace SunsetSystems.Entities.Characters
         {
             if (template == null || template.EquipmentSlotsData == null)
             {
-                EquipmentSlots = new()
+                EquipmentSlots = InitializeEquipmentSlots();
+                return;
+            }
+            EquipmentSlots ??= InitializeEquipmentSlots();
+
+            foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
+            {
+                if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))
+                {
+                    if (mySlot.TryEquipItem(templateSlot.GetEquippedItem(), out var _))
+                    {
+                        Debug.Log($"Injected item {templateSlot.GetEquippedItem()} into equipment manager!");
+                        ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());
+                    }
+                }
+            }
+#if UNITY_EDITOR
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+#endif
+        }
+
+        private Dictionary<EquipmentSlotID, IEquipmentSlot> InitializeEquipmentSlots()
+        {
+            return new()
                 {
                     { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
                     { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
@@ -100,20 +121,6 @@ namespace SunsetSystems.Entities.Characters
                     { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
                     { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
                 };
-                return;
-            }
-            if (EquipmentSlots == null)
-                EquipmentSlots = new();
-            foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
-            {
-                EquipmentSlots[key] = new EquipmentSlot(template.EquipmentSlotsData[key]);
-            }
-#if UNITY_EDITOR
-            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
-            {
-                UnityEditor.EditorUtility.SetDirty(this);
-            }
-#endif
         }
     }
 }

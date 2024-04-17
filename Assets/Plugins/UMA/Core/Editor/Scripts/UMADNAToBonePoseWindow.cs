@@ -91,7 +91,7 @@ namespace UMA.PoseTools
 			if (avatarDNAisDirty)
 			{
 				avatarDNAisDirty = false;
-				UMAData umaPostDNA = tempAvatarPostDNA.GetComponent<UMADynamicAvatar>().umaData;
+				UMAData umaPostDNA = tempAvatarPostDNA.GetComponent<UMADynamicAvatar>().UmaData;
 				if (umaPostDNA != null)
 				{
 					umaPostDNA.Dirty(true, false, false);
@@ -106,8 +106,8 @@ namespace UMA.PoseTools
 			avatarDNAisDirty = false;
 			UMABonePose bonePose = ScriptableObject.CreateInstance<UMABonePose>();
 
-			UMAData umaPreDNA = tempAvatarPreDNA.GetComponent<UMADynamicAvatar>().umaData;
-			UMAData umaPostDNA = tempAvatarPostDNA.GetComponent<UMADynamicAvatar>().umaData;
+			UMAData umaPreDNA = tempAvatarPreDNA.GetComponent<UMADynamicAvatar>().UmaData;
+			UMAData umaPostDNA = tempAvatarPostDNA.GetComponent<UMADynamicAvatar>().UmaData;
 			UMADnaBase activeDNA = umaPostDNA.umaRecipe.GetDna(selectedDNAHash);
 			UMASkeleton skeletonPreDNA = umaPreDNA.skeleton;
 			UMASkeleton skeletonPostDNA = umaPostDNA.skeleton;
@@ -259,15 +259,15 @@ namespace UMA.PoseTools
 			UMADynamicAvatar tempAvatar = tempAvatarPreDNA.AddComponent<UMADynamicAvatar>();
 			tempAvatar.umaGenerator = sourceUMA.umaGenerator;
 			tempAvatar.Initialize();
-			tempAvatar.umaData.umaRecipe = new UMAData.UMARecipe();
-			tempAvatar.umaData.umaRecipe.raceData = ScriptableObject.CreateInstance<RaceData>();
-			tempAvatar.umaData.umaRecipe.raceData.raceName = "Temp Raw Race";
-			tempAvatar.umaData.umaRecipe.raceData.TPose = sourceUMA.umaRecipe.raceData.TPose;
-			tempAvatar.umaData.umaRecipe.raceData.umaTarget = sourceUMA.umaRecipe.raceData.umaTarget;
+			tempAvatar.UmaData.umaRecipe = new UMAData.UMARecipe();
+			tempAvatar.UmaData.umaRecipe.raceData = ScriptableObject.CreateInstance<RaceData>();
+			tempAvatar.UmaData.umaRecipe.raceData.raceName = "Temp Raw Race";
+			tempAvatar.UmaData.umaRecipe.raceData.TPose = sourceUMA.umaRecipe.raceData.TPose;
+			tempAvatar.UmaData.umaRecipe.raceData.umaTarget = sourceUMA.umaRecipe.raceData.umaTarget;
 			slotIndex = 0;
 			foreach (SlotData slotEntry in activeSlots) {
 				if ((slotEntry == null) || slotEntry.dontSerialize) continue;
-				tempAvatar.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
+				tempAvatar.UmaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
 			}
 			tempAvatar.Show();
 
@@ -279,23 +279,23 @@ namespace UMA.PoseTools
 			UMADynamicAvatar tempAvatar2 = tempAvatarPostDNA.AddComponent<UMADynamicAvatar>();
 			tempAvatar2.umaGenerator = sourceUMA.umaGenerator;
 			tempAvatar2.Initialize();
-			tempAvatar2.umaData.umaRecipe = new UMAData.UMARecipe();
-			tempAvatar2.umaData.umaRecipe.raceData = ScriptableObject.CreateInstance<RaceData>();
-			tempAvatar2.umaData.umaRecipe.raceData.raceName = "Temp DNA Race";
-			tempAvatar2.umaData.umaRecipe.raceData.TPose = sourceUMA.umaRecipe.raceData.TPose;
-			tempAvatar2.umaData.umaRecipe.raceData.umaTarget = sourceUMA.umaRecipe.raceData.umaTarget;
+			tempAvatar2.UmaData.umaRecipe = new UMAData.UMARecipe();
+			tempAvatar2.UmaData.umaRecipe.raceData = ScriptableObject.CreateInstance<RaceData>();
+			tempAvatar2.UmaData.umaRecipe.raceData.raceName = "Temp DNA Race";
+			tempAvatar2.UmaData.umaRecipe.raceData.TPose = sourceUMA.umaRecipe.raceData.TPose;
+			tempAvatar2.UmaData.umaRecipe.raceData.umaTarget = sourceUMA.umaRecipe.raceData.umaTarget;
 			//tempAvatar2.umaData.umaRecipe.raceData.dnaConverterList = new DnaConverterBehaviour[1];
 			//tempAvatar2.umaData.umaRecipe.raceData.dnaConverterList[0] = activeConverter;
-			tempAvatar2.umaData.umaRecipe.raceData.dnaConverterList = activeConverters;
-			tempAvatar2.umaData.umaRecipe.raceData.UpdateDictionary();
+			tempAvatar2.UmaData.umaRecipe.raceData.dnaConverterList = activeConverters;
+			tempAvatar2.UmaData.umaRecipe.raceData.UpdateDictionary();
 
 			slotIndex = 0;
 			foreach (SlotData slotEntry in activeSlots) {
 				if ((slotEntry == null) || slotEntry.dontSerialize) continue;
-				tempAvatar2.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
+				tempAvatar2.UmaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
 			}
 
-			tempAvatar2.umaData.OnCharacterUpdated += CreateBonePoseCallback;
+			tempAvatar2.UmaData.OnCharacterUpdated += CreateBonePoseCallback;
 			tempAvatar2.Show();
 		}
 

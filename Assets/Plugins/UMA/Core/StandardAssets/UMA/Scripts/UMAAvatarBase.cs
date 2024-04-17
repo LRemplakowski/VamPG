@@ -9,7 +9,23 @@ namespace UMA
 	public abstract class UMAAvatarBase : MonoBehaviour
 	{
 		public UMAContextBase context;
-		public UMAData umaData;
+		[SerializeField]
+		protected UMAData _umaData;
+		public UMAData UmaData 
+		{ 
+			get 
+			{
+                if (_umaData == null)
+                {
+					_umaData = EnsureUMAData();
+                }
+                return _umaData;
+			}
+			set
+			{
+				_umaData = value;
+			}
+		}
 		public UMARendererAsset defaultRendererAsset; // this can be null if no default renderers need to be applied.
 
 		/// <summary>
@@ -53,6 +69,31 @@ namespace UMA
 		{
 			Initialize();
 		}
+
+		private UMAData EnsureUMAData()
+		{
+			var result = GetComponent<UMAData>();
+			if (result == null)
+			{
+				result = gameObject.AddComponent<UMAData>();
+                result.umaRecipe = new UMAData.UMARecipe();
+                if (umaGenerator != null && !umaGenerator.gameObject.activeInHierarchy)
+                {
+                    if (Debug.isDebugBuild)
+                    {
+                        Debug.LogError("Invalid UMA Generator on Avatar.", gameObject);
+                        Debug.LogError("UMA generators must be active scene objects!", umaGenerator.gameObject);
+                    }
+                    umaGenerator = null;
+                }
+            }
+			if (umaGenerator != null)
+			{
+				result.umaGenerator = umaGenerator;
+			}
+			return result;
+		}
+
 		public void Initialize()
 		{
 			if (context == null)
@@ -60,36 +101,18 @@ namespace UMA
 				context = UMAContextBase.Instance;
 			}
 
-			if (umaData == null)
+			if (_umaData == null)
 			{
-				umaData = GetComponent<UMAData>();
-				if (umaData == null)
-				{
-					umaData = gameObject.AddComponent<UMAData>();
-					umaData.umaRecipe = new UMAData.UMARecipe(); // TEST JRRM
-					if (umaGenerator != null && !umaGenerator.gameObject.activeInHierarchy)
-					{
-						if (Debug.isDebugBuild)
-						{
-							Debug.LogError("Invalid UMA Generator on Avatar.", gameObject);
-							Debug.LogError("UMA generators must be active scene objects!", umaGenerator.gameObject);
-						}
-						umaGenerator = null;
-					}
-				}
-			}
-			if (umaGenerator != null)
-			{
-				umaData.umaGenerator = umaGenerator;
+				_umaData = EnsureUMAData();
 			}
 			
-			if (CharacterCreated != null) umaData.CharacterCreated = CharacterCreated;
-			if (CharacterBegun != null) umaData.CharacterBegun = CharacterBegun;
-			if (CharacterDestroyed != null) umaData.CharacterDestroyed = CharacterDestroyed;
-			if (CharacterUpdated != null) umaData.CharacterUpdated = CharacterUpdated;
-			if (CharacterDnaUpdated != null) umaData.CharacterDnaUpdated = CharacterDnaUpdated;
-			if (AnimatorStateSaved != null) umaData.AnimatorStateSaved = AnimatorStateSaved;
-			if (AnimatorStateRestored != null) umaData.AnimatorStateRestored = AnimatorStateRestored;
+			if (CharacterCreated != null) UmaData.CharacterCreated = CharacterCreated;
+			if (CharacterBegun != null) UmaData.CharacterBegun = CharacterBegun;
+			if (CharacterDestroyed != null) UmaData.CharacterDestroyed = CharacterDestroyed;
+			if (CharacterUpdated != null) UmaData.CharacterUpdated = CharacterUpdated;
+			if (CharacterDnaUpdated != null) UmaData.CharacterDnaUpdated = CharacterDnaUpdated;
+			if (AnimatorStateSaved != null) UmaData.AnimatorStateSaved = AnimatorStateSaved;
+			if (AnimatorStateRestored != null) UmaData.AnimatorStateRestored = AnimatorStateRestored;
 		}
 
 		/// <summary>
@@ -108,7 +131,7 @@ namespace UMA
 		public virtual void Load(UMARecipeBase umaRecipe, params UMARecipeBase[] umaAdditionalRecipes)
 		{
 			if (umaRecipe == null) return;
-			if (umaData == null)
+			if (UmaData == null)
 			{
 				Initialize();
 			}
@@ -116,10 +139,10 @@ namespace UMA
 
 			this.umaRecipe = umaRecipe;
 
-			umaRecipe.Load(umaData.umaRecipe, context);
-			umaData.AddAdditionalRecipes(umaAdditionalRecipes, context);
+			umaRecipe.Load(UmaData.umaRecipe, context);
+			UmaData.AddAdditionalRecipes(umaAdditionalRecipes, context);
 
-			if (umaRace != umaData.umaRecipe.raceData)
+			if (umaRace != UmaData.umaRecipe.raceData)
 			{
 				UpdateNewRace();
 			}
@@ -137,9 +160,9 @@ namespace UMA
 #endif
 			if (animationController != null)
 			{
-				umaData.animationController = animationController;
+				UmaData.animationController = animationController;
 			}
-			umaData.Dirty(true, true, true);
+			UmaData.Dirty(true, true, true);
 		}
 
 		public void UpdateNewRace()
@@ -148,15 +171,15 @@ namespace UMA
 			Debug.Log("UpdateNewRace on DynamicCharacterAvatar: " + gameObject.name);
 #endif
 
-			umaRace = umaData.umaRecipe.raceData;
+			umaRace = UmaData.umaRecipe.raceData;
 			if (animationController != null)
 			{
-				umaData.animationController = animationController;
+				UmaData.animationController = animationController;
 			}
 
-			umaData.umaGenerator = umaGenerator;
+			UmaData.umaGenerator = umaGenerator;
 
-			umaData.Dirty(true, true, true);
+			UmaData.Dirty(true, true, true);
 		}
 
 		public virtual void Hide()
@@ -169,21 +192,21 @@ namespace UMA
 		/// </summary>
 		public virtual void Hide(bool DestroyRoot = true)
 		{
-			if (umaData != null)
+			if (UmaData != null)
 			{
-				umaData.CleanTextures();
-				umaData.CleanMesh(true);
-				umaData.CleanAvatar();
+				UmaData.CleanTextures();
+				UmaData.CleanMesh(true);
+				UmaData.CleanAvatar();
 				if (DestroyRoot)
 				{
-				UMAUtils.DestroySceneObject(umaData.umaRoot);
-				umaData.umaRoot = null;
-					umaData.skeleton = null;
+				UMAUtils.DestroySceneObject(UmaData.umaRoot);
+				UmaData.umaRoot = null;
+					UmaData.skeleton = null;
 				}
-				umaData.SetRenderers(null);
-				umaData.SetRendererAssets(null);
-				umaData.animator = null;
-				umaData.firstBake = true;
+				UmaData.SetRenderers(null);
+				UmaData.SetRendererAssets(null);
+				UmaData.animator = null;
+				UmaData.firstBake = true;
 			}
 			umaRace = null;
 		}
@@ -199,7 +222,7 @@ namespace UMA
 			}
 			else
 			{
-				if (umaRace != umaData.umaRecipe.raceData)
+				if (umaRace != UmaData.umaRecipe.raceData)
 				{
 					UpdateNewRace();
 				}

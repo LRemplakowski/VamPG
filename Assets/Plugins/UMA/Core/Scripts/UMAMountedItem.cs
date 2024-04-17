@@ -63,7 +63,7 @@ public class UMAMountedItem : MonoBehaviour
             if (avatar == null)
                 return false;
         }
-        MountPoint = FindOrCreateMountpoint(avatar.umaData);
+        MountPoint = FindOrCreateMountpoint(avatar.UmaData);
         SetMountTransform();
         return true;
     }
@@ -87,7 +87,7 @@ public class UMAMountedItem : MonoBehaviour
 
     public void ResetMountPoint()
     {
-        MountPoint = FindOrCreateMountpoint(avatar.umaData);
+        MountPoint = FindOrCreateMountpoint(avatar.UmaData);
         SetMountTransform();
     }
 

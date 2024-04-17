@@ -95,7 +95,7 @@ public class UMARenderTextureMover : MonoBehaviour
         if (TriggerNow)
         {
             TriggerNow = false;
-            TextureMover(avatar.umaData);
+            TextureMover(avatar.UmaData);
         }
     }
 

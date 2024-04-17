@@ -119,7 +119,7 @@ namespace UMA.PoseTools
 
 			if (umaAvatar != null)
 			{
-				Animator animator = umaAvatar.umaData.animator;
+				Animator animator = umaAvatar.UmaData.animator;
 				if (animator != null)
 				{
 					if (animator.enabled)
@@ -137,7 +137,7 @@ namespace UMA.PoseTools
 
 				if (GUILayout.Button("Randomize"))
 				{
-					UMADnaHumanoid humanoidDna = umaAvatar.umaData.GetDna<UMADnaHumanoid>();
+					UMADnaHumanoid humanoidDna = umaAvatar.UmaData.GetDna<UMADnaHumanoid>();
 
 					if (humanoidDna != null)
 					{

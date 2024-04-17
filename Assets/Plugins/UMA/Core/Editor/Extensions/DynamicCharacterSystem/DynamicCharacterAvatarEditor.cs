@@ -147,7 +147,7 @@ namespace UMA.CharacterSystem.Editors
             }
              //The base DynamicAvatar properties- get these early because changing the race changes someof them
             SerializedProperty context = serializedObject.FindProperty("context");
-			SerializedProperty umaData = serializedObject.FindProperty("umaData");
+			SerializedProperty umaData = serializedObject.FindProperty("_umaData");
 			SerializedProperty umaGenerator = serializedObject.FindProperty("umaGenerator");
 			SerializedProperty umaRecipe = serializedObject.FindProperty("umaRecipe");
 			SerializedProperty umaAdditionalRecipes = serializedObject.FindProperty("umaAdditionalRecipes");
@@ -931,7 +931,7 @@ namespace UMA.CharacterSystem.Editors
 
 					dca.activeRace.racedata.ResetDNA();
 
-					ugb.GenerateSingleUMA(dca.umaData,false);
+					ugb.GenerateSingleUMA(dca.UmaData,false);
 					
 					ugb.fastGeneration = oldFastGen;
 					ugb.FreezeTime = false;
@@ -956,8 +956,8 @@ namespace UMA.CharacterSystem.Editors
 				{
 					DestroyImmediate(go);
 				}
-				DestroyImmediate(thisDCA.umaData);
-				thisDCA.umaData = null;
+				DestroyImmediate(thisDCA.UmaData);
+				thisDCA.UmaData = null;
 				thisDCA.ClearSlots();
 			}
 
@@ -981,7 +981,7 @@ namespace UMA.CharacterSystem.Editors
         {
             float value = 0.5f;
 
-            if (thisDCA.umaData != null)
+            if (thisDCA.UmaData != null)
             {
                 var characterDNA = thisDCA.GetDNA();
                 if (characterDNA != null)

@@ -319,9 +319,9 @@ namespace UMA.CharacterSystem.Examples
 			}
 			if (freezeAnimation)
 			{
-				avatarToPhoto.umaData.animator.speed = 1f;
-				avatarToPhoto.umaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableBlinking = true;
-				avatarToPhoto.umaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableSaccades = true;
+				avatarToPhoto.UmaData.animator.speed = 1f;
+				avatarToPhoto.UmaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableBlinking = true;
+				avatarToPhoto.UmaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableSaccades = true;
 			}
 			avatarToPhoto.LoadDefaultWardrobe();
 			avatarToPhoto.BuildCharacter(true);
@@ -422,11 +422,11 @@ namespace UMA.CharacterSystem.Examples
 
 		private void SetAnimationFrame()
 		{
-			var thisAnimatonClip = avatarToPhoto.umaData.animationController.animationClips[0];
-			avatarToPhoto.umaData.animator.Play(thisAnimatonClip.name, 0, animationFreezeFrame);
-			avatarToPhoto.umaData.animator.speed = 0f;
-			avatarToPhoto.umaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableBlinking = false;
-			avatarToPhoto.umaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableSaccades = false;
+			var thisAnimatonClip = avatarToPhoto.UmaData.animationController.animationClips[0];
+			avatarToPhoto.UmaData.animator.Play(thisAnimatonClip.name, 0, animationFreezeFrame);
+			avatarToPhoto.UmaData.animator.speed = 0f;
+			avatarToPhoto.UmaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableBlinking = false;
+			avatarToPhoto.UmaData.gameObject.GetComponent<UMA.PoseTools.UMAExpressionPlayer>().enableSaccades = false;
 		}
 
 		IEnumerator TakePhotoCoroutine()
@@ -549,7 +549,7 @@ namespace UMA.CharacterSystem.Examples
 
 		public void ForceNoCulling()
         {
-			var smrs = avatarToPhoto.umaData.GetRenderers();
+			var smrs = avatarToPhoto.UmaData.GetRenderers();
 
 			foreach (var smr in smrs)
 			{
@@ -580,12 +580,12 @@ namespace UMA.CharacterSystem.Examples
 
 		private void UndoDimmingAnNeutralizing()
 		{
-			int numSlots = avatarToPhoto.umaData.GetSlotArraySize();
+			int numSlots = avatarToPhoto.UmaData.GetSlotArraySize();
 			for (int i = 0; i < numSlots; i++)
 			{
-				if (avatarToPhoto.umaData.GetSlot(i))
+				if (avatarToPhoto.UmaData.GetSlot(i))
 				{
-					var thisSlot = avatarToPhoto.umaData.GetSlot(i);
+					var thisSlot = avatarToPhoto.UmaData.GetSlot(i);
 					var thisSlotOverlays = thisSlot.GetOverlayList();
 					for (int ii = 0; ii < thisSlotOverlays.Count; ii++)
 					{
@@ -613,7 +613,7 @@ namespace UMA.CharacterSystem.Examples
 				if (Debug.isDebugBuild)
 					Debug.Log("Doing Dimming And Neutralizing for Body shots");
 			}
-			int numAvatarSlots = avatarToPhoto.umaData.GetSlotArraySize();
+			int numAvatarSlots = avatarToPhoto.UmaData.GetSlotArraySize();
 			originalColors.Clear();
 			List<string> slotsInRecipe = new List<string>();
 			List<string> overlaysInRecipe = new List<string>();
@@ -637,7 +637,7 @@ namespace UMA.CharacterSystem.Examples
 			//Deal with skin color first if we are dimming
 			if (dimAllButTarget)
 			{
-				OverlayColorData[] sharedColors = avatarToPhoto.umaData.umaRecipe.sharedColors;
+				OverlayColorData[] sharedColors = avatarToPhoto.UmaData.umaRecipe.sharedColors;
 				for (int i = 0; i < sharedColors.Length; i++)
 				{
 					if (sharedColors[i].name == "Skin" || sharedColors[i].name == "skin")
@@ -652,10 +652,10 @@ namespace UMA.CharacterSystem.Examples
 			}
 			for (int i = 0; i < numAvatarSlots; i++)
 			{
-				if (avatarToPhoto.umaData.GetSlot(i) != null)
+				if (avatarToPhoto.UmaData.GetSlot(i) != null)
 				{
-					var overlaysInAvatarSlot = avatarToPhoto.umaData.GetSlot(i).GetOverlayList();
-					if (slotsInRecipe.Contains(avatarToPhoto.umaData.GetSlot(i).asset.name))
+					var overlaysInAvatarSlot = avatarToPhoto.UmaData.GetSlot(i).GetOverlayList();
+					if (slotsInRecipe.Contains(avatarToPhoto.UmaData.GetSlot(i).asset.name))
 					{
 						if (neutralizeTargetColors || dimAllButTarget)
 						{
@@ -734,8 +734,8 @@ namespace UMA.CharacterSystem.Examples
 					}
 				}
 			}
-			avatarToPhoto.umaData.dirty = false;
-			avatarToPhoto.umaData.Dirty(false, true, false);
+			avatarToPhoto.UmaData.dirty = false;
+			avatarToPhoto.UmaData.Dirty(false, true, false);
 		}
 
 		private bool SetBestRenderTexture(string wardrobeSlot = "")

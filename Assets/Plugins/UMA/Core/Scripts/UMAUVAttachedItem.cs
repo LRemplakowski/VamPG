@@ -315,7 +315,7 @@ namespace UMA
 						{
 							if(string.IsNullOrEmpty(bsAdjust.RaceName) || bsAdjust.RaceName == avatar.activeRace.name) 
 								{
-								SkinnedMeshRenderer smr = avatar.umaData.GetRenderer(0);
+								SkinnedMeshRenderer smr = avatar.UmaData.GetRenderer(0);
 								int bsIndex = smr.sharedMesh.GetBlendShapeIndex(bsAdjust.BlendshapeName);
 								if(bsIndex >= 0) {
 									float bsWeight = smr.GetBlendShapeWeight(bsIndex)/100.0f;

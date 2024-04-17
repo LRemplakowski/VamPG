@@ -70,7 +70,7 @@ namespace UMA.PoseTools
 
 			if (avatar != null)
             {
-				umaData = avatar.umaData;
+				umaData = avatar.UmaData;
 				if (!EventsAdded)
 				{
 					avatar.CharacterBegun.AddListener(CharacterBegun);

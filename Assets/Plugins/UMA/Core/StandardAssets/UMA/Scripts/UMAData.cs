@@ -913,7 +913,7 @@ namespace UMA
 				{
 					if (Debug.isDebugBuild)
                     {
-                        Debug.LogError("UMA recipe missing required race!");
+                        Debug.LogError($"UMA recipe {this} missing required race!");
                     }
 
                     valid = false;
@@ -929,7 +929,7 @@ namespace UMA
                     {
                         Debug.LogError("UMA recipe slot list is empty!");
                     }
-
+					slotDataList = new SlotData[0];
                     valid = false;
 				}
 				int slotDataCount = 0;

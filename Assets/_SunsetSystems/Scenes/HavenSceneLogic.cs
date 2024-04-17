@@ -91,14 +91,13 @@ namespace SunsetSystems.Core
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            _desiree.Transform.SetPositionAndRotation(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position, Quaternion.identity);
-            _desiree.References.NavMeshAgent.Warp(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position);
+            _desiree.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position);
             await fade.DoFadeInAsync(.5f);
         }
 
         public async void BringKevinForVisit()
         {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSpawnWaypoint.transform.position);
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
@@ -111,7 +110,7 @@ namespace SunsetSystems.Core
 
         public async Task MoveToSink()
         {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
             _landlord.ForceToPosition(_landlordSinkWaypoint.transform.position);
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordSinkWaypoint.transform.position);
@@ -152,7 +151,7 @@ namespace SunsetSystems.Core
 
         private async void MoveActorsAndCameraToFridgeConfig()
         {
-            SceneLoadingUIManager fade = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcFridgeWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicFridgeWaypoint.transform.position);

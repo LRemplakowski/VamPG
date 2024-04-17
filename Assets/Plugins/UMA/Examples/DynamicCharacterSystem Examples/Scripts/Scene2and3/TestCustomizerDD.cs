@@ -561,7 +561,7 @@ namespace UMA.CharacterSystem.Examples
 
 		public void SetUpColorDropdowns()
 		{
-			UMA.UMAData umaData = Avatar.umaData;
+			UMA.UMAData umaData = Avatar.UmaData;
 			thisRace = Avatar.activeRace.name;
 			var currentColorDropdowns = colorDropdownPanel.transform.GetComponentsInChildren<CSColorChangerDD>(true);
 			List<string> activeColorDropdowns = new List<string>();

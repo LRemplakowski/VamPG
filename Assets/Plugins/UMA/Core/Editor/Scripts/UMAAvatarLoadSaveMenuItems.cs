@@ -36,18 +36,18 @@ namespace UMA.Editors
 				return;
 			}
 
-			if (avatar.umaData == null)
+			if (avatar.UmaData == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "The Avatar must be constructed before using this function", "OK");
 				return;
 			}
 
-			if (avatar.umaData.animator == null)
+			if (avatar.UmaData.animator == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "Animator has not been assigned!", "OK");
 				return;
 			}
-			if (avatar.umaData.animator.avatar == null)
+			if (avatar.UmaData.animator.avatar == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "Mecanim avatar is null!", "OK");
 				return;
@@ -55,7 +55,7 @@ namespace UMA.Editors
 
 			string path = EditorUtility.SaveFilePanelInProject("Save avatar", "CreatedAvatar.asset", "asset", "Save the avatar");
 
-			AssetDatabase.CreateAsset(avatar.umaData.animator.avatar, path);
+			AssetDatabase.CreateAsset(avatar.UmaData.animator.avatar, path);
 			AssetDatabase.SaveAssets();
 
 			EditorUtility.DisplayDialog("Saved", "Avatar save to assets as CreatedAvatar", "OK");
@@ -70,7 +70,7 @@ namespace UMA.Editors
 				System.IO.Directory.CreateDirectory(Folder);
 			}
 
-			SkinnedMeshRenderer[] renderers = avatar.umaData.GetRenderers();
+			SkinnedMeshRenderer[] renderers = avatar.UmaData.GetRenderers();
 			int meshno = 0;
 			foreach (SkinnedMeshRenderer smr in renderers)
 			{
@@ -443,11 +443,11 @@ namespace UMA.Editors
 						//check if Avatar is DCS
 						if (avatar is UMA.CharacterSystem.DynamicCharacterAvatar)
 						{
-							asset.Save(avatar.umaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
+							asset.Save(avatar.UmaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
 						}
 						else
 						{
-							asset.Save(avatar.umaData.umaRecipe, avatar.context);
+							asset.Save(avatar.UmaData.umaRecipe, avatar.context);
 						}
 						System.IO.File.WriteAllText(path, asset.recipeString);
 						UMAUtils.DestroySceneObject(asset);
@@ -517,11 +517,11 @@ namespace UMA.Editors
 						//check if Avatar is DCS
 						if (avatar is DynamicCharacterAvatar)
 						{
-							asset.Save(avatar.umaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
+							asset.Save(avatar.UmaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
 						}
 						else
 						{
-							asset.Save(avatar.umaData.umaRecipe, avatar.context);
+							asset.Save(avatar.UmaData.umaRecipe, avatar.context);
 						}
 						AssetDatabase.CreateAsset(asset, path);
 						AssetDatabase.SaveAssets();

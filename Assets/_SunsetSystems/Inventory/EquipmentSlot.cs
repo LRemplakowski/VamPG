@@ -78,18 +78,18 @@ namespace SunsetSystems.Equipment
             return _equippedItem;
         }
 
-        public bool TryEquipItem(IEquipableItem item)
+        public bool TryEquipItem(IEquipableItem item, out IEquipableItem unequipped)
         {
+            unequipped = default;
+            if (item == null)
+                return false;
             if (AcceptedCategory.Equals(item.ItemCategory) is false)
                 return false;
             if (_equippedItem != null)
             {
-                if (TryUnequipItem(out var _))
-                {
-                    _equippedItem = item;
-                    return true;
-                }
-                return false;
+                TryUnequipItem(out unequipped);
+                _equippedItem = item;
+                return true;
             }
             else
             {
@@ -103,7 +103,7 @@ namespace SunsetSystems.Equipment
             item = _equippedItem;
             if (ItemDatabase.Instance.TryGetEntryByReadableID(DefaultItemID, out IBaseItem defaultItem) && defaultItem is IEquipableItem equipableItem)
                 _equippedItem = equipableItem;
-            return item != null && item != _equippedItem;
+            return item != null || item.ReadableID != DefaultItemID;
         }
     }
 }

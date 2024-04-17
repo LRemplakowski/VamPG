@@ -16,9 +16,9 @@ namespace UMA
         {
             if (avatar != null)
             {
-                if (avatar.umaData != null && avatar.umaData.umaRecipe != null)
+                if (avatar.UmaData != null && avatar.UmaData.umaRecipe != null)
                 {
-                    var slots = avatar.umaData.umaRecipe.slotDataList;
+                    var slots = avatar.UmaData.umaRecipe.slotDataList;
 
                     foreach (var slot in slots)
                     {

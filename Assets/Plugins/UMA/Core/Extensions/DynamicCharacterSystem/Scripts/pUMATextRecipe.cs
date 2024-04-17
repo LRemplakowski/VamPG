@@ -457,7 +457,7 @@ namespace UMA
 					Debug.LogWarning("DCSPackRecipe Type can only be used for recipeTypes 'DynamicCharacterAvatar'");
 					return;
 				}
-				var recipeToSave = dcaToSave.umaData.umaRecipe;
+				var recipeToSave = dcaToSave.UmaData.umaRecipe;
 				packedRecipeType = pRecipeType;
 				name = recipeName;
 				race = dcaToSave.activeRace.racedata.raceName;

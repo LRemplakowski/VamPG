@@ -349,7 +349,7 @@ namespace UMA
 
                 Transform t = decalIndicator.visualPlane.transform;
 
-                Mesh characterMesh  = avatar.umaData.GetRenderer(0).sharedMesh;
+                Mesh characterMesh  = avatar.UmaData.GetRenderer(0).sharedMesh;
 
                 NativeArray<byte> basebonesPerVertex = characterMesh.GetBonesPerVertex();
                 NativeArray<BoneWeight1> baseboneWeights = characterMesh.GetAllBoneWeights();
@@ -403,7 +403,7 @@ namespace UMA
                 SimpleDecal sd = newDecal.AddComponent<SimpleDecal>();
 
                 SkinnedMeshRenderer characterRenderer = Character.GetComponentInChildren<SkinnedMeshRenderer>();
-                UMAData cData = avatar.umaData;
+                UMAData cData = avatar.UmaData;
 
                 var boneHashNames = cData.skeleton.GetBoneHashNames();
 

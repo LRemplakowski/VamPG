@@ -14,7 +14,7 @@ namespace SunsetSystems.Equipment
 
         EquipmentSlotID ID { get; }
 
-        bool TryEquipItem(IEquipableItem itemToEquip);
+        bool TryEquipItem(IEquipableItem itemToEquip, out IEquipableItem unequipped);
 
         bool TryUnequipItem(out IEquipableItem previouslyEquippedItem);
     }

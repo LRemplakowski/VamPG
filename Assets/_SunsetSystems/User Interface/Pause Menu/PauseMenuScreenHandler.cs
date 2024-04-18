@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
+using SunsetSystems.Game;
 using SunsetSystems.UI.Pause;
 using UltEvents;
 using UnityEngine;
@@ -35,6 +36,8 @@ namespace SunsetSystems.UI
 
         public void OpenMenuScreen(PauseMenuScreen screen)
         {
+            if (GameManager.Instance.CurrentState == GameState.Conversation)
+                return;
             switch (screen)
             {
                 case PauseMenuScreen.Settings:

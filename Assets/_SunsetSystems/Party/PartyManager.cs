@@ -121,20 +121,13 @@ namespace SunsetSystems.Party
                 {
                     _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
                     if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                    {
                         creature.ForceToPosition(savedPosition);
+                    }
                 }
-            }
-            OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
-        }
-
-        private async void InitializePartyAtSavedPositions()
-        {
-            foreach (string key in _partyPositions.Keys)
-            {
-                if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
+                else
                 {
-                    Vector3 position = _partyPositions[key];
-                    _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
+                    Debug.LogError($"Party Member {key} is active, but has no template!");
                 }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());

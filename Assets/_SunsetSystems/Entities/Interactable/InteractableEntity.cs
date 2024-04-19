@@ -168,6 +168,7 @@ namespace SunsetSystems.Entities.Interactable
                 InteractionHandlers.Add(interactionHandler);
         }
 
+        [Button]
         public virtual void Interact()
         {
             if (!Interactable)

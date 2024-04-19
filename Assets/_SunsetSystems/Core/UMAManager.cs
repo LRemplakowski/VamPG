@@ -68,6 +68,7 @@ namespace SunsetSystems.Core.UMA
                 _umaAvatar = _umaRoot.AddComponent<DynamicCharacterAvatar>();
                 _umaAvatar.RacePreset = _umaConfig.BodyRaceData[BodyType.Female].raceName;
                 _umaAvatar.RecreateAnimatorOnRaceChange = false;
+                _umaAvatar.KeepAnimatorController = true;
                 _umaAvatar.predefinedDNA = new();
                 DynamicCharacterAvatar.RaceAnimator maleAnimator = new()
                 {
@@ -87,8 +88,6 @@ namespace SunsetSystems.Core.UMA
             _umaAvatar.WardrobeRecipes.Clear();
             if (BaseLookWardrobeCollection != null)
                 _umaAvatar.LoadWardrobeCollection(BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
-            _umaAvatar.BuildCharacter(true);
         }
 
         private void SetBodyType(BodyType bodyType)

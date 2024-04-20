@@ -612,9 +612,13 @@ namespace UMA
 				umaData.isShapeDirty = false;
 				DnaChanged++;
 			}
-			else if (umaData.skeleton.isUpdating)
+			else if (umaData.skeleton != null && umaData.skeleton.isUpdating)
 			{
 				umaData.skeleton.EndSkeletonUpdate();
+			}
+			else
+			{
+				return false;
 			}
 
 			UMAReady();

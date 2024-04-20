@@ -65,7 +65,7 @@ namespace ES3Types
 					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<BaseLookWardrobeCollection>k__BackingField", reader.Read<UMA.CharacterSystem.UMAWardrobeCollection>(), instance);
 					break;
 					case "<EquipmentSlotsData>k__BackingField":
-					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<EquipmentSlotsData>k__BackingField", reader.Read<System.Collections.Generic.Dictionary<SunsetSystems.Equipment.EquipmentSlotID, SunsetSystems.Equipment.IEquipmentSlot>>(), instance);
+					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<EquipmentSlotsData>k__BackingField", reader.Read<System.Collections.Generic.Dictionary<SunsetSystems.Equipment.EquipmentSlotID, System.String>>(), instance);
 					break;
 					case "<StatsData>k__BackingField":
 					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<StatsData>k__BackingField", reader.Read<SunsetSystems.Entities.Data.StatsData>(), instance);

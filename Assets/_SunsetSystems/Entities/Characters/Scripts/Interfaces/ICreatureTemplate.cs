@@ -21,7 +21,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         AssetReferenceSprite PortraitAssetRef { get; }
         UMAWardrobeCollection BaseLookWardrobeCollection { get; }
 
-        Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
+        Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; }
         StatsData StatsData { get; }
     }
 }

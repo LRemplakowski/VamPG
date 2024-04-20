@@ -133,7 +133,7 @@ namespace SunsetSystems.Entities.Characters
 
             public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
+            public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
             public StatsData StatsData { get; private set; }
 
@@ -148,7 +148,14 @@ namespace SunsetSystems.Entities.Characters
                 this.CreatureType = asset.CreatureType;
                 this.PortraitAssetRef = asset.PortraitAssetRef;
                 this.BaseLookWardrobeCollection = asset.BaseLookWardrobeCollection;
-                this.EquipmentSlotsData = new(asset.EquipmentSlotsData);
+                this.EquipmentSlotsData = new();
+                foreach (var item in asset.EquipmentSlotsData)
+                {
+                    if (item.Value.GetEquippedItem() == null)
+                        this.EquipmentSlotsData[item.Key] = item.Value.DefaultItemID;
+                    else
+                        this.EquipmentSlotsData[item.Key] = item.Value.GetEquippedItem().ReadableID;
+                }
                 this.StatsData = new(asset.StatsData);
             }
 

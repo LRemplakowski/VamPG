@@ -903,7 +903,7 @@ namespace UMA
 			protected Dictionary<string, int> mergedSharedColors = new Dictionary<string, int>();
 			[SerializeField]
 			public List<UMADnaBase> dnaValues = new List<UMADnaBase>();
-			public SlotData[] slotDataList;
+			public SlotData[] slotDataList = new SlotData[0];
 			public OverlayColorData[] sharedColors;
 			public Dictionary<string, List<MeshHideAsset>> MeshHideDictionary { get; set; } = new Dictionary<string, List<MeshHideAsset>>();
 			public Dictionary<string, List<UMAMeshData>> BlendshapeSlots { get; set; } = new Dictionary<string, List<UMAMeshData>>();

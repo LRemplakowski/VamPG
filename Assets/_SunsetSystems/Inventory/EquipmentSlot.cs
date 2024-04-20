@@ -74,7 +74,7 @@ namespace SunsetSystems.Equipment
         }
 
         public IEquipableItem GetEquippedItem()
-        {
+        { 
             return _equippedItem;
         }
 

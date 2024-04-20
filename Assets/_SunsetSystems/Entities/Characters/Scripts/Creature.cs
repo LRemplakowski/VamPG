@@ -173,7 +173,11 @@ namespace SunsetSystems.Entities.Characters
                 CreatureType = instance.References.CreatureData.CreatureType;
                 PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
                 BaseLookWardrobeCollection = instance.References.UMAManager.BaseLookWardrobeCollection;
-                EquipmentSlotsData = new(instance.References.EquipmentManager.EquipmentSlots);
+                EquipmentSlotsData = new();
+                foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
+                {
+                    EquipmentSlotsData[item.Key] = item.Value.GetEquippedItem().ReadableID;
+                }
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 
@@ -202,7 +206,7 @@ namespace SunsetSystems.Entities.Characters
 
             public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; private set; }
+            public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
             public StatsData StatsData { get; private set; }
         }

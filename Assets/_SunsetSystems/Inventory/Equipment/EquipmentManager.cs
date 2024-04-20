@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
@@ -95,9 +96,9 @@ namespace SunsetSystems.Entities.Characters
             {
                 if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))
                 {
-                    if (mySlot.TryEquipItem(templateSlot.GetEquippedItem(), out var _))
+                    if (ItemDatabase.Instance.TryGetEntryByReadableID(templateSlot, out var item) && item is IWearable wearable && mySlot.TryEquipItem(wearable, out var _))
                     {
-                        Debug.Log($"Injected item {templateSlot.GetEquippedItem()} into equipment manager!");
+                        Debug.Log($"Injected item {mySlot.GetEquippedItem()} into equipment manager!");
                         ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());
                     }
                 }

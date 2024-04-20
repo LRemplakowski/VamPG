@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using UMA.CharacterSystem;
+using System.Text;
 
 #if UMA_ADDRESSABLES
 using UnityEngine.AddressableAssets;
@@ -22,7 +23,6 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
-using System.Text;
 #endif
 
 
@@ -1492,7 +1492,7 @@ namespace UMA
 
         public static string KeysToString(string msg, List<string> keys)
         {
-            StringBuilder sb = new StringBuilder(msg);
+            StringBuilder sb = new(msg);
             sb.Append(String.Join("; ", keys));
             return sb.ToString();
         }

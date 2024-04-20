@@ -61,6 +61,8 @@ namespace SunsetSystems.Entities
         {
             if (_unique == null)
                 _unique = GetComponent<UniqueId>();
+            if (_references == null)
+                _references = GetComponent<IEntityReferences>();
             List<IPersistentComponent> cachedComponents = new(PersistentComponents);
             cachedComponents.AddRange(GetComponents<IPersistentComponent>());
             PersistentComponents.Clear();

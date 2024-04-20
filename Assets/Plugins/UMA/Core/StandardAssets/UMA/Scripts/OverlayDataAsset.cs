@@ -1,16 +1,19 @@
 using UnityEngine;
 using System.Collections;
-using System;
 using UnityEngine.Rendering;
+#if UNITY_EDITOR
+using UnityEditorInternal;
+#endif
+
 
 namespace UMA
 {
-	/// <summary>
-	/// Contains the immutable data shared between overlays of the same type.
-	/// </summary>
-	[PreferBinarySerialization]
+    /// <summary>
+    /// Contains the immutable data shared between overlays of the same type.
+    /// </summary>
+    [PreferBinarySerialization]
 	[System.Serializable]
-	public partial class OverlayDataAsset : ScriptableObject, ISerializationCallbackReceiver
+	public partial class OverlayDataAsset : ScriptableObject, ISerializationCallbackReceiver, IUMAIndexOptions
 	{
 		[Tooltip("The name of this overlay.")]
 		public string overlayName;
@@ -22,6 +25,10 @@ namespace UMA
 		public bool doSave { get; set; } = false;
 		public bool additionalFoldout { get; set; } = false;
 		public bool textureFoldout { get; set; } = false;
+		public bool tagsFoldout { get; set; } = false;
+		public bool occlusionFoldout { get; set; } = false;
+
+		public ReorderableList tagsList;
 #endif
 		public enum OverlayType
 		{
@@ -110,10 +117,20 @@ namespace UMA
 			get
 			{
 				if (textureList == null)
-					return 0;	
-				return textureList.Length;
+                {
+                    return 0;
+                }
+
+                return textureList.Length;
 			}
 		}
+
+        public bool forceKeep = false;
+        public bool ForceKeep { get { return forceKeep; } set { forceKeep = value; } }
+
+        private bool labelLocalFiles = false;
+        public bool LabelLocalFiles { get { return labelLocalFiles; } set { labelLocalFiles = value; } }
+
 
 		public OverlayBlend GetBlend(int channel)
 		{
@@ -160,8 +177,12 @@ namespace UMA
 				{
 					get
 					{
-						if (_instance == null) _instance = new OcclusionEntryComparer();
-						return _instance;
+						if (_instance == null)
+                        {
+                            _instance = new OcclusionEntryComparer();
+                        }
+
+                        return _instance;
 					}
 				}
 
@@ -174,10 +195,16 @@ namespace UMA
 					var yv = (yo == null) ? (int)y : yo.slotNameHash;
 
 					if (xv < yv)
-						return -1;
-					if (xv > yv)
-						return 1;
-					return 0;
+                    {
+                        return -1;
+                    }
+
+                    if (xv > yv)
+                    {
+                        return 1;
+                    }
+
+                    return 0;
 				}
 			}
 		}

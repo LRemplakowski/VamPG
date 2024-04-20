@@ -1,4 +1,5 @@
 using System.Collections;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -105,39 +106,43 @@ namespace SunsetSystems.Core.UMA
             _umaAvatar.LoadWardrobeCollection(BaseLookWardrobeCollection);
         }
 
-        public void OnItemEquipped(IEquipableItem item)
+        public async void OnItemEquipped(IEquipableItem item)
         {
             if (item is IWearable wearable && _umaAvatar != null)
             {
                 if (wearable.WearableWardrobe != null)
                 {
                     _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
-                    _umaAvatar.UmaData.Dirty();
+                    if (_umaAvatar.umaData == null)
+                        await new WaitUntil(() => _umaAvatar.umaData != null);
+                    _umaAvatar.umaData.Dirty();
                     if (_updateOnNextFrame == null)
                     {
                         _updateOnNextFrame = RebuildUmaOnNextFrame();
-                        StartCoroutine(_updateOnNextFrame);
+                        _ = StartCoroutine(_updateOnNextFrame);
                     }
                 }
                 else
                 {
-                    Debug.LogError($"Item {wearable} has a null WardrobeCollection reference!");
+                    Debug.LogWarning($"Item {wearable} has a null WardrobeCollection reference!");
                 }
             }
         }
 
-        public void OnItemUnequipped(IEquipableItem item)
+        public async void OnItemUnequipped(IEquipableItem item)
         {
             if (item is IWearable wearable)
             {
                 if (wearable.WearableWardrobe != null)
                 {
                     _umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
-                    _umaAvatar.UmaData.Dirty();
+                    if (_umaAvatar.umaData == null)
+                        await new WaitUntil(() => _umaAvatar.umaData != null);
+                    _umaAvatar.umaData.Dirty();
                     if (_updateOnNextFrame == null)
                     {
                         _updateOnNextFrame = RebuildUmaOnNextFrame();
-                        StartCoroutine(_updateOnNextFrame);
+                        _ = StartCoroutine(_updateOnNextFrame);
                     }
                 }
             }

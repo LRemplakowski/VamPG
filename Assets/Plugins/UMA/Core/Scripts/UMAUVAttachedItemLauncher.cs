@@ -1,11 +1,6 @@
 #define USING_BAKEMESH
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using UMA;
 using UMA.CharacterSystem;
-using Unity.Collections;
 using UnityEngine;
 
 
@@ -54,13 +49,14 @@ namespace UMA
             this.sourceSlot = slotData;
         }
 
-        public void OnDnaAppliedBootstrapper(UMAData umaData)
+
+        public void Setup(UMAData umaData, bool Activate)
         {
 #if UNITY_EDITOR
-			if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode) 
-			{
-				return;
-			}
+            if (!UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                return;
+            }
 #endif
             Debug.Log($"DNA Applied {GetInstanceID()}");
 
@@ -70,7 +66,12 @@ namespace UMA
                 uvam = umaData.gameObject.AddComponent<UMAUVAttachedItemManager>();
                 uvam.Setup(umaData);
             }
-            uvam.AddAttachedItem(umaData, this);
+            uvam.AddAttachedItem(umaData, this, Activate);
+        }
+
+        public void OnDnaAppliedBootstrapper(UMAData umaData)
+        {
+            Setup(umaData, true);
         }
     }
 }

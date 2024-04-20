@@ -13,9 +13,7 @@ MonoBehaviour:
   m_Name: UMA_Diffuse_Normal_Metallic_Occlusion
   m_EditorClassIdentifier: 
   translateSRP: 1
-  _material: {fileID: 2100000, guid: 28b1ac3a307b8f840b606f83b7fb55d7, type: 2}
-  srpMaterials: []
-  secondPass: {fileID: 0}
+  material: {fileID: 2100000, guid: 28b1ac3a307b8f840b606f83b7fb55d7, type: 2}
   materialType: 1
   channels:
   - channelType: 4
@@ -28,7 +26,7 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 1
     textureFormat: 0
-    materialPropertyName: _NormalMap
+    materialPropertyName: _BumpMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -36,7 +34,15 @@ MonoBehaviour:
     NonShaderTexture: 0
   - channelType: 0
     textureFormat: 0
-    materialPropertyName: _MaskMap
+    materialPropertyName: _MetallicGlossMap
+    sourceTextureName: 
+    Compression: 0
+    DownSample: 0
+    ConvertRenderTexture: 0
+    NonShaderTexture: 0
+  - channelType: 0
+    textureFormat: 0
+    materialPropertyName: _OcclusionMap
     sourceTextureName: 
     Compression: 0
     DownSample: 0
@@ -49,5 +55,3 @@ MonoBehaviour:
   shaderParms: []
   MaskWithCurrentColor: 0
   maskMultiplier: {r: 1, g: 1, b: 1, a: 1}
-  MaterialName: 
-  ShaderName: 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Text;
+using System.Globalization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,17 +19,17 @@ namespace UMA.Editors
 			sb.Append("g ").Append(m.name).Append("\n");
 			foreach (Vector3 v in m.vertices)
 			{
-				sb.Append(string.Format("v {0} {1} {2}\n", v.x, v.y, v.z));
+				sb.Append(string.Format(CultureInfo.InvariantCulture, "v {0} {1} {2}\n", v.x, v.y, v.z));
 			}
 			sb.Append("\n");
 			foreach (Vector3 v in m.normals)
 			{
-				sb.Append(string.Format("vn {0} {1} {2}\n", v.x, v.y, v.z));
+				sb.Append(string.Format(CultureInfo.InvariantCulture, "vn {0} {1} {2}\n", v.x, v.y, v.z));
 			}
 			sb.Append("\n");
 			foreach (Vector3 v in m.uv)
 			{
-				sb.Append(string.Format("vt {0} {1}\n", v.x, v.y));
+				sb.Append(string.Format(CultureInfo.InvariantCulture, "vt {0} {1}\n", v.x, v.y));
 			}
 			for (int material = 0; material < m.subMeshCount; material++)
 			{
@@ -69,8 +70,8 @@ namespace UMA.Editors
 #if UMA_32BITBUFFERS
 				staticMesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 #endif
-						avatar.UmaData.GetRenderer(0).BakeMesh(staticMesh);
-						FileUtils.WriteAllText(path, MeshToString(staticMesh, avatar.UmaData.GetRenderer(0).sharedMaterials));
+						avatar.umaData.GetRenderer(0).BakeMesh(staticMesh);
+						FileUtils.WriteAllText(path, MeshToString(staticMesh, avatar.umaData.GetRenderer(0).sharedMaterials));
 						UMAUtils.DestroySceneObject(staticMesh);
 					}
 				}

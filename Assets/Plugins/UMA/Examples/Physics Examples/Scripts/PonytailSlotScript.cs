@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using UMA;
 using UnityEngine;
 
 namespace UMA.Examples
 {
-	/// <summary>
-	/// Slot recipe script intended for runtime set up of character joints to simulate a physics based pony tail.
-	/// </summary>
-	public class PonytailSlotScript : MonoBehaviour
+    /// <summary>
+    /// Slot recipe script intended for runtime set up of character joints to simulate a physics based pony tail.
+    /// </summary>
+    public class PonytailSlotScript : MonoBehaviour
 	{
 		public bool UseSwayBone;
 	    // Properties to setup the Swing chain
@@ -132,9 +131,11 @@ namespace UMA.Examples
 	                r.angularDrag = SwingAngularDrag;
 
 	                if (FreezePositions)
-	                  r.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+                    {
+                        r.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+                    }
 
-	                SphereCollider sc = t.gameObject.AddComponent<SphereCollider>();
+                    SphereCollider sc = t.gameObject.AddComponent<SphereCollider>();
 	                sc.radius = SwingRadius;
 					sc.gameObject.layer = BoneLayer;
 
@@ -177,9 +178,11 @@ namespace UMA.Examples
 	        go.layer = 8; // our ragdoll layer
 
 	        if (go.GetComponent<Rigidbody>() != null)
-	            return t;
+            {
+                return t;
+            }
 
-	        Rigidbody r = go.AddComponent<Rigidbody>();
+            Rigidbody r = go.AddComponent<Rigidbody>();
 	        r.isKinematic = true;
 	        r.useGravity = false;
 	        r.maxAngularVelocity = 4;

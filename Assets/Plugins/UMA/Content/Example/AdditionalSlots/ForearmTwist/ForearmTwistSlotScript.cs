@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace UMA
 {
-	/// <summary>
-	/// Auxillary slot which adds a TwistBone component for the forearms of a newly created character.
-	/// </summary>
-	public class ForearmTwistSlotScript : MonoBehaviour 
+    /// <summary>
+    /// Auxillary slot which adds a TwistBone component for the forearms of a newly created character.
+    /// </summary>
+    public class ForearmTwistSlotScript : MonoBehaviour 
 	{
 		public string LeftHandBoneName = "LeftHand";
 		public string RightHandBoneName = "RightHand";
@@ -38,8 +37,11 @@ namespace UMA
 			if ((leftHand == null) || (rightHand == null) || (leftTwist == null) || (rightTwist == null))
 			{
 				if (Debug.isDebugBuild)
-					Debug.LogError("Failed to add Forearm Twist to: " + umaData.name);
-				return;
+                {
+                    Debug.LogError("Failed to add Forearm Twist to: " + umaData.name);
+                }
+
+                return;
 			}
 
 			if (umaData.gameObject.GetComponent<TwistBones>() == null)

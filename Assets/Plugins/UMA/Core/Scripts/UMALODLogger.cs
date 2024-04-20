@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -16,12 +14,13 @@ namespace UMA
         {
             if (avatar != null)
             {
-                if (avatar.UmaData != null && avatar.UmaData.umaRecipe != null)
+                if (avatar.umaData != null && avatar.umaData.umaRecipe != null)
                 {
-                    var slots = avatar.UmaData.umaRecipe.slotDataList;
+                    var slots = avatar.umaData.umaRecipe.slotDataList;
 
-                    foreach (var slot in slots)
+                    for (int i = 0; i < slots.Length; i++)
                     {
+                        SlotData slot = slots[i];
                         if (slot != null)
                         {
                             if (slot.slotName != null)

@@ -1,11 +1,9 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UMA;
 
 namespace UMA.Examples
 {
-	public class UMACrowd : MonoBehaviour
+    public class UMACrowd : MonoBehaviour
 	{
 		public UMACrowdRandomSet[] randomPool;
 		public UMAGeneratorBase generator;
@@ -40,8 +38,12 @@ namespace UMA.Examples
 
 		void Awake()
 		{
-			if (space <= 0) space = 1;
-			if (UMAContextBase == null)
+			if (space <= 0)
+            {
+                space = 1;
+            }
+
+            if (UMAContextBase == null)
             {
 				UMAContextBase = UMAContext.Instance;
             }
@@ -460,9 +462,11 @@ namespace UMA.Examples
 			if (generateLotsUMA && hideWhileGeneratingLots)
 			{
 				if (umaData.animator != null)
-					umaData.animator.enabled = false;
-				
-				Renderer[] renderers = umaData.GetRenderers();
+                {
+                    umaData.animator.enabled = false;
+                }
+
+                Renderer[] renderers = umaData.GetRenderers();
 				for (int i = 0; i < renderers.Length; i++)
 				{
 					renderers[i].enabled = false;
@@ -683,13 +687,13 @@ namespace UMA.Examples
 
 			UMADynamicAvatar umaDynamicAvatar = newGO.AddComponent<UMADynamicAvatar>();
 			umaDynamicAvatar.Initialize();
-			umaData = umaDynamicAvatar.UmaData;
+			umaData = umaDynamicAvatar.umaData;
 			umaData.CharacterCreated = new UMADataEvent(CharacterCreated);
 			umaData.CharacterDestroyed = new UMADataEvent(CharacterDestroyed);
 			umaData.CharacterUpdated = new UMADataEvent(CharacterUpdated);
 			umaDynamicAvatar.umaGenerator = generator;
 			umaData.umaGenerator = generator;
-			var umaRecipe = umaDynamicAvatar.UmaData.umaRecipe;
+			var umaRecipe = umaDynamicAvatar.umaData.umaRecipe;
 			UMACrowdRandomSet.CrowdRaceData race = null;
 
 			if (randomPool != null && randomPool.Length > 0)
@@ -739,8 +743,11 @@ namespace UMA.Examples
 		{
 			Vector3 zeroPos = Vector3.zero;
 			if (zeroPoint != null)
-				zeroPos = zeroPoint.position;
-			Vector3 newPos = zeroPos + new Vector3((spawnX - umaCrowdSize.x / 2f + 0.5f) * space, 0f, (spawnY - umaCrowdSize.y / 2f + 0.5f) * space);
+            {
+                zeroPos = zeroPoint.position;
+            }
+
+            Vector3 newPos = zeroPos + new Vector3((spawnX - umaCrowdSize.x / 2f + 0.5f) * space, 0f, (spawnY - umaCrowdSize.y / 2f + 0.5f) * space);
 
 			if (spawnY < umaCrowdSize.y)
 			{
@@ -759,9 +766,11 @@ namespace UMA.Examples
 					foreach (UMAData generatedData in generatedCrowd)
 					{
 						if (generatedData.animator != null)
-							generatedData.animator.enabled = true;
-						
-						Renderer[] renderers = generatedData.GetRenderers();
+                        {
+                            generatedData.animator.enabled = true;
+                        }
+
+                        Renderer[] renderers = generatedData.GetRenderers();
 						for (int i = 0; i < renderers.Length; i++)
 						{
 							renderers[i].enabled = true;
@@ -797,10 +806,14 @@ namespace UMA.Examples
 			}
 
 			if (umaCrowdSize.x <= 1 && umaCrowdSize.y <= 1)
-				generateUMA = true;
-			else
-				generateLotsUMA = true;
-		}
+            {
+                generateUMA = true;
+            }
+            else
+            {
+                generateLotsUMA = true;
+            }
+        }
 
 		public void RandomizeAllDna()
 		{
@@ -830,8 +843,8 @@ namespace UMA.Examples
 					Debug.Log("Couldn't find dynamic avatar on child: " + child.gameObject.name);
 					continue;
 				}
-				umaData = umaDynamicAvatar.UmaData;
-				var umaRecipe = umaDynamicAvatar.UmaData.umaRecipe;
+				umaData = umaDynamicAvatar.umaData;
+				var umaRecipe = umaDynamicAvatar.umaData.umaRecipe;
 				UMACrowdRandomSet.CrowdRaceData race = null;
 				
 				if (randomPool != null && randomPool.Length > 0)

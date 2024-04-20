@@ -1,16 +1,14 @@
 using UnityEngine;
 using UnityEditor;
-using UMA;
 using UMA.CharacterSystem;
 using System.Collections.Generic;
 using System.IO;
 using UMA.Examples;
 using UMA.PoseTools;
-using static UMA.UMAPackedRecipeBase;
 
 namespace UMA.Editors
 {
-	public class UMAAvatarLoadSaveMenuItems : Editor
+    public class UMAAvatarLoadSaveMenuItems : Editor
 	{
 		[UnityEditor.MenuItem("GameObject/UMA/Save Mecanim Avatar to Asset (runtime only)")]
 		[MenuItem("UMA/Runtime/Save Selected Avatars Mecanim Avatar to Asset", priority = 1)]
@@ -36,18 +34,18 @@ namespace UMA.Editors
 				return;
 			}
 
-			if (avatar.UmaData == null)
+			if (avatar.umaData == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "The Avatar must be constructed before using this function", "OK");
 				return;
 			}
 
-			if (avatar.UmaData.animator == null)
+			if (avatar.umaData.animator == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "Animator has not been assigned!", "OK");
 				return;
 			}
-			if (avatar.UmaData.animator.avatar == null)
+			if (avatar.umaData.animator.avatar == null)
 			{
 				EditorUtility.DisplayDialog("Notice", "Mecanim avatar is null!", "OK");
 				return;
@@ -55,7 +53,7 @@ namespace UMA.Editors
 
 			string path = EditorUtility.SaveFilePanelInProject("Save avatar", "CreatedAvatar.asset", "asset", "Save the avatar");
 
-			AssetDatabase.CreateAsset(avatar.UmaData.animator.avatar, path);
+			AssetDatabase.CreateAsset(avatar.umaData.animator.avatar, path);
 			AssetDatabase.SaveAssets();
 
 			EditorUtility.DisplayDialog("Saved", "Avatar save to assets as CreatedAvatar", "OK");
@@ -70,7 +68,7 @@ namespace UMA.Editors
 				System.IO.Directory.CreateDirectory(Folder);
 			}
 
-			SkinnedMeshRenderer[] renderers = avatar.UmaData.GetRenderers();
+			SkinnedMeshRenderer[] renderers = avatar.umaData.GetRenderers();
 			int meshno = 0;
 			foreach (SkinnedMeshRenderer smr in renderers)
 			{
@@ -149,9 +147,12 @@ namespace UMA.Editors
 
 			DestroyImmediate(avatar);
 			var lod = baseObject.GetComponent<UMASimpleLOD>();
-			if (lod != null) DestroyImmediate(lod);
+			if (lod != null)
+            {
+                DestroyImmediate(lod);
+            }
 
-			if (AddStandaloneDNA)
+            if (AddStandaloneDNA)
 			{
 				UMAData uda = baseObject.GetComponent<UMAData>();
 				StandAloneDNA sda = baseObject.AddComponent<UMA.StandAloneDNA>();
@@ -166,12 +167,18 @@ namespace UMA.Editors
 			else
 			{
 				var ud = baseObject.GetComponent<UMAData>();
-				if (ud != null) DestroyImmediate(ud);
-			}
+				if (ud != null)
+                {
+                    DestroyImmediate(ud);
+                }
+            }
 			var ue = baseObject.GetComponent<UMAExpressionPlayer>();
-			if (ue != null) DestroyImmediate(ue);
+			if (ue != null)
+            {
+                DestroyImmediate(ue);
+            }
 
-			baseObject.name = CharName;
+            baseObject.name = CharName;
 			string prefabName = Folder + "/"+CharName+".prefab";
 			prefabName = CustomAssetUtility.UnityFriendlyPath(prefabName);
 			PrefabUtility.SaveAsPrefabAssetAndConnect(baseObject, prefabName, InteractionMode.AutomatedAction);
@@ -222,8 +229,11 @@ namespace UMA.Editors
 					{
 						string texname = PathBase + tex + ".PNG";
 						Texture texture = mat.GetTexture(tex);
-						if (texture != null) SaveTexture(texture, texname);
-					}
+						if (texture != null)
+                        {
+                            SaveTexture(texture, texname);
+                        }
+                    }
 				}
 			}
 		}
@@ -443,11 +453,11 @@ namespace UMA.Editors
 						//check if Avatar is DCS
 						if (avatar is UMA.CharacterSystem.DynamicCharacterAvatar)
 						{
-							asset.Save(avatar.UmaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
+							asset.Save(avatar.umaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
 						}
 						else
 						{
-							asset.Save(avatar.UmaData.umaRecipe, avatar.context);
+							asset.Save(avatar.umaData.umaRecipe, avatar.context);
 						}
 						System.IO.File.WriteAllText(path, asset.recipeString);
 						UMAUtils.DestroySceneObject(asset);
@@ -517,11 +527,11 @@ namespace UMA.Editors
 						//check if Avatar is DCS
 						if (avatar is DynamicCharacterAvatar)
 						{
-							asset.Save(avatar.UmaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
+							asset.Save(avatar.umaData.umaRecipe, avatar.context, (avatar as DynamicCharacterAvatar).WardrobeRecipes, true);
 						}
 						else
 						{
-							asset.Save(avatar.UmaData.umaRecipe, avatar.context);
+							asset.Save(avatar.umaData.umaRecipe, avatar.context);
 						}
 						AssetDatabase.CreateAsset(asset, path);
 						AssetDatabase.SaveAssets();
@@ -692,8 +702,10 @@ namespace UMA.Editors
 				if (UAI.IsIndexedType(type))
 				{
 					if (UAI.EvilAddAsset(type, o))
-						added++;
-				}
+                    {
+                        added++;
+                    }
+                }
 			}
 			UAI.ForceSave();
 			EditorUtility.DisplayDialog("Success", added + " item(s) added to Global Library", "OK");

@@ -171,7 +171,6 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
                 BaseLookWardrobeCollection = instance.References.UMAManager.BaseLookWardrobeCollection;
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
@@ -201,8 +200,6 @@ namespace SunsetSystems.Entities.Characters
             public BodyType BodyType { get; private set; }
 
             public CreatureType CreatureType { get; private set; }
-
-            public AssetReferenceSprite PortraitAssetRef { get; private set; }
 
             public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 

@@ -28,8 +28,7 @@ namespace SunsetSystems.Core.AddressableManagement
             {
                 if (handle.IsDone is false)
                     await handle.Task;
-                return Addressables.LoadAssetAsync<T>(assetReference).Result;
-                    
+                return Addressables.LoadAssetAsync<T>(assetReference).Result;                 
             }
             else
             {

@@ -5,6 +5,7 @@ using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using SunsetSystems.Utils.Extensions;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -31,7 +32,7 @@ namespace SunsetSystems.Entities.Characters
         private string _readableIDOverride = "";
         public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [field: SerializeField]
-        public AssetReferenceSprite PortraitAssetRef { get; private set; }
+        public Sprite Portrait { get; private set; }
         [SerializeField]
         private StatsConfig _statsConfig;
         public StatsData StatsData => new(_statsConfig);
@@ -129,8 +130,6 @@ namespace SunsetSystems.Entities.Characters
 
             public CreatureType CreatureType { get; private set; }
 
-            public AssetReferenceSprite PortraitAssetRef { get; private set; }
-
             public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
 
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
@@ -146,7 +145,6 @@ namespace SunsetSystems.Entities.Characters
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                this.PortraitAssetRef = asset.PortraitAssetRef;
                 this.BaseLookWardrobeCollection = asset.BaseLookWardrobeCollection;
                 this.EquipmentSlotsData = new();
                 foreach (var item in asset.EquipmentSlotsData)

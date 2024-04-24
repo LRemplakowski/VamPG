@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using UMA;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -15,8 +12,17 @@ namespace SunsetSystems.Entities.Characters
         public string ReadableID { get; private set; }
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; }
-        [field: SerializeField]
-        public AssetReferenceSprite PortraitAssetRef { get; private set; }
+        [SerializeField]
+        private Sprite _portrait;
+        public Sprite Portrait 
+        { 
+            get 
+            {
+                if (_portrait == null && CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+                    _portrait = config.Portrait;
+                return _portrait;
+            } 
+        }
         [field: SerializeField]
         public Faction Faction { get; private set; }
         [field: SerializeField]
@@ -30,7 +36,8 @@ namespace SunsetSystems.Entities.Characters
             LastName = template.LastName;
             DatabaseID = template.DatabaseID;
             ReadableID = template.ReadableID;
-            PortraitAssetRef = template.PortraitAssetRef;
+            if (CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+                _portrait = config.Portrait;
             Faction = template.Faction;
             BodyType = template.BodyType;
             CreatureType = template.CreatureType;

@@ -11,31 +11,19 @@ namespace SunsetSystems.Dialogue
     public static class DialogueExtensions
     {
         private static string lastID;
-        private static Sprite lastLoadedSprite;
+        private static Sprite lastSprite;
 
-        public async static Task<Sprite> GetSpeakerPortrait(this DialogueViewBase dialogueViewBase, string speakerID)
+        public static Sprite GetSpeakerPortrait(this DialogueViewBase dialogueViewBase, string speakerID)
         {
             Debug.Log($"Fetching config of {speakerID} from the database!");
-            if (lastID == speakerID && lastLoadedSprite != null)
-                return lastLoadedSprite;
+            if (lastID == speakerID && lastSprite != null)
+                return lastSprite;
             if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
             {
-                if (CreatureDatabase.Instance.TryGetConfig(lastID, out CreatureConfig previousConfig))
-                {
-                    if (previousConfig.PortraitAssetRef == config.PortraitAssetRef && lastLoadedSprite != null)
-                        return lastLoadedSprite;
-                    lastLoadedSprite = null;
-                    //AddressableManager.Instance.ReleaseAsset(previousConfig.PortraitAssetRef);
-                }
                 lastID = speakerID;
-                lastLoadedSprite = await AddressableManager.Instance.LoadAssetAsync(config.PortraitAssetRef);
-                return lastLoadedSprite;
+                lastSprite = config.Portrait;
             }
-            else
-            {
-                Debug.LogWarning($"Config database fetch failed for ID {speakerID}");
-            }
-            return null;
+            return lastSprite;
         }
     }
 }

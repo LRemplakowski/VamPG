@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using UMA.CharacterSystem;
-using UnityEngine.AddressableAssets;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Interfaces
 {
@@ -18,7 +18,6 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         BodyType BodyType { get; }
         CreatureType CreatureType { get; }
 
-        AssetReferenceSprite PortraitAssetRef { get; }
         UMAWardrobeCollection BaseLookWardrobeCollection { get; }
 
         Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; }

@@ -77,8 +77,9 @@ namespace UMA
 			activeGeneratorCoroutine = null;
 		}
 
-		public virtual void Awake()
+		public override void Awake()
 		{
+			base.Awake();
 			activeGeneratorCoroutine = null;
 
 			if (atlasResolution == 0)
@@ -538,7 +539,7 @@ namespace UMA
 
 				if (!umaData.Validate())
                 {
-                    return true;
+                    return false;
                 }
 
                 if (meshCombiner != null)

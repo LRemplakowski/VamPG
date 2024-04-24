@@ -37,17 +37,24 @@ namespace SunsetSystems.Core.SceneLoading
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data.LoadingData);
             CurrentLoadedLevel = data.LoadingData;
-            await new WaitForUpdate();
+            await new WaitForSeconds(1f);
+            await new WaitUntil(HasGeneratorProcessedAllUMA);
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();
-            await new WaitUntil(() => UMAGeneratorBase.Instance != null && UMAGeneratorBase.Instance.IsIdle());
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();
             await new WaitForSeconds(.1f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
+        }
+
+        private bool HasGeneratorProcessedAllUMA()
+        {
+            if (UMAGenerator.Instance != null)
+                return UMAGenerator.Instance.IsIdle();
+            return false;
         }
 
         public async Task LoadSavedGame(string saveID)

@@ -1,13 +1,9 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace SunsetSystems.Combat.UI
@@ -22,7 +18,6 @@ namespace SunsetSystems.Combat.UI
         private string animatedArrowTrigger;
         private int animatedArrowTriggerHash;
 
-        private List<AssetReferenceSprite> portraitReferences = new();
         private IEnumerator animatePortraitArrows;
 
         private bool firstIteration = false;
@@ -55,8 +50,11 @@ namespace SunsetSystems.Combat.UI
         private async Task UpdatePortraits()
         {
             List<ICombatant> combatantsInOrder = CombatManager.Instance.GetCombatantsInTurnOrder();
-            List<AssetReferenceSprite> newPortraitReferences = new();
-            List<Task<Sprite>> spriteLoadingTasks = new();
+            for (int i = 0; i < turnOrderPortraits.Count; i++)
+            {
+                if (combatantsInOrder.Count <= i)
+                    turnOrderPortraits[i].transform.parent.gameObject.SetActive(false);
+            }
             for (int i = 0; i < turnOrderPortraits.Count; i++)
             {
                 if (combatantsInOrder.Count <= i)
@@ -65,29 +63,14 @@ namespace SunsetSystems.Combat.UI
                 }
                 else
                 {
-                    ICombatant combatantAtIndex = combatantsInOrder[i];
-                    if (combatantAtIndex == null)
-                        continue;
-                    AssetReferenceSprite portraitRef = combatantAtIndex.References.GetCachedComponentInChildren<CreatureData>().PortraitAssetRef;
-                    newPortraitReferences.Add(portraitRef);
-                    Task<Sprite> portraitTask = AddressableManager.Instance.LoadAssetAsync(portraitRef);
-                    spriteLoadingTasks.Add(portraitTask);
+                    Image image = turnOrderPortraits[i];
+                    image.sprite = combatantsInOrder[i].References.CreatureData.Portrait;
+                    image.transform.parent.gameObject.SetActive(true);
+                    if (!firstIteration)
+                        await Task.Delay(500);
                 }
             }
-            await Task.WhenAll(spriteLoadingTasks);
-            for (int i = 0; i < turnOrderPortraits.Count; i++)
-            {
-                if (i >= spriteLoadingTasks.Count)
-                    break;
-                Image image = turnOrderPortraits[i];
-                image.sprite = spriteLoadingTasks[i].Result;
-                image.transform.parent.gameObject.SetActive(true);
-                if (!firstIteration)
-                    await Task.Delay(500);
-            }
             firstIteration = true;
-            //portraitReferences.ForEach(reference => AddressableManager.Instance.ReleaseAsset(reference));
-            portraitReferences = newPortraitReferences;
         }
 
         private IEnumerator AnimateArrows()

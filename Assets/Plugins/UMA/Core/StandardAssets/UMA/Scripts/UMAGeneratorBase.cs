@@ -108,19 +108,22 @@ namespace UMA
 		/// </summary>
 		public abstract void Work();
 
+		public static UMAGeneratorBase Instance { get; private set; }
 		/// <summary>
 		/// Try to finds the static generator in the scene.
 		/// </summary>
 		/// <returns>The instance.</returns>
 		public static UMAGeneratorBase FindInstance()
 		{
-			var generatorGO = GameObject.Find("UMAGenerator");
-			if (generatorGO == null)
-            {
-                return null;
-            }
+			return Instance;
+		}
 
-            return generatorGO.GetComponent<UMAGeneratorBase>();
+		public virtual void Awake()
+		{
+			if (Instance == null)
+				Instance = this;
+			if (Instance != this)
+				Destroy(gameObject);
 		}
 
 		/// <summary>

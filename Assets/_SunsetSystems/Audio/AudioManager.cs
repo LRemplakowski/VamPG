@@ -1,10 +1,8 @@
-using UnityEngine;
-using SunsetSystems.Utils;
-using UnityEngine.Audio;
+using Sirenix.OdinInspector;
 using SunsetSystems.Constants;
 using SunsetSystems.Game;
-using System;
-using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Audio;
 
 namespace SunsetSystems.Audio
 {
@@ -27,7 +25,14 @@ namespace SunsetSystems.Audio
         private void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+                DontDestroyOnLoad(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void Start()

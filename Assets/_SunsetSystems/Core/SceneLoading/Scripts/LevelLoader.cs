@@ -5,6 +5,7 @@ using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
+using UMA;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,6 +42,7 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();
+            await new WaitUntil(() => UMAGeneratorBase.Instance != null && UMAGeneratorBase.Instance.IsIdle());
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();
@@ -66,6 +68,7 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             OnLevelLoadEnd?.Invoke();
+            await new WaitUntil(() => UMAGeneratorBase.FindInstance().IsIdle());
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();

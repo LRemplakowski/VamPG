@@ -32,12 +32,22 @@ MonoBehaviour:
   OverrideDNA:
     PreloadValues: []
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"_Base Look Diana
-    Foster","race":"","dna":[],"characterColors":[],"wardrobeSet":[],"raceAnimatorController":""}'
+    Foster","race":"","dna":[],"characterColors":[{"name":"Hair","colors":[182,154,102,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-9987401},{"name":"clothes_chest","colors":[105,2,2,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-16645526}],"wardrobeSet":[],"raceAnimatorController":""}'
   forceKeep: 0
   labelLocalFiles: 0
   coverImages: []
   wardrobeCollection:
     sets:
     - targetRace: VampireFemale
-      wardrobeSet: []
+      wardrobeSet:
+      - slot: Hair
+        recipe: hair_long_f01_Recipe
+      - slot: Chest
+        recipe: t-shirt_female01_Recipe
+      - slot: OuterClothing
+        recipe: leather_jacket_f01_Recipe
+      - slot: Feet
+        recipe: martens01_Recipe
+      - slot: Neck
+        recipe: necklace01_Recipe
   arbitraryRecipes: []

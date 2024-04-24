@@ -32,12 +32,22 @@ MonoBehaviour:
   OverrideDNA:
     PreloadValues: []
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"_Base Look Caterina
-    Sforza","race":"","dna":[],"characterColors":[],"wardrobeSet":[],"raceAnimatorController":""}'
+    Sforza","race":"","dna":[],"characterColors":[{"name":"Hair","colors":[144,51,33,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-14601328},{"name":"clothing_waist","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"clothing_feet","colors":[113,0,0,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-16777103}],"wardrobeSet":[],"raceAnimatorController":""}'
   forceKeep: 0
   labelLocalFiles: 0
   coverImages: []
   wardrobeCollection:
     sets:
     - targetRace: VampireFemale
-      wardrobeSet: []
+      wardrobeSet:
+      - slot: Hair
+        recipe: hair_long_f01_Recipe
+      - slot: Chest
+        recipe: mini_dress01_Recipe
+      - slot: Waist
+        recipe: corset_underbust01_Recipe
+      - slot: Feet
+        recipe: formal_female_shoes01_Recipe
+      - slot: OuterClothing
+        recipe: female_stockings_recipe
   arbitraryRecipes: []

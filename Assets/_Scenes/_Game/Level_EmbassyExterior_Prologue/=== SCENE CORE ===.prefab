@@ -323,11 +323,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _highlightMaterial: {fileID: 2100000, guid: e940e4dc8b8118d45b58e3e7c7c068c0, type: 2}
+  _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
-  _materialLerpSpeed: 4
 --- !u!65 &2761288087773390320
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -512,11 +511,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _highlightMaterial: {fileID: 2100000, guid: e940e4dc8b8118d45b58e3e7c7c068c0, type: 2}
+  _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
-  _materialLerpSpeed: 4
 --- !u!136 &2151520885442104582
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -974,6 +972,7 @@ Transform:
   - {fileID: 2819603835767264927}
   - {fileID: 6598720626429557649}
   - {fileID: 6516773305120121977}
+  - {fileID: 1047836773948973988}
   m_Father: {fileID: 2316374439347273328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8397615598235775519
@@ -999,7 +998,10 @@ MonoBehaviour:
     SerializationNodes: []
   _unique: {fileID: 7512641965498313235}
   <OnSceneStart>k__BackingField:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 4756831309744253927}
+      _MethodName: Interact
+      _PersistentArguments: []
 --- !u!114 &7512641965498313235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,6 +1107,8 @@ MonoBehaviour:
   _targetWaypointTag: 
   _fadeScreenCanvasGroup: {fileID: 0}
   _fadeScreenTime: 0.5
+  OnAfterFadeOut:
+    _PersistentCalls: []
 --- !u!1 &1592177938168729746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1801,146 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &4083545280892360953
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047836773948973988}
+  - component: {fileID: 6974321106351870184}
+  - component: {fileID: 7350521089350715483}
+  - component: {fileID: 4756831309744253927}
+  m_Layer: 0
+  m_Name: Start Scene Fake Interactable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1047836773948973988
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4083545280892360953}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7667441210886433374}
+  m_Father: {fileID: 513792861640893169}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6974321106351870184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4083545280892360953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
+--- !u!114 &7350521089350715483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4083545280892360953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+--- !u!114 &4756831309744253927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4083545280892360953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 7350521089350715483}
+    - {fileID: 1980729992328057350}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _highlightHandler
+      Entry: 6
+      Data: 
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 6974321106351870184}
+  _enablePersistence: 1
+  _interactionCollider: {fileID: 0}
+  _linkedGameObject: {fileID: 0}
+  _interactionDistance: 2
+  _interactionTransform: {fileID: 1047836773948973988}
+  _interactable: 1
+  _nameplateName: 
+  _nameplateOffset: {x: 0, y: 3, z: 0}
+  _interactableOnce: 1
+  OnInteractionTriggered:
+    _PersistentCalls: []
 --- !u!1 &4272193668735545793
 GameObject:
   m_ObjectHideFlags: 0
@@ -2076,11 +2220,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _highlightMaterial: {fileID: 2100000, guid: e940e4dc8b8118d45b58e3e7c7c068c0, type: 2}
+  _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
-  _materialLerpSpeed: 4
 --- !u!65 &2611792287252184729
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2779,6 +2922,60 @@ MonoBehaviour:
     levelOrigin: {x: -30.77, y: 3, z: -26.78}
     cellSize: 1.5
   showGizmosWhenNotSelected: 0
+--- !u!1 &6937390315322955822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7667441210886433374}
+  - component: {fileID: 1980729992328057350}
+  m_Layer: 0
+  m_Name: Start Cutscene Interaction Handler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7667441210886433374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6937390315322955822}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1047836773948973988}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1980729992328057350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6937390315322955822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c99923bc95aab458734309ab5cbf1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _director: {fileID: 8979448437548175271}
 --- !u!1 &7384196466746986288
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,7 +3275,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: e7fe5812c4e0af3479ca0c5aa0713c68, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -3107,7 +3304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: e6ba86d1-4c2b-4fa5-9cb8-d5ead6ecb9c3
+  _id: 
 --- !u!114 &3952261865877414833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3381,11 +3578,10 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  _highlightMaterial: {fileID: 2100000, guid: e940e4dc8b8118d45b58e3e7c7c068c0, type: 2}
+  _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
-  _materialLerpSpeed: 4
 --- !u!1 &8536369431280802390
 GameObject:
   m_ObjectHideFlags: 0
@@ -3447,6 +3643,8 @@ MonoBehaviour:
   _targetWaypointTag: WP_EMBASSY_OFFICE
   _fadeScreenCanvasGroup: {fileID: 0}
   _fadeScreenTime: 0.5
+  OnAfterFadeOut:
+    _PersistentCalls: []
 --- !u!1 &8622618039681380178
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ tags:
 ---
 <<set $playerNickname to "Deputee">>
 [nomarkup][Your journey is rather uneventful. Dominic is sitting behind his wheel, visibly relaxed, smoking his next cigarette. He had at least some decency to open up the window on his side so the smoke gets sucked out or is pushed behind. It looks rather hilarious that he drives with his sunglasses in the middle of the night also having dark glass of his car before him. But he seems to see just fine, only occasionally disregarding red light on the road. The engine roars soaring through the Vegas streets. It sounds like he has a real beast under the hood. Other than that the interior of the car is silent. Eerily silent even. It makes you somewhat uncomfortable - considering that several minutes earlier you survived hell. You feel as though you're on another planet. It seems that normally talkative Sheriff doesn't want to be intrusive and allows you to gather your thoughts in silence.][/nomarkup]
+<<jump carInteractions>>
 ===
 title: carInteractions
 ---
@@ -75,7 +76,7 @@ title: useADrink
 ===
 title: tellAboutHer
 ---
-{$sheriff}: Ah, one of my favorite topics. Keep me on it too long and I'll start singing'. Sure you don't want to hear that.. [nomarkup][He tapped his ring on the steering wheel.][/nomarkup] Sure you heard about the Prince? You met with Kate and she's about as sure on my Lady as a pitchfork in hell.. Not promisin' it'll be the unbiased interview you'd hope for but it'll be somethin' alright.
+{$sheriff}: Ah, one of my favorite topics. Keep me on it too long and I'll start singing'. Sure you don't want to hear that.. [nomarkup][He tapped his ring on the steering wheel.][/nomarkup] Sure you heard about the Prince? You met with Kate and she's about as sure on my Lady as a pitchfork in hell. Not promisin' it'll be the unbiased interview you'd hope for but it'll be somethin' alright.
 -> {$pcName}: How old she is? <<if visited("herAge") == false>>
     <<jump herAge>>
 -> {$pcName}: What's her role in the… how was it… <<if visited("herRole") == false>>
@@ -100,7 +101,7 @@ title: herRole
 ===
 title: normalFamily
 ---
-{$sheriff}: It's a long story bearin' the title “none of your business”. And it'll stay that way Desiree, I mean it, don't go askin' around about it neither.. As for families no. It ain't, but I wish it was.. We're supernatural after all, all the bad things in the world why not have something good.. So I'm a believer, true love and all that. If there is somethin' up there a little hard to believe he'd make somethin' this fucked up without givin' us a reason to fight for it.
+{$sheriff}: It's a long story bearin' the title “none of your business”. And it'll stay that way Desiree, I mean it, don't go askin' around about it neither.. As for families no. It ain't, but I wish it was.. We're supernatural after all, all the bad things in the world why not have something good. So I'm a believer, true love and all that. If there is somethin' up there a little hard to believe he'd make somethin' this fucked up without givin' us a reason to fight for it.
 <<jump tellAboutHer>>
 ===
 title: anyAdvice
@@ -110,7 +111,7 @@ title: anyAdvice
 <<if GetCompanionInfluence ($sheriff)==1>>
     {$sheriff}: I can do that, but you'll owe me one, an' I don't mean this is a way where I want you bringin' food to the cookout. You'll do what I ask when I ask it. You always gotta pay your debts.
 <<elseif GetCompanionInfluence ($sheriff)>1>>
-    {$sheriff}: Sure could, I can remind her how well  you handle the… circumstances.
+    {$sheriff}: Sure could, I can remind her how well you handle the… circumstances.
 <<else>>
     {$sheriff}: You ain't leave a man the best impression. So no, kid, you're on your own in this.
 <<endif>>
@@ -120,7 +121,7 @@ title: whyDeputee
 ---
 {$sheriff}: Because this is what you are. At least today. You did a job I normally do. This is why I'm callin' you, Deputee. If you don't like it I may call you Bumblebee.
 -> {$pcName}: What's with the nicknames?
-{$sheriff}: You ever been in the army kid? You do somethin' stupid and it sticks with you, piss on an electric fence and someone'll come up an' call you Bloody Rain. It reminds you you're human, despite everythin' everyone's sayin' despite all the shit you've built up you're human and you make mistakes. Well Deputee I can't exactly call you Lion Fucker, so just remindin' myself you're like a little me. In the ways that matter
+{$sheriff}: You ever been in the army kid? You do somethin' stupid and it sticks with you, piss on an electric fence and someone'll come up an' call you Bloody Rain. It reminds you you're human, despite everythin' everyone's sayin' despite all the shit you've built up you're human and you make mistakes. Well Deputee I can't exactly call you Lion Fucker, so just remindin' myself you're like a little me. In the ways that matter.
 <<jump nicknames>>
 ===
 title: nicknames
@@ -130,6 +131,7 @@ title: nicknames
 -> {$pcName}: Stick to Deputee. I just might stay around you for a little bit longer. <<if visited("wantDeputee") == false and visited("wantName") == false>>
     <<jump wantDeputee>>
 -> {$pcName}: I like Desiree more. It's sweet you want me to be like you, but I don't know you yet. <<if visited("wantDeputee") == false and visited("wantName") == false>>
+    <<jump carInteractions>>
 ===
 title: whyLionFucker
 ---
@@ -141,12 +143,13 @@ title: whyLionFucker
 title: wantDeputee
 ---
 {$sheriff}: Right on Deputee. I can always use more help.
+<<jump carInteractions>>
 ===
 title: wantName
 ---
 <<set $playerNickname to GetFirstName($pcName)>>
 {$sheriff}: Sure thing {$playerNickname}, an' if you do change your mind… always welcome to. [nomarkup][He smiles a little looking at you.][/nomarkup]
-<<jump nicknames>>
+<<jump carInteractions>>
 ===
 title: whatHappensWithDiana
 ---
@@ -162,11 +165,11 @@ title: whatHappensWithDiana
     <<if Roll("Wits","Insight") >=4>>
         [nomarkup][It's hard to discern Dominic's emotions because of his sunglasses, but you feel that he isn't telling you the truth. At least not entirely. He isn't dishonest with you either, it's rather something that he doesn't understand or he doesn't want to admit before himself.][/nomarkup]
         -> {$pcName}: Cut the crap Dominic. You were just stalling so you could hear arguments from someone else's side and have a good excuse for your decision.
-        {$sheriff}: [nomarkup][He taps his fingers on the driving wheel for several seconds.][/nomarkup] I'm not a bad guy ya know, I didn't want to be playing cop for all eternity But my wife makes the law and I don't trust anyone else to enforce them, not in a way that follows the spirit an' not just the word.But I already knew you, Desiree Bardot. I know what ya'll are capable of. I've read your articles in the Sands and saw your career crumble to dust, an' all I get to do about it is smile an' nod. Couldn't stop that from happenin' but I had my opinions on it, I had my thoughts. So I had my opportunity an' here you sit, glad to know that intuition ain't failed me yet.
+        {$sheriff}: [nomarkup][He taps his fingers on the driving wheel for several seconds.][/nomarkup] I'm not a bad guy ya know, I didn't want to be playing cop for all eternity but my wife makes the law and I don't trust anyone else to enforce them, not in a way that follows the spirit an' not just the word. But I already knew you, Desiree Bardot. I know what ya'll are capable of. I've read your articles in the Sands and saw your career crumble to dust, an' all I get to do about it is smile an' nod. Couldn't stop that from happenin' but I had my opinions on it, I had my thoughts. So I had my opportunity an' here you sit, glad to know that intuition ain't failed me yet.
         -> {$pcName}: You… know me?
         {$sheriff}: As I said, by reputation. You're famous {$playerNickname}.
         -> {$pcName}: You're a fan?
-        {$sheriff}: Now why you gotta ask that? Could say I am, could say I'm not But you dig up skeletons, an' there's a lot of skeletons around here that need to be dug up.
+        {$sheriff}: Now why you gotta ask that? Could say I am, could say I'm not. But you dig up skeletons, an' there's a lot of skeletons around here that need to be dug up.
     <<endif>>
 -> {$pcName}: I just want to know if I passed a death sentence on her.
     {$sheriff}: Don't go down that road or you'll go mad. Whatever happens to Diana it's a consequence of her own decisions… with some help from other Kindred, but you didn't make her do nothin'. And you can't go back now, the machine was set in motion an' all you did was handle the final product. You can try to stop it, but it'll most likely grind you to dust along with her.
@@ -206,7 +209,7 @@ title: musicSurprised
 ===
 title: musicComplaining
 ---
-{$sheriff}: He is always complainin'. Wantin' to change the world startin' with everyone's choices.! That's not what this music is about, it has so much energy that is fills you, gets to you too, doesn't it? [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] If you don't like it just switch it off, I won't be mad about it. Not everyone likes to listen to this shit.
+{$sheriff}: He is always complainin'. Wantin' to change the world startin' with everyone's choices! That's not what this music is about, it has so much energy that is fills you, gets to you too, doesn't it? [nomarkup][He taps the rhythm with his fingers on the wheel moving his head a little. He definitely has some musical talent, because his tapping is seamless to the rhythm coming out of the speakers.][/nomarkup] If you don't like it just switch it off, I won't be mad about it. Not everyone likes to listen to this shit.
 <<jump radioDecision>>
 ===
 title: radioDecision
@@ -258,7 +261,7 @@ title: dominicsTakeOnBeast
 ---
 {$sheriff}: I see Kieran told you about this ragin' bull.
 -> {$pcName}: Not as much as I'd like.
-{$sheriff}: Well… if you ask about my opinion… [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It's a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don't need to be discreet. If you do, just ain't  listen to em.
+{$sheriff}: Well… if you ask about my opinion… [nomarkup][He stays silent for a while longer than usual in between the sentences and shrugs.][/nomarkup] Not much to tell. It's a son of a bitch that will be with you forever. Little prick may be useful sometimes. But only when you don't need to be discreet. If you do, just ain't listen to em.
 <<jump carInteractions>>
 ===
 title: differentSuit
@@ -274,6 +277,6 @@ title: differentSuit
 ===
 title: whatsNext
 ---
-{$sheriff}: I'm not a specialist in Kindred politics, I leave that to my better half. But I think your story will go its usual track. Well… hmm… maybe not. My decision will probably cause a little scandal in the Court. But don't you worry none about that. Kindred love to talk, gossip, and plot. You'll just have to be careful with whom you'll mingle, I guarantee you you'll catch everyone's attention. [He stays silent for a minute.] And oh, I nearly forgot. Collect all the boons you can. It will help you because boons are nearly the only currency that any Kindred will accept. Without reputation or favors owed you won't be able to survive for long. An' for the love of all that's holy find a group of Kindred in a similar situation to yours. Young and wantin' to prove themselves. Nights are not easy to survive on your own. You'll need someone you can at least depend on.
+{$sheriff}: I'm not a specialist in Kindred politics, I leave that to my better half. But I think your story will go its usual track. Well… hmm… maybe not. My decision will probably cause a little scandal in the Court. But don't you worry none about that. Kindred love to talk, gossip, and plot. You'll just have to be careful with whom you'll mingle, I guarantee you you'll catch everyone's attention. [nomarkup][He stays silent for a minute.][/nomarkup] And oh, I nearly forgot. Collect all the boons you can. It will help you because boons are nearly the only currency that any Kindred will accept. Without reputation or favors owed you won't be able to survive for long. An' for the love of all that's holy find a group of Kindred in a similar situation to yours. Young and wantin' to prove themselves. Nights are not easy to survive on your own. You'll need someone you can at least depend on.
 <<jump carInteractions>>
 ===

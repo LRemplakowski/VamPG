@@ -8,17 +8,14 @@ namespace SunsetSystems.Input.CameraControl
 {
     public class CameraControlScript : MonoBehaviour, ISaveable
     {
+        public static CameraControlScript Instance { get; private set; }
+
         [SerializeField]
-        public float defaultZoom;
+        private CinemachineFreeLook mainVirtualCam;
         [SerializeField]
-        public float zoomMax;
+        private LayerMask _groundRaycastMask;
         [SerializeField]
-        public float zoomMin;
-        [SerializeField]
-        private CinemachineVirtualCamera mainVirtualCam;
-        
-        [SerializeField]
-        private static LayerMask _groundRaycastMask;
+        private float _cameraMoveSpeed = 4;
         [SerializeField]
         private BoundingBox _currentBoundingBox;
         public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
@@ -30,7 +27,15 @@ namespace SunsetSystems.Input.CameraControl
 
         private void Awake()
         {
-            ISaveable.RegisterSaveable(this);
+            if (Instance == null)
+            {
+                Instance = this;
+                ISaveable.RegisterSaveable(this);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnDestroy()
@@ -38,8 +43,7 @@ namespace SunsetSystems.Input.CameraControl
             ISaveable.UnregisterSaveable(this);
         }
 
-        private const float internalMoveTargetSpeed = 8;
-        private const float internalMoveSpeed = 4;
+        private float _internalMoveTargetSpeed => _cameraMoveSpeed + 2;
         private Vector3 _moveTarget;
         private Vector3 _moveDirection;
         private float _rotationDirection;
@@ -47,23 +51,11 @@ namespace SunsetSystems.Input.CameraControl
         private static Vector2 mousePos;
         private static Vector3 mousePosVector;
 
-        private float _currentZoomAmount;
-        public float currentZoom
-        {   
-            get => _currentZoomAmount;
-            private set
-            {
-                _currentZoomAmount = value;
-            }
-        }
-        private float _internalZoomSpeed = 4;
-
         private bool _movedToSavedPosition = false;
 
         private void Start()
         {
             _moveTarget = transform.position;
-            currentZoom = defaultZoom;
         }
 
         public void MoveToLevelStartPosition()
@@ -93,28 +85,9 @@ namespace SunsetSystems.Input.CameraControl
             }
         }
 
-        public void OnZoom(InputAction.CallbackContext context)
-        {
-            if (context.phase != InputActionPhase.Performed)
-            {
-                return;
-            }
-            if (!(context.performed || context.canceled)){
-                return;
-            }
-            if (GameManager.Instance.CurrentState == GameState.Conversation){
-                _zoomDirection = Vector2.zero;
-            }
-            else if (GameManager.Instance.CurrentState == GameState.Combat){
-                _zoomDirection = context.ReadValue<Vector2>();
-                currentZoom = Mathf.Clamp(_currentZoomAmount - _zoomDirection.y, zoomMin, zoomMax);
-            }
-            
-        }
-
         private void FixedUpdate()
         {
-            _moveTarget += Quaternion.AngleAxis(mainVirtualCam.transform.localRotation.eulerAngles.y, Vector3.up) * _moveDirection * internalMoveTargetSpeed * Time.fixedDeltaTime;
+            _moveTarget += Quaternion.AngleAxis(Camera.main.transform.localRotation.eulerAngles.y, Vector3.up) * _moveDirection * _internalMoveTargetSpeed * Time.fixedDeltaTime;
             Ray ray = new(transform.position + Vector3.up, -Vector3.up);
             if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f, _groundRaycastMask, QueryTriggerInteraction.Collide)){
                 _moveTarget = new(_moveTarget.x, hitInfo.point.y, _moveTarget.z);
@@ -124,7 +97,7 @@ namespace SunsetSystems.Input.CameraControl
             }
         }
 
-        public static Vector3 GetPosition(){
+        public Vector3 GetPosition(){
             mousePos = new Vector2(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue());
             mousePosVector = new Vector3(mousePos.x, 0, mousePos.y);
             Ray ray = Camera.main.ScreenPointToRay(mousePosVector);
@@ -134,7 +107,7 @@ namespace SunsetSystems.Input.CameraControl
 
         private void LateUpdate()
         {
-            transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * internalMoveSpeed);
+            transform.position = Vector3.Lerp(transform.position, _moveTarget, Time.deltaTime * _cameraMoveSpeed);
         }
 
         public object GetSaveData()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
+using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
 using UMA;
@@ -42,6 +43,7 @@ namespace SunsetSystems.Core.SceneLoading
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
+            CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);

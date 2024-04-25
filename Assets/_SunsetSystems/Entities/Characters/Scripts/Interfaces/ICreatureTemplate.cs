@@ -18,7 +18,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         BodyType BodyType { get; }
         CreatureType CreatureType { get; }
 
-        UMAWardrobeCollection BaseLookWardrobeCollection { get; }
+        short BaseLookWardrobeCollectionID { get; }
 
         Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; }
         StatsData StatsData { get; }

@@ -173,7 +173,8 @@ namespace SunsetSystems.Core
         public async void MoveDominicToDoorAndDestroy()
         {
             await _dominic.PerformAction(new Move(_dominic, _dominicDoorWaypoint.transform.position));
-            Destroy(_dominic.References.GameObject);
+            await new WaitForSeconds(.5f);
+            _dominic.References.GameObject.SetActive(false);
         }
 
 

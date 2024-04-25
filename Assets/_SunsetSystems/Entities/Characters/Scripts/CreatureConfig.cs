@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
+using SunsetSystems.Utils.Database;
 using SunsetSystems.Utils.Extensions;
 using UMA;
 using UMA.CharacterSystem;
@@ -130,7 +131,7 @@ namespace SunsetSystems.Entities.Characters
 
             public CreatureType CreatureType { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
+            public short BaseLookWardrobeCollectionID { get; private set; }
 
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
@@ -145,7 +146,7 @@ namespace SunsetSystems.Entities.Characters
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                this.BaseLookWardrobeCollection = asset.BaseLookWardrobeCollection;
+                this.BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(asset.BaseLookWardrobeCollection);
                 this.EquipmentSlotsData = new();
                 foreach (var item in asset.EquipmentSlotsData)
                 {

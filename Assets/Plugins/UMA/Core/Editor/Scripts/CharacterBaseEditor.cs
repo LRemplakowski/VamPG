@@ -2649,8 +2649,8 @@ namespace UMA.Editors
         {
             _needsUpdate = false;
             _forceUpdate = false;
-            UMATextRecipe theRecipe = target as UMATextRecipe;
-            InitialResourcesOnlyFlag = theRecipe.resourcesOnly;
+            if (target is UMATextRecipe theRecipe)
+                InitialResourcesOnlyFlag = theRecipe.resourcesOnly;
         }
 
         public virtual void OnDisable()

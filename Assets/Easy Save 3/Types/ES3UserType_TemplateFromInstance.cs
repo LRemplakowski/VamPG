@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<DatabaseID>k__BackingField", "<ReadableID>k__BackingField", "<FirstName>k__BackingField", "<LastName>k__BackingField", "<Faction>k__BackingField", "<BodyType>k__BackingField", "<CreatureType>k__BackingField", "<BaseLookWardrobeCollection>k__BackingField", "<EquipmentSlotsData>k__BackingField", "<StatsData>k__BackingField")]
+	[ES3PropertiesAttribute("<DatabaseID>k__BackingField", "<ReadableID>k__BackingField", "<FirstName>k__BackingField", "<LastName>k__BackingField", "<Faction>k__BackingField", "<BodyType>k__BackingField", "<CreatureType>k__BackingField", "<BaseLookWardrobeCollectionID>k__BackingField", "<EquipmentSlotsData>k__BackingField", "<StatsData>k__BackingField")]
 	public class ES3UserType_TemplateFromInstance : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -23,7 +23,7 @@ namespace ES3Types
 			writer.WritePrivateField("<Faction>k__BackingField", instance);
 			writer.WritePrivateField("<BodyType>k__BackingField", instance);
 			writer.WritePrivateField("<CreatureType>k__BackingField", instance);
-			writer.WritePrivateFieldByRef("<BaseLookWardrobeCollection>k__BackingField", instance);
+			writer.WritePrivateField("<BaseLookWardrobeCollectionID>k__BackingField", instance);
 			writer.WritePrivateField("<EquipmentSlotsData>k__BackingField", instance);
 			writer.WritePrivateField("<StatsData>k__BackingField", instance);
 		}
@@ -57,8 +57,8 @@ namespace ES3Types
 					case "<CreatureType>k__BackingField":
 					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<CreatureType>k__BackingField", reader.Read<CreatureType>(), instance);
 					break;
-					case "<BaseLookWardrobeCollection>k__BackingField":
-					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<BaseLookWardrobeCollection>k__BackingField", reader.Read<UMA.CharacterSystem.UMAWardrobeCollection>(), instance);
+					case "<BaseLookWardrobeCollectionID>k__BackingField":
+					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<BaseLookWardrobeCollectionID>k__BackingField", reader.Read<System.Int16>(), instance);
 					break;
 					case "<EquipmentSlotsData>k__BackingField":
 					instance = (SunsetSystems.Entities.Characters.Creature.TemplateFromInstance)reader.SetPrivateField("<EquipmentSlotsData>k__BackingField", reader.Read<System.Collections.Generic.Dictionary<SunsetSystems.Equipment.EquipmentSlotID, System.String>>(), instance);

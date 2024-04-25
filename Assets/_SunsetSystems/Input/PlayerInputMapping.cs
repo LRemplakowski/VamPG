@@ -40,7 +40,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""name"": ""CameraZoom"",
                     ""type"": ""Value"",
                     ""id"": ""58a57ae2-36b6-471e-bfc7-326804228dfb"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -331,7 +331,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""2D Vector"",
-                    ""id"": ""da816192-d6b3-43df-8a50-746c2c69334e"",
+                    ""id"": ""bde42faa-9041-4021-bfd6-88a3af3b3a0c"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -341,8 +341,30 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": ""up"",
+                    ""id"": ""7b693cfc-ea2d-4aa5-b80d-5f8fcf9c2109"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CameraRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""4dc495c4-e5c5-4af3-a5d1-28b1f18328ee"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CameraRotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Left"",
-                    ""id"": ""8c2fedd7-dc3b-4283-8ffa-838e6b816b82"",
+                    ""id"": ""8ee42b4a-d7fa-470b-98fb-8e90d221794f"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -353,7 +375,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Right"",
-                    ""id"": ""4c05f8ed-3f9c-4e16-b24a-29fefa028c20"",
+                    ""id"": ""b8eb3eed-e52b-46ae-af09-a3f675b07c4f"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",

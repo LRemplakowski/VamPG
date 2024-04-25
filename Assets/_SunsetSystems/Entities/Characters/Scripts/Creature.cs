@@ -5,6 +5,7 @@ using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
+using SunsetSystems.Utils.Database;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -171,7 +172,7 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                BaseLookWardrobeCollection = instance.References.UMAManager.BaseLookWardrobeCollection;
+                BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
                 {
@@ -201,7 +202,7 @@ namespace SunsetSystems.Entities.Characters
 
             public CreatureType CreatureType { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
+            public short BaseLookWardrobeCollectionID { get; private set; }
 
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 

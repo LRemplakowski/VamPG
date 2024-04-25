@@ -40,7 +40,7 @@ namespace SunsetSystems.Entities.Characters
                 _portrait = config.Portrait;
             Faction = template.Faction;
             BodyType = template.BodyType;
-            CreatureType = template.CreatureType;
+            CreatureType = template.CreatureType;          
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
             {

@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Database;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -49,8 +50,9 @@ namespace SunsetSystems.Core.UMA
             if (_umaAvatar == null)
                 PrepareUMA();
             SetBodyType(template.BodyType);
-            if (template.BaseLookWardrobeCollection != null)
-                LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollection);
+            LoadDefaultWardrobeCollection(DatabaseHolder.Instance
+                .GetDatabase<WardrobeCollectionDatabaseFile>()
+                .GetAsset(template.BaseLookWardrobeCollectionID).Asset);
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)

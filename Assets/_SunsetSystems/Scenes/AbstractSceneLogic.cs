@@ -35,6 +35,7 @@ namespace SunsetSystems.Core
             GameManager.Instance.OnLevelStart -= StartScene;
         }
 
+        [Button]
         public async void StartScene()
         {
             await Task.Delay(1000);

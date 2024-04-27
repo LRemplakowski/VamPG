@@ -13,7 +13,12 @@ tags:
 <<endif>>
 -> {$pcName}: Maybe buy a girl a drink first? #line:038b01f 
     <<jump buyMeADrink>>
--> {$pcName}: I'll get a Blood Mary. #line:012043e 
+-> {$pcName}: I'll get a Blood Mary. #line:012043e
+    <<if Roll("Wits","Craft") >=(3-$rollModifier)>>
+        <<set $drinkSuccess to true>>
+        [nomarkup][You watch the bartender as he pours your drink and notice that it takes him a little longer than it usually would to pour. It actually looks like he's giving you a double.][/nomarkup] #line:0b9def3 
+    <<endif>>
+    -> {$pcName}: You're a regular here? #line:0ac9369 
     <<jump iBuyYouADrink>>
 ===
 title: buyMeADrink
@@ -23,11 +28,6 @@ title: buyMeADrink
 ===
 title: iBuyYouADrink
 ---
-<<if Roll("Wits","Craft") >=(3-$rollModifier)>>
-    <<set $drinkSuccess to true>>
-    [nomarkup][You watch the bartender as he pours your drink and notice that it takes him a little longer than it usually would to pour. It actually looks like he's giving you a double.][/nomarkup] #line:0b9def3 
-<<endif>>
--> {$pcName}: You're a regular here? #line:0ac9369 
 {$diana}: Everyone here knows the Duchess gets the good stuff. Only the best for me and my girl. [She turns to the bartender.] Put it on my tab. #line:0fb9533 
 <<jump havingADrink>>
 ===
@@ -60,6 +60,7 @@ title: pcUnamused
 ===
 title: dianaTalkCont
 ---
+[nomarkup][Woman beside you takes a sip of her drink.][/nomarkup]
 -> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if visited("introduction") ==false>> #line:087ae66 
     <<jump introductions>>
 -> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
@@ -116,13 +117,14 @@ title: flirt
     [nomarkup][This is what you came here for. You wash the pause away with some alcohol.][/nomarkup] #line:087b59b 
     <<set $numberOfDrinks to ($numberOfDrinks+1)>>
 <<endif>>
--> {$pcName}: Maybe it's time to make some changes huh? #line:0c388ac 
-{$diana}: Starting with...? #line:0187fec 
+-> {$pcName}: Maybe it's time to make some changes huh? #line:0c388ac  
 <<jump judgementOnDrinks>>
 ===
 title: judgementOnDrinks
 ---
+{$diana}: Starting with...? #line:0187fec
 <<if $numberOfDrinks <=1>>
+    -> {$pcName}: Me. [nomarkup][You blush and bite your lip, gesturing to yourself with both thumbs.][/nomarkup] #line:092b037
     <<jump meProblem>>
 <<endif>>
 -> {$pcName}: Finding better one liners? #line:0a333e7 
@@ -131,8 +133,7 @@ title: judgementOnDrinks
     <<jump sceneryChange>>
 ===
 title: meProblem
----
--> {$pcName}: Me. [nomarkup][You blush and bite your lip, gesturing to yourself with both thumbs.][/nomarkup] #line:092b037 
+--- 
 {$diana}: You're cute, you know that don't you? #line:0470a64 
 <<jump leaveEmbassy>>
 ===
@@ -154,11 +155,11 @@ title: sceneryChange
 {$diana}: Go where no one knows you, start over... that's a romantic thought. #line:0348295 
 -> {$pcName}: Not sure I like that idea so much anymore. #line:0acbdfc 
 {$diana}: Wish I could say I didn't agree. #line:0a0aa8e 
-[nomarkup][Two of you sit in silence for a moment and the ice clinks as Diana swirls her glass.][/nomarkup] #line:0d82f30 
 <<jump leaveEmbassy>>
 ===
 title: leaveEmbassy
 ---
+[nomarkup][Two of you sit in silence for a moment and the ice clinks as Diana swirls her glass.][/nomarkup] #line:0d82f30 
 -> {$pcName}: Actually, probably best I'll be getting home. Thanks for the drink but I'm going to call it a night. #line:08dd11e 
     <<jump leaveAlone>>
 -> {$pcName}: Hey do you want to get out of here? #line:06cba46 

@@ -11,12 +11,12 @@ tags:
 //she leans again to whisper in the PCs ear//
 {$sire}: Desiree? #line:04f2989 
 [nomarkup][You feel lips press against your ear in a whisper.][/nomarkup] #line:002f783 
-{$sire}: I asked you a question. #line:0d0ba7b 
-//she stands straight again//
 <<jump deathOptions>>
 ===
 title: deathOptions
 ---
+{$sire}: I asked you a question. #line:0d0ba7b 
+//she stands straight again//
 -> {$pcName}: Strangulation. <<if visited("strangulation") == false>> #line:04f6c9a 
     <<jump strangulation>>
 -> {$pcName}: Gunshot. #line:00bfdba 

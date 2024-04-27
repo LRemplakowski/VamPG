@@ -1,8 +1,12 @@
 ﻿title: embassyArrival
 tags:
 ---
-[nomarkup][Kieran chauffeurs you to Embassy, parallel parking neatly next to the sidewalk a block or two down from the main entrance to this: the city’s best (and only) British rock club. An ominous glow from the neon Union Jack illuminates the sidewalk as you both exit Kieran’s vehicle.][/nomarkup] #line:00aef1c 
-{$kieran}: As I was saying prior to you wresting control of the radio to blast that discordant cacophony you call music, the Embassy is my Sire, Kate's Domain. On the books, however, the club is run by her ghoul, Diana. #line:01bda99 
+[nomarkup][Kieran chauffeurs you to Embassy, parallel parking neatly next to the sidewalk a block or two down from the main entrance to this - the city’s best (and only) British rock club. An ominous glow from the neon Union Jack illuminates the sidewalk as you both exit Kieran’s vehicle.][/nomarkup] #line:00aef1c 
+{$kieran}: As I was saying prior to you wresting control of the radio to blast that discordant cacophony you call music, the Embassy is my Sire, Kate's Domain. On the books, however, the club is run by her ghoul, Diana. #lastline #line:01bda99
+<<jump ArrivalQuestions>>
+===
+title: ArrivalQuestions
+---
 -> {$pcName}: [nomarkup][You raise an eyebrow at that.][/nomarkup] You're telling me "ghouls" are real too? <<if visited("vampiricWeaknesses") == false>> #line:0a1597d 
     <<jump vampiricWeaknesses>>
 -> {$pcName}: You've mentioned it a few times now. What do you mean by 'domain'? <<if visited("whatIsDomain") == false>> #line:091d4cf 
@@ -32,8 +36,8 @@ title: garlicBread
 ---
 -> {$pcName}: Can I not eat garlic bread anymore? That doesn't seem like a life worth living. #line:0c462b8 
     {$kieran}: [nomarkup][Your remark puts a blink-and-you’ll-miss-it smile on his usual stiff and borderline-pessimistic expression.][/nomarkup] I miss food as well - cookies, in particular. That being said, life without those indulgences will not kill you. Kindred can no longer take in food as humans do. Our digestive system finds anything but blood...troubling. #line:0be75d2 
-    {$innerVoice}: Fuck! I didn't even think about desserts. #line:0f04483 
-    <<jump embassyArrival>>
+    {$innerVoice}: Fuck! I didn't even think about desserts. #lastline #line:0f04483 
+    <<jump ArrivalQuestions>>
 ===
 title: whatIsDomain
 ---
@@ -42,8 +46,8 @@ title: whatIsDomain
         {$kieran}: [nomarkup][Kieran is taken aback by the bluntness of the question, but recovers quickly.][/nomarkup] No, miss Bardot. I do not. #line:08bef4e 
         -> {$pcName}: Touchy topic? #line:04bd3c2 
             {$kieran}: No. Not at all. I'm only surprised you would assume I might have one after such an explanation. I'm not a young man, but I am a very young Kindred. One that is yet to earn the standing and influence necessary to claim a Domain. #line:05b714a 
-            {$beast}: Blind leading the blind, as one would say? #line:091bec4 
-            <<jump embassyArrival>>
+            {$beast}: Blind leading the blind, as one would say? #lastline #line:091bec4 
+            <<jump ArrivalQuestions>>
 ===
 title: musicTastes
 position: 164,153

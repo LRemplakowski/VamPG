@@ -78,7 +78,7 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 [nomarkup][You don't want to die here. Not now. The man waits, patiently watching you as a trail of smoke rises from the lit cigarette dangling out of his mouth.][/nomarkup] #line:08c7fca 
 -> {$pcName}: [nomarkup][I need to bide my time.][/nomarkup] #line:0712ce8
     <<jump dominicDialogueContinuation>>
--> {$pcName}: Do your worse...
+-> {$pcName}: Do your worst...
     <<jump DropButt>>
 ===
 title: dominicDialogueContinuation
@@ -106,7 +106,7 @@ title: dominicDialogueContinuation
     <<jump WhoAreYou>>
 -> {$pcName}: How did you find me? <<if visited("HowFindMe") == false>> #line:004b038 
     <<jump HowFindMe>>
--> {$pcName}: What happens now? [nomarkup][END][/nomarkup] #line:08f5d82 
+-> {$pcName}: What happens now? #line:08f5d82 
     <<jump DropButt>>
 === 
 title: WantToKill

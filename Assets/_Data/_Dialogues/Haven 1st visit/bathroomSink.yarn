@@ -14,13 +14,13 @@ tags:
 ---
 <<if $coveredinblood == true>>
     [nomarkup][Blood is smeared over your tired, sagging eyes. Your clothes are soaked red. Upon closer inspection, you see that your canines have grown into long fangs.][/nomarkup]
-    [nomarkup][This has to be a dream. A nightmare. How else does anything that is happening to you make sense?][/nomarkup] #line:02eb103 
+    [nomarkup][This has to be a dream. A nightmare. How else does anything that is happening to you make sense?][/nomarkup] #lastline #line:02eb103 
 <<else>>
-    [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup] #line:04aa944 
+    [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup] #lastline #line:04aa944 
 <<endif>>
 {$pcName}: [nomarkup][What's happening to me?][/nomarkup] #line:0e5b410 
 <<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 3>>
-    [nomarkup][This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.][/nomarkup] #line:0912bc6 
+    [nomarkup][This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.][/nomarkup] #lastline #line:0912bc6 
 <<endif>>
 <<jump BathroomSink>>
 ===
@@ -29,14 +29,14 @@ tags:
 ---
 [nomarkup][Sifting through your cosmetic products, you find a Bobby Pin on the counter.][/nomarkup] #line:092338c 
 <<GiveItem "IT_Q_BOBBY_PIN">>
-{$pcName}: [nomarkup][Wish I had this sooner.][/nomarkup] #line:026ddf4 
+{$pcName}: [nomarkup][Wish I had this sooner.][/nomarkup] #lastline #line:026ddf4 
 <<jump BathroomSink>>
 ===
 title: MedCabinet
 tags:
 ---
 [nomarkup][You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.][/nomarkup] #line:068c180 
-{$pcName}: [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup] #line:0d1c5fe 
+{$pcName}: [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup] #lastline #line:0d1c5fe 
 <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "GRAB_MEDS_2">>
 <<jump BathroomSink>>
 ===

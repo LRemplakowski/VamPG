@@ -3,9 +3,9 @@ tags:
 ---
 [nomarkup][Ready to soak in the relaxing spray of hot water upon your skin, you open the shower curtain, only to find a one-eyed corpse in a pool of old blood half-staring back at you. Your stomach sinks. As if this night couldn't get any worse.][/nomarkup] #line:01e8681 
 {$pcName}: [nomarkup][No! Oh god, please, no!][/nomarkup] #line:0a9835b 
--> (Intelligence + Medicine) [nomarkup][Find the cause of death.][/nomarkup] <<if visited("CauseofDeath") == false>> #line:0ecd4b4 
+-> [nomarkup][Find the cause of death.] (Intelligence + Medicine) [/nomarkup] <<if visited("CauseofDeath") == false>> #line:0ecd4b4 
     <<jump CauseofDeath>>
--> (Wits + Streetwise) [nomarkup][Fleece the body.][/nomarkup] <<if visited("FleeceBody") == false>> #line:03acf5e 
+-> [nomarkup][Fleece the body.] (Wits + Streetwise) [/nomarkup] <<if visited("FleeceBody") == false>> #line:03acf5e 
     <<jump FleeceBody>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0684ec1 
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "TAKE_SHOWER">>

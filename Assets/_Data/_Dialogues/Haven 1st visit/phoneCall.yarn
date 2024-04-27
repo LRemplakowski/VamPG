@@ -9,7 +9,7 @@
 title: PhoneCall
 tags:
 ---
-[nomarkup][You pick up the phone. The last voice you want to hear in the disoriented wake of a drunken bender blares out the line: your ex-husband. At the very least, he can't see you right now - something you're exceedingly thankful for.][/nomarkup] #line:03673f5 
+[nomarkup][You pick up the phone. The last voice you want to hear in the disoriented wake of a drunken bender blares out the line - your ex-husband. At the very least, he can't see you right now - something you're exceedingly thankful for.][/nomarkup] #line:03673f5 
 {$exspouse}: Hey Dez, how you been? I was starting to worry. You didn't pick up earlier today. #line:0acac77 
 [nomarkup][The worst part is, you know the concern is sincere.][/nomarkup] #line:08f0ead 
 -> {$pcName}: ...Good. #line:0668f0e 
@@ -22,7 +22,7 @@ tags:
     [nomarkup][You hear Arthur desperately mutter some syllables before you hang up the line.][/nomarkup] #line:01792fb 
     <<jump AfterPhoneCall>>
 {$exspouse}: Listen, I know I'm probably the last person you want to hear from, but I was calling to see if you have any updates on the money I lent you. #line:03744d9 
--> {$pcName}: (Charisma + Persuasion) I'm working on it, give me some time. #line:0c5da88 
+-> {$pcName}: I'm working on it, give me some time. (Charisma + Persuasion) #line:0c5da88 
     <<if Roll("Charisma","Persuasion") >= 2>>
         {$exspouse}: Okay. I trust you. Just keep me updated, alright? You know better than anyone I'm not exactly swimming in cash here. [nomarkup][He awkwardly chuckles.][/nomarkup] #success #line:00bd597 
         {$pcName}: [nomarkup][Guilt hits you like a bag of bricks. He doesn't deserve this. You can feel your throat closing up with emotion. Just have to get a few more words out.][/nomarkup] Will do. #line:0f3f039 

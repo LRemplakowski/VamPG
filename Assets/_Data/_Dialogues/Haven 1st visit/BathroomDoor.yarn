@@ -28,9 +28,9 @@ position: 114,94
 ---
 -> [nomarkup][Knock.][/nomarkup] <<if visited("BathroomDoorKnock") == false>> #line:05c9288 
     <<jump BathroomDoorKnock>>
--> [nomarkup] (Strength + Brawl) [Try to kick the door open.][/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 
+-> [nomarkup][Try to kick the door open.] (Strength + Brawl)[/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 
     <<jump BathroomDoorKick>>
--> (Strength + Melee) [nomarkup][Crowbar the door.][/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
+-> [nomarkup][Crowbar the door.] (Strength + Melee) [/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
     <<jump BathroomDoorCrowbar>>
 -> [nomarkup][Unlock the door.][/nomarkup] <<if $key == true>> #line:04a268c 
     <<jump BathroomDoorUnlock>>

@@ -7,6 +7,7 @@ tags:
 ===
 title: carInteractions
 ---
+[nomarkup][Dominic looks at the road sitting behind his wheel.][/nomarkup]
 -> {$pcName}: May I have one? <<if visited("haveACigarette") == false>>
     <<jump haveACigarette>>
 -> {$pcName}: I could use a drink... <<if visited("useADrink") == false>>
@@ -126,6 +127,7 @@ title: whyDeputee
 ===
 title: nicknames
 ---
+[nomarkup][Dominic falls silent for a second.][/nomarkup]
 -> {$pcName}: Lion... fucker? What the hell? What did I do to earn a name like that!? <<if visited("whyLionFucker") == false>>
     <<jump whyLionFucker>>
 -> {$pcName}: Stick to Deputee. I just might stay around you for a little bit longer. <<if visited("wantDeputee") == false and visited("wantName") == false>>
@@ -193,10 +195,6 @@ title: turnOnRadio
 ---
 [nomarkup][You flip the switch and you immediately get hit by the wall of sound blasting from the speakers around the car. The feeling is similar to brain freeze when you eat ice cream. The music is hard. Really hard. Sounds like metal. The guitars are screeching, percussion is rumbling, and basses make your heart beat without the use of muscles. Then the initial shock passes.][/nomarkup]
 {$sheriff}: Not your kind of music? [nomarkup][He says with a smirk on his face.][/nomarkup]
-<<jump musicOpinion>>
-===
-title: musicOpinion
----
 -> {$pcName}: No, no... it's okay, I'm just surprised.
     <<jump musicSurprised>>
 -> {$pcName}: What is this? And Kieran was complaining about my music!
@@ -214,11 +212,12 @@ title: musicComplaining
 ===
 title: radioDecision
 ---
--> [Switch it off.]
+[nomarkup][The noise coming from the radio is nearly unbereable for most people.][/nomarkup]
+-> [nomarkup][Switch it off.][/nomarkup]
     [nomarkup][To Dominic's slight disappointment you turn the radio off. Silence comes back to the car being disturbed only by the roar of the engine.][/nomarkup]
--> [Leave it as it is.]
+-> [nomarkup][Leave it as it is.][/nomarkup]
     [nomarkup][Music fills up the car. Dominic even starts to hum the melody.][/nomarkup]
--> [Turn volume down.]
+-> [nomarkup][Turn volume down.][/nomarkup]
     [nomarkup][The volume is in this sweet spot where it doesn't make you nearly deaf listening to it and you can continue the conversation without screaming at each other.][/nomarkup]
     {$sheriff}: You know that the base is part of it right? It's made to be loud?
 <<jump carInteractions>>

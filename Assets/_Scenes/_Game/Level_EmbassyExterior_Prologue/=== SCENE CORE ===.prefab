@@ -1709,6 +1709,7 @@ GameObject:
   - component: {fileID: 2819603835767264927}
   - component: {fileID: 7626540437386973256}
   - component: {fileID: 2065123355780897245}
+  - component: {fileID: 6107454905581855191}
   m_Layer: 16
   m_Name: Soccer Mom Start Dialogue
   m_TagString: Untagged
@@ -1762,14 +1763,22 @@ MonoBehaviour:
   OnDialogueStarted:
     _PersistentCalls: []
   OnDialogueFinished:
-    _PersistentCalls:
-    - _Target: {fileID: 4511814263405271625}
-      _MethodName: Play
-      _PersistentArguments: []
+    _PersistentCalls: []
   OnNodeStarted:
     _PersistentCalls: []
   OnNodeFinished:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 6107454905581855191}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!114 &2065123355780897245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1801,6 +1810,21 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &6107454905581855191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3896399030272099657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: approachKiddnaper
+  OnNodeEventMatch:
+    _PersistentCalls: []
 --- !u!1 &4083545280892360953
 GameObject:
   m_ObjectHideFlags: 0

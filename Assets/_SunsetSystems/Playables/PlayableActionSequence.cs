@@ -26,6 +26,12 @@ namespace SunsetSystems.Playables
                 StartSequence();
         }
 
+        private void Update()
+        {
+            if (_loop && _sequenceCoroutine == null)
+                StartSequence();
+        }
+
         public void StartSequence()
         {
             if (_sequenceCoroutine != null)
@@ -43,11 +49,6 @@ namespace SunsetSystems.Playables
                     yield return null;
             }
             _sequenceCoroutine = null;
-            if (_loop)
-            {
-                _sequenceCoroutine = ActionSequence();
-                StartCoroutine(_sequenceCoroutine);
-            }
         }
 
         public void StopSequence()

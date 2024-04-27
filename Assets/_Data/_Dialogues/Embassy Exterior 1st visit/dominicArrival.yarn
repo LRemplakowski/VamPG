@@ -3,14 +3,14 @@ tags:
 ---
 //Dominic's car arrives at the scene with his owner//
 [nomarkup][Dominic nearly jumps out of his immaculate car gleaming mendaciously in the dark. He is holding his gun tightly with a bestial grimace on his face. Looks like not only your evening got ruined. But on the other hand, what he did expect releasing you into the wild woods of vampiric business without any explanation whatsoever. He's either an idiot or he's plainly stupid. Or both. One thing for sure, you don't want his hand cannon to be pointed at you.][/nomarkup]
-{$sheriff}: Somebody cares to explain what the fuck I am doin' here tonight? There I was, sitting with the missus, spending my time in silence and, surprisingly, not pissin' anybody off, and out of the blue I heard that annoyin', screeching noise of the alarm phone line ringin'. You, Kieran, got somethin' to say? When I said to find her daddy I didn't mean to do everythin' to make my night miserable. And especially not makin' the Masquerade FUBAR. Jesus…
+{$sheriff}: Somebody cares to explain what the fuck I am doin' here tonight? There I was, sitting with the missus, spending my time in silence and, surprisingly, not pissin' anybody off, and out of the blue I heard that annoyin', screeching noise of the alarm phone line ringin'. You, Kieran, got somethin' to say? When I said to find her daddy I didn't mean to do everythin' to make my night miserable. And especially not makin' the Masquerade FUBAR. Jesus...
 {$sforza}: Dominic, as always you are a master of good manners. This is not Kieran's nor his friends doing.
 -> {$pcName}: Hey - I... [nomarkup][You try to cut in just in time for Kieran to speak up. He looks grim.][/nomarkup]
 {$kieran}: This seemed premeditated, I would suspect it to be an overly complicated lure playing on our...
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Premeditated? Hey, pencil pusher not everything is set up. Sometimes a dirty club gets shot up.
 <<endif>>
--> {$pcName}: Hey I'm trying to…
+-> {$pcName}: Hey I'm trying to...
 {$sforza}: Hush now. We don't even know the names of anyone who's behind this. Dominic, please, think critically for a moment.
 {$sheriff}: That's exactly what I'm fixin' to do here. Kieran, did you get a good look at anyone who was involved in the shoot-out?
 {$kieran}: I wasn't able to but they are well funded.
@@ -18,11 +18,11 @@ tags:
     -> {$pcName}: I saw someone...
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: [nomarkup][She looks to everyone around you and puts a hand on your shoulder as you're being talked over.][/nomarkup] Hey! Shut it for a second. Desiree saw something.
-        [nomarkup][Dominic turns to stare at Ana, a flicker of malice as she draws attention. Then his eyes turn onto you… at least you think so. His sunglasses don't make that easier for you.][/nomarkup]
+        [nomarkup][Dominic turns to stare at Ana, a flicker of malice as she draws attention. Then his eyes turn onto you... at least you think so. His sunglasses don't make that easier for you.][/nomarkup]
     <<else>>
         [nomarkup][Everyone is shouting and you can feel the blood pounding in your ears.][/nomarkup]
         {$beast}: I SAW SOMEONE! [nomarkup][This voice again, this time talking with you and by you in resonance.][/nomarkup]
-        [nomarkup][Dominic turns to stare at you… at least you think so. His sunglasses don't make that easier for you. You see a flicker of malice as you draw attention.][/nomarkup]
+        [nomarkup][Dominic turns to stare at you... at least you think so. His sunglasses don't make that easier for you. You see a flicker of malice as you draw attention.][/nomarkup]
     <<endif>>
     -> {$pcName}: I saw a man with a sacred heart tattoo.
     {$sheriff}: A sacred heart tattoo? In Las Vegas? That's about as useful as tits on a boar hog.
@@ -42,7 +42,7 @@ tags:
     <<endif>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Was she planning to make it look like she died in the attack then?
-        {$kieran}: That seems most likely to me. It would at least have bought her time…
+        {$kieran}: That seems most likely to me. It would at least have bought her time...
     <<endif>>
     -> {$pcName}: [nomarkup][You can feel your head ringing slightly as you tune them out. They aren't listening to you and you can feel the Beast starting to pound itself against your heart and squeeze the breath out of your lungs. No one here is taking you seriously.][/nomarkup] Why aren't any of you listening?
         <<jump dominicTalks>>
@@ -83,10 +83,10 @@ title: dominicTalksChaSuccess
 title: dominicTalksChaFailure
 ---
 -> {$pcName}: HER NAME IS LUCIA YOU INSOLENT BLOWHARDS!! IF YOU WOULD JUST LISTEN TO ME I MIGHT BE ABLE TO ANSWER YOUR QUESTIONS! [nomarkup][You can feel rage like an evil thing itching at the corners of your eyes, it curls your lip and drags it's claws over your stopped heart as if trying to restart it.][/nomarkup] #failure
-{$beast}: How dare they not listen to me. I know more about this than anyone here…
+{$beast}: How dare they not listen to me. I know more about this than anyone here...
 -> {$pcName}: SHUT YOUR MOUTHS FOR ONE MINUTE AND LISTEN!
 {$sforza}: Brujah you said? [nomarkup][She looks at Kieran with an air of disgust. He nods silently.][/nomarkup] I would have rather guessed.
-{$sheriff}: [nomarkup][He walks up to you and exhales long and slow, almost like a growl in his throat.][/nomarkup] And they say I'm childish. Stop ptichin' a hissy fit and start talkin' some sense. I ain't here to hold your hand…
+{$sheriff}: [nomarkup][He walks up to you and exhales long and slow, almost like a growl in his throat.][/nomarkup] And they say I'm childish. Stop ptichin' a hissy fit and start talkin' some sense. I ain't here to hold your hand...
 [nomarkup][His hand snaps out and covers your mouth.][/nomarkup]
 {$sheriff}: ...and you don't want me to go through you to find what I need... You good? If not best speak up, I ain't lettin' this go a second time. Let the adults talk and leave your tantrums for someone who cares.
 <<ModifyInfluence -1 $sheriff>>
@@ -121,10 +121,10 @@ title: dominicTalksCompSuccess
 title: dominicTalksCompFailure
 ---
 [nomarkup][You inhale and exhale rhythmically and feel these timed breaths come in faster and faster. Picking up speed as you start to work yourself up. Trying to get out of this cycle to say something.][/nomarkup] #failure
--> {$pcName}: Dominic… her name is Lucia.
+-> {$pcName}: Dominic... her name is Lucia.
 {$sheriff}: [nomarkup][He looks over towards you holding is hand up so that the rest won't speak.][/nomarkup] What?
 -> {$pcName}: My Sire's name is Lucia. [nomarkup][You can feel your voice get more quiet as the sentence goes on your vision getting slightly burry as you can feel yourself hyperventilating.][/nomarkup]
-{$sheriff}: … What's your Momma's name?
+{$sheriff}: ... What's your Momma's name?
 -> {$pcName}: Lu-cia. [nomarkup][The more his attention is focused on you the more it starts to remind you of how Lucia's eyes looked when the rested on you. That cruel levity that resulted in pain or humiliation. Panic laws at the back of your neck and you struggle to speak.][/nomarkup]
 {$sheriff}: At least we have a name.
 <<ModifyInfluence -1 $sheriff>>
@@ -139,7 +139,7 @@ title: kidredTalkContinues
 {$sheriff}: You got somethin' you want to explain here Kate?
 {$sforza}: Do you not have any decorum, Dominic? None at all? I've only just got here.
 {$sheriff}: Your ghoul. Your Childer. Your Domain. Your problem.
-{$diana}: … Not hers.
+{$diana}: ... Not hers.
 {$sforza}: Oh? [nomarkup][Her tone is one of gentle shock and hurt. Her eyebrows knit.][/nomarkup]
 <<if Roll("Wits","Insight") >=5>>
     [nomarkup][She looks disappointed as if Diana has just said there is shit on the woman's shiny designer shoes.][/nomarkup]

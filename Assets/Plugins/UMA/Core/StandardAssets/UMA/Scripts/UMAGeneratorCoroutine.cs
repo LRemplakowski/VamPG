@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Redcode.Awaiting;
 
 namespace UMA
 {
@@ -121,7 +122,7 @@ namespace UMA
 			return new Rect(r.x * w, r.y * h, r.width * w, r.height * h);
 		}
 
-		protected override void Start()
+		protected async override void Start()
 		{
 			if (generatedMaterialLookup == null)
 			{
@@ -131,6 +132,8 @@ namespace UMA
 			{
 				generatedMaterialLookup.Clear();
 			}
+			if (umaData == null)
+				await new WaitUntil(() => umaData != null);
 			backUpTexture = umaData.backUpTextures();
 			umaData.CleanTextures();
 			generatedMaterials = new List<UMAData.GeneratedMaterial>(20);
@@ -325,6 +328,8 @@ namespace UMA
 
 		protected override IEnumerator workerMethod()
 		{
+			if (umaData == null)
+				yield return null;
 			umaData.generatedMaterials.rendererAssets = uniqueRenderers;
 			umaData.generatedMaterials.materials = generatedMaterials;
 

@@ -80,7 +80,7 @@ title: inspectBuds
 title: deskBook
 ---
 [nomarkup][Nothing of particular interest. Well, maybe aside from the biography of Anton LaVey with several bookmarks poking out of its pages. When you pick it up, Kieran chuckles. Raising both eyebrows, you stare at him.][/nomarkup] #line:07e4f9f 
-{$kieran}: I apologize. It’s just… I’ve met the individual in the past. Quite the showman, to be honest. Please don’t ask me to elaborate further. I was on… an investigation, of sorts…
+{$kieran}: I apologize. It’s just... I’ve met the individual in the past. Quite the showman, to be honest. Please don’t ask me to elaborate further. I was on... an investigation, of sorts...
 {$kieran}: The point is, I mentioned him once in passing when I was talking with Diana. Didn’t think she would remember him, much less purchase a biography of his life to scrutinize so thoroughly. #line:0adec2b 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: It sounds like almost everyone here is a PI. Didn’t know it was such a popular pastime. #line:0942ee9 
@@ -166,7 +166,7 @@ title: hackingSuccess
 ===
 title: hackingFailure
 ---
-[nomarkup][Stupid machine! Despite your every attempt, the computer refuses to allow you past the login screen - the input cursor’s incessant flashing taunting you relentlessly… Your frustration and anger threaten to boil over into a white-hot rage.][/nomarkup] #failure #line:0d9f1de 
+[nomarkup][Stupid machine! Despite your every attempt, the computer refuses to allow you past the login screen - the input cursor’s incessant flashing taunting you relentlessly... Your frustration and anger threaten to boil over into a white-hot rage.][/nomarkup] #failure #line:0d9f1de 
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0d18ca5 
         <<DecreaseWillpower ($pcName, 1)>>
@@ -229,7 +229,7 @@ title: olderLogs
         -> [nomarkup][Look for a floppy disc and save the data.][/nomarkup] #line:0f2f61f 
             [nomarkup][It may be a small thing, but it could prove quite useful if you'd like to do a bit of blackmail.][/nomarkup] #line:057ec4d 
             <<if GetAttributeSkillPoolSize("Wits","Politics") >=4>>
-                [nomarkup][You think… But then again, you probably don’t want to use it as leverage against Diana, since she’s the “ghoul” of someone quite important to the political ecosystem of Vegas, if your impressions of her are correct.. At least, you don’t want to use it <i>right now,</i> when you don’t have any backing. Best to sit on it for a bit.][/nomarkup] #line:0fda57c 
+                [nomarkup][You think... But then again, you probably don’t want to use it as leverage against Diana, since she’s the “ghoul” of someone quite important to the political ecosystem of Vegas, if your impressions of her are correct.. At least, you don’t want to use it <i>right now,</i> when you don’t have any backing. Best to sit on it for a bit.][/nomarkup] #line:0fda57c 
                 <<jump accessGranted>>
             <<endif>>
 <<else>>
@@ -245,7 +245,7 @@ title: searchQuerry
 ===
 title: deskDrawers
 ---
-[nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items… In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated…][/nomarkup] #line:07b41ed 
+[nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items... In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated...][/nomarkup] #line:07b41ed 
 <<if GetHasItem("IT_Q_BOBBY_PIN") is true>>
 -> [nomarkup][Pick the drawer open.][Dexterity + Larceny][/nomarkup] #line:03db049 
     <<if Roll("Dexterity","Larceny") >=3>>

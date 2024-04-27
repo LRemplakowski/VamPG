@@ -62,7 +62,7 @@ title: dianaTalkCont
 ---
 -> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if visited("introduction") ==false>> #line:087ae66 
     <<jump introductions>>
--> {$pcName}: So… [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
+-> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
     <<jump flirt>>
 ===
 title: introductions
@@ -100,12 +100,12 @@ title: introductions
 ===
 title: flirt
 ---
-{$diana}: So… [nomarkup][She raises an eyebrow playfully at you.][/nomarkup] #line:032cbdf 
+{$diana}: So... [nomarkup][She raises an eyebrow playfully at you.][/nomarkup] #line:032cbdf 
 -> {$pcName}: Okay fair. How's your night been? #line:0fa9990 
 {$diana}: Better now that I've got you? #line:0e3dd98 
 -> {$pcName}: Something something 'fell from heaven'? #line:0c778b0 
 {$diana}: Touche. I've actually been struggling a lot with my purpose here. Sometimes I think it's some big cosmic joke and I'm laughing but I don't know what I'm laughing at. #line:0664792 
--> {$pcName}: Sounds… familiar. I wish it didn't. [nomarkup][You look over to Diana who catches your stare and laughs it off. Clearly trying to turn it around, embarrassed.][/nomarkup] #line:0cb2098 
+-> {$pcName}: Sounds... familiar. I wish it didn't. [nomarkup][You look over to Diana who catches your stare and laughs it off. Clearly trying to turn it around, embarrassed.][/nomarkup] #line:0cb2098 
 {$diana}: God if there's a punchline tell me it's coming because I am not seeing the joke, love, I'm not seeing it at all. #line:0b281f4 
 <<if Roll("Resolve","Insight") >=(1+$numberOfDrinks)>>
     {$diana}: Fuck. [nomarkup][The guilt in her whisper is obvious. She stares at her own drink and her lips twitch, her eyes blinking a couple of times.][/nomarkup] #line:0ad4797 
@@ -117,7 +117,7 @@ title: flirt
     <<set $numberOfDrinks to ($numberOfDrinks+1)>>
 <<endif>>
 -> {$pcName}: Maybe it's time to make some changes huh? #line:0c388ac 
-{$diana}: Starting with…? #line:0187fec 
+{$diana}: Starting with...? #line:0187fec 
 <<jump judgementOnDrinks>>
 ===
 title: judgementOnDrinks
@@ -141,7 +141,7 @@ title: betterOneLiners
 [nomarkup][Diana rolls her eyes and smirks at you.][/nomarkup] #line:072e51b 
 -> {$pcName}: What? #line:076757c 
 {$diana}: Did it hurt when you fell from heaven? #line:0393703 
--> {$pcName}: Bitch… #line:0af2f5f 
+-> {$pcName}: Bitch... #line:0af2f5f 
 {$diana}: - because baby you're showing some marks. #line:0eb7bee 
 -> {$pcName}: Jesus Christ. #line:07bcda3 
 {$diana}: Names Diana but you can call me whatever you like. #line:02d91be 
@@ -151,7 +151,7 @@ title: betterOneLiners
 ===
 title: sceneryChange
 ---
-{$diana}: Go where no one knows you, start over… that's a romantic thought. #line:0348295 
+{$diana}: Go where no one knows you, start over... that's a romantic thought. #line:0348295 
 -> {$pcName}: Not sure I like that idea so much anymore. #line:0acbdfc 
 {$diana}: Wish I could say I didn't agree. #line:0a0aa8e 
 [nomarkup][Two of you sit in silence for a moment and the ice clinks as Diana swirls her glass.][/nomarkup] #line:0d82f30 

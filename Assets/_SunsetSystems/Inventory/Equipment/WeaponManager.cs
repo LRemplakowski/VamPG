@@ -33,8 +33,10 @@ namespace SunsetSystems.Equipment
         private int weaponAnimationTypeParamHash;
         [SerializeField]
         private bool _ignoreAmmo;
+        [SerializeField]
+        private bool _showWeaponOutsideCombat;
         [Title("Debug Info")]
-        [ShowInInspector, ReadOnly]
+        [SerializeField, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
         [ShowInInspector, ReadOnly]
         private IWeaponInstance weaponInstance;
@@ -58,8 +60,10 @@ namespace SunsetSystems.Equipment
         private void Start()
         {
             weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
-            SetSelectedWeapon(SelectedWeapon.None);
+            //SetSelectedWeapon(SelectedWeapon.None);
             weaponsAmmoData ??= new();
+            if (_showWeaponOutsideCombat)
+                OnCombatStart(new List<ICombatant>() { owner });
         }
 
         private void OnWeaponSelected(SelectedWeapon weapon)
@@ -114,7 +118,10 @@ namespace SunsetSystems.Equipment
             if (newSelectedWeapon != selectedWeapon)
             {
                 selectedWeapon = newSelectedWeapon;
-                await RebuildWeaponInstance();
+#if UNITY_EDITOR
+                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#endif
+                    await RebuildWeaponInstance();
             }
         }
 
@@ -122,7 +129,7 @@ namespace SunsetSystems.Equipment
         {
             if (weaponInstance != null)
                 ReleaseCurrentWeaponInstance();
-            if (GameManager.Instance.IsCurrentState(GameState.Combat) is false)
+            if (GameManager.Instance.IsCurrentState(GameState.Combat) is false && _showWeaponOutsideCombat is false)
                 return;
             weaponInstance = await InstantiateCurrentWeapon();
             if (weaponInstance != null)

@@ -16,7 +16,7 @@ Bartender: Hey- can't leave your license behind the bar. Let me close out your t
     <<jump bartenderChaRoll>>
 -> {$pcName}: Sure. [nomarkup][Look at the bar. Something doesn't add up.][/nomarkup](Intelligence + Etiquette)[/nomarkup] #line:0750220 
     <<jump bartenderIntRoll>>
--> {$pcName}: [nomarkup][You raise your eyebrow.][/nomarkup] Yeah, yeah… sorry… (Composure + Streetwise) #line:040d2cf 
+-> {$pcName}: [nomarkup][You raise your eyebrow.][/nomarkup] Yeah, yeah... sorry... (Composure + Streetwise) #line:040d2cf 
     <<jump bartenderCompRoll>>
 ===
 title: bartenderChaRoll
@@ -85,14 +85,14 @@ title: dianaContinues
     [nomarkup][The situation has taken a turn and as you look back at Diana you can see her glowering at you. You almost have to take a step back it has such a venom to it. You twirl your keys in your hand, anxious. Whatever ‘The Dutchess' has in mind for you you want no part in it.][/nomarkup] #line:0eec1e1 
     {$diana}: You sure you don't want to take me up on the offer Desiree Bardot? #line:0106224 
     -> {$pcName}: Yeah. Yeah, I think I'm sure. Have a nice night. #line:02f59c1 
-    {$diana}: Alright… Have it your way. #line:0dbe7cb 
+    {$diana}: Alright... Have it your way. #line:0dbe7cb 
     <<jump havenArrivalAlone>>
 <<elseif $numberOfDrinks >=1>>
     <<if Roll("Stamina","Resolve") >=1>>
         //pc gets drunk animations//
         [nomarkup][You feel yourself getting unsteady on your feet, the lights seem brighter and the back of your neck feels hot. You didn't drink that much did you?][/nomarkup] #line:0c9c27d 
     <<endif>>
-    {$diana}: Sorry babes… It'll all be over quickly. #line:0bc9069 
+    {$diana}: Sorry babes... It'll all be over quickly. #line:0bc9069 
     <<jump drugOvercome>>
 <<endif>>
 -> [nomarkup][Try to overcome the drug effects.](Stamina + Resolve)[/nomarkup] #line:069e723 
@@ -109,9 +109,9 @@ title: drugOvercomeFailure
 ---
 [nomarkup][You find your head resting against your knees as prickles of hair brush against your face.][/nomarkup] #line:0f84d46 
 {$diana}: Come on. #line:0f7d324 
--> {$pcName}: Why…? #line:076b299 
-{$diana}: It's what Lucia… why am I answering that. #line:01f990f 
--> {$pcName}: Why… #line:0c7a610 
+-> {$pcName}: Why...? #line:076b299 
+{$diana}: It's what Lucia... why am I answering that. #line:01f990f 
+-> {$pcName}: Why... #line:0c7a610 
 {$diana}: I don't know. #line:028828c 
 <<jump pcLoosesConciousness>>
 ===
@@ -126,7 +126,7 @@ title: drugOvercomeSuccess
 ---
 //pc leans on the bar//
 [nomarkup][You put your hand on the bar and wheeze feeling everything get brighter.][/nomarkup] #success #line:05ab806 
--> {$pcName}: What did you… put in my… drink? #line:0bd17c4 
+-> {$pcName}: What did you... put in my... drink? #line:0bd17c4 
 {$diana}: ... #line:0431257 
 //fade to black//
 <<if Roll("Stamina","Resolve") >=(2+$numberOfDrinks)>>
@@ -140,7 +140,7 @@ title:drugOvercomeSuccess2
 //pc gest drunk anims as he makes several steps//
 [nomarkup][You stagger through the club as you're bounced between bodies feeling your vision get more and more hazy. The lights are so bright and they're blinding you.][/nomarkup] #line:0471e23 
 {$diana}: Just relax. #line:0e483ed 
--> {$pcName}: Fuck you. Fuck… Fuck you. #line:0acc94a 
+-> {$pcName}: Fuck you. Fuck... Fuck you. #line:0acc94a 
 //fade to black//
 <<if Roll("Stamina","Resolve") >=(3+$numberOfDrinks)>>
     <<jump drugOvercomeSuccess3>>
@@ -153,7 +153,7 @@ title:drugOvercomeSuccess3
 //PC is in back alley lying on the ground next to the black van//
 [nomarkup][Your hand presses onto something cold and metallic and you push, hard, on whatever it is. You have to close your eyes against the intensity of the headlights flashing. Where are you?][/nomarkup] #line:07c85c4 
 {$diana}: Oh shit - Desiree! #line:063aea1 
--> {$pcName}: Wha-what the fuck is… what's happening…? #line:0a00823 
+-> {$pcName}: Wha-what the fuck is... what's happening...? #line:0a00823 
 //fade to black//
 <<if Roll("Stamina","Resolve") >=(4+$numberOfDrinks)>>
     <<jump drugOvercomeSuccess4>>
@@ -164,7 +164,7 @@ title:drugOvercomeSuccess3
 title: drugOvercomeSuccess4
 ---
 //PC is in the black van, that goes through the streets//
-[nomarkup][You lead against a wall and close your eyes feeling your legs go weak. You keep pushing yourself… forward. A muffled voice can be heard above you.][/nomarkup] #line:07c5416 
--> {$pcName}: W-who's there - what? Where am… I? #line:0ff10bc 
+[nomarkup][You lead against a wall and close your eyes feeling your legs go weak. You keep pushing yourself... forward. A muffled voice can be heard above you.][/nomarkup] #line:07c5416 
+-> {$pcName}: W-who's there - what? Where am... I? #line:0ff10bc 
 <<jump drugOvercomeFailure>>
 ===

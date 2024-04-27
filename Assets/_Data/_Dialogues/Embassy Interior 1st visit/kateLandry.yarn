@@ -13,9 +13,9 @@ position: -540,-238
 [nomarkup][The woman before you looks like she is in her mid-40s, but beautiful despite the ghosts of wrinkles beginning to etch themselves onto her face.][/nomarkup]
 [nomarkup][She’s wearing a corset heavily embroidered with gold, its pattern showing proud peacocks ostentatiously presenting their tail feathers. The rigid garment is tied so tight you’re convinced her organs are in her throat.][/nomarkup]
 [nomarkup][Her dark red hair cascades downwards towards that cinched waistline, the same hue as the short dress she is wearing. Decorated with sequins, said garment shimmers slightly, reflecting the light around her, and out of that flared skirt poke slender and pale legs, adorned with a pair of lace stockings.][/nomarkup] #line:0455019 
-[nomarkup][Following a simple once-over, your eyes are drawn to her glossy crimson nails encircling the brim of a glass containing a dark red liquid that may pass for wine, but you get a feeling it’s something far more sinister…][/nomarkup]
-[nomarkup][The soft vermillion of the light that illuminates her heavy, but comfortable, armchair is dim and ominous. This is the perch of a ruler, the throne which declares her the red queen of this place…][/nomarkup] #line:0fa3ba6 
-{$innerVoice}: Her waistline… Geez… Good thing she doesn’t need to breathe anymore… #line:04c289e 
+[nomarkup][Following a simple once-over, your eyes are drawn to her glossy crimson nails encircling the brim of a glass containing a dark red liquid that may pass for wine, but you get a feeling it’s something far more sinister...][/nomarkup]
+[nomarkup][The soft vermillion of the light that illuminates her heavy, but comfortable, armchair is dim and ominous. This is the perch of a ruler, the throne which declares her the red queen of this place...][/nomarkup] #line:0fa3ba6 
+{$innerVoice}: Her waistline... Geez... Good thing she doesn’t need to breathe anymore... #line:04c289e 
 <<if GetIsPartyMemberRecruited($anastasia) is false>>
     {$sforza}:Kieran. Back so soon? Hope Dominic didn't run you off. Who's your friend? [nomarkup][Her eyes are turned on you. She speaks with a strange manner and accent you can't quite place. Something European, perhaps?][/nomarkup] #line:084f939 
 <<else>>
@@ -29,17 +29,17 @@ position: -540,-238
 {$sforza}: [nomarkup][Incredulous, she lifts an eyebrow.][/nomarkup] I can see Dominic is trying to start another Court scandal, yes. How nice of him. Does Prince Douglas know? #line:056e742 
 {$kieran}: [nomarkup][He chuckles nervously.][/nomarkup] I'll leave their marital drama up to them. But she probably knows. And if not now, then she will soon. As for your guest... [nomarkup][He turns to you.][/nomarkup] 
 {$kieran}: Meet miss Desiree Bardot. She's a PI. Dominic is of the opinion that she has enough potential for a simple execution to be a waste. Her first task is to find her Sire to minimize the scandal. #line:03e637f 
-[nomarkup][This is not how events unfolded in your apartment. It was Kieran who needed to convince Dominic of your competence, not the other way around…][/nomarkup] #line:01efab0 
-[nomarkup][Moreover, Kieran’s omission of your deadline is… glaring, to say the least. You feel a heavy iron knot tightening in your gut. How bad is the current situation if Kieran feels the need to hide the truth from even his Sire?][/nomarkup]
+[nomarkup][This is not how events unfolded in your apartment. It was Kieran who needed to convince Dominic of your competence, not the other way around...][/nomarkup] #line:01efab0 
+[nomarkup][Moreover, Kieran’s omission of your deadline is... glaring, to say the least. You feel a heavy iron knot tightening in your gut. How bad is the current situation if Kieran feels the need to hide the truth from even his Sire?][/nomarkup]
 {$beast}: So fond of her. And still able to lie in her face to cover his ass. #line:02ff6ae 
 {$sforza}: Interesting. [nomarkup][She gives you an ocular pat down, eyeing the length of your figure, and smiles this time - a smile that manages to reach her eyes.][/nomarkup] 
-{$sforza}: I suppose if Dominic believes you’re worth breaking the Traditions over, then you must be something quite special…? Good luck with this little test my dear, and do come back if you succeed? Oh, but don’t forget to  tell me all about it, I’m so curious! #line:0e09c12 
+{$sforza}: I suppose if Dominic believes you’re worth breaking the Traditions over, then you must be something quite special...? Good luck with this little test my dear, and do come back if you succeed? Oh, but don’t forget to  tell me all about it, I’m so curious! #line:0e09c12 
 -> {$pcName}: Thanks. #line:099b710 
     {$sforza}: At least you know your manners. That helps. [nomarkup][+1 Kieran Influence][/nomarkup] #line:05b5dd3 
     <<ModifyInfluence 1 $kieran>>
     <<jump questionsAboutLastNight>>
 -> {$pcName}: How generous of you. [nomarkup][You say with a dose of sarcasm.][/nomarkup] #line:09aa0fa 
-    {$sforza}: [nomarkup][She laughs, yet her tone is far from amused.][/nomarkup] My dear, you should learn to be more guarded with your intentions if you want to make something of your new life. Not all Kindred are as nice as I am; some think that the solution to a wounded pride is a missing tooth… [nomarkup][-1 Kieran Influence][/nomarkup] #line:07fa057 
+    {$sforza}: [nomarkup][She laughs, yet her tone is far from amused.][/nomarkup] My dear, you should learn to be more guarded with your intentions if you want to make something of your new life. Not all Kindred are as nice as I am; some think that the solution to a wounded pride is a missing tooth... [nomarkup][-1 Kieran Influence][/nomarkup] #line:07fa057 
     <<ModifyInfluence -1 $kieran>>
     {$kieran}: She does have a fiery temperament, but... it's to be expected, given her Blood. #line:00590a3 
     {$sforza}: Brujah? [nomarkup][She sighs and rolls her eyes.][/nomarkup] I would heartily endorse some anger management classes and, if you would like to live a long prosperous life, to not lean on excuses. #line:0179d9d 
@@ -49,7 +49,7 @@ title: questionsAboutLastNight
 position: -212,-233
 ---
 {$pcName}: I came by here last night. Do you remember me? Who I was with? #line:043906c 
-{$sforza}: I see a lot of faces, my dear! This is a popular club. But- I can see that this is a serious matter. Allow me a moment to recall… [nomarkup][Her lips curl in an amused grin as her eyes drift off to the side, her focus turning towards her own memories.][/nomarkup]
+{$sforza}: I see a lot of faces, my dear! This is a popular club. But- I can see that this is a serious matter. Allow me a moment to recall... [nomarkup][Her lips curl in an amused grin as her eyes drift off to the side, her focus turning towards her own memories.][/nomarkup]
 {$sforza}: Ah, yes. I do remember someone mentioning a woman of your description. You’re quite famous around these parts, it seems. I remember saying that if you were to stop by your first drink would be on me.
 {$sforza}: Thank you for that article on the Golden Lion, by the by.  It has brought me no end of amusement. [nomarkup][She remarks off-handedly, a devious grin coming to her lips.][/nomarkup]
 {$sforza}: I was told you found yourself something of a partner in crime and left before anyone had the opportunity. [nomarkup][She makes a wide, sweeping gesture with her hand, chuckling.][/nomarkup] Maybe he's your Sire? #line:04cf964 
@@ -62,7 +62,7 @@ position: -212,-233
     [nomarkup][You think you know why... This was the man in your shower. It's the only explanation that makes sense.][/nomarkup] #success #line:07e8067 
     -> {$pcName}: I think it might be the guy I - found... in my apartment. #line:0ff1529 
     {$kieran}: [nomarkup][He attempts to offer a comforting smile - his eyebrows knit.][/nomarkup] Right. Sorry about that. #line:0566754 
-    {$sforza}: Making a mess already, piccola mia? But you are a smart one to survive this long. Or just maybe it’s those lovely eyes, so sweet. So full of fire - Dominic always did like the ones with bite…
+    {$sforza}: Making a mess already, piccola mia? But you are a smart one to survive this long. Or just maybe it’s those lovely eyes, so sweet. So full of fire - Dominic always did like the ones with bite...
     {$sforza}: Poor influences aside, I’m sure Kieran can help you realize your full potential, and in time, build you into an upstanding member of the Praxis. I anticipate that his mentorship will be an exemplary guiding force, and I would expect nothing less. #line:053536d 
     {$sforza}: [nomarkup][She gazes meaningfully at you both.][/nomarkup] He [nomarkup]is my[/nomarkup] Childe, after all.
     [nomarkup][Kieran only reciprocates with a shallow nod, though there may be some pride in the way he glances at you momentarily.][+1 Kieran influence][/nomarkup] #line:0d945bc 
@@ -79,7 +79,7 @@ position: -212,-233
     [nomarkup][Nobody knows how to respond.][/nomarkup] #line:055e8ca 
     {$anastasia}: Why are you looking at me like that? It's just a question. And greatly important to this “investigation”, too. Need to know if there's yet another corpse kicking around, right? #line:05a19b3 
 <<endif>>
-{$sforza}: [nomarkup][She sighs.][/nomarkup] My dear, if you left with anyone else, I can’t say.  Perhaps, I could try to recall something, but then it would be unlikely I could give you a clear answer. You know how memories warp things… And I will admit that I was preoccupied. #line:0922b17 
+{$sforza}: [nomarkup][She sighs.][/nomarkup] My dear, if you left with anyone else, I can’t say.  Perhaps, I could try to recall something, but then it would be unlikely I could give you a clear answer. You know how memories warp things... And I will admit that I was preoccupied. #line:0922b17 
 -> {$pcName}: (Manipulation + Persuasion) “Preoccupied?” #line:0872f7f 
     <<if Roll("Manipulation","Persuasion")>=3>>
         {$sforza}: [nomarkup][She sighs.][/nomarkup] My dear, if you want so desperately to know about my personal life, you are more than welcome to come find me when you are off the job. Until then, my time is my own, and I will not be sharing it - at least not in this context. #success #line:03782f0 
@@ -94,7 +94,7 @@ title: kateFarewell
 position: 78,-418
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is false and $kateRequest is false>>
-{$sforza}: Before you go, I may have a lead for you. See the darling down there harassing my bartender? I would suspect she knows something about all of this… [nomarkup][She leans forward as her eyes crinkle with amusement.][/nomarkup] Diana has something of a type. #line:07253c8 
+{$sforza}: Before you go, I may have a lead for you. See the darling down there harassing my bartender? I would suspect she knows something about all of this... [nomarkup][She leans forward as her eyes crinkle with amusement.][/nomarkup] Diana has something of a type. #line:07253c8 
     <<if visited("anastasiaMeeting")==true>>
         <<set $kateRequest to true>>
         [nomarkup][Kate raises her delicate hand up in a sweeping wave, indicating to you a woman decked out in studded leather garments and steel-toed cleats - a “punk”, if your memory of the lingo serves. Some knowledge of the various subcultures present in the city is useful for a PI, after all.][/nomarkup]
@@ -113,9 +113,9 @@ position: 78,-418
 title: kateNudgesTowardAnastasia
 position: 436,-587
 ---
-{$sforza}: Diana says her name is Anastasia, my dear. A Kindred, if you can believe it. She’s shown up the past few nights, but hasn’t done me the courtesy of introducing herself…
-{$sforza}: A shame really… She looks like a treat. [nomarkup][Kate's voice drops onto a purr before she gives you a bashful look and covers her mouth with her hand.][/nomarkup]
-{$sforza}: Do excuse me, it's just so hard to resist confidence. I’ve been keeping an eye on her, and do forestall your assumptions, if you could. She hasn’t caused any problems, to my knowledge, but please do let me know if she does? She could use a… tête á téte. #line:091af37 
+{$sforza}: Diana says her name is Anastasia, my dear. A Kindred, if you can believe it. She’s shown up the past few nights, but hasn’t done me the courtesy of introducing herself...
+{$sforza}: A shame really... She looks like a treat. [nomarkup][Kate's voice drops onto a purr before she gives you a bashful look and covers her mouth with her hand.][/nomarkup]
+{$sforza}: Do excuse me, it's just so hard to resist confidence. I’ve been keeping an eye on her, and do forestall your assumptions, if you could. She hasn’t caused any problems, to my knowledge, but please do let me know if she does? She could use a... tête á téte. #line:091af37 
 {$kieran}: [nomarkup][Kieran's eyes widen momentarily, taken aback by the statement.][/nomarkup] Since when have you started tolerating poachers in your domain? #line:0691cc7 
 {$sforza}: She hasn’t poached yet, and she shouldn’t if she wants to continue putting off our inevitable introduction.  You see, my darling, I may not understand the game she thinks she's playing - but I see no reason to stop this delightful little charadé. Eventually, the reason for her sudden appearance and unwavering tendency to linger in my Domain will be laid bare.
 {$sforza}: That is, either she’s staking out the place, or she’s helplessly in love with my staff and trying desperately to get my attention. [nomarkup][She looks deeply amused and clearly does not believe there is any merit in the latter suggestion.][/nomarkup] Regardless of her motives, if you will allow me to prolong this dance via absenté, I’d be grateful. #line:0786a77 
@@ -156,7 +156,7 @@ title: whoIsDiana
 position: -418,534
 ---
 {$sforza}: What an odd question! But I'll entertain it, you've been such a delight all evening. 
-{$sforza}: You may have guessed this already, but she’s my ghoul. She owns this place, the Embassy, and gives it that foreign touch. Running the bar to keep up appearances, I find, makes the place feel authentic, although she's been away from Britain for… oh dear, almost thirty years now! And most importantly for you, my three musketeers, she's [nomarkup]mine[/nomarkup]. Why do you ask? #line:025b8c9 
+{$sforza}: You may have guessed this already, but she’s my ghoul. She owns this place, the Embassy, and gives it that foreign touch. Running the bar to keep up appearances, I find, makes the place feel authentic, although she's been away from Britain for... oh dear, almost thirty years now! And most importantly for you, my three musketeers, she's [nomarkup]mine[/nomarkup]. Why do you ask? #line:025b8c9 
 -> {$pcName}: You mentioned she was here last night. #line:0b21fb4 
     <<jump dianaEveryNight>>
 ===
@@ -229,7 +229,7 @@ title: princeExplained
 position: 530,-103
 ---
 {$sforza}: Ah, it’s so refreshing to have someone around as oblivious to politics as you. But I will be frank, I do not want to step on the toes of whomever your Sire turns out to be, and it’s their vision of the future you may be forced to follow. I’d hate to be accused of poaching.
-{$sforza}: Still, I would hate to see you thrown out with nothing… Kieran, be a dear and educate your new friend on the intricacies of our society, would you? It would be a good refresher, and it may save her life. #line:0417d47 
+{$sforza}: Still, I would hate to see you thrown out with nothing... Kieran, be a dear and educate your new friend on the intricacies of our society, would you? It would be a good refresher, and it may save her life. #line:0417d47 
 {$kieran}: The Prince is the head figure in charge of the Camarilla's capital-D Domain here in Las Vegas - nearly the entire valley aside from Henderson and Sunset Manor is under our control. I'll inform you of the broader details once our investigation has concluded. #line:08f63d0 
 <<jump additionalQuestions>>
 ===
@@ -259,7 +259,7 @@ title: whatIsSabbat
 position: 908,-62
 ---
     {$kieran}: A bunch of savages. #line:0bd540d 
-    {$sforza}: [nomarkup][She gestures towards Kieran in approval.][/nomarkup]  A dangerous, misguided organization that rejects the Traditions - the very ones that would have prevented you from standing where you are now... Benedic didn't see them as a serious threat, as so often those with bold new ideas are… [nomarkup][She looks over your shoulder with a touch of sadness, before that fades as her gaze returns to you.][/nomarkup] 
+    {$sforza}: [nomarkup][She gestures towards Kieran in approval.][/nomarkup]  A dangerous, misguided organization that rejects the Traditions - the very ones that would have prevented you from standing where you are now... Benedic didn't see them as a serious threat, as so often those with bold new ideas are... [nomarkup][She looks over your shoulder with a touch of sadness, before that fades as her gaze returns to you.][/nomarkup] 
     {$sforza}: And thus, he suffered Final Death at their hands. Some advice, Desiree, free of change: If I were someone in your position, Heaven forbid, I would do my very best to know as little about them as possible. Nothing good will come from seeking out such things. Remember that ignorance can be a shield. #line:011ca26 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: It's just the natural order of things. They weren't skilled enough to avoid the consequences of what they did, so they died. [nomarkup][She shrugs.][/nomarkup] #line:0b5f03a 

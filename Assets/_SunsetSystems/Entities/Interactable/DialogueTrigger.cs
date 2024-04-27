@@ -28,6 +28,7 @@ namespace SunsetSystems.Entities.Interactable
         public UltEvent<string> OnNodeStarted;
         public UltEvent<string> OnNodeFinished;
 
+        [Button]
         public void StartDialogue()
         {
             if (_fadeOutBeforeDialogue)

@@ -49,11 +49,11 @@ position: 370,249
     <<set $tattooSpotter to true>>
     -> {$pcName}: Gang members? #line:0fd17b9 
     {$kieran}: What gave you that idea? #line:0e78495 
-    -> {$pcName}: It's just a guess. Aren't there gangs that require their members to get tattoos and such…? [nomarkup][You pause for a moment.][/nomarkup] Never mind, I didn't see it on anyone else, so probably not. The important thing is, one of them - the one standing out front - wasn't carrying a gun at all. #line:0e878eb 
-    {$kieran}: Hm… curious. #line:0e3e372 
+    -> {$pcName}: It's just a guess. Aren't there gangs that require their members to get tattoos and such...? [nomarkup][You pause for a moment.][/nomarkup] Never mind, I didn't see it on anyone else, so probably not. The important thing is, one of them - the one standing out front - wasn't carrying a gun at all. #line:0e878eb 
+    {$kieran}: Hm... curious. #line:0e3e372 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Penny for your thoughts, Kiki? #line:01229da 
-        {$kieran}: My thoughts? I think we might be looking at something a lot bigger than just a couple hooligans deciding to shoot up the local club, here… #line:009e9a5 
+        {$kieran}: My thoughts? I think we might be looking at something a lot bigger than just a couple hooligans deciding to shoot up the local club, here... #line:009e9a5 
     <<endif>>
 <<endif>>
 <<jump urraNaMintarn>>
@@ -78,6 +78,6 @@ position: -125,683
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: And we're just going to run for it? It might be a bit far for our little nerd, here. I bet his knees are already shaking. Just remember, I can easily carry you, if you need assistance, Kiki. #line:092f346 
     {$kieran}: Just remember, people can always surprise you, Anastasia. #line:0c93df5 
-    {$anastasia}: [nomarkup][She blinks, staring at Kieran for a beat or two with wide eyes - muzzle fire harshly lighting the side of her face, which is then split by a smirk yet again.][/nomarkup] You just might… Kieran. Alright, let's move! #line:08dac9f 
+    {$anastasia}: [nomarkup][She blinks, staring at Kieran for a beat or two with wide eyes - muzzle fire harshly lighting the side of her face, which is then split by a smirk yet again.][/nomarkup] You just might... Kieran. Alright, let's move! #line:08dac9f 
 <<endif>>
 ===

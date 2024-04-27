@@ -181,13 +181,13 @@ title: poeBookExamine
 ===
 title: poeBookExamineQuestions
 ---
--> [nomarkup][Try to recall the code.](Intelligence+Academics)[/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
+-> [nomarkup][Try to recall the code.] (Intelligence+Academics)[/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
     <<jump poeExamineAcademicsRoll>>
--> [nomarkup][Try to break the code by yourself.](Intelligence+Investigation)[/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
+-> [nomarkup][Try to break the code by yourself.] (Intelligence+Investigation)[/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
     <<jump poeExamineInvestigationRoll>>
--> [nomarkup][Look for the missing pages.](Wits+Awareness)[/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>> #line:082ed56 
+-> [nomarkup][Look for the missing pages.] (Wits+Awareness)[/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>> #line:082ed56 
     <<jump poeExamineAwarenessRoll>>
--> [nomarkup][Look for the missing pages behind the TV.](Strength+Athletics)[/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>> #line:08d0838 
+-> [nomarkup][Look for the missing pages behind the TV.] (Strength+Athletics)[/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>> #line:08d0838 
     <<jump poeExamineAthleticsRoll>>
 -> [nomarkup][Look at the code again.][/nomarkup] #line:00656fb 
     <<jump poeBookExamine>>
@@ -259,7 +259,7 @@ title:poeExamineAwarenessRollSuccess
 ---
 [nomarkup][You don’t have time to play around with some stupid riddle from a story that’s nearly 100 years old. There has to be a simpler solution than breaking the code. It’s from a book, after all - and a well-known one, at that...][/nomarkup] #success #line:0fc704f
 [nomarkup][You look around the shelves. Then up. As you glance toward the top of the shelf, you see a piece of paper tucked under a pile of other books, protruding just off the edge.][/nomarkup]
--> [nomarkup][Try to reach it.](Dexterity+Athletics)[/nomarkup] #line:075d965 
+-> [nomarkup][Try to reach it.] (Dexterity+Athletics)[/nomarkup] #line:075d965 
     <<jump poeMissingPagesDexterityRoll>>
 ===
 title: poeMissingPagesDexterityRoll

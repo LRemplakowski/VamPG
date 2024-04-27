@@ -6,7 +6,7 @@ position: -323,-660
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that's it!! #line:028297e 
 <<endif>>
--> [nomarkup][Determine the least dangerous path.](Intelligence+Insight)[/nomarkup] #line:08b200e 
+-> [nomarkup][Determine the least dangerous path.] (Intelligence+Insight)[/nomarkup] #line:08b200e 
     <<jump evacuateIntRoll>>
 ===
 title: evacuateIntRoll
@@ -34,9 +34,9 @@ position: -166,-433
 title: evacuateAdditional
 position: -152,-219
 ---
--> [nomarkup][Sneak to the exit.](Dexterity+Stealth)[/nomarkup] #line:074b1d5 
+-> [nomarkup][Sneak to the exit.] (Dexterity+Stealth)[/nomarkup] #line:074b1d5 
     <<jump evacuateDexRoll>>
--> [nomarkup][Sprint to the exit.](Stamina+Athletics)[/nomarkup] #line:08c56aa 
+-> [nomarkup][Sprint to the exit.] (Stamina+Athletics)[/nomarkup] #line:08c56aa 
     <<jump evacuateStamRoll>>
 ===
 title: evacuateDexRoll
@@ -287,21 +287,21 @@ position: 107,1671
 title: physicalOptions
 position: 537,2170
 ---
--> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0cf3925 
+-> [nomarkup][Sneak the rest of the way.] (Dexterity+Stealth)[/nomarkup] #line:0cf3925 
     <<jump stealthShootingRoll>>
--> [nomarkup][Sprint the rest of the way.](Stamina+Athletics)[/nomarkup] #line:017212d 
+-> [nomarkup][Sprint the rest of the way.] (Stamina+Athletics)[/nomarkup] #line:017212d 
     <<jump runShootingRoll>>
 ===
 title: physicalOptionsStealth
 position: 838,1863
 ---
--> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0d22557 
+-> [nomarkup][Sneak the rest of the way.] (Dexterity+Stealth)[/nomarkup] #line:0d22557 
     <<jump stealthShootingRoll>>
 ===
 title: physicalOptionsRun
 position: 293,2057
 ---
--> [nomarkup][Sprint the rest of the way.](Stamina+Athletics)[/nomarkup] #line:085e4de 
+-> [nomarkup][Sprint the rest of the way.] (Stamina+Athletics)[/nomarkup] #line:085e4de 
     <<jump runShootingRoll>>
 ===
 title:stealthShootingRoll

@@ -152,7 +152,7 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
-            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => string.Equals(tag, LAST_LINE_TAG)) is false))
+            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => tag == LAST_LINE_TAG) is false))
                 await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
 

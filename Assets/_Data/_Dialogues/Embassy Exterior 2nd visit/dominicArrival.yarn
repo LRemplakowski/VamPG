@@ -59,7 +59,7 @@ position: -343,68
 [nomarkup][Your frustration grows. It seems like everyone is forgetting that YOU are the one who died today. Not Kieran. And they keep talking like you aren't here.][/nomarkup] #line:0fc4322 
 -> {$pcName}: HER NAME IS LUCIA. (Charisma + Intimidation) #line:00fd705 
     <<jump herNameChaRoll>>
--> {$pcName}: [nomarkup][Maintain your cool.](Composure + Leadership)[nomarkup] #line:0fa95ff 
+-> {$pcName}: [nomarkup][Maintain your cool.] (Composure + Leadership)[nomarkup] #line:0fa95ff 
     <<jump keepCoolCompRoll>>
 ===
 title: herNameChaRoll
@@ -162,9 +162,9 @@ position: -87,478
 {$diana}: You're fucking pathetic. You have nearly half a century and the best you could be is a fucking pig. #line:00aa884 
 [nomarkup][Dominic's expression changes to be far more serious and deadly. He leans forwards towards her and his eyes narrow.][/nomarkup] #line:09e9150 
 {$sheriff}: And yet I'm not the one squealin'. Lucia isn't comin' back for you and we don't have due process. [nomarkup][He taps her lightly on the shoulder and she goes reeling back as if she was pushed.][/nomarkup] I am a judge, jury, and executioner out here and I can make this very unpleasant for us both. Keep goin' down this way and I swear by the Blood in my veins - even Kate or your precious Lucia will not be able to recognize what will remain of you when I'm done. [nomarkup][He grinned with weird bestiality showing his bared fangs and his eyes started to glow crimson red in the shadows of the alley. His voice is so cold that you could swear you felt it freeze your veins. Even if he seemed pissed in your apartment right now he seems to be fear incarnate. All of your senses are overwhelmed with one emotion - to run away. Luckily you are not the one that is in trouble. At least not right now. As she stumbles back he doesn't move forward, Diana's eyes flashing with fear as her trembling lip curls into a sneer.][/nomarkup] #line:0a77426 
--> [nomarkup][Grapple Her.](Dexterity + Athletics)[/nomarkup] #line:0f513d4 
+-> [nomarkup][Grapple Her.] (Dexterity + Athletics)[/nomarkup] #line:0f513d4 
     <<jump dianaGrappleRoll>>
--> [nomarkup][Punch her.](Strength + Brawl)[/nomarkup] #line:0dd2b79 
+-> [nomarkup][Punch her.] (Strength + Brawl)[/nomarkup] #line:0dd2b79 
     <<jump punchDianaRoll>>
 -> {$pcName}: How does it feel to be thrown away like trash? Everything you did and you still ended up back here? With the people you were running away from? (Manipulation + Intimidation) #line:095425b 
     <<jump intimidateDianaRoll>>
@@ -222,9 +222,9 @@ position: 357,1380
             [nomarkup][The redhead woman looks shocked for a moment and then leans in to Anastasia and whispers something in her ear.][nomarkup] #line:02316a1 
             <<set $kateAnastasia to true>>
             [nomarkup][Anastasia immediately recoils as her nose flares and her eyes flash.][/nomarkup] #line:0a0e625 
-            -> [nomarkup][Try to make out everyone's emotions.](Composure + Insight)[/nomarkup] #line:0fd87e3 
+            -> [nomarkup][Try to make out everyone's emotions.] (Composure + Insight)[/nomarkup] #line:0fd87e3 
                 <<jump empathyCompRoll>>
-            -> [nomarkup][Observe Anastasia's reaction.](Wits + Awareness)[/nomarkup] #line:089b778 
+            -> [nomarkup][Observe Anastasia's reaction.] (Wits + Awareness)[/nomarkup] #line:089b778 
                 <<jump anaWitsRoll>>
         <<endif>>
     <<endif>>

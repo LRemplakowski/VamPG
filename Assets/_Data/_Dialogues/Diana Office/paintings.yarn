@@ -8,11 +8,11 @@ tags:
 <<endif>>
 -> [nomarkup][Destroy the paintings.][/nomarkup] #line:063d360 
     <<jump paintingsDestroyed>>
--> [nomarkup][Examine the paintings more closely.](Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>> #line:0d08a4a 
+-> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
--> [nomarkup][Try to dig up some information about art trade from your brain.](Intelligence+Finance)[/nomarkup]<<if visited("paintingIntelligenceRoll") == false>> #line:0770fad 
+-> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup]<<if visited("paintingIntelligenceRoll") == false>> #line:0770fad 
     <<jump paintingIntelligenceRoll>>
--> [nomarkup][Those seem to be completely out of place... you wonder why...](Wits+Insight)[/nomarkup]<<if visited("paintingWitsSuccess") == false>> #line:0b6d950   
+-> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup]<<if visited("paintingWitsSuccess") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
 <<if $paintingsPutDown ==true>>
     -> [nomarkup][Examine the safe.][/nomarkup] #line:0847f88 
@@ -210,7 +210,7 @@ title: paintingsDestroyed
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Such depths of emotion! The viciousness on display was captivating. You should make your own exhibition one day. [nomarkup][She grins.][/nomarkup] #line:0183fc2 
 <<endif>>
-{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.](Kieran influence -1)[nomarkup] #line:04a3041 
+{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[nomarkup] #line:04a3041 
 <<ModifyInfluence -1 $kieran>>
 -> {$pcName}: I... don't know what came over me. <<if visited("beastTalk") == false>> #line:0e9e8bb 
     <<jump beastTalk>>
@@ -261,7 +261,7 @@ title: anaAndKieranConflict
 ---
 {$innerVoice}: Shit... #line:0560752 
 {$beast}: I don’t want to die... I must survive.
--> {$pcName}: [nomarkup][Find the will to assert yourself.](Resolve+Leadership)[/nomarkup] #line:04748ad 
+-> {$pcName}: [nomarkup][Find the will to assert yourself.] (Resolve+Leadership)[/nomarkup] #line:04748ad 
 [nomarkup][Kieran and Anastasia continue to argue as you briefly clear your throat, readying yourself to take on the mantle of being the sole adult in the room... What will you say?][/nomarkup] #line:0928c7c 
 <<if Roll ("Resolve","Leadership")>=2>>
     -> {$pcName}: [nomarkup][You straighten up where you stand, before projecting an authoritative, firm voice.][/nomarkup] Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. #success #line:00b25cf 

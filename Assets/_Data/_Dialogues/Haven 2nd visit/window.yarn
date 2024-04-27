@@ -283,9 +283,9 @@ title: windowUseFurniture
 ---
 [nomarkup][You look around for suitable furniture. Something that will cover the window. It won't be ideal, but it has to suffice. The first that comes to your mind is your clunky fridge. The second one is the bookcase. In the case of the fridge, it should be easy - it's empty - so you don't risk if something will fall out. It's just pretty heavy. The bookcase is lighter, but you don't have the time to put everything down on the shelves. And you're sentimental about some trinkets you've collected and placed on it.][/nomarkup]
 <<set $attemptsCounter to ($attemptsCounter + 1)>>
--> [nomarkup][Move the fridge.](Strenght + Athletics)[/nomarkup] <<if visited("windowMoveFridgeRoll") == false>>
+-> [nomarkup][Move the fridge.] (Strenght + Athletics)[/nomarkup] <<if visited("windowMoveFridgeRoll") == false>>
     <<jump windowMoveFridgeRoll>>
--> [nomarkup][Move the bookcase.](Dexterity + Athletics)[/nomarkup] <<if visited("windowMoveBookcaseRoll") == false>>
+-> [nomarkup][Move the bookcase.] (Dexterity + Athletics)[/nomarkup] <<if visited("windowMoveBookcaseRoll") == false>>
     <<jump windowMoveBookcaseRoll>>
 ===
 title: windowMoveFridgeRoll

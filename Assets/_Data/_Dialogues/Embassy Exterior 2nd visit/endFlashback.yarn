@@ -5,7 +5,7 @@ tags:
 [nomarkup][Your senses come to. The person, no, the monster who did this to you is standing directly before you.][/nomarkup] #line:02d07da 
 {$diana}: Your Childe just killed some of our men. #line:00a4e36 
 {$sire}: I'm almost proud. #line:02699f8 
--> [nomarkup][Sneak up on the pair.](Dexterity + Stealth)[/nomarkup] #line:0b0b714 
+-> [nomarkup][Sneak up on the pair.] (Dexterity + Stealth)[/nomarkup] #line:0b0b714 
     <<jump dianaLuciaDexRoll>>
 -> {$pcName}: Who has the most to lose now? #line:05eeefb 
     <<jump looser>>
@@ -39,7 +39,7 @@ title: looser
 -> {$pcName}: Take me with you. #line:0080e49 
     <<set $wannabeDefector to true>>
     <<jump wannabeDefector>>
--> [nomarkup][Charge at her.](Strength + Brawl)[/nomarkup] #line:0dda2ad 
+-> [nomarkup][Charge at her.] (Strength + Brawl)[/nomarkup] #line:0dda2ad 
     <<jump chargeStrRoll>>
 -> {$pcName}: You'll get what's coming to you.  #line:0444260 
     <<jump youHadThatComing>>

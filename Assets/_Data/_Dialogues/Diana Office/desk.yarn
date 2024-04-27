@@ -37,7 +37,7 @@ title: deskExamination
 title: throwAsh
 ---
 [nomarkup][The ash caked inside the ashtray is stubborn as a mule. After years of heavy use, the mass of soot does not want to slide easily into the wastebasket... You'll probably need to wash the ashtray in order to see clearly what is engraved on its bottom.][/nomarkup] #line:0d1020c 
--> [nomarkup][Try to read the inscription anyway.](Resolve+Awareness)[/nomarkup] #line:0e9f52b 
+-> [nomarkup][Try to read the inscription anyway.] (Resolve+Awareness)[/nomarkup] #line:0e9f52b 
 <<if Roll("Resolve","Awareness") >=3>>
     [nomarkup][You speak slowly, sounding out the letters surrounding the Union Jack you can manage to decipher.][/nomarkup] Spreading Anarchy in Las Vegas since 19... [nomarkup][It's a miracle you were able to read nearly the entire sentence in one go.]/[nomarkup] #success #line:0508fcc 
         {$kieran}: It's probably the year when Diana started. 1969. #line:07fa5eb 
@@ -48,7 +48,7 @@ title: throwAsh
     [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #failure #line:0b38984 
     <<jump deskExamination>>
 <<endif>>
--> [nomarkup][Is this ashtray unique?](Intelligence+Investigation)[/nomarkup] #line:0fa0839 
+-> [nomarkup][Is this ashtray unique?] (Intelligence+Investigation)[/nomarkup] #line:0fa0839 
 <<if Roll("Intelligence","Investigation") >=3>>
     [nomarkup][You saw these same ashtrays downstairs. You didn't pay too much attention to how they were decorated, though. Maybe it's something similar to casino chips? They often have the year the gambling establishment they belong to opened written on them...][/nomarkup] #success #line:090f77c 
     -> {$pcName}: When was The Embassy opened? #line:03bc814 
@@ -201,9 +201,9 @@ title: wrongPassword
 title: accessGranted
 ---
 [nomarkup][Just after you hit enter, the screen’s display changes, bringing you to the welcome page for Diana. Dismissing that window, there are several files on the homepage. Mostly financial stuff dating back to 1969. You guess that she may have had to move the records from paper. Probably a good call? Definitely would have been, for you.][/nomarkup] #line:03e8efc 
--> [nomarkup][Examine recent logs.](Resolve + Investigation)[/nomarkup] <<if visited("recentLogs") == false>> #line:0ff1350 
+-> [nomarkup][Examine recent logs.] (Resolve + Investigation)[/nomarkup] <<if visited("recentLogs") == false>> #line:0ff1350 
     <<jump recentLogs>>
--> [nomarkup][Examine older logs.](Intelligence + Finance)[/nomarkup] <<if visited("olderLogs") == false>> #line:0c00f59 
+-> [nomarkup][Examine older logs.] (Intelligence + Finance)[/nomarkup] <<if visited("olderLogs") == false>> #line:0c00f59 
     <<jump olderLogs>>
 <<if $safeDiscovered ==true>>
     -> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if visited("searchQuerry") == false>> #line:085e30a 

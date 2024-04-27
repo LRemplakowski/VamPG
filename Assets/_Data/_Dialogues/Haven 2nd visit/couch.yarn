@@ -2,7 +2,7 @@
 tags:
 ---
 [nomarkup][Your a little bit tarnished couch that doubles as your bed.][/nomarkup]
--> [nomarkup][Move the couch.](Strength + Athletics)[/nomarkup] <<if visited("couchStrRoll") == false>>
+-> [nomarkup][Move the couch.] (Strength + Athletics)[/nomarkup] <<if visited("couchStrRoll") == false>>
     <<jump couchStrRoll>>
 -> [Take the sheets.] <<if visited("sheets") == false>>
     <<jump sheets>>

@@ -10,9 +10,9 @@ tags:
 <<endif>>
 -> [nomarkup][Don't take a shower.][/nomarkup]
     <<jump noShower>>
--> [nomarkup][You grab the shower curtain and start to pull it off the rail.](Strength + Athletics)[/nomarkup]
+-> [nomarkup][You grab the shower curtain and start to pull it off the rail.] (Strength + Athletics)[/nomarkup]
     <<jump showerStrRoll>>
--> [nomarkup][Try to carefully remove curtain from the rod.](Intelligence + Craft)[/nomarkup]
+-> [nomarkup][Try to carefully remove curtain from the rod.] (Intelligence + Craft)[/nomarkup]
     <<jump showerIntRoll>>
 ===
 title: takeAShowerWithAna
@@ -147,7 +147,7 @@ title: showerIntFailure
 title: pcChecksShower
 ---
 [nomarkup][You walk into the bathroom and are met with the same sight you saw this evening Diego remains exactly where you left him, though his eye has now detached and fallen into the bathtub. Bright red oxygenated blood has dried down to a dull black and his face looks terrified. Frozen forever in an expression of unimaginable fear, fear you now understand yourself in some ways. Rigor mortis has set in and his skin has a grayish tint to it.][/nomarkup]
--> [nomarkup][Move the body.](Strength + Athletics)[/nomarkup]
+-> [nomarkup][Move the body.] (Strength + Athletics)[/nomarkup]
     <<jump moveDiegoStrRoll>>
 ===
 title: moveDiegoStrRoll
@@ -167,7 +167,7 @@ title: moveDiegoStrSuccess
 ===
 title: moveDiegoStrFailure
 ---
-[nomarkup][You have Diego up onto your shoulder and carefully maneuver him into a nearby supply closet. Finding a dustpan and vacuum stored in there as well. You only have a few more hours until his body starts to rot, but you don't have the time to think about that as dawn encroaches. For now, you carefully set him down in the closet and close his eyes. You'll find someplace to bury him in the next evening if the Dominics crew won't take care of it sooner. You find yourself staring into the abyss of his face, it feels so much more personal now - even if Diego Vaguez is a stranger to you.](+1 Hunger)[/nomarkup] #failure
+[nomarkup][You have Diego up onto your shoulder and carefully maneuver him into a nearby supply closet. Finding a dustpan and vacuum stored in there as well. You only have a few more hours until his body starts to rot, but you don't have the time to think about that as dawn encroaches. For now, you carefully set him down in the closet and close his eyes. You'll find someplace to bury him in the next evening if the Dominics crew won't take care of it sooner. You find yourself staring into the abyss of his face, it feels so much more personal now - even if Diego Vaguez is a stranger to you.] (+1 Hunger)[/nomarkup] #failure
 <<set $diegoMoved to true>>
 <<jump shower>>
 ===

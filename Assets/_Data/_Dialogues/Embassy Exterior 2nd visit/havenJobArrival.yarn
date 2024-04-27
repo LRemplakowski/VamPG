@@ -23,9 +23,9 @@ title: havenDruggedArrival
 //haven exterior, pc is lying on the ground and Diana drags him to apartment//
 [nomarkup][You can feel your pockets being fumbled with as a hand reaches in and pulls the keys out. Streetlights pass by as your head rests against the cool glass, somewhere from inside the car you can hear the sound of a man coughing. His voice is wheezing like he's struggling to breathe. Suddenly you find yourself pulling into the parking lot of your apartment, a door being opened and you're dragged out of your street and tossed onto the gravel.][/nomarkup] #line:042a781 
 {$diana}: Lot - harder than it seems in the - movies. [nomarkup][She grumbles to herself as you hear another thud. You're too swamped with lethargy to move but you get a glance around- it is your apartment complex, you could probably make a run for it?][/nomarkup] #line:0f2c4cd 
--> [nomarkup][Try to escape by force.](Strength + Athletics)[/nomarkup] #line:0ce3b56 
+-> [nomarkup][Try to escape by force.] (Strength + Athletics)[/nomarkup] #line:0ce3b56 
     <<jump gripStrRoll>>
--> [nomarkup][Try to escape using her distraction to your advantage.](Dexterity + Stealth)[/nomarkup] #line:0a865dc 
+-> [nomarkup][Try to escape using her distraction to your advantage.] (Dexterity + Stealth)[/nomarkup] #line:0a865dc 
     <<jump gripDexRoll>>
 ===
 title: gripStrRoll
@@ -102,7 +102,7 @@ title: arrivalPassive
 //if scene didn't progress to Haven interior it does now//
 <<if Roll("Wits","Awareness") >=2>>
     [nomarkup][There is a tickle of chill on the back of your neck from a window you didn't realize had been left open. Turning to look further into your apartment you see something that sends an immediate cold flash down your spine. eyes in the din of your apartment and feel an immediate flicker of fear as you recognize there's someone already inside.][/nomarkup] #line:04564e8 
-    -> [nomarkup][Try to assess if the intruder is still in your apartment.](Resolve + Athletics)[/nomarkup] #line:0ca7d2e 
+    -> [nomarkup][Try to assess if the intruder is still in your apartment.] (Resolve + Athletics)[/nomarkup] #line:0ca7d2e 
     <<jump arrivalResolveRoll>>
 <<endif>>
 ===

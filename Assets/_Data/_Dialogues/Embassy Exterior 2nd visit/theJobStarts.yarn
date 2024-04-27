@@ -181,7 +181,7 @@ title: chaseOptions
 ---
 {$diego}: You know... [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #line:00acd50 
 //Diego starts to run//
--> [nomarkup][Go after him as fast as you can.](Dexterity + Athletics)[/nomarkup] #line:0406e6a 
+-> [nomarkup][Go after him as fast as you can.] (Dexterity + Athletics)[/nomarkup] #line:0406e6a 
     <<jump dexChaseRoll>>
 ===
 title: dexChaseRoll
@@ -195,7 +195,7 @@ title: dexChaseRoll
 title: dexChaseSuccess
 ---
 [nomarkup][You move, turning on your heel to avoid the lit cigarette coming towards you. As you pivot to move towards Diego you can see that he's started to move faster away from you, noticing the pace of your footsteps and reacting by breaking out into a run. You find yourself sprinting after him, air fast and hot in your lungs as you try to out run his initial sprint.][/nomarkup] #success #line:06984e1 
--> [nomarkup][Try to tackle him.](Stamina + Brawl)[/nomarkup] #line:02080e9 
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup] #line:02080e9 
 <<jump stamChaseRoll>>
 ===
 title: dexChaseFailure
@@ -203,7 +203,7 @@ title: dexChaseFailure
 [nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure #line:064459e 
 <<DealDamage $pcName 1>>
 [nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19
--> [nomarkup][Try to tackle him.](Stamina + Brawl)[/nomarkup]
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup]
 <<jump stamChaseRoll>>
 ===
 title: stamChaseRoll

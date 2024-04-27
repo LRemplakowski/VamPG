@@ -12,9 +12,9 @@ tags:
 title: licenseTab
 ---
 Bartender: Hey- can't leave your license behind the bar. Let me close out your tab? #line:0cd6d54 
--> {$pcName}: Ah, silly me, I nearly forgot. [nomarkup][Look closely at bartender hiding suspicion.](Charisma + Insight)[/nomarkup] #line:07e7631 
+-> {$pcName}: Ah, silly me, I nearly forgot. [nomarkup][Look closely at bartender hiding suspicion.] (Charisma + Insight)[/nomarkup] #line:07e7631 
     <<jump bartenderChaRoll>>
--> {$pcName}: Sure. [nomarkup][Look at the bar. Something doesn't add up.][/nomarkup](Intelligence + Etiquette)[/nomarkup] #line:0750220 
+-> {$pcName}: Sure. [nomarkup][Look at the bar. Something doesn't add up.][/nomarkup] (Intelligence + Etiquette)[/nomarkup] #line:0750220 
     <<jump bartenderIntRoll>>
 -> {$pcName}: [nomarkup][You raise your eyebrow.][/nomarkup] Yeah, yeah... sorry... (Composure + Streetwise) #line:040d2cf 
     <<jump bartenderCompRoll>>
@@ -95,7 +95,7 @@ title: dianaContinues
     {$diana}: Sorry babes... It'll all be over quickly. #line:0bc9069 
     <<jump drugOvercome>>
 <<endif>>
--> [nomarkup][Try to overcome the drug effects.](Stamina + Resolve)[/nomarkup] #line:069e723 
+-> [nomarkup][Try to overcome the drug effects.] (Stamina + Resolve)[/nomarkup] #line:069e723 
 ===
 title: drugOvercome
 ---

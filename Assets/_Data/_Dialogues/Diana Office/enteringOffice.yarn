@@ -55,7 +55,7 @@ title: sidingWithKieran
     [nomarkup][She smirks, opening her mouth to speak...][/nomarkup] #line:0d66efc 
 <<endif>>
 <<if $missKaminska == true>>
-    -> [nomarkup][Redirect everyone towards the investigation at hand.](Charisma + Leadership)[/nomarkup] #line:0818717 
+    -> [nomarkup][Redirect everyone towards the investigation at hand.] (Charisma + Leadership)[/nomarkup] #line:0818717 
     <<if Roll ("Charisma","Leadership")>=3>>
         [nomarkup][..but you cut in before she can utter a word.][/nomarkup] #succees #line:045bf4f 
         -> {$pcName}: Guys, I think it's time we stopped bickering and focused on the task at hand. Time is running short, and we still haven't the faintest clue who my Sire is. #line:0fa839a 

@@ -2,7 +2,7 @@
 tags:
 ---
 [nomarkup][You pick up the 9mm Handgun Arthur bought you to keep you safe. The metal is normally cool in your hands, but now it suspiciously has no temperature.][/nomarkup] #line:020c521 
--> (Dexterity + Firearms) [nomarkup][Clean the gun.][/nomarkup] #line:0f5c611 
+-> [nomarkup][Clean the gun.] (Dexterity + Firearms)[/nomarkup] #line:0f5c611 
     <<jump PickUpGun>>
 -> [nomarkup][Walk away.][/nomarkup] #line:070033a 
     <<GiveItem "IT_WPN_RN_HANDGUN">>

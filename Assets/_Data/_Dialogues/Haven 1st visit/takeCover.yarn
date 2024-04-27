@@ -33,20 +33,20 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 {$sheriff}: Hello M'am, we know you are in here somewhere... [nomarkup][He widens his nostrils and sniffs the air.][/nomarkup] ...and it smells like you've been busy! [nomarkup][The man in sunglasses has an audible Texan accent.][/nomarkup] #line:01e8e04 
 {$kieran}: There is no point in hiding, miss Bardot. This is not a conversation that you wish to delay. #line:0518162 
 {$beast}: Who are they to barge into my home like this? Let's show them some manners. #line:025adfd 
--> (Dexterity + Brawl) [nomarkup][Punch the intruder.][/nomarkup] #line:007495a 
+-> [nomarkup][Punch the intruder.] (Dexterity + Brawl) [/nomarkup] #line:007495a 
     <<if Roll("Dexterity","Brawl") >= 3>>
         [nomarkup][Your attack connects solidly with his shoulder, but he seems unaffected. Amused, even.][/nomarkup] #success #line:0f9b326 
     <<else>>
         [nomarkup][Barely moving, the man in the aviators nonchalantly dodges your attack with swagger - one of his hands still stuffed into the pockets of his black suit pants.][/nomarkup] #failure #line:0540c27 
     <<endif>>
--> (Dexterity + Melee) [nomarkup][Hit the intruder with the crowbar.][/nomarkup] #line:0919bac 
+-> [nomarkup][Hit the intruder with the crowbar.] (Dexterity + Melee)[/nomarkup] #line:0919bac 
     <<if Roll("Dexterity","Melee") >= 3>>
         [nomarkup][Your attack connects, the tip of the crowbar leaving a gnarly gash in the man with aviators, but he seems unaffected. His flesh knits itself back together as the wound heals before your eyes.][/nomarkup] #success
         [nomarkup][He's clearly unbothered. Amused, even. He grins menacingly, looking you up and down as his hand snatches the crowbar and pulls it from your hands without any visible effort. Then, without taking his eyes off you, he tosses it away from your reach.][/nomarkup] #line:06e97a8 
     <<else>>
         [nomarkup][Barely moving, the man in the aviators nonchalantly dodges your attack with swagger - one of his hands still stuffed into the pockets of his black suit pants. The second grabs your weapon and pulls it from your hands without any substantial effort made - throwing it away from your reach.][/nomarkup] #failure #line:0888dbf 
     <<endif>>
--> (Dexterity + Firearms) [nomarkup][Shoot the intruder.][/nomarkup] #line:069f0e5 
+-> [nomarkup][Shoot the intruder.] (Dexterity + Firearms)[/nomarkup] #line:069f0e5 
     <<if Roll("Dexterity","Firearms") >= 3>>
         [nomarkup][BANG! The gun recoils as the bullet embeds itself in the shoulder of the man in the aviators, but he seems unaffected. His flesh knits itself back together, pushing the lead pellet out and into his waiting hand.][/nomarkup] #success
         [nomarkup][He's clearly unbothered. Amused, even. The lead bead makes a faint metallic noise as it is tossed nonchalantly onto the ground.][/nomarkup] #line:058033a 

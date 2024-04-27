@@ -1,6 +1,11 @@
 ﻿title: BathroomSink
 tags:
 ---
+[nomarkup][The sink is dirty, but at least it isn't clogged like the one in the kitchen. The mirror from the medicine cabinet is clean though and reflects everything in the room. You included.][/nomarkup] #lastline
+<<jump BathroomSinkInteractions>>
+===
+title: BathroomSinkInteractions
+---
 -> [nomarkup][Look in the mirror.][/nomarkup] <<if visited("MirrorLook") == false>> #line:0f02e54 
     <<jump MirrorLook>>
 -> [nomarkup][Look through the clutter near the sink.][/nomarkup] <<if visited("SinkClutter") == false>> #line:0361f9e 
@@ -22,7 +27,7 @@ tags:
 <<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 3>>
     [nomarkup][This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.][/nomarkup] #lastline #line:0912bc6 
 <<endif>>
-<<jump BathroomSink>>
+<<jump BathroomSinkInteractions>>
 ===
 title: SinkClutter
 tags:
@@ -30,7 +35,7 @@ tags:
 [nomarkup][Sifting through your cosmetic products, you find a Bobby Pin on the counter.][/nomarkup] #line:092338c 
 <<GiveItem "IT_Q_BOBBY_PIN">>
 {$pcName}: [nomarkup][Wish I had this sooner.][/nomarkup] #lastline #line:026ddf4 
-<<jump BathroomSink>>
+<<jump BathroomSinkInteractions>>
 ===
 title: MedCabinet
 tags:
@@ -38,5 +43,5 @@ tags:
 [nomarkup][You open up the mirror and grab an off-brand painkiller. Without reading the label, you pop two pills.][/nomarkup] #line:068c180 
 {$pcName}: [nomarkup][What's the worst some more liver damage is gonna do?][/nomarkup] #lastline #line:0d1c5fe 
 <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "GRAB_MEDS_2">>
-<<jump BathroomSink>>
+<<jump BathroomSinkInteractions>>
 ===

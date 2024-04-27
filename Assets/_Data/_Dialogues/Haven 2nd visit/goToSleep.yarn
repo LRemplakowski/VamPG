@@ -7,6 +7,7 @@ tags:
 ===
 title: goToSleepOptions
 ---
+[nomarkup][You feel dizzynes that accompanies tiredness. But it's not just being tired. It's like feeling the weight of the ages on your shoulders that pulls you down.][/nomarkup]
 <<if $attemptsCounter >= 4>>
     <<jump endNight>>
 <<endif>>
@@ -31,14 +32,14 @@ title: goToSleepOptions
     <<endif>>
     <<jump thinkAboutPeople>>
 <<if GetIsPartyMemberRecruited($anastasia) is true and visited("askAnastasia")==false>>
-    <<jump askAnastasia>>
+    -> {$pcName}: Anastasia?
+        <<jump askAnastasia>>
 <<endif>>
--> [It doesn't matter. Quiet your thoughts.]
+-> [nomarkup][It doesn't matter. Quiet your thoughts.][/nomarkup]
     <<jump endNight>>
 ===
 title: askAnastasia
 ---
--> {$pcName}: Anastasia?
 {$anastasia}: Fuck off. I'm trying to get comfortable.
 [nomarkup][You'll find no companionship in your voyage this morning.][/nomarkup]
 <<jump goToSleepOptions>>
@@ -79,17 +80,17 @@ title: discussionConclussion
 title: thinkAboutVampires
 ---
 -> {$beast}: The “beautiful predators” and “masters of the night”. Yeah, right... Rather stuck up a bunch of self-important pricks.
-    [nomarkup][Like everybody you used to think vampires were just fantasy but then again that was what they wanted you to think. The Masquerade they call it. Like ranchers over cattle. You wonder how high up the chain Kindred rule the world?][/nomarkup]
+    [nomarkup][Like everybody you used to think vampires were just fantasy but then again that was what they wanted you to think. The Masquerade they call it. Like ranchers over cattle. You wonder how high up the chain Kindred rule the world?][/nomarkup] #lastline
 -> {$innerVoice}: So this is how my life will look like from this point forward. Drinking blood and dabbling in politics.
-    [nomarkup][Like everybody you used to think vampires were just fantasy but then again that was what they wanted you to think. The Masquerade they call it. Like ranchers over cattle. You wonder how high up the chain Kindred rule the world?][/nomarkup]
+    [nomarkup][Like everybody you used to think vampires were just fantasy but then again that was what they wanted you to think. The Masquerade they call it. Like ranchers over cattle. You wonder how high up the chain Kindred rule the world?][/nomarkup] #lastline
 <<jump discussionVampires2ndStep>>
 ===
 title: discussionVampires2ndStep
 ---
 -> {$beast}: Of course they do. To be on top you have to be ruthless. I need to be ruthless to survive. Otherwise, I'll end up how I started - as no one. Or worse.
-    [nomarkup][Yes, a lowlife. You have had enough of this. You have ambition, you have your dreams and now you've got a means to make them true. Why should you stop yourself here? You should go and take what you want for yourself.][/nomarkup]
+    [nomarkup][Yes, a lowlife. You have had enough of this. You have ambition, you have your dreams and now you've got a means to make them true. Why should you stop yourself here? You should go and take what you want for yourself.][/nomarkup] #lastline
 -> {$innerVoice}: It's obvious. But why do they need to be a source of all evil? Normal people are capable of really cruel things. Even a calm and nice guy from the house next door may be a cruel murderer. Like a wolf hiding among the sheep. I know that too well...
-    [nomarkup][The silent types are the worst. It would be the best to lay low for a while. Look how it works in the Kindres society - as they call themselves. This is an unknown to you and you don't want to make it even worse.][/nomarkup]
+    [nomarkup][The silent types are the worst. It would be the best to lay low for a while. Look how it works in the Kindres society - as they call themselves. This is an unknown to you and you don't want to make it even worse.][/nomarkup] #lastline
 <<jump discussionVampires3rdStep>>
 ===
 title: discussionVampires3rdStep
@@ -102,17 +103,17 @@ title: discussionVampires3rdStep
 title: thinkAboutWhatHappened
 ---
 -> {$beast}: Trial by fire. Nothing less and nothing more. And I survived! It tells something, doesn't it?
-    [nomarkup][Trial by fire. Funny you say that - the same fire seems to repel you. Good thing you didn't stay at the Embassy for much longer. Well, you may also consider flying bullets a fire. Then in this case yes, it was a trial by fire.][/nomarkup]
+    [nomarkup][Trial by fire. Funny you say that - the same fire seems to repel you. Good thing you didn't stay at the Embassy for much longer. Well, you may also consider flying bullets a fire. Then in this case yes, it was a trial by fire.][/nomarkup] #lastline
 -> {$innerVoice}: A series of unfortunate events. I hope that tomorrow will be better. And much slower.
-    [nomarkup][Everything went so fast that it looked like a blur in your memory. But at the same time, you seem to recall every moment with clarity. Every bullet, every wound, and... every death. The faces of the dead you see in your thoughts make your head spin.][/nomarkup]
+    [nomarkup][Everything went so fast that it looked like a blur in your memory. But at the same time, you seem to recall every moment with clarity. Every bullet, every wound, and... every death. The faces of the dead you see in your thoughts make your head spin.][/nomarkup] #lastline
 <<jump discussionWhatHappened2ndStep>>
 ===
 title: discussionWhatHappened2ndStep
 ---
 -> {$beast}: And this is only the beginning. The Embassy? Lucia? Diana? It was only a sliver of a city. Just to think what happens in other places! And I will be the center of it all.
-    [nomarkup][You like the thrill, the attention, and most of all the dynamic that surrounds you. The moments come and go, but you will take them all head-on. You survived your first night. You'll survive the next too. And the one after that.][/nomarkup]
+    [nomarkup][You like the thrill, the attention, and most of all the dynamic that surrounds you. The moments come and go, but you will take them all head-on. You survived your first night. You'll survive the next too. And the one after that.][/nomarkup] #lastline
 -> {$innerVoice}: Things need to slow down or I will be unable to keep up. Hopefully, the pace will get slower in the next few days... hopefully.
-    [nomarkup][All this information, your world as you know it in ruin... new words, rules, people... it's just too much. Even for you. All that is left is hope. In this particular case, the hope is that all this will blow over. Probably not without any consequences, but maybe people will forget about it soon.][/nomarkup]
+    [nomarkup][All this information, your world as you know it in ruin... new words, rules, people... it's just too much. Even for you. All that is left is hope. In this particular case, the hope is that all this will blow over. Probably not without any consequences, but maybe people will forget about it soon.][/nomarkup] #lastline
 <<jump discussionWhatHappened3rdStep>>
 ===
 title: discussionWhatHappened3rdStep

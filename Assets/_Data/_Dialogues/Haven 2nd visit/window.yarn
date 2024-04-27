@@ -69,7 +69,7 @@ title: windowWitsSuccess
     -> {$pcName}: What happened?
     {$anastasia}: I'll tell you about it sometime but not right now.
 -> {$pcName}: No.
-    {$anastasia}: Well good!
+    {$anastasia}: Well good! #lastline
 <<jump doAnaKnowTheGuy>>
 ===
 title: windowWitsFailure
@@ -79,7 +79,7 @@ title: windowWitsFailure
 -> {$pcName}: Fine! Fine.
 {$anastasia}: I am the supreme vampire lord! Worship me!!
 -> {$pcName}: You've made your point!!
-[nomarkup][The pair of you laugh and she waves her hand at you to dismiss the conversation.][/nomarkup]
+[nomarkup][The pair of you laugh and she waves her hand at you to dismiss the conversation.][/nomarkup] #lastline
 <<jump doAnaKnowTheGuy>>
 ===
 title: doAnaKnowTheGuy
@@ -96,11 +96,11 @@ title: watchItFirst
 ===
 title: windowProofing
 ---
-[nomarkup][Aside from completely ordinary blinds that allow you to block some of the sunlight during the day and street lights at night there's little protection from the daylight. It always floods your apartment after noon - from what you recall window is on the western wall of the building. You survived one hell so you probably don't want to be taken down by Sun. You look around for potential solutions. You have some sheets hidden in the couch if that will not work you also have some clothing and a shower curtain. But you'll have to think about how to put them in place. Probably a hammer and some nails would be useful. The second option that comes to you is all that cardboard from pizza. You may as well use them before you throw them into the trash. In this case, the duct tape should be enough. At worst, you can move some of the furniture, but it may require some help. There's also this clunky fridge, but you're not sure if it'll cover the entire window. At least you don't have to worry if something goes bad inside during the day. It was empty anyway. If none of the options that come to your mind would work there's also a windowless bathroom... but you'd probably want to avoid a place where Diego died because of you. You shudder at the sheer thought. You take a look at the clock. When you went to the Embassy with Kieran he said that you have nine hours until dawn... quick math tells you that you don't have much time. If you botch two attempts to light-proof the window it's a bathroom for you whether you like it or not.][/nomarkup]
+[nomarkup][Aside from completely ordinary blinds that allow you to block some of the sunlight during the day and street lights at night there's little protection from the daylight. It always floods your apartment after noon - from what you recall window is on the western wall of the building. You survived one hell so you probably don't want to be taken down by Sun. You look around for potential solutions. You have some sheets hidden in the couch if that will not work you also have some clothing and a shower curtain. But you'll have to think about how to put them in place. Probably a hammer and some nails would be useful. The second option that comes to you is all that cardboard from pizza. You may as well use them before you throw them into the trash. In this case, the duct tape should be enough. At worst, you can move some of the furniture, but it may require some help. There's also this clunky fridge, but you're not sure if it'll cover the entire window. At least you don't have to worry if something goes bad inside during the day. It was empty anyway. If none of the options that come to your mind would work there's also a windowless bathroom... but you'd probably want to avoid a place where Diego died because of you. You shudder at the sheer thought. You take a look at the clock. When you went to the Embassy with Kieran he said that you have nine hours until dawn... quick math tells you that you don't have much time. If you botch two attempts to light-proof the window it's a bathroom for you whether you like it or not.][/nomarkup] #lastline
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: What are you thinking about? Readying yourself for a session of sunbathing? We don't have much time - we need to think of something. Otherwise, we'll burn to a crisp.
     -> {$pcName}: I have some ideas. If nothing works we can use the bathroom.
-    {$anastasia}: [nomarkup][She sighs a little looking at you.][/nomarkup] Ye, it should work. It doesn't have a window.
+    {$anastasia}: [nomarkup][She sighs a little looking at you.][/nomarkup] Ye, it should work. It doesn't have a window. #lastline
 <<endif>>
 <<jump windowOptions>>
 ===
@@ -140,7 +140,7 @@ title: windowOptions
 title: blinds
 ---
 <<set $windowBlinds to true>>
-[nomarkup][You close the blinds with a frown. There's no way in hell that'll keep out the light. You need to seal the edges around the window or everything you went through won't matter.][/nomarkup]
+[nomarkup][You close the blinds with a frown. There's no way in hell that'll keep out the light. You need to seal the edges around the window or everything you went through won't matter.][/nomarkup] #lastline
 <<jump windowOptions>>
 ===
 title: windowHaveSheets

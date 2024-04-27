@@ -23,17 +23,15 @@ tags:
     Reporter: Yes Cheryl. Efforts are underway currently to try and clear the building of those still trapped inside, it would seem that a broken door in the back alley allowed many to escape. The fire team on duty this evening commented that it likely saved a great many people from smoke annihilation... 
     [nomarkup][The reporter drones on as you see police come and talk with the new station, saying that they suspect a string of violent crimes in the area all to be tied to a resurgence of gang violence and organized crime after a series of arrests late last year. You're witnessing the work of your “primogen,” as Kieran put it, in real-time. You wonder how many other stories you've heard are flights of fancy Kindred have served to the public.][/nomarkup]
     <<if GetHasItem("IT_Q_VHS")>>
-        <<jump vhsTape>>
+        -> [nomarkup][Insert the tape.][/nomarkup]
+            <<jump tvInsertTape>>
+        -> [nomarkup][Walk away.][/nomarkup]
     <<endif>>
 <<elseif GetHasItem("IT_Q_VHS")>>
-    <<jump vhsTape>>
+    -> [nomarkup][Insert the tape.][/nomarkup]
+        <<jump tvInsertTape>>
+    -> [nomarkup][Walk away.][/nomarkup]
 <<endif>>
-===
-title: vhsTape
----
--> [nomarkup][Insert the tape.][/nomarkup]
-    <<jump tvInsertTape>>
--> [nomarkup][Walk away.][/nomarkup]
 ===
 title: tvInsertTape
 ---

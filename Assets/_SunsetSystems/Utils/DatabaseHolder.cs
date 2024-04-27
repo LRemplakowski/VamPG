@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace SunsetSystems.Utils.Database
 {
-    [ExecuteAlways]
     public class DatabaseHolder : SerializedMonoBehaviour
     {
         public static DatabaseHolder Instance { get; private set; }
@@ -20,12 +19,9 @@ namespace SunsetSystems.Utils.Database
             if (Instance == null)
             {
                 Instance = this;
-#if UNITY_EDITOR
-                if (UnityEditor.EditorApplication.isPlaying)
-#endif
-                    DontDestroyOnLoad(this);
+                DontDestroyOnLoad(this);
             }
-            else if (Instance != this)
+            else
             {
                 Destroy(gameObject);
             }

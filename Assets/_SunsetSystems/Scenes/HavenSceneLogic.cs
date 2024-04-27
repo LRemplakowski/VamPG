@@ -103,8 +103,6 @@ namespace SunsetSystems.Core
             PartyManager.Instance.MainCharacter.ForceToPosition(_pcLandlordVisitWaypoint.transform.position);
             CameraControl.ForceToPosition(_landlordEnterCameraPosition);
             CameraControl.ForceRotation(_landlordEnterCameraRotation);
-            await new WaitForFixedUpdate();
-            _landlordDialogue.StartDialogue();
             await fade.DoFadeInAsync(.5f);
         }
 
@@ -251,6 +249,12 @@ namespace SunsetSystems.Core
             public static void MakeDominicLeave()
             {
                 HavenSceneLogic.MoveDominicToDoorAndDestroy();
+            }
+
+            [YarnCommand("BringLandlordForVisit")]
+            public static void BringLandlordForVisit()
+            {
+                HavenSceneLogic.BringKevinForVisit();
             }
         }
     }

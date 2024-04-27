@@ -2,6 +2,7 @@
 tags:
 ---
 KNOCK. KNOCK. KNOCK. #line:015551b 
+<<BringLandlordForVisit>>
 <<if $bathroomdoordestroyed == true>>
     {$landlord}: The fuck did you do? Was there a reason you felt the need to damage my property? Jesus... I'm billing you for the damages, and I expect the payment to be on time. #line:0d98a67 
     [nomarkup][It's disappointing that the first thing that your landlord notices is the state of the apartment, rather than the fact that you look inches from death. Kevin certainly isn't the kind of person you would expect basic human decency from, though.][/nomarkup] #line:0fe85a1 
@@ -14,6 +15,7 @@ KNOCK. KNOCK. KNOCK. #line:015551b
         {$landlord}: You don't smell that? Smells like... nevermind. Let me take a look at that sink. #line:0d4e2b8 
     <<endif>>
 <<endif>>
+<<MoveLandlordAndPCToSinkPositions>>
 [nomarkup][As he bends over to examine the pipes under the sink, you find yourself staring at Kevin's exposed neck. You swear you can see his pulse through the spider web of veins under his skin.][/nomarkup] #line:095fa15 
 [nomarkup][He looks appetizing - but not in a sexual way. You don't feel aroused. Anxious, more like, but not nervous. Instead, it's an anticipatory feeling - like your emotions know something that you do not have the foresight to predict.][/nomarkup]
 [nomarkup][Your stomach aches, the hunger gnawing at your insides without mercy. You lean closer. Why are you doing this?][/nomarkup] #line:0ca60a3 
@@ -29,7 +31,8 @@ KNOCK. KNOCK. KNOCK. #line:015551b
 [nomarkup][You pounce on Kevin as a matter of instinct, sinking your teeth into his neck. Wet, warm blood flows down your throat. This is what you've been craving.][/nomarkup] Set Hunger to 0. #line:0de994d 
 <<set $kevinmurdered to true>>
 <<set $police to true>>
-[nomarkup][When you retract your bite, his limp body falls to the ground with a sickening thud. The shock of what you've just done hits you all at once.][/nomarkup] #line:0e5ffa4 
+[nomarkup][When you retract your bite, his limp body falls to the ground with a sickening thud. The shock of what you've just done hits you all at once.][/nomarkup] #line:0e5ffa4
+<<KillKevin>> 
 {$pcName}: [nomarkup][Holy fuck! What did I-?][/nomarkup] #line:0c6778e 
 -> [nomarkup][Try to save him.] (Intelligence + Medicine)[/nomarkup] #line:036197c 
     <<if Roll("Intelligence","Medicine") >= 3>>

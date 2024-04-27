@@ -443,6 +443,7 @@ namespace UMA.CharacterSystem
 
         public void Awake()
         {
+            StartGuard = false;
 #if UNITY_EDITOR
             // Cleanup from any edit-time uma generation
             if (Application.isPlaying)
@@ -519,6 +520,8 @@ namespace UMA.CharacterSystem
         // Use this for initialization
         public override void Start()
         {
+            StartGuard = false;
+            _isFirstSettingsBuild = true;
             InitialStartup();
         }
 

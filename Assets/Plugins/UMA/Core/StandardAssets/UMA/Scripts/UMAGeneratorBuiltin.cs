@@ -229,7 +229,6 @@ namespace UMA
 				{
 					UMAGeneratorPro ugp = new UMAGeneratorPro();
 					ugp.ProcessTexture(this, umaData, true, InitialScaleFactor);
-					TextureChanged++;
                 }
                 else
 				{
@@ -249,7 +248,7 @@ namespace UMA
                     activeGeneratorCoroutine = null; 
 				}
 
-				TextureChanged++;
+				TextureChanged--;
 			}
 		}
 
@@ -530,7 +529,7 @@ namespace UMA
 			UMAContextBase.IgnoreTag = ignoreTag;
 			if (data == null)
             {
-                return true;
+                return false;
             }
 
             if (umaData != data)
@@ -578,7 +577,7 @@ namespace UMA
 					activeGeneratorCoroutine = null;
 					umaData.isTextureDirty = false;
 					umaData.isAtlasDirty |= umaData.isMeshDirty;
-					TextureChanged++;
+					TextureChanged--;
 				}
 
 				//shouldn't this only cause another loop if this part MADE the mesh dirty?
@@ -594,7 +593,7 @@ namespace UMA
 				UpdateUMAMesh(umaData.isAtlasDirty);
 				umaData.isAtlasDirty = false;
 				umaData.isMeshDirty = false;
-				SlotsChanged++;
+				SlotsChanged--;
 				forceGarbageCollect++;
 
 				if (!fastGeneration)
@@ -611,7 +610,7 @@ namespace UMA
 				}
 				UpdateUMABody(umaData);
 				umaData.isShapeDirty = false;
-				DnaChanged++;
+				DnaChanged--;
 			}
 			else if (umaData.skeleton != null && umaData.skeleton.isUpdating)
 			{

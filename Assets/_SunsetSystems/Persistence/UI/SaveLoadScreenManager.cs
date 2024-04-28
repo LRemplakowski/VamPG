@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace SunsetSystems.Persistence.UI
             }
 
             var saveMetaData = SaveLoadManager.GetAllSaveMetaData();
+            saveMetaData = saveMetaData.OrderBy(save => save.SaveDate);
             foreach (var metaData in saveMetaData)
             {
                 SaveEntry saveEntry = Instantiate(_saveEntryPrefab, _saveEntriesParent);

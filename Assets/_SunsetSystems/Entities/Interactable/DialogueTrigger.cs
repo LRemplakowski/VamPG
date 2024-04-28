@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using Yarn.Unity;
 using SunsetSystems.Entities.Characters.Actions;
 using UltEvents;
+using SunsetSystems.Core.SceneLoading.UI;
+using System.Threading.Tasks;
 
 namespace SunsetSystems.Entities.Interactable
 {
@@ -12,12 +14,16 @@ namespace SunsetSystems.Entities.Interactable
     {
         [SerializeField]
         private bool _fadeOutBeforeDialogue;
+        [SerializeField]
+        private bool _fadeOutAfterDialogue;
         [InfoBox("XYZ represent fade out timings.\nX - Fading out time\nY - Time screen stays faded out\nZ - Fading in time")]
         [Space]
-        [SerializeField, ShowIf("_fadeOutBeforeDialogue")]
+        [SerializeField, ShowIf("@this._fadeOutBeforeDialogue == true || this._fadeOutAfterDialogue == true")]
         private Vector3 _fadeTimes = Vector3.one;
         [SerializeField, ShowIf("_fadeOutBeforeDialogue")]
         private UnityEvent _onAfterFadeout;
+        [SerializeField, ShowIf("_fadeOutAfterDialogue")]
+        private UnityEvent _onAfterDialogueFadeout;
         [SerializeField]
         private YarnProject _dialogueProject;
         [field: SerializeField]
@@ -29,11 +35,15 @@ namespace SunsetSystems.Entities.Interactable
         public UltEvent<string> OnNodeFinished;
 
         [Button]
-        public void StartDialogue()
+        public async void StartDialogue()
         {
             if (_fadeOutBeforeDialogue)
             {
+                var fade = SceneLoadingUIManager.Instance;
+                await fade.DoFadeOutAsync(_fadeTimes.x);
                 _onAfterFadeout?.Invoke();
+                await Task.Delay(Mathf.RoundToInt(_fadeTimes.y * 1000));
+                await fade.DoFadeInAsync(_fadeTimes.z);
             }
             SubscribeToDialogueEvents();
             DialogueManager.Instance.StartDialogue(EntryNode, _dialogueProject);
@@ -60,9 +70,17 @@ namespace SunsetSystems.Entities.Interactable
             OnDialogueStarted?.InvokeSafe();
         }
 
-        private void PropagateDialogueFinished()
+        private async void PropagateDialogueFinished()
         {
             OnDialogueFinished?.InvokeSafe();
+            if (_fadeOutAfterDialogue)
+            {
+                var fade = SceneLoadingUIManager.Instance;
+                await fade.DoFadeOutAsync(_fadeTimes.x);
+                _onAfterDialogueFadeout?.Invoke();
+                await Task.Delay(Mathf.RoundToInt(_fadeTimes.y * 1000));
+                await fade.DoFadeInAsync(_fadeTimes.z);
+            }
             UnsubscribeFromDialogueEvents();
         }
 

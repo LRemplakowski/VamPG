@@ -33,7 +33,7 @@ namespace SunsetSystems.UI
             {
                 _itemEntry = dataProvider.Data;
                 lastLoadedSprite = _itemEntry._item.Icon;
-                _icon.sprite = await AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
+                _icon.sprite = await AddressableManager.Instance.LoadAssetAsync<Sprite>(lastLoadedSprite);
                 _icon.gameObject.SetActive(true);
                 if (_itemEntry._item.Stackable)
                 {

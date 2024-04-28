@@ -29,7 +29,7 @@ namespace SunsetSystems.Equipment.UI
             if (itemInSlot != null)
             {
                 lastLoadedSprite = itemInSlot.Icon;
-                Task<Sprite> iconTask = AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
+                Task<Sprite> iconTask = AddressableManager.Instance.LoadAssetAsync<Sprite>(lastLoadedSprite);
                 await iconTask;
                 _itemIcon.sprite = iconTask.Result;
                 _itemIcon.gameObject.SetActive(true);

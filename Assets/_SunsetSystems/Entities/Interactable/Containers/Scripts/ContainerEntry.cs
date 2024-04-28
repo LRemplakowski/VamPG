@@ -30,7 +30,7 @@ namespace SunsetSystems.Inventory.UI
             _storage = storage;
             _text.text = content._item.Name;
             lastLoadedSprite = content._item.Icon;
-            _icon.sprite = await AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
+            _icon.sprite = await AddressableManager.Instance.LoadAssetAsync<Sprite>(lastLoadedSprite);
             gameObject.name = content._item.Name;
         }
 

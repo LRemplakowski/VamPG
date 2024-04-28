@@ -17,7 +17,7 @@ namespace SunsetSystems.Core.AddressableManagement
             assetHandlesDictionary.Clear();
         }
 
-        public async Task<T> LoadAssetAsync<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
+        public async Task<T> LoadAssetAsync<T>(AssetReference assetReference) where T : UnityEngine.Object
         {
             if (assetReference.RuntimeKeyIsValid() is false)
             {
@@ -39,7 +39,7 @@ namespace SunsetSystems.Core.AddressableManagement
             }
         }
 
-        public void ReleaseAsset<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
+        public void ReleaseAsset(AssetReference assetReference)
         {
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {

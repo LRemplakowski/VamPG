@@ -47,7 +47,11 @@ position: -407,-310
 title: anastasiaSomethingOff
 position: -130,38
 ---
--> [nomarkup][Something's off about her.] (Intelligence + Medicine)[/nomarkup] #line:0d9b7de 
+<<if $anaIsVampire == true>>
+    <<jump anastasiaKnowIsKindred>>
+<<else>>
+    -> [nomarkup][Something's off about her.] (Intelligence + Medicine)[/nomarkup] #line:0d9b7de
+<<endif>> 
 <<if Roll("Intelligence","Medicine") >= 3>>
     [nomarkup][Glancing over her, you notice her skin is blanched unusually pale. Her diaphragm isn't moving, either.][/nomarkup] #success #line:0791089 
     <<set $anaIsVampire to true>>

@@ -1,4 +1,7 @@
-﻿using Redcode.Awaiting;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
@@ -6,13 +9,7 @@ using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using SunsetSystems.Utils.Database;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UMA;
-using UMA.CharacterSystem;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters
@@ -209,5 +206,29 @@ namespace SunsetSystems.Entities.Characters
             public StatsData StatsData { get; private set; }
         }
         #endregion
+
+        public override object GetPersistenceData()
+        {
+            return new CreaturePersistenceData(this);
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            if (data is not CreaturePersistenceData creaturePersistenceData)
+                return;
+            ForceToPosition(creaturePersistenceData.WorldPosition);
+        }
+
+        [Serializable]
+        private class CreaturePersistenceData : PersistenceData
+        {
+            public Vector3 WorldPosition;
+
+            public CreaturePersistenceData(Creature creature) : base(creature)
+            {
+                WorldPosition = creature.References.BodyTransform.position;
+            }
+        }
     }
 }

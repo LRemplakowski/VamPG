@@ -24,18 +24,18 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _doorState = value;
-                if (_animator != null)
+                if (_animator != null || gameObject.TryGetComponent(out _animator))
                     _animator.SetBool(DOOR_STATE, value);
             }
         }
 
         public string ComponentID => COMPONENT_ID;
 
-        private void Awake()
+        private void Start()
         {
             if (_animator != null)
                 _animator = GetComponentInChildren<Animator>();
-            _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);        
+            _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);
         }
 
         [Button]

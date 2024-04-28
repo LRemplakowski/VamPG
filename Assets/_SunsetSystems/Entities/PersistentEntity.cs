@@ -71,16 +71,7 @@ namespace SunsetSystems.Entities
 
         public virtual object GetPersistenceData()
         {
-            PersistenceData data = new();
-            data.GameObjectActive = gameObject.activeSelf;
-            if (PersistentComponents.Count > 0)
-            {
-                data.PersistentComponentData = new();
-                foreach (IPersistentComponent persistentComponent in PersistentComponents)
-                {
-                    data.PersistentComponentData[persistentComponent.ComponentID] = persistentComponent.GetComponentPersistenceData();
-                }
-            }
+            PersistenceData data = new(this);
             return data;
         }
 
@@ -104,6 +95,19 @@ namespace SunsetSystems.Entities
         {
             public bool GameObjectActive;
             public Dictionary<string, object> PersistentComponentData;
+
+            public PersistenceData(PersistentEntity persistentEntity)
+            {
+                GameObjectActive = persistentEntity.gameObject.activeSelf;
+                PersistentComponentData = new();
+                if (persistentEntity.PersistentComponents.Count > 0)
+                {
+                    foreach (IPersistentComponent persistentComponent in persistentEntity.PersistentComponents)
+                    {
+                        PersistentComponentData[persistentComponent.ComponentID] = persistentComponent.GetComponentPersistenceData();
+                    }
+                }
+            }
 
             public PersistenceData()
             {

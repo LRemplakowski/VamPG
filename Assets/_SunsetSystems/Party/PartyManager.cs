@@ -28,6 +28,8 @@ namespace SunsetSystems.Party
         [Title("Config")]
         [SerializeField, ValueDropdown("GetLayerNames")]
         private string _defaultPartyLayer;
+        [SerializeField]
+        private bool _forceSpawnPartyInStorage = false;
 
         [Title("Runtime")]
         [SerializeField]
@@ -93,7 +95,7 @@ namespace SunsetSystems.Party
             if (string.IsNullOrWhiteSpace(_mainCharacterKey))
                 return;
             var waypoint = WaypointManager.Instance.GetSceneEntryWaypoint();
-            if (waypoint != null)
+            if (waypoint != null && !_forceSpawnPartyInStorage)
                 InitializePartyAtPosition(waypoint.transform.position);
             else
                 InitializePartyInCreatureStorage();

@@ -69,7 +69,9 @@ namespace SunsetSystems.Core.UMA
             if (_umaAvatar == null)
             {
                 _umaAvatar = _umaRoot.AddComponent<DynamicCharacterAvatar>();
+#if UNITY_EDITOR
                 _umaAvatar.editorTimeGeneration = false;
+#endif
                 _umaAvatar.RacePreset = _umaConfig.BodyRaceData[BodyType.Female].raceName;
                 _umaAvatar.RecreateAnimatorOnRaceChange = false;
                 _umaAvatar.KeepAnimatorController = true;

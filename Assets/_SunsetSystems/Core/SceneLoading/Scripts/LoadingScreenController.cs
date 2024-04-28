@@ -77,6 +77,7 @@ namespace SunsetSystems.Core.SceneLoading.UI
             this.gameObject.SetActive(false);
         }
 
+        [Button]
         public async Task LoadRandomLoadingScreen()
         {
             var screen = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();

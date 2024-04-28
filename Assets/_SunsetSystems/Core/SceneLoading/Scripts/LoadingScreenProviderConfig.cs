@@ -13,9 +13,20 @@ namespace SunsetSystems.Core.SceneLoading.UI
     public class LoadingScreenProviderConfig : SerializedScriptableObject, IAddressableAssetSource<Sprite>
     {
         [SerializeField]
-        private List<AssetReferenceSprite> defaultLoadingScreens = new();
+        private List<AssetReference> defaultLoadingScreens = new();
 
         private readonly List<AssetReferenceSprite> loadedScreens = new();
+
+        //private void OnValidate()
+        //{
+        //    List<AssetReference> nonSprites = new();
+        //    foreach (var assetRef in defaultLoadingScreens)
+        //    {
+        //        if (assetRef != null && assetRef is not AssetReferenceSprite)
+        //            nonSprites.Add(assetRef);
+        //    }
+        //    defaultLoadingScreens.RemoveAll(assetRef => nonSprites.Contains(assetRef));
+        //}
 
         private void OnEnable()
         {
@@ -30,7 +41,7 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public async Task<Sprite> GetRandomLoadingScreenAsync()
         {
-            AssetReferenceSprite loadingScreenAssetRef = defaultLoadingScreens.GetRandom();
+            AssetReferenceSprite loadingScreenAssetRef = defaultLoadingScreens.GetRandom() as AssetReferenceSprite;
             return await GetAssetAsync(loadingScreenAssetRef);
         }
 

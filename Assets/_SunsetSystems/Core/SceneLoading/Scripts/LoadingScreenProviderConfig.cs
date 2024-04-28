@@ -40,7 +40,7 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public async Task<Sprite> GetRandomLoadingScreenAsync()
         {
-            AssetReferenceSprite loadingScreenAssetRef = defaultLoadingScreens.GetRandom() as AssetReferenceSprite;
+            AssetReference loadingScreenAssetRef = defaultLoadingScreens.GetRandom();
             return await GetAssetAsync(loadingScreenAssetRef);
         }
 

@@ -19,9 +19,14 @@ namespace SunsetSystems.Core.AddressableManagement
 
         public async Task<T> LoadAssetAsync<T>(AssetReference assetReference) where T : UnityEngine.Object
         {
-            if (assetReference.RuntimeKeyIsValid() is false)
+            if (assetReference == null)
             {
                 Debug.LogError("Requested to load asset with null reference!");
+                return null;
+            }
+            if (assetReference.RuntimeKeyIsValid() is false)
+            {
+                Debug.LogError("Requested to load asset with invalid key!");
                 return null;
             }
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))

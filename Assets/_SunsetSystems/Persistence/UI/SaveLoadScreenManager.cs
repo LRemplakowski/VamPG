@@ -34,7 +34,7 @@ namespace SunsetSystems.Persistence.UI
             }
 
             var saveMetaData = SaveLoadManager.GetAllSaveMetaData();
-            saveMetaData = saveMetaData.OrderBy(save => save.SaveDate);
+            saveMetaData = saveMetaData.OrderByDescending(save => save.SaveDate);
             foreach (var metaData in saveMetaData)
             {
                 SaveEntry saveEntry = Instantiate(_saveEntryPrefab, _saveEntriesParent);

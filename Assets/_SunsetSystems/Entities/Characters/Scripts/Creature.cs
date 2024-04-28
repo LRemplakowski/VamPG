@@ -221,13 +221,18 @@ namespace SunsetSystems.Entities.Characters
         }
 
         [Serializable]
-        private class CreaturePersistenceData : PersistenceData
+        public class CreaturePersistenceData : PersistenceData
         {
             public Vector3 WorldPosition;
 
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
                 WorldPosition = creature.References.BodyTransform.position;
+            }
+
+            public CreaturePersistenceData() : base()
+            {
+
             }
         }
     }

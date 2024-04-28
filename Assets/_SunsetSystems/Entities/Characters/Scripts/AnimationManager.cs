@@ -205,21 +205,21 @@ namespace SunsetSystems.Animation
                 return;
             foreach (int key in animatorData.AnimatorStateData.Keys)
             {
-                var stateInfo = animatorData.AnimatorStateData[key];
-                animator.Play(stateInfo.shortNameHash, key);
+                var stateHash = animatorData.AnimatorStateData[key];
+                animator.Play(stateHash, key);
             }
         }
 
         [Serializable]
-        private class AnimatorPersistenceData
+        public class AnimatorPersistenceData
         {
-            public Dictionary<int, AnimatorStateInfo> AnimatorStateData;
+            public Dictionary<int, int> AnimatorStateData;
 
             public AnimatorPersistenceData(AnimationManager animationManager)
             {
                 for (int i = 0; i < animationManager.animator.layerCount; i++)
                 {
-                    AnimatorStateData[i] = animationManager.animator.GetCurrentAnimatorStateInfo(i);
+                    AnimatorStateData[i] = animationManager.animator.GetCurrentAnimatorStateInfo(i).shortNameHash;
                 }
             }
 

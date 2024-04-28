@@ -17,7 +17,15 @@ namespace SunsetSystems.Entities
         private UniqueId _unique;
         [SerializeField]
         private bool _enablePersistence = true;
-        public string PersistenceID => _unique.Id;
+        public string PersistenceID 
+        { 
+            get 
+            {
+                if (_unique == null)
+                    _unique = GetComponent<UniqueId>();
+                return _unique.Id;
+            } 
+        }
         public override string ID => PersistenceID;
         public string GameObjectName => gameObject.name;
 
@@ -91,9 +99,11 @@ namespace SunsetSystems.Entities
         }
 
         [Serializable]
-        protected class PersistenceData
+        public class PersistenceData
         {
+            [ES3Serializable]
             public bool GameObjectActive;
+            [ES3Serializable]
             public Dictionary<string, object> PersistentComponentData;
 
             public PersistenceData(PersistentEntity persistentEntity)
@@ -109,9 +119,9 @@ namespace SunsetSystems.Entities
                 }
             }
 
-            public PersistenceData()
+            public PersistenceData() : base()
             {
-
+                PersistentComponentData = new();
             }
         }
     }

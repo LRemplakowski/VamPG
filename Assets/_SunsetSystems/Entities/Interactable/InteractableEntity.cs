@@ -210,42 +210,40 @@ namespace SunsetSystems.Entities.Interactable
 
         public override object GetPersistenceData()
         {
-            InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData)
-            {
-                Interactable = Interactable,
-                Interacted = _interacted,
-                InteractableOnce = _interactableOnce,
-                InteractionHandlers = InteractionHandlers
-            };
+            InteractableEntityPersistenceData persistenceData = new(this);
             return persistenceData;
         }
 
         public override void InjectPersistenceData(object data)
         {
             base.InjectPersistenceData(data);
-            InteractableEntityPersistenceData persistenceData = data as InteractableEntityPersistenceData;
-            Interactable = persistenceData.Interactable;
-            _interacted = persistenceData.Interacted;
-            _interactableOnce = persistenceData.InteractableOnce;
-            InteractionHandlers = persistenceData.InteractionHandlers;
+            if (data is not InteractableEntityPersistenceData interactableData)
+                return;
+            Interactable = interactableData.Interactable;
+            _interacted = interactableData.Interacted;
+            _interactableOnce = interactableData.InteractableOnce;
+            InteractionHandlers = interactableData.InteractionHandlers;
             if (_linkedGameObject)
-                _linkedGameObject.SetActive(persistenceData.GameObjectActive);
+                _linkedGameObject.SetActive(interactableData.GameObjectActive);
         }
 
         [Serializable]
-        protected class InteractableEntityPersistenceData : PersistenceData
+        public class InteractableEntityPersistenceData : PersistenceData
         {
             public bool Interactable;
             public bool Interacted;
             public bool InteractableOnce;
             public List<IInteractionHandler> InteractionHandlers;
 
-            public InteractableEntityPersistenceData(PersistenceData persistentEntity)
+            public InteractableEntityPersistenceData(InteractableEntity interactableEntity) : base(interactableEntity)
             {
-                GameObjectActive = persistentEntity.GameObjectActive;
+                Interactable = interactableEntity.Interactable;
+                Interacted = interactableEntity.Interacted;
+                InteractableOnce = interactableEntity._interactableOnce;
+                InteractionHandlers = interactableEntity.InteractionHandlers;
             }
 
-            public InteractableEntityPersistenceData()
+            public InteractableEntityPersistenceData() : base()
             {
 
             }

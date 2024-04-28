@@ -1,9 +1,8 @@
-using CleverCrow.Fluid.UniqueIds;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using CleverCrow.Fluid.UniqueIds;
+using Sirenix.OdinInspector;
 using UnityEngine;
-using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Persistence
 {
@@ -51,12 +50,18 @@ namespace SunsetSystems.Persistence
 
         public void Register(IPersistentObject persistentEntity)
         {
-            if (string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
+            try
             {
-                Debug.LogError($"Entity {persistentEntity} does not have valid Persistence ID! It will not be saved.");
-                return;
+                _ = persistentEntity.PersistenceID;
             }
-            persistentEntitiesSet.Add(persistentEntity);
+            catch (NullReferenceException e)
+            {
+                Debug.LogException(e);
+            }
+            finally
+            {
+                persistentEntitiesSet.Add(persistentEntity);
+            }
         }
 
         public void Unregister(IPersistentObject persistentEntity)
@@ -91,7 +96,7 @@ namespace SunsetSystems.Persistence
         }
 
         [Serializable]
-        private class ScenePersistenceData : SaveData
+        public class ScenePersistenceData : SaveData
         {
             public Dictionary<string, object> PersistentData = new();
         }

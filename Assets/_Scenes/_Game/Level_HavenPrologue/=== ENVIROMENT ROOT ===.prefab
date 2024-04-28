@@ -8880,10 +8880,6 @@ PrefabInstance:
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5619748464740179427, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
-      value: 
-      objectReference: {fileID: 7836623066073507761}
     - target: {fileID: 7016400798426151755, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -8919,165 +8915,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8670466175974504716}
-    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7140447888397465534}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
---- !u!1 &4172445415958917095 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8670466175974504716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4172445415958917095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 5400387298692007333}
-    - {fileID: 7836623066073507761}
-    - {fileID: 7140447888397465534}
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: <PersistentComponents>k__BackingField
-      Entry: 7
-      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 1
-    - Name: 
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: _references
-      Entry: 10
-      Data: 1
-    - Name: <InteractionHandlers>k__BackingField
-      Entry: 7
-      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: _highlightHandler
-      Entry: 10
-      Data: 2
-  <Faction>k__BackingField: 0
-  _unique: {fileID: 6160532348160014171}
-  _enablePersistence: 0
-  _interactionCollider: {fileID: 5134278318734885869}
-  _linkedGameObject: {fileID: 4172445415958917095}
-  _interactionDistance: 2
-  _interactionTransform: {fileID: 7069735621750389300}
-  _interactable: 0
-  _nameplateName: 
-  _nameplateOffset: {x: 0, y: 3, z: 0}
-  _interactableOnce: 0
-  OnInteractionTriggered:
-    _PersistentCalls: []
---- !u!114 &7140447888397465534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4172445415958917095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1a12cce87f09846a024c87bec0bd48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
-  _highlightRenderers:
-  - {fileID: 5620317527500559720}
-  _rendererParent: {fileID: 0}
---- !u!65 &5134278318734885869 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 7363549319578438250, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5400387298692007333 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7746767884310121506, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4172445415958917095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!23 &5620317527500559720 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7822588697428532463, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6160532348160014171 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8362780428356386524, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4172445415958917095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7069735621750389300 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 2409438969040472455}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7836623066073507761 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5598340278945951286, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 2409438969040472455}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4172445415958917095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &2451502362558833817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10855,25 +10699,9 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.ReferencedUnityObjects.Array.data[2]
-      value: 
-      objectReference: {fileID: 1405460726896496926}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
-      value: 
-      objectReference: {fileID: 1405460726896496926}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
-      value: 
-      objectReference: {fileID: 7404366094674273878}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
-      value: 
-      objectReference: {fileID: 4680039570859983938}
     - target: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Name
       value: corridor_door02
@@ -10961,69 +10789,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1405460726896496926}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
---- !u!1 &3740046444250279424 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3130242985683585120}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1405460726896496926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740046444250279424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1a12cce87f09846a024c87bec0bd48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
-  _highlightRenderers:
-  - {fileID: 5188060529136145551}
-  _rendererParent: {fileID: 0}
---- !u!114 &4680039570859983938 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7746767884310121506, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3130242985683585120}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740046444250279424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!23 &5188060529136145551 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7822588697428532463, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3130242985683585120}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7404366094674273878 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5598340278945951286, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3130242985683585120}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3740046444250279424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &7501993693657398227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
@@ -12183,25 +11950,9 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.ReferencedUnityObjects.Array.data[2]
-      value: 
-      objectReference: {fileID: 4568964229316964599}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]
-      value: 
-      objectReference: {fileID: 4568964229316964599}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[1]
-      value: 
-      objectReference: {fileID: 9053499914970478557}
-    - target: {fileID: 720800799709296587, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      propertyPath: serializationData.PrefabModificationsReferencedUnityObjects.Array.data[2]
-      value: 
-      objectReference: {fileID: 6599812767689479625}
     - target: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
       propertyPath: m_Name
       value: corridor_door03
@@ -12289,56 +12040,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4568964229316964599}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 894d74694202427499f35233c24e5c48, type: 3}
 --- !u!1 &2919099896333713291 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1772037835463075424, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3464731452016269803}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4568964229316964599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919099896333713291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e1a12cce87f09846a024c87bec0bd48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
-  _highlightRenderers:
-  - {fileID: 6672742690112341252}
-  _rendererParent: {fileID: 0}
---- !u!114 &6599812767689479625 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7746767884310121506, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3464731452016269803}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919099896333713291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f46ec760094604c8dda998466c67bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!23 &6672742690112341252 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7822588697428532463, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 3464731452016269803}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8320829169561954904 stripped
@@ -12346,17 +12052,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4858457029234095027, guid: 894d74694202427499f35233c24e5c48, type: 3}
   m_PrefabInstance: {fileID: 3464731452016269803}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &9053499914970478557 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5598340278945951286, guid: 894d74694202427499f35233c24e5c48, type: 3}
-  m_PrefabInstance: {fileID: 3464731452016269803}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2919099896333713291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3696713349915364445
 PrefabInstance:
   m_ObjectHideFlags: 0

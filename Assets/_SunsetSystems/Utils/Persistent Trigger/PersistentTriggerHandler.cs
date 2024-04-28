@@ -89,14 +89,14 @@ namespace SunsetSystems.Utils.Triggers
 
         public override object GetPersistenceData()
         {
-            return new PersistentTriggerData(this, base.GetPersistenceData() as PersistenceData);
+            return new PersistentTriggerData(this);
         }
 
         public override void InjectPersistenceData(object data)
         {
+            base.InjectPersistenceData(data);
             if (data is not PersistentTriggerData triggerData)
                 return;
-            base.InjectPersistenceData(data);
             enterTriggeredOnce = triggerData.EnterTriggered;
             exitTriggeredOnce = triggerData.ExitTriggered;
             stayTriggeredOnce = triggerData.StayTriggered;
@@ -107,13 +107,16 @@ namespace SunsetSystems.Utils.Triggers
         {
             public bool EnterTriggered, ExitTriggered, StayTriggered;
 
-            public PersistentTriggerData(PersistentTriggerHandler triggerHandler, PersistenceData baseData)
+            public PersistentTriggerData(PersistentTriggerHandler triggerHandler) : base(triggerHandler)
             {
-                GameObjectActive = baseData.GameObjectActive;
-                PersistentComponentData = baseData.PersistentComponentData;
                 EnterTriggered = triggerHandler.enterTriggeredOnce;
                 ExitTriggered = triggerHandler.enterTriggeredOnce;
                 StayTriggered = triggerHandler.exitTriggeredOnce;
+            }
+
+            public PersistentTriggerData() : base()
+            {
+
             }
         }
     }

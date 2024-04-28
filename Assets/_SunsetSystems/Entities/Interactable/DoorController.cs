@@ -52,11 +52,7 @@ namespace SunsetSystems.Entities.Interactable
 
         public object GetComponentPersistenceData()
         {
-            DoorsPersistenceData persistenceData = new()
-            {
-                DoorState = Open,
-            };
-            return persistenceData;
+            return new DoorsPersistenceData(this);
         }
 
         public void InjectComponentPersistenceData(object data)
@@ -67,9 +63,14 @@ namespace SunsetSystems.Entities.Interactable
         }
 
         [Serializable]
-        protected class DoorsPersistenceData
+        public class DoorsPersistenceData
         {
             public bool DoorState = false;
+
+            public DoorsPersistenceData(DoorController doorController)
+            {
+                DoorState = doorController.Open;
+            }
 
             public DoorsPersistenceData()
             {

@@ -68,7 +68,7 @@ namespace SunsetSystems.Persistence
         }
 
         [Serializable]
-        protected class PersistentObjectData
+        public class PersistentObjectData
         {
             public bool ActiveState;
             public Dictionary<string, object> PersistentComponentData;

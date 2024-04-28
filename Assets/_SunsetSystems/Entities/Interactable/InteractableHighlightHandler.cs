@@ -29,7 +29,7 @@ namespace SunsetSystems.Entities.Interactable
         }
 #endif
 
-        private void Start()
+        public void Start()
         {
             if (_findRenderersAtRuntime && _rendererParent != null)
                 _highlightRenderers = _rendererParent.GetComponentsInChildren<Renderer>().ToList();

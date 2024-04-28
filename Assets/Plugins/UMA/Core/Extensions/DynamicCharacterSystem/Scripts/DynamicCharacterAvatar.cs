@@ -51,13 +51,13 @@ namespace UMA.CharacterSystem
         /// <summary>
         /// Callback event when the character recipe is updated. Use this to tweak the resulting recipe BEFORE the UMA is actually generated
         /// </summary>
-        public UMADataEvent RecipeUpdated;
-        public UMADataWardrobeEvent WardrobeAdded;
-        public UMADataWardrobeEvent WardrobeRemoved;
-        public UMACharacterEvent CharacterStart = new UMACharacterEvent();
-        public UMADataEvent BuildCharacterBegun = new UMADataEvent();
-        public UMASlotsEvent SlotsHidden = new UMASlotsEvent();
-        public UMARecipesEvent WardrobeSuppressed= new UMARecipesEvent();
+        public UMADataEvent RecipeUpdated = new();
+        public UMADataWardrobeEvent WardrobeAdded = new();
+        public UMADataWardrobeEvent WardrobeRemoved = new();
+        public UMACharacterEvent CharacterStart = new();
+        public UMADataEvent BuildCharacterBegun = new();
+        public UMASlotsEvent SlotsHidden = new();
+        public UMARecipesEvent WardrobeSuppressed = new();
 
         #endregion
 
@@ -440,6 +440,16 @@ namespace UMA.CharacterSystem
         #region METHODS 
 
         #region Start Update and Inititalization
+        private void OnValidate()
+        {
+            RecipeUpdated ??= new();
+            WardrobeAdded ??= new();
+            WardrobeRemoved ??= new();
+            CharacterStart ??= new();
+            BuildCharacterBegun ??= new();
+            SlotsHidden ??= new();
+            WardrobeSuppressed ??= new();
+        }
 
         public void Awake()
         {

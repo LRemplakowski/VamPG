@@ -734,34 +734,48 @@ namespace UMA.CharacterSystem.Editors
                 SerializedProperty WardrobeSuppressed = serializedObject.FindProperty("WardrobeSuppressed");
 
                 EditorGUILayout.HelpBox("CharacterStart is called in the character Start method, after Initialization, but before auto building.", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterStart);
+                if (CharacterStart != null)
+                    EditorGUILayout.PropertyField(CharacterStart);
                 EditorGUILayout.HelpBox("CharacterBegun is called when the character is starting the build process", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterBegun);
+                if (CharacterBegun != null)
+                    EditorGUILayout.PropertyField(CharacterBegun);
                 EditorGUILayout.HelpBox("CharacterCreated is called after the character has completed generation the first time. It is only called once.", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterCreated);
+                if (CharacterCreated != null)
+                    EditorGUILayout.PropertyField(CharacterCreated);
                 EditorGUILayout.HelpBox("CharacterUpdated is called after the character has completed generation. It is called every time the character is generated.", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterUpdated);
+                if (CharacterUpdated != null)
+                    EditorGUILayout.PropertyField(CharacterUpdated);
                 EditorGUILayout.HelpBox("CharacterDestroyed is called when the character is destroyed.", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterDestroyed);
+                if (CharacterDestroyed != null)
+                    EditorGUILayout.PropertyField(CharacterDestroyed);
                 EditorGUILayout.HelpBox("CharacterDnaUpdated is called during the build process when the character's DNA has been applied.", MessageType.Info);
-                EditorGUILayout.PropertyField(CharacterDnaUpdated);
+                if (CharacterDnaUpdated != null)
+                    EditorGUILayout.PropertyField(CharacterDnaUpdated);
 
                 EditorGUILayout.HelpBox("BuildCharacterBegun is called at the start of BuildCharacter, before the recipes have all been merged.", MessageType.Info);
-                EditorGUILayout.PropertyField(BuildCharacterBegun);
+                if (BuildCharacterBegun != null)
+                    EditorGUILayout.PropertyField(BuildCharacterBegun);
                 EditorGUILayout.HelpBox("RecipeUpdated is called after the UMAData.UMARecipe has been updated on the character, and it is ready to schedule the build", MessageType.Info);
-                EditorGUILayout.PropertyField(RecipeUpdated);
+                if (RecipeUpdated != null)
+                    EditorGUILayout.PropertyField(RecipeUpdated);
                 EditorGUILayout.HelpBox("AnimatorStateSaved is called after the character's animator state has been saved", MessageType.Info);
-                EditorGUILayout.PropertyField(AnimatorSaved);
+                if (AnimatorSaved != null)
+                    EditorGUILayout.PropertyField(AnimatorSaved);
                 EditorGUILayout.HelpBox("AnimatorStateRestored is called after the character's animator state has been restored", MessageType.Info);
-                EditorGUILayout.PropertyField(AnimatorRestored);
+                if (AnimatorRestored != null)
+                    EditorGUILayout.PropertyField(AnimatorRestored);
                 EditorGUILayout.HelpBox("WardrobeAdded is called after a wardrobe recipe has been added to the character", MessageType.Info);
-                EditorGUILayout.PropertyField(WardrobeAdded);
+                if (WardrobeAdded != null)
+                    EditorGUILayout.PropertyField(WardrobeAdded);
                 EditorGUILayout.HelpBox("WardrobeRemoved is called after a wardrobe recipe has been removed from the character", MessageType.Info);
-                EditorGUILayout.PropertyField(WardrobeRemoved);
+                if (WardrobeRemoved != null)
+                    EditorGUILayout.PropertyField(WardrobeRemoved);
                 EditorGUILayout.HelpBox("WardrobeSuppressed is called after recipe generation with a list of all recipes that were suppressed by other items", MessageType.Info);
-                EditorGUILayout.PropertyField(WardrobeSuppressed);
+                if (WardrobeSuppressed != null)
+                    EditorGUILayout.PropertyField(WardrobeSuppressed);
                 EditorGUILayout.HelpBox("SlotsHidden is called after recipe generation with a list of all slots that were hidden by other items", MessageType.Info);
-                EditorGUILayout.PropertyField(SlotsHidden);
+                if (SlotsHidden != null)
+                    EditorGUILayout.PropertyField(SlotsHidden);
                 EndVerticalPadded();
             }
             if (EditorGUI.EndChangeCheck())

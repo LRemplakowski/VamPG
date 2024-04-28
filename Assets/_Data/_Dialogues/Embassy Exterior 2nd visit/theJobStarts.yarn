@@ -233,6 +233,10 @@ title: theVan
 {$diana}: Babes, you didn't say- what's the address? #line:0783432 
 -> {$pcName}: It's (apartment address). #line:040a5e9 
 //car starts to move through the streets//
+<<jump theVanRide>>
+===
+title: theVanRide
+---
 [nomarkup][You shove the doors open and muscle the man you just ran down inside. He looks a little out of it and doesn't resist. You take a few minutes to seatbelt him in and turn his face to get a better look at his eyes. Diego's head lists.][/nomarkup] #line:06af709 
 <<if Roll("Intelligence","Medicine") >=3>>
     [nomarkup][Diego's pupils are wide, his gaze is unfocused, and his pulse is slow. Calm despite the situation. As you touch the side of his face, he doesn't react in the slightest.][/nomarkup] #line:089182b 

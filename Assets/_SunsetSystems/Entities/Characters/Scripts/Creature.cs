@@ -9,6 +9,7 @@ using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using SunsetSystems.Utils.Database;
+using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -218,16 +219,19 @@ namespace SunsetSystems.Entities.Characters
             if (data is not CreaturePersistenceData creaturePersistenceData)
                 return;
             ForceToPosition(creaturePersistenceData.WorldPosition);
+            References.GetCachedComponentInChildren<DynamicCharacterAvatar>().ToggleHide(creaturePersistenceData.UMAHidden);
         }
 
         [Serializable]
         public class CreaturePersistenceData : PersistenceData
         {
             public Vector3 WorldPosition;
+            public bool UMAHidden;
 
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
                 WorldPosition = creature.References.BodyTransform.position;
+                UMAHidden = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>().hide;
             }
 
             public CreaturePersistenceData() : base()

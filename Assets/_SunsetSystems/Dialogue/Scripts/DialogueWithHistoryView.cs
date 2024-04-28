@@ -227,8 +227,9 @@ namespace SunsetSystems.Dialogue
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+                characterID = PartyManager.Instance.MainCharacterKey;
+                if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+                    characterName = config.FullName;
             }
             else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
             {

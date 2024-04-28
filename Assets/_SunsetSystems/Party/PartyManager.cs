@@ -37,6 +37,7 @@ namespace SunsetSystems.Party
         [SerializeField]
         private Dictionary<string, ICreature> _activeParty = new();
         public ICreature MainCharacter => _activeParty.TryGetValue(Instance._mainCharacterKey, out ICreature creature) ? creature : null;
+        public string MainCharacterKey => _mainCharacterKey;
         public List<ICreature> ActiveParty => _activeParty.Values.ToList();
         public List<ICreature> Companions => _activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         [SerializeField]

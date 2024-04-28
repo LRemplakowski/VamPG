@@ -9,6 +9,10 @@ tags:
 -> {$pcName}: [nomarkup][You don't mean for your voice to go sour but it does. Thinking about what has led you here draining your personable nature.][/nomarkup] Sure. See you inside. #line:079535d 
 {$diana}: [nomarkup][She nods and unbuckles Diego from this seat.][/nomarkup] #line:058eea4 
 //Haven interior on the corridor//
+<<jump havenJobArrivalContinued>>
+===
+title: havenJobArrivalContinued
+---
 [nomarkup][Walking up the stairs you can hear the sounds of your feet against the stairs, the slight echo of force against metal. Approaching your apartment door you pull out a key and unlock it. Pushing the door open and catching it with your foot. You hear the thud of a body hitting the ground and the effort of Diana picking Diego up and carrying him.][/nomarkup] #line:0add112 
 <<jump arrivalPassive>>
 ===
@@ -105,6 +109,7 @@ title: arrivalPassive
     -> [nomarkup][Try to assess if the intruder is still in your apartment.] (Resolve + Athletics)[/nomarkup] #line:0ca7d2e 
     <<jump arrivalResolveRoll>>
 <<endif>>
+<<jump theAttack>>
 ===
 title: arrivalResolveRoll
 ---

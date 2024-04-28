@@ -143,6 +143,12 @@ namespace SunsetSystems.Journal
             BeginQuest(quest.ID);
         }
 
+        [Button]
+        public bool BeginQuest(Quest quest)
+        {
+            return BeginQuest(quest.ID);
+        }
+
         public bool BeginQuest(string questID)
         {
             if (_completedQuests.ContainsKey(questID))

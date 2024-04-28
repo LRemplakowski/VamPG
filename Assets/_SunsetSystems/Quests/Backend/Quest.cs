@@ -121,7 +121,7 @@ namespace SunsetSystems.Journal
         {
             Rewards.ForEach(rewardData => (rewardData.Reward as IRewardable).ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
-            _startQuestsOnCompletion.ForEach(q => q.Begin());
+            _startQuestsOnCompletion.ForEach(q => QuestJournal.Instance.BeginQuest(q));
         }
     }
 

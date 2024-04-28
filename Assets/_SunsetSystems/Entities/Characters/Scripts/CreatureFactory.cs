@@ -48,7 +48,7 @@ namespace SunsetSystems.Entities.Creatures
             await new WaitForUpdate();
             newInstance.InjectDataFromTemplate(creatureTemplate);
             newInstance.Transform.SetParent(parent);
-            newInstance.Transform.SetPositionAndRotation(position, rotation);
+            newInstance.ForceToPosition(position);
             return newInstance;
         }
 

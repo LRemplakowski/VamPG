@@ -24,8 +24,8 @@ tags:
     [nomarkup][The bags under your eyes are the most prominent they've ever been. Your skin seems strangely ashy and pale. Upon closer inspection, you see that your canines have grown into fangs.][/nomarkup] #lastline #line:04aa944 
 <<endif>>
 {$pcName}: [nomarkup][What's happening to me?][/nomarkup] #line:0e5b410 
-<<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 3>>
-    [nomarkup][This can't be, it just... Can't. What you're beginning to think you are, they're not real. It has to be the hangover messing with you.][/nomarkup] #lastline #line:0912bc6 
+<<if GetAttributeSkillPoolSize("Intelligence","Occult") >= 2>>
+    [nomarkup][This can't be, it just…can't. What you're beginning to think you are is… They're not real. This has to be the hangover messing with you.][/nomarkup] #lastline #line:0912bc6 
 <<endif>>
 <<jump BathroomSinkInteractions>>
 ===

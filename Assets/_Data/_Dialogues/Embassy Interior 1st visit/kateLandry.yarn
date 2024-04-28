@@ -106,8 +106,7 @@ position: 78,-418
         <<jump kateNudgesTowardAnastasia>>
     <<endif>>
 <<else>>
--> {$pcName}: Thank you for your time. #line:0cd92c8 
-    {$sforzaMask}: I'd say “anytime”, dear, but that wouldn't be honest, my time is more valuable to me than anything. I do wish you the best in your endeavor, however... It would seem to me a rather horrendous waste of skill for you to be welcomed in only to be shown the door in such short order. #line:0c3f219 
+<<jump subsequentQuestions>>
 <<endif>>
 ===
 title: kateNudgesTowardAnastasia
@@ -146,12 +145,10 @@ title: subsequentQuestions
     <<jump howSheStarted>>
 -> {$pcName}: Tell me about youself. <<if visited("kateTalksAboutHerself") == false>> #line:023a789 
     <<jump kateTalksAboutHerself>>
-<<if $dianaMet ==true>>
-    -> {$pcName}: I need to get into Diana's office. #line:0460c71 
+-> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true>> #line:0460c71 
     <<jump getToOffice>>
-<<endif>>
--> {$pcName}: I should go. #line:0eb2f6c 
-    {$sforzaMask}: An astute observation. Best of luck on your little search. #line:0c9db72 
+-> {$pcName}: I should go.
+    {$sforzaMask}: An astute observation. Best of luck on your little search.
 ===
 title: whoIsDiana
 position: -418,534
@@ -200,7 +197,7 @@ position: -70,220
     {$sforzaMask}: Diana owns the place, piccola mia. I just look after it. It was a gift from our ever so “beloved” Prince. She saw fit to bestow upon me this modest domain as a token of her gratitude after that nasty business with what happened to the previous Prince. I knew that The Embassy would be the perfect spot to establish a hub where Kindred could gather and socialize, a true haven for our dysfunctional little family. 
     {$sforzaMask}: It required a bit of remodeling and adapting to the needs of our kind, but with Diana's help and expertise, it has blossomed. #line:0709911 
 <<endif>>
-<<jump subsequentQuestions>>
+<<jump additionalQuestions>>
 ===
 title: additionalQuestions
 position: 335,288
@@ -212,7 +209,7 @@ position: 335,288
     <<jump princeExplained>>
 -> {$pcName}: What happened to the previous Prince? #line:0b0ed9e 
     <<jump previousPrince>>
--> [nomarkup][Another questions.][nomarkup]
+-> [nomarkup][Another questions.][/nomarkup]
     <<jump subsequentQuestions>>
 -> {$pcName}: I should go.
     {$sforzaMask}: An astute observation. Best of luck on your little search.
@@ -244,6 +241,7 @@ position: 740,281
 ===
 title: aboutSects
 --- 
+[nomarkup][Kate looks at you with a little dose of curiosity awaiting questions.][/nomarkup]
 -> {$pcName}: Sabbat? #line:01d00d6 
     <<jump whatIsSabbat>>
 -> {$pcName}: Traditions? #line:0324140 
@@ -252,7 +250,7 @@ title: aboutSects
     <<jump camarillaExplained>>
 -> {$pcName}: Final Death? #line:0a6fbab 
     <<jump finalDeathExplained>>
--> [nomarkup][Another questions.][nomarkup]
+-> [nomarkup][Another questions.][/nomarkup]
     <<jump additionalQuestions>>
 -> {$pcName}: I should go.
     {$sforzaMask}: An astute observation. Best of luck on your little search. 
@@ -288,7 +286,7 @@ position: 964,525
     {$anastasia}: [nomarkup][She shrugs, grinning ear to ear.][/nomarkup] Hey, I'll maintain it's got a nice ring to it. Really captures your essence. #line:0cd4fed 
     {$sforzaMask}: Now, I don't mean to rush you, but we only have so long until dawn, and I distinctly remember someone looking for their absentee parent? I would get to that; I'd hate to be the one returning to Dominic empty-handed. [nomarkup][She gives Kieran a meaningful look.][/nomarkup] #line:0a6b5ba 
 <<endif>>
-<<jump additionalQuestions>>
+<<jump aboutSects>>
 ===
 title: camarillaExplained
 position: 537,611
@@ -305,7 +303,7 @@ position: 537,611
 <<if Roll ("Wits","Awareness")>=4>>
     [nomarkup][It's a smile, but you get the impression it may have been bitter, once - sharp and astringent, but those emotions have clearly been dulled by time.][/nomarkup] #line:0a719c9 
 <<endif>>
-<<jump additionalQuestions>>
+<<jump aboutSects>>
 ===
 title: kateTalksAboutHerself
 position: -127,-43
@@ -340,7 +338,7 @@ position: 1151,92
     {$kieran}: [nomarkup][He sighs. Looks like he's not going to dignify that with a response...][/nomarkup] #line:0110938 
     {$sforzaMask}: Kiki? [nomarkup][She looks over at Kieran with an amused smile - like a lion looking at a rabbit.][/nomarkup] How adorable. My son, it seems to me you're getting along splendidly with all your little friends. #line:0235db9 
 <<endif>>
-<<jump previousPrince>>
+<<jump aboutSects>>
 ===
 title: getToOffice
 position: -858,264

@@ -19,11 +19,11 @@ position: -407,-310
 {$anastasia}: You're working right now, silly. Come on, let me buy you a drink. [nomarkup][She talks with a heavy accent, Russian perhaps? No. It's similar, but there's a different quality to it that's hard to describe.][/nomarkup] #line:09b479d 
 {$bartender}: ... [nomarkup][As you ponder, the woman behind the bar locks eyes with you, silently pleading for help.][/nomarkup] #line:077df12 
 -> {$pcName}: Doesn't look like she's interested. #line:05d0fe1 
-    {$anastasia}: [nomarkup][She straightens up, turning towards the bartender with an exaggerated pout on her lips.][/nomarkup] Is that true? Are you not interested? #line:01264ca 
-    -> {$pcName}: [nomarkup][Congratulations, you've been outmaneuvered.][/nomarkup] #line:07cd174 
-    {$bartender}: [nomarkup][The bartender huffs out a deep sigh.][/nomarkup] Listen, I've been trying to tell you that for what? A week? #line:03bd7b5 
-    {$anastasia}: [nomarkup][The woman in black furrows her brows.][/nomarkup] Then why didn't you just say so? #line:020e02c 
-    {$bartender}: Because I didn't know how to do it without hurting you. And that's about that. [nomarkup][She's waiting for something, anything, to break the silence that now fills the air...][/nomarkup] #lastline #line:00d7850 
+{$anastasia}: [nomarkup][She straightens up, turning towards the bartender with an exaggerated pout on her lips.][/nomarkup] Is that true? Are you not interested? #line:01264ca 
+-> {$pcName}: [nomarkup][Congratulations, you've been outmaneuvered.][/nomarkup] #line:07cd174 
+{$bartender}: [nomarkup][The bartender huffs out a deep sigh.][/nomarkup] Listen, I've been trying to tell you that for what? A week? #line:03bd7b5 
+{$anastasia}: [nomarkup][The woman in black furrows her brows.][/nomarkup] Then why didn't you just say so? #line:020e02c 
+{$bartender}: Because I didn't know how to do it without hurting you. And that's about that. [nomarkup][She's waiting for something, anything, to break the silence that now fills the air...][/nomarkup] #lastline #line:00d7850 
 <<if GetCurrentMoney() >= 5>>
     -> {$pcName}: I'll have a Bloody Mary. (Pay 5$) #line:097575b 
         {$bartender}: Coming right up! [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup] #line:0d7a9d5 
@@ -35,13 +35,14 @@ position: -407,-310
         <<endif>>
     -> [nomarkup][Say nothing.][/nomarkup] #line:06df652 
         {$bartender}: [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup] Go away. Just, leave me alone, please... #line:0626d4c 
-        {$anastasia}: [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup] Well, that was rude. #lastline #line:075763d 
+        {$anastasia}: [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup] Well, that was rude. #lastline #line:075763d
+        <<jump anastasiaSomethingOff>> 
 <<else>>
     -> [nomarkup][Say nothing.][/nomarkup] 
         {$bartender}: [nomarkup][After a few long seconds, the Bartender realizes she's on her own. She huffs out a deep sigh.][/nomarkup] Go away. Just, leave me alone, please...  
         {$anastasia}: [nomarkup][The woman in black seems appalled, but the shocked expression is quickly replaced with a grin as her gaze falls upon you. Fresh meat on display...][/nomarkup] Well, that was rude. #lastline
+        <<jump anastasiaSomethingOff>>
 <<endif>>
-<<jump anastasiaSomethingOff>>
 ===
 title: anastasiaSomethingOff
 position: -130,38

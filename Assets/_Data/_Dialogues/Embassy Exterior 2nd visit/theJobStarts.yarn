@@ -36,9 +36,9 @@ title: approachWithoutDiana
 title: interactions
 ---
 [nomarkup][The man is looking at you waiting.][/nomarkup]
--> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if visited("cigRoll") == false>> #line:06b4ac7 
+-> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if CustomVisited("cigRoll") == false>> #line:06b4ac7 
     <<jump cigRoll>>
--> [nomarkup][Check him out.][/nomarkup] <<if visited("checkout") == false>> #line:0d46036 
+-> [nomarkup][Check him out.][/nomarkup] <<if CustomVisited("checkout") == false>> #line:0d46036 
     <<jump checkout>>
 -> [nomarkup][Confront Diego.][/nomarkup] #line:0795fa7 
     <<jump chase>>
@@ -57,11 +57,11 @@ title: cigRoll
 title: cigSuccess
 ---
 [nomarkup][He gets you a cig, lights it. This will buy some time. There is a wedding ring on his right hand.][/nomarkup] #success #line:0f37119 
--> {$pcName}: I'm Des, nice to meet you. <<if visited("introduction") == false>> #line:036f294 
+-> {$pcName}: I'm Des, nice to meet you. <<if CustomVisited("introduction") == false>> #line:036f294 
     <<jump introduction>>
--> {$pcName}: Are you married? I see a wedding ring on your finger. <<if visited("married") == false>> #line:0a38f95 
+-> {$pcName}: Are you married? I see a wedding ring on your finger. <<if CustomVisited("married") == false>> #line:0a38f95 
     <<jump married>>
--> {$pcName}: Nice scar. I bet it has a good story behind it. <<if visited("scar") == false>> #line:024876f 
+-> {$pcName}: Nice scar. I bet it has a good story behind it. <<if CustomVisited("scar") == false>> #line:024876f 
     <<jump scar>>
 <<jump interactions>>
 ===
@@ -110,9 +110,9 @@ title: chase
 ---
 [nomarkup][Your eyes scan along Diego and he watches you back, each of you trying to gauge the other's intent.][/nomarkup] #line:0552e80 
 {$diego}: Déjate de mamadas. I don't know if I like that look. #line:0da3675 
-<<if visited("checkout") == true>>
+<<if CustomVisited("checkout") == true>>
     [nomarkup][He came here unarmed, probably looking to feel disconnected to his job. Looking to have something to take his mind off his work.][/nomarkup] #line:0eed270 
-<<elseif visited("cigRoll") == true>>
+<<elseif CustomVisited("cigRoll") == true>>
     [nomarkup][Diego's lonely, he's looking for someone to empathize with him and then leave him alone to get his life together. As unlikely as that is to work.][/nomarkup] #line:03d8e10 
     -> {$pcName}: Do you want to spend the night with me? #line:0c8803b 
         <<jump lureDiego>>
@@ -134,7 +134,7 @@ title: lureDiego
     {$diego}: You've got this wicked look in your eye, thought you'd understand you know? #line:04755ca 
     -> {$pcName}: Sure, but all the other... I wouldn't have asked if you weren't into it. #line:0efbb28 
     {$diego}: [nomarkup][He nods a couple times and looks at the ground][nomarkup] It's sporting, you know? #line:051843e 
-    <<if visited("married") == true>>
+    <<if CustomVisited("married") == true>>
         {$diego}: But I'm never going to cheat on Elizabeth. I don't care if she never comes back to me, she's my lady. I'm not going to do that to her. #line:0fb531c 
         [nomarkup][You can't help but think about Arthur, hoping that he'll have that kind of devotion to you. It strikes you for a moment that you're in the same position as Diego, but unlike him if you can get the money Diana is offering you might have your Diego back.][/nomarkup] #line:0202e93 
         -> {$pcName}: Shit man. #line:015e93c 
@@ -157,7 +157,7 @@ title: cutToTheChase
 {$diego}: Is that what you wanted to ask me about morra? #line:042bb18 
 -> {$pcName}: No. No it isn't Diego. #line:0a3a728 
 {$diego}: [nomarkup][Diego sighs and looks down at his boots][/nomarkup] You sure it isn't Desiree? #line:09b1c6a 
-<<if visited("scar") == true>>
+<<if CustomVisited("scar") == true>>
     -> {$pcName}: First step on the way out is to clean up your debts Diego. You don't want this mess riding on Elizabeth's conscience. #line:0fe4f36 
     {$diego}: Don't say her name, don't do that to me. [nomarkup][He presses his hand against his eyes.][/nomarkup] #line:0278566 
 <<endif>>

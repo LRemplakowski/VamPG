@@ -61,9 +61,9 @@ title: pcUnamused
 title: dianaTalkCont
 ---
 [nomarkup][Woman beside you takes a sip of her drink.][/nomarkup]
--> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if visited("introduction") ==false>> #line:087ae66 
+-> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if CustomVisited("introduction") ==false>> #line:087ae66 
     <<jump introductions>>
--> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
+-> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if CustomVisited("flirt") ==false>> #line:0e99543 
     <<jump flirt>>
 ===
 title: introductions

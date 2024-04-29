@@ -6,11 +6,11 @@ tags:
 ===
 title: BathroomSinkInteractions
 ---
--> [nomarkup][Look in the mirror.][/nomarkup] <<if visited("MirrorLook") == false>> #line:0f02e54 
+-> [nomarkup][Look in the mirror.][/nomarkup] <<if CustomVisited("MirrorLook") == false>> #line:0f02e54 
     <<jump MirrorLook>>
--> [nomarkup][Look through the clutter near the sink.][/nomarkup] <<if visited("SinkClutter") == false>> #line:0361f9e 
+-> [nomarkup][Look through the clutter near the sink.][/nomarkup] <<if CustomVisited("SinkClutter") == false>> #line:0361f9e 
     <<jump SinkClutter>>
--> [nomarkup][Search the medicine cabinet.][/nomarkup] <<if visited("MedCabinet") == false>> #line:078e486 
+-> [nomarkup][Search the medicine cabinet.][/nomarkup] <<if CustomVisited("MedCabinet") == false>> #line:078e486 
     <<jump MedCabinet>>
 -> [nomarkup][Walk away.][/nomarkup]  #line:0e48216 
 ===

@@ -8,42 +8,42 @@ tags:
 title: carInteractions
 ---
 [nomarkup][Dominic looks at the road sitting behind his wheel.][/nomarkup] #line:02f0e0a 
--> {$pcName}: May I have one? <<if visited("haveACigarette") == false>> #line:038577a 
+-> {$pcName}: May I have one? <<if CustomVisited("haveACigarette") == false>> #line:038577a 
     <<jump haveACigarette>>
--> {$pcName}: I could use a drink... <<if visited("useADrink") == false>> #line:0748f57 
+-> {$pcName}: I could use a drink... <<if CustomVisited("useADrink") == false>> #line:0748f57 
     <<jump useADrink>>
--> {$pcName}: [nomarkup][Point at his marriage ring.][/nomarkup] So... can you tell me something about her? <<if visited("tellAboutHer") == false>> #line:0c8a4b5 
+-> {$pcName}: [nomarkup][Point at his marriage ring.][/nomarkup] So... can you tell me something about her? <<if CustomVisited("tellAboutHer") == false>> #line:0c8a4b5 
     <<jump tellAboutHer>>
--> {$pcName}: Why do you call me Deputee? <<if visited("whyDeputee") == false>> #line:037de99 
+-> {$pcName}: Why do you call me Deputee? <<if CustomVisited("whyDeputee") == false>> #line:037de99 
     <<jump whyDeputee>>
--> {$pcName}: What happens with Diana? <<if visited("whatHappensWithDiana") == false>> #line:0868058 
+-> {$pcName}: What happens with Diana? <<if CustomVisited("whatHappensWithDiana") == false>> #line:0868058 
     <<jump whatHappensWithDiana>>
--> {$pcName}: You have a really nice car. <<if visited("niceCar") == false and visited("badCar") == false>> #line:0ad1f30 
+-> {$pcName}: You have a really nice car. <<if CustomVisited("niceCar") == false and CustomVisited("badCar") == false>> #line:0ad1f30 
     <<jump niceCar>>
 -> {$pcName}: Why do you keep this pile of junk? #line:0c10dfd 
     <<jump badCar>>
--> [nomarkup][Turn on the radio.][/nomarkup] <<if visited("turnOnRadio") == false>> #line:0f1e6db 
+-> [nomarkup][Turn on the radio.][/nomarkup] <<if CustomVisited("turnOnRadio") == false>> #line:0f1e6db 
     <<jump turnOnRadio>>
-<<if GetIsPartyMemberRecruited($anastasia) is true and visited("anaInMirror") == false>>
+<<if GetIsPartyMemberRecruited($anastasia) is true and CustomVisited("anaInMirror") == false>>
 -> [nomarkup][Look at rearview mirror.][/nomarkup] #line:0ef26b0 
     <<jump anaInMirror>>
 <<endif>>
 <<if $dominicHasDiana == true>>
-    -> [nomarkup][Look behind at Diana.][/nomarkup] <<if visited("lookAtDiana") == false>> #line:0d105db 
+    -> [nomarkup][Look behind at Diana.][/nomarkup] <<if CustomVisited("lookAtDiana") == false>> #line:0d105db 
     <<jump lookAtDiana>>
 <<endif>>
 <<if $beastTalk == false>>
-    -> {$pcName}: ... maybe you could tell me something about this strange voice in my head? <<if visited("dominicBeast") == false>> #line:0fbf7a3 
+    -> {$pcName}: ... maybe you could tell me something about this strange voice in my head? <<if CustomVisited("dominicBeast") == false>> #line:0fbf7a3 
         <<jump dominicBeast>>
 <<else>>
-    -> {$pcName}: What's your take on the Beast? <<if visited("dominicsTakeOnBeast") == false>> #line:0971726 
+    -> {$pcName}: What's your take on the Beast? <<if CustomVisited("dominicsTakeOnBeast") == false>> #line:0971726 
         <<jump dominicsTakeOnBeast>>    
 <<endif>>
 <<if $dominicshot == true and Roll("Wits","Awareness") >=3>>
     -> {$pcName}: This is not the same suit you had in my apartment. #line:09b2df3 
         <<jump differentSuit>>
 <<endif>>
--> {$pcName}: So... what happens next? <<if visited("whatsNext") == false>> #line:0236d96 
+-> {$pcName}: So... what happens next? <<if CustomVisited("whatsNext") == false>> #line:0236d96 
     <<jump whatsNext>>
 -> [nomarkup][Stay silent.][/nomarkup] #line:0afdc86 
     {$sheriff}: We are nearly at your place. An' hey, ‘bout the Embassy, I know it ain't an excuse for bein' short but I was pissed. Ain't gonna be like that again. #line:09df32e 
@@ -78,13 +78,13 @@ title: useADrink
 title: tellAboutHer
 ---
 {$sheriff}: Ah, one of my favorite topics. Keep me on it too long and I'll start singing'. Sure you don't want to hear that.. [nomarkup][He tapped his ring on the steering wheel.][/nomarkup] Sure you heard about the Prince? You met with Kate and she's about as sure on my Lady as a pitchfork in hell. Not promisin' it'll be the unbiased interview you'd hope for but it'll be somethin' alright. #line:066dd14 
--> {$pcName}: How old she is? <<if visited("herAge") == false>> #line:039b1cf 
+-> {$pcName}: How old she is? <<if CustomVisited("herAge") == false>> #line:039b1cf 
     <<jump herAge>>
--> {$pcName}: What's her role in the... how was it... <<if visited("herRole") == false>> #line:0b7a969 
+-> {$pcName}: What's her role in the... how was it... <<if CustomVisited("herRole") == false>> #line:0b7a969 
     <<jump herRole>>
--> {$pcName}: How did you two end up together? It's normal for Kindred to have families like that? <<if visited("normalFamily") == false>> #line:0551168 
+-> {$pcName}: How did you two end up together? It's normal for Kindred to have families like that? <<if CustomVisited("normalFamily") == false>> #line:0551168 
     <<jump normalFamily>>
--> {$pcName}: Any advice before I meet her? <<if visited("anyAdvice") == false>> #line:0b2d2d3 
+-> {$pcName}: Any advice before I meet her? <<if CustomVisited("anyAdvice") == false>> #line:0b2d2d3 
     <<jump anyAdvice>>
 <<jump carInteractions>>
 ===
@@ -128,11 +128,11 @@ title: whyDeputee
 title: nicknames
 ---
 [nomarkup][Dominic falls silent for a second.][/nomarkup] #line:095fff0 
--> {$pcName}: Lion... fucker? What the hell? What did I do to earn a name like that!? <<if visited("whyLionFucker") == false>> #line:02b367c 
+-> {$pcName}: Lion... fucker? What the hell? What did I do to earn a name like that!? <<if CustomVisited("whyLionFucker") == false>> #line:02b367c 
     <<jump whyLionFucker>>
--> {$pcName}: Stick to Deputee. I just might stay around you for a little bit longer. <<if visited("wantDeputee") == false and visited("wantName") == false>> #line:0799a0f 
+-> {$pcName}: Stick to Deputee. I just might stay around you for a little bit longer. <<if CustomVisited("wantDeputee") == false and CustomVisited("wantName") == false>> #line:0799a0f 
     <<jump wantDeputee>>
--> {$pcName}: I like Desiree more. It's sweet you want me to be like you, but I don't know you yet. <<if visited("wantDeputee") == false and visited("wantName") == false>> #line:0a0bf68 
+-> {$pcName}: I like Desiree more. It's sweet you want me to be like you, but I don't know you yet. <<if CustomVisited("wantDeputee") == false and CustomVisited("wantName") == false>> #line:0a0bf68 
     <<jump carInteractions>>
 ===
 title: whyLionFucker

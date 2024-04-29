@@ -28,17 +28,17 @@ title: questionsKieran
         <<jump willHeKillUs>>
     -> {$pcName}: How old are you exactly? #line:0802f55 
         <<jump kieransAge>>
-    -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if visited("drinks") ==false>> #line:026a963 
+    -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if CustomVisited("drinks") ==false>> #line:026a963 
         <<jump drinks>>
     <<if GetAttributeSkillPoolSize("wits","awarness")>=4>>
         -> {$pcName}: I can't help but notice you're wearing a wedding ring on your finger. #line:0c6c442 
             <<jump kieransRing>>
     <<endif>>
-    -> {$pcName}: Can you tell me something about your Sire? <<if visited("kieransSire") ==false>> #line:079feb2 
+    -> {$pcName}: Can you tell me something about your Sire? <<if CustomVisited("kieransSire") ==false>> #line:079feb2 
         <<jump kieransSire>>
     -> {$pcName}: If we'll be partners, even temporarily I would like to know more about you. #line:0350c77 
         <<jump wantToKnowMoreAboutKieran>>
-    -> {$pcName}: I think that some thanks are in order. <<if visited("thanks") ==false>> #line:02f65bf 
+    -> {$pcName}: I think that some thanks are in order. <<if CustomVisited("thanks") ==false>> #line:02f65bf 
         <<jump thanks>>
     -> {$pcName}: Maybe later #line:064e3db 
         {$kieran}: OK, it's not like I'm going anywhere. #line:0ab9942 
@@ -110,9 +110,9 @@ title: kieransRing
 title: kieransSire
 ---
 {$kieran}: Ask your questions. I may answer. Depends on what would you like to know. #line:0c3afaa 
-    -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>> #line:09f2327 
+    -> {$pcName}: What is she like? <<if CustomVisited("catherinaCharacteristics") ==false>> #line:09f2327 
         <<jump catherinaCharacteristics>>
-    -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>> #line:083cfb0 
+    -> {$pcName}: How old is she? <<if CustomVisited("catherinasAge>") ==false>> #line:083cfb0 
         <<jump catherinasAge>>
     -> {$pcName}: You know what? Maybe another time. #line:026fd2e 
         <<jump questionsKieran>>

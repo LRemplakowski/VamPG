@@ -1,7 +1,7 @@
 ﻿title: anastasiaEntry
 position: 136,-238
 ---
-<<if (visited("anastasiaInitial"))>>
+<<if (CustomVisited("anastasiaInitial"))>>
     <<jump anastasiaSubsequent>>
 <<else>>
     <<jump anastasiaInitial>>

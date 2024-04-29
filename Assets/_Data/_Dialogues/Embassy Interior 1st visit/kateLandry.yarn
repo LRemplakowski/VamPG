@@ -1,7 +1,7 @@
 ﻿title: kateDialogueStart
 position: -910,-108
 ---
-<<if visited("meetingKate") is false>>
+<<if CustomVisited("meetingKate") is false>>
     <<jump meetingKate>>
 <<else>>
     <<jump subsequentInteractions>>
@@ -95,7 +95,7 @@ position: 78,-418
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is false and $kateRequest is false>>
 {$sforzaMask}: Before you go, I may have a lead for you. See the darling down there harassing my bartender? I would suspect she knows something about all of this... [nomarkup][She leans forward as her eyes crinkle with amusement.][/nomarkup] Diana has something of a type. #line:07253c8 
-    <<if visited("anastasiaMeeting")==true>>
+    <<if CustomVisited("anastasiaMeeting")==true>>
         <<set $kateRequest to true>>
         [nomarkup][Kate raises her delicate hand up in a sweeping wave, indicating to you a woman decked out in studded leather garments and steel-toed cleats - a “punk”, if your memory of the lingo serves. Some knowledge of the various subcultures present in the city is useful for a PI, after all.][/nomarkup]
         [nomarkup][Whatever group she belongs to, there are altogether too many studs affixed to her clothing. Maybe it's supposed to make her look “hard”. Even from this distance, you can tell her attempts to woo the woman behind the bar aren't going well.][/nomarkup] #line:048b9c4 
@@ -141,15 +141,15 @@ position: -502,87
 title: subsequentQuestions
 ---
 [nomarkup][Kate is looking at you with a moderate dose of interest.][/nomarkup]
--> {$pcName}: What can you tell me about Diana? <<if visited("whoIsDiana") == false>> #line:0f856b5 
+-> {$pcName}: What can you tell me about Diana? <<if CustomVisited("whoIsDiana") == false>> #line:0f856b5 
     <<jump whoIsDiana>>
--> {$pcName}: How did you come to own this place? <<if visited("howSheStarted") == false>> #line:0174ecc 
+-> {$pcName}: How did you come to own this place? <<if CustomVisited("howSheStarted") == false>> #line:0174ecc 
     <<jump howSheStarted>>
--> {$pcName}: Tell me about youself. <<if visited("kateTalksAboutHerself") == false>> #line:023a789 
+-> {$pcName}: Tell me about youself. <<if CustomVisited("kateTalksAboutHerself") == false>> #line:023a789 
     <<jump kateTalksAboutHerself>>
--> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and visited("getToOffice") == false>> #line:0460c71 
+-> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and CustomVisited("getToOffice") == false>> #line:0460c71 
     <<jump getToOffice>>
--> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and visited("bouncerDifficulties") == false>>#line:0ffc627 
+-> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false>>#line:0ffc627 
     <<jump bouncerDifficulties>>
 -> {$pcName}: I should go.
     {$sforzaMask}: An astute observation. Best of luck on your little search.

@@ -96,15 +96,15 @@ title: dominicDialogueContinuation
 {$sheriff}: [nomarkup][He responds with a grin.][/nomarkup] Well, her time in “this life”, as you put it, won't be long enough to have an impression in the first place. At least now she knows she didn't kill for no reason. She was hungry. #line:00482a8 
 [nomarkup][The crazy part is that it makes some amount of sense. Not that it makes you feel any better. At least you have a better explanation than this being a dream, or you going totally bonkers.][/nomarkup] #line:0d0fe7d 
 {$sheriff}: Any other questions? #line:0ebaa58 
--> {$pcName}: Why do you want to kill me? <<if visited("WantToKill") == false>> #line:046bb83 
+-> {$pcName}: Why do you want to kill me? <<if CustomVisited("WantToKill") == false>> #line:046bb83 
     <<jump WantToKill>>
--> {$pcName}: How did this happen to me? <<if visited("HowItHappened") == false>> #line:016ffbf 
+-> {$pcName}: How did this happen to me? <<if CustomVisited("HowItHappened") == false>> #line:016ffbf 
     <<jump HowItHappened>>
--> {$pcName}: What did you mean by Sire? <<if visited("SireInfo") == false>> #line:01a182e 
+-> {$pcName}: What did you mean by Sire? <<if CustomVisited("SireInfo") == false>> #line:01a182e 
     <<jump SireInfo>>
--> {$pcName}: Who are you? <<if visited("WhoAreYou") == false>> #line:021d941 
+-> {$pcName}: Who are you? <<if CustomVisited("WhoAreYou") == false>> #line:021d941 
     <<jump WhoAreYou>>
--> {$pcName}: How did you find me? <<if visited("HowFindMe") == false>> #line:004b038 
+-> {$pcName}: How did you find me? <<if CustomVisited("HowFindMe") == false>> #line:004b038 
     <<jump HowFindMe>>
 -> {$pcName}: What happens now? #line:08f5d82 
     <<jump DropButt>>
@@ -166,15 +166,15 @@ title: AnyOtherQuestions
 tags:
 ---
 {$sheriff}: Any other questions? #line:033b5e0 
--> {$pcName}: Why do you want to kill me? <<if visited("WantToKill") == false>> #line:0241df5 
+-> {$pcName}: Why do you want to kill me? <<if CustomVisited("WantToKill") == false>> #line:0241df5 
     <<jump WantToKill>>
--> {$pcName}: How did this happen to me? <<if visited("HowItHappened") == false>> #line:09280ba 
+-> {$pcName}: How did this happen to me? <<if CustomVisited("HowItHappened") == false>> #line:09280ba 
     <<jump HowItHappened>>
--> {$pcName}: What did you mean by Sire? <<if visited("SireInfo") == false>> #line:0b15e48 
+-> {$pcName}: What did you mean by Sire? <<if CustomVisited("SireInfo") == false>> #line:0b15e48 
     <<jump SireInfo>>
--> {$pcName}: Who are you? <<if visited("WhoAreYou") == false>> #line:0a0b43a 
+-> {$pcName}: Who are you? <<if CustomVisited("WhoAreYou") == false>> #line:0a0b43a 
     <<jump WhoAreYou>>
--> {$pcName}: How did you find me? <<if visited("HowFindMe") == false>> #line:013b483 
+-> {$pcName}: How did you find me? <<if CustomVisited("HowFindMe") == false>> #line:013b483 
     <<jump HowFindMe>>
 -> {$pcName}: What happens now? #line:08803b8 
     <<jump DropButt>>

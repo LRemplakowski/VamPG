@@ -2,10 +2,10 @@
 position: -171,-476
 ---
 [nomarkup][It looks just like a normal, civilian-use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
--> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if visited("safeResolveRoll") == false>> #line:05d4917 
+-> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if CustomVisited("safeResolveRoll") == false>> #line:05d4917 
     <<jump safeResolveRoll>>
 <<if $crowbar ==true>>
--> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if visited("safeStrengthRoll") == false>> #line:03cddc8 
+-> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if CustomVisited("safeStrengthRoll") == false>> #line:03cddc8 
     <<jump safeStrengthRoll>>
 <<endif>>
 <<if $safeCode ==true>>
@@ -84,7 +84,7 @@ position: -1111,-157
 title: safeQuestions
 position: -898,282
 ---
--> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if visited("safeGunExamine") == false>> #line:010783e 
+-> [nomarkup][Examine the gun.][Intelligence + Firearms][/nomarkup] <<if CustomVisited("safeGunExamine") == false>> #line:010783e 
     <<if Roll("Intelligence","Firearms") >=3>>
         <<jump safeGunExamine>>
     <<else>>
@@ -92,13 +92,13 @@ position: -898,282
     <<endif>>
 -> [nomarkup][Examine the documents.][/nomarkup] #line:05039a5 
     <<jump safeDocumentsExamine>>
--> [nomarkup][Examine the vial.][Intelligence + Medicine][/nomarkup] <<if visited("safeBloodIdentified") == false>> #line:06887c6 
+-> [nomarkup][Examine the vial.][Intelligence + Medicine][/nomarkup] <<if CustomVisited("safeBloodIdentified") == false>> #line:06887c6 
     <<if Roll("Intelligence","Medicine") >=3>>
         <<jump safeBloodIdentified>>
     <<else>>
         <<jump safeBloodFailure>>
     <<endif>>
--> [nomarkup][Take the money.][/nomarkup] <<if visited("safeMoney") == false>> #line:07ec05b 
+-> [nomarkup][Take the money.][/nomarkup] <<if CustomVisited("safeMoney") == false>> #line:07ec05b 
     <<jump takeSafeMoney>>
 ===
 title: safeGunExamine

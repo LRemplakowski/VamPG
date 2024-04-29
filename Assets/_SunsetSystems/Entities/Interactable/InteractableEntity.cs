@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
 using System;
@@ -222,7 +223,11 @@ namespace SunsetSystems.Entities.Interactable
             Interactable = interactableData.Interactable;
             _interacted = interactableData.Interacted;
             _interactableOnce = interactableData.InteractableOnce;
-            InteractionHandlers = interactableData.InteractionHandlers;
+            InteractionHandlers = new();
+            foreach (var key in interactableData.InteractionHandlers)
+            {
+                InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(key) as IInteractionHandler);
+            }
             if (_linkedGameObject)
                 _linkedGameObject.SetActive(interactableData.GameObjectActive);
         }
@@ -233,14 +238,18 @@ namespace SunsetSystems.Entities.Interactable
             public bool Interactable;
             public bool Interacted;
             public bool InteractableOnce;
-            public List<IInteractionHandler> InteractionHandlers;
+            public List<long> InteractionHandlers;
 
             public InteractableEntityPersistenceData(InteractableEntity interactableEntity) : base(interactableEntity)
             {
                 Interactable = interactableEntity.Interactable;
                 Interacted = interactableEntity.Interacted;
                 InteractableOnce = interactableEntity._interactableOnce;
-                InteractionHandlers = interactableEntity.InteractionHandlers;
+                InteractionHandlers = new();
+                foreach (var handler in interactableEntity.InteractionHandlers)
+                {
+                    InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(handler as UnityEngine.Object));
+                }
             }
 
             public InteractableEntityPersistenceData() : base()

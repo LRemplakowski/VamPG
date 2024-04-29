@@ -29,26 +29,26 @@ namespace UMA
 		/// <summary>
 		/// Callback event when character is created.
 		/// </summary>
-		public UMADataEvent CharacterCreated;
+		public UMADataEvent CharacterCreated = new();
 		/// <summary>
 		/// Callback event when character is started.
 		/// </summary>
-		public UMADataEvent CharacterBegun;
+		public UMADataEvent CharacterBegun = new();
 		/// <summary>
 		/// Callback event when character is destroyed.
 		/// </summary>
-		public UMADataEvent CharacterDestroyed;
+		public UMADataEvent CharacterDestroyed = new();
 		/// <summary>
 		/// Callback event when character is updated.
 		/// </summary>
-		public UMADataEvent CharacterUpdated;
+		public UMADataEvent CharacterUpdated = new();
 		/// <summary>
 		/// Callback event when character DNA is updated.
 		/// </summary>
-		public UMADataEvent CharacterDnaUpdated;
+		public UMADataEvent CharacterDnaUpdated = new();
 
-		public UMADataEvent AnimatorStateSaved;
-		public UMADataEvent AnimatorStateRestored;
+		public UMADataEvent AnimatorStateSaved = new();
+		public UMADataEvent AnimatorStateRestored = new();
 
 		public virtual void Start()
 		{

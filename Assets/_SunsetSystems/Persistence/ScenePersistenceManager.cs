@@ -7,7 +7,7 @@ using UnityEngine;
 namespace SunsetSystems.Persistence
 {
     [RequireComponent(typeof(UniqueId))]
-    public class ScenePersistenceManager : MonoBehaviour, ISaveable
+    public class ScenePersistenceManager : SerializedMonoBehaviour, ISaveable
     {
         [ReadOnly, ShowInInspector]
         private HashSet<IPersistentObject> persistentEntitiesSet = new();
@@ -17,6 +17,36 @@ namespace SunsetSystems.Persistence
         public static ScenePersistenceManager Instance { get; private set; }
 
         public string DataKey => _unique.Id;
+
+        private void OnValidate()
+        {
+            _unique ??= GetComponent<UniqueId>();
+        }
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                _unique ??= GetComponent<UniqueId>();
+                persistentEntitiesSet = new();
+            }
+            else
+            {
+                Debug.LogWarning($"There is more than one ScenePersistenceManager in scene! Destroying {gameObject.name}!");
+                Destroy(this.gameObject);
+            }
+        }
+
+        private void Start()
+        {
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
+        }
 
         public object GetSaveData()
         {
@@ -67,32 +97,6 @@ namespace SunsetSystems.Persistence
         public void Unregister(IPersistentObject persistentEntity)
         {
             persistentEntitiesSet.Remove(persistentEntity);
-        }
-
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                _unique ??= GetComponent<UniqueId>();
-                ISaveable.RegisterSaveable(this);
-                persistentEntitiesSet = new();
-            }
-            else
-            {
-                Debug.LogWarning($"There is more than one ScenePersistenceManager in scene! Destroying {gameObject.name}!");
-                Destroy(this.gameObject);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            ISaveable.UnregisterSaveable(this);
-        }
-
-        private void OnValidate()
-        {
-            _unique ??= GetComponent<UniqueId>();
         }
 
         [Serializable]

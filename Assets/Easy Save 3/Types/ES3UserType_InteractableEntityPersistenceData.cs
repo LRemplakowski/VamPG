@@ -19,7 +19,7 @@ namespace ES3Types
 			writer.WriteProperty("Interactable", instance.Interactable, ES3Type_bool.Instance);
 			writer.WriteProperty("Interacted", instance.Interacted, ES3Type_bool.Instance);
 			writer.WriteProperty("InteractableOnce", instance.InteractableOnce, ES3Type_bool.Instance);
-			writer.WriteProperty("InteractionHandlers", instance.InteractionHandlers, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<SunsetSystems.Entities.Interactable.IInteractionHandler>)));
+			writer.WriteProperty("InteractionHandlers", instance.InteractionHandlers, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<System.Int64>)));
 			writer.WriteProperty("GameObjectActive", instance.GameObjectActive, ES3Type_bool.Instance);
 			writer.WriteProperty("PersistentComponentData", instance.PersistentComponentData, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.Object>)));
 		}
@@ -42,7 +42,7 @@ namespace ES3Types
 						instance.InteractableOnce = reader.Read<System.Boolean>(ES3Type_bool.Instance);
 						break;
 					case "InteractionHandlers":
-						instance.InteractionHandlers = reader.Read<System.Collections.Generic.List<SunsetSystems.Entities.Interactable.IInteractionHandler>>();
+						instance.InteractionHandlers = reader.Read<System.Collections.Generic.List<System.Int64>>();
 						break;
 					case "GameObjectActive":
 						instance.GameObjectActive = reader.Read<System.Boolean>(ES3Type_bool.Instance);

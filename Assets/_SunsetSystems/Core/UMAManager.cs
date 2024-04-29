@@ -5,6 +5,7 @@ using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Utils.Database;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -45,14 +46,22 @@ namespace SunsetSystems.Core.UMA
             _updateOnNextFrame = null;
         }
 
-        public void BuildUMAFromTemplate(ICreatureTemplate template)
+        public async void BuildUMAFromTemplate(ICreatureTemplate template)
         {
             if (_umaAvatar == null)
                 PrepareUMA();
+            await new WaitForUpdate();
+            bool umaFinished = false;
+            _umaAvatar.CharacterCreated.AddListener(OnUMADone);
+            _umaAvatar.CharacterUpdated.AddListener(OnUMADone);
+            await new WaitUntil(() => umaFinished);
+            _umaAvatar.CharacterCreated.RemoveListener(OnUMADone);
+            _umaAvatar.CharacterUpdated.RemoveListener(OnUMADone);
             SetBodyType(template.BodyType);
-            LoadDefaultWardrobeCollection(DatabaseHolder.Instance
-                .GetDatabase<WardrobeCollectionDatabaseFile>()
-                .GetAsset(template.BaseLookWardrobeCollectionID).Asset);
+            var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
+            if (wardrobeDB != null)
+                LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            await new WaitForUpdate();
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
@@ -60,6 +69,10 @@ namespace SunsetSystems.Core.UMA
                 UnityEditor.EditorUtility.SetDirty(this);
             }
 #endif
+            void OnUMADone(UMAData data)
+            {
+                umaFinished = true;
+            }
         }
 
         [Button]
@@ -129,7 +142,7 @@ namespace SunsetSystems.Core.UMA
                 }
                 else
                 {
-                    Debug.LogWarning($"Item {wearable} has a null WardrobeCollection reference!");
+                    Debug.LogWarning($"Item {wearable} of Creature {_umaRoot.transform.parent.name} has a null WardrobeCollection reference!");
                 }
             }
         }

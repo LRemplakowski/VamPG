@@ -1,7 +1,9 @@
+using Redcode.Awaiting;
 using SunsetSystems.Journal;
 using SunsetSystems.Journal.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +53,7 @@ namespace SunsetSystems
             UpdateQuestView();
         }
         
-        private void UpdateQuestView()
+        private async void UpdateQuestView()
         {
             if (_cachedQuest == null)
                 return;
@@ -59,24 +61,44 @@ namespace SunsetSystems
             _description.text = _cachedQuest.Description;
             _objectivePool.RemoveAll(obView => obView == null);
             _objectivePool.ForEach(obView => obView.gameObject.SetActive(false));
+            if (QuestJournal.Instance == null)
+                await new WaitUntil(() => QuestJournal.Instance != null);
             if (QuestJournal.Instance.GetCurrentObjectives(_cachedQuest.ID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {
                     Debug.Log("Setting objective view for objective " + objective.Description);
-                    TextMeshProUGUI objectiveView = GetObjectiveViewFromPool();
+                    TextMeshProUGUI objectiveView = await GetObjectiveViewFromPool();
                     objectiveView.text = objective.Description;
                     objectiveView.gameObject.SetActive(true);
                 }
             }
         }
 
-        private TextMeshProUGUI GetObjectiveViewFromPool()
+        private async Task<TextMeshProUGUI> GetObjectiveViewFromPool()
         {
             TextMeshProUGUI view = default;
-            view = _objectivePool.FirstOrDefault(obView => obView.IsActive() == false);
+            if (_objectivePool == null)
+                _objectivePool = new();
+            if (_objectivePool.Count > 0)
+                view = _objectivePool.FirstOrDefault(obView => obView != null && obView.IsActive() == false);
             if (view == null)
             {
+                if (_objectivePoolElementPrefab == null)
+                {
+                    Debug.LogError("Quest view has a null prefab! Fix it you dummy!");
+                    GameObject newOb = new();
+                    view = newOb.AddComponent<TextMeshProUGUI>();
+                    _objectivePool.Add(view);
+                    return view;
+                } 
+                else if (_objectivePoolParent == null)
+                {
+                    Debug.LogError("Quest View has a null objective pool parent! Waiting...");
+                    await new WaitUntil(() => _objectivePoolParent != null || Task.Delay(10000).IsCompleted);
+                    if (_objectivePoolParent == null)
+                        _objectivePoolParent = new GameObject().transform;
+                }
                 view = Instantiate(_objectivePoolElementPrefab, _objectivePoolParent);
                 view.gameObject.SetActive(false);
                 _objectivePool.Add(view);

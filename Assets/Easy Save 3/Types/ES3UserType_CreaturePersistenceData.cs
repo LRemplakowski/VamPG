@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("WorldPosition", "GameObjectActive", "PersistentComponentData")]
+	[ES3PropertiesAttribute("WorldPosition", "UMAHidden", "GameObjectActive", "PersistentComponentData")]
 	public class ES3UserType_CreaturePersistenceData : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -17,6 +17,7 @@ namespace ES3Types
 			var instance = (SunsetSystems.Entities.Characters.Creature.CreaturePersistenceData)obj;
 			
 			writer.WriteProperty("WorldPosition", instance.WorldPosition, ES3Type_Vector3.Instance);
+			writer.WriteProperty("UMAHidden", instance.UMAHidden, ES3Type_bool.Instance);
 			writer.WriteProperty("GameObjectActive", instance.GameObjectActive, ES3Type_bool.Instance);
 			writer.WriteProperty("PersistentComponentData", instance.PersistentComponentData, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.Dictionary<System.String, System.Object>)));
 		}
@@ -31,6 +32,9 @@ namespace ES3Types
 					
 					case "WorldPosition":
 						instance.WorldPosition = reader.Read<UnityEngine.Vector3>(ES3Type_Vector3.Instance);
+						break;
+					case "UMAHidden":
+						instance.UMAHidden = reader.Read<System.Boolean>(ES3Type_bool.Instance);
 						break;
 					case "GameObjectActive":
 						instance.GameObjectActive = reader.Read<System.Boolean>(ES3Type_bool.Instance);

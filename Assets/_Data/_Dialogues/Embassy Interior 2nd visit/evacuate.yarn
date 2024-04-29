@@ -6,7 +6,7 @@ position: -323,-660
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that's it!! #line:028297e 
 <<endif>>
--> [nomarkup][Determine the least dangerous path.](Intelligence+Insight)[/nomarkup] #line:08b200e 
+-> [nomarkup][Determine the least dangerous path.] (Intelligence+Insight)[/nomarkup] #line:08b200e 
     <<jump evacuateIntRoll>>
 ===
 title: evacuateIntRoll
@@ -34,9 +34,9 @@ position: -166,-433
 title: evacuateAdditional
 position: -152,-219
 ---
--> [nomarkup][Sneak to the exit.](Dexterity+Stealth)[/nomarkup] #line:074b1d5 
+-> [nomarkup][Sneak to the exit.] (Dexterity+Stealth)[/nomarkup] #line:074b1d5 
     <<jump evacuateDexRoll>>
--> [nomarkup][Sprint to the exit.](Stamina+Athletics)[/nomarkup] #line:08c56aa 
+-> [nomarkup][Sprint to the exit.] (Stamina+Athletics)[/nomarkup] #line:08c56aa 
     <<jump evacuateStamRoll>>
 ===
 title: evacuateDexRoll
@@ -87,7 +87,7 @@ position: 228,476
 <<if Roll ("Intelligence","Medicine")>=3>>
     [nomarkup][This man isn't going to be able to walk without treatment of some kind - that much is for certain.][/nomarkup] #line:03470eb 
 <<elseif Roll ("Wits","Insight")>=2>>
-    [nomarkup][If you could just get him to let go…][/nomarkup] #line:09d73a4 
+    [nomarkup][If you could just get him to let go...][/nomarkup] #line:09d73a4 
 <<endif>>
 -> {$pcName}: [nomarkup][You place your hand in his and give him a small, kind smile - the tense muscles around your eyes relaxing as you whisper your last words to him.][/nomarkup] It'll be okay, I'm going to try and get the police and paramedics- I'll come back.(Manipulation+Insight) #line:0f4f0d1 
     <<jump sootheDoeEyedRoll>>
@@ -111,7 +111,7 @@ title: sootheDoeEyedSuccess
 position: 547,728
 ---
 [nomarkup][He hiccups and nods, letting you go as his body fully relaxes, his eyes locked on you as hiccups spasm in his throat.][/nomarkup] #success #line:0bc185b 
-[nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too…][/nomarkup] #line:0d2fe45 
+[nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too...][/nomarkup] #line:0d2fe45 
 <<jump gottaStayStrong>>
 ===
 title: gottaStayStrong
@@ -144,13 +144,13 @@ title: convinceDoeEyedSuccess
 position: 372,926
 ---
 [nomarkup][His eyes well up, and he nods, letting go. You give him a nod in return, as well, and gesture for him to stay down. His gaze shines with fear, but you know he'll do as he's told.][/nomarkup] #success #line:08f211d 
-[nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too…][/nomarkup] #line:02e2440 
+[nomarkup][You turn to leave, feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, but if you did - you might break down, too...][/nomarkup] #line:02e2440 
 <<jump gottaStayStrong>>
 ===
 title: convinceDoeEyedFailure
 position: 221,1198
 ---
-[nomarkup][You press down on his leg by accident, only for him to utter an ear splitting scream. Swatting your hand away, he clings ever-tighter to you as he tries to flex the muscles in his thigh - finding them unresponsive. His screams and shouts and sobbing pleas for help attract a lot of attention prior to him passing out…][/nomarkup] #failure #line:086d846 
+[nomarkup][You press down on his leg by accident, only for him to utter an ear splitting scream. Swatting your hand away, he clings ever-tighter to you as he tries to flex the muscles in his thigh - finding them unresponsive. His screams and shouts and sobbing pleas for help attract a lot of attention prior to him passing out...][/nomarkup] #failure #line:086d846 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Thank Christ that's over. Leave him. He'll be too much of a burden, and he's pretty much dead where he lies, anyhow. #line:0d42640 
 <<else>>
@@ -183,7 +183,7 @@ position: 86,959
 [nomarkup][Recomposing himself, he breathes out with you.][/nomarkup] #line:0f66f32 
 -> {$pcName}: You are going to stay behind this cover and press on your leg. No matter who walks past, play dead - don't move. #line:01eed3f 
 [nomarkup][He looks at you and nods, laying down and curling up so he can put pressure on his leg. His breathing seems to come easier, in this position.][/nomarkup] #line:0ee1016 
-[nomarkup][You turn to leave, knowing it's unlikely that anyone will be coming to save him soon enough. Feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, you hesitate, but if you did - you might break down, too…][/nomarkup] #line:021872d 
+[nomarkup][You turn to leave, knowing it's unlikely that anyone will be coming to save him soon enough. Feeling the urge to apologize, pat him on the back, anything that might soothe his soul in what will likely be his last moments, you hesitate, but if you did - you might break down, too...][/nomarkup] #line:021872d 
 <<jump gottaStayStrong>>
 ===
 title: intimidateDoeEyedFailure
@@ -211,7 +211,7 @@ position: 428,1628
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Anastasia's belt - it should do just fine.][/nomarkup] #success #line:09a85ca 
     -> {$pcName}: Ana, give me your belt! #line:0b171bf 
-    {$anastasia}: What? Now's not the time or place for hanky-panky… #line:0070b8b 
+    {$anastasia}: What? Now's not the time or place for hanky-panky... #line:0070b8b 
     {$kieran}: She probably only wants to slow the bleeding by using something as a tourniquet. #line:07d7111 
 <<else>>
     [nomarkup][You look around trying to find something that could work as a tourniquet. Your eyes focus on Kieran's belt - it should do just fine.][/nomarkup] #line:035c5ff 
@@ -224,7 +224,7 @@ title: kieranHelps
 position: 434,1848
 ---
 [nomarkup][It looks like Kieran has done that many times in the past.][/nomarkup] #line:0d31b4b 
-[nomarkup][With his help, you quickly treat the man. There is less blood, now - but that doesn't mean its smell isn't enticing to you… or your new friends. On several occasions, Kieran grimaced and averted his eyes from it.][/nomarkup] #line:0219a10 
+[nomarkup][With his help, you quickly treat the man. There is less blood, now - but that doesn't mean its smell isn't enticing to you... or your new friends. On several occasions, Kieran grimaced and averted his eyes from it.][/nomarkup] #line:0219a10 
 {$kieran}: Now, we can help him get out of here with us. #line:0c81977 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: What's your plan, then? Are we gonna limp to safety? #line:06852d8 
@@ -235,7 +235,7 @@ position: 434,1848
         -> {$pcName}: No. You can carry him. Right, Anastasia? #line:02449da 
             {$anastasia}: Wha- Me?! Why me? #line:0990860 
             {$kieran}: [nomarkup][Kieran looks at her with deadeyed determination and his eyes narrow ever so slightly. The smallest of shivers flickers with fear up your spine as you see Kieran's eyes go ever so slightly hard. Terrifying.][/nomarkup] #line:05cfbcd 
-            {$beast}: We aren't the only ones with a temper… #line:0222485 
+            {$beast}: We aren't the only ones with a temper... #line:0222485 
             -> {$pcName}: You [nomarkup]<i>were</i>[/nomarkup] the one bragging back there that you could easily haul Kieran to the exit, right? #line:088243e 
             {$anastasia}: [nomarkup][She grins.][/nomarkup] Fair enough, you got me there. But if he bleeds too much on my clothes, you owe me a new set, Kiki. #line:0b55d03 
             {$kieran}: So that's the price of a life to you Anastasia? #line:0261752 
@@ -268,7 +268,7 @@ position: 434,1848
             <<else>>
                 <<set $carryingNPC to 1>>
                 -> {$pcName}: Let's go, he needs to get to a hospital. #line:057c291 
-                {$anastasia}: Christ almighty… #line:093240c 
+                {$anastasia}: Christ almighty... #line:093240c 
             <<endif>>
             <<jump physicalOptionsRun>>
 <<endif>>
@@ -280,28 +280,28 @@ title: medicalAssistanceFailure
 position: 107,1671
 ---
 [nomarkup][There's blood everywhere, screams, shots, you can't concentrate.][/nomarkup] #failure #line:0671482 
--> {$pcName}: Shit, shit, shit… I don't know what to do… There wasn't a first aid course required for my line of work… #line:03ef806 
-{$kieran}: First of all we need to stop, or suppress the bleeding… [nomarkup][He unclasps his belt.][/nomarkup] Here. I'll block his leg.  Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he's not shot again. [nomarkup][He blocks the doe eyed man's leg with precision and professionalism.][/nomarkup] #line:08afeed 
+-> {$pcName}: Shit, shit, shit... I don't know what to do... There wasn't a first aid course required for my line of work... #line:03ef806 
+{$kieran}: First of all we need to stop, or suppress the bleeding... [nomarkup][He unclasps his belt.][/nomarkup] Here. I'll block his leg.  Luckily, the blood is too dark to have come from the artery. He just might have a chance of surviving if he's not shot again. [nomarkup][He blocks the doe eyed man's leg with precision and professionalism.][/nomarkup] #line:08afeed 
 <<jump kieranHelps>>
 ===
 title: physicalOptions
 position: 537,2170
 ---
--> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0cf3925 
+-> [nomarkup][Sneak the rest of the way.] (Dexterity+Stealth)[/nomarkup] #line:0cf3925 
     <<jump stealthShootingRoll>>
--> [nomarkup][Sprint the rest of the way.](Stamina+Athletics)[/nomarkup] #line:017212d 
+-> [nomarkup][Sprint the rest of the way.] (Stamina+Athletics)[/nomarkup] #line:017212d 
     <<jump runShootingRoll>>
 ===
 title: physicalOptionsStealth
 position: 838,1863
 ---
--> [nomarkup][Sneak the rest of the way.](Dexterity+Stealth)[/nomarkup] #line:0d22557 
+-> [nomarkup][Sneak the rest of the way.] (Dexterity+Stealth)[/nomarkup] #line:0d22557 
     <<jump stealthShootingRoll>>
 ===
 title: physicalOptionsRun
 position: 293,2057
 ---
--> [nomarkup][Sprint the rest of the way.](Stamina+Athletics)[/nomarkup] #line:085e4de 
+-> [nomarkup][Sprint the rest of the way.] (Stamina+Athletics)[/nomarkup] #line:085e4de 
     <<jump runShootingRoll>>
 ===
 title:stealthShootingRoll

@@ -1,12 +1,8 @@
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using SunsetSystems.Persistence;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using SunsetSystems.Core.AddressableManagement;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace SunsetSystems.Core.SceneLoading.UI
 {
@@ -81,9 +77,13 @@ namespace SunsetSystems.Core.SceneLoading.UI
             this.gameObject.SetActive(false);
         }
 
+        [Button]
         public async Task LoadRandomLoadingScreen()
         {
-            backgroundImage.sprite = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
+            var screen = await loadingScreenProviderConfig.GetRandomLoadingScreenAsync();
+            if (screen == null)
+                Debug.LogError("Loading Screen Provider returned a null loading screen sprite!");
+            backgroundImage.sprite = screen;
         }
     }
 }

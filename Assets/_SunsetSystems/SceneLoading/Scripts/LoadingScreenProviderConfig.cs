@@ -1,11 +1,10 @@
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Core.AddressableManagement;
+using SunsetSystems.Utils.Extensions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using SunsetSystems.Utils.Extensions;
-using SunsetSystems.Core.AddressableManagement;
 
 namespace SunsetSystems.Core.SceneLoading.UI
 {
@@ -13,9 +12,20 @@ namespace SunsetSystems.Core.SceneLoading.UI
     public class LoadingScreenProviderConfig : SerializedScriptableObject, IAddressableAssetSource<Sprite>
     {
         [SerializeField]
-        private List<AssetReferenceSprite> defaultLoadingScreens = new();
+        private List<AssetReference> defaultLoadingScreens = new();
 
-        private readonly List<AssetReferenceSprite> loadedScreens = new();
+        private readonly List<AssetReference> loadedScreens = new();
+
+        //private void OnValidate()
+        //{
+        //    List<AssetReference> nonSprites = new();
+        //    foreach (var assetRef in defaultLoadingScreens)
+        //    {
+        //        if (assetRef != null && assetRef is not AssetReferenceSprite)
+        //            nonSprites.Add(assetRef);
+        //    }
+        //    defaultLoadingScreens.RemoveAll(assetRef => nonSprites.Contains(assetRef));
+        //}
 
         private void OnEnable()
         {
@@ -24,31 +34,31 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         private void OnDisable()
         {
-            List<AssetReferenceSprite> toRelease = new(loadedScreens);
+            List<AssetReference> toRelease = new(loadedScreens);
             toRelease.ForEach(screen => ReturnAsset(screen));
         }
 
         public async Task<Sprite> GetRandomLoadingScreenAsync()
         {
-            AssetReferenceSprite loadingScreenAssetRef = defaultLoadingScreens.GetRandom();
+            AssetReference loadingScreenAssetRef = defaultLoadingScreens.GetRandom();
             return await GetAssetAsync(loadingScreenAssetRef);
         }
 
         public void ReleaseLoadingScreens()
         {
-            List<AssetReferenceSprite> toRelease = new(loadedScreens);
+            List<AssetReference> toRelease = new(loadedScreens);
             toRelease.ForEach(screen => ReturnAsset(screen));
         }
 
-        public async Task<Sprite> GetAssetAsync(AssetReferenceT<Sprite> assetReference)
+        public async Task<Sprite> GetAssetAsync(AssetReference assetReference)
         {
-            loadedScreens.Add(assetReference as AssetReferenceSprite);
-            return await AddressableManager.Instance.LoadAssetAsync(assetReference);
+            loadedScreens.Add(assetReference);
+            return await AddressableManager.Instance.LoadAssetAsync<Sprite>(assetReference);
         }
 
-        public void ReturnAsset(AssetReferenceT<Sprite> asset)
+        public void ReturnAsset(AssetReference asset)
         {
-            loadedScreens.Remove(asset as AssetReferenceSprite);
+            loadedScreens.Remove(asset);
             AddressableManager.Instance.ReleaseAsset(asset);
         }
     }

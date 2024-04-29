@@ -1,17 +1,17 @@
-﻿using Redcode.Awaiting;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UMA;
+using SunsetSystems.Utils.Database;
 using UMA.CharacterSystem;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -91,8 +91,15 @@ namespace SunsetSystems.Entities.Characters
         public void ForceToPosition(Vector3 position)
         {
             ClearAllActions();
-            Debug.Log($"Forcing Creature {gameObject.name} to position: {position}");
-            References.NavMeshAgent.Warp(position);
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, (int)NavMeshAreas.Walkable))
+            {
+                Debug.Log($"Forcing Creature {gameObject.name} to position: {hit.position}!");
+                References.NavMeshAgent.Warp(hit.position);
+            }
+            else
+            {
+                Debug.LogError($"Could not force creature {this} to position {position}! Could not find walkable NavMesh!");
+            }
         }
 
         public void ForceToPosition(Transform positionTransform)
@@ -152,7 +159,7 @@ namespace SunsetSystems.Entities.Characters
         public ICreatureTemplate CreatureTemplate => new TemplateFromInstance(this);
 
         [Serializable]
-        private class TemplateFromInstance : ICreatureTemplate
+        public class TemplateFromInstance : ICreatureTemplate
         {
             public TemplateFromInstance(ICreature instance)
             {
@@ -163,36 +170,74 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                PortraitAssetRef = instance.References.CreatureData.PortraitAssetRef;
-                BaseLookWardrobeCollection = instance.References.UMAManager.BaseLookWardrobeCollection;
-                EquipmentSlotsData = new(instance.References.EquipmentManager.EquipmentSlots);
+                BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
+                EquipmentSlotsData = new();
+                foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
+                {
+                    EquipmentSlotsData[item.Key] = item.Value.GetEquippedItem().ReadableID;
+                }
                 StatsData = new(instance.References.StatsManager.Stats);
             }
 
-            public string DatabaseID { get; }
+            public TemplateFromInstance()
+            {
 
-            public string ReadableID { get; }
+            }
+
+            public string DatabaseID { get; private set; }
+
+            public string ReadableID { get; private set; }
 
             public string FullName => $"{FirstName} {LastName}".Trim();
 
-            public string FirstName { get; }
+            public string FirstName { get; private set; }
 
-            public string LastName { get; }
+            public string LastName { get; private set; }
 
-            public Faction Faction { get; }
+            public Faction Faction { get; private set; }
 
-            public BodyType BodyType { get; }
+            public BodyType BodyType { get; private set; }
 
-            public CreatureType CreatureType { get; }
+            public CreatureType CreatureType { get; private set; }
 
-            public AssetReferenceSprite PortraitAssetRef { get; }
+            public short BaseLookWardrobeCollectionID { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
+            public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
-
-            public StatsData StatsData { get; }
+            public StatsData StatsData { get; private set; }
         }
         #endregion
+
+        public override object GetPersistenceData()
+        {
+            return new CreaturePersistenceData(this);
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            if (data is not CreaturePersistenceData creaturePersistenceData)
+                return;
+            ForceToPosition(creaturePersistenceData.WorldPosition);
+            References.GetCachedComponentInChildren<DynamicCharacterAvatar>().ToggleHide(creaturePersistenceData.UMAHidden);
+        }
+
+        [Serializable]
+        public class CreaturePersistenceData : PersistenceData
+        {
+            public Vector3 WorldPosition;
+            public bool UMAHidden;
+
+            public CreaturePersistenceData(Creature creature) : base(creature)
+            {
+                WorldPosition = creature.References.BodyTransform.position;
+                UMAHidden = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>().hide;
+            }
+
+            public CreaturePersistenceData() : base()
+            {
+
+            }
+        }
     }
 }

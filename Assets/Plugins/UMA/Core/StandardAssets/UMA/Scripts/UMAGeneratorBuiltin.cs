@@ -60,6 +60,9 @@ namespace UMA
 		[Tooltip("Automatically set blendshapes based on race")]
 		public bool autoSetRaceBlendshapes = false;
 
+		[Tooltip("Allow read on generated mesh data. Will increase memory usage.")]
+		public bool AllowReadFromMesh = false;
+
 		[NonSerialized]
 		public long ElapsedTicks;
 		[NonSerialized]
@@ -74,8 +77,9 @@ namespace UMA
 			activeGeneratorCoroutine = null;
 		}
 
-		public virtual void Awake()
+		public override void Awake()
 		{
+			base.Awake();
 			activeGeneratorCoroutine = null;
 
 			if (atlasResolution == 0)
@@ -225,7 +229,6 @@ namespace UMA
 				{
 					UMAGeneratorPro ugp = new UMAGeneratorPro();
 					ugp.ProcessTexture(this, umaData, true, InitialScaleFactor);
-					TextureChanged++;
                 }
                 else
 				{
@@ -245,7 +248,7 @@ namespace UMA
                     activeGeneratorCoroutine = null; 
 				}
 
-				TextureChanged++;
+				TextureChanged--;
 			}
 		}
 
@@ -303,9 +306,10 @@ namespace UMA
                 }
 
 
-				foreach(var child in childlist)
+                for (int i = 0; i < childlist.Count; i++)
 				{
-					SaveBonesRecursively(child,holder);
+                    Transform child = childlist[i];
+                    SaveBonesRecursively(child,holder);
 				}
 			}
         }
@@ -429,18 +433,20 @@ namespace UMA
 				{
 					RaceData[] races = UMAContextBase.Instance.GetAllRaces();
 					raceNames = new HashSet<string>();
-					foreach (RaceData r in races)
+                    for (int i = 0; i < races.Length; i++)
 					{
-						raceNames.Add(r.raceName);
+                        RaceData r = races[i];
+                        raceNames.Add(r.raceName);
 					}
 				}
 
 
 				if (raceNames != null && raceNames.Count > 0)
 				{
-					foreach (SkinnedMeshRenderer smr in renderers)
+                    for (int i1 = 0; i1 < renderers.Length; i1++)
 					{
-						if (smr.sharedMesh.blendShapeCount > 0)
+                        SkinnedMeshRenderer smr = renderers[i1];
+                        if (smr.sharedMesh.blendShapeCount > 0)
 						{
 							for (int i = 0; i < smr.sharedMesh.blendShapeCount;i++)
 							{
@@ -523,7 +529,7 @@ namespace UMA
 			UMAContextBase.IgnoreTag = ignoreTag;
 			if (data == null)
             {
-                return true;
+                return false;
             }
 
             if (umaData != data)
@@ -532,7 +538,7 @@ namespace UMA
 
 				if (!umaData.Validate())
                 {
-                    return true;
+                    return false;
                 }
 
                 if (meshCombiner != null)
@@ -571,7 +577,7 @@ namespace UMA
 					activeGeneratorCoroutine = null;
 					umaData.isTextureDirty = false;
 					umaData.isAtlasDirty |= umaData.isMeshDirty;
-					TextureChanged++;
+					TextureChanged--;
 				}
 
 				//shouldn't this only cause another loop if this part MADE the mesh dirty?
@@ -587,7 +593,7 @@ namespace UMA
 				UpdateUMAMesh(umaData.isAtlasDirty);
 				umaData.isAtlasDirty = false;
 				umaData.isMeshDirty = false;
-				SlotsChanged++;
+				SlotsChanged--;
 				forceGarbageCollect++;
 
 				if (!fastGeneration)
@@ -604,11 +610,15 @@ namespace UMA
 				}
 				UpdateUMABody(umaData);
 				umaData.isShapeDirty = false;
-				DnaChanged++;
+				DnaChanged--;
 			}
-			else if (umaData.skeleton.isUpdating)
+			else if (umaData.skeleton != null && umaData.skeleton.isUpdating)
 			{
 				umaData.skeleton.EndSkeletonUpdate();
+			}
+			else
+			{
+				return false;
 			}
 
 			UMAReady();

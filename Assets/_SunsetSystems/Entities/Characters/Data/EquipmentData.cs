@@ -1,26 +1,27 @@
-using System.Collections.Generic;
-using SunsetSystems.Inventory.Data;
 using System;
+using System.Collections.Generic;
 using Sirenix.Serialization;
 using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Equipment
 {
     [Serializable]
-    public class EquipmentData : Object
+    public class EquipmentData
     {
         [field: OdinSerialize]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
         public static Dictionary<EquipmentSlotID, IEquipmentSlot> GetSlotsPreset()
         {
-            Dictionary<EquipmentSlotID, IEquipmentSlot> equipmentSlots = new();
-            equipmentSlots.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
-            equipmentSlots.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
-            equipmentSlots.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
-            equipmentSlots.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
-            equipmentSlots.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
-            equipmentSlots.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+            Dictionary<EquipmentSlotID, IEquipmentSlot> equipmentSlots = new()
+            {
+                { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+            };
             return equipmentSlots;
         }
 

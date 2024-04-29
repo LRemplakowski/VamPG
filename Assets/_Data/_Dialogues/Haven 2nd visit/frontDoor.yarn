@@ -9,11 +9,11 @@ KNOCK. KNOCK. KNOCK.
     [nomarkup][You come closer feeling more comfortable with the thought that you're not alone.][/nomarkup]
 <<endif>>
 -> {$pcName}: Who's there?
-[nomarkup][Of course, there's no answer. You take a deep breath trying to compose yourself and come closer to the door reading your weapon.][/nomarkup]
 <<jump doorOptions>>
 ===
 title: doorOptions
 ---
+[nomarkup][Of course, there's no answer. You take a deep breath trying to compose yourself and come closer to the door reading your weapon.][/nomarkup]
 -> [nomarkup][Open it.][/nomarkup]
     <<jump doorOpened>>
 -> [nomarkup][Look out the peephole.][/nomarkup] <<if visited("doorOpened") == false>>

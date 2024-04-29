@@ -6,7 +6,7 @@ position: -209,38
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "GRAB_MEDS">>
 <<endif>>
 <<if visited("DoorFirstVisit")>>
-    [nomarkup][The door knob still doesn't budge. It's locked.][/nomarkup] #line:0506090  
+    [nomarkup][The door knob still doesn't budge. It's locked.][/nomarkup] #lastline #line:0506090  
     <<jump DoorVisit>>
 <<else>>
     <<jump DoorFirstVisit>>
@@ -16,9 +16,11 @@ title: DoorFirstVisit
 tags:
 position: 91,-139
 ---
-[nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup] #line:0d2188f
-<<if $key is false>>
-    {$pcName}: [nomarkup][Where did I put that key?][/nomarkup] #line:0ad2e34
+<<if GetHasItem("IT_Q_EMBASSYDRINK")==false>>
+    [nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup]
+    {$pcName}: [nomarkup][Where did I put that key?][/nomarkup] #lastline #line:0ad2e34
+<<else>>
+    [nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup] #lastline
 <<endif>> 
 <<jump DoorVisit>>
 ===
@@ -28,11 +30,11 @@ position: 114,94
 ---
 -> [nomarkup][Knock.][/nomarkup] <<if visited("BathroomDoorKnock") == false>> #line:05c9288 
     <<jump BathroomDoorKnock>>
--> [nomarkup](Strength + Brawl) [Try to kick the door open.][/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 
+-> [nomarkup][Try to kick the door open.] (Strength + Brawl)[/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 
     <<jump BathroomDoorKick>>
--> (Strength + Melee) [nomarkup][Crowbar the door.][/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
+-> [nomarkup][Crowbar the door.] (Strength + Melee) [/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
     <<jump BathroomDoorCrowbar>>
--> [nomarkup][Unlock the door.][/nomarkup] <<if $key == true>> #line:04a268c 
+-> [nomarkup][Unlock the door.][/nomarkup] <<if GetHasItem("IT_Q_EMBASSYDRINK")==true>> #line:04a268c 
     <<jump BathroomDoorUnlock>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0362587 
 ===
@@ -41,10 +43,12 @@ position: 439,-259
 ---
 KNOCK! KNOCK! KNOCK! #line:0705409 
 [nomarkup][Unsurprisingly, there's no answer.][/nomarkup] #line:0fdd8d6 
-{$pcName}: [nomarkup][Why did I do that?][/nomarkup] #line:0e20ed7 
 <<if GetAttributeSkillPoolSize("Wits","Insight") >= 5>>
-    [nomarkup][You feel the strangest sense that you shouldn't go in there. A shiver runs down your spine.][/nomarkup] #line:0e82241 
+    {$pcName}: [nomarkup][Why did I do that?][/nomarkup]
+    [nomarkup][You feel the strangest sense that you shouldn't go in there. A shiver runs down your spine.][/nomarkup] #lastline #line:0e82241 
     <<set $strangeInsightModifier to 1>>
+<<else>>
+    {$pcName}: [nomarkup][Why did I do that?][/nomarkup] #lastline
 <<endif>>
 <<jump DoorVisit>>
 ===
@@ -70,9 +74,9 @@ position: 567,-63
         <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "ENTER_BATHROOM">>
     <<else>>
         <<if $kevinmurdered == true>>
-            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #failure #line:0082b73 
+            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist.][/nomarkup] #failure #lastline #line:0082b73 
         <<else>>
-            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more... Your wallet will thank you.][/nomarkup] #failure #line:0ca4ae0 
+            [nomarkup][Despite your best efforts, the door doesn't budge. The architect definitely was a sadist. But maybe it's for the best. You don't want to piss your landlord off any more... Your wallet will thank you.][/nomarkup] #failure #lastline #line:0ca4ae0 
         <<endif>>
         <<jump DoorVisit>> 
     <<endif>>

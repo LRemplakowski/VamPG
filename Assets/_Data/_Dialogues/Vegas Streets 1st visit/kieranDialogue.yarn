@@ -17,7 +17,7 @@ title: questionsKieran
 {$kieran}: [nomarkup][He sights.][/nomarkup] Okay. Just so long as it will help our investigation. Go ahead and ask. #line:0eb3799 
     <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
     [nomarkup][You’ve read enough vampire fiction to have some idea of a couple extra questions you could pose.][/nomarkup] #line:0a5c8c0
-    -> {$pcName}: So… How many of the stereotypes about vampires are true? Like that we sleep in coffins, or have super speed, are averted by crosses and so on? #line:09868f1 
+    -> {$pcName}: So... How many of the stereotypes about vampires are true? Like that we sleep in coffins, or have super speed, are averted by crosses and so on? #line:09868f1 
         <<jump occultQuestions>>
     <<endif>>
     -> {$pcName}: You and Dominic don't seem to get along. #line:0431dde 
@@ -94,7 +94,7 @@ title: drinks
 <<elseif GetCompanionInfluence($kieran)<=-2>>
     {$kieran}: ...and no amount would make it worth your prolonged company. #line:0ddc428 
 <<else>>
-    {$kieran}: … but I don’t know if such a thing would be… appropriate. #line:0a4ea6d 
+    {$kieran}: ... but I don’t know if such a thing would be... appropriate. #line:0a4ea6d 
 <<endif>>
 <<jump questionsKieran>>
 ===
@@ -133,7 +133,7 @@ title: catherinaCharacteristics
             <<if Roll ("Wits","Awareness")>=3>>
                 [nomarkup][He looks sideways, like he wants to add something, but is hesitant to do so.][/nomarkup] #line:0e7149d 
                 -> {$pcName}: There's something more than that. I can see it. #line:05201c6 
-                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It’s… This isn’t important to our investigation. #line:0473290 
+                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It’s... This isn’t important to our investigation. #line:0473290 
                 <<jump kieransSire>>
             <<endif>>
         ->  {$pcName}: You must be exaggerating. #line:01d0455 

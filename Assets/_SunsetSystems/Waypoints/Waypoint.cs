@@ -21,7 +21,7 @@ namespace SunsetSystems.LevelUtility
         private void OnValidate()
         {
             if (string.IsNullOrWhiteSpace(_waypointTag))
-                _waypointTag = gameObject.name;
+                Debug.LogError("Waypoint tag cannot be an empty string!");
         }
 
         private void Awake()

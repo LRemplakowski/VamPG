@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
@@ -26,6 +28,8 @@ namespace SunsetSystems.Party
         [Title("Config")]
         [SerializeField, ValueDropdown("GetLayerNames")]
         private string _defaultPartyLayer;
+        [SerializeField]
+        private bool _forceSpawnPartyInStorage = false;
 
         [Title("Runtime")]
         [SerializeField]
@@ -33,6 +37,7 @@ namespace SunsetSystems.Party
         [SerializeField]
         private Dictionary<string, ICreature> _activeParty = new();
         public ICreature MainCharacter => _activeParty.TryGetValue(Instance._mainCharacterKey, out ICreature creature) ? creature : null;
+        public string MainCharacterKey => _mainCharacterKey;
         public List<ICreature> ActiveParty => _activeParty.Values.ToList();
         public List<ICreature> Companions => _activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         [SerializeField]
@@ -48,6 +53,8 @@ namespace SunsetSystems.Party
         [Title("Events")]
         public UltEvent<IEnumerable<ICreature>> OnActivePartyInitialized = new();
         public UltEvent<string> OnPartyMemberRecruited = new();
+
+        private bool _initializeAtSavedPositions = false;
 
         private string[] GetLayerNames()
         {
@@ -89,7 +96,7 @@ namespace SunsetSystems.Party
             if (string.IsNullOrWhiteSpace(_mainCharacterKey))
                 return;
             var waypoint = WaypointManager.Instance.GetSceneEntryWaypoint();
-            if (waypoint != null)
+            if (waypoint != null && !_forceSpawnPartyInStorage)
                 InitializePartyAtPosition(waypoint.transform.position);
             else
                 InitializePartyInCreatureStorage();
@@ -100,7 +107,11 @@ namespace SunsetSystems.Party
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
+                {
                     _activeParty.Add(key, await InitializePartyMemberInCreatureStorage(template));
+                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                        creature.ForceToPosition(savedPosition);                        
+                }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
@@ -109,23 +120,18 @@ namespace SunsetSystems.Party
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
-                if(_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
-                    _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
-            }
-            OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
-        }
-
-        private async void InitializePartyAtPositions(List<Vector3> positions)
-        {
-            int index = 0;
-            foreach (string key in Instance._activeCoterieMemberKeys)
-            {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
-                    Vector3 position = positions[index];
                     _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
+                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                    {
+                        creature.ForceToPosition(savedPosition);
+                    }
                 }
-                index++;
+                else
+                {
+                    Debug.LogError($"Party Member {key} is active, but has no template!");
+                }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
@@ -227,7 +233,7 @@ namespace SunsetSystems.Party
             Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
-                partyPositions.Add(key, _activeParty[key].References.Transform.position);
+                partyPositions.Add(key, _activeParty[key].References.BodyTransform.position);
             }
             saveData.PartyPositions = partyPositions;
             return saveData;
@@ -253,6 +259,7 @@ namespace SunsetSystems.Party
                 else
                     _partyPositions.Add(key, Vector3.zero);
             }
+            _initializeAtSavedPositions = true;
         }
     }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UMA;
+﻿using System.Collections.Generic;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,7 +21,11 @@ namespace UMA
                 {
                     foreach (DynamicCharacterAvatar dca in dcas)
                     {
-                        if (dca.editorTimeGeneration == false) continue;
+                        if (dca.editorTimeGeneration == false)
+                        {
+                            continue;
+                        }
+
                         EditTimeAvatars.Add(dca);
                     }
                 }
@@ -49,8 +51,16 @@ namespace UMA
                     var items = dca.preloadWardrobeRecipes.recipes;
                     foreach (var wi in items)
                     {
-                        if (wi == null) continue;
-                        if (wi._recipe == null) continue;
+                        if (wi == null)
+                        {
+                            continue;
+                        }
+
+                        if (wi._recipe == null)
+                        {
+                            continue;
+                        }
+
                         var rcp = wi._recipe;
                         if (rcp.name == recipe.name)
                         {
@@ -154,7 +164,10 @@ namespace UMA
                                         break;
                                     }
                                 }
-                                if (hasMatchingOverlay) break;
+                                if (hasMatchingOverlay)
+                                {
+                                    break;
+                                }
                             }
                         }
                     }

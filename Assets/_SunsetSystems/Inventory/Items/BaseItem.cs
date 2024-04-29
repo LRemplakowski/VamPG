@@ -22,7 +22,7 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField]
         public AssetReferenceGameObject WorldSpaceRepresentation { get; protected set; }
         [field: SerializeField]
-        public AssetReferenceSprite Icon { get; protected set; }
+        public Sprite Icon { get; protected set; }
         [field: SerializeField]
         public bool Stackable { get; protected set; }
 

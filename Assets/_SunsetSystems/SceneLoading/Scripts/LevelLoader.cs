@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using SunsetSystems.Core.SceneLoading.UI;
+using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Persistence;
 using SunsetSystems.Utils;
+using UMA;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SunsetSystems.Core.SceneLoading
 {
@@ -18,10 +21,12 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private Camera loadingCamera;
 
+        public SceneLoadingDataAsset.LevelLoadingData CurrentLoadedLevel { get; private set; }
+
         public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad;
         public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
 
-        public async Task LoadNewScene(SceneLoadingData data)
+        public async Task LoadNewScene(SceneLoadingDataAsset data)
         {
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             await new WaitForUpdate();
@@ -31,11 +36,14 @@ namespace SunsetSystems.Core.SceneLoading
             loadingScreenUI.EnableAndResetLoadingScreen();
             await new WaitForSeconds(.5f);
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
-            await DoSceneLoading(data);
-            await new WaitForUpdate();
+            await DoSceneLoading(data.LoadingData);
+            CurrentLoadedLevel = data.LoadingData;
+            await new WaitForSeconds(1f);
+            await new WaitUntil(HasGeneratorProcessedAllUMA);
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
+            CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
@@ -44,9 +52,47 @@ namespace SunsetSystems.Core.SceneLoading
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
         }
 
-        private async Task DoSceneLoading(SceneLoadingData data)
+        private bool HasGeneratorProcessedAllUMA()
         {
-            var asyncOp = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[0], UnityEngine.SceneManagement.LoadSceneMode.Single);
+            if (UMAGenerator.Instance != null)
+                return UMAGenerator.Instance.IsIdle();
+            return false;
+        }
+
+        public async Task LoadSavedGame(string saveID)
+        {
+            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            await new WaitForUpdate();
+            loadingCamera.gameObject.SetActive(true);
+            OnLevelLoadStart?.Invoke();
+            loadingScreenUI.EnableAndResetLoadingScreen();
+            await new WaitForSeconds(.5f);
+            await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
+            var saveMetaData = SaveLoadManager.GetSaveMetaData(saveID);
+            await DoSceneLoading(saveMetaData.LevelLoadingData);
+            CurrentLoadedLevel = saveMetaData.LevelLoadingData;
+            await new WaitForUpdate();
+            OnBeforePersistentDataLoad?.Invoke();
+            SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
+            SaveLoadManager.InjectRuntimeDataIntoSaveables();
+            await new WaitForSeconds(0.1f);
+            OnLevelLoadEnd?.Invoke();
+            await new WaitUntil(() => UMAGeneratorBase.FindInstance().IsIdle());
+            await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
+            loadingCamera.gameObject.SetActive(false);
+            loadingScreenUI.DisableLoadingScreen();
+            await new WaitForSeconds(.1f);
+            await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
+        }
+
+        public void BackToMainMenu()
+        {
+            SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+        }
+
+        private async Task DoSceneLoading(SceneLoadingDataAsset.LevelLoadingData data)
+        {
+            var asyncOp = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[0], LoadSceneMode.Single);
             while (asyncOp.IsDone == false)
             {
                 loadingScreenUI.UpadteLoadingBar(asyncOp.PercentComplete);
@@ -56,7 +102,7 @@ namespace SunsetSystems.Core.SceneLoading
             List<Task> loadingOps = new();
             for (int i = 1; i < data.AddressableScenePaths.Count; i++)
             {
-                loadingOps.Add(UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[i], UnityEngine.SceneManagement.LoadSceneMode.Additive).Task);
+                loadingOps.Add(UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[i], LoadSceneMode.Additive).Task);
             }
             await Task.WhenAll(loadingOps);
         }

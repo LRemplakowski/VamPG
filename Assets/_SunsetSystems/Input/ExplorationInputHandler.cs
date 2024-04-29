@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using InsaneSystems.RTSSelection;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Party;
+using SunsetSystems.Utils.Input;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-
-
+using UnityEngine.Rendering;
 
 namespace SunsetSystems.Input
 {
@@ -31,6 +33,9 @@ namespace SunsetSystems.Input
             if (context.performed is false)
                 return;
             mousePosition = context.ReadValue<Vector2>();
+            if (InputHelper.IsRaycastHittingUIObject(mousePosition, out var results) && results.Select(r => r.gameObject.GetComponentInParent<CanvasGroup>()).Any(cg => cg.blocksRaycasts))
+                return;
+
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, RAYCAST_RANGE, _raycastTargetMask, QueryTriggerInteraction.Collide))
             {
@@ -81,11 +86,11 @@ namespace SunsetSystems.Input
                 List<ICreature> creatures = new();
                 if (hit.collider.TryGetComponent(out IInteractable interactable))
                 {
-                    _ = mainCharacter.PerformAction(new Interact(mainCharacter, interactable));
+                    _ = mainCharacter.PerformAction(new Interact(mainCharacter, interactable), true);
                 }
                 else
                 {
-                    _ = mainCharacter.PerformAction(new Move(mainCharacter, hit.point));
+                    _ = mainCharacter.PerformAction(new Move(mainCharacter, hit.point), true);
                 }
                 if (PartyManager.Instance.ActiveParty.Count > 1)
                     creatures.AddRange(PartyManager.Instance.Companions);

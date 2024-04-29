@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
 using System;
-using System.Linq;
 
 namespace UMA.Editors
 {
@@ -55,8 +53,10 @@ namespace UMA.Editors
                             }
                             string path = AssetDatabase.GetAssetPath(o);
                             TextureImporter importer = (TextureImporter)TextureImporter.GetAtPath(path);
-                            if (importer == null) continue;
-
+                            if (importer == null)
+                            {
+                                continue;
+                            }
 
                             var def = importer.GetDefaultPlatformTextureSettings();
                             var changed = false;

@@ -1,11 +1,8 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UMA;
 
 namespace UMA.CharacterSystem.Examples
 {
-	public class DNADelegatesExample : MonoBehaviour
+    public class DNADelegatesExample : MonoBehaviour
 	{
 
 		public DynamicCharacterAvatar targetAvatar;
@@ -36,8 +33,10 @@ namespace UMA.CharacterSystem.Examples
 			if (umaData.umaRecipe.raceData)
 			{
 				if (umaData.umaRecipe.raceData != lastRace)
-					SetUpDNADelegates(umaData);
-			}
+                {
+                    SetUpDNADelegates(umaData);
+                }
+            }
 		}
 
 		public void SetUpDNADelegates(UMAData umaData)
@@ -46,9 +45,10 @@ namespace UMA.CharacterSystem.Examples
 			if (umaData.umaRecipe.raceData)
 			{
 				lastRace = umaData.umaRecipe.raceData;
-                foreach (DynamicDNAConverterController dcb in umaData.umaRecipe.raceData.dnaConverterList)
+                for (int i = 0; i < umaData.umaRecipe.raceData.dnaConverterList.Length; i++)
 				{
-							dcb.AddDnaCallbackDelegate(ChangeCharacterRedness, "skinRedness");
+                    DynamicDNAConverterController dcb = umaData.umaRecipe.raceData.dnaConverterList[i];
+                    dcb.AddDnaCallbackDelegate(ChangeCharacterRedness, "skinRedness");
 							dcb.AddDnaCallbackDelegate(ChangeCharacterGreenness, "skinGreenness");
 							dcb.AddDnaCallbackDelegate(ChangeCharacterBlueness, "skinBlueness");
 				}

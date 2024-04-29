@@ -19,9 +19,9 @@ namespace SunsetSystems.Journal
         [SerializeField]
         private List<Quest> _trackedQuests = new();
         public List<Quest> ActiveQuests => _activeQuests.Values.ToList();
-        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Main)).ToList();
-        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Side)).ToList();
-        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest.Category.Equals(QuestCategory.Case)).ToList();
+        public List<Quest> MainQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest?.Category.Equals(QuestCategory.Main) ?? false).ToList();
+        public List<Quest> SideQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest?.Category.Equals(QuestCategory.Side) ?? false).ToList();
+        public List<Quest> CaseQuests => _activeQuests.Select(kv => kv.Value).Where(quest => quest?.Category.Equals(QuestCategory.Case) ?? false).ToList();
         public List<Quest> CompletedQuests => _completedQuests.Values.ToList();
 
         public string DataKey => DataKeyConstants.QUEST_JOURNAL_DATA_KEY;
@@ -141,6 +141,12 @@ namespace SunsetSystems.Journal
         private void BeginQuestDebug(Quest quest)
         {
             BeginQuest(quest.ID);
+        }
+
+        [Button]
+        public bool BeginQuest(Quest quest)
+        {
+            return BeginQuest(quest.ID);
         }
 
         public bool BeginQuest(string questID)
@@ -279,9 +285,13 @@ namespace SunsetSystems.Journal
             saveData.TrackedQuests.ForEach(questID => { QuestDatabase.Instance.TryGetQuest(questID, out Quest quest); _trackedQuests.Add(quest); });
             foreach (string key in _activeQuests.Keys)
             {
-                foreach (Objective objective in _currentObjectives[key].Values)
+                if (_currentObjectives.TryGetValue(key, out var objectives))
                 {
-                    _activeQuests[key].ForceSubscribeToObjective(objective);
+                    foreach (Objective objective in objectives.Values)
+                    {
+                        if (_activeQuests.TryGetValue(key, out var quest))
+                            quest.ForceSubscribeToObjective(objective);
+                    }
                 }
             }
             OnObjectiveDataInjected?.Invoke(injectedObjectives);

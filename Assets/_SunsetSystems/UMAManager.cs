@@ -1,7 +1,11 @@
+using System.Collections;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Database;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -25,22 +29,39 @@ namespace SunsetSystems.Core.UMA
         [SerializeField, ReadOnly]
         private DynamicCharacterAvatar _umaAvatar;
 
+        private IEnumerator _updateOnNextFrame;
+
         private void Start()
         {
             if (_umaAvatar == null)
                 PrepareUMA();
             LoadDefaultWardrobeCollection(BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
             _umaAvatar.BuildCharacter(true);
         }
 
-        public void BuildUMAFromTemplate(ICreatureTemplate template)
+        private IEnumerator RebuildUmaOnNextFrame()
+        {
+            yield return null;
+            _umaAvatar.BuildCharacter(true);
+            _updateOnNextFrame = null;
+        }
+
+        public async void BuildUMAFromTemplate(ICreatureTemplate template)
         {
             if (_umaAvatar == null)
                 PrepareUMA();
+            await new WaitForUpdate();
+            bool umaFinished = false;
+            _umaAvatar.CharacterCreated.AddListener(OnUMADone);
+            _umaAvatar.CharacterUpdated.AddListener(OnUMADone);
+            await new WaitUntil(() => umaFinished);
+            _umaAvatar.CharacterCreated.RemoveListener(OnUMADone);
+            _umaAvatar.CharacterUpdated.RemoveListener(OnUMADone);
             SetBodyType(template.BodyType);
-            LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
+            var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
+            if (wardrobeDB != null)
+                LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            await new WaitForUpdate();
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
@@ -48,6 +69,10 @@ namespace SunsetSystems.Core.UMA
                 UnityEditor.EditorUtility.SetDirty(this);
             }
 #endif
+            void OnUMADone(UMAData data)
+            {
+                umaFinished = true;
+            }
         }
 
         [Button]
@@ -57,8 +82,12 @@ namespace SunsetSystems.Core.UMA
             if (_umaAvatar == null)
             {
                 _umaAvatar = _umaRoot.AddComponent<DynamicCharacterAvatar>();
+#if UNITY_EDITOR
+                _umaAvatar.editorTimeGeneration = false;
+#endif
                 _umaAvatar.RacePreset = _umaConfig.BodyRaceData[BodyType.Female].raceName;
                 _umaAvatar.RecreateAnimatorOnRaceChange = false;
+                _umaAvatar.KeepAnimatorController = true;
                 _umaAvatar.predefinedDNA = new();
                 DynamicCharacterAvatar.RaceAnimator maleAnimator = new()
                 {
@@ -78,8 +107,6 @@ namespace SunsetSystems.Core.UMA
             _umaAvatar.WardrobeRecipes.Clear();
             if (BaseLookWardrobeCollection != null)
                 _umaAvatar.LoadWardrobeCollection(BaseLookWardrobeCollection);
-            _umaAvatar.UpdatePending();
-            _umaAvatar.BuildCharacter(true);
         }
 
         private void SetBodyType(BodyType bodyType)
@@ -97,23 +124,45 @@ namespace SunsetSystems.Core.UMA
             _umaAvatar.LoadWardrobeCollection(BaseLookWardrobeCollection);
         }
 
-        public void OnItemEquipped(IEquipableItem item)
+        public async void OnItemEquipped(IEquipableItem item)
         {
-            if (item is IWearable wearable)
+            if (item is IWearable wearable && _umaAvatar != null)
             {
-                _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
-                _umaAvatar.UpdatePending();
-                _umaAvatar.BuildCharacter(true);
+                if (wearable.WearableWardrobe != null)
+                {
+                    _umaAvatar.LoadWardrobeCollection(wearable.WearableWardrobe);
+                    if (_umaAvatar.umaData == null)
+                        await new WaitUntil(() => _umaAvatar.umaData != null);
+                    _umaAvatar.umaData.Dirty();
+                    if (_updateOnNextFrame == null)
+                    {
+                        _updateOnNextFrame = RebuildUmaOnNextFrame();
+                        _ = StartCoroutine(_updateOnNextFrame);
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"Item {wearable} of Creature {_umaRoot.transform.parent.name} has a null WardrobeCollection reference!");
+                }
             }
         }
 
-        public void OnItemUnequipped(IEquipableItem item)
+        public async void OnItemUnequipped(IEquipableItem item)
         {
             if (item is IWearable wearable)
             {
-                _umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
-                _umaAvatar.UpdatePending();
-                _umaAvatar.BuildCharacter(true);
+                if (wearable.WearableWardrobe != null)
+                {
+                    _umaAvatar.UnloadWardrobeCollection(wearable.WearableWardrobe.name);
+                    if (_umaAvatar.umaData == null)
+                        await new WaitUntil(() => _umaAvatar.umaData != null);
+                    _umaAvatar.umaData.Dirty();
+                    if (_updateOnNextFrame == null)
+                    {
+                        _updateOnNextFrame = RebuildUmaOnNextFrame();
+                        _ = StartCoroutine(_updateOnNextFrame);
+                    }
+                }
             }
         }
     }

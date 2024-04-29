@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -24,6 +23,7 @@ namespace UMA.Controls
 			Type,
 			IsResource,
 			IsAddressable,
+            Total,
 			Group,
 			Labels,
 			Ignore,
@@ -54,20 +54,29 @@ namespace UMA.Controls
 		public static void TreeToList(TreeViewItem root, IList<TreeViewItem> result)
 		{
 			if (root == null)
-				throw new System.NullReferenceException("root");
-			if (result == null)
-				throw new System.NullReferenceException("result");
+            {
+                throw new System.NullReferenceException("root");
+            }
 
-			result.Clear();
+            if (result == null)
+            {
+                throw new System.NullReferenceException("result");
+            }
+
+            result.Clear();
 
 			if (root.children == null)
-				return;
+            {
+                return;
+            }
 
-			Stack<TreeViewItem> stack = new Stack<TreeViewItem>();
+            Stack<TreeViewItem> stack = new Stack<TreeViewItem>();
 			for (int i = root.children.Count - 1; i >= 0; i--)
-				stack.Push(root.children[i]);
+            {
+                stack.Push(root.children[i]);
+            }
 
-			while (stack.Count > 0)
+            while (stack.Count > 0)
 			{
 				TreeViewItem current = stack.Pop();
 				result.Add(current);
@@ -102,9 +111,11 @@ namespace UMA.Controls
 		void SortIfNeeded(TreeViewItem root, IList<TreeViewItem> rows)
 		{
 			if (rows.Count <= 1)
-				return;
+            {
+                return;
+            }
 
-			if (multiColumnHeader.sortedColumnIndex == -1)
+            if (multiColumnHeader.sortedColumnIndex == -1)
 			{
 				return; // No column to sort for (just use the order the data are in)
 			}
@@ -120,9 +131,11 @@ namespace UMA.Controls
 			var sortedColumns = multiColumnHeader.state.sortedColumns;
 
 			if (sortedColumns.Length == 0)
-				return;
+            {
+                return;
+            }
 
-			var myTypes = rootItem.children.Cast<TreeViewItem<AssetTreeElement>>();
+            var myTypes = rootItem.children.Cast<TreeViewItem<AssetTreeElement>>();
 			var orderedQuery = InitialOrder(myTypes, sortedColumns);
 			for (int i = 1; i < sortedColumns.Length; i++)
 			{
@@ -247,6 +260,12 @@ namespace UMA.Controls
 				}
 				break;
 
+                case AssetColumns.Total:
+                    {
+                        GUI.Label(cellRect, ate.totalCount.ToString());
+                    }
+                    break;
+
 				case AssetColumns.Group:
 					break;
 
@@ -326,7 +345,9 @@ namespace UMA.Controls
 					{
 						ai.IsAlwaysLoaded = clicked;
 						UMAAssetIndexer.Instance.ForceSave();
-					}
+						owningWindow.RecountTypes();
+						owningWindow.Repaint();
+                    }
 				}
 				break;
 
@@ -339,6 +360,9 @@ namespace UMA.Controls
                         {
                             ai.Ignore = clicked;
                             UMAAssetIndexer.Instance.ForceSave();
+                            owningWindow.RecountTypes();
+                            owningWindow.Repaint();
+
                         }
                     }
                     break;
@@ -374,6 +398,13 @@ namespace UMA.Controls
 					EditorGUI.Toggle(cellRect, ai.IsAddressable);
 				}
 				break;
+
+                case AssetColumns.Total:
+                    {
+                        cellRect.x += kCheckboxOffset;
+                        cellRect.width -= kCheckboxOffset;
+                    }
+                    break;
 
 				case AssetColumns.Group:
 					EditorGUI.LabelField(cellRect, ai.AddressableGroup);
@@ -615,6 +646,19 @@ namespace UMA.Controls
 
 				new MultiColumnHeaderState.Column
 				{
+                    headerContent = new GUIContent("Tot", "Just the count"),
+                    headerTextAlignment = TextAlignment.Center,
+                    sortedAscending = true,
+                    sortingArrowAlignment = TextAlignment.Left,
+                    width = 40,
+                    minWidth = 40,
+                    maxWidth = 40,
+                    autoResize = true
+                },
+
+
+                new MultiColumnHeaderState.Column
+				{
 					headerContent = new GUIContent("Group", "Addressable Group this is in (asset bundle)"),
 					headerTextAlignment = TextAlignment.Left,
 					sortedAscending = true,
@@ -637,7 +681,7 @@ namespace UMA.Controls
 				},
 				new MultiColumnHeaderState.Column
 				{
-					headerContent = new GUIContent("Keep", "This is always loaded"),
+                    headerContent = new GUIContent("Ignore", "This is not included in addressables or resources"),
 					headerTextAlignment = TextAlignment.Center,
 					sortedAscending = true,
 					sortingArrowAlignment = TextAlignment.Left,
@@ -649,7 +693,7 @@ namespace UMA.Controls
 				},
                 new MultiColumnHeaderState.Column
                 {
-                    headerContent = new GUIContent("Ignore", "This is not included in addressables or resources"),
+					headerContent = new GUIContent("Keep", "This is always loaded"),
                     headerTextAlignment = TextAlignment.Center,
                     sortedAscending = true,
                     sortingArrowAlignment = TextAlignment.Left,

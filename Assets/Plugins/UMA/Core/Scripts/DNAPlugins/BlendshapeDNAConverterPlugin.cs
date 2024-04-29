@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UMA.PoseTools;
 
 namespace UMA
 {
-	[System.Serializable]
+    [System.Serializable]
 	public class BlendshapeDNAConverterPlugin : DynamicDNAPlugin
 	{
 		#region FIELDS
@@ -55,9 +53,11 @@ namespace UMA
 					for (int ci = 0; ci < _blendshapeDNAConverters[i].UsedDNANames.Count; ci++)
 					{
 						if (!dict.ContainsKey(_blendshapeDNAConverters[i].UsedDNANames[ci]))
-							dict.Add(_blendshapeDNAConverters[i].UsedDNANames[ci], new List<int>());
+                        {
+                            dict.Add(_blendshapeDNAConverters[i].UsedDNANames[ci], new List<int>());
+                        }
 
-						dict[_blendshapeDNAConverters[i].UsedDNANames[ci]].Add(i);
+                        dict[_blendshapeDNAConverters[i].UsedDNANames[ci]].Add(i);
 					}
 				}
 				return dict;
@@ -212,16 +212,20 @@ namespace UMA
 				this._blendshapeToApply = blendshapeToApply;
 				this._startingShapeWeight = startingShapeWeight;
 				if(modifyingDnas != null)
-					this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
-			}
+                {
+                    this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
+                }
+            }
 
 			public BlendshapeDNAConverter(string shapeToApply, float startingShapeWeight = 0f, List<DNAEvaluator> modifyingDnas = null)
 			{
 				this._blendshapeToApply = shapeToApply;
 				this._startingShapeWeight = startingShapeWeight;
 				if(modifyingDnas != null)
-					this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
-			}
+                {
+                    this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
+                }
+            }
 
 			public BlendshapeDNAConverter(BlendshapeDNAConverter other)
 			{

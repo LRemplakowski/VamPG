@@ -31,8 +31,6 @@ namespace SunsetSystems.Combat.UI
 
         private List<Selectable> childrenButtons = new();
 
-        private AssetReferenceSprite spriteReference;
-
         private void OnEnable()
         {
             currentActorPortrait.color = Color.clear;
@@ -54,7 +52,7 @@ namespace SunsetSystems.Combat.UI
             childrenButtons.ForEach(button => button.interactable = combatant.Faction is Faction.PlayerControlled);
             if (combatant.Faction == Faction.PlayerControlled)
             {
-                _ = UpdateCurrentActorPortrait(combatant);
+                UpdateCurrentActorPortrait(combatant);
                 currentActorHealth.UpdateHealthDisplay();
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
@@ -74,19 +72,11 @@ namespace SunsetSystems.Combat.UI
             bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
         }
 
-        private async Task UpdateCurrentActorPortrait(ICombatant actor)
+        private void UpdateCurrentActorPortrait(ICombatant actor)
         {
-            AssetReferenceSprite newSpriteRef = actor.References.CreatureData.PortraitAssetRef;
-            if (newSpriteRef != null)
-            {
-                Sprite sprite = await AddressableManager.Instance.LoadAssetAsync(newSpriteRef);
-                currentActorPortrait.sprite = sprite;
-                if (currentActorPortrait.color == Color.clear)
-                    StartCoroutine(ShowPortrait());
-                //if (spriteReference != null)
-                //    AddressableManager.Instance.ReleaseAsset(spriteReference);
-                spriteReference = newSpriteRef;
-            }
+            currentActorPortrait.sprite = actor.References.CreatureData.Portrait;
+            if (currentActorPortrait.color == Color.clear)
+                StartCoroutine(ShowPortrait());
         }
 
         private IEnumerator ShowPortrait()

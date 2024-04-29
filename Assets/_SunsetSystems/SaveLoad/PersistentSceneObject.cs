@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine;
 namespace SunsetSystems.Persistence
 {
     [RequireComponent(typeof(UniqueId))]
-    public class PersistentSceneObject : MonoBehaviour, IPersistentObject
+    public class PersistentSceneObject : SerializedMonoBehaviour, IPersistentObject
     {
         public string PersistenceID => _unique.Id;
         public string GameObjectName => gameObject.name;
@@ -14,7 +16,7 @@ namespace SunsetSystems.Persistence
         [SerializeField, ReadOnly]
         private UniqueId _unique;
         
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private List<IPersistentComponent> _persistentComponents = new();
         public List<IPersistentComponent> PersistentComponents => _persistentComponents;
 
@@ -22,6 +24,8 @@ namespace SunsetSystems.Persistence
         {
             if (_unique == null)
                 _unique = GetComponent<UniqueId>();
+            _persistentComponents.AddRange(GetComponents<IPersistentComponent>().AsEnumerable());
+            _persistentComponents = _persistentComponents.Distinct().ToList();
         }
 
         private void Start()
@@ -66,7 +70,8 @@ namespace SunsetSystems.Persistence
             }
         }
 
-        protected class PersistentObjectData
+        [Serializable]
+        public class PersistentObjectData
         {
             public bool ActiveState;
             public Dictionary<string, object> PersistentComponentData;

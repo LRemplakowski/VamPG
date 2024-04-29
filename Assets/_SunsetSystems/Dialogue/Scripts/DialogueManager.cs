@@ -48,14 +48,14 @@ namespace SunsetSystems.Dialogue
             DialogueHelper.InitializePersistentVariableStorage(_dialogueRunner.VariableStorage as PersistentVariableStorage);
         }
 
-        public static void RegisterView(DialogueViewBase view)
+        public void RegisterView(DialogueViewBase view)
         {
             List<DialogueViewBase> views = Instance._dialogueRunner.dialogueViews.ToList();
             views.Add(view);
-            Instance._dialogueRunner.SetDialogueViews(views.ToArray());
+            Instance._dialogueRunner.SetDialogueViews(views.Distinct().ToArray());
         }
 
-        public static void UnregisterView(DialogueViewBase view)
+        public void UnregisterView(DialogueViewBase view)
         {
             List<DialogueViewBase> views = Instance?._dialogueRunner.dialogueViews.ToList();
             views?.Remove(view);

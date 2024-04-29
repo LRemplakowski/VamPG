@@ -181,13 +181,13 @@ title: poeBookExamine
 ===
 title: poeBookExamineQuestions
 ---
--> [nomarkup][Try to recall the code.](Intelligence+Academics)[/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
+-> [nomarkup][Try to recall the code.] (Intelligence+Academics)[/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
     <<jump poeExamineAcademicsRoll>>
--> [nomarkup][Try to break the code by yourself.](Intelligence+Investigation)[/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
+-> [nomarkup][Try to break the code by yourself.] (Intelligence+Investigation)[/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
     <<jump poeExamineInvestigationRoll>>
--> [nomarkup][Look for the missing pages.](Wits+Awareness)[/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>> #line:082ed56 
+-> [nomarkup][Look for the missing pages.] (Wits+Awareness)[/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>> #line:082ed56 
     <<jump poeExamineAwarenessRoll>>
--> [nomarkup][Look for the missing pages behind the TV.](Strength+Athletics)[/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>> #line:08d0838 
+-> [nomarkup][Look for the missing pages behind the TV.] (Strength+Athletics)[/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>> #line:08d0838 
     <<jump poeExamineAthleticsRoll>>
 -> [nomarkup][Look at the code again.][/nomarkup] #line:00656fb 
     <<jump poeBookExamine>>
@@ -230,7 +230,7 @@ A beeline from the tree, through the shot fifty feet out.[/nomarkup] #line:08b5f
 ===
 title: poeExamineFailure
 ---
-[nomarkup][It’s no use. You could spend the entire evening trying to break this code, but all you would gain is a headache… or maybe a lack of it, since by the next night, you wouldn’t have any head to speak of…][/nomarkup] #failure #line:047d4a2 
+[nomarkup][It’s no use. You could spend the entire evening trying to break this code, but all you would gain is a headache... or maybe a lack of it, since by the next night, you wouldn’t have any head to speak of...][/nomarkup] #failure #line:047d4a2 
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineInvestigationRoll
@@ -244,7 +244,7 @@ title: poeExamineInvestigationRoll
 title: poeExamineInvestigationRollSuccess
 ---
 <<set $goldBugCombination to true>>
-[nomarkup][Alright, deep breath. In your time as a PI, you’ve had to deal with this kind of stuff more than once. This one doesn’t look to be too difficult. You would guess it’s a simple substitution cipher, which means that all you need to do is to recreate the decryption key using logic and common linguistic patterns…][/nomarkup] #success #line:0b81818 
+[nomarkup][Alright, deep breath. In your time as a PI, you’ve had to deal with this kind of stuff more than once. This one doesn’t look to be too difficult. You would guess it’s a simple substitution cipher, which means that all you need to do is to recreate the decryption key using logic and common linguistic patterns...][/nomarkup] #success #line:0b81818 
 <<jump poeBookExamineMentalSuccess>>
 ===
 title: poeExamineAwarenessRoll
@@ -257,9 +257,9 @@ title: poeExamineAwarenessRoll
 ===
 title:poeExamineAwarenessRollSuccess
 ---
-[nomarkup][You don’t have time to play around with some stupid riddle from a story that’s nearly 100 years old. There has to be a simpler solution than breaking the code. It’s from a book, after all - and a well-known one, at that…][/nomarkup] #success #line:0fc704f
+[nomarkup][You don’t have time to play around with some stupid riddle from a story that’s nearly 100 years old. There has to be a simpler solution than breaking the code. It’s from a book, after all - and a well-known one, at that...][/nomarkup] #success #line:0fc704f
 [nomarkup][You look around the shelves. Then up. As you glance toward the top of the shelf, you see a piece of paper tucked under a pile of other books, protruding just off the edge.][/nomarkup]
--> [nomarkup][Try to reach it.](Dexterity+Athletics)[/nomarkup] #line:075d965 
+-> [nomarkup][Try to reach it.] (Dexterity+Athletics)[/nomarkup] #line:075d965 
     <<jump poeMissingPagesDexterityRoll>>
 ===
 title: poeMissingPagesDexterityRoll

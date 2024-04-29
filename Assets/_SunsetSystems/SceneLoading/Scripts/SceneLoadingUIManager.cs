@@ -9,6 +9,8 @@ namespace SunsetSystems.Core.SceneLoading.UI
         private LoadingScreenController loadingScreen;
         [SerializeField]
         private FadeScreenAnimator fadeScreen;
+        [SerializeField]
+        private CanvasGroup _canvasGroup;
 
         public static SceneLoadingUIManager Instance { get; private set; }
 
@@ -33,9 +35,19 @@ namespace SunsetSystems.Core.SceneLoading.UI
                 fadeScreen = GetComponentInChildren<FadeScreenAnimator>();
         }
 
-        public async Task DoFadeOutAsync(float fadeOutTime) => await fadeScreen.FadeOut(fadeOutTime);
+        public async Task DoFadeOutAsync(float fadeOutTime)
+        {
+            _canvasGroup.blocksRaycasts = true;
+            _canvasGroup.interactable = true;
+            await fadeScreen.FadeOut(fadeOutTime);
+        }
 
-        public async Task DoFadeInAsync(float fadeInTime) => await fadeScreen.FadeIn(fadeInTime);
+        public async Task DoFadeInAsync(float fadeInTime)
+        {
+            _canvasGroup.blocksRaycasts = false;
+            _canvasGroup.interactable = false;
+            await fadeScreen.FadeIn(fadeInTime);
+        }
 
         public void UpadteLoadingBar(float value) => loadingScreen.SetLoadingProgress(value);
 

@@ -7,7 +7,7 @@ position: 1,-230
 <<declare $doeEyedRescued to 0>>
 <<declare $carryingNPC to 0>>
 <<declare $ranForIt to 0>>
-[nomarkup][Back downstairs, explosions of feathers, wood chips and couch padding can be seen floating through the air as the gunfire continues - the hail of bullets tearing through the scenery. The club's patrons cower behind makeshift furniture barricades, couches and under tables - doing anything they can to shelter themselves. You're going to have to get through all of that, if you want to escape, but you're safe where you are, for now…][/nomarkup] #line:035bc8f 
+[nomarkup][Back downstairs, explosions of feathers, wood chips and couch padding can be seen floating through the air as the gunfire continues - the hail of bullets tearing through the scenery. The club's patrons cower behind makeshift furniture barricades, couches and under tables - doing anything they can to shelter themselves. You're going to have to get through all of that, if you want to escape, but you're safe where you are, for now...][/nomarkup] #line:035bc8f 
 -> {$pcName}: Anyone wanna tell me who these people are? #line:06e5ca8 
 {$kieran}: All we know is that they have guns, and they're shooting at us. The only thing that matters right now is survival. #line:004aeaa 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -25,7 +25,7 @@ title: boom
 -> {$pcName}: [nomarkup][Your eyes are still wide in shock, but you do your best to hold it together.][/nomarkup] Right. #line:0912ba7 
 [nomarkup][A few patrons who run towards the exits barely make it a few steps before they are filled with lead - mown down in a mist of blood.][/nomarkup] #line:0c644e5 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: [nomarkup][She turns back to look at the two of you.][/nomarkup] Y'know, I really don't think they're going to be receptive to cookie sales from you Girl Scouts gossiping back there… What's the plan? #line:0566430 
+    {$anastasia}: [nomarkup][She turns back to look at the two of you.][/nomarkup] Y'know, I really don't think they're going to be receptive to cookie sales from you Girl Scouts gossiping back there... What's the plan? #line:0566430 
     -> {$pcName}: How many are there? #line:00aa2aa 
     {$anastasia}: Dunno. They're moving too fast and I can't — [nomarkup][She responds, but shuts up quickly mid-sentence.][/nomarkup] #line:04716bd 
 <<endif>>
@@ -35,7 +35,7 @@ title: boom
     -> {$pcName}: How would he know that? #line:0d4555b 
     [nomarkup][Both of your companions hold up their hands to shush you.][/nomarkup] #line:09de9db 
     <<if Roll ("Wits","Insight")>=4>>
-        [nomarkup][Oddly, despite the fact that both of them were arguing just minutes ago, they seem to be on the same page in this dire circumstance - both using their powers to gather information and possibly gain an edge over the gunmen assaulting the club they're all trapped inside. This is a synergy that they'd never show unless their next moves could be their last… You just hope you won't have to try and get them to admit they make a good team, in the aftermath.][/nomarkup] #line:05737d7 
+        [nomarkup][Oddly, despite the fact that both of them were arguing just minutes ago, they seem to be on the same page in this dire circumstance - both using their powers to gather information and possibly gain an edge over the gunmen assaulting the club they're all trapped inside. This is a synergy that they'd never show unless their next moves could be their last... You just hope you won't have to try and get them to admit they make a good team, in the aftermath.][/nomarkup] #line:05737d7 
     <<endif>>
     {$kieran}: Semiautomatic. We'll have just enough time to make a run for it, once they stop to reload. #line:00ed14a 
 <<endif>>
@@ -46,7 +46,7 @@ title: boom
     {$anastasia}: Hold, Desiree. Hold. [nomarkup][She reaches out and places a hand on your shoulder, pressing down. The force of it grounding - if a little painful. After a moment, her eyes flick over to Kieran. He nods, and she removes her hand swiftly from your shoulder.][/nomarkup] #line:07dd664 
     {$anastasia}: Now! #line:0420c46 
 <<endif>>
-[nomarkup][There's a crackle of sound from the TV as it's knocked over, and music pollutes the air backing the flurry of random gunshots. It's a war zone. Seems like almost everyone you've met today is trying to kill you… no matter. You'll be out of this, soon enough.][/nomarkup] #line:00505e5 
+[nomarkup][There's a crackle of sound from the TV as it's knocked over, and music pollutes the air backing the flurry of random gunshots. It's a war zone. Seems like almost everyone you've met today is trying to kill you... no matter. You'll be out of this, soon enough.][/nomarkup] #line:00505e5 
 {$beast}: Time to escape. We can't die here! #line:0c80c1d 
 [nomarkup][The front entrance is blocked.][/nomarkup] #line:049bfa1 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>

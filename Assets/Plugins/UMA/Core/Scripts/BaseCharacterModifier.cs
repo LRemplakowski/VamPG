@@ -1,19 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace UMA
 {
-	/// <summary>
-	/// Deals with base modifications to the character, user can enable scale, height, radius, mass and bounds modifications.
-	/// </summary>
-	//This replaces the fields and methods in DynamicDNAConverterBehaviour pre-DynamicDNAPlugins. 
-	//The available modifications are the same but each kind can be enabled or disabled for more granular control
-	//The method for getting the character height is now based solely on the resulting bone structure of the mechanim bones (for humanoid characters)
-	//so it no longer assumes certain dna or bones are available
-	//the adjustment numbers should now be considered to be more like 'padding' since none of them (apart from 'Head Ratio') are actually required in order to perform any calculations
-	[System.Serializable]
+    /// <summary>
+    /// Deals with base modifications to the character, user can enable scale, height, radius, mass and bounds modifications.
+    /// </summary>
+    //This replaces the fields and methods in DynamicDNAConverterBehaviour pre-DynamicDNAPlugins. 
+    //The available modifications are the same but each kind can be enabled or disabled for more granular control
+    //The method for getting the character height is now based solely on the resulting bone structure of the mechanim bones (for humanoid characters)
+    //so it no longer assumes certain dna or bones are available
+    //the adjustment numbers should now be considered to be more like 'padding' since none of them (apart from 'Head Ratio') are actually required in order to perform any calculations
+    [System.Serializable]
 	public class BaseCharacterModifier
 	{
 		#region FIELDS
@@ -267,8 +266,11 @@ namespace UMA
 			{
 				var baseRenderer = GetBaseRenderer(umaData);
 				if (baseRenderer == null)
-					return;
-				var newBounds = DoBoundsModifications(baseRenderer, umaData);
+                {
+                    return;
+                }
+
+                var newBounds = DoBoundsModifications(baseRenderer, umaData);
 				UpdateCharacterHeightMassRadius(umaData, skeleton, newBounds);
 			}
 		}
@@ -312,10 +314,12 @@ namespace UMA
 
 				//if there is a collider, disable it before we move anything
 				if (umaCollider)
-					umaCollider.enabled = false;
+                {
+                    umaCollider.enabled = false;
+                }
 
-				//Move UMA into the root, we do this because it might be inside a scaled object
-				umaTransform.SetParent(null, false);
+                //Move UMA into the root, we do this because it might be inside a scaled object
+                umaTransform.SetParent(null, false);
 				umaTransform.localRotation = Quaternion.identity;
 				umaTransform.localPosition = Vector3.zero;
 
@@ -363,8 +367,10 @@ namespace UMA
 
 				//set any collider to its original setting
 				if (umaCollider)
-					umaCollider.enabled = prevColliderEnabled;
-			}
+                {
+                    umaCollider.enabled = prevColliderEnabled;
+                }
+            }
 			targetRenderer.localBounds = newBounds;
 			targetRenderer.rootBone = saveRoot;
 			return newBounds;
@@ -440,9 +446,11 @@ namespace UMA
 
 					//if there is a collider, disable it before we move anything
 					if (umaCollider)
-						umaCollider.enabled = false;
+                    {
+                        umaCollider.enabled = false;
+                    }
 
-					umaTransform.SetParent(null, false);
+                    umaTransform.SetParent(null, false);
 					umaTransform.localRotation = Quaternion.identity;
 					umaTransform.localPosition = Vector3.zero;
 
@@ -468,13 +476,19 @@ namespace UMA
 							var eyeHeight = 0f;
 							//if we have both eyes get the average
 							if (skeleton.BoneExists(_mechanimBoneDict["LeftEye"]) && skeleton.BoneExists(_mechanimBoneDict["RightEye"]))
-								eyeHeight = (skeleton.GetRelativePosition(_mechanimBoneDict["LeftEye"]).y + skeleton.GetRelativePosition(_mechanimBoneDict["RightEye"]).y) / 2f;
-							else if (skeleton.BoneExists(_mechanimBoneDict["LeftEye"]))
-								eyeHeight = skeleton.GetRelativePosition(_mechanimBoneDict["LeftEye"]).y;
-							else if (skeleton.BoneExists(_mechanimBoneDict["RightEye"]))
-								eyeHeight = skeleton.GetRelativePosition(_mechanimBoneDict["RightEye"]).y;
+                            {
+                                eyeHeight = (skeleton.GetRelativePosition(_mechanimBoneDict["LeftEye"]).y + skeleton.GetRelativePosition(_mechanimBoneDict["RightEye"]).y) / 2f;
+                            }
+                            else if (skeleton.BoneExists(_mechanimBoneDict["LeftEye"]))
+                            {
+                                eyeHeight = skeleton.GetRelativePosition(_mechanimBoneDict["LeftEye"]).y;
+                            }
+                            else if (skeleton.BoneExists(_mechanimBoneDict["RightEye"]))
+                            {
+                                eyeHeight = skeleton.GetRelativePosition(_mechanimBoneDict["RightEye"]).y;
+                            }
 
-							headHeight = ((eyeHeight - chinHeight) * 2f);
+                            headHeight = ((eyeHeight - chinHeight) * 2f);
 							//because we do this the actual headRatio doesnt *feel* right
 							//i.e. with toon the head ratio is more like 3, but the correct value for calcs is 6.5
 							//I'd prefer it if these calcs made 3 deliver the correct result
@@ -523,8 +537,10 @@ namespace UMA
 
 					//set any collider to its original setting
 					if (umaCollider)
-						umaCollider.enabled = prevColliderEnabled;
-				}
+                    {
+                        umaCollider.enabled = prevColliderEnabled;
+                    }
+                }
 			}
 			else //if its a car or a castle or whatever use the bounds
 			{
@@ -535,9 +551,11 @@ namespace UMA
 			//get the scale of the overall scale bone if set
 			float overallScale = 1f;
 			if (skeleton.GetBoneTransform(_scaleBoneHash) != null)
-				overallScale = (skeleton.GetScale(_scaleBoneHash)).x;
+            {
+                overallScale = (skeleton.GetScale(_scaleBoneHash)).x;
+            }
 
-			if (_adjustHeight)
+            if (_adjustHeight)
 			{
 				//characterHeight is what we calculated plus any radius y the user has added
 				umaData.characterHeight = charHeight * (1 + (_radiusAdjustY * 2));

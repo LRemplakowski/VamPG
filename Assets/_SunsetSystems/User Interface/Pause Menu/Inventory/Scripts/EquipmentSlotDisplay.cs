@@ -18,9 +18,7 @@ namespace SunsetSystems.Equipment.UI
         [SerializeField]
         private Image _itemIcon;
 
-        private AssetReferenceSprite lastLoadedSprite;
-
-        public async void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
+        public void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
         {
             //if (lastLoadedSprite != null)
             //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
@@ -28,10 +26,7 @@ namespace SunsetSystems.Equipment.UI
             IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
             {
-                lastLoadedSprite = itemInSlot.Icon;
-                Task<Sprite> iconTask = AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
-                await iconTask;
-                _itemIcon.sprite = iconTask.Result;
+                _itemIcon.sprite = itemInSlot.Icon;
                 _itemIcon.gameObject.SetActive(true);
             }
             else

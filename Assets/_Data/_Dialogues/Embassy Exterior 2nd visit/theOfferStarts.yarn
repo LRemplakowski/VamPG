@@ -13,7 +13,12 @@ tags:
 <<endif>>
 -> {$pcName}: Maybe buy a girl a drink first? #line:038b01f 
     <<jump buyMeADrink>>
--> {$pcName}: I'll get a Blood Mary. #line:012043e 
+-> {$pcName}: I'll get a Blood Mary. #line:012043e
+    <<if Roll("Wits","Craft") >=(3-$rollModifier)>>
+        <<set $drinkSuccess to true>>
+        [nomarkup][You watch the bartender as he pours your drink and notice that it takes him a little longer than it usually would to pour. It actually looks like he's giving you a double.][/nomarkup] #line:0b9def3 
+    <<endif>>
+    -> {$pcName}: You're a regular here? #line:0ac9369 
     <<jump iBuyYouADrink>>
 ===
 title: buyMeADrink
@@ -23,11 +28,6 @@ title: buyMeADrink
 ===
 title: iBuyYouADrink
 ---
-<<if Roll("Wits","Craft") >=(3-$rollModifier)>>
-    <<set $drinkSuccess to true>>
-    [nomarkup][You watch the bartender as he pours your drink and notice that it takes him a little longer than it usually would to pour. It actually looks like he's giving you a double.][/nomarkup] #line:0b9def3 
-<<endif>>
--> {$pcName}: You're a regular here? #line:0ac9369 
 {$diana}: Everyone here knows the Duchess gets the good stuff. Only the best for me and my girl. [She turns to the bartender.] Put it on my tab. #line:0fb9533 
 <<jump havingADrink>>
 ===
@@ -60,19 +60,20 @@ title: pcUnamused
 ===
 title: dianaTalkCont
 ---
+[nomarkup][Woman beside you takes a sip of her drink.][/nomarkup]
 -> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if visited("introduction") ==false>> #line:087ae66 
     <<jump introductions>>
--> {$pcName}: So… [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
+-> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if visited("flirt") ==false>> #line:0e99543 
     <<jump flirt>>
 ===
 title: introductions
 ---
 {$diana}: Diana Foster, the Dutchess if you're familiar with me by reputation? #line:0957c37 
--> [nomarkup][Try to recall where you heard that.](Wits + Streetwise)[/nomarkup] #line:02686b9 
+-> [nomarkup][Try to recall where you heard that.] (Wits + Streetwise)[/nomarkup] #line:02686b9 
 <<if Roll("Wits","Streetwise") >=2>>
     [nomarkup][You remember her, she's got a bit of a reputation as a wild card but she's street savvy and you're in her club. Plus she's clearly got good taste, she's here with you.][/nomarkup] #success #line:075c462 
 <<else>>
-    [nomarkup][Probably not your scene but you remember ‘The Dutchess' as a club owner on the strip.][/nomarkup] #failure #line:072d48f 
+    [nomarkup][Probably not your scene but you remember 'The Dutchess' as a club owner on the strip.][/nomarkup] #failure #line:072d48f 
 <<endif>>
 -> {$pcName}: I can't exactly say you'd know me by - #line:039ae4e 
 {$diana}: Desiree Bardot. You did a piece on a competitor of mine, thank you for that. Beautiful work your takedown of the Golden Lion, there's something to be said about someone trying to root out corruption in Las Vegas. It's a sisyphean task love, but I'm glad to see someone do it. [nomarkup][She salutes you with her drink.][/nomarkup] #line:0851fb7 
@@ -84,7 +85,7 @@ title: introductions
 -> {$pcName}: You have no idea how good that is to hear. I feel like I've been catching nothing but losses ever since. Sometimes I wonder if it was even worth it at all. #line:08b0bcb 
 {$diana}: [nomarkup][She winks at you.][/nomarkup] Babes I know a little something about how it feels to have good work go unrecognized. I'm not sure how much you're willing to talk about but love, really - it opened my eyes to a lot of things going on in the world. Made me realize some things about myself. I'm betting you don't want to talk about it but you got a fan in me, Desiree. #line:0a698b5 
 {$diana}: [nomarkup][She runs her finger around the rim of her glass.][/nomarkup] Sometimes someone writes something that makes you take a long hard look at yourself and ask - is this it? Am I happy with the corruption, the lies, and the endless uphill battle to get something good? Is this all I have to look forward to? A couple hours with someone to make things feel less hopeless? #line:0f7dce6 
--> [nomarkup][Try not to show your feelings.](Composure + Subterfuge)[/nomarkup] #line:0c2092e 
+-> [nomarkup][Try not to show your feelings.] (Composure + Subterfuge)[/nomarkup] #line:0c2092e 
     <<if Roll("Composure","Subterfuge") >=3>>
         [nomarkup][You feel a hollow in your throat when she says that, unknowingly voicing the reason you came here to drink in the first place. You close your eyes and try to forget that feeling, your mind unbidden brings images of a notice from yet another job falling through, citing the retraction of your article as a contributing factor. Who trusts a journalist who lies?][/nomarkup] #success #line:0fbc558 
         -> [nomarkup][Take a sip of your drink.][/nomarkup] #line:00f1edd 
@@ -100,12 +101,12 @@ title: introductions
 ===
 title: flirt
 ---
-{$diana}: So… [nomarkup][She raises an eyebrow playfully at you.][/nomarkup] #line:032cbdf 
+{$diana}: So... [nomarkup][She raises an eyebrow playfully at you.][/nomarkup] #line:032cbdf 
 -> {$pcName}: Okay fair. How's your night been? #line:0fa9990 
 {$diana}: Better now that I've got you? #line:0e3dd98 
--> {$pcName}: Something something ‘fell from heaven'? #line:0c778b0 
+-> {$pcName}: Something something 'fell from heaven'? #line:0c778b0 
 {$diana}: Touche. I've actually been struggling a lot with my purpose here. Sometimes I think it's some big cosmic joke and I'm laughing but I don't know what I'm laughing at. #line:0664792 
--> {$pcName}: Sounds… familiar. I wish it didn't. [nomarkup][You look over to Diana who catches your stare and laughs it off. Clearly trying to turn it around, embarrassed.][/nomarkup] #line:0cb2098 
+-> {$pcName}: Sounds... familiar. I wish it didn't. [nomarkup][You look over to Diana who catches your stare and laughs it off. Clearly trying to turn it around, embarrassed.][/nomarkup] #line:0cb2098 
 {$diana}: God if there's a punchline tell me it's coming because I am not seeing the joke, love, I'm not seeing it at all. #line:0b281f4 
 <<if Roll("Resolve","Insight") >=(1+$numberOfDrinks)>>
     {$diana}: Fuck. [nomarkup][The guilt in her whisper is obvious. She stares at her own drink and her lips twitch, her eyes blinking a couple of times.][/nomarkup] #line:0ad4797 
@@ -116,13 +117,14 @@ title: flirt
     [nomarkup][This is what you came here for. You wash the pause away with some alcohol.][/nomarkup] #line:087b59b 
     <<set $numberOfDrinks to ($numberOfDrinks+1)>>
 <<endif>>
--> {$pcName}: Maybe it's time to make some changes huh? #line:0c388ac 
-{$diana}: Starting with…? #line:0187fec 
+-> {$pcName}: Maybe it's time to make some changes huh? #line:0c388ac  
 <<jump judgementOnDrinks>>
 ===
 title: judgementOnDrinks
 ---
+{$diana}: Starting with...? #line:0187fec
 <<if $numberOfDrinks <=1>>
+    -> {$pcName}: Me. [nomarkup][You blush and bite your lip, gesturing to yourself with both thumbs.][/nomarkup] #line:092b037
     <<jump meProblem>>
 <<endif>>
 -> {$pcName}: Finding better one liners? #line:0a333e7 
@@ -131,8 +133,7 @@ title: judgementOnDrinks
     <<jump sceneryChange>>
 ===
 title: meProblem
----
--> {$pcName}: Me. [nomarkup][You blush and bite your lip, gesturing to yourself with both thumbs.][/nomarkup] #line:092b037 
+--- 
 {$diana}: You're cute, you know that don't you? #line:0470a64 
 <<jump leaveEmbassy>>
 ===
@@ -141,7 +142,7 @@ title: betterOneLiners
 [nomarkup][Diana rolls her eyes and smirks at you.][/nomarkup] #line:072e51b 
 -> {$pcName}: What? #line:076757c 
 {$diana}: Did it hurt when you fell from heaven? #line:0393703 
--> {$pcName}: Bitch… #line:0af2f5f 
+-> {$pcName}: Bitch... #line:0af2f5f 
 {$diana}: - because baby you're showing some marks. #line:0eb7bee 
 -> {$pcName}: Jesus Christ. #line:07bcda3 
 {$diana}: Names Diana but you can call me whatever you like. #line:02d91be 
@@ -151,14 +152,14 @@ title: betterOneLiners
 ===
 title: sceneryChange
 ---
-{$diana}: Go where no one knows you, start over… that's a romantic thought. #line:0348295 
+{$diana}: Go where no one knows you, start over... that's a romantic thought. #line:0348295 
 -> {$pcName}: Not sure I like that idea so much anymore. #line:0acbdfc 
 {$diana}: Wish I could say I didn't agree. #line:0a0aa8e 
-[nomarkup][Two of you sit in silence for a moment and the ice clinks as Diana swirls her glass.][/nomarkup] #line:0d82f30 
 <<jump leaveEmbassy>>
 ===
 title: leaveEmbassy
 ---
+[nomarkup][Two of you sit in silence for a moment and the ice clinks as Diana swirls her glass.][/nomarkup] #line:0d82f30 
 -> {$pcName}: Actually, probably best I'll be getting home. Thanks for the drink but I'm going to call it a night. #line:08dd11e 
     <<jump leaveAlone>>
 -> {$pcName}: Hey do you want to get out of here? #line:06cba46 

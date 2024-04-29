@@ -94,7 +94,7 @@ MonoBehaviour:
     SerializationNodes: []
   _umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   _umaRoot: {fileID: 1203071946431115676}
-  <DefaultUMARecipes>k__BackingField: []
+  <BaseLookWardrobeCollection>k__BackingField: {fileID: 0}
   _umaAvatar: {fileID: 0}
 --- !u!1 &680196556232561751
 GameObject:
@@ -160,6 +160,7 @@ MonoBehaviour:
   weaponParent: {fileID: 1187578031712813030}
   animationController: {fileID: 4678919013744510610}
   weaponAnimationTypeParam: WeaponAnimationType
+  _ignoreAmmo: 0
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,7 +446,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1203071946431115676}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Speed: 6
   m_Acceleration: 6
   avoidancePriority: 50
@@ -597,7 +598,7 @@ MonoBehaviour:
       Data: 0
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
-  _enablePersistence: 1
+  _enablePersistence: 0
 --- !u!114 &265292995897044542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,6 +968,10 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 11400000, guid: 1ebf64d5605512942b10f5ac0e7b59db, type: 2}
+    - {fileID: 11400000, guid: 84d19f9b2fa9b4641b6b3fbc9b6aacb3, type: 2}
+    - {fileID: 11400000, guid: 5bb3b2d82c83e0540b32fe8fa79bb378, type: 2}
+    - {fileID: 11400000, guid: a75e2dc2b72d29042a0256712087af14, type: 2}
+    - {fileID: 11400000, guid: ce6ed723fa6174e408d049a17e9a82de, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -1005,9 +1010,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 0
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 1
     - Name: _equippedItem
       Entry: 10
       Data: 0
@@ -1027,9 +1029,6 @@ MonoBehaviour:
       Entry: 7
       Data: 3|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
-      Entry: 3
-      Data: 1
-    - Name: _acceptedCategory
       Entry: 3
       Data: 1
     - Name: _equippedItem
@@ -1053,12 +1052,9 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 2
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 2
     - Name: _equippedItem
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 8
       Data: 
@@ -1077,12 +1073,9 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 3
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 7
     - Name: _equippedItem
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 2
     - Name: 
       Entry: 8
       Data: 
@@ -1101,12 +1094,9 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 4
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 6
     - Name: _equippedItem
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 3
     - Name: 
       Entry: 8
       Data: 
@@ -1125,12 +1115,9 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 5
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 10
     - Name: _equippedItem
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 4
     - Name: 
       Entry: 8
       Data: 

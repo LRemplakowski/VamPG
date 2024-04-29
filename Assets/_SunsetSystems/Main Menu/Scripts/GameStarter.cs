@@ -17,7 +17,7 @@ namespace SunsetSystems.Data
         [SerializeField]
         private GameObject _mainMenuParent;
         [SerializeField, Required]
-        private SceneLoadingData startSceneData;
+        private SceneLoadingDataAsset startSceneData;
 
         [Title("Runtime")]
         [SerializeField]
@@ -58,13 +58,12 @@ namespace SunsetSystems.Data
             //this._playerCharacterData.FirstName = characterName;
         }
 
-        public async void StartGame()
-        {
-            SaveLoadManager.SetSaveID(new());
+        public void StartGame()
+        {            
             PartyManager.Instance.RecruitMainCharacter(_playerCharacterTemplate);
             OnGameStart?.Invoke();
             SaveLoadManager.ForceCreateNewSaveData();
-            await LevelLoader.Instance.LoadNewScene(startSceneData);
+            _ = LevelLoader.Instance.LoadNewScene(startSceneData);
         }
 
         //private CreatureConfig GetMatchingCreatureAsset()

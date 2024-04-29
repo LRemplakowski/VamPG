@@ -1,8 +1,8 @@
 ﻿title: havenEscape
 tags:
 ---
-[nomarkup][You barely manage to get your bearings as you duck under Diana and exit the apartment. You hit the railing and look out over the parking lot to see… no one is coming. There's a van and a motorcycle in the parking lot but otherwise it's completely empty. Your only hope is to run.][/nomarkup] #line:01a9cbe 
--> [nomarkup][Try to run on the road.](Dexterity + Athletics)[/nomarkup] #line:0330b13 
+[nomarkup][You barely manage to get your bearings as you duck under Diana and exit the apartment. You hit the railing and look out over the parking lot to see... no one is coming. There's a van and a motorcycle in the parking lot but otherwise it's completely empty. Your only hope is to run.][/nomarkup] #line:01a9cbe 
+-> [nomarkup][Try to run on the road.] (Dexterity + Athletics)[/nomarkup] #line:0330b13 
     <<jump escapeDexRoll>>
 ===
 title: escapeDexRoll
@@ -16,7 +16,7 @@ title: escapeDexRoll
 title: escapeDexSuccess
 ---
 [nomarkup][Jumping over the fence you dash towards the open road, trying to look around for phone booth. Nothing there. You grit your teeth and turn back to see that the woman, Lucia, is slowly walking towards you.][/nomarkup] #success #line:07db2f1 
--> [nomarkup][Try to short-wire one of the vehicles in the parking.](Resolve + Larceny)[/nomarkup] #line:0c28d70 
+-> [nomarkup][Try to short-wire one of the vehicles in the parking.] (Resolve + Larceny)[/nomarkup] #line:0c28d70 
     <<jump escapeResRoll>>
 ===
 title: escapeDexFailure
@@ -48,7 +48,7 @@ title: escapeResFailure
 [nomarkup][You spot a motorcycle and race towards it. Your fingers grasp the ignition panel as you desperately try to rip it open. It doesn't budge.][/nomarkup] #failure #line:08a1894 
 {$sire}: Would you like a few seconds to keep trying? Or shall we just go inside. #line:0e7126a 
 -> {$pcName}: Just- gimmie a- come on! #line:0d898ac 
-{$sire}: Three… #line:02aaf31 
+{$sire}: Three... #line:02aaf31 
 [nomarkup][You pull open the panel and see the wires underneath and immediately pull at them with your teeth feeling a slight buzz.][/nomarkup] #line:0ae3731 
 {$sire}: Two... #line:0ccefef 
 [nomarkup][Twisting them together with your fingers you blind away the sweat dripping into your eyes as you look over at the woman. She nods at you with an encouraging smile. What the absolute fuck.][/nomarkup] #line:0e64884 

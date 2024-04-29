@@ -17,19 +17,23 @@ namespace SunsetSystems.Core.AddressableManagement
             assetHandlesDictionary.Clear();
         }
 
-        public async Task<T> LoadAssetAsync<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
+        public async Task<T> LoadAssetAsync<T>(AssetReference assetReference) where T : UnityEngine.Object
         {
-            if (assetReference.RuntimeKeyIsValid() is false)
+            if (assetReference == null)
             {
                 Debug.LogError("Requested to load asset with null reference!");
+                return null;
+            }
+            if (assetReference.RuntimeKeyIsValid() is false)
+            {
+                Debug.LogError("Requested to load asset with invalid key!");
                 return null;
             }
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {
                 if (handle.IsDone is false)
                     await handle.Task;
-                return Addressables.LoadAssetAsync<T>(assetReference).Result;
-                    
+                return Addressables.LoadAssetAsync<T>(assetReference).Result;                 
             }
             else
             {
@@ -40,7 +44,7 @@ namespace SunsetSystems.Core.AddressableManagement
             }
         }
 
-        public void ReleaseAsset<T>(AssetReferenceT<T> assetReference) where T : UnityEngine.Object
+        public void ReleaseAsset(AssetReference assetReference)
         {
             if (assetHandlesDictionary.TryGetValue(assetReference, out AsyncOperationHandle handle))
             {

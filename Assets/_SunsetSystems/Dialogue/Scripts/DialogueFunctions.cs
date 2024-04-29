@@ -185,5 +185,11 @@ namespace SunsetSystems.Dialogue
         {
             return true;
         }
+
+        [YarnFunction("CustomVisited")]
+        public static bool CustomVisited(string nodeID)
+        {
+            return DialogueHelper.VariableStorage.TryGetValue($"visited:{nodeID}", out bool visited) && visited;
+        }
     }
 }

@@ -11,13 +11,12 @@ tags:
 ===
 title: deskInteractions
 ---
-
 <<if $computerUnusable ==false>>
     -> [nomarkup][Inspect the desk.][/nomarkup] #line:02b7b75 
         <<jump deskExamination>>
     -> [nomarkup][Boot the computer.][/nomarkup] #line:001bf2a 
         <<jump computerTurnedOn>>
-    -> [nomarkup][Check the drawers.][/nomarkup] #line:0edbce5 
+    -> [nomarkup][Check the drawers.][/nomarkup] <<if visited("deskDrawers") == false>> #line:0edbce5 
         <<jump deskDrawers>>
     -> [nomarkup][Leave the desk alone.][/nomarkup] #line:0a6e434
 <<else>>
@@ -262,20 +261,28 @@ title: deskDrawers
 ---
 [nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items... In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated...][/nomarkup] #lastline #line:07b41ed 
 <<if GetHasItem("IT_Q_BOBBY_PIN") is true>>
--> [nomarkup][Pick the drawer open.][Dexterity + Larceny][/nomarkup] #line:03db049 
-    <<if Roll("Dexterity","Larceny") >=3>>
-        <<jump drawerLockpickSuccess>>
-    <<else>>
-        <<jump drawerFailure>>
-    <<endif>>
--> [nomarkup][Break the lock by force.][Strength + Larceny][/nomarkup] #line:007fa6d 
-    <<if Roll("Strength","Larceny") >=4>>
-        <<jump drawerStrengthSuccess>>
-    <<elseif GetPartyHasDiscipline ("Potence") == true>>
-        <<jump drawerStrengthSuccess>>
-    <<else>>
-        <<jump drawerFailure>>
-    <<endif>>
+    -> [nomarkup][Pick the drawer open.] (Dexterity + Larceny)[/nomarkup] <<if visited("drawerDexRoll") == false>> #line:03db049
+        <<jump drawerDexRoll>> 
+<<endif>>
+-> [nomarkup][Break the lock by force.] (Strength + Larceny) [/nomarkup] <<if visited("drawerStrRoll") == false>> #line:007fa6d
+    <<jump drawerStrRoll>> 
+===
+title: drawerDexRoll
+---
+<<if Roll("Dexterity","Larceny") >=3>>
+    <<jump drawerLockpickSuccess>>
+<<else>>
+    <<jump drawerFailure>>
+<<endif>>
+===
+title: drawerStrRoll
+---
+<<if Roll("Strength","Larceny") >=4>>
+    <<jump drawerStrengthSuccess>>
+<<elseif GetPartyHasDiscipline ("Potence") == true>>
+    <<jump drawerStrengthSuccess>>
+<<else>>
+    <<jump drawerFailure>>
 <<endif>>
 ===
 title: drawerLockpickSuccess
@@ -291,7 +298,7 @@ title: drawerStrengthSuccess
 title: drawerFailure
 ---
 [nomarkup][The lock seems to be stronger than you thought. What secrets may it be hiding, if it's as resilient as an armored safe? You'll never know...][/nomarkup] #failure
-[nomarkup][This is getting more and more exasperating - as if everything around you is sworn to stand in your way...][/nomarkup] #line:0f3b4b3 
+[nomarkup][This is getting more and more exasperating - as if everything around you is sworn to stand in your way...][/nomarkup] #lastline #line:0f3b4b3 
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0f7fb97 
         <<DecreaseWillpower $pcName 1>>
@@ -299,7 +306,7 @@ title: drawerFailure
     -> [nomarkup][Give in to the feeling.][/nomarkup] #line:029a945 
         <<jump drawerDestroyed>>
 <<else>>
-    -> [nomarkup][This is ridiculous. You count to ten, breathing slowly. And hope nothing of importance is hidden inside the drawer.][/nomarkup] #line:0e95273 
+    -> [nomarkup][This is ridiculous. You count to ten, breathing slowly. And hope nothing of importance is hidden inside the drawer.][/nomarkup] #lastline #line:0e95273 
         <<jump deskInteractions>>
 <<endif>>
 ===
@@ -315,19 +322,18 @@ title: drawerDestroyed
 ===
 title: drawerSuccess
 ---
-[nomarkup][The lock isn’t a challenge for you. All you needed was the bobby pin you found in your bathroom and a little patience.][/nomarkup] #line:0bccefd 
-[nomarkup][You pull the drawer open - the lock no longer an obstacle to your snoopery.][/nomarkup]
-{$kieran}: Something useful in there? #line:0b15cea 
+[nomarkup][You pull the drawer open - the lock no longer an obstacle to your snoopery.][/nomarkup] 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: You [nomarkup]<i>are</i>[/nomarkup] thorough, aren’t you? [nomarkup][She purrs.][/nomarkup]#line:04b2d6d 
 <<endif>>
--> [nomarkup][Sift through the documents.][/nomarkup] #line:0aba321 
+{$kieran}: Something useful in there? #lastline #line:0b15cea
+-> [nomarkup][Sift through the documents.] (Resolve + Investigation)[/nomarkup] #line:0aba321 
 <<if Roll ("Resolve","Investigation") >=4>>
 <<set $safeCode to true>>
-    [nomarkup][Most of what you discover as you search are receipts, placed here for safe-keeping. Eventually, though, you find one about a wall safe, filed along with its manual, as well as a note stating its combination: 1969.][/nomarkup] #success #line:030c021 
+    [nomarkup][Most of what you discover as you search are receipts, placed here for safe-keeping. Eventually, though, you find one about a wall safe, filed along with its manual, as well as a note stating its combination - 1969.][/nomarkup] #lastline #success #line:030c021 
     <<jump deskInteractions>>
 <<else>>
-    [nomarkup][You see nothing you can use, but the oldest documents here are from 1969.][/nomarkup] #line:061b72d 
+    [nomarkup][You see nothing you can use, but the oldest documents here are from 1969.][/nomarkup] #lastline #failure #line:061b72d 
     <<jump deskInteractions>>
 <<endif>>
 ===

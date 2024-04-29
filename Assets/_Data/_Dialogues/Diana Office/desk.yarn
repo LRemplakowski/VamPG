@@ -1,26 +1,41 @@
 ﻿title: desk
 tags:
 ---
-[nomarkup][This desk looks like a solid piece of furniture. Surely, anyone who sits behind it is something of a king - or in this case, queen, and the club is their castle.. Its surface isn’t neat, though, breaking the illusion of regality.][/nomarkup]
-[nomarkup][You do not touch the clutter, instead scanning for anything that could tell you why things are so disorganized. A computer, you think, rests on its side.][/nomarkup] #line:02f5560 
+[nomarkup][This desk looks like a solid piece of furniture. Surely, anyone who sits behind it is something of a king - or in this case, queen, and the club is their castle. Its surface isn’t neat, though, breaking the illusion of regality.][/nomarkup]
+[nomarkup][You do not touch the clutter, instead scanning for anything that could tell you why things are so disorganized. A computer, you think, rests on its side.][/nomarkup] #lastline #line:02f5560 
 <<if Roll ("Intelligence","Technology")>=4>>
     [nomarkup][Upon closer inspection, it looks to be an IBM model. It's sad that such a technological marvel seems to be so haphazardly disrespected - especially since it's a relatively new model - only made available to consumers a year or two ago.][/nomarkup] #line:04edffd 
     <<set $computerModelIdentified to 1>>
 <<endif>>
--> [nomarkup][Inspect the desk.][/nomarkup] #line:02b7b75 
-    <<jump deskExamination>>
+<<jump deskInteractions>>
+===
+title: deskInteractions
+---
+
 <<if $computerUnusable ==false>>
--> [nomarkup][Boot the computer.][/nomarkup] #line:001bf2a 
-    <<jump computerTurnedOn>>
+    -> [nomarkup][Inspect the desk.][/nomarkup] #line:02b7b75 
+        <<jump deskExamination>>
+    -> [nomarkup][Boot the computer.][/nomarkup] #line:001bf2a 
+        <<jump computerTurnedOn>>
+    -> [nomarkup][Check the drawers.][/nomarkup] #line:0edbce5 
+        <<jump deskDrawers>>
+    -> [nomarkup][Leave the desk alone.][/nomarkup] #line:0a6e434
+<<else>>
+    -> [nomarkup][Inspect the desk.][/nomarkup]
+        <<jump deskExamination>>
+    -> [nomarkup][Check the drawers.][/nomarkup]
+        <<jump deskDrawers>>
+    -> [nomarkup][Leave the desk alone.][/nomarkup]
 <<endif>>
--> [nomarkup][Check the drawers.][/nomarkup] #line:0edbce5 
-    <<jump deskDrawers>>
--> [nomarkup][Leave the desk alone.][/nomarkup] #line:0a6e434 
 ===
 title: deskExamination
 ---
 [nomarkup][There are several items strewn about the desk. A newspaper, an ashtray, several pens and pencils, some documents as well as blank pieces of paper, and some books. None of these are in any way out of the ordinary. The ashtray, though, seems to commemorate something...][/nomarkup]
-[nomarkup][In the middle, a Union Jack with letters surrounding it is engraved, but you aren't sure what they say without a closer look. That is, you'll have to empty the ashtray of its contents, including an unfinished cigarette still smoldering.][/nomarkup] #line:0b35655 
+[nomarkup][In the middle, a Union Jack with letters surrounding it is engraved, but you aren't sure what they say without a closer look. That is, you'll have to empty the ashtray of its contents, including an unfinished cigarette still smoldering.][/nomarkup] #lastline #line:0b35655 
+<<jump deskExaminationOptions>>
+===
+title: deskExaminationOptions
+---
 -> [nomarkup][Throw the ash away.][/nomarkup] <<if visited("throwAsh") == false>> #line:0d3873e 
     <<jump throwAsh>>
 -> [nomarkup][Smoke the remaining cigarette.][/nomarkup] <<if visited("smokeCigarette") == false>> #line:0aba136 
@@ -32,7 +47,7 @@ title: deskExamination
 -> [nomarkup][Inspect the newspaper.][/nomarkup] #line:0156f74 
     <<jump deskNewspaper>>
 -> [nomarkup][Leave the items alone.][/nomarkup] #line:07bfd15 
-    <<jump desk>>
+    <<jump deskInteractions>>
 ===
 title: throwAsh
 ---
@@ -42,11 +57,11 @@ title: throwAsh
     [nomarkup][You speak slowly, sounding out the letters surrounding the Union Jack you can manage to decipher.][/nomarkup] Spreading Anarchy in Las Vegas since 19... [nomarkup][It's a miracle you were able to read nearly the entire sentence in one go.]/[nomarkup] #success #line:0508fcc 
         {$kieran}: It's probably the year when Diana started. 1969. #line:07fa5eb 
         <<set $safeCode to true>>
-        [nomarkup][Yout put the ashtray back on the desk.][/nomarkup] #line:08501c5 
-        <<jump deskExamination>>
+        [nomarkup][Yout put the ashtray back on the desk.][/nomarkup] #lastline #line:08501c5 
+        <<jump deskExaminationOptions>>
 <<else>>
-    [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #failure #line:0b38984 
-    <<jump deskExamination>>
+    [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #lastline #failure #line:0b38984 
+    <<jump deskExaminationOptions>>
 <<endif>>
 -> [nomarkup][Is this ashtray unique?] (Intelligence+Investigation)[/nomarkup] #line:0fa0839 
 <<if Roll("Intelligence","Investigation") >=3>>
@@ -55,27 +70,27 @@ title: throwAsh
         {$kieran}: In 1969. Why do you ask? #line:0867d06 
         <<set $safeCode to true>>
         -> {$pcName}: Nothing. Just asking out of curiosity. #line:0172ed3 
-            [nomarkup][You put the ashtray back on the desk.][/nomarkup] #line:0f7fd6b 
-            <<jump deskExamination>>
+            [nomarkup][You put the ashtray back on the desk.][/nomarkup] #lastline #line:0f7fd6b 
+            <<jump deskExaminationOptions>>
 <<else>>
-    [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #line:03f5de0 
-    <<jump deskExamination>>
+    [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #lastline #line:03f5de0 
+    <<jump deskExaminationOptions>>
 <<endif>>
 ===
 title: smokeCigarette
 ---
 [nomarkup][You pluck the remaining cigarette from the ashtray and take a drag. These are not menthols or some other kind of aromatized tobacco. They're strong though. Definitely a good brand...][/nomarkup]
 [nomarkup][But you can't recall the name; you gave up the cigarettes fueling your nicotine addiction some time ago, when your financial situation began to really go poorly. Well, at least you've had the pleasure of smoking something like this, now.][/nomarkup] #line:09a1746 
-{$kieran}: I'll bet that Dominic would be able to tell which brand it is just by sniffing the smoke. #line:05ffa43 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Won’t kill you now, at least. One of the many upsides to being dead. #line:052ee8e 
 <<endif>>
-<<jump deskExamination>>
+{$kieran}: I'll bet that Dominic would be able to tell which brand it is just by sniffing the smoke. #lastline #line:05ffa43 
+<<jump deskExaminationOptions>>
 ===
 title: inspectBuds
 ---
-[nomarkup][Typical buds from your typical cigarettes. You can just barely read the brand name - “Embassy” - written on the edge of the filter. Diana seems to be a big fan of this word. And those cigarettes - nearly every one of them - have lipstick stains.][/nomarkup] #line:09725ec 
-<<jump deskExamination>>
+[nomarkup][Typical buds from your typical cigarettes. You can just barely read the brand name - “Embassy” - written on the edge of the filter. Diana seems to be a big fan of this word. And those cigarettes - nearly every one of them - have lipstick stains.][/nomarkup] #lastline #line:09725ec 
+<<jump deskExaminationOptions>>
 ===
 title: deskBook
 ---
@@ -90,7 +105,7 @@ title: deskBook
     {$anastasia}: Yup, but I like my version better. Names for things are at least fifty percent more cool when you repeat the letters at the beginnings of each word  like that. I know there’s a term for it. What is it, again?  #line:08f8e8f 
     {$kieran}: [nomarkup][He sighs wearily.][/nomarkup] Alliteration? #line:0477207 
     {$anastasia}: Alliteration, eh? That’s a mouthful. And a word that describes a very specific thing - so specific that I’ll almost never use it. But thanks anyway, Kiki! #line:0b65972 
-    {$kieran}: [nomarkup][He just blinks - slowly. He's not going to take the bait. Nope. Not tonight...][/nomarkup] You're welcome. #line:0a43699 
+    {$kieran}: [nomarkup][He just blinks - slowly. He's not going to take the bait. Nope. Not tonight...][/nomarkup] You're welcome. #lastline #line:0a43699 
 <<endif>>
 -> [nomarkup][Inspect the bookmarked pages.][/nomarkup] #line:0ee85bf 
 [nomarkup][One of the bookmarks tells you the date of founding of the Church of Satan - 30th April, 1966.][/nomarkup] #line:0744d63 
@@ -101,7 +116,7 @@ title: deskBook
     {$kieran}: ‘66 actually. #line:0d3e4fb 
     {$anastasia}: You [nomarkup]<i>would</i>[/nomarkup] be a little spoon, wouldn’t you, Tinker Bell? #line:0d89fd6 
 <<endif>>
-<<jump deskExamination>>
+<<jump deskExaminationOptions>>
 ===
 title: deskNewspaper
 ---
@@ -111,7 +126,7 @@ title: deskNewspaper
     [nomarkup][Sadly, she’s right. And you’d like it to stay that way. Not only because of the issues your death would undoubtedly cause, but also because it would make your passing real - more so than you are willing or capable of acknowledging at the current moment.][/nomarkup]
     [nomarkup][Somewhere deep inside, you still hold onto the faint hope that this is just some absurd nightmare, conjured in the wake of yet another drunken stupor...][/nomarkup] #line:014343c 
 <<endif>>
-<<jump deskExamination>>
+<<jump deskExaminationOptions>>
 ===
 title: computerTurnedOn
 ---
@@ -153,7 +168,7 @@ title: computerTurnedOn
         <<jump wrongPassword>>
 <<endif>>
 -> [nomarkup][Leave computer as it is.][/nomarkup] #line:0aa3bb5 
-        <<jump desk>>
+        <<jump deskInteractions>>
 ===
 title: hackingSuccess
 ---
@@ -170,12 +185,12 @@ title: hackingFailure
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0d18ca5 
         <<DecreaseWillpower ($pcName, 1)>>
-        <<jump desk>>
+        <<jump deskInteractions>>
     -> [nomarkup][Give in to the feeling.][/nomarkup] #line:0c1013c 
         <<jump computerDestroyed>>
 <<else>>
     -> [nomarkup][You grit your teeth, staring daggers at the computer screen. You can't reason with a machine, and a machine has infinite patience.][/nomarkup] #line:03833e3 
-        <<jump desk>>
+        <<jump deskInteractions>>
 <<endif>>
 ===
 title: computerDestroyed
@@ -196,7 +211,7 @@ title: computerDestroyed
 title: wrongPassword
 ---
 [nomarkup][You write the password in every possible way that got into your head. It looks like it isn't it.][/nomarkup] #line:0b2980b 
-<<jump deskExamination>>
+<<jump deskExaminationOptions>>
 ===
 title: accessGranted
 ---
@@ -245,7 +260,7 @@ title: searchQuerry
 ===
 title: deskDrawers
 ---
-[nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items... In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated...][/nomarkup] #line:07b41ed 
+[nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items... In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated...][/nomarkup] #lastline #line:07b41ed 
 <<if GetHasItem("IT_Q_BOBBY_PIN") is true>>
 -> [nomarkup][Pick the drawer open.][Dexterity + Larceny][/nomarkup] #line:03db049 
     <<if Roll("Dexterity","Larceny") >=3>>
@@ -275,17 +290,17 @@ title: drawerStrengthSuccess
 ===
 title: drawerFailure
 ---
-[nomarkup][The lock seems to be stronger than you thought. What secrets may it be hiding, if it's as resilient as an armored safe? You'll never know...][/nomarkup]
-[nomarkup][This is getting more and more exasperating - as if everything around you is sworn to stand in your way...][/nomarkup] #success #line:0f3b4b3 
+[nomarkup][The lock seems to be stronger than you thought. What secrets may it be hiding, if it's as resilient as an armored safe? You'll never know...][/nomarkup] #failure
+[nomarkup][This is getting more and more exasperating - as if everything around you is sworn to stand in your way...][/nomarkup] #line:0f3b4b3 
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0f7fb97 
         <<DecreaseWillpower $pcName 1>>
-        <<jump desk>>
+        <<jump deskInteractions>>
     -> [nomarkup][Give in to the feeling.][/nomarkup] #line:029a945 
         <<jump drawerDestroyed>>
 <<else>>
     -> [nomarkup][This is ridiculous. You count to ten, breathing slowly. And hope nothing of importance is hidden inside the drawer.][/nomarkup] #line:0e95273 
-        <<jump desk>>
+        <<jump deskInteractions>>
 <<endif>>
 ===
 title: drawerDestroyed
@@ -310,9 +325,9 @@ title: drawerSuccess
 <<if Roll ("Resolve","Investigation") >=4>>
 <<set $safeCode to true>>
     [nomarkup][Most of what you discover as you search are receipts, placed here for safe-keeping. Eventually, though, you find one about a wall safe, filed along with its manual, as well as a note stating its combination: 1969.][/nomarkup] #success #line:030c021 
-    <<jump desk>>
+    <<jump deskInteractions>>
 <<else>>
     [nomarkup][You see nothing you can use, but the oldest documents here are from 1969.][/nomarkup] #line:061b72d 
-    <<jump desk>>
+    <<jump deskInteractions>>
 <<endif>>
 ===

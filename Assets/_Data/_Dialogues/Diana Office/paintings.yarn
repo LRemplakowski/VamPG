@@ -6,6 +6,10 @@ tags:
     <<set $paintingsOutOfPlace to -1>>
     [nomarkup][The general vibe of the surroundings and Diana's seemingly proletarian punk aesthetic, coupled with her rough, confrontational attitude - they clash with this display of fine art. The paintings are out of place, and that's for damn sure.][/nomarkup] #line:07d075d 
 <<endif>>
+<<jump paintingsInteractions>>
+===
+title: paintingsInteractions
+---
 -> [nomarkup][Destroy the paintings.][/nomarkup] #line:063d360 
     <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>> #line:0d08a4a 
@@ -135,7 +139,7 @@ title: paintingIntelligenceFailure
 ---
 <<if $artTalk == true>>
     [nomarkup][Regardless of your opinion, you're almost certain that these paintings can't have been worth much.][/nomarkup] #failure #line:066c4d9 
-    <<jump paintings>>
+    <<jump paintingsInteractions>>
 <<else>>
     [nomarkup][These paintings had to have been picked up at a garage sale, or even more likely, fished out of a dumpster, because there isn't any value here to speak of.][/nomarkup] #failure #line:0632c87 
     <<jump opinionsStart>>
@@ -158,7 +162,7 @@ title: paintingWitsFailure
 <<else>>
     {$kieran}: You've been standing there for ten minutes with a blank look on your face. How exactly does this aid us in our investigation? #line:025032c 
     -> {$pcName}: Oh, sorry about that. [nomarkup][You respond sheepishly. You would be red with embarrassment, if such a thing were still possible.][/nomarkup] #line:0afbd2d 
-    <<jump paintings>>
+    <<jump paintingsInteractions>>
 <<endif>>
 ===
 title: paintingSuccessExamination
@@ -301,7 +305,7 @@ title: anaAndKieranConflict
     {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. [nomarkup][Kieran influence +1][/nomarkup]
     <<ModifyInfluence 1 $kieran>>
     {$anastasia}: Ugh.
-<<jump paintings>>
+<<jump paintingsInteractions>>
 ===
 title: examineScraps
 ---

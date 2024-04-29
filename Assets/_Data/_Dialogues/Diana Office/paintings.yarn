@@ -12,15 +12,15 @@ title: paintingsInteractions
 ---
 -> [nomarkup][Destroy the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:063d360 
     <<jump paintingsDestroyed>>
--> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if CustomVisited("paintingAwarenessRoll") == false>> #line:0d08a4a 
+-> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
--> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup]<<if CustomVisited("paintingIntelligenceRoll") == false>> #line:0770fad 
+-> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup]<<if visited("paintingIntelligenceRoll") == false>> #line:0770fad 
     <<jump paintingIntelligenceRoll>>
--> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup]<<if CustomVisited("paintingWitsSuccess") == false>> #line:0b6d950   
+-> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup]<<if visited("paintingWitsSuccess") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
 -> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>>#line:0847f88 
     <<jump safeExamine>>
--> [nomarkup][Take down one of the paintings.][/nomarkup] <<if CustomVisited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
+-> [nomarkup][Take down one of the paintings.][/nomarkup] <<if visited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
     <<jump successContinued>>
 -> [Step away.] #line:0c06753 
 ===
@@ -82,7 +82,7 @@ title: opinionsStart
         {$kieran}: That is, a hunch does not hold up in court, but its presence can be a valid reason to begin gathering up the evidence that supports a similar conclusion - just so long as one's confirmation bias does not get in the way of a sound argument. #line:0b50446 
         {$anastasia}: Y'know, for once, I'm sorry I made the joke in the first place... #line:002280f 
         {$kieran}: I've done my job well, then. #line:0666287 
-        <<if CustomVisited("aintingsOpinion") == false>>
+        <<if visited("aintingsOpinion") == false>>
             <<jump paintingsOpinion>>
         <<endif>>
     <<endif>>
@@ -93,7 +93,7 @@ title: opinionsStart
         {$kieran}: I'm sorry? I don't follow. #line:0a03b07 
         {$anastasia}: It's worthwhile specifically because it gets this kinda reaction out of people like you. It's a temple to the terrible. A shrine of shit! And I. Am. Here. For. It! #line:0c781bf 
         {$kieran}: Riiight. [nomarkup][By the look on his face, the confusion has gone, now replaced with a desire to move on.][/nomarkup] #line:0ad0321 
-        <<if CustomVisited("aintingsOpinion") == false>>
+        <<if visited("aintingsOpinion") == false>>
             <<jump paintingsOpinion>>
         <<endif>>
     <<endif>>
@@ -128,6 +128,7 @@ title: paintingIntelligenceSuccess
 [nomarkup][You stare at the piece, and the picture, which seems to have been made under the influence of various illicit substances, stares back - at least for a few moments... But then, snapping out of your trance-like state, you dislodge it from the wall.][/nomarkup] #line:0e57bc8 
 [nomarkup][Flipping it over to glance at the back of the canvas, there is indeed a paper stamp, but the most glaring detail isn't part of the painting. It's the safe tucked away in an alcove behind where the artwork was displayed...][/nomarkup] #line:0e81006 
 <<set $safeDiscovered to true>>
+<<set $paintingsPutDown to true>> 
 <<jump successContinued>>
 ===
 title: paintingIntelligenceFailure
@@ -146,6 +147,7 @@ title: paintingWitsSuccess
 [nomarkup][Maybe there's something worth looking for behind one part of this polyptych? You go with your gut, and dislodge its frame...][/nomarkup] #line:0c002bd 
 [nomarkup][...You were right! There's a safe tucked away in an alcove behind where the artwork was displayed, as well as a paper stamp on the back of the canvas.][/nomarkup]#line:0b2604b 
 <<set $safeDiscovered to true>>
+<<set $paintingsPutDown to true>> 
 <<jump successContinued>>
 ===
 title: paintingWitsFailure
@@ -212,9 +214,9 @@ title: paintingsDestroyed
 <<endif>>
 {$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[/nomarkup] #line:04a3041 
 <<ModifyInfluence -1 $kieran>>
--> {$pcName}: I... don't know what came over me. <<if CustomVisited("beastTalk") == false>> #line:0e9e8bb 
+-> {$pcName}: I... don't know what came over me. <<if visited("beastTalk") == false>> #line:0e9e8bb 
     <<jump beastTalk>>
--> {$pcName}: Normally no. But I'm pissed. <<if CustomVisited("beastTalk") == false>> #line:0537bea 
+-> {$pcName}: Normally no. But I'm pissed. <<if visited("beastTalk") == false>> #line:0537bea 
     <<jump beastTalk>>
 <<jump paintingsInteractions>>
 ===

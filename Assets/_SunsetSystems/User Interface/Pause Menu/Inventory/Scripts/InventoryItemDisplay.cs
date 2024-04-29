@@ -22,9 +22,7 @@ namespace SunsetSystems.UI
         [SerializeField]
         private TextMeshProUGUI _stackSize;
 
-        private AssetReferenceSprite lastLoadedSprite;
-
-        public async void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
+        public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
             //if (lastLoadedSprite != null)
@@ -32,8 +30,7 @@ namespace SunsetSystems.UI
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.Data;
-                lastLoadedSprite = _itemEntry._item.Icon;
-                _icon.sprite = await AddressableManager.Instance.LoadAssetAsync<Sprite>(lastLoadedSprite);
+                _icon.sprite = _itemEntry._item.Icon;
                 _icon.gameObject.SetActive(true);
                 if (_itemEntry._item.Stackable)
                 {

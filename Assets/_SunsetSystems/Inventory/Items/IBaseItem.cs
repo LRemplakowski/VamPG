@@ -12,7 +12,7 @@ namespace SunsetSystems.Inventory.Data
         string DatabaseID { get; }
         bool Stackable { get; }
         ItemCategory ItemCategory { get; }
-        AssetReferenceSprite Icon { get; }
+        Sprite Icon { get; }
         AssetReferenceGameObject WorldSpaceRepresentation { get; }
     }
 }

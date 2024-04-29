@@ -7,6 +7,7 @@ position: 136,-238
 [nomarkup][Diana's eyes are fixed on you as she approaches, dark brown and dancing with intent. You talk, and she smiles at you, thankful... Then, she turns and looks over her shoulder and back at you. Did you follow her here?][/nomarkup] #line:0b1137c 
 {$diana}: Bad evening? #line:05026cb 
 -> {$pcName}: The worst. #line:0ac27e4 
+[nomarkup][Your speech is slow as you reach for words, this feels so familiar but from where? That smile feels like something you've seen, how many times has she asked you this? When...][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Well, if she's done spacing out and you two already have some kind of plan, I'd like to hear it. Sharing is caring. #line:0af9e59 
     {$kieran}: [nomarkup][Kieran frowns.][/nomarkup] She does that, sometimes. Please, pay it no mind. #line:09a1f03 
@@ -22,7 +23,6 @@ title: tellAboutVision
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: I don't envy you. It's always awkward running into an ex. #line:081cd9b 
     -> {$pcName}: Not like that. #line:017ce07 
-    <<jump approachDiana>>
 <<endif>>
 {$kieran}: Diana is here almost every night. Her presence is hardly surprising if you recognize her. After all, she runs this place. #line:0ec512e 
 -> {$pcName}: She talked to me, smiled... The interaction was... kind. #line:0412e1f 
@@ -30,9 +30,9 @@ title: tellAboutVision
 ===
 title: approachDiana
 ---
-{$kieran}: [nomarkup][As you weave through the crowd making your way to the bar, Kieran grabs your shoulder.][/nomarkup] Proceed with caution. Diana is Kate's favorite ghoul. If something were to happen to her, she would be pissed.Proceed with caution, Diana is Kate's favorite ghoul. #line:022383f 
+{$kieran}: [nomarkup][As you weave through the crowd making your way to the bar, Kieran grabs your shoulder.][/nomarkup] Proceed with caution. Diana is Kate's favorite ghoul. If something were to happen to her, she would be pissed. Proceed with caution, Diana is Kate's favorite ghoul. #line:022383f 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: [nomarkup][Under her breath.][/nomarkup] Funny way to say pet. #line:0c35de6 
+    {$anastasia}: [nomarkup][Under her breath.][/nomarkup] Funny way to say pet. #lastline #line:0c35de6 
 <<endif>>
 -> {$pcName}: [nomarkup][Nod.][/nomarkup] #line:0c46c4d 
     {$kieran}: [nomarkup][Kieran nods back.][+1 Kieran Reputation][/nomarkup] #line:0399fb7 
@@ -55,7 +55,7 @@ title: dianaApproached
     <<else>>
         <<jump dianaApproachedFailure>>
     <<endif>>
--> {$pcName}: Yeah, it's me! Care to tell me what the fuck happened last night?! #line:0b3a30e 
+-> {$pcName}: Yeah, it's me! Care to tell me what the fuck happened last night?! (Manipulation + Intimidation) #line:0b3a30e 
     <<if Roll("Manipulation","Intimidation") >=3>>
         <<jump dianaThreatenedSuccess>>
     <<else>>
@@ -72,7 +72,7 @@ title: dianaApproachedSuccess
 ===
 title: dianaApproachedFailure
 ---
-{$diana}:  Night was as bland as any other. Lots of club-goers filtering in and out - only a few of them proper trollied... Did you lose your wallet or something? Then I'd leg it over to the staff in the coat room rather than bothering me with your minor cock-up. #failure #line:0871d44 
+{$diana}:  Night was as bland as any other. Lots of club-goers filtering in and out - only a few of them proper trollied... Did you lose your wallet or something? Then I'd leg it over to the staff in the coat room rather than bothering me with your minor cock-up. #failure #lastline #line:0871d44 
 <<jump blownOffByDiana>>
 ===
 title: dianaThreatenedSuccess
@@ -86,7 +86,7 @@ title: dianaThreatenedSuccess
 title: dianaThreatenedFailure
 ---
 [nomarkup][The crowd around the bar side-eyes you for making a scene. Everyone is uncomfortable.][/nomarkup] #failure #line:02b6647 
-{$diana}: Sod off before I have you thrown out. [nomarkup][She turns to the crowd.][/nomarkup] Great stuff. Some ladies just can't handle their liquor, am I right? #line:0c47a9a 
+{$diana}: Sod off before I have you thrown out. [nomarkup][She turns to the crowd.][/nomarkup] Great stuff. Some ladies just can't handle their liquor, am I right? #lastline #line:0c47a9a 
 <<jump blownOffByDiana>>
 ===
 title: dianaInvitation

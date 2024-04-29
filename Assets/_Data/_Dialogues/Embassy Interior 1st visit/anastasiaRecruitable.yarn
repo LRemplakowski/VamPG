@@ -72,7 +72,7 @@ title: insightRoll
 ---
 <<if Roll("Intelligence","Insight") >= 3>>
     <<set $anaIsVampire to true>>
-    [nomarkup][Judging from the way he chose to speak to her just now... Those were strong words, and getting Kate involved? Could she possibly be a vampire, too?][/nomarkup] #line:0cf169c 
+    [nomarkup][Judging from the way he chose to speak to her just now... Those were strong words, and getting Kate involved? Could she possibly be a vampire, too?][/nomarkup] #lastline #line:0cf169c 
     <<jump anastasiaKnowIsKindred>>
 <<else>>
     {$kieran}: I know what you are. #line:0d4eed3 
@@ -101,7 +101,7 @@ position: 138,93
 title: anastasiaKnowIsKindred
 position: -323,308
 ---
-{$pcName}: I know what you are. #line:0f1ec73 
+-> {$pcName}: I know what you are. #line:0f1ec73 
 {$anastasia}: What? A lesbian? Anyone a mile away could tell you that. #line:0bec9f6 
 -> {$pcName}: No. A vampire. #line:0f3a8a1 
 {$anastasia}: ... #line:0c1e9d6 

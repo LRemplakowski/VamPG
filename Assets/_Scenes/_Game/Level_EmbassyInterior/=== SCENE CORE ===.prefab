@@ -1465,7 +1465,18 @@ MonoBehaviour:
   OnDialogueFinished:
     _PersistentCalls: []
   OnNodeStarted:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 5318167662571694092}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnNodeFinished:
     _PersistentCalls: []
 --- !u!1 &2699487060681785363
@@ -1539,6 +1550,53 @@ MonoBehaviour:
   OnNodeStarted:
     _PersistentCalls: []
   OnNodeFinished:
+    _PersistentCalls: []
+--- !u!1 &3349933920525326815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4490009311011039564}
+  - component: {fileID: 5318167662571694092}
+  m_Layer: 0
+  m_Name: Caterina Goes To Bouncer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4490009311011039564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3349933920525326815}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5318167662571694092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3349933920525326815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: bouncerDifficulties
+  OnNodeEventMatch:
     _PersistentCalls: []
 --- !u!1 &3377142950894329135
 GameObject:
@@ -2059,6 +2117,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1da8a155d0f71cd49827c35db9a8111a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   _unique: {fileID: 4107636285549146619}
 --- !u!1 &3919487550797867651
 GameObject:
@@ -2694,6 +2761,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 627754758468489085}
+  - {fileID: 4490009311011039564}
   m_Father: {fileID: 412658073151826774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5225593122114779037

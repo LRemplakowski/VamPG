@@ -43,6 +43,11 @@ namespace SunsetSystems.Utils
             RefreshUMAVisibility();
         }
 
+        public void SetUMAVisibility(bool visible)
+        {
+            UmaVisible = visible;
+        }
+
         private void RefreshUMAVisibility()
         {
             foreach (var uma in _childrenUMA)

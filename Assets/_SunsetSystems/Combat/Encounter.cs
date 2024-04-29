@@ -8,6 +8,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
+using System.Linq;
 
 namespace SunsetSystems.Combat
 {
@@ -70,6 +71,17 @@ namespace SunsetSystems.Combat
             if (encounterEndLogic)
                 await encounterEndLogic.Perform();
             OnEncounterEnd?.InvokeSafe();
+        }
+
+        public void AddToEncounter(Creature creature)
+        {
+            Creatures.Add(creature);
+            Creatures = Creatures.Distinct().ToList();
+        }
+
+        public void RemoveFromEncounter(Creature creature)
+        {
+            Creatures.Remove(creature);
         }
 
         private enum EncounterEndTrigger

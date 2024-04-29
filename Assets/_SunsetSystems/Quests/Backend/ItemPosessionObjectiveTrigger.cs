@@ -39,7 +39,7 @@ namespace SunsetSystems.Journal
             }
             else
             {
-                InventoryManager.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
+                InventoryManager.Instance.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
             }
         }
 
@@ -67,7 +67,7 @@ namespace SunsetSystems.Journal
             objectiveToTrigger.OnObjectiveActive -= StartHandlingObjective;
             objectiveToTrigger.OnObjectiveInactive -= StopHandlingObjective;
             objectiveToTrigger.OnObjectiveCompleted -= StopHandlingObjective;
-            InventoryManager.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
+            InventoryManager.Instance.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
         }
 
         [Serializable]

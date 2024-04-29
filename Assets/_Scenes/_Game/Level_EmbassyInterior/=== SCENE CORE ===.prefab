@@ -881,7 +881,7 @@ MonoBehaviour:
     _PersistentCalls: []
   TriggerExit:
     _PersistentCalls: []
-  visualizeTrigger: 1
+  visualizeTrigger: 0
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
   myCollider: {fileID: 4079991032760785723}
 --- !u!65 &4079991032760785723
@@ -2762,6 +2762,8 @@ Transform:
   m_Children:
   - {fileID: 627754758468489085}
   - {fileID: 4490009311011039564}
+  - {fileID: 1306119733862654178}
+  - {fileID: 8772536613743566665}
   m_Father: {fileID: 412658073151826774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5225593122114779037
@@ -3285,6 +3287,64 @@ MonoBehaviour:
   _fadeScreenTime: 0.5
   OnAfterFadeOut:
     _PersistentCalls: []
+--- !u!1 &6578044277531088400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8772536613743566665}
+  - component: {fileID: 6149011885094242711}
+  m_Layer: 0
+  m_Name: On Paintings Took Down
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8772536613743566665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578044277531088400}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6149011885094242711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578044277531088400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: successContinued
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 2390319528945370258}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &6649260884599490651
 GameObject:
   m_ObjectHideFlags: 0
@@ -3534,6 +3594,64 @@ MonoBehaviour:
     _PersistentCalls: []
   OnNodeFinished:
     _PersistentCalls: []
+--- !u!1 &6897982518348698030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1306119733862654178}
+  - component: {fileID: 6397296105106596478}
+  m_Layer: 0
+  m_Name: On Paintings Destroyed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1306119733862654178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897982518348698030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6397296105106596478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897982518348698030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: paintingsDestroyed
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 2390319528945370258}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &6998712319754004623
 GameObject:
   m_ObjectHideFlags: 0
@@ -4285,7 +4403,7 @@ MonoBehaviour:
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 1
   _interactionTransform: {fileID: 7237593476347197736}
-  _interactable: 1
+  _interactable: 0
   _nameplateName: Safe
   _nameplateOffset: {x: 0, y: 3, z: 0}
   _interactableOnce: 0

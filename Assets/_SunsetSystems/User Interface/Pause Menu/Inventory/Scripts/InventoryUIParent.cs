@@ -1,15 +1,11 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Equipment;
 using SunsetSystems.Equipment.UI;
 using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.UI
@@ -21,32 +17,42 @@ namespace SunsetSystems.UI
         [SerializeField, Required]
         private EquipmentContentsUpdater _equipmentContentsUpdater;
 
+        private bool _isDirty;
+
         private void OnEnable()
         {
             string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
-            UpdateInventory(characterKey);
+            UpdateInventory();
+            InventoryManager.Instance.PlayerInventory.OnItemAdded += MarkDirty;
+            InventoryManager.Instance.PlayerInventory.OnItemRemoved += MarkDirty;
         }
 
         private void OnDisable()
         {
-
+            InventoryManager.Instance.PlayerInventory.OnItemAdded -= MarkDirty;
+            InventoryManager.Instance.PlayerInventory.OnItemRemoved -= MarkDirty;
         }
 
-        private void UpdateEquipment(string characterKey)
+        private void Update()
         {
-            if (PartyManager.Instance.IsRecruitedMember(characterKey))
+            if (_isDirty)
             {
-                List<IGameDataProvider<InventoryEntry>> items = new();
-                foreach (InventoryEntry entry in InventoryManager.PlayerInventory.Contents)
-                {
-                    items.Add(entry);
-                }
-                _inventoryContentsUpdater.UpdateViews(items);
+                Refresh();
+                _isDirty = false;
             }
         }
 
-        private void UpdateInventory(string characterKey)
+        private void MarkDirty(InventoryEntry _) => _isDirty = true;
+
+        private void Refresh()
+        {
+            string characterKey = CharacterSelector.SelectedCharacterKey;
+            UpdateEquipment(characterKey);
+            UpdateInventory();
+        }
+
+        private void UpdateEquipment(string characterKey)
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
@@ -61,6 +67,16 @@ namespace SunsetSystems.UI
                 }
                 _equipmentContentsUpdater.UpdateViews(slots);
             }
+        }
+
+        private void UpdateInventory()
+        {
+            List<IGameDataProvider<InventoryEntry>> items = new();
+            foreach (InventoryEntry entry in InventoryManager.Instance.PlayerInventory.Contents)
+            {
+                items.Add(entry);
+            }
+            _inventoryContentsUpdater.UpdateViews(items);
         }
     }
 }

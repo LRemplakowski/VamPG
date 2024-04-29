@@ -19,7 +19,7 @@ namespace SunsetSystems.Inventory
         [SerializeField]
         private float _money;
        
-        public static ItemStorage PlayerInventory => Instance._playerInventory;
+        public ItemStorage PlayerInventory => Instance._playerInventory;
 
         public string DataKey => DataKeyConstants.INVENTORY_MANAGER_DATA_KEY;
 

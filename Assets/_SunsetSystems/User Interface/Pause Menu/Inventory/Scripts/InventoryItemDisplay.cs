@@ -1,13 +1,10 @@
+using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
-using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -42,6 +39,12 @@ namespace SunsetSystems.UI
                     _stackSize.gameObject.SetActive(false);
                 }
                 interactable = true;
+            }
+            else
+            {
+                _icon.gameObject.SetActive(false);
+                _stackSize.gameObject.SetActive(false);
+                interactable = false;
             }
         }
 

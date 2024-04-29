@@ -4,13 +4,13 @@ tags:
 [nomarkup][The wall is decorated with kitsch, “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup] #line:04e5553 
 <<if Roll ("Wits","Insight")>=3>>
     <<set $paintingsOutOfPlace to -1>>
-    [nomarkup][The general vibe of the surroundings and Diana's seemingly proletarian punk aesthetic, coupled with her rough, confrontational attitude - they clash with this display of fine art. The paintings are out of place, and that's for damn sure.][/nomarkup] #line:07d075d 
+    [nomarkup][The general vibe of the surroundings and Diana's seemingly proletarian punk aesthetic, coupled with her rough, confrontational attitude - they clash with this display of fine art. The paintings are out of place, and that's for damn sure.][/nomarkup] # lastline #line:07d075d 
 <<endif>>
 <<jump paintingsInteractions>>
 ===
 title: paintingsInteractions
 ---
--> [nomarkup][Destroy the paintings.][/nomarkup] #line:063d360 
+-> [nomarkup][Destroy the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:063d360 
     <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if visited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
@@ -18,14 +18,10 @@ title: paintingsInteractions
     <<jump paintingIntelligenceRoll>>
 -> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup]<<if visited("paintingWitsSuccess") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
-<<if $paintingsPutDown ==true>>
-    -> [nomarkup][Examine the safe.][/nomarkup] #line:0847f88 
-        <<jump safeExamine>>
-<<endif>>
-<<if $safeDiscovered ==true>>
-    -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if visited("successContinued") == false>> #line:033b9e3 
-        <<jump successContinued>>
-<<endif>>
+-> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>>#line:0847f88 
+    <<jump safeExamine>>
+-> [nomarkup][Take down one of the paintings.][/nomarkup] <<if visited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
+    <<jump successContinued>>
 -> [Step away.] #line:0c06753 
 ===
 title: paintingAwarenessRoll
@@ -54,8 +50,9 @@ title: paintingWitsRoll
 ===
 title: paintingAwarenessSuccess
 ---
-[nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that - noticing that the largest of the paintings in the polyptych casts an uneven shadow on the wall, its frame slightly askew. You reach up to straighten it, but the panel comes loose, revealing a safe hidden in an alcove behind the artwork.][/nomarkup]
-[nomarkup][Flipping the canvas over to place it gently to the side, you also notice a stamp affixed to the painting's back.][/nomarkup] #success #line:038c1c7 
+[nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that - noticing that the largest of the paintings in the polyptych casts an uneven shadow on the wall, its frame slightly askew. You reach up to straighten it, but the panel comes loose, revealing a safe hidden in an alcove behind the artwork.][/nomarkup] #success #line:03f7be6 
+[nomarkup][Flipping the canvas over to place it gently to the side, you also notice a stamp affixed to the painting's back.][/nomarkup] #line:038c1c7
+<<set $paintingsPutDown to true>> 
 <<jump successContinued>>
 ===
 title: successContinued
@@ -64,13 +61,11 @@ title: successContinued
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Jackpot! Now we just have to pry it open. #line:08ce67d 
 <<endif>>
-{$kieran}: As long as we're missing the correct combination, prying it open would take the entire night... or several. #line:08cdc27 
-<<if $paintingsDestroyed ==false>>
-    -> [nomarkup][Look at the paintings.][/nomarkup] #line:080811b 
-        <<jump opinionsStart>>
-    -> [nomarkup][Examine the stamp.][/nomarkup] #line:08344ae 
-        <<jump paintingSuccessExamination>>
-<<endif>>
+{$kieran}: As long as we're missing the correct combination, prying it open would take the entire night... or several. #lastline #line:08cdc27 
+-> [nomarkup][Look at the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:080811b 
+    <<jump opinionsStart>>
+-> [nomarkup][Examine the stamp.][/nomarkup] <<if $paintingsDestroyed == false>> #line:08344ae 
+    <<jump paintingSuccessExamination>>
 -> [nomarkup][Examine the safe.][/nomarkup] #line:0ad9884 
     <<jump safeExamine>>
 -> [Step away.] #line:03b4936 
@@ -80,10 +75,10 @@ title: opinionsStart
 {$kieran}: Did you find something? #line:02cb4fa 
 -> {$pcName}: I'm not sure. Call it a gut feeling. #line:0932b04 
 <<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
-    {$kieran}: I'll leave you to it, then. Your gut instincts have proven useful before, right? Maybe they’ll help us here, too. [nomarkup][He looks at the painting with curiosity, frowning slightly. He doesn’t seem to like its style very much. Instead, he is attempting to answer a fundamental question at the core of this case: What kind of person would own a piece of artwork as hideous as this?][/nomarkup] #line:06aadf8 
+    {$kieran}: I'll leave you to it, then. Your gut instincts have proven useful before, right? Maybe they'll help us here, too. [nomarkup][He looks at the painting with curiosity, frowning slightly. He doesn't seem to like its style very much. Instead, he is attempting to answer a fundamental question at the core of this case: What kind of person would own a piece of artwork as hideous as this?][/nomarkup] #line:06aadf8 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: My, our dear stuffy, moralistic nerd is finally acknowledging the utility of gut instincts. Oh, the humanity! The irrationality! Have seven trumpets just sounded? Because THE END IS NIGH! [nomarkup][The back of her hand flies to her forehead, as if fainting in a dramatic fashion.][/nomarkup] #line:02c7566 
-        {$kieran}: Now, now. No need for doomsaying. I'm simply acknowledging that the beginnings of an idea can come from less tangible and reliable sources than the conclusions which come out of them.
+        {$kieran}: Now, now. No need for doomsaying. I'm simply acknowledging that the beginnings of an idea can come from less tangible and reliable sources than the conclusions which come out of them. #line:00c9e75 
         {$kieran}: That is, a hunch does not hold up in court, but its presence can be a valid reason to begin gathering up the evidence that supports a similar conclusion - just so long as one's confirmation bias does not get in the way of a sound argument. #line:0b50446 
         {$anastasia}: Y'know, for once, I'm sorry I made the joke in the first place... #line:002280f 
         {$kieran}: I've done my job well, then. #line:0666287 
@@ -108,7 +103,7 @@ title: opinionsStart
 title: paintingsOpinion
 ---
 [nomarkup][You feel as if you should have an opinion about the art in front of you...][/nomarkup] #line:0676976 
--> {$pcName}: It isn’t all that aesthetically pleasing, is it? #line:0ec2ef6 
+-> {$pcName}: It isn't all that aesthetically pleasing, is it? #line:0ec2ef6 
     {$kieran}: Right, you are. This piece fails to be satisfying to the eye, and moreover is unsuccessful in conveying anything but chaos. Hence, it lacks artistic value. (+1 Kieran Influence) #line:0e0bb0e 
     <<ModifyInfluence 1 $kieran>>
 -> {$pcName}: You know what? I also think I actually kind of like this painting. I mean, it's a trainwreck, but there's something about it... #line:0a6402e 
@@ -116,8 +111,8 @@ title: paintingsOpinion
     {$anastasia}: Right?! It rules!(+1 Anastasia Influence) #line:0684159 
     <<ModifyInfluence 1 $anastasia>>
 -> {$pcName}: People like Kieran, huh? I don't think that a person's opinion says nearly as much about them as you claim it does, Anastasia. Least of all me, since I don't really have an opinion. #line:039146c 
-    {$anastasia}: Au contraire, as the residents of Paris, capital of art snobbery, would say. Not having an opinion is still an opinion - just as much as Kiki’s or mine. It tells me that you haven’t really thought too deeply about the art you consume, for one. That, or you’re too tired and stressed to risk prolonging our bickering.  
-    {$anastasia}: As for Kieran, well... He believes that the function of art is for it to look good and clearly, explicitly convey something. In a nutshell, it needs to say shit and not look like shit, in order to even be given the title - “art”. 
+    {$anastasia}: Au contraire, as the residents of Paris, capital of art snobbery, would say. Not having an opinion is still an opinion - just as much as Kiki's or mine. It tells me that you haven't really thought too deeply about the art you consume, for one. That, or you're too tired and stressed to risk prolonging our bickering.   #line:01e7487 
+    {$anastasia}: As for Kieran, well... He believes that the function of art is for it to look good and clearly, explicitly convey something. In a nutshell, it needs to say shit and not look like shit, in order to even be given the title - “art”.  #line:0bfa58c 
     {$anastasia}: In his personality and belief system, this points to strictness, traditionalism, and just plain old narrow-mindedness - but that isn't really a surprise, at this point. #line:0c3afc8 
     {$kieran}: Okay, I'll bite. What is the purpose of a piece of art, if it doesn't “mean” anything, in your view? #line:0e7cd4c 
     {$anastasia}: [nomarkup][She shrugs.][/nomarkup] Doesn't need one. If it's created by someone that can think and feel - someone that has a sense of self - then that's enough. That's art. The product and expression of the creative spirit - nothing more, and nothing less. #line:019c090 
@@ -130,8 +125,8 @@ title: paintingsOpinion
 title: paintingIntelligenceSuccess
 ---
 [nomarkup][You appraise that this particular set of artwork is worth quite a bit. It had to be bought in one of the local galleries or at an auction, since such pieces often have stamps or notes on their backs. These serve as receipts, of sorts, containing information about when or where the set was bought.][/nomarkup] #success #line:013991a 
-[nomarkup][You stare at the piece, and the picture, which seems to have been made under the influence of various illicit substances, stares back - at least for a few moments... But then, snapping out of your trance-like state, you dislodge it from the wall.][/nomarkup]
-[nomarkup][Flipping it over to glance at the back of the canvas, there is indeed a paper stamp, but the most glaring detail isn’t part of the painting. It’s the safe tucked away in an alcove behind where the artwork was displayed...][/nomarkup]
+[nomarkup][You stare at the piece, and the picture, which seems to have been made under the influence of various illicit substances, stares back - at least for a few moments... But then, snapping out of your trance-like state, you dislodge it from the wall.][/nomarkup] #line:0e57bc8 
+[nomarkup][Flipping it over to glance at the back of the canvas, there is indeed a paper stamp, but the most glaring detail isn't part of the painting. It's the safe tucked away in an alcove behind where the artwork was displayed...][/nomarkup] #line:0e81006 
 <<set $safeDiscovered to true>>
 <<jump successContinued>>
 ===
@@ -147,21 +142,21 @@ title: paintingIntelligenceFailure
 ===
 title: paintingWitsSuccess
 ---
-[nomarkup][This painting is not just a simple wall decoration. It's here for a reason. It doesn't mesh well with the image of Diana as a British punk rocker. She'd just place <i>Sex Pistols</i> or <i>The Exploited</i> posters on the wall if she wanted to express that portion of her identity.][/nomarkup]
-[nomarkup][Maybe there's something worth looking for behind one part of this polyptych? You go with your gut, and dislodge its frame...][/nomarkup]
-[nomarkup][...You were right! There’s a safe tucked away in an alcove behind where the artwork was displayed, as well as a paper stamp on the back of the canvas.][/nomarkup] #success #line:0b2604b 
+[nomarkup][This painting is not just a simple wall decoration. It's here for a reason. It doesn't mesh well with the image of Diana as a British punk rocker. She'd just place <i>Sex Pistols</i> or <i>The Exploited</i> posters on the wall if she wanted to express that portion of her identity.][/nomarkup] #success #line:098448f 
+[nomarkup][Maybe there's something worth looking for behind one part of this polyptych? You go with your gut, and dislodge its frame...][/nomarkup] #line:0c002bd 
+[nomarkup][...You were right! There's a safe tucked away in an alcove behind where the artwork was displayed, as well as a paper stamp on the back of the canvas.][/nomarkup]#line:0b2604b 
 <<set $safeDiscovered to true>>
 <<jump successContinued>>
 ===
 title: paintingWitsFailure
 ---
-[nomarkup][You stand in the middle of the office, waiting for the universe to bring ideas and revelations to you. You anticipate their grandeur, almost to herald the arrival of that first bit of understanding as to why you feel this way, but... None ever come.][/nomarkup]
-[nomarkup][Your eyes refocus, only to be met with Anastasia's hand being waved mere inches in front of your face.][/nomarkup] #failure #line:0ad5e7a 
+[nomarkup][You stand in the middle of the office, waiting for the universe to bring ideas and revelations to you. You anticipate their grandeur, almost to herald the arrival of that first bit of understanding as to why you feel this way, but... None ever come.][/nomarkup] #failure #line:0cf5daa 
+[nomarkup][Your eyes refocus, only to be met with Anastasia's hand being waved mere inches in front of your face.][/nomarkup] #line:0ad5e7a 
 <<if $artTalk == true>>
     <<jump opinionsStart>>
 <<else>>
     {$kieran}: You've been standing there for ten minutes with a blank look on your face. How exactly does this aid us in our investigation? #line:025032c 
-    -> {$pcName}: Oh, sorry about that. [nomarkup][You respond sheepishly. You would be red with embarrassment, if such a thing were still possible.][/nomarkup] #line:0afbd2d 
+    -> {$pcName}: Oh, sorry about that. [nomarkup][You respond sheepishly. You would be red with embarrassment, if such a thing were still possible.][/nomarkup] #lastline #line:0afbd2d 
     <<jump paintingsInteractions>>
 <<endif>>
 ===
@@ -170,10 +165,10 @@ title: paintingSuccessExamination
 <<set $aidanFoster to true>>
 <<set $safeCode to true>>
 <<set $vibrantVistas to true>>
-[nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup]
+[nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup] #line:08877b9 
 [nomarkup][It looks quite new. Maybe a bit yellowed. The text indicates that it was bought in the Vibrant Vistas Gallery in the Arts District. It also says that this particular piece was bought on the 17th of June, 1969.][/nomarkup] #line:06c123e 
-{$kieran}: Vibrant Vistas Gallery... The address... I believe it’s somewhere in the Arts District. And the date:the 17th of June, 1969. This is probably when it was bought. #line:0d53691 
-<<if GetIsPartyMemberRecruited($anastasia) is true and $paintingsAreDestroyed ==true>>
+{$kieran}: Vibrant Vistas Gallery... The address... I believe it's somewhere in the Arts District. And the date:the 17th of June, 1969. This is probably when it was bought. #line:0d53691 
+<<if GetIsPartyMemberRecruited($anastasia) is true and $PaintingsDestroyed ==true>>
     {$anastasia}: Great! Now we know where we can find more art to tear into. [nomarkup][She chuckles.][/nomarkup] #line:05774dc 
 <<endif>>
 [nomarkup][Your attention is caught by a small handwritten note on the stamp - “For my beloved Diana, on one of the most important days of her life. - Aidan Foster.”][/nomarkup] #line:0b50f52 
@@ -184,13 +179,14 @@ title: paintingSuccessExamination
 <<endif>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Our pet nerd seems to have an idea, though. #line:04c2d43 
-    {$kieran}: You’re right, miss Goth Queen. I have. I believe that Aidan Foster was Diana’s husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. [nomarkup][He pauses - allowing a beat of silence to hang in the air.][/nomarkup] #line:016a4d5
-    {$kieran}: When I was Kate’s ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy’s name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision.
+    {$kieran}: You're right, miss Goth Queen. I have. I believe that Aidan Foster was Diana's husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. [nomarkup][He pauses - allowing a beat of silence to hang in the air.][/nomarkup] #line:016a4d5
+    {$kieran}: When I was Kate's ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy's name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision. #lastline #line:0b7865b 
+<<else>>
+    {$kieran}: [nomarkup][He looks as if he is deep in thought.][/nomarkup] I believe that Aidan Foster was Diana's husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. [nomarkup][He pauses - allowing a beat of silence to hang in the air.][/nomarkup] #line:0be079e 
+    {$kieran}: When I was Kate's ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy's name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision. #lastline #line:03dfb9b 
 <<endif>>
-{$kieran}: [nomarkup][He looks as if he is deep in thought.][/nomarkup]  I believe that Aidan Foster was Diana’s husband. Rather touchy topic for her. He died in Vietnam in 1972, from what I recall. Killed in action. [nomarkup][He pauses - allowing a beat of silence to hang in the air.][/nomarkup]
-{$kieran}: When I was Kate’s ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy’s name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision.
 -> {$pcName}: Good to know. May be important. Thanks Kieran. #line:0893dd5 
-<<if $paintingsAreDestroyed ==false>>
+<<if $paintingsDestroyed ==false>>
     [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup] #line:0d6d4a6 
 <<endif>>
 ===
@@ -206,39 +202,40 @@ title: paintingAwarenessFailure
 ===
 title: paintingsDestroyed
 ---
-[nomarkup][Flimsy old paintings aren't a difficult obstacle for you to overcome, amounting to nothing more than plain canvas stretched over a wooden frame, then hung on a wall. Plain canvas that you, in all your senseless rage, are staring at, nostrils flaring with each unnecessary breath - every muscle in your body tensing... Ready to strike.][/nomarkup] 
+[nomarkup][Flimsy old paintings aren't a difficult obstacle for you to overcome, amounting to nothing more than plain canvas stretched over a wooden frame, then hung on a wall. Plain canvas that you, in all your senseless rage, are staring at, nostrils flaring with each unnecessary breath - every muscle in your body tensing... Ready to strike.][/nomarkup]  #line:0f4e1fd 
 [nomarkup][In a single swift motion, you punch through the frame, ripping and tearing at the canvas - leaving miserable shreds as a witness to your growing frustration. Somehow, you feel better...][/nomarkup] #line:0e7d4d1 
-[nomarkup][But it is not long before the beginnings of anxious dread and terror seep into your thoughts, along with a chilling realization: This act was something not entirely within your control.][/nomarkup]
+[nomarkup][But it is not long before the beginnings of anxious dread and terror seep into your thoughts, along with a chilling realization - This act was something not entirely within your control.][/nomarkup] #line:068d00c 
 <<set $safeDiscovered to true>>
-<<set $paintingsAreDestroyed to true>>
+<<set $paintingsDestroyed to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Such depths of emotion! The viciousness on display was captivating. You should make your own exhibition one day. [nomarkup][She grins.][/nomarkup] #line:0183fc2 
 <<endif>>
-{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[nomarkup] #line:04a3041 
+{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[/nomarkup] #line:04a3041 
 <<ModifyInfluence -1 $kieran>>
 -> {$pcName}: I... don't know what came over me. <<if visited("beastTalk") == false>> #line:0e9e8bb 
     <<jump beastTalk>>
 -> {$pcName}: Normally no. But I'm pissed. <<if visited("beastTalk") == false>> #line:0537bea 
     <<jump beastTalk>>
+<<jump paintingsInteractions>>
 ===
 title: beastTalk
 ---
 {$kieran}: [nomarkup][He frowns, not out of anger or judgment, but concern.][/nomarkup] I know what you are talking about. Just try your best to suppress those impulses. Otherwise, we may end up with no leads at all, in this investigation. #line:012f469 
 -> {$pcName}: Is there something you're not telling me? #line:0f1eb5b 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: I’m gonna take a wild guess, here and say: probably a lot. He wants to hide the more “unseemly” facts about our condition and the Beast inside of you for as long as he can. But we all have to face our true natures, eventually. #line:0254f15 
+    {$anastasia}: I'm gonna take a wild guess, here and say: probably a lot. He wants to hide the more “unseemly” facts about our condition and the Beast inside of you for as long as he can. But we all have to face our true natures, eventually. #line:0254f15 
 <<endif>>
 {$kieran}: I'm not trying to hide anything. It's just a... complicated concept. #line:097a87e 
 <<if (GetCompanionInfluence($kieran) >4)>>
-    {$kieran}: You have experienced a lot of... confrontations, tonight. I don’t want to overburden you. [nomarkup][Did you imagine it,  or was there genuine concern in his voice, just now...?][/nomarkup] #line:0a16b2c 
-    {$beast}: No, he doesn't care. Not about who I really am. Just toying with my feelings.
+    {$kieran}: You have experienced a lot of... confrontations, tonight. I don't want to overburden you. [nomarkup][Did you imagine it,  or was there genuine concern in his voice, just now...?][/nomarkup] #line:0a16b2c 
+    {$beast}: No, he doesn't care. Not about who I really am. Just toying with my feelings. #line:0bf80c5 
     {$beast}: Face it, he wasn't particularly ‘concerned' when I had a gun against my head, and he wouldn't be again if something similar happened now. #line:09b6336 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: [nomarkup][She bursts out laughing.][/nomarkup] Complicated? What's so complicated about it? Listen, when you hear it, just follow your gut. Don't listen to him. He'll just hinder your REAL potential. #line:0033600 
         {$beast}: I like that girl. She talks sense. #line:0e4c7e7 
         {$kieran}: [nomarkup][He squints at Anastasia, his eyebrows furrowing.][/nomarkup] Listen Anastasia, I gave her my word that I am going to help her, and I do not appreciate your efforts to sabotage that trust. Moreover, if she listens to you, then she'll have an even more difficult time adjusting than she would have, otherwise. #line:099edfa 
         {$anastasia}: Yes Kieran, I know. Your ass is on the line. You repeat it all the time. Not that I care all that much whether you live or die. #line:07b37da 
-        {$kieran}: We know; you've made it apparent that you don't care about much of anything at all... [nomarkup][He continues to argue, and you get the impression that if you don’t stop them both, they will continue bickering until the dawn catches you all unawares][/nomarkup] #line:017c492 
+        {$kieran}: We know; you've made it apparent that you don't care about much of anything at all... [nomarkup][He continues to argue, and you get the impression that if you don't stop them both, they will continue bickering until the dawn catches you all unawares][/nomarkup] #line:017c492 
         <<jump anaAndKieranConflict>>
     <<else>>
         {$kieran}: You had a lot of them tonight. I just don't want to overburden you. \[did you just heard genuine... concern in his voice?\] #line:040f0e3 
@@ -260,20 +257,22 @@ title: beastTalk
         -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #line:0ca6b02 
     <<endif>>
 <<endif>>
+<<jump paintingsInteractions>>
 ===
 title: anaAndKieranConflict
 ---
 {$innerVoice}: Shit... #line:0560752 
-{$beast}: I don’t want to die... I must survive.
+{$beast}: I don't want to die... I must survive. #line:088157a 
 -> {$pcName}: [nomarkup][Find the will to assert yourself.] (Resolve+Leadership)[/nomarkup] #line:04748ad 
-[nomarkup][Kieran and Anastasia continue to argue as you briefly clear your throat, readying yourself to take on the mantle of being the sole adult in the room... What will you say?][/nomarkup] #line:0928c7c 
-<<if Roll ("Resolve","Leadership")>=2>>
-    -> {$pcName}: [nomarkup][You straighten up where you stand, before projecting an authoritative, firm voice.][/nomarkup] Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. #success #line:00b25cf 
+[nomarkup][Kieran and Anastasia continue to argue as you briefly clear your throat, readying yourself to take on the mantle of being the sole adult in the room... What will you say?][/nomarkup] #line:0928c7c
+-> [nomarkup][You straighten up where you stand, you have no choice but to say something. Otherwise this quarrel will not end.] (Composure + Leadership) [/nomarkup]
+<<if Roll ("Composure","Leadership")>=2>>
+    -> {$pcName}: Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. [nomarkup][You say firmly.][/nomarkup] #success #line:00b25cf 
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0cbb9fc 
     {$kieran}: We'll finish this conversation at another, more opportune, time. #line:0c589a9 
     {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust. #line:00cc36a 
 <<else>>
-    -> {$pcName}: [nomarkup][You straighten up where you stand, before releasing an impressively loud shout.][/nomarkup] SHUT UP!!! #failure #line:0658ceb 
+    -> {$pcName}: SHUT UP!!! [nomarkup][You release an impressively loud shout.][/nomarkup] #failure #line:0658ceb 
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0822982 
     {$kieran}: That was exceedingly rude. We're helping you with this investigation, and this is the thanks we get? (-1 Kieran Influence) #line:081baa7 
     <<ModifyInfluence -1 $kieran>>
@@ -288,7 +287,7 @@ title: anaAndKieranConflict
         {$kieran}: That, or the irritating buzzing noise I cannot help but to hear when you speak... #line:0b0ca0c 
     <<endif>>
     -> {$pcName}: Oh, thank you. I'm so glad you think so. #line:0136ed4 
-    {$kieran}: [nomarkup][He smiles pleasantly and politely - the usual display.][/nomarkup] You are quite welcome. Being honest and forthcoming with the small things does tend to have its merits, after all... #line:0e7e345 
+    {$kieran}: [nomarkup][He smiles pleasantly and politely - the usual display.][/nomarkup] You are quite welcome. Being honest and forthcoming with the small things does tend to have its merits, after all... #lastline #line:0e7e345 
     <<if (GetCompanionInfluence($kieran) >=4)>>
         -> {$pcName}: [nomarkup][I think he might be warming up to me, a little...][/nomarkup] #line:0ef4fda 
     <<else>>
@@ -299,17 +298,17 @@ title: anaAndKieranConflict
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another, then back at you.][/nomarkup] #line:0968b83 
     {$anastasia}: [nomarkup][She raises an eyebrow with a smirk.][/nomarkup] Why? You gotta give a good reason, kid. #line:03a1d87 
     -> {$pcName}: Very well. It is only that... When you act so emotional and childish while invoking my name, I cannot help but think that I mistakenly stumbled into a daycare, rather than one of the Vegas Strip's finest night clubs. #line:03f7e44 
-    {$anastasia}: I am not a child. But if I was, that’d make you a fetus, little miss Desiree-conciler the pacifier. [nomarkup][She spits.] [-1 Anastasia influence][/nomarkup] #line:02c5afb
+    {$anastasia}: I am not a child. But if I was, that'd make you a fetus, little miss Desiree-conciler the pacifier. [nomarkup][She spits.] [-1 Anastasia influence][/nomarkup] #line:02c5afb
     <<ModifyInfluence -1 $anastasia>>
     -> {$pcName}: That being said, Kieran is my adoptive Sire, and if any information pertinent to this investigation comes up, I trust him to relay it to me when his judgment deems the time to be right. #line:066cd94
-    {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. [nomarkup][Kieran influence +1][/nomarkup]
+    {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. [nomarkup][Kieran influence +1][/nomarkup] #line:00780ed 
     <<ModifyInfluence 1 $kieran>>
-    {$anastasia}: Ugh.
+    {$anastasia}: Ugh. #line:0177a57 
 <<jump paintingsInteractions>>
 ===
 title: examineScraps
 ---
 [nomarkup][The paintings, or what is left of them, litters the floor - the wood frames shattered as canvas scraps try desperately to cling to the splintered mounting. Some of the old, dry paint has crumbled to dust, leaving scattered piles of vibrant powder upon the floor. But, in the midst of this wanton destruction, you spy a ripped paper stamp... Weird.][/nomarkup] #line:0fa3f84 
-[nomarkup][At least you’re still in one piece after that minor freakout. Unfortunately, though, you can't say the same about the paintings... A heavy steel safe sits behind what is left of one of the pieces of art, awaiting your inspection.][nomarkup]
+[nomarkup][At least you're still in one piece after that minor freakout. Unfortunately, though, you can't say the same about the paintings... A heavy steel safe sits behind what is left of one of the pieces of art, awaiting your inspection.][nomarkup] #line:0dadf45 
 <<jump successContinued>>
 ===

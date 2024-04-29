@@ -238,6 +238,11 @@ namespace SunsetSystems.Party
             return result;
         }
 
+        public bool TryRemoveMemberFromActiveRoster(ICreature partyMember)
+        {
+            return TryRemoveMemberFromActiveRoster(partyMember.References.CreatureData.DatabaseID);
+        }
+
         public object GetSaveData()
         {
             PartySaveData saveData = new();

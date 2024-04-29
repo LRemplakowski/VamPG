@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace SunsetSystems.Utils.Database
 {
-    [ExecuteAlways]
     public class DatabaseHolder : SerializedMonoBehaviour
     {
         public static DatabaseHolder Instance { get; private set; }

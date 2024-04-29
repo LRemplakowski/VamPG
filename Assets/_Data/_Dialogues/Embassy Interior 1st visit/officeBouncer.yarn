@@ -15,7 +15,7 @@ Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms.
     -> {$pcName}: Kate sent us. #line:0ee6107 
     <<jump officeBouncerKateSentUs>>
 <<endif>>
-<<if GetHasItem("IT_Q_EMBASSYDRINK") is true and visited("drinkFailure") is false>>
+<<if GetHasItem("IT_Q_EMBASSYDRINK") is true and CustomVisited("drinkFailure") is false>>
     -> {$pcName}: You've been working all night. Here, a drink. (Manipulation + Persuasion) #line:0d0b60d 
         <<if Roll("Manipulation","Persuasion") >=3>>
             <<jump drinkSuccess>>

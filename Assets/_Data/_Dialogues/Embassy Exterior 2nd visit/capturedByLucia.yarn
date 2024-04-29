@@ -17,7 +17,7 @@ title: deathOptions
 ---
 {$sire}: I asked you a question. #line:0d0ba7b 
 //she stands straight again//
--> {$pcName}: Strangulation. <<if visited("strangulation") == false>> #line:04f6c9a 
+-> {$pcName}: Strangulation. <<if CustomVisited("strangulation") == false>> #line:04f6c9a 
     <<jump strangulation>>
 -> {$pcName}: Gunshot. #line:00bfdba 
     <<jump gunshot>>

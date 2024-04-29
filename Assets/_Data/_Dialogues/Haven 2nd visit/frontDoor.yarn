@@ -16,7 +16,7 @@ title: doorOptions
 [nomarkup][Of course, there's no answer. You take a deep breath trying to compose yourself and come closer to the door reading your weapon.][/nomarkup] #line:05e8ab0 
 -> [nomarkup][Open it.][/nomarkup] #line:00feb7e 
     <<jump doorOpened>>
--> [nomarkup][Look out the peephole.][/nomarkup] <<if visited("doorOpened") == false>> #line:0cfff56 
+-> [nomarkup][Look out the peephole.][/nomarkup] <<if CustomVisited("doorOpened") == false>> #line:0cfff56 
     [nomarkup][You only see the neighbor's door across the hall. If somebody is there, they are hiding.][/nomarkup] #line:0be388c 
     <<jump doorOptions>>
 ===

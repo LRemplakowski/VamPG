@@ -1,6 +1,6 @@
 ﻿title: PhoneStartNode
 ---
-<<if visited("PhoneCall") == true>>
+<<if CustomVisited("PhoneCall") == true>>
     <<jump CallLandlord>>
 <<else>>
     <<jump PhoneCall>>

@@ -7,9 +7,9 @@ tags:
 ===
 title: ShowerInteractions
 --- 
--> [nomarkup][Find the cause of death.] (Intelligence + Medicine) [/nomarkup] <<if visited("CauseofDeath") == false>> #line:0ecd4b4 
+-> [nomarkup][Find the cause of death.] (Intelligence + Medicine) [/nomarkup] <<if CustomVisited("CauseofDeath") == false>> #line:0ecd4b4 
     <<jump CauseofDeath>>
--> [nomarkup][Fleece the body.] (Wits + Streetwise) [/nomarkup] <<if visited("FleeceBody") == false>> #line:03acf5e 
+-> [nomarkup][Fleece the body.] (Wits + Streetwise) [/nomarkup] <<if CustomVisited("FleeceBody") == false>> #line:03acf5e 
     <<jump FleeceBody>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0684ec1 
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "TAKE_SHOWER">>

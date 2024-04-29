@@ -1,7 +1,7 @@
 ﻿title: bookcase
 tags:
 ---
-<<if visited("bookcase") == false>>
+<<if CustomVisited("bookcase") == false>>
     [nomarkup][The bookcase is filled with a myriad of items. Not only books, but a large TV, radio, some decorative vases... Modern books sit upon the shelves, but there are also several occult tomes which line the wall - the faint scent of lignin permeating the air. These books must be pretty old.][/nomarkup]
     [nomarkup][Several scrolls lean against the farthest shelf on top, and you ponder whether they are made from paper or parchment. A traditional quill is even nestled amongst them, gaining dust with time. What a strange, dissonant fusion of new and old...][/nomarkup] #line:04c2c4b 
     {$kieran}: Oh my... do you see these books? #line:0bd847a 
@@ -24,9 +24,9 @@ title: bookcaseInteractions
     <<jump bookcaseExamine>>
 -> [nomarkup][Examine the normal books.][/nomarkup] #line:0821d34 
     <<jump bookcaseExcamineNormal>>
--> [nomarkup][Turn on the TV.][/nomarkup] <<if visited("bookcaseTV") == false>> #line:0ed4221 
+-> [nomarkup][Turn on the TV.][/nomarkup] <<if CustomVisited("bookcaseTV") == false>> #line:0ed4221 
     <<jump bookcaseTV>>
--> [nomarkup][Turn on the radio.][/nomarkup] <<if visited("bookcaseRadio") == false>> #line:0f01e3f 
+-> [nomarkup][Turn on the radio.][/nomarkup] <<if CustomVisited("bookcaseRadio") == false>> #line:0f01e3f 
     <<jump bookcaseRadio>>
 -> [nomarkup][Examine Poe's book.] #line:0de685b 
     <<jump poeBookExamine>>
@@ -188,13 +188,13 @@ title: poeBookExamine
 ===
 title: poeBookExamineQuestions
 ---
--> [nomarkup][Try to recall the code.] (Intelligence+Academics)[/nomarkup] <<if visited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
+-> [nomarkup][Try to recall the code.] (Intelligence+Academics)[/nomarkup] <<if CustomVisited("poeExamineAcademicsRoll") == false>> #line:0d8cc1f 
     <<jump poeExamineAcademicsRoll>>
--> [nomarkup][Try to break the code by yourself.] (Intelligence+Investigation)[/nomarkup] <<if visited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
+-> [nomarkup][Try to break the code by yourself.] (Intelligence+Investigation)[/nomarkup] <<if CustomVisited("poeExamineInvestigationRoll") == false>> #line:0f3e02d 
     <<jump poeExamineInvestigationRoll>>
--> [nomarkup][Look for the missing pages.] (Wits+Awareness)[/nomarkup] <<if visited("poeExamineAwarenessRoll") == false>> #line:082ed56 
+-> [nomarkup][Look for the missing pages.] (Wits+Awareness)[/nomarkup] <<if CustomVisited("poeExamineAwarenessRoll") == false>> #line:082ed56 
     <<jump poeExamineAwarenessRoll>>
--> [nomarkup][Look for the missing pages behind the TV.] (Strength+Athletics)[/nomarkup] <<if visited("poeExamineAthleticsRoll") == false>> #line:08d0838 
+-> [nomarkup][Look for the missing pages behind the TV.] (Strength+Athletics)[/nomarkup] <<if CustomVisited("poeExamineAthleticsRoll") == false>> #line:08d0838 
     <<jump poeExamineAthleticsRoll>>
 -> [nomarkup][Look at the code again.][/nomarkup] #line:00656fb 
     <<jump poeBookExamine>>

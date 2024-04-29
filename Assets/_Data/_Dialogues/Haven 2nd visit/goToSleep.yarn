@@ -11,27 +11,27 @@ title: goToSleepOptions
 <<if $attemptsCounter >= 4>>
     <<jump endNight>>
 <<endif>>
--> [nomarkup][Think about Arthur.][/nomarkup] <<if visited("thinkAboutArthur") == false>> #line:0c5e975 
+-> [nomarkup][Think about Arthur.][/nomarkup] <<if CustomVisited("thinkAboutArthur") == false>> #line:0c5e975 
     <<if $attemptsCounter > 1>>
         <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<endif>>
     <<jump thinkAboutArthur>>
--> [nomarkup][Think about vampires.][/nomarkup] <<if visited("thinkAboutVampires") == false>> #line:0992d14 
+-> [nomarkup][Think about vampires.][/nomarkup] <<if CustomVisited("thinkAboutVampires") == false>> #line:0992d14 
     <<if $attemptsCounter > 1>>
         <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<endif>>
     <<jump thinkAboutVampires>>
--> [nomarkup][Think about what happened today.][/nomarkup] <<if visited("thinkAboutWhatHappened") == false>> #line:0092b53 
+-> [nomarkup][Think about what happened today.][/nomarkup] <<if CustomVisited("thinkAboutWhatHappened") == false>> #line:0092b53 
     <<if $attemptsCounter > 1>>
         <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<endif>>
     <<jump thinkAboutWhatHappened>>
--> [nomarkup][Think about other people you've met today.][/nomarkup] <<if visited("thinkAboutPeople") == false>> #line:0818b66 
+-> [nomarkup][Think about other people you've met today.][/nomarkup] <<if CustomVisited("thinkAboutPeople") == false>> #line:0818b66 
     <<if $attemptsCounter > 1>>
         <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<endif>>
     <<jump thinkAboutPeople>>
-<<if GetIsPartyMemberRecruited($anastasia) is true and visited("askAnastasia")==false>>
+<<if GetIsPartyMemberRecruited($anastasia) is true and CustomVisited("askAnastasia")==false>>
     -> {$pcName}: Anastasia? #line:02b2a3b 
         <<jump askAnastasia>>
 <<endif>>
@@ -126,17 +126,17 @@ title: discussionWhatHappened3rdStep
 title: thinkAboutPeople
 ---
 [nomarkup][You've met so many people today. It's not hard to keep track though. You were always good with names and faces. One of the quirks that makes you a good PI. Your thoughts start to spin around...][/nomarkup] #line:0670fc2 
--> [nomarkup][Kieran.][/nomarkup] <<if visited("thinkAboutKieran") == false>> #line:0a668c5 
+-> [nomarkup][Kieran.][/nomarkup] <<if CustomVisited("thinkAboutKieran") == false>> #line:0a668c5 
     <<jump thinkAboutKieran>>
-<<if GetIsPartyMemberRecruited($anastasia) == true and visited("thinkAboutAnastasia") == false>>
+<<if GetIsPartyMemberRecruited($anastasia) == true and CustomVisited("thinkAboutAnastasia") == false>>
     -> [nomarkup][Anastasia.][/nomarkup]  #line:09c00f4 
         <<jump thinkAboutAnastasia>>
 <<endif>>
--> [nomarkup][Dominic.][/nomarkup] <<if visited("thinkAboutDominic") == false>> #line:09e4581 
+-> [nomarkup][Dominic.][/nomarkup] <<if CustomVisited("thinkAboutDominic") == false>> #line:09e4581 
     <<jump thinkAboutDominic>>
--> [nomarkup][Kate.][/nomarkup] <<if visited("thinkAboutKate") == false>> #line:0ec0e89 
+-> [nomarkup][Kate.][/nomarkup] <<if CustomVisited("thinkAboutKate") == false>> #line:0ec0e89 
     <<jump thinkAboutKate>>
--> [nomarkup][Diana.][/nomarkup] <<if visited("thinkAboutDiana") == false>> #line:097ccc7 
+-> [nomarkup][Diana.][/nomarkup] <<if CustomVisited("thinkAboutDiana") == false>> #line:097ccc7 
     <<jump thinkAboutDiana>>
 ===
 title: thinkAboutKieran

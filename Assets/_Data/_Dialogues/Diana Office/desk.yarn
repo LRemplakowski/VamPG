@@ -16,7 +16,7 @@ title: deskInteractions
         <<jump deskExamination>>
     -> [nomarkup][Boot the computer.][/nomarkup] #line:001bf2a 
         <<jump computerTurnedOn>>
-    -> [nomarkup][Check the drawers.][/nomarkup] <<if visited("deskDrawers") == false>> #line:0edbce5 
+    -> [nomarkup][Check the drawers.][/nomarkup] <<if CustomVisited("deskDrawers") == false>> #line:0edbce5 
         <<jump deskDrawers>>
     -> [nomarkup][Leave the desk alone.][/nomarkup] #line:0a6e434
 <<else>>
@@ -35,9 +35,9 @@ title: deskExamination
 ===
 title: deskExaminationOptions
 ---
--> [nomarkup][Throw the ash away.][/nomarkup] <<if visited("throwAsh") == false>> #line:0d3873e 
+-> [nomarkup][Throw the ash away.][/nomarkup] <<if CustomVisited("throwAsh") == false>> #line:0d3873e 
     <<jump throwAsh>>
--> [nomarkup][Smoke the remaining cigarette.][/nomarkup] <<if visited("smokeCigarette") == false>> #line:0aba136 
+-> [nomarkup][Smoke the remaining cigarette.][/nomarkup] <<if CustomVisited("smokeCigarette") == false>> #line:0aba136 
     <<jump smokeCigarette>>
 -> [nomarkup][Inspect the buds.][/nomarkup] #line:0288b54 
     <<jump inspectBuds>>
@@ -130,7 +130,7 @@ title: deskNewspaper
 title: computerTurnedOn
 ---
 [nomarkup][As soon as you flip the switch on the side of the box nesting the screen, it flashes to life. A series of scratches and metallic bleeps are emitted from the steel cube. The glass screen shows a series of letters, which disappear less than a second later, the system prompting you for a password.][/nomarkup] #line:0239e06 
--> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.][Intelligence + Technology][/nomarkup] <<if visited("hackingFailure") == false or visited("hackingSuccess") == false>> #line:07dd03a 
+-> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.][Intelligence + Technology][/nomarkup] <<if CustomVisited("hackingFailure") == false or CustomVisited("hackingSuccess") == false>> #line:07dd03a 
     <<if Roll("intelligence","technology")>=(4-$computerModelIdentified)>>
         <<jump hackingSuccess>>
     <<else>>
@@ -204,7 +204,7 @@ title: computerDestroyed
     {$anastasia}: Haha! Right between the eyes! #line:00b827a 
 <<endif>>
 {$kieran}: Goddamnit! There could have been some useful data in there! #line:01caa19 
--> {$pcName}: Don’t yell at me! I don’t even know what happened! <<if visited("beastTalk") == false>> #line:02f5132 
+-> {$pcName}: Don’t yell at me! I don’t even know what happened! <<if CustomVisited("beastTalk") == false>> #line:02f5132 
     <<jump beastTalk>>
 ===
 title: wrongPassword
@@ -215,12 +215,12 @@ title: wrongPassword
 title: accessGranted
 ---
 [nomarkup][Just after you hit enter, the screen’s display changes, bringing you to the welcome page for Diana. Dismissing that window, there are several files on the homepage. Mostly financial stuff dating back to 1969. You guess that she may have had to move the records from paper. Probably a good call? Definitely would have been, for you.][/nomarkup] #line:03e8efc 
--> [nomarkup][Examine recent logs.] (Resolve + Investigation)[/nomarkup] <<if visited("recentLogs") == false>> #line:0ff1350 
+-> [nomarkup][Examine recent logs.] (Resolve + Investigation)[/nomarkup] <<if CustomVisited("recentLogs") == false>> #line:0ff1350 
     <<jump recentLogs>>
--> [nomarkup][Examine older logs.] (Intelligence + Finance)[/nomarkup] <<if visited("olderLogs") == false>> #line:0c00f59 
+-> [nomarkup][Examine older logs.] (Intelligence + Finance)[/nomarkup] <<if CustomVisited("olderLogs") == false>> #line:0c00f59 
     <<jump olderLogs>>
 <<if $safeDiscovered ==true>>
-    -> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if visited("searchQuerry") == false>> #line:085e30a 
+    -> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if CustomVisited("searchQuerry") == false>> #line:085e30a 
         <<jump searchQuerry>>
 <<endif>>
 -> [nomarkup][Leave computer as it is.][/nomarkup] #line:03c5c3c 
@@ -261,10 +261,10 @@ title: deskDrawers
 ---
 [nomarkup][Not much in here. Most of them contain paper, writing utensils, and other miscellaneous items... In one, there is even an unopened pack of Embassy cigarettes. A single drawer, however, remains locked to you, and takes a key. But the lock doesn’t look too complicated...][/nomarkup] #lastline #line:07b41ed 
 <<if GetHasItem("IT_Q_BOBBY_PIN") is true>>
-    -> [nomarkup][Pick the drawer open.] (Dexterity + Larceny)[/nomarkup] <<if visited("drawerDexRoll") == false>> #line:03db049
+    -> [nomarkup][Pick the drawer open.] (Dexterity + Larceny)[/nomarkup] <<if CustomVisited("drawerDexRoll") == false>> #line:03db049
         <<jump drawerDexRoll>> 
 <<endif>>
--> [nomarkup][Break the lock by force.] (Strength + Larceny) [/nomarkup] <<if visited("drawerStrRoll") == false>> #line:007fa6d
+-> [nomarkup][Break the lock by force.] (Strength + Larceny) [/nomarkup] <<if CustomVisited("drawerStrRoll") == false>> #line:007fa6d
     <<jump drawerStrRoll>> 
 ===
 title: drawerDexRoll
@@ -317,7 +317,7 @@ title: drawerDestroyed
     {$anastasia}: Hey! At least let me know if you're gonna throw something! #line:07f5833 
 <<endif>>
 {$kieran}: By the Blood! That's not how lockpicking works! #line:03a425d 
--> {$pcName}: Don't scream at me! I don't even know what happened! <<if visited("beastTalk") == false>> #line:0521161 
+-> {$pcName}: Don't scream at me! I don't even know what happened! <<if CustomVisited("beastTalk") == false>> #line:0521161 
     <<jump beastTalk>>
 ===
 title: drawerSuccess

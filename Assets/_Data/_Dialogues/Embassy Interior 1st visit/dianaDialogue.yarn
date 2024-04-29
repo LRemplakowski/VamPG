@@ -15,7 +15,7 @@ position: 136,-238
 <<if $toldKieranAboutVision ==1>>
     {$kieran}: Another vision? #line:07c09de 
 <<endif>>
--> {$pcName}: That's the woman I've been seeing. <<if visited("tellAboutVision") == false>> #line:0a3a355 
+-> {$pcName}: That's the woman I've been seeing. <<if CustomVisited("tellAboutVision") == false>> #line:0a3a355 
     <<jump tellAboutVision>>
 ===
 title: tellAboutVision

@@ -118,9 +118,13 @@ namespace SunsetSystems.Journal
                 if (_currentObjectives.TryGetValue(quest.ID, out Dictionary<string, Objective> questObjectives))
                 {
                     if (questObjectives.Remove(objective.ReadableID))
+                    {
                         OnActiveQuestsChanged?.Invoke(_trackedQuests);
+                    }
                     else
+                    {
                         Debug.LogWarning($"Trying to fail objective {objective.ReadableID} of quest {quest.Name} but it is not an active objective!");
+                    }
                 }
             }
         }

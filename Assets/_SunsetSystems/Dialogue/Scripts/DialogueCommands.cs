@@ -1,6 +1,7 @@
 using System;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.Database;
+using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
@@ -127,7 +128,14 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("DecreaseWillpower")]
         public static void DecreaseWillpower(string characterID, int value)
         {
-            throw new NotImplementedException();
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            {
+                var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
+                if (partyMember != null)
+                {
+                    partyMember.References.StatsManager.Willpower.SuperficialDamage += value;
+                }
+            }
         }
     }
 }

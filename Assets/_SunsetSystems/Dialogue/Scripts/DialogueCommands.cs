@@ -111,7 +111,10 @@ namespace SunsetSystems.Dialogue
         public static void RemoveItem(string itemID)
         {
 
-            throw new NotImplementedException();
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out var item))
+            {
+                InventoryManager.Instance.TakeItemFromPlayer(item, 1);
+            }
 
         }
 

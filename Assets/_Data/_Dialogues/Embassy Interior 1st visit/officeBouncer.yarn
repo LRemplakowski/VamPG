@@ -31,10 +31,13 @@ position: -86,6
 {$kieran}: Did you hear her? Last time I checked, you were not deaf. Quite the opposite. #line:02e9baa 
 Office Bouncer: ... Ms. Foster is not taking any visitors at the moment. #line:0b0c979 
 {$kieran}: Kate isn't going to like this. And you of all people, George, should be acutely aware of what happens when she is sufficiently angry. That is a fate I would not wish on my worst enemy... #line:0ee072c 
-[nomarkup][A bead of sweat forms off the Bouncer's head but he doesn't budge][/nomarkup] #line:072e3c5 
+[nomarkup][A bead of sweat forms off the Bouncer's head but he doesn't budge.][/nomarkup] #line:072e3c5 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Oh, let me guess. [nomarkup][She tries to mimic the bouncer's voice.][/nomarkup] Ms. Foster is not taking any visitors at the moment. #line:0ca32c6 
+    {$anastasia}: Oh, let me guess. [nomarkup][She tries to mimic the bouncer's voice.][/nomarkup] Ms. Foster is not taking any visitors at the moment. #line:0ca32c6
+    Office Bouncer: [nomarkup][You see as he swallows visibly stressed.][/nomarkup] ... Ms. Foster is not taking any visitors at the moment.
+    {$anastasia}: See? Told ya.
 <<endif>>
+[nomarkup][It appears you need to look for another way in...][/nomarkup]
 ===
 title: drinkSuccess
 position: 241,17

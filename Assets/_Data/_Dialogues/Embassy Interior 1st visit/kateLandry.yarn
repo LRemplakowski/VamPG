@@ -128,9 +128,10 @@ position: -502,87
     {$sforzaMask}: Back again, piccola mia? I suppose for you I have a few minutes. #lastline #line:08fbef5 
 <<else>>
     <<if $anastasiaIntroduced is false and GetIsPartyMemberRecruited($anastasia) is true>>
+        <<set $anastasiaIntroduced to true>>
         {$sforzaMask}: Pleasure to finally make your acquaintance, Anastasia. [nomarkup][Anastasia raises an eyebrow, but keeps her bearings.][/nomarkup] #line:0ed9529 
         {$anastasia}: You too, Kate. [nomarkup][She grabs Kate's hand, quickly planting a kiss upon it.][/nomarkup]
-        [nomarkup][Snatching her hand away, Kate grabs Anastasia's hand back, forcing her  fingers against Kate's soft wrist. Then, Kate raises those soft fingers up to her mouth and presses her lips to the point where Anastasia touched her. Kate's eyes locked on her the whole time.][/nomarkup] #line:08e2e3b 
+        [nomarkup][Snatching her hand away, Kate grabs Anastasia's hand back, forcing her fingers against Kate's soft wrist. Then, Kate raises those soft fingers up to her mouth and presses her lips to the point where Anastasia touched her. Kate's eyes locked on her the whole time.][/nomarkup] #line:08e2e3b 
         {$sforzaMask}: No little games for me after all that time hanging yourself off my bar like yesterday's catch? Hm? [nomarkup][She raises an eyebrow.][/nomarkup] #line:05ec913
         {$sforzaMask}: I suppose not, then. In that case, let's speak your language, Anastasia. Go ahead and tell me why you've put such efforts into getting my attention, while you still have it.
     <<endif>>
@@ -295,9 +296,9 @@ position: 537,611
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$kieran}: A Kindred sect founded more than five hundred years ago with the Six Traditions as our core guiding tenets. All of us are members, and... #line:043e039 
     {$anastasia}: [nomarkup][He's interrupted by a snort.][/nomarkup] #line:0435734 
-    {$kieran}: ...citizens, so to speak, of the Praxis. The institution's organization is modeled after feudalistic societies of the middle ages, with the Prince of a given territory being the equivalent to a lord. #line:03a41ce 
+    {$kieran}: ...citizens, so to speak, of the Praxis. The institution's organization is modeled after feudalistic societies of the middle ages, with the Prince of a given territory being the equivalent to a lord. #lastline #line:03a41ce 
 <<else>>
-    {$kieran}: A Kindred sect founded more than five hundred years ago with the Six Traditions as our core guiding tenets. All of us are members, and citizens, so to speak, of the Praxis. The institution's organization is modeled after feudalistic societies of the middle ages, with the Prince of a given territory being the equivalent to a Lord. #line:08eb862 
+    {$kieran}: A Kindred sect founded more than five hundred years ago with the Six Traditions as our core guiding tenets. All of us are members, and citizens, so to speak, of the Praxis. The institution's organization is modeled after feudalistic societies of the middle ages, with the Prince of a given territory being the equivalent to a Lord. #lastline #line:08eb862 
 <<endif>>
 -> {$pcName}: And the Lady? #line:06100ac 
 {$sforzaMask}: Women's work so rarely intersected with something so crass as leadership you see, so when the systems were being designed, such words as “Princess” and “Lady” were neatly left out. How thoughtful of them, no? [nomarkup][The tone in her voice is sweet, but the way she says the words has a distinct air of disdain. Kate smiles at you.][/nomarkup] But it's different now, no? The tide of progress lifts all boats! #line:0c7e90e 
@@ -317,18 +318,23 @@ position: -823,567
 ---
 {$sforzaMask}: After you told him I sent you? #line:0cdd3c5 
 -> {$pcName}: Yes, ma'am. #line:07204d4 
-    {$sforzaMask}: That won't do at all. He's been so well behaved, thus far. You take a seat here, dear, and I will be just a moment. #line:04a9a26 
-    <<set $kateDealsWithBouncer to true>>
-    //cut to black - Kate goes from her lodge and takes care of the bouncer//
-    {$sforzaMask}: [nomarkup][Returning, the woman's swaying hips scatter the light as she approaches.][/nomarkup] He won't be an issue anymore. #line:0f0538b 
-    {$kieran}: Thank you ma'am. #line:0486696 
-    -> {$pcName}: What did you do to him? #line:0d333c8 
-        {$sforzaMask}: We had a conversation, my darling. Do you need anything else? #line:02c7a04 
-        {$kieran}: It would be best to refrain from asking prying questions. He's out of our way - that is what counts. Onward, we go. #line:0467994 
-        <<if GetIsPartyMemberRecruited($anastasia) is true>>
-            {$anastasia}: Oooooh how ominous. #line:0c10d16 
-        <<endif>>
-<<jump subsequentQuestions>>
+{$sforzaMask}: That won't do at all. He's been so well behaved, thus far. You take a seat here, dear, and I will be just a moment. #line:04a9a26 
+<<set $kateDealsWithBouncer to true>>
+<<jump KateTalkWithBouncer>>
+===
+title: KateTalkWithBouncer
+---
+//cut to black - Kate goes from her lodge and takes care of the bouncer//
+{$sforzaMask}: [nomarkup][Returning, the woman's swaying hips scatter the light as she approaches.][/nomarkup] He won't be an issue anymore. #line:0f0538b 
+{$kieran}: Thank you ma'am. #line:0486696 
+-> {$pcName}: What did you do to him? #line:0d333c8 
+{$sforzaMask}: We had a conversation, my darling. Do you need anything else? #line:02c7a04 
+{$kieran}: It would be best to refrain from asking prying questions. He's out of our way - that is what counts. Onward, we go. #line:0467994 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: Oooooh how ominous. #lastline #line:0c10d16 
+<<endif>>
+-> {$pcName}: I should go.
+    {$sforzaMask}: An astute observation. Best of luck on your little search.
 ===
 title: finalDeathExplained
 position: 1151,92
@@ -350,14 +356,13 @@ position: -858,264
     <<set $kateAlleyTalk to true>>
     {$sforzaMask}: You should talk to her about that, then. #line:0f13eb6 
     -> {$pcName}: She ran off into her office before I had the chance. #line:0637d69 
-    {$sforzaMask}: [nomarkup][She cocks her head to the side.][/nomarkup] With such a courteous and considerate attitude, I cannot imagine why. Perhaps she had work to do? #line:0987053 
+    {$sforzaMask}: [nomarkup][She cocks her head to the side.][/nomarkup] With such a courteous and considerate attitude, I cannot imagine why. Perhaps she had work to do? Talk to her bouncer over there.
+    [nomarkup][She raises her slender hand and shows you another exit from the room - there is a muscled man standing on stairs and guarding the doors behind him.][/nomarkup] #line:0987053 
+    {$sforzaMask}: [nomarkup][Kate waves her hand without looking at you.][/nomarkup] Tell him his mistress sent you. #line:0868ee8 
+<<elseif $talkedToBouncer == false>>
+    {$kieran}: We appreciate your assistance with this matter. #line:028f814
 <<else>>
-    {$sforzaMask}: [nomarkup][Kate waves her hand without looking at you.][/nomarkup] Speak with the bouncer, and tell him his mistress sent you. #line:0868ee8 
-    <<if $talkedToBouncer == false>>
-        {$kieran}: We appreciate your assistance with this matter. #line:028f814 
-    <<else>>
-        {$pcName}: The bouncer is being difficult. #line:0ffc627 
-        <<jump bouncerDifficulties>>
-    <<endif>>
+    {$pcName}: The bouncer is being difficult. #line:0ffc627 
+    <<jump bouncerDifficulties>>
 <<endif>>
 ===

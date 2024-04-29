@@ -179,5 +179,11 @@ namespace SunsetSystems.Dialogue
         {
             return 0;
         }
+
+        [YarnFunction("GetPartyHasDiscipline")]
+        public static bool GetParyHasDiscipline(string disciplineID)
+        {
+            return true;
+        }
     }
 }

@@ -18,10 +18,14 @@ MonoBehaviour:
   DisplayValue: 
   compatibleRaces:
   - VampireMale
+  - VampireFemale
   wardrobeRecipeThumbs:
   - race: VampireMale
     filename: 
     thumb: {fileID: 21300000, guid: ad4422f9c24a1d8408c3f14d6478a86d, type: 3}
+  - race: VampireFemale
+    filename: 
+    thumb: {fileID: 0}
   wardrobeSlot: FullOutfit
   Appended: 0
   Hides: []
@@ -32,7 +36,9 @@ MonoBehaviour:
   OverrideDNA:
     PreloadValues: []
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Goon 03 Outfit
-    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothing_chest","colors":[255,255,255,255,0,0,0,0,31,30,30,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"clothes_chest","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"headgear","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false}],"wardrobeSet":[],"raceAnimatorController":""}'
+    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothing_chest","colors":[255,255,255,255,0,0,0,0,31,30,30,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"clothes_chest","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"headgear","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1}],"wardrobeSet":[],"raceAnimatorController":""}'
+  forceKeep: 0
+  labelLocalFiles: 0
   coverImages:
   - {fileID: 21300000, guid: 9c9a4bc04609c62428392eb5ead1f685, type: 3}
   - {fileID: 21300000, guid: c13828597679d0b48bdf3f20d5462564, type: 3}
@@ -50,4 +56,16 @@ MonoBehaviour:
         recipe: Dominic_facial_hair_overlay
       - slot: Face
         recipe: sunglasses_aviators01
+    - targetRace: VampireFemale
+      wardrobeSet:
+      - slot: Face
+        recipe: sunglasses_aviators01
+      - slot: Hair
+        recipe: hair_long_f01_Recipe
+      - slot: Legs
+        recipe: denim_trousers_f01_Recipe
+      - slot: Chest
+        recipe: bra01_Recipe
+      - slot: Feet
+        recipe: sneakers_Recipe
   arbitraryRecipes: []

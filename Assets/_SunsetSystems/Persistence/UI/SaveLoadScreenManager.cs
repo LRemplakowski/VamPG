@@ -1,12 +1,12 @@
-using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SunsetSystems.Persistence.UI
 {
-    public class SaveLoadScreenManager : MonoBehaviour
+    public class SaveLoadScreenManager : MonoBehaviour, ICancelHandler
     {
         [SerializeField, AssetsOnly, Required]
         private SaveEntry _saveEntryPrefab;
@@ -58,6 +58,11 @@ namespace SunsetSystems.Persistence.UI
         {
             SaveLoadManager.CreateNewSaveFile(saveName);
             RefreshSaveScreen(true);
+        }
+
+        public void OnCancel(BaseEventData eventData)
+        {
+            gameObject.SetActive(false);
         }
     }
 }

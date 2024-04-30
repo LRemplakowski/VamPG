@@ -52,6 +52,7 @@ namespace SunsetSystems.Inventory.UI
                 return;
             }
             ViewParent.gameObject.SetActive(true);
+            UpdateMoneyCounter(Mathf.RoundToInt(InventoryManager.Instance.GetMoneyAmount()));
             for (int i = 0; i < data.Count; i++)
             {
                 IGameDataProvider<InventoryEntry> dataProvider = data[i];

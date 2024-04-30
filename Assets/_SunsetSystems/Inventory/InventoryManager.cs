@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Data;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Persistence;
@@ -106,25 +107,49 @@ namespace SunsetSystems.Inventory
 
         public object GetSaveData()
         {
-            InventorySaveData saveData = new();
-            saveData.InventoryContents = _playerInventory.Contents ?? new();
-            saveData.Money = _money;
-            return saveData;
+            return new InventorySaveData(this);
         }
 
         public void InjectSaveData(object data)
         {
             if (data is not InventorySaveData saveData)
                 return;
-            this._playerInventory.AddItems(saveData.InventoryContents);
-            this._money = saveData.Money;
+            foreach (var itemData in saveData.InventoryContents)
+            {
+                if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out var item))
+                {
+                    _playerInventory.AddItem(new InventoryEntry(item, itemData.StackSize));
+                }
+            }
+            _money = saveData.Money;
         }
     }
 
     [Serializable]
     public class InventorySaveData
     {
-        public List<InventoryEntry> InventoryContents;
+        public List<InventoryContentData> InventoryContents;
         public float Money;
+
+        public InventorySaveData(InventoryManager manager)
+        {
+            foreach (var itemEntry in manager.PlayerInventory.Contents)
+            {
+                InventoryContents.Add(new() { ItemID = itemEntry._item.DatabaseID, StackSize = itemEntry._stackSize });
+            }
+            Money = manager.GetMoneyAmount();
+        }
+
+        public InventorySaveData()
+        {
+
+        }
+
+        [Serializable]
+        public struct InventoryContentData
+        {
+            public string ItemID;
+            public int StackSize;
+        }
     }
 }

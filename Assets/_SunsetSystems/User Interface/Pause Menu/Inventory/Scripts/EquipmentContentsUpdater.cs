@@ -15,8 +15,7 @@ namespace SunsetSystems.Equipment.UI
 
         private void OnValidate()
         {
-            if (_slotViews == null)
-                _slotViews = new();
+            _slotViews ??= new();
             foreach (EquipmentSlotID key in EquipmentData.GetSlotsPreset().Keys)
             {
                 _slotViews.TryAdd(key, null);

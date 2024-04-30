@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace SunsetSystems.Inventory.UI
 {
@@ -18,9 +19,11 @@ namespace SunsetSystems.Inventory.UI
         private int _minimumVisibleRows;
         [SerializeField]
         private GridLayoutGroup _contentGrid;
+        [SerializeField]
+        private TextMeshProUGUI _moneyText;
         private int ColumnConstraint => _contentGrid.constraintCount;
 
-        public Transform ViewParent => transform;
+        public Transform ViewParent => _contentGrid.transform;
 
         private readonly List<InventoryItemDisplay> _viewPool = new();
         public List<InventoryItemDisplay> ViewPool => _viewPool;
@@ -75,7 +78,7 @@ namespace SunsetSystems.Inventory.UI
 
         public void UpdateMoneyCounter(int money)
         {
-
+            _moneyText.text = $"{money.ToString("$ 0", System.Globalization.CultureInfo.CurrentCulture)}$";
         }
 
 

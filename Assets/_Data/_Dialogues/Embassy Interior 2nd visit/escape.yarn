@@ -9,10 +9,10 @@ position: 1,-230
 <<declare $ranForIt to 0>>
 [nomarkup][Back downstairs, explosions of feathers, wood chips and couch padding can be seen floating through the air as the gunfire continues - the hail of bullets tearing through the scenery. The club's patrons cower behind makeshift furniture barricades, couches and under tables - doing anything they can to shelter themselves. You're going to have to get through all of that, if you want to escape, but you're safe where you are, for now...][/nomarkup] #line:035bc8f 
 -> {$pcName}: Anyone wanna tell me who these people are? #line:06e5ca8 
-{$kieran}: All we know is that they have guns, and they're shooting at us. The only thing that matters right now is survival. #line:004aeaa 
+{$kieran}: All we know is that they have guns, and they're shooting at us. The only thing that matters right now is survival. #lastline #line:004aeaa 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Hey, you and I might agree on something, for once, Kiki! But instead of standing here idly alongside you folk, I was going to go and ask ‘em. [nomarkup][The maniacal grin that's been plastered onto her face since the first gunshot hasn't left - only gotten wider.][/nomarkup] #line:0163286 
-    {$kieran}: [nomarkup][He grabs Anastasia's wrist as she moves to push open the double-doors into the main floor of Embassy.][/nomarkup] Miss Goth Queen, contain yourself. We'll go in a minute. [nomarkup]<i>Together</i>[/nomarkup]. #line:0c45ab7 
+    {$kieran}: [nomarkup][He grabs Anastasia's wrist as she moves to push open the double-doors into the main floor of Embassy.][/nomarkup] Miss Goth Queen, contain yourself. We'll go in a minute. [nomarkup]<i>Together</i>[/nomarkup]. #lastline #line:0c45ab7 
 <<endif>>
 -> {$pcName}: Understood, Kieran. #line:02e4b75 
 <<jump boom>>
@@ -47,16 +47,16 @@ title: boom
     {$anastasia}: Now! #line:0420c46 
 <<endif>>
 [nomarkup][There's a crackle of sound from the TV as it's knocked over, and music pollutes the air backing the flurry of random gunshots. It's a war zone. Seems like almost everyone you've met today is trying to kill you... no matter. You'll be out of this, soon enough.][/nomarkup] #line:00505e5 
-{$beast}: Time to escape. We can't die here! #line:0c80c1d 
+{$beast}: Time to escape. I can't die here! #line:0c80c1d 
 [nomarkup][The front entrance is blocked.][/nomarkup] #line:049bfa1 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Rat-bastards. Desiree, where's the backdoor? #line:0c94131 
+    {$anastasia}: Rat-bastards. Desiree, where's the backdoor? #lastline #line:0c94131 
 <<endif>>
 -> {$pcName}: [nomarkup][You feel yourself scramble for a moment, until a clear image of the layout of the Embassy comes to mind.][/nomarkup] We're going to head down- #line:064cd1b 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$kieran}: No time for that. You have the layout? [nomarkup][He watches you nod your head in confirmation, then glances over at Anastasia, who just shrugs.][/nomarkup] #line:061228a 
+    {$kieran}: No time for that. You have the layout? [nomarkup][He watches you nod your head in confirmation, then glances over at Anastasia, who just shrugs.][/nomarkup] #lastline #line:061228a 
 <<else>>
-    {$kieran}: No time for that. You have the layout? [nomarkup][He watches you nod your head in confirmation.][/nomarkup] #line:0e50502 
+    {$kieran}: No time for that. You have the layout? [nomarkup][He watches you nod your head in confirmation.][/nomarkup] #lastline #line:0e50502 
 <<endif>>
 -> {$pcName}: I can lead us there. #line:01e69c0 
 ===

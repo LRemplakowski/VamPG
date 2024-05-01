@@ -28,16 +28,6 @@ namespace SunsetSystems.Persistence
             _persistentComponents = _persistentComponents.Distinct().ToList();
         }
 
-        private void Start()
-        {
-            ScenePersistenceManager.Instance?.Register(this);
-        }
-
-        private void OnDestroy()
-        {
-            ScenePersistenceManager.Instance?.Unregister(this);
-        }
-
         public virtual object GetPersistenceData()
         {
             var result = new PersistentObjectData()

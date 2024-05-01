@@ -114,11 +114,16 @@ namespace SunsetSystems.Inventory
         {
             if (data is not InventorySaveData saveData)
                 return;
-            foreach (var itemData in saveData.InventoryContents)
+            if (saveData.InventoryContents != null)
             {
-                if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out var item))
+                foreach (var itemData in saveData.InventoryContents)
                 {
-                    _playerInventory.AddItem(new InventoryEntry(item, itemData.StackSize));
+                    if (string.IsNullOrWhiteSpace(itemData.ItemID))
+                        continue;
+                    if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out var item))
+                    {
+                        _playerInventory.AddItem(new InventoryEntry(item, itemData.StackSize));
+                    }
                 }
             }
             _money = saveData.Money;
@@ -142,7 +147,7 @@ namespace SunsetSystems.Inventory
 
         public InventorySaveData()
         {
-
+            InventoryContents = new();
         }
 
         [Serializable]

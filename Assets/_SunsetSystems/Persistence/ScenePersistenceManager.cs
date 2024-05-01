@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace SunsetSystems.Persistence
@@ -9,18 +11,23 @@ namespace SunsetSystems.Persistence
     [RequireComponent(typeof(UniqueId))]
     public class ScenePersistenceManager : SerializedMonoBehaviour, ISaveable
     {
-        [ReadOnly, ShowInInspector]
-        private HashSet<IPersistentObject> persistentEntitiesSet = new();
         [SerializeField, ReadOnly]
         private UniqueId _unique;
+        [ReadOnly, SerializeField]
+        private HashSet<IPersistentObject> persistentEntitiesSet = new();
 
         public static ScenePersistenceManager Instance { get; private set; }
 
         public string DataKey => _unique.Id;
 
+        [Button("Force Validate")]
         private void OnValidate()
         {
-            _unique ??= GetComponent<UniqueId>();
+            _unique = _unique != null ? _unique : GetComponent<UniqueId>();
+            persistentEntitiesSet ??= new();
+            var persistentSceneObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IPersistentObject>();
+            persistentEntitiesSet.AddRange(persistentSceneObjects);
+
         }
 
         private void Awake()
@@ -29,7 +36,6 @@ namespace SunsetSystems.Persistence
             {
                 Instance = this;
                 _unique ??= GetComponent<UniqueId>();
-                persistentEntitiesSet = new();
             }
             else
             {

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -52,7 +53,7 @@ namespace SunsetSystems.Utils
         {
             foreach (var uma in _childrenUMA)
             {
-                if (UmaVisible)
+                if (UmaVisible && uma.hide)
                     uma.Show();
                 else
                     uma.Hide();

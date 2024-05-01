@@ -877,6 +877,9 @@ MonoBehaviour:
     - _Target: {fileID: 7714737348246512721}
       _MethodName: StartDialogue
       _PersistentArguments: []
+    - _Target: {fileID: 11400000, guid: 7c21401865927cc468de3520f6519043, type: 2}
+      _MethodName: Complete
+      _PersistentArguments: []
   TriggerStay:
     _PersistentCalls: []
   TriggerExit:
@@ -2081,74 +2084,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5719185, y: 0.82567024, z: 1.0649549}
   m_Center: {x: -0.001169204, y: 0.4189539, z: 0.032477558}
---- !u!1 &3835714270366909503
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9079548946284730719}
-  - component: {fileID: 4107636285549146619}
-  - component: {fileID: 5780783058142314822}
-  m_Layer: 0
-  m_Name: Scene Persistence Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9079548946284730719
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 412658073151826774}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4107636285549146619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
---- !u!114 &5780783058142314822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1da8a155d0f71cd49827c35db9a8111a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
-  _unique: {fileID: 4107636285549146619}
 --- !u!1 &3919487550797867651
 GameObject:
   m_ObjectHideFlags: 0
@@ -5370,7 +5305,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4193489125721962962}
-  - {fileID: 9079548946284730719}
   - {fileID: 6193579103115963031}
   - {fileID: 3458999538365666020}
   - {fileID: 5168241024844028177}

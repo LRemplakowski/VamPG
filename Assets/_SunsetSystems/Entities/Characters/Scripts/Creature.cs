@@ -170,7 +170,10 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
+                if (DatabaseHolder.Instance != null)
+                    BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
+                else
+                    BaseLookWardrobeCollectionAsset = instance.References.UMAManager.BaseLookWardrobeCollection;
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
                 {
@@ -201,6 +204,8 @@ namespace SunsetSystems.Entities.Characters
             public CreatureType CreatureType { get; private set; }
 
             public short BaseLookWardrobeCollectionID { get; private set; }
+
+            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
 
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 

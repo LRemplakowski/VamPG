@@ -64,9 +64,16 @@ namespace SunsetSystems.Core.UMA
             }
 #endif
             SetBodyType(template.BodyType);
-            var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
-            if (wardrobeDB != null)
-                LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            if (DatabaseHolder.Instance != null)
+            {
+                var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
+                if (wardrobeDB != null)
+                    LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            }
+            else
+            {
+                LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollectionAsset);
+            }
 #if !UNITY_EDITOR
             await new WaitForUpdate();
 #endif

@@ -133,6 +133,8 @@ namespace SunsetSystems.Entities.Characters
 
             public short BaseLookWardrobeCollectionID { get; private set; }
 
+            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
+
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
             public StatsData StatsData { get; private set; }
@@ -146,7 +148,10 @@ namespace SunsetSystems.Entities.Characters
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                this.BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(asset.BaseLookWardrobeCollection);
+                if (DatabaseHolder.Instance != null)
+                    this.BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(asset.BaseLookWardrobeCollection);
+                else
+                    BaseLookWardrobeCollectionAsset = asset.BaseLookWardrobeCollection;
                 this.EquipmentSlotsData = new();
                 foreach (var item in asset.EquipmentSlotsData)
                 {

@@ -27,7 +27,7 @@ namespace SunsetSystems.Persistence
             persistentEntitiesSet ??= new();
             var persistentSceneObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IPersistentObject>();
             persistentEntitiesSet.AddRange(persistentSceneObjects);
-
+            persistentEntitiesSet.RemoveWhere(element => element == null);
         }
 
         private void Awake()
@@ -60,6 +60,11 @@ namespace SunsetSystems.Persistence
             Dictionary<string, object> persistenceData = new();
             foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
             {
+                if (persistentEntity == null && string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
+                {
+                    Debug.LogError($"Tried to save a null entity or entity has a null/whitespace ID!");
+                    continue;
+                }    
                 if (persistenceData.TryAdd(persistentEntity.PersistenceID, persistentEntity.GetPersistenceData()) == false)
                 {
                     Debug.LogError($"Persistence data dictionary already contains key for {persistentEntity}! Key: {persistentEntity.PersistenceID}");
@@ -109,6 +114,11 @@ namespace SunsetSystems.Persistence
         public class ScenePersistenceData : SaveData
         {
             public Dictionary<string, object> PersistentData = new();
+
+            public ScenePersistenceData()
+            {
+                PersistentData = new();
+            }
         }
     }
 }

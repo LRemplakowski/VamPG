@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.10558443, g: 0.07513075, b: 0.07918474, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -955,6 +955,26 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[0]._Target
+      value: 
+      objectReference: {fileID: 1053060811}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[1]._Target
+      value: 
+      objectReference: {fileID: 1053060810}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[0]._MethodName
+      value: OnLevelStarted
+      objectReference: {fileID: 0}
+    - target: {fileID: 47072572736257757, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: OnLevelStart._PersistentCalls.Array.data[1]._MethodName
+      value: MoveToLevelStartPosition
+      objectReference: {fileID: 0}
     - target: {fileID: 375571750532069245, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -1027,6 +1047,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -476.645
       objectReference: {fileID: 0}
+    - target: {fileID: 900467796158517555, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 900467796158517555, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 974074308385128740, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -1095,6 +1119,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -752.79
       objectReference: {fileID: 0}
+    - target: {fileID: 2051313321650768581, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2051313321650768581, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 2146170913191627318, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2146170913191627318, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 2226573316802865885, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -23997,11 +24029,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5915763835949141645, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000002441512
+      value: 0.00000002441511
       objectReference: {fileID: 0}
     - target: {fileID: 5915763835949141645, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000014168644
+      value: -0.000000014168638
       objectReference: {fileID: 0}
     - target: {fileID: 6002621442208826797, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
@@ -24051,6 +24083,10 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 6954080022722330163, guid: 4769f016047210d478f53803138aacf5, type: 3}
+    - target: {fileID: 6962113855649037350, guid: 4769f016047210d478f53803138aacf5, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 6962113855649037350, guid: 4769f016047210d478f53803138aacf5, type: 3}
     - target: {fileID: 7276480248754477961, guid: 4769f016047210d478f53803138aacf5, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -24152,6 +24188,115 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4769f016047210d478f53803138aacf5, type: 3}
+--- !u!114 &1053060810 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8763309741657221742, guid: 4769f016047210d478f53803138aacf5, type: 3}
+  m_PrefabInstance: {fileID: 1053060809}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad87d169ed984048b1e428b5333fbfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1053060811 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4528754766922320062, guid: 4769f016047210d478f53803138aacf5, type: 3}
+  m_PrefabInstance: {fileID: 1053060809}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e86753e52110f642a3cfda9f29a1656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &1327817555
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1327817557}
+  - component: {fileID: 1327817556}
+  m_Layer: 0
+  m_Name: Waypoint Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1327817556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327817555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b734c00623d954741bf3b2f1d9a2d8d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 4178887329739347439}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _sceneWaypoints
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.LevelUtility.Waypoint,
+        SunsetSystems]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Car
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  _defaultSceneWaypoint: {fileID: 4178887329739347439}
+--- !u!4 &1327817557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327817555}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1549958685
 GameObject:
   m_ObjectHideFlags: 0
@@ -24536,7 +24681,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2389068859355959202, guid: 7e05f12dc8b8e6a45beb15251091dcad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 583265286}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4329041494980009154, guid: 7e05f12dc8b8e6a45beb15251091dcad, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4178887329739347439}
   m_SourcePrefab: {fileID: 100100000, guid: 7e05f12dc8b8e6a45beb15251091dcad, type: 3}
 --- !u!4 &4178887329739347436 stripped
 Transform:
@@ -24548,6 +24696,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1429063237206597456, guid: 7e05f12dc8b8e6a45beb15251091dcad, type: 3}
   m_PrefabInstance: {fileID: 4178887329739347435}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4178887329739347438 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4329041494980009154, guid: 7e05f12dc8b8e6a45beb15251091dcad, type: 3}
+  m_PrefabInstance: {fileID: 4178887329739347435}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4178887329739347439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4178887329739347438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6f2cc9ae74f3ac46b7e8b6786f57b6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waypointTag: Car
+  <FaceDirection>k__BackingField: {fileID: 0}
 --- !u!1001 &8618281263049273529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24676,3 +24843,4 @@ SceneRoots:
   - {fileID: 2048062900}
   - {fileID: 957891028}
   - {fileID: 4178887329739347435}
+  - {fileID: 1327817557}

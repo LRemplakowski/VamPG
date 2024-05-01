@@ -9,51 +9,14 @@ namespace SunsetSystems.LevelUtility
         [Title("Config")]
         [SerializeField]
         private string _waypointTag = "";
+        public string WaypointTag => _waypointTag;
         [field: SerializeField]
         public Transform FaceDirection { get; private set; }
-
-        [Title("Runtime")]
-        [ShowInInspector, ReadOnly]
-        private bool _registered;
-        [ShowInInspector, ReadOnly]
-        private static Dictionary<string, Waypoint> _sceneWaypoints = new();
 
         private void OnValidate()
         {
             if (string.IsNullOrWhiteSpace(_waypointTag))
                 _waypointTag = name;
-        }
-
-        private void Awake()
-        {
-            if (_sceneWaypoints.TryAdd(_waypointTag, this))
-            {
-                _registered = true;
-                Debug.Log($"Registered waypoint {gameObject}!");
-            }
-            else
-            {
-                Debug.LogError($"Could not add waypoint {gameObject} to dictionary! Waypoint tag {_waypointTag} is already present in the dictionary!");
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (_registered)
-                _sceneWaypoints.Remove(_waypointTag);
-        }
-
-        public static Waypoint GetWaypointByTag(string tag)
-        {
-            if (_sceneWaypoints.TryGetValue(tag, out Waypoint waypoint))
-            {
-                return waypoint;
-            }
-            else
-            {
-                Debug.LogError($"There is no waypoint with tag {tag} registered in scene!");
-                return null;
-            }
         }
 
         private void OnDrawGizmos()

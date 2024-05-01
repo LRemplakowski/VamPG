@@ -76,33 +76,42 @@ position: -1111,-157
 title: safeQuestions
 position: -898,282
 ---
--> [nomarkup][Examine the gun.] (Intelligence + Firearms)[/nomarkup] <<if CustomVisited("safeGunExamine") == false>> #line:010783e 
-    <<if Roll("Intelligence","Firearms") >=3>>
-        <<jump safeGunExamine>>
-    <<else>>
-        <<jump safeGunExamineFail>>
-    <<endif>>
--> [nomarkup][Examine the documents.][/nomarkup] #line:05039a5 
+-> [nomarkup][Examine the gun.] (Intelligence + Firearms)[/nomarkup] <<if CustomVisited("gunRoll") == false>> #line:010783e
+    <<jump gunRoll>>
+-> [nomarkup][Examine the documents.][/nomarkup] <<if CustomVisited("safeDocumentsExamine") == false>> #line:05039a5 
     <<jump safeDocumentsExamine>>
--> [nomarkup][Examine the vial.] (Intelligence + Medicine)[/nomarkup] <<if CustomVisited("safeBloodIdentified") == false>> #line:06887c6 
-    <<if Roll("Intelligence","Medicine") >=3>>
-        <<jump safeBloodIdentified>>
-    <<else>>
-        <<jump bloodVialSuccess>>
-    <<endif>>
+-> [nomarkup][Examine the vial.] (Intelligence + Medicine)[/nomarkup] <<if CustomVisited("bloodMedRoll") == false>> #line:06887c6 
+    <<jump bloodMedRoll>>
 -> [nomarkup][Take the money.][/nomarkup] <<if CustomVisited("safeMoney") == false>> #line:07ec05b 
     <<jump takeSafeMoney>>
+-> [nomarkup][Step away.][/nomarkup]
+===
+title: gunRoll
+---
+<<if Roll("Intelligence","Firearms") >=3>>
+    <<jump safeGunExamine>>
+<<else>>
+    <<jump safeGunExamineFail>>
+<<endif>>
+===
+title: bloodMedRoll
+---
+<<if Roll("Intelligence","Medicine") >=3>>
+    <<jump safeBloodIdentified>>
+<<else>>
+    <<jump bloodVialSuccess>>
+<<endif>>
 ===
 title: safeGunExamine
 position: -654,747
 ---
-[nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success #line:0cdcbc2 
+[nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success #lastline #line:0cdcbc2 
 <<jump safeQuestions>>
 ===
 title: safeGunExamineFail
 position: -1256,686
 ---
-[nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. Probably.][/nomarkup] #failure #line:099beb4 
+[nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. Probably.][/nomarkup] #failure #lastline #line:099beb4 
 <<jump safeQuestions>>
 ===
 title: safeDocumentsExamine
@@ -122,8 +131,7 @@ Lucia #line:00d2b26
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][She pumps her fist in the air with a loud, enthusiastic whoop.][/nomarkup] FINALLY! Some action! #line:064ec68 
 <<endif>>
-{$kieran}: That didn't sound good... We need to leave. Now. [nomarkup][Kieran looks concerned.][/nomarkup] #lastline #line:0cb4a25 
-<<jump safeQuestions>>
+{$kieran}: That didn't sound good... We need to leave. Now. [nomarkup][Kieran looks concerned.][/nomarkup] #line:0cb4a25 
 ===
 title: safeBloodIdentified
 position: -531,378
@@ -140,12 +148,18 @@ position: -125,525
     {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #line:0c20ec5 
     <<ModifyInfluence -1 $kieran>>
     -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:09ba39d 
-    <<jump bloodVialSuccess>>
+    <<jump bloodVialKieranExamine>>
 -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:031d09b 
-    <<jump bloodVialSuccess>>
+    <<jump bloodVialKieranExamine>>
 ===
 title: bloodVialSuccess
 position: -45,814
+---
+[nomarkup][You have no idea what's in the vial.][/nomarkup]
+{$pcName}: I don't think that's ordinary blood. Allow me. [nomarkup][He holds out his hand expectantly.][/nomarkup] 
+<<jump bloodVialKieranExamine>>
+===
+title: bloodVialKieranExamine
 ---
 [nomarkup][Without another word, you place the vial in the palm of Kieran's waiting hand.][/nomarkup] #line:045718d 
 [nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #line:03c693e 
@@ -191,7 +205,7 @@ position: -284,185
 -> {$pcName}: I need to pay my bills Kieran. #line:0212bfb 
 {$kieran}: That is by no means a good enough reason to steal! [nomarkup][Kieran influence -2][/nomarkup] #line:0a341aa 
 -> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
-[nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #line:0e13ecd 
+[nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #lastline #line:0e13ecd 
 <<GiveMoney (500)>>
 <<jump safeQuestions>>
 ===

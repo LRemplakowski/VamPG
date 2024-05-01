@@ -11,21 +11,13 @@ tags:
 ===
 title: deskInteractions
 ---
-<<if $computerUnusable ==false>>
     -> [nomarkup][Inspect the desk.][/nomarkup] #line:02b7b75 
         <<jump deskExamination>>
-    -> [nomarkup][Boot the computer.][/nomarkup] #line:001bf2a 
+    -> [nomarkup][Boot the computer.][/nomarkup] <<if $computerUnusable == false>> #line:001bf2a 
         <<jump computerTurnedOn>>
     -> [nomarkup][Check the drawers.][/nomarkup] <<if CustomVisited("deskDrawers") == false>> #line:0edbce5 
         <<jump deskDrawers>>
     -> [nomarkup][Leave the desk alone.][/nomarkup] #line:0a6e434
-<<else>>
-    -> [nomarkup][Inspect the desk.][/nomarkup] #line:052a85f 
-        <<jump deskExamination>>
-    -> [nomarkup][Check the drawers.][/nomarkup] #line:0cf91a1 
-        <<jump deskDrawers>>
-    -> [nomarkup][Leave the desk alone.][/nomarkup] #line:0964b81 
-<<endif>>
 ===
 title: deskExamination
 ---
@@ -291,7 +283,7 @@ title: drawerLockpickSuccess
 title: drawerStrengthSuccess
 ---
 [nomarkup][The lock isn't strong. It breaks easily when you apply sufficient force while pulling the drawer.][/nomarkup] #success #line:09b29ad 
-<<jumo drawerSuccess>>
+<<jump drawerSuccess>>
 ===
 title: drawerFailure
 ---
@@ -320,9 +312,9 @@ title: drawerDestroyed
 ===
 title: drawerSuccess
 ---
-[nomarkup][You pull the drawer open - the lock no longer an obstacle to your snoopery.][/nomarkup]  #line:024ed6f 
+[nomarkup][You pull the drawer open - the lock no longer an obstacle to your snoopery.][/nomarkup] #line:024ed6f 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: You [nomarkup]<i>are</i>[/nomarkup] thorough, aren't you? [nomarkup][She purrs.][/nomarkup]#line:04b2d6d 
+    {$anastasia}: You [nomarkup]<i>are</i>[/nomarkup] thorough, aren't you? [nomarkup][She purrs.][/nomarkup] #line:04b2d6d 
 <<endif>>
 {$kieran}: Something useful in there? #lastline #line:0b15cea
 -> [nomarkup][Sift through the documents.] (Resolve + Investigation)[/nomarkup] #line:0aba321 

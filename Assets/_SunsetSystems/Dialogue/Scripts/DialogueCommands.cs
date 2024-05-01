@@ -38,7 +38,7 @@ namespace SunsetSystems.Dialogue
         {
             if (QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(readableQuestID, objectiveID, out Objective objective))
             {
-                objective.MakeInactive();
+                objective.Fail();
             }
             else
             {

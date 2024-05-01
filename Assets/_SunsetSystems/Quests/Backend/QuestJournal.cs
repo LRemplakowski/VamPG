@@ -65,6 +65,7 @@ namespace SunsetSystems.Journal
         {
             Quest.QuestStarted += OnQuestStarted;
             Quest.QuestCompleted += OnQuestCompleted;
+            Quest.QuestFailed += OnQuestFailed;
             Quest.ObjectiveCompleted += OnQuestObjectiveCompleted;
             Quest.ObjectiveFailed += OnQuestObjectiveFailed;
         }
@@ -73,6 +74,7 @@ namespace SunsetSystems.Journal
         {
             Quest.QuestStarted -= OnQuestStarted;
             Quest.QuestCompleted -= OnQuestCompleted;
+            Quest.QuestFailed -= OnQuestFailed;
             Quest.ObjectiveCompleted -= OnQuestObjectiveCompleted;
             Quest.ObjectiveFailed -= OnQuestObjectiveFailed;
         }
@@ -84,6 +86,20 @@ namespace SunsetSystems.Journal
 
         private void OnQuestStarted(Quest quest)
         {
+            OnActiveQuestsChanged?.Invoke(_trackedQuests);
+        }
+
+        private void OnQuestCompleted(Quest quest)
+        {
+            if (MoveToCompleteQuests(quest.ID) == false)
+                Debug.LogError("Failed to complete quest " + quest.Name + "! Quest ID: " + quest.ID);
+            OnActiveQuestsChanged?.Invoke(_trackedQuests);
+        }
+
+        private void OnQuestFailed(Quest quest)
+        {
+            if (MoveToCompleteQuests(quest.ID) == false)
+                Debug.LogError("Failed to fail quest " + quest.Name + "! Quest ID: " + quest.ID);
             OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
@@ -127,13 +143,6 @@ namespace SunsetSystems.Journal
                     }
                 }
             }
-        }
-
-        private void OnQuestCompleted(Quest quest)
-        {
-            if (MoveToCompleteQuests(quest.ID) == false)
-                Debug.LogError("Failed to complete quest " + quest.Name + "! Quest ID: " + quest.ID);
-            OnActiveQuestsChanged?.Invoke(_trackedQuests);
         }
 
         public bool IsQuestCompleted(string questID)

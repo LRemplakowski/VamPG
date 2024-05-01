@@ -12,10 +12,12 @@ namespace SunsetSystems.Journal
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; }
         public string ReadableID = "";
+        public bool IsOptional = false;
         [TextArea(5, 10)]
         public string Description = "";
         public event Action<Objective> OnObjectiveActive;
-        public event Action<Objective> OnObjectiveInactive;
+        public event Action<Objective> OnObjectiveFailed;
+        public event Action<Objective> OnObjectiveCanceled;
         public event Action<Objective> OnObjectiveCompleted;
 
         [ReadOnly]
@@ -23,6 +25,8 @@ namespace SunsetSystems.Journal
 
         public List<Objective> ObjectivesToCancelOnCompletion;
         public List<Objective> NextObjectives;
+        public List<Objective> NextObjectivesOnFailed;
+        public List<Objective> ObjectivesToCancelOnFail;
 
         #region Database Registration
 
@@ -68,10 +72,18 @@ namespace SunsetSystems.Journal
             OnObjectiveActive?.Invoke(this);
         }
 
-        public void MakeInactive()
+        public void Cancel()
+        {
+            Debug.Log($"Canceled objective {ReadableID}!");
+            OnObjectiveCanceled?.Invoke(this);
+        }
+
+        public void Fail()
         {
             Debug.Log($"Failed objective {ReadableID}!");
-            OnObjectiveInactive?.Invoke(this);
+            OnObjectiveFailed?.Invoke(this);
+            ObjectivesToCancelOnFail.ForEach(o => o.Cancel());
+            NextObjectivesOnFailed.ForEach(o => o.MakeActive());
         }
 
         [Button]
@@ -79,8 +91,8 @@ namespace SunsetSystems.Journal
         {
             Debug.Log($"Completed objective {ReadableID}!");
             OnObjectiveCompleted?.Invoke(this);
-            ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
-            NextObjectives.ForEach(o => (o as Objective).MakeActive());
+            ObjectivesToCancelOnCompletion.ForEach(o => o.Cancel());
+            NextObjectives.ForEach(o => o.MakeActive());
         }
     }
 }

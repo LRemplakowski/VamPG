@@ -21,7 +21,7 @@ namespace SunsetSystems.Journal
         private void OnEnable()
         {
             _objective.OnObjectiveActive += ObjectiveActiveHandler;
-            _objective.OnObjectiveInactive += ObjectiveInactiveHandler;
+            _objective.OnObjectiveFailed += ObjectiveInactiveHandler;
             _objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected += ObjectiveDataInjectedHandler;
         }
@@ -29,7 +29,7 @@ namespace SunsetSystems.Journal
         private void OnDisable()
         {
             _objective.OnObjectiveActive -= ObjectiveActiveHandler;
-            _objective.OnObjectiveInactive -= ObjectiveInactiveHandler;
+            _objective.OnObjectiveFailed -= ObjectiveInactiveHandler;
             _objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected -= ObjectiveDataInjectedHandler;
         }

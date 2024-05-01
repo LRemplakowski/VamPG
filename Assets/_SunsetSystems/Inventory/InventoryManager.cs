@@ -136,10 +136,15 @@ namespace SunsetSystems.Inventory
         public List<InventoryContentData> InventoryContents;
         public float Money;
 
-        public InventorySaveData(InventoryManager manager)
+        public InventorySaveData(InventoryManager manager) : this()
         {
             foreach (var itemEntry in manager.PlayerInventory.Contents)
             {
+                if (itemEntry._item == null)
+                {
+                    Debug.LogError("Player has a null item in their inventory!");
+                    continue;
+                }
                 InventoryContents.Add(new() { ItemID = itemEntry._item.DatabaseID, StackSize = itemEntry._stackSize });
             }
             Money = manager.GetMoneyAmount();

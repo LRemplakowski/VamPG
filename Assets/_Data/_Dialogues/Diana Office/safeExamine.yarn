@@ -145,7 +145,7 @@ title: bloodVialRolls
 position: -125,525
 ---
 -> {$pcName}: Hold on, what are you going to do with it? #line:04960dc 
-    {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #line:0c20ec5 
+    {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #lastline #line:0c20ec5 
     <<ModifyInfluence -1 $kieran>>
     -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:09ba39d 
     <<jump bloodVialKieranExamine>>
@@ -162,7 +162,7 @@ position: -45,814
 title: bloodVialKieranExamine
 ---
 [nomarkup][Without another word, you place the vial in the palm of Kieran's waiting hand.][/nomarkup] #line:045718d 
-[nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #line:03c693e 
+[nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #lastline #line:03c693e 
 <<if Roll ("Intelligence","Occult") >=4 or Roll ("Wits","Awareness") >=4>>
     -> {$pcName}: Did you just do the same thing that Dominic did back in my apartment? #line:0a7f352 
     {$kieran}: Yes. It's a little but useful trick. (Kieran Influence +1) #line:01b5ea3 
@@ -196,7 +196,7 @@ position: -370,798
     {$anastasia}: You done, twinkle toes? #line:0e80d38 
     {$kieran}: Pretty much, yes. #line:02c73c1 
 <<endif>>
-{$kieran}: Unfortunately, we don't have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot - at least for the time being. #line:04e369d 
+{$kieran}: Unfortunately, we don't have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot - at least for the time being. #lastline #line:04e369d 
 <<jump safeQuestions>>
 ===
 title: takeSafeMoney

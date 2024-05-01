@@ -104,11 +104,17 @@ namespace SunsetSystems.Entities
             [ES3Serializable]
             public bool GameObjectActive;
             [ES3Serializable]
+            public Vector3 TransformPosition;
+            [ES3Serializable]
+            public Quaternion TransformRotation;
+            [ES3Serializable]
             public Dictionary<string, object> PersistentComponentData;
 
             public PersistenceData(PersistentEntity persistentEntity)
             {
                 GameObjectActive = persistentEntity.gameObject.activeSelf;
+                TransformPosition = persistentEntity.transform.position;
+                TransformRotation = persistentEntity.transform.rotation;
                 PersistentComponentData = new();
                 if (persistentEntity.PersistentComponents.Count > 0)
                 {

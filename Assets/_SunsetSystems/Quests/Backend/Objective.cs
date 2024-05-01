@@ -74,6 +74,7 @@ namespace SunsetSystems.Journal
             OnObjectiveInactive?.Invoke(this);
         }
 
+        [Button]
         public void Complete()
         {
             Debug.Log($"Completed objective {ReadableID}!");

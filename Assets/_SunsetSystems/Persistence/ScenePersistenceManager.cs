@@ -83,6 +83,12 @@ namespace SunsetSystems.Persistence
             {
                 foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
                 {
+                    if (persistentEntity == null || string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
+                    {
+                        Debug.LogWarning($"Encountered a null persistent entity or persistent entity with invalid persitence id! {persistentEntity}");
+                        continue;
+                    }
+
                     if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
                         persistentEntity.InjectPersistenceData(entityData);
                 }

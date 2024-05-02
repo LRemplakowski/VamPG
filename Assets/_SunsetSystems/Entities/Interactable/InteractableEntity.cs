@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             get
             {
-                return _interactable;
+                return _interactable && (_interactableOnce ? _interacted : true);
             }
             set
             {
@@ -136,7 +136,8 @@ namespace SunsetSystems.Entities.Interactable
 
         private void OnEnable()
         {
-            InteractablesInScene.Add(this);
+            if (Interactable)
+                InteractablesInScene.Add(this);
             if (_linkedGameObject != null)
                 _linkedGameObject.SetActive(true);
         }
@@ -183,8 +184,8 @@ namespace SunsetSystems.Entities.Interactable
                 if (handler.HandleInteraction(TargetedBy))
                     result = true;
             }
-            TargetedBy = null;
             OnInteractionTriggered?.Invoke(result);
+            TargetedBy = null;
         }
 
         public void OnDrawGizmosSelected()
@@ -198,8 +199,6 @@ namespace SunsetSystems.Entities.Interactable
             if (_highlightHandler != null && Interactable)
                 _highlightHandler.SetHighlightActive(IsHoveredOver);
         }
-
-
 
         public void ResetInteraction()
         {

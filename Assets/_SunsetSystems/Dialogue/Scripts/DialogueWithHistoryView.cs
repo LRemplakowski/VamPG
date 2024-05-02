@@ -142,14 +142,16 @@ namespace SunsetSystems.Dialogue
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect && _typeSpeed > 0)
             {
-                AudioManager.Instance.PlayTyperwriterLoop();
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
                 if (_requestedLineInterrupt)
                     return;
             }
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-            AudioManager.Instance.PlayTypewriterEnd();
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
             if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => tag == LAST_LINE_TAG) is false))

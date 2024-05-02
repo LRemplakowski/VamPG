@@ -141,12 +141,26 @@ position: -502,87
 title: subsequentQuestions
 ---
 [nomarkup][Kate is looking at you with a moderate dose of interest.][/nomarkup]
--> {$pcName}: What can you tell me about Diana? <<if CustomVisited("whoIsDiana") == false>> #line:0f856b5 
+-> {$pcName}: What can you tell me about Diana? #line:0f856b5 
     <<jump whoIsDiana>>
--> {$pcName}: How did you come to own this place? <<if CustomVisited("howSheStarted") == false>> #line:0174ecc 
+-> {$pcName}: How did you come to own this place? #line:0174ecc 
     <<jump howSheStarted>>
--> {$pcName}: Tell me about youself. <<if CustomVisited("kateTalksAboutHerself") == false>> #line:023a789 
+-> {$pcName}: Tell me about youself. #line:023a789 
     <<jump kateTalksAboutHerself>>
+-> {$pcName}: [nomarkup][Might as well ask...][/nomarkup] What do you think about the Prince? <<if CustomVisited("kateTalksAboutHerself") == true>> #line:0dfc750 
+    <<jump katePrinceOpinion>>
+-> {$pcName}: Who is the Prince? And what's the significance of the title? It seems to repeat in nearly all discussions with... our kind. <<if CustomVisited("kateTalksAboutHerself") == true>> #line:002b53c 
+    <<jump princeExplained>>
+-> {$pcName}: What happened to the previous Prince? <<if CustomVisited("kateTalksAboutHerself") == true>> #line:0b0ed9e 
+    <<jump previousPrince>>
+-> {$pcName}: Sabbat? <<if CustomVisited("previousPrince") == true>> #line:01d00d6 
+    <<jump whatIsSabbat>>
+-> {$pcName}: Traditions? <<if CustomVisited("previousPrince") == true>> #line:0324140 
+    <<jump whatAreTraditions>>
+-> {$pcName}: Camarilla? <<if CustomVisited("previousPrince") == true>> #line:0140d42 
+    <<jump camarillaExplained>>
+-> {$pcName}: Final Death? <<if CustomVisited("previousPrince") == true>> #line:0a6fbab 
+    <<jump finalDeathExplained>>
 -> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and CustomVisited("getToOffice") == false>> #line:0460c71 
     <<jump getToOffice>>
 -> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false>>#line:0ffc627 
@@ -201,22 +215,7 @@ position: -70,220
     {$sforzaMask}: Diana owns the place, piccola mia. I just look after it. It was a gift from our ever so “beloved” Prince. She saw fit to bestow upon me this modest domain as a token of her gratitude after that nasty business with what happened to the previous Prince. I knew that The Embassy would be the perfect spot to establish a hub where Kindred could gather and socialize, a true haven for our dysfunctional little family. 
     {$sforzaMask}: It required a bit of remodeling and adapting to the needs of our kind, but with Diana's help and expertise, it has blossomed. #line:0709911 
 <<endif>>
-<<jump additionalQuestions>>
-===
-title: additionalQuestions
-position: 335,288
----
-[nomarkup][Kate looks at you with a little dose of curiosity awaiting questions.][/nomarkup]
--> {$pcName}: [nomarkup][Might as well ask...][/nomarkup] What do you think about the Prince? #line:0dfc750 
-    <<jump katePrinceOpinion>>
--> {$pcName}: Who is the Prince? And what's the significance of the title? It seems to repeat in nearly all discussions with... our kind. #line:002b53c 
-    <<jump princeExplained>>
--> {$pcName}: What happened to the previous Prince? #line:0b0ed9e 
-    <<jump previousPrince>>
--> [nomarkup][Another questions.][/nomarkup]
-    <<jump subsequentQuestions>>
--> {$pcName}: I should go.
-    {$sforzaMask}: An astute observation. Best of luck on your little search.
+<<jump subsequentQuestions>>
 ===
 title: katePrinceOpinion
 position: 176,-105
@@ -226,7 +225,7 @@ position: 176,-105
 -> {$pcName}: That's a non-answer. #line:0ea36a6 
     {$sforzaMask}: Is it? #line:060db44 
     {$kieran}: We have an investigation to get back to. #line:0a20fdd 
-    <<jump additionalQuestions>>
+    <<jump subsequentQuestions>>
 ===
 title: princeExplained
 position: 530,-103
@@ -234,41 +233,25 @@ position: 530,-103
 {$sforzaMask}: Ah, it's so refreshing to have someone around as oblivious to politics as you. But I will be frank, I do not want to step on the toes of whomever your Sire turns out to be, and it's their vision of the future you may be forced to follow. I'd hate to be accused of poaching.
 {$sforzaMask}: Still, I would hate to see you thrown out with nothing... Kieran, be a dear and educate your new friend on the intricacies of our society, would you? It would be a good refresher, and it may save her life. #line:0417d47 
 {$kieran}: The Prince is the head figure in charge of the Camarilla's capital-D Domain here in Las Vegas - nearly the entire valley aside from Henderson and Sunset Manor is under our control. I'll inform you of the broader details once our investigation has concluded. #line:08f63d0 
-<<jump additionalQuestions>>
+<<jump subsequentQuestions>>
 ===
 title: previousPrince
 position: 740,281
 ---
 {$sforzaMask}: Kieran? #line:0c349ba 
 {$kieran}: Benedic was the Prince before Sam. He got himself killed by Sabbat assassins, but they learned their lesson. They've since been hunted down and killed for their crimes against the Praxis. #line:0fbf8e9
-<<jump aboutSects>>
-===
-title: aboutSects
---- 
-[nomarkup][Kate looks at you with a little dose of curiosity awaiting questions.][/nomarkup]
--> {$pcName}: Sabbat? #line:01d00d6 
-    <<jump whatIsSabbat>>
--> {$pcName}: Traditions? #line:0324140 
-    <<jump whatAreTraditions>>
--> {$pcName}: Camarilla? #line:0140d42 
-    <<jump camarillaExplained>>
--> {$pcName}: Final Death? #line:0a6fbab 
-    <<jump finalDeathExplained>>
--> [nomarkup][Another questions.][/nomarkup]
-    <<jump additionalQuestions>>
--> {$pcName}: I should go.
-    {$sforzaMask}: An astute observation. Best of luck on your little search. 
+<<jump subsequentQuestions>>
 ===
 title: whatIsSabbat
 position: 908,-62
 ---
-    {$kieran}: A bunch of savages. #line:0bd540d 
-    {$sforzaMask}: [nomarkup][She gestures towards Kieran in approval.][/nomarkup]  A dangerous, misguided organization that rejects the Traditions - the very ones that would have prevented you from standing where you are now... Benedic didn't see them as a serious threat, as so often those with bold new ideas are... [nomarkup][She looks over your shoulder with a touch of sadness, before that fades as her gaze returns to you.][/nomarkup] 
-    {$sforzaMask}: And thus, he suffered Final Death at their hands. Some advice, Desiree, free of change: If I were someone in your position, Heaven forbid, I would do my very best to know as little about them as possible. Nothing good will come from seeking out such things. Remember that ignorance can be a shield. #line:011ca26 
-    <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        {$anastasia}: It's just the natural order of things. They weren't skilled enough to avoid the consequences of what they did, so they died. [nomarkup][She shrugs.][/nomarkup] #line:0b5f03a 
-    <<endif>>
-    <<jump aboutSects>>
+{$kieran}: A bunch of savages. #line:0bd540d 
+{$sforzaMask}: [nomarkup][She gestures towards Kieran in approval.][/nomarkup]  A dangerous, misguided organization that rejects the Traditions - the very ones that would have prevented you from standing where you are now... Benedic didn't see them as a serious threat, as so often those with bold new ideas are... [nomarkup][She looks over your shoulder with a touch of sadness, before that fades as her gaze returns to you.][/nomarkup] 
+{$sforzaMask}: And thus, he suffered Final Death at their hands. Some advice, Desiree, free of change: If I were someone in your position, Heaven forbid, I would do my very best to know as little about them as possible. Nothing good will come from seeking out such things. Remember that ignorance can be a shield. #line:011ca26 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: It's just the natural order of things. They weren't skilled enough to avoid the consequences of what they did, so they died. [nomarkup][She shrugs.][/nomarkup] #line:0b5f03a 
+<<endif>>
+<<jump subsequentQuestions>>
 ===
 title: whatAreTraditions
 position: 964,525
@@ -290,7 +273,7 @@ position: 964,525
     {$anastasia}: [nomarkup][She shrugs, grinning ear to ear.][/nomarkup] Hey, I'll maintain it's got a nice ring to it. Really captures your essence. #line:0cd4fed 
     {$sforzaMask}: Now, I don't mean to rush you, but we only have so long until dawn, and I distinctly remember someone looking for their absentee parent? I would get to that; I'd hate to be the one returning to Dominic empty-handed. [nomarkup][She gives Kieran a meaningful look.][/nomarkup] #line:0a6b5ba 
 <<endif>>
-<<jump aboutSects>>
+<<jump subsequentQuestions>>
 ===
 title: camarillaExplained
 position: 537,611
@@ -307,7 +290,7 @@ position: 537,611
 <<if Roll ("Wits","Awareness")>=4>>
     [nomarkup][It's a smile, but you get the impression it may have been bitter, once - sharp and astringent, but those emotions have clearly been dulled by time.][/nomarkup] #line:0a719c9 
 <<endif>>
-<<jump aboutSects>>
+<<jump subsequentQuestions>>
 ===
 title: kateTalksAboutHerself
 position: -127,-43
@@ -347,7 +330,7 @@ position: 1151,92
     {$kieran}: [nomarkup][He sighs. Looks like he's not going to dignify that with a response...][/nomarkup] #line:0110938 
     {$sforzaMask}: Kiki? [nomarkup][She looks over at Kieran with an amused smile - like a lion looking at a rabbit.][/nomarkup] How adorable. My son, it seems to me you're getting along splendidly with all your little friends. #line:0235db9 
 <<endif>>
-<<jump aboutSects>>
+<<jump subsequentQuestions>>
 ===
 title: getToOffice
 position: -858,264
@@ -363,5 +346,5 @@ position: -858,264
     {$sforzaMask}: [nomarkup][Kate waves her hand without looking at you.][/nomarkup] Tell him his mistress sent you. #line:0868ee8 
     {$kieran}: We appreciate your assistance with this matter. #line:028f814
 <<endif>>
-<<jump subsequentInteractions>>
+<<jump subsequentQuestions>>
 ===

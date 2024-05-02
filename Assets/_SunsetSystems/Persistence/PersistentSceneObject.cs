@@ -15,7 +15,9 @@ namespace SunsetSystems.Persistence
 
         [SerializeField, ReadOnly]
         private UniqueId _unique;
-        
+        [field: SerializeField]
+        public bool EnablePersistence { get; private set; } = true;
+
         [SerializeField, ReadOnly]
         private List<IPersistentComponent> _persistentComponents = new();
         public List<IPersistentComponent> PersistentComponents => _persistentComponents;

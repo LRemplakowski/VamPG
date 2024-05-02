@@ -34,20 +34,18 @@ namespace SunsetSystems.Entities.Characters
         }
 
         #region Unity messages
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
+
         }
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            base.OnDestroy();
             Debug.Log($"Destroying creature {gameObject.name}!");
         }
 
@@ -224,7 +222,11 @@ namespace SunsetSystems.Entities.Characters
             if (data is not CreaturePersistenceData creaturePersistenceData)
                 return;
             ForceToPosition(creaturePersistenceData.WorldPosition);
-            References.GetCachedComponentInChildren<DynamicCharacterAvatar>().ToggleHide(creaturePersistenceData.UMAHidden);
+            var dna = References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
+            if (dna.UpdatePending())
+                dna.CharacterCreated.AddAction((ud) => { if (creaturePersistenceData.UMAHidden) ud.Hide(); else ud.Show(); });
+            else
+                dna.ToggleHide(creaturePersistenceData.UMAHidden);
         }
 
         [Serializable]

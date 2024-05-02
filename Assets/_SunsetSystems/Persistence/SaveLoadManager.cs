@@ -70,10 +70,21 @@ namespace SunsetSystems.Persistence
         {
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                if (_gameData.TryGetData(saveable.DataKey, out object data))
-                    saveable.InjectSaveData(data);
-                else
-                    UnityEngine.Debug.Log($"There is no saved data for object {saveable}!");
+                try
+                {
+                    if (_gameData.TryGetData(saveable.DataKey, out object data))
+                        saveable.InjectSaveData(data);
+                    else
+                        UnityEngine.Debug.Log($"There is no saved data for object {saveable}!");
+                }
+                catch (Exception exception)
+                {
+                    UnityEngine.Debug.LogException(exception, saveable as UnityEngine.Object);
+                }
+                finally
+                {
+                    UnityEngine.Debug.Log($"Data injection into {saveable} successful!");
+                }
             }
         }
 

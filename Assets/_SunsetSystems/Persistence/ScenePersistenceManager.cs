@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
@@ -89,31 +90,52 @@ namespace SunsetSystems.Persistence
                         continue;
                     }
 
-                    if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
-                        persistentEntity.InjectPersistenceData(entityData);
+                    try
+                    {
+                        InjectPersistentData(persistenceData, persistentEntity);
+                    }
+                    catch
+                    {
+                        float retryAfterTime = 10f;
+                        Debug.LogException(new InvalidOperationException($"Injecting data into {persistentEntity} failed! Retrying injection in {Mathf.RoundToInt(retryAfterTime)} seconds!"));
+                        StartCoroutine(RetryInjectionInTime(retryAfterTime));
+
+                        IEnumerator RetryInjectionInTime(float time)
+                        {
+                            float timeElapsed = 0f;
+                            while (timeElapsed < time)
+                            {
+                                timeElapsed += Time.deltaTime;
+                                yield return null;
+                            }
+                            Debug.Log($"Retrying injection for object {persistentEntity}!");
+                            try
+                            {
+                                InjectPersistentData(persistenceData, persistentEntity);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogError($"Data injection retry for {persistentEntity} failed due to exception {e}! WTF?!");
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        public void Register(IPersistentObject persistentEntity)
+        private static void InjectPersistentData(ScenePersistenceData persistenceData, IPersistentObject persistentEntity)
         {
-            try
+            if (persistentEntity.EnablePersistence)
             {
-                _ = persistentEntity.PersistenceID;
+                Debug.Log($"Persistence is disabled for entity {persistentEntity}! Continuing...");
+                return;
             }
-            catch (NullReferenceException e)
-            {
-                Debug.LogException(e);
-            }
-            finally
-            {
-                persistentEntitiesSet.Add(persistentEntity);
-            }
-        }
 
-        public void Unregister(IPersistentObject persistentEntity)
-        {
-            persistentEntitiesSet.Remove(persistentEntity);
+            if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
+            {
+                persistentEntity.InjectPersistenceData(entityData);
+                Debug.Log($"Successfuly injected persistence data into {persistentEntity}!");
+            }
         }
 
         [Serializable]

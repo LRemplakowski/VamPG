@@ -120,9 +120,8 @@ namespace SunsetSystems.Entities.Interactable
 
         }
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;
@@ -149,9 +148,8 @@ namespace SunsetSystems.Entities.Interactable
                 _linkedGameObject.SetActive(false);
         }
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             if (_interactionCollider != null)

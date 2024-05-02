@@ -16,7 +16,7 @@ position: -516,-712
     {$kieran}: You're welcome to leave, but I cannot until we find her Sire. I'm not going back to Dominic empty-handed. #line:0296d1e 
 <<else>>
     -> {$pcName}: Let's get out of here. #line:0604e3f 
-        {$kieran}: Not until we find your Sire. I'm not going back to Dominic empty-handed. #line:0f2aadd 
+        {$kieran}: Not until we find your Sire. I'm not going back to Dominic empty-handed. #lastline #line:0f2aadd 
 <<endif>>
 -> {$pcName}: Aren't you worried about the police? #line:0bbac08 
     {$kieran}: Your Primogen has us covered. #line:0ffe05e 
@@ -64,7 +64,7 @@ title: charismaGhoulsFailure
 tags: 
 position: 103,-153
 ---
-Karl: They didn't have you in point-blank range like I do. #line:07a5d51 
+Karl: They didn't have you in point-blank range like I do. #failure #line:07a5d51 
 //initiate combat//
 ===
 title: ghoulsCombat

@@ -65,7 +65,12 @@ namespace SunsetSystems.Persistence
                 {
                     Debug.LogError($"Tried to save a null entity or entity has a null/whitespace ID!");
                     continue;
-                }    
+                }   
+                if (persistentEntity.EnablePersistence is false)
+                {
+                    Debug.Log($"Persistence disabled for entity {persistentEntity}! Skipping...");
+                    continue;
+                }
                 if (persistenceData.TryAdd(persistentEntity.PersistenceID, persistentEntity.GetPersistenceData()) == false)
                 {
                     Debug.LogError($"Persistence data dictionary already contains key for {persistentEntity}! Key: {persistentEntity.PersistenceID}");
@@ -73,8 +78,6 @@ namespace SunsetSystems.Persistence
                 }
             }
             data.PersistentData = persistenceData;
-            if (data.PersistentData == null)
-                throw new NullReferenceException("FOO");
             return data;
         }
 
@@ -125,7 +128,7 @@ namespace SunsetSystems.Persistence
 
         private static void InjectPersistentData(ScenePersistenceData persistenceData, IPersistentObject persistentEntity)
         {
-            if (persistentEntity.EnablePersistence)
+            if (persistentEntity.EnablePersistence is false)
             {
                 Debug.Log($"Persistence is disabled for entity {persistentEntity}! Continuing...");
                 return;

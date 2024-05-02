@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             get
             {
-                return _interactable && (_interactableOnce ? _interacted : true);
+                return _interactable && (_interactableOnce ? !_interacted : true);
             }
             set
             {

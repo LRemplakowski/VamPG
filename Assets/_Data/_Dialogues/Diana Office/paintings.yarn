@@ -14,11 +14,11 @@ title: paintingsInteractions
     <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if CustomVisited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
--> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup]<<if CustomVisited("paintingIntelligenceRoll") == false>> #line:0770fad 
+-> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup] <<if CustomVisited("paintingIntelligenceRoll") == false>> #line:0770fad 
     <<jump paintingIntelligenceRoll>>
--> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup]<<if CustomVisited("paintingWitsSuccess") == false>> #line:0b6d950   
+-> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup] <<if CustomVisited("paintingWitsRoll") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
--> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>>#line:0847f88 
+-> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>> #line:0847f88 
     <<jump safeExamine>>
 -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if CustomVisited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
     <<jump successContinued>>
@@ -174,7 +174,7 @@ title: paintingSuccessExamination
     {$anastasia}: Great! Now we know where we can find more art to tear into. [nomarkup][She chuckles.][/nomarkup] #line:05774dc 
 <<endif>>
 [nomarkup][Your attention is caught by a small handwritten note on the stamp - “For my beloved Diana, on one of the most important days of her life. - Aidan Foster.”][/nomarkup] #line:0b50f52 
--> {$pcName}: Does the name Aidan Foster ring any bells? #line:0266774 
+-> {$pcName}: Does the name Aidan Foster ring any bells? #line:0266774
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][Anastasia shakes her head.][/nomarkup] Sorry, I don't swing that way. [nomarkup][She shrugs.][/nomarkup] #line:0b77208 
     [nomarkup][Kieran on the other hand looks like he is thinking...][/nomarkup] #line:037f6e8 

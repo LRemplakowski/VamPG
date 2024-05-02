@@ -6,12 +6,14 @@ position: -171,-476
     <<jump safeResolveRoll>>
 -> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if CustomVisited("safeStrengthRoll") == false and GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:03cddc8 
     <<jump safeStrengthRoll>>
+-> [nomarkup][Open the safe with a 1966 combination.][/nomarkup] <<if $satanDate == true and CustomVisited("safeSatan") == false>> #line:08271ae 
+    <<jump safeSatan>>
 -> [nomarkup][Open the safe with a 1969 combination.][/nomarkup] <<if $safeCode == true>> #line:03859ca 
     <<jump safeOpenedwCode>>
--> [nomarkup][Open the safe with a 1966 combination.][/nomarkup] <<if $satanDate == true>> #line:08271ae 
-    <<jump safeFailure>>
--> [nomarkup][Open the safe with a 4113 combination.][/nomarkup] <<if $goldBugCode == true>> #line:0278058 
-    <<jump safeFailure>>
+-> [nomarkup][Open the safe with a 1972 combination.][/nomarkup] <<if $aidanFoster == true and CustomVisited("safeFoster") == false>>
+    <<jump safeFoster>>
+-> [nomarkup][Open the safe with a 4113 combination.][/nomarkup] <<if $goldBugCode == true and CustomVisited("safeGoldBug") == false>> #line:0278058 
+    <<jump safeGoldBug>>
 -> [nomarkup][Step away.][/nomarkup] #line:0cf47c3 
 ===
 title: safeResolveRoll
@@ -220,4 +222,16 @@ position: -297,5
 ---
 [nomarkup][Despite your best efforts, you give up after several minutes of fruitless conflict with the door to the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:050d36f 
 <<jump safeExamine>>
+===
+title: safeSatan
+---
+<<jump safeFailure>>
+===
+title: safeFoster
+---
+<<jump safeFailure>>
+===
+title: safeGoldBug
+---
+<<jump safeFailure>>
 ===

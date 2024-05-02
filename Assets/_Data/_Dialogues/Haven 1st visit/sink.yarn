@@ -11,7 +11,7 @@ tags:
         <<CompleteObjective "Q_0P_FIX_SINK" "REPAIR_SINK">>   
         <<if Roll("Resolve","Craft") >= (5 - $strangeInsightModifier)>>
             [nomarkup][As you open up the U-Pipe, what is undeniably cold blood squirts out. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.][/nomarkup] #success #line:0b08312 
-            <<set $key to true>>
+            <<GiveItem "IT_Q_BATHROOM_KEY">>
             <<set $police to true>>
         <<else>>
             [nomarkup][The pipe breaks off into your hands. What is undeniably backed-up blood sprays you soaked. The bloody bile looks and feels disgusting on your skin, but despite that fact, you find yourself transfixed by the fluid. You have to put in quite a bit of effort to refocus on unclogging the sink.][/nomarkup] #failure #line:027c5e4 
@@ -25,9 +25,9 @@ tags:
             [nomarkup][A wet PLOP is audible as it splashes into the half-full, bloodstained sink. It bobs up and down, chaotically spinning until the pupil of its deep brown iris settles on you. Its gaze feels almost accusatory.][/nomarkup] #line:08e5462 
             <<if $coveredinblood == true>>
                 {$pcName}: [nomarkup][I need a shower.][/nomarkup] #line:098ef19 
+            <<else>>
+                -> [nomarkup][Walk away.][/nomarkup] #line:006dd6d 
             <<endif>>
-            -> [nomarkup][Walk away.][/nomarkup] #line:006dd6d 
-                <<stop>>
         -> [nomarkup][Eat the eye.][/nomarkup] #line:0610a8e 
             [nomarkup][You hesitantly fit the whole eyeball into your mouth. Chewing on it, a slimy, viscous fluid squirts in between your teeth. It's grotesque, but oddly satisfying.][/nomarkup] (-1 Hunger). #line:0de1bea 
             [nomarkup][You stare at your now-empty, bloodstained palm. A crushing wave of negative emotion washes over you. You feel like bursting into tears.][/nomarkup] #line:09de30d 
@@ -36,8 +36,9 @@ tags:
             {$pcName}: [nomarkup][...][/nomarkup] #line:05d8791 
             <<if $coveredinblood == true>>
                 {$pcName}: [nomarkup][I need a shower.][/nomarkup] #line:0c5d3b5 
-            <<endif>>
-            -> [nomarkup][Walk away.][/nomarkup] #line:02a6d44 
+            <<else>>
+                -> [nomarkup][Walk away.][/nomarkup] #line:02a6d44
+            <<endif>> 
     -> [nomarkup][Walk away.][/nomarkup] #line:0b9f479 
 <<else>>
     [nomarkup][The sink is clogged. Again. You get what you pay for, and this shitty apartment just about cleans you out each time rent is due. It's a pile of crap, but at the very least, it's your pile of crap.][/nomarkup] #line:0f4b5be 
@@ -59,8 +60,9 @@ tags:
             [nomarkup][A wet PLOP is audible as it splashes into the half-full, bloodstained sink. It bobs up and down, chaotically spinning until the pupil of its deep brown iris settles on you. Its gaze feels almost accusatory.][/nomarkup] #line:07e083e 
             <<if $coveredinblood == true>>
                 {$pcName}: [nomarkup][I need a shower.][/nomarkup] #line:0065a93 
+            <<else>>
+                -> [nomarkup][Walk away.][/nomarkup] #line:0fcb8b5 
             <<endif>>
-            -> [nomarkup][Walk away.][/nomarkup] #line:0fcb8b5 
         -> [nomarkup][Eat the eye.][/nomarkup] #line:02a5771 
             [nomarkup][You hesitantly fit the whole eyeball into your mouth. Chewing on it, a slimy, viscous fluid squirts in between your teeth. It's grotesque, but oddly satisfying.][/nomarkup] (-1 Hunger). #line:07e4fad 
             [nomarkup][You stare at your now-empty, bloodstained palm. A crushing wave of negative emotion washes over you. You feel like bursting into tears.][/nomarkup] #line:0f719a9 
@@ -69,8 +71,9 @@ tags:
             {$pcName}: [nomarkup][...][/nomarkup] #line:0c7d3cb 
             <<if $coveredinblood == true>>
                 {$pcName}: [nomarkup][I need a shower.][/nomarkup] #line:03485a3 
+            <<else>>
+                -> [nomarkup][Walk away.][/nomarkup] #line:0e1b8f6 
             <<endif>>
-            -> [nomarkup][Walk away.][/nomarkup] #line:0e1b8f6 
     -> [nomarkup][Walk away.][/nomarkup] #line:009d6b5 
 <<endif>> 
 ===

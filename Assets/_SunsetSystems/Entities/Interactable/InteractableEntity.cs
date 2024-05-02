@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             get
             {
-                return _interactable && (_interactableOnce ? !_interacted : true);
+                return _interactable && (!_interactableOnce || !_interacted) && gameObject.activeSelf;
             }
             set
             {
@@ -110,6 +110,8 @@ namespace SunsetSystems.Entities.Interactable
             }
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
             if (_references == null)
                 _references = GetComponent<IEntityReferences>();
             if (InteractionHandlers == null)
@@ -140,6 +142,8 @@ namespace SunsetSystems.Entities.Interactable
                 InteractablesInScene.Add(this);
             if (_linkedGameObject != null)
                 _linkedGameObject.SetActive(true);
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
         }
 
         private void OnDisable()
@@ -245,7 +249,7 @@ namespace SunsetSystems.Entities.Interactable
                 InteractionHandlers = new();
                 foreach (var handler in interactableEntity.InteractionHandlers)
                 {
-                    InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(handler as UnityEngine.Object));
+                    InteractionHandlers.Add(ES3Internal.ES3ReferenceMgrBase.Current.Get(handler as UnityEngine.Object));
                 }
             }
 

@@ -10,19 +10,19 @@ tags:
 ===
 title: paintingsInteractions
 ---
--> [nomarkup][Destroy the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:063d360 
-    <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if CustomVisited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
 -> [nomarkup][Try to dig up some information about art trade from your brain.] (Intelligence+Finance)[/nomarkup] <<if CustomVisited("paintingIntelligenceRoll") == false>> #line:0770fad 
     <<jump paintingIntelligenceRoll>>
 -> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup] <<if CustomVisited("paintingWitsRoll") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
+-> [nomarkup][Destroy the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:063d360 
+    <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>> #line:0847f88 
     <<jump safeExamine>>
 -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if CustomVisited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
     <<jump successContinued>>
--> [Step away.] #line:0c06753 
+-> [nomarkup][Step away.][/nomarkup] #line:0c06753 
 ===
 title: paintingAwarenessRoll
 ---
@@ -82,9 +82,7 @@ title: opinionsStart
         {$kieran}: That is, a hunch does not hold up in court, but its presence can be a valid reason to begin gathering up the evidence that supports a similar conclusion - just so long as one's confirmation bias does not get in the way of a sound argument. #line:0b50446 
         {$anastasia}: Y'know, for once, I'm sorry I made the joke in the first place... #line:002280f 
         {$kieran}: I've done my job well, then. #line:0666287 
-        <<if CustomVisited("paintingsOpinion") == false>>
-            <<jump paintingsOpinion>>
-        <<endif>>
+        <<jump paintingsOpinion>>
     <<endif>>
 <<else>>
     {$kieran}: I hope it's something important, and not just a hunch. We don't have time for art connoisseurship - but something this abstract could hardly be called art. #line:0972833 
@@ -93,34 +91,34 @@ title: opinionsStart
         {$kieran}: I'm sorry? I don't follow. #line:0a03b07 
         {$anastasia}: It's worthwhile specifically because it gets this kinda reaction out of people like you. It's a temple to the terrible. A shrine of shit! And I. Am. Here. For. It! #line:0c781bf 
         {$kieran}: Riiight. [nomarkup][By the look on his face, the confusion has gone, now replaced with a desire to move on.][/nomarkup] #line:0ad0321 
-        <<if CustomVisited("paintingsOpinion") == false>>
-            <<jump paintingsOpinion>>
-        <<endif>>
+        <<jump paintingsOpinion>>
     <<endif>>
 <<endif>>
 <<jump paintingsInteractions>>
 ===
 title: paintingsOpinion
 ---
-[nomarkup][You feel as if you should have an opinion about the art in front of you...][/nomarkup] #line:0676976 
--> {$pcName}: It isn't all that aesthetically pleasing, is it? #line:0ec2ef6 
-    {$kieran}: Right, you are. This piece fails to be satisfying to the eye, and moreover is unsuccessful in conveying anything but chaos. Hence, it lacks artistic value. (+1 Kieran Influence) #line:0e0bb0e 
-    <<ModifyInfluence 1 $kieran>>
--> {$pcName}: You know what? I also think I actually kind of like this painting. I mean, it's a trainwreck, but there's something about it... #line:0a6402e 
-    {$kieran}: Hm. Agree to disagree, I suppose... #line:0a50756 
-    {$anastasia}: Right?! It rules!(+1 Anastasia Influence) #line:0684159 
-    <<ModifyInfluence 1 $anastasia>>
--> {$pcName}: People like Kieran, huh? I don't think that a person's opinion says nearly as much about them as you claim it does, Anastasia. Least of all me, since I don't really have an opinion. #line:039146c 
-    {$anastasia}: Au contraire, as the residents of Paris, capital of art snobbery, would say. Not having an opinion is still an opinion - just as much as Kiki's or mine. It tells me that you haven't really thought too deeply about the art you consume, for one. That, or you're too tired and stressed to risk prolonging our bickering.   #line:01e7487 
-    {$anastasia}: As for Kieran, well... He believes that the function of art is for it to look good and clearly, explicitly convey something. In a nutshell, it needs to say shit and not look like shit, in order to even be given the title - “art”.  #line:0bfa58c 
-    {$anastasia}: In his personality and belief system, this points to strictness, traditionalism, and just plain old narrow-mindedness - but that isn't really a surprise, at this point. #line:0c3afc8 
-    {$kieran}: Okay, I'll bite. What is the purpose of a piece of art, if it doesn't “mean” anything, in your view? #line:0e7cd4c 
-    {$anastasia}: [nomarkup][She shrugs.][/nomarkup] Doesn't need one. If it's created by someone that can think and feel - someone that has a sense of self - then that's enough. That's art. The product and expression of the creative spirit - nothing more, and nothing less. #line:019c090 
-    {$kieran}: You know what? I may be able to get behind that particular definition... #line:0a13fa9 
--> {$pcName}: [nomarkup][No, I don't.][/nomarkup] #line:0455ee3 
-    {$kieran}: We don't have time for this, anyhow. Let us return to the task at hand. #line:094cce7 
-<<set $artTalk to true>>
-<<jump paintingsInteractions>>
+<<if CustomVisited("paintingsOpinion") == false>>
+    [nomarkup][You feel as if you should have an opinion about the art in front of you...][/nomarkup] #line:0676976 
+    -> {$pcName}: It isn't all that aesthetically pleasing, is it? #line:0ec2ef6 
+        {$kieran}: Right, you are. This piece fails to be satisfying to the eye, and moreover is unsuccessful in conveying anything but chaos. Hence, it lacks artistic value. (+1 Kieran Influence) #line:0e0bb0e 
+        <<ModifyInfluence 1 $kieran>>
+    -> {$pcName}: You know what? I also think I actually kind of like this painting. I mean, it's a trainwreck, but there's something about it... #line:0a6402e 
+        {$kieran}: Hm. Agree to disagree, I suppose... #line:0a50756 
+        {$anastasia}: Right?! It rules!(+1 Anastasia Influence) #line:0684159 
+        <<ModifyInfluence 1 $anastasia>>
+    -> {$pcName}: People like Kieran, huh? I don't think that a person's opinion says nearly as much about them as you claim it does, Anastasia. Least of all me, since I don't really have an opinion. #line:039146c 
+        {$anastasia}: Au contraire, as the residents of Paris, capital of art snobbery, would say. Not having an opinion is still an opinion - just as much as Kiki's or mine. It tells me that you haven't really thought too deeply about the art you consume, for one. That, or you're too tired and stressed to risk prolonging our bickering.   #line:01e7487 
+        {$anastasia}: As for Kieran, well... He believes that the function of art is for it to look good and clearly, explicitly convey something. In a nutshell, it needs to say shit and not look like shit, in order to even be given the title - “art”.  #line:0bfa58c 
+        {$anastasia}: In his personality and belief system, this points to strictness, traditionalism, and just plain old narrow-mindedness - but that isn't really a surprise, at this point. #line:0c3afc8 
+        {$kieran}: Okay, I'll bite. What is the purpose of a piece of art, if it doesn't “mean” anything, in your view? #line:0e7cd4c 
+        {$anastasia}: [nomarkup][She shrugs.][/nomarkup] Doesn't need one. If it's created by someone that can think and feel - someone that has a sense of self - then that's enough. That's art. The product and expression of the creative spirit - nothing more, and nothing less. #line:019c090 
+        {$kieran}: You know what? I may be able to get behind that particular definition... #line:0a13fa9 
+    -> {$pcName}: [nomarkup][No, I don't.][/nomarkup] #line:0455ee3 
+        {$kieran}: We don't have time for this, anyhow. Let us return to the task at hand. #line:094cce7 
+<<else>>
+    <<jump paintingsInteractions>>
+<<endif>>
 ===
 title: paintingIntelligenceSuccess
 ---
@@ -198,8 +196,7 @@ title: paintingAwarenessFailure
 {$kieran}: ...ardot? Miss Bardot! #line:0d77c66 
 [nomarkup][Kieran's voice jolts you back into the land of the living - and indisputably conscious.][/nomarkup] #line:0cc506c 
 {$kieran}: Are you alright? You seemed... transfixed. Did you notice something about the art? #line:0d4385d 
--> {$pcName}: No, but I think I have an opinion about this piece. #line:05806b8 
-{$kieran}: Then by all means, go ahead. #line:0e6a64e 
+-> {$pcName}: No, but I think I have an opinion about this piece. #line:05806b8
 <<jump paintingsOpinion>>
 ===
 title: paintingsDestroyed
@@ -214,9 +211,9 @@ title: paintingsDestroyed
 <<endif>>
 {$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[/nomarkup] #line:04a3041 
 <<ModifyInfluence -1 $kieran>>
--> {$pcName}: I... don't know what came over me. <<if visited("beastTalk") == false>> #line:0e9e8bb 
+-> {$pcName}: I... don't know what came over me. <<if CustomVisited("beastTalk") == false>> #line:0e9e8bb 
     <<jump beastTalk>>
--> {$pcName}: Normally no. But I'm pissed. <<if visited("beastTalk") == false>> #line:0537bea 
+-> {$pcName}: Normally no. But I'm pissed. <<if CustomVisited("beastTalk") == false>> #line:0537bea 
     <<jump beastTalk>>
 <<jump paintingsInteractions>>
 ===
@@ -237,13 +234,13 @@ title: beastTalk
         {$beast}: I like that girl. She talks sense. #line:0e4c7e7 
         {$kieran}: [nomarkup][He squints at Anastasia, his eyebrows furrowing.][/nomarkup] Listen Anastasia, I gave her my word that I am going to help her, and I do not appreciate your efforts to sabotage that trust. Moreover, if she listens to you, then she'll have an even more difficult time adjusting than she would have, otherwise. #line:099edfa 
         {$anastasia}: Yes Kieran, I know. Your ass is on the line. You repeat it all the time. Not that I care all that much whether you live or die. #line:07b37da 
-        {$kieran}: We know; you've made it apparent that you don't care about much of anything at all... [nomarkup][He continues to argue, and you get the impression that if you don't stop them both, they will continue bickering until the dawn catches you all unawares][/nomarkup] #line:017c492 
+        {$kieran}: We know; you've made it apparent that you don't care about much of anything at all... [nomarkup][He continues to argue, and you get the impression that if you don't stop them both, they will continue bickering until the dawn catches you all unawares][/nomarkup] #lastline #line:017c492 
         <<jump anaAndKieranConflict>>
     <<else>>
         {$kieran}: You had a lot of them tonight. I just don't want to overburden you. \[did you just heard genuine... concern in his voice?\] #line:040f0e3 
         {$beast}: No, it's not concern, he's just toying with my feelings. He wasn't particularly “concerned” when I had gun next to my head. All he does is complaining. #line:09232e5 
         {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage... #line:094ba19 
-        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #line:02babbc 
+        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #lastline #line:02babbc 
     <<endif>>
 <<else>>
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -252,11 +249,11 @@ title: beastTalk
         {$beast}: I like that girl. She talks sense. #line:0304a70 
         [nomarkup][Kieran rolls his eyes][/nomarkup] #line:0ece729 
         {$kieran}: Listen Anastasia, I said to her that I'm going to help her and this is what I do. If she'll just run rampage... #line:0ad0af3 
-        {$anastasia}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. Not that I care about it. #line:01b221f 
+        {$anastasia}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. Not that I care about it. #lastline #line:01b221f 
         <<jump anaAndKieranConflict>>
     <<else>>
         {$kieran}: Listen, I said to that I'm going to help you and this is what I do. If you'll just run rampage... #line:09082bb 
-        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #line:0ca6b02 
+        -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #lastline #line:0ca6b02 
     <<endif>>
 <<endif>>
 <<jump paintingsInteractions>>
@@ -265,14 +262,12 @@ title: anaAndKieranConflict
 ---
 {$innerVoice}: Shit... #line:0560752 
 {$beast}: I don't want to die... I must survive. #line:088157a 
--> {$pcName}: [nomarkup][Find the will to assert yourself.] (Resolve+Leadership)[/nomarkup] #line:04748ad 
-[nomarkup][Kieran and Anastasia continue to argue as you briefly clear your throat, readying yourself to take on the mantle of being the sole adult in the room... What will you say?][/nomarkup] #line:0928c7c
 -> [nomarkup][You straighten up where you stand, you have no choice but to say something. Otherwise this quarrel will not end.] (Composure + Leadership) [/nomarkup]
 <<if Roll ("Composure","Leadership")>=2>>
     -> {$pcName}: Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. [nomarkup][You say firmly.][/nomarkup] #success #line:00b25cf 
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0cbb9fc 
     {$kieran}: We'll finish this conversation at another, more opportune, time. #line:0c589a9 
-    {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust. #line:00cc36a 
+    {$anastasia}: I'll hold you to that. I'm eager to crush all your stupid arguments to dust. #lastline #line:00cc36a 
 <<else>>
     -> {$pcName}: SHUT UP!!! [nomarkup][You release an impressively loud shout.][/nomarkup] #failure #line:0658ceb 
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0822982 
@@ -284,16 +279,16 @@ title: anaAndKieranConflict
     {$kieran}: Your clothing, miss Bardot. I think our companion here is referring to the color scheme and pattern. #line:001185e 
     [nomarkup][You look down at the black and yellow striped sweater you slipped into before exiting your apartment.][/nomarkup] #line:01fc98a 
     <<if (GetCompanionInfluence($kieran) >=4)>>
-        {$kieran}: Although... [nomarkup][He trails off, tapping a forefinger on his chin for a moment before continuing.][/nomarkup] I also suppose it could refer to your tenacity and work ethic as you attempt to solve this mystery? #line:0968bbc 
+        {$kieran}: Although... [nomarkup][He trails off, tapping a forefinger on his chin for a moment before continuing.][/nomarkup] I also suppose it could refer to your tenacity and work ethic as you attempt to solve this mystery? #lastline #line:0968bbc 
     <<else>>
-        {$kieran}: That, or the irritating buzzing noise I cannot help but to hear when you speak... #line:0b0ca0c 
+        {$kieran}: That, or the irritating buzzing noise I cannot help but to hear when you speak... #lastline #line:0b0ca0c 
     <<endif>>
     -> {$pcName}: Oh, thank you. I'm so glad you think so. #line:0136ed4 
     {$kieran}: [nomarkup][He smiles pleasantly and politely - the usual display.][/nomarkup] You are quite welcome. Being honest and forthcoming with the small things does tend to have its merits, after all... #lastline #line:0e7e345 
     <<if (GetCompanionInfluence($kieran) >=4)>>
-        -> {$pcName}: [nomarkup][I think he might be warming up to me, a little...][/nomarkup] #line:0ef4fda 
+        -> {$pcName}: [nomarkup][I think he might be warming up to me, a little...][/nomarkup] #lastline #line:0ef4fda 
     <<else>>
-        -> {$pcName}: [nomarkup][Well, fuck you, too, I guess. Sarcasm can only go so far to communicate a point...][/nomarkup] #line:05b9ccb 
+        -> {$pcName}: [nomarkup][Well, fuck you, too, I guess. Sarcasm can only go so far to communicate a point...][/nomarkup] #lastline #line:05b9ccb 
     <<endif>>
 <<endif>>
 -> {$pcName}: [nomarkup][You straighten up where you stand, breathing in, then out in an attempt to calm and center yourself, before beginning to speak slowly and clearly in an unwavering monotone.][/nomarkup] Anastasia, Kieran... Please refrain from fighting on my behalf. #line:0d792fe 
@@ -305,7 +300,7 @@ title: anaAndKieranConflict
     -> {$pcName}: That being said, Kieran is my adoptive Sire, and if any information pertinent to this investigation comes up, I trust him to relay it to me when his judgment deems the time to be right. #line:066cd94
     {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. [nomarkup][Kieran influence +1][/nomarkup] #line:00780ed 
     <<ModifyInfluence 1 $kieran>>
-    {$anastasia}: Ugh. #line:0177a57 
+    {$anastasia}: Ugh. #lastline #line:0177a57 
 <<jump paintingsInteractions>>
 ===
 title: examineScraps

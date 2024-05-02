@@ -44,7 +44,12 @@ namespace SunsetSystems.Entities.Interactable
             int highlightedLayer = LayerMask.NameToLayer(_highlightLayer);
             foreach (var renderer in _highlightRenderers)
             {
-                renderer.gameObject.layer = active ? highlightedLayer : _rendererLayerCache[renderer];                
+                if (renderer == null)
+                    continue;
+                if (active)
+                    renderer.gameObject.layer = highlightedLayer;
+                else if (_rendererLayerCache.TryGetValue(renderer, out var cachedLayer))
+                    renderer.gameObject.layer = cachedLayer;
             }
         }
     }

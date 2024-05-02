@@ -46,7 +46,10 @@ namespace SunsetSystems.Entities.Interactable
             {
                 if (renderer == null)
                     continue;
-                renderer.gameObject.layer = active ? highlightedLayer : _rendererLayerCache[renderer];                
+                if (active)
+                    renderer.gameObject.layer = highlightedLayer;
+                else if (_rendererLayerCache.TryGetValue(renderer, out var cachedLayer))
+                    renderer.gameObject.layer = cachedLayer;
             }
         }
     }

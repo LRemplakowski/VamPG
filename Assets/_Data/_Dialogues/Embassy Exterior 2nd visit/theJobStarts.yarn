@@ -6,7 +6,7 @@ position: -72,177
 {$diana}: I noticed it about a week ago, about half our books have been wrong for nearly eight months now. This arsehole clearly knew something, and these aren't the kind of people I want to fuck around with. And you're sure that this is where he is? #line:0e03cc4 
 -> {$pcName}: A lot of things have gone wrong for me lately but this isn't one of them. He's there. #line:0c2e7e6 
 {$diana}: What, had a bad evening? #line:09930eb 
--> {$pcName}: [You snort as you push open the door] The worst. #line:0ee6859 
+-> {$pcName}: [nomarkup][You snort as you push open the door][/nomarkup] The worst. #line:0ee6859 
 //PC comes out of the car with Diana//
 [nomarkup][Diana moves as if to get out as well and you hold a hand up to her through the window and shake your head. She'll only spook him, she nods to you and settles back down. Rubbing the back of her neck and looking down the alley. It smells distinctly of grim and tar, the scent coming on strong from in the alley, you can see dumpsters out back have been piled high with trash and Diego lights up a cigarette before shaking out the lighter.][/nomarkup] #line:05dada1 
 {$innerVoice}: Talk to him, gain his trust and lead him back to the van. Simple enough. [nomarkup][Your eyes soften a bit with a smile as you walk over, sitting on your hip as you force a sway into your step. The man looking up and catching you as you do.][/nomarkup] #line:0053a5d 
@@ -222,11 +222,12 @@ title: stamChaseSuccess
 title: stamChaseFailure
 ---
 [nomarkup][You sprint after Diego as he collides off the Van, you hear Diana shout from inside and the sound of the passenger side door opening just as you dash past her, running Diego down as he tries to get out of the way and further down the back streets towards the main road. You gras his jacket and he slips out of it, finding yourself running after him with your arms full of leather. Diana's feet pounding behind you.][/nomarkup] #failure #line:0b64cec 
+<<jump theVan>>
 ===
 title: theVan
 ---
 //Diego is pushed into the van//
-[nomarkup][You look a little closer at the man who's been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You've been skimming the documents that you've been given and looked into Diego's background - a nobody. Got caught up in something he didn't understand; ultimately it's unlikely he'll walk away from this unscathed, but that isn't your problem.][/omarkup] #line:0c75ce4 
+[nomarkup][You look a little closer at the man who's been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You've been skimming the documents that you've been given and looked into Diego's background - a nobody. Got caught up in something he didn't understand; ultimately it's unlikely he'll walk away from this unscathed, but that isn't your problem.][/nomarkup] #line:0c75ce4 
 {$diana}: Where can we take him that'll be private? #line:05df103 
 -> {$pcName}: [nomarkup][You can feel the sigh building up in your chest.][/nomarkup] I know a place. #line:010d1be 
 [nomarkup][The van is a large black vehicle that has had its plates changed. Diana moves towards the driver's door and stops.][/nomarkup] #line:0c0a848 
@@ -247,11 +248,11 @@ title: theVanRide
 <<endif>>
 [nomarkup][You sit in the car with Diana as the city scrolls by. Giving her directions as she quietly watches the road. You can hear the soft breathing of the knocked-out Diego but you suspect he might have been given something since he's no longer resisting.][/nomarkup] #line:02b5dba 
 {$diana}: You know my boss speaks very highly of you. She said that you're the best investigator anyone's ever seen, gotta say glad you're on our side. #line:02e2d70 
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... validated.] #line:013b09d 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... validated.][/nomarkup] #line:013b09d 
     <<jump pcValidated>>
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... vindicated.] #line:0a4d926 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... vindicated.][/nomarkup] #line:0a4d926 
     <<jump pcVindicated>>
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... venerated.] #line:0658d29 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... venerated.][/nomarkup] #line:0658d29 
     <<jump pcVenerated>>
 ===
 title: pcValidated

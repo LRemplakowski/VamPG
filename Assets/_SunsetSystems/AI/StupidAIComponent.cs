@@ -16,7 +16,7 @@ namespace SunsetSystems.AI
         private IDecisionContext context;
         [ShowInInspector, ReadOnly]
         private bool performingLogic = false;
-
+        [ShowInInspector]
         private EntityAction performedAction;
 
         private void OnEnable()

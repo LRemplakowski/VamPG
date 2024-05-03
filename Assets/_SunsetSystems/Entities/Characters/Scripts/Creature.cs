@@ -238,7 +238,13 @@ namespace SunsetSystems.Entities.Characters
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
                 WorldPosition = creature.References.BodyTransform.position;
-                UMAHidden = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>().hide;
+                UMAHidden = false;
+                if (creature.References != null)
+                {
+                    var dna = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
+                    if (dna != null)
+                        UMAHidden = dna.hide;
+                }
             }
 
             public CreaturePersistenceData() : base()

@@ -25,6 +25,7 @@ namespace SunsetSystems.Cinematics
 
         public void PlayCutscene(PlayableAsset asset, DirectorWrapMode wrapMode)
         {
+            _playableDirector.Stop();
             _playableDirector.Play(asset, wrapMode);
         }
     }

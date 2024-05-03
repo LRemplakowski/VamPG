@@ -46,8 +46,14 @@ namespace SunsetSystems.Dialogue
             _dialogueRunner.onNodeStart.AddListener(MarkNodeVisitedCustom);
         }
 
+        private void OnDestroy()
+        {
+            _dialogueRunner.onNodeStart.RemoveListener(MarkNodeVisitedCustom);
+        }
+
         private void MarkNodeVisitedCustom(string nodeID)
         {
+            Debug.Log($"Visited dialogue node: {nodeID}");
             DialogueHelper.VariableStorage.SetValue($"visited:{nodeID}", true);
         }
 

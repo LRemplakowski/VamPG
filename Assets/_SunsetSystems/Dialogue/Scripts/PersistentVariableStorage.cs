@@ -20,8 +20,6 @@ namespace SunsetSystems.Dialogue
         private DialogueVariableConfig _variableInjectionConfig;
 
         private readonly Dictionary<string, object> _variables = new();
-
-        [SerializeField]
        
         public string DataKey => DataKeyConstants.PERSISTANT_VARIABLE_STORAGE_DATA_KEY;
 

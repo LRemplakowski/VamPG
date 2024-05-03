@@ -10,10 +10,14 @@ position: 136,-238
 [nomarkup][Your speech is slow as you reach for words, this feels so familiar but from where? That smile feels like something you've seen, how many times has she asked you this? When...][/nomarkup]
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Well, if she's done spacing out and you two already have some kind of plan, I'd like to hear it. Sharing is caring. #line:0af9e59 
-    {$kieran}: [nomarkup][Kieran frowns.][/nomarkup] She does that, sometimes. Please, pay it no mind. #line:09a1f03 
-<<endif>>
-<<if $toldKieranAboutVision ==1>>
-    {$kieran}: Another vision? #line:07c09de 
+    {$kieran}: [nomarkup][Kieran frowns.][/nomarkup] She does that, sometimes. Please, pay it no mind. #line:09a1f03
+    <<if $toldKieranAboutVision is true>>
+        {$kieran}: Another vision? #lastline #line:07c09de
+    <<endif>> 
+<<else>>
+    <<if $toldKieranAboutVision is true>>
+        {$kieran}: Another vision? #lastline
+    <<endif>> 
 <<endif>>
 -> {$pcName}: That's the woman I've been seeing. <<if CustomVisited("tellAboutVision") == false>> #line:0a3a355 
     <<jump tellAboutVision>>

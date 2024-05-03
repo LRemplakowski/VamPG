@@ -122,7 +122,7 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("DealDamage")]
         public static void DealDamage(string characterID, int damage, string damageType)
         {
-            throw new NotImplementedException();
+            Debug.LogError($"Deal that damage, dummy");
         }
 
         [YarnCommand("DecreaseWillpower")]

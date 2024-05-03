@@ -47,6 +47,11 @@ namespace SunsetSystems.Combat.UI
             await UpdatePortraits();
         }
 
+        public async void OnCombatTurnEnd()
+        {
+            await UpdatePortraits();
+        }
+
         private async Task UpdatePortraits()
         {
             List<ICombatant> combatantsInOrder = CombatManager.Instance.GetCombatantsInTurnOrder();

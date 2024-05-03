@@ -35,7 +35,7 @@ title: approachWithoutDiana
 ===
 title: interactions
 ---
-[nomarkup][The man is looking at you waiting.][/nomarkup]
+[nomarkup][The man is looking at you waiting.][/nomarkup] #line:0f0cb9d 
 -> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if CustomVisited("cigRoll") == false>> #line:06b4ac7 
     <<jump cigRoll>>
 -> [nomarkup][Check him out.][/nomarkup] <<if CustomVisited("checkout") == false>> #line:0d46036 
@@ -203,7 +203,7 @@ title: dexChaseFailure
 [nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure #line:064459e 
 <<DealDamage $pcName 1>>
 [nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19
--> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup]
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup] #line:06aa376 
 <<jump stamChaseRoll>>
 ===
 title: stamChaseRoll
@@ -288,6 +288,6 @@ title: pcVenerated
 ===
 title: wrapUpVan
 ---
-[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup]
+[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup] #line:0ee0167 
 <<jump havenJobArrival>>
 ===

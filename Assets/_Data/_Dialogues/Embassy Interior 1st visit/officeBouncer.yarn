@@ -5,24 +5,26 @@ position: 58,-333
 <<set $talkedToBouncer to true>>
 [nomarkup][An intimidating, almost stereotypical Bouncer in a tight, V-neck black T-shirt and sunglasses crosses his arms before you.][/nomarkup] #line:0d24941 
 Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms. Foster is not taking any visitors at the moment. #line:0e15041 
-<<if $dianaOffice ==true>>
-    -> {$pcName}: She's expecting me. #line:0400125 
-    [nomarkup][He glares through his shades.][/nomarkup] Ms. Foster is not taking any visitors at the moment. #line:02ea8fb 
-<<else>>
-    {$kieran}: Sorry to bother you. #line:0764b1c 
-<<endif>>
-<<if $kateAlleyTalk ==true>>
-    -> {$pcName}: Kate sent us. #line:0ee6107 
-    <<jump officeBouncerKateSentUs>>
-<<endif>>
-<<if GetHasItem("IT_Q_EMBASSYDRINK") is true and CustomVisited("drinkFailure") is false>>
-    -> {$pcName}: You've been working all night. Here, a drink. (Manipulation + Persuasion) #line:0d0b60d 
-        <<if Roll("Manipulation","Persuasion") >=3>>
-            <<jump drinkSuccess>>
-        <<else>>
-            <<jump drinkFailure>>
-        <<endif>>
-<<endif>>
+-> {$pcName}: She's expecting me. <<if $dianaOffice == true and CustomVisited("officeBouncerTechnicalNode1") == false>> #line:0400125 
+    [nomarkup][He glares through his shades.][/nomarkup] Ms. Foster is not taking any visitors at the moment. #line:02ea8fb
+    <<jump officeBouncerTechnicalNode1>>
+-> {$pcName}: Kate sent us. <<if $kateAlleyTalk == true and CustomVisited("officeBouncerTechnicalNode2") == false>> #line:0ee6107 
+    <<jump officeBouncerTechnicalNode2>>
+-> {$pcName}: You've been working all night. Here, a drink. (Manipulation + Persuasion) <<if GetHasItem("IT_Q_EMBASSYDRINK") is true and CustomVisited("drinkFailure") is false>> #line:0d0b60d 
+    <<if Roll("Manipulation","Persuasion") >=3>>
+        <<jump drinkSuccess>>
+    <<else>>
+        <<jump drinkFailure>>
+    <<endif>>
+{$kieran}: Sorry to bother you. #line:0764b1c 
+===
+title: officeBouncerTechnicalNode1
+---
+<<jump officeBouncerKateSentUs>> 
+===
+title: officeBouncerTechnicalNode2
+---
+<<jump officeBouncerKateSentUs>> 
 ===
 title: officeBouncerKateSentUs
 position: -86,6

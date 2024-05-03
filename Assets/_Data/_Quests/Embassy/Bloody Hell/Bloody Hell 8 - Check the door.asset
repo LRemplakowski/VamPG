@@ -13,9 +13,13 @@ MonoBehaviour:
   m_Name: Bloody Hell 8 - Check the door
   m_EditorClassIdentifier: 
   <DatabaseID>k__BackingField: b480d3cb-7475-485a-b706-ef1ba45228b7
-  ReadableID: 
-  Description: 
+  ReadableID: BH8_CHECK_DOOR
+  IsOptional: 0
+  Description: Check who's knocking
   IsFirst: 0
   IsLast: 0
   ObjectivesToCancelOnCompletion: []
-  NextObjectives: []
+  NextObjectives:
+  - {fileID: 11400000, guid: d5824b61961558641a4d5cafb5dd5f38, type: 2}
+  NextObjectivesOnFailed: []
+  ObjectivesToCancelOnFail: []

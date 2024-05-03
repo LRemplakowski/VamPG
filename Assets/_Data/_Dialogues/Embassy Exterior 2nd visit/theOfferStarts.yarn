@@ -9,7 +9,7 @@ tags:
 {$diana}: [nomarkup][She pops her lips and raises an eyebrow at you][/nomarkup] I was just thinking you might want to make it a little shorter? #line:04b3712 
 <<if Roll("Resolve","Etiquette") >=3>>
     <<set $rollModifier to 1>>
-    [nomarkup][She's being really forward and you're clearly not looking for company, maybe she's also lonely?][/nomarkup] #line:002152f 
+    [nomarkup][She's being really forward and you're clearly not looking for company, maybe she's also lonely?][/nomarkup] #lastline #line:002152f 
 <<endif>>
 -> {$pcName}: Maybe buy a girl a drink first? #line:038b01f 
     <<jump buyMeADrink>>
@@ -61,7 +61,7 @@ title: pcUnamused
 title: dianaTalkCont
 ---
 [nomarkup][Woman beside you takes a sip of her drink.][/nomarkup]
--> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if CustomVisited("introduction") ==false>> #line:087ae66 
+-> {$pcName}: Do you have a name or are you going to keep being a stranger? <<if CustomVisited("introductions") ==false>> #line:087ae66 
     <<jump introductions>>
 -> {$pcName}: So... [nomarkup][You brush some of your hair out of you face and feel a shiver run up your neck that makes your shoulder rise up.][/nomarkup] <<if CustomVisited("flirt") ==false>> #line:0e99543 
     <<jump flirt>>
@@ -71,9 +71,9 @@ title: introductions
 {$diana}: Diana Foster, the Dutchess if you're familiar with me by reputation? #line:0957c37 
 -> [nomarkup][Try to recall where you heard that.] (Wits + Streetwise)[/nomarkup] #line:02686b9 
 <<if Roll("Wits","Streetwise") >=2>>
-    [nomarkup][You remember her, she's got a bit of a reputation as a wild card but she's street savvy and you're in her club. Plus she's clearly got good taste, she's here with you.][/nomarkup] #success #line:075c462 
+    [nomarkup][You remember her, she's got a bit of a reputation as a wild card but she's street savvy and you're in her club. Plus she's clearly got good taste, she's here with you.][/nomarkup] #lastline #success #line:075c462 
 <<else>>
-    [nomarkup][Probably not your scene but you remember 'The Dutchess' as a club owner on the strip.][/nomarkup] #failure #line:072d48f 
+    [nomarkup][Probably not your scene but you remember 'The Dutchess' as a club owner on the strip.][/nomarkup] #lastline #failure #line:072d48f 
 <<endif>>
 -> {$pcName}: I can't exactly say you'd know me by - #line:039ae4e 
 {$diana}: Desiree Bardot. You did a piece on a competitor of mine, thank you for that. Beautiful work your takedown of the Golden Lion, there's something to be said about someone trying to root out corruption in Las Vegas. It's a sisyphean task love, but I'm glad to see someone do it. [nomarkup][She salutes you with her drink.][/nomarkup] #line:0851fb7 

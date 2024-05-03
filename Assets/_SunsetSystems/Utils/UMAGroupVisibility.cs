@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Persistence;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -41,6 +42,10 @@ namespace SunsetSystems.Utils
 
         private void Start()
         {
+            foreach (var uma in _childrenUMA)
+            {
+                uma.CharacterCreated.AddListener(UpdateUMAVisibility);
+            }
             RefreshUMAVisibility();
         }
 
@@ -53,11 +58,29 @@ namespace SunsetSystems.Utils
         {
             foreach (var uma in _childrenUMA)
             {
-                if (UmaVisible && uma.hide)
-                    uma.Show();
+                if (uma.umaData != null && uma.UpdatePending() is false)
+                {
+                    uma.ToggleHide(!_umaVisible);
+                }
                 else
-                    uma.Hide();
+                {
+                    StartCoroutine(LateRefreshVisibility(uma));
+                }
             }
+
+            IEnumerator LateRefreshVisibility(DynamicCharacterAvatar uma)
+            {
+                yield return new WaitUntil(() => uma.umaData != null && uma.UpdatePending() is false); 
+                uma.ToggleHide(!_umaVisible);
+            }
+        }
+        
+        private void UpdateUMAVisibility(UMAData umaData)
+        {
+            if (_umaVisible)
+                umaData.Show();
+            else
+                umaData.Hide();
         }
 
         public object GetComponentPersistenceData()
@@ -69,7 +92,7 @@ namespace SunsetSystems.Utils
         {
             if (data is not UMAGroupVisibilityPersistenceData umaGroupData)
                 return;
-            _umaVisible = umaGroupData.UMAsVisible;
+            SetUMAVisibility(umaGroupData.UMAsVisible);
         }
 
         [SerializeField]

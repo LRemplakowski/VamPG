@@ -1,13 +1,10 @@
 ﻿title: shower
 tags:
 ---
-<<if $diegoMoved == true and GetIsPartyMemberRecruited($anastasia) is true>>
--> {$pcName}: Yea, I need a shower. #line:0ac3c01 
+-> {$pcName}: Yea, I need a shower. <<if $diegoMoved == true and GetIsPartyMemberRecruited($anastasia) is true>> #line:0ac3c01 
     <<jump takeAShowerWithAna>>
-<<elseif $diegoMoved == true>>
--> [nomarkup][Take a shower.][/nomarkup] #line:0f525b8 
+-> [nomarkup][Take a shower.][/nomarkup] <<if $diegoMoved == true and GetIsPartyMemberRecruited($anastasia) is false>> #line:0f525b8 
     <<jump showerAlone>>
-<<endif>>
 -> [nomarkup][Don't take a shower.][/nomarkup] #line:0298725 
     <<jump noShower>>
 -> [nomarkup][You grab the shower curtain and start to pull it off the rail.] (Strength + Athletics)[/nomarkup] #line:054a4fe 

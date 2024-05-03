@@ -2,6 +2,7 @@
 tags:
 position: 490,264
 ---
+<<CompleteObjective "Q_0P_NEVER_TRUST_WHITE_VAN" "O_0P_WHITE_VAN_HELP_THE_MAN">>
 <<declare $disciplineUse to false>>
 {$kieran}: I vouched for your ability to maintain a low profile, but... You are ever the magnet for trouble, aren't you? #line:0fbaad4 
 -> {$pcName}: Do you ever stop complaining? #line:09d7478 
@@ -35,8 +36,8 @@ position: 40,-74
     <<jump drunkardSuccess>>
 <<else>>
     Drunk Guy: Still doesn't make it right for you to kill them. That's why we have a criminal justice system. #failure #line:008c641 
-    {$innerVoice}: He’s right, but at the same time, horribly naive. #line:0c7ca0e 
-    {$kieran}: And where was that system when you were nearly kidnapped? I am sure it was not here. Otherwise, you wouldn’t have needed our help. #line:0c7ede0 
+    {$innerVoice}: He's right, but at the same time, horribly naive. #line:0c7ca0e 
+    {$kieran}: And where was that system when you were nearly kidnapped? I am sure it was not here. Otherwise, you wouldn't have needed our help. #line:0c7ede0 
     <<jump drunkardOptions>>
 <<endif>>
 ===
@@ -79,7 +80,7 @@ title: killTheDrunkard
 position: -328,-137
 ---
 Drunk Guy: Why are you looking at me like that? Stay away! #line:01c9b51 
-[nomarkup][The man attempts to fight, but it’s no use. Already in a weakened state, he goes down with a single blow][/nomarkup] #line:0f90220 
+[nomarkup][The man attempts to fight, but it's no use. Already in a weakened state, he goes down with a single blow][/nomarkup] #line:0f90220 
 {$beast}: Yes, no witnesses. Nice and clean. #line:09ad6ac 
 {$kieran}: [nomarkup][Kieran's disappointment turns into barely restrained anger - his frown deep and his nostrils flaring.][/nomarkup] So that's your solution? Reducing people down to obstacles to be removed? It sure is convenient, isn't it? The overwhelming force you've been gifted with. [nomarkup][Kieran Influence -2][/nomarkup]
 <<ModifyInfluence -2 $kieran>>

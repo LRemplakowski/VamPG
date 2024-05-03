@@ -1,8 +1,9 @@
 ﻿title: dumpster
 tags:
 ---
-<<if CurrentObjective("NEVER_TRUST", "DUMP_BODIES")==true>>
-    [nomarkup][One by one, you heave the bodies into the dumpster. There’s a soft thud as they hit the metal.][/nomarkup] #line:08438ac 
+<<if CurrentObjective("Q_0P_NEVER_TRUST_WHITE_VAN","O_0P_WHITE_VAN_GET_RID_OF_BODIES") == true>>
+    <<CompleteObjective "Q_0P_NEVER_TRUST_WHITE_VAN" "O_0P_WHITE_VAN_GET_RID_OF_BODIES">>
+    [nomarkup][One by one, you heave the bodies into the dumpster. There's a soft thud as they hit the metal.][/nomarkup] #line:08438ac 
     -> {$pcName}: Won't these be found? #line:0bffeae 
     {$kieran}: We have a lot of drop points like this across the city. See that logo? [nomarkup][He points to a faded picture on the side of a dumpster. It looks like it belongs to Ardus Enterprises.][/nomarkup]You can dispose of bodies in dumpsters with it. No questions asked. #line:06df308 
     <<jump financeRoll>>

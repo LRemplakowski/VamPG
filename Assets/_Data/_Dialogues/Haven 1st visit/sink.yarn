@@ -6,9 +6,9 @@ tags:
 <<if $vomit == true>>
     [nomarkup][You forgot the sink was clogged. Your reflection in the water, now tinted red, stares back at you. You look terrible - even more so than usual... Like you're terminally ill.][/nomarkup] #line:0f33850 
     [nomarkup][The idea fills you with dread... How's that possible? Yesterday, you were fine! What's worse is, you can't afford a visit to the ER, either.][/nomarkup]
-    [nomarkup][You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup] #line:0afd30e 
+    [nomarkup][You have no choice but to wait and hope that it's not as serious as it looks... You're not ready to die.][/nomarkup] #lastline #line:0afd30e 
 <<else>>
-    [nomarkup][The sink is clogged. Again. You get what you pay for, and this shitty apartment just about cleans you out each time rent is due. It's a pile of crap, but at the very least, it's your pile of crap.][/nomarkup] #line:0f4b5be 
+    [nomarkup][The sink is clogged. Again. You get what you pay for, and this shitty apartment just about cleans you out each time rent is due. It's a pile of crap, but at the very least, it's your pile of crap.][/nomarkup] #lastline #line:0f4b5be 
 <<endif>> 
 -> [nomarkup][Repair it yourself.] (Resolve + Craft) [/nomarkup] #line:052c893
     <<CompleteObjective "Q_0P_FIX_SINK" "REPAIR_SINK">>

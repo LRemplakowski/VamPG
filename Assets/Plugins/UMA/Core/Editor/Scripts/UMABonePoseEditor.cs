@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
-using UMA.CharacterSystem;
-using System;
 using UMA.Editors;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,7 +8,7 @@ using System.Collections.Generic;
 
 namespace UMA.PoseTools
 {
-	public class BoneTreeView : TreeView
+    public class BoneTreeView : TreeView
 	{
 		public TreeViewItem RootNode;
 		public int NodeCount;
@@ -39,10 +37,17 @@ namespace UMA.PoseTools
 		{
 			List<string> boneNames = new List<string>();
 			IList<int> boneIDs = GetSelection();
-			if (boneIDs == null) return boneNames;
-			if (boneIDs.Count == 0) return boneNames;
+			if (boneIDs == null)
+            {
+                return boneNames;
+            }
 
-			foreach(int i in boneIDs)
+            if (boneIDs.Count == 0)
+            {
+                return boneNames;
+            }
+
+            foreach (int i in boneIDs)
 			{
 				TreeViewItem tvi = FindItem(i, RootNode);
 				if (tvi != null)
@@ -192,18 +197,24 @@ namespace UMA.PoseTools
 		public static void SetLivePopupEditor(UMABonePoseEditor liveUBPEditor)
 		{
 			if(Application.isPlaying)
-				_livePopupEditor = liveUBPEditor;
-		}
+            {
+                _livePopupEditor = liveUBPEditor;
+            }
+        }
 
 		public void OnEnable()
 		{
 			if (saveUMAData != null)
-				sourceUMA = saveUMAData;
+            {
+                sourceUMA = saveUMAData;
+            }
 
-			if (treeState == null)
-				treeState = new TreeViewState();
+            if (treeState == null)
+            {
+                treeState = new TreeViewState();
+            }
 
-			boneTreeView = new BoneTreeView(treeState);
+            boneTreeView = new BoneTreeView(treeState);
 
 			targetPose = target as UMABonePose;
 //			inspectorLocked = ActiveEditorTracker.sharedTracker.isLocked;
@@ -319,14 +330,19 @@ namespace UMA.PoseTools
 				}
 			}
 			if (!Application.isPlaying)
-				_livePopupEditor = null;
-		}
+            {
+                _livePopupEditor = null;
+            }
+        }
 
 		private void DrawSkeletonBones()
 		{
 			if (context == null || context.activeUMA == null)
-				return;
-			var prevHandlesColor = Handles.color;
+            {
+                return;
+            }
+
+            var prevHandlesColor = Handles.color;
 			if (context.activeUMA.umaRoot != null)
 			{
 				var Global = context.activeUMA.umaRoot.transform.Find("Global");
@@ -383,11 +399,18 @@ namespace UMA.PoseTools
 				SerializedProperty activePose = null;
 				SerializedProperty mirrorPose = null;
 
-				if (activeBoneIndex != BAD_INDEX) activePose = poses.GetArrayElementAtIndex(activeBoneIndex);
-				if (mirrorBoneIndex != BAD_INDEX) mirrorPose = poses.GetArrayElementAtIndex(mirrorBoneIndex);
+				if (activeBoneIndex != BAD_INDEX)
+                {
+                    activePose = poses.GetArrayElementAtIndex(activeBoneIndex);
+                }
 
-//				EditorGUI.BeginChangeCheck( );
-				Transform activeTrans = context.activeTransform;
+                if (mirrorBoneIndex != BAD_INDEX)
+                {
+                    mirrorPose = poses.GetArrayElementAtIndex(mirrorBoneIndex);
+                }
+
+                //				EditorGUI.BeginChangeCheck( );
+                Transform activeTrans = context.activeTransform;
 				Transform mirrorTrans = context.mirrorTransform;
 				if (!mirrorActive || (mirrorBoneIndex == BAD_INDEX))
 				{
@@ -1018,8 +1041,11 @@ namespace UMA.PoseTools
 				int controlIDHigh = GUIUtility.GetControlID(0, FocusType.Passive);
 				if ((GUIUtility.keyboardControl > controlIDLow) && (GUIUtility.keyboardControl < controlIDHigh))
 				{
-					if (context != null) context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Position;
-				}
+					if (context != null)
+                    {
+                        context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Position;
+                    }
+                }
 
 				// Show Euler angles for rotation
 				SerializedProperty rotation = property.FindPropertyRelative("rotation");
@@ -1036,8 +1062,11 @@ namespace UMA.PoseTools
 				controlIDHigh = GUIUtility.GetControlID(0, FocusType.Passive);
 				if ((GUIUtility.keyboardControl > controlIDLow) && (GUIUtility.keyboardControl < controlIDHigh))
 				{
-					if (context != null) context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Rotation;
-				}
+					if (context != null)
+                    {
+                        context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Rotation;
+                    }
+                }
 				if (EditorGUI.EndChangeCheck())
 				{
 					if(newRotationEuler != currentRotationEuler)
@@ -1055,8 +1084,11 @@ namespace UMA.PoseTools
 				controlIDHigh = GUIUtility.GetControlID(0, FocusType.Passive);
 				if ((GUIUtility.keyboardControl > controlIDLow) && (GUIUtility.keyboardControl < controlIDHigh))
 				{
-					if (context != null) context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Scale;
-				}
+					if (context != null)
+                    {
+                        context.activeTool = UMABonePoseEditorContext.EditorTool.Tool_Scale;
+                    }
+                }
 
 				// Warn if there's a non-uniform scale
 				Vector3 scaleValue = scaleProperty.vector3Value;

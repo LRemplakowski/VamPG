@@ -1,16 +1,14 @@
 using UnityEngine;
 using UnityEditor;
-using UMA;
 using UMA.CharacterSystem;
 using System.Collections.Generic;
 using System.IO;
 using UMA.Examples;
 using UMA.PoseTools;
-using static UMA.UMAPackedRecipeBase;
 
 namespace UMA.Editors
 {
-	public class UMAAvatarLoadSaveMenuItems : Editor
+    public class UMAAvatarLoadSaveMenuItems : Editor
 	{
 		[UnityEditor.MenuItem("GameObject/UMA/Save Mecanim Avatar to Asset (runtime only)")]
 		[MenuItem("UMA/Runtime/Save Selected Avatars Mecanim Avatar to Asset", priority = 1)]
@@ -149,9 +147,12 @@ namespace UMA.Editors
 
 			DestroyImmediate(avatar);
 			var lod = baseObject.GetComponent<UMASimpleLOD>();
-			if (lod != null) DestroyImmediate(lod);
+			if (lod != null)
+            {
+                DestroyImmediate(lod);
+            }
 
-			if (AddStandaloneDNA)
+            if (AddStandaloneDNA)
 			{
 				UMAData uda = baseObject.GetComponent<UMAData>();
 				StandAloneDNA sda = baseObject.AddComponent<UMA.StandAloneDNA>();
@@ -166,12 +167,18 @@ namespace UMA.Editors
 			else
 			{
 				var ud = baseObject.GetComponent<UMAData>();
-				if (ud != null) DestroyImmediate(ud);
-			}
+				if (ud != null)
+                {
+                    DestroyImmediate(ud);
+                }
+            }
 			var ue = baseObject.GetComponent<UMAExpressionPlayer>();
-			if (ue != null) DestroyImmediate(ue);
+			if (ue != null)
+            {
+                DestroyImmediate(ue);
+            }
 
-			baseObject.name = CharName;
+            baseObject.name = CharName;
 			string prefabName = Folder + "/"+CharName+".prefab";
 			prefabName = CustomAssetUtility.UnityFriendlyPath(prefabName);
 			PrefabUtility.SaveAsPrefabAssetAndConnect(baseObject, prefabName, InteractionMode.AutomatedAction);
@@ -222,8 +229,11 @@ namespace UMA.Editors
 					{
 						string texname = PathBase + tex + ".PNG";
 						Texture texture = mat.GetTexture(tex);
-						if (texture != null) SaveTexture(texture, texname);
-					}
+						if (texture != null)
+                        {
+                            SaveTexture(texture, texname);
+                        }
+                    }
 				}
 			}
 		}
@@ -692,8 +702,10 @@ namespace UMA.Editors
 				if (UAI.IsIndexedType(type))
 				{
 					if (UAI.EvilAddAsset(type, o))
-						added++;
-				}
+                    {
+                        added++;
+                    }
+                }
 			}
 			UAI.ForceSave();
 			EditorUtility.DisplayDialog("Success", added + " item(s) added to Global Library", "OK");

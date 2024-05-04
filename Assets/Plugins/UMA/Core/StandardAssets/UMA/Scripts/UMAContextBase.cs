@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UMA.CharacterSystem;
 
 namespace UMA
 {
-	/// <summary>
-	/// Gloal container for various UMA objects in the scene. Marked as partial so the developer can add to this if necessary
-	/// </summary>
-	public abstract class UMAContextBase : MonoBehaviour
+    /// <summary>
+    /// Gloal container for various UMA objects in the scene. Marked as partial so the developer can add to this if necessary
+    /// </summary>
+    public abstract class UMAContextBase : MonoBehaviour
 	{
 		public static string IgnoreTag;
 
@@ -237,8 +236,10 @@ namespace UMA
 			{
 				var contextGO = GameObject.Find("UMAContext");
 				if (contextGO != null)
-					Instance = contextGO.GetComponent<UMAContextBase>();
-			}
+                {
+                    Instance = contextGO.GetComponent<UMAContextBase>();
+                }
+            }
 			if (Instance == null)
 			{
 				Instance = Component.FindObjectOfType<UMAContextBase>();

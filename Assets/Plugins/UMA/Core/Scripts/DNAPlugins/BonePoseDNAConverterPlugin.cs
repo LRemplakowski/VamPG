@@ -5,11 +5,10 @@ using UMA.PoseTools;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UMA.CharacterSystem;
 
 namespace UMA
 {
-	[System.Serializable]
+    [System.Serializable]
 	public class BonePoseDNAConverterPlugin : DynamicDNAPlugin
 	{
 
@@ -118,9 +117,11 @@ namespace UMA
 					for (int ci = 0; ci < _poseDNAConverters[i].UsedDNANames.Count; ci++)
 					{
 						if (!dict.ContainsKey(_poseDNAConverters[i].UsedDNANames[ci]))
-							dict.Add(_poseDNAConverters[i].UsedDNANames[ci], new List<int>());
+                        {
+                            dict.Add(_poseDNAConverters[i].UsedDNANames[ci], new List<int>());
+                        }
 
-						dict[_poseDNAConverters[i].UsedDNANames[ci]].Add(i);
+                        dict[_poseDNAConverters[i].UsedDNANames[ci]].Add(i);
 					}
 				}
 				return dict;
@@ -277,16 +278,20 @@ namespace UMA
 				this._poseToApply = poseToApply;
 				this._startingPoseWeight = startingPoseWeight;
 				if (modifyingDnas != null)
-					this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
-			}
+                {
+                    this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
+                }
+            }
 
 			public BonePoseDNAConverter(UMABonePose poseToApply, float startingPoseWeight = 0f, List<DNAEvaluator> modifyingDnas = null)
 			{
 				this._poseToApply = poseToApply;
 				this._startingPoseWeight = startingPoseWeight;
 				if(modifyingDnas != null)
-					this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
-			}
+                {
+                    this._modifyingDNA = new DNAEvaluatorList(modifyingDnas);
+                }
+            }
 
 			public BonePoseDNAConverter(BonePoseDNAConverter other)
 			{
@@ -304,8 +309,11 @@ namespace UMA
 				if (_poseToApply == null)
 				{
 					if (Debug.isDebugBuild)
-						Debug.LogWarning(umaData.gameObject.name + " had an invalid or empty pose set in its BonePoseDNAConverters in its DNAConverterController");
-					return;
+                    {
+                        Debug.LogWarning(umaData.gameObject.name + " had an invalid or empty pose set in its BonePoseDNAConverters in its DNAConverterController");
+                    }
+
+                    return;
 				}
 				_livePoseWeight = _startingPoseWeight;
 
@@ -325,8 +333,11 @@ namespace UMA
 				if (_poseToApply == null)
 				{
 					if (Debug.isDebugBuild)
-						Debug.LogWarning(umaData.gameObject.name + " had an invalid or empty pose set in its BonePoseDNAConverters in its DNAConverterController");
-					return;
+                    {
+                        Debug.LogWarning(umaData.gameObject.name + " had an invalid or empty pose set in its BonePoseDNAConverters in its DNAConverterController");
+                    }
+
+                    return;
 				}
 				_livePoseWeight = _startingPoseWeight;
 

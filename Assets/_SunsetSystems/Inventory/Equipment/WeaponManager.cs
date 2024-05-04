@@ -3,9 +3,11 @@ using SunsetSystems.Animation;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.UI;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Game;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -31,8 +33,10 @@ namespace SunsetSystems.Equipment
         private int weaponAnimationTypeParamHash;
         [SerializeField]
         private bool _ignoreAmmo;
+        [SerializeField]
+        private bool _showWeaponOutsideCombat;
         [Title("Debug Info")]
-        [ShowInInspector, ReadOnly]
+        [SerializeField, ReadOnly]
         private EquipmentSlotID selectedWeapon = EquipmentSlotID.PrimaryWeapon;
         [ShowInInspector, ReadOnly]
         private IWeaponInstance weaponInstance;
@@ -43,50 +47,62 @@ namespace SunsetSystems.Equipment
         {
             WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
             CombatManager.Instance.CombatBegin += OnCombatStart;
+            CombatManager.Instance.CombatEnd += OnCombatEnd;
         }
 
         private void OnDisable()
         {
             WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
             CombatManager.Instance.CombatBegin -= OnCombatStart;
+            CombatManager.Instance.CombatEnd -= OnCombatEnd;
         }
 
         private void Start()
         {
             weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
-            SetSelectedWeapon(SelectedWeapon.None);
+            //SetSelectedWeapon(SelectedWeapon.None);
             weaponsAmmoData ??= new();
+            if (_showWeaponOutsideCombat)
+                OnCombatStart(new List<ICombatant>() { owner });
         }
 
         private void OnWeaponSelected(SelectedWeapon weapon)
         {
-            if (CombatManager.Instance.CurrentActiveActor == owner)
-                SetSelectedWeapon(weapon);
+            SetSelectedWeapon(weapon);
         }
 
         private void OnCombatStart(IEnumerable<ICombatant> combatants)
         {
             weaponsAmmoData.Clear();
-            IWeapon primaryWeapon = GetPrimaryWeapon();
-            if (primaryWeapon != null && primaryWeapon.WeaponType == WeaponType.Ranged)
+            if (combatants.Contains(owner))
             {
-                WeaponAmmoData primaryWeaponAmmoData = new()
+                IWeapon primaryWeapon = GetPrimaryWeapon();
+                if (primaryWeapon != null && primaryWeapon.WeaponType == WeaponType.Ranged)
                 {
-                    MaxAmmo = primaryWeapon.MaxAmmo,
-                    CurrentAmmo = primaryWeapon.MaxAmmo
-                };
-                weaponsAmmoData.Add(primaryWeapon, primaryWeaponAmmoData);
-            }
-            IWeapon secondaryWeapon = GetSecondaryWeapon();
-            if (secondaryWeapon != null && secondaryWeapon.WeaponType == WeaponType.Ranged)
-            {
-                WeaponAmmoData secondaryWeaponAmmoData = new()
+                    WeaponAmmoData primaryWeaponAmmoData = new()
+                    {
+                        MaxAmmo = primaryWeapon.MaxAmmo,
+                        CurrentAmmo = primaryWeapon.MaxAmmo
+                    };
+                    weaponsAmmoData.Add(primaryWeapon, primaryWeaponAmmoData);
+                }
+                IWeapon secondaryWeapon = GetSecondaryWeapon();
+                if (secondaryWeapon != null && secondaryWeapon.WeaponType == WeaponType.Ranged)
                 {
-                    MaxAmmo = primaryWeapon.MaxAmmo,
-                    CurrentAmmo = primaryWeapon.MaxAmmo
-                };
-                weaponsAmmoData.Add(secondaryWeapon, secondaryWeaponAmmoData);
+                    WeaponAmmoData secondaryWeaponAmmoData = new()
+                    {
+                        MaxAmmo = primaryWeapon.MaxAmmo,
+                        CurrentAmmo = primaryWeapon.MaxAmmo
+                    };
+                    weaponsAmmoData.Add(secondaryWeapon, secondaryWeaponAmmoData);
+                }
+                _ = RebuildWeaponInstance();
             }
+        }
+
+        public void OnCombatEnd()
+        {
+            ReleaseCurrentWeaponInstance();
         }
 
         [Button]
@@ -102,7 +118,10 @@ namespace SunsetSystems.Equipment
             if (newSelectedWeapon != selectedWeapon)
             {
                 selectedWeapon = newSelectedWeapon;
-                await RebuildWeaponInstance();
+#if UNITY_EDITOR
+                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#endif
+                    await RebuildWeaponInstance();
             }
         }
 
@@ -110,6 +129,8 @@ namespace SunsetSystems.Equipment
         {
             if (weaponInstance != null)
                 ReleaseCurrentWeaponInstance();
+            if (GameManager.Instance.IsCurrentState(GameState.Combat) is false && _showWeaponOutsideCombat is false)
+                return;
             weaponInstance = await InstantiateCurrentWeapon();
             if (weaponInstance != null)
                 animationController.SetInteger(weaponAnimationTypeParamHash, (int)(weaponInstance.WeaponAnimationData.AnimationType));
@@ -127,7 +148,8 @@ namespace SunsetSystems.Equipment
 
         private void ReleaseCurrentWeaponInstance()
         {
-            Addressables.ReleaseInstance(weaponInstance.GameObject);
+            if (weaponInstance != null)
+                Addressables.ReleaseInstance(weaponInstance.GameObject);
             weaponInstance = null;
         }
 

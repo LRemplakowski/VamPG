@@ -76,12 +76,17 @@ namespace SunsetSystems.Dialogue
         private void Awake()
         {
             _optionViews = new();
-            gameObject.SetActive(false);
         }
 
         private void Start()
         {
-            //DialogueManager.RegisterView(this);
+            DialogueManager.Instance.RegisterView(this);
+            //gameObject.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            DialogueManager.Instance.UnregisterView(this);
         }
 
         private void Update()
@@ -147,7 +152,7 @@ namespace SunsetSystems.Dialogue
             AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
-            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => string.Equals(tag, LAST_LINE_TAG)) is false))
+            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => tag == LAST_LINE_TAG) is false))
                 await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
 
@@ -217,13 +222,14 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private async void UpdateSpeakerPhoto(string characterID)
+        private void UpdateSpeakerPhoto(string characterID)
         {
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+                characterID = PartyManager.Instance.MainCharacterKey;
+                if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+                    characterName = config.FullName;
             }
             else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
             {
@@ -235,7 +241,7 @@ namespace SunsetSystems.Dialogue
                 characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
                 characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             }
-            Sprite sprite = await this.GetSpeakerPortrait(characterID);
+            Sprite sprite = this.GetSpeakerPortrait(characterID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;

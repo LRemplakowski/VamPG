@@ -8,78 +8,14 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.83F126EB" = "Female Age"
-	"OpenInspectorPreview.83F126EB" = "0"
-	"currentGroup.83F126EB" = "asset"
-	"last_search.7BEC51F9" = ""
-	"OpenInspectorPreview.7BEC51F9" = "0"
-	"currentGroup.7BEC51F9" = "asset"
-	"last_search.E8DA1663" = "t:YarnProjectImporter"
-	"OpenInspectorPreview.E8DA1663" = "0"
-	"currentGroup.E8DA1663" = "all"
-	"picker_window_position_offset.3172962C" = "967;401;320;550"
-	"picker_search_text.3172962C" = "muz "
-	"last_search.3172962C" = "muz "
-	"OpenInspectorPreview.3172962C" = "0"
-	"currentGroup.3172962C" = "all"
-	"last_search.110DEAA3" = "p: t:texture"
+	"last_search.110DEAA3" = "h: is:child t:InteractableEntity"
 	"OpenInspectorPreview.110DEAA3" = "0"
 	"currentGroup.110DEAA3" = "asset"
-	"picker_window_position_offset.74AD8FDB" = "749;401;320;550"
-	"picker_search_text.74AD8FDB" = "blurre"
-	"last_search.74AD8FDB" = "blurre"
-	"OpenInspectorPreview.74AD8FDB" = "0"
-	"currentGroup.74AD8FDB" = "all"
-	"last_search.310DEAA3" = "highlight"
-	"OpenInspectorPreview.310DEAA3" = "0"
-	"currentGroup.310DEAA3" = "all"
+	"last_search.E8DA1663" = "h: t:ObjectiveTrigger"
+	"OpenInspectorPreview.E8DA1663" = "0"
+	"currentGroup.E8DA1663" = "all"
 }
 providers = {
-	adb = {
-		active = false
-		priority = 2500
-		defaultAction = null
-	}
-	asset = {
-		active = true
-		priority = 25
-		defaultAction = null
-	}
-	store = {
-		active = true
-		priority = 100
-		defaultAction = null
-	}
-	find = {
-		active = true
-		priority = 25
-		defaultAction = null
-	}
-	log = {
-		active = false
-		priority = 210
-		defaultAction = null
-	}
-	packages = {
-		active = true
-		priority = 90
-		defaultAction = null
-	}
-	performance = {
-		active = false
-		priority = 100
-		defaultAction = null
-	}
-	scene = {
-		active = true
-		priority = 50
-		defaultAction = null
-	}
-	query = {
-		active = true
-		priority = 100
-		defaultAction = null
-	}
 	st = {
 		active = true
 		priority = 100
@@ -90,43 +26,68 @@ providers = {
 		priority = 100
 		defaultAction = null
 	}
+	adb = {
+		active = false
+		priority = 2500
+		defaultAction = null
+	}
+	log = {
+		active = false
+		priority = 210
+		defaultAction = null
+	}
+	performance = {
+		active = false
+		priority = 100
+		defaultAction = null
+	}
+	store = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
 	profilermarkers = {
 		active = false
 		priority = 100
 		defaultAction = null
 	}
-	menu = {
+	scene = {
 		active = true
-		priority = 80
+		priority = 50
 		defaultAction = null
 	}
-	settings = {
+	find = {
 		active = true
-		priority = 100
+		priority = 25
 		defaultAction = null
 	}
-	calculator = {
+	packages = {
 		active = true
-		priority = 10
+		priority = 90
 		defaultAction = null
 	}
-	static_methods = {
+	asset = {
 		active = true
-		priority = 85
+		priority = 25
 		defaultAction = null
 	}
 }
 objectSelectors = {
 }
 recentSearches = [
-	"h"
+	"h: t:ObjectiveTrigger"
+	"h: t:QuestTrigger"
+	"h: t:DialogueVariableObjectiveTrigger"
+	"h: t:DialogueTrigger"
+	"h: t:NodeEventListener"
+	"h: t:ObjectiveEventListener"
+	"h: t:InteractableHighlightHandler"
 	""
-	"t:YarnProjectImporter"
-	" "
-	"p: t:texture"
-	"t:Texture ext:png"
-	"t:Texture"
-	"Female Age"
+	"h: t:InteractableEntity"
+	"h: is:child t:InteractableEntity"
+	"h: is:child t:InteractableEntity layer=<$layer:8, ActionTarget$>"
+	"h: t:InteractableEntity is:child"
+	"h:"
 ]
 searchItemFavorites = [
 ]
@@ -137,7 +98,7 @@ expandedQueries = [
 ]
 queryBuilder = true
 ignoredProperties = "id;name;classname;imagecontentshash"
-helperWidgetCurrentArea = "all"
+helperWidgetCurrentArea = "h:"
 disabledIndexers = ""
 minIndexVariations = 2
 findProviderIndexHelper = true

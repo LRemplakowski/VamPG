@@ -18,19 +18,16 @@ namespace SunsetSystems.Inventory.UI
         private InventoryEntry _content;
         private ItemStorage _storage;
 
-        private AssetReferenceSprite lastLoadedSprite;
-
         public static event Action<ContainerEntry> ContainerEntryDestroyed;
 
-        public async Task SetEntryContent(InventoryEntry content, ItemStorage storage)
+        public void SetEntryContent(InventoryEntry content, ItemStorage storage)
         {
             //if (lastLoadedSprite != null)
             //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _content = content;
             _storage = storage;
             _text.text = content._item.Name;
-            lastLoadedSprite = content._item.Icon;
-            _icon.sprite = await AddressableManager.Instance.LoadAssetAsync(lastLoadedSprite);
+            _icon.sprite = content._item.Icon;
             gameObject.name = content._item.Name;
         }
 

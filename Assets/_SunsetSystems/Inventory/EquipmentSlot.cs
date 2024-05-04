@@ -1,61 +1,95 @@
+using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.UI.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Equipment
 {
-    [System.Serializable]
+    [Serializable, HideReferenceObjectPicker]
     public class EquipmentSlot : IEquipmentSlot
     {
         [field: SerializeField, ReadOnly]
         public EquipmentSlotID ID { get; private set; }
-        [SerializeField, ReadOnly]
-        private ItemCategory _acceptedCategory;
-        public ItemCategory AcceptedCategory { get => _acceptedCategory; }
+
+        [ShowInInspector, ReadOnly]
+        public string DefaultItemID
+        {
+            get
+            {
+                return ID switch
+                {
+                    EquipmentSlotID.PrimaryWeapon => "IT_WPN_BR_FISTS",
+                    EquipmentSlotID.SecondaryWeapon => "IT_WPN_BR_FISTS",
+                    EquipmentSlotID.Chest => "IT_CLTH_DEFAULT",
+                    EquipmentSlotID.Boots => "IT_BTS_DEFAULT",
+                    EquipmentSlotID.Hands => "IT_HDS_DEFAULT",
+                    EquipmentSlotID.Trinket => "IT_TRKT_DEFAULT",
+                    EquipmentSlotID.Invalid => throw new ArgumentException("Requested default item ID for Invalid slot!"),
+                    _ => throw new NotImplementedException($"Equipment slot {ID} does not have default item ID!"),
+                };
+            }
+        }
+
+        [ShowInInspector, ReadOnly]
+        public ItemCategory AcceptedCategory
+        {
+            get
+            {
+                return ID switch
+                {
+                    EquipmentSlotID.PrimaryWeapon => ItemCategory.WEAPON,
+                    EquipmentSlotID.SecondaryWeapon => ItemCategory.WEAPON,
+                    EquipmentSlotID.Chest => ItemCategory.CLOTHING,
+                    EquipmentSlotID.Boots => ItemCategory.SHOES,
+                    EquipmentSlotID.Hands => ItemCategory.GLOVES,
+                    EquipmentSlotID.Trinket => ItemCategory.TRINKET,
+                    EquipmentSlotID.Invalid => throw new ArgumentException($"Requested Accepted Item Category for Invalid slot!"),
+                    _ => throw new NotImplementedException($"Equipment slot {ID} does not have Accepted Item Category!"),
+                };
+            }
+        }
 
         public IEquipmentSlot Data => this;
 
         [SerializeField]
         private IEquipableItem _equippedItem;
 
-        public EquipmentSlot(ItemCategory acceptedCategory, EquipmentSlotID id)
+        public EquipmentSlot(EquipmentSlotID id)
         {
-            this._acceptedCategory = acceptedCategory;
-            this.ID = id;
-            _equippedItem = null;
+            ID = id;
+            _equippedItem = default;
         }
 
         public EquipmentSlot(IEquipmentSlot slot)
         {
-            this._acceptedCategory = slot.AcceptedCategory;
-            this.ID = slot.ID;
+            ID = slot.ID;
             _equippedItem = slot.GetEquippedItem();
         }
 
         public EquipmentSlot()
         {
-
+            ID = EquipmentSlotID.Invalid;
+            _equippedItem = default;
         }
 
         public IEquipableItem GetEquippedItem()
-        {
+        { 
             return _equippedItem;
         }
 
-        public bool TryEquipItem(IEquipableItem item)
+        public bool TryEquipItem(IEquipableItem item, out IEquipableItem unequipped)
         {
-            if (!_acceptedCategory.Equals(item.ItemCategory))
+            unequipped = default;
+            if (item == null)
+                return false;
+            if (AcceptedCategory.Equals(item.ItemCategory) is false)
                 return false;
             if (_equippedItem != null)
             {
-                if (TryUnequipItem(_equippedItem))
-                {
-                    _equippedItem = item;
-                    return true;
-                }
-                return false;
+                TryUnequipItem(out unequipped);
+                _equippedItem = item;
+                return true;
             }
             else
             {
@@ -64,19 +98,12 @@ namespace SunsetSystems.Equipment
             }
         }
 
-        public bool TryUnequipItem(IEquipableItem item)
+        public bool TryUnequipItem(out IEquipableItem item)
         {
-            if (_equippedItem == null)
-                return false;
-            if (_equippedItem.Equals(item))
-            {
-                _equippedItem = null;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            item = _equippedItem;
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(DefaultItemID, out IBaseItem defaultItem) && defaultItem is IEquipableItem equipableItem)
+                _equippedItem = equipableItem;
+            return item != null || item.ReadableID != DefaultItemID;
         }
     }
 }

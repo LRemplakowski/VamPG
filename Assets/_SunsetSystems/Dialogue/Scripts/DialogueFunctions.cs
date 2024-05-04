@@ -53,7 +53,10 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetIsPartyMemberRecruited")]
         public static bool GetIsPartyMemberRecruited(string readableID)
         {
-            return PartyManager.Instance.IsRecruitedMember(readableID);
+            if (CreatureDatabase.Instance.TryGetConfig(readableID, out var config))
+                return PartyManager.Instance.IsRecruitedMember(config.DatabaseID);
+            else
+                return false;
         }
 
         [YarnFunction("GetCurrentMoney")]

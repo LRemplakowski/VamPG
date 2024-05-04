@@ -1,13 +1,11 @@
-using CleverCrow.Fluid.UniqueIds;
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Persistence;
-using System;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    [RequireComponent(typeof(IPersistentObject))]
     public class DoorController : SerializedMonoBehaviour, IInteractionHandler, IPersistentComponent
     {
         private const string DOOR_STATE = "Open";
@@ -26,18 +24,18 @@ namespace SunsetSystems.Entities.Interactable
             set
             {
                 _doorState = value;
-                if (_animator != null)
+                if (_animator != null || gameObject.TryGetComponent(out _animator))
                     _animator.SetBool(DOOR_STATE, value);
             }
         }
 
         public string ComponentID => COMPONENT_ID;
 
-        private void Awake()
+        private void Start()
         {
             if (_animator != null)
                 _animator = GetComponentInChildren<Animator>();
-            _animator.SetBool(ANIMATION_REVERSE, _reverseAnimation);        
+            _animator?.SetBool(ANIMATION_REVERSE, _reverseAnimation);
         }
 
         [Button]
@@ -54,11 +52,7 @@ namespace SunsetSystems.Entities.Interactable
 
         public object GetComponentPersistenceData()
         {
-            DoorsPersistenceData persistenceData = new()
-            {
-                DoorState = Open,
-            };
-            return persistenceData;
+            return new DoorsPersistenceData(this);
         }
 
         public void InjectComponentPersistenceData(object data)
@@ -69,9 +63,14 @@ namespace SunsetSystems.Entities.Interactable
         }
 
         [Serializable]
-        protected class DoorsPersistenceData
+        public class DoorsPersistenceData
         {
             public bool DoorState = false;
+
+            public DoorsPersistenceData(DoorController doorController)
+            {
+                DoorState = doorController.Open;
+            }
 
             public DoorsPersistenceData()
             {

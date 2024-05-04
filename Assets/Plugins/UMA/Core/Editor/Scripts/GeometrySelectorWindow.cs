@@ -1,10 +1,8 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 
 namespace UMA.Editors
 {
@@ -55,10 +53,14 @@ namespace UMA.Editors
 
             _Source = target as GeometrySelector;
             if (_Source != null)
+            {
                 restoreScenes = _Source.restoreScenes;
+            }
             else
+            {
                 Debug.LogError("GeometrySelector not found!");
-            
+            }
+
             Instance = this;
             EditorApplication.update += GeometryUpdate;
             UpdateShadingMode(showWireframe);
@@ -72,20 +74,12 @@ namespace UMA.Editors
            // Tools.current = Tool.None;
            // Tools.hidden = true;
             EditorApplication.LockReloadAssemblies();
-#if UNITY_2019_1_OR_NEWER
-            SceneView.duringSceneGui += this.OnSceneGUI;
-#else
-            SceneView.onSceneGUIDelegate += this.OnSceneGUI;
-#endif
+            SceneView.duringSceneGui += this.DoSceneGUI;
         }
 
         private void OnDisable()
         {
-#if UNITY_2019_1_OR_NEWER
-            SceneView.duringSceneGui -= this.OnSceneGUI;
-#else
-            SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
-#endif
+            SceneView.duringSceneGui -= this.DoSceneGUI;
             CleanUp();
         }
 
@@ -99,7 +93,10 @@ namespace UMA.Editors
             // Guard against Unity calling this via update multiple times even after
             // it's been removed from the event. Only happens on Mac.
             if (disposed)
+            {
                 return;
+            }
+
             disposed = true;
 
             Instance = null;
@@ -113,7 +110,10 @@ namespace UMA.Editors
                 foreach (GeometrySelector.SceneInfo s in restoreScenes)
                 {
                     if (string.IsNullOrEmpty(s.path))
+                    {
                         continue;
+                    }
+
                     EditorSceneManager.OpenScene(s.path, s.mode);
                 }
                 if (_Source.currentSceneView != null)
@@ -179,9 +179,14 @@ namespace UMA.Editors
                 _OccluderMeshHide = null;
                 newOccluderMeshHide = null;
                 if (_OccluderSlotData != null)
-                        _Source.UpdateOcclusionMesh(_OccluderSlotData.meshData, _occluderOffset, _occluderPosition, _occluderRotation, _occluderScale);
+                {
+                    _Source.UpdateOcclusionMesh(_OccluderSlotData.meshData, _occluderOffset, _occluderPosition, _occluderRotation, _occluderScale);
+                }
                 else
-                        _Source.occlusionMesh = null;
+                {
+                    _Source.occlusionMesh = null;
+                }
+
                 SceneView.RepaintAll();
             }
             if (newOccluderMeshHide != _OccluderMeshHide)
@@ -196,9 +201,14 @@ namespace UMA.Editors
                     _OccluderSlotData = null;
                     newOccluderSlotData = null;
                     if (_OccluderMeshHide != null && _OccluderMeshHide != _Source.meshAsset)
+                    {
                         _Source.UpdateOcclusionMesh(_OccluderMeshHide, _occluderOffset, _occluderPosition, _occluderRotation, _occluderScale);
+                    }
                     else
+                    {
                         _Source.occlusionMesh = null;
+                    }
+
                     SceneView.RepaintAll();
                 }
             }
@@ -255,9 +265,14 @@ namespace UMA.Editors
             if (changed)
             {
                 if(_OccluderSlotData)
+                {
                     _Source.UpdateOcclusionMesh( _OccluderSlotData.meshData, _occluderOffset, _occluderPosition, _occluderRotation, _occluderScale);
-                if(_OccluderMeshHide)
+                }
+
+                if (_OccluderMeshHide)
+                {
                     _Source.UpdateOcclusionMesh( _OccluderMeshHide, _occluderOffset, _occluderPosition, _occluderRotation, _occluderScale);
+                }
             }
 
             if (GUILayout.Button(new GUIContent("Raycast Hidden Faces", "Warning! This will clear the current selection.")))
@@ -330,9 +345,13 @@ namespace UMA.Editors
 #if UNITY_2018_1_OR_NEWER
             SceneView.CameraMode newMode = SceneView.lastActiveSceneView.cameraMode;
             if (wireframeOn)
+            {
                 newMode.drawMode = DrawCameraMode.TexturedWire;
+            }
             else
+            {
                 newMode.drawMode = DrawCameraMode.Textured;
+            }
 #else
             if (wireframeOn)
                 SceneView.lastActiveSceneView.renderMode = DrawCameraMode.TexturedWire;
@@ -346,19 +365,25 @@ namespace UMA.Editors
         private void ClearAll()
         {
             if (_Source != null)
+            {
                 _Source.ClearAll();
+            }
         }
 
         private void SelectAll()
         {
             if (_Source != null)
+            {
                 _Source.SelectAll();
+            }
         }
 
         private void Invert()
         {
             if (_Source != null)
+            {
                 _Source.Invert();
+            }
         }
 
         private void GeometryUpdate()
@@ -389,7 +414,10 @@ namespace UMA.Editors
         public void SaveSelection(BitArray selection)
         {
             if (cancelSave)
+            {
                 return;
+            }
+
             _Source.meshAsset.SaveSelection(selection);
         }
 
@@ -432,9 +460,13 @@ namespace UMA.Editors
             GUILayout.Label("Selection Mode", GUILayout.Width(100));
             selectionSelected = GUILayout.SelectionGrid(selectionSelected, selectionOptions, selectionOptions.Length);
             if (selectionSelected == 0)
+            {
                 setSelectedOn = true;
+            }
             else
+            {
                 setSelectedOn = false;
+            }
 
             GUILayout.EndHorizontal();
 
@@ -492,21 +524,12 @@ namespace UMA.Editors
                 SceneView.FrameLastActiveSceneView();            
         }
 
-        void OnSceneGUI(SceneView scene)
+        void DoSceneGUI(SceneView scene)
         {
-            const float WindowHeight = 140;
-            const float WindowWidth = 380;
-            const float Margin = 40;
-
             ResetLabelStart();
 
             Handles.BeginGUI();
-#if !UNITY_2021_2_OR_NEWER
-
-            Rect WinRect = new Rect(SceneView.lastActiveSceneView.position.width - (WindowWidth + Margin), SceneView.lastActiveSceneView.position.height - (WindowHeight + Margin),WindowWidth, WindowHeight);
-
-            GUI.Window(1,WinRect, SceneWindow, "UMA Mesh Hide Geometry Selector");
-#endif
+ 
             DrawNextLabel("Left click and drag to area select");
             DrawNextLabel("Hold SHIFT while dragging to paint");
             DrawNextLabel("Hold CTRL while dragging to paint inverse");
@@ -515,15 +538,21 @@ namespace UMA.Editors
             Handles.EndGUI();
 
             if (_Source == null)
+            {
                 return;
-            
+            }
+
             if (!isSelecting && Event.current.alt)
+            {
                 return;
+            }
 
             Rect selectionRect = new Rect();
 
             if (Event.current.type == EventType.Layout)
+            {
                 HandleUtility.AddDefaultControl(GUIUtility.GetControlID(GetHashCode(), FocusType.Passive));
+            }
 
             if (isSelecting)
             {
@@ -543,7 +572,10 @@ namespace UMA.Editors
                 if (Event.current.shift || Event.current.control)
                 {
                     bool selVal = setSelectedOn;
-                    if (Event.current.control) selVal = !selVal;
+                    if (Event.current.control)
+                    {
+                        selVal = !selVal;
+                    }
 
                     startMousePos = Event.current.mousePosition;
                     int mirrorHit = -1;
@@ -635,10 +667,14 @@ namespace UMA.Editors
                                 if (backfaceCull)
                                 {
                                     if (Vector3.Dot(normal, SceneView.currentDrawingSceneView.camera.transform.forward) < -0.0f)
+                                    {
                                         found = true;
+                                    }
                                 }
                                 else
+                                {
                                     found = true;
+                                }
                             }
                         }
 
@@ -650,14 +686,20 @@ namespace UMA.Editors
                             if (backfaceCull)
                             {
                                 if (Vector3.Dot(centerNormal, SceneView.currentDrawingSceneView.camera.transform.forward) < -0.0f)
+                                {
                                     found = true;
+                                }
                             }
                             else
+                            {
                                 found = true;
+                            }
                         }
 
                         if (found)
+                        {
                             _Source.selectedTriangles[(i / 3)] = setSelectedOn;
+                        }
                     }
 
                     _Source.UpdateSelectionMesh();
@@ -682,11 +724,15 @@ namespace UMA.Editors
             Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             RaycastHit hit;
             if (!Physics.Raycast(ray, out hit))
+            {
                 return -1;
+            }
 
             MeshCollider meshCollider = hit.collider as MeshCollider;
             if (meshCollider == null || meshCollider.sharedMesh == null || meshCollider != _Source.meshCollider)
+            {
                 return -1;
+            }
 
             if (Mirror)
             {
@@ -777,20 +823,28 @@ namespace UMA.Editors
         private void RaycastHide(bool bothDirections = false)
         {
             if (_Source == null)
+            {
                 return;
+            }
 
             Mesh targetMesh = _Source.sharedMesh;
             if (targetMesh == null)
+            {
                 return;
-            
+            }
+
             Mesh occlusionMesh = _Source.occlusionMesh;
             if (occlusionMesh == null)
+            {
                 return;
-            
+            }
+
             Vector3[] targetVerts = targetMesh.vertices;
             Vector3[] targetNorms = targetMesh.normals;
             if (targetNorms.Length != targetVerts.Length)
+            {
                 return;
+            }
 
             Matrix4x4 m = _Source.gameObject.transform.localToWorldMatrix;
             for (int i = 0; i < targetVerts.Length; i++)
@@ -850,7 +904,9 @@ namespace UMA.Editors
                     }
 
                     if (vertexOccluded[i])
+                    {
                         continue;
+                    }
                 }
             }
             EditorUtility.ClearProgressBar();
@@ -880,7 +936,10 @@ namespace UMA.Editors
             {
                 UpdateShadingMode(false);
                 if (_Source.meshAsset != null)
+                {
                     Selection.activeObject = _Source.meshAsset;
+                }
+
                 DestroyImmediate(_Source.gameObject);
             }
         }

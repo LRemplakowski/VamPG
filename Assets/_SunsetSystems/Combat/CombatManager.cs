@@ -53,6 +53,15 @@ namespace SunsetSystems.Combat
             Instance = this;
         }
 
+        [field: SerializeField]
+        private GameRuntimeData RuntimeData { get; set; }
+
+        private void Start()
+        {
+            if (!RuntimeData)
+                RuntimeData = this.FindFirstComponentWithTag<GameRuntimeData>(TagConstants.GAME_RUNTIME_DATA);
+        }
+
         public void SetCurrentActiveActor(int index)
         {
             ICombatant c = null;

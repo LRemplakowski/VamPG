@@ -1,11 +1,11 @@
 ﻿title: bouncerConversation
 tags:
 ---
-{$kieran}: Or don't listen to me. \[-1 Kieran Influence\] #line:0b1e53d 
+{$kieran}: Or don't listen to me. [nomarkup][-1 Kieran Influence\][/nomarkup] #line:0b1e53d 
 <<ModifyInfluence -1 $kieran>>
 [nomarkup][The queue behind you grumbles and curses at you for cutting the line. The Bouncer eyes you up and down, unimpressed. The suit he wears can barely contain his rippling muscles.][/nomarkup] #line:0eaab2c 
 Bouncer: You on the list? #line:00cf04d 
--> {$pcName}: (Presence) Care to pencil us in? #line:0224718 
+-> {$pcName}: Care to pencil us in? (Presence) #line:0224718 
     <<if UseDiscipline("presence") >= 1>>
         <<jump BouncerPresenceSuccess>>
     <<else>>
@@ -15,7 +15,7 @@ Bouncer: You on the list? #line:00cf04d
     Bouncer: Why even bother lying? #line:0e9b76e 
 -> {$pcName}: No. #line:0261ff6 
     Bouncer: Thanks for being honest, I guess. Now fuck off. #line:0bf4b11 
-    {$kieran}: ... why did you even bother? [nomarkup] [He looks confused.][/nomarkup]  #line:0ffc896 
+    {$kieran}: ... why did you even bother? [nomarkup][He looks confused.][/nomarkup]  #line:0ffc896 
 ===
 title: BouncerPresenceSuccess
 ---

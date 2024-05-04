@@ -67,7 +67,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4000011311384812}
-  - component: {fileID: 33000014242907972}
+  - component: {fileID: 4047877599714163726}
   m_Layer: 0
   m_Name: 004_audi_coll
   m_TagString: Untagged
@@ -90,13 +90,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4000012940855660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &33000014242907972
-MeshFilter:
+--- !u!64 &4047877599714163726
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1000012366396920}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300044, guid: cf9117a83ead2a54fac4d52261421382, type: 3}
 --- !u!1 &1000012983482736
 GameObject:

@@ -1,22 +1,11 @@
-using SunsetSystems.Entities.Characters;
-using InsaneSystems.RTSSelection;
-using SunsetSystems.Combat;
+using System.Collections.Generic;
+using System.Linq;
+using Sirenix.OdinInspector;
 using SunsetSystems.Game;
 using SunsetSystems.Utils.Input;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using System.Linq;
-using SunsetSystems.Party;
-using SunsetSystems.Spellbook;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Interfaces;
-using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Input
 {
@@ -68,6 +57,8 @@ namespace SunsetSystems.Input
 
         private void OnPointerPosition(InputAction.CallbackContext context)
         {
+            if (context.performed)
+                mousePosition = context.ReadValue<Vector2>();
             if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                 handler.HandlePointerPosition(context);
         }

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 9104678660509500652}
   - component: {fileID: 4111265707815432815}
   - component: {fileID: 781805661518230390}
-  - component: {fileID: 7258311450096224514}
-  m_Layer: 0
+  - component: {fileID: 2726464624233649135}
+  - component: {fileID: 480919928410547436}
+  m_Layer: 3
   m_Name: Props_00_Electric_Pole_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,8 +85,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7258311450096224514
-MeshCollider:
+--- !u!65 &2726464624233649135
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -102,7 +103,19 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -9031272936660543095, guid: 9a11dc181bf288f478a5d6acba2e86ef, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.29, y: 7.6500006, z: 0.28500095}
+  m_Center: {x: -0.2099934, y: 3.8250003, z: 0.0075003225}
+--- !u!114 &480919928410547436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388132446955891753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522a152904dce894b8819c6dab2764ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Quality>k__BackingField: 1

@@ -1,12 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.InputSystem;
-using SunsetSystems.Utils;
-using System;
+﻿using System;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(Tagger))]
 public class SunsetInputHandler : SerializedMonoBehaviour
 {
+    [SerializeField]
+    private PlayerInput _playerInput;
+
     // Mouse input
     public static event Action<InputAction.CallbackContext> OnPrimaryAction;
     public static event Action<InputAction.CallbackContext> OnSecondaryAction;
@@ -19,6 +22,12 @@ public class SunsetInputHandler : SerializedMonoBehaviour
     public static event Action<InputAction.CallbackContext> OnSkipDialogue;
     public static event Action<InputAction.CallbackContext> OnHighlightInteractables;
     public static event Action<InputAction.CallbackContext> OnHelp;
+
+    [Button]
+    private void Awake()
+    {
+        _playerInput.actions.actionMaps.ForEach(map => map.Enable());
+    }
 
     public void PrimaryAction(InputAction.CallbackContext context)
     {

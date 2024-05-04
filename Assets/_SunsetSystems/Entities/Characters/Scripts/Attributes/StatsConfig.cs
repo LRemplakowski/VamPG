@@ -20,29 +20,35 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public class Trackers
+    public struct Trackers
     {
         [SerializeField]
         private Tracker health, willpower, hunger, humanity;
 
         public static Trackers Initialize()
         {
-            Trackers result = new();
-            result.health = new(TrackerType.Health);
-            result.willpower = new(TrackerType.Willpower);
-            result.hunger = new(TrackerType.Hunger);
+            Trackers result = new()
+            {
+                health = new(TrackerType.Health),
+                willpower = new(TrackerType.Willpower),
+                hunger = new(TrackerType.Hunger),
+                humanity = new(TrackerType.Humanity)
+            };
             result.hunger.SetValue(0);
-            result.humanity = new(TrackerType.Humanity);
             return result;
         }
 
         public static Trackers DeepCopy(Trackers existing)
         {
-            Trackers result = new();
-            result.health = new(existing.health);
-            result.willpower = new(existing.willpower);
-            result.hunger = new(existing.hunger);
-            result.humanity = new(existing.humanity);
+            if (existing == null)
+                return Initialize();
+            Trackers result = new()
+            {
+                health = new(existing.health),
+                willpower = new(existing.willpower),
+                hunger = new(existing.hunger),
+                humanity = new(existing.humanity)
+            };
             return result;
         }
 
@@ -60,7 +66,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public class Attributes
+    public struct Attributes
     {
         [SerializeField]
         private CreatureAttribute
@@ -100,6 +106,8 @@ namespace SunsetSystems.Entities.Data
 
         public static Attributes DeepCopy(Attributes existing)
         {
+            if (existing == null)
+                return Initialize();
             Attributes result = new();
             result.strength = new(existing.strength);
             result.dexterity = new(existing.dexterity);
@@ -144,7 +152,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public class Skills
+    public struct Skills
     {
         [SerializeField]
         private Skill
@@ -217,6 +225,8 @@ namespace SunsetSystems.Entities.Data
 
         public static Skills DeepCopy(Skills existing)
         {
+            if (existing == null)
+                return Initialize();
             Skills result = new();
             //PHYSICAL
             result.athletics = new Skill(existing.athletics);
@@ -298,7 +308,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public class Disciplines
+    public struct Disciplines
     {
         [SerializeField]
         private Discipline
@@ -349,6 +359,8 @@ namespace SunsetSystems.Entities.Data
 
         public static Disciplines DeepCopy(Disciplines existing)
         {
+            if (existing == null)
+                return Initialize();
             Disciplines result = new();
             result.animalism = new(existing.animalism);
             result.auspex = new(existing.auspex);

@@ -35,6 +35,7 @@ title: approachWithoutDiana
 ===
 title: interactions
 ---
+[nomarkup][The man is looking at you waiting.][/nomarkup]
 -> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if visited("cigRoll") == false>> #line:06b4ac7 
     <<jump cigRoll>>
 -> [nomarkup][Check him out.][/nomarkup] <<if visited("checkout") == false>> #line:0d46036 
@@ -131,7 +132,7 @@ title: lureDiego
     {$diego}: Sorry ‘bout leading you on there. But no. #line:0a8e601 
     -> {$pcName}: So why then? #line:015e2ae 
     {$diego}: You've got this wicked look in your eye, thought you'd understand you know? #line:04755ca 
-    -> {$pcName}: Sure, but all the other… I wouldn't have asked if you weren't into it. #line:0efbb28 
+    -> {$pcName}: Sure, but all the other... I wouldn't have asked if you weren't into it. #line:0efbb28 
     {$diego}: [nomarkup][He nods a couple times and looks at the ground][nomarkup] It's sporting, you know? #line:051843e 
     <<if visited("married") == true>>
         {$diego}: But I'm never going to cheat on Elizabeth. I don't care if she never comes back to me, she's my lady. I'm not going to do that to her. #line:0fb531c 
@@ -168,24 +169,19 @@ title: leadershipRoll
 <<if Roll("Charisma","Leadership") >=4>>
     <<jump leadershipSuccess>>
 <<else>>
-    <<jump leadershipFailure>>
+    <<jump chaseOptions>>
 <<endif>>
 ===
 title: leadershipSuccess
 ---
 {$diego}: I don't think so bebezota. Sorry. [nomarkup][He flicks the cig he had been smoking to the ground and snuffs it out with his heel, brushing past you and walking away.][/nomarkup] #success #line:029c2a3 
-{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #line:00acd50 
-<<jump chaseOptions>>
-===
-title: leadershipFailure
----
-{$diego}: You know… [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #failure #line:0c91ded 
 <<jump chaseOptions>>
 ===
 title: chaseOptions
 ---
+{$diego}: You know... [nomarkup][He flicks the cig he had been smoking at you with a swiftness as he turns and starts sprinting down the alley way- towards you the van that you were planning to get him into. The shock of it makes you freeze for a second before you spin and give chase.][/nomarkup] #line:00acd50 
 //Diego starts to run//
--> [nomarkup][Go after him as fast as you can.](Dexterity + Athletics)[/nomarkup] #line:0406e6a 
+-> [nomarkup][Go after him as fast as you can.] (Dexterity + Athletics)[/nomarkup] #line:0406e6a 
     <<jump dexChaseRoll>>
 ===
 title: dexChaseRoll
@@ -199,18 +195,15 @@ title: dexChaseRoll
 title: dexChaseSuccess
 ---
 [nomarkup][You move, turning on your heel to avoid the lit cigarette coming towards you. As you pivot to move towards Diego you can see that he's started to move faster away from you, noticing the pace of your footsteps and reacting by breaking out into a run. You find yourself sprinting after him, air fast and hot in your lungs as you try to out run his initial sprint.][/nomarkup] #success #line:06984e1 
-<<jump tackleTry>>
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup] #line:02080e9 
+<<jump stamChaseRoll>>
 ===
 title: dexChaseFailure
 ---
 [nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure #line:064459e 
 <<DealDamage $pcName 1>>
-[nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19 
-<<jump tackleTry>>
-===
-title: tackleTry
----
--> [nomarkup][Try to tackle him.](Stamina + Brawl)[/nomarkup] #line:02080e9 
+[nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup]
 <<jump stamChaseRoll>>
 ===
 title: stamChaseRoll
@@ -240,6 +233,10 @@ title: theVan
 {$diana}: Babes, you didn't say- what's the address? #line:0783432 
 -> {$pcName}: It's (apartment address). #line:040a5e9 
 //car starts to move through the streets//
+<<jump theVanRide>>
+===
+title: theVanRide
+---
 [nomarkup][You shove the doors open and muscle the man you just ran down inside. He looks a little out of it and doesn't resist. You take a few minutes to seatbelt him in and turn his face to get a better look at his eyes. Diego's head lists.][/nomarkup] #line:06af709 
 <<if Roll("Intelligence","Medicine") >=3>>
     [nomarkup][Diego's pupils are wide, his gaze is unfocused, and his pulse is slow. Calm despite the situation. As you touch the side of his face, he doesn't react in the slightest.][/nomarkup] #line:089182b 
@@ -290,6 +287,6 @@ title: pcVenerated
 ===
 title: wrapUpVan
 ---
-[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup] #line:02fc3bf 
+[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup]
 <<jump havenJobArrival>>
 ===

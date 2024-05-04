@@ -1,4 +1,6 @@
-using SunsetSystems.Utils;
+using Entities.Characters.Data;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UI.CharacterPortraits
@@ -6,17 +8,17 @@ namespace UI.CharacterPortraits
     public class PortraitController : MonoBehaviour
     {
         [SerializeField]
-        private PortraitIcon portraitIcon;
+        private PortraitIcon potraitIcon;
 
         private void Start()
         {
-            if (portraitIcon == null)
-                portraitIcon = GetComponentInChildren<PortraitIcon>();
+            if (potraitIcon == null)
+                potraitIcon = GetComponentInChildren<PortraitIcon>();
         }
 
-        public void InitPotrait(Sprite portrait)
+        internal void InitPotrait(Sprite portrait)
         {
-            portraitIcon.SetIcon(portrait);
+            potraitIcon.SetIcon(portrait);
         }    
     }
 }

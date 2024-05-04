@@ -8,11 +8,10 @@
 
 using UnityEngine;
 using UnityEditor;
-using UMA;
 
 namespace UMA.PoseTools
 {
-	public class UMADNAToBonePoseWindow : EditorWindow
+    public class UMADNAToBonePoseWindow : EditorWindow
 	{
 		public UMAData sourceUMA;
 		public UnityEngine.Object outputFolder;
@@ -266,8 +265,12 @@ namespace UMA.PoseTools
 			tempAvatar.umaData.umaRecipe.raceData.umaTarget = sourceUMA.umaRecipe.raceData.umaTarget;
 			slotIndex = 0;
 			foreach (SlotData slotEntry in activeSlots) {
-				if ((slotEntry == null) || slotEntry.dontSerialize) continue;
-				tempAvatar.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
+				if ((slotEntry == null) || slotEntry.dontSerialize)
+                {
+                    continue;
+                }
+
+                tempAvatar.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
 			}
 			tempAvatar.Show();
 
@@ -291,8 +294,12 @@ namespace UMA.PoseTools
 
 			slotIndex = 0;
 			foreach (SlotData slotEntry in activeSlots) {
-				if ((slotEntry == null) || slotEntry.dontSerialize) continue;
-				tempAvatar2.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
+				if ((slotEntry == null) || slotEntry.dontSerialize)
+                {
+                    continue;
+                }
+
+                tempAvatar2.umaData.umaRecipe.SetSlot(slotIndex++, slotEntry);
 			}
 
 			tempAvatar2.umaData.OnCharacterUpdated += CreateBonePoseCallback;
@@ -320,11 +327,22 @@ namespace UMA.PoseTools
 		private const float bonePoseAccuracy = 0.0001f;
 		private static bool LocalTransformsMatch(Transform t1, Transform t2)
 		{
-			if ((t1.localPosition - t2.localPosition).sqrMagnitude > bonePoseAccuracy) return false;
-			if ((t1.localScale - t2.localScale).sqrMagnitude > bonePoseAccuracy) return false;
-			if (t1.localRotation != t2.localRotation) return false;
+			if ((t1.localPosition - t2.localPosition).sqrMagnitude > bonePoseAccuracy)
+            {
+                return false;
+            }
 
-			return true;
+            if ((t1.localScale - t2.localScale).sqrMagnitude > bonePoseAccuracy)
+            {
+                return false;
+            }
+
+            if (t1.localRotation != t2.localRotation)
+            {
+                return false;
+            }
+
+            return true;
 		}
 
 		[MenuItem("UMA/Pose Tools/Bone Pose DNA Extractor", priority = 1)]

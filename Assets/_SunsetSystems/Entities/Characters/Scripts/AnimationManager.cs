@@ -4,10 +4,13 @@ using UnityEngine.Animations.Rigging;
 using UMA;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Persistence;
+using System;
+using System.Collections.Generic;
 
 namespace SunsetSystems.Animation
 {
-    public class AnimationManager : SerializedMonoBehaviour
+    public class AnimationManager : SerializedMonoBehaviour, IPersistentComponent
     {
         [Title("References")]
         [SerializeField, Required]
@@ -37,6 +40,8 @@ namespace SunsetSystems.Animation
         private Vector2 smoothDeltaPosition;
 
         private Transform MotionTransform => agent.transform;
+
+        public string ComponentID => throw new System.NotImplementedException();
 
         private void Start()
         {
@@ -202,6 +207,41 @@ namespace SunsetSystems.Animation
         public void SetBool(int hash, bool value)
         {
             animator.SetBool(hash, value);
+        }
+
+        public object GetComponentPersistenceData()
+        {
+            return new AnimatorPersistenceData(this);
+        }
+
+        public void InjectComponentPersistenceData(object data)
+        {
+            if (data is not AnimatorPersistenceData animatorData)
+                return;
+            foreach (int key in animatorData.AnimatorStateData.Keys)
+            {
+                var stateHash = animatorData.AnimatorStateData[key];
+                animator.Play(stateHash, key);
+            }
+        }
+
+        [Serializable]
+        public class AnimatorPersistenceData
+        {
+            public Dictionary<int, int> AnimatorStateData;
+
+            public AnimatorPersistenceData(AnimationManager animationManager)
+            {
+                for (int i = 0; i < animationManager.animator.layerCount; i++)
+                {
+                    AnimatorStateData[i] = animationManager.animator.GetCurrentAnimatorStateInfo(i).shortNameHash;
+                }
+            }
+
+            public AnimatorPersistenceData()
+            {
+
+            }
         }
     }
 }

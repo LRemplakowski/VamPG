@@ -1,13 +1,11 @@
-﻿//////////////////////////////////////////////////////
+#define __BETTERSHADERS__
+//////////////////////////////////////////////////////
 // Shader Packager
 // Copyright (c)2021 Jason Booth
 //////////////////////////////////////////////////////
 
 using System;
-using System.IO;
 using System.Linq;
-using System.Collections;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using UnityEngine;

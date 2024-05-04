@@ -1,15 +1,15 @@
-﻿using UnityEngine;
-using SunsetSystems.Entities.Data;
-using Sirenix.OdinInspector;
-using SunsetSystems.Utils.Extensions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using UnityEngine.AddressableAssets;
+﻿using System;
 using System.Collections.Generic;
-using UMA;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using System;
-using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Database;
+using SunsetSystems.Utils.Extensions;
+using UMA;
 using UMA.CharacterSystem;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -33,7 +33,7 @@ namespace SunsetSystems.Entities.Characters
         private string _readableIDOverride = "";
         public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [field: SerializeField]
-        public AssetReferenceSprite PortraitAssetRef { get; private set; }
+        public Sprite Portrait { get; private set; }
         [SerializeField]
         private StatsConfig _statsConfig;
         public StatsData StatsData => new(_statsConfig);
@@ -79,13 +79,15 @@ namespace SunsetSystems.Entities.Characters
                 CreatureDatabase.Instance?.RegisterConfig(this);
             if (EquipmentSlotsData == null || EquipmentSlotsData.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length - 1)
             {
-                EquipmentSlotsData = new();
-                EquipmentSlotsData.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
-                EquipmentSlotsData.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
-                EquipmentSlotsData.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
-                EquipmentSlotsData.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
-                EquipmentSlotsData.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
-                EquipmentSlotsData.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+                EquipmentSlotsData = new()
+                {
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+                };
             }
         }
 
@@ -111,48 +113,55 @@ namespace SunsetSystems.Entities.Characters
         }
 
         [Serializable]
-        private class TemplateFromCreatureAsset : ICreatureTemplate
+        public class TemplateFromCreatureAsset : ICreatureTemplate
         {
-            public string DatabaseID { get; }
+            public string DatabaseID { get; private set; }
 
-            public string ReadableID { get; }
+            public string ReadableID { get; private set; }
 
-            public string FullName { get; }
+            public string FullName => $"{FirstName} {LastName}".Trim();
 
-            public string FirstName { get; }
+            public string FirstName { get; private set; }
 
-            public string LastName { get; }
+            public string LastName { get; private set; }
 
-            public Faction Faction { get; }
+            public Faction Faction { get; private set; }
 
-            public BodyType BodyType { get; }
+            public BodyType BodyType { get; private set; }
 
-            public CreatureType CreatureType { get; }
+            public CreatureType CreatureType { get; private set; }
 
-            public AssetReferenceSprite PortraitAssetRef { get; }
+            public short BaseLookWardrobeCollectionID { get; private set; }
 
-            public UMAWardrobeCollection BaseLookWardrobeCollection { get; }
+            public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
-            public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlotsData { get; }
-
-            public StatsData StatsData { get; }
+            public StatsData StatsData { get; private set; }
 
             public TemplateFromCreatureAsset(CreatureConfig asset)
             {
                 this.DatabaseID = asset.DatabaseID;
                 this.ReadableID = asset.ReadableID;
-                this.FullName = asset.FullName;
                 this.FirstName = asset.FirstName;
                 this.LastName = asset.LastName;
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                this.PortraitAssetRef = asset.PortraitAssetRef;
-                this.BaseLookWardrobeCollection = asset.BaseLookWardrobeCollection;
-                this.EquipmentSlotsData = new(asset.EquipmentSlotsData);
+                this.BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(asset.BaseLookWardrobeCollection);
+                this.EquipmentSlotsData = new();
+                foreach (var item in asset.EquipmentSlotsData)
+                {
+                    if (item.Value.GetEquippedItem() == null)
+                        this.EquipmentSlotsData[item.Key] = item.Value.DefaultItemID;
+                    else
+                        this.EquipmentSlotsData[item.Key] = item.Value.GetEquippedItem().ReadableID;
+                }
                 this.StatsData = new(asset.StatsData);
             }
 
+            public TemplateFromCreatureAsset()
+            {
+
+            }
         }
     }
 }

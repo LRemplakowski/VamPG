@@ -17,7 +17,15 @@ namespace SunsetSystems.Entities
         private UniqueId _unique;
         [SerializeField]
         private bool _enablePersistence = true;
-        public string PersistenceID => _unique.Id;
+        public string PersistenceID 
+        { 
+            get 
+            {
+                if (_unique == null)
+                    _unique = GetComponent<UniqueId>();
+                return _unique.Id;
+            } 
+        }
         public override string ID => PersistenceID;
         public string GameObjectName => gameObject.name;
 
@@ -61,6 +69,8 @@ namespace SunsetSystems.Entities
         {
             if (_unique == null)
                 _unique = GetComponent<UniqueId>();
+            if (_references == null)
+                _references = GetComponent<IEntityReferences>();
             List<IPersistentComponent> cachedComponents = new(PersistentComponents);
             cachedComponents.AddRange(GetComponents<IPersistentComponent>());
             PersistentComponents.Clear();
@@ -69,16 +79,7 @@ namespace SunsetSystems.Entities
 
         public virtual object GetPersistenceData()
         {
-            PersistenceData data = new();
-            data.GameObjectActive = gameObject.activeSelf;
-            if (PersistentComponents.Count > 0)
-            {
-                data.PersistentComponentData = new();
-                foreach (IPersistentComponent persistentComponent in PersistentComponents)
-                {
-                    data.PersistentComponentData[persistentComponent.ComponentID] = persistentComponent.GetComponentPersistenceData();
-                }
-            }
+            PersistenceData data = new(this);
             return data;
         }
 
@@ -98,14 +99,29 @@ namespace SunsetSystems.Entities
         }
 
         [Serializable]
-        protected class PersistenceData
+        public class PersistenceData
         {
+            [ES3Serializable]
             public bool GameObjectActive;
+            [ES3Serializable]
             public Dictionary<string, object> PersistentComponentData;
 
-            public PersistenceData()
+            public PersistenceData(PersistentEntity persistentEntity)
             {
+                GameObjectActive = persistentEntity.gameObject.activeSelf;
+                PersistentComponentData = new();
+                if (persistentEntity.PersistentComponents.Count > 0)
+                {
+                    foreach (IPersistentComponent persistentComponent in persistentEntity.PersistentComponents)
+                    {
+                        PersistentComponentData[persistentComponent.ComponentID] = persistentComponent.GetComponentPersistenceData();
+                    }
+                }
+            }
 
+            public PersistenceData() : base()
+            {
+                PersistentComponentData = new();
             }
         }
     }

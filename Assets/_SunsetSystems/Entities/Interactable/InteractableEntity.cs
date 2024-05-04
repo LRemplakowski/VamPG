@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
 using System;
@@ -68,7 +69,8 @@ namespace SunsetSystems.Entities.Interactable
                     InteractablesInScene.Add(this);
                 else
                     InteractablesInScene.Remove(this);
-                _interactionCollider.enabled = value;
+                if (_interactionCollider != null)
+                    _interactionCollider.enabled = value;
             }
         }
 
@@ -152,7 +154,8 @@ namespace SunsetSystems.Entities.Interactable
             base.Start();
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
-            _interactionCollider.enabled = Interactable;
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
         }
 
         public void ClearHandlers()
@@ -166,6 +169,7 @@ namespace SunsetSystems.Entities.Interactable
                 InteractionHandlers.Add(interactionHandler);
         }
 
+        [Button]
         public virtual void Interact()
         {
             if (!Interactable)
@@ -207,40 +211,48 @@ namespace SunsetSystems.Entities.Interactable
 
         public override object GetPersistenceData()
         {
-            InteractableEntityPersistenceData persistenceData = new(base.GetPersistenceData() as PersistenceData);
-            persistenceData.Interactable = Interactable;
-            persistenceData.Interacted = _interacted;
-            persistenceData.InteractableOnce = _interactableOnce;
-            persistenceData.InteractionHandlers = InteractionHandlers;
+            InteractableEntityPersistenceData persistenceData = new(this);
             return persistenceData;
         }
 
         public override void InjectPersistenceData(object data)
         {
             base.InjectPersistenceData(data);
-            InteractableEntityPersistenceData persistenceData = data as InteractableEntityPersistenceData;
-            Interactable = persistenceData.Interactable;
-            _interacted = persistenceData.Interacted;
-            _interactableOnce = persistenceData.InteractableOnce;
-            InteractionHandlers = persistenceData.InteractionHandlers;
+            if (data is not InteractableEntityPersistenceData interactableData)
+                return;
+            Interactable = interactableData.Interactable;
+            _interacted = interactableData.Interacted;
+            _interactableOnce = interactableData.InteractableOnce;
+            InteractionHandlers = new();
+            foreach (var key in interactableData.InteractionHandlers)
+            {
+                InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(key) as IInteractionHandler);
+            }
             if (_linkedGameObject)
-                _linkedGameObject.SetActive(persistenceData.GameObjectActive);
+                _linkedGameObject.SetActive(interactableData.GameObjectActive);
         }
 
         [Serializable]
-        protected class InteractableEntityPersistenceData : PersistenceData
+        public class InteractableEntityPersistenceData : PersistenceData
         {
             public bool Interactable;
             public bool Interacted;
             public bool InteractableOnce;
-            public List<IInteractionHandler> InteractionHandlers;
+            public List<long> InteractionHandlers;
 
-            public InteractableEntityPersistenceData(PersistenceData persistentEntity)
+            public InteractableEntityPersistenceData(InteractableEntity interactableEntity) : base(interactableEntity)
             {
-                GameObjectActive = persistentEntity.GameObjectActive;
+                Interactable = interactableEntity.Interactable;
+                Interacted = interactableEntity.Interacted;
+                InteractableOnce = interactableEntity._interactableOnce;
+                InteractionHandlers = new();
+                foreach (var handler in interactableEntity.InteractionHandlers)
+                {
+                    InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(handler as UnityEngine.Object));
+                }
             }
 
-            public InteractableEntityPersistenceData()
+            public InteractableEntityPersistenceData() : base()
             {
 
             }

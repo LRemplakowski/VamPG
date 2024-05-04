@@ -1,21 +1,19 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
-using UMA.CharacterSystem;
 
 namespace UMA
 {
-	/// <summary>
-	/// Data for a UMA "race".
-	/// </summary>
-	/// <remarks>
-	/// A "race" in UMA is nothing more than a specific TPose and set of DNA
-	/// converters. For example there are RaceData entries for Male Humans and
-	/// Female Humans, because they have slightly different TPoses and gender
-	/// specific DNA converters, despite sharing the same DNA types.
-	/// </remarks>
-	[PreferBinarySerialization]
+    /// <summary>
+    /// Data for a UMA "race".
+    /// </summary>
+    /// <remarks>
+    /// A "race" in UMA is nothing more than a specific TPose and set of DNA
+    /// converters. For example there are RaceData entries for Male Humans and
+    /// Female Humans, because they have slightly different TPoses and gender
+    /// specific DNA converters, despite sharing the same DNA types.
+    /// </remarks>
+    [PreferBinarySerialization]
 	[Serializable]
 	public partial class RaceData : ScriptableObject, INameProvider
 	{
@@ -42,9 +40,10 @@ namespace UMA
 		{
 			List<string> Names = new List<string>();
 
-			foreach(IDNAConverter converter in dnaConverterList)
+            for (int i = 0; i < dnaConverterList.Length; i++)
             {
-				if (converter is IDynamicDNAConverter)
+                IDNAConverter converter = dnaConverterList[i];
+                if (converter is IDynamicDNAConverter)
 				{
 					var asset = ((IDynamicDNAConverter)converter).dnaAsset;
 					Names.AddRange(asset.Names);
@@ -55,9 +54,10 @@ namespace UMA
 
 		public void ResetDNA()
 		{
-			foreach (IDNAConverter converter in dnaConverterList)
+            for (int j = 0; j < dnaConverterList.Length; j++)
 			{
-				if (converter is DynamicDNAConverterController)
+                IDNAConverter converter = dnaConverterList[j];
+                if (converter is DynamicDNAConverterController)
 				{
 					var c = converter as DynamicDNAConverterController;
 					for (int i=0;i<c.PluginCount;i++)
@@ -146,9 +146,11 @@ namespace UMA
 			if ((umaTarget == UMATarget.Humanoid) && (TPose == null))
 			{
 				if (Debug.isDebugBuild)
-					Debug.LogError("Humanoid UMA target missing required TPose data!");
+                {
+                    Debug.LogError("Humanoid UMA target missing required TPose data!");
+                }
 
-				valid = false;
+                valid = false;
 			}
 			
 			return valid;

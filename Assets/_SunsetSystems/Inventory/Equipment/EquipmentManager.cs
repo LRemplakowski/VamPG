@@ -1,13 +1,11 @@
-using Sirenix.OdinInspector;
-using Sirenix.Serialization;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Equipment;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Equipment;
+using SunsetSystems.Inventory.Data;
 using UltEvents;
 using UnityEngine;
 
@@ -16,7 +14,7 @@ namespace SunsetSystems.Entities.Characters
     public class EquipmentManager : SerializedMonoBehaviour, IEquipmentManager
     {
         [field: Title("Data")]
-        [field: SerializeField]
+        [field: SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
         [Title("Events")]
@@ -37,13 +35,15 @@ namespace SunsetSystems.Entities.Characters
         {
             if (EquipmentSlots == null || EquipmentSlots.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length-1)
             {
-                EquipmentSlots = new();
-                EquipmentSlots.Add(EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.PrimaryWeapon));
-                EquipmentSlots.Add(EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(ItemCategory.WEAPON, EquipmentSlotID.SecondaryWeapon));
-                EquipmentSlots.Add(EquipmentSlotID.Chest, new EquipmentSlot(ItemCategory.CLOTHING, EquipmentSlotID.Chest));
-                EquipmentSlots.Add(EquipmentSlotID.Boots, new EquipmentSlot(ItemCategory.SHOES, EquipmentSlotID.Boots));
-                EquipmentSlots.Add(EquipmentSlotID.Hands, new EquipmentSlot(ItemCategory.GLOVES, EquipmentSlotID.Hands));
-                EquipmentSlots.Add(EquipmentSlotID.Trinket, new EquipmentSlot(ItemCategory.TRINKET, EquipmentSlotID.Trinket));
+                EquipmentSlots = new()
+                {
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+                };
             }
         }
 
@@ -53,16 +53,10 @@ namespace SunsetSystems.Entities.Characters
             {
                 if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
                 {
-                    if (slot.GetEquippedItem() != null)
+                    if (slot.TryEquipItem(item, out var unequipped))
                     {
-                        IEquipableItem previousItem = slot.GetEquippedItem();
-                        if (slot.TryUnequipItem(previousItem))
-                        {
-                            ItemUnequipped?.InvokeSafe(previousItem);
-                        }
-                    }
-                    if (slot.TryEquipItem(item))
-                    {
+                        if (unequipped != null && unequipped.ReadableID != slot.DefaultItemID)
+                            ItemUnequipped?.InvokeSafe(unequipped);
                         ItemEquipped?.InvokeSafe(item);
                         return true;
                     }
@@ -75,7 +69,7 @@ namespace SunsetSystems.Entities.Characters
         {
             if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
             {
-                return slot.TryUnequipItem(slot.GetEquippedItem());
+                return slot.TryUnequipItem(out var _);
             }
             return false;
         }
@@ -91,11 +85,23 @@ namespace SunsetSystems.Entities.Characters
 
         public void CopyFromTemplate(ICreatureTemplate template)
         {
-            if (EquipmentSlots == null)
-                EquipmentSlots = new();
+            if (template == null || template.EquipmentSlotsData == null)
+            {
+                EquipmentSlots = InitializeEquipmentSlots();
+                return;
+            }
+            EquipmentSlots ??= InitializeEquipmentSlots();
+
             foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
             {
-                EquipmentSlots[key] = new EquipmentSlot(template.EquipmentSlotsData[key]);
+                if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))
+                {
+                    if (ItemDatabase.Instance.TryGetEntryByReadableID(templateSlot, out var item) && item is IWearable wearable && mySlot.TryEquipItem(wearable, out var _))
+                    {
+                        Debug.Log($"Injected item {mySlot.GetEquippedItem()} into equipment manager!");
+                        ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());
+                    }
+                }
             }
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
@@ -103,6 +109,19 @@ namespace SunsetSystems.Entities.Characters
                 UnityEditor.EditorUtility.SetDirty(this);
             }
 #endif
+        }
+
+        private Dictionary<EquipmentSlotID, IEquipmentSlot> InitializeEquipmentSlots()
+        {
+            return new()
+                {
+                    { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                    { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                    { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                    { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                    { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                    { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+                };
         }
     }
 }

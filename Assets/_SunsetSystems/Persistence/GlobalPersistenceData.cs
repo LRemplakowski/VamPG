@@ -19,11 +19,12 @@ namespace SunsetSystems.Persistence
                 _persistenceDataDictionary[dataProvider.DataKey] = saveData;
         }
 
-        public object GetData(string dataKey)
+        public bool TryGetData(string dataKey, out object data)
         {
-            if (dataKey != null && _persistenceDataDictionary.TryGetValue(dataKey, out object data))
-                return data;
-            return null;
+            data = null;
+            if (dataKey != null && _persistenceDataDictionary.TryGetValue(dataKey, out data))
+                return true;
+            return false;
         }
 
         public void ClearSaveData()

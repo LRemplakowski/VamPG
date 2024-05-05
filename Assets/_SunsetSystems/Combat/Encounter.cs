@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using SunsetSystems.Game;
-using System.Threading.Tasks;
+using SunsetSystems.Combat.Grid;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters.Interfaces;
+using UltEvents;
 using System.Linq;
-using Redcode.Awaiting;
 
 namespace SunsetSystems.Combat
 {
-    [RequireComponent(typeof(GridController))]
-    public class Encounter : MonoBehaviour, IEncounter
+    public class Encounter : SerializedMonoBehaviour, IEncounter
     {
         [field: SerializeField]
-        public GridController MyGrid { get; private set; }
-        private CombatManager combatManager;
+        public GridManager GridManager { get; private set; }
 
         [field: SerializeField, Tooltip("Creatures taking part in this encounter.")]
-        public List<Creature> Creatures { get; private set; }
+        public List<ICreature> Creatures { get; private set; } = new();
 
         [SerializeField]
         private EncounterEndTrigger _encounterEndTrigger = EncounterEndTrigger.Automatic;
 
-        [Header("Optional")]
+        [Title("Optional")]
         [SerializeField, Tooltip("(Optional) Custom logic run before the start of the encounter.")]
         private AbstractEncounterLogic encounterStartLogic;
         [SerializeField, Tooltip("(Optional) Custom logic run after the end of the encounter.")]
@@ -30,44 +31,57 @@ namespace SunsetSystems.Combat
 
         private int _creatureCounter = 0;
 
-        private void Start()
-        {
-            if (!MyGrid)
-                MyGrid = GetComponent<GridController>();
-            if (!combatManager)
-                combatManager = this.FindFirstComponentWithTag<CombatManager>(TagConstants.COMBAT_MANAGER);
-        }
+        [Title("Events")]
+        public UltEvent OnEncounterStart = new();
+        public UltEvent OnEncounterEnd = new();
 
+        [Title("Editor Utility")]
+        [Button("Begin Encounter")]
         public async void Begin()
         {
             Debug.LogWarning("Begin encounter, do encounter start logic.");
             if (encounterStartLogic)
                 await encounterStartLogic.Perform();
-            GameManager.CurrentState = GameState.Combat;
+            GameManager.Instance.CurrentState = GameState.Combat;
+            GridManager.EnableGrid();
+            OnEncounterStart?.InvokeSafe();
             _creatureCounter = Creatures.Count;
-            await combatManager.BeginEncounter(this);
+            _ = CombatManager.Instance.BeginEncounter(this);
             if (_encounterEndTrigger == EncounterEndTrigger.Automatic)
             {
-                Creatures.ForEach(c => c.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
+                Creatures.ForEach(c => c.References.StatsManager.OnCreatureDied += DecrementCounterAndCheckForEncounterEnd);
             }
         }
 
-        private void DecrementCounterAndCheckForEncounterEnd(Creature creature)
+        private void DecrementCounterAndCheckForEncounterEnd(ICreature creature)
         {
             _creatureCounter -= 1;
-            creature.StatsManager.OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
+            creature.References.StatsManager.OnCreatureDied -= DecrementCounterAndCheckForEncounterEnd;
             if (_creatureCounter <= 0)
                 End();
         }
 
+        [Button("End Encounter")]
         public async void End()
         {
             Debug.LogWarning("End encounter, do encounter end logic.");
-            MyGrid.ClearActiveElements();
-            await combatManager.EndEncounter(this);
-            GameManager.CurrentState = GameState.Exploration;
+            GridManager.DisableGrid();
+            await CombatManager.Instance.EndEncounter(this);
+            GameManager.Instance.CurrentState = GameState.Exploration;
             if (encounterEndLogic)
                 await encounterEndLogic.Perform();
+            OnEncounterEnd?.InvokeSafe();
+        }
+
+        public void AddToEncounter(Creature creature)
+        {
+            Creatures.Add(creature);
+            Creatures = Creatures.Distinct().ToList();
+        }
+
+        public void RemoveFromEncounter(Creature creature)
+        {
+            Creatures.Remove(creature);
         }
 
         private enum EncounterEndTrigger

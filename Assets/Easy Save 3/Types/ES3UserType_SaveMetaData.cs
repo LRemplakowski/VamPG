@@ -1,0 +1,65 @@
+using System;
+using UnityEngine;
+
+namespace ES3Types
+{
+	[UnityEngine.Scripting.Preserve]
+	[ES3PropertiesAttribute("SaveID", "SaveName", "SaveDate", "LevelLoadingData")]
+	public class ES3UserType_SaveMetaData : ES3Type
+	{
+		public static ES3Type Instance = null;
+
+		public ES3UserType_SaveMetaData() : base(typeof(SunsetSystems.Persistence.SaveMetaData)){ Instance = this; priority = 1;}
+
+
+		public override void Write(object obj, ES3Writer writer)
+		{
+			var instance = (SunsetSystems.Persistence.SaveMetaData)obj;
+			
+			writer.WriteProperty("SaveID", instance.SaveID, ES3Type_string.Instance);
+			writer.WriteProperty("SaveName", instance.SaveName, ES3Type_string.Instance);
+			writer.WriteProperty("SaveDate", instance.SaveDate, ES3Type_string.Instance);
+			writer.WriteProperty("LevelLoadingData", instance.LevelLoadingData, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(SunsetSystems.Core.SceneLoading.SceneLoadingDataAsset.LevelLoadingData)));
+		}
+
+		public override object Read<T>(ES3Reader reader)
+		{
+			var instance = new SunsetSystems.Persistence.SaveMetaData();
+			string propertyName;
+			while((propertyName = reader.ReadPropertyName()) != null)
+			{
+				switch(propertyName)
+				{
+					
+					case "SaveID":
+						instance.SaveID = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					case "SaveName":
+						instance.SaveName = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					case "SaveDate":
+						instance.SaveDate = reader.Read<System.String>(ES3Type_string.Instance);
+						break;
+					case "LevelLoadingData":
+						instance.LevelLoadingData = reader.Read<SunsetSystems.Core.SceneLoading.SceneLoadingDataAsset.LevelLoadingData>();
+						break;
+					default:
+						reader.Skip();
+						break;
+				}
+			}
+			return instance;
+		}
+	}
+
+
+	public class ES3UserType_SaveMetaDataArray : ES3ArrayType
+	{
+		public static ES3Type Instance;
+
+		public ES3UserType_SaveMetaDataArray() : base(typeof(SunsetSystems.Persistence.SaveMetaData[]), ES3UserType_SaveMetaData.Instance)
+		{
+			Instance = this;
+		}
+	}
+}

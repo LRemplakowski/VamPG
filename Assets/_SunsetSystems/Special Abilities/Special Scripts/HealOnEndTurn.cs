@@ -1,5 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,20 +10,23 @@ namespace SunsetSystems.Spellbook
     [CreateAssetMenu(fileName = "HealOnEndTurn", menuName = "Scriptable Powers/Heal On End Turn")]
     public class HealOnEndTurn : DisciplineScript
     {
-        private List<Creature> _effectRecievers = new();
+        private List<ICombatant> _effectRecievers = new();
 
-        private void OnEnable()
+        private void Awake()
         {
             _effectRecievers = new();
-            CombatManager.OnFullTurnCompleted += HealOnFullTurn;
+            
+            //if (CombatManager.Instance != null)
+                //CombatManager.Instance.OnFullTurnCompleted += HealOnFullTurn;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            CombatManager.OnFullTurnCompleted -= HealOnFullTurn;
+            //if (CombatManager.Instance != null)
+                //CombatManager.Instance.OnFullTurnCompleted -= HealOnFullTurn;
         }
 
-        public override void Activate(Creature target, Creature caster)
+        public override void Activate(ICombatant target, ICombatant caster)
         {
             _effectRecievers ??= new();
             _effectRecievers.RemoveAll(c => c == null);
@@ -34,12 +38,13 @@ namespace SunsetSystems.Spellbook
             _effectRecievers.ForEach(c => DoHealing(c));
         }
 
-        private void DoHealing(Creature c)
+        private void DoHealing(ICombatant creature)
         {
-            if (c.StatsManager.IsAlive())
+            StatsManager targetStatsManager = creature.References.GetCachedComponentInChildren<StatsManager>();
+            if (targetStatsManager != null && targetStatsManager.IsAlive())
             {
                 int amount = UnityEngine.Random.Range(1, 3);
-                c.StatsManager.Heal(amount);
+                targetStatsManager.Heal(amount);
             }
         }
     }

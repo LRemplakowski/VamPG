@@ -1,25 +1,29 @@
+using System.Threading.Tasks;
+using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
     public static class DialogueExtensions
     {
+        private static string lastID;
+        private static Sprite lastSprite;
+
         public static Sprite GetSpeakerPortrait(this DialogueViewBase dialogueViewBase, string speakerID)
         {
-            Sprite result = null;
             Debug.Log($"Fetching config of {speakerID} from the database!");
+            if (lastID == speakerID && lastSprite != null)
+                return lastSprite;
             if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
             {
-                result = config.Portrait;
+                lastID = speakerID;
+                lastSprite = config.Portrait;
             }
-            else
-            {
-                Debug.LogWarning($"Config database fetch failed for ID {speakerID}");
-            }
-            return result;
+            return lastSprite;
         }
     }
 }

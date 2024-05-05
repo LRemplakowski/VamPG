@@ -1,4 +1,6 @@
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Data;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
 using System.Collections.Generic;
@@ -23,16 +25,17 @@ namespace SunsetSystems.UI
         public void UpdateCharacterSheet()
         {
             string selectedCharacterKey = CharacterSelector.SelectedCharacterKey;
-            CreatureData data = PartyManager.Instance.GetPartyMemberDataByID(selectedCharacterKey);
+            ICreature creature = PartyManager.Instance.GetPartyMemberByID(selectedCharacterKey);
+            StatsData data = creature.References.StatsManager.Stats;
             List<IGameDataProvider<BaseStat>> attributes = new();
-            attributes.AddRange(data.Stats.Attributes.GetAttributeList());
+            attributes.AddRange(data.Attributes?.GetAttributeList() ?? new());
             _attributes.ForEach(attributeGroup => attributeGroup.UpdateViews(attributes));
             List<IGameDataProvider<BaseStat>> skills = new();
-            skills.AddRange(data.Stats.Skills.GetSkillList());
+            skills.AddRange(data.Skills?.GetSkillList() ?? new());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IGameDataProvider<BaseStat>> disciplines = new();
-            disciplines.AddRange(data.Stats.Disciplines.GetDisciplines());
-            _disciplines.UpdateViews(disciplines);
+            //disciplines.AddRange(data.Disciplines?.GetDisciplines() ?? new());
+            //_disciplines.UpdateViews(disciplines);
         }
     }
 }

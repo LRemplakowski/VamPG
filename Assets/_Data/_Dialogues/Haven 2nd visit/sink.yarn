@@ -1,0 +1,31 @@
+﻿title: sink
+tags:
+---
+[nomarkup][It takes several long seconds to unjam the junk drawer and open it. You remember your dad telling you to always have some duct tape handy, just in case. You find a half-full roll underneath a deck of playing cards and set it on the countertop. Too bad you can't use the tape on the Beast.][/nomarkup] #line:0f8c704 
+<<GiveItem IT_Q_DUCTTAPE>>
+<<if $kevinmurdered == true>>
+    -> [nomarkup][Move Kevin's body.][/nomarkup] #line:041801a 
+        <<jump moveKevin>>
+<<endif>>
+<<if $kevinMoved == true>>
+    -> [nomarkup][Take hammer and nails.][/nomarkup] #line:02f77e1 
+    <<GiveItem IT_Q_HAMMER>>
+<<endif>>
+<<if $kevinmurdered == true or $coveredinblood == true>>
+    -> [nomarkup][Clean up the floor.][/nomarkup] #line:0f82c14 
+        <<jump cleanSlurry>>
+<<endif>>
+===
+title: moveKevin
+---
+<<set $kevinMoved to true>>
+<<if $diegoMoved == true>>
+    [nomarkup][You heft the corpse of your superintendent and drag him into the closet where you find that Diego has already been put. One thing is for sure - you too have skeletons in your closet. Quite literally.][/nomarkup] #line:0b76f74 
+<<else>>
+    [nomarkup][There's plenty of room in the closet. Diego's corpse is still in the shower, but it'll probably fit in here just fine.][/nomarkup] #line:030ac41 
+<<endif>>
+===
+title: cleanSlurry
+---
+[nomarkup][Since you're crouched you can clean up the bloody slurry from the sink as well - just so it doesn't make your nose - and apparently Beast - annoyed by the smell of the blood. You take an old rag and get to work making the puddle disappear in a few moments.][/nomarkup] #line:05a4242 
+===

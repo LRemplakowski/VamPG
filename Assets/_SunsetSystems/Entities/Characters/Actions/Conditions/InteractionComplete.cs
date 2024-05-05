@@ -1,8 +1,13 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
+﻿using Sirenix.Serialization;
+
+namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [System.Serializable]
     public class InteractionComplete : Condition
     {
-        readonly IInteractable target;
+        [OdinSerialize]
+        private IInteractable target;
+
         public InteractionComplete(IInteractable target)
         {
             this.target = target;

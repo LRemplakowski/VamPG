@@ -1,0 +1,96 @@
+﻿
+#pragma kernel CSMain
+
+//----------------------------------------------
+
+//float4x4 _transformMatrix;
+float4x4 _bonesMatrix[500];
+int _vertexCount;
+int _textureSize;
+
+struct SkinData
+{
+	float4 ids;
+	float4 weights;
+};
+
+struct V3Data
+{
+	float3 value;	
+};
+
+struct MatrixBuffer
+{
+	float4x4 mat;
+};
+
+RWStructuredBuffer<SkinData> _Skin;
+RWStructuredBuffer<V3Data> _vertexBuf;
+RWStructuredBuffer<V3Data> _normalBuf;
+RWStructuredBuffer<V3Data> _tangentBuf;
+
+RWTexture2D<float4> _vertexTex;
+RWTexture2D<float4> _normalTex;
+RWTexture2D<float4> _tangentTex;
+//----------------------------------------------
+//Skinning
+
+float3 Skin(int idx, float3 localPos)
+{
+	float4 skinnedPos = float4(0, 0, 0, 0);
+	for (int i = 0; i < 4; ++i)
+		skinnedPos += mul(_bonesMatrix[_Skin[idx].ids[i]], float4(localPos, 1)) * _Skin[idx].weights[i];
+        //skinnedPos.x += _Skin[idx].weights[i];
+
+    //return float3(_Skin[idx].ids[0] * .1,0,0);
+	return skinnedPos.xyz;
+
+}
+
+
+
+//----------------------------------------------
+
+
+
+
+
+//RWStructuredBuffer<MatrixBuffer> _transformMatrix;
+//float _dt;
+
+[numthreads(16, 16, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+        
+    int idx = id.x + id.y*_textureSize;
+    int x = id.x;
+	int y = _textureSize - id.y - 1;
+
+    
+	if (idx < _vertexCount)
+	{
+		
+		float4 localPos = float4(_vertexBuf[idx].value, 1);
+        float4 localNorm = float4(normalize(_normalBuf[idx].value), 0);
+        float4 localTan = float4(normalize(_normalBuf[idx].value), 0);
+					
+		float3 skinnedPos = Skin(idx,localPos.xyz).xyz;
+		float3 skinnedNorm = normalize( Skin(idx,localPos.xyz+localNorm.xyz).xyz-skinnedPos.xyz);
+        float3 skinnedTan = normalize( Skin(idx,localPos.xyz+localTan.xyz).xyz-skinnedPos.xyz);
+	
+	    _vertexTex[float2(x, y)] = float4( skinnedPos.xyz-localPos.xyz,0.0);
+        _normalTex[float2(x, y)] = float4( skinnedNorm.xyz, 0.0);
+        _tangentTex[float2(x, y)] = float4( skinnedTan.xyz, 0.0);
+
+    }
+    else
+    {
+        if(x<_textureSize && y<_textureSize)
+        {
+            _vertexTex[float2(x, y)] =  float4( 1.0,0.0,0.0,1.0);
+            _normalTex[float2(x, y)] =  float4( 0.0,1.0,1.0,1.0);
+            _tangentTex[float2(x, y)] = float4( 0.0,0.0,1.0,1.0);
+        }
+    }
+
+}

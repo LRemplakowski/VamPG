@@ -1,46 +1,76 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions
-{
-    using SunsetSystems.Entities.Characters.Actions.Conditions;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
+using UnityEngine;
 
+namespace SunsetSystems.Entities.Characters.Actions
+{
     [System.Serializable]
     public abstract class EntityAction
     {
-        protected abstract Creature Owner { get; set; }
+        /// <summary>
+        /// Priority actions clear action queue upon assignment.
+        /// </summary>
+        [ShowInInspector]
+        private string name => this.ToString();
+        [field: SerializeField]
+        public bool IsPriority { get; protected set; }
+        [field: SerializeField]
+        public bool ActionFinished { get; protected set; } = false;
+        [field: SerializeField]
+        public bool ActionCanceled { get; protected set; } = false;
+        [field: OdinSerialize]
+        protected IActionPerformer Owner { get; private set; }
+        [SerializeField]
         protected List<Condition> conditions = new List<Condition>();
 
+        public EntityAction(IActionPerformer owner)
+        {
+            Owner = owner;
+            IsPriority = false;
+        }
+
+        public EntityAction(IActionPerformer owner, bool isPriority) : this(owner)
+        {
+            IsPriority = isPriority;
+        }
+
         /// <summary>
-        /// Rozpoczęcie akcji. Wywoływane kiedy akcja trafia na początek kolejki akcji.
+        /// Start executing action logic.
         /// </summary>
         public abstract void Begin();
 
         /// <summary>
-        /// Przerwanie akcji. Wywoływane kiedy warunki ukończenia akcji zostaną spełnione lub zewnętrznie przez inną klasę.
+        /// Do any relevant cleanup.
         /// </summary>
-        public abstract void Abort();
-
-        public virtual bool IsFinished()
+        public virtual void Cleanup()
         {
+            conditions.Clear();
+            ActionFinished = true;
+        }
+
+        public virtual void Abort()
+        {
+            conditions.Clear();
+            ActionCanceled = true;
+        }
+
+        public virtual bool EvaluateAction()
+        {
+            if (ActionFinished || ActionCanceled)
+                return true;
             if (conditions.Count == 0)
             {
                 Debug.LogError("Aborting action, no conditions present");
-                this.Abort();
+                Abort();
                 return true;
             }
-            foreach (Condition c in conditions)
-            {
-                if (c.IsMet())
-                {
-                    continue;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            this.Abort();
-            return true;
+            ActionFinished = conditions.All(c => c.IsMet());
+            if (ActionFinished)
+                Cleanup();
+            return ActionFinished;
         }
 
         public override string ToString()

@@ -1,19 +1,13 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions
+﻿using SunsetSystems.Entities.Characters.Interfaces;
+
+namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Idle : EntityAction
     {
-        protected override Creature Owner
-        {
-            get;
-            set;
-        }
+        public Idle(IActionPerformer owner) : base(owner) { }
 
-        public Idle(Creature owner)
-        {
-            Owner = owner;
-        }
-
-        public override void Abort()
+        public override void Cleanup()
         {
 
         }
@@ -23,7 +17,7 @@
 
         }
 
-        public override bool IsFinished()
+        public override bool EvaluateAction()
         {
             return false;
         }

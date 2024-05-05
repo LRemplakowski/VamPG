@@ -1,0 +1,39 @@
+﻿title: backAtHaven2ndVisit
+tags:
+---
+[nomarkup][You are driven back to your apartment, the building stands as a testament to your Embrace as well as today's endeavors. A shadow of fear and anxiety settles over you as you see sunglasses in the rearview mirror.][/nomarkup] #line:0450bf6 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    [nomarkup][Looking out the window you can see Anastasia riding close by on her motorcycle, following you back to your apartment. You remember the look of disgust she gave Dominic when he offered her a ride and his snort of laughter.][/nomarkup] #line:05fca51 
+<<endif>>
+<<if $dominicHasDiana == true>>
+    [nomarkup][Diana sits in the cruiser next to Dominic. Her eyes vacantly staring at Dominic, she can barely look at you but it seems she's not really present either way. Either due to shock or shame, she seems to be somewhat frozen looking out at the road beyond the headlights.][/nomarkup] #line:0ed0079 
+    -> {$pcName}: Diana? #line:03b8606 
+        {$diana}: ... #line:0d72001 
+        -> {$pcName}: Are you going to say anything? #line:075a00f 
+        {$diana}: ... #line:012e6f2 
+        {$sheriff}: Ya'll leave each other alone back there. I don't have the patience to break up a fight. #line:0a37832 
+        -> {$pcName}: I don't think there's going to be one. #line:0c0d22d 
+        {$sheriff}: What're you still botherin' her for then? #line:067c851 
+        [nomarkup][Diana just continues to stare at him. Unresponsive.][/nomarkup] #line:0c004fd 
+    -> [nomarkup][Leave her be.][/nomarkup] #line:0a464f8 
+        [nomarkup][Diana just continues to stare at him. Unresponsive.][/nomarkup] #line:05cd1a9 
+<<endif>>
+{$sheriff}: And here you are. I'll be checkin' in on you t'morrow, don't let me find a headache when I do. Block off the windows. Don't let any light in or I'll be findin' a pile of ash tomorrow mornin' you hear? Also with the Embassy shitstorm, I was unable to arrange a clean-up of your apartment. I'll send someone to take care of it when they are done there. #line:056643c 
+<<if GetCompanionInfluence ($sheriff)>=1>>
+    //Dominic gets out of the car//
+    [nomarkup][He steps out of the car and opens up the door. Seeing your look he puts a hand on your shoulder and grimaces.][/nomarkup] #line:0d08cc8 
+    {$sheriff}: I said it was best you didn't remember it. #line:0e1f39c 
+    -> {$pcName}: How'd you know? #line:06ee9c8 
+    {$sheriff}: Everyone's been through it {$playerNickname}, no one makes it out alive.  #line:0191488 
+    [nomarkup][He squeezes your shoulder and lets it go. Stepping away so that he can slam the door shut behind you.][/nomarkup] #line:05cd0e5 
+    //Dominic gets into the car//
+<<else>>
+    [nomarkup][You sit in the car for a moment and Dominic sighs.][/nomarkup] #line:0dcfd88 
+    {$sheriff}: Plannin' on getting out of the car tonight kid? #line:056f444 
+    -> {$pcName}: Did you know it was going to be like this? #line:0b92747 
+    {$sheriff}: No I did not, but I did hope. Now get out. #line:035a5f6 
+    [nomarkup][You push the door open and step out into the crunch of the gravel.][/nomarkup] #line:0320899 
+<<endif>>
+[nomarkup][You hear the purr of an engine as the Sheriff wheels off into the night.][/nomarkup] #line:024d719 
+//Dominics car drives away//
+===

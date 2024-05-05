@@ -1,17 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using SunsetSystems.Loading;
-using SunsetSystems.Utils;
+using SunsetSystems.Core.SceneLoading.UI;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace SunsetSystems.MainMenu.UI
 {
     public class MainMenuNavigationButton : MonoBehaviour
     {
-        protected SceneLoadingUIManager fadeUI;
+        [SerializeField]
+        protected FadeScreenAnimator fadeUI;
         [SerializeField]
         protected GameObject currentGUIScreen;
         [SerializeField]
@@ -19,16 +14,14 @@ namespace SunsetSystems.MainMenu.UI
 
         protected virtual void Start()
         {
-            if (fadeUI == null)
-                if (this.TryFindFirstGameObjectWithTag(TagConstants.SCENE_LOADING_UI, out GameObject fadeUIObject))
-                    fadeUI = fadeUIObject.GetComponent<SceneLoadingUIManager>();
+
         }
 
         public async virtual void OnClick()
         {
-            await fadeUI.DoFadeOutAsync(.5f);
+            await fadeUI.FadeOut(.5f);
             DoLoadTargetGUIScreen();
-            await fadeUI.DoFadeInAsync(.5f);
+            await fadeUI.FadeIn(.5f);
         }
 
         protected void DoLoadTargetGUIScreen()

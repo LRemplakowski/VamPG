@@ -1,8 +1,5 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.MainMenu.UI;
 using SunsetSystems.UI.Utils;
-using SunsetSystems.Utils;
-using System.Collections;
+using SunsetSystems.Utils.Extensions;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;

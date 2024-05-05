@@ -1,23 +1,23 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
+using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentSlotDisplay : Button, IUserInterfaceView<EquipmentSlot>
+    public class EquipmentSlotDisplay : Button, IUserInterfaceView<IEquipmentSlot>
     {
         [SerializeField, ReadOnly]
-        private EquipmentSlot _cachedSlotData;
+        private IEquipmentSlot _cachedSlotData;
         [SerializeField]
         private Image _itemIcon;
 
-        public void UpdateView(IGameDataProvider<EquipmentSlot> dataProvider)
+        public void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
         {
             _cachedSlotData = dataProvider.Data;
-            EquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
+            IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
             {
                 _itemIcon.sprite = itemInSlot.Icon;
@@ -31,10 +31,19 @@ namespace SunsetSystems.Inventory.UI
 
         public void UnequipItemFromSlot()
         {
-            if (_cachedSlotData.GetEquippedItem() != null)
+            if (CanUnequipItem(_cachedSlotData))
             {
-                InventoryManager.TryUnequipItemFromSlot(CharacterSelector.SelectedCharacterKey, _cachedSlotData.ID);
+                _cachedSlotData.TryUnequipItem(out var unequipped);
+                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(unequipped));
             }
+        }
+
+        private static bool CanUnequipItem(IEquipmentSlot slot)
+        {
+            if (slot == null)
+                return false;
+            var item = slot.GetEquippedItem();
+            return item != null && item.CanBeRemoved && !item.IsDefaultItem;
         }
     }
 }

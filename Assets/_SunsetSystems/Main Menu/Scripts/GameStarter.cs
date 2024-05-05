@@ -1,129 +1,92 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Loading;
+using SunsetSystems.Persistence;
 using UnityEngine;
-using SunsetSystems.Resources;
-using SunsetSystems.UI;
-using SunsetSystems.Utils;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Party;
-using UnityEngine.Events;
-using System.Collections.Generic;
-using System.Linq;
+using UltEvents;
+using SunsetSystems.Core.SceneLoading;
+using SunsetSystems.Entities.Characters.Interfaces;
 
 namespace SunsetSystems.Data
 {
-    public class GameStarter : Singleton<GameStarter>
+    public class GameStarter : SerializedMonoBehaviour
     {
         private const string MAIN_MENU = "MainMenuParent";
 
-        [SerializeField]
-        private CreatureData _playerCharacterData;
-        [SerializeField]
-        private PlayerCharacterBackground _selectedBackground;
-        [SerializeField]
-        private string _startSceneName;
-        [SerializeField]
-        private string _initialEntryPointTag;
-        [SerializeField]
-        private string _initialBoundingBoxTag;
-        [SerializeField]
-        private SceneLoader _sceneLoader;
+        [Title("References")]
         [SerializeField]
         private GameObject _mainMenuParent;
+        [SerializeField, Required]
+        private SceneLoadingDataAsset startSceneData;
+
+        [Title("Runtime")]
         [SerializeField]
-        private List<GameObject> _objectsToReset;
-        private List<IResetable> _resetables => _objectsToReset.Select(go => go.GetComponent<IResetable>()).Where(r => r != null).ToList();
-        public UnityEvent OnGameStart;
+        private ICreatureTemplateProvider _playerCharacterTemplate;
+
+        [field: Title("Events")]
+        [field: SerializeField]
+        public UltEvent OnGameStart { get; private set; }
 
         private void Start()
         {
-            if (!_sceneLoader)
-                _sceneLoader = FindObjectOfType<SceneLoader>();
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)
         {
-            this._selectedBackground = selectedBackground;
+            //this._selectedBackground = selectedBackground;
         }
 
         public void SelectBodyType(BodyType selectedBodyType)
         {
-            this._playerCharacterData.BodyType = selectedBodyType;
+            //this._playerCharacterData.BodyType = selectedBodyType;
         }
 
         public void SetAttribueValue(AttributeType attribute, int value)
         {
-            _playerCharacterData.Stats.Attributes.GetAttribute(attribute).SetValue(value);
+            //_playerCharacterData.Stats.Attributes.GetAttribute(attribute).SetValue(value);
         }
 
         public void SetSkillValue(SkillType skill, int value)
         {
-            _playerCharacterData.Stats.Skills.GetSkill(skill).SetValue(value);
+            //_playerCharacterData.Stats.Skills.GetSkill(skill).SetValue(value);
         }
 
         public void SetCharacterName(string characterName)
         {
-            this._playerCharacterData.FirstName = characterName;
+            //this._playerCharacterData.FirstName = characterName;
         }
 
-        public async void InitializeGame()
-        {
-            Start();
-            CreatureConfig mainCharacterAsset = GetMatchingCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(mainCharacterAsset));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameScene(data);
-        }
-
-        public async void InitializeGameDebug()
-        {
-            Start();
-            _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
-            CreatureConfig debugAsset = ResourceLoader.GetDefaultCreatureAsset();
-            PartyManager.RecruitMainCharacter(new(debugAsset));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
-            await _sceneLoader.LoadGameScene(data);
-        }
-
-        public async void InitializeGameJam()
-        {
-            Start();
-            _resetables.ForEach(resetable => resetable?.ResetOnGameStart());
-            CreatureConfig desiree = ResourceLoader.GetFemaleJournalistAsset();
-            PartyManager.RecruitMainCharacter(new(desiree));
-            SceneLoadingData data = new NameLoadingData(_startSceneName, _initialEntryPointTag, _initialBoundingBoxTag, DisableMainMenu);
+        public void StartGame()
+        {            
+            PartyManager.Instance.RecruitMainCharacter(_playerCharacterTemplate);
             OnGameStart?.Invoke();
-            await _sceneLoader.LoadGameScene(data);
+            SaveLoadManager.ForceCreateNewSaveData();
+            _ = LevelLoader.Instance.LoadNewScene(startSceneData);
         }
 
-        public void DisableMainMenu()
-        {
-            _mainMenuParent.SetActive(false);
-        }
-
-        private CreatureConfig GetMatchingCreatureAsset()
-        {
-            return _playerCharacterData.BodyType switch
-            {
-                BodyType.M => _selectedBackground switch
-                {
-                    PlayerCharacterBackground.Agent => ResourceLoader.GetMaleAgentAsset(),
-                    PlayerCharacterBackground.Convict => ResourceLoader.GetMaleConvictAsset(),
-                    PlayerCharacterBackground.Journalist => ResourceLoader.GetMaleJournalistAsset(),
-                    _ => ResourceLoader.GetDefaultCreatureAsset(),
-                },
-                BodyType.F => _selectedBackground switch
-                {
-                    PlayerCharacterBackground.Agent => ResourceLoader.GetFemaleAgentAsset(),
-                    PlayerCharacterBackground.Convict => ResourceLoader.GetFemaleConvictAsset(),
-                    PlayerCharacterBackground.Journalist => ResourceLoader.GetFemaleJournalistAsset(),
-                    _ => ResourceLoader.GetDefaultCreatureAsset(),
-                },
-                _ => ResourceLoader.GetDefaultCreatureAsset(),
-            };
-        }
+        //private CreatureConfig GetMatchingCreatureAsset()
+        //{
+        //    return _playerCharacterData.BodyType switch
+        //    {
+        //        BodyType.Male => _selectedBackground switch
+        //        {
+        //            PlayerCharacterBackground.Agent => ResourceLoader.GetMaleAgentAsset(),
+        //            PlayerCharacterBackground.Convict => ResourceLoader.GetMaleConvictAsset(),
+        //            PlayerCharacterBackground.Journalist => ResourceLoader.GetMaleJournalistAsset(),
+        //            _ => ResourceLoader.GetDefaultCreatureAsset(),
+        //        },
+        //        BodyType.Female => _selectedBackground switch
+        //        {
+        //            PlayerCharacterBackground.Agent => ResourceLoader.GetFemaleAgentAsset(),
+        //            PlayerCharacterBackground.Convict => ResourceLoader.GetFemaleConvictAsset(),
+        //            PlayerCharacterBackground.Journalist => ResourceLoader.GetFemaleJournalistAsset(),
+        //            _ => ResourceLoader.GetDefaultCreatureAsset(),
+        //        },
+        //        _ => ResourceLoader.GetDefaultCreatureAsset(),
+        //    };
+        //}
     }
 
     public interface IResetable

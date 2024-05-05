@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Spellbook;
-using System.Data.Linq.Mapping;
+using System.Linq;
 
 namespace SunsetSystems.Entities.Data
 {
@@ -16,8 +16,7 @@ namespace SunsetSystems.Entities.Data
         public int Generation = 12;
         public int BloodPotency = 1;
         public Attributes Attributes = Attributes.Initialize();
-        public Skills Skills = Skills.Initialize();
-        public Disciplines Disciplines = Disciplines.Initialize();   
+        public Skills Skills = Skills.Initialize();  
     }
 
     [Serializable]
@@ -28,22 +27,28 @@ namespace SunsetSystems.Entities.Data
 
         public static Trackers Initialize()
         {
-            Trackers result = new();
-            result.health = new(TrackerType.Health);
-            result.willpower = new(TrackerType.Willpower);
-            result.hunger = new(TrackerType.Hunger);
+            Trackers result = new()
+            {
+                health = new(TrackerType.Health),
+                willpower = new(TrackerType.Willpower),
+                hunger = new(TrackerType.Hunger),
+                humanity = new(TrackerType.Humanity)
+            };
             result.hunger.SetValue(0);
-            result.humanity = new(TrackerType.Humanity);
             return result;
         }
 
         public static Trackers DeepCopy(Trackers existing)
         {
-            Trackers result = new();
-            result.health = new(existing.health);
-            result.willpower = new(existing.willpower);
-            result.hunger = new(existing.hunger);
-            result.humanity = new(existing.humanity);
+            if (existing == null)
+                return Initialize();
+            Trackers result = new()
+            {
+                health = new(existing.health),
+                willpower = new(existing.willpower),
+                hunger = new(existing.hunger),
+                humanity = new(existing.humanity)
+            };
             return result;
         }
 
@@ -101,6 +106,8 @@ namespace SunsetSystems.Entities.Data
 
         public static Attributes DeepCopy(Attributes existing)
         {
+            if (existing == null)
+                return Initialize();
             Attributes result = new();
             result.strength = new(existing.strength);
             result.dexterity = new(existing.dexterity);
@@ -216,6 +223,44 @@ namespace SunsetSystems.Entities.Data
             return result;
         }
 
+        public static Skills DeepCopy(Skills existing)
+        {
+            if (existing == null)
+                return Initialize();
+            Skills result = new();
+            //PHYSICAL
+            result.athletics = new Skill(existing.athletics);
+            result.brawl = new Skill(existing.brawl);
+            result.craft = new Skill(existing.craft);
+            result.drive = new Skill(existing.drive);
+            result.firearms = new Skill(existing.firearms);
+            result.larceny = new Skill(existing.larceny);
+            result.melee = new Skill(existing.melee);
+            result.stealth = new Skill(existing.stealth);
+            result.survival = new Skill(existing.survival);
+            //SOCIAL
+            result.animalKen = new Skill(existing.animalKen);
+            result.etiquette = new Skill(existing.etiquette);
+            result.insight = new Skill(existing.insight);
+            result.intimidation = new Skill(existing.intimidation);
+            result.leadership = new Skill(existing.leadership);
+            result.performance = new Skill(existing.performance);
+            result.persuasion = new Skill(existing.persuasion);
+            result.streetwise = new Skill(existing.streetwise);
+            result.subterfuge = new Skill(existing.subterfuge);
+            //MENTAL
+            result.academics = new Skill(existing.academics);
+            result.awarness = new Skill(existing.awarness);
+            result.finance = new Skill(existing.finance);
+            result.investigation = new Skill(existing.investigation);
+            result.medicine = new Skill(existing.medicine);
+            result.occult = new Skill(existing.occult);
+            result.politics = new Skill(existing.politics);
+            result.science = new Skill(existing.science);
+            result.technology = new Skill(existing.technology);
+            return result;
+        }
+
         public Skill GetSkill(SkillType type)
         {
             return type switch
@@ -314,6 +359,8 @@ namespace SunsetSystems.Entities.Data
 
         public static Disciplines DeepCopy(Disciplines existing)
         {
+            if (existing == null)
+                return Initialize();
             Disciplines result = new();
             result.animalism = new(existing.animalism);
             result.auspex = new(existing.auspex);
@@ -360,7 +407,7 @@ namespace SunsetSystems.Entities.Data
                 DisciplineType.Medicine => medicine,
                 DisciplineType.Larceny => larceny,
                 DisciplineType.Intimidation => intimidation,
-                _ => new(DisciplineType.Invalid),
+                _ => throw new NotImplementedException(),
             };
         }
 

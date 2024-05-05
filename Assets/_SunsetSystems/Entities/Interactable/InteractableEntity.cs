@@ -1,32 +1,29 @@
-﻿using SunsetSystems.Entities.Characters;
-using SunsetSystems.Resources;
+﻿using Sirenix.OdinInspector;
+using Sirenix.Serialization;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
+using UltEvents;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public abstract class InteractableEntity : Entity, IInteractable, INameplateReciever
+    public class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
     {
-        public static readonly List<IInteractable> InteractablesInScene = new();
+        public static readonly HashSet<IInteractable> InteractablesInScene = new();
 
+        [field: Title("References")]
+        [field: SerializeField]
+        public List<IInteractionHandler> InteractionHandlers { get; set; }
         [SerializeField]
         private Collider _interactionCollider;
-        [field: SerializeField]
-        public GameObject HoverHighlight { get; set; }
+        [SerializeField]
+        private IHighlightHandler _highlightHandler;
+        [SerializeField]
+        private GameObject _linkedGameObject;
 
-        private bool _isHoveredOver;
-        public bool IsHoveredOver
-        {
-            get => _isHoveredOver;
-            set
-            {
-                _isHoveredOver = value;
-                HandleHoverHiglight();
-            }
-        }
-
+        [Title("Config")]
         [SerializeField]
         protected float _interactionDistance = 2.0f;
         public float InteractionDistance
@@ -34,7 +31,7 @@ namespace SunsetSystems.Entities.Interactable
             get => _interactionDistance;
             set => _interactionDistance = value;
         }
-        public Creature TargetedBy { get; set; }
+        public IActionPerformer TargetedBy { get; set; }
 
         private bool _interacted;
         public bool Interacted
@@ -63,35 +60,66 @@ namespace SunsetSystems.Entities.Interactable
         {
             get
             {
-                return _interactable;
+                return _interactable && (!_interactableOnce || !_interacted) && gameObject.activeSelf;
             }
             set
             {
                 _interactable = value;
-                this.enabled = value;
-                _interactionCollider.enabled = value;
+                if (_interactable)
+                    InteractablesInScene.Add(this);
+                else
+                    InteractablesInScene.Remove(this);
+                if (_interactionCollider != null)
+                    _interactionCollider.enabled = value;
             }
         }
 
         [SerializeField]
         private string _nameplateName;
         public string NameplateText => _nameplateName;
+        [SerializeField]
+        private Vector3 _nameplateOffset = new (0, 3, 0);
 
-        public Vector3 NameplateWorldPosition => transform.position + Vector3.up;
+        public Vector3 NameplateWorldPosition => transform.position + _nameplateOffset;
 
         [SerializeField]
         private bool _interactableOnce = false;
 
-        public UnityEvent OnInteractionTriggered;
+        [Title("Events")]
+        public UltEvent<bool> OnInteractionTriggered;
 
-        protected virtual void OnValidate()
+        [Title("Runtime")]
+        [ShowInInspector]
+        private bool _isHoveredOver;
+        public bool IsHoveredOver
         {
+            get => _isHoveredOver;
+            set
+            {
+                _isHoveredOver = value;
+                HandleHoverHiglight();
+            }
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;
             }
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
+            if (_references == null)
+                _references = GetComponent<IEntityReferences>();
+            if (InteractionHandlers == null)
+                InteractionHandlers = new();
+            //IHH added
+            if (_highlightHandler == null)
+                _highlightHandler = GetComponent<IHighlightHandler>();
+
         }
 
         protected virtual void Awake()
@@ -100,47 +128,69 @@ namespace SunsetSystems.Entities.Interactable
             {
                 InteractionTransform = this.transform;
             }
+            if (Interactable)
+                InteractablesInScene.Add(this);
+            //Added IHH
+            if (_highlightHandler == null)
+                _highlightHandler = GetComponent<IHighlightHandler>();
+
         }
 
         private void OnEnable()
         {
-            InteractablesInScene.Add(this);
+            if (Interactable)
+                InteractablesInScene.Add(this);
+            if (_linkedGameObject != null)
+                _linkedGameObject.SetActive(true);
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
+        }
+
+        private void OnDisable()
+        {
+            InteractablesInScene.Remove(this);
+            if (_linkedGameObject != null)
+                _linkedGameObject.SetActive(false);
         }
 
         protected virtual void Start()
         {
-            enabled = Interactable;
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
-            _interactionCollider.enabled = Interactable;
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
         }
 
-        private void LateUpdate()
+        public void ClearHandlers()
         {
-            if (TargetedBy == null)
-                Interacted = false;
+            InteractionHandlers.Clear();
         }
 
-        protected virtual void OnDisable()
+        public void AddHandler(GameObject handler)
         {
-            InteractablesInScene.Remove(this);
+            if (handler.TryGetComponent(out IInteractionHandler interactionHandler))
+                InteractionHandlers.Add(interactionHandler);
         }
 
-        public void Interact()
+        [Button]
+        public virtual void Interact()
         {
             if (!Interactable)
                 return;
             IsHoveredOver = false;
             Debug.Log(TargetedBy + " interacted with object " + gameObject);
-            HandleInteraction();
-            OnInteractionTriggered?.Invoke();
             Interacted = true;
-            TargetedBy = null;
             if (_interactableOnce)
                 this.Interactable = false;
+            bool result = false;
+            foreach (IInteractionHandler handler in InteractionHandlers)
+            {
+                if (handler.HandleInteraction(TargetedBy))
+                    result = true;
+            }
+            OnInteractionTriggered?.Invoke(result);
+            TargetedBy = null;
         }
-
-        protected abstract void HandleInteraction();
 
         public void OnDrawGizmosSelected()
         {
@@ -150,14 +200,63 @@ namespace SunsetSystems.Entities.Interactable
 
         private void HandleHoverHiglight()
         {
-            if (HoverHighlight != null && Interactable)
-                HoverHighlight.SetActive(IsHoveredOver);
+            if (_highlightHandler != null && Interactable)
+                _highlightHandler.SetHighlightActive(IsHoveredOver);
         }
 
         public void ResetInteraction()
         {
             _interacted = false;
             Interactable = true;
+        }
+
+        public override object GetPersistenceData()
+        {
+            InteractableEntityPersistenceData persistenceData = new(this);
+            return persistenceData;
+        }
+
+        public override void InjectPersistenceData(object data)
+        {
+            base.InjectPersistenceData(data);
+            if (data is not InteractableEntityPersistenceData interactableData)
+                return;
+            Interactable = interactableData.Interactable;
+            _interacted = interactableData.Interacted;
+            _interactableOnce = interactableData.InteractableOnce;
+            InteractionHandlers = new();
+            foreach (var key in interactableData.InteractionHandlers)
+            {
+                InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(key) as IInteractionHandler);
+            }
+            if (_linkedGameObject)
+                _linkedGameObject.SetActive(interactableData.GameObjectActive);
+        }
+
+        [Serializable]
+        public class InteractableEntityPersistenceData : PersistenceData
+        {
+            public bool Interactable;
+            public bool Interacted;
+            public bool InteractableOnce;
+            public List<long> InteractionHandlers;
+
+            public InteractableEntityPersistenceData(InteractableEntity interactableEntity) : base(interactableEntity)
+            {
+                Interactable = interactableEntity.Interactable;
+                Interacted = interactableEntity.Interacted;
+                InteractableOnce = interactableEntity._interactableOnce;
+                InteractionHandlers = new();
+                foreach (var handler in interactableEntity.InteractionHandlers)
+                {
+                    InteractionHandlers.Add(ES3Internal.ES3ReferenceMgrBase.Current.Get(handler as UnityEngine.Object));
+                }
+            }
+
+            public InteractableEntityPersistenceData() : base()
+            {
+
+            }
         }
     }
 }

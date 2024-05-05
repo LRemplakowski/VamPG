@@ -1,13 +1,10 @@
-﻿using SunsetSystems.Entities.Characters;
+﻿using System.Collections.Generic;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Interactable;
 using UnityEngine;
+
 public interface IInteractable
 {
-    GameObject HoverHighlight
-    {
-        get;
-        set;
-    }
-
     bool IsHoveredOver
     {
         get;
@@ -20,7 +17,7 @@ public interface IInteractable
         set;
     }
 
-    Creature TargetedBy
+    IActionPerformer TargetedBy
     {
         get;
         set;
@@ -45,6 +42,4 @@ public interface IInteractable
     }
 
     void Interact();
-
-    void OnDrawGizmosSelected();
 }

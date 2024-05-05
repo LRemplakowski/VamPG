@@ -1,24 +1,22 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.UI.Utils;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.UI.Utils;
 using UnityEngine;
 
-namespace SunsetSystems.Inventory.UI
+namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentContentsUpdater : MonoBehaviour, IUserInterfaceUpdateReciever<EquipmentSlot>
+    public class EquipmentContentsUpdater : SerializedMonoBehaviour, IUserInterfaceUpdateReciever<IEquipmentSlot>
     {
         [SerializeField]
         private EquipmentSlotDisplay _slotPrefab;
 
-        [SerializeField]
-        private StringEquipmentSlotDisplayDictionary _slotViews;
+        [SerializeField, DictionaryDrawerSettings(IsReadOnly = true, KeyLabel = "Slot ID", ValueLabel = "Slot View")]
+        private Dictionary<EquipmentSlotID, EquipmentSlotDisplay> _slotViews = new();
 
         private void OnValidate()
         {
-            StringEquipmentSlotDictionary slotPairs = EquipmentData.Initialize().equipmentSlots;
-            foreach (string key in slotPairs.Keys)
+            _slotViews ??= new();
+            foreach (EquipmentSlotID key in EquipmentData.GetSlotsPreset().Keys)
             {
                 _slotViews.TryAdd(key, null);
             }
@@ -29,13 +27,15 @@ namespace SunsetSystems.Inventory.UI
             
         }
 
-        public void UpdateViews(List<IGameDataProvider<EquipmentSlot>> data)
+        public void UpdateViews(List<IGameDataProvider<IEquipmentSlot>> data)
         {
-            foreach (IGameDataProvider<EquipmentSlot> slot in data)
+            foreach (IGameDataProvider<IEquipmentSlot> slot in data)
             {
-                EquipmentSlotDisplay view = _slotViews[slot.Data.ID];
-                view.UpdateView(slot);
-                view.gameObject.SetActive(true);
+                if (_slotViews.TryGetValue(slot.Data.ID, out EquipmentSlotDisplay view))
+                {
+                    view.UpdateView(slot);
+                    view.gameObject.SetActive(true);
+                }
             }
         }
     }

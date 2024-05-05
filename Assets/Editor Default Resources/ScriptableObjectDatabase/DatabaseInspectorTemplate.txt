@@ -1,0 +1,30 @@
+﻿//Created by Scriptable Object Database plugin.
+using 'targetNamespace';
+using MyLib.EditorTools;
+using UnityEditor;
+
+[CustomEditor(typeof('databaseName'File))]
+public class 'databaseName'Inspector : DatabaseInspectorBase<'databaseName'File, 'objectType'>
+{
+    public override void ReloadGUI()
+    {
+        pEditorGUI = new 'databaseName'EditorGUI("'databaseName'" + pThisDatabase.ID16 + ".Inspector");
+        pEditorGUI.InitInspector();
+    }
+}
+
+public class 'databaseName'EditorGUI : DatabaseWindowEditor<'databaseName'File, 'objectType'>
+{
+    public override string EditorName { get { return "'editorName'"; } }
+    
+    public override System.Type ParentType
+    {
+        get
+        {
+            return typeof('parentsType');
+        }
+    }
+    
+    public 'databaseName'EditorGUI(string editorPrefsPrefix)
+        : base(editorPrefsPrefix) { }
+}

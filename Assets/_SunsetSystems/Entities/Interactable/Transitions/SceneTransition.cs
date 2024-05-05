@@ -1,89 +1,147 @@
-﻿using SunsetSystems.Entities.Characters;
+﻿using System.Collections;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
-using SunsetSystems.Data;
+using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;
+using SunsetSystems.LevelUtility;
 using SunsetSystems.Party;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using SunsetSystems.Persistence;
+using UltEvents;
 using UnityEngine;
 
-namespace SunsetSystems.Loading
+namespace SunsetSystems.Core.SceneLoading
 {
-    public class SceneTransition : InteractableEntity, ITransition
+    public class SceneTransition : SerializedMonoBehaviour, IInteractionHandler
     {
-        [SerializeField]
-        private string _sceneName;
-
-        [SerializeField]
-        private int _sceneIndex;
-
+        [Title("References")]
         [SerializeField]
         private TransitionType _type;
-        [SerializeField]
-        private string _targetEntryPointTag;
-        [SerializeField]
-        private string _targetBoundingBoxTag;
-        [SerializeField]
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
+        private SceneLoadingDataAsset _sceneToLoad;
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private Waypoint _targetEntryPoint;
-        [SerializeField]
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
         private BoundingBox _targetBoundingBox;
-        [SerializeField]
-        private SceneLoader _sceneLoader;
-        [SerializeField]
-        private SceneLoadingUIManager _fadeUI;
-        [SerializeField]
-        private CameraControlScript _cameraControlScript;
 
-        protected override void Start()
+        [Title("Configs")]
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition")]
+        private bool _overrideDefaultWaypoint = false;
+        [SerializeField, ShowIf("@this._type == TransitionType.SceneTransition && this._overrideDefaultWaypoint == true")]
+        private string _targetWaypointTag = "";
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition")]
+        private CanvasGroup _fadeScreenCanvasGroup;
+        [SerializeField, ShowIf("@this._type == TransitionType.InternalTransition"), Min(0)]
+        private float _fadeScreenTime = .5f;
+
+        [Title("Events")]
+        public UltEvent OnAfterFadeOut = new();
+
+        private IEnumerator _internalTransitionCoroutine;
+
+        private void OnEnable()
         {
-            base.Start();
-            _sceneLoader = FindObjectOfType<SceneLoader>();
-            _fadeUI = this.FindFirstComponentWithTag<SceneLoadingUIManager>(TagConstants.SCENE_LOADING_UI);
+            LevelLoader.OnAfterScreenFadeOut += InvokeAfterFadeOut;
         }
 
-        protected override void HandleInteraction()
+        private void OnDisable()
+        {
+            LevelLoader.OnAfterScreenFadeOut -= InvokeAfterFadeOut;
+        }
+
+        public void TriggerTransition()
+        {
+            HandleInteraction(null);
+        }
+
+        public bool HandleInteraction(IActionPerformer interactee)
         {
             Debug.Log("Interacting with area transition!");
             switch (_type)
             {
-                case TransitionType.indexTransition:
-                    MoveToScene(new IndexLoadingData(_sceneIndex, _targetEntryPointTag, _targetBoundingBoxTag));
+                case TransitionType.SceneTransition:
+                    MoveToScene(_sceneToLoad);
                     break;
-                case TransitionType.nameTransition:
-                    MoveToScene(new NameLoadingData(_sceneName, _targetEntryPointTag, _targetBoundingBoxTag));
+                case TransitionType.InternalTransition:
+                    MoveToArea(_targetEntryPoint, _targetBoundingBox);
                     break;
-                case TransitionType.internalTransition:
-                    _ = MoveToArea();
-                    break;
+                default:
+                    return false;
             }
+            return true;
         }
 
-        public void MoveToScene(SceneLoadingData data)
+        private void MoveToScene(SceneLoadingDataAsset data)
         {
-            _ = _sceneLoader.LoadGameScene(data);
+            SaveLoadManager.UpdateRuntimeDataCache();
+            if (_overrideDefaultWaypoint)
+                WaypointManager.Instance.OverrideSceneWaypoint(_targetWaypointTag);
+            _ = LevelLoader.Instance.LoadNewScene(data);
         }
 
-        public async Task MoveToArea()
+        private void MoveToArea(Waypoint waypoint, BoundingBox cameraBoundingBox)
         {
-            await _fadeUI.DoFadeOutAsync(.5f);
-            List<Creature> party = PartyManager.ActiveParty;
-            for (int i = 0; i < party.Count; i++)
+            if (_internalTransitionCoroutine != null)
+                StopCoroutine(_internalTransitionCoroutine);
+            _internalTransitionCoroutine = FadeOutScreenAndMoveToArea(waypoint, cameraBoundingBox);
+            StartCoroutine(_internalTransitionCoroutine);
+        }
+
+        private IEnumerator FadeOutScreenAndMoveToArea(Waypoint waypoint, BoundingBox cameraBoundingBox)
+        {
+            if (_fadeScreenTime <= 0f || _fadeScreenCanvasGroup == null)
             {
-                party[i].ClearAllActions();
-                party[i].ForceCreatureToPosition(_targetEntryPoint.transform.position);
-                await Task.Yield();
+                InvokeAfterFadeOut();
+                var party = PartyManager.Instance.ActiveParty;
+                foreach (ICreature creature in party)
+                {
+                    creature.ForceToPosition(waypoint.transform.position);
+                }
+                var camera = GameManager.Instance.GameCamera;
+                camera.ForceToPosition(waypoint.transform.position);
+                camera.CurrentBoundingBox = cameraBoundingBox;
             }
-            if (!_cameraControlScript)
-                _cameraControlScript = FindObjectOfType<CameraControlScript>();
-            _cameraControlScript.CurrentBoundingBox = _targetBoundingBox;
-            _cameraControlScript.ForceToPosition(_targetEntryPoint.transform.position);
-            await Task.Delay(500);
-            await _fadeUI.DoFadeInAsync(.5f);
+            else
+            {
+                float lerp = 0f;
+                _fadeScreenCanvasGroup.gameObject.SetActive(true);
+                while (lerp < 1)
+                {
+                    lerp += Time.deltaTime * (1 / _fadeScreenTime);
+                    _fadeScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, lerp);
+                    yield return null;
+                }
+                InvokeAfterFadeOut();
+                _fadeScreenCanvasGroup.alpha = 1f;
+                var party = PartyManager.Instance.ActiveParty;
+                foreach (ICreature creature in party)
+                {
+                    creature.ForceToPosition(waypoint.transform.position);
+                }
+                var camera = GameManager.Instance.GameCamera;
+                camera.ForceToPosition(waypoint.transform.position);
+                camera.CurrentBoundingBox = cameraBoundingBox;
+                yield return new WaitForSeconds(_fadeScreenTime / 2);
+                while (lerp > 0)
+                {
+                    lerp -= Time.deltaTime * (1 / _fadeScreenTime);
+                    _fadeScreenCanvasGroup.alpha = Mathf.Lerp(0, 1, lerp);
+                    yield return null;
+                }
+                _fadeScreenCanvasGroup.alpha = 0f;
+                _fadeScreenCanvasGroup.gameObject.SetActive(false);
+            }
+        }
+
+        public void InvokeAfterFadeOut()
+        {
+            OnAfterFadeOut?.InvokeSafe();
         }
     }
 
     public enum TransitionType
     {
-        indexTransition, nameTransition, internalTransition
+        SceneTransition, InternalTransition
     }
 }

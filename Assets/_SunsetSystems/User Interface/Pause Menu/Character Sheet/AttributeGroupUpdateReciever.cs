@@ -1,7 +1,5 @@
-using NaughtyAttributes;
-using SunsetSystems.Entities.Characters;
+using Sirenix.OdinInspector;
 using SunsetSystems.UI.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +8,7 @@ namespace SunsetSystems.UI
 {
     public class AttributeGroupUpdateReciever : MonoBehaviour, IUserInterfaceUpdateReciever<BaseStat>
     {
-        [SerializeField, EnumFlags]
+        [SerializeField]
         private AttributeType _attributes;
         [SerializeField]
         private List<BaseStatView> _views = new();

@@ -1,3 +1,6 @@
+using System;
+
+[Flags]
 public enum AttributeType
 {
     Strength = 1,

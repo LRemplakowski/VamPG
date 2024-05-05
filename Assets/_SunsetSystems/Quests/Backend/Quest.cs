@@ -1,10 +1,7 @@
-using NaughtyAttributes;
-using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using UnityEditor;
+using Sirenix.OdinInspector;
+using SunsetSystems.UI.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -13,8 +10,6 @@ namespace SunsetSystems.Journal
     [Serializable]
     public class Quest : ScriptableObject, IGameDataProvider<Quest>
     {
-        private const string COMPLETE_QUEST = "COMPLETE_QUEST";
-
         [field: SerializeField, ReadOnly]
         public string ID { get; private set; }
         [field: SerializeField]
@@ -24,7 +19,7 @@ namespace SunsetSystems.Journal
         [TextArea(10, 15)]
         public string Description;
         public List<Objective> InitialObjectives;
-        [field: SerializeField, AllowNesting]
+        [field: SerializeField]
         public List<RewardData> Rewards { get; private set; }
         [SerializeField, SerializeReference]
         private List<Quest> _startQuestsOnCompletion;
@@ -32,6 +27,7 @@ namespace SunsetSystems.Journal
 
         public static event Action<Quest> QuestStarted;
         public static event Action<Quest> QuestCompleted;
+        public static event Action<Quest> QuestFailed;
         public static event Action<Quest, Objective> ObjectiveCompleted;
         public static event Action<Quest, Objective> ObjectiveFailed;
 
@@ -77,47 +73,87 @@ namespace SunsetSystems.Journal
             QuestStarted?.Invoke(this);
             foreach (Objective o in InitialObjectives)
             {
-                o.OnObjectiveCompleted += OnObjectiveChanged;
+                o.OnObjectiveCompleted += OnObjectiveCompleted;
+                o.OnObjectiveFailed += OnObjectiveFailed;
+                o.OnObjectiveCanceled += OnObjectiveCanceled;
                 o.MakeActive();
             }
         }
 
         //TODO Rework this to sub recursively in quest begin
-        private void OnObjectiveChanged(Objective objective)
+        private void OnObjectiveCompleted(Objective objective)
         {
-            Debug.Log($"Completed objective {objective.ID}!");
+            Debug.Log($"Completed objective {objective.ReadableID}!");
             ObjectiveCompleted?.Invoke(this, objective);
-            objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
-            objective.ObjectivesToCancelOnCompletion.ForEach(o => (o as Objective).MakeInactive());
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => o.Cancel());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
-                Debug.Log($"Completed quest!");
+                Debug.Log($"Completed quest {Name}!");
                 Complete();
             }
             else
             {
                 Debug.Log("Tracking new set of objectives!");
-                foreach (UnityEngine.Object o in objective.NextObjectives)
+                foreach (Objective newObjective in objective.NextObjectives)
                 {
-                    Objective ob = o as Objective;
-                    ob.OnObjectiveCompleted += OnObjectiveChanged;
-                    ob.OnObjectiveInactive += OnObjectiveDeactivated;
+                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
+                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
+                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
                 }
             }
         }
 
-        private void OnObjectiveDeactivated(Objective objective)
+        public void ForceSubscribeToObjective(Objective objective)
         {
-            objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
+            if (objective == null)
+                return;
+            objective.OnObjectiveCompleted += OnObjectiveCompleted;
+            objective.OnObjectiveFailed += OnObjectiveFailed;
+            objective.OnObjectiveCanceled += OnObjectiveCanceled;
+        }
+
+        private void OnObjectiveFailed(Objective objective)
+        {
             ObjectiveFailed?.Invoke(this, objective);
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
+            objective.ObjectivesToCancelOnFail.ForEach(o => o.Cancel());
+            if (objective.NextObjectivesOnFailed == null || objective.NextObjectivesOnFailed.Count <= 0)
+            {
+                Debug.Log($"Failed quest {ReadableID}!");
+                Fail();
+            }
+            else
+            {
+                foreach (Objective newObjective in objective.NextObjectivesOnFailed)
+                {
+                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
+                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
+                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
+                }
+            }
+        }
+
+        private void OnObjectiveCanceled(Objective objective)
+        {
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
         }
 
         public void Complete()
         {
-            Rewards.ForEach(rewardData => (rewardData.Reward as IRewardable).ApplyReward(rewardData.Amount));
+            Rewards.ForEach(rewardData => rewardData.Reward.ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
+            _startQuestsOnCompletion.ForEach(q => QuestJournal.Instance.BeginQuest(q));
+        }
+
+        public void Fail()
+        {
+            QuestFailed?.Invoke(this);
         }
     }
 
@@ -137,8 +173,7 @@ namespace SunsetSystems.Journal
     public struct RewardData
     {
         public int Amount;
-        [RequireInterface(typeof(IRewardable))]
-        public UnityEngine.Object Reward;
+        public IRewardable Reward;
     }
 
     public enum QuestCategory

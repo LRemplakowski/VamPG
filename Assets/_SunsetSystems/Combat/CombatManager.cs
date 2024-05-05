@@ -1,52 +1,57 @@
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Data;
-using SunsetSystems.Party;
 using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using Redcode.Awaiting;
-using SunsetSystems.Animation;
 using System;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Party;
+using SunsetSystems.Animation;
+using SunsetSystems.Entities.Characters.Actions;
+using UltEvents;
 
 namespace SunsetSystems.Combat
 {
-    [RequireComponent(typeof(Tagger))]
-    public class CombatManager : Singleton<CombatManager>
+    public class CombatManager : SerializedMonoBehaviour
     {
-        public delegate void CombatBeginHandler(List<Creature> creaturesInCombat);
-        public static event CombatBeginHandler CombatBegin;
-        public delegate void CombatEndHandler();
-        public static event CombatEndHandler CombatEnd;
-        public delegate void ActiveActorChangedHandler(Creature newActor, Creature previousActor);
-        public static event ActiveActorChangedHandler ActiveActorChanged;
-        public delegate void CombatRoundBeginHandler(Creature currentActor);
-        public static event CombatRoundBeginHandler CombatRoundBegin;
-        public delegate void CombatRoundEndHandler(Creature currentActor);
-        public static event CombatRoundEndHandler CombatRoundEnd;
-        public static event Action OnFullTurnCompleted;
+        public static CombatManager Instance { get; private set; }
+
+        [field: Title("Runtime")]
+        [field: SerializeField]
+        public Encounter CurrentEncounter { get; private set; }
+
+        [field: ShowInInspector, ReadOnly]
+        public List<ICombatant> Actors { get; private set; }
+        public List<ICombatant> LivingActors => Actors.FindAll(a => a.IsAlive);
+
+        [Title("Events")]
+        public UltEvent<IEnumerable<ICombatant>> CombatBegin;
+        public UltEvent CombatEnd;
+        public UltEvent<ICombatant> CombatRoundBegin;
+        public UltEvent<ICombatant> CombatRoundEnd;
+        public UltEvent<ICombatant> OnFullTurnCompleted;
 
         private int turnCounter;
 
-        private static Creature _currentActiveActor;
-        public static Creature CurrentActiveActor
+        private ICombatant _currentActiveActor;
+        public ICombatant CurrentActiveActor
         {
             get => _currentActiveActor;
             private set
             {
-                Creature previous = _currentActiveActor;
+                ICombatant previous = _currentActiveActor;
                 _currentActiveActor = value;
-                ActiveActorChanged?.Invoke(value, previous);
             }
         }
-        private Creature FirstActor;
+        private ICombatant FirstActor;
 
-        [field: SerializeField]
-        public Encounter CurrentEncounter { get; private set; }
-
-        [field: SerializeField]
-        public List<Creature> Actors { get; private set; }
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         [field: SerializeField]
         private GameRuntimeData RuntimeData { get; set; }
@@ -59,33 +64,38 @@ namespace SunsetSystems.Combat
 
         public void SetCurrentActiveActor(int index)
         {
-            Creature c = null;
-            if (index < Actors.Count)
-                c = Actors[index];
+            ICombatant c = null;
+            var livingActors = LivingActors;
+            if (index < livingActors.Count)
+            {
+                c = livingActors[index];
+            }
             CurrentActiveActor = c;
         }
 
+        [Title("Editor")]
+        [Button]
         public void NextRound()
         {
-            if (CurrentActiveActor)
+            if (CurrentActiveActor != null)
             {
                 CombatRoundEnd?.Invoke(CurrentActiveActor);
-                Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " finished round " + turnCounter + "!");
+                Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " finished round " + turnCounter + "!");
                 int index = Actors.IndexOf(CurrentActiveActor);
-                SetCurrentActiveActor(++index < Actors.Count ? index : 0);
+                SetCurrentActiveActor(++index < LivingActors.Count ? index : 0);
             }
             else
             {
                 FirstActor = DecideFirstActor(Actors);
                 CurrentActiveActor = FirstActor;
             }
-            if (CurrentActiveActor == FirstActor)
+            if (LivingActors.IndexOf(CurrentActiveActor) == 0)
             {
                 turnCounter++;
-                OnFullTurnCompleted?.Invoke();
+                OnFullTurnCompleted?.Invoke(CurrentActiveActor);
             }
-            CombatRoundBegin?.Invoke(CurrentActiveActor);
-            Debug.Log("Combat Manager: " + CurrentActiveActor.gameObject.name + " begins round " + turnCounter + "!");
+            CombatRoundBegin?.InvokeSafeDynamicFirst(CurrentActiveActor);
+            Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " begins round " + turnCounter + "!");
         }
 
         public async Task BeginEncounter(Encounter encounter)
@@ -93,17 +103,17 @@ namespace SunsetSystems.Combat
             CurrentEncounter = encounter;
             turnCounter = 0;
             Actors = new();
-            Actors.AddRange(encounter.Creatures);
-            Actors.AddRange(PartyManager.ActiveParty);
-            CombatBegin?.Invoke(Actors);
-            Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(true));
+            Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
+            Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
+            CombatBegin?.InvokeSafe(Actors);
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
+            await new WaitForSeconds(1f);
             NextRound();
         }
 
-        private Creature DecideFirstActor(List<Creature> creatures)
+        private ICombatant DecideFirstActor(List<ICombatant> creatures)
         {
-            creatures.OrderByDescending(creature => creature.StatsManager.GetInitiative());
+            //creatures.OrderByDescending(creature => creature.References.GetComponentInChildren<StatsManager>().GetInitiative());
             return creatures[0];
         }
 
@@ -111,27 +121,19 @@ namespace SunsetSystems.Combat
         {
             await Task.Yield();
             CombatEnd?.Invoke();
-            Actors.ForEach(c => c.GetComponent<CreatureAnimationController>().SetCombatAnimationsActive(false));
             CurrentEncounter = null;
         }
 
-        private static async Task MoveAllCreaturesToNearestGridPosition(List<Creature> actors, Encounter currentEncounter)
+        private static Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
-            List<Task> moveTasks = new();
-            foreach (Creature c in actors)
+            List<Task> tasks = new();
+            foreach (ICombatant combatant in actors)
             {
-                moveTasks.Add(Task.Run(async () =>
-                {
-                    await new WaitForUpdate();
-                    c.Move(currentEncounter.MyGrid.GetNearestGridElement(c.transform.position));
-                    while (c.Agent.enabled)
-                    {
-                        Debug.Log("Waiting for creature " + c.gameObject.name + " to move!");
-                        await Task.Delay(1000);
-                    }
-                }));
+                Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.BodyTransform.position);
+                Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
+                tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager)));
             }
-            await Task.WhenAll(moveTasks);
+            return Task.WhenAll(tasks);
         }
 
         public bool IsBeforeFirstRound()
@@ -144,9 +146,9 @@ namespace SunsetSystems.Combat
             return turnCounter == 1;
         }
 
-        public static bool IsActiveActorPlayerControlled()
+        public bool IsActiveActorPlayerControlled()
         {
-            return _currentActiveActor ? CurrentActiveActor.CombatBehaviour.IsPlayerControlled : false;
+            return _currentActiveActor != null ? CurrentActiveActor.IsPlayerControlled : false;
         }
 
         public int GetRound()
@@ -154,9 +156,31 @@ namespace SunsetSystems.Combat
             return turnCounter;
         }
 
-        public class CombatEventData
+        public List<ICombatant> GetCombatantsInTurnOrder()
         {
+            var livingActors = LivingActors;
+            if (livingActors.Count <= 0)
+                return livingActors;
+            int currentActorIndex = livingActors.IndexOf(CurrentActiveActor);
+            ICombatant[] offsetCopy = new ICombatant[livingActors.Count];
+            offsetCopy = ShiftLeft(livingActors.ToArray(), currentActorIndex);
+            return offsetCopy.ToList();
+        }
 
+        private static ICombatant[] ShiftLeft(ICombatant[] array, int shiftAmount)
+        {
+            int length = array.Length;
+            ICombatant[] result = new ICombatant[array.Length];
+            // Ensure shiftAmount is within the range of the array length
+            shiftAmount = shiftAmount % length;
+
+            // Shift indices to the left by X positions
+            for (int i = 0; i < length; i++)
+            {
+                int newIndex = (i - shiftAmount + length) % length;
+                result[newIndex] = array[i];
+            }
+            return result;
         }
     }
 }

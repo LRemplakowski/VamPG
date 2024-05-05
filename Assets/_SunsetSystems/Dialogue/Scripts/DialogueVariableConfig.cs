@@ -1,11 +1,8 @@
-using NaughtyAttributes;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
@@ -32,7 +29,7 @@ namespace SunsetSystems.Dialogue
                 if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))
                 {
                     injectionData._strings.Add(configID, config.FullName);
-                    injectionData._strings.Add(config.FullName, configID);
+                    //injectionData._strings.Add(config.FullName, configID);
                 }
             }
             return injectionData;

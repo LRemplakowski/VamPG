@@ -1,32 +1,56 @@
-using Entities.Characters.Data;
 using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Dice;
-using NaughtyAttributes;
 using SunsetSystems.Entities.Data;
+using SunsetSystems.Entities.Characters.Interfaces;
+using UltEvents;
+using Sirenix.OdinInspector;
 using System.Linq;
-using SunsetSystems.Spellbook;
-using System;
-using static SunsetSystems.Spellbook.DisciplinePower.EffectWrapper;
 
 namespace SunsetSystems.Entities.Characters
 {
-    public class StatsManager : MonoBehaviour
+    public class StatsManager : SerializedMonoBehaviour
     {
-        [SerializeField, ReadOnly]
+        [SerializeField, HideInInspector]
         private Creature _owner;
-        private ref StatsData Data => ref _owner.Data.Stats;
-
-        public Tracker Health => Data.Trackers.GetTracker(TrackerType.Health);
-        public Tracker Willpower => Data.Trackers.GetTracker(TrackerType.Willpower);
-        public Tracker Hunger => Data.Trackers.GetTracker(TrackerType.Hunger);
-        public Tracker Humanity => Data.Trackers.GetTracker(TrackerType.Humanity);
-
-        public event Action<Creature> OnCreatureDied;
-
-        public void Initialize(Creature owner)
+        private Creature Owner
         {
-            this._owner = owner;
+            get
+            {
+                if (_owner == null)
+                    _owner = GetComponent<Creature>();
+                return _owner;
+            }
+        }
+
+        [Title("Events")]
+        public UltEvent<ICreature> OnCreatureDied = new();
+        [field: Title("Debug")]
+        [field: SerializeField]
+        public StatsData Stats { get; private set; }
+
+        public Tracker Health => Stats.Trackers.GetTracker(TrackerType.Health);
+        public Tracker Willpower => Stats.Trackers.GetTracker(TrackerType.Willpower);
+        public Tracker Hunger => Stats.Trackers.GetTracker(TrackerType.Hunger);
+        public Tracker Humanity => Stats.Trackers.GetTracker(TrackerType.Humanity);
+
+        public StatsManager Instance { get; protected set; }
+
+        private void OnValidate()
+        {
+            if (_owner == null)
+                _owner = GetComponentInParent<Creature>();
+        }
+
+        [Button]
+        public void LoadFromConfig(StatsConfig config)
+        {
+            Stats = new(config);
+        }
+
+        private void Start()
+        {
+            OnValidate();
         }
 
         public void TakeDamage(int damage)
@@ -55,10 +79,10 @@ namespace SunsetSystems.Entities.Characters
         public virtual void Die()
         {
             Health.SuperficialDamage = 10000;
-            OnCreatureDied?.Invoke(_owner);
+            OnCreatureDied?.Invoke(Owner);
         }
 
-        internal void Heal(int amount)
+        public void Heal(int amount)
         {
             int currentDamage = Health.SuperficialDamage;
             currentDamage -= amount;
@@ -68,12 +92,13 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            return Data.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            //return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            return 5;
         }
 
         public int GetInitiative()
         {
-            return Data.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
+            return Stats.Attributes.GetAttribute(AttributeType.Dexterity).GetValue();
         }
 
         public bool IsAlive()
@@ -81,41 +106,21 @@ namespace SunsetSystems.Entities.Characters
             return Health.GetValue() > 0;
         }
 
-        public AttributeSkillPool GetDefensePool()
+        public void CopyFromTemplate(ICreatureTemplate template)
         {
-            return new AttributeSkillPool(Data.Attributes.GetAttribute(AttributeType.Dexterity), Data.Skills.GetSkill(SkillType.Athletics));
-        }
-
-        public AttributeSkillPool GetAttackPool()
-        {
-            return new AttributeSkillPool(Data.Attributes.GetAttribute(GetWeaponAttribute()), Data.Skills.GetSkill(GetWeaponSkill()));
-        }
-
-        private AttributeType GetWeaponAttribute()
-        {
-            return AttributeType.Composure;
-        }
-
-        private SkillType GetWeaponSkill()
-        {
-            return SkillType.Firearms;
-        }
-
-        public DisciplinePower GetDisciplinePower(string powerID)
-        {
-            foreach (Discipline discipline in Data.Disciplines.GetDisciplines())
+            Stats = new(template.StatsData);
+#if UNITY_EDITOR
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
             {
-                DisciplinePower power = discipline.GetKnownPowers().Find(p => p.ID.Equals(powerID));
-                if (power != null)
-                    return power;
+                UnityEditor.EditorUtility.SetDirty(this);
             }
-            return null;
+#endif
         }
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, bool useHunger = false)
         {
-            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
-            Skill s = Data.Skills.GetSkill(skill);
+            CreatureAttribute a = Stats.Attributes.GetAttribute(attribute);
+            Skill s = Stats.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -129,8 +134,8 @@ namespace SunsetSystems.Entities.Characters
 
         public Outcome GetSkillRoll(AttributeType attribute, SkillType skill, int dc, bool useHunger = false)
         {
-            CreatureAttribute a = Data.Attributes.GetAttribute(attribute);
-            Skill s = Data.Skills.GetSkill(skill);
+            CreatureAttribute a = Stats.Attributes.GetAttribute(attribute);
+            Skill s = Stats.Skills.GetSkill(skill);
             int normalDice = a.GetValue() + s.GetValue();
             int hungerDice = 0;
             if (useHunger)
@@ -142,37 +147,79 @@ namespace SunsetSystems.Entities.Characters
             return Roll.d10(normalDice, hungerDice, dc);
         }
 
-        public Outcome GetAttackRoll(int dc, bool useHunger)
-        {
-            AttributeType weaponAttribute = GetWeaponAttribute();
-            SkillType weaponSkill = GetWeaponSkill();
-            return GetSkillRoll(weaponAttribute, weaponSkill, dc, useHunger);
-        }
-
         public List<CreatureAttribute> GetAttributes()
         {
-            return Data.Attributes.GetAttributeList();
+            return Stats.Attributes.GetAttributeList();
+        }
+
+        public CreatureAttribute GetAttribute(AttributeType attributeType)
+        {
+            foreach (CreatureAttribute attribute in GetAttributes())
+            {
+                if (attributeType == attribute.AttributeType)
+                    return attribute;
+            }
+            return null;
+        }
+
+        public List<Skill> GetSkills()
+        {
+            return Stats.Skills.GetSkillList();
+        }
+
+        public Skill GetSkill(SkillType skillType)
+        {
+            foreach (Skill skill in GetSkills())
+            {
+                if (skillType == skill.SkillType)
+                    return skill;
+            }
+            return null;
         }
 
         public HealthData GetHealthData()
         {
-            HealthData.HealthDataBuilder builder = new(Data.Trackers.GetTracker(TrackerType.Health).GetValue());
+            HealthData.HealthDataBuilder builder = new(Health.MaxValue);
+            builder.SetSuperficialDamage(Health.SuperficialDamage);
+            builder.SetAggravatedDamage(Health.AggravatedDamage);
             return builder.Create();
         }
+    }
 
-        public void ApplyEffect(AttributeEffect effect)
+    public struct HealthData
+    {
+        public readonly int maxHealth, superficialDamage, aggravatedDamage;
+
+        private HealthData(int maxHealth, int superficialDamage, int aggravatedDamage)
         {
-            Data.Attributes.GetAttribute(effect.AffectedProperty).AddModifier(new(effect.ModifierValue, effect.ModifierType, effect.GetHashCode().ToString()));
+            this.maxHealth = maxHealth;
+            this.superficialDamage = superficialDamage;
+            this.aggravatedDamage = aggravatedDamage;
         }
 
-        public void ApplyEffect(SkillEffect effect)
+        public class HealthDataBuilder
         {
-            throw new NotImplementedException();
-        }
+            private int maxHealth, superficialDamage = 0, aggravatedDamage = 0;
 
-        public void ApplyEffect(DisciplineEffect effect)
-        {
-            throw new NotImplementedException();
+            public HealthDataBuilder(int maxHealth)
+            {
+                this.maxHealth = maxHealth;
+            }
+
+            public void SetSuperficialDamage(int superficialDamage)
+            {
+                this.superficialDamage = superficialDamage;
+            }
+
+            public void SetAggravatedDamage(int aggravatedDamage)
+            {
+                this.aggravatedDamage = aggravatedDamage;
+            }
+
+            public HealthData Create()
+            {
+                return new HealthData(maxHealth, superficialDamage, aggravatedDamage);
+            }
         }
     }
 }

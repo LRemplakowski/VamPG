@@ -1,0 +1,69 @@
+﻿title: havenEscape
+tags:
+---
+[nomarkup][You barely manage to get your bearings as you duck under Diana and exit the apartment. You hit the railing and look out over the parking lot to see... no one is coming. There's a van and a motorcycle in the parking lot but otherwise it's completely empty. Your only hope is to run.][/nomarkup] #line:01a9cbe 
+-> [nomarkup][Try to run on the road.] (Dexterity + Athletics)[/nomarkup] #line:0330b13 
+    <<jump escapeDexRoll>>
+===
+title: escapeDexRoll
+---
+<<if Roll("Dexterity","Athletics") >=3>>
+    <<jump escapeDexSuccess>>
+<<else>>
+    <<jump escapeDexFailure>>
+<<endif>>
+===
+title: escapeDexSuccess
+---
+[nomarkup][Jumping over the fence you dash towards the open road, trying to look around for phone booth. Nothing there. You grit your teeth and turn back to see that the woman, Lucia, is slowly walking towards you.][/nomarkup] #success #line:07db2f1 
+-> [nomarkup][Try to short-wire one of the vehicles in the parking.] (Resolve + Larceny)[/nomarkup] #line:0c28d70 
+    <<jump escapeResRoll>>
+===
+title: escapeDexFailure
+---
+[nomarkup][You make to jump the low fence and your foot gets caught and sends you sprawling on the pavement. You get up preparing to run only to feel a hand grip around your neck.][/nomarkup] #failure #line:03a63dd 
+{$sire}: This is rather unbecoming dear, let's head back inside. #line:04bdbe2 
+[nomarkup][Your vision starts to swim with black spots as you're dragged back inside the apartment.][/nomarkup] #line:0eadc6a 
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===
+title: escapeResRoll
+---
+<<if Roll("Resolve","Larceny") >=4>>
+    <<jump escapeResSuccess>>
+<<else>>
+    <<jump escapeResFailure>>
+<<endif>>
+===
+title: escapeResSuccess
+---
+[nomarkup][Looking around you spot a motorcycle lying on its side. You rip at it until you can see the ignition wires and bite at them. Ill-advised sure, but better to die later than now. You twist the wires together and practically cry when you hear the engine stutter to life.][nomarkup] #success #line:00a5931 
+{$sire}: Oh that's a neat trick dear. #line:0f88053 
+-> {$pcName}: Fuck-fuck fuck! #line:0aaf195 
+{$sire}: Hm, yes quite. #line:0c9f28e 
+<<jump nearlyEscaped>>
+===
+title: escapeResFailure
+---
+[nomarkup][You spot a motorcycle and race towards it. Your fingers grasp the ignition panel as you desperately try to rip it open. It doesn't budge.][/nomarkup] #failure #line:08a1894 
+{$sire}: Would you like a few seconds to keep trying? Or shall we just go inside. #line:0e7126a 
+-> {$pcName}: Just- gimmie a- come on! #line:0d898ac 
+{$sire}: Three... #line:02aaf31 
+[nomarkup][You pull open the panel and see the wires underneath and immediately pull at them with your teeth feeling a slight buzz.][/nomarkup] #line:0ae3731 
+{$sire}: Two... #line:0ccefef 
+[nomarkup][Twisting them together with your fingers you blind away the sweat dripping into your eyes as you look over at the woman. She nods at you with an encouraging smile. What the absolute fuck.][/nomarkup] #line:0e64884 
+{$sire}: One! #line:0dbb650 
+[nomarkup][You rev the engine and throw it in reverse and feel the wind in your hair - only to realize that you no longer feel the bike under you. A fraction of a second later your head slams into the pavement and you feel a blackout for a second.][/nomarkup] #line:0468313 
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===
+title: nearlyEscaped
+---
+[nomarkup][Without looking back at the woman slowly sauntering towards you, you step on the gas - just in time to see a hand lightly being placed on the front of the motorcycle. A woman with dark hair rolling her shoulders and raising an eyebrow, one hand placed on the bike headlight with the front wheel between her legs. She's holding it in place as she stares at you placidly.][/nomarkup] #line:0f81601 
+{$sire}: Are we done here? I think we're done.  #line:0383a15 
+[nomarkup][You stare at her, as she smiles at you. Her manicured fingernails tapping against the headlight.][/nomarkup] #line:094297e 
+{$sire}: Take. Your foot. Off. The gas. #line:0b134e0 
+[nomarkup][You can't help it. You take your foot off the gas. She smiles wanly at you and walking around puts a hand on your shoulder. Pulling you off the bike and walking you towards the apartment. You feel your vision starting to blur and go dark.][/nomarkup] #line:0fab281 
+//fade to black, haven interior scene//
+<<jump capturedByLucia>>
+===

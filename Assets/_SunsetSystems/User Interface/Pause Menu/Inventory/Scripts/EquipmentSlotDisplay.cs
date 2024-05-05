@@ -1,12 +1,8 @@
 using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
+using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.UI.Utils;
-using System;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace SunsetSystems.Equipment.UI
@@ -20,8 +16,6 @@ namespace SunsetSystems.Equipment.UI
 
         public void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
         {
-            //if (lastLoadedSprite != null)
-            //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _cachedSlotData = dataProvider.Data;
             IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
@@ -37,10 +31,19 @@ namespace SunsetSystems.Equipment.UI
 
         public void UnequipItemFromSlot()
         {
-            if (_cachedSlotData.GetEquippedItem() != null)
+            if (CanUnequipItem(_cachedSlotData))
             {
-                throw new NotImplementedException();
+                _cachedSlotData.TryUnequipItem(out var unequipped);
+                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(unequipped));
             }
+        }
+
+        private static bool CanUnequipItem(IEquipmentSlot slot)
+        {
+            if (slot == null)
+                return false;
+            var item = slot.GetEquippedItem();
+            return item != null && item.CanBeRemoved && !item.IsDefaultItem;
         }
     }
 }

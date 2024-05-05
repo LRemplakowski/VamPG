@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities;
+using SunsetSystems.Party;
 using UltEvents;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace SunsetSystems.Utils.Triggers
         private bool triggeredOnlyBySpecificObject;
         [SerializeField, ShowIf("triggeredOnlyBySpecificObject")]
         private Collider triggeringObject;
+        [SerializeField]
+        private bool _stopPlayerPartyOnTrigger = false;
 
         [Title("Events")]
         public UltEvent<Collider> TriggerEnter = new();
@@ -51,6 +54,8 @@ namespace SunsetSystems.Utils.Triggers
                 return;
             TriggerEnter?.InvokeSafe(other);
             enterTriggeredOnce = true;
+            if (_stopPlayerPartyOnTrigger)
+                PartyManager.Instance.StopTheParty();
         }
 
         public void OnTriggerExit(Collider other)
@@ -61,6 +66,8 @@ namespace SunsetSystems.Utils.Triggers
                 return;
             TriggerExit?.InvokeSafe(other);
             exitTriggeredOnce = true;
+            if (_stopPlayerPartyOnTrigger)
+                PartyManager.Instance.StopTheParty();
         }
 
         public void OnTriggerStay(Collider other)
@@ -71,6 +78,8 @@ namespace SunsetSystems.Utils.Triggers
                 return;
             TriggerStay?.InvokeSafe(other);
             stayTriggeredOnce = true;
+            if (_stopPlayerPartyOnTrigger)
+                PartyManager.Instance.StopTheParty();
         }
 
         private void OnDrawGizmos()

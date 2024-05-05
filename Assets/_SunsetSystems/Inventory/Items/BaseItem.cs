@@ -63,7 +63,7 @@ namespace SunsetSystems.Inventory.Data
 
         public void ApplyReward(int amount)
         {
-            InventoryManager.PlayerInventory.AddItem(new InventoryEntry(this, amount));
+            InventoryManager.Instance.PlayerInventory.AddItem(new InventoryEntry(this, amount));
         }
     }
 }

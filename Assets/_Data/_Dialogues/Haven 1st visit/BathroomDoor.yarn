@@ -5,7 +5,7 @@ position: -209,38
 <<if CurrentObjective("Q_0P_MAIN_SATURDAY_START","GRAB_MEDS")>>
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "GRAB_MEDS">>
 <<endif>>
-<<if visited("DoorFirstVisit")>>
+<<if CustomVisited("DoorFirstVisit")>>
     [nomarkup][The door knob still doesn't budge. It's locked.][/nomarkup] #lastline #line:0506090  
     <<jump DoorVisit>>
 <<else>>
@@ -16,7 +16,7 @@ title: DoorFirstVisit
 tags:
 position: 91,-139
 ---
-<<if GetHasItem("IT_Q_EMBASSYDRINK")==false>>
+<<if GetHasItem("IT_Q_BATHROOM_KEY") == false>>
     [nomarkup][The door knob doesn't budge. It's locked. Of course it's from the inside. The architect must have been a sadist.][/nomarkup]
     {$pcName}: [nomarkup][Where did I put that key?][/nomarkup] #lastline #line:0ad2e34
 <<else>>
@@ -28,13 +28,13 @@ title: DoorVisit
 tags:
 position: 114,94
 ---
--> [nomarkup][Knock.][/nomarkup] <<if visited("BathroomDoorKnock") == false>> #line:05c9288 
+-> [nomarkup][Knock.][/nomarkup] <<if CustomVisited("BathroomDoorKnock") == false>> #line:05c9288 
     <<jump BathroomDoorKnock>>
--> [nomarkup][Try to kick the door open.] (Strength + Brawl)[/nomarkup] <<if visited("BahtroomDoorKick") == false>> #line:0c702b0 
+-> [nomarkup][Try to kick the door open.] (Strength + Brawl)[/nomarkup] <<if CustomVisited("BahtroomDoorKick") == false>> #line:0c702b0 
     <<jump BathroomDoorKick>>
--> [nomarkup][Crowbar the door.] (Strength + Melee) [/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
+-> [nomarkup][Crowbar the door.] (Strength + Melee)[/nomarkup] <<if GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:0cb3a69 
     <<jump BathroomDoorCrowbar>>
--> [nomarkup][Unlock the door.][/nomarkup] <<if GetHasItem("IT_Q_EMBASSYDRINK")==true>> #line:04a268c 
+-> [nomarkup][Unlock the door.][/nomarkup] <<if GetHasItem("IT_Q_BATHROOM_KEY") == true>> #line:04a268c 
     <<jump BathroomDoorUnlock>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0362587 
 ===

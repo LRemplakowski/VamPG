@@ -20,7 +20,7 @@ namespace SunsetSystems.Journal
         private void Start()
         {
             objectiveToTrigger.OnObjectiveActive += StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveInactive += StopHandlingObjective;
+            objectiveToTrigger.OnObjectiveFailed += StopHandlingObjective;
             objectiveToTrigger.OnObjectiveCompleted += StopHandlingObjective;
         }
 
@@ -39,7 +39,7 @@ namespace SunsetSystems.Journal
             }
             else
             {
-                InventoryManager.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
+                InventoryManager.Instance.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
             }
         }
 
@@ -65,9 +65,9 @@ namespace SunsetSystems.Journal
         private void StopHandlingObjective(Objective obj)
         {
             objectiveToTrigger.OnObjectiveActive -= StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveInactive -= StopHandlingObjective;
+            objectiveToTrigger.OnObjectiveFailed -= StopHandlingObjective;
             objectiveToTrigger.OnObjectiveCompleted -= StopHandlingObjective;
-            InventoryManager.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
+            InventoryManager.Instance.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
         }
 
         [Serializable]

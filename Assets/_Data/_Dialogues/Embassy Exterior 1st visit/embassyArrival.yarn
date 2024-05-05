@@ -7,11 +7,11 @@ tags:
 ===
 title: ArrivalQuestions
 ---
--> {$pcName}: [nomarkup][You raise an eyebrow at that.][/nomarkup] You're telling me "ghouls" are real too? <<if visited("vampiricWeaknesses") == false>> #line:0a1597d 
+-> {$pcName}: [nomarkup][You raise an eyebrow at that.][/nomarkup] You're telling me "ghouls" are real too? <<if CustomVisited("vampiricWeaknesses") == false>> #line:0a1597d 
     <<jump vampiricWeaknesses>>
--> {$pcName}: You've mentioned it a few times now. What do you mean by 'domain'? <<if visited("whatIsDomain") == false>> #line:091d4cf 
+-> {$pcName}: You've mentioned it a few times now. What do you mean by 'domain'? <<if CustomVisited("whatIsDomain") == false>> #line:091d4cf 
     <<jump whatIsDomain>>
--> {$pcName}: You don't like my music? <<if visited("musicTastes") == false>> #line:0819a63 
+-> {$pcName}: You don't like my music? <<if CustomVisited("musicTastes") == false>> #line:0819a63 
     <<jump musicTastes>>
 -> {$pcName}: Let's go. #line:0c36d66 
     <<jump letsGo>>

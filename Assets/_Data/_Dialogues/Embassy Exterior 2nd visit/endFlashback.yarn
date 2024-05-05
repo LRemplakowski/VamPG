@@ -23,7 +23,7 @@ title: dianaLuciaDexSuccess
 [nomarkup][You approach Lucia from behind.][/nomarkup] #success #line:0010765 
 //+dmg agains Lucia, or make Lucia wounded at the start of the fight//
 -> {$pcName}: Who has the most to lose now? #line:05c0e34 
-<<jump>>
+<<jump looser>>
 ===
 title: dianaLuciaDexFailure
 ---
@@ -90,7 +90,12 @@ title: vanComes
 [nomarkup][The ghouls do not budge.][/nomarkup] #line:0adba1b 
 {$diana}: Lucia! #line:00654e4 
 {$sire}: Sorry love. You've outlived your usefulness. Tada. [nomarkup][She signals to the ghouls to close the doors.][/nomarkup] #line:0670f3f 
-{$diana}: You bitch! I loved you! I ruined my whole life and you betrayed me like this! [nomarkup][The punk before you is distraught. In a way, you know how it feels.][/nomarkup] This is all your fault! #line:0192490 
+{$diana}: You bitch! I loved you! I ruined my whole life and you betrayed me like this! [nomarkup][The punk before you is distraught. In a way, you know how it feels.][/nomarkup]  #line:03f65aa 
+<<jump afterVanLeaves>>
+===
+title: afterVanLeaves
+---
+{$diana}: [nomarkup][Eventually, Diana turns towards you.][/nomarkup] This is all your fault! #line:0192490 
 -> {$pcName}: Mine? You're joking right? #line:0443ad0 
     {$diana}: If you hadn't shown up she would have Embraced me instead! I should be the one being tested! #line:0f71ade 
     //initiate combat//
@@ -111,10 +116,10 @@ title: dianaManipRoll
 title: dianaManipSuccess
 ---
 {$diana}: [nomarkup][You watch those words weigh upon her face. There's a painful period of silence as she's lost in reflection.][/nomarkup] You - you're right. #success #line:00de38f 
-<<jump dominicArrival>>
+//combat starts without Diana
 ===
 title: dianaManipFailure
 ---
-{$diana}: How would you even know that? You don't know her like I do. #line:04bfba2 
+{$diana}: How would you even know that? You don't know her like I do. #failure #line:04bfba2 
 //initiate combat//
 ===

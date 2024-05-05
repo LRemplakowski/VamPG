@@ -34,20 +34,18 @@ namespace SunsetSystems.Entities.Characters
         }
 
         #region Unity messages
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
+
         }
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
             ActionQueue.Enqueue(new Idle(this));
         }
 
-        protected override void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            base.OnDestroy();
             Debug.Log($"Destroying creature {gameObject.name}!");
         }
 
@@ -170,7 +168,10 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
+                if (DatabaseHolder.Instance != null)
+                    BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
+                else
+                    BaseLookWardrobeCollectionAsset = instance.References.UMAManager.BaseLookWardrobeCollection;
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
                 {
@@ -202,6 +203,8 @@ namespace SunsetSystems.Entities.Characters
 
             public short BaseLookWardrobeCollectionID { get; private set; }
 
+            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
+
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
             public StatsData StatsData { get; private set; }
@@ -219,7 +222,11 @@ namespace SunsetSystems.Entities.Characters
             if (data is not CreaturePersistenceData creaturePersistenceData)
                 return;
             ForceToPosition(creaturePersistenceData.WorldPosition);
-            References.GetCachedComponentInChildren<DynamicCharacterAvatar>().ToggleHide(creaturePersistenceData.UMAHidden);
+            var dna = References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
+            if (dna.UpdatePending())
+                dna.CharacterCreated.AddAction((ud) => { if (creaturePersistenceData.UMAHidden) ud.Hide(); else ud.Show(); });
+            else
+                dna.ToggleHide(creaturePersistenceData.UMAHidden);
         }
 
         [Serializable]
@@ -231,7 +238,13 @@ namespace SunsetSystems.Entities.Characters
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
                 WorldPosition = creature.References.BodyTransform.position;
-                UMAHidden = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>().hide;
+                UMAHidden = false;
+                if (creature.References != null)
+                {
+                    var dna = creature.References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
+                    if (dna != null)
+                        UMAHidden = dna.hide;
+                }
             }
 
             public CreaturePersistenceData() : base()

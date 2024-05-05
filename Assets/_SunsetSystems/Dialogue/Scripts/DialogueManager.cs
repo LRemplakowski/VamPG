@@ -1,13 +1,10 @@
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Constants;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UltEvents;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
@@ -46,6 +43,18 @@ namespace SunsetSystems.Dialogue
         private void Start()
         {
             DialogueHelper.InitializePersistentVariableStorage(_dialogueRunner.VariableStorage as PersistentVariableStorage);
+            _dialogueRunner.onNodeStart.AddListener(MarkNodeVisitedCustom);
+        }
+
+        private void OnDestroy()
+        {
+            _dialogueRunner.onNodeStart.RemoveListener(MarkNodeVisitedCustom);
+        }
+
+        private void MarkNodeVisitedCustom(string nodeID)
+        {
+            Debug.Log($"Visited dialogue node: {nodeID}");
+            DialogueHelper.VariableStorage.SetValue($"visited:{nodeID}", true);
         }
 
         public void RegisterView(DialogueViewBase view)

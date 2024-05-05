@@ -1,10 +1,6 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Inventory.Data;
 
 namespace SunsetSystems.Equipment
 {
@@ -12,8 +8,9 @@ namespace SunsetSystems.Equipment
     {
         Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; }
 
-        bool EquipItem(EquipmentSlotID slotID, IEquipableItem item);
-        bool UnequipItem(EquipmentSlotID slotID);
+        EquipmentSlotID GetSlotForItem(IEquipableItem item);
+        bool EquipItem(EquipmentSlotID slotID, IEquipableItem item, out IEquipableItem previouslyEquipped);
+        bool UnequipItem(EquipmentSlotID slotID, out IEquipableItem unequipped);
         void CopyFromTemplate(ICreatureTemplate template);
     }
 }

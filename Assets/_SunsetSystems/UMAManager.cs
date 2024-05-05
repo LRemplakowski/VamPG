@@ -50,6 +50,7 @@ namespace SunsetSystems.Core.UMA
         {
             if (_umaAvatar == null)
                 PrepareUMA();
+#if !UNITY_EDITOR
             await new WaitForUpdate();
             bool umaFinished = false;
             _umaAvatar.CharacterCreated.AddListener(OnUMADone);
@@ -57,11 +58,25 @@ namespace SunsetSystems.Core.UMA
             await new WaitUntil(() => umaFinished);
             _umaAvatar.CharacterCreated.RemoveListener(OnUMADone);
             _umaAvatar.CharacterUpdated.RemoveListener(OnUMADone);
+            void OnUMADone(UMAData data)
+            {
+                umaFinished = true;
+            }
+#endif
             SetBodyType(template.BodyType);
-            var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
-            if (wardrobeDB != null)
-                LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            if (DatabaseHolder.Instance != null)
+            {
+                var wardrobeDB = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>();
+                if (wardrobeDB != null)
+                    LoadDefaultWardrobeCollection(wardrobeDB.GetAsset(template.BaseLookWardrobeCollectionID)?.Asset);
+            }
+            else
+            {
+                LoadDefaultWardrobeCollection(template.BaseLookWardrobeCollectionAsset);
+            }
+#if !UNITY_EDITOR
             await new WaitForUpdate();
+#endif
             _umaAvatar.BuildCharacter();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
@@ -69,10 +84,6 @@ namespace SunsetSystems.Core.UMA
                 UnityEditor.EditorUtility.SetDirty(this);
             }
 #endif
-            void OnUMADone(UMAData data)
-            {
-                umaFinished = true;
-            }
         }
 
         [Button]

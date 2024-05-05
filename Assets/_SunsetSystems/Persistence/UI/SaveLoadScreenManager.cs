@@ -1,17 +1,20 @@
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SunsetSystems.Persistence.UI
 {
-    public class SaveLoadScreenManager : MonoBehaviour
+    public class SaveLoadScreenManager : MonoBehaviour, ICancelHandler
     {
         [SerializeField, AssetsOnly, Required]
         private SaveEntry _saveEntryPrefab;
         [SerializeField, Required]
         private Transform _saveEntriesParent;
+        [SerializeField, Required]
+        private CanvasGroup _saveLoadCanvasGroup;
         [SerializeField]
         private GameObject _newSaveGameObject;
 
@@ -46,18 +49,33 @@ namespace SunsetSystems.Persistence.UI
         {
             if (_newSaveGameObject == null || _newSaveGameObject.activeInHierarchy is false)
                 _ = LevelLoader.Instance.LoadSavedGame(saveMetaData.SaveID);
+            StartCoroutine(DisableInteractionForSeconds(.5f));
         }
 
         public void DeleteSave(SaveMetaData saveMetaData)
         {
             SaveLoadManager.DeleteSaveFile(saveMetaData.SaveID);
             RefreshSaveScreen(_newSaveGameObject != null && _newSaveGameObject.activeInHierarchy);
+            StartCoroutine(DisableInteractionForSeconds(.5f));
         }
 
         public void CreateNewSave(string saveName)
         {
             SaveLoadManager.CreateNewSaveFile(saveName);
             RefreshSaveScreen(true);
+            StartCoroutine(DisableInteractionForSeconds(.5f));
+        }
+
+        public void OnCancel(BaseEventData eventData)
+        {
+            gameObject.SetActive(false);
+        }
+
+        private IEnumerator DisableInteractionForSeconds(float seconds)
+        {
+            _saveLoadCanvasGroup.interactable = false;
+            yield return new WaitForSeconds(seconds);
+            _saveLoadCanvasGroup.interactable = true;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace SunsetSystems.Combat
         public UltEvent CombatEnd;
         public UltEvent<ICombatant> CombatRoundBegin;
         public UltEvent<ICombatant> CombatRoundEnd;
-        public UltEvent OnFullTurnCompleted;
+        public UltEvent<ICombatant> OnFullTurnCompleted;
 
         private int turnCounter;
 
@@ -92,7 +92,7 @@ namespace SunsetSystems.Combat
             if (LivingActors.IndexOf(CurrentActiveActor) == 0)
             {
                 turnCounter++;
-                OnFullTurnCompleted?.Invoke();
+                OnFullTurnCompleted?.Invoke(CurrentActiveActor);
             }
             CombatRoundBegin?.InvokeSafeDynamicFirst(CurrentActiveActor);
             Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " begins round " + turnCounter + "!");

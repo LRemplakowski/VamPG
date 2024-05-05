@@ -25,6 +25,15 @@ namespace SunsetSystems.Combat
             }
         }
 
+        public void OnFullTurnCompleted(ICombatant actor)
+        {
+            if (actor.Faction == Faction.PlayerControlled)
+            {
+                this.SelectedActionData = new(CombatActionType.Move);
+                HandleNewSelectedAction(SelectedActionData.ActionType);
+            }
+        }
+
         public void OnCombatRoundEnd(ICombatant actor)
         {
             if (actor.Faction == Faction.PlayerControlled)

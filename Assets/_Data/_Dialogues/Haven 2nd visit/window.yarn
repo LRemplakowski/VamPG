@@ -1,7 +1,7 @@
 ﻿title: window
 tags:
 ---
-<<if visited ("peekOutside") == false>>
+<<if CustomVisited("peekOutside") == false>>
     <<jump peekOutside>>
 <<elseif GetHasItem ("IT_Q_VHS")>>
     <<jump watchItFirst>>
@@ -13,37 +13,37 @@ title: peekOutside
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is false>>
     <<if Roll("Wits","Awareness") >=2>>
-        [nomarkup][You check outside the window and see a woman from the bar pulling up into the drive way. A feeling of slight unease hits you before you tamp it down, remembering the face of the gruff woman at the bar. Why she's here is unclear and as you look at her from the window she waves at you and points at something on your door questioningly.][/nomarkup]
+        [nomarkup][You check outside the window and see a woman from the bar pulling up into the drive way. A feeling of slight unease hits you before you tamp it down, remembering the face of the gruff woman at the bar. Why she's here is unclear and as you look at her from the window she waves at you and points at something on your door questioningly.][/nomarkup] #line:0d0f2a9 
         <<jump frontDoor>>
     <<else>>
-        [nomarkup][You check outside the window and see the gleam of chrome as light hits the engine of a motorcycle. The figure on the bike is clearly a woman, but why she's here is less obvious. She points at your door and you get a sense of unease and confusion.][/nomarkup]
+        [nomarkup][You check outside the window and see the gleam of chrome as light hits the engine of a motorcycle. The figure on the bike is clearly a woman, but why she's here is less obvious. She points at your door and you get a sense of unease and confusion.][/nomarkup] #line:063abc2 
         <<jump frontDoor>>
     <<endif>>
 <<else>>
     <<if $tattooSpotter == true>>
-        [nomarkup][You look outside the window for a moment and see a man with very long beautiful hair standing outside. He stares up at you and raises an eyebrow and you get the immediate feeling that he was waiting for you to acknowledge him.][/nomarkup]
+        [nomarkup][You look outside the window for a moment and see a man with very long beautiful hair standing outside. He stares up at you and raises an eyebrow and you get the immediate feeling that he was waiting for you to acknowledge him.][/nomarkup] #line:075184c 
         <<if $wannabeDefector == true>>
-            [nomarkup][Once the pair of you lock eyes he rolls his shoulders and winks. It would be inviting if it wasn't so clearly intentional. He gets on his bike and pats one of his thighs before wheeling around and driving away.][/nomarkup]
+            [nomarkup][Once the pair of you lock eyes he rolls his shoulders and winks. It would be inviting if it wasn't so clearly intentional. He gets on his bike and pats one of his thighs before wheeling around and driving away.][/nomarkup] #line:00a35ae 
         <<endif>>
-        [nomarkup][Once the pair of you lock eyes he rolls his shoulders and smiles giving you a little two-finger salute before wheeling around on his bike and driving away.][/nomarkup]
+        [nomarkup][Once the pair of you lock eyes he rolls his shoulders and smiles giving you a little two-finger salute before wheeling around on his bike and driving away.][/nomarkup] #line:0de0d63 
     <<endif>>
 <<endif>>
-{$anastasia}: What are you lookin' at out there? Cops?
--> {$pcName}: No it's the... guy.
-{$anastasia}: Very descriptive Desiree. Try using your words.
--> {$pcName}: The long-haired guy I saw at the Embassy. He was in the parking lot sitting on his bike. I think he was waiting for me to spot him.
-{$anastasia}: Good God can they not understand that bringing work home is the last thing anyone wants to do!? She shakes her head in disgust. Gimmie a fucking break! Want me to go out there and tell him to shove his dick up his ass so he can learn what it feels like to fuck off?
--> {$pcName}: I mean he's already gone but yes.
-{$anastasia}: Alrighty Princess one ‘teaching men to take a hint' coming up! [nomarkup][She makes for the door.][/nomarkup]
-[nomarkup][Chuckling, you roll your eyes. Anastasia grins devilishly.][/nomarkup]
-{$anastasia}: Knew you had it in you Princess. You alright? 
--> {$pcName}: I don't feel safe in my own home anymore.
-{$anastasia}: Oh. Yeah- yeah, that's about right. Okay well... He's gone. Right? So whatever he was here for didn't involve ‘personally fucking with Desiree'. So reasonably, whatever the plan is for tonight - shooting you in the gut isn't a part of that?
--> {$pcName}: Or he'd have done that.
-{$anastasia}: Mind games. [nomarkup][She rolls her eyes.][/nomarkup] The only thing Kindred love more is politics. [nomarkup][Exhausted by her own words, she hangs her head.][/nomarkup]
--> {$pcName}: It's always like this?
-{$anastasia}: Pretty much. [nomarkup][She pulls out a fresh cigarette but thinks better of it.][/nomarkup] Sometimes you meet those not into mind games, at least for a while. [nomarkup][Her eyes grow distant before she snaps back to the present][/nomarkup] But eventually they end up like your stalker friend out there. It's like dropping a freshwater fish into a saltwater tank, if they don't learn to breathe the salt: they die.
--> {$pcName}: What about you?
+{$anastasia}: What are you lookin' at out there? Cops? #line:066fd87 
+-> {$pcName}: No it's the... guy. #line:0dccbe5 
+{$anastasia}: Very descriptive Desiree. Try using your words. #line:0dcc9ff 
+-> {$pcName}: The long-haired guy I saw at the Embassy. He was in the parking lot sitting on his bike. I think he was waiting for me to spot him. #line:0d64dd1 
+{$anastasia}: Good God can they not understand that bringing work home is the last thing anyone wants to do!? She shakes her head in disgust. Gimmie a fucking break! Want me to go out there and tell him to shove his dick up his ass so he can learn what it feels like to fuck off? #line:08f8796 
+-> {$pcName}: I mean he's already gone but yes. #line:0b78efe 
+{$anastasia}: Alrighty Princess one ‘teaching men to take a hint' coming up! [nomarkup][She makes for the door.][/nomarkup] #line:02b3ac9 
+[nomarkup][Chuckling, you roll your eyes. Anastasia grins devilishly.][/nomarkup] #line:0881b7f 
+{$anastasia}: Knew you had it in you Princess. You alright?  #line:0a01d00 
+-> {$pcName}: I don't feel safe in my own home anymore. #line:06cb466 
+{$anastasia}: Oh. Yeah- yeah, that's about right. Okay well... He's gone. Right? So whatever he was here for didn't involve ‘personally fucking with Desiree'. So reasonably, whatever the plan is for tonight - shooting you in the gut isn't a part of that? #line:0dd7399 
+-> {$pcName}: Or he'd have done that. #line:0dafef0 
+{$anastasia}: Mind games. [nomarkup][She rolls her eyes.][/nomarkup] The only thing Kindred love more is politics. [nomarkup][Exhausted by her own words, she hangs her head.][/nomarkup] #line:0ddcc74 
+-> {$pcName}: It's always like this? #line:07747e5 
+{$anastasia}: Pretty much. [nomarkup][She pulls out a fresh cigarette but thinks better of it.][/nomarkup] Sometimes you meet those not into mind games, at least for a while. [nomarkup][Her eyes grow distant before she snaps back to the present][/nomarkup] But eventually they end up like your stalker friend out there. It's like dropping a freshwater fish into a saltwater tank, if they don't learn to breathe the salt: they die. #line:0d4ac48 
+-> {$pcName}: What about you? #line:0219534 
 <<jump windowWitsRoll>>
 ===
 title: windowWitsRoll
@@ -56,101 +56,101 @@ title: windowWitsRoll
 ===
 title: windowWitsSuccess
 ---
-[nomarkup][You nod to yourself and feel it as Anastasia sits against the couch trying to look anywhere but at you.][/nomarkup] #success
-{$anastasia}: What about me? Do I manipulate people?
--> {$pcName}: Do you think you're going to die to the salt?
-{$anastasia}: Princess I'm not a fucking fish alright? I... I don't know. Okay? Tonight was a lot.
--> {$pcName}: I thought you were big and bad and an expert at these things?
-{$anastasia}: I say away from the mind games. [nomarkup][Her cross jingles on her neck as she ruffles her hair.][/nomarkup] I got used to them when I was young. Chronicles 28:20 ‘And David said to Solomon his son, Be strong and of good courage, and do it: fear not, nor be dismayed: for the Loes God, even my God, will be with thee; he will not fail thee, nor forsake thee until thou hast finished all the work for the service of the house of the Lord.' Use that shit and justify anything you want.
--> {$pcName}: Not a big fan of Christianity?
-{$anastasia}: I don't seem pious to you.
--> {$pcName}: Yes. You have a lot of conviction and confidence. Pious I'm not sure. You did just preach at me.
-    {$anastasia}: Just illustrating the point Princess. But no. Not anymore.
-    -> {$pcName}: What happened?
-    {$anastasia}: I'll tell you about it sometime but not right now.
--> {$pcName}: No.
-    {$anastasia}: Well good! #lastline
+[nomarkup][You nod to yourself and feel it as Anastasia sits against the couch trying to look anywhere but at you.][/nomarkup] #success #line:095e057 
+{$anastasia}: What about me? Do I manipulate people? #line:0c4efbe 
+-> {$pcName}: Do you think you're going to die to the salt? #line:06cb573 
+{$anastasia}: Princess I'm not a fucking fish alright? I... I don't know. Okay? Tonight was a lot. #line:05b384a 
+-> {$pcName}: I thought you were big and bad and an expert at these things? #line:0fa8566 
+{$anastasia}: I say away from the mind games. [nomarkup][Her cross jingles on her neck as she ruffles her hair.][/nomarkup] I got used to them when I was young. Chronicles 28:20 ‘And David said to Solomon his son, Be strong and of good courage, and do it: fear not, nor be dismayed: for the Loes God, even my God, will be with thee; he will not fail thee, nor forsake thee until thou hast finished all the work for the service of the house of the Lord.' Use that shit and justify anything you want. #line:078cc3b 
+-> {$pcName}: Not a big fan of Christianity? #line:048171c 
+{$anastasia}: I don't seem pious to you. #line:0e584a8 
+-> {$pcName}: Yes. You have a lot of conviction and confidence. Pious I'm not sure. You did just preach at me. #line:0e06804 
+    {$anastasia}: Just illustrating the point Princess. But no. Not anymore. #line:0965f60 
+    -> {$pcName}: What happened? #line:030a520 
+    {$anastasia}: I'll tell you about it sometime but not right now. #line:0366a8e 
+-> {$pcName}: No. #line:0fdc7d3 
+    {$anastasia}: Well good! #lastline #line:0c5d13d 
 <<jump doAnaKnowTheGuy>>
 ===
 title: windowWitsFailure
 ---
-[nomarkup][The gothic woman raises an eyebrow at you then gestures to herself.][/nomarkup] #failure
-{$anastasia}: Do you not see the almighty vampire before you? Get on your knees!
--> {$pcName}: Fine! Fine.
-{$anastasia}: I am the supreme vampire lord! Worship me!!
--> {$pcName}: You've made your point!!
-[nomarkup][The pair of you laugh and she waves her hand at you to dismiss the conversation.][/nomarkup] #lastline
+[nomarkup][The gothic woman raises an eyebrow at you then gestures to herself.][/nomarkup] #failure #line:0994836 
+{$anastasia}: Do you not see the almighty vampire before you? Get on your knees! #line:0a63b1e 
+-> {$pcName}: Fine! Fine. #line:05c4b7b 
+{$anastasia}: I am the supreme vampire lord! Worship me!! #line:0739e09 
+-> {$pcName}: You've made your point!! #line:019e6a7 
+[nomarkup][The pair of you laugh and she waves her hand at you to dismiss the conversation.][/nomarkup] #lastline #line:005f746 
 <<jump doAnaKnowTheGuy>>
 ===
 title: doAnaKnowTheGuy
 ---
--> {$pcName}: Do you know anything about the man out there?
-{$anastasia}: The only description I really have is that he's got a tattoo. Not much I can really do there?
--> {$pcName}: He's got long hair too? Tanned skin from being out in the sun?
-[nomarkup][Anastasia shakes her head.][/nomarkup]
+-> {$pcName}: Do you know anything about the man out there? #line:0324d0d 
+{$anastasia}: The only description I really have is that he's got a tattoo. Not much I can really do there? #line:0ee1418 
+-> {$pcName}: He's got long hair too? Tanned skin from being out in the sun? #line:06d5a3d 
+[nomarkup][Anastasia shakes her head.][/nomarkup] #line:0f1b2a3 
 <<jump frontDoor>>
 ===
 title: watchItFirst
 ---
-[nomarkup][The mysterious tape that you picked seconds earlier from your doorstep keeps your mind so preoccupied you can't concentrate. The anxiety is building and you keep on thinking why it ended up here. Your mind is spinning more and more absurd and dark scenarios. You have to watch it now.][/nomarkup]
+[nomarkup][The mysterious tape that you picked seconds earlier from your doorstep keeps your mind so preoccupied you can't concentrate. The anxiety is building and you keep on thinking why it ended up here. Your mind is spinning more and more absurd and dark scenarios. You have to watch it now.][/nomarkup] #line:025d28d 
 ===
 title: windowProofing
 ---
-[nomarkup][Aside from completely ordinary blinds that allow you to block some of the sunlight during the day and street lights at night there's little protection from the daylight. It always floods your apartment after noon - from what you recall window is on the western wall of the building. You survived one hell so you probably don't want to be taken down by Sun. You look around for potential solutions. You have some sheets hidden in the couch if that will not work you also have some clothing and a shower curtain. But you'll have to think about how to put them in place. Probably a hammer and some nails would be useful. The second option that comes to you is all that cardboard from pizza. You may as well use them before you throw them into the trash. In this case, the duct tape should be enough. At worst, you can move some of the furniture, but it may require some help. There's also this clunky fridge, but you're not sure if it'll cover the entire window. At least you don't have to worry if something goes bad inside during the day. It was empty anyway. If none of the options that come to your mind would work there's also a windowless bathroom... but you'd probably want to avoid a place where Diego died because of you. You shudder at the sheer thought. You take a look at the clock. When you went to the Embassy with Kieran he said that you have nine hours until dawn... quick math tells you that you don't have much time. If you botch two attempts to light-proof the window it's a bathroom for you whether you like it or not.][/nomarkup] #lastline
+[nomarkup][Aside from completely ordinary blinds that allow you to block some of the sunlight during the day and street lights at night there's little protection from the daylight. It always floods your apartment after noon - from what you recall window is on the western wall of the building. You survived one hell so you probably don't want to be taken down by Sun. You look around for potential solutions. You have some sheets hidden in the couch if that will not work you also have some clothing and a shower curtain. But you'll have to think about how to put them in place. Probably a hammer and some nails would be useful. The second option that comes to you is all that cardboard from pizza. You may as well use them before you throw them into the trash. In this case, the duct tape should be enough. At worst, you can move some of the furniture, but it may require some help. There's also this clunky fridge, but you're not sure if it'll cover the entire window. At least you don't have to worry if something goes bad inside during the day. It was empty anyway. If none of the options that come to your mind would work there's also a windowless bathroom... but you'd probably want to avoid a place where Diego died because of you. You shudder at the sheer thought. You take a look at the clock. When you went to the Embassy with Kieran he said that you have nine hours until dawn... quick math tells you that you don't have much time. If you botch two attempts to light-proof the window it's a bathroom for you whether you like it or not.][/nomarkup] #lastline #line:0f522dd 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: What are you thinking about? Readying yourself for a session of sunbathing? We don't have much time - we need to think of something. Otherwise, we'll burn to a crisp.
-    -> {$pcName}: I have some ideas. If nothing works we can use the bathroom.
-    {$anastasia}: [nomarkup][She sighs a little looking at you.][/nomarkup] Ye, it should work. It doesn't have a window. #lastline
+    {$anastasia}: What are you thinking about? Readying yourself for a session of sunbathing? We don't have much time - we need to think of something. Otherwise, we'll burn to a crisp. #line:0d9b33a 
+    -> {$pcName}: I have some ideas. If nothing works we can use the bathroom. #line:00efa5c 
+    {$anastasia}: [nomarkup][She sighs a little looking at you.][/nomarkup] Ye, it should work. It doesn't have a window. #lastline #line:0f1c762 
 <<endif>>
 <<jump windowOptions>>
 ===
 title: windowOptions
 ---
--> [nomarkup][Close blinds.][/nomarkup] <<if visited("blinds") == false>>
+-> [nomarkup][Close blinds.][/nomarkup] <<if CustomVisited("blinds") == false>> #line:01181c6 
     <<jump blinds>>
 <<if GetHasItem("IT_Q_SHEETS")>>
     <<if GetHasItem("IT_Q_HAMMER")>>
         <<jump windowHaveSheetsAndHammer>>
     <<elseif GetHasItem("IT_Q_DUCTTAPE")>>
-        <<jump windowHaveSheetsAndTape>>>   
+        <<jump windowHaveSheetsAndTape>>>    #line:0c9a0cb 
     <<endif>>
-        -> [nomarkup][Use bed sheets.][/nomarkup]
+        -> [nomarkup][Use bed sheets.][/nomarkup] #line:05d62c3 
         <<jump windowHaveSheets>>
 <<endif>>
 <<if GetHasItem("IT_Q_SHOWERCURTAIN")>>
     <<if GetHasItem("IT_Q_HAMMER")>>
         <<jump windowHaveSheetsAndHammer>>
     <<elseif GetHasItem("IT_Q_DUCTTAPE")>>
-        <<jump windowHaveSheetsAndTape>>>   
+        <<jump windowHaveSheetsAndTape>>>    #line:0b528ff 
     <<endif>>
-    -> [nomarkup][Use shower curtain sheets.][/nomarkup]
+    -> [nomarkup][Use shower curtain sheets.][/nomarkup] #line:085b5c5 
     <<jump windowHaveSheets>>
 <<endif>>
 <<if GetHasItem("IT_Q_PIZZABOXES")>>
     <<if GetHasItem("IT_Q_DUCTTAPE")>>
-        <<jump windowHaveSheetsAndTape>>>   
+        <<jump windowHaveSheetsAndTape>>>    #line:03b1252 
     <<endif>>
-    -> [nomarkup][Use pizza boxes.][/nomarkup]
+    -> [nomarkup][Use pizza boxes.][/nomarkup] #line:09ebc04 
     <<jump windowHaveSheets>>
 <<endif>>
--> [nomarkup][Use furniture in the apartment.][/nomarkup]
+-> [nomarkup][Use furniture in the apartment.][/nomarkup] #line:00862d9 
     <<jump windowUseFurniture>>
--> [nomarkup][Leave it be.][/nomarkup] 
+-> [nomarkup][Leave it be.][/nomarkup]  #line:0aefd63 
 ===
 title: blinds
 ---
 <<set $windowBlinds to true>>
-[nomarkup][You close the blinds with a frown. There's no way in hell that'll keep out the light. You need to seal the edges around the window or everything you went through won't matter.][/nomarkup] #lastline
+[nomarkup][You close the blinds with a frown. There's no way in hell that'll keep out the light. You need to seal the edges around the window or everything you went through won't matter.][/nomarkup] #lastline #line:0e387fd 
 <<jump windowOptions>>
 ===
 title: windowHaveSheets
 ---
-[nomarkup][Without anything to hold the proofing material in place you may as well just leave them on the ground.][/nomarkup]
+[nomarkup][Without anything to hold the proofing material in place you may as well just leave them on the ground.][/nomarkup] #line:0ee314c 
 ===
 title: windowHaveSheetsAndHammer
 ---
-[nomarkup][With hammer in hand you'll be able to nail the material to the wall. You smile in your thoughts. You have some aggression to work out so you may use it to defuse yourself as well.][/nomarkup]
--> [nomarkup][Try to place nails evenly.] (Intelligence + Craft)[/nomarkup]
+[nomarkup][With hammer in hand you'll be able to nail the material to the wall. You smile in your thoughts. You have some aggression to work out so you may use it to defuse yourself as well.][/nomarkup] #line:094b4c8 
+-> [nomarkup][Try to place nails evenly.] (Intelligence + Craft)[/nomarkup] #line:0f74556 
 <<set $attemptsCounter to ($attemptsCounter + 1)>>
 <<if GetHasItem("IT_Q_SHEETS")>>
     <<RemoveItem "IT_Q_SHEETS">>
@@ -171,45 +171,45 @@ title: windowHaveSheetsAndHammer
 title: windowNailingSheetsSuccess
 ---
 <<set $windowSheets to true>>
-[nomarkup][You smooth out the folded sheet and nail it in place before taking a step back to admire your handiwork. So far so good. Maybe you won't burst into flames after all. The smiling teddy bears seem to agree with you.][/nomarkup] #success
+[nomarkup][You smooth out the folded sheet and nail it in place before taking a step back to admire your handiwork. So far so good. Maybe you won't burst into flames after all. The smiling teddy bears seem to agree with you.][/nomarkup] #success #line:0f5e5cd 
 <<jump succesfulProofing>>
 ===
 title: successfulProofing
 ---
 <<if $attemptsCounter ==1>>
-    [nomarkup][You should be safe. At least for the day.][/nomarkup]
+    [nomarkup][You should be safe. At least for the day.][/nomarkup] #line:0f92836 
 <<else>>
-    [nomarkup][Dawn gets nearer and nearer. You start to feel a tiredness seeping into your mind and body and you can't shake the feeling off. It's like you haven't slept in months and lack of energy is getting to you. It should be enough to protect you, but you feel unable to do anything else either.][/nomarkup]
+    [nomarkup][Dawn gets nearer and nearer. You start to feel a tiredness seeping into your mind and body and you can't shake the feeling off. It's like you haven't slept in months and lack of energy is getting to you. It should be enough to protect you, but you feel unable to do anything else either.][/nomarkup] #line:086e9dd 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        -> {$pcName}: Why... do I feel... so tired?
-        {$anastasia}: It's... normal... it's the sun. We'll go into Torpor in... several minutes... but we should be safe with what you did.
+        -> {$pcName}: Why... do I feel... so tired? #line:0f4d03b 
+        {$anastasia}: It's... normal... it's the sun. We'll go into Torpor in... several minutes... but we should be safe with what you did. #line:08a53ac 
     <<endif>>
 <<endif>>
 ===
 title: windowNailingSheetsFailure
 ---
-[nomarkup][You smooth out the sheet and pin it to the wall with a few thumbtacks. You step back and inspect your handiwork. The sheet holds for a few seconds before fluttering to the ground with the bent tacks. A teddy bear stares mournfully up at you from the ground. The cracks of light are growing brighter. You need to find something stronger to hold up the sheet before you turn into a charcoal briquette.][/nomarkup] #failure
+[nomarkup][You smooth out the sheet and pin it to the wall with a few thumbtacks. You step back and inspect your handiwork. The sheet holds for a few seconds before fluttering to the ground with the bent tacks. A teddy bear stares mournfully up at you from the ground. The cracks of light are growing brighter. You need to find something stronger to hold up the sheet before you turn into a charcoal briquette.][/nomarkup] #failure #line:0da4bc2 
 <<jump unsuccesfulProofing>>
 ===
 title: unsuccesfulProofing
 ---
 <<if $attemptsCounter ==1>>
-    [nomarkup][This will not be enough. The good news is that you still can try again. Maybe something else will work?][/nomarkup]
+    [nomarkup][This will not be enough. The good news is that you still can try again. Maybe something else will work?][/nomarkup] #line:0d36c2f 
     <<jump windowOptions>>
 <<else>>
-    [nomarkup][Dawn gets nearer and nearer. You start to feel a tiredness seeping into your mind and body and you can't shake the feeling off. It's like you haven't slept in months and lack of energy is getting to you. You failed to light-proof the window, but you feel unable to do anything else either.][/nomarkup]
+    [nomarkup][Dawn gets nearer and nearer. You start to feel a tiredness seeping into your mind and body and you can't shake the feeling off. It's like you haven't slept in months and lack of energy is getting to you. You failed to light-proof the window, but you feel unable to do anything else either.][/nomarkup] #line:037387a 
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
-        -> {$pcName}: Why... do I feel... so tired?
-        {$anastasia}: It's... normal... it's the sun. We'll go into Torpor in... several minutes... we... need to run... into the bathroom, quick, before... you drop... onto the ground.
+        -> {$pcName}: Why... do I feel... so tired? #line:07eb374 
+        {$anastasia}: It's... normal... it's the sun. We'll go into Torpor in... several minutes... we... need to run... into the bathroom, quick, before... you drop... onto the ground. #line:06a2e6b 
     <<endif>>
 <<endif>>
 <<jump proofingObjectiveFailed>>
 ===
 title: windowHaveSheetsAndTape
 ---
-[nomarkup][With duct tape in hand you'll be able to stick the material to the wall. These can tape the kids and repair nearly everything. So why not stick something to the wall?][/nomarkup]
+[nomarkup][With duct tape in hand you'll be able to stick the material to the wall. These can tape the kids and repair nearly everything. So why not stick something to the wall?][/nomarkup] #line:05d613e 
 <<if GetHasItem("IT_Q_PIZZABOXES")>>
-    -> [nomarkup][Tape the cardboard to the window.] (Resolve + Craft)[/nomarkup]
+    -> [nomarkup][Tape the cardboard to the window.] (Resolve + Craft)[/nomarkup] #line:0ceb501 
     <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<RemoveItem "IT_Q_PIZZABOXES">>
         <<if Roll("Resolve","Craft") >=1>>
@@ -219,7 +219,7 @@ title: windowHaveSheetsAndTape
         <<endif>>
 <<endif>>
 <<if GetHasItem("IT_Q_SHEETS") or GetHasItem("IT_Q_SHOWERCURTAIN")>>
-    -> [nomarkup][Tape the material to the wall.] (Dexterity + Athletics)[/nomarkup]
+    -> [nomarkup][Tape the material to the wall.] (Dexterity + Athletics)[/nomarkup] #line:0ef4827 
     <<set $attemptsCounter to ($attemptsCounter + 1)>>
     <<if GetHasItem("IT_Q_SHEETS")>>
         <<RemoveItem "IT_Q_SHEETS">>
@@ -241,51 +241,51 @@ title: windowHaveSheetsAndTape
 title: windowTapingSheetsSuccess
 ---
 <<set $windowSheets to true>>
-[nomarkup][You smooth out the folded sheet and tape it in place before taking a step back to admire your handiwork. This task required some acrobatics, but you managed to go through such a trivial obstacle. So far so good. Maybe you won't burst into flames after all. The smiling teddy bears seem to agree with you.][/nomarkup] #success
+[nomarkup][You smooth out the folded sheet and tape it in place before taking a step back to admire your handiwork. This task required some acrobatics, but you managed to go through such a trivial obstacle. So far so good. Maybe you won't burst into flames after all. The smiling teddy bears seem to agree with you.][/nomarkup] #success #line:0a7cc3e 
 <<jump succesfulProofing>>
 ===
 title: windowTapingSheetsFailure
 ---
-[nomarkup][You smooth out the sheet and tape it to the wall sometimes taping yourself to the wall. You step back and inspect your handiwork. The sheet holds for a few seconds before fluttering to the ground with the bent tacks. A teddy bear stares mournfully up at you from the ground. The cracks of light are growing brighter. You need to find something stronger to hold up the sheet before you turn into a charcoal briquette.][/nomarkup] #failure
+[nomarkup][You smooth out the sheet and tape it to the wall sometimes taping yourself to the wall. You step back and inspect your handiwork. The sheet holds for a few seconds before fluttering to the ground with the bent tacks. A teddy bear stares mournfully up at you from the ground. The cracks of light are growing brighter. You need to find something stronger to hold up the sheet before you turn into a charcoal briquette.][/nomarkup] #failure #line:0579580 
 <<jump unsuccesfulProofing>>
 ===
 title: windowTapingCurtainSuccess
 ---
 <<if $curtainRipped == 0>>
 <<set $windowCurtain to true>>
-    [nomarkup][You remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the edges of the curtain before taping it to the wall.][/nomarkup] #success
+    [nomarkup][You remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the edges of the curtain before taping it to the wall.][/nomarkup] #success #line:07b02cf 
 <<else>>
-    [nomarkup][The curtain has some holes in it, because of your botched attempt to get it off from the railing, but you remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the curtain before taping it to cover the window.][/nomarkup] #success
+    [nomarkup][The curtain has some holes in it, because of your botched attempt to get it off from the railing, but you remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the curtain before taping it to cover the window.][/nomarkup] #success #line:03565bd 
 <<endif>>
 <<jump successfulProofing>>
 ===
 title: windowTapingCurtainFailure
 ---
 <<if $curtainRipped == 0>>
-    [nomarkup][Despite your best efforts the curtain won't stick to the tape. Pacing back and forth, you search the apartment for a solution as the sun creeps closer to the horizon.][/nomarkup] #failure
+    [nomarkup][Despite your best efforts the curtain won't stick to the tape. Pacing back and forth, you search the apartment for a solution as the sun creeps closer to the horizon.][/nomarkup] #failure #line:0056288 
 <<else>>
-    [nomarkup][You remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the edges of the curtain before taping it to the wall only to see that you forgot about holes you've made in it. You're not sure if the amount of tape you have will be enough and removing the one you already used will make it ineffective.][/nomarkup] #failure
+    [nomarkup][You remember reading something about duct tape not sticking to wet surfaces. Grabbing a towel from the kitchen, you dry the edges of the curtain before taping it to the wall only to see that you forgot about holes you've made in it. You're not sure if the amount of tape you have will be enough and removing the one you already used will make it ineffective.][/nomarkup] #failure #line:09f1900 
 <<endif>>
 <<jump unsuccesfulProofing>>
 ===
 title: windowTapingCardboardSuccess
 ---
 <<set $windowBoxes to true>>
-[nomarkup][You take all the old card boxes of pizza you have in your apartment. It appears there are quite a few of them - enough to cover your window if you unfold and prepare them right. You rip some so they fit as they should, covering it entirely. Sometimes you have to use scissors or a knife to cut them and remember to do it along the fibers but in the end, you're really satisfied with what you created.][/nomarkup] #success
+[nomarkup][You take all the old card boxes of pizza you have in your apartment. It appears there are quite a few of them - enough to cover your window if you unfold and prepare them right. You rip some so they fit as they should, covering it entirely. Sometimes you have to use scissors or a knife to cut them and remember to do it along the fibers but in the end, you're really satisfied with what you created.][/nomarkup] #success #line:0391cc0 
 <<jump successfulProofing>>
 ===
 title: windowTapingCardboardFailure
 ---
-[nomarkup][You take all the old card boxes of pizza you have in your apartment. It appears there are quite a few of them - enough to cover your window if you unfold and prepare them right. You rip some so they fit as they should, covering it entirely. Sometimes you have to use scissors or a knife to cut them. But it appears that this handiwork is too much for you. Some of the boxes are destroyed along the way making them unusable. Not enough is left to cover the entire window.][/nomarkup] #failure
+[nomarkup][You take all the old card boxes of pizza you have in your apartment. It appears there are quite a few of them - enough to cover your window if you unfold and prepare them right. You rip some so they fit as they should, covering it entirely. Sometimes you have to use scissors or a knife to cut them. But it appears that this handiwork is too much for you. Some of the boxes are destroyed along the way making them unusable. Not enough is left to cover the entire window.][/nomarkup] #failure #line:0f3bd46 
 <<jump unsuccesfulProofing>>
 ===
 title: windowUseFurniture
 ---
-[nomarkup][You look around for suitable furniture. Something that will cover the window. It won't be ideal, but it has to suffice. The first that comes to your mind is your clunky fridge. The second one is the bookcase. In the case of the fridge, it should be easy - it's empty - so you don't risk if something will fall out. It's just pretty heavy. The bookcase is lighter, but you don't have the time to put everything down on the shelves. And you're sentimental about some trinkets you've collected and placed on it.][/nomarkup]
+[nomarkup][You look around for suitable furniture. Something that will cover the window. It won't be ideal, but it has to suffice. The first that comes to your mind is your clunky fridge. The second one is the bookcase. In the case of the fridge, it should be easy - it's empty - so you don't risk if something will fall out. It's just pretty heavy. The bookcase is lighter, but you don't have the time to put everything down on the shelves. And you're sentimental about some trinkets you've collected and placed on it.][/nomarkup] #line:0cee63e 
 <<set $attemptsCounter to ($attemptsCounter + 1)>>
--> [nomarkup][Move the fridge.] (Strenght + Athletics)[/nomarkup] <<if visited("windowMoveFridgeRoll") == false>>
+-> [nomarkup][Move the fridge.] (Strenght + Athletics)[/nomarkup] <<if CustomVisited("windowMoveFridgeRoll") == false>> #line:0ccbe95 
     <<jump windowMoveFridgeRoll>>
--> [nomarkup][Move the bookcase.] (Dexterity + Athletics)[/nomarkup] <<if visited("windowMoveBookcaseRoll") == false>>
+-> [nomarkup][Move the bookcase.] (Dexterity + Athletics)[/nomarkup] <<if CustomVisited("windowMoveBookcaseRoll") == false>> #line:0d3425d 
     <<jump windowMoveBookcaseRoll>>
 ===
 title: windowMoveFridgeRoll
@@ -303,22 +303,22 @@ title: windowMoveFridgeRoll
 title: windowMoveFridgeSuccess
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    [nomarkup][With Anastasia's help you are able to push the fridge from its normal spot to the window. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success
+    [nomarkup][With Anastasia's help you are able to push the fridge from its normal spot to the window. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success #line:081418f 
 <<elseif GetCharacterDisciplineRank($pcName,"POTENCE") > 0>>
-    [nomarkup][By pushing the fridge alone you discovered that you have much more strength than you used to. It certainly helped a lot. You are able to push the fridge from its normal spot to the window. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success
+    [nomarkup][By pushing the fridge alone you discovered that you have much more strength than you used to. It certainly helped a lot. You are able to push the fridge from its normal spot to the window. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success #line:078120d 
 <<else>>
-    [nomarkup][Fridge is stubborn, but you don't get tired either. Finally, it goes into a new place encouraged by you. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success
+    [nomarkup][Fridge is stubborn, but you don't get tired either. Finally, it goes into a new place encouraged by you. Aside from opening its doors, it fits perfectly - just enough to cover the window.][/nomarkup] #success #line:08abeea 
 <<endif>>
 <<jump successfulProofing>>
 ===
 title: windowMoveFridgeFailure
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    [nomarkup][Even with Anastasia's help you are unable to push the fridge from its normal spot to the window. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure
+    [nomarkup][Even with Anastasia's help you are unable to push the fridge from its normal spot to the window. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure #line:0fa8c31 
 <<elseif GetCharacterDisciplineRank($pcName,"POTENCE") > 0>>
-    [nomarkup][Even with unnatural strength you feel in your muscles you are unable to push the fridge from its normal spot to the window. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure
+    [nomarkup][Even with unnatural strength you feel in your muscles you are unable to push the fridge from its normal spot to the window. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure #line:09dd844 
 <<else>>
-    [nomarkup][Moving that fridge is a really tedious task. Especially because it is so clunky and you don't have a good spot to grab it with a sure grip. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure
+    [nomarkup][Moving that fridge is a really tedious task. Especially because it is so clunky and you don't have a good spot to grab it with a sure grip. When you were halfway through it tipped over and made a lot of noise definitely breaking in the process. Not only it is unusable now, but also its doors went out of the hinges. You will be unable to cover the entire window with it.][/nomarkup] #failure #line:0ad4e18 
 <<endif>>
 <<jump unsuccessfulProofing>>
 ===
@@ -332,11 +332,11 @@ title: windowMoveBookcaseRoll
 ===
 title: windowMoveBookcaseSuccess
 ---
-[nomarkup][You get the file cabinet out of the way and try to gently push the bookcase. It takes some patience and balancing - especially when the wall changes angle - but without a bigger issue you managed to push the bookcase into its new place without any major accidents. You should be safe from the sun.][/nomarkup] #success
+[nomarkup][You get the file cabinet out of the way and try to gently push the bookcase. It takes some patience and balancing - especially when the wall changes angle - but without a bigger issue you managed to push the bookcase into its new place without any major accidents. You should be safe from the sun.][/nomarkup] #success #line:090160b 
 <<jump successfulProofing>>
 ===
 title: windowMoveBookcaseFailure
 ---
-[nomarkup][You try, and try and try, but the wooden furniture is too stubborn. Finally, you just hit it so hard it tipped over and everything it contained landed on the floor along with the bookcase itself. You tried to make it stand again, but the impact damaged the pegs that held it together. Looks like the only place it belongs now is trash.][/nomarkup]
+[nomarkup][You try, and try and try, but the wooden furniture is too stubborn. Finally, you just hit it so hard it tipped over and everything it contained landed on the floor along with the bookcase itself. You tried to make it stand again, but the impact damaged the pegs that held it together. Looks like the only place it belongs now is trash.][/nomarkup] #line:02bb55a 
 <<jump unsuccesfulProofing>>
 ===

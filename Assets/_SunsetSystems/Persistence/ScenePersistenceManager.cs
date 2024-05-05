@@ -1,7 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CleverCrow.Fluid.UniqueIds;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace SunsetSystems.Persistence
@@ -9,18 +12,23 @@ namespace SunsetSystems.Persistence
     [RequireComponent(typeof(UniqueId))]
     public class ScenePersistenceManager : SerializedMonoBehaviour, ISaveable
     {
-        [ReadOnly, ShowInInspector]
-        private HashSet<IPersistentObject> persistentEntitiesSet = new();
         [SerializeField, ReadOnly]
         private UniqueId _unique;
+        [ReadOnly, SerializeField]
+        private HashSet<IPersistentObject> persistentEntitiesSet = new();
 
         public static ScenePersistenceManager Instance { get; private set; }
 
         public string DataKey => _unique.Id;
 
+        [Button("Force Validate")]
         private void OnValidate()
         {
-            _unique ??= GetComponent<UniqueId>();
+            _unique = _unique != null ? _unique : GetComponent<UniqueId>();
+            persistentEntitiesSet ??= new();
+            var persistentSceneObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IPersistentObject>();
+            persistentEntitiesSet.AddRange(persistentSceneObjects);
+            persistentEntitiesSet.RemoveWhere(element => element == null);
         }
 
         private void Awake()
@@ -29,7 +37,6 @@ namespace SunsetSystems.Persistence
             {
                 Instance = this;
                 _unique ??= GetComponent<UniqueId>();
-                persistentEntitiesSet = new();
             }
             else
             {
@@ -54,6 +61,16 @@ namespace SunsetSystems.Persistence
             Dictionary<string, object> persistenceData = new();
             foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
             {
+                if (persistentEntity == null && string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
+                {
+                    Debug.LogError($"Tried to save a null entity or entity has a null/whitespace ID!");
+                    continue;
+                }   
+                if (persistentEntity.EnablePersistence is false)
+                {
+                    Debug.Log($"Persistence disabled for entity {persistentEntity}! Skipping...");
+                    continue;
+                }
                 if (persistenceData.TryAdd(persistentEntity.PersistenceID, persistentEntity.GetPersistenceData()) == false)
                 {
                     Debug.LogError($"Persistence data dictionary already contains key for {persistentEntity}! Key: {persistentEntity.PersistenceID}");
@@ -61,8 +78,6 @@ namespace SunsetSystems.Persistence
                 }
             }
             data.PersistentData = persistenceData;
-            if (data.PersistentData == null)
-                throw new NullReferenceException("FOO");
             return data;
         }
 
@@ -72,37 +87,69 @@ namespace SunsetSystems.Persistence
             {
                 foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
                 {
-                    if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
-                        persistentEntity.InjectPersistenceData(entityData);
+                    if (persistentEntity == null || string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
+                    {
+                        Debug.LogWarning($"Encountered a null persistent entity or persistent entity with invalid persitence id! {persistentEntity}");
+                        continue;
+                    }
+
+                    try
+                    {
+                        InjectPersistentData(persistenceData, persistentEntity);
+                    }
+                    catch
+                    {
+                        float retryAfterTime = 10f;
+                        Debug.LogException(new InvalidOperationException($"Injecting data into {persistentEntity} failed! Retrying injection in {Mathf.RoundToInt(retryAfterTime)} seconds!"));
+                        StartCoroutine(RetryInjectionInTime(retryAfterTime));
+
+                        IEnumerator RetryInjectionInTime(float time)
+                        {
+                            float timeElapsed = 0f;
+                            while (timeElapsed < time)
+                            {
+                                timeElapsed += Time.deltaTime;
+                                yield return null;
+                            }
+                            Debug.Log($"Retrying injection for object {persistentEntity}!");
+                            try
+                            {
+                                InjectPersistentData(persistenceData, persistentEntity);
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.LogError($"Data injection retry for {persistentEntity} failed due to exception {e}! WTF?!");
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        public void Register(IPersistentObject persistentEntity)
+        private static void InjectPersistentData(ScenePersistenceData persistenceData, IPersistentObject persistentEntity)
         {
-            try
+            if (persistentEntity.EnablePersistence is false)
             {
-                _ = persistentEntity.PersistenceID;
+                Debug.Log($"Persistence is disabled for entity {persistentEntity}! Continuing...");
+                return;
             }
-            catch (NullReferenceException e)
-            {
-                Debug.LogException(e);
-            }
-            finally
-            {
-                persistentEntitiesSet.Add(persistentEntity);
-            }
-        }
 
-        public void Unregister(IPersistentObject persistentEntity)
-        {
-            persistentEntitiesSet.Remove(persistentEntity);
+            if (persistenceData.PersistentData.TryGetValue(persistentEntity.PersistenceID, out object entityData))
+            {
+                persistentEntity.InjectPersistenceData(entityData);
+                Debug.Log($"Successfuly injected persistence data into {persistentEntity}!");
+            }
         }
 
         [Serializable]
         public class ScenePersistenceData : SaveData
         {
             public Dictionary<string, object> PersistentData = new();
+
+            public ScenePersistenceData()
+            {
+                PersistentData = new();
+            }
         }
     }
 }

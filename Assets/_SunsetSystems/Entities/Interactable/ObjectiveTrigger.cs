@@ -18,9 +18,9 @@ namespace SunsetSystems.Entities.Interactable
             if (_objective != null)
             {
                 _objective.OnObjectiveActive -= OnObjectiveActive;
-                _objective.OnObjectiveInactive -= OnObjectiveInactive;
+                _objective.OnObjectiveFailed -= OnObjectiveInactive;
                 _objective.OnObjectiveActive += OnObjectiveActive;
-                _objective.OnObjectiveInactive += OnObjectiveInactive;
+                _objective.OnObjectiveFailed += OnObjectiveInactive;
             }
         }
 
@@ -29,7 +29,7 @@ namespace SunsetSystems.Entities.Interactable
             if (_objective != null)
             {
                 _objective.OnObjectiveActive -= OnObjectiveActive;
-                _objective.OnObjectiveInactive -= OnObjectiveInactive;
+                _objective.OnObjectiveFailed -= OnObjectiveInactive;
             }
         }
 

@@ -47,16 +47,34 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        public bool EquipItem(EquipmentSlotID slotID, IEquipableItem item)
+        public EquipmentSlotID GetSlotForItem(IEquipableItem item)
         {
+            if (item.ItemCategory == ItemCategory.WEAPON)
+            {
+                if (EquipmentSlots[EquipmentSlotID.PrimaryWeapon].GetEquippedItem().IsDefaultItem)
+                    return EquipmentSlotID.PrimaryWeapon;
+                if (EquipmentSlots[EquipmentSlotID.SecondaryWeapon].GetEquippedItem().IsDefaultItem)
+                    return EquipmentSlotID.SecondaryWeapon;
+            }
+            foreach (var slotID in EquipmentSlots.Keys)
+            {
+                if (ValidateItem(slotID, item) && EquipmentSlots[slotID].GetEquippedItem().CanBeRemoved)
+                    return slotID;
+            }
+            return EquipmentSlotID.Invalid;
+        }
+
+        public bool EquipItem(EquipmentSlotID slotID, IEquipableItem item, out IEquipableItem previouslyEquipped)
+        {
+            previouslyEquipped = default;
             if (ValidateItem(slotID, item))
             {
-                if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+                if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot) && slot.GetEquippedItem().CanBeRemoved)
                 {
-                    if (slot.TryEquipItem(item, out var unequipped))
+                    if (slot.TryEquipItem(item, out previouslyEquipped))
                     {
-                        if (unequipped != null && unequipped.ReadableID != slot.DefaultItemID)
-                            ItemUnequipped?.InvokeSafe(unequipped);
+                        if (previouslyEquipped != null && previouslyEquipped.ReadableID != slot.DefaultItemID)
+                            ItemUnequipped?.InvokeSafe(previouslyEquipped);
                         ItemEquipped?.InvokeSafe(item);
                         return true;
                     }
@@ -65,11 +83,12 @@ namespace SunsetSystems.Entities.Characters
             return false;
         }
 
-        public bool UnequipItem(EquipmentSlotID slotID)
+        public bool UnequipItem(EquipmentSlotID slotID, out IEquipableItem unequipped)
         {
+            unequipped = default;
             if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
             {
-                return slot.TryUnequipItem(out var _);
+                return slot.TryUnequipItem(out unequipped);
             }
             return false;
         }

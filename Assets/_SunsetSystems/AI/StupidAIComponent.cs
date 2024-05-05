@@ -16,7 +16,7 @@ namespace SunsetSystems.AI
         private IDecisionContext context;
         [ShowInInspector, ReadOnly]
         private bool performingLogic = false;
-
+        [ShowInInspector]
         private EntityAction performedAction;
 
         private void OnEnable()
@@ -67,6 +67,8 @@ namespace SunsetSystems.AI
                         target = FindGridPositionAdjacentToClosestEnemy(grid, currentGridPosition);
                         if (target != null)
                             context.Owner.MoveToGridPosition(target.GridPosition);
+                        else
+                            context.Owner.SignalEndTurn();
                         break;
                     case Inventory.WeaponType.Ranged:
                         target = FindRandomGridPositionInMovementRange(grid, currentGridPosition);
@@ -95,6 +97,10 @@ namespace SunsetSystems.AI
                     context.Owner.AttackCreatureUsingCurrentWeapon(target);
                 else
                     context.Owner.SignalEndTurn();
+            }
+            else
+            {
+                context.Owner.SignalEndTurn();
             }
         }
 

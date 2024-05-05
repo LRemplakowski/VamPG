@@ -71,13 +71,14 @@ namespace SunsetSystems.Core.SceneLoading
             var saveMetaData = SaveLoadManager.GetSaveMetaData(saveID);
             await DoSceneLoading(saveMetaData.LevelLoadingData);
             CurrentLoadedLevel = saveMetaData.LevelLoadingData;
-            await new WaitForUpdate();
+            await new WaitForSeconds(1f);
+            await new WaitUntil(HasGeneratorProcessedAllUMA);
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
-            await new WaitForSeconds(0.1f);
+            await Task.Delay(1000);
             OnLevelLoadEnd?.Invoke();
-            await new WaitUntil(() => UMAGeneratorBase.FindInstance().IsIdle());
+            await new WaitUntil(HasGeneratorProcessedAllUMA);
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
             loadingScreenUI.DisableLoadingScreen();

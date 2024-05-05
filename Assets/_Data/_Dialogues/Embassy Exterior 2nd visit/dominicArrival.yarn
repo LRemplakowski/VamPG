@@ -202,9 +202,9 @@ title: dianaGrappleSuccess
 position: 357,1380
 --- 
 [nomarkup][Quick as a whip you lash out and grab Diana hauling her against the wall][/nomarkup] #success #line:007068a 
-<<if visited("theOfferStarts") ==  true>>
+<<if CustomVisited("theOfferStarts") ==  true>>
     -> {$pcName}: You approached me in that bar because Lucia told you to. #line:066cbf2 
-    <<if visited("leaveAlone") == true>>
+    <<if CustomVisited("leaveAlone") == true>>
         [nomarkup][You try to recall what happened yesterday evening, hazy memories slowly resurface in your brain fueling your rage.][/nomarkup] #line:049a5e1 
         <<if $numberOfDrinks >1>>
             -> {$pcName}: But I didn't fall for it. You weren't good enough for Lucia, weren't good enough for me. #line:04bef90 
@@ -251,9 +251,9 @@ title: empathyCompSuccess
 position: 426,1960
 ---
 [nomarkup][You feel Diana stiffen slightly under your arm and she uses her shoulder to curl away from Anastasia and cover herself. Looking over to Kieran you see that his eyes have gone very vacant as he stares somewhere over by Dominic. His face is completely devoid of anything that might register as emotive.][/nomarkup] #success #line:0de6b2a 
-<<if visited("theOfferStarts") ==  true>>
+<<if CustomVisited("theOfferStarts") ==  true>>
 -> {$pcName}: Do you at least have something to say for yourself? #line:086e09f 
-    <<if visited("leaveAlone") == true>>
+    <<if CustomVisited("leaveAlone") == true>>
         [nomarkup][You try to recall what happened yesterday evening, hazy memories slowly resurface in your brain fueling your rage.][/nomarkup] #line:08a2a6f 
             <<if $numberOfDrinks >1>>
                 {$diana}: No. Not to you. #line:02f182f 
@@ -348,9 +348,9 @@ title: intimidateDianaSuccess
 position: 509,1097
 ---
 [nomarkup][You lean in close you curl your lip and lean in to whisper close in her ear, something that Lucia insisted and doing to you and likely did to Diana as well.][/nomarkup] #success #line:01d1b2a 
-<<if visited("theOfferStarts") ==  true>>
+<<if CustomVisited("theOfferStarts") ==  true>>
 -> {$pcName}: Do you at least have something to say for yourself? #line:05f48ab 
-    <<if visited("leaveAlone") == true>>
+    <<if CustomVisited("leaveAlone") == true>>
         [nomarkup][You try to recall what happened yesterday evening, hazy memories slowly resurface in your brain fueling your rage.][/nomarkup] #line:0e28538 
             <<if $numberOfDrinks >1>>
                 {$diana}: You're nothing. You couldn't even convince me to take a single drink. #line:0a0fdf4 

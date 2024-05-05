@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Redcode.Awaiting;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
+using SunsetSystems.Core;
 using SunsetSystems.Data;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Creatures;
 using SunsetSystems.Persistence;
@@ -79,6 +79,19 @@ namespace SunsetSystems.Party
         protected void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
+        }
+
+        public void StopTheParty()
+        {
+            foreach (var member in ActiveParty)
+            {
+                member.PeekCurrentAction.Abort();
+            }
+        }
+
+        public void OrderMoveMainCharacter(Transform destination)
+        {
+            MainCharacter.PerformAction(new Move(MainCharacter, destination.position));
         }
 
         public ICreature GetPartyMemberByID(string key)
@@ -222,6 +235,11 @@ namespace SunsetSystems.Party
                 CreatureFactory.Instance.DestroyCreature(memberInstance);
             }
             return result;
+        }
+
+        public bool TryRemoveMemberFromActiveRoster(ICreature partyMember)
+        {
+            return TryRemoveMemberFromActiveRoster(partyMember.References.CreatureData.DatabaseID);
         }
 
         public object GetSaveData()

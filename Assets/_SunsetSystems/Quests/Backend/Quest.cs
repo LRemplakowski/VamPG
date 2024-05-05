@@ -1,7 +1,7 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.UI.Utils;
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.UI.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -27,6 +27,7 @@ namespace SunsetSystems.Journal
 
         public static event Action<Quest> QuestStarted;
         public static event Action<Quest> QuestCompleted;
+        public static event Action<Quest> QuestFailed;
         public static event Action<Quest, Objective> ObjectiveCompleted;
         public static event Action<Quest, Objective> ObjectiveFailed;
 
@@ -72,19 +73,21 @@ namespace SunsetSystems.Journal
             QuestStarted?.Invoke(this);
             foreach (Objective o in InitialObjectives)
             {
-                o.OnObjectiveCompleted += OnObjectiveChanged;
+                o.OnObjectiveCompleted += OnObjectiveCompleted;
+                o.OnObjectiveFailed += OnObjectiveFailed;
+                o.OnObjectiveCanceled += OnObjectiveCanceled;
                 o.MakeActive();
             }
         }
 
         //TODO Rework this to sub recursively in quest begin
-        private void OnObjectiveChanged(Objective objective)
+        private void OnObjectiveCompleted(Objective objective)
         {
             Debug.Log($"Completed objective {objective.ReadableID}!");
             ObjectiveCompleted?.Invoke(this, objective);
-            objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
-            objective.ObjectivesToCancelOnCompletion.ForEach(o => o.MakeInactive());
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.ObjectivesToCancelOnCompletion.ForEach(o => o.Cancel());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
                 Debug.Log($"Completed quest {Name}!");
@@ -93,11 +96,11 @@ namespace SunsetSystems.Journal
             else
             {
                 Debug.Log("Tracking new set of objectives!");
-                foreach (UnityEngine.Object o in objective.NextObjectives)
+                foreach (Objective newObjective in objective.NextObjectives)
                 {
-                    Objective ob = o as Objective;
-                    ob.OnObjectiveCompleted += OnObjectiveChanged;
-                    ob.OnObjectiveInactive += OnObjectiveDeactivated;
+                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
+                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
+                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
                 }
             }
         }
@@ -106,22 +109,51 @@ namespace SunsetSystems.Journal
         {
             if (objective == null)
                 return;
-            objective.OnObjectiveCompleted += OnObjectiveChanged;
-            objective.OnObjectiveInactive += OnObjectiveDeactivated;
+            objective.OnObjectiveCompleted += OnObjectiveCompleted;
+            objective.OnObjectiveFailed += OnObjectiveFailed;
+            objective.OnObjectiveCanceled += OnObjectiveCanceled;
         }
 
-        private void OnObjectiveDeactivated(Objective objective)
+        private void OnObjectiveFailed(Objective objective)
         {
-            objective.OnObjectiveCompleted -= OnObjectiveChanged;
-            objective.OnObjectiveInactive -= OnObjectiveDeactivated;
             ObjectiveFailed?.Invoke(this, objective);
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
+            objective.ObjectivesToCancelOnFail.ForEach(o => o.Cancel());
+            if (objective.NextObjectivesOnFailed == null || objective.NextObjectivesOnFailed.Count <= 0)
+            {
+                Debug.Log($"Failed quest {ReadableID}!");
+                Fail();
+            }
+            else
+            {
+                foreach (Objective newObjective in objective.NextObjectivesOnFailed)
+                {
+                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
+                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
+                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
+                }
+            }
+        }
+
+        private void OnObjectiveCanceled(Objective objective)
+        {
+            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
         }
 
         public void Complete()
         {
-            Rewards.ForEach(rewardData => (rewardData.Reward as IRewardable).ApplyReward(rewardData.Amount));
+            Rewards.ForEach(rewardData => rewardData.Reward.ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
             _startQuestsOnCompletion.ForEach(q => QuestJournal.Instance.BeginQuest(q));
+        }
+
+        public void Fail()
+        {
+            QuestFailed?.Invoke(this);
         }
     }
 

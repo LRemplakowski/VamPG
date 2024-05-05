@@ -123,13 +123,21 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetCompanionInfluence")]
         public static int GetCompanionInfluence(string companionID)
         {
-            throw new NotImplementedException();
+            return 0;
         }
 
         [YarnFunction ("GetBloodPoints")]
         public static int GetBloodPoints(string characterID)
         {
-            throw new NotImplementedException();
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            {
+                var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
+                if (partyMember != null)
+                {
+                    return partyMember.References.StatsManager.Hunger.GetValue();
+                }
+            }
+            return 0;
         }
 
         [YarnFunction ("GetHasItem")]
@@ -170,6 +178,18 @@ namespace SunsetSystems.Dialogue
         public static int GetCharacterDisciplineRank(string characterID, string disciplineID)
         {
             return 0;
+        }
+
+        [YarnFunction("GetPartyHasDiscipline")]
+        public static bool GetParyHasDiscipline(string disciplineID)
+        {
+            return true;
+        }
+
+        [YarnFunction("CustomVisited")]
+        public static bool CustomVisited(string nodeID)
+        {
+            return DialogueHelper.VariableStorage.TryGetValue($"visited:{nodeID}", out bool visited) && visited;
         }
     }
 }

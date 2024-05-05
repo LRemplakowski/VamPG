@@ -6,7 +6,7 @@ position: -72,177
 {$diana}: I noticed it about a week ago, about half our books have been wrong for nearly eight months now. This arsehole clearly knew something, and these aren't the kind of people I want to fuck around with. And you're sure that this is where he is? #line:0e03cc4 
 -> {$pcName}: A lot of things have gone wrong for me lately but this isn't one of them. He's there. #line:0c2e7e6 
 {$diana}: What, had a bad evening? #line:09930eb 
--> {$pcName}: [You snort as you push open the door] The worst. #line:0ee6859 
+-> {$pcName}: [nomarkup][You snort as you push open the door][/nomarkup] The worst. #line:0ee6859 
 //PC comes out of the car with Diana//
 [nomarkup][Diana moves as if to get out as well and you hold a hand up to her through the window and shake your head. She'll only spook him, she nods to you and settles back down. Rubbing the back of her neck and looking down the alley. It smells distinctly of grim and tar, the scent coming on strong from in the alley, you can see dumpsters out back have been piled high with trash and Diego lights up a cigarette before shaking out the lighter.][/nomarkup] #line:05dada1 
 {$innerVoice}: Talk to him, gain his trust and lead him back to the van. Simple enough. [nomarkup][Your eyes soften a bit with a smile as you walk over, sitting on your hip as you force a sway into your step. The man looking up and catching you as you do.][/nomarkup] #line:0053a5d 
@@ -35,10 +35,10 @@ title: approachWithoutDiana
 ===
 title: interactions
 ---
-[nomarkup][The man is looking at you waiting.][/nomarkup]
--> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if visited("cigRoll") == false>> #line:06b4ac7 
+[nomarkup][The man is looking at you waiting.][/nomarkup] #line:0f0cb9d 
+-> {$pcName}: Can you spare a cigarette? (Manipulation + Etiquette) <<if CustomVisited("cigRoll") == false>> #line:06b4ac7 
     <<jump cigRoll>>
--> [nomarkup][Check him out.][/nomarkup] <<if visited("checkout") == false>> #line:0d46036 
+-> [nomarkup][Check him out.][/nomarkup] <<if CustomVisited("checkout") == false>> #line:0d46036 
     <<jump checkout>>
 -> [nomarkup][Confront Diego.][/nomarkup] #line:0795fa7 
     <<jump chase>>
@@ -51,17 +51,17 @@ title: cigRoll
     <<set $rollModifier to 1>>
     <<jump cigSuccess>>
 <<else>>
-    <<jump cigFailure>>
+    <<jump chaseOptions>>
 <<endif>>
 ===
 title: cigSuccess
 ---
 [nomarkup][He gets you a cig, lights it. This will buy some time. There is a wedding ring on his right hand.][/nomarkup] #success #line:0f37119 
--> {$pcName}: I'm Des, nice to meet you. <<if visited("introduction") == false>> #line:036f294 
+-> {$pcName}: I'm Des, nice to meet you. <<if CustomVisited("introduction") == false>> #line:036f294 
     <<jump introduction>>
--> {$pcName}: Are you married? I see a wedding ring on your finger. <<if visited("married") == false>> #line:0a38f95 
+-> {$pcName}: Are you married? I see a wedding ring on your finger. <<if CustomVisited("married") == false>> #line:0a38f95 
     <<jump married>>
--> {$pcName}: Nice scar. I bet it has a good story behind it. <<if visited("scar") == false>> #line:024876f 
+-> {$pcName}: Nice scar. I bet it has a good story behind it. <<if CustomVisited("scar") == false>> #line:024876f 
     <<jump scar>>
 <<jump interactions>>
 ===
@@ -110,9 +110,9 @@ title: chase
 ---
 [nomarkup][Your eyes scan along Diego and he watches you back, each of you trying to gauge the other's intent.][/nomarkup] #line:0552e80 
 {$diego}: Déjate de mamadas. I don't know if I like that look. #line:0da3675 
-<<if visited("checkout") == true>>
+<<if CustomVisited("checkout") == true>>
     [nomarkup][He came here unarmed, probably looking to feel disconnected to his job. Looking to have something to take his mind off his work.][/nomarkup] #line:0eed270 
-<<elseif visited("cigRoll") == true>>
+<<elseif CustomVisited("cigRoll") == true>>
     [nomarkup][Diego's lonely, he's looking for someone to empathize with him and then leave him alone to get his life together. As unlikely as that is to work.][/nomarkup] #line:03d8e10 
     -> {$pcName}: Do you want to spend the night with me? #line:0c8803b 
         <<jump lureDiego>>
@@ -134,7 +134,7 @@ title: lureDiego
     {$diego}: You've got this wicked look in your eye, thought you'd understand you know? #line:04755ca 
     -> {$pcName}: Sure, but all the other... I wouldn't have asked if you weren't into it. #line:0efbb28 
     {$diego}: [nomarkup][He nods a couple times and looks at the ground][nomarkup] It's sporting, you know? #line:051843e 
-    <<if visited("married") == true>>
+    <<if CustomVisited("married") == true>>
         {$diego}: But I'm never going to cheat on Elizabeth. I don't care if she never comes back to me, she's my lady. I'm not going to do that to her. #line:0fb531c 
         [nomarkup][You can't help but think about Arthur, hoping that he'll have that kind of devotion to you. It strikes you for a moment that you're in the same position as Diego, but unlike him if you can get the money Diana is offering you might have your Diego back.][/nomarkup] #line:0202e93 
         -> {$pcName}: Shit man. #line:015e93c 
@@ -157,7 +157,7 @@ title: cutToTheChase
 {$diego}: Is that what you wanted to ask me about morra? #line:042bb18 
 -> {$pcName}: No. No it isn't Diego. #line:0a3a728 
 {$diego}: [nomarkup][Diego sighs and looks down at his boots][/nomarkup] You sure it isn't Desiree? #line:09b1c6a 
-<<if visited("scar") == true>>
+<<if CustomVisited("scar") == true>>
     -> {$pcName}: First step on the way out is to clean up your debts Diego. You don't want this mess riding on Elizabeth's conscience. #line:0fe4f36 
     {$diego}: Don't say her name, don't do that to me. [nomarkup][He presses his hand against his eyes.][/nomarkup] #line:0278566 
 <<endif>>
@@ -203,7 +203,7 @@ title: dexChaseFailure
 [nomarkup][You reel back from the shock of the cigarette butt and jerk to avoid it even as it lands near you and not specifically at you. Putting to much power into the action you find yourself sprawled on your ass and by the time you look up - you see Diego has broken out into a sprint.][nomarkup] #failure #line:064459e 
 <<DealDamage $pcName 1>>
 [nomarkup][You look at a scrape on your hand with a grimace and stand up, leaping off your back foot to start chasing him.][/nomarkup] #line:0865a19
--> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup]
+-> [nomarkup][Try to tackle him.] (Stamina + Brawl)[/nomarkup] #line:06aa376 
 <<jump stamChaseRoll>>
 ===
 title: stamChaseRoll
@@ -222,11 +222,12 @@ title: stamChaseSuccess
 title: stamChaseFailure
 ---
 [nomarkup][You sprint after Diego as he collides off the Van, you hear Diana shout from inside and the sound of the passenger side door opening just as you dash past her, running Diego down as he tries to get out of the way and further down the back streets towards the main road. You gras his jacket and he slips out of it, finding yourself running after him with your arms full of leather. Diana's feet pounding behind you.][/nomarkup] #failure #line:0b64cec 
+<<jump theVan>>
 ===
 title: theVan
 ---
 //Diego is pushed into the van//
-[nomarkup][You look a little closer at the man who's been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You've been skimming the documents that you've been given and looked into Diego's background - a nobody. Got caught up in something he didn't understand; ultimately it's unlikely he'll walk away from this unscathed, but that isn't your problem.][/omarkup] #line:0c75ce4 
+[nomarkup][You look a little closer at the man who's been quiet since you dragged him into the van. Diana grabs his face to look at him, dragging Diego towards her whose face is pinched and sallow. You've been skimming the documents that you've been given and looked into Diego's background - a nobody. Got caught up in something he didn't understand; ultimately it's unlikely he'll walk away from this unscathed, but that isn't your problem.][/nomarkup] #line:0c75ce4 
 {$diana}: Where can we take him that'll be private? #line:05df103 
 -> {$pcName}: [nomarkup][You can feel the sigh building up in your chest.][/nomarkup] I know a place. #line:010d1be 
 [nomarkup][The van is a large black vehicle that has had its plates changed. Diana moves towards the driver's door and stops.][/nomarkup] #line:0c0a848 
@@ -247,11 +248,11 @@ title: theVanRide
 <<endif>>
 [nomarkup][You sit in the car with Diana as the city scrolls by. Giving her directions as she quietly watches the road. You can hear the soft breathing of the knocked-out Diego but you suspect he might have been given something since he's no longer resisting.][/nomarkup] #line:02b5dba 
 {$diana}: You know my boss speaks very highly of you. She said that you're the best investigator anyone's ever seen, gotta say glad you're on our side. #line:02e2d70 
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... validated.] #line:013b09d 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... validated.][/nomarkup] #line:013b09d 
     <<jump pcValidated>>
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... vindicated.] #line:0a4d926 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... vindicated.][/nomarkup] #line:0a4d926 
     <<jump pcVindicated>>
--> {$pcName}: Thanks I- [You look out at the road and can't help but feel... venerated.] #line:0658d29 
+-> {$pcName}: Thanks I- [nomarkup][You look out at the road and can't help but feel... venerated.][/nomarkup] #line:0658d29 
     <<jump pcVenerated>>
 ===
 title: pcValidated
@@ -287,6 +288,6 @@ title: pcVenerated
 ===
 title: wrapUpVan
 ---
-[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup]
+[nomarkup][Eventually you turn onto a familiar street and the desire to talk leaves you. You can feel there is only a few more turns before the grim task ahead of you must be done.][/nomarkup] #line:0ee0167 
 <<jump havenJobArrival>>
 ===

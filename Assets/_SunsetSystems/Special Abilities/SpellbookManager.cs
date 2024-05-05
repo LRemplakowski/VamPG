@@ -40,7 +40,7 @@ namespace SunsetSystems.Spellbook
 
         private void OnEnable()
         {
-            CombatManager.Instance.OnFullTurnCompleted += DecreaseCooldowns;
+            //CombatManager.Instance.OnFullTurnCompleted += DecreaseCooldowns;
         }
 
         private void Start()
@@ -50,7 +50,7 @@ namespace SunsetSystems.Spellbook
 
         private void OnDisable()
         {
-            CombatManager.Instance.OnFullTurnCompleted -= DecreaseCooldowns;
+            //CombatManager.Instance.OnFullTurnCompleted -= DecreaseCooldowns;
         }
 
         private void ApplyPasivePowers()

@@ -13,7 +13,7 @@ title: ignoredVan
 ---
 [nomarkup][The woman shoves the man into the back seat of her van and drives off.][/nomarkup] #line:05aa9ea 
 {$innerVoice}: He'll be fine. #line:00338ea 
-[nomarkup][You’re not so sure.][/nomarkup] #line:08e31dc 
+[nomarkup][You're not so sure.][/nomarkup] #line:08e31dc 
 <<FailObjective "Q_0P_NEVER_TRUST_WHITE_VAN" "O_0P_WHITE_VAN_HELP_THE_MAN">>
 ===
 title: approachKiddnaper
@@ -30,7 +30,7 @@ Soccer Mom: Can I help you? #line:07039b0
     [nomarkup][Suspicious, she looks over her shoulder the rest of her trek to her van.][/nomarkup] #line:011eb50 
 -> {$pcName}: Is he alright? (Wits + Awarness) #line:0d92186 
     <<if Roll("Wits","Awarness")>=2-$smileInsincere>>
-        [nomarkup][She’s jumpy and sweating bullets. Looking her over, you spy the shimmer of the gun she is holding to the man’s side.][/nomarkup] #success #line:0b3b1fb 
+        [nomarkup][She's jumpy and sweating bullets. Looking her over, you spy the shimmer of the gun she is holding to the man's side.][/nomarkup] #success #line:0b3b1fb 
         {$beast}: My, you are subtle as a bag of bricks. #line:08f5d2e 
     <<else>>
         {$pcName}: [nomarkup][You try to discern what the problem could be, but find yourself distracted by her horrible fashion choices.][/nomarkup] #failure #line:0a45fe8 

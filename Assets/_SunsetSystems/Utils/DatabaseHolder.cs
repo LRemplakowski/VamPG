@@ -19,6 +19,9 @@ namespace SunsetSystems.Utils.Database
             if (Instance == null)
             {
                 Instance = this;
+#if UNITY_EDITOR
+                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#endif
                 DontDestroyOnLoad(this);
             }
             else

@@ -34,7 +34,7 @@ namespace SunsetSystems.Inventory.UI
         public void OnClick()
         {
             Debug.Log("Container Entry clicked!");
-            InventoryManager.Instance.TransferItem(_storage, InventoryManager.PlayerInventory, _content);
+            InventoryManager.Instance.TransferItem(_storage, InventoryManager.Instance.PlayerInventory, _content);
             ContainerEntryDestroyed?.Invoke(this);
             Destroy(gameObject);
         }

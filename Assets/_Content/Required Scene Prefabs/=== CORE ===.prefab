@@ -69,9 +69,6 @@ MonoBehaviour:
     - _Target: {fileID: 8763309741657221742}
       _MethodName: MoveToLevelStartPosition
       _PersistentArguments: []
-    - _Target: {fileID: 5507004115440895947}
-      _MethodName: ClearWaypointOverride
-      _PersistentArguments: []
   OnLevelExit:
     _PersistentCalls: []
 --- !u!114 &7294060555853319670
@@ -182,6 +179,7 @@ MonoBehaviour:
       Data: 
   _creatureParent: {fileID: 375571750532069242}
   _defaultPartyLayer: Party Member
+  _forceSpawnPartyInStorage: 0
   _mainCharacterKey: 
   _activeCoterieMemberKeys: []
   _coterieMemberKeysCache: []
@@ -687,7 +685,6 @@ Transform:
   - {fileID: 9165693303196109145}
   - {fileID: 1535922929522897298}
   - {fileID: 8400243579288208860}
-  - {fileID: 7978280898801608711}
   m_Father: {fileID: 5684286085573570492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2866363236454183401
@@ -749,7 +746,7 @@ MonoBehaviour:
     - rid: 4472779642454933507
       type: {class: FullScreenCustomPass, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
-        m_Name: Custom Pass
+        m_Name: Highlight Renderers Fullscreen
         enabled: 1
         targetColorBuffer: 0
         targetDepthBuffer: 0
@@ -763,7 +760,7 @@ MonoBehaviour:
     - rid: 4472779642454933509
       type: {class: DrawRenderersCustomPass, ns: UnityEngine.Rendering.HighDefinition, asm: Unity.RenderPipelines.HighDefinition.Runtime}
       data:
-        m_Name: Custom Pass
+        m_Name: Highlight Renderers Opaque
         enabled: 1
         targetColorBuffer: 1
         targetDepthBuffer: 0
@@ -1930,51 +1927,6 @@ Transform:
   - {fileID: 3750713276213756390}
   m_Father: {fileID: 5684286085573570492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7604841543873156242
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7978280898801608711}
-  - component: {fileID: 5507004115440895947}
-  m_Layer: 0
-  m_Name: Waypoint Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7978280898801608711
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7604841543873156242}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1529408134919660166}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5507004115440895947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7604841543873156242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b734c00623d954741bf3b2f1d9a2d8d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultSceneWaypoint: {fileID: 0}
 --- !u!1 &8264853024507600422
 GameObject:
   m_ObjectHideFlags: 0
@@ -2275,11 +2227,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3506235010177551070, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000013355538
+      value: -0.000000013355532
       objectReference: {fileID: 0}
     - target: {fileID: 3506235010177551070, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.0000000077505184
+      value: 0.000000007750515
       objectReference: {fileID: 0}
     - target: {fileID: 4162656406322385771, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: _id
@@ -2287,15 +2239,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4817461888584228408, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.5019268
+      value: 0.50192684
       objectReference: {fileID: 0}
     - target: {fileID: 4817461888584228408, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000002441511
+      value: -0.000000018407567
       objectReference: {fileID: 0}
     - target: {fileID: 4817461888584228408, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.000000014168638
+      value: 0.000000010682324
       objectReference: {fileID: 0}
     - target: {fileID: 5270208337379138059, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2371,7 +2323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -17.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2379,7 +2331,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.3
+      value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2387,15 +2339,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.50192684
+      value: 0.5019268
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.000000018407558
+      value: -0.000000013355532
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000010682321
+      value: 0.000000007750515
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -1,6 +1,7 @@
 using System;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.Database;
+using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
@@ -37,7 +38,7 @@ namespace SunsetSystems.Dialogue
         {
             if (QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(readableQuestID, objectiveID, out Objective objective))
             {
-                objective.MakeInactive();
+                objective.Fail();
             }
             else
             {
@@ -111,20 +112,30 @@ namespace SunsetSystems.Dialogue
         public static void RemoveItem(string itemID)
         {
 
-            throw new NotImplementedException();
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out var item))
+            {
+                InventoryManager.Instance.TakeItemFromPlayer(item, 1);
+            }
 
         }
 
         [YarnCommand("DealDamage")]
         public static void DealDamage(string characterID, int damage, string damageType)
         {
-            throw new NotImplementedException();
+            Debug.LogError($"Deal that damage, dummy");
         }
 
         [YarnCommand("DecreaseWillpower")]
         public static void DecreaseWillpower(string characterID, int value)
         {
-            throw new NotImplementedException();
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            {
+                var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
+                if (partyMember != null)
+                {
+                    partyMember.References.StatsManager.Willpower.SuperficialDamage += value;
+                }
+            }
         }
     }
 }

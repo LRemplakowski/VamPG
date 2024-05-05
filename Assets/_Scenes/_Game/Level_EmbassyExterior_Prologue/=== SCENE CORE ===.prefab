@@ -130,7 +130,7 @@ MonoBehaviour:
       Data: 0
   <Faction>k__BackingField: 0
   _unique: {fileID: 4052116957183267434}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   triggerOnlyOnce: 1
   triggeredOnlyBySpecificObject: 0
   triggeringObject: {fileID: 0}
@@ -288,7 +288,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 9071439612605614377}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 2761288087773390320}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -479,7 +479,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 5020892430124901740}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 2151520885442104582}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -729,8 +729,12 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _fadeOutBeforeDialogue: 0
+  _fadeOutAfterDialogue: 0
   _fadeTimes: {x: 1, y: 1, z: 1}
   _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _onAfterDialogueFadeout:
     m_PersistentCalls:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 4fdb1a272f1fb0749aa1a21260de6d69, type: 3}
@@ -922,8 +926,12 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _fadeOutBeforeDialogue: 0
+  _fadeOutAfterDialogue: 0
   _fadeTimes: {x: 1, y: 1, z: 1}
   _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _onAfterDialogueFadeout:
     m_PersistentCalls:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 4fdb1a272f1fb0749aa1a21260de6d69, type: 3}
@@ -968,8 +976,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7700214392017002896}
-  - {fileID: 2819603835767264927}
   - {fileID: 6598720626429557649}
   - {fileID: 6516773305120121977}
   - {fileID: 1047836773948973988}
@@ -1503,7 +1509,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3301618758824461832}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.117016084, y: -0.7848764, z: 0.15616302, w: 0.5881237}
+  m_LocalRotation: {x: 0.1170161, y: -0.7848764, z: 0.15616304, w: 0.5881236}
   m_LocalPosition: {x: 14.561953, y: 0, z: 14.149014}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1730,7 +1736,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 513792861640893169}
+  m_Father: {fileID: 8949510978704507189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7626540437386973256
 MonoBehaviour:
@@ -1754,8 +1760,12 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _fadeOutBeforeDialogue: 0
+  _fadeOutAfterDialogue: 0
   _fadeTimes: {x: 1, y: 1, z: 1}
   _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _onAfterDialogueFadeout:
     m_PersistentCalls:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 4fdb1a272f1fb0749aa1a21260de6d69, type: 3}
@@ -1954,7 +1964,7 @@ MonoBehaviour:
       Data: 
   <Faction>k__BackingField: 0
   _unique: {fileID: 6974321106351870184}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 0}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -2212,7 +2222,7 @@ MonoBehaviour:
       Data: 1
   <Faction>k__BackingField: 0
   _unique: {fileID: 1258477889869921613}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 2611792287252184729}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -2463,7 +2473,7 @@ MonoBehaviour:
       Data: 0
   <Faction>k__BackingField: 0
   _unique: {fileID: 8229924666936559389}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   triggerOnlyOnce: 1
   triggeredOnlyBySpecificObject: 0
   triggeringObject: {fileID: 0}
@@ -2521,65 +2531,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6910163942486439595}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5953228204130869790
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7748189333567764054}
-  - component: {fileID: 943112841536983503}
-  - component: {fileID: 4464952919558100648}
-  m_Layer: 0
-  m_Name: ScenePersistenceManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7748189333567764054
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5953228204130869790}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2316374439347273328}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &943112841536983503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5953228204130869790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
---- !u!114 &4464952919558100648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5953228204130869790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1da8a155d0f71cd49827c35db9a8111a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unique: {fileID: 943112841536983503}
 --- !u!1 &6273161296589484461
 GameObject:
   m_ObjectHideFlags: 0
@@ -2605,12 +2556,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6273161296589484461}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 513792861640893169}
+  m_Father: {fileID: 8949510978704507189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3157709757044805337
 MonoBehaviour:
@@ -2634,8 +2585,12 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _fadeOutBeforeDialogue: 0
+  _fadeOutAfterDialogue: 0
   _fadeTimes: {x: 1, y: 1, z: 1}
   _onAfterFadeout:
+    m_PersistentCalls:
+      m_Calls: []
+  _onAfterDialogueFadeout:
     m_PersistentCalls:
       m_Calls: []
   _dialogueProject: {fileID: 7545569452688597077, guid: 4fdb1a272f1fb0749aa1a21260de6d69, type: 3}
@@ -3376,7 +3331,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7748189333567764054}
   - {fileID: 513792861640893169}
   - {fileID: 3690388424654314151}
   - {fileID: 2659312116816264101}
@@ -3386,6 +3340,7 @@ Transform:
   - {fileID: 9119916219854045139}
   - {fileID: 6428175982882152205}
   - {fileID: 8949510978704507189}
+  - {fileID: 608740341010829358}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8404914718585670729
@@ -3515,7 +3470,7 @@ MonoBehaviour:
       Data: 1
   <Faction>k__BackingField: 0
   _unique: {fileID: 4593981069990668484}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 4521343518889213420}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -3635,6 +3590,37 @@ MonoBehaviour:
   _fadeScreenTime: 0.5
   OnAfterFadeOut:
     _PersistentCalls: []
+--- !u!1 &8609099243513844432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608740341010829358}
+  m_Layer: 0
+  m_Name: === DIALOGUE EVENTS ===
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &608740341010829358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609099243513844432}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2316374439347273328}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8622618039681380178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3766,5 +3752,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3761759175524673040}
+  - {fileID: 2819603835767264927}
+  - {fileID: 7700214392017002896}
   m_Father: {fileID: 2316374439347273328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

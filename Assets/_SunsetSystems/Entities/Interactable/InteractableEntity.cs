@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Interactable
         {
             get
             {
-                return _interactable;
+                return _interactable && (!_interactableOnce || !_interacted) && gameObject.activeSelf;
             }
             set
             {
@@ -110,6 +110,8 @@ namespace SunsetSystems.Entities.Interactable
             }
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
             if (_references == null)
                 _references = GetComponent<IEntityReferences>();
             if (InteractionHandlers == null)
@@ -120,9 +122,8 @@ namespace SunsetSystems.Entities.Interactable
 
         }
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
             if (InteractionTransform == null)
             {
                 InteractionTransform = this.transform;
@@ -137,9 +138,12 @@ namespace SunsetSystems.Entities.Interactable
 
         private void OnEnable()
         {
-            InteractablesInScene.Add(this);
+            if (Interactable)
+                InteractablesInScene.Add(this);
             if (_linkedGameObject != null)
                 _linkedGameObject.SetActive(true);
+            if (_interactionCollider != null)
+                _interactionCollider.enabled = Interactable;
         }
 
         private void OnDisable()
@@ -149,9 +153,8 @@ namespace SunsetSystems.Entities.Interactable
                 _linkedGameObject.SetActive(false);
         }
 
-        protected override void Start()
+        protected virtual void Start()
         {
-            base.Start();
             if (_interactionCollider == null)
                 _interactionCollider = GetComponentInChildren<Collider>();
             if (_interactionCollider != null)
@@ -185,8 +188,8 @@ namespace SunsetSystems.Entities.Interactable
                 if (handler.HandleInteraction(TargetedBy))
                     result = true;
             }
-            TargetedBy = null;
             OnInteractionTriggered?.Invoke(result);
+            TargetedBy = null;
         }
 
         public void OnDrawGizmosSelected()
@@ -200,8 +203,6 @@ namespace SunsetSystems.Entities.Interactable
             if (_highlightHandler != null && Interactable)
                 _highlightHandler.SetHighlightActive(IsHoveredOver);
         }
-
-
 
         public void ResetInteraction()
         {
@@ -248,7 +249,7 @@ namespace SunsetSystems.Entities.Interactable
                 InteractionHandlers = new();
                 foreach (var handler in interactableEntity.InteractionHandlers)
                 {
-                    InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(handler as UnityEngine.Object));
+                    InteractionHandlers.Add(ES3Internal.ES3ReferenceMgrBase.Current.Get(handler as UnityEngine.Object));
                 }
             }
 

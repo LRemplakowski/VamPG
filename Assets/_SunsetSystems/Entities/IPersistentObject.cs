@@ -12,6 +12,8 @@ namespace SunsetSystems.Persistence
 
         string GameObjectName { get; }
 
+        bool EnablePersistence { get; }
+
         List<IPersistentComponent> PersistentComponents { get; }
     }
 }

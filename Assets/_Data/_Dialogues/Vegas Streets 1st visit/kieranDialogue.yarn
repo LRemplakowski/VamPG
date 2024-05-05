@@ -16,7 +16,7 @@ title: questionsKieran
 ---
 {$kieran}: [nomarkup][He sights.][/nomarkup] Okay. Just so long as it will help our investigation. Go ahead and ask. #line:0eb3799 
     <<if GetAttributeSkillPoolSize("intelligence","occult")>=4>>
-    [nomarkup][You’ve read enough vampire fiction to have some idea of a couple extra questions you could pose.][/nomarkup] #line:0a5c8c0
+    [nomarkup][You've read enough vampire fiction to have some idea of a couple extra questions you could pose.][/nomarkup] #line:0a5c8c0
     -> {$pcName}: So... How many of the stereotypes about vampires are true? Like that we sleep in coffins, or have super speed, are averted by crosses and so on? #line:09868f1 
         <<jump occultQuestions>>
     <<endif>>
@@ -28,17 +28,17 @@ title: questionsKieran
         <<jump willHeKillUs>>
     -> {$pcName}: How old are you exactly? #line:0802f55 
         <<jump kieransAge>>
-    -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if visited("drinks") ==false>> #line:026a963 
+    -> {$pcName}: If we survive this, I'll buy us a drink. Or two. <<if CustomVisited("drinks") ==false>> #line:026a963 
         <<jump drinks>>
     <<if GetAttributeSkillPoolSize("wits","awarness")>=4>>
         -> {$pcName}: I can't help but notice you're wearing a wedding ring on your finger. #line:0c6c442 
             <<jump kieransRing>>
     <<endif>>
-    -> {$pcName}: Can you tell me something about your Sire? <<if visited("kieransSire") ==false>> #line:079feb2 
+    -> {$pcName}: Can you tell me something about your Sire? <<if CustomVisited("kieransSire") ==false>> #line:079feb2 
         <<jump kieransSire>>
     -> {$pcName}: If we'll be partners, even temporarily I would like to know more about you. #line:0350c77 
         <<jump wantToKnowMoreAboutKieran>>
-    -> {$pcName}: I think that some thanks are in order. <<if visited("thanks") ==false>> #line:02f65bf 
+    -> {$pcName}: I think that some thanks are in order. <<if CustomVisited("thanks") ==false>> #line:02f65bf 
         <<jump thanks>>
     -> {$pcName}: Maybe later #line:064e3db 
         {$kieran}: OK, it's not like I'm going anywhere. #line:0ab9942 
@@ -66,7 +66,7 @@ title: vampisismExplained
 {$kieran}: Exist, yes. So do many of the myriad of myths and monsters you were told to be wary of, as a child. Unfortunately, however, introductions to those will have to wait, too. #line:00de44d 
     -> {$pcName}: Not even a crash course? #line:0a9b893 
         {$kieran}: The one you had back in your apartment wasn't sufficient? #line:0b6fda2 
-        -> {$pcName}: You know, I don’t think that particular crash course gave me much more than an additional headache to go with the hangover. #line:0c0db40 
+        -> {$pcName}: You know, I don't think that particular crash course gave me much more than an additional headache to go with the hangover. #line:0c0db40 
             {$kieran}: Lead lodged in your skull would certainly have inflicted more discomfort. [nomarkup][He gives you a meaningful look.][/nomarkup] I understand what you are saying, but we really have to get going. #line:00ec54f 
             <<jump questionsKieran>>
 ===
@@ -94,7 +94,7 @@ title: drinks
 <<elseif GetCompanionInfluence($kieran)<=-2>>
     {$kieran}: ...and no amount would make it worth your prolonged company. #line:0ddc428 
 <<else>>
-    {$kieran}: ... but I don’t know if such a thing would be... appropriate. #line:0a4ea6d 
+    {$kieran}: ... but I don't know if such a thing would be... appropriate. #line:0a4ea6d 
 <<endif>>
 <<jump questionsKieran>>
 ===
@@ -110,9 +110,9 @@ title: kieransRing
 title: kieransSire
 ---
 {$kieran}: Ask your questions. I may answer. Depends on what would you like to know. #line:0c3afaa 
-    -> {$pcName}: What is she like? <<if visited("catherinaCharacteristics") ==false>> #line:09f2327 
+    -> {$pcName}: What is she like? <<if CustomVisited("catherinaCharacteristics") ==false>> #line:09f2327 
         <<jump catherinaCharacteristics>>
-    -> {$pcName}: How old is she? <<if visited("catherinasAge>") ==false>> #line:083cfb0 
+    -> {$pcName}: How old is she? <<if CustomVisited("catherinasAge>") ==false>> #line:083cfb0 
         <<jump catherinasAge>>
     -> {$pcName}: You know what? Maybe another time. #line:026fd2e 
         <<jump questionsKieran>>
@@ -133,7 +133,7 @@ title: catherinaCharacteristics
             <<if Roll ("Wits","Awareness")>=3>>
                 [nomarkup][He looks sideways, like he wants to add something, but is hesitant to do so.][/nomarkup] #line:0e7149d 
                 -> {$pcName}: There's something more than that. I can see it. #line:05201c6 
-                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It’s... This isn’t important to our investigation. #line:0473290 
+                    {$kieran}: [nomarkup][He... blushes a bit? There's definitely more pink tone to his rather pale complexion.][/nomarkup] It's... This isn't important to our investigation. #line:0473290 
                 <<jump kieransSire>>
             <<endif>>
         ->  {$pcName}: You must be exaggerating. #line:01d0455 
@@ -145,7 +145,7 @@ title: catherinaCharacteristics
         {$kieran}: I don't want to sound rude, but I'm not certain how this is relevant to the ongoing investigation. #line:065ce23 
         <<jump kieransSire>>
     <<else>>
-        {$kieran}: Other than that, I won’t say. Gossip just is not the way I prefer to spend my time. #line:0b7fef2 
+        {$kieran}: Other than that, I won't say. Gossip just is not the way I prefer to spend my time. #line:0b7fef2 
     <<endif>>
     <<jump kieransSire>>
 ===
@@ -174,7 +174,7 @@ title: occultQuestions
 ---
 {$kieran}: Most cannot be warded away with any religious symbols, though there are some anomalous occurrences of this being a trait developed following the Embrace. We also don't tend to sleep in coffins, but there is no accounting for taste. Not judging, of course. As for the super speed - and strength, those are a few abilities that Kindred do have. Training to hone them is a necessity, though. Never forget this. #line:051f8a9 
 -> {$pcName}: So I'm some kind of... let's call it a superhero in the making? Can you teach me everything you mentioned just now? #line:0f53480 
-{$kieran}: That is exactly the kind of mindset which will get you killed, Miss Bardot. One’s abilities are not toys.
+{$kieran}: That is exactly the kind of mindset which will get you killed, Miss Bardot. One's abilities are not toys.
 {$kieran}: And sadly, the answer is once again no. I do not know all of those powers, myself. I am sure you will find a suitable teacher, when the time comes, however. Being Brujah, the powers you possess are quite common amongst Kindred. #line:0748c05
 ===
 title: occultChoices

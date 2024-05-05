@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4014772322296344489}
   - component: {fileID: 1102909319863974429}
   - component: {fileID: 2928918285864754838}
+  - component: {fileID: 4845783034028766837}
   m_Layer: 8
   m_Name: Diana Office Exit Interactable
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 105043839984915438}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -53.038, y: 0, z: -6.804}
+  m_LocalPosition: {x: -53.038, y: -0.0059999824, z: -6.804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: b348ca07-b310-497c-9869-d375c0a04f4a
 --- !u!114 &4977821538316392530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +132,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 4132482663781271664}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 1102909319863974429}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -186,8 +187,29 @@ MonoBehaviour:
     SerializationNodes: []
   _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
-  _highlightRenderers: []
+  _highlightRenderers:
+  - {fileID: 0}
   _rendererParent: {fileID: 0}
+--- !u!1818360608 &4845783034028766837
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105043839984915438}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: -52.438, y: -0.0059999824, z: -6.804}
+  m_TranslationOffset: {x: -0.6, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &161829022805534854
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,7 +437,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 6777580908316828396}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 611216940958823482}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -442,8 +464,10 @@ PositionConstraint:
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
   m_Active: 0
-  m_IsLocked: 0
-  m_Sources: []
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!136 &611216940958823482
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -489,7 +513,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
+  _findRenderersAtRuntime: 1
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
 --- !u!1 &361742821747680989
@@ -720,7 +744,7 @@ GameObject:
   - component: {fileID: 627754758468489085}
   - component: {fileID: 8158018155449696581}
   m_Layer: 0
-  m_Name: On Safe Opened
+  m_Name: On Documents Examined
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -753,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _listenForNode: safeOpened
+  _listenForNode: safeDocumentsExamine
   OnNodeEventMatch:
     _PersistentCalls:
     - _Target: {fileID: 11400000, guid: c40c00a44ed1f674abc71849b87ed150, type: 2}
@@ -806,7 +830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 83ab8a70-303e-45f8-92cc-a9f0e3997320
 --- !u!114 &5506400256412988272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,12 +892,15 @@ MonoBehaviour:
       Data: 0
   <Faction>k__BackingField: 0
   _unique: {fileID: 2552857204904598696}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   triggerOnlyOnce: 1
   triggeredOnlyBySpecificObject: 0
   triggeringObject: {fileID: 0}
   TriggerEnter:
     _PersistentCalls:
+    - _Target: {fileID: 11400000, guid: 7c21401865927cc468de3520f6519043, type: 2}
+      _MethodName: Complete
+      _PersistentArguments: []
     - _Target: {fileID: 7714737348246512721}
       _MethodName: StartDialogue
       _PersistentArguments: []
@@ -881,7 +908,7 @@ MonoBehaviour:
     _PersistentCalls: []
   TriggerExit:
     _PersistentCalls: []
-  visualizeTrigger: 1
+  visualizeTrigger: 0
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
   myCollider: {fileID: 4079991032760785723}
 --- !u!65 &4079991032760785723
@@ -905,6 +932,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 6, y: 4, z: 6}
   m_Center: {x: 0, y: 2, z: 0.3}
+--- !u!1 &1423688129032164154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1996872204342772866}
+  m_Layer: 0
+  m_Name: Interaction Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1996872204342772866
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423688129032164154}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.15, y: -2.52, z: 0.128}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5586103541092479680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498260722307892585
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,6 +1203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1004448944945847651}
   - component: {fileID: 7068793759289427369}
+  - component: {fileID: 5690235948467085102}
   m_Layer: 0
   m_Name: Bouncer Dialogue
   m_TagString: Untagged
@@ -1204,9 +1263,38 @@ MonoBehaviour:
   OnDialogueFinished:
     _PersistentCalls: []
   OnNodeStarted:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 5690235948467085102}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnNodeFinished:
     _PersistentCalls: []
+--- !u!114 &5690235948467085102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2257568251537385827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: afterBouncerCutscene
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 0}
+      _MethodName: Play
+      _PersistentArguments: []
 --- !u!1 &2394455403596263019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1442,28 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 1639173363840695593}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnObjectiveInactive:
     _PersistentCalls: []
   OnObjectiveCompleted:
@@ -1393,6 +1503,7 @@ Transform:
   - {fileID: 7480338085577165777}
   - {fileID: 4661173145078378173}
   - {fileID: 2055844673459276428}
+  - {fileID: 5586103541092479680}
   - {fileID: 57027530599186258}
   m_Father: {fileID: 3458999538365666020}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1465,7 +1576,18 @@ MonoBehaviour:
   OnDialogueFinished:
     _PersistentCalls: []
   OnNodeStarted:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 5318167662571694092}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnNodeFinished:
     _PersistentCalls: []
 --- !u!1 &2699487060681785363
@@ -1537,9 +1659,81 @@ MonoBehaviour:
   OnDialogueFinished:
     _PersistentCalls: []
   OnNodeStarted:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 6397296105106596478}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 6149011885094242711}
+      _MethodName: OnNodeEvent
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: 
+        _X: 2
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
   OnNodeFinished:
     _PersistentCalls: []
+--- !u!1 &3349933920525326815
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4490009311011039564}
+  - component: {fileID: 5318167662571694092}
+  m_Layer: 0
+  m_Name: Caterina Goes To Bouncer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4490009311011039564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3349933920525326815}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5318167662571694092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3349933920525326815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: bouncerDifficulties
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 0}
+      _MethodName: Play
+      _PersistentArguments: []
 --- !u!1 &3377142950894329135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,6 +1794,7 @@ GameObject:
   - component: {fileID: 8225610843001443676}
   - component: {fileID: 8120622148517254203}
   - component: {fileID: 263529266809718824}
+  - component: {fileID: 6340268012968331352}
   m_Layer: 8
   m_Name: Diana Foster Dialogue Interactable
   m_TagString: Untagged
@@ -1616,7 +1811,7 @@ Transform:
   m_GameObject: {fileID: 3555153982747422410}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 13.625, y: 0.386, z: -0.942}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1634,7 +1829,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: ea42135f-a08f-46cb-916b-908862e85257
 --- !u!114 &4073998050915692901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,7 +1912,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 7826651151302407526}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 263529266809718824}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -1772,10 +1967,30 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!1818360608 &6340268012968331352
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3555153982747422410}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &3659644215871819664
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,6 +2042,7 @@ GameObject:
   - component: {fileID: 4396322186493841482}
   - component: {fileID: 6464459995964333189}
   - component: {fileID: 3775942608069817214}
+  - component: {fileID: 8062824439663956151}
   m_Layer: 8
   m_Name: Diana Desk Interactable
   m_TagString: Untagged
@@ -1846,7 +2062,8 @@ Transform:
   m_LocalPosition: {x: -54.202, y: 0, z: -10.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7112661909686903579}
   m_Father: {fileID: 2628070321381840805}
   m_LocalEulerAnglesHint: {x: 0, y: 14.09, z: 0}
 --- !u!114 &1637255304497387831
@@ -1944,11 +2161,11 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 1637255304497387831}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 3775942608069817214}
   _linkedGameObject: {fileID: 0}
-  _interactionDistance: 2
-  _interactionTransform: {fileID: 7480338085577165777}
+  _interactionDistance: 1
+  _interactionTransform: {fileID: 7112661909686903579}
   _interactable: 1
   _nameplateName: Desk
   _nameplateOffset: {x: 0, y: 3, z: 0}
@@ -1977,7 +2194,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
+  _findRenderersAtRuntime: 1
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
 --- !u!65 &3775942608069817214
@@ -2001,65 +2218,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5719185, y: 0.82567024, z: 1.0649549}
   m_Center: {x: -0.001169204, y: 0.4189539, z: 0.032477558}
---- !u!1 &3835714270366909503
-GameObject:
+--- !u!1818360608 &8062824439663956151
+PositionConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9079548946284730719}
-  - component: {fileID: 4107636285549146619}
-  - component: {fileID: 5780783058142314822}
-  m_Layer: 0
-  m_Name: Scene Persistence Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9079548946284730719
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
+  m_GameObject: {fileID: 3675345517478125349}
+  m_Enabled: 1
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 412658073151826774}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4107636285549146619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
---- !u!114 &5780783058142314822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835714270366909503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1da8a155d0f71cd49827c35db9a8111a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _unique: {fileID: 4107636285549146619}
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &3919487550797867651
 GameObject:
   m_ObjectHideFlags: 0
@@ -2230,7 +2408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 00e96378-0530-4bca-8a3d-0794f07b012e
 --- !u!114 &1325366295735741871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2279,6 +2457,7 @@ GameObject:
   - component: {fileID: 773581060133220786}
   - component: {fileID: 3071853747706028623}
   - component: {fileID: 2113742154728847458}
+  - component: {fileID: 3173947531926746244}
   m_Layer: 8
   m_Name: Diana Bookcase Interactable
   m_TagString: Untagged
@@ -2313,7 +2492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 1bde14d7-e460-45d0-b46b-b45cf345a0de
 --- !u!114 &4406270610393989017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2396,7 +2575,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 7284403620151681567}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 2113742154728847458}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 1.25
@@ -2429,7 +2608,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
+  _findRenderersAtRuntime: 1
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
 --- !u!65 &2113742154728847458
@@ -2453,6 +2632,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 4, z: 2.3}
   m_Center: {x: 0, y: 2, z: 0.09}
+--- !u!1818360608 &3173947531926746244
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4240819674308193438}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &4313397565552709021
 GameObject:
   m_ObjectHideFlags: 0
@@ -2468,6 +2667,7 @@ GameObject:
   - component: {fileID: 57940760864927958}
   - component: {fileID: 4397061826179621874}
   - component: {fileID: 4807792580495435104}
+  - component: {fileID: 4889993707502069924}
   m_Layer: 8
   m_Name: Bouncer Dialogue Interactable
   m_TagString: Untagged
@@ -2484,7 +2684,7 @@ Transform:
   m_GameObject: {fileID: 4313397565552709021}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.72, y: 0.394, z: -17.638}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2585,7 +2785,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 8187980113731327492}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 4807792580495435104}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -2611,7 +2811,7 @@ PositionConstraint:
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
-  m_Active: 1
+  m_Active: 0
   m_IsLocked: 1
   m_Sources:
   - sourceTransform: {fileID: 0}
@@ -2638,7 +2838,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
+  _findRenderersAtRuntime: 1
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
 --- !u!136 &4807792580495435104
@@ -2658,12 +2858,42 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &4889993707502069924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4313397565552709021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: b87eb41e47b3c8945a14137a6f93a9bb, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4313397565552709021}
+          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &4389236365697749148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2694,6 +2924,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 627754758468489085}
+  - {fileID: 4490009311011039564}
+  - {fileID: 1306119733862654178}
+  - {fileID: 8772536613743566665}
   m_Father: {fileID: 412658073151826774}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5225593122114779037
@@ -2742,6 +2975,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waypointTag: Diana Office Exit Waypoint
   <FaceDirection>k__BackingField: {fileID: 0}
+--- !u!1 &5398693919491477810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7112661909686903579}
+  m_Layer: 8
+  m_Name: Interaction Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7112661909686903579
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5398693919491477810}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.09, y: 0, z: 1.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7480338085577165777}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5542332029669683204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2813,7 +3077,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 8909f734-4cb7-4c8d-a852-93bdfe71a723
 --- !u!114 &1445786708607321841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2896,7 +3160,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 5543449660640069087}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 4148999762344483179}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -2929,8 +3193,9 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
-  _highlightRenderers: []
+  _findRenderersAtRuntime: 1
+  _highlightRenderers:
+  - {fileID: 0}
   _rendererParent: {fileID: 0}
 --- !u!1 &5619716321713612056
 GameObject:
@@ -3217,6 +3482,108 @@ MonoBehaviour:
   _fadeScreenTime: 0.5
   OnAfterFadeOut:
     _PersistentCalls: []
+--- !u!1 &6578044277531088400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8772536613743566665}
+  - component: {fileID: 6149011885094242711}
+  m_Layer: 0
+  m_Name: On Paintings Took Down
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8772536613743566665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578044277531088400}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6149011885094242711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578044277531088400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: successContinued
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 2390319528945370258}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 8326897091126409034}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 1255705960459513473}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &6649260884599490651
 GameObject:
   m_ObjectHideFlags: 0
@@ -3466,6 +3833,108 @@ MonoBehaviour:
     _PersistentCalls: []
   OnNodeFinished:
     _PersistentCalls: []
+--- !u!1 &6897982518348698030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1306119733862654178}
+  - component: {fileID: 6397296105106596478}
+  m_Layer: 0
+  m_Name: On Paintings Destroyed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1306119733862654178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897982518348698030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5497587318410868971}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6397296105106596478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897982518348698030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04fde4530509d946a2eea72274b3294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _listenForNode: paintingsDestroyed
+  OnNodeEventMatch:
+    _PersistentCalls:
+    - _Target: {fileID: 2390319528945370258}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 0}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 8326897091126409034}
+      _MethodName: SetActive
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 1255705960459513473}
+      _MethodName: set_Interactable
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 1
+        _String: 
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &6998712319754004623
 GameObject:
   m_ObjectHideFlags: 0
@@ -3546,7 +4015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 8243397c-7448-4754-a27c-0b145b366584
 --- !u!114 &9122325778317959642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3629,7 +4098,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 880842583242700824}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 1870542963831898563}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -3663,7 +4132,8 @@ MonoBehaviour:
     SerializationNodes: []
   _highlightLayer: Highlighted
   _findRenderersAtRuntime: 0
-  _highlightRenderers: []
+  _highlightRenderers:
+  - {fileID: 0}
   _rendererParent: {fileID: 0}
 --- !u!65 &1870542963831898563
 BoxCollider:
@@ -3843,6 +4313,7 @@ GameObject:
   - component: {fileID: 6408438618280638287}
   - component: {fileID: 2074295198076424556}
   - component: {fileID: 4228424957190804301}
+  - component: {fileID: 8325108103391486487}
   m_Layer: 8
   m_Name: Diana Office Entrance Interactable
   m_TagString: Untagged
@@ -3877,7 +4348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 6dde5406-005f-489d-b76d-ca30b2530e92
 --- !u!114 &6638858931914886080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3960,7 +4431,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 2767473808532486069}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 4228424957190804301}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -4013,10 +4484,41 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.37666368, y: 2.5270553, z: 1.9564991}
   m_Center: {x: 0.03761512, y: 1.2623155, z: -0.005373955}
+--- !u!114 &8325108103391486487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7393814666032933807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: 569f2e502f5702c4e9b176ad16401998, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6408438618280638287}
+          m_TargetAssemblyTypeName: SunsetSystems.Entities.Interactable.InteractableEntity,
+            SunsetSystems
+          m_MethodName: set_Interactable
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
 --- !u!1 &7464828148247941609
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,6 +4596,7 @@ GameObject:
   - component: {fileID: 2390319528945370258}
   - component: {fileID: 1068161043165760772}
   - component: {fileID: 1864502387388453628}
+  - component: {fileID: 8969524387647267191}
   m_Layer: 8
   m_Name: Diana Office Safe Interactable
   m_TagString: Untagged
@@ -4212,12 +4715,12 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 8998023699552037527}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 1864502387388453628}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 1
   _interactionTransform: {fileID: 7237593476347197736}
-  _interactable: 1
+  _interactable: 0
   _nameplateName: Safe
   _nameplateOffset: {x: 0, y: 3, z: 0}
   _interactableOnce: 0
@@ -4245,7 +4748,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _highlightLayer: Highlighted
-  _findRenderersAtRuntime: 0
+  _findRenderersAtRuntime: 1
   _highlightRenderers: []
   _rendererParent: {fileID: 0}
 --- !u!65 &1864502387388453628
@@ -4265,10 +4768,30 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.5, z: 0.07486057}
   m_Center: {x: 0, y: 0, z: 0.04508829}
+--- !u!1818360608 &8969524387647267191
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7603863199843054609}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &7635274636090222634
 GameObject:
   m_ObjectHideFlags: 0
@@ -4433,6 +4956,260 @@ MonoBehaviour:
     _PersistentCalls: []
   OnObjectiveActiveAfterSceneLoad:
     _PersistentCalls: []
+--- !u!1 &7907894582382441583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5586103541092479680}
+  - component: {fileID: 7178604656986767798}
+  - component: {fileID: 3554185846252223914}
+  - component: {fileID: 2351622310657451355}
+  - component: {fileID: 1255705960459513473}
+  - component: {fileID: 3940869702872160173}
+  - component: {fileID: 76854826618342923}
+  - component: {fileID: 1088896726368637372}
+  - component: {fileID: 2668935013109094652}
+  m_Layer: 8
+  m_Name: Diana Office Paintings Taken Down Interactable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5586103541092479680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.61, y: 2.68, z: -12.708}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1996872204342772866}
+  m_Father: {fileID: 2628070321381840805}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7178604656986767798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e1a12cce87f09846a024c87bec0bd48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  _highlightLayer: Highlighted
+  _findRenderersAtRuntime: 0
+  _highlightRenderers: []
+  _rendererParent: {fileID: 0}
+--- !u!114 &3554185846252223914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
+--- !u!114 &2351622310657451355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9decf95dfc41a4e43bd71c2b98e07386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+--- !u!114 &1255705960459513473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e3795c4b5c68442a53ad3e605cf1d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 2351622310657451355}
+    - {fileID: 3050464422408868731}
+    - {fileID: 7178604656986767798}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: <PersistentComponents>k__BackingField
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Persistence.IPersistentComponent,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: <InteractionHandlers>k__BackingField
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[SunsetSystems.Entities.Interactable.IInteractionHandler,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 1
+    - Name: 
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _highlightHandler
+      Entry: 10
+      Data: 2
+  <Faction>k__BackingField: 0
+  _unique: {fileID: 3554185846252223914}
+  <EnablePersistence>k__BackingField: 1
+  _interactionCollider: {fileID: 3940869702872160173}
+  _linkedGameObject: {fileID: 0}
+  _interactionDistance: 1
+  _interactionTransform: {fileID: 1996872204342772866}
+  _interactable: 0
+  _nameplateName: Hideous Poliptych
+  _nameplateOffset: {x: 0, y: 3, z: 0}
+  _interactableOnce: 0
+  OnInteractionTriggered:
+    _PersistentCalls: []
+--- !u!65 &3940869702872160173
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1.41, y: 1.44957, z: 0.17241287}
+  m_Center: {x: 1.12, y: 0.005619645, z: -0.054187775}
+--- !u!1818360608 &76854826618342923
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
+--- !u!65 &1088896726368637372
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.41, y: 1.44957, z: 0.17241287}
+  m_Center: {x: -1.12, y: 0.005619645, z: -0.054187775}
+--- !u!65 &2668935013109094652
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907894582382441583}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.41, y: 1.44957, z: 0.79}
+  m_Center: {x: 1.12, y: -1.82, z: -0.054187775}
 --- !u!1 &8158127868126231101
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,7 +5287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: 
+  _id: 1c58727a-277c-4e6d-a62e-bacd96eb6304
 --- !u!114 &8115491378721482168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4592,7 +5369,7 @@ MonoBehaviour:
       Data: 
   <Faction>k__BackingField: 0
   _unique: {fileID: 1364581044894262703}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 0}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 2
@@ -4727,6 +5504,7 @@ GameObject:
   - component: {fileID: 7734619727052224546}
   - component: {fileID: 1301803204495832738}
   - component: {fileID: 7330703278028534912}
+  - component: {fileID: 20206829816037161}
   m_Layer: 8
   m_Name: Diana Office Paintings Interactable
   m_TagString: Untagged
@@ -4870,7 +5648,7 @@ MonoBehaviour:
       Data: 2
   <Faction>k__BackingField: 0
   _unique: {fileID: 8309916780573579908}
-  _enablePersistence: 1
+  <EnablePersistence>k__BackingField: 1
   _interactionCollider: {fileID: 7330703278028534912}
   _linkedGameObject: {fileID: 0}
   _interactionDistance: 1
@@ -4902,6 +5680,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9846268, y: 1.44957, z: 0.17241287}
   m_Center: {x: -0.0078315735, y: 0.005619645, z: -0.054187775}
+--- !u!1818360608 &20206829816037161
+PositionConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8326897091126409034}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffset: {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_Active: 0
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 0}
+    weight: 1
 --- !u!1 &8721328679792091608
 GameObject:
   m_ObjectHideFlags: 0
@@ -5162,7 +5960,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4193489125721962962}
-  - {fileID: 9079548946284730719}
   - {fileID: 6193579103115963031}
   - {fileID: 3458999538365666020}
   - {fileID: 5168241024844028177}

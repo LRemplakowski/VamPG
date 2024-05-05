@@ -42,6 +42,12 @@ namespace SunsetSystems.Entities.Characters
                 _owner = GetComponentInParent<Creature>();
         }
 
+        [Button]
+        public void LoadFromConfig(StatsConfig config)
+        {
+            Stats = new(config);
+        }
+
         private void Start()
         {
             OnValidate();

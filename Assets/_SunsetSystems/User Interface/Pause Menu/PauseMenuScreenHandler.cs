@@ -22,12 +22,6 @@ namespace SunsetSystems.UI
         
         public PauseMenuScreen CurrentActiveScreen { get; private set; }
 
-        private void Start()
-        {
-            _characterSelector.SetActive(true);
-            _characterSelector.SetActive(false);
-        }
-
         public void QuitToMenu()
         {
             _onReturnToMenu?.Invoke();

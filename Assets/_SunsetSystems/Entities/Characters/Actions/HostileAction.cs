@@ -1,30 +1,21 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
+﻿using System;
+using Sirenix.Serialization;
+using SunsetSystems.Entities.Interfaces;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [Serializable]
     public abstract class HostileAction : EntityAction
     {
-        protected override Creature Owner { get; set; }
+        [field: OdinSerialize]
+        protected ICombatant Attacker { get; private set; }
+        [field: OdinSerialize]
+        protected ICombatant Target { get; private set; }
 
-        public delegate void OnAttackFinished(Creature target, Creature performer);
-        public static OnAttackFinished onAttackFinished;
-
-        public Creature Target { get; private set; }
-        protected readonly HostileActionCondition condition;
-
-        public HostileAction(Creature target, Creature attacker)
+        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker, false)
         {
-            Owner = attacker;
+            Attacker = attacker;
             Target = target;
-            HostileActionCondition condition = new(target, attacker);
-            onAttackFinished += condition.OnHostileActionFinished;
-            conditions.Add(condition);
-            this.condition = condition;
-        }
-
-        public override void Abort()
-        {
-            onAttackFinished -= condition.OnHostileActionFinished;
         }
     }
 }

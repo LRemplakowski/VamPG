@@ -1,132 +1,54 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
-using NaughtyAttributes;
 using System;
-using Apex;
+using System.Collections.Generic;
+using Sirenix.Serialization;
+using SunsetSystems.Entities.Characters;
 
-namespace SunsetSystems.Entities.Characters
+namespace SunsetSystems.Equipment
 {
     [Serializable]
-    public struct EquipmentData
+    public class EquipmentData
     {
-        public const string SLOT_WEAPON_PRIMARY = "SLOT_WEAPON_PRIMARY";
-        public const string SLOT_WEAPON_SECONDARY = "SLOT_WEAPON_SECONDARY";
-        public const string SLOT_CHEST = "SLOT_CHEST";
-        public const string SLOT_BOOTS = "SLOT_BOOTS";
-        public const string SLOT_HANDS = "SLOT_HANDS";
-        public const string SLOT_TRINKET = "SLOT_TRINKET";
+        [field: OdinSerialize]
+        public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
 
-        [ReadOnly]
-        public StringEquipmentSlotDictionary equipmentSlots;
-
-        private string _selectedWeapon;
-
-        public static EquipmentData Initialize()
+        public static Dictionary<EquipmentSlotID, IEquipmentSlot> GetSlotsPreset()
         {
-            EquipmentData data = new();
-            data.equipmentSlots = GetSlotsPreset();
-            return data;
-        }
-
-        private static StringEquipmentSlotDictionary GetSlotsPreset()
-        {
-            StringEquipmentSlotDictionary equipmentSlots = new();
-            equipmentSlots.Add(SLOT_WEAPON_PRIMARY, new EquipmentSlot(ItemCategory.WEAPON, "Primary Weapon", SLOT_WEAPON_PRIMARY));
-            equipmentSlots.Add(SLOT_WEAPON_SECONDARY, new EquipmentSlot(ItemCategory.WEAPON, "Secondary Weapon", SLOT_WEAPON_SECONDARY));
-            equipmentSlots.Add(SLOT_CHEST, new EquipmentSlot(ItemCategory.CLOTHING, "Chest", SLOT_CHEST));
-            equipmentSlots.Add(SLOT_BOOTS, new EquipmentSlot(ItemCategory.SHOES, "Boots", SLOT_BOOTS));
-            equipmentSlots.Add(SLOT_HANDS, new EquipmentSlot(ItemCategory.GLOVES, "Hands", SLOT_HANDS));
-            equipmentSlots.Add(SLOT_TRINKET, new EquipmentSlot(ItemCategory.TRINKET, "Trinket", SLOT_TRINKET));
+            Dictionary<EquipmentSlotID, IEquipmentSlot> equipmentSlots = new()
+            {
+                { EquipmentSlotID.PrimaryWeapon, new EquipmentSlot(EquipmentSlotID.PrimaryWeapon) },
+                { EquipmentSlotID.SecondaryWeapon, new EquipmentSlot(EquipmentSlotID.SecondaryWeapon) },
+                { EquipmentSlotID.Chest, new EquipmentSlot(EquipmentSlotID.Chest) },
+                { EquipmentSlotID.Boots, new EquipmentSlot(EquipmentSlotID.Boots) },
+                { EquipmentSlotID.Hands, new EquipmentSlot(EquipmentSlotID.Hands) },
+                { EquipmentSlotID.Trinket, new EquipmentSlot(EquipmentSlotID.Trinket) }
+            };
             return equipmentSlots;
         }
 
         public EquipmentData(InventoryConfig config)
         {
-            equipmentSlots = GetSlotsPreset();
-            _selectedWeapon = SLOT_WEAPON_PRIMARY;
-            foreach (string key in config.Equipment.equipmentSlots.Keys)
+            EquipmentSlots = GetSlotsPreset();
+            foreach (EquipmentSlotID key in config.Equipment.EquipmentSlots.Keys)
             {
-                if (equipmentSlots.ContainsKey(key))
+                if (EquipmentSlots.ContainsKey(key))
                 {
-                    equipmentSlots[key] = config.Equipment.equipmentSlots[key];
+                    EquipmentSlots[key] = config.Equipment.EquipmentSlots[key];
                 }    
             }
         }
 
-        public void SetSelectedWeapon(SelectedWeapon weapon)
+        public EquipmentData(EquipmentData existing)
         {
-            switch (weapon)
+            EquipmentSlots = new();
+            foreach (EquipmentSlotID id in existing.EquipmentSlots.Keys)
             {
-                case SelectedWeapon.Primary:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
-                case SelectedWeapon.Secondary:
-                    _selectedWeapon = SLOT_WEAPON_SECONDARY;
-                    break;
-                default:
-                    _selectedWeapon = SLOT_WEAPON_PRIMARY;
-                    break;
+                EquipmentSlots[id] = new EquipmentSlot(existing.EquipmentSlots[id]);
             }
         }
 
-        public Weapon GetSelectedWeapon()
+        public EquipmentData()
         {
-            return equipmentSlots[_selectedWeapon].GetEquippedItem() as Weapon;
+            EquipmentSlots = GetSlotsPreset();
         }
-
-        public Weapon GetPrimaryWeapon()
-        {
-            return equipmentSlots[SLOT_WEAPON_PRIMARY].GetEquippedItem() as Weapon;
-        }
-
-        public Weapon GetSecondaryWeapon()
-        {
-            return equipmentSlots[SLOT_WEAPON_SECONDARY].GetEquippedItem() as Weapon;
-        }
-
-        public static List<string> GetSlotIDsFromItemCategory(ItemCategory category)
-        {
-            List<string> result = new();
-            switch (category)
-            {
-                case ItemCategory.OTHER:
-                    break;
-                case ItemCategory.WEAPON:
-                    result.Add(SLOT_WEAPON_PRIMARY);
-                    result.Add(SLOT_WEAPON_SECONDARY);
-                    break;
-                case ItemCategory.CLOTHING:
-                    result.Add(SLOT_CHEST);
-                    break;
-                case ItemCategory.OUTER_CLOTHING:
-                    break;
-                case ItemCategory.HEADWEAR:
-                    break;
-                case ItemCategory.FACEWEAR:
-                    break;
-                case ItemCategory.GLOVES:
-                    result.Add(SLOT_HANDS);
-                    break;
-                case ItemCategory.SHOES:
-                    result.Add(SLOT_BOOTS);
-                    break;
-                case ItemCategory.TROUSERS:
-                    break;
-                case ItemCategory.CONSUMABLE:
-                    break;
-                case ItemCategory.TRINKET:
-                    result.Add(SLOT_TRINKET);
-                    break;
-            }
-            return result;
-        }
-    }
-
-    public enum SelectedWeapon
-    {
-        Primary, Secondary
     }
 }

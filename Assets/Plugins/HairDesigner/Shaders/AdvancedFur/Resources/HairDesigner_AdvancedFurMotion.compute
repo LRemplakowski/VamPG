@@ -1,0 +1,557 @@
+﻿
+#pragma kernel CSMain
+
+#define MAX_COLLIDERS 20
+
+float RND(float seed) {
+	seed = round(seed * 255) / 255;//fix
+	return frac(sin(dot(float2(seed, seed*seed), float2(12.9898, 78.233))) * 43758.5453);
+}
+
+
+//----------------------------------------------
+//motion
+struct PIData
+{
+	float dtStepNext;
+	float3 errSum;
+	float3 error;
+	float3 target;
+	float3 result;
+};
+
+const float dtStep = 1.0 / 100.0;
+const float dtMax = 1.0;
+
+
+
+float _damping;
+float _bouncing;
+float _dt;
+float _timeScale;
+
+float4 _Time;
+float _lastTime;
+
+float _furLength;
+float _useSkin;
+float3 _Gravity;
+float _WindMain;
+float _WindTurbulence;
+float _MotionFactor;
+float _CentrifugalFactor;
+float _Random;
+float _InteractionOffsetFactor;
+float _MotionThreshold;
+
+
+RWStructuredBuffer<PIData> _PI_Data_Buffer;
+
+float4x4 _transformMatrix;
+float4x4 _bonesMatrix[500];
+
+bool _CSInitialized;
+
+
+float4 KHD_windZoneDir;
+float4 KHD_windZoneParam;
+
+
+
+
+//motion
+struct SkinData
+{
+	float4 ids;
+	float4 weights;
+};
+
+RWStructuredBuffer<SkinData> _Skin;
+
+
+/*
+float4x4 rotationMatrix(float3 axis, float angle)
+{
+	axis = normalize(axis);
+	float s = sin(angle);
+	float c = cos(angle);
+	float oc = 1.0 - c;
+
+	return float4x4(oc * axis.x * axis.x + c, oc * axis.x * axis.y - axis.z * s, oc * axis.z * axis.x + axis.y * s, 0.0,
+		oc * axis.x * axis.y + axis.z * s, oc * axis.y * axis.y + c, oc * axis.y * axis.z - axis.x * s, 0.0,
+		oc * axis.z * axis.x - axis.y * s, oc * axis.y * axis.z + axis.x * s, oc * axis.z * axis.z + c, 0.0,
+		0.0, 0.0, 0.0, 1.0);
+}
+*/
+
+
+float3 ComputeWind(float t, float rnd, float3 tan, float3 worldPos)
+{
+	if (length(KHD_windZoneDir)*KHD_windZoneParam.x == 0)
+		return float3(0, 0, 0);
+
+	float3 wind = KHD_windZoneDir.xyz;
+
+
+	
+
+	if (KHD_windZoneDir.w != 0)
+	{
+		//spherical wind
+		wind = normalize(cross(worldPos - KHD_windZoneDir.xyz, float3(0.0, 1.0, 0.0)));
+		if (length((worldPos - KHD_windZoneDir.xyz)) < abs(KHD_windZoneDir.w))
+		{
+			float f = length(worldPos - KHD_windZoneDir.xyz) / KHD_windZoneDir.w;
+			KHD_windZoneParam.x *= f > .5 ? 1.0 - (f - .5)*2.0 : f * 2.0;
+		}
+		else
+			return float3(0, 0, 0);
+	}
+
+	//return wind;//WIP
+
+	/*
+	if (m_windZone.mode == WindZoneMode.Directional)
+    {
+        m_windZoneDir.x = m_windZone.transform.forward.x;
+        m_windZoneDir.y = m_windZone.transform.forward.y;
+        m_windZoneDir.z = m_windZone.transform.forward.z;
+        m_windZoneDir.w = 0;//for spherical integration
+    }
+    else
+    {
+        m_windZoneDir.x = m_windZone.transform.position.x;
+        m_windZoneDir.y = m_windZone.transform.position.y;
+        m_windZoneDir.z = m_windZone.transform.position.z;
+        m_windZoneDir.w = m_windZone.radius;//for spherical integration
+    }
+    m_windZoneParam.x = m_windZone.windMain;
+    m_windZoneParam.y = m_windZone.windTurbulence;
+    m_windZoneParam.z = m_windZone.windPulseMagnitude;
+    m_windZoneParam.w = m_windZone.windPulseFrequency;
+	*/
+
+	wind = normalize(wind + .1*float3(sin(_Time.y* KHD_windZoneParam.y * _WindTurbulence + rnd ), sin(_Time.y* KHD_windZoneParam.y * _WindTurbulence + rnd*2.0 * KHD_windZoneParam.y), sin(_Time.y* KHD_windZoneParam.y + rnd*3.0*KHD_windZoneParam.y)));//WIP
+
+	wind = normalize(wind) * KHD_windZoneParam.x *.1 ;	
+	wind += normalize(wind) * KHD_windZoneParam.z * (sin(_Time.y*KHD_windZoneParam.w) + sin(_Time.z*KHD_windZoneParam.w )*.1 +sin(_Time.w*KHD_windZoneParam.w)*.01 )* KHD_windZoneParam.x *.01;
+	
+	return wind * _WindMain;
+}
+
+
+
+
+
+
+struct DualSphereColliderData
+{
+	float4 sphere1;
+	float4 sphere2;
+};
+
+RWStructuredBuffer<DualSphereColliderData> _CollidersData_Buffer;
+int _CollidersData_length;
+
+
+void ForceTarget(int idx, float percent)
+{
+	_PI_Data_Buffer[idx].errSum = lerp(_PI_Data_Buffer[idx].errSum, float3(0.0, 0.0, 0.0), percent);
+	//_PI_Data_Buffer[idx].errSum = _PI_Data_Buffer[idx].errSum * (1.0-percent)+  float3(0.0, 0.0, 0.0) * percent;
+}
+
+
+
+//---------------------------------------------
+//COLLISION MACRO
+#define COLLISION(a) \
+{ \
+	contactDir = normalize(contactDir)*contactForce;\
+	/*if(dot(normalize(contactDir), worldNorm)>-.95)*/ \
+	/*	contactDir = normalize(contactDir - dot(contactDir, worldNorm)*worldNorm)*contactForce;*/ \
+	/*if (dot(normalize(contactDir), normalize(deltaPos))<0)*/\
+	{\
+		if (lct <= radius)\
+		{\
+			deltaPos = contactDir*100.0 * lct/radius;\
+		}\
+		else\
+		{\
+			f = (lct - radius) / (furlengthoffset);\
+			deltaPos = lerp(contactDir*f, deltaPos, f);\
+		}\
+	}\
+	/*ForceTarget(idx, .2);*/\
+	_timeScale*=.1;\
+}
+//---------------------------------------------
+
+
+
+
+#define LIMIT_P(a) if (input.a + deltaLimit.a * 2 > _furLength) \
+{ \
+	target.a -= (float)_PI_Data_Buffer[idx].errSum.a; \
+	_PI_Data_Buffer[idx].errSum.a = 0; \
+}
+
+#define LIMIT_N(a) if (input.a + deltaLimit.a * 2 < -_furLength) \
+{ \
+	target.a -= (float)_PI_Data_Buffer[idx].errSum.a; \
+	_PI_Data_Buffer[idx].errSum.a = 0; \
+}
+
+
+float3 Compute(int idx, float3 input)
+{
+	float dtStep = _timeScale / 100.0;
+	float dtMax = 1.0;
+	//return input;
+
+	_PI_Data_Buffer[idx].target = input;
+
+
+	float damping = _damping;
+	float bouncing = _bouncing;
+
+
+	float dt = _dt;
+	dt *= _timeScale;
+	//dt = .333333;
+
+	if (dt == 0)
+		return input;
+
+	//return input;
+
+	if (dt > dtMax)
+	{
+		ForceTarget(idx, 1.0);
+		//return float3(0, 0, 1);
+		return _PI_Data_Buffer[idx].target;
+	}
+
+	//return input;
+	float3 result = input;
+	float step = dt;
+	float3 target = _PI_Data_Buffer[idx].target;
+	float3 delta = float3(0.0, 0.0, 0.0);
+
+	float3 deltaLimit = bouncing * (float3)_PI_Data_Buffer[idx].errSum + damping * (float3)_PI_Data_Buffer[idx].error;
+	
+	LIMIT_P(x)
+	LIMIT_P(y)
+	LIMIT_P(z)
+	LIMIT_N(x)
+	LIMIT_N(y)
+	LIMIT_N(z)
+
+
+	dt += _PI_Data_Buffer[idx].dtStepNext;
+	_PI_Data_Buffer[idx].dtStepNext = 0;
+
+	while (dt >= dtStep)
+	{
+
+		result = _PI_Data_Buffer[idx].result;
+		step = dt > dtStep ? dtStep : dt;
+
+		_PI_Data_Buffer[idx].error = (_PI_Data_Buffer[idx].target - result);
+		_PI_Data_Buffer[idx].error *= step;
+		_PI_Data_Buffer[idx].errSum += _PI_Data_Buffer[idx].error;
+
+		if (bouncing == 0 )
+			_PI_Data_Buffer[idx].errSum = 0;		
+
+		delta = (damping * _PI_Data_Buffer[idx].error+ bouncing * _PI_Data_Buffer[idx].errSum);
+		result += delta;
+
+		_PI_Data_Buffer[idx].result = result;
+		dt -= step;
+
+
+	}
+	_PI_Data_Buffer[idx].dtStepNext += dt;
+
+
+	//add delta of current step to fake "out of step" result
+	//keep a smooth result between step
+	//result will be override by next real step
+	result = lerp(_PI_Data_Buffer[idx].result, _PI_Data_Buffer[idx].result + delta, (_PI_Data_Buffer[idx].dtStepNext / dtStep));
+	//double f = _PI_Data_Buffer[idx].dtStepNext / dtStep;
+	//result = _PI_Data_Buffer[idx].result * (1.0-f) + (_PI_Data_Buffer[idx].result + delta)*f;
+	
+	return (float3)result;
+}
+
+//----------------------------------------------
+//Skinning
+
+float3 Skin(int idx, float3 localPos)
+{
+	float4 worldPos = float4(0, 0, 0, 0);
+	for (int i = 0; i < 4; ++i)			
+		worldPos += mul(_bonesMatrix[_Skin[idx].ids[i]], float4(localPos, 1)) * _Skin[idx].weights[i];
+
+	return worldPos.xyz;
+
+}
+
+
+
+
+
+
+
+
+//----------------------------------------------
+
+
+RWTexture2D<float4> Result;
+
+int _verticeCount;
+int _textureSize;
+
+struct Vector3Buffer
+{
+	float3 value;
+};
+
+struct MatrixBuffer
+{
+	float4x4 mat;
+};
+
+
+
+
+
+
+// Compute Buffers
+
+RWStructuredBuffer<Vector3Buffer> _vertexBuf;
+RWStructuredBuffer<Vector3Buffer> _normalBuf;
+RWStructuredBuffer<Vector3Buffer> _lastWorldNormalBuf;
+RWStructuredBuffer<Vector3Buffer> _worldPosBuf;
+//RWStructuredBuffer<MatrixBuffer> _transformMatrix;
+//float _dt;
+
+//[numthreads(64,1,1)]
+[numthreads(16, 16, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	//if (!_CSInitialized)
+	//	_lastTime = _time;
+
+	//_dt = _lastTime - _time;
+	//_lastTime = _time;
+
+	int idx = id.x + id.y* _textureSize;
+	int x = id.x;
+	int y = _textureSize - id.y - 1;
+
+	if (idx < _verticeCount)
+	{
+		float4 localNorm = float4(_normalBuf[idx].value, 0);
+		float4 localPos = float4(_vertexBuf[idx].value, 1);
+
+		float3 worldPos = float3(0, 0, 0);
+		float3 worldNorm = float3(0, 1, 0);
+		
+		if (_useSkin == 0)
+		{
+			worldPos = mul(_transformMatrix, localPos).xyz;
+			worldNorm = normalize(mul(_transformMatrix, localPos+localNorm).xyz-worldPos);
+		}
+		else
+		{ 			
+			worldPos = Skin(idx,localPos.xyz).xyz;
+			worldNorm = normalize( Skin(idx,localPos.xyz+localNorm.xyz).xyz-worldPos.xyz);
+		}
+
+		
+		if (!_CSInitialized)
+		{
+			_worldPosBuf[idx].value = worldPos;
+			_lastWorldNormalBuf[idx].value = worldNorm;
+		}
+		
+		
+        float3 dlt = (_worldPosBuf[idx].value - worldPos);
+		
+		/*
+        _MotionThreshold = 0.01;
+        if (length(dlt) * _dt < _MotionThreshold)
+        {
+            float f = length(dlt) * _dt / _MotionThreshold;
+            dlt *= f;
+        }
+		*/
+		
+        float3 deltaPos = dlt * _MotionFactor;
+		
+		
+		
+		//float3 oldDeltaPos = _PI_Data_Buffer[idx].result;
+
+		//-------------------------------
+		//centrifugal force
+		if( length(deltaPos)>0 )
+		{
+			float dotNormMotion = dot(_lastWorldNormalBuf[idx].value, worldNorm);
+			//deltaPos = lerp(normalize(deltaPos),worldNorm* _CentrifugalFactor, (1-dotNormMotion) * _CentrifugalFactor) * length(deltaPos) ;		
+			deltaPos += _lastWorldNormalBuf[idx].value * (1-dotNormMotion) * _CentrifugalFactor;
+			_lastWorldNormalBuf[idx].value = worldNorm;
+		}
+		//-------------------------------
+
+
+		//Random
+		deltaPos += RND((float)idx + _Time.y)*_Random * deltaPos;
+		
+		
+		deltaPos += _Gravity * .01;
+		if(KHD_windZoneParam.x>0)
+			deltaPos += ComputeWind(1.0, idx, cross(worldPos, KHD_windZoneDir.xyz), worldPos);
+
+		//deltaPos += KHD_windZoneDir.xyz;
+
+		//deltaPos = worldNorm;//test
+
+		
+		//-----------------------------------
+		//collision system
+		int count = min(_CollidersData_length,MAX_COLLIDERS);
+		float contactForce = 100.0;
+				
+
+		float furlengthoffset = _furLength * _InteractionOffsetFactor;
+
+		for (int i = 0; i < count; ++i)
+		{
+			if (i > _CollidersData_length-1)
+				break;
+
+			float3 contactDirRoot = worldPos.xyz - _CollidersData_Buffer[i].sphere1.xyz;
+			float3 contactDirTip = worldPos.xyz + worldNorm * _furLength - _CollidersData_Buffer[i].sphere1.xyz;
+			float3 contactDir =( contactDirRoot + contactDirTip)*.5;
+			float radius = _CollidersData_Buffer[i].sphere1.w;
+			float lct = length(contactDir);
+			float f = .2f;
+			
+			if (lct < radius + furlengthoffset)
+			{		
+				COLLISION(1)
+				break;
+			}
+			
+			
+			contactDir = worldPos.xyz - _CollidersData_Buffer[i].sphere2.xyz;
+			radius = _CollidersData_Buffer[i].sphere2.w;
+			lct = length(contactDir);
+
+			if (lct < radius  + furlengthoffset)
+			{
+				COLLISION(1)
+				break;
+			}
+			
+			
+			float3 axis = _CollidersData_Buffer[i].sphere1.xyz - _CollidersData_Buffer[i].sphere2.xyz;
+			float dotproj = dot((worldPos.xyz - _CollidersData_Buffer[i].sphere2.xyz), normalize(axis));
+
+			if (dotproj < length(axis) && dotproj>0)
+			{			
+				float3 proj = dotproj * normalize(axis) + _CollidersData_Buffer[i].sphere2.xyz;
+				contactDir = worldPos.xyz - proj;
+				radius = lerp(_CollidersData_Buffer[i].sphere2.w, _CollidersData_Buffer[i].sphere1.w, dotproj);
+				lct = length(contactDir);
+
+				if (lct < radius + furlengthoffset)
+				{
+					COLLISION(1)
+					break;
+				}
+			}
+			
+			
+		}
+		//-----------------------------------
+		
+		
+		/*
+		//-----------------------------------
+		//avoid mesh collision
+		if (length(deltaPos) > 0)
+		{
+			float dotNDir = dot(worldNorm, normalize(deltaPos));
+
+			if (dotNDir < 0)
+			{
+				
+				//deltaPos.xyz = normalize(deltaPos - dotNDir * worldNorm) * length(deltaPos);
+				deltaPos.xyz *= .5 + .5*(1.0 + dotNDir)*(1.0 + dotNDir);//strand rigidity
+				deltaPos = normalize(deltaPos - worldNorm * dot(worldNorm, deltaPos))*length(deltaPos);
+				
+
+				deltaPos += dot(worldNorm, deltaPos)*worldNorm;
+			}
+			else
+			{
+				//deltaPos.xyz *= dotNDir;
+			}
+		}
+		//-----------------------------------
+		*/
+
+
+
+		float l = length(deltaPos);
+        float limit = _furLength * 100.0* _MotionFactor;
+
+		
+		if (l > 0)
+		{
+			deltaPos = normalize(deltaPos) * min(l, limit);
+		}
+		else			
+		{
+			deltaPos = worldNorm * .01;//fix bug 'no gravity'
+		}
+
+
+		//if( l>0 || length(_PI_Data_Buffer[idx].errSum)>0)
+			deltaPos = Compute(idx, deltaPos);
+
+		//deltaPos = lerp(newDeltaPos, deltaPos, -dot(normalize(newDeltaPos), normalize(deltaPos)));
+		//deltaPos = newDeltaPos;
+
+		//deltaPos = lerp(_PI_Data_Buffer[idx].result, deltaPos, _dt);
+
+
+		/*
+		float prev = (Result[float2(x, y)] - float3(.5, .5, .5)) * 2.0;
+		deltaPos = lerp(prev, deltaPos, .5);
+		*/
+
+
+
+		float3 r = float3(.5, .5, .5);
+		float motionAmplitude = length(deltaPos);// / _furLength;	
+
+
+		if (motionAmplitude > 0)
+		{
+			r = normalize(deltaPos)*.5+ float3(.5, .5, .5);			
+		}
+		Result[float2(x, y)] = float4(r, motionAmplitude);		
+		_worldPosBuf[idx].value = worldPos;
+
+	}
+	else
+	{
+		Result[float2(x, y)] = float4(0.5, 0.5, 0.5, 0);
+	}
+
+
+}

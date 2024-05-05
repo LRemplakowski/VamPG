@@ -1,4 +1,6 @@
-using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using UltEvents;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,36 +10,63 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private Objective _objective;
+        [SerializeField]
+        private bool useUltEvents = true;
 
-        public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted;
+        [HideIf("@this.useUltEvents == true")]
+        public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted, ObjectiveActiveAfterSceneLoad;
+        [ShowIf("@this.useUltEvents == true")]
+        public UltEvent OnObjectiveActive, OnObjectiveInactive, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
 
         private void OnEnable()
         {
-            _objective.OnObjectiveActive += OnObjectiveActive;
-            _objective.OnObjectiveInactive += OnObjectiveInactive;
-            _objective.OnObjectiveCompleted += OnObjectiveCompleted;
+            _objective.OnObjectiveActive += ObjectiveActiveHandler;
+            _objective.OnObjectiveFailed += ObjectiveInactiveHandler;
+            _objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
+            QuestJournal.OnObjectiveDataInjected += ObjectiveDataInjectedHandler;
         }
 
         private void OnDisable()
         {
-            _objective.OnObjectiveActive -= OnObjectiveActive;
-            _objective.OnObjectiveInactive -= OnObjectiveInactive;
-            _objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            _objective.OnObjectiveActive -= ObjectiveActiveHandler;
+            _objective.OnObjectiveFailed -= ObjectiveInactiveHandler;
+            _objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
+            QuestJournal.OnObjectiveDataInjected -= ObjectiveDataInjectedHandler;
         }
 
-        private void OnObjectiveActive(Objective obj)
+        private void ObjectiveActiveHandler(Objective obj)
         {
-            ObjectiveActive?.Invoke();
+            if (useUltEvents)
+                OnObjectiveActive?.InvokeSafe();
+            else
+                ObjectiveActive?.Invoke();
         }
 
-        private void OnObjectiveInactive(Objective obj)
+        private void ObjectiveInactiveHandler(Objective obj)
         {
-            ObjectiveInactive?.Invoke();
+            if (useUltEvents)
+                OnObjectiveInactive?.InvokeSafe();
+            else
+                ObjectiveInactive?.Invoke();
         }
 
-        private void OnObjectiveCompleted(Objective obj)
+        private void ObjectiveCompletedHandler(Objective obj)
         {
-            ObjectiveCompleted?.Invoke();
+            if (useUltEvents)
+                OnObjectiveCompleted?.InvokeSafe();
+            else
+                ObjectiveCompleted?.Invoke();
+        }
+
+        private void ObjectiveDataInjectedHandler(HashSet<Objective> objectives)
+        {
+            if (objectives.Contains(_objective))
+            {
+                if (useUltEvents)
+                    OnObjectiveActiveAfterSceneLoad?.InvokeSafe();
+                else
+                    ObjectiveActiveAfterSceneLoad?.Invoke();
+            }
         }
     }
 }

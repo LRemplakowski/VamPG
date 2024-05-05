@@ -1,22 +1,28 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
+﻿using Sirenix.Serialization;
+using SunsetSystems.Entities.Interfaces;
+using UnityEngine;
+
+namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
+    [System.Serializable]
     public class HostileActionCondition : Condition
     {
-
+        [field: SerializeField]
         public bool Performed { get; set; }
+        [OdinSerialize]
+        private ICombatant target, performer;
 
-        private Creature target, performer;
-
-        public HostileActionCondition(Creature target, Creature performer)
+        public HostileActionCondition(ICombatant target, ICombatant performer)
         {
             Performed = false;
             this.target = target;
             this.performer = performer;
         }
 
-        public void OnHostileActionFinished(Creature target, Creature performer)
+        public void OnHostileActionFinished(ICombatant target, ICombatant performer)
         {
-            Finish();
+            if ((target?.Equals(this.target) ?? false) && (performer?.Equals(this.performer) ?? false))
+                Finish();
         }
 
         public void Finish()

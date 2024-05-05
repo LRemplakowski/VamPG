@@ -1,0 +1,170 @@
+﻿title: leaveAlone
+tags:
+---
+{$diana}: Shame. Think I could grab your number? #line:0a751ff 
+-> {$pcName}: Yes. #line:04adab7 
+    {$diana}: [nomarkup][You write down your phone number on a napkin and hand it to her. She grins and tucks it into her cleavage.][/nomarkup] Great stuff. #line:0f036fe 
+-> {$pcName}: No. #line:0425a85 
+    [nomarkup][You wave her off and she pouts.][/nomarkup] #line:0228d7e 
+<<jump licenseTab>>
+//regardless of outcome PC stands up//
+===
+title: licenseTab
+---
+Bartender: Hey- can't leave your license behind the bar. Let me close out your tab? #line:0cd6d54 
+-> {$pcName}: Ah, silly me, I nearly forgot. [nomarkup][Look closely at bartender hiding suspicion.] (Charisma + Insight)[/nomarkup] #line:07e7631 
+    <<jump bartenderChaRoll>>
+-> {$pcName}: Sure. [nomarkup][Look at the bar. Something doesn't add up.] (Intelligence + Etiquette)[/nomarkup] #line:0750220 
+    <<jump bartenderIntRoll>>
+-> {$pcName}: [nomarkup][You raise your eyebrow.][/nomarkup] Yeah, yeah... sorry... (Composure + Streetwise) #line:040d2cf 
+    <<jump bartenderCompRoll>>
+===
+title: bartenderChaRoll
+---
+<<if $drinkSuccess == true>>
+    <<jump bartenderChaSuccess>>
+<<elseif Roll("Charisma","Insight") >=3>>
+    <<jump bartenderChaSuccess>>
+<<else>>
+    <<jump bartenderChaFailure>>
+<<endif>>
+===
+title: bartenderChaSuccess
+---
+[nomarkup][You look at the bartender who's been serving you and catch his eyes with an easy smile. He glances at the drink with a flash of extreme guilt that sets on on edge and hands you your driver's license. Before you have the chance to ask him he disappears into the staff-only area.][/nomarkup] #success #line:0cdf5b5 
+<<jump dianaContinues>>
+===
+title: bartenderChaFailure
+---
+[nomarkup][You take your license from the bartender who rings up your tab. He immediately disappears into the staff-only area.][/nomarkup] #line:0b169a5 
+<<jump dianaContinues>>
+===
+title: bartenderIntRoll
+---
+<<if $drinkSuccess == true>>
+    <<jump bartenderIntSuccess>>
+<<elseif Roll("Charisma","Insight") >=3>>
+    <<jump bartenderIntSuccess>>
+<<else>>
+    <<jump bartenderIntFailure>>
+<<endif>>
+===
+title: bartenderIntSuccess
+---
+[nomarkup][You catch it just out of the corner of your eye that the bartender has written down your license information. He hands it back to you a moment later but you know something off here. Before you have the chance to ask him he disappears into the staff-only area.][/nomarkup] #success #line:0f6e2b7 
+<<jump dianaContinues>>
+===
+title: bartenderIntFailure
+---
+[nomarkup][You see him write something down behind the bar as he hands you back your license. He looks over at Diana and then tells another bartender he'll be taking his break.][/nomarkup] #failure #line:0901783 
+<<jump dianaContinues>>
+===
+title: bartenderCompRoll
+---
+<<if $drinkSuccess == true>>
+    <<jump bartenderCompSuccess>>
+<<elseif Roll("Charisma","Insight") >=3>>
+    <<jump bartenderCompSuccess>>
+<<else>>
+    <<jump bartenderCompFailure>>
+<<endif>>
+===
+title: bartenderCompSuccess
+---
+[nomarkup][You were supposed to be given your license back immediately, it's actually more strange that you're getting it now. What has he been doing it with this whole time? Shit. This is bad. Before you have the chance to ask him he disappears into the staff-only area.][/nomarkup] #success #line:059b5c9 
+<<jump dianaContinues>>
+===
+title: bartenderCompFailure
+---
+[nomarkup][It's weird that he didn't give you back your license until now but he might have just not gotten around to it. Before you have the change to ask him he's disappeared into the kitchen.][/nomarkup] #failure #line:06efe54 
+<<jump dianaContinues>>
+===
+title: dianaContinues
+---
+<<if $numberOfDrinks == 0>>
+    [nomarkup][The situation has taken a turn and as you look back at Diana you can see her glowering at you. You almost have to take a step back it has such a venom to it. You twirl your keys in your hand, anxious. Whatever ‘The Dutchess' has in mind for you you want no part in it.][/nomarkup] #line:0eec1e1 
+    {$diana}: You sure you don't want to take me up on the offer Desiree Bardot? #line:0106224 
+    -> {$pcName}: Yeah. Yeah, I think I'm sure. Have a nice night. #line:02f59c1 
+    {$diana}: Alright... Have it your way. #line:0dbe7cb 
+    <<jump havenArrivalAlone>>
+<<elseif $numberOfDrinks >=1>>
+    <<if Roll("Stamina","Resolve") >=1>>
+        //pc gets drunk animations//
+        [nomarkup][You feel yourself getting unsteady on your feet, the lights seem brighter and the back of your neck feels hot. You didn't drink that much did you?][/nomarkup] #line:0c9c27d 
+    <<endif>>
+    {$diana}: Sorry babes... It'll all be over quickly. #line:0bc9069 
+    <<jump drugOvercome>>
+<<endif>>
+-> [nomarkup][Try to overcome the drug effects.] (Stamina + Resolve)[/nomarkup] #line:069e723 
+===
+title: drugOvercome
+---
+<<if Roll("Stamina","Resolve") >=(1+$numberOfDrinks)>>
+    <<jump drugOvercomeSuccess>>
+<<else>>
+    <<jump drugOvercomeFailure>>
+<<endif>>
+===
+title: drugOvercomeFailure
+---
+[nomarkup][You find your head resting against your knees as prickles of hair brush against your face.][/nomarkup] #line:0f84d46 
+{$diana}: Come on. #line:0f7d324 
+-> {$pcName}: Why...? #line:076b299 
+{$diana}: It's what Lucia... why am I answering that. #line:01f990f 
+-> {$pcName}: Why... #line:0c7a610 
+{$diana}: I don't know. #line:028828c 
+<<jump pcLoosesConciousness>>
+===
+title: pcLoosesConciousness
+---
+//PC stumbles and lies on ground//
+[nomarkup][Everything goes white as you hear the sound of your body hitting the floor.][/nomarkup] #line:0db91ec 
+//fade to black//
+<<jump havenDruggedArrival>>
+===
+title: drugOvercomeSuccess
+---
+//pc leans on the bar//
+[nomarkup][You put your hand on the bar and wheeze feeling everything get brighter.][/nomarkup] #success #line:05ab806 
+-> {$pcName}: What did you... put in my... drink? #line:0bd17c4 
+{$diana}: ... #line:0431257 
+//fade to black//
+<<if Roll("Stamina","Resolve") >=(2+$numberOfDrinks)>>
+    <<jump drugOvercomeSuccess2>>
+<<else>>
+    <<jump drugOvercomeFailure>>
+<<endif>>
+===
+title:drugOvercomeSuccess2
+---
+//pc gest drunk anims as he makes several steps//
+[nomarkup][You stagger through the club as you're bounced between bodies feeling your vision get more and more hazy. The lights are so bright and they're blinding you.][/nomarkup] #line:0471e23 
+{$diana}: Just relax. #line:0e483ed 
+-> {$pcName}: Fuck you. Fuck... Fuck you. #line:0acc94a 
+//fade to black//
+<<if Roll("Stamina","Resolve") >=(3+$numberOfDrinks)>>
+    <<jump drugOvercomeSuccess3>>
+<<else>>
+    <<jump drugOvercomeFailure>>
+<<endif>>
+===
+title:drugOvercomeSuccess3
+---
+//PC is in back alley lying on the ground next to the black van//
+[nomarkup][Your hand presses onto something cold and metallic and you push, hard, on whatever it is. You have to close your eyes against the intensity of the headlights flashing. Where are you?][/nomarkup] #line:07c85c4 
+{$diana}: Oh shit - Desiree! #line:063aea1 
+-> {$pcName}: Wha-what the fuck is... what's happening...? #line:0a00823 
+//fade to black//
+<<if Roll("Stamina","Resolve") >=(4+$numberOfDrinks)>>
+    <<jump drugOvercomeSuccess4>>
+<<else>>
+    <<jump drugOvercomeFailure>>
+<<endif>>
+===
+title: drugOvercomeSuccess4
+---
+//PC is in the black van, that goes through the streets//
+[nomarkup][You lead against a wall and close your eyes feeling your legs go weak. You keep pushing yourself... forward. A muffled voice can be heard above you.][/nomarkup] #line:07c5416 
+-> {$pcName}: W-who's there - what? Where am... I? #line:0ff10bc 
+<<jump drugOvercomeFailure>>
+===

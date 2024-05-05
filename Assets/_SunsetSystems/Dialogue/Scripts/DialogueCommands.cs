@@ -1,11 +1,12 @@
+using System;
 using SunsetSystems.Audio;
-using SunsetSystems.Entities.Characters;
+using SunsetSystems.Core.Database;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -37,7 +38,7 @@ namespace SunsetSystems.Dialogue
         {
             if (QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(readableQuestID, objectiveID, out Objective objective))
             {
-                objective.MakeInactive();
+                objective.Fail();
             }
             else
             {
@@ -48,15 +49,15 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("IncreaseHunger")]
         public static void IncreaseHunger(string characterID, int value)
         {
-            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            character.StatsManager.TryUseBlood(value);
+            ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            character.References.StatsManager.TryUseBlood(value);
         }
 
         [YarnCommand("DecreaseHunger")]
         public static void DecreaseHunger(string characterID, int value)
         {
-            Creature character = PartyManager.Instance.GetPartyMemberByID(characterID);
-            character.StatsManager.RegainBlood(value);
+            ICreature character = PartyManager.Instance.GetPartyMemberByID(characterID);
+            character.References.StatsManager.RegainBlood(value);
         }
 
         [YarnCommand("AddMoney")]
@@ -75,13 +76,66 @@ namespace SunsetSystems.Dialogue
         public static void RemoveMoney(float value)
         {
             if (InventoryManager.Instance.TryRemoveMoney(value) == false)
-                throw new ArgumentException($"Money amount {value} is greater than current funds! Check money amount before removing money!");
+                Debug.LogError($"Money amount {value} is greater than current funds! Check money amount before removing money!");
         }
 
         [YarnCommand("PlaySFX")]
         public static void PlaySFX(string clipName)
         {
             AudioManager.Instance.PlaySFXOneShot(clipName);
+        }
+
+        [YarnCommand("GiveItem")]
+        public static void GiveItem(string itemID)
+        {
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
+                InventoryManager.Instance.GiveItemToPlayer(new(item));
+            else
+                Debug.LogError($"Dialogue command GiveItem: Could not find item {itemID} in the ItemDatabase instance!");
+        }
+
+        [YarnCommand("GiveItemCount")]
+        public static void GiveItemCount(string itemID, int count)
+        {
+            if (count <= 0)
+            {
+                Debug.LogError("Item count cannot be less than 1!");
+                return;
+            }
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
+                InventoryManager.Instance.GiveItemToPlayer(new(item, count));
+            else
+                Debug.LogError($"Dialogue command GiveItemCount: Could not find item {itemID} in the ItemDatabase instance!");
+        }
+
+        [YarnCommand("RemoveItem")]
+        public static void RemoveItem(string itemID)
+        {
+
+            if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out var item))
+            {
+                InventoryManager.Instance.TakeItemFromPlayer(item, 1);
+            }
+
+        }
+
+        [YarnCommand("DealDamage")]
+        public static void DealDamage(string characterID, int damage, string damageType)
+        {
+            Debug.LogError($"Deal that damage, dummy");
+        }
+
+        [YarnCommand("DecreaseWillpower")]
+        public static void DecreaseWillpower(string characterID, int value)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            {
+                var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
+                if (partyMember != null)
+                {
+                    partyMember.References.StatsManager.Willpower.SuperficialDamage += value;
+                }
+            }
         }
     }
 }

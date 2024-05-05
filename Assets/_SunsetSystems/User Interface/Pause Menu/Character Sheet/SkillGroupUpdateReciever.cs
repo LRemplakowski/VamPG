@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.UI.Utils;
 using System.Collections;
@@ -10,7 +9,7 @@ namespace SunsetSystems.UI
 {
     public class SkillGroupUpdateReciever : MonoBehaviour, IUserInterfaceUpdateReciever<BaseStat>
     {
-        [SerializeField, EnumFlags]
+        [SerializeField]
         private SkillType _skills;
         [SerializeField]
         private List<BaseStatView> _views = new();

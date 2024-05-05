@@ -1,13 +1,8 @@
 ﻿using UnityEngine;
 
-namespace Entities.Characters.Data
+namespace SunsetSystems.Entities.Characters
 {
-    public class EntityData
-    {
-
-    }
-
-    public class CreatureUIData : EntityData
+    public struct CreatureUIData
     {
         public readonly string name;
         public readonly Sprite portrait;
@@ -21,7 +16,7 @@ namespace Entities.Characters.Data
             this.hunger = hunger;
         }
 
-        public class CreatureDataBuilder : EntityDataBuilder<CreatureUIData>
+        public class CreatureDataBuilder
         {
             private string name;
             private Sprite portrait;
@@ -36,52 +31,10 @@ namespace Entities.Characters.Data
                 this.hunger = hunger;
             }
 
-            public override CreatureUIData Create()
+            public CreatureUIData Create()
             {
                 return new CreatureUIData(name, portrait, healthData, hunger);
             }
         }
-    }
-
-    public class HealthData  : EntityData
-    {
-        public readonly int maxHealth, superficialDamage, aggravatedDamage;
-
-        private HealthData(int maxHealth, int superficialDamage, int aggravatedDamage)
-        {
-            this.maxHealth = maxHealth;
-            this.superficialDamage = superficialDamage;
-            this.aggravatedDamage = aggravatedDamage;
-        }
-
-        public class HealthDataBuilder : EntityDataBuilder<HealthData>
-        {
-            private int maxHealth, superficialDamage = 0, aggravatedDamage = 0;
-
-            public HealthDataBuilder(int maxHealth)
-            {
-                this.maxHealth = maxHealth;
-            }
-
-            public void SetSuperficialDamage(int superficialDamage)
-            {
-                this.superficialDamage = superficialDamage;
-            }
-
-            public void SetAggravatedDamage(int aggravatedDamage)
-            {
-                this.aggravatedDamage = aggravatedDamage;
-            }
-
-            public override HealthData Create()
-            {
-                return new HealthData(maxHealth, superficialDamage, aggravatedDamage);
-            }
-        }
-    }
-
-    public abstract class EntityDataBuilder<T> where T : EntityData
-    {
-        public abstract T Create();
     }
 }

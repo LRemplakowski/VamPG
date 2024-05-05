@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using Redcode.Awaiting;
 using SunsetSystems.Audio;
 using SunsetSystems.Party;
@@ -12,6 +12,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Yarn.Unity;
+using UnityEngine.EventSystems;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Dialogue
 {
@@ -19,6 +22,8 @@ namespace SunsetSystems.Dialogue
     {
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
+        [SerializeField]
+        private Button _proceedToNextLineButton;
         [SerializeField, Required]
         private Scrollbar _scrollbar;
         [SerializeField, Required]
@@ -47,6 +52,7 @@ namespace SunsetSystems.Dialogue
 
         private const string ROLL_SUCCESS_TAG = "success";
         private const string ROLL_FAIL_TAG = "failure";
+        private const string LAST_LINE_TAG = "lastline";
         private const string ALWAYS_SHOW_OPTION = "showAlways";
 
         public event Action OnOptionsPresented, OnOptionSelectedCustom;
@@ -58,6 +64,7 @@ namespace SunsetSystems.Dialogue
         private bool _clampScrollbarNextFrame;
         private bool _requestedLineInterrupt = false;
         private bool _optionsPresented = false;
+        private bool _canProceedToNextLine = false;
 
         public void Cleanup()
         {
@@ -73,8 +80,13 @@ namespace SunsetSystems.Dialogue
 
         private void Start()
         {
-            DialogueManager.RegisterView(this);
-            gameObject.SetActive(false);
+            DialogueManager.Instance.RegisterView(this);
+            //gameObject.SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            DialogueManager.Instance.UnregisterView(this);
         }
 
         private void Update()
@@ -119,6 +131,7 @@ namespace SunsetSystems.Dialogue
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            _canProceedToNextLine = false;
             _requestedLineInterrupt = false;
             _clampScrollbarNextFrame = true;
             UpdateSpeakerPhoto(dialogueLine.CharacterName);
@@ -129,17 +142,34 @@ namespace SunsetSystems.Dialogue
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
             if (_typewriterEffect && _typeSpeed > 0)
             {
-                AudioManager.Instance.PlayTyperwriterLoop();
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
                 if (_requestedLineInterrupt)
                     return;
             }
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-            AudioManager.Instance.PlayTypewriterEnd();
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayTypewriterEnd();
             _clampScrollbarNextFrame = true;
             await new WaitForSecondsRealtime(_lineCompletionDelay);
+            if (dialogueLine.Metadata == null || (dialogueLine.Metadata.Any(tag => tag == LAST_LINE_TAG) is false))
+                await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
+
+            async Task WaitForProceedToNextLine()
+            {
+                _proceedToNextLineButton.gameObject.SetActive(true);
+                await new WaitUntil(() => _canProceedToNextLine);
+            }
+        }
+
+        public void RunNextLine()
+        {
+            _canProceedToNextLine = true;
+            _proceedToNextLineButton.gameObject.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(null);
         }
 
         private async Task TypewriteText(LocalizedLine line)
@@ -164,16 +194,19 @@ namespace SunsetSystems.Dialogue
             _lineHistoryStringBuilder
                 .AppendLine("");
             bool appended = AppendRollPrefix(line);
-            if (line.CharacterName != null && string.IsNullOrWhiteSpace(line.CharacterName) == false)
+            if (string.IsNullOrWhiteSpace(line.CharacterName) == false)
             {
-                if (appended == false)
-                    _lineHistoryStringBuilder.Append("<size=26>");
+                //if (appended == false)
+                //    _lineHistoryStringBuilder.Append("<size=26>");
                 appended = true;
+                string speakerName = line.CharacterName;
+                if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
+                    speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
-                    .Append($"<color=\"red\">{line.CharacterName}:</color>");
+                    .Append($"<color=\"red\">{speakerName}: </color>");
             }
-            if (appended)
-                _lineHistoryStringBuilder.AppendLine("</size>");
+            //if (appended)
+            //    _lineHistoryStringBuilder.AppendLine("</size>");
             _lineHistoryStringBuilder
                 .AppendLine(line.TextWithoutCharacterName.Text);
             return _lineHistoryStringBuilder.ToString();
@@ -183,7 +216,7 @@ namespace SunsetSystems.Dialogue
         {
             if (dialogueLine.Metadata == null || dialogueLine.Metadata.Length <= 0)
                 return false;
-            _lineHistoryStringBuilder.Append("<size=26>");
+            //_lineHistoryStringBuilder.Append("<size=26>");
             if (dialogueLine.Metadata.Contains(ROLL_SUCCESS_TAG))
                 _lineHistoryStringBuilder.Append("(Success) ");
             else if (dialogueLine.Metadata.Contains(ROLL_FAIL_TAG))
@@ -191,23 +224,26 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private void UpdateSpeakerPhoto(string characterName)
+        private void UpdateSpeakerPhoto(string characterID)
         {
-            string speakerID;
-            if (characterName == null || string.IsNullOrWhiteSpace(characterName))
+            string characterName = characterID;
+            if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                speakerID = PartyManager.MainCharacter.Data.ID;
-                characterName = PartyManager.MainCharacter.Data.FullName;
+                characterID = PartyManager.Instance.MainCharacterKey;
+                if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+                    characterName = config.FullName;
+            }
+            else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
+            {
+                characterID = config.ReadableID;
+                characterName = config.FullName;
             }
             else
             {
-                if (DialogueHelper.VariableStorage.TryGetValue(characterName, out speakerID) == false)
-                {
-                    speakerID = PartyManager.MainCharacter.Data.ID;
-                    characterName = PartyManager.MainCharacter.Data.FullName;
-                }
+                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             }
-            Sprite sprite = this.GetSpeakerPortrait(speakerID);
+            Sprite sprite = this.GetSpeakerPortrait(characterID);
             if (sprite != null)
             {
                 _photo.sprite = sprite;
@@ -217,7 +253,7 @@ namespace SunsetSystems.Dialogue
             else
             {
                 _photoParent.SetActive(false);
-                Debug.LogError($"Cannot find portrait for creature with ID {speakerID} and no placeholder portrait found!");
+                Debug.LogError($"Cannot find portrait for creature with ID {characterID} and no placeholder portrait found!");
             }
         }
 
@@ -285,6 +321,7 @@ namespace SunsetSystems.Dialogue
             _clampScrollbarNextFrame = true;
             AudioManager.Instance.PlayTypewriterEnd();
             _requestedLineInterrupt = true;
+            RunNextLine();
             requestInterrupt?.Invoke();
         }
 

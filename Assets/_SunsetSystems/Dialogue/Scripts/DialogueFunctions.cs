@@ -1,9 +1,12 @@
+using System;
+using System.Linq;
 using SunsetSystems.Dice;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
 using SunsetSystems.Party;
-using System;
-using System.Collections.Generic;
+using UnityEngine;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -11,7 +14,7 @@ namespace SunsetSystems.Dialogue
     public static class DialogueFunctions
     {
         [YarnFunction("RollSingle")]
-        public static int GetRollResult(string statName)
+        public static int GetRollResultSingle(string statName)
         {
             int dice = 0;
             dice += GetStatValueFromString(statName);
@@ -29,6 +32,15 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetAttributeSkillPoolSize")]
+        public static int GetDicePoolSize(string attributeName, string skillName)
+        {
+            int size = 0;
+            size += GetStatValueFromString(attributeName);
+            size += GetStatValueFromString(skillName);
+            return size;
+        }
+
         [YarnFunction("UseDiscipline")]
         public static int GetUseDisciplineResult(string disciplineName)
         {
@@ -38,8 +50,16 @@ namespace SunsetSystems.Dialogue
             return rollOutcome.successes;
         }
 
+        [YarnFunction("GetIsPartyMemberRecruited")]
+        public static bool GetIsPartyMemberRecruited(string readableID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(readableID, out var config))
+                return PartyManager.Instance.IsRecruitedMember(config.DatabaseID);
+            else
+                return false;
+        }
 
-        [YarnFunction("CurrentMoney")]
+        [YarnFunction("GetCurrentMoney")]
         public static float GetCurrentMoney()
         {
             return InventoryManager.Instance.GetMoneyAmount();
@@ -60,12 +80,12 @@ namespace SunsetSystems.Dialogue
             AttributeType attributeType = GetAttributeTypeFromString(statName);
             if (attributeType != AttributeType.Invalid)
             {
-                return PartyManager.MainCharacter.Data.Stats.Attributes.GetAttribute(attributeType).GetValue();
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetAttribute(attributeType)?.GetValue() ?? 0;
             }
             SkillType skillType = GetSkillTypeFromString(statName);
             if (skillType != SkillType.Invalid)
             {
-                return PartyManager.MainCharacter.Data.Stats.Skills.GetSkill(skillType).GetValue();
+                return PartyManager.Instance.MainCharacter.References.StatsManager.GetSkill(skillType)?.GetValue() ?? 0;
             }
             return 1;
         }
@@ -98,6 +118,78 @@ namespace SunsetSystems.Dialogue
         public static bool GetIsObjectiveActive(string questID, string objectiveID)
         {
             return QuestJournal.Instance.TryGetTrackedObjectiveByReadableID(questID, objectiveID, out _);
+        }
+
+        [YarnFunction("GetCompanionInfluence")]
+        public static int GetCompanionInfluence(string companionID)
+        {
+            return 0;
+        }
+
+        [YarnFunction ("GetBloodPoints")]
+        public static int GetBloodPoints(string characterID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            {
+                var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
+                if (partyMember != null)
+                {
+                    return partyMember.References.StatsManager.Hunger.GetValue();
+                }
+            }
+            return 0;
+        }
+
+        [YarnFunction ("GetHasItem")]
+        public static bool GetHasItem(string itemID)
+        {
+            return InventoryManager.Instance.GetInventoryContainsItemWithReadableID(itemID, out _);
+        }
+
+        [YarnFunction("GetIsCompanionInParty")]
+        public static bool GetIsCompanionInParty(string characterID)
+        {
+            foreach (var partyMember in PartyManager.Instance.ActiveParty)
+            {
+                Debug.Log($"Comparing party member IDs! {partyMember.References.CreatureData.ReadableID} == {characterID} ? {partyMember.References.CreatureData.ReadableID == characterID}");
+                if (partyMember.References.CreatureData.ReadableID == characterID)
+                    return true;
+            }
+            return false;
+        }
+
+        [YarnFunction("GetFirstName")]
+        public static string GetFirstName(string characterID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+                return creatureAsset.FirstName;
+            return "";
+        }
+
+        [YarnFunction("GetLastName")]
+        public static string GetLastName(string characterID)
+        {
+            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+                return creatureAsset.LastName;
+            return "";
+        }
+
+        [YarnFunction("GetCharacterDisciplineRank")]
+        public static int GetCharacterDisciplineRank(string characterID, string disciplineID)
+        {
+            return 0;
+        }
+
+        [YarnFunction("GetPartyHasDiscipline")]
+        public static bool GetParyHasDiscipline(string disciplineID)
+        {
+            return true;
+        }
+
+        [YarnFunction("CustomVisited")]
+        public static bool CustomVisited(string nodeID)
+        {
+            return DialogueHelper.VariableStorage.TryGetValue($"visited:{nodeID}", out bool visited) && visited;
         }
     }
 }

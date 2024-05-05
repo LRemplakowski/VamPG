@@ -1,88 +1,64 @@
-﻿using SunsetSystems.Entities.Characters.Actions.Conditions;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Interfaces;
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Move : EntityAction
     {
-        private readonly NavMeshAgent navMeshAgent;
-        private readonly NavMeshObstacle navMeshObstacle;
+        [SerializeField]
+        private NavMeshAgent navMeshAgent;
+        [SerializeField, ReadOnly]
         private Vector3 destination;
-        public delegate void OnMovementFinished(Creature who);
-        public static OnMovementFinished onMovementFinished;
-        public delegate void OnMovementStarted(Creature who);
-        public static OnMovementStarted onMovementStarted;
-        private float stoppingDistance;
-        private Transform rotationTarget;
-        private Task rotationTask;
+        public static event Action<IActionPerformer> OnMovementFinished;
+        public static event Action<IActionPerformer> OnMovementStarted;
+        //private Task rotationTask;
 
-        protected override Creature Owner
+        public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, false)
         {
-            get;
-            set;
-        }
-
-        public Move(Creature owner, Vector3 destination, float stoppingDistance)
-        {
-            this.Owner = owner;
-            this.navMeshAgent = owner.GetComponent<NavMeshAgent>();
-            this.navMeshObstacle = owner.GetComponent<NavMeshObstacle>();
+            this.navMeshAgent = owner.References.NavMeshAgent;
+            NavMesh.SamplePosition(destination, out var hit, 1f, NavMesh.AllAreas);
             conditions.Add(new Destination(navMeshAgent));
-            this.destination = destination;
-            this.stoppingDistance = stoppingDistance;
+            this.destination = hit.position;
         }
 
-        public Move(Creature owner, Vector3 destination, Transform rotationTarget) : this(owner, destination, 0f)
+        public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition))
         {
-            this.rotationTarget = rotationTarget;
-            rotationTask = new Task(RotateToTarget);
+            gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
+            owner.OnChangedGridPosition += ClearOccupierFromCell;
+
+            void ClearOccupierFromCell(ICombatant combatant)
+            {
+                gridInstance.ClearOccupierFromCell(gridCell);
+                owner.OnChangedGridPosition -= ClearOccupierFromCell;
+            }
         }
 
-        private async void RotateToTarget()
+        public override void Cleanup()
         {
-            await Owner.FaceTarget(rotationTarget);
-        }
-
-        public override void Abort()
-        {
-            navMeshAgent.velocity = Vector3.zero;
+            base.Cleanup();
             navMeshAgent.isStopped = true;
-            //navMeshAgent.enabled = false;
-            //navMeshObstacle.enabled = true;
-            navMeshAgent.stoppingDistance = 0f;
-            if (onMovementFinished != null)
-                onMovementFinished.Invoke(this.Owner);
+            if (OnMovementFinished != null)
+                OnMovementFinished.Invoke(this.Owner);
         }
 
         public override void Begin()
         {
-            navMeshObstacle.enabled = false;
-            navMeshAgent.enabled = true;
-            navMeshAgent.ResetPath();
-            navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
-            navMeshAgent.stoppingDistance = stoppingDistance;
-            if (onMovementStarted != null)
-                onMovementStarted.Invoke(this.Owner);
-        }
-
-        public override bool IsFinished()
-        {
-            bool finished = base.IsFinished();
-            if (rotationTarget != null && conditions.Any(c => (c is Destination d) && d.IsMet()))
+            navMeshAgent.ResetPath();
+            if (navMeshAgent.SetDestination(destination)) 
             {
-                rotationTask.Start();
-            }
-            if (finished)
-            {
-                return true;
+                if (OnMovementStarted != null)
+                    OnMovementStarted.Invoke(this.Owner);
             }
             else
             {
-                return false;
+                Cleanup();
             }
         }
     }

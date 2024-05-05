@@ -1,11 +1,8 @@
-using NaughtyAttributes;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
 {
@@ -23,24 +20,21 @@ namespace SunsetSystems.Dialogue
         private DialogueSaveData GenerateInjectionData()
         {
             DialogueSaveData injectionData = new();
-            injectionData._floats = new();
-            injectionData._strings = new();
-            injectionData._bools = new();
-            List<string> configIDs = CreatureDatabase.Instance.AccessorKeys ?? new();
+            List<string> configIDs = CreatureDatabase.Instance?.AccessorKeys ?? new();
             foreach (string configID in configIDs)
             {
                 if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))
                 {
                     injectionData._strings.Add(configID, config.FullName);
-                    injectionData._strings.Add(config.FullName, configID);
+                    //injectionData._strings.Add(config.FullName, configID);
                 }
             }
             return injectionData;
         }
 
-        public ref DialogueSaveData GetVariableInjectionData()
+        public DialogueSaveData GetVariableInjectionData()
         {
-            return ref _injectionData;
+            return _injectionData;
         }
     }
 }

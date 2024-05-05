@@ -1,4 +1,3 @@
-using Apex;
 using SunsetSystems.UI.Utils;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,7 +69,7 @@ namespace SunsetSystems.Journal.UI
                     ViewPool.Add(view);
                 }
                 view.UpdateView(dataProvider);
-                (view as MonoBehaviour).gameObject.SetActive(true);
+                view.gameObject.SetActive(true);
             }
             gameObject.SetActive(true);
         }

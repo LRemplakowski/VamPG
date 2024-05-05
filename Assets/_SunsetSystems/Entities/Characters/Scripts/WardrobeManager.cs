@@ -1,7 +1,6 @@
 using SunsetSystems.Animation;
 using SunsetSystems.Combat;
-using SunsetSystems.Game;
-using SunsetSystems.Inventory;
+using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
 using System;
 using System.Collections.Generic;
@@ -15,29 +14,13 @@ namespace SunsetSystems.Entities.Characters
     public class WardrobeManager : MonoBehaviour
     {
         private Creature _owner;
-        private CreatureAnimationController _animationController;
+        private AnimationManager _animationController;
         private Transform _rightClavicle, _leftHand;
         private DynamicCharacterAvatar _dca;
         private string _characterID;
         private WardrobeData _cachedWardrobeData = new();
         private bool _initializedOnce;
         private bool _displayWeapons = false;
-
-        private void OnEnable()
-        {
-            InventoryManager.ItemEquipped += UpdateWardrobe;
-            InventoryManager.ItemUnequipped += UpdateWardrobe;
-            CombatManager.CombatBegin += OnCombatBegin;
-            CombatManager.CombatEnd += OnCombatEnd;
-        }
-
-        private void OnDisable()
-        {
-            InventoryManager.ItemEquipped -= UpdateWardrobe;
-            InventoryManager.ItemUnequipped -= UpdateWardrobe;
-            CombatManager.CombatBegin -= OnCombatBegin;
-            CombatManager.CombatEnd -= OnCombatEnd;
-        }
 
         private void OnCombatBegin(List<Creature> combatants)
         {
@@ -46,7 +29,7 @@ namespace SunsetSystems.Entities.Characters
             if (combatants.Contains(_owner))
             {
                 _displayWeapons = true;
-                UpdateWardrobe(_characterID);
+                UpdateWardrobe();
             }
             else
             {
@@ -59,29 +42,24 @@ namespace SunsetSystems.Entities.Characters
             if (!_initializedOnce)
                 Initialize();
             _displayWeapons = false;
-            UpdateWardrobe(_characterID);
+            UpdateWardrobe();
         }
 
         private void Initialize()
         {
             Debug.LogError($"Initializing wardrobe manager for {gameObject.name}");
-            _dca = GetComponent<DynamicCharacterAvatar>();
-            _owner = GetComponent<Creature>();
-            _characterID = _owner.Data.ID;
+            _owner = GetComponentInParent<Creature>();
+            _dca = _owner.References.GetCachedComponentInChildren<DynamicCharacterAvatar>();
+            _characterID = _owner.References.CreatureData.DatabaseID;
+            _animationController = _owner.References.GetCachedComponentInChildren<AnimationManager>();
             _initializedOnce = true;
-            _animationController = GetComponent<CreatureAnimationController>();
         }    
 
-        public void UpdateWardrobe(string characterID)
+        public void UpdateWardrobe()
         {
             if (!_initializedOnce)
                 Initialize();
-            if (this._characterID.Equals(characterID))
-            {
-                EquipmentData data = _owner.Data.Equipment;
-                RemoveWardrobe();
-                HandleWeapon(data);                
-            }
+            throw new NotImplementedException();
         }
 
         private void HandleWeapon(EquipmentData data)
@@ -92,30 +70,28 @@ namespace SunsetSystems.Entities.Characters
                 return;
             }
 
-            Weapon selectedWeapons = data.GetSelectedWeapon();
-            if (selectedWeapons == null)
-            {
-                Debug.LogWarning($"No weapon selected for {gameObject.name}!");
-                _animationController.DisableIK();
-                return;
-            }
+            //Weapon selectedWeapons = data.GetSelectedWeapon();
+            //if (selectedWeapons == null)
+            //{
+            //    Debug.LogWarning($"No weapon selected for {gameObject.name}!");
+            //    _animationController.DisableIK();
+            //    return;
+            //}
             
-            if (_rightClavicle == null)
-            {
-                UMAData umaData = GetComponent<UMAData>();
-                _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
-            }
+            //if (_rightClavicle == null)
+            //{
+            //    UMAData umaData = GetComponent<UMAData>();
+            //    _rightClavicle = umaData.GetBoneGameObject("CC_Base_R_Clavicle").transform;
+            //}
 
-            Transform weapon = Instantiate(selectedWeapons.Prefab).transform;
-            weapon.SetParent(_rightClavicle);
-            _cachedWardrobeData.CurrentWeapon = weapon;
-            if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
-            {
-                Debug.Log($"Enabling weapon IK for {gameObject.name}!");
-                _animationController.EnableIK(ikData);
-                weapon.localPosition = ikData.PositionOffset;
-                weapon.localEulerAngles = ikData.RotationOffset;
-            }
+            //Transform weapon = Instantiate(selectedWeapons.Prefab).transform;
+            //weapon.SetParent(_rightClavicle);
+            //_cachedWardrobeData.CurrentWeapon = weapon;
+            //if (weapon.TryGetComponent(out WeaponAnimationDataProvider ikData))
+            //{
+            //    Debug.Log($"Enabling weapon IK for {gameObject.name}!");
+            //    _animationController.EnableIK(ikData);
+            //}
         }
 
         private void RemoveWardrobe()

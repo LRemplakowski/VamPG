@@ -1,38 +1,34 @@
 trackSelection = true
+refreshSearchWindowsInPlayMode = false
 fetchPreview = true
-wantsMore = false
+defaultFlags = 0
 keepOpen = false
 queryFolder = "Assets"
 onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.83F126EB" = "Female Age"
-	"OpenInspectorPreview.83F126EB" = "0"
-	"currentGroup.83F126EB" = "asset"
-	"last_search.7BEC51F9" = ""
-	"OpenInspectorPreview.7BEC51F9" = "0"
-	"currentGroup.7BEC51F9" = "asset"
+	"last_search.110DEAA3" = "h: is:child t:InteractableEntity"
+	"OpenInspectorPreview.110DEAA3" = "0"
+	"currentGroup.110DEAA3" = "asset"
+	"last_search.E8DA1663" = "h: ref=\"/=== SCENE CORE ===/=== DIALOGUES ===/Diana Office/Diana Office Enter Dialogue\""
+	"OpenInspectorPreview.E8DA1663" = "0"
+	"currentGroup.E8DA1663" = "all"
 }
 providers = {
-	adb = {
-		active = false
-		priority = 2500
-		defaultAction = null
-	}
-	asset = {
-		active = true
-		priority = 25
-		defaultAction = null
-	}
-	store = {
+	st = {
 		active = true
 		priority = 100
 		defaultAction = null
 	}
-	find = {
+	at = {
 		active = true
-		priority = 25
+		priority = 100
+		defaultAction = null
+	}
+	adb = {
+		active = false
+		priority = 2500
 		defaultAction = null
 	}
 	log = {
@@ -40,12 +36,17 @@ providers = {
 		priority = 210
 		defaultAction = null
 	}
-	packages = {
-		active = true
-		priority = 90
+	performance = {
+		active = false
+		priority = 100
 		defaultAction = null
 	}
-	performance = {
+	store = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	profilermarkers = {
 		active = false
 		priority = 100
 		defaultAction = null
@@ -55,22 +56,51 @@ providers = {
 		priority = 50
 		defaultAction = null
 	}
-	query = {
+	find = {
 		active = true
-		priority = 100
+		priority = 25
+		defaultAction = null
+	}
+	packages = {
+		active = true
+		priority = 90
+		defaultAction = null
+	}
+	asset = {
+		active = true
+		priority = 25
 		defaultAction = null
 	}
 }
+objectSelectors = {
+}
 recentSearches = [
-	"Female Age"
+	"h: ref=\"/=== SCENE CORE ===/=== DIALOGUES ===/Diana Office/Diana Office Enter Dialogue\""
+	"h: ref=<$object:none,GameObject$>"
+	""
+	"h: t:ObjectiveTrigger"
+	"h: t:QuestTrigger"
+	"h: t:DialogueVariableObjectiveTrigger"
+	"h: t:DialogueTrigger"
+	"h: t:NodeEventListener"
+	"h: t:ObjectiveEventListener"
+	"h: t:InteractableHighlightHandler"
+	"h: t:InteractableEntity"
+	"h: is:child t:InteractableEntity"
+	"h: is:child t:InteractableEntity layer=<$layer:8, ActionTarget$>"
+	"h: t:InteractableEntity is:child"
+	"h:"
 ]
 searchItemFavorites = [
 ]
 savedSearchesSortOrder = 0
 showSavedSearchPanel = false
+hideTabs = false
 expandedQueries = [
 ]
-queryBuilder = false
+queryBuilder = true
 ignoredProperties = "id;name;classname;imagecontentshash"
-helperWidgetCurrentArea = "all"
+helperWidgetCurrentArea = "h:"
 disabledIndexers = ""
+minIndexVariations = 2
+findProviderIndexHelper = true

@@ -24,18 +24,23 @@ namespace InsaneSystems.RTSSelection
 
         private void OnEnable()
         {
-            PlayerInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            PlayerInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
         }
 
         public override void Initialize()
         {
             AllSelectables.Clear();
             AllSelectables.AddRange(FindInterfaces.Find<ISelectable>());
+        }
+
+        public override void LateInitialize()
+        {
+
         }
 
         /// <summary> Returns all selected objects of type T, which should be derived from ISelectable. If you have only one selectable type, it simply return all of them converted to this type from ISelectable.

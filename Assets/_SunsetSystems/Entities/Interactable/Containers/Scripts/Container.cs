@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
 
 namespace SunsetSystems.Entities.Interactable
 {
     [RequireComponent(typeof(ItemStorage))]
-    public class Container : InteractableEntity
+    public class Container : SerializedMonoBehaviour, IInteractionHandler
     {
         [SerializeField]
         private ItemStorage _myInventory;
         private ContainerGUI _containerGUI;
 
-        protected override void Awake()
+        protected void Awake()
         {
             if (!_myInventory)
                 _myInventory = GetComponent<ItemStorage>();
         }
 
-        protected override void HandleInteraction()
+        public bool HandleInteraction(IActionPerformer interactee)
         {
             OpenContainer();
+            return true;
         }
 
         private void OpenContainer()

@@ -1,0 +1,875 @@
+﻿#pragma kernel UpdateRootPositions
+#pragma kernel UpdatePositions
+#pragma kernel Solve
+#pragma kernel UpdateOrientation
+#pragma kernel BufferCopy
+
+#define PI 3.1415926535897932384626433832795
+
+struct NodeInfo
+{
+	int parentId;
+	int childId;
+	int rootId;
+	int rootArrayId;
+	float parentDistance;
+	float childDistance;
+	float rootDistance;
+	float strandLength;
+	float chainFactor;
+	float3 initPosition;
+	float3 initUp;
+	int constraint;
+	//float strandLength;
+	//float3 localPosition;
+};
+
+
+struct NodeData
+{
+	float3 position;
+	float3 prevPosition;
+	float3 forward;
+	float3 up;	
+	//bool collided;
+};
+
+
+struct RootMatrix
+{
+	float3 pos;
+	float4x4 mat;
+	float4x4 previousMat;
+};
+
+struct ColliderData
+{
+	float3 center1;
+	float3 center2;
+	float radius1;
+	float radius2;
+	int activated;
+};
+
+
+RWStructuredBuffer<RootMatrix> _rootTransform;
+StructuredBuffer<NodeData> _nodesRead;
+StructuredBuffer<NodeInfo> _nodesInfos;
+RWStructuredBuffer<NodeData> _nodes;
+StructuredBuffer<ColliderData> _colliders;
+
+int _nodeCount;
+int _collidersCount;
+float _collisionOffset;
+
+float2 _motionStability;
+float2 _rootTipSmoothFactor;
+
+
+float _dt;
+float _previous_dt;
+float3 _force;
+float2 _length;
+float _elasticity;
+float _ratioWeightRootTip;
+
+
+float2 _rigidity;
+float _maxAngle;
+float _globalSmooth;
+float2 _shapeFactor;
+
+
+bool _lastStep;
+
+float _WindMain;
+float _WindTurbulence;
+
+float4 _Time;
+float4 KHD_windZoneDir;
+float4 KHD_windZoneParam;
+
+float _scale;
+//float _distanceSmooth;
+
+
+float3 LimitVectorAngle(float3 target, float3 v, float limitAngleRad)
+{
+	target = normalize(target);
+
+	float c = dot(target, v) / (length(target) * length(v));
+	if (acos(c) > limitAngleRad)
+	{
+		c = cos(limitAngleRad);
+		float s = sin(limitAngleRad);
+		float3 rotateAxis = normalize(cross(target, normalize(v)));
+		float3 vr = target * c + cross(rotateAxis, target) * s + rotateAxis * dot(rotateAxis, target) * (1 - c);
+		v = normalize(vr) * length(v);
+	}
+
+	return v;
+}
+
+
+
+
+
+
+
+float GetScale(NodeInfo info)
+{
+	//if( info.parentId != -1 )
+	//return lerp(_length.x, _length.y, info.chainFactor) * _scale;
+	//return 1.0;
+	return _scale;
+}
+
+
+float3 GetRootPosition(NodeInfo info)
+{	
+	//return _rootTransform[info.rootArrayId].pos;
+	return mul( _rootTransform[info.rootArrayId].mat, float4(0,0,0,1) ).xyz;
+}
+
+float3 GetInitPosition(NodeInfo info)
+{	
+	//return mul( _rootTransform[info.rootArrayId].mat, float4(info.initPosition * GetScale(info),1)).xyz;
+	float3 initPos = mul(_rootTransform[info.rootArrayId].mat, float4(info.initPosition, 1)).xyz;
+	return (initPos - GetRootPosition(info)) *GetScale(info) + GetRootPosition(info);
+}
+
+/*
+float3 GetPreviousInitPosition(NodeInfo info)
+{
+	return mul(_rootTransform[info.rootArrayId].previousMat, float4(info.initPosition * GetScale(info), 1)).xyz;
+}*/
+
+float3 GetInitUp(NodeInfo info)
+{
+	return normalize(mul(_rootTransform[info.rootArrayId].mat, float4(info.initUp, 1)).xyz - _nodesRead[info.rootId].position);
+}
+
+
+
+
+
+float3 ComputeWind(float rnd, float3 tan, float3 worldPos)
+{
+	if (length(KHD_windZoneDir)*KHD_windZoneParam.x == 0)
+		return float3(0, 0, 0);
+
+	float3 wind = KHD_windZoneDir.xyz;
+
+	if (KHD_windZoneDir.w != 0)
+	{
+		//spherical wind
+		wind = normalize(cross(worldPos - KHD_windZoneDir.xyz, float3(0.0, 1.0, 0.0)));
+		if (length((worldPos - KHD_windZoneDir.xyz)) < abs(KHD_windZoneDir.w))
+		{
+			float f = length(worldPos - KHD_windZoneDir.xyz) / KHD_windZoneDir.w;
+			KHD_windZoneParam.x *= f > .5 ? 1.0 - (f - .5)*2.0 : f * 2.0;
+		}
+		else
+			return float3(0, 0, 0);
+	}
+
+	
+	wind = normalize(wind + float3(sin(_Time.y* KHD_windZoneParam.y * _WindTurbulence + rnd), sin(_Time.y* KHD_windZoneParam.y * _WindTurbulence + rnd * 2.0 * KHD_windZoneParam.y), sin(_Time.y* KHD_windZoneParam.y + rnd * 3.0*KHD_windZoneParam.y)));//WIP
+
+	wind = normalize(wind) * KHD_windZoneParam.x;
+	wind += normalize(wind) * KHD_windZoneParam.z * (sin(_Time.y*KHD_windZoneParam.w) + sin(_Time.z*KHD_windZoneParam.w) + sin(_Time.w*KHD_windZoneParam.w)*.1)* KHD_windZoneParam.x *.1;
+
+	return wind * _WindMain;
+}
+
+
+
+
+
+float3 ComputeCollisions(float3 position, inout bool collided, inout float3 collisionNormal)
+{
+	collided = false;
+	//if (m_settings.ComputeCollisions && !n.isKinematic)
+	{
+		for (int j = 0; j < 2; ++j)
+		for (int i = 0; i < _collidersCount; ++i)
+		{
+			ColliderData col = _colliders[i];
+
+			if (!col.activated)
+				continue;
+
+			float3 colliderCenter;
+			float colliderRadius;
+
+			//check tube
+			float3 axis = col.center2 - col.center1;
+			float3 axisNorm = normalize(axis);
+			float3 proj = dot(axisNorm, position - col.center1) * axisNorm + col.center1;
+
+			float projLength = length(proj);
+			float axisLength = length(axis);
+
+			float orientation = dot(normalize(proj - col.center1), axisNorm);
+			if (orientation > 0 && projLength < axisLength && axisLength>0)
+			{
+				collided = true;
+				float f = projLength / axisLength;
+				float radius = lerp(col.radius1, col.radius2, f);
+
+				float3 delta = position - proj;
+				if (length(delta) < radius + _collisionOffset)
+				{
+					position = proj + normalize(delta) * (radius + _collisionOffset);
+				}
+				collisionNormal = normalize(delta);
+			}
+
+
+			//sphere 1
+			colliderCenter = col.center1;
+			colliderRadius = col.radius1;
+			float dist = length(position - colliderCenter);
+			if (!collided && dist < colliderRadius + _collisionOffset)
+			{
+				collided = true;
+				position = normalize(position - colliderCenter) * (colliderRadius + _collisionOffset) + colliderCenter;
+				collisionNormal = normalize(position - colliderCenter);
+			}
+
+			//sphere 2
+			colliderCenter = col.center2;
+			colliderRadius = col.radius2;
+			dist = length(position - colliderCenter);
+			if (!collided && dist < colliderRadius + _collisionOffset)
+			{
+				collided = true;
+				position = normalize(position - colliderCenter) * (colliderRadius + _collisionOffset) + colliderCenter;
+				collisionNormal = normalize(position - colliderCenter);
+			}
+
+			
+		}
+	}
+
+	return position;
+}
+
+
+
+float StrandRandomValue(NodeInfo infos)
+{
+	return frac(infos.rootId * sin(infos.rootId*PI*_dt)*_dt);
+}
+
+
+float3 AngleConstraint(float3 position, NodeInfo infos)
+{
+	//return position;//debug
+
+
+	float3 refAxis = _nodesRead[infos.parentId].forward;
+	if (_nodesInfos[infos.parentId].parentId != -1)
+	{
+		refAxis = _nodesRead[_nodesInfos[infos.parentId].parentId].forward;
+	}
+
+	float3 d1 = position - _nodesRead[infos.parentId].position;
+	//float3 d2 = LimitVectorAngle(refAxis, d1, (1.0 - _rigidity) * _maxAngle);
+	float3 d2 = LimitVectorAngle(refAxis, d1, _maxAngle);
+	position = d2 + _nodesRead[infos.parentId].position;
+
+	return position;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------------------------------------------------------
+//Kernels
+//-------------------------------------------------------------------
+
+[numthreads(512, 1, 1)]
+void UpdateRootPositions(uint3 id : SV_DispatchThreadID)
+{
+	int idx = id.x;
+	if (idx >= _nodeCount)
+		return;
+
+	NodeData node = _nodes[idx];
+	NodeInfo info = _nodesInfos[idx];
+
+		
+	if (info.rootId == -1)
+	{
+		_rootTransform[info.rootArrayId].previousMat = _rootTransform[info.rootArrayId].mat;
+		node.prevPosition = node.position;
+		node.position = GetRootPosition(info);
+		_nodes[idx] = node;
+		return;
+	}
+}
+
+
+
+
+
+
+[numthreads(512, 1, 1)]
+void UpdatePositions(uint3 id : SV_DispatchThreadID)
+{
+	int idx = id.x;
+	if (idx >= _nodeCount)
+		return;
+
+	NodeData node = _nodes[idx];
+	NodeInfo info = _nodesInfos[idx];
+
+		
+	if (info.rootId == -1)
+	{
+		//node.prevPosition = node.position;
+		//node.position = _nodesRead[idx].position;
+		//node.up = _nodesRead[idx].up;
+		//_nodes[idx] = node;
+		return;
+	}
+		
+	NodeData root = _nodesRead[info.rootId];
+
+	if (info.parentId == info.rootId || info.constraint == 1 )
+	{
+		node.prevPosition = node.position;
+		node.position = GetInitPosition(info);
+		_nodes[idx] = node;
+		return;
+	}
+
+	if ( info.constraint == 2)
+	{
+		node.prevPosition = node.position;		
+		_nodes[idx] = node;
+		return;
+	}
+
+
+	float chainFactor = info.chainFactor;
+		
+	
+	//world -> local (root) transformation
+	node.prevPosition += (root.position - root.prevPosition) * clamp(lerp(_motionStability.x, _motionStability.y, chainFactor * chainFactor),0,1);
+	node.position += (root.position - root.prevPosition) * clamp(lerp(_motionStability.x,_motionStability.y, chainFactor * chainFactor),0,1);
+
+
+	//float3 rotationOffset = GetPreviousInitPosition(info) - GetInitPosition(info);
+	//node.position += rotationOffset;
+
+
+	//node.position = RigidityConstraint(info, node.position);
+	float3 newPos = node.position;
+
+	
+	
+
+
+	
+	bool collided = false;
+	float3 collisionNormal;	
+	float3 beforeCollision = newPos;
+	newPos = ComputeCollisions(beforeCollision, collided, collisionNormal);
+	
+	float friction = 0;
+	/*
+	if (length(beforeCollision-newPos) > 0)
+	{
+		friction = 1;
+		node.prevPosition = node.position;
+		node.position = newPos;
+		_nodes[idx] = node;
+		return;
+	}
+	*/
+
+
+	//smooth
+	float3 delta = (node.position - node.prevPosition);
+	//float _motionFactor = lerp(1, 2, chainFactor * chainFactor * chainFactor);
+	
+	//delta *= _motionFactor;
+	//node.prevPosition -= delta * _dt * _motionFactor;
+	
+	delta = (node.position - node.prevPosition);
+	float rootTipSmooth = lerp(_rootTipSmoothFactor.x, _rootTipSmoothFactor.y, chainFactor * chainFactor * chainFactor);
+	node.prevPosition += delta * _dt * (rootTipSmooth);
+	float globalSmooth = lerp(1.0 - _globalSmooth, 1.0, chainFactor * chainFactor * chainFactor);
+
+
+	/*
+	if (collided)
+		globalSmooth *= .9f;
+	*/
+
+	float l = GetScale(info);
+
+	/*
+	//Not a nice solution, need more work
+	if(info.strandLength<_distanceSmooth)
+	{
+		float f = 1.0 - clamp(l / _distanceSmooth,0,1);
+		globalSmooth *= 1.0 - f*f;
+		//globalSmooth = 0;
+	}*/
+
+
+	//set a distance limit for better resolution
+	if (length(newPos - root.position) > info.rootDistance* l * 2.0f)
+		newPos = root.position + normalize(newPos - root.position)*info.rootDistance* l * 2.0;
+		
+
+
+	float3 wind = ComputeWind(idx, node.forward, node.position);	
+	float3 force = _force +wind;	
+
+	NodeData parent = _nodes[info.parentId];
+	float3 shapeForce = (GetInitPosition(info) - node.position);// *(1.0 - chainFactor) * _rootRigidity;
+	//shapeForce *= (1.0 - chainFactor* chainFactor);
+
+	shapeForce *= (1.0 - chainFactor * chainFactor* chainFactor );
+	
+	float  f = clamp(lerp(_shapeFactor.x,_shapeFactor.y,chainFactor*chainFactor),0,1);// - chainFactor * chainFactor *_rootRigidity;
+
+
+
+	force = lerp(force, shapeForce *100.0, f);	
+
+
+	node.prevPosition = ComputeCollisions(node.prevPosition, collided, collisionNormal);//fix motion bug
+
+
+	
+
+	bool _timeCorrected = true;
+
+	if (_previous_dt == 0 || !_timeCorrected)
+	{
+		//original Verlet
+		//x[i+1] = x[i] + (x[i] - x[i-1]) + a * dt * dt        
+		newPos += (newPos - node.prevPosition) * globalSmooth;
+		newPos +=_force * _dt * _dt;//add forces
+	}
+	else
+	{
+		//Time corrected : https://stackoverflow.com/questions/10139670/time-corrected-verlet-integration-and-too-big-timesteps/28061393#28061393            
+		//x[i+1] = x[i] + (x[i] – x[i-1]) * (dt[i] / dt[i-1]) + a* dt[i] * (dt[i] + dt[i-1]) / 2
+		newPos += (newPos - node.prevPosition) * globalSmooth * _dt / _previous_dt;
+		newPos += force * _dt * ((_dt + _previous_dt) * .5);//add forces      
+	}
+
+
+//----------------------------------------------------------------
+
+	
+
+	newPos = AngleConstraint(newPos, info);	
+	newPos = lerp(newPos, GetInitPosition(info), clamp(lerp(_rigidity.x, _rigidity.y, info.chainFactor*info.chainFactor),0,1));
+
+
+	node.prevPosition = node.position;
+	node.position = newPos;
+
+	
+
+	_nodes[idx] = node;
+
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+float3 Delta(NodeData parent, NodeData child, float connectionlength)
+{
+
+	float3 delta = parent.position - child.position;
+
+	if(connectionlength==0)
+		return delta;
+
+	float l = length(delta);
+	float f = (l> 0.0) ? (l - connectionlength) / l : 0;
+	return f * delta;
+}
+
+
+
+
+
+
+
+
+
+///----------------------------------------------------------------
+///SOLVER
+///----------------------------------------------------------------
+[numthreads(512,1,1)]
+void Solve(uint3 id : SV_DispatchThreadID)
+{
+	int idx = id.x;
+	if (idx >= _nodeCount)
+		return;
+
+	NodeInfo info = _nodesInfos[idx];
+
+	float l = GetScale(info);
+
+	NodeData node = _nodesRead[idx];
+
+	if (info.rootId == -1)
+	{
+		_nodes[idx] = node;
+		return;
+	}
+
+	/*
+	if (info.parentId == info.rootId)
+	{
+		NodeData node = _nodesRead[idx];
+		node.position = ComputeLocalPos(info, node.position);
+		_nodes[idx] = node;
+		return;
+	}*/
+		
+	
+	NodeData root = _nodesRead[info.rootId];
+
+
+	float3 newPos = node.position;
+	
+	//Solve parent dependency
+	if(info.parentId!=-1)
+	{
+		NodeData parent = _nodesRead[info.parentId];		
+		float3 d1 = Delta(parent, node, info.parentDistance* l);
+		newPos += d1 * _ratioWeightRootTip;
+		//node.up = normalize(parent.up + node.up);
+	}
+
+	//Solve child dependency
+	if (info.childId != -1)
+	{
+		NodeData child = _nodesRead[info.childId];
+		float3 d2 = Delta(node, child, info.childDistance* l);
+		newPos -= d2 * (1.0- _ratioWeightRootTip);
+		//node.up = normalize(child.up + node.up);
+	}
+	
+
+	
+
+
+	/*
+	//solve position between parent and children
+	if (info.parentId != -1 && info.childId != -1)
+	{
+		NodeData parent = _nodesRead[info.parentId];
+		NodeData child = _nodesRead[info.childId];
+		if (dot(parent.forward, child.forward) > .99)
+		{
+			newPos = lerp( newPos, (parent.position + child.position)*.5, .01);
+		}
+	}*/
+
+
+	
+
+	
+	//Check max length
+	if (info.parentId != -1)
+	{
+		//float rf = GetRigidityFactor(info);
+		
+		//Angle constraint -> wobble
+		//newPos = lerp(  AngleConstraint(newPos, info), newPos, rf);
+		NodeData parent = _nodesRead[info.parentId];
+		
+		
+
+		float maxLength = l * (1.0 + _elasticity);
+		float minLength = l * (1.0 - _elasticity);
+		minLength = minLength < 0 ? 0 : minLength;
+		
+
+
+		if (_lastStep)
+		{
+			if (length(newPos - parent.position) > info.parentDistance* maxLength)
+				newPos = parent.position + normalize(newPos - parent.position)*info.parentDistance* maxLength;
+			else if (length(newPos - parent.position) < info.parentDistance* minLength)
+				newPos = parent.position + normalize(newPos - parent.position)*info.parentDistance* minLength;
+		}
+		
+		else
+		{
+			float limit = lerp(1.0, (2.0 + _elasticity), info.chainFactor);
+			if (length(newPos - parent.position) > info.parentDistance* l * limit)
+				newPos = parent.position + normalize(newPos - parent.position)*info.parentDistance* l * limit;
+		}
+		
+		
+		//if (isnan(newPos.x) || isinf(newPos.x))
+		//	newPos = node.position;
+			
+	}
+	
+
+	
+
+
+	bool collided = false;
+	float3 collisionNormal;
+	newPos = ComputeCollisions(newPos, collided, collisionNormal);
+	if (collided)
+	{		
+		float d = dot(node.up, collisionNormal);
+		//node.up = d>0 ? collisionNormal : -collisionNormal;
+	}
+	
+	/*
+	//Solve rigidity
+	{
+		float3 origine = GetInitPosition(info);
+		float3 delta = newPos - origine;
+		float ld = length(delta);
+		float connectionlength = (1.0 - GetRigidityFactor(info)) * info.rootDistance*2.0 * l;
+
+		float3 force = node.position - node.prevPosition;
+
+		//if (dot(_force, node.forward) > 0)
+		{
+			if (ld > connectionlength)
+			{
+				newPos = normalize(delta) * connectionlength + origine;
+			}
+		}
+		//newPos = lerp( newPos, origine, _rigidity);
+	}*/
+	
+
+	//-----------------------------------
+	//compute orientation
+	float3 forward = node.forward;
+	float3 up = node.up;
+	NodeData parent = _nodesRead[info.parentId];
+
+	if (info.childId != -1)
+	{
+		NodeData child = _nodesRead[info.childId];
+		forward = normalize(child.position - node.position);
+	}
+	else if (info.parentId != -1)
+	{
+		
+		forward = normalize(node.position - parent.position);
+	}
+
+	float rf = pow(abs(1.0 - info.chainFactor), 10);//use a constant for rotation factor
+
+	up = lerp(parent.up, GetInitUp(info), rf);
+	//up = parent.up;
+	up = normalize(cross(forward, cross(up, forward)));
+
+	node.forward = forward;
+	node.up = up;
+
+	//---------------------------
+
+
+	//newPos = ComputeLocalPos(info, newPos);
+
+	/*
+	//test local position
+	if (info.parentId != -1)
+	{
+		NodeData parent = _nodesRead[info.parentId];
+
+
+		float3 origine;
+
+		origine = parent.position;
+		origine += parent.forward * info.localPosition.z;
+		origine += parent.up * info.localPosition.y;
+		origine += cross(parent.forward, parent.up) * info.localPosition.x;
+				
+		float3 delta = origine - newPos;
+		float ld = length(delta);
+		float connectionlength = ld *.9*(1.0-info.chainFactor);
+
+		float3 d1 = newPos - parent.position;
+		float3 d2 = origine - parent.position;
+		float dotD = dot(normalize(d1), normalize(d2));
+		
+		newPos += delta * .5;// *(1.0 - clamp(dotD, 0, 1)) * 10.0;
+		
+		
+		//newPos = (newPos + node.position) * .5;
+	}
+	*/
+
+	
+	node.position = newPos;
+
+
+	
+	
+	
+	
+
+	_nodes[idx] = node;
+
+}
+
+
+
+
+
+
+
+[numthreads(512, 1, 1)]
+void BufferCopy(uint3 id : SV_DispatchThreadID)
+{
+	int idx = id.x;
+	if (idx >= _nodeCount)
+		return;
+
+	_nodes[idx] = _nodesRead[idx];
+}
+
+
+
+
+
+
+
+
+
+
+[numthreads(512, 1, 1)]
+void UpdateOrientation(uint3 id : SV_DispatchThreadID)
+{
+	//return;
+	int idx = id.x;
+	if (idx >= _nodeCount)
+		return;
+
+
+
+	NodeInfo info = _nodesInfos[idx];
+
+
+	
+	if (info.rootId == -1)
+	{
+		if (info.childId != -1)
+		{
+			NodeData node = _nodesRead[idx];
+			NodeData child = _nodesRead[info.childId];
+			node.forward = normalize(child.position - node.position);
+			_nodes[idx] = node;
+		}
+		return;
+	}
+		
+	NodeData node = _nodesRead[idx];
+	NodeData parent = _nodesRead[info.parentId];
+	NodeData root = _nodesRead[info.rootId];
+
+
+	float3 forward = node.forward;
+	float3 up = node.up;
+	/*
+	_nodes[idx] = node;
+	return;
+	*/
+
+
+	//instable!!!
+	//node.position = parent.position + normalize(node.position - parent.position)*info.parentDistance* _length;
+
+
+
+
+
+	if (info.childId != -1)
+	{
+		NodeData child = _nodesRead[info.childId];
+		forward = normalize(child.position - node.position);
+	}
+	else if (info.parentId != -1)
+	{		
+		forward = normalize(node.position - parent.position);
+	}
+
+
+	//float3 targetUp = normalize(mul(_rootTransform[info.rootId].mat, float4(info.initUp,1))- root.position);
+	//float target = parent.up;		
+	//up = normalize(LimitVectorAngle(parent.up, GetInitUp(info), (1.0-info.chainFactor) * 0.1745 * .1f));//0,1745->10deg	
+	//node.up = GetInitUp(info);
+	
+
+	/*
+	float dotFRUP = dot(normalize(_force), root.up);
+	float rootRigidity = lerp(_rootRigidity, _rootRigidityUpsideDown, (dotFRUP + 1.0)*.5);
+	*/
+	//node.up = lerp(GetInitUp(info), node.up, rootRigidity);
+
+
+	//float rf = GetRigidityFactor(info);
+	float rf = pow(abs(1.0 - info.chainFactor), 10);//use a constant for rotation factor
+
+	up = lerp(parent.up, GetInitUp(info), rf);
+	//up = parent.up;
+	
+	
+	up = normalize(cross(forward, cross(up, forward)));
+	
+	//node.position = GetInitPosition(info);
+	/*
+	node.position = mul(_rootTransform[info.rootId].mat, float4(info.initPosition*_length, 1)).xyz;
+	node.prevPosition = node.position;
+	*/
+
+
+	node.forward = normalize(forward);
+	if (length(node.up) > 0)
+		node.up = normalize(up);
+	else
+		node.up = float3(0, 1, 0);
+
+	/*
+	node.forward = lerp(node.forward, forward, .5);
+	node.up = lerp(node.up, up, .5);
+	*/
+
+	
+
+	_nodes[idx] = node;
+}
+
+

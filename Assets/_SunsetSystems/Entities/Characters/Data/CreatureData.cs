@@ -1,54 +1,52 @@
-﻿using Entities.Characters.Data;
-using SunsetSystems.Entities.Data;
-using System;
-using UMA.CharacterSystem;
+﻿using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
-    [Serializable]
-    public struct CreatureData
+    public class CreatureData : SerializedMonoBehaviour
     {
-        public string FirstName, LastName;
+        public string FirstName = "Foo", LastName = "Bar";
         public string FullName => $"{FirstName} {LastName}";
-        public readonly string ID;
-        public Sprite Portrait;
-        public Faction Faction;
-        public BodyType BodyType;
-        public CreatureType CreatureType;
-        public TextAsset UmaPreset;
-        public RuntimeAnimatorController AnimatorControllerAsset;
-        public StatsData Stats;
-        public EquipmentData Equipment;
-        public bool UseEquipmentPreset;
-        public float Money;
-
-        public CreatureData(CreatureConfig config)
-        {
-            FirstName = config.Name;
-            LastName = config.LastName;
-            ID = config.ReadableID;
-            Portrait = config.Portrait;
-            Faction = config.CreatureFaction;
-            BodyType = config.BodyType;
-            CreatureType = config.CreatureType;
-            UmaPreset = config.UmaPreset;
-            AnimatorControllerAsset = config.AnimatorController;
-            Stats = new(config.StatsAsset);
-            Equipment = new(config.EquipmentConfig);
-            UseEquipmentPreset = config.UseEquipmentPreset;
-            Money = config.EquipmentConfig.Money;
+        [field: SerializeField, ReadOnly]
+        public string ReadableID { get; private set; }
+        [field: SerializeField, ReadOnly]
+        public string DatabaseID { get; private set; }
+        [SerializeField]
+        private Sprite _portrait;
+        public Sprite Portrait 
+        { 
+            get 
+            {
+                if (_portrait == null && CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+                    _portrait = config.Portrait;
+                return _portrait;
+            } 
         }
+        [field: SerializeField]
+        public Faction Faction { get; private set; }
+        [field: SerializeField]
+        public BodyType BodyType { get; private set; }
+        [field: SerializeField]
+        public CreatureType CreatureType { get; private set; }
 
-        //public CreatureUIData GetCreatureUIData()
-        //{
-        //    Tracker tracker = Stats.Trackers.GetTracker(TrackerType.Health)
-        //    HealthData healthData = new HealthData(. );
-        //    CreatureUIData.CreatureDataBuilder builder = new(Data.FullName,
-        //        Data.Portrait,
-        //        healthData,
-        //        0);
-        //    return builder.Create();
-        //}
+        public void CopyFromTemplate(ICreatureTemplate template)
+        {
+            FirstName = template.FirstName;
+            LastName = template.LastName;
+            DatabaseID = template.DatabaseID;
+            ReadableID = template.ReadableID;
+            if (CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+                _portrait = config.Portrait;
+            Faction = template.Faction;
+            BodyType = template.BodyType;
+            CreatureType = template.CreatureType;          
+#if UNITY_EDITOR
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+#endif
+        }
     }
 }

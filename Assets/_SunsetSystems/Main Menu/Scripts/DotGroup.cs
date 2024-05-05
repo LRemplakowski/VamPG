@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SunsetSystems.MainMenu.UI
 {
-    public class DotGroup : ExposableMonobehaviour
+    public class DotGroup : MonoBehaviour
     {
 
         [SerializeField]

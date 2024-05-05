@@ -1,4 +1,4 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Dialogue;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,30 +10,30 @@ namespace SunsetSystems.Journal
     {
         [SerializeField]
         private Objective _objective;
-        //[SerializeField]
-        //private ValueType _valueType;
-        //private bool StringValue => _valueType == ValueType.StringValue;
-        //private bool IntValue => _valueType == ValueType.IntValue;
-        //private bool BoolValue => _valueType == ValueType.BoolValue;
-        //[SerializeField, ShowIf("StringValue")]
-        //private string _stringKey;
-        //[SerializeField, ShowIf("StringValue")]
-        //private string _stringValue;
-        //[SerializeField, ShowIf("IntValue")]
-        //private string _intKey;
-        //[SerializeField, ShowIf("IntValue")]
-        //private int _intValue;
-        //[SerializeField, ShowIf("BoolValue")]
-        //private string _boolKey;
-        //[SerializeField, ShowIf("BoolValue")]
-        //private bool _boolValue;
+        [SerializeField]
+        private ValueType _valueType;
+        private bool StringValue => _valueType == ValueType.StringValue;
+        private bool IntValue => _valueType == ValueType.IntValue;
+        private bool BoolValue => _valueType == ValueType.BoolValue;
+        [SerializeField, ShowIf("StringValue")]
+        private string _stringKey;
+        [SerializeField, ShowIf("StringValue")]
+        private string _stringValue;
+        [SerializeField, ShowIf("IntValue")]
+        private string _intKey;
+        [SerializeField, ShowIf("IntValue")]
+        private int _intValue;
+        [SerializeField, ShowIf("BoolValue")]
+        private string _boolKey;
+        [SerializeField, ShowIf("BoolValue")]
+        private bool _boolValue;
 
         [SerializeField]
-        StringStringDictionary _strings;
+        private Dictionary<string, string> _strings;
         [SerializeField]
-        StringIntDictionary _ints;
+        private Dictionary<string, int> _ints;
         [SerializeField]
-        StringBoolDictionary _bools;
+        private Dictionary<string, bool> _bools;
 
         private bool _isActive;
 

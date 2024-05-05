@@ -1,8 +1,8 @@
 public enum Faction
 {
+    None,
     Hostile,
     Neutral,
     Friendly,
-    PlayerControlled,
-    Dialogue
+    PlayerControlled
 }

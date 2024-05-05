@@ -1,13 +1,11 @@
-using NaughtyAttributes;
-using SunsetSystems.Entities.Characters;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.Equipment;
+using SunsetSystems.Equipment.UI;
 using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.UI
@@ -19,50 +17,66 @@ namespace SunsetSystems.UI
         [SerializeField, Required]
         private EquipmentContentsUpdater _equipmentContentsUpdater;
 
+        private bool _isDirty;
+
         private void OnEnable()
         {
             string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
-            UpdateInventory(characterKey);
-
-            InventoryManager.ItemEquipped += UpdateInventory;
-            InventoryManager.ItemEquipped += UpdateEquipment;
-            InventoryManager.ItemUnequipped += UpdateInventory;
-            InventoryManager.ItemUnequipped += UpdateEquipment;
+            UpdateInventory();
+            InventoryManager.Instance.PlayerInventory.OnItemAdded += MarkDirty;
+            InventoryManager.Instance.PlayerInventory.OnItemRemoved += MarkDirty;
         }
 
         private void OnDisable()
         {
-            InventoryManager.ItemEquipped -= UpdateInventory;
-            InventoryManager.ItemEquipped -= UpdateEquipment;
-            InventoryManager.ItemUnequipped -= UpdateInventory;
-            InventoryManager.ItemUnequipped -= UpdateEquipment;
+            InventoryManager.Instance.PlayerInventory.OnItemAdded -= MarkDirty;
+            InventoryManager.Instance.PlayerInventory.OnItemRemoved -= MarkDirty;
+        }
+
+        private void Update()
+        {
+            if (_isDirty)
+            {
+                Refresh();
+                _isDirty = false;
+            }
+        }
+
+        private void MarkDirty(InventoryEntry _) => _isDirty = true;
+
+        private void Refresh()
+        {
+            string characterKey = CharacterSelector.SelectedCharacterKey;
+            UpdateEquipment(characterKey);
+            UpdateInventory();
         }
 
         private void UpdateEquipment(string characterKey)
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
-                List<IGameDataProvider<InventoryEntry>> items = new();
-                items.AddRange(InventoryManager.PlayerInventory.Contents);
-                _inventoryContentsUpdater.UpdateViews(items);
-            }
-        }
-
-        private void UpdateInventory(string characterKey)
-        {
-            if (PartyManager.Instance.IsRecruitedMember(characterKey))
-            {
-                List<IGameDataProvider<EquipmentSlot>> slots = new();
-                if (InventoryManager.TryGetEquipmentData(CharacterSelector.SelectedCharacterKey, out EquipmentData data))
+                List<IGameDataProvider<IEquipmentSlot>> slots = new();
+                var memberEquipment = PartyManager.Instance.GetPartyMemberByID(characterKey).References.EquipmentManager;
+                if (memberEquipment != null)
                 {
-                    foreach (string key in data.equipmentSlots.Keys)
+                    foreach (EquipmentSlotID key in memberEquipment.EquipmentSlots.Keys)
                     {
-                        slots.Add(data.equipmentSlots[key]);
+                        slots.Add(memberEquipment.EquipmentSlots[key]);
                     }
                 }
                 _equipmentContentsUpdater.UpdateViews(slots);
             }
+        }
+
+        private void UpdateInventory()
+        {
+            List<IGameDataProvider<InventoryEntry>> items = new();
+            foreach (InventoryEntry entry in InventoryManager.Instance.PlayerInventory.Contents)
+            {
+                items.Add(entry);
+            }
+            _inventoryContentsUpdater.UpdateViews(items);
         }
     }
 }

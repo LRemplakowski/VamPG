@@ -1,79 +1,70 @@
-﻿using Redcode.Awaiting;
+﻿using System.Collections;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Utils.Threading;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
+    [System.Serializable]
     public class Interact : EntityAction
     {
         private readonly IInteractable target;
-        private Move moveToTarget;
-        private bool _aborted;
+        private readonly NavMeshAgent navMeshAgent;
+        [ShowInInspector, ReadOnly]
+        private Vector3 destination;
+        private IEnumerator delayedInteractionCoroutine;
 
-        protected override Creature Owner
-        {
-            get;
-            set;
-        }
-
-        public Interact(IInteractable target, Creature owner)
+        public Interact(IActionPerformer owner, IInteractable target) : base(owner, false)
         {
             this.target = target;
-            Owner = owner;
             conditions.Add(new InteractionComplete(target));
+            this.navMeshAgent = owner.References.NavMeshAgent;
+            NavMesh.SamplePosition(target.InteractionTransform.position, out var hit, 1f, NavMesh.AllAreas);
+            this.destination = hit.position;
         }
 
-        public override void Abort()
+        public override void Cleanup()
         {
-            if (moveToTarget != null)
-                moveToTarget.Abort();
-            _aborted = true;
+            base.Cleanup();
             target.Interacted = false;
+            navMeshAgent.isStopped = true;
+            if (delayedInteractionCoroutine != null)
+                Owner.CoroutineRunner.StopCoroutine(delayedInteractionCoroutine);
         }
 
-        public async override void Begin()
+        public override void Begin()
         {
-            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.transform.position);
+            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position);
             if (distance > target.InteractionDistance)
             {
-                await new WaitForUpdate();
-                Owner.Agent.SetDestination(target.InteractionTransform.position);
-                Owner.Agent.stoppingDistance = 0f;
-                Owner.Agent.isStopped = false;
-                NavMeshAgent agent = Owner.Agent;
-                while (PathComplete() == false)
+                navMeshAgent.isStopped = false;
+                navMeshAgent.ResetPath();
+                if (navMeshAgent.SetDestination(destination))
                 {
-                    await new WaitForSecondsRealtime(.1f);
+                    conditions.Add(new Destination(navMeshAgent));
+                    delayedInteractionCoroutine = InteractWhenCloseEnough();
+                    Owner.CoroutineRunner.StartCoroutine(delayedInteractionCoroutine);
                 }
-                if (_aborted || Vector3.Distance(target.InteractionTransform.position, Owner.transform.position) > target.InteractionDistance)
-                    return;
-                await Owner.FaceTarget((target as MonoBehaviour)?.transform);
-                target.TargetedBy = Owner;
-                target.Interact();
+                else
+                {
+                    Cleanup();
+                }
             }
             else
             {
-                await Owner.FaceTarget(target.InteractionTransform);
                 target.TargetedBy = Owner;
                 target.Interact();
             }
         }
 
-        private bool PathComplete()
+        private IEnumerator InteractWhenCloseEnough()
         {
-            if (Vector3.Distance(Owner.Agent.destination, Owner.Agent.transform.position) <= Owner.Agent.stoppingDistance + target.InteractionDistance - 0.01f)
-            {
-                if (!Owner.Agent.hasPath || Owner.Agent.velocity.sqrMagnitude == 0f)
-                {
-                    return true;
-                }
-            }
-            return false;
+            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position) > target.InteractionDistance)
+                yield return null;
+            navMeshAgent.isStopped = true;
+            target.TargetedBy = Owner;
+            target.Interact();
         }
     }
 }

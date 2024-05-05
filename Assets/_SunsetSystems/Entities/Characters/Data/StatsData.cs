@@ -11,7 +11,6 @@ namespace SunsetSystems.Entities.Data
         public int BloodPotency;
         public Attributes Attributes;
         public Skills Skills;
-        public Disciplines Disciplines;
 
         public StatsData(StatsConfig statsAsset)
         {
@@ -20,19 +19,17 @@ namespace SunsetSystems.Entities.Data
             this.Generation = statsAsset.Generation;
             this.BloodPotency = statsAsset.BloodPotency;
             this.Attributes = Attributes.DeepCopy(statsAsset.Attributes);
-            this.Skills = statsAsset.Skills;
-            this.Disciplines = Disciplines.DeepCopy(statsAsset.Disciplines);
+            this.Skills = Skills.DeepCopy(statsAsset.Skills);
         }
 
         public StatsData(StatsData data)
         {
-            this.Trackers = data.Trackers;
+            this.Trackers = Trackers.DeepCopy(data.Trackers);
             this.Clan = data.Clan;
             this.Generation = data.Generation;
             this.BloodPotency = data.BloodPotency;
-            this.Attributes = data.Attributes;
-            this.Skills = data.Skills;
-            this.Disciplines = data.Disciplines;
+            this.Attributes = Attributes.DeepCopy(data.Attributes);
+            this.Skills = Skills.DeepCopy(data.Skills);
         }
     }
 }

@@ -1,5 +1,7 @@
 using Redcode.Awaiting;
-using System.Collections;
+using Sirenix.OdinInspector;
+using SunsetSystems.Game;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -7,14 +9,14 @@ using UnityEngine;
 namespace SunsetSystems.Audio
 {
     [RequireComponent(typeof(AudioSource))]
-    public class SoundtrackController : MonoBehaviour
+    public class SoundtrackController : SerializedMonoBehaviour
     {
         [SerializeField]
         private AudioSource _soundtrackSource;
         [SerializeField, Range(0.01f, 10f)]
         private float _trackTransitionTime = 1f;
-        [SerializeField]
-        private PlaylistConfig _menuPlaylist, _gamePlaylist;
+        [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
+        private Dictionary<GameState, PlaylistConfig> statePlaylistPairs = new();
         [SerializeField]
         private float _defaultVolume = .5f;
         private float _cachedVolume;
@@ -42,16 +44,19 @@ namespace SunsetSystems.Audio
             _cachedVolume = Volume;
         }
 
-        public void PlayMenuPlaylist()
+        private void OnValidate()
         {
-            _playSoundtrack = true;
-            _cachedPlaylistTask = ExecutePlaylist(_menuPlaylist);
+            foreach (GameState state in Enum.GetValues(typeof(GameState)))
+            {
+                if (statePlaylistPairs.ContainsKey(state) is false)
+                    statePlaylistPairs[state] = null;
+            }
         }
 
-        public void PlayGamePlaylist()
+        public void PlayStatePlaylist(GameState gameState)
         {
             _playSoundtrack = true;
-            _cachedPlaylistTask = ExecutePlaylist(_gamePlaylist);
+            _cachedPlaylistTask = ExecutePlaylist(statePlaylistPairs[gameState]);
         }
 
         public void StopSoundtrackImmediate()

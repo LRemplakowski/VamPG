@@ -1,11 +1,10 @@
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SunsetSystems.UI
@@ -22,6 +21,8 @@ namespace SunsetSystems.UI
         public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
+            //if (lastLoadedSprite != null)
+                //AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.Data;
@@ -38,23 +39,44 @@ namespace SunsetSystems.UI
                 }
                 interactable = true;
             }
+            else
+            {
+                _icon.gameObject.SetActive(false);
+                _stackSize.gameObject.SetActive(false);
+                interactable = false;
+            }
         }
 
         public void OnClick()
         {
-            //TODO: Handle equip item in double click or right click context menu
-            Debug.Log($"Equipping item {_itemEntry._item.ItemName}!");
-            if (_itemEntry._item is EquipableItem item)
+            if (_itemEntry._item is IEquipableItem equipableItem)
             {
-                if (!InventoryManager.TryEquipItem(CharacterSelector.SelectedCharacterKey, item))
-                    Debug.LogError($"Failed to equip item {item.ItemName} for character {CharacterSelector.SelectedCharacterKey}!");
+                var itemEntry = new InventoryEntry(equipableItem);
+                if (InventoryManager.Instance.PlayerInventory.TryRemoveItem(itemEntry) is false)
+                    return;
+                string currentCharacterID = CharacterSelector.SelectedCharacterKey;
+                var eqManager = PartyManager.Instance.GetPartyMemberByID(currentCharacterID).References.EquipmentManager;
+                var slotID = eqManager.GetSlotForItem(equipableItem);
+                if (eqManager.EquipItem(slotID, equipableItem, out var previouslyEquipped) && ShouldAddItemBackToInventory(previouslyEquipped))
+                {
+                    InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(previouslyEquipped));
+                }
+                else
+                {
+                    InventoryManager.Instance.GiveItemToPlayer(itemEntry);
+                }
             }
+        }
+
+        private bool ShouldAddItemBackToInventory(IEquipableItem item)
+        {
+            return item != null && !item.IsDefaultItem;
         }
 
         private void ResetView()
         {
             _icon.gameObject.SetActive(false);
-            _itemEntry = null;
+            //_itemEntry = null;
             _stackSize.gameObject.SetActive(false);
             interactable = false;
         }
@@ -64,13 +86,13 @@ namespace SunsetSystems.UI
             //TODO: Actually make a context menu for an item instead of just equipping it
         }
 
-        public override void OnPointerClick(PointerEventData eventData)
-        {
-            base.OnPointerClick(eventData);
-            if (eventData.button.Equals(PointerEventData.InputButton.Right) && interactable)
-            {
-                OpentContextMenu();
-            }
-        }
+        //public override void OnPointerClick(PointerEventData eventData)
+        //{
+        //    base.OnPointerClick(eventData);
+        //    if (eventData.button.Equals(PointerEventData.InputButton.Right) && interactable)
+        //    {
+        //        OpentContextMenu();
+        //    }
+        //}
     }
 }

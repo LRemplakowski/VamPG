@@ -1,9 +1,10 @@
-﻿namespace SunsetSystems
-{
-    using SunsetSystems.Data;
+﻿using SunsetSystems.Core.SceneLoading;
+
+namespace SunsetSystems
+{   
 
     public interface ITransition
     {
-        void MoveToScene(SceneLoadingData data);
+        void MoveToScene(SceneLoadingDataAsset data);
     }
 }

@@ -1,9 +1,12 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
+﻿using Sirenix.OdinInspector;
+
+namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public abstract class Condition
     {
-        public abstract bool IsMet();
+        [ShowInInspector]
+        private bool ConditionMet => IsMet();
 
-        public abstract override string ToString();
+        public abstract bool IsMet();
     }
 }

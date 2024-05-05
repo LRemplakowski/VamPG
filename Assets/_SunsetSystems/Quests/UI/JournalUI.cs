@@ -1,6 +1,4 @@
-using NaughtyAttributes;
-using System.Collections;
-using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using System.Linq;
 using UnityEngine;
 

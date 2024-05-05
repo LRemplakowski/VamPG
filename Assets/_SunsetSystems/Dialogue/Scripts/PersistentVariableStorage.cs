@@ -1,37 +1,42 @@
-using Apex;
-using System.Collections;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using Sirenix.Utilities;
+using SunsetSystems.Data;
+using SunsetSystems.Persistence;
 using UnityEngine;
 using Yarn.Unity;
-using SunsetSystems.Loading;
-using System;
-using SunsetSystems.Data;
 
 namespace SunsetSystems.Dialogue
 {
-    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveRuntimeData, IResetable
+    public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
         [SerializeField]
-        private StringFloatDictionary _floats = new();
+        private Dictionary<string, float> _floats = new();
         [SerializeField]
-        private StringStringDictionary _strings = new();
+        private Dictionary<string, string> _strings = new();
         [SerializeField]
-        private StringBoolDictionary _bools = new();
+        private Dictionary<string, bool> _bools = new();
         [SerializeField]
         private DialogueVariableConfig _variableInjectionConfig;
 
         private readonly Dictionary<string, object> _variables = new();
-
-        private const string DIALOGUE_DATA_KEY = "DIALOGUE_DATA";
+       
+        public string DataKey => DataKeyConstants.PERSISTANT_VARIABLE_STORAGE_DATA_KEY;
 
         private void Awake()
         {
+          
             if (_variableInjectionConfig != null)
             {
                 DialogueSaveData _injectionData = _variableInjectionConfig.GetVariableInjectionData();
                 SetAllVariables(_injectionData._floats, _injectionData._strings, _injectionData._bools);
             }
+            ISaveable.RegisterSaveable(this);
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         public void ResetOnGameStart()
@@ -67,15 +72,16 @@ namespace SunsetSystems.Dialogue
             return (_floats, _strings, _bools);
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            DialogueSaveData savedData = ES3.Load<DialogueSaveData>(DIALOGUE_DATA_KEY);
+            if (data is not DialogueSaveData savedData)
+                return;
             SetAllVariables(savedData._floats, savedData._strings, savedData._bools);
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(DIALOGUE_DATA_KEY, new DialogueSaveData(_floats, _strings, _bools));
+            return new DialogueSaveData(_floats, _strings, _bools);
         }
 
         public override void SetAllVariables(Dictionary<string, float> floats, Dictionary<string, string> strings, Dictionary<string, bool> bools, bool clear = true)
@@ -84,12 +90,9 @@ namespace SunsetSystems.Dialogue
             {
                 Clear();
             }
-            _floats.AddRange(floats);
-            _strings.AddRange(strings);
-            _bools.AddRange(bools);
-            _floats.Apply(kv => _variables.Add(kv.Key, kv.Value));
-            _strings.Apply(kv => _variables.Add(kv.Key, kv.Value));
-            _bools.Apply(kv => _variables.Add(kv.Key, kv.Value));
+            floats.Keys.ForEach(key => _floats.Add(key, floats[key]));
+            strings.Keys.ForEach(key => _strings.Add(key, strings[key]));
+            bools.Keys.ForEach(key => _bools.Add(key, bools[key]));
         }
 
         public override void SetValue(string variableName, string stringValue)
@@ -123,17 +126,22 @@ namespace SunsetSystems.Dialogue
     }
 
     [Serializable]
-    public struct DialogueSaveData
+    public class DialogueSaveData
     {
-        public StringFloatDictionary _floats;
-        public StringStringDictionary _strings;
-        public StringBoolDictionary _bools;
+        public Dictionary<string, float> _floats = new();
+        public Dictionary<string, string> _strings = new();
+        public Dictionary<string, bool> _bools = new();
 
-        public DialogueSaveData(StringFloatDictionary _floats, StringStringDictionary _strings, StringBoolDictionary _bools)
+        public DialogueSaveData(Dictionary<string, float> _floats, Dictionary<string, string> _strings, Dictionary<string, bool> _bools)
         {
-            this._floats = _floats;
-            this._strings = _strings;
-            this._bools = _bools;
+            this._floats = new(_floats);
+            this._strings = new(_strings);
+            this._bools = new(_bools);
+        }
+
+        public DialogueSaveData()
+        {
+
         }
     }
 }

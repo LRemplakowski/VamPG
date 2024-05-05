@@ -1,0 +1,237 @@
+﻿title: safeExamine
+position: -171,-476
+---
+[nomarkup][It looks just like a normal, civilian-use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
+-> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if CustomVisited("safeResolveRoll") == false>> #line:05d4917 
+    <<jump safeResolveRoll>>
+-> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if CustomVisited("safeStrengthRoll") == false and GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:03cddc8 
+    <<jump safeStrengthRoll>>
+-> [nomarkup][Open the safe with a 1966 combination.][/nomarkup] <<if $satanDate == true and CustomVisited("safeSatan") == false>> #line:08271ae 
+    <<jump safeSatan>>
+-> [nomarkup][Open the safe with a 1969 combination.][/nomarkup] <<if $safeCode == true>> #line:03859ca 
+    <<jump safeOpenedwCode>>
+-> [nomarkup][Open the safe with a 1972 combination.][/nomarkup] <<if $aidanFoster == true and CustomVisited("safeFoster") == false>>
+    <<jump safeFoster>>
+-> [nomarkup][Open the safe with a 4113 combination.][/nomarkup] <<if $goldBugCode == true and CustomVisited("safeGoldBug") == false>> #line:0278058 
+    <<jump safeGoldBug>>
+-> [nomarkup][Step away.][/nomarkup] #line:0cf47c3 
+===
+title: safeResolveRoll
+position: 274,-762
+---
+<<if Roll("Resolve","Larceny")>=6>>
+    <<jump safeOpenedwoCode>>
+<<else>>
+    <<jump safeResolveFailure>>
+<<endif>>
+===
+title: safeStrengthRoll
+position: -474,-221
+---
+<<if Roll("Strength","Larceny")>=6>>
+    <<jump safeForceOpened>>
+<<else>>
+    <<jump safeStrenghtFailure>>
+<<endif>>
+===
+title: safeOpenedwoCode
+position: -378,-751
+---
+[nomarkup][Determined, you attempt to open the safe without any combination. Risky, but what better place to take risks than Vegas? You've seen how people crack open safes in films. Why not try it yourself?][/nomarkup] #success #line:00b3f93 
+[nomarkup][You stick one of your ears against the chilly metal and cautiously rotate the knob, expecting to hear a click. It's a difficult task, demanding your full attention, and even Anastasia goes silent as you work your magic.][/nomarkup] #line:05c2909 
+[nomarkup][Several minutes later, you hear the last click of the lock components settling into place, and the doors are opened.][/nomarkup] #line:0da57fd 
+<<jump safeOpened>>
+===
+title: safeForceOpened
+position: -707,-22
+---
+[nomarkup][Good thing you didn't forget the old crowbar you keep stashed in your home. It'll be handy, here. You jimmy the crowbar into the slit between the safe's frame and the doors - applying a gradually increasing amount of force. Using the wall to push this improvised lever forth, you make several attempts, thankful that your body is undead - otherwise you'd be exhausted - until finally, you feel the lock give in to your brute strength.][/nomarkup] #success #line:05a227e 
+<<jump safeOpened>>
+===
+title: safeFailure
+position: 14,-207
+---
+[nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #line:008d6ba 
+<<set $satanDate to false>>
+<<set $goldBugCode to false>>
+<<jump safeExamine>>
+===
+title: safeOpenedwCode
+position: -756,-282
+---
+[nomarkup][You hear the click of the mechanical lock opening.][/nomarkup] #lastline #line:0f81031 
+<<jump safeOpened>>
+===
+title: safeOpened
+tags:
+position: -1111,-157
+---
+-> {$pcName}: Open sesame! [nomarkup][You exclaim with satisfaction, opening the safe doors.][/nomarkup] #line:0190deb 
+[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some ammunition - .45 caliber - not what your gun is using. However, one thing does catch your eye... a vial containing a vivid red liquid...][/nomarkup] #line:0d46450 
+{$kieran}: Great work! [nomarkup][You hear Kieran's voice, excited - for the first time this night - behind you.][/nomarkup] #line:06e7470 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: [nomarkup][She pumps her fist, before inching closer to peer eagerly over your shoulder and into the safe.][/nomarkup] That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils? #line:0b237a6 
+    {$kieran}: [nomarkup][He grimaces.][/nomarkup] I will not take Diana's money, and I suggest you do not, either. #lastline #line:0bec761 
+<<endif>>
+<<jump safeQuestions>>
+===
+title: safeQuestions
+position: -898,282
+---
+-> [nomarkup][Examine the gun.] (Intelligence + Firearms)[/nomarkup] <<if CustomVisited("gunRoll") == false>> #line:010783e
+    <<jump gunRoll>>
+-> [nomarkup][Examine the documents.][/nomarkup] <<if CustomVisited("safeDocumentsExamine") == false>> #line:05039a5 
+    <<jump safeDocumentsExamine>>
+-> [nomarkup][Examine the vial.] (Intelligence + Medicine)[/nomarkup] <<if CustomVisited("bloodMedRoll") == false>> #line:06887c6 
+    <<jump bloodMedRoll>>
+-> [nomarkup][Take the money.][/nomarkup] <<if CustomVisited("safeMoney") == false>> #line:07ec05b 
+    <<jump takeSafeMoney>>
+-> [nomarkup][Step away.][/nomarkup]
+===
+title: gunRoll
+---
+<<if Roll("Intelligence","Firearms") >=3>>
+    <<jump safeGunExamine>>
+<<else>>
+    <<jump safeGunExamineFail>>
+<<endif>>
+===
+title: bloodMedRoll
+---
+<<if Roll("Intelligence","Medicine") >=3>>
+    <<jump safeBloodIdentified>>
+<<else>>
+    <<jump bloodVialSuccess>>
+<<endif>>
+===
+title: safeGunExamine
+position: -654,747
+---
+[nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success #lastline #line:0cdcbc2 
+<<jump safeQuestions>>
+===
+title: safeGunExamineFail
+position: -1256,686
+---
+[nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. Probably.][/nomarkup] #failure #lastline #line:099beb4 
+<<jump safeQuestions>>
+===
+title: safeDocumentsExamine
+position: -982,799
+---
+[nomarkup][You rummage through the documents. Nothing particularly interesting. Just financial records and the like. But when you flip through one of the stapled packets, a folded up piece of paper that had been loosely stuck between its pages falls to the floor. You pick it up to examine it.][/nomarkup] #line:03c1d1c 
+Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away... #line:0999c1e 
+I can't stand to see you used by that insect of a Kindred you call your Master any longer. Like a mosquito, or some hungry parasite, she doesn't just sting, she bites and drains and takes and bleeds you dry until there is nothing left of you nor the woman you used to be - the woman I love... #line:0333eda 
+You have spent so long under her cruel watch - nothing more than a convenient tool to be used and abused, and I think it has been long enough... So fight it. Fight the bond she has forced on you, the chains that bind you to her - choose me, and in doing so, the freedom you deserve. But above all else, choose yourself, Dove. #line:0a132e0 
+I want us to live together - be together as equals, such that we'll be bonded only through trust and love rather than coercion and obligation. I promise that once the last of your bindings are broken, we will escape and make our home far, far away from here - from Jyhad and the pressures foisted upon us by wicked institutions.  #line:06ece37 
+It will be just you - and me. Together in the night. #line:07e7453 
+With love,  #line:026c4fd 
+Lucia #line:00d2b26 
+<<set $luciaLoveLetter to true>>
+[nomarkup][Just as you finish reading the letter, a sharp sound rings out from the club downstairs - a sound that cannot be mistaken for anything else. A gunshot.][/nomarkup] #line:0530e38 
+{$kieran}: What the hell? #line:0decad3 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: [nomarkup][She pumps her fist in the air with a loud, enthusiastic whoop.][/nomarkup] FINALLY! Some action! #line:064ec68 
+<<endif>>
+{$kieran}: That didn't sound good... We need to leave. Now. [nomarkup][Kieran looks concerned.][/nomarkup] #line:0cb4a25 
+===
+title: safeBloodIdentified
+position: -531,378
+---
+[nomarkup][You take the bottle and examine it more closely. At first, it appears to be a thick, red wine. But on closer inspection, it's far too viscous. It's not wine at all - it's blood.][/nomarkup] #success #line:024ce18 
+-> {$pcName}: I think I found... blood? #line:00843d3 
+{$pcName}: I don't think that's ordinary blood. Allow me. [nomarkup][He holds out his hand expectantly.][/nomarkup] #lastline #line:0454bb9 
+<<jump bloodVialRolls>>
+===
+title: bloodVialRolls
+position: -125,525
+---
+-> {$pcName}: Hold on, what are you going to do with it? #line:04960dc 
+    {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #lastline #line:0c20ec5 
+    <<ModifyInfluence -1 $kieran>>
+    -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:09ba39d 
+    <<jump bloodVialKieranExamine>>
+-> [nomarkup][Give Kieran the vial.][/nomarkup] #line:031d09b 
+    <<jump bloodVialKieranExamine>>
+===
+title: bloodVialSuccess
+position: -45,814
+---
+[nomarkup][You have no idea what's in the vial.][/nomarkup]
+{$kieran}: I don't think that's ordinary blood. Allow me. [nomarkup][He holds out his hand expectantly.][/nomarkup] 
+<<jump bloodVialKieranExamine>>
+===
+title: bloodVialKieranExamine
+---
+[nomarkup][Without another word, you place the vial in the palm of Kieran's waiting hand.][/nomarkup] #line:045718d 
+[nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #lastline #line:03c693e 
+<<if Roll ("Intelligence","Occult") >=4 or Roll ("Wits","Awareness") >=4>>
+    -> {$pcName}: Did you just do the same thing that Dominic did back in my apartment? #line:0a7f352 
+    {$kieran}: Yes. It's a little but useful trick. (Kieran Influence +1) #line:01b5ea3 
+    <<ModifyInfluence 1 $kieran>>
+    -> {$pcName}: Can I learn to do that? #line:0ced55a 
+        {$kieran}: [He shakes his head.] Unfortunately for you, it's something only my Clan is permitted to learn. #line:01aeb8a 
+        <<if GetIsPartyMemberRecruited($anastasia) is true>>
+            {$anastasia}: In other words, spooky magic shit. #line:0ed285a 
+        <<endif>>
+<<else>>
+    <<jump bloodVialFailure>>
+<<endif>>
+<<jump safeContinuation>>
+===
+title: bloodVialFailure
+position: -245,1149
+---
+-> {$pcName}: That was evidence! #line:0255b57 
+    {$kieran}: Trust me, I know what I'm doing. #line:0d7c422 
+    <<if GetIsPartyMemberRecruited($anastasia) is true>>
+        {$anastasia}: Your Clan and trust, huh? Those two things go together like toothpaste and orange juice. #line:029a549 
+    <<endif>>
+<<jump safeContinuation>>
+===
+title: safeContinuation
+position: -370,798
+---
+{$kieran}:  Brujah blood. Could be yours, or... [nomarkup][He trails off, quietly muttering.][/nomarkup] #line:0ef449e 
+[nomarkup][It doesn't take a rocket scientist to understand what he's implying.][/nomarkup] #line:0c3d335 
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: You done, twinkle toes? #line:0e80d38 
+    {$kieran}: Pretty much, yes. #line:02c73c1 
+<<endif>>
+{$kieran}: Unfortunately, we don't have time for a more detailed examination right now. This will have to suffice. I suggest you hold onto the vial, miss Bardot - at least for the time being. #lastline #line:04e369d 
+<<jump safeQuestions>>
+===
+title: takeSafeMoney
+position: -284,185
+---
+-> {$pcName}: I need to pay my bills Kieran. #line:0212bfb 
+{$kieran}: That is by no means a good enough reason to steal! [nomarkup][Kieran influence -2][/nomarkup] #line:0a341aa 
+-> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
+[nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #lastline #line:0e13ecd 
+<<GiveMoney (500)>>
+<<jump safeQuestions>>
+===
+title: safeResolveFailure
+position: 282,-547
+---
+[nomarkup][Despite your best efforts, you give up after several minutes of fruitless fiddling with the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:0b8b221 
+<<jump safeExamine>>
+===
+title: safeStrenghtFailure
+position: -297,5
+---
+[nomarkup][Despite your best efforts, you give up after several minutes of fruitless conflict with the door to the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:050d36f 
+<<jump safeExamine>>
+===
+title: safeSatan
+---
+<<jump safeFailure>>
+===
+title: safeFoster
+---
+<<jump safeFailure>>
+===
+title: safeGoldBug
+---
+<<jump safeFailure>>
+===

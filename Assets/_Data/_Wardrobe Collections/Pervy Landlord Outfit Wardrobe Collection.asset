@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae7341e07d1b8f41aa37f5e2c910168, type: 3}
+  m_Name: Pervy Landlord Outfit Wardrobe Collection
+  m_EditorClassIdentifier: 
+  label: 
+  resourcesOnly: 0
+  recipeType: WardrobeCollection
+  DisplayValue: 
+  compatibleRaces:
+  - VampireMale
+  wardrobeRecipeThumbs:
+  - race: VampireMale
+    filename: 
+    thumb: {fileID: 0}
+  wardrobeSlot: FullOutfit
+  Appended: 0
+  Hides: []
+  HideTags: []
+  suppressWardrobeSlots: []
+  activeWardrobeSet: []
+  MeshHideAssets: []
+  OverrideDNA:
+    PreloadValues: []
+  recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Pervy Landlord
+    Outfit Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"suit
+    pants","colors":[35,55,98,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-10275036},{"name":"hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"clothes_chest","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-1},{"name":"Suit
+    Color","colors":[40,47,98,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false,"displayColor":-10277080}],"wardrobeSet":[],"raceAnimatorController":""}'
+  forceKeep: 0
+  labelLocalFiles: 0
+  coverImages: []
+  wardrobeCollection:
+    sets:
+    - targetRace: VampireMale
+      wardrobeSet:
+      - slot: OuterClothing
+        recipe: pullover01_Recipe
+      - slot: Legs
+        recipe: suit pants_Recipe
+      - slot: WristL
+        recipe: watch_Recipe
+      - slot: Hair
+        recipe: hair01_Recipe
+      - slot: Eyebrows
+        recipe: moustache01_Recipe
+      - slot: Feet
+        recipe: shoes_Recipe
+      - slot: Chest
+        recipe: shirt01_Recipe
+      - slot: Face
+        recipe: sunglasses_aviators02
+      - slot: Complexion
+        recipe: Dominic_facial_hair_overlay
+  arbitraryRecipes: []

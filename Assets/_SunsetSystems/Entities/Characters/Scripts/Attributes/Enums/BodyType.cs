@@ -1,5 +1,8 @@
-﻿public enum BodyType
+﻿namespace SunsetSystems.Entities.Characters
 {
-    M,
-    F
+    public enum BodyType
+    {
+        Male,
+        Female
+    }
 }

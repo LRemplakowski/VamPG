@@ -1,6 +1,4 @@
-using NaughtyAttributes;
-using System;
-using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,6 +13,17 @@ public class Skill : BaseStat
 
     public float Value { get => GetValue(); }
     public SkillType SkillType { get => skillType; }
+
+    public Skill(Skill existing) : base(existing)
+    {
+        baseValue = existing.baseValue;
+        skillType = existing.skillType;
+    }
+
+    public Skill() : this(SkillType.Invalid)
+    {
+
+    }
 
     protected override void SetValueImpl(int value)
     {

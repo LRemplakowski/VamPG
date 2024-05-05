@@ -1,63 +1,92 @@
-using CleverCrow.Fluid.UniqueIds;
-using SunsetSystems.Loading;
-using SunsetSystems.Utils;
 using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.Persistence;
 using UnityEngine;
 
 namespace SunsetSystems.Experience
 {
-    [RequireComponent(typeof(UniqueId))]
-    public class ExperienceManager : Singleton<ExperienceManager>, ISaveRuntimeData
+    public class ExperienceManager : SerializedMonoBehaviour, ISaveable
     {
+        public static ExperienceManager Instance { get; private set; }
+
         [SerializeField]
-        private StringExperienceDataDictionary _experienceDataCache = new();
+        private Dictionary<string, ExperienceData> _experienceDataCache = new();
 
-        private UniqueId _unique;
+       
+        public string DataKey => DataKeyConstants.EXPERIENCE_MANAGER_DATA_KEY;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-            _unique ??= GetComponent<UniqueId>();
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(gameObject);
+            ISaveable.RegisterSaveable(this);
+            
         }
 
-        public static void AddCreatureToExperienceManager(string creatureID)
+        private void OnDestroy()
         {
-            bool result = Instance._experienceDataCache.TryAdd(creatureID, new());
+            ISaveable.UnregisterSaveable(this);
+        }
+
+        public void AddCreatureToExperienceManager(string creatureID)
+        {
+            bool result = _experienceDataCache.TryAdd(creatureID, new());
             if (result == false)
                 Debug.LogError($"Cannot add creature to experience manager. Creature with ID {creatureID} is already tracked!");
         }
 
-        public static bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
+        public bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 data.AddExperience(amount, experienceType);
-                Instance._experienceDataCache[creatureID] = data;
+                _experienceDataCache[creatureID] = data;
             }
             return false;
         }
 
-        public static bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
+        public bool TryRemoveExperience(string creatureID, int amount, ExperienceType experienceType)
         {
-            if (Instance._experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
+            if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
                 if (data.GetCurrentExperience(experienceType) < amount)
                     return false;
                 data.RemoveExperience(amount, experienceType);
-                Instance._experienceDataCache[creatureID] = data;
+                _experienceDataCache[creatureID] = data;
                 return true;
             }
             return false;
         }
 
-        public void SaveRuntimeData()
+        public object GetSaveData()
         {
-            ES3.Save(_unique.Id, _experienceDataCache);
+            return new ExperienceSaveData(this);
         }
 
-        public void LoadRuntimeData()
+        public void InjectSaveData(object data)
         {
-            _experienceDataCache = ES3.Load<StringExperienceDataDictionary>(_unique.Id);
+            if (data is not ExperienceSaveData expData)
+                return;
+            _experienceDataCache = expData.ExperienceDataCache;
+        }
+
+        [Serializable]
+        private class ExperienceSaveData : SaveData
+        {
+            public Dictionary<string, ExperienceData> ExperienceDataCache;
+
+            public ExperienceSaveData(ExperienceManager manager)
+            {
+                ExperienceDataCache = manager._experienceDataCache;
+            }
+
+            public ExperienceSaveData()
+            {
+                ExperienceDataCache = new();
+            }
         }
     }
 
@@ -66,6 +95,7 @@ namespace SunsetSystems.Experience
         Physical, Social, Skill, Discipline
     }
 
+    [Serializable]
     public struct ExperienceData
     {
         public int Physical, PhysicalTotal;

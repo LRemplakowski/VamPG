@@ -91,8 +91,6 @@ namespace UMA
 			//Add the reset listeners if we havent already
 			//we need this because if 'fastGeneration' is false we may still get another loop
 			//and we should not do this again if _dnaAppliedTo contains umaData.gameObject
-			if (umaData == null)
-				Debug.LogError("fooo");
 			if (!_listenersAddedTo.Contains(umaData.gameObject))
 			{
 				umaData.CharacterUpdated.AddListener(ResetOnCharaterUpdated);

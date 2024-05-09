@@ -51,30 +51,20 @@ namespace SunsetSystems.Animation
             animator.applyRootMotion = true;
             agent.updatePosition = false;
             agent.updateRotation = true;
-
-            
-
         }
 
-      
+        private void Update()
+        {
+            SynchronizeAnimatorWithNavMeshAgent();
+        }
 
         private void OnAnimatorMove()
         {
-            transform.position = agent.nextPosition;   //added this, seems to help?
             Vector3 rootPosition = animator.rootPosition;
             rootPosition.y = agent.nextPosition.y;
             MotionTransform.position = rootPosition;
             agent.nextPosition = rootPosition;
             //MotionTransform.rotation = animator.rootRotation;
-            
-
-        }
-
-        private void Update()
-        {
-           
-            SynchronizeAnimatorWithNavMeshAgent();
-          
         }
 
         private void OnDestroy()
@@ -84,38 +74,33 @@ namespace SunsetSystems.Animation
 
         private void SynchronizeAnimatorWithNavMeshAgent()
         {
-            
             Vector3 worldPositionDelta = agent.nextPosition - MotionTransform.position;
             worldPositionDelta.y = 0;
 
             float deltaX = Vector3.Dot(MotionTransform.right, worldPositionDelta);
             float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
-            Vector2 positionDelta = new Vector2(deltaX, deltaY); //added Vector2
+            Vector2 positionDelta = new(deltaX, deltaY);
 
             float positionSmoothing = Mathf.Min(1f, Time.deltaTime / .15f);
             smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
 
             velocity = smoothDeltaPosition / Time.deltaTime;
 
-            if (agent.remainingDistance == agent.stoppingDistance) //<=, == works well
+            if (agent.remainingDistance <= agent.stoppingDistance)
             {
-                velocity = Vector2.Lerp(Vector2.zero, 
-                    velocity, 
-                    agent.remainingDistance / agent.stoppingDistance
+                velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
+            }
 
-                    );
-            }transform.position = agent.nextPosition;
-
-            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2; //no >=
+            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2;
 
             animator.SetBool("IsMoving", shouldMove);
             //animator.SetFloat("MoveX", velocity.x);
             animator.SetFloat("MoveY", velocity.magnitude / 3);
 
             float deltaMagnitude = worldPositionDelta.magnitude;
-            if (deltaMagnitude > agent.radius) //video had agent.radius / 2f
+            if (deltaMagnitude > agent.radius)
             {
-                MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f); //originally  * 0.9f
+                MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
             }
         }
 

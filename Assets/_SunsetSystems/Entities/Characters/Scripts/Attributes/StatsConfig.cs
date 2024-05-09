@@ -20,7 +20,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public struct Trackers
+    public class Trackers
     {
         [SerializeField]
         private Tracker health, willpower, hunger, humanity;
@@ -66,7 +66,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public struct Attributes
+    public class Attributes
     {
         [SerializeField]
         private CreatureAttribute
@@ -152,7 +152,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public struct Skills
+    public class Skills
     {
         [SerializeField]
         private Skill
@@ -308,7 +308,7 @@ namespace SunsetSystems.Entities.Data
     }
 
     [Serializable]
-    public struct Disciplines
+    public class Disciplines
     {
         [SerializeField]
         private Discipline

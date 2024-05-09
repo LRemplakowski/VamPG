@@ -20,10 +20,7 @@ namespace SunsetSystems.Dialogue
         private DialogueSaveData GenerateInjectionData()
         {
             DialogueSaveData injectionData = new();
-            injectionData._floats = new();
-            injectionData._strings = new();
-            injectionData._bools = new();
-            List<string> configIDs = CreatureDatabase.Instance.AccessorKeys ?? new();
+            List<string> configIDs = CreatureDatabase.Instance?.AccessorKeys ?? new();
             foreach (string configID in configIDs)
             {
                 if (CreatureDatabase.Instance.TryGetConfig(configID, out CreatureConfig config))
@@ -35,9 +32,9 @@ namespace SunsetSystems.Dialogue
             return injectionData;
         }
 
-        public ref DialogueSaveData GetVariableInjectionData()
+        public DialogueSaveData GetVariableInjectionData()
         {
-            return ref _injectionData;
+            return _injectionData;
         }
     }
 }

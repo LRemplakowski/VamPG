@@ -85,7 +85,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2957039446081043022}
   - component: {fileID: 7467419229976355587}
-  - component: {fileID: 5359187051584677651}
   - component: {fileID: 5760142860369745364}
   - component: {fileID: 6964734998283903206}
   m_Layer: 5
@@ -124,26 +123,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6791822720029462652}
   m_CullTransparentMesh: 1
---- !u!114 &5359187051584677651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6791822720029462652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreLayout: 0
-  m_MinWidth: 80
-  m_MinHeight: 80
-  m_PreferredWidth: -1
-  m_PreferredHeight: -1
-  m_FlexibleWidth: 0
-  m_FlexibleHeight: 0
-  m_LayoutPriority: 1
 --- !u!114 &5760142860369745364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +144,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  actionType: 0
+  actionData:
+    <ActionType>k__BackingField: 0
+    <DisciplinePowerData>k__BackingField: {fileID: 0}
 --- !u!114 &6964734998283903206
 MonoBehaviour:
   m_ObjectHideFlags: 0

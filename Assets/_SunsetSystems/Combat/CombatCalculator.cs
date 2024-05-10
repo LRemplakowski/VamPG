@@ -33,7 +33,7 @@ namespace SunsetSystems.Combat
             double critChance = 0;
             double critRoll = 0;
 
-            float heightDifference = attacker.References.BodyTransform.position.y - defender.References.BodyTransform.position.y;
+            float heightDifference = attacker.References.Transform.position.y - defender.References.Transform.position.y;
             if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
             {
                 attackModifier.HitChanceMod += .1d;
@@ -107,7 +107,7 @@ namespace SunsetSystems.Combat
         {
             double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
             double result = 0d;
-            if (attacker.CurrentWeapon.GetRangeData().shortRange >= Vector3.Distance(attacker.References.BodyTransform.position, defender.References.BodyTransform.position))
+            if (attacker.CurrentWeapon.GetRangeData().shortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;

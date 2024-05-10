@@ -237,7 +237,7 @@ namespace SunsetSystems.Entities.Characters
 
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
-                WorldPosition = creature.References.BodyTransform.position;
+                WorldPosition = creature.References.Transform.position;
                 UMAHidden = false;
                 if (creature.References != null)
                 {

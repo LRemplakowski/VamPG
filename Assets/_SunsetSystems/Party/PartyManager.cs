@@ -251,7 +251,7 @@ namespace SunsetSystems.Party
             Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {
-                partyPositions.Add(key, _activeParty[key].References.BodyTransform.position);
+                partyPositions.Add(key, _activeParty[key].References.Transform.position);
             }
             saveData.PartyPositions = partyPositions;
             return saveData;

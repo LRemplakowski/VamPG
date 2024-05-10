@@ -12,6 +12,10 @@ namespace SunsetSystems.Animation
 {
     public class AnimationManager : SerializedMonoBehaviour, IPersistentComponent
     {
+        private const string ANIMATION_MANAGER_ID = "ANIMATION_MANAGER";
+        private const string ANIMATOR_PARAM_ON_MOVE = "IsMoving";
+        private const string ANIMATOR_PARAM_SPEED = "Speed";
+
         [Title("References")]
         [SerializeField, Required]
         private ICreature owner;
@@ -36,21 +40,21 @@ namespace SunsetSystems.Animation
 
         private bool _initializedOnce = false;
 
-        private Vector2 velocity;
-        private Vector2 smoothDeltaPosition;
+        private int _animatorOnMove;
+        private int _animatorSpeed;
 
-        private Transform MotionTransform => agent.transform;
-
-        public string ComponentID => throw new System.NotImplementedException();
+        public string ComponentID => ANIMATION_MANAGER_ID;
 
         private void Start()
         {
             rigBuilder.layers.Clear();
             rigBuilder.enabled = false;
 
-            animator.applyRootMotion = true;
-            agent.updatePosition = false;
-            agent.updateRotation = true;
+            _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
+            _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
+            //animator.applyRootMotion = true;
+            //agent.updatePosition = false;
+            //agent.updateRotation = true;
         }
 
         private void Update()
@@ -58,14 +62,14 @@ namespace SunsetSystems.Animation
             SynchronizeAnimatorWithNavMeshAgent();
         }
 
-        private void OnAnimatorMove()
-        {
-            Vector3 rootPosition = animator.rootPosition;
-            rootPosition.y = agent.nextPosition.y;
-            MotionTransform.position = rootPosition;
-            agent.nextPosition = rootPosition;
-            //MotionTransform.rotation = animator.rootRotation;
-        }
+        //private void OnAnimatorMove()
+        //{
+        //    Vector3 rootPosition = animator.rootPosition;
+        //    rootPosition.y = agent.nextPosition.y;
+        //    MotionTransform.position = rootPosition;
+        //    agent.nextPosition = rootPosition;
+        //    //MotionTransform.rotation = animator.rootRotation;
+        //}
 
         private void OnDestroy()
         {
@@ -74,35 +78,43 @@ namespace SunsetSystems.Animation
 
         private void SynchronizeAnimatorWithNavMeshAgent()
         {
-            Vector3 worldPositionDelta = agent.nextPosition - MotionTransform.position;
-            worldPositionDelta.y = 0;
-
-            float deltaX = Vector3.Dot(MotionTransform.right, worldPositionDelta);
-            float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
-            Vector2 positionDelta = new(deltaX, deltaY);
-
-            float positionSmoothing = Mathf.Min(1f, Time.deltaTime / .15f);
-            smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
-
-            velocity = smoothDeltaPosition / Time.deltaTime;
-
-            if (agent.remainingDistance <= agent.stoppingDistance)
-            {
-                velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
-            }
-
-            bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2;
-
-            animator.SetBool("IsMoving", shouldMove);
-            //animator.SetFloat("MoveX", velocity.x);
-            animator.SetFloat("MoveY", velocity.magnitude / 3);
-
-            float deltaMagnitude = worldPositionDelta.magnitude;
-            if (deltaMagnitude > agent.radius)
-            {
-                MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
-            }
+            bool agentOnMove = agent.hasPath & !agent.isStopped & agent.remainingDistance > agent.stoppingDistance;
+            float agentSpeed = agent.velocity.magnitude / agent.speed;
+            animator.SetBool(_animatorOnMove, agentOnMove);
+            animator.SetFloat(_animatorSpeed, agentSpeed);
         }
+
+        //private void SynchronizeAnimatorWithNavMeshAgent()
+        //{
+        //    Vector3 worldPositionDelta = agent.nextPosition - MotionTransform.position;
+        //    worldPositionDelta.y = 0;
+
+        //    float deltaX = Vector3.Dot(MotionTransform.right, worldPositionDelta);
+        //    float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
+        //    Vector2 positionDelta = new(deltaX, deltaY);
+
+        //    float positionSmoothing = Mathf.Min(1f, Time.deltaTime / .15f);
+        //    smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
+
+        //    velocity = smoothDeltaPosition / Time.deltaTime;
+
+        //    if (agent.remainingDistance <= agent.stoppingDistance)
+        //    {
+        //        velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
+        //    }
+
+        //    bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2;
+
+        //    animator.SetBool("IsMoving", shouldMove);
+        //    //animator.SetFloat("MoveX", velocity.x);
+        //    animator.SetFloat("MoveY", velocity.magnitude / 3);
+
+        //    float deltaMagnitude = worldPositionDelta.magnitude;
+        //    if (deltaMagnitude > agent.radius)
+        //    {
+        //        MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
+        //    }
+        //}
 
         private Rig InitializeRigLayer()
         {

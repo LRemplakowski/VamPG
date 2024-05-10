@@ -9,10 +9,10 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
 {
     public class CreatureReferenceManager : CachedReferenceManager, ICreatureReferences
     {
-        [field: SerializeField]
-        public Transform BodyTransform { get; private set; }
-        [field: SerializeField]
-        public GameObject BodyGameObject { get; private set; }
+        //[field: SerializeField]
+        //public Transform BodyTransform { get; private set; }
+        //[field: SerializeField]
+        //public GameObject BodyGameObject { get; private set; }
         [field: SerializeField]
         public CreatureData CreatureData { get; private set; }
         [field: SerializeField]

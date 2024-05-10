@@ -35,7 +35,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public override void Begin()
         {
-            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position);
+            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position);
             if (distance > target.InteractionDistance)
             {
                 navMeshAgent.isStopped = false;
@@ -60,7 +60,7 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator InteractWhenCloseEnough()
         {
-            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position) > target.InteractionDistance)
+            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position) > target.InteractionDistance)
                 yield return null;
             navMeshAgent.isStopped = true;
             target.TargetedBy = Owner;

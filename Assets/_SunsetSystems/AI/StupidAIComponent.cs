@@ -57,7 +57,7 @@ namespace SunsetSystems.AI
         private void DecideWhatToDo()
         {
             GridManager grid = context.GridManager;
-            Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.BodyTransform.position);
+            Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
             if (context.CanMove)
             {
                 GridUnit target = null;
@@ -89,7 +89,7 @@ namespace SunsetSystems.AI
                         break;
                     case Inventory.WeaponType.Ranged:
                         target = context.FriendlyCombatants
-                                        .Where(combatant => Vector3.Distance(combatant.References.BodyTransform.position, context.Owner.References.BodyTransform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
+                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
                                         .GetRandom();
                         break;
                 }

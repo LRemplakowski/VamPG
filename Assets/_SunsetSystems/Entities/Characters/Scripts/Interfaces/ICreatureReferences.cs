@@ -9,8 +9,8 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
 {
     public interface ICreatureReferences : IEntityReferences
     {
-        Transform BodyTransform { get; }
-        GameObject BodyGameObject { get; }
+        //Transform BodyTransform { get; }
+        //GameObject BodyGameObject { get; }
 
         CreatureData CreatureData { get; }
         StatsManager StatsManager { get; }

@@ -41,7 +41,7 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private IWeaponInstance weaponInstance;
         [ShowInInspector, ReadOnly]
-        private Dictionary<IWeapon, WeaponAmmoData> weaponsAmmoData = new();
+        private Dictionary<EquipmentSlotID, WeaponAmmoData> weaponsAmmoData = new();
 
         private void OnEnable()
         {
@@ -84,7 +84,7 @@ namespace SunsetSystems.Equipment
                         MaxAmmo = primaryWeapon.MaxAmmo,
                         CurrentAmmo = primaryWeapon.MaxAmmo
                     };
-                    weaponsAmmoData.Add(primaryWeapon, primaryWeaponAmmoData);
+                    weaponsAmmoData[EquipmentSlotID.PrimaryWeapon] = primaryWeaponAmmoData;
                 }
                 IWeapon secondaryWeapon = GetSecondaryWeapon();
                 if (secondaryWeapon != null && secondaryWeapon.WeaponType == WeaponType.Ranged)
@@ -94,7 +94,7 @@ namespace SunsetSystems.Equipment
                         MaxAmmo = primaryWeapon.MaxAmmo,
                         CurrentAmmo = primaryWeapon.MaxAmmo
                     };
-                    weaponsAmmoData.Add(secondaryWeapon, secondaryWeaponAmmoData);
+                    weaponsAmmoData[EquipmentSlotID.SecondaryWeapon] = secondaryWeaponAmmoData;
                 }
                 _ = RebuildWeaponInstance();
             }
@@ -172,8 +172,8 @@ namespace SunsetSystems.Equipment
 
         public bool UseAmmoFromSelectedWeapon(int count)
         {
-            IWeapon selectedWeapon = GetSelectedWeapon();
-            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
+            IWeapon selectedWeaponInstance = GetSelectedWeapon();
+            if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return true;
             if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
             {
@@ -188,8 +188,8 @@ namespace SunsetSystems.Equipment
 
         public void ReloadSelectedWeapon()
         {
-            IWeapon selectedWeapon = GetSelectedWeapon();
-            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
+            IWeapon selectedWeaponInstance = GetSelectedWeapon();
+            if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return;
             if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
             {

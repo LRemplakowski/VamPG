@@ -78,7 +78,7 @@ namespace SunsetSystems.Animation
 
         private void SynchronizeAnimatorWithNavMeshAgent()
         {
-            bool agentOnMove = agent.hasPath & !agent.isStopped & agent.remainingDistance > agent.stoppingDistance;
+            bool agentOnMove = agent.isOnNavMesh && agent.hasPath && agent.remainingDistance - agent.stoppingDistance > moveThreshold;
             float agentSpeed = agent.velocity.magnitude / agent.speed;
             animator.SetBool(_animatorOnMove, agentOnMove);
             animator.SetFloat(_animatorSpeed, agentSpeed);

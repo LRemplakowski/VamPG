@@ -244,10 +244,12 @@ namespace SunsetSystems.Party
 
         public object GetSaveData()
         {
-            PartySaveData saveData = new();
-            saveData.CachedPartyTemplates = new(_cachedPartyTemplates);
-            saveData.ActiveMemberKeys = new(_activeCoterieMemberKeys);
-            saveData.MainCharacterKey = _mainCharacterKey;
+            PartySaveData saveData = new()
+            {
+                CachedPartyTemplates = new(_cachedPartyTemplates),
+                ActiveMemberKeys = new(_activeCoterieMemberKeys),
+                MainCharacterKey = _mainCharacterKey
+            };
             Dictionary<string, Vector3> partyPositions = new();
             foreach (string key in _activeParty.Keys)
             {

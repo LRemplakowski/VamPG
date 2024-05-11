@@ -20,7 +20,7 @@ namespace SunsetSystems.Combat
         public static CombatManager Instance { get; private set; }
 
         [field: Title("Runtime")]
-        [field: SerializeField]
+        [field: ShowInInspector, ReadOnly]
         public Encounter CurrentEncounter { get; private set; }
 
         [field: ShowInInspector, ReadOnly]
@@ -163,7 +163,7 @@ namespace SunsetSystems.Combat
             int length = array.Length;
             ICombatant[] result = new ICombatant[array.Length];
             // Ensure shiftAmount is within the range of the array length
-            shiftAmount = shiftAmount % length;
+            shiftAmount %= length;
 
             // Shift indices to the left by X positions
             for (int i = 0; i < length; i++)

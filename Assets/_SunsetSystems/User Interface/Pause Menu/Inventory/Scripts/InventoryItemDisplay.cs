@@ -57,9 +57,10 @@ namespace SunsetSystems.UI
                 string currentCharacterID = CharacterSelector.SelectedCharacterKey;
                 var eqManager = PartyManager.Instance.GetPartyMemberByID(currentCharacterID).References.EquipmentManager;
                 var slotID = eqManager.GetSlotForItem(equipableItem);
-                if (eqManager.EquipItem(slotID, equipableItem, out var previouslyEquipped) && ShouldAddItemBackToInventory(previouslyEquipped))
+                if (eqManager.EquipItem(slotID, equipableItem, out var previouslyEquipped))
                 {
-                    InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(previouslyEquipped));
+                    if (ShouldAddItemBackToInventory(previouslyEquipped))
+                        InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(previouslyEquipped));
                 }
                 else
                 {

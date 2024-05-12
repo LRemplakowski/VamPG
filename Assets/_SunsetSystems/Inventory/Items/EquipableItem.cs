@@ -13,6 +13,6 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField]
         public bool CanBeRemoved { get; private set; } = true;
         [field: SerializeField]
-        public bool IsDefaultItem { get; private set; } = true;
+        public bool IsDefaultItem { get; private set; } = false;
     }
 }

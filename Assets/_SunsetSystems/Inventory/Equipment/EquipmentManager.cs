@@ -115,9 +115,9 @@ namespace SunsetSystems.Entities.Characters
             {
                 if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))
                 {
-                    if (ItemDatabase.Instance.TryGetEntryByReadableID(templateSlot, out var item) && item is IWearable wearable && mySlot.TryEquipItem(wearable, out var _))
+                    if (ItemDatabase.Instance.TryGetEntryByReadableID(templateSlot, out var item) && item is IEquipableItem equipable && mySlot.TryEquipItem(equipable, out var _))
                     {
-                        Debug.Log($"Injected item {mySlot.GetEquippedItem()} into equipment manager!");
+                        Debug.Log($"Injected item {mySlot.GetEquippedItem()} into slot {mySlot.ID}! Creature: {transform.parent.parent.name}");
                         ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());
                     }
                 }

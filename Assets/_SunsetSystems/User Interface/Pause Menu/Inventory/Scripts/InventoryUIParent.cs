@@ -43,7 +43,9 @@ namespace SunsetSystems.UI
             }
         }
 
-        private void MarkDirty(InventoryEntry _) => _isDirty = true;
+        public void MarkDirty(InventoryEntry _) => MarkDirty();
+
+        public void MarkDirty() => _isDirty = true;
 
         private void Refresh()
         {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Utils.Extensions;
@@ -27,16 +28,16 @@ namespace SunsetSystems.Core.SceneLoading.UI
         //    defaultLoadingScreens.RemoveAll(assetRef => nonSprites.Contains(assetRef));
         //}
 
-        private void OnEnable()
-        {
-            loadedScreens.Clear();
-        }
+        //private void OnEnable()
+        //{
+        //    loadedScreens.Clear();
+        //}
 
-        private void OnDisable()
-        {
-            List<AssetReference> toRelease = new(loadedScreens);
-            toRelease.ForEach(screen => ReturnAsset(screen));
-        }
+        //private void OnDisable()
+        //{
+        //    List<AssetReference> toRelease = new(loadedScreens);
+        //    toRelease.ForEach(screen => ReturnAsset(screen));
+        //}
 
         public async Task<Sprite> GetRandomLoadingScreenAsync()
         {
@@ -53,13 +54,15 @@ namespace SunsetSystems.Core.SceneLoading.UI
         public async Task<Sprite> GetAssetAsync(AssetReference assetReference)
         {
             loadedScreens.Add(assetReference);
-            return await AddressableManager.Instance.LoadAssetAsync<Sprite>(assetReference);
+            var asyncOp = Addressables.LoadAssetAsync<Sprite>(assetReference);
+            await new WaitUntil(() => asyncOp.IsDone);
+            return asyncOp.Result;
         }
 
         public void ReturnAsset(AssetReference asset)
         {
             loadedScreens.Remove(asset);
-            AddressableManager.Instance.ReleaseAsset(asset);
+            Addressables.Release(asset);
         }
     }
 }

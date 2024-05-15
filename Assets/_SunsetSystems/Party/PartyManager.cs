@@ -244,6 +244,7 @@ namespace SunsetSystems.Party
 
         public object GetSaveData()
         {
+            _cachedPartyTemplates = UpdatePartyTemplates();
             PartySaveData saveData = new()
             {
                 CachedPartyTemplates = new(_cachedPartyTemplates),
@@ -257,6 +258,23 @@ namespace SunsetSystems.Party
             }
             saveData.PartyPositions = partyPositions;
             return saveData;
+
+            Dictionary<string, ICreatureTemplate> UpdatePartyTemplates()
+            {
+                Dictionary<string, ICreatureTemplate> templates = new();
+                foreach (string key in _cachedPartyTemplates.Keys)
+                {
+                    if (_activeParty.TryGetValue(key, out ICreature creature))
+                    {
+                        templates[key] = creature.CreatureTemplate;
+                    }
+                    else
+                    {
+                        templates[key] = _cachedPartyTemplates[key];
+                    }
+                }
+                return templates;
+            }
         }
 
         public void InjectSaveData(object data)

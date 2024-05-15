@@ -18,7 +18,10 @@ namespace SunsetSystems.Utils.Extensions
 
             int itemIndex = Random.Range(0, enumerableCount);
             Debug.Log($"Got random item from collection {enumerable}! Item index: {itemIndex}");
-            return enumerable.ElementAt(itemIndex);
+            var elementAtIndex = enumerable.ElementAt(itemIndex);
+            if (elementAtIndex == null)
+                Debug.Break();
+            return elementAtIndex;
         }
     }
 }

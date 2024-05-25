@@ -61,8 +61,8 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public void ReturnAsset(AssetReference asset)
         {
-            loadedScreens.Remove(asset);
-            Addressables.Release(asset);
+            if (loadedScreens.Remove(asset))
+                Addressables.Release(asset);
         }
     }
 }

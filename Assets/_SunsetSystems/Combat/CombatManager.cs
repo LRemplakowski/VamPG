@@ -19,6 +19,9 @@ namespace SunsetSystems.Combat
     {
         public static CombatManager Instance { get; private set; }
 
+        [Title("References")]
+        [SerializeField]
+        private CanvasGroup _combatUICanvasGroup;
         [field: Title("Runtime")]
         [field: ShowInInspector, ReadOnly]
         public Encounter CurrentEncounter { get; private set; }
@@ -86,6 +89,7 @@ namespace SunsetSystems.Combat
                 OnFullTurnCompleted?.Invoke(CurrentActiveActor);
             }
             CombatRoundBegin?.InvokeSafeDynamicFirst(CurrentActiveActor);
+            SetCombatUIActive(IsActiveActorPlayerControlled());
             Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " begins round " + turnCounter + "!");
         }
 
@@ -97,9 +101,16 @@ namespace SunsetSystems.Combat
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
             Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
             CombatBegin?.InvokeSafe(Actors);
+            SetCombatUIActive(false);
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             await new WaitForSeconds(1f);
             NextRound();
+        }
+
+        private void SetCombatUIActive(bool active)
+        {
+            if (_combatUICanvasGroup != null)
+                _combatUICanvasGroup.interactable = active;
         }
 
         private ICombatant DecideFirstActor(List<ICombatant> creatures)
@@ -115,7 +126,7 @@ namespace SunsetSystems.Combat
             CurrentEncounter = null;
         }
 
-        private static Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
+        private static async Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
         {
             List<Task> tasks = new();
             foreach (ICombatant combatant in actors)
@@ -123,8 +134,9 @@ namespace SunsetSystems.Combat
                 Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.Transform.position);
                 Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
                 tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager)));
+                await new WaitForUpdate();
             }
-            return Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);
         }
 
         public bool IsBeforeFirstRound()
@@ -139,7 +151,7 @@ namespace SunsetSystems.Combat
 
         public bool IsActiveActorPlayerControlled()
         {
-            return _currentActiveActor != null ? CurrentActiveActor.IsPlayerControlled : false;
+            return _currentActiveActor != null && CurrentActiveActor.IsPlayerControlled;
         }
 
         public int GetRound()

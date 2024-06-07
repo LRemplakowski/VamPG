@@ -6,6 +6,7 @@ using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Spellbook;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.Input
@@ -23,8 +24,15 @@ namespace SunsetSystems.Input
         private const int raycastRange = 100;
         private Vector2 mousePosition;
 
+        private bool _pointerOverGameObject;
+
         private Collider gridHit;
         private Collider targetableHit;
+
+        private void Update()
+        {
+            _pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
+        }
 
         public void HandlePointerPosition(InputAction.CallbackContext context)
         {
@@ -33,10 +41,15 @@ namespace SunsetSystems.Input
             mousePosition = context.ReadValue<Vector2>();
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             CombatManager.Instance.CurrentEncounter.GridManager.ClearHighlightedCell();
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, raycastRange, gridLayerMask))
+            if (_pointerOverGameObject)
+            {
+                gridHit = null;
+                targetableHit = null;
+                return;
+            }
+            Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, gridLayerMask))
             {
                 if (gridHit == null)
                     gridHit = hit.collider;
@@ -53,8 +66,7 @@ namespace SunsetSystems.Input
 
             void HandleGridCellPointerPosition()
             {
-                IGridCell gridCell = hit.collider.gameObject.GetComponent<IGridCell>();
-                if (gridCell != null)
+                if (hit.collider.gameObject.TryGetComponent<IGridCell>(out var gridCell))
                 {
                     CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell);
                 }

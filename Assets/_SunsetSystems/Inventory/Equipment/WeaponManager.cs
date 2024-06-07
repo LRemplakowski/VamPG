@@ -9,6 +9,7 @@ using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UltEvents;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -29,9 +30,6 @@ namespace SunsetSystems.Equipment
         private ICombatant owner;
         [Title("Config")]
         [SerializeField]
-        private string weaponAnimationTypeParam;
-        private int weaponAnimationTypeParamHash;
-        [SerializeField]
         private bool _ignoreAmmo;
         [SerializeField]
         private bool _showWeaponOutsideCombat;
@@ -42,6 +40,8 @@ namespace SunsetSystems.Equipment
         private IWeaponInstance weaponInstance;
         [ShowInInspector, ReadOnly]
         private Dictionary<EquipmentSlotID, WeaponAmmoData> weaponsAmmoData = new();
+
+        public UltEvent<IWeaponInstance> OnWeaponInstanceChanged = new();
 
         private void OnEnable()
         {
@@ -59,7 +59,6 @@ namespace SunsetSystems.Equipment
 
         private void Start()
         {
-            weaponAnimationTypeParamHash = Animator.StringToHash(weaponAnimationTypeParam);
             //SetSelectedWeapon(SelectedWeapon.None);
             weaponsAmmoData ??= new();
             if (_showWeaponOutsideCombat)
@@ -68,7 +67,8 @@ namespace SunsetSystems.Equipment
 
         private void OnWeaponSelected(SelectedWeapon weapon)
         {
-            SetSelectedWeapon(weapon);
+            if (CombatManager.Instance.CurrentActiveActor == owner)
+                SetSelectedWeapon(weapon);
         }
 
         private void OnCombatStart(IEnumerable<ICombatant> combatants)
@@ -118,10 +118,7 @@ namespace SunsetSystems.Equipment
             if (newSelectedWeapon != selectedWeapon)
             {
                 selectedWeapon = newSelectedWeapon;
-#if UNITY_EDITOR
-                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-#endif
-                    await RebuildWeaponInstance();
+                await RebuildWeaponInstance();
             }
         }
 
@@ -132,10 +129,7 @@ namespace SunsetSystems.Equipment
             if (GameManager.Instance.IsCurrentState(GameState.Combat) is false && _showWeaponOutsideCombat is false)
                 return;
             weaponInstance = await InstantiateCurrentWeapon();
-            if (weaponInstance != null)
-                animationController.SetInteger(weaponAnimationTypeParamHash, (int)(weaponInstance.WeaponAnimationData.AnimationType));
-            else
-                animationController.SetInteger(weaponAnimationTypeParamHash, (int)WeaponAnimationType.Brawl);
+            OnWeaponInstanceChanged?.InvokeSafe(weaponInstance);
         }
 
         private async Task<IWeaponInstance> InstantiateCurrentWeapon()

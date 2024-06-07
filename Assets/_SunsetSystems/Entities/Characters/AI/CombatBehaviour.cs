@@ -194,9 +194,6 @@ namespace SunsetSystems.Combat
             return Owner.PerformAction(action, clearQueue);
         }
 
-        public new T GetComponent<T>() where T : Component => References.GetCachedComponent<T>();
-        public new T GetComponentInChildren<T>() where T : Component => References.GetCachedComponentInChildren<T>();
-
         public void SignalEndTurn()
         {
             if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)

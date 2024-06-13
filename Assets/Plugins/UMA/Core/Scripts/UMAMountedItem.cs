@@ -15,6 +15,9 @@ public class UMAMountedItem : MonoBehaviour
     public Quaternion Orientation;
     public string IgnoreTag = "UMAIgnore";
 
+    [SerializeField]
+    private bool _cleanUpMountPoint = false;
+
     [Tooltip("If true the object will scale to bone DNA")]
     public bool setScale = true;
 
@@ -50,6 +53,12 @@ public class UMAMountedItem : MonoBehaviour
         }
 #endif
         return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (MountPoint != null && _cleanUpMountPoint)
+            Destroy(MountPoint.gameObject);
     }
 
     // Used when mounting manually.

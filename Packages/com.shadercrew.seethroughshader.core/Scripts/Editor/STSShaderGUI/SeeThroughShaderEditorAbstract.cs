@@ -39,7 +39,7 @@ namespace ShaderCrew.SeeThroughShader
 
             InitializeGUI(materialEditor, properties);
 
-            FindPropertiesSeeThroughShader(properties);
+            FindPropertiesSeeThroughShader(properties, material);
             seeThroughShaderGUI.m_MaterialEditor = materialEditor;
 
             if (m_FirstTimeApply)
@@ -81,10 +81,11 @@ namespace ShaderCrew.SeeThroughShader
 
             }
 
-            if (seeThroughShaderGUI.syncCullMode.floatValue == 1 || !seeThroughShaderGUI.isReferenceMaterial)
-            {
+            //if (seeThroughShaderGUI.syncCullMode.floatValue == 1 || !seeThroughShaderGUI.isReferenceMaterial)
+            //if (seeThroughShaderGUI.isReferenceMaterial)
+            //{
                 DoGUI(material, materialEditor, properties);
-            }
+            //}
 
 
             EditorGUILayout.Space();
@@ -117,7 +118,7 @@ namespace ShaderCrew.SeeThroughShader
 
 
 
-        public void FindPropertiesSeeThroughShader(MaterialProperty[] props)
+        public void FindPropertiesSeeThroughShader(MaterialProperty[] props, Material material)
         {
             seeThroughShaderGUI.isReferenceMaterialMat = FindProperty("_isReferenceMaterial", props);
 
@@ -139,6 +140,8 @@ namespace ShaderCrew.SeeThroughShader
             seeThroughShaderGUI.dissolveTextureAnimationEnabled = FindProperty("_AnimationEnabled", props);
             seeThroughShaderGUI.dissolveTextureAnimationSpeed = FindProperty("_AnimationSpeed", props);
             seeThroughShaderGUI.dissolveTransitionDuration = FindProperty("_TransitionDuration", props);
+
+
 
 
             seeThroughShaderGUI.interactionMode = FindProperty("_InteractionMode", props);
@@ -216,6 +219,39 @@ namespace ShaderCrew.SeeThroughShader
             seeThroughShaderGUI.showContentDebugArea = FindProperty("_ShowContentDebugArea", props);
 
             seeThroughShaderGUI.syncCullMode = FindProperty("_SyncCullMode", props);
+
+
+            seeThroughShaderGUI.useCustomTime = FindProperty("_UseCustomTime", props);
+
+
+            if (material.HasProperty("_CrossSectionEnabled") && material.HasProperty("_CrossSectionColor") &&
+                material.HasProperty("_CrossSectionTextureEnabled") && material.HasProperty("_CrossSectionTexture") &&
+                material.HasProperty("_CrossSectionTextureScale") && material.HasProperty("_CrossSectionUVScaledByDistance") )
+            {
+                seeThroughShaderGUI.crossSectionEnabled = FindProperty("_CrossSectionEnabled", props);
+                seeThroughShaderGUI.crossSectionColor = FindProperty("_CrossSectionColor", props);
+
+                seeThroughShaderGUI.crossSectionTextureEnabled = FindProperty("_CrossSectionTextureEnabled", props);
+                seeThroughShaderGUI.crossSectionTexture = FindProperty("_CrossSectionTexture", props);
+                seeThroughShaderGUI.crossSectionTextureScale = FindProperty("_CrossSectionTextureScale", props);
+                seeThroughShaderGUI.crossSectionUVScaledByDistance = FindProperty("_CrossSectionUVScaledByDistance", props);
+            }
+
+            seeThroughShaderGUI.dissolveMethod = FindProperty("_DissolveMethod", props);
+            seeThroughShaderGUI.dissolveTexSpace = FindProperty("_DissolveTexSpace", props);
+
+#if USING_HDRP
+            if (material.HasProperty("_CullMode"))
+            {
+                seeThroughShaderGUI.cull = FindProperty("_CullMode", props);
+            }
+#else
+            if (material.HasProperty("_Cull"))
+            {
+                seeThroughShaderGUI.cull = FindProperty("_Cull", props);
+            }
+#endif
+
         }
 
         public override void OnClosed(Material material)

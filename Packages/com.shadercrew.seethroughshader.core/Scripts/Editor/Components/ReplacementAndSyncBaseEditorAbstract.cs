@@ -330,14 +330,33 @@ namespace ShaderCrew.SeeThroughShader
                 EditorGUILayout.HelpBox("The reference material is NOT a 'See-through Shader' material! Replacement will NOT work with a NON-STS shader!", MessageType.Error);
 
             }
-            else if (((Material)referenceMaterial.objectReferenceValue).GetFloat("_IsReplacementShader") == 1)
+            //else if (((Material)referenceMaterial.objectReferenceValue).GetFloat("_IsReplacementShader") == 1)
+            //{
+            //    EditorGUILayout.HelpBox("\"Global Replacement\" is enabled for the selected reference material. Please disable, otherwise you will get an incorrect behaviour!", MessageType.Error);
+            //    if (GUILayout.Button("Disabel \"Global Replacement\""))
+            //    {
+            //        ((Material)referenceMaterial.objectReferenceValue).SetFloat("_IsReplacementShader", 0);
+            //        ((Material)referenceMaterial.objectReferenceValue).DisableKeyword("_REPLACEMENT");
+            //    }
+            //}
+            else if (!((Material)referenceMaterial.objectReferenceValue).shader.name.Equals(GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader))
             {
-                EditorGUILayout.HelpBox("\"Global Replacement\" is enabled for the selected reference material. Please disable, otherwise you will get an incorrect behaviour!", MessageType.Error);
-                if (GUILayout.Button("Disabel \"Global Replacement\""))
+                EditorGUILayout.HelpBox("The reference material is NOT using the correct shader!, please use " + GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader, MessageType.Error);
+
+                Shader correctShader = Shader.Find(GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader);
+
+                if (correctShader != null)
                 {
-                    ((Material)referenceMaterial.objectReferenceValue).SetFloat("_IsReplacementShader", 0);
-                    ((Material)referenceMaterial.objectReferenceValue).DisableKeyword("_REPLACEMENT");
+                    if (GUILayout.Button("Apply " + GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader))
+                    {
+                        ((Material)referenceMaterial.objectReferenceValue).shader = Shader.Find(GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader);
+                    }
                 }
+                else
+                {
+                    EditorGUILayout.HelpBox(GeneralUtils.getUnityVersionAndRenderPipelineCorrectedShaderString().versionAndRPCorrectedShader + " couldn't be found in your project. Check your files or re-import the STS asset.", MessageType.Error);
+                }
+
             }
 
 

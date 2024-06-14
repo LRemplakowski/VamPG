@@ -61,12 +61,12 @@ namespace ShaderCrew.SeeThroughShader
                     {
                         GUI.backgroundColor = Color.red;
                     }
-                    else if (
-                            ((GameObject)element.objectReferenceValue).GetComponent<Collider>() == null ||
-                            ((GameObject)element.objectReferenceValue).GetComponent<Collider>().enabled == false)
-                    {
-                        GUI.backgroundColor = Color.magenta;
-                    }
+                    //else if (
+                    //        ((GameObject)element.objectReferenceValue).GetComponent<Collider>() == null ||
+                    //        ((GameObject)element.objectReferenceValue).GetComponent<Collider>().enabled == false)
+                    //{
+                    //    GUI.backgroundColor = Color.magenta;
+                    //}
                     else
                     {
                         GUI.backgroundColor = backgroundColor;
@@ -126,13 +126,13 @@ namespace ShaderCrew.SeeThroughShader
                     {
                         height += EditorGUIUtility.singleLineHeight * 2;
                     }
-                    else if (
-                            ((GameObject)element.objectReferenceValue).GetComponent<Collider>() == null ||
-                            ((GameObject)element.objectReferenceValue).GetComponent<Collider>().enabled == false
-                    )
-                    {
-                        height += EditorGUIUtility.singleLineHeight * 2;
-                    }
+                    //else if (
+                    //        ((GameObject)element.objectReferenceValue).GetComponent<Collider>() == null ||
+                    //        ((GameObject)element.objectReferenceValue).GetComponent<Collider>().enabled == false
+                    //)
+                    //{
+                    //    height += EditorGUIUtility.singleLineHeight * 2;
+                    //}
                     return height;
                 },
 

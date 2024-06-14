@@ -254,14 +254,10 @@ namespace ShaderCrew.SeeThroughShader
                                             }
                                             updatedMaterials[j] = materialTracker[renderers[i].materials[j].name];
 
-                                            ///if (!tmpTransformsWithSTS.Contains(gameObject.transform))
-                                          ///  {
-                                           ///     tmpTransformsWithSTS.Add(gameObject.transform);
-                                           /// }
-                                        }
-                                        if (!tmpTransformsWithSTS.Contains(gameObject.transform))
-                                        {
-                                            tmpTransformsWithSTS.Add(gameObject.transform);
+                                            if (!tmpTransformsWithSTS.Contains(gameObject.transform))
+                                            {
+                                                tmpTransformsWithSTS.Add(gameObject.transform);
+                                            }
                                         }
                                     }
                                 }
@@ -345,31 +341,64 @@ namespace ShaderCrew.SeeThroughShader
 
 
 
+        //private void updateGlobalShaderVariables()
+        //{
+        //    if (referenceMaterial != null)
+        //    {
+        //        Texture disTex = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX);
+        //        Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX_GLOBAL, disTex);
+
+        //        Texture dissolveMask = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK);
+        //        Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK_GLOBAL, dissolveMask);
+
+        //        Texture obstructionCurve = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE);
+        //        Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE_GLOBAL, obstructionCurve);
+
+        //        Shader.SetGlobalColor(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR_GLOBAL, referenceMaterial.GetColor(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR));
+        //        foreach (string propertyName in GeneralUtils.STS_SYNC_PROPERTIES_LIST)
+        //        {
+        //            if (referenceMaterial.HasProperty(propertyName))
+        //            {
+        //                float temp = referenceMaterial.GetFloat(propertyName);
+        //                Shader.SetGlobalFloat(propertyName + SeeThroughShaderConstants.PROPERTY_GLOBAL, temp);
+        //            }
+        //        }
+        //    }
+        //}
+
+
         private void updateGlobalShaderVariables()
         {
             if (referenceMaterial != null)
             {
-                Texture disTex = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX);
-                Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX_GLOBAL, disTex);
+                Shader shader = referenceMaterial.shader;
 
-                Texture dissolveMask = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK);
-                Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK_GLOBAL, dissolveMask);
-
-                Texture obstructionCurve = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE);
-                Shader.SetGlobalTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE_GLOBAL, obstructionCurve);
-
-                Shader.SetGlobalColor(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR_GLOBAL, referenceMaterial.GetColor(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR));
                 foreach (string propertyName in GeneralUtils.STS_SYNC_PROPERTIES_LIST)
                 {
-                    if (referenceMaterial.HasProperty(propertyName))
+                    if (referenceMaterial.HasProperty(propertyName) && !propertyName.Contains("Cull")) //Culling can't be synced this way, do it manually?
                     {
-                        float temp = referenceMaterial.GetFloat(propertyName);
-                        Shader.SetGlobalFloat(propertyName + SeeThroughShaderConstants.PROPERTY_GLOBAL, temp);
+                        ShaderPropertyType shaderPropertyType = shader.GetPropertyType(shader.FindPropertyIndex(propertyName));
+
+                        if (shaderPropertyType == ShaderPropertyType.Float || shaderPropertyType == ShaderPropertyType.Range)
+                        {
+                            float temp = referenceMaterial.GetFloat(propertyName);
+                            Shader.SetGlobalFloat(propertyName + SeeThroughShaderConstants.PROPERTY_GLOBAL, temp);
+                        }
+                        else if (shaderPropertyType == ShaderPropertyType.Color)
+                        {
+                            Shader.SetGlobalColor(propertyName + SeeThroughShaderConstants.PROPERTY_GLOBAL, referenceMaterial.GetColor(propertyName));
+
+                        }
+                        else if (shaderPropertyType == ShaderPropertyType.Texture)
+                        {
+                            Texture texture = referenceMaterial.GetTexture(propertyName);
+                            Shader.SetGlobalTexture(propertyName + SeeThroughShaderConstants.PROPERTY_GLOBAL, texture);
+                        }
                     }
+
                 }
             }
         }
-
 
 
         private void updateShaderKeywords()
@@ -378,9 +407,8 @@ namespace ShaderCrew.SeeThroughShader
             {
                 if (transformsWithSTS != null && transformsWithSTS.Length > 0 && UnityToSTSShaderMapping != null)
                 {
-
-                    //GeneralUtils.updateSeeThroughShaderMaterialProperties(transformsWithSTS, seeThroughShaderName, referenceMaterial);
-                    GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(transformsWithSTS, UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
+                    //GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(transformsWithSTS, UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
+                    GeneralUtils.updateSeeThroughShaderMaterialKeywordsAndCulling(transformsWithSTS, UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
 
                 }
             }

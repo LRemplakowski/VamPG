@@ -138,6 +138,25 @@ namespace ShaderCrew.SeeThroughShader
             seeThroughShaderZone.type = ZoneType.Cone;
         }
 
+        [MenuItem("GameObject/See-through Shader/Zoning/Zone Plane", false, 12)]
+        static void CreateZonePlane()
+        {
+            //Debug.Log("Create Zone Box");
+            GameObject plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+
+            plane.transform.position = GetZoneSpawningTransform();
+
+            plane.name = "ZonePlane";
+
+            MeshCollider collider = plane.GetComponent<MeshCollider>();
+            collider.convex = true;
+            collider.isTrigger = true;
+            DestroyImmediate(plane.GetComponent<MeshRenderer>());
+
+            plane.AddComponent<SeeThroughShaderZone>();
+
+            plane.GetComponent<SeeThroughShaderZone>().type = ZoneType.Plane;
+        }
 
         [MenuItem("GameObject/See-through Shader/Zoning/Zones Group", false, 12)]
         static void CreateZonesGroup()

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 namespace SunsetSystems.Equipment
 {
@@ -41,18 +42,16 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private Dictionary<EquipmentSlotID, WeaponAmmoData> weaponsAmmoData = new();
 
-        public UltEvent<IWeaponInstance> OnWeaponInstanceChanged = new();
+        public UltEvent<IWeaponInstance> OnWeaponInstanceRebuilt = new();
 
         private void OnEnable()
         {
-            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
             CombatManager.Instance.CombatBegin += OnCombatStart;
             CombatManager.Instance.CombatEnd += OnCombatEnd;
         }
 
         private void OnDisable()
         {
-            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
             CombatManager.Instance.CombatBegin -= OnCombatStart;
             CombatManager.Instance.CombatEnd -= OnCombatEnd;
         }
@@ -63,12 +62,6 @@ namespace SunsetSystems.Equipment
             weaponsAmmoData ??= new();
             if (_showWeaponOutsideCombat)
                 OnCombatStart(new List<ICombatant>() { owner });
-        }
-
-        private void OnWeaponSelected(SelectedWeapon weapon)
-        {
-            if (CombatManager.Instance.CurrentActiveActor == owner)
-                SetSelectedWeapon(weapon);
         }
 
         private void OnCombatStart(IEnumerable<ICombatant> combatants)
@@ -129,7 +122,7 @@ namespace SunsetSystems.Equipment
             if (GameManager.Instance.IsCurrentState(GameState.Combat) is false && _showWeaponOutsideCombat is false)
                 return;
             weaponInstance = await InstantiateCurrentWeapon();
-            OnWeaponInstanceChanged?.InvokeSafe(weaponInstance);
+            OnWeaponInstanceRebuilt?.InvokeSafe(weaponInstance);
         }
 
         private async Task<IWeaponInstance> InstantiateCurrentWeapon()

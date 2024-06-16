@@ -19,37 +19,34 @@ namespace SunsetSystems.Combat.UI
         [Title("References")]
         [SerializeField]
         private Image currentActorPortrait;
+        [SerializeField, Required]
+        private ActionBarUI _actionBarUI;
         [SerializeField]
         private PlayerHealthDisplay currentActorHealth;
         [SerializeField]
         private ResourceBarDisplay apBar, bpBar;
         [SerializeField]
         private ActiveAbilitiesDisplayManager disciplineBar;
+        [SerializeField, Required]
+        private CanvasGroup _combatCanvasGroup;
 
         [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
-
-        private List<Selectable> childrenButtons = new();
 
         private void OnEnable()
         {
             currentActorPortrait.color = Color.clear;
         }
 
-        private void Start()
-        {
-            childrenButtons = GetComponentsInChildren<Selectable>(true).ToList();
-        }
-
         public void OnCombatBegin()
         {
-            childrenButtons.ForEach(b => b.interactable = false);
+            _combatCanvasGroup.interactable = false;
         }
 
         public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            childrenButtons.ForEach(button => button.interactable = combatant.Faction is Faction.PlayerControlled);
+            _combatCanvasGroup.interactable = combatant.Faction is Faction.PlayerControlled;
             if (combatant.Faction == Faction.PlayerControlled)
             {
                 UpdateCurrentActorPortrait(combatant);
@@ -57,9 +54,16 @@ namespace SunsetSystems.Combat.UI
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
                 disciplineBar.ShowAbilities(combatant);
+                _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
+                combatant.OnWeaponChanged += OnWeaponChanged;
             }
+        }
+
+        private void OnWeaponChanged(ICombatant combatant)
+        {
+            _actionBarUI.RefreshAvailableActions();
         }
 
         private void OnActionUsed(ICombatant combatant)

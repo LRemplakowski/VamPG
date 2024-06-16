@@ -15,6 +15,7 @@ namespace SunsetSystems.Entities.Interfaces
         UltEvent<ICombatant> OnChangedGridPosition { get; set; }
         UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
+        UltEvent<ICombatant> OnWeaponChanged { get; set; }
 
         IMagicUser MagicUser { get; }
         Faction Faction { get; }

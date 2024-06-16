@@ -17,6 +17,7 @@ using SunsetSystems.Equipment;
 using Sirenix.Utilities;
 using UnityEngine.AI;
 using SunsetSystems.Entities.Creatures.Interfaces;
+using SunsetSystems.Combat.UI;
 
 namespace SunsetSystems.Combat
 {
@@ -59,6 +60,7 @@ namespace SunsetSystems.Combat
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
             CombatManager.Instance.CombatEnd += OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
         }
 
         private void Start()
@@ -72,6 +74,9 @@ namespace SunsetSystems.Combat
         {
             CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
+            CombatManager.Instance.CombatBegin -= OnCombatBegin;
+            CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
         }
 
         private void Update()
@@ -112,6 +117,15 @@ namespace SunsetSystems.Combat
         private void OnCombatRoundEnd(ICombatant currentActor)
         {
 
+        }
+
+        private void OnWeaponSelected(SelectedWeapon weapon)
+        {
+            if (CombatManager.Instance.CurrentActiveActor.Equals(this))
+            {
+                weaponManager.SetSelectedWeapon(weapon);
+                OnWeaponChanged?.InvokeSafe(this);
+            }
         }
 
         #region ITargetable
@@ -157,6 +171,8 @@ namespace SunsetSystems.Combat
         public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnWeaponChanged { get; set; }
 
         [field: Title("Combat Runtime")]
         [field: ShowInInspector, ReadOnly]

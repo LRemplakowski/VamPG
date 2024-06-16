@@ -1,54 +1,39 @@
-using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.Equipment;
 using UnityEngine;
 
-public class ActionBarUI : SerializedMonoBehaviour
+namespace SunsetSystems.Combat.UI
 {
-    private SelectedBarAction selected;
-    private static readonly SelectedBarAction DEFAULT = new(BarAction.MOVE);
-
-    public static ActionBarUI Instance;
-
-    private void Awake()
+    public class ActionBarUI : SerializedMonoBehaviour
     {
-        if (Instance == null)
-            Instance = this;
-        else if (Instance != this)
-            Destroy(this.gameObject);
-    }
+        [SerializeField]
+        private CombatActionType _defaultActions;
+        [SerializeField]
+        private Dictionary<CombatActionType, GameObject> _basicActions = new();
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        selected = DEFAULT;
-    }
-
-    public SelectedBarAction GetSelectedBarAction()
-    {
-        return selected;
-    }
-
-    public void SetBarAction(int n)
-    {
-        BarAction action = (BarAction)n;
-        SelectedBarAction newSelected = action switch
+        public void RefreshAvailableActions()
         {
-            BarAction.MOVE => new SelectedBarAction(BarAction.MOVE),
-            BarAction.ATTACK => new SelectedBarAction(BarAction.ATTACK),
-            BarAction.SELECT_TARGET => new SelectedBarAction(BarAction.SELECT_TARGET),
-            _ => DEFAULT,
-        };
-        selected = newSelected;
-    }
+            var actionFlags = GetAvailableActions();
+            foreach (var key in _basicActions.Keys)
+            {
+                _basicActions[key].SetActive(actionFlags.HasFlag(key));
+            }
+        }
 
-    public class SelectedBarAction
-    {
-        public readonly BarAction actionType;
-
-        public SelectedBarAction(BarAction actionType)
+        private CombatActionType GetAvailableActions()
         {
-            this.actionType = actionType;
+            CombatActionType result = CombatActionType.None;
+            result |= _defaultActions;
+            result |= GetWeaponActions();
+            return result;
+
+            static CombatActionType GetWeaponActions()
+            {
+                var combatant = CombatManager.Instance.CurrentActiveActor;
+                var weapon = combatant.References.GetCachedComponentInChildren<IWeaponManager>().GetSelectedWeapon();
+                return weapon.GetWeaponCombatActions();
+            }
         }
     }
 }

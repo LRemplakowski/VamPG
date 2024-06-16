@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
 using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -20,6 +21,10 @@ namespace SunsetSystems.Inventory.Data
         public WeaponFireMode FireMode { get; private set; }
         [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
         public int MaxAmmo { get; private set; } = 3;
+        [SerializeField]
+        private bool _overrideWeaponActions = false;
+        [SerializeField, ShowIf("_overrideWeaponActions")]
+        private CombatActionType _actionsOverride;
         [field: SerializeField]
         public AttributeType AssociatedAttribute { get; private set; }
         [field: SerializeField]
@@ -56,6 +61,24 @@ namespace SunsetSystems.Inventory.Data
             data.damageModifier = DamageModifier;
             data.damageType = DamageType;
             return data;
+        }
+
+        public CombatActionType GetWeaponCombatActions()
+        {
+            if (_overrideWeaponActions)
+                return _actionsOverride;
+            CombatActionType result = CombatActionType.None;
+            switch (this.WeaponType)
+            {
+                case WeaponType.Melee:
+                    result |= CombatActionType.MeleeAtk;
+                    break;
+                case WeaponType.Ranged:
+                    result |= CombatActionType.RangedAtk;
+                    result |= CombatActionType.Reload;
+                    break;
+            }
+            return result;
         }
     }
 }

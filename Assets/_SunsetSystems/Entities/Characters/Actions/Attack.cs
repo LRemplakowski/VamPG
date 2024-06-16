@@ -46,7 +46,7 @@ namespace SunsetSystems.Entities.Characters.Actions
             AttackResult result = CombatCalculator.CalculateAttackResult(attacker, defender, _attackModifier);
             LogAttack(result);
             attackRoutine = PerformAttack(attacker, defender, result);
-            (attacker as MonoBehaviour).StartCoroutine(attackRoutine);
+            attacker.CoroutineRunner.StartCoroutine(attackRoutine);
 
             static void LogAttack(AttackResult result)
             {

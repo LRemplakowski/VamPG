@@ -227,6 +227,19 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 	[AbsoluteValue()] _DissolveEmissionBooster("Dissolve Emission Booster", float) = 1
 	_DissolveTex("Dissolve Effect Texture", 2D) = "white" {}
 
+	_DissolveMethod ("Dissolve Method", Float) = 0
+	_DissolveTexSpace ("Dissolve Tex Space", Float) = 0
+
+
+    [MaterialToggle] _CrossSectionEnabled("Cross-Section Enabled", float) = 0.0
+    _CrossSectionColor("Cross-Section Color", Color) = (1,0,0,1)
+
+    [MaterialToggle] _CrossSectionTextureEnabled("Cross-Section Texture Enabled", float) = 0.0
+    _CrossSectionTexture("Cross-Section Texture", 2D) = "white" {}
+    _CrossSectionTextureScale ("Cross-Section Texture Scale", Float) = 1.0
+    [MaterialToggle] _CrossSectionUVScaledByDistance("Scale UV by Camera Distance", Float) = 1.0
+
+
 	[Enum(STSInteractionMode)] _InteractionMode ("Interaction Mode", Float) = 0
 	[Enum(ObstructionMode)] _Obstruction ("Obstruction Mode", Float) = 0
 	_AngleStrength("Angle Obstruction Strength", Range(0,1)) = 1.0
@@ -260,7 +273,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 	[AbsoluteValue()] _UVs ("Dissolve Texture Scale", float) = 1.0
 	[MaterialToggle] _hasClippedShadows("Has Clipped Shadows", Float) = 0
         
-	[MaterialToggle] _Floor ("Floor", float) = 1.0
+	[MaterialToggle] _Floor ("Floor", float) = 0.0
 	[Enum(FloorMode)] _FloorMode ("Floor Mode", Float) = 0
 	_FloorY ("FloorY",  float) = 1.0
 	_PlayerPosYOffset ("PlayerPos Y Offset", float) = 1.0  
@@ -308,7 +321,6 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 	_ZoningEdgeGradientLength ("Edge Gradient Length", float) = 0.1
     
 
-
 	[MaterialToggle] _IsZoningRevealable ("Is Zoning Revealable", float) = 0.0
 
     
@@ -316,8 +328,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 	[MaterialToggle] _SyncZonesWithFloorY ("Sync Zones With FloorY", float) = 0.0
 	_SyncZonesFloorYOffset ("Sync Zones Floor YOffset", float) = 0.0
 
-	[MaterialToggle] _isReferenceMaterial("Is Reference Material", float) = 0.0
+    [MaterialToggle] _UseCustomTime ("_UseCustomTime", float) = 0.0
 
+
+
+	[MaterialToggle] _isReferenceMaterial("Is Reference Material", float) = 0.0
 
     // FOR UI ONLY
     [HideInInspector] _ShowContentDissolveArea ("hidden: _ShowContentDissolveArea", Float) = 1
@@ -438,7 +453,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             #pragma multi_compile_raytracing _ SHADOWS_SHADOWMASK
             #pragma multi_compile_fragment DECALS_OFF DECALS_3RT DECALS_4RT
             #pragma multi_compile_fragment _ DECAL_SURFACE_GRADIENT
-            #pragma multi_compile_fragment SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH SHADOW_VERY_HIGH
+            #pragma multi_compile_fragment SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH
             #pragma multi_compile_fragment SCREEN_SPACE_SHADOWS_OFF SCREEN_SPACE_SHADOWS_ON
             #pragma multi_compile_fragment USE_FPTL_LIGHTLIST USE_CLUSTERED_LIGHTLIST
             #pragma multi_compile_fragment AREA_SHADOW_MEDIUM AREA_SHADOW_HIGH
@@ -524,7 +539,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -704,135 +719,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -867,7 +828,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -1066,7 +1027,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -1125,7 +1086,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -1347,15 +1308,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -1601,6 +1554,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -1621,7 +1665,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -1642,11 +1690,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -1671,6 +1722,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -1687,11 +1740,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -1716,6 +1771,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -1738,6 +1795,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -1961,7 +2046,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -2050,15 +2135,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -2093,23 +2178,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -2267,7 +2352,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -2351,7 +2436,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -2435,46 +2565,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -2966,7 +3099,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -3154,135 +3287,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -3317,7 +3396,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -3514,7 +3593,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -3573,7 +3652,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -3796,15 +3875,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -4050,6 +4121,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -4070,7 +4232,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -4091,11 +4257,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -4120,6 +4289,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -4136,11 +4307,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -4165,6 +4338,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -4187,6 +4362,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -4410,7 +4613,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -4499,15 +4702,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -4542,23 +4745,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -4716,7 +4919,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -4800,7 +5003,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -4884,46 +5132,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -5228,7 +5479,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -5413,135 +5664,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -5576,7 +5773,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -5773,7 +5970,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -5832,7 +6029,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -6054,15 +6251,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -6308,6 +6497,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -6328,7 +6608,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -6349,11 +6633,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -6378,6 +6665,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -6394,11 +6683,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -6423,6 +6714,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -6445,6 +6738,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -6668,7 +6989,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -6757,15 +7078,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -6800,23 +7121,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -6974,7 +7295,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -7058,7 +7379,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -7142,46 +7508,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -7563,7 +7932,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -7745,135 +8114,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -7908,7 +8223,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -8104,7 +8419,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -8163,7 +8478,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -8385,15 +8700,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -8639,6 +8946,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -8659,7 +9057,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -8680,11 +9082,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -8709,6 +9114,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -8725,11 +9132,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -8754,6 +9163,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -8776,6 +9187,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -8999,7 +9438,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -9088,15 +9527,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -9131,23 +9570,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -9305,7 +9744,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -9389,7 +9828,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -9473,46 +9957,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -9869,7 +10356,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -10052,135 +10539,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -10215,7 +10648,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -10412,7 +10845,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -10471,7 +10904,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -10693,15 +11126,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -10947,6 +11372,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -10967,7 +11483,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -10988,11 +11508,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -11017,6 +11540,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -11033,11 +11558,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -11062,6 +11589,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -11084,6 +11613,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -11307,7 +11864,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -11396,15 +11953,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -11439,23 +11996,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -11613,7 +12170,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -11697,7 +12254,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -11781,46 +12383,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -12125,7 +12730,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -12308,135 +12913,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -12471,7 +13022,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -12667,7 +13218,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -12726,7 +13277,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -12948,15 +13499,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -13202,6 +13745,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -13222,7 +13856,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -13243,11 +13881,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -13272,6 +13913,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -13288,11 +13931,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -13317,6 +13962,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -13339,6 +13986,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -13562,7 +14237,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -13651,15 +14326,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -13694,23 +14369,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -13868,7 +14543,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -13952,7 +14627,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -14036,46 +14756,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -14374,7 +15097,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -14554,135 +15277,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -14717,7 +15386,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -14911,7 +15580,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -14970,7 +15639,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -15192,15 +15861,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -15446,6 +16107,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -15466,7 +16218,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -15487,11 +16243,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -15516,6 +16275,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -15532,11 +16293,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -15561,6 +16324,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -15583,6 +16348,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -15806,7 +16599,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -15895,15 +16688,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -15938,23 +16731,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -16112,7 +16905,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -16196,7 +16989,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -16280,46 +17118,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -16655,7 +17496,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -16835,135 +17676,81 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -16998,7 +17785,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -17193,7 +17980,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -17252,7 +18039,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -17474,15 +18261,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -17728,6 +18507,97 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -17748,7 +18618,11 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -17769,11 +18643,14 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -17798,6 +18675,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -17814,11 +18693,13 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -17843,6 +18724,8 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -17865,6 +18748,34 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -18088,7 +18999,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -18177,15 +19088,15 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -18220,23 +19131,23 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -18394,7 +19305,7 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -18478,7 +19389,52 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -18562,46 +19518,49 @@ Shader "SeeThroughShader/HDRP/2022/Lit"
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 
@@ -18955,7 +19914,7 @@ void Frag(  VertexToPixel v2f
    #define _HDRP 1
 #define _USINGTEXCOORD1 1
 #define _USINGTEXCOORD2 1
-
+#define NEED_FACING 1
 
                #pragma vertex Vert
    #pragma fragment Frag
@@ -19135,135 +20094,81 @@ void Frag(  VertexToPixel v2f
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -19298,7 +20203,7 @@ void Frag(  VertexToPixel v2f
                // #endif
 
                // #if %SCREENPOSREQUIREKEY%
-               // float4 screenPos : TEXCOORD7;
+                float4 screenPos : TEXCOORD7;
                // #endif
 
                // #if %VERTEXCOLORREQUIREKEY%
@@ -19492,7 +20397,7 @@ void Frag(  VertexToPixel v2f
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -19551,7 +20456,7 @@ void Frag(  VertexToPixel v2f
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -19773,15 +20678,7 @@ void Frag(  VertexToPixel v2f
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     sampler2D _EmissiveColorMap;
     sampler2D _BaseColorMap;
     sampler2D _MaskMap;
@@ -20027,6 +20924,97 @@ void Frag(  VertexToPixel v2f
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -20047,7 +21035,11 @@ void Frag(  VertexToPixel v2f
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -20068,11 +21060,14 @@ void Frag(  VertexToPixel v2f
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -20097,6 +21092,8 @@ void Frag(  VertexToPixel v2f
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -20113,11 +21110,13 @@ void Frag(  VertexToPixel v2f
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -20142,6 +21141,8 @@ void Frag(  VertexToPixel v2f
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -20164,6 +21165,34 @@ void Frag(  VertexToPixel v2f
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -20387,7 +21416,7 @@ void Frag(  VertexToPixel v2f
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -20476,15 +21505,15 @@ void Frag(  VertexToPixel v2f
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -20519,23 +21548,23 @@ void Frag(  VertexToPixel v2f
              d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -20693,7 +21722,7 @@ void Frag(  VertexToPixel v2f
        // #endif
 
        // #if %SCREENPOSREQUIREKEY%
-       // output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
+        output.screenPos = ComputeScreenPos(output.pos, _ProjectionParams.x);
        // #endif
    
        #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
@@ -20777,7 +21806,52 @@ void Frag(  VertexToPixel v2f
             
                     return output;
                 }
-            
+
+#if UNITY_VERSION > UNITY_2022_3_12
+                void ApplyDecalAndGetNormal(FragInputs fragInputs, PositionInputs posInput, Surface surfaceDescription, float3 normalTS,
+                    inout SurfaceData surfaceData)
+                {
+                    float3 doubleSidedConstants = GetDoubleSidedConstants();
+                    
+                #ifdef DECAL_NORMAL_BLENDING
+                    // SG nodes don't ouptut surface gradients, so if decals require surf grad blending, we have to convert
+                    // the normal to gradient before applying the decal. We then have to resolve the gradient back to world space
+                    normalTS = SurfaceGradientFromTangentSpaceNormalAndFromTBN(normalTS,
+                    fragInputs.tangentToWorld[0], fragInputs.tangentToWorld[1]);
+                
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, fragInputs.tangentToWorld[2], normalTS);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                
+                    GetNormalWS_SG(fragInputs, normalTS, surfaceData.normalWS, doubleSidedConstants);
+                #else
+                    // normal delivered to master node
+                
+                    #if HAVE_DECALS
+                    if (_EnableDecals)
+                    {
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                
+                        // Both uses and modifies 'surfaceData.normalWS'.
+                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                        ApplyDecalToSurfaceNormal(decalSurfaceData, surfaceData.normalWS.xyz);
+                        ApplyDecalToSurfaceDataNoNormal(decalSurfaceData, surfaceData);
+                    }
+                    #endif
+                #endif
+                }
+#endif
+
                void BuildSurfaceData(FragInputs fragInputs, inout Surface surfaceDescription, float3 V, PositionInputs posInput, out SurfaceData surfaceData, out float3 bentNormalWS)
                {
                    // setup defaults -- these are used if the graph doesn't output a value
@@ -20861,46 +21935,49 @@ void Frag(  VertexToPixel v2f
                         // Reproduce the energy conservation done in legacy Unity. Not ideal but better for compatibility and users can unchek it
                         surfaceData.baseColor *= (1.0 - Max3(surfaceData.specularColor.r, surfaceData.specularColor.g, surfaceData.specularColor.b));
                     #endif
+
+                float3 normalTS = surfaceDescription.Normal;
+                #if !_WORLDSPACENORMAL
+                    surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
+                #else
+                    normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
+                    surfaceData.normalWS = surfaceDescription.Normal;
+                #endif
+
+
+                #if UNITY_VERSION > UNITY_2022_3_12
+                    ApplyDecalAndGetNormal(fragInputs, posInput, surfaceDescription, normalTS, surfaceData);
+                #else
+                    #ifdef DECAL_NORMAL_BLENDING
+                        #if HAVE_DECALS
+                        float alpha = 1.0;
+                        alpha = surfaceDescription.Alpha;
+                        if (_EnableDecals)
+                        {
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
+                        }
+                        #endif
+                    #else
+                        #if HAVE_DECALS
+                        if (_EnableDecals)
+                        {
+                            float alpha = 1.0;
+                            alpha = surfaceDescription.Alpha;
+                            // Both uses and modifies 'surfaceData.normalWS'.
+                            DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
+                            ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
+                        }
+                        #endif
+                    #endif
+                 #endif
+
                 
-
-
-                   // compute world space normal
-                   float3 normalTS = surfaceDescription.Normal;
-                   #if !_WORLDSPACENORMAL
-                      surfaceData.normalWS = mul(surfaceDescription.Normal, fragInputs.tangentToWorld);
-                   #else
-                      normalTS = mul(fragInputs.tangentToWorld, surfaceDescription.Normal);
-                      surfaceData.normalWS = surfaceDescription.Normal;
-                   #endif
 
                    surfaceData.geomNormalWS = fragInputs.tangentToWorld[2];
         
                    surfaceData.tangentWS = normalize(fragInputs.tangentToWorld[0].xyz);    // The tangent is not normalize in tangentToWorld for mikkt. TODO: Check if it expected that we normalize with Morten. Tag: SURFACE_GRADIENT
 
-
-
-                #ifdef DECAL_NORMAL_BLENDING
-                    #if HAVE_DECALS
-                    float alpha = 1.0;
-                    alpha = surfaceDescription.Alpha;
-                    if (_EnableDecals)
-                    {
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData, normalTS);
-                    }
-                    #endif
-                #else
-                    #if HAVE_DECALS
-                    if (_EnableDecals)
-                    {
-                        float alpha = 1.0;
-                        alpha = surfaceDescription.Alpha;
-                        // Both uses and modifies 'surfaceData.normalWS'.
-                        DecalSurfaceData decalSurfaceData = GetDecalSurfaceData(posInput, fragInputs, alpha);
-                        ApplyDecalToSurfaceData(decalSurfaceData, fragInputs.tangentToWorld[2], surfaceData);
-                    }
-                    #endif
-                #endif
 
                     bentNormalWS = surfaceData.normalWS;
                 

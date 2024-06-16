@@ -10,7 +10,9 @@ namespace ShaderCrew.SeeThroughShader
         public ZoneCylinder(Transform transform)
         {
             this.transform = transform;
-            this.type = 2; //Cylinder
+            //this.type = 2; //Cylinder
+            this.type = (int)ZoneType.Cylinder;
+
         }
 
         public static ZoneCylinder CreateInstance(Transform transform)

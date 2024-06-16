@@ -44,45 +44,51 @@ namespace ShaderCrew.SeeThroughShader
         {
             if (this.isActiveAndEnabled)
             {
-                base.Awake();
-                materialNoApplyNames = GeneralUtils.MaterialsNoApplyListToNameList(materialExemptions);
-
-                if (parentTransform == null)
+                if(referenceMaterial != null && referenceMaterial.HasProperty(SeeThroughShaderConstants.STS_SHADER_IDENTIFIER_PROPERTY))
                 {
-                    parentTransform = this.transform;
-                }
+                    base.Awake();
 
-                if (replacementGroupType == ReplacementGroupType.ListOfMaterials && materialList.Count > 0)
-                {
-                    foreach (Material material in materialList)
+                    materialNoApplyNames = GeneralUtils.MaterialsNoApplyListToNameList(materialExemptions);
+
+                    if (parentTransform == null)
                     {
-                        if(material != null)
+                        parentTransform = this.transform;
+                    }
+
+                    if (replacementGroupType == ReplacementGroupType.ListOfMaterials && materialList.Count > 0)
+                    {
+                        foreach (Material material in materialList)
                         {
-                            Material savedCopy = new Material(material);
-                            GeneralUtils.AddSTSInstancePrefix(material);
-                            string name = material.name;
-                            if (isReplacement)
+                            if (material != null)
                             {
-                                if (!name.Contains(" - Replaced by " + referenceMaterial.name))
+                                Material savedCopy = new Material(material);
+                                GeneralUtils.AddSTSInstancePrefix(material);
+                                string name = material.name;
+                                if (isReplacement)
                                 {
-                                    name += " - Replaced by " + referenceMaterial.name;
+                                    if (!name.Contains(" - Replaced by " + referenceMaterial.name))
+                                    {
+                                        name += " - Replaced by " + referenceMaterial.name;
+                                    }
+                                    material.shader = UnityToSTSShaderMapping.TryGetValue(material.shader.name, out Shader value) ? value : UnityToSTSShaderMapping[SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY];
                                 }
-                                material.shader = UnityToSTSShaderMapping.TryGetValue(material.shader.name, out Shader value) ? value : UnityToSTSShaderMapping[SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY];
-                            }
-                            else
-                            {
-                                if (!name.Contains(" - Synced with " + referenceMaterial.name))
+                                else
                                 {
-                                    name += " - Synced with " + referenceMaterial.name;
+                                    if (!name.Contains(" - Synced with " + referenceMaterial.name))
+                                    {
+                                        name += " - Synced with " + referenceMaterial.name;
+                                    }
                                 }
+                                material.name = name;
+                                materialCache.Add(material, savedCopy);
                             }
-                            material.name = name;
-                            materialCache.Add(material, savedCopy);
                         }
                     }
+
+                    doSetupOfAllMaterials();
+
                 }
 
-                doSetupOfAllMaterials();
             }
         }
 
@@ -107,7 +113,7 @@ namespace ShaderCrew.SeeThroughShader
         {
             if (this.isActiveAndEnabled)
             {
-                if (referenceMaterial != null)
+                if (referenceMaterial != null && referenceMaterial.HasProperty(SeeThroughShaderConstants.STS_SHADER_IDENTIFIER_PROPERTY))
                 {
                     SynchronizeSTSMaterialsWithReferenceMaterial();
 
@@ -149,7 +155,7 @@ namespace ShaderCrew.SeeThroughShader
         {
             if (this.isActiveAndEnabled)
             {
-                if (keepMaterialsInSyncWithReference && referenceMaterial != null)
+                if (keepMaterialsInSyncWithReference && referenceMaterial != null && referenceMaterial.HasProperty(SeeThroughShaderConstants.STS_SHADER_IDENTIFIER_PROPERTY) )
                 {
                     SynchronizeSTSMaterialsWithReferenceMaterial();
                 }
@@ -159,7 +165,7 @@ namespace ShaderCrew.SeeThroughShader
         private void SynchronizeSTSMaterialsWithReferenceMaterial()
         {
             //if (transformsWithSTS != null && seeThroughShaderName != null && referenceMaterial != null)
-            if (UnityToSTSShaderMapping != null && referenceMaterial != null)
+            if (UnityToSTSShaderMapping != null && referenceMaterial != null && referenceMaterial.HasProperty(SeeThroughShaderConstants.STS_SHADER_IDENTIFIER_PROPERTY))
             {
                 if (replacementGroupType == ReplacementGroupType.ListOfMaterials)
                 {
@@ -168,10 +174,10 @@ namespace ShaderCrew.SeeThroughShader
                         //GeneralUtils.updateSeeThroughShaderMaterialProperties(transformsWithSTS, seeThroughShaderName, referenceMaterial);
                         GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(materialList.ToArray(), UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
                     }
-                    else
-                    {
-                        Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
-                    }
+                    //else
+                    //{
+                    //    Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
+                    //}
                 }
                 else
                 {
@@ -181,10 +187,10 @@ namespace ShaderCrew.SeeThroughShader
                         GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(transformsWithSTS, UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
 
                     }
-                    else
-                    {
-                        Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
-                    }
+                    //else
+                    //{
+                    //    Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
+                    //}
                 }
             }
         }

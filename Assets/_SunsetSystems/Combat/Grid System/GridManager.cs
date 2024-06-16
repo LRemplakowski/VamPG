@@ -43,6 +43,8 @@ namespace SunsetSystems.Combat.Grid
         public void HighlightCell(IGridCell gridCell)
         {
             ClearHighlightedCell();
+            if (gridCell == null)
+                return;
             GridUnit cellData = this[gridCell.GridPosition];
             cellData.Highlighted = true;
             currentlyHighlightedCell = cellData;

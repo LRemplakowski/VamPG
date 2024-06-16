@@ -399,7 +399,7 @@ namespace ShaderCrew.SeeThroughShader
         public static void SetMaterialKeywords(Material material, Action<Material> shadingModelFunc = null, Action<Material> shaderFunc = null)
         {
             // Clear all keywords for fresh start
-            material.shaderKeywords = null;
+            //material.shaderKeywords = null; <- overwrites STS keywords :(
 
             // Setup blending - consistent across all Universal RP shaders
             SetupMaterialBlendMode(material);

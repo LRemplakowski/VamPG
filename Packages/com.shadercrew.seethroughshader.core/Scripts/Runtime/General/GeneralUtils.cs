@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -15,11 +14,13 @@ namespace ShaderCrew.SeeThroughShader
         "SeeThroughShader/BiRP/Unlit/Color",
         "SeeThroughShader/BiRP/Unlit/Texture",
 
+        "SeeThroughShader/HDRP/2023/Lit",
         "SeeThroughShader/HDRP/2022/Lit",
         "SeeThroughShader/HDRP/2021/Lit",
         "SeeThroughShader/HDRP/2020/Lit",
         "SeeThroughShader/HDRP/2019/Lit",
 
+        "SeeThroughShader/URP/2023/Lit",
         "SeeThroughShader/URP/2022/Lit",
         "SeeThroughShader/URP/2021/Lit",
         "SeeThroughShader/URP/2020/Lit",
@@ -44,7 +45,11 @@ namespace ShaderCrew.SeeThroughShader
         public static readonly Dictionary<string,string> STS_HDRP_SHADER_DICTIONARY = new Dictionary<string, string>
         {
 
-#if UNITY_2022
+#if UNITY_2023 || UNITY_6000
+            //{ "HDRP/Unlit", "SeeThroughShader/HDRP/2023/Unlit" },
+            { "HDRP/Lit", "SeeThroughShader/HDRP/2023/Lit" },
+            { SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY, "SeeThroughShader/HDRP/2023/Lit" },
+#elif UNITY_2022
             //{ "HDRP/Unlit", "SeeThroughShader/HDRP/2022/Unlit" },
             { "HDRP/Lit", "SeeThroughShader/HDRP/2022/Lit" },
             { SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY, "SeeThroughShader/HDRP/2022/Lit" },
@@ -69,7 +74,12 @@ namespace ShaderCrew.SeeThroughShader
         public static readonly Dictionary<string, string> STS_URP_SHADER_DICTIONARY = new Dictionary<string, string>
     {
 
-#if UNITY_2022
+
+#if UNITY_2023 || UNITY_6000
+        //{ "URP/Unlit", "SeeThroughShader/URP/2023/Lit" },
+        { "URP/Lit", "SeeThroughShader/URP/2023/Lit" },
+        { SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY, "SeeThroughShader/URP/2023/Lit" },
+#elif UNITY_2022
         //{ "URP/Unlit", "SeeThroughShader/URP/2022/Lit" },
         { "URP/Lit", "SeeThroughShader/URP/2022/Lit" },
         { SeeThroughShaderConstants.STS_SHADER_DEFAULT_KEY, "SeeThroughShader/URP/2022/Lit" },
@@ -92,10 +102,10 @@ namespace ShaderCrew.SeeThroughShader
         };
 #endif
 
-        //public static readonly List<string> STS_REFMAT_LIST = new List<string>
-        //{
-        //    "refMaterial","refMaterial2","refMaterial3","refMaterial4",
-        //};
+            //public static readonly List<string> STS_REFMAT_LIST = new List<string>
+            //{
+            //    "refMaterial","refMaterial2","refMaterial3","refMaterial4",
+            //};
 
         public static readonly List<string> STS_SYNC_PROPERTIES_LIST = new List<string>
     {
@@ -124,7 +134,17 @@ namespace ShaderCrew.SeeThroughShader
         "_CurveStrength", "_CurveObstructionDestroyRadius",
         "_InteractionMode",
 
-        "_SyncCullMode"
+        "_SyncCullMode",
+        "_UseCustomTime" , "_DissolveMethod", "_DissolveTexSpace",
+
+        "_CrossSectionEnabled", "_CrossSectionTextureEnabled", "_CrossSectionTextureScale", "_CrossSectionUVScaledByDistance",
+
+        //Colors:
+         "_DissolveColor",  "_CrossSectionColor",
+        //Textures:
+
+        "_DissolveTex", "_DissolveMask", "_ObstructionCurve", "_CrossSectionTexture",
+
     };
 
         public static readonly List<string> STS_NONSYNC_PROPERTIES_LIST = new List<string>
@@ -250,10 +270,15 @@ namespace ShaderCrew.SeeThroughShader
                         shaderString = "SeeThroughShader/HDRP/2021/Lit";
                         shaderFolder = "SeeThroughShader/HDRP/2021/...";
                     }
-                    else
+                    else if (unityVersion.Substring(0, 4).Equals("2022"))
                     {
                         shaderString = "SeeThroughShader/HDRP/2022/Lit";
                         shaderFolder = "SeeThroughShader/HDRP/2022/...";
+                    }
+                    else
+                    {
+                        shaderString = "SeeThroughShader/HDRP/2023/Lit";
+                        shaderFolder = "SeeThroughShader/HDRP/2023/...";
                     }
 
                 }
@@ -275,10 +300,15 @@ namespace ShaderCrew.SeeThroughShader
                         shaderString = "SeeThroughShader/URP/2021/Lit";
                         shaderFolder = "SeeThroughShader/URP/2021/...";
                     }
-                    else
+                    else if (unityVersion.Substring(0, 4).Equals("2022"))
                     {
                         shaderString = "SeeThroughShader/URP/2022/Lit";
                         shaderFolder = "SeeThroughShader/URP/2022/...";
+                    }
+                    else
+                    {
+                        shaderString = "SeeThroughShader/URP/2023/Lit";
+                        shaderFolder = "SeeThroughShader/URP/2023/...";
                     }
                 }
             }
@@ -564,12 +594,15 @@ namespace ShaderCrew.SeeThroughShader
         {
 
             Material firstInstancedMaterial = getFirstInstancedMaterial(transforms, seeThroughShaderName);
-            List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
-            List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
-            if(namesOfChangedProperties != null && namesOfChangedKeywords != null)
-            {    
-                if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
+            if (firstInstancedMaterial != null)
+            {
+                List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
+                List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
+                if(namesOfChangedProperties != null && namesOfChangedKeywords != null)
                 {
+                    //if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
+                    if ((namesOfChangedProperties != null && namesOfChangedProperties.Count > 0) || (namesOfChangedKeywords != null && namesOfChangedKeywords.Count > 0))
+                    {
                         List<Material> allSTSMaterials = getAllSTSMaterialsFromTransforms(transforms, seeThroughShaderName, referenceMaterial);
                         foreach (Material material in allSTSMaterials)
                         {
@@ -583,12 +616,17 @@ namespace ShaderCrew.SeeThroughShader
                                 updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
                             }
                         }
+                    }
+                }   
+                else
+                {
+                    Debug.LogWarning("namesOfChangedProperties == null: " + (namesOfChangedProperties == null));
+                    Debug.LogWarning("namesOfChangedKeywords == null: " + (namesOfChangedKeywords == null));
                 }
-            }   
+            }
             else
             {
-                Debug.LogWarning("namesOfChangedProperties == null: " + (namesOfChangedProperties == null));
-                Debug.LogWarning("namesOfChangedKeywords == null: " + (namesOfChangedKeywords == null));
+                Debug.LogWarning("No STS material was found while updating the STS properties. Please check your replacement method and if all STS shaders are in your project");
             }
         }
 
@@ -597,30 +635,74 @@ namespace ShaderCrew.SeeThroughShader
         {
 
             Material firstInstancedMaterial = getFirstInstancedMaterial(transforms, STSShaders);
-            List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
-            foreach (string name in namesOfChangedProperties)
+            if (firstInstancedMaterial != null)
             {
-                //Debug.Log("name: " + name);
-            }
-            List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
-            if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
-            {
-                List<Material> allSTSMaterials = getAllSTSMaterialsFromTransforms(transforms, STSShaders, referenceMaterial);
-                foreach (Material material in allSTSMaterials)
+                List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
+                List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
+                //if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
+                if ((namesOfChangedProperties != null && namesOfChangedProperties.Count > 0) || (namesOfChangedKeywords != null && namesOfChangedKeywords.Count > 0))
                 {
-                    if (namesOfChangedProperties.Count > 0)
+                    List<Material> allSTSMaterials = getAllSTSMaterialsFromTransforms(transforms, STSShaders, referenceMaterial);
+                    foreach (Material material in allSTSMaterials)
                     {
-                        updateMaterialProperties(material, referenceMaterial, namesOfChangedProperties);
-                    }
+                        if (namesOfChangedProperties.Count > 0)
+                        {
+                            updateMaterialProperties(material, referenceMaterial, namesOfChangedProperties);
+                        }
 
-                    if (namesOfChangedKeywords.Count > 0)
-                    {
-                        updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
+                        if (namesOfChangedKeywords.Count > 0)
+                        {
+                            updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
+                        }
                     }
                 }
             }
+            else
+            {
+                Debug.LogWarning("No STS material was found while updating the STS properties. Please check your replacement method and if all STS shaders are in your project");
+            }
         }
 
+        public static void updateSeeThroughShaderMaterialKeywordsAndCulling(Transform[] transforms, List<Shader> STSShaders, Material referenceMaterial)
+        {
+
+            Material firstInstancedMaterial = getFirstInstancedMaterial(transforms, STSShaders);
+            if (firstInstancedMaterial != null)
+            {
+                //List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
+
+                List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
+                if ((namesOfChangedKeywords != null && namesOfChangedKeywords.Count > 0) || (referenceMaterial.HasProperty("_SyncCullMode") && referenceMaterial.GetFloat("_SyncCullMode") == 1) )
+                {
+                    List<Material> allSTSMaterials = getAllSTSMaterialsFromTransforms(transforms, STSShaders, referenceMaterial);
+                    foreach (Material material in allSTSMaterials)
+                    {
+
+                        //if (namesOfChangedProperties.Count > 0)
+                        //{
+                        //    updateMaterialProperties(material, referenceMaterial, namesOfChangedProperties);
+                        //}
+                        if(referenceMaterial.HasProperty("_SyncCullMode") && referenceMaterial.GetFloat("_SyncCullMode") == 1)
+                        {
+                            if (referenceMaterial.HasProperty("_Cull") && material.HasProperty("_Cull"))
+                            {
+                                material.SetFloat("_Cull", referenceMaterial.GetFloat("_Cull"));
+                            }
+                        }
+
+
+                        if (namesOfChangedKeywords != null && namesOfChangedKeywords.Count > 0)
+                        {
+                            updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No STS material was found while updating the STS properties. Please check your replacement method and if all STS shaders are in your project");
+            }
+        }
 
 
         public static void updateSeeThroughShaderMaterialPropertiesAndKeywords(Material[] materialsWithSTS, List<Shader> STSShaders, Material referenceMaterial)
@@ -634,22 +716,31 @@ namespace ShaderCrew.SeeThroughShader
                     break;
                 }
             }
-            List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
-            List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
-            if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
+            if (firstInstancedMaterial != null)
             {
-                foreach (Material material in materialsWithSTS)
-                {
-                    if (namesOfChangedProperties.Count > 0)
-                    {
-                        updateMaterialProperties(material, referenceMaterial, namesOfChangedProperties);
-                    }
 
-                    if (namesOfChangedKeywords.Count > 0)
+                List<string> namesOfChangedProperties = getNamesOfAllChangedPropertyValues(firstInstancedMaterial, referenceMaterial);
+                List<string> namesOfChangedKeywords = getNamesOfAllChangedKeywordValues(firstInstancedMaterial, referenceMaterial);
+                //if (namesOfChangedProperties.Count > 0 || namesOfChangedKeywords.Count > 0)
+                if ((namesOfChangedProperties != null && namesOfChangedProperties.Count > 0) || (namesOfChangedKeywords != null && namesOfChangedKeywords.Count > 0))
+                {
+                    foreach (Material material in materialsWithSTS)
                     {
-                        updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
+                        if (namesOfChangedProperties.Count > 0)
+                        {
+                            updateMaterialProperties(material, referenceMaterial, namesOfChangedProperties);
+                        }
+
+                        if (namesOfChangedKeywords.Count > 0)
+                        {
+                            updateMaterialKeywords(material, referenceMaterial, namesOfChangedKeywords);
+                        }
                     }
                 }
+            }
+            else
+            {
+                Debug.LogWarning("No STS material was found while updating the STS properties. Please check your replacement method and if all STS shaders are in your project");
             }
         }
 
@@ -674,53 +765,52 @@ namespace ShaderCrew.SeeThroughShader
         private static void updateMaterialProperties(Material instancedMaterial, Material referenceMaterial, List<string> namesOfChangedProperties)
         {
             //Debug.Log("updateMaterialProperties()");
+            Shader shader = referenceMaterial.shader;
 
             foreach (string propertyName in namesOfChangedProperties)
             {
-                if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX))
+                if (referenceMaterial.HasProperty(propertyName) && instancedMaterial.HasProperty(propertyName))
                 {
-                    Texture disTex = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX);
-                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX, disTex);
+                    ShaderPropertyType shaderPropertyType = shader.GetPropertyType(shader.FindPropertyIndex(propertyName));
 
-                    //Debug.Log(instancedMaterial.name);
-                }
-                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK))
-                {
-                    Texture disMask = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK);
-                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK, disMask);
-                }
-                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE))
-                {
-                    Texture obstructionCurve = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE);
-                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE, obstructionCurve);
-                }
-                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR))
-                {
-                    instancedMaterial.SetColorArray(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR, referenceMaterial.GetColorArray(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR));
-                }
-                else
-                {
-                    bool isCulling = false;
+
+                    if (shaderPropertyType == ShaderPropertyType.Float || shaderPropertyType == ShaderPropertyType.Range)
+                    {
+                        bool isCulling = false;
 #if USING_HDRP
                    // isCulling = propertyName == "_CullMode" || propertyName == "_CullModeForward";
 #elif USING_URP
-                    
+                        isCulling = (propertyName == "_Cull");
 #else
-                    isCulling = (propertyName == "_Cull");
+                        isCulling = (propertyName == "_Cull");
 #endif
-                    if (isCulling)
-                    {
-                        if (referenceMaterial.GetFloat("_SyncCullMode") == 1)
+
+
+                        if (isCulling)
+                        {
+                            if (referenceMaterial.GetFloat("_SyncCullMode") == 1)
+                            {
+
+                                float temp = referenceMaterial.GetFloat(propertyName);
+                                instancedMaterial.SetFloat(propertyName, temp);
+                            }
+                        }
+                        else
                         {
                             float temp = referenceMaterial.GetFloat(propertyName);
                             instancedMaterial.SetFloat(propertyName, temp);
                         }
-                    } else
-                    {
-                        float temp = referenceMaterial.GetFloat(propertyName);
-                        instancedMaterial.SetFloat(propertyName, temp);
                     }
+                    else if (shaderPropertyType == ShaderPropertyType.Color)
+                    {
+                        instancedMaterial.SetColor(propertyName, referenceMaterial.GetColor(propertyName));
 
+                    }
+                    else if (shaderPropertyType == ShaderPropertyType.Texture)
+                    {
+                        Texture texture = referenceMaterial.GetTexture(propertyName);
+                        instancedMaterial.SetTexture(propertyName, texture);
+                    }
                 }
             }
         }
@@ -741,85 +831,258 @@ namespace ShaderCrew.SeeThroughShader
             }
         }
 
+
+        //OLD - Delete after testing
+        //        private static void updateMaterialProperties(Material instancedMaterial, Material referenceMaterial, List<string> namesOfChangedProperties)
+        //        {
+        //            //Debug.Log("updateMaterialProperties()");
+
+        //            foreach (string propertyName in namesOfChangedProperties)
+        //            {
+        //                if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX))
+        //                {
+        //                    Texture disTex = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX);
+        //                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX, disTex);
+
+        //                    //Debug.Log(instancedMaterial.name);
+        //                }
+        //                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK))
+        //                {
+        //                    Texture disMask = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK);
+        //                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK, disMask);
+        //                }
+        //                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE))
+        //                {
+        //                    Texture obstructionCurve = referenceMaterial.GetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE);
+        //                    instancedMaterial.SetTexture(SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE, obstructionCurve);
+        //                }
+        //                else if (propertyName.Equals(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR))
+        //                {
+        //                    instancedMaterial.SetColorArray(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR, referenceMaterial.GetColorArray(SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR));
+        //                }
+        //                else
+        //                {
+        //                    bool isCulling = false;
+        //#if USING_HDRP
+        //                   // isCulling = propertyName == "_CullMode" || propertyName == "_CullModeForward";
+        //#elif USING_URP
+
+        //#else
+        //                    isCulling = (propertyName == "_Cull");
+        //#endif
+        //                    if (isCulling)
+        //                    {
+        //                        if (referenceMaterial.GetFloat("_SyncCullMode") == 1)
+        //                        {
+        //                            float temp = referenceMaterial.GetFloat(propertyName);
+        //                            instancedMaterial.SetFloat(propertyName, temp);
+        //                        }
+        //                    } 
+        //                    else
+        //                    {
+        //                        float temp = referenceMaterial.GetFloat(propertyName);
+        //                        instancedMaterial.SetFloat(propertyName, temp);
+        //                    }
+
+        //                }
+        //            }
+        //        }
+
+
+        // Old - Delete after testing
+        //private static List<string> getNamesOfAllChangedPropertyValues(Material instancedMaterial, Material referenceMaterial) //, bool force = false)
+        //{
+        //    if (instancedMaterial != null && referenceMaterial != null)
+        //    {
+
+        //        if (GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name)
+        //            &&
+        //            GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name)
+        //            )
+        //        {
+
+        //            List<string> namesOfChangedProperties = new List<string>();
+        //            foreach (string propertyName in GeneralUtils.STS_SYNC_PROPERTIES_LIST)
+        //            {
+        //                //if(propertyName == "_Cull" && instancedMaterial.shader.name != "SeeThroughShader/BiRP/Standard")
+        //                //{
+
+        //                //} else
+        //                //{
+        //                if(referenceMaterial.HasProperty(propertyName) && instancedMaterial.HasProperty(propertyName))
+        //                {
+        //                    float instancedValue = instancedMaterial.GetFloat(propertyName);
+        //                    float referenceValue = referenceMaterial.GetFloat(propertyName);
+        //                    if ((instancedValue != referenceValue)) // || force)
+        //                    {
+        //                        namesOfChangedProperties.Add(propertyName);
+        //                    }
+        //                }
+
+        //                //}
+
+        //            }
+        //            string dissolveTexPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX;
+        //            Texture instancedDissolveTexture = instancedMaterial.GetTexture(dissolveTexPropertyName);
+        //            Texture referenceDissolveTexture = referenceMaterial.GetTexture(dissolveTexPropertyName);
+        //            if (instancedDissolveTexture != null && referenceDissolveTexture != null)
+        //            {
+        //                if (!String.Equals(instancedDissolveTexture.name, referenceDissolveTexture.name))
+        //                {
+        //                    namesOfChangedProperties.Add(dissolveTexPropertyName);
+        //                }
+        //            } 
+        //            else if ((instancedDissolveTexture != null) != (referenceDissolveTexture != null))
+        //            {
+        //                namesOfChangedProperties.Add(dissolveTexPropertyName);
+        //            }
+        //            string dissolveMaskPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK;
+        //            Texture instancedDissolveMask = instancedMaterial.GetTexture(dissolveMaskPropertyName);
+        //            Texture referenceDissolveMask = referenceMaterial.GetTexture(dissolveMaskPropertyName);
+        //            if (instancedDissolveMask != null && referenceDissolveMask != null)
+        //            {
+        //                if (!String.Equals(instancedDissolveMask.name, referenceDissolveMask.name))
+        //                {
+        //                    namesOfChangedProperties.Add(dissolveMaskPropertyName);
+        //                }
+        //            }
+        //            else if ((instancedDissolveMask != null) != (referenceDissolveMask != null))
+        //            {
+        //                namesOfChangedProperties.Add(dissolveMaskPropertyName);
+        //            }
+
+        //            string obstructionCurvePropertyName = SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE;
+        //            Texture instancedObstructionCurve = instancedMaterial.GetTexture(obstructionCurvePropertyName);
+        //            Texture referenceObstructionCurve = referenceMaterial.GetTexture(obstructionCurvePropertyName);
+        //            if (instancedObstructionCurve != null && referenceObstructionCurve != null)
+        //            {
+        //                if (!String.Equals(instancedObstructionCurve.name, referenceObstructionCurve.name))
+        //                {
+        //                    namesOfChangedProperties.Add(obstructionCurvePropertyName);
+        //                }
+        //            }
+        //            else if ((instancedObstructionCurve != null) != (referenceObstructionCurve != null))
+        //            {
+        //                namesOfChangedProperties.Add(obstructionCurvePropertyName);
+        //            }
+
+        //            string dissolveColorPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR;
+        //            Color[] instancedColor = instancedMaterial.GetColorArray(dissolveColorPropertyName);
+        //            Color[] referenceColor = referenceMaterial.GetColorArray(dissolveColorPropertyName);
+        //            if (!instancedColor[0].Equals(referenceColor[0]))
+        //            {
+        //                namesOfChangedProperties.Add(dissolveColorPropertyName);
+        //            }
+
+        //            return namesOfChangedProperties;
+
+        //        }
+        //        else
+        //        {
+        //            if (!GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name)
+        //                && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name))
+        //            {
+        //                Debug.LogWarning("The instanced material(" + instancedMaterial.name + ") has a shader("+ instancedMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
+
+        //            }
+
+        //            if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name)
+        //                && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name))
+        //            {
+        //                Debug.LogWarning("The reference material(" + referenceMaterial.name + ") has a shader(" + referenceMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
+        //            }
+        //            return null;
+        //        }
+
+
+        //    }
+        //    else
+        //    {
+        //        if (instancedMaterial == null)
+        //        {
+        //            Debug.LogWarning("Some instanced material wasn't found while updating the STS properties. Please check your replacement method");
+
+        //        }
+        //        if (referenceMaterial == null)
+        //        {
+        //            Debug.LogWarning("Some reference material wasn't found while updating the STS properties. Please check your replacement method");
+        //        } else
+        //        {
+        //            if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name))
+        //            {
+        //                Debug.LogWarning("The reference material(" + referenceMaterial.name + ") has a shader(" + referenceMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
+        //            }
+        //        }
+        //        return null;
+        //    }
+        //}
+
+
         private static List<string> getNamesOfAllChangedPropertyValues(Material instancedMaterial, Material referenceMaterial) //, bool force = false)
         {
             if (instancedMaterial != null && referenceMaterial != null)
             {
 
-                if (GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(instancedMaterial.shader.name)
+                if (GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name)
                     &&
-                    GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(referenceMaterial.shader.name)
+                    GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name)
                     )
                 {
 
+                    Shader shader = referenceMaterial.shader;
                     List<string> namesOfChangedProperties = new List<string>();
                     foreach (string propertyName in GeneralUtils.STS_SYNC_PROPERTIES_LIST)
                     {
-                        if(propertyName == "_Cull" && instancedMaterial.shader.name != "SeeThroughShader/BiRP/Standard")
-                        {
+                        //if(propertyName == "_Cull" && instancedMaterial.shader.name != "SeeThroughShader/BiRP/Standard")
+                        //{
 
-                        } else
+                        //} else
+                        //{
+                        if (referenceMaterial.HasProperty(propertyName) && instancedMaterial.HasProperty(propertyName))
                         {
-                            float instancedValue = instancedMaterial.GetFloat(propertyName);
-                            float referenceValue = referenceMaterial.GetFloat(propertyName);
-                            if ((instancedValue != referenceValue)) // || force)
+                            ShaderPropertyType shaderPropertyType = shader.GetPropertyType(shader.FindPropertyIndex(propertyName));
+
+
+                            if (shaderPropertyType == ShaderPropertyType.Float || shaderPropertyType == ShaderPropertyType.Range)
                             {
-                                namesOfChangedProperties.Add(propertyName);
+                                float instancedValue = instancedMaterial.GetFloat(propertyName);
+                                float referenceValue = referenceMaterial.GetFloat(propertyName);
+                                if ((instancedValue != referenceValue)) // || force)
+                                {
+                                    namesOfChangedProperties.Add(propertyName);
+                                }
                             }
+                            else if (shaderPropertyType == ShaderPropertyType.Color)
+                            {
+                                Color instancedColor = instancedMaterial.GetColor(propertyName);
+                                Color referenceColor = referenceMaterial.GetColor(propertyName);
+                                if (!instancedColor.Equals(referenceColor))
+                                {
+                                    namesOfChangedProperties.Add(propertyName);
+                                }
+                            }
+                            else if (shaderPropertyType == ShaderPropertyType.Texture)
+                            {
+                                Texture instancedDissolveTexture = instancedMaterial.GetTexture(propertyName);
+                                Texture referenceDissolveTexture = referenceMaterial.GetTexture(propertyName);
+                                if (instancedDissolveTexture != null && referenceDissolveTexture != null)
+                                {
+                                    if (!String.Equals(instancedDissolveTexture.name, referenceDissolveTexture.name))
+                                    {
+                                        namesOfChangedProperties.Add(propertyName);
+                                    }
+                                }
+                                else if ((instancedDissolveTexture != null) != (referenceDissolveTexture != null))
+                                {
+                                    namesOfChangedProperties.Add(propertyName);
+                                }
+
+                            }
+
                         }
 
                     }
-                    string dissolveTexPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_TEX;
-                    Texture instancedDissolveTexture = instancedMaterial.GetTexture(dissolveTexPropertyName);
-                    Texture referenceDissolveTexture = referenceMaterial.GetTexture(dissolveTexPropertyName);
-                    if (instancedDissolveTexture != null && referenceDissolveTexture != null)
-                    {
-                        if (!String.Equals(instancedDissolveTexture.name, referenceDissolveTexture.name))
-                        {
-                            namesOfChangedProperties.Add(dissolveTexPropertyName);
-                        }
-                    } 
-                    else if ((instancedDissolveTexture != null) != (referenceDissolveTexture != null))
-                    {
-                        namesOfChangedProperties.Add(dissolveTexPropertyName);
-                    }
-                    string dissolveMaskPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_MASK;
-                    Texture instancedDissolveMask = instancedMaterial.GetTexture(dissolveMaskPropertyName);
-                    Texture referenceDissolveMask = referenceMaterial.GetTexture(dissolveMaskPropertyName);
-                    if (instancedDissolveMask != null && referenceDissolveMask != null)
-                    {
-                        if (!String.Equals(instancedDissolveMask.name, referenceDissolveMask.name))
-                        {
-                            namesOfChangedProperties.Add(dissolveMaskPropertyName);
-                        }
-                    }
-                    else if ((instancedDissolveMask != null) != (referenceDissolveMask != null))
-                    {
-                        namesOfChangedProperties.Add(dissolveMaskPropertyName);
-                    }
 
-                    string obstructionCurvePropertyName = SeeThroughShaderConstants.PROPERTY_OBSTRUCTION_CURVE;
-                    Texture instancedObstructionCurve = instancedMaterial.GetTexture(obstructionCurvePropertyName);
-                    Texture referenceObstructionCurve = referenceMaterial.GetTexture(obstructionCurvePropertyName);
-                    if (instancedObstructionCurve != null && referenceObstructionCurve != null)
-                    {
-                        if (!String.Equals(instancedObstructionCurve.name, referenceObstructionCurve.name))
-                        {
-                            namesOfChangedProperties.Add(obstructionCurvePropertyName);
-                        }
-                    }
-                    else if ((instancedObstructionCurve != null) != (referenceObstructionCurve != null))
-                    {
-                        namesOfChangedProperties.Add(obstructionCurvePropertyName);
-                    }
-
-                    string dissolveColorPropertyName = SeeThroughShaderConstants.PROPERTY_DISSOLVE_COLOR;
-                    Color[] instancedColor = instancedMaterial.GetColorArray(dissolveColorPropertyName);
-                    Color[] referenceColor = referenceMaterial.GetColorArray(dissolveColorPropertyName);
-                    if (!instancedColor[0].Equals(referenceColor[0]))
-                    {
-                        namesOfChangedProperties.Add(dissolveColorPropertyName);
-                    }
 
                     return namesOfChangedProperties;
 
@@ -827,14 +1090,14 @@ namespace ShaderCrew.SeeThroughShader
                 else
                 {
                     if (!GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name)
-                        && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(instancedMaterial.shader.name))
+                        && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name))
                     {
-                        Debug.LogWarning("The instanced material(" + instancedMaterial.name + ") has a shader("+ instancedMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
+                        Debug.LogWarning("The instanced material(" + instancedMaterial.name + ") has a shader(" + instancedMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
 
                     }
 
                     if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name)
-                        && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(instancedMaterial.shader.name))
+                        && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name))
                     {
                         Debug.LogWarning("The reference material(" + referenceMaterial.name + ") has a shader(" + referenceMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
                     }
@@ -853,9 +1116,10 @@ namespace ShaderCrew.SeeThroughShader
                 if (referenceMaterial == null)
                 {
                     Debug.LogWarning("Some reference material wasn't found while updating the STS properties. Please check your replacement method");
-                } else
+                }
+                else
                 {
-                    if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(referenceMaterial.shader.name))
+                    if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name))
                     {
                         Debug.LogWarning("The reference material(" + referenceMaterial.name + ") has a shader(" + referenceMaterial.shader.name + ") that wasn't recognized by the See-through Shader System");
                     }
@@ -870,9 +1134,9 @@ namespace ShaderCrew.SeeThroughShader
             if (instancedMaterial != null && referenceMaterial != null)
             {
 
-                if (GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(instancedMaterial.shader.name)
+                if (GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name)
                     &&
-                    GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(referenceMaterial.shader.name)
+                    GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) || STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name)
                     )
                 {
 
@@ -893,13 +1157,13 @@ namespace ShaderCrew.SeeThroughShader
                 }
                 else
                 {
-                    if (!GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(instancedMaterial.shader.name))
+                    if (!GeneralUtils.STS_SHADER_LIST.Contains(instancedMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(instancedMaterial.shader.name))
                     {
                         Debug.LogWarning("The instanced material(" + instancedMaterial.name + ") has a shader(" + instancedMaterial.shader.name + ") that wasn't recognized by the See-through Shader System!");
 
                     }
 
-                    if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsKey(referenceMaterial.shader.name))
+                    if (!GeneralUtils.STS_SHADER_LIST.Contains(referenceMaterial.shader.name) && !STSCustomShaderMappingsStorage.Instance.STSCustomShaderMappingsDict.ContainsValue(referenceMaterial.shader.name))
                     {
                         Debug.LogWarning("The reference material(" + referenceMaterial.name + ") has a shader(" + referenceMaterial.shader.name + ") that wasn't recognized by the See-through Shader System!");
                     }

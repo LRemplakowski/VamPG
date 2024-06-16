@@ -10,7 +10,8 @@ public class ZoneCone : ZoneData
     public ZoneCone(Transform transform)
     {
         this.transform = transform;
-        this.type = 3; //Cone
+        //this.type = 3; //Cone
+        this.type = (int)ZoneType.Cone;
     }
 
     public static ZoneCone CreateInstance(Transform transform)
@@ -26,7 +27,8 @@ public class ZoneCone : ZoneData
         {
             id = IdGenerator.Instance.Id;
         }
-        this.type = 3; //Cone
+        //this.type = 3; //Cone
+        this.type = (int)ZoneType.Cone;
         List<float> list = new List<float>();
         list.Add(id);
         list.Add(type); //instead array length?

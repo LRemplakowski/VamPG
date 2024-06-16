@@ -159,10 +159,23 @@ MonoBehaviour:
       Data: 1
   weaponParent: {fileID: 1187578031712813030}
   animationController: {fileID: 4678919013744510610}
-  weaponAnimationTypeParam: WeaponAnimationType
   _ignoreAmmo: 0
   _showWeaponOutsideCombat: 0
   selectedWeapon: 0
+  OnWeaponInstanceChanged:
+    _PersistentCalls:
+    - _Target: {fileID: 4678919013744510610}
+      _MethodName: OnWeaponChanged
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Equipment.IWeaponInstance, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,6 +852,7 @@ MonoBehaviour:
   rigBuilder: {fileID: 3758664395462481180}
   moveThreshold: 0.1
   positionDeltaTolerance: 0.1
+  _weaponAnimationTypeParam: WeaponAnimationType
 --- !u!1 &5165274126658692935
 GameObject:
   m_ObjectHideFlags: 0

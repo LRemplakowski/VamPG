@@ -10,6 +10,20 @@ using static ShaderCrew.SeeThroughShader.SeeThroughShaderGUI;
 
 namespace ShaderCrew.SeeThroughShader
 {
+
+    public enum DissolveMethod
+    {
+        TextureBased = 0,
+        Dither = 1,
+        None = 2,
+    }
+
+    public enum DissolveTexSpace
+    {
+        Local = 0,
+        World = 1
+    }
+
     public class SeeThroughShaderGUI
     {
 
@@ -36,6 +50,9 @@ namespace ShaderCrew.SeeThroughShader
 
 
         // See-through Shader
+        public MaterialProperty dissolveMethod = null;
+        public MaterialProperty dissolveTexSpace = null;
+
         public MaterialProperty dissolveMap = null;
         public MaterialProperty dissolveColor = null;
         public MaterialProperty dissolveSize = null;
@@ -48,6 +65,17 @@ namespace ShaderCrew.SeeThroughShader
         public MaterialProperty dissolveTexturedEmissionEdgeStrength = null;
 
         public MaterialProperty dissolveClippedShadowsEnabled = null;
+
+
+        public MaterialProperty crossSectionEnabled = null;
+        public MaterialProperty crossSectionColor = null;
+        public MaterialProperty crossSectionTextureEnabled = null;
+        public MaterialProperty crossSectionTexture = null;
+        public MaterialProperty crossSectionTextureScale = null;
+        public MaterialProperty crossSectionUVScaledByDistance = null;
+
+
+
 
         public MaterialProperty dissolveTextureAnimationEnabled = null;
         AnimBool dissolveTextureAnimationEnabledAnimBool;
@@ -135,6 +163,10 @@ namespace ShaderCrew.SeeThroughShader
 
 
 
+        public MaterialProperty useCustomTime = null;
+
+
+
         public MaterialProperty showContentDissolveArea = null;
         public MaterialProperty showContentInteractionOptionsArea = null;
         public MaterialProperty showContentObstructionOptionsArea = null;
@@ -144,7 +176,8 @@ namespace ShaderCrew.SeeThroughShader
         public MaterialProperty showContentDebugArea = null;
 
         public MaterialProperty syncCullMode = null;
-        
+
+        public MaterialProperty cull = null;
 
 
         //// TODO: move inside shader so it can get serialized
@@ -204,7 +237,8 @@ namespace ShaderCrew.SeeThroughShader
         public static class SeethroughShaderStyles
         {
             public static GUIContent dissolveText = EditorGUIUtility.TrTextContent("Dissolve Effect Texture", "Dissolve Effect Texture");
-            public static GUIContent dissolveSizeText = EditorGUIUtility.TrTextContent("Dissolve Texture Scale", "Dissolve Texture Scale");
+            public static GUIContent crossSectionTextureText = EditorGUIUtility.TrTextContent("Screen-Space Texture", "Screen-Space Texture");
+            public static GUIContent dissolveSizeText = EditorGUIUtility.TrTextContent("Texture Scale", "Dissolve Texture Scale");
             public static GUIContent dissolveEmissionText = EditorGUIUtility.TrTextContent("Strength", "Dissolve Emission Strength");
             public static GUIContent dissolveEmissionBoosterText = EditorGUIUtility.TrTextContent("Dissolve Emission Booster", "Dissolve Emission Booster");
             public static GUIContent dissolveColorSaturationText = EditorGUIUtility.TrTextContent("Saturation", "Dissolve Color Saturation");
@@ -395,7 +429,7 @@ namespace ShaderCrew.SeeThroughShader
                 {
                     EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - 94; //80
                 }
-                DoDissolveArea();
+                DoDissolveArea(material);
                 DoInteractionOptionsArea(material);
                 DoObstructionOptionsArea(material);
                 DoAnimationArea(material);
@@ -432,7 +466,7 @@ namespace ShaderCrew.SeeThroughShader
 
 
 
-        void DoDissolveArea()
+        void DoDissolveArea(Material material)
         {
 
 
@@ -446,21 +480,49 @@ namespace ShaderCrew.SeeThroughShader
             if (showContentDissolveArea.floatValue == 1)
             {
 
-
+                EditorGUI.indentLevel += 1;
                 EditorGUILayout.Space();
-
-
-                m_MaterialEditor.TexturePropertySingleLine(SeethroughShaderStyles.dissolveText, dissolveMap, dissolveColor);
-
-                //EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - 94;
-                if (dissolveMap.textureValue == null)
+                float oriLabelWidth = EditorGUIUtility.labelWidth;
+                EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth / 2f;
+                dissolveMethod.floatValue = (int)(DissolveMethod)EditorGUILayout.EnumPopup("Dissolve Method", (DissolveMethod)dissolveMethod.floatValue);
+                EditorGUIUtility.labelWidth = oriLabelWidth;
+                EditorGUILayout.Space();
+                EditorGUI.indentLevel -= 1;
+                if (dissolveMethod.floatValue == 0)
                 {
-                    EditorGUILayout.HelpBox("You didn't select any dissolve texture! The 'See-through Shader' effect won't work without it!", MessageType.Error);
-                }
+                    EditorGUI.indentLevel += 1;
+                    m_MaterialEditor.TexturePropertySingleLine(SeethroughShaderStyles.dissolveText, dissolveMap, dissolveColor);
+                    EditorGUI.indentLevel -= 1;
+                    if (dissolveMap.textureValue == null)
+                    {
+                        EditorGUILayout.HelpBox("You didn't select any dissolve texture! The 'See-through Shader' effect won't work without it!", MessageType.Error);
+                    } else
+                    {
+                        EditorGUI.indentLevel += 2;
+
+                        EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth / 2f;
+                        dissolveTexSpace.floatValue = (int)(DissolveTexSpace)EditorGUILayout.EnumPopup("Texture Space", (DissolveTexSpace)dissolveTexSpace.floatValue);
+                        EditorGUIUtility.labelWidth = oriLabelWidth;
+
+                        m_MaterialEditor.ShaderProperty(dissolveSize, SeethroughShaderStyles.dissolveSizeText);
+
+                        EditorGUI.indentLevel -= 2;
+
+                    }
+                } 
                 else
                 {
                     EditorGUI.indentLevel += 2;
-                    m_MaterialEditor.ShaderProperty(dissolveSize, SeethroughShaderStyles.dissolveSizeText);
+                    EditorGUIUtility.labelWidth = EditorGUIUtility.currentViewWidth - 100;
+                    m_MaterialEditor.ShaderProperty(dissolveColor, "Color");
+                    EditorGUIUtility.labelWidth = oriLabelWidth;
+                    EditorGUI.indentLevel -= 2;
+                }
+
+
+                if (dissolveMap.textureValue != null || dissolveMethod.floatValue != 0)
+                {
+                    EditorGUI.indentLevel += 2;
                     m_MaterialEditor.ShaderProperty(dissolveColorSaturation, SeethroughShaderStyles.dissolveColorSaturationText);
                     EditorGUILayout.Space();
 
@@ -508,6 +570,119 @@ namespace ShaderCrew.SeeThroughShader
                         EditorGUILayout.HelpBox("In Obstruction Mode \"Circle\" Clipped Shadows act like in \"None\" Mode!", MessageType.Info);
 
                     }
+
+#if USING_HDRP
+                    if (material.HasProperty("_CrossSectionEnabled") )
+                    {
+                        GUI.enabled = false;
+                        crossSectionEnabled.floatValue = 0;
+                    }
+#elif !USING_URP
+                    bool containsNonForwardCam = false;
+                    bool containsForwardCam = false;
+                    if(Camera.allCamerasCount > 0 )
+                    {
+                        foreach (Camera cam in Camera.allCameras)
+                        {
+                            if(cam != null)
+                            {
+                                if (cam.actualRenderingPath != RenderingPath.Forward)
+                                {
+                                    containsNonForwardCam = true;
+                                } 
+                                else if (cam.actualRenderingPath == RenderingPath.Forward)
+                                {
+                                    containsForwardCam = true;
+                                }
+                            }
+   
+                        }
+                    } else
+                    {
+                        containsForwardCam = true;
+                    }
+
+#endif
+                    if (material.HasProperty("_CrossSectionEnabled") && crossSectionEnabled != null && crossSectionColor != null)
+                    {
+
+                        EditorGUILayout.Space();
+
+                        EditorUtils.DrawUILineSubMenu();
+
+
+                        EditorGUI.indentLevel -= 1;
+                        EditorStyles.label.normal.textColor = oriCol;
+                        crossSectionEnabled.floatValue = Convert.ToSingle(EditorGUILayout.ToggleLeft("Cross-Section",
+                                                                  Convert.ToBoolean(crossSectionEnabled.floatValue)));
+                        EditorStyles.label.normal.textColor = textColor;
+                        EditorGUI.indentLevel += 1;
+
+                        //enableDefaultEffectRadiusAnimBool.target = enableDefaultEffectRadius.floatValue == 1;
+                        //if (EditorGUILayout.BeginFadeGroup(enableDefaultEffectRadiusAnimBool.faded))
+                        if (crossSectionEnabled.floatValue == 1)
+                        {
+                            m_MaterialEditor.TexturePropertySingleLine(SeethroughShaderStyles.crossSectionTextureText, crossSectionTexture, crossSectionColor);
+                            if(crossSectionTexture != null && crossSectionTexture.textureValue != null)
+                            {
+                                m_MaterialEditor.ShaderProperty(crossSectionTextureScale, "Texture Scale");
+                                m_MaterialEditor.ShaderProperty(crossSectionUVScaledByDistance, "Scale UV by Camera Distance");
+                                crossSectionTextureEnabled.floatValue = 1.0f;
+                            }
+                            else
+                            {
+                                crossSectionTextureEnabled.floatValue = 0.0f;
+                            }
+
+                            if (cull != null && cull.floatValue != 0) 
+                            {
+                                EditorGUILayout.HelpBox("You have to set culling to OFF/BOTH, for the Cross-Section effect to work", MessageType.Warning);
+                            } 
+                            else if (cull == null)
+                            {
+                                EditorGUILayout.HelpBox("Don't forget, you have to set culling to off, for the Cross-Section effect to work!", MessageType.Info);
+                            }
+
+                            //#if USING_URP
+                            //                                EditorGUILayout.HelpBox("The CrossSection feature doesn't work with the Deferred Rendering Path!", MessageType.Info);
+                            //#endif
+                        }
+                        //EditorGUILayout.EndFadeGroup();
+
+                    }
+
+                    GUI.enabled = true;
+
+#if USING_HDRP
+                        EditorGUILayout.Space();
+                        EditorGUILayout.HelpBox("The CrossSection feature doesn't work with HDRP!", MessageType.Warning);
+#elif !USING_URP
+                    if(material.HasProperty("_CrossSectionEnabled"))
+                    {
+                        if (containsNonForwardCam)
+                        {
+                            EditorGUILayout.Space();
+
+                            if (containsForwardCam)
+                            {
+                                EditorGUILayout.HelpBox("Keep in mind that the CrossSection feature only works with the Forward Rendering Path!", MessageType.Info);
+                            }
+                            else if (Camera.allCamerasCount > 0)
+                            {
+                                EditorGUILayout.HelpBox("The CrossSection feature only works with the Forward Rendering Path! Currently your scene only has cameras in the Non-Forward Rendering Path!", MessageType.Warning);
+                            }
+                        }
+                        if (Camera.allCamerasCount <= 0)
+                        {
+                            EditorGUILayout.HelpBox("The CrossSection feature only works with the Forward Rendering Path! Don't forget to add cameras in the Forward Rendering Path for this feature to work!", MessageType.Info);
+                        }
+
+                    }
+
+#endif
+
+
+
 
                     //}
 
@@ -641,30 +816,34 @@ namespace ShaderCrew.SeeThroughShader
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel += 2;
 
-                EditorGUI.indentLevel -= 1;
-                EditorStyles.label.normal.textColor = oriCol;
-                EditorGUILayout.LabelField("Dissolve Texture");
-                EditorStyles.label.normal.textColor = textColor;
-                EditorGUI.indentLevel += 1;
-
-                GUIStyle optionStyle = new GUIStyle();
-                optionStyle.normal.textColor = textColor;
-                //optionStyle.fontSize = 15;
-                optionStyle.fontStyle = FontStyle.Bold;
-                dissolveTextureAnimationEnabled.floatValue = Convert.ToSingle(EditorGUILayout.Toggle("Animation Enabled", Convert.ToBoolean(dissolveTextureAnimationEnabled.floatValue)));
-                //m_MaterialEditor.ShaderProperty(dissolveTextureAnimationEnabled,dissolveTextureAnimationEnabled.displayName);
-                dissolveTextureAnimationEnabledAnimBool.target = dissolveTextureAnimationEnabled.floatValue == 1;
-                if (EditorGUILayout.BeginFadeGroup(dissolveTextureAnimationEnabledAnimBool.faded))
+                if((DissolveMethod)dissolveMethod.floatValue == DissolveMethod.TextureBased)
                 {
-                    //EditorGUI.indentLevel++;
-                    m_MaterialEditor.ShaderProperty(dissolveTextureAnimationSpeed, "Speed");
-                    //EditorGUI.indentLevel--;
+                    EditorGUI.indentLevel -= 1;
+                    EditorStyles.label.normal.textColor = oriCol;
+                    EditorGUILayout.LabelField("Dissolve Texture");
+                    EditorStyles.label.normal.textColor = textColor;
+                    EditorGUI.indentLevel += 1;
+
+                    GUIStyle optionStyle = new GUIStyle();
+                    optionStyle.normal.textColor = textColor;
+                    //optionStyle.fontSize = 15;
+                    optionStyle.fontStyle = FontStyle.Bold;
+                    dissolveTextureAnimationEnabled.floatValue = Convert.ToSingle(EditorGUILayout.Toggle("Animation Enabled", Convert.ToBoolean(dissolveTextureAnimationEnabled.floatValue)));
+                    //m_MaterialEditor.ShaderProperty(dissolveTextureAnimationEnabled,dissolveTextureAnimationEnabled.displayName);
+                    dissolveTextureAnimationEnabledAnimBool.target = dissolveTextureAnimationEnabled.floatValue == 1;
+                    if (EditorGUILayout.BeginFadeGroup(dissolveTextureAnimationEnabledAnimBool.faded))
+                    {
+                        //EditorGUI.indentLevel++;
+                        m_MaterialEditor.ShaderProperty(dissolveTextureAnimationSpeed, "Speed");
+                        //EditorGUI.indentLevel--;
+                    }
+                    EditorGUILayout.EndFadeGroup();
+
+                    EditorGUILayout.Space();
+
+                    EditorUtils.DrawUILineSubMenu();
                 }
-                EditorGUILayout.EndFadeGroup();
 
-                EditorGUILayout.Space();
-
-                EditorUtils.DrawUILineSubMenu();
 
                 EditorGUI.indentLevel -= 1;
                 EditorStyles.label.normal.textColor = oriCol;
@@ -684,6 +863,22 @@ namespace ShaderCrew.SeeThroughShader
                 else
                 {
                     m_MaterialEditor.ShaderProperty(dissolveTransitionDuration, "Transition Duration In Seconds");
+                }
+                EditorGUILayout.Space();
+
+                EditorUtils.DrawUILineSubMenu();
+                EditorGUI.indentLevel -= 1;
+                EditorStyles.label.normal.textColor = oriCol;
+                EditorGUILayout.LabelField("Use Custom Time (Global)");
+                EditorStyles.label.normal.textColor = textColor;
+                EditorGUI.indentLevel += 1;
+
+                m_MaterialEditor.ShaderProperty(useCustomTime, "Use Custom Time");
+                if(useCustomTime.floatValue == 1)
+                {
+                    EditorGUILayout.LabelField("Globally Set \"_STSCustomTime\": " + Shader.GetGlobalFloat("_STSCustomTime"));
+                    EditorGUILayout.HelpBox("You can use \"STSCustomTimeSetter.DirectlySetSTSCustomTime(float customTime)\" or \"Shader.SetGlobalFloat(\"_STSCustomTime\", customTime)\" to set the custom time.", MessageType.Info);
+
                 }
 
                 EditorGUILayout.Space();
@@ -859,7 +1054,7 @@ namespace ShaderCrew.SeeThroughShader
 
             EditorGUI.indentLevel += 1;
             //showContentDebugArea = MakeSTSSectionHeaderWithFoldout("Replacement Options", showContentDebugArea);
-            showContentReplacementOptionsArea.floatValue = Convert.ToSingle(MakeSTSSectionHeaderWithFoldout("Replacement Options", Convert.ToBoolean(showContentReplacementOptionsArea.floatValue)));
+            showContentReplacementOptionsArea.floatValue = Convert.ToSingle(MakeSTSSectionHeaderWithFoldout("Culling Options", Convert.ToBoolean(showContentReplacementOptionsArea.floatValue)));
 
             EditorGUI.indentLevel -= 1;
             if (showContentReplacementOptionsArea.floatValue == 1)
@@ -867,29 +1062,32 @@ namespace ShaderCrew.SeeThroughShader
                 EditorGUILayout.Space();
                 EditorGUI.indentLevel += 2;
 
-                if(rp == GeneralUtils.RenderPipeline.BiRP)
-                {
-                    EditorGUI.indentLevel -= 1;
-                    EditorStyles.label.normal.textColor = oriCol;
-                    EditorGUILayout.LabelField("Culling Mode");
-                    EditorStyles.label.normal.textColor = textColor;
-                    EditorGUI.indentLevel += 1;
-
-                    m_MaterialEditor.ShaderProperty(syncCullMode, "Sync Culling Mode");
-                }
-
 
                 EditorGUI.indentLevel -= 1;
                 EditorStyles.label.normal.textColor = oriCol;
-                EditorGUILayout.LabelField("Replacement Type");
+                EditorGUILayout.LabelField("Culling Mode");
                 EditorStyles.label.normal.textColor = textColor;
                 EditorGUI.indentLevel += 1;
 
-                m_MaterialEditor.ShaderProperty(isReplacementShader, "Global Replacement");
-                if (isReplacementShader.floatValue == 1)
+                m_MaterialEditor.ShaderProperty(syncCullMode, "Sync Culling Mode");
+                if(syncCullMode.floatValue == 1)
                 {
-                    EditorGUILayout.HelpBox("Use this material only in conjunction with the \"Global Shader Replacement\" script! For every other use case, please disable this option!", MessageType.Info);
+                    EditorGUILayout.HelpBox("You can change culling at the top!", MessageType.Info);
                 }
+
+
+                // Not needed?
+                //EditorGUI.indentLevel -= 1;
+                //EditorStyles.label.normal.textColor = oriCol;
+                //EditorGUILayout.LabelField("Replacement Type");
+                //EditorStyles.label.normal.textColor = textColor;
+                //EditorGUI.indentLevel += 1;
+
+                //m_MaterialEditor.ShaderProperty(isReplacementShader, "Global Replacement");
+                //if (isReplacementShader.floatValue == 1)
+                //{
+                //    EditorGUILayout.HelpBox("Use this material only in conjunction with the \"Global Shader Replacement\" script! For every other use case, please disable this option!", MessageType.Info);
+                //}
                 EditorGUI.indentLevel -= 2;
                 //makeBetweenRange(previewIndicatorLineThickness,0.1f,0.5f);
 
@@ -1417,7 +1615,13 @@ namespace ShaderCrew.SeeThroughShader
             if (curveTexture != null)
             {
                 if (curveTexture.width != curveTextureResolution)
+                {
+#if !UNITY_2021_1_OR_NEWER
+                    curveTexture.Resize(curveTextureResolution, 1);
+#else
                     curveTexture.Reinitialize(curveTextureResolution, 1);
+#endif
+                }
 
                 curveTexture.wrapMode = TextureWrapMode.Clamp;
                 curveTexture.filterMode = FilterMode.Bilinear;

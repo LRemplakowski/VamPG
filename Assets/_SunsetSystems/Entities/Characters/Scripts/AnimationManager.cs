@@ -7,6 +7,7 @@ using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Persistence;
 using System;
 using System.Collections.Generic;
+using SunsetSystems.Equipment;
 
 namespace SunsetSystems.Animation
 {
@@ -31,6 +32,9 @@ namespace SunsetSystems.Animation
         private float moveThreshold = .5f;
         [SerializeField]
         private float positionDeltaTolerance = 2f;
+        [SerializeField]
+        private string _weaponAnimationTypeParam;
+        private int _weaponAnimationTypeParamHash;
 
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
         private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
@@ -52,6 +56,7 @@ namespace SunsetSystems.Animation
 
             _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
             _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
+            _weaponAnimationTypeParamHash = Animator.StringToHash(_weaponAnimationTypeParam);
             //animator.applyRootMotion = true;
             //agent.updatePosition = false;
             //agent.updateRotation = true;
@@ -115,6 +120,14 @@ namespace SunsetSystems.Animation
         //        MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
         //    }
         //}
+
+        public void OnWeaponChanged(IWeaponInstance weaponInstance)
+        {
+            if (weaponInstance != null)
+                SetInteger(_weaponAnimationTypeParamHash, (int)(weaponInstance.WeaponAnimationData.AnimationType));
+            else
+                SetInteger(_weaponAnimationTypeParamHash, (int)WeaponAnimationType.Brawl);
+        }
 
         private Rig InitializeRigLayer()
         {

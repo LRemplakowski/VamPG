@@ -60,6 +60,12 @@ namespace SunsetSystems.Combat
                 damageReduction = CalculateDefenderDamageReduction(defender, attacker.CurrentWeapon.WeaponType) + attackModifier.DamageReductionMod;
                 adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
+            if (attacker.IsPlayerControlled)
+            {
+                Debug.LogError($"ADDED 10 TO PLAYER DAMAGE! THIS IS TEMPORARY, REMOVE IT!");
+                adjustedDamage += 10;
+            }
+
             return new(attackerHitChance, defenderDodgeChance, hitRoll, critChance, critRoll, damage, damageReduction, adjustedDamage, hit, crit);
         }
 

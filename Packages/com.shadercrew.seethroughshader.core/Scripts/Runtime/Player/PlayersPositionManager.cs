@@ -82,7 +82,7 @@ namespace ShaderCrew.SeeThroughShader
                 _ArrayLength_ID = Shader.PropertyToID(SeeThroughShaderConstants.PLAYERS_POS_ARRAY_COUNT_PROPERTY_NAME);
 
 
-                if (playableCharacters.Count > 0)
+                if (playableCharacters != null && playableCharacters.Count > 0)
                 {
 
                     foreach (GameObject gplayer in playableCharacters)

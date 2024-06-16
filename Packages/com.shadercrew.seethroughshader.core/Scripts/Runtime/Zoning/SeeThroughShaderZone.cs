@@ -67,6 +67,17 @@ namespace ShaderCrew.SeeThroughShader
                     Vector3 adjustedScale = new Vector3(transform.lossyScale.x , transform.lossyScale.y, transform.lossyScale.x);
                     Gizmos.DrawMesh(coneMesh, transform.position, transform.rotation, adjustedScale);
                 }
+                else if (type == ZoneType.Plane)
+                {
+                    Gizmos.color = new Color(0, 1, 0, 0.2f); 
+                    Gizmos.DrawMesh(Resources.GetBuiltinResource<Mesh>("Plane.fbx"), transform.position, transform.rotation, transform.lossyScale*10);
+                    Vector3 scale = transform.lossyScale * 10;
+                    scale.z *= -1;
+
+                    Gizmos.color = new Color(1, 0, 0, 0.2f);
+                    Gizmos.DrawMesh(Resources.GetBuiltinResource<Mesh>("Plane.fbx"), transform.position, transform.rotation, scale);
+
+                }
                 //}
 
             }
@@ -93,6 +104,10 @@ namespace ShaderCrew.SeeThroughShader
                 else if (type == ZoneType.Cone)
                 {
                     zoneData = ZoneCone.CreateInstance(transform);
+                }
+                else if (type == ZoneType.Plane)
+                {
+                    zoneData = ZonePlane.CreateInstance(transform);
                 }
                 zoneData.id = IdGenerator.Instance.Id;
                 zoneData.zoneInstanceID = GetInstanceID();

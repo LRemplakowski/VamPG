@@ -78,6 +78,19 @@ Shader "SeeThroughShader/URP/2022/Lit"
 	[AbsoluteValue()] _DissolveEmissionBooster("Dissolve Emission Booster", float) = 1
 	_DissolveTex("Dissolve Effect Texture", 2D) = "white" {}
 
+	_DissolveMethod ("Dissolve Method", Float) = 0
+	_DissolveTexSpace ("Dissolve Tex Space", Float) = 0
+
+
+    [MaterialToggle] _CrossSectionEnabled("Cross-Section Enabled", float) = 0.0
+    _CrossSectionColor("Cross-Section Color", Color) = (1,0,0,1)
+
+    [MaterialToggle] _CrossSectionTextureEnabled("Cross-Section Texture Enabled", float) = 0.0
+    _CrossSectionTexture("Cross-Section Texture", 2D) = "white" {}
+    _CrossSectionTextureScale ("Cross-Section Texture Scale", Float) = 1.0
+    [MaterialToggle] _CrossSectionUVScaledByDistance("Scale UV by Camera Distance", Float) = 1.0
+
+
 	[Enum(STSInteractionMode)] _InteractionMode ("Interaction Mode", Float) = 0
 	[Enum(ObstructionMode)] _Obstruction ("Obstruction Mode", Float) = 0
 	_AngleStrength("Angle Obstruction Strength", Range(0,1)) = 1.0
@@ -111,7 +124,7 @@ Shader "SeeThroughShader/URP/2022/Lit"
 	[AbsoluteValue()] _UVs ("Dissolve Texture Scale", float) = 1.0
 	[MaterialToggle] _hasClippedShadows("Has Clipped Shadows", Float) = 0
         
-	[MaterialToggle] _Floor ("Floor", float) = 1.0
+	[MaterialToggle] _Floor ("Floor", float) = 0.0
 	[Enum(FloorMode)] _FloorMode ("Floor Mode", Float) = 0
 	_FloorY ("FloorY",  float) = 1.0
 	_PlayerPosYOffset ("PlayerPos Y Offset", float) = 1.0  
@@ -159,7 +172,6 @@ Shader "SeeThroughShader/URP/2022/Lit"
 	_ZoningEdgeGradientLength ("Edge Gradient Length", float) = 0.1
     
 
-
 	[MaterialToggle] _IsZoningRevealable ("Is Zoning Revealable", float) = 0.0
 
     
@@ -167,8 +179,11 @@ Shader "SeeThroughShader/URP/2022/Lit"
 	[MaterialToggle] _SyncZonesWithFloorY ("Sync Zones With FloorY", float) = 0.0
 	_SyncZonesFloorYOffset ("Sync Zones Floor YOffset", float) = 0.0
 
-	[MaterialToggle] _isReferenceMaterial("Is Reference Material", float) = 0.0
+    [MaterialToggle] _UseCustomTime ("_UseCustomTime", float) = 0.0
 
+
+
+	[MaterialToggle] _isReferenceMaterial("Is Reference Material", float) = 0.0
 
     // FOR UI ONLY
     [HideInInspector] _ShowContentDissolveArea ("hidden: _ShowContentDissolveArea", Float) = 1
@@ -279,7 +294,7 @@ ZWrite On
 
 
    #define _URP 1
-
+#define NEED_FACING 1
 
             // this has to be here or specular color will be ignored. Not in SG code
             #if _SIMPLELIT
@@ -348,7 +363,7 @@ ZWrite On
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -555,7 +570,7 @@ ZWrite On
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -614,7 +629,7 @@ ZWrite On
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -870,135 +885,81 @@ ZWrite On
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -1008,15 +969,7 @@ ZWrite On
 
          
 
-         #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+         
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -1348,6 +1301,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -1368,7 +1412,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -1389,11 +1437,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -1418,6 +1469,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -1434,11 +1487,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -1463,6 +1518,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -1485,6 +1542,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -1708,7 +1793,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -1797,15 +1882,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -1840,23 +1925,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -1956,7 +2041,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER
@@ -2269,7 +2354,7 @@ bool IsAlphaDiscardEnabledMy()
 
 
    #define _URP 1
-
+#define NEED_FACING 1
 
             
 
@@ -2335,7 +2420,7 @@ bool IsAlphaDiscardEnabledMy()
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -2543,7 +2628,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -2602,7 +2687,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -2858,135 +2943,81 @@ bool IsAlphaDiscardEnabledMy()
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -2996,15 +3027,7 @@ bool IsAlphaDiscardEnabledMy()
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -3336,6 +3359,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -3356,7 +3470,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -3377,11 +3495,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -3406,6 +3527,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -3422,11 +3545,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -3451,6 +3576,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -3473,6 +3600,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -3696,7 +3851,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -3785,15 +3940,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -3828,23 +3983,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -3944,7 +4099,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER
@@ -4165,7 +4320,7 @@ bool IsAlphaDiscardEnabledMy()
 
 
    #define _URP 1
-
+#define NEED_FACING 1
                  
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Texture.hlsl"
@@ -4223,7 +4378,7 @@ bool IsAlphaDiscardEnabledMy()
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -4430,7 +4585,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -4489,7 +4644,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -4745,135 +4900,81 @@ bool IsAlphaDiscardEnabledMy()
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -4883,15 +4984,7 @@ bool IsAlphaDiscardEnabledMy()
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -5223,6 +5316,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -5243,7 +5427,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -5264,11 +5452,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -5293,6 +5484,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -5309,11 +5502,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -5338,6 +5533,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -5360,6 +5557,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -5583,7 +5808,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -5672,15 +5897,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -5715,23 +5940,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -5831,7 +6056,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER
@@ -5972,7 +6197,7 @@ bool IsAlphaDiscardEnabledMy()
 
 
    #define _URP 1
-
+#define NEED_FACING 1
             // Includes
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Version.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
@@ -6030,7 +6255,7 @@ bool IsAlphaDiscardEnabledMy()
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -6237,7 +6462,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -6296,7 +6521,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -6552,135 +6777,81 @@ bool IsAlphaDiscardEnabledMy()
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -6690,15 +6861,7 @@ bool IsAlphaDiscardEnabledMy()
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -7030,6 +7193,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -7050,7 +7304,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -7071,11 +7329,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -7100,6 +7361,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -7116,11 +7379,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -7145,6 +7410,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -7167,6 +7434,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -7390,7 +7685,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -7479,15 +7774,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -7522,23 +7817,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -7638,7 +7933,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER
@@ -7776,7 +8071,7 @@ bool IsAlphaDiscardEnabledMy()
 
 
    #define _URP 1
-
+#define NEED_FACING 1
 
 
             // Includes
@@ -7837,7 +8132,7 @@ bool IsAlphaDiscardEnabledMy()
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -8044,7 +8339,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -8103,7 +8398,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -8359,135 +8654,81 @@ bool IsAlphaDiscardEnabledMy()
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -8497,15 +8738,7 @@ bool IsAlphaDiscardEnabledMy()
 
             
 
-            #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+            
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -8837,6 +9070,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -8857,7 +9181,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -8878,11 +9206,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -8907,6 +9238,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -8923,11 +9256,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -8952,6 +9287,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -8974,6 +9311,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -9197,7 +9562,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -9286,15 +9651,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -9329,23 +9694,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -9445,7 +9810,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER
@@ -9581,7 +9946,7 @@ bool IsAlphaDiscardEnabledMy()
 
 
    #define _URP 1
-
+#define NEED_FACING 1
 
             // this has to be here or specular color will be ignored. Not in SG code
             #if _SIMPLELIT
@@ -9650,7 +10015,7 @@ bool IsAlphaDiscardEnabledMy()
          // #endif
 
          // #if %SCREENPOSREQUIREKEY%
-         // float4 screenPos : TEXCOORD7;
+          float4 screenPos : TEXCOORD7;
          // #endif
 
          // #if %VERTEXCOLORREQUIREKEY%
@@ -9857,7 +10222,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 vertexColor : COLOR;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD4; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity    : TEXCOORD5; // Add Precomputed Velocity (Alembic computes velocities on runtime side).
@@ -9916,7 +10281,7 @@ bool IsAlphaDiscardEnabledMy()
                // float4 extraV2F7 : TEXCOORD12;
                // #endif
 
-               #if _HDRP && (_PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR)))
+               #if _PASSMOTIONVECTOR || ((_PASSFORWARD || _PASSUNLIT) && defined(_WRITE_TRANSPARENT_MOTION_VECTOR))
                   float3 previousPositionOS : TEXCOORD13; // Contain previous transform position (in case of skinning for example)
                   #if defined (_ADD_PRECOMPUTED_VELOCITY)
                      float3 precomputedVelocity : TEXCOORD14;
@@ -10172,135 +10537,81 @@ bool IsAlphaDiscardEnabledMy()
     float _IsExempt;
     float _isReferenceMaterial;
     float _InteractionMode;
-    int _ArrayLength = 0;
-    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-        float4 _PlayersPosVectorArray[20];
-        float _PlayersDataFloatArray[150];     
-    #else
-        float4 _PlayersPosVectorArray[100];
-        float _PlayersDataFloatArray[500];  
-    #endif
+
     float _tDirection = 0;
     float _numOfPlayersInside = 0;
     float _tValue = 0;
     float _id = 0;
-    #if _ZONING
-        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
-            float _ZDFA[500];
-        #else
-            float _ZDFA[1000];
-        #endif
-        float _ZonesDataCount;
-    #endif
-    #if _REPLACEMENT        
-        half4 _DissolveColorGlobal;
-        float _DissolveColorSaturationGlobal;
-        float _DissolveEmissionGlobal;
-        float _DissolveEmissionBoosterGlobal;
-        float _TextureVisibilityGlobal;
-        float _ObstructionGlobal;
-        float _AngleStrengthGlobal;
-        float _ConeStrengthGlobal;
-        float _ConeObstructionDestroyRadiusGlobal;
-        float _CylinderStrengthGlobal;
-        float _CylinderObstructionDestroyRadiusGlobal;
-        float _CircleStrengthGlobal;
-        float _CircleObstructionDestroyRadiusGlobal;
-        float _CurveStrengthGlobal;
-        float _CurveObstructionDestroyRadiusGlobal;
-        float _DissolveFallOffGlobal;
-        float _AffectedAreaPlayerBasedObstructionGlobal;
-        float _IntrinsicDissolveStrengthGlobal;
-        float _PreviewModeGlobal;
-        float _UVsGlobal;
-        float _hasClippedShadowsGlobal;
-        float _FloorGlobal;
-        float _FloorModeGlobal;
-        float _FloorYGlobal;
-        float _PlayerPosYOffsetGlobal;
-        float _FloorYTextureGradientLengthGlobal;
-        float _AffectedAreaFloorGlobal;
-        float _AnimationEnabledGlobal;
-        float _AnimationSpeedGlobal;
-        float _DefaultEffectRadiusGlobal;
-        float _EnableDefaultEffectRadiusGlobal;
-        float _TransitionDurationGlobal;        
-        float _TexturedEmissionEdgeGlobal;
-        float _TexturedEmissionEdgeStrengthGlobal;
-        float _IsometricExclusionGlobal;
-        float _IsometricExclusionDistanceGlobal;
-        float _IsometricExclusionGradientLengthGlobal;
-        float _CeilingGlobal;
-        float _CeilingModeGlobal;
-        float _CeilingBlendModeGlobal;
-        float _CeilingYGlobal;
-        float _CeilingPlayerYOffsetGlobal;
-        float _CeilingYGradientLengthGlobal;
-        float _ZoningGlobal;
-        float _ZoningModeGlobal;
-        float _ZoningEdgeGradientLengthGlobal;
-        float _IsZoningRevealableGlobal;
-        float _SyncZonesWithFloorYGlobal;
-        float _SyncZonesFloorYOffsetGlobal;
-        float4 _ObstructionCurveGlobal_TexelSize;
-        float4 _DissolveMaskGlobal_TexelSize;
-        float _DissolveMaskEnabledGlobal;
-        float _PreviewIndicatorLineThicknessGlobal;
-    #else
-        half _TextureVisibility;
-        half _AngleStrength;
-        float _Obstruction;
-        float _UVs;
-        float4 _ObstructionCurve_TexelSize;      
-        float _DissolveMaskEnabled;
-        float4 _DissolveMask_TexelSize;
-        half4 _DissolveColor;
-        float _DissolveColorSaturation;
-        float _DissolveEmission;
-        float _DissolveEmissionBooster;
-        float _hasClippedShadows;
-        float _ConeStrength;
-        float _ConeObstructionDestroyRadius;
-        float _CylinderStrength;
-        float _CylinderObstructionDestroyRadius;
-        float _CircleStrength;
-        float _CircleObstructionDestroyRadius;
-        float _CurveStrength;
-        float _CurveObstructionDestroyRadius;
-        float _IntrinsicDissolveStrength;
-        float _DissolveFallOff;
-        float _AffectedAreaPlayerBasedObstruction;
-        float _PreviewMode;
-        float _PreviewIndicatorLineThickness;
-        float _AnimationEnabled;
-        float _AnimationSpeed;
-        float _DefaultEffectRadius;
-        float _EnableDefaultEffectRadius;
-        float _TransitionDuration;
-        float _TexturedEmissionEdge;
-        float _TexturedEmissionEdgeStrength;
-        float _IsometricExclusion;
-        float _IsometricExclusionDistance;
-        float _IsometricExclusionGradientLength;
-        float _Floor;
-        float _FloorMode;
-        float _FloorY;
-        float _FloorYTextureGradientLength;
-        float _PlayerPosYOffset;
-        float _AffectedAreaFloor;
-        float _Ceiling;
-        float _CeilingMode;
-        float _CeilingBlendMode;
-        float _CeilingY;
-        float _CeilingPlayerYOffset;
-        float _CeilingYGradientLength;
-        float _Zoning;
-        float _ZoningMode;
-        float _ZoningEdgeGradientLength;
-        float _IsZoningRevealable;
-        float _SyncZonesWithFloorY;
-        float _SyncZonesFloorYOffset;
-    #endif
+
+
+
+    half _TextureVisibility;
+    half _AngleStrength;
+    float _Obstruction;
+    float _UVs;
+    float4 _ObstructionCurve_TexelSize;      
+    float _DissolveMaskEnabled;
+    float4 _DissolveMask_TexelSize;
+    half4 _DissolveColor;
+    float _DissolveColorSaturation;
+    float _DissolveEmission;
+    float _DissolveEmissionBooster;
+    float _hasClippedShadows;
+    float _ConeStrength;
+    float _ConeObstructionDestroyRadius;
+    float _CylinderStrength;
+    float _CylinderObstructionDestroyRadius;
+    float _CircleStrength;
+    float _CircleObstructionDestroyRadius;
+    float _CurveStrength;
+    float _CurveObstructionDestroyRadius;
+    float _IntrinsicDissolveStrength;
+    float _DissolveFallOff;
+    float _AffectedAreaPlayerBasedObstruction;
+    float _PreviewMode;
+    float _PreviewIndicatorLineThickness;
+    float _AnimationEnabled;
+    float _AnimationSpeed;
+    float _DefaultEffectRadius;
+    float _EnableDefaultEffectRadius;
+    float _TransitionDuration;
+    float _TexturedEmissionEdge;
+    float _TexturedEmissionEdgeStrength;
+    float _IsometricExclusion;
+    float _IsometricExclusionDistance;
+    float _IsometricExclusionGradientLength;
+    float _Floor;
+    float _FloorMode;
+    float _FloorY;
+    float _FloorYTextureGradientLength;
+    float _PlayerPosYOffset;
+    float _AffectedAreaFloor;
+    float _Ceiling;
+    float _CeilingMode;
+    float _CeilingBlendMode;
+    float _CeilingY;
+    float _CeilingPlayerYOffset;
+    float _CeilingYGradientLength;
+    float _Zoning;
+    float _ZoningMode;
+    float _ZoningEdgeGradientLength;
+    float _IsZoningRevealable;
+    float _SyncZonesWithFloorY;
+    float _SyncZonesFloorYOffset;
+
+    half _UseCustomTime;
+
+    half _CrossSectionEnabled;
+    half4 _CrossSectionColor;
+    half _CrossSectionTextureEnabled;
+    float _CrossSectionTextureScale;
+    half _CrossSectionUVScaledByDistance;
+
+
+    half _DissolveMethod;
+    half _DissolveTexSpace;
+
+
 
 
 
@@ -10310,15 +10621,7 @@ bool IsAlphaDiscardEnabledMy()
 
          
 
-         #ifdef unity_WorldToObject
-#undef unity_WorldToObject
-#endif
-#ifdef unity_ObjectToWorld
-#undef unity_ObjectToWorld
-#endif
-#define unity_ObjectToWorld GetObjectToWorldMatrix()
-#define unity_WorldToObject GetWorldToObjectMatrix()
-
+         
     //////////////////////
     // Texture Sampler:
     //////////////////////
@@ -10650,6 +10953,97 @@ bool IsAlphaDiscardEnabledMy()
 
 
 
+// Global Uniforms:
+    float _ArrayLength = 0;
+    #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+        float4 _PlayersPosVectorArray[20];
+        float _PlayersDataFloatArray[150];     
+    #else
+        float4 _PlayersPosVectorArray[100];
+        float _PlayersDataFloatArray[500];  
+    #endif
+
+
+    #if _ZONING
+        #if (defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)) 
+            float _ZDFA[500];
+        #else
+            float _ZDFA[1000];
+        #endif
+        float _ZonesDataCount;
+    #endif
+
+    float _STSCustomTime = 0;
+
+
+    #if _REPLACEMENT        
+        half4 _DissolveColorGlobal;
+        float _DissolveColorSaturationGlobal;
+        float _DissolveEmissionGlobal;
+        float _DissolveEmissionBoosterGlobal;
+        float _TextureVisibilityGlobal;
+        float _ObstructionGlobal;
+        float _AngleStrengthGlobal;
+        float _ConeStrengthGlobal;
+        float _ConeObstructionDestroyRadiusGlobal;
+        float _CylinderStrengthGlobal;
+        float _CylinderObstructionDestroyRadiusGlobal;
+        float _CircleStrengthGlobal;
+        float _CircleObstructionDestroyRadiusGlobal;
+        float _CurveStrengthGlobal;
+        float _CurveObstructionDestroyRadiusGlobal;
+        float _DissolveFallOffGlobal;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _IntrinsicDissolveStrengthGlobal;
+        float _PreviewModeGlobal;
+        float _UVsGlobal;
+        float _hasClippedShadowsGlobal;
+        float _FloorGlobal;
+        float _FloorModeGlobal;
+        float _FloorYGlobal;
+        float _PlayerPosYOffsetGlobal;
+        float _FloorYTextureGradientLengthGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _AnimationEnabledGlobal;
+        float _AnimationSpeedGlobal;
+        float _DefaultEffectRadiusGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
+        float _TransitionDurationGlobal;        
+        float _TexturedEmissionEdgeGlobal;
+        float _TexturedEmissionEdgeStrengthGlobal;
+        float _IsometricExclusionGlobal;
+        float _IsometricExclusionDistanceGlobal;
+        float _IsometricExclusionGradientLengthGlobal;
+        float _CeilingGlobal;
+        float _CeilingModeGlobal;
+        float _CeilingBlendModeGlobal;
+        float _CeilingYGlobal;
+        float _CeilingPlayerYOffsetGlobal;
+        float _CeilingYGradientLengthGlobal;
+        float _ZoningGlobal;
+        float _ZoningModeGlobal;
+        float _ZoningEdgeGradientLengthGlobal;
+        float _IsZoningRevealableGlobal;
+        float _SyncZonesWithFloorYGlobal;
+        float _SyncZonesFloorYOffsetGlobal;
+        float4 _ObstructionCurveGlobal_TexelSize;
+        float4 _DissolveMaskGlobal_TexelSize;
+        float _DissolveMaskEnabledGlobal;
+        float _PreviewIndicatorLineThicknessGlobal;
+        half _UseCustomTimeGlobal;
+
+        half _CrossSectionEnabledGlobal;
+        half4 _CrossSectionColorGlobal;
+        half _CrossSectionTextureEnabledGlobal;
+        float _CrossSectionTextureScaleGlobal;
+        half _CrossSectionUVScaledByDistanceGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
+
+    #endif
+
+
     #if _REPLACEMENT
         sampler2D _DissolveTexGlobal;
     #else
@@ -10670,7 +11064,11 @@ bool IsAlphaDiscardEnabledMy()
         sampler2D _ObstructionCurve;
     #endif
 
-
+    #if _REPLACEMENT
+        sampler2D _CrossSectionTextureGlobal;
+    #else
+        sampler2D _CrossSectionTexture;
+    #endif
 
 
 
@@ -10691,11 +11089,14 @@ bool IsAlphaDiscardEnabledMy()
 #undef USE_UNITY_TEXTURE_2D_TYPE
 #endif
 #if _REPLACEMENT
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
+
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                         _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                         _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -10720,6 +11121,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                         _TransitionDurationGlobal,
 
+                        _UseCustomTimeGlobal,
+
                         _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                         _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
 
@@ -10736,11 +11139,13 @@ bool IsAlphaDiscardEnabledMy()
                         albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal,
+    DoSeeThroughShading( o.Albedo, o.Normal, d.worldSpacePosition, d.worldSpaceNormal, d.screenPos,
 
                         _numOfPlayersInside, _tDirection, _tValue, _id,
                         _TriggerMode, _RaycastMode,
                         _IsExempt,
+
+                        _DissolveMethod, _DissolveTexSpace,
 
                         _DissolveColor, _DissolveColorSaturation, _UVs,
                         _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -10765,6 +11170,8 @@ bool IsAlphaDiscardEnabledMy()
                         _AnimationEnabled, _AnimationSpeed,
                         _TransitionDuration,
 
+                        _UseCustomTime,
+
                         _Zoning, _ZoningMode , _IsZoningRevealable, _ZoningEdgeGradientLength,
                         _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
 
@@ -10787,6 +11194,34 @@ bool IsAlphaDiscardEnabledMy()
         o.Emission += emission;   
 
 	}
+
+
+
+    
+    void Ext_FinalColorForward1 (Surface o, ShaderData d, inout half4 color)
+    {
+        #if _REPLACEMENT   
+            DoCrossSection(_CrossSectionEnabledGlobal,
+                        _CrossSectionColorGlobal,
+                        _CrossSectionTextureEnabledGlobal,
+                        _CrossSectionTextureGlobal,
+                        _CrossSectionTextureScaleGlobal,
+                        _CrossSectionUVScaledByDistanceGlobal,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #else 
+            DoCrossSection(_CrossSectionEnabled,
+                        _CrossSectionColor,
+                        _CrossSectionTextureEnabled,
+                        _CrossSectionTexture,
+                        _CrossSectionTextureScale,
+                        _CrossSectionUVScaledByDistance,
+                        d.isFrontFace,
+                        d.screenPos,
+                        color);
+        #endif
+    }
 
 
 
@@ -11010,7 +11445,7 @@ bool IsAlphaDiscardEnabledMy()
             void ChainFinalColorForward(inout Surface l, inout ShaderData d, inout half4 color)
             {
                //   Ext_FinalColorForward0(l, d, color);
-               //   Ext_FinalColorForward1(l, d, color);
+                  Ext_FinalColorForward1(l, d, color);
                //   Ext_FinalColorForward2(l, d, color);
                //   Ext_FinalColorForward3(l, d, color);
                //   Ext_FinalColorForward4(l, d, color);
@@ -11099,15 +11534,15 @@ bool IsAlphaDiscardEnabledMy()
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(d.worldSpacePosition), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(d.worldSpacePosition, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(d.worldSpacePosition, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, d.worldSpaceTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), d.worldSpaceTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
+             d.screenUV = (IN.ScreenPosition.xy / max(0.01, IN.ScreenPosition.w));
             // #endif
 
             return d;
@@ -11142,23 +11577,23 @@ bool IsAlphaDiscardEnabledMy()
             // d.texcoord3 = i.texcoord3;
             // #endif
 
-            // d.isFrontFace = facing;
+             d.isFrontFace = facing;
             // #if %VERTEXCOLORREQUIREKEY%
             // d.vertexColor = i.vertexColor;
             // #endif
 
             // these rarely get used, so we back transform them. Usually will be stripped.
             #if _HDRP
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(GetCameraRelativePositionWS(i.worldPos), 1)).xyz;
             #else
-                // d.localSpacePosition = mul(unity_WorldToObject, float4(i.worldPos, 1)).xyz;
+                // d.localSpacePosition = mul(GetWorldToObjectMatrix(), float4(i.worldPos, 1)).xyz;
             #endif
-            // d.localSpaceNormal = normalize(mul((float3x3)unity_WorldToObject, i.worldNormal));
-            // d.localSpaceTangent = normalize(mul((float3x3)unity_WorldToObject, i.worldTangent.xyz));
+            // d.localSpaceNormal = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldNormal));
+            // d.localSpaceTangent = normalize(mul((float3x3)GetWorldToObjectMatrix(), i.worldTangent.xyz));
 
             // #if %SCREENPOSREQUIREKEY%
-            // d.screenPos = i.screenPos;
-            // d.screenUV = (i.screenPos.xy / i.screenPos.w);
+             d.screenPos = i.screenPos;
+             d.screenUV = (i.screenPos.xy / i.screenPos.w);
             // #endif
 
 
@@ -11258,7 +11693,7 @@ bool IsAlphaDiscardEnabledMy()
           #endif
 
           // #if %SCREENPOSREQUIREKEY%
-          // o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
+           o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
           #if _PASSFORWARD || _PASSGBUFFER

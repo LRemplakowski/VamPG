@@ -8,11 +8,19 @@ using SunsetSystems.Persistence;
 using System;
 using System.Collections.Generic;
 using SunsetSystems.Equipment;
+using System.Collections;
 
 namespace SunsetSystems.Animation
 {
     public class AnimationManager : SerializedMonoBehaviour, IPersistentComponent
     {
+        public enum CreatureAnimationLayer
+        {
+            Exploration = 0,
+            Combat = 1,
+            Stealth = 2
+        }
+
         private const string ANIMATION_MANAGER_ID = "ANIMATION_MANAGER";
         private const string ANIMATOR_PARAM_ON_MOVE = "IsMoving";
         private const string ANIMATOR_PARAM_SPEED = "Speed";
@@ -31,10 +39,14 @@ namespace SunsetSystems.Animation
         [SerializeField]
         private float moveThreshold = .5f;
         [SerializeField]
-        private float positionDeltaTolerance = 2f;
-        [SerializeField]
         private string _weaponAnimationTypeParam;
         private int _weaponAnimationTypeParamHash;
+        [SerializeField]
+        private string _takeHitAnimationParam;
+        private int _takeHitAnimationParamHash;
+        [SerializeField]
+        private string _fireWeaponAnimationParam;
+        private int _fireWeaponAnimationParamHash;
 
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
         private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
@@ -57,28 +69,13 @@ namespace SunsetSystems.Animation
             _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
             _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
             _weaponAnimationTypeParamHash = Animator.StringToHash(_weaponAnimationTypeParam);
-            //animator.applyRootMotion = true;
-            //agent.updatePosition = false;
-            //agent.updateRotation = true;
+            _takeHitAnimationParamHash = Animator.StringToHash(_takeHitAnimationParam);
+            _fireWeaponAnimationParamHash = Animator.StringToHash(_fireWeaponAnimationParam);
         }
 
         private void Update()
         {
             SynchronizeAnimatorWithNavMeshAgent();
-        }
-
-        //private void OnAnimatorMove()
-        //{
-        //    Vector3 rootPosition = animator.rootPosition;
-        //    rootPosition.y = agent.nextPosition.y;
-        //    MotionTransform.position = rootPosition;
-        //    agent.nextPosition = rootPosition;
-        //    //MotionTransform.rotation = animator.rootRotation;
-        //}
-
-        private void OnDestroy()
-        {
-
         }
 
         private void SynchronizeAnimatorWithNavMeshAgent()
@@ -89,37 +86,29 @@ namespace SunsetSystems.Animation
             animator.SetFloat(_animatorSpeed, agentSpeed);
         }
 
-        //private void SynchronizeAnimatorWithNavMeshAgent()
-        //{
-        //    Vector3 worldPositionDelta = agent.nextPosition - MotionTransform.position;
-        //    worldPositionDelta.y = 0;
+        private void SetActiveAnimationLayer(CreatureAnimationLayer layer)
+        {
+            for (int i = 0; i < animator.layerCount; i++)
+            {
+                StartCoroutine(LerpLayerWeight(animator, i, i == (int)layer ? 1f : 0f, 1f));
+            }
 
-        //    float deltaX = Vector3.Dot(MotionTransform.right, worldPositionDelta);
-        //    float deltaY = Vector3.Dot(MotionTransform.forward, worldPositionDelta);
-        //    Vector2 positionDelta = new(deltaX, deltaY);
-
-        //    float positionSmoothing = Mathf.Min(1f, Time.deltaTime / .15f);
-        //    smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, positionDelta, positionSmoothing);
-
-        //    velocity = smoothDeltaPosition / Time.deltaTime;
-
-        //    if (agent.remainingDistance <= agent.stoppingDistance)
-        //    {
-        //        velocity = Vector2.Lerp(Vector2.zero, velocity, agent.remainingDistance / agent.stoppingDistance);
-        //    }
-
-        //    bool shouldMove = velocity.magnitude > moveThreshold && agent.remainingDistance > agent.radius + agent.stoppingDistance / 2;
-
-        //    animator.SetBool("IsMoving", shouldMove);
-        //    //animator.SetFloat("MoveX", velocity.x);
-        //    animator.SetFloat("MoveY", velocity.magnitude / 3);
-
-        //    float deltaMagnitude = worldPositionDelta.magnitude;
-        //    if (deltaMagnitude > agent.radius)
-        //    {
-        //        MotionTransform.position = agent.nextPosition - (worldPositionDelta * 0.9f);
-        //    }
-        //}
+            static IEnumerator LerpLayerWeight(Animator animator, int index, float targetWeight, float time)
+            {
+                float lerp = 0f;
+                float startWeight = 1 - targetWeight;
+                if (animator.GetLayerWeight(index) == targetWeight)
+                    yield break;
+                while (lerp < time)
+                {
+                    float value = Mathf.Lerp(startWeight, targetWeight, lerp / time);
+                    animator.SetLayerWeight(index, value);
+                    lerp += Time.deltaTime;
+                    yield return null;
+                }
+                animator.SetLayerWeight(index, targetWeight);
+            }
+        }
 
         public void OnWeaponChanged(IWeaponInstance weaponInstance)
         {
@@ -160,6 +149,10 @@ namespace SunsetSystems.Animation
         public void SetCombatAnimationsActive(bool isCombat)
         {
             animator.SetBool("IsCombat", isCombat);
+            if (isCombat)
+                SetActiveAnimationLayer(CreatureAnimationLayer.Combat);
+            else
+                SetActiveAnimationLayer(CreatureAnimationLayer.Exploration);
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)
@@ -197,6 +190,16 @@ namespace SunsetSystems.Animation
             leftHandConstraint.data.hintWeight = 0;
 
             rigBuilder.enabled = false;
+        }
+
+        public void PlayFireWeaponAnimation()
+        {
+            animator.SetTrigger(_fireWeaponAnimationParam);
+        }
+
+        public void PlayTakeHitAnimation()
+        {
+            animator.SetTrigger(_takeHitAnimationParamHash);
         }
 
         public void SetTrigger(string name)

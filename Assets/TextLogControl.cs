@@ -19,7 +19,7 @@ public class TextLogControl : MonoBehaviour
 
     public void LogText(string newTextString, Color newColor)
     {
-        if (textItems.Count == 10)
+        if (textItems.Count == 20)
         {
             GameObject tempItem = textItems[0];
             Destroy(tempItem.gameObject);

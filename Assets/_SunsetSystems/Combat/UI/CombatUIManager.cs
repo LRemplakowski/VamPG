@@ -1,14 +1,8 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
 using UltEvents;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -17,15 +11,15 @@ namespace SunsetSystems.Combat.UI
     public class CombatUIManager : SerializedMonoBehaviour
     {
         [Title("References")]
-        [SerializeField]
+        [SerializeField, Required]
         private Image currentActorPortrait;
         [SerializeField, Required]
         private ActionBarUI _actionBarUI;
-        [SerializeField]
+        [SerializeField, Required]
         private PlayerHealthDisplay currentActorHealth;
-        [SerializeField]
+        [SerializeField, Required]
         private ResourceBarDisplay apBar, bpBar;
-        [SerializeField]
+        [SerializeField, Required]
         private ActiveAbilitiesDisplayManager disciplineBar;
         [SerializeField, Required]
         private CanvasGroup _combatCanvasGroup;

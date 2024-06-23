@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
@@ -88,24 +89,25 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            switch (selectedActionManager.SelectedActionData.ActionType)
+            var actionFlag = selectedActionManager.SelectedActionData.ActionType;
+            switch (actionFlag)
             {
-                case CombatActionType.Move:
+                case CombatActionType when (actionFlag & CombatActionType.Move) != 0:
                     HandleMoveCombatAction();
                     break;
-                case CombatActionType.RangedAtk:
+                case CombatActionType when (actionFlag & CombatActionType.RangedAtk) != 0:
                     HandleRangedAttackCombatAction();
                     break;
-                case CombatActionType.MeleeAtk:
+                case CombatActionType when (actionFlag & CombatActionType.MeleeAtk) != 0:
                     HandleMeleeAttackCombatAction();
                     break;
-                case CombatActionType.Feed:
+                case CombatActionType when (actionFlag & CombatActionType.Feed) != 0:
                     HandleFeedCombatAction();
                     break;
-                case CombatActionType.Reload:
+                case CombatActionType when (actionFlag & CombatActionType.Reload) != 0:
                     HandleReloadCombatAction();
                     break;
-                case CombatActionType.UseDiscipline:
+                case CombatActionType when (actionFlag & CombatActionType.UseDiscipline) != 0:
                     HandleUseDisciplineCombatAction();
                     break;
             }

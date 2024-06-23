@@ -356,8 +356,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformAttackAnimation()
         {
-            animationController.SetTrigger(attackAnimationTriggerHash);
-            return 2f;
+            animationController.PlayFireWeaponAnimation();
+            return 1f;
         }
 
         /// <summary>
@@ -366,8 +366,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformTakeHitAnimation()
         {
-            animationController.SetTrigger(takeHitAnimationTriggerHash);
-            return 2f;
+            animationController.PlayTakeHitAnimation();
+            return 1f;
         }
         #endregion
 

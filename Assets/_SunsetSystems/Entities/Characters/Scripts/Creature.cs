@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
@@ -32,6 +33,8 @@ namespace SunsetSystems.Entities.Characters
                 return _actionQueue;
             }
         }
+
+        private Coroutine _faceDirectionCoroutine;
 
         #region Unity messages
         protected virtual void Awake()
@@ -115,6 +118,28 @@ namespace SunsetSystems.Entities.Characters
         public EntityAction PeekActionFromQueue()
         {
             return ActionQueue.Peek();
+        }
+
+        public void FaceTarget(Vector3 targetPosition)
+        {
+            if (_faceDirectionCoroutine != null)
+                StopCoroutine(_faceDirectionCoroutine);
+        }
+
+        private IEnumerator FaceTargetInTime(float time, Vector3 targetPosition)
+        {
+            Vector3 lookPosition = targetPosition - transform.position;
+            lookPosition.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
+            Quaternion startRotation = transform.rotation;
+            float slerp = 0f;
+            while (slerp < time)
+            {
+                slerp += Time.deltaTime;
+                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, slerp / time);
+                yield return null;
+            }
+            transform.rotation = targetRotation;
         }
 
         public async Task PerformAction(EntityAction action, bool clearQueue = false)

@@ -1,7 +1,7 @@
-﻿using Cinemachine;
-using SunsetSystems.Core;
+﻿using SunsetSystems.Core;
 using SunsetSystems.Game;
 using SunsetSystems.Persistence;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +12,7 @@ namespace SunsetSystems.Input.CameraControl
         public static CameraControlScript Instance { get; private set; }
 
         [SerializeField]
-        private CinemachineFreeLook mainVirtualCam;
+        private CinemachineCamera mainVirtualCam;
         [SerializeField]
         private LayerMask _groundRaycastMask;
         [SerializeField]

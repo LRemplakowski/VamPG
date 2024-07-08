@@ -16,23 +16,35 @@ namespace SunsetSystems.Input
     {
         [Title("References")]
         [SerializeField, Required]
-        private PlayerCombatActionManager selectedActionManager;
+        private PlayerCombatActionManager _selectedActionManager;
+        [SerializeField]
+        private LineRenderer _targetingLineRenderer;
         [Title("Config")]
         [SerializeField]
         private LayerMask gridLayerMask;
         [SerializeField]
         private LayerMask targetableLayerMask;
+
         private const int raycastRange = 100;
         private Vector2 mousePosition;
 
         private bool _pointerOverGameObject;
+        private bool _showTargetingLine;
 
         private Collider gridHit;
         private Collider targetableHit;
 
+        private void Start()
+        {
+            _targetingLineRenderer.gameObject.SetActive(false);
+        }
+
         private void Update()
         {
+            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
+                _showTargetingLine = false;
             _pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
+            _targetingLineRenderer.gameObject.SetActive(_showTargetingLine);
         }
 
         public void HandlePointerPosition(InputAction.CallbackContext context)
@@ -75,10 +87,14 @@ namespace SunsetSystems.Input
 
             void HandleTargetablePointerPosition()
             {
-                ICombatant combatant = hit.collider.gameObject.GetComponent<ICreature>()?.References.CombatBehaviour;
-                if (combatant != null)
+                if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
-                    // do some target highlight
+                    ICombatant current = CombatManager.Instance.CurrentActiveActor;
+                    ICombatant target = creature.References.CombatBehaviour;
+                    if (_selectedActionManager.SelectedActionData.ActionType == CombatActionType.RangedAtk)
+                        _showTargetingLine = true;
+                    _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
+                    _targetingLineRenderer.SetPosition(1, creature.References.CombatBehaviour.AimingOrigin);
                 }
             }
         }
@@ -89,7 +105,7 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            var actionFlag = selectedActionManager.SelectedActionData.ActionType;
+            var actionFlag = _selectedActionManager.SelectedActionData.ActionType;
             switch (actionFlag)
             {
                 case CombatActionType when (actionFlag & CombatActionType.Move) != 0:
@@ -177,7 +193,7 @@ namespace SunsetSystems.Input
 
             void HandleUseDisciplineCombatAction()
             {
-                DisciplinePower selectedDisciplinePower = selectedActionManager.SelectedActionData.DisciplinePowerData;
+                DisciplinePower selectedDisciplinePower = _selectedActionManager.SelectedActionData.DisciplinePowerData;
                 IMagicUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
                 if (targetableHit != null)
                 {
@@ -196,7 +212,7 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            switch (selectedActionManager.SelectedActionData.ActionType)
+            switch (_selectedActionManager.SelectedActionData.ActionType)
             {
                 case CombatActionType.Move:
                     break;

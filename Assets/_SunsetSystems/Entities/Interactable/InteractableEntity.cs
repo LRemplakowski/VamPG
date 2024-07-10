@@ -2,6 +2,7 @@
 using Sirenix.Serialization;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.UI;
 using System;
 using System.Collections.Generic;
 using UltEvents;
@@ -98,6 +99,7 @@ namespace SunsetSystems.Entities.Interactable
             {
                 _isHoveredOver = value;
                 HandleHoverHiglight();
+                HandleNameplate();
             }
         }
 
@@ -202,6 +204,18 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_highlightHandler != null && Interactable)
                 _highlightHandler.SetHighlightActive(IsHoveredOver);
+        }
+
+        private void HandleNameplate()
+        {
+            if (Interactable && IsHoveredOver)
+            {
+                NameplateManager.Instance.AddNameplateSource(this);
+            }
+            else
+            {
+                NameplateManager.Instance.RemoveNameplateSource(this);
+            }    
         }
 
         public void ResetInteraction()

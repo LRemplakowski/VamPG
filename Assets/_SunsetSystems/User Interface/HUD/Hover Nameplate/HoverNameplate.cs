@@ -1,24 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
+using SunsetSystems.Utils.ObjectPooling;
 using TMPro;
 using UnityEngine;
 
 namespace SunsetSystems.UI
 {
-    public class HoverNameplate : MonoBehaviour
+    public class HoverNameplate : MonoBehaviour, IPooledObject
     {
+        [field: SerializeField]
+        public RectTransform Rect { get; private set; }
+
         [SerializeField]
-        private TextMeshProUGUI textComponent;
+        private TextMeshProUGUI _textComponent;
 
         private void Start()
         {
-            textComponent ??= GetComponentInChildren<TextMeshProUGUI>();
-            gameObject.SetActive(false);
+            if (Rect == null)
+                Rect = transform as RectTransform;
+            _textComponent ??= GetComponentInChildren<TextMeshProUGUI>();
         }
 
         public void SetNameplateText(string text)
         {
-            textComponent.text = text;
+            _textComponent.text = text;
+        }
+
+        public void ResetObject()
+        {
+            _textComponent.text = "";
         }
     }
 }

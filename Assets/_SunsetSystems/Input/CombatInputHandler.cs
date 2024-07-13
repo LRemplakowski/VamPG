@@ -76,6 +76,11 @@ namespace SunsetSystems.Input
                 HandleTargetablePointerPosition();
                 targetableHit = hit.collider;
             }
+            else
+            {
+                targetableHit = null;
+                _showTargetingLine = false;
+            }
 
             void HandleGridCellPointerPosition()
             {
@@ -91,10 +96,9 @@ namespace SunsetSystems.Input
                 {
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
-                    if (_selectedActionManager.SelectedActionData.ActionType == CombatActionType.RangedAtk)
-                        _showTargetingLine = true;
+                    _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
-                    _targetingLineRenderer.SetPosition(1, creature.References.CombatBehaviour.AimingOrigin);
+                    _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
                 }
             }
         }

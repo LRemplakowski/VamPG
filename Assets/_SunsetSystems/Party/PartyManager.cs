@@ -11,6 +11,7 @@ using SunsetSystems.Entities.Creatures;
 using SunsetSystems.Persistence;
 using UltEvents;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SunsetSystems.Party
 {
@@ -257,6 +258,7 @@ namespace SunsetSystems.Party
                 partyPositions.Add(key, _activeParty[key].References.Transform.position);
             }
             saveData.PartyPositions = partyPositions;
+            saveData.PartyPositionsScene = SceneManager.GetActiveScene().name;
             return saveData;
 
             Dictionary<string, ICreatureTemplate> UpdatePartyTemplates()
@@ -297,7 +299,7 @@ namespace SunsetSystems.Party
                 else
                     _partyPositions.Add(key, Vector3.zero);
             }
-            _initializeAtSavedPositions = true;
+            _initializeAtSavedPositions = saveData.PartyPositionsScene == SceneManager.GetActiveScene().name;
         }
     }
 
@@ -308,5 +310,6 @@ namespace SunsetSystems.Party
         public Dictionary<string, ICreatureTemplate> CachedPartyTemplates;
         public List<string> ActiveMemberKeys;
         public string MainCharacterKey;
+        public string PartyPositionsScene;
     }
 }

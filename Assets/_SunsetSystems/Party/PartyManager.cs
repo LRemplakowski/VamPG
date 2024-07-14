@@ -160,7 +160,6 @@ namespace SunsetSystems.Party
             {
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data, position, Quaternion.identity, _creatureParent);
                 memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
-                memberInstance.References.NavMeshAgent.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }
@@ -175,7 +174,7 @@ namespace SunsetSystems.Party
             {
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data, _creatureParent);
                 memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
-                memberInstance.References.NavMeshAgent.gameObject.layer = memberInstance.References.GameObject.layer;
+                //memberInstance.References.NavigationManager.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }

@@ -34,8 +34,6 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        private Coroutine _faceDirectionCoroutine;
-
         #region Unity messages
         protected virtual void Awake()
         {
@@ -95,7 +93,7 @@ namespace SunsetSystems.Entities.Characters
             if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, (int)NavMeshAreas.Walkable))
             {
                 Debug.Log($"Forcing Creature {gameObject.name} to position: {hit.position}!");
-                References.NavMeshAgent.Warp(hit.position);
+                References.NavigationManager.Warp(hit.position);
             }
             else
             {
@@ -103,10 +101,9 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        public void ForceToPosition(Transform positionTransform)
-        {
-            ForceToPosition(positionTransform.position);
-        }
+        public void ForceToPosition(Transform positionTransform) => ForceToPosition(positionTransform.position);
+
+        public void FacePointInSpace(Vector3 point) => References.NavigationManager.FaceDirectionAfterMovementFinished(point);
 
         public void ClearAllActions()
         {
@@ -118,28 +115,6 @@ namespace SunsetSystems.Entities.Characters
         public EntityAction PeekActionFromQueue()
         {
             return ActionQueue.Peek();
-        }
-
-        public void FaceTarget(Vector3 targetPosition)
-        {
-            if (_faceDirectionCoroutine != null)
-                StopCoroutine(_faceDirectionCoroutine);
-        }
-
-        private IEnumerator FaceTargetInTime(float time, Vector3 targetPosition)
-        {
-            Vector3 lookPosition = targetPosition - transform.position;
-            lookPosition.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
-            Quaternion startRotation = transform.rotation;
-            float slerp = 0f;
-            while (slerp < time)
-            {
-                slerp += Time.deltaTime;
-                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, slerp / time);
-                yield return null;
-            }
-            transform.rotation = targetRotation;
         }
 
         public async Task PerformAction(EntityAction action, bool clearQueue = false)

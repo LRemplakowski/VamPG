@@ -11,6 +11,8 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         new ICreatureReferences References { get; }
 
         void ForceToPosition(Vector3 position);
+        void ForceToPosition(Transform positionTransform);
+        void FacePointInSpace(Vector3 point);
         void InjectDataFromTemplate(ICreatureTemplate template);
     }
 }

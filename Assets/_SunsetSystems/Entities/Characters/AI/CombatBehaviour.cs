@@ -18,6 +18,7 @@ using Sirenix.Utilities;
 using UnityEngine.AI;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Combat.UI;
+using SunsetSystems.Entities.Characters.Navigation;
 
 namespace SunsetSystems.Combat
 {
@@ -291,7 +292,7 @@ namespace SunsetSystems.Combat
                 }
                 else
                 {
-                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<NavMeshAgent>());
+                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<INavigationManager>());
                     gridManager.ShowCellsInMovementRange(this);
                     if (nearestUnitInRangeAdjacentToTarget != null && MoveToGridPosition(nearestUnitInRangeAdjacentToTarget.GridPosition))
                     {
@@ -324,15 +325,15 @@ namespace SunsetSystems.Combat
             return true;
         }
 
-        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, NavMeshAgent navMeshAgent)
+        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, INavigationManager navigationManager)
         {
             GridUnit unit = null;
             float distance = float.MaxValue;
-            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navMeshAgent, out _);
+            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navigationManager, out _);
             if (target != null)
             {
                 Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(target.Transform.position);
-                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<NavMeshAgent>(), out _);
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<INavigationManager>(), out _);
                 IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
                 foreach (GridUnit commonUnit in commonElements)
                 {

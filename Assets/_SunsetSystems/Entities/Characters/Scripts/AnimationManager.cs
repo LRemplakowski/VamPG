@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Animations.Rigging;
-using UMA;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Persistence;
-using System;
-using System.Collections.Generic;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
-using System.Collections;
+using SunsetSystems.Persistence;
+using UMA;
+using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace SunsetSystems.Animation
 {
@@ -31,7 +31,7 @@ namespace SunsetSystems.Animation
         [SerializeField, Required]
         private Animator animator;
         [SerializeField, Required]
-        private NavMeshAgent agent;
+        private INavigationManager agent;
         [SerializeField, Required]
         private RigBuilder rigBuilder;
 
@@ -80,8 +80,8 @@ namespace SunsetSystems.Animation
 
         private void SynchronizeAnimatorWithNavMeshAgent()
         {
-            bool agentOnMove = agent.isOnNavMesh && agent.hasPath && agent.remainingDistance - agent.stoppingDistance > moveThreshold;
-            float agentSpeed = agent.velocity.magnitude / agent.speed;
+            bool agentOnMove = agent.IsMoving;
+            float agentSpeed = agent.CurrentSpeed / agent.MaxSpeed;
             animator.SetBool(_animatorOnMove, agentOnMove);
             animator.SetFloat(_animatorSpeed, agentSpeed);
         }
@@ -194,7 +194,7 @@ namespace SunsetSystems.Animation
 
         public void PlayFireWeaponAnimation()
         {
-            animator.SetTrigger(_fireWeaponAnimationParam);
+            animator.SetTrigger(_fireWeaponAnimationParamHash);
         }
 
         public void PlayTakeHitAnimation()

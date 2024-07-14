@@ -1,6 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 using System;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace SunsetSystems.Entities.Characters.Actions
     public class Move : EntityAction
     {
         [SerializeField]
-        private NavMeshAgent navMeshAgent;
+        private INavigationManager navigationManager;
         [SerializeField, ReadOnly]
         private Vector3 destination;
         public static event Action<IActionPerformer> OnMovementFinished;
@@ -21,9 +22,9 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public Move(IActionPerformer owner, Vector3 destination/*, float stoppingDistance = .1f*/) : base(owner, false)
         {
-            this.navMeshAgent = owner.References.NavMeshAgent;
+            this.navigationManager = owner.References.NavigationManager;
             NavMesh.SamplePosition(destination, out var hit, 1f, NavMesh.AllAreas);
-            conditions.Add(new Destination(navMeshAgent));
+            conditions.Add(new Destination(navigationManager));
             this.destination = hit.position;
         }
 
@@ -42,19 +43,14 @@ namespace SunsetSystems.Entities.Characters.Actions
         public override void Cleanup()
         {
             base.Cleanup();
-            navMeshAgent.isStopped = true;
-            if (OnMovementFinished != null)
-                OnMovementFinished.Invoke(this.Owner);
+            OnMovementFinished?.Invoke(this.Owner);
         }
 
         public override void Begin()
         {
-            navMeshAgent.isStopped = false;
-            navMeshAgent.ResetPath();
-            if (navMeshAgent.SetDestination(destination)) 
+            if (navigationManager.SetNavigationTarget(destination)) 
             {
-                if (OnMovementStarted != null)
-                    OnMovementStarted.Invoke(this.Owner);
+                OnMovementStarted?.Invoke(this.Owner);
             }
             else
             {

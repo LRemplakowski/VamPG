@@ -1,24 +1,27 @@
+using SunsetSystems.Entities.Characters.Navigation;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions.Conditions
 {
     public class KeepWithinStoppingDistanceOfFollowTarget : Condition
     {
         [SerializeField]
-        private NavMeshAgent followTarget;
+        private INavigationManager followTarget;
         [SerializeField]
-        private NavMeshAgent myAgent;
+        private INavigationManager myAgent;
+        [SerializeField]
+        private float distance;
 
-        public KeepWithinStoppingDistanceOfFollowTarget(NavMeshAgent followTarget, NavMeshAgent myAgent)
+        public KeepWithinStoppingDistanceOfFollowTarget(INavigationManager followTarget, INavigationManager myAgent, float distance)
         {
             this.followTarget = followTarget;
             this.myAgent = myAgent;
+            this.distance = distance;
         }
 
         public override bool IsMet()
         {
-            return followTarget.isStopped && Vector3.Distance(followTarget.transform.position, myAgent.transform.position) > myAgent.stoppingDistance;
+            return !followTarget.IsMoving && Vector3.Distance(followTarget.Position, myAgent.Position) <= distance;
         }
     }
 }

@@ -24,6 +24,8 @@ namespace SunsetSystems.Inventory
 
         public string DataKey => DataKeyConstants.INVENTORY_MANAGER_DATA_KEY;
 
+        public static event Action<IBaseItem> OnItemAcquired, OnItemLost;
+
         public void ResetOnGameStart()
         {
             _playerInventory.Contents.Clear();
@@ -41,12 +43,21 @@ namespace SunsetSystems.Inventory
             if (!_playerInventory)
                 _playerInventory = gameObject.AddComponent<ItemStorage>();
             ISaveable.RegisterSaveable(this);
-            
         }
 
         private void OnDestroy()
         {
             ISaveable.UnregisterSaveable(this);
+        }
+
+        private void OnPlayerInventoryItemAcquired(InventoryEntry itemEntry)
+        {
+            OnItemAcquired?.Invoke(itemEntry._item);
+        }
+
+        private void OnPlayerInventoryItemLost(InventoryEntry itemEntry)
+        {
+            OnItemLost?.Invoke(itemEntry._item);
         }
 
         public void GiveItemToPlayer(InventoryEntry item)

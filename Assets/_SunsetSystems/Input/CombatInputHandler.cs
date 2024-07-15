@@ -92,13 +92,16 @@ namespace SunsetSystems.Input
 
             void HandleTargetablePointerPosition()
             {
+                if (targetableHit == hit.collider)
+                    return; // skip if we hit previous targetable
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
+                    _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
-                    _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
                     _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
+                    current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
                 }
             }
         }

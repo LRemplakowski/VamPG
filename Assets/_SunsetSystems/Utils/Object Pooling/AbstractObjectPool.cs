@@ -20,9 +20,9 @@ namespace SunsetSystems.Utils.ObjectPooling
     public abstract class AbstractObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : Component, IPooledObject
     {
         [Title("Object Pooling")]
-        [SerializeField]
+        [SerializeField, Required]
         private Transform _poolParent;
-        [SerializeField]
+        [SerializeField, Required]
         private T _objectPrefab;
 
         private Queue<T> _objectPool = new();

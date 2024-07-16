@@ -35,6 +35,15 @@ namespace SunsetSystems.Combat.UI
         public void OnCombatBegin()
         {
             _combatCanvasGroup.interactable = false;
+            _combatCanvasGroup.blocksRaycasts = true;
+            _combatCanvasGroup.alpha = 1f;
+        }
+
+        public void OnCombatEnd()
+        {
+            _combatCanvasGroup.interactable = false;
+            _combatCanvasGroup.blocksRaycasts = false;
+            _combatCanvasGroup.alpha = 0f;
         }
 
         public void OnCombatRoundBegin(ICombatant combatant)

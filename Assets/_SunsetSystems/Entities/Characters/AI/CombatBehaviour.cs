@@ -1,24 +1,21 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Combat;
-using SunsetSystems.Entities.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using SunsetSystems.Animation;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Combat.UI;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters.Navigation;
+using SunsetSystems.Entities.Creatures.Interfaces;
+using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
-using Sirenix.OdinInspector;
-using System.Threading.Tasks;
-using System.Linq;
-using SunsetSystems.AI;
 using UltEvents;
-using SunsetSystems.Animation;
-using SunsetSystems.Equipment;
-using Sirenix.Utilities;
-using UnityEngine.AI;
-using SunsetSystems.Entities.Creatures.Interfaces;
-using SunsetSystems.Combat.UI;
-using SunsetSystems.Entities.Characters.Navigation;
+using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
@@ -26,13 +23,9 @@ namespace SunsetSystems.Combat
     {
         [Title("Config")]
         [SerializeField]
+        private Vector3 _combatNameplateOffset = new Vector3(0, 2, 0);
+        [SerializeField]
         private float defaultRaycastOriginY = 1.5f;
-        [SerializeField]
-        private string attackAnimationTrigger;
-        private int attackAnimationTriggerHash;
-        [SerializeField]
-        private string takeHitAnimationTrigger;
-        private int takeHitAnimationTriggerHash;
         [SerializeField]
         private string hasCoverAnimationBoolean;
         private int hasCoverAnimationBooleanHash;
@@ -66,8 +59,6 @@ namespace SunsetSystems.Combat
 
         private void Start()
         {
-            attackAnimationTriggerHash = Animator.StringToHash(attackAnimationTrigger);
-            takeHitAnimationTriggerHash = Animator.StringToHash(takeHitAnimationTrigger);
             hasCoverAnimationBooleanHash = Animator.StringToHash(hasCoverAnimationBoolean);
         }
 
@@ -157,6 +148,7 @@ namespace SunsetSystems.Combat
         public IWeapon SecondaryWeapon => Owner.References.WeaponManager.GetSecondaryWeapon();
 
         public Vector3 AimingOrigin => RaycastOrigin;
+        public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
 
         public bool IsInCover => CurrentCoverSources.Count > 0;
         public bool IsAlive => Owner.References.StatsManager.IsAlive();
@@ -174,6 +166,8 @@ namespace SunsetSystems.Combat
         public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnWeaponChanged { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnDamageTaken { get; set; }
 
         [field: Title("Combat Runtime")]
         [field: ShowInInspector, ReadOnly]
@@ -198,6 +192,7 @@ namespace SunsetSystems.Combat
         public bool TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);
+            OnDamageTaken?.InvokeSafe(this);
             return true;
         }
 

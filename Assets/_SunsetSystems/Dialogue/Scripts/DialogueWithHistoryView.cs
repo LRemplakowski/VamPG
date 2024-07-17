@@ -38,7 +38,9 @@ namespace SunsetSystems.Dialogue
         private bool _showUnavailableOptions;
         [SerializeField]
         private float _lineCompletionDelay = .5f;
-        [Space, Header("Portrait")]
+        [Title("Portrait")]
+        [SerializeField]
+        private Sprite _placeholderPortraitAsset;
         [SerializeField]
         private GameObject _photoParent;
         [SerializeField]
@@ -245,18 +247,12 @@ namespace SunsetSystems.Dialogue
                 characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
                 characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             }
+            _photoText.text = characterName;
             Sprite sprite = this.GetSpeakerPortrait(characterID);
             if (sprite != null)
-            {
                 _photo.sprite = sprite;
-                _photoText.text = characterName;
-                _photoParent.SetActive(true);
-            }
             else
-            {
-                _photoParent.SetActive(false);
-                Debug.LogError($"Cannot find portrait for creature with ID {characterID} and no placeholder portrait found!");
-            }
+                _photo.sprite = _placeholderPortraitAsset;
         }
 
         public void ClampScrollbar()

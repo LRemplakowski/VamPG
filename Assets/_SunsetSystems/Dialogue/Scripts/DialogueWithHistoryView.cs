@@ -226,7 +226,7 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private async void UpdateSpeakerPhoto(string characterID)
+        private void UpdateSpeakerPhoto(string characterID)
         {
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
@@ -240,16 +240,15 @@ namespace SunsetSystems.Dialogue
                 characterID = config.ReadableID;
                 characterName = config.FullName;
             }
-            else
-            {
-                if (PartyManager.Instance.MainCharacter == null)
-                    await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
-                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
-            }
+            //else
+            //{
+            //    if (PartyManager.Instance.MainCharacter == null)
+            //        await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
+            //    characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+            //    characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+            //}
             _photoText.text = characterName;
-            Sprite sprite = this.GetSpeakerPortrait(characterID);
-            if (sprite != null)
+            if (this.GetSpeakerPortrait(characterID, out var sprite))
                 _photo.sprite = sprite;
             else
                 _photo.sprite = _placeholderPortraitAsset;

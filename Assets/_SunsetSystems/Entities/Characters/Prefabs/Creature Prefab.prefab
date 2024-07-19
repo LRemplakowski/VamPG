@@ -931,9 +931,8 @@ MonoBehaviour:
     - Name: <MagicUser>k__BackingField
       Entry: 10
       Data: 2
+  _combatNameplateOffset: {x: 0, y: 2, z: 0}
   defaultRaycastOriginY: 1.5
-  attackAnimationTrigger: AttackWithWeapon
-  takeHitAnimationTrigger: TakeHit
   hasCoverAnimationBoolean: InCover
   _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
@@ -945,6 +944,8 @@ MonoBehaviour:
   <OnSpentBloodPoint>k__BackingField:
     _PersistentCalls: []
   <OnWeaponChanged>k__BackingField:
+    _PersistentCalls: []
+  <OnDamageTaken>k__BackingField:
     _PersistentCalls: []
 --- !u!1 &6912376922156523433
 GameObject:
@@ -1253,6 +1254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c88b98e58e3b34fb47a6cb9e53f38e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _faceTargetTime: 0.25
   _navMeshAgent: {fileID: 7708544126274853394}
 --- !u!1 &8102729581408813883
 GameObject:

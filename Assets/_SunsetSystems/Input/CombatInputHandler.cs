@@ -64,16 +64,13 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, gridLayerMask))
             {
-                if (gridHit == null)
-                    gridHit = hit.collider;
                 HandleGridCellPointerPosition();
                 gridHit = hit.collider;
             }
             if (Physics.Raycast(ray, out hit, raycastRange, targetableLayerMask))
             {
-                if (targetableHit == null)
-                    targetableHit = hit.collider;
-                HandleTargetablePointerPosition();
+                if (targetableHit != hit.collider)
+                    HandleTargetablePointerPosition();
                 targetableHit = hit.collider;
             }
             else
@@ -92,8 +89,6 @@ namespace SunsetSystems.Input
 
             void HandleTargetablePointerPosition()
             {
-                if (targetableHit == hit.collider)
-                    return; // skip if we hit previous targetable
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
                     _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;

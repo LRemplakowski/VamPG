@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,7 +8,7 @@ namespace SunsetSystems.Entities.Characters.Navigation
     public class NavigationManager : MonoBehaviour, INavigationManager
     {
         [Title("Config")]
-        [SerializeField, Range(.1f, 10f)]
+        [SerializeField]
         private float _faceTargetTime = .5f;
         [Title("References")]
         [SerializeField, Required]
@@ -65,20 +64,20 @@ namespace SunsetSystems.Entities.Characters.Navigation
         private IEnumerator FaceTargetInTime(float time, Vector3 targetPosition)
         {
             yield return new WaitUntil(() => IsMoving is false);
-            Vector3 lookPosition = targetPosition - transform.position;
+            Vector3 lookPosition = targetPosition - _navMeshAgent.transform.position;
             lookPosition.y = 0;
             Quaternion targetRotation = Quaternion.LookRotation(lookPosition);
-            Quaternion startRotation = transform.rotation;
+            Quaternion startRotation = _navMeshAgent.transform.rotation;
             float slerp = 0f;
             while (slerp < time)
             {
                 if (IsMoving)
                     yield break;
                 slerp += Time.deltaTime;
-                transform.rotation = Quaternion.Slerp(startRotation, targetRotation, slerp / time);
+                _navMeshAgent.transform.rotation = Quaternion.Slerp(startRotation, targetRotation, slerp / time);
                 yield return null;
             }
-            transform.rotation = targetRotation;
+            _navMeshAgent.transform.rotation = targetRotation;
         }
 
         public bool SetNavigationTarget(Vector3 target)

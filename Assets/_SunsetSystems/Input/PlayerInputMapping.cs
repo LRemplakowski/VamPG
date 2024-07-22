@@ -41,7 +41,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""58a57ae2-36b6-471e-bfc7-326804228dfb"",
                     ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
+                    ""processors"": ""Invert"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
@@ -279,7 +279,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""id"": ""5effafb5-9341-43ef-8a40-a4f59e5d8121"",
                     ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
-                    ""processors"": ""NormalizeVector2"",
+                    ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""CameraZoom"",
                     ""isComposite"": false,

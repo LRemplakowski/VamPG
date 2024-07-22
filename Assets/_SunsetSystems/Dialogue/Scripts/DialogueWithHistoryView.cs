@@ -224,7 +224,7 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private void UpdateSpeakerPhoto(string characterID)
+        private async void UpdateSpeakerPhoto(string characterID)
         {
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
@@ -240,6 +240,8 @@ namespace SunsetSystems.Dialogue
             }
             else
             {
+                if (PartyManager.Instance.MainCharacter == null)
+                    await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
                 characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
                 characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             }

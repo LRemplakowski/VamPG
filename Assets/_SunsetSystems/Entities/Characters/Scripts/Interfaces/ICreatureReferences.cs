@@ -1,5 +1,6 @@
 using SunsetSystems.Core.UMA;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
 
         CreatureData CreatureData { get; }
         StatsManager StatsManager { get; }
-        NavMeshAgent NavMeshAgent { get; }
+        INavigationManager NavigationManager { get; }
         ICombatant CombatBehaviour { get; }
         IEquipmentManager EquipmentManager { get; }
         IWeaponManager WeaponManager { get; }

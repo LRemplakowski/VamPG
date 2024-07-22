@@ -5,6 +5,7 @@ using System;
 using UnityEngine.AI;
 using System.Linq;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters.Navigation;
 
 namespace SunsetSystems.Combat.Grid
 {
@@ -73,7 +74,7 @@ namespace SunsetSystems.Combat.Grid
             currentlyHighlightedCell = null;
         }
 
-        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
+        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, INavigationManager agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
         {
             distanceToUnitDictionary = new();
             List<GridUnit> unitsInRange = new();
@@ -114,9 +115,9 @@ namespace SunsetSystems.Combat.Grid
         {
             HideCellsInMovementRange();
             Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
-            NavMeshAgent agent = combatant.References.NavMeshAgent;
+            var navigationManager = combatant.References.NavigationManager;
             currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), navigationManager, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 float distanceToUnit = distanceToUnitDictionary[unit];

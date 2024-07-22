@@ -13,17 +13,24 @@ namespace SunsetSystems.Dialogue
         private static string lastID;
         private static Sprite lastSprite;
 
-        public static Sprite GetSpeakerPortrait(this DialogueViewBase dialogueViewBase, string speakerID)
+        public static bool GetSpeakerPortrait(this DialogueViewBase dialogueViewBase, string speakerID, out Sprite portrait)
         {
+            portrait = null;
             Debug.Log($"Fetching config of {speakerID} from the database!");
             if (lastID == speakerID && lastSprite != null)
-                return lastSprite;
+            {
+                portrait = lastSprite;
+                return true;
+            }
+
             if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
             {
                 lastID = speakerID;
                 lastSprite = config.Portrait;
+                portrait = lastSprite;
+                return true;
             }
-            return lastSprite;
+            return false;
         }
     }
 }

@@ -64,17 +64,19 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, gridLayerMask))
             {
-                if (gridHit == null)
-                    gridHit = hit.collider;
                 HandleGridCellPointerPosition();
                 gridHit = hit.collider;
             }
             if (Physics.Raycast(ray, out hit, raycastRange, targetableLayerMask))
             {
-                if (targetableHit == null)
-                    targetableHit = hit.collider;
-                HandleTargetablePointerPosition();
+                if (targetableHit != hit.collider)
+                    HandleTargetablePointerPosition();
                 targetableHit = hit.collider;
+            }
+            else
+            {
+                targetableHit = null;
+                _showTargetingLine = false;
             }
 
             void HandleGridCellPointerPosition()
@@ -89,12 +91,12 @@ namespace SunsetSystems.Input
             {
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
+                    _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
-                    if (_selectedActionManager.SelectedActionData.ActionType == CombatActionType.RangedAtk)
-                        _showTargetingLine = true;
                     _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
-                    _targetingLineRenderer.SetPosition(1, creature.References.CombatBehaviour.AimingOrigin);
+                    _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
+                    current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
                 }
             }
         }

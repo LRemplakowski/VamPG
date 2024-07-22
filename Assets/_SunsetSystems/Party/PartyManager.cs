@@ -11,6 +11,7 @@ using SunsetSystems.Entities.Creatures;
 using SunsetSystems.Persistence;
 using UltEvents;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SunsetSystems.Party
 {
@@ -159,7 +160,6 @@ namespace SunsetSystems.Party
             {
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data, position, Quaternion.identity, _creatureParent);
                 memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
-                memberInstance.References.NavMeshAgent.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }
@@ -174,7 +174,7 @@ namespace SunsetSystems.Party
             {
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data, _creatureParent);
                 memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
-                memberInstance.References.NavMeshAgent.gameObject.layer = memberInstance.References.GameObject.layer;
+                //memberInstance.References.NavigationManager.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }
@@ -257,6 +257,7 @@ namespace SunsetSystems.Party
                 partyPositions.Add(key, _activeParty[key].References.Transform.position);
             }
             saveData.PartyPositions = partyPositions;
+            saveData.PartyPositionsScene = SceneManager.GetActiveScene().name;
             return saveData;
 
             Dictionary<string, ICreatureTemplate> UpdatePartyTemplates()
@@ -297,7 +298,7 @@ namespace SunsetSystems.Party
                 else
                     _partyPositions.Add(key, Vector3.zero);
             }
-            _initializeAtSavedPositions = true;
+            _initializeAtSavedPositions = saveData.PartyPositionsScene == SceneManager.GetActiveScene().name;
         }
     }
 
@@ -308,5 +309,6 @@ namespace SunsetSystems.Party
         public Dictionary<string, ICreatureTemplate> CachedPartyTemplates;
         public List<string> ActiveMemberKeys;
         public string MainCharacterKey;
+        public string PartyPositionsScene;
     }
 }

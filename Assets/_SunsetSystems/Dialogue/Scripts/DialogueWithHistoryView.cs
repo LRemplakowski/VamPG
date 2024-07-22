@@ -38,7 +38,9 @@ namespace SunsetSystems.Dialogue
         private bool _showUnavailableOptions;
         [SerializeField]
         private float _lineCompletionDelay = .5f;
-        [Space, Header("Portrait")]
+        [Title("Portrait")]
+        [SerializeField]
+        private Sprite _placeholderPortraitAsset;
         [SerializeField]
         private GameObject _photoParent;
         [SerializeField]
@@ -224,7 +226,7 @@ namespace SunsetSystems.Dialogue
             return true;
         }
 
-        private async void UpdateSpeakerPhoto(string characterID)
+        private void UpdateSpeakerPhoto(string characterID)
         {
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
@@ -238,25 +240,18 @@ namespace SunsetSystems.Dialogue
                 characterID = config.ReadableID;
                 characterName = config.FullName;
             }
-            else
-            {
-                if (PartyManager.Instance.MainCharacter == null)
-                    await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
-                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
-            }
-            Sprite sprite = this.GetSpeakerPortrait(characterID);
-            if (sprite != null)
-            {
+            //else
+            //{
+            //    if (PartyManager.Instance.MainCharacter == null)
+            //        await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
+            //    characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+            //    characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+            //}
+            _photoText.text = characterName;
+            if (this.GetSpeakerPortrait(characterID, out var sprite))
                 _photo.sprite = sprite;
-                _photoText.text = characterName;
-                _photoParent.SetActive(true);
-            }
             else
-            {
-                _photoParent.SetActive(false);
-                Debug.LogError($"Cannot find portrait for creature with ID {characterID} and no placeholder portrait found!");
-            }
+                _photo.sprite = _placeholderPortraitAsset;
         }
 
         public void ClampScrollbar()

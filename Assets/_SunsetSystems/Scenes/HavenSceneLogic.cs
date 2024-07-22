@@ -140,9 +140,9 @@ namespace SunsetSystems.Core
             CameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
             CameraControl.ForceRotation(_cameraRotationDominicEnter);
-            //_ = PartyManager.Instance.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
-            //_ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
-            //_ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            PartyManager.Instance.MainCharacter.FacePointInSpace(_pcCoverWaypoint.FaceDirection.position);
+            _dominic.FacePointInSpace(_dominicWaypoint.FaceDirection.position);
+            _kieran.FacePointInSpace(_kieranWaypoint.FaceDirection.position);
             await new WaitForFixedUpdate();
             await fade.DoFadeInAsync(.5f);
         }
@@ -157,9 +157,9 @@ namespace SunsetSystems.Core
             CameraControl.ForceToPosition(_cameraPositionPinnedToWall);
             await new WaitForFixedUpdate();
             CameraControl.ForceRotation(_cameraRotationPinnedToWall);
-            //_ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
-            //_ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
-            //_ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
+            PartyManager.Instance.MainCharacter.FacePointInSpace(_pcFridgeWaypoint.FaceDirection.position);
+            _dominic.FacePointInSpace(_dominicFridgeWaypoint.FaceDirection.position);
+            _kieran.FacePointInSpace(_kieranFridgeWaypoint.FaceDirection.position);
             await fade.DoFadeInAsync(.5f);
         }
 

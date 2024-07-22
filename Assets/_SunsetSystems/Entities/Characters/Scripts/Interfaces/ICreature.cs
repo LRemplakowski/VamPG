@@ -1,7 +1,6 @@
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Interfaces;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Interfaces
@@ -11,6 +10,8 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         new ICreatureReferences References { get; }
 
         void ForceToPosition(Vector3 position);
+        void ForceToPosition(Transform positionTransform);
+        void FacePointInSpace(Vector3 point);
         void InjectDataFromTemplate(ICreatureTemplate template);
     }
 }

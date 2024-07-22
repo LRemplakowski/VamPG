@@ -1,5 +1,6 @@
 using SunsetSystems.Core.UMA;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         [field: SerializeField]
         public StatsManager StatsManager { get; private set; }
         [field: SerializeField]
-        public NavMeshAgent NavMeshAgent { get; private set; }
+        public INavigationManager NavigationManager { get; private set; }
         [field: SerializeField]
         public ICombatant CombatBehaviour { get; private set; }
         [field: SerializeField]

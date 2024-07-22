@@ -16,6 +16,7 @@ namespace SunsetSystems.Entities.Interfaces
         UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         UltEvent<ICombatant> OnWeaponChanged { get; set; }
+        UltEvent<ICombatant> OnDamageTaken { get; set; }
 
         IMagicUser MagicUser { get; }
         Faction Faction { get; }
@@ -26,6 +27,7 @@ namespace SunsetSystems.Entities.Interfaces
         IWeapon SecondaryWeapon { get; }
 
         Vector3 AimingOrigin { get; }
+        Vector3 NameplatePosition { get; }
 
         bool IsInCover { get; }
         bool IsAlive { get; }

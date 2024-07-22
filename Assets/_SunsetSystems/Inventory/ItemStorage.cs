@@ -24,8 +24,7 @@ namespace SunsetSystems.Inventory
 
         private void OnValidate()
         {
-            if (_contents == null)
-                _contents = new();
+            _contents ??= new();
             if (_acceptedItemTypes.Count() > 0)
             {
                 List<string> keysToRemove = new();
@@ -43,16 +42,18 @@ namespace SunsetSystems.Inventory
             }
         }
 
-        public void AddItems(List<InventoryEntry> itemEntries)
+        public bool AddItems(List<InventoryEntry> itemEntries)
         {
-            itemEntries?.ForEach(entry => AddItem(entry));
+            bool success = true;
+            itemEntries?.ForEach(entry => success &= AddItem(entry));
+            return success;
         }
 
         [Button]
-        public void AddItem(InventoryEntry itemEntry)
+        public bool AddItem(InventoryEntry itemEntry)
         {
             if (itemEntry._item == null)
-                return;
+                return false;
             if (IsItemTypeAccepted(itemEntry._item.ItemCategory))
             {
                 string entryID = itemEntry._item.DatabaseID;
@@ -66,7 +67,9 @@ namespace SunsetSystems.Inventory
                     _contents[entryID] = itemEntry;
                 }
                 OnItemAdded?.InvokeSafe(itemEntry);
+                return true;
             }
+            return false;
         }
 
         private bool DoesInventoryContainItem(IBaseItem item)

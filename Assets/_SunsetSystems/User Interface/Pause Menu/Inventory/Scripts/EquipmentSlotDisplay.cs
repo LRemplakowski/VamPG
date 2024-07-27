@@ -34,7 +34,7 @@ namespace SunsetSystems.Equipment.UI
             if (CanUnequipItem(_cachedSlotData))
             {
                 _cachedSlotData.TryUnequipItem(out var unequipped);
-                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(unequipped));
+                InventoryManager.Instance.GiveItemToPlayer(unequipped, postLogMessage: false);
             }
         }
 

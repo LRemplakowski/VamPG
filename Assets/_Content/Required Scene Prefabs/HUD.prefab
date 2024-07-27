@@ -302,6 +302,8 @@ GameObject:
   - component: {fileID: 3379137270486999140}
   - component: {fileID: 6784479964220706756}
   - component: {fileID: 7717480370493737093}
+  - component: {fileID: 6396890825957638180}
+  - component: {fileID: 683877765049573627}
   m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
@@ -320,7 +322,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3164408045515332034}
   m_Father: {fileID: 5712328250871327291}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -366,6 +369,33 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6396890825957638180
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5703786106017548597}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &683877765049573627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5703786106017548597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40fa52b4dc6de9040b48ac4adac7032a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showHideTime: 0.5
+  _holdBeforeFadeOut: 1
+  _canvasGroup: {fileID: 6396890825957638180}
 --- !u!1 &6593267868941745787
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +577,7 @@ RectTransform:
   m_Children:
   - {fileID: 4942746869248275049}
   - {fileID: 164105825599622214}
-  m_Father: {fileID: 5712328250871327291}
+  m_Father: {fileID: 3379137270486999140}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -827,7 +857,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3379137270486999140}
-  - {fileID: 3164408045515332034}
   m_Father: {fileID: 2056977963442622800}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -848,6 +877,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxLogEntryCount: 20
+  _logVisibilityHandler: {fileID: 683877765049573627}
   _logEntryParent: {fileID: 3203830171870661777}
   _logEntryPrefab: {fileID: 8241894181852539406, guid: 03f1f8ba0ac372d45b13e1575305ada9, type: 3}
 --- !u!1 &9126236666257298100

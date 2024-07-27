@@ -26,12 +26,12 @@ namespace SunsetSystems.UI
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.Data;
-                _icon.sprite = _itemEntry._item.Icon;
+                _icon.sprite = _itemEntry.ItemReference.Icon;
                 _icon.gameObject.SetActive(true);
-                if (_itemEntry._item.Stackable)
+                if (_itemEntry.ItemReference.Stackable)
                 {
                     _stackSize.gameObject.SetActive(true);
-                    _stackSize.text = _itemEntry._stackSize.ToString();
+                    _stackSize.text = _itemEntry.StackSize.ToString();
                 }
                 else
                 {
@@ -49,10 +49,9 @@ namespace SunsetSystems.UI
 
         public void OnClick()
         {
-            if (_itemEntry._item is IEquipableItem equipableItem)
+            if (_itemEntry.ItemReference is IEquipableItem equipableItem)
             {
-                var itemEntry = new InventoryEntry(equipableItem);
-                if (InventoryManager.Instance.PlayerInventory.TryRemoveItem(itemEntry) is false)
+                if (InventoryManager.Instance.TakeItemFromPlayer(equipableItem, postLogMessage: false) is false)
                     return;
                 string currentCharacterID = CharacterSelector.SelectedCharacterKey;
                 var eqManager = PartyManager.Instance.GetPartyMemberByID(currentCharacterID).References.EquipmentManager;
@@ -60,11 +59,11 @@ namespace SunsetSystems.UI
                 if (eqManager.EquipItem(slotID, equipableItem, out var previouslyEquipped))
                 {
                     if (ShouldAddItemBackToInventory(previouslyEquipped))
-                        InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(previouslyEquipped));
+                        InventoryManager.Instance.GiveItemToPlayer(previouslyEquipped, postLogMessage: false);
                 }
                 else
                 {
-                    InventoryManager.Instance.GiveItemToPlayer(itemEntry);
+                    InventoryManager.Instance.GiveItemToPlayer(equipableItem, postLogMessage: false);
                 }
             }
         }

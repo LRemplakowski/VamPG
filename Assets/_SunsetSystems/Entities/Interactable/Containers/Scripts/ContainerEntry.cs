@@ -26,17 +26,26 @@ namespace SunsetSystems.Inventory.UI
             //    AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             _content = content;
             _storage = storage;
-            _text.text = content._item.Name;
-            _icon.sprite = content._item.Icon;
-            gameObject.name = content._item.Name;
+            _text.text = content.ItemReference.Name;
+            _icon.sprite = content.ItemReference.Icon;
+            gameObject.name = content.ItemReference.Name;
         }
 
         public void OnClick()
         {
             Debug.Log("Container Entry clicked!");
-            InventoryManager.Instance.TransferItem(_storage, InventoryManager.Instance.PlayerInventory, _content);
-            ContainerEntryDestroyed?.Invoke(this);
-            Destroy(gameObject);
+            if (_storage.TryRemoveItem(_content))
+            {
+                if (InventoryManager.Instance.GiveItemToPlayer(_content.ItemReference, _content.StackSize))
+                {
+                    ContainerEntryDestroyed?.Invoke(this);
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    _storage.AddItem(_content);
+                }
+            }
         }
     }
 }

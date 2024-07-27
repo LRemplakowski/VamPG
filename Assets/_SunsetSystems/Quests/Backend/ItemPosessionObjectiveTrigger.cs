@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Party;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -39,13 +40,13 @@ namespace SunsetSystems.Journal
             }
             else
             {
-                InventoryManager.Instance.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
+                InventoryManager.OnItemAcquired += OnItemAddedToPlayerInventory;
             }
         }
 
-        private void OnItemAddedToPlayerInventory(InventoryEntry itemEntry)
+        private void OnItemAddedToPlayerInventory(IBaseItem item)
         {
-            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.GetRequiredItems().Contains(itemEntry._item)) is false)
+            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.GetRequiredItems().Any(required => required.DatabaseID == item.DatabaseID)) is false)
                 return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
@@ -67,7 +68,7 @@ namespace SunsetSystems.Journal
             objectiveToTrigger.OnObjectiveActive -= StartHandlingObjective;
             objectiveToTrigger.OnObjectiveFailed -= StopHandlingObjective;
             objectiveToTrigger.OnObjectiveCompleted -= StopHandlingObjective;
-            InventoryManager.Instance.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
+            InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
         }
 
         [Serializable]
@@ -90,22 +91,48 @@ namespace SunsetSystems.Journal
                 int itemCount = 0;
                 foreach (IBaseItem item in requiredItems)
                 {
-                    if (InventoryManager.Instance.GetInventoryContainsItemWithReadableID(item.ReadableID, out int count))
+                    bool hasRequiredItems;
+                    if (InventoryManager.Instance.GetInventoryContainsItemWithReadableID(item.ReadableID, out int oneTypeCount))
                     {
-                        bool hasRequiredItems;
                         switch (countingLogic)
                         {
                             case ItemCountLogic.CountOneType:
-                                hasRequiredItems = count >= requiredCount;
+                                hasRequiredItems = oneTypeCount >= requiredCount;
                                 if (hasRequiredItems)
                                     return true;
                                 break;
                             case ItemCountLogic.CountAllTypes:
-                                itemCount += count;
+                                itemCount += oneTypeCount;
                                 hasRequiredItems = itemCount >= requiredCount;
                                 if (hasRequiredItems)
                                     return true;
                                 break;
+                        }
+                    }
+                    else if (item is IEquipableItem equipable)
+                    {
+                        var equipments = PartyManager.Instance.ActiveParty.Select(member => member.References.EquipmentManager);
+                        oneTypeCount = 0;
+                        foreach (var eq in equipments)
+                        {
+                            if (eq.IsItemEquipped(equipable))
+                            {
+                                switch (countingLogic)
+                                {
+                                    case ItemCountLogic.CountOneType:
+                                        oneTypeCount += 1;
+                                        hasRequiredItems = oneTypeCount >= requiredCount;
+                                        if (hasRequiredItems)
+                                            return true;
+                                        break;
+                                    case ItemCountLogic.CountAllTypes:
+                                        itemCount += 1;
+                                        hasRequiredItems = itemCount >= requiredCount;
+                                        if (hasRequiredItems)
+                                            return true;
+                                        break;
+                                }
+                            }
                         }
                     }
                 }

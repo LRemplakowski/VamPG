@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 namespace SunsetSystems.Persistence.UI
 {
-    public class SaveLoadScreenManager : MonoBehaviour, ICancelHandler
+    public class SaveLoadScreenManager : MonoBehaviour
     {
         [SerializeField, AssetsOnly, Required]
         private SaveEntry _saveEntryPrefab;
@@ -17,6 +17,11 @@ namespace SunsetSystems.Persistence.UI
         private CanvasGroup _saveLoadCanvasGroup;
         [SerializeField]
         private GameObject _newSaveGameObject;
+
+        private void OnEnable()
+        {
+            
+        }
 
         public void ShowScreen(bool includeNewSaveSlot = false)
         {
@@ -66,7 +71,7 @@ namespace SunsetSystems.Persistence.UI
             StartCoroutine(DisableInteractionForSeconds(.5f));
         }
 
-        public void OnCancel(BaseEventData eventData)
+        public void OnCancel()
         {
             gameObject.SetActive(false);
         }

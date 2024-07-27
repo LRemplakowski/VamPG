@@ -89,7 +89,7 @@ namespace SunsetSystems.Dialogue
         public static void GiveItem(string itemID)
         {
             if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
-                InventoryManager.Instance.GiveItemToPlayer(new(item));
+                InventoryManager.Instance.GiveItemToPlayer(item);
             else
                 Debug.LogError($"Dialogue command GiveItem: Could not find item {itemID} in the ItemDatabase instance!");
         }
@@ -103,7 +103,7 @@ namespace SunsetSystems.Dialogue
                 return;
             }
             if (ItemDatabase.Instance.TryGetEntryByReadableID(itemID, out IBaseItem item))
-                InventoryManager.Instance.GiveItemToPlayer(new(item, count));
+                InventoryManager.Instance.GiveItemToPlayer(item, count);
             else
                 Debug.LogError($"Dialogue command GiveItemCount: Could not find item {itemID} in the ItemDatabase instance!");
         }

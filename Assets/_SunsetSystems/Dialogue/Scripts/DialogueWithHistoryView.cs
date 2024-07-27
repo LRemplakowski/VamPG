@@ -247,8 +247,13 @@ namespace SunsetSystems.Dialogue
             //    characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
             //    characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
             //}
+            SetSpeakerPortrait(characterID);
             _photoText.text = characterName;
-            if (this.GetSpeakerPortrait(characterID, out var sprite))
+        }
+
+        private void SetSpeakerPortrait(string speakerID)
+        {
+            if (this.GetSpeakerPortrait(speakerID, out var sprite) && sprite != null)
                 _photo.sprite = sprite;
             else
                 _photo.sprite = _placeholderPortraitAsset;

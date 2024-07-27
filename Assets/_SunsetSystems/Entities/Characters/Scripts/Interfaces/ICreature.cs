@@ -12,6 +12,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         void ForceToPosition(Vector3 position);
         void ForceToPosition(Transform positionTransform);
         void FacePointInSpace(Vector3 point);
+        void FaceTransform(Transform transform);
         void InjectDataFromTemplate(ICreatureTemplate template);
     }
 }

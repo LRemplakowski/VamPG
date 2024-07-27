@@ -4,6 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Data;
+using SunsetSystems.DynamicLog;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Persistence;
 using UnityEngine;
@@ -19,8 +20,6 @@ namespace SunsetSystems.Inventory
         private ItemStorage _playerInventory;
         [SerializeField]
         private float _money;
-       
-        public ItemStorage PlayerInventory => Instance._playerInventory;
 
         public string DataKey => DataKeyConstants.INVENTORY_MANAGER_DATA_KEY;
 
@@ -50,30 +49,44 @@ namespace SunsetSystems.Inventory
             ISaveable.UnregisterSaveable(this);
         }
 
-        private void OnPlayerInventoryItemAcquired(InventoryEntry itemEntry)
+        public bool GiveItemToPlayer(IBaseItem item, int amount = 1, bool postLogMessage = true)
         {
-            OnItemAcquired?.Invoke(itemEntry._item);
+            if (amount <= 0)
+            {
+                Debug.LogError("Cannot add less than 1 item to player inventory!");
+                return false;
+            }
+            else if (_playerInventory.AddItem(new(item, amount)))
+            {
+                OnItemAcquired?.Invoke(item);
+                if (postLogMessage)
+                    DynamicLogManager.Instance.PostLogMessage(LogUtility.LogMessageFromItemPickup(item));
+                return true;
+            }
+            return false;
         }
 
-        private void OnPlayerInventoryItemLost(InventoryEntry itemEntry)
+        public bool TakeItemFromPlayer(IBaseItem item, int amount = 1, bool postLogMessage = true)
         {
-            OnItemLost?.Invoke(itemEntry._item);
-        }
-
-        public void GiveItemToPlayer(InventoryEntry item)
-        {
-            PlayerInventory.AddItem(item);
-        }
-
-        public bool TakeItemFromPlayer(IBaseItem item, int amount)
-        {
-            return PlayerInventory.TryRemoveItem(new(item, amount));
+            if (amount <= 0)
+            {
+                Debug.LogError("Cannot take less than 1 item from player inventory!");
+                return false;
+            }
+            else if (_playerInventory.TryRemoveItem(new(item, amount)))
+            {
+                OnItemLost?.Invoke(item);
+                if (postLogMessage)
+                DynamicLogManager.Instance.PostLogMessage(LogUtility.LogMessageFromItemLoss(item));
+                return true;
+            }
+            return false;
         }
 
         public bool GetInventoryContainsItemWithReadableID(string itemID, out int count)
         {
             count = 0;
-            var items = _playerInventory.Contents.FindAll(entry => entry._item.ReadableID == itemID);
+            var items = _playerInventory.Contents.FindAll(entry => entry.ItemReference.ReadableID == itemID);
             if (items != null && items.Count() > 0)
             {
                 count = items.Count();
@@ -84,6 +97,8 @@ namespace SunsetSystems.Inventory
                 return false;
             }
         }
+
+        public IEnumerable<InventoryEntry> GetPlayerInventoryContents() => _playerInventory.Contents;
 
         public void TransferItem(ItemStorage from, ItemStorage to, InventoryEntry item)
         {
@@ -149,14 +164,14 @@ namespace SunsetSystems.Inventory
 
         public InventorySaveData(InventoryManager manager) : this()
         {
-            foreach (var itemEntry in manager.PlayerInventory.Contents)
+            foreach (var itemEntry in manager.GetPlayerInventoryContents())
             {
-                if (itemEntry._item == null)
+                if (itemEntry.ItemReference == null)
                 {
                     Debug.LogError("Player has a null item in their inventory!");
                     continue;
                 }
-                InventoryContents.Add(new() { ItemID = itemEntry._item.DatabaseID, StackSize = itemEntry._stackSize });
+                InventoryContents.Add(new() { ItemID = itemEntry.ItemReference.DatabaseID, StackSize = itemEntry.StackSize });
             }
             Money = manager.GetMoneyAmount();
         }

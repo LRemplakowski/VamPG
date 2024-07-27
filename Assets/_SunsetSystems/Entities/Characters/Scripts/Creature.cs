@@ -105,6 +105,18 @@ namespace SunsetSystems.Entities.Characters
 
         public void FacePointInSpace(Vector3 point) => References.NavigationManager.FaceDirectionAfterMovementFinished(point);
 
+        public void FaceTransform(Transform transform)
+        {
+            if (transform == null)
+            {
+                Debug.LogError($"Creature {Name} was requested to face a null transfrom!");
+            }
+            else
+            {
+                References.NavigationManager.FaceDirectionAfterMovementFinished(transform.position);
+            }
+        }
+
         public void ClearAllActions()
         {
             while (ActionQueue.Count > 0)

@@ -30,7 +30,7 @@ namespace SunsetSystems.Inventory
                 List<string> keysToRemove = new();
                 foreach (string key in _contents.Keys)
                 {
-                    if (_contents.TryGetValue(key, out var value) && _acceptedItemTypes.Contains(value._item.ItemCategory) is false)
+                    if (_contents.TryGetValue(key, out var value) && _acceptedItemTypes.Contains(value.ItemReference.ItemCategory) is false)
                     {
                         keysToRemove.Add(key);
                     }
@@ -52,14 +52,14 @@ namespace SunsetSystems.Inventory
         [Button]
         public bool AddItem(InventoryEntry itemEntry)
         {
-            if (itemEntry._item == null)
+            if (itemEntry.ItemReference == null)
                 return false;
-            if (IsItemTypeAccepted(itemEntry._item.ItemCategory))
+            if (IsItemTypeAccepted(itemEntry.ItemReference.ItemCategory))
             {
-                string entryID = itemEntry._item.DatabaseID;
+                string entryID = itemEntry.ItemReference.DatabaseID;
                 if (_contents.TryGetValue(entryID, out InventoryEntry storedItem))
                 {
-                    storedItem._stackSize += itemEntry._stackSize;
+                    storedItem.StackSize += itemEntry.StackSize;
                     _contents[entryID] = storedItem;
                 }
                 else
@@ -84,15 +84,15 @@ namespace SunsetSystems.Inventory
 
         public bool TryRemoveItem(InventoryEntry entry)
         {
-            if (_contents.TryGetValue(entry._item.DatabaseID, out InventoryEntry existing))
+            if (_contents.TryGetValue(entry.ItemReference.DatabaseID, out InventoryEntry existing))
             {
-                if (existing._stackSize >= entry._stackSize)
+                if (existing.StackSize >= entry.StackSize)
                 {
-                    existing._stackSize -= entry._stackSize;
-                    if (existing._stackSize <= 0)
-                        _contents.Remove(existing._item.DatabaseID);
+                    existing.StackSize -= entry.StackSize;
+                    if (existing.StackSize <= 0)
+                        _contents.Remove(existing.ItemReference.DatabaseID);
                     else
-                        _contents[existing._item.DatabaseID] = existing;
+                        _contents[existing.ItemReference.DatabaseID] = existing;
                     OnItemRemoved?.InvokeSafe(entry);
                     return true;
                 }
@@ -117,15 +117,15 @@ namespace SunsetSystems.Inventory
     public struct InventoryEntry : IGameDataProvider<InventoryEntry>
     {
         [NonSerialized, OdinSerialize, ES3Serializable]
-        public IBaseItem _item;
-        public int _stackSize;
+        public IBaseItem ItemReference;
+        public int StackSize;
 
         public InventoryEntry(IBaseItem item) : this(item, 1) { }
 
         public InventoryEntry(IBaseItem item, int stackSize)
         {
-            this._item = item;
-            this._stackSize = stackSize;
+            this.ItemReference = item;
+            this.StackSize = stackSize;
         }
 
         public InventoryEntry Data => this;

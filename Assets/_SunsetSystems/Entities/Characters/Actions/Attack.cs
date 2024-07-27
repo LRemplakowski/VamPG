@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using SunsetSystems.Combat;
+using SunsetSystems.DynamicLog;
 using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             base.Cleanup();
             if (attackRoutine != null)
-                (Attacker as MonoBehaviour).StopCoroutine(attackRoutine);
+                Attacker.CoroutineRunner.StopCoroutine(attackRoutine);
         }
 
         public override void Begin()
@@ -41,20 +42,21 @@ namespace SunsetSystems.Entities.Characters.Actions
                 return;
             conditions.Add(new WaitForFlag(attackFinished));
             Debug.Log(Attacker.References.GameObject.name + " attacks " + Target.References.GameObject.name);
-            ICombatant attacker = Attacker;
-            ICombatant defender = Target;
-            AttackResult result = CombatCalculator.CalculateAttackResult(attacker, defender, _attackModifier);
-            LogAttack(result);
-            attackRoutine = PerformAttack(attacker, defender, result);
-            attacker.CoroutineRunner.StartCoroutine(attackRoutine);
+            AttackResult result = CombatCalculator.CalculateAttackResult(Attacker, Target, _attackModifier);
+            LogAttack(Attacker, Target, result);
+            attackRoutine = PerformAttack(Attacker, Target, result);
+            Attacker.CoroutineRunner.StartCoroutine(attackRoutine);
 
-            static void LogAttack(AttackResult result)
+            static void LogAttack(ICombatant attacker, ICombatant target, AttackResult result)
             {
+                string logMessage = LogUtility.LogMessageFromAttackResult(attacker, target, result);
+                DynamicLogManager.Instance.PostLogMessage(logMessage);
                 Debug.Log($"Attack hit? {result.Successful}\n" +
                     $"Attacker hit chance = {result.AttackerHitChance}\n" +
                     $"Defender dodge chance = {result.DefenderDodgeChance}\n" +
                     $"Attack roll: {result.HitRoll} vs difficulty {result.AttackerHitChance - result.DefenderDodgeChance}\n" +
                     $"Damage dealt: {result.Damage} - {result.DamageReduction} = {result.AdjustedDamage}");
+
             }
         }
 

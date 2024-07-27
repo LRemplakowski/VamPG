@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.UI;
 using UnityEngine;
 
 namespace SunsetSystems.DynamicLog
@@ -11,6 +12,8 @@ namespace SunsetSystems.DynamicLog
         [SerializeField]
         private int _maxLogEntryCount = 20;
         [Title("References")]
+        [SerializeField, Required]
+        private ShowElementOnHover _logVisibilityHandler;
         [SerializeField, Required]
         private Transform _logEntryParent;
         [SerializeField, Required]
@@ -26,15 +29,10 @@ namespace SunsetSystems.DynamicLog
 
         public void LogText(LogEntryData entryData)
         {
-            if (textItems.Count >= _maxLogEntryCount)
-            {
-                GameObject lastEntry = textItems.Dequeue();
-                Destroy(lastEntry);
-            }
-
             var newText = Instantiate(_logEntryPrefab, _logEntryParent);
             newText.SetText(entryData);
             textItems.Enqueue(newText.gameObject);
+            _logVisibilityHandler.TriggerShowElement();
         }
 
 

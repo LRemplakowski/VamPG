@@ -11,6 +11,7 @@ namespace SunsetSystems.Equipment
         EquipmentSlotID GetSlotForItem(IEquipableItem item);
         bool EquipItem(EquipmentSlotID slotID, IEquipableItem item, out IEquipableItem previouslyEquipped);
         bool UnequipItem(EquipmentSlotID slotID, out IEquipableItem unequipped);
+        bool IsItemEquipped(IEquipableItem item);
         void CopyFromTemplate(ICreatureTemplate template);
     }
 }

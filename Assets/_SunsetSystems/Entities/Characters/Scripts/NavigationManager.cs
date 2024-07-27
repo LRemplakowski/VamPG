@@ -32,7 +32,7 @@ namespace SunsetSystems.Entities.Characters.Navigation
             get
             {
                 if (_navMeshAgent.pathPending)
-                    return false;
+                    return true;
                 return _navMeshAgent.hasPath && CurrentSpeed > 0.1f;
             }
         }

@@ -75,13 +75,17 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: _creatureDataCache
+    - Name: _cachedPartyTemplates
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Entities.Characters.CreatureData,
+      Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Entities.Characters.Interfaces.ICreatureTemplate,
         SunsetSystems]], mscorlib
     - Name: comparer
-      Entry: 9
-      Data: 1
+      Entry: 7
+      Data: 3|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+        mscorlib]], mscorlib
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: 
       Entry: 12
       Data: 0
@@ -91,8 +95,16 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-  _unique: {fileID: 9139583844708857982}
   _creatureParent: {fileID: 8148909507334410362}
+  _defaultPartyLayer: Party Member
+  _forceSpawnPartyInStorage: 0
+  _mainCharacterKey: 
+  _activeCoterieMemberKeys: []
+  _coterieMemberKeysCache: []
+  OnActivePartyInitialized:
+    _PersistentCalls: []
+  OnPartyMemberRecruited:
+    _PersistentCalls: []
 --- !u!114 &9139583844708857982
 MonoBehaviour:
   m_ObjectHideFlags: 0

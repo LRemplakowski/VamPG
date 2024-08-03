@@ -1,8 +1,8 @@
-using Sirenix.OdinInspector;
-using Sirenix.Utilities;
-using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
+using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Database;
 using UnityEngine;
 
 namespace SunsetSystems.Core.Database
@@ -15,21 +15,10 @@ namespace SunsetSystems.Core.Database
         [SerializeField]
         private Dictionary<string, string> _itemAccessorRegistry = new();
 
-        public static ItemDatabase Instance { get; private set; }
-
-        private void Awake()
-        {
-            Instance = this;
-        }
-
-        private void OnEnable()
-        {
-            Instance = this;
-        }
+        public static ItemDatabase Instance => DatabaseHolder.Instance.GetDatabase<ItemDatabase>();
 
         protected void OnValidate()
         {
-            Instance = this;
             List<string> keysToDelete = new();
             foreach (string key in _itemRegistry.Keys)
             {

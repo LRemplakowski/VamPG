@@ -197,28 +197,29 @@ namespace SunsetSystems.Entities.Characters
 
             }
 
+            [ShowInInspector]
             public string DatabaseID { get; private set; }
-
+            [ShowInInspector]
             public string ReadableID { get; private set; }
-
+            [ShowInInspector]
             public string FullName => $"{FirstName} {LastName}".Trim();
-
+            [ShowInInspector]
             public string FirstName { get; private set; }
-
+            [ShowInInspector]
             public string LastName { get; private set; }
-
+            [ShowInInspector]
             public Faction Faction { get; private set; }
-
+            [ShowInInspector]
             public BodyType BodyType { get; private set; }
-
+            [ShowInInspector]
             public CreatureType CreatureType { get; private set; }
-
+            [ShowInInspector]
             public short BaseLookWardrobeCollectionID { get; private set; }
-
+            [ShowInInspector]
             public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
-
+            [ShowInInspector]
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
-
+            [ShowInInspector]
             public StatsData StatsData { get; private set; }
         }
         #endregion

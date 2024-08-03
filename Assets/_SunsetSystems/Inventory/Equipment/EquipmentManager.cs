@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Utils.Database;
 using UltEvents;
 using UnityEngine;
 
@@ -86,9 +88,10 @@ namespace SunsetSystems.Entities.Characters
         public bool UnequipItem(EquipmentSlotID slotID, out IEquipableItem unequipped)
         {
             unequipped = default;
-            if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot))
+            if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot) && slot.TryUnequipItem(out unequipped))
             {
-                return slot.TryUnequipItem(out unequipped);
+                ItemUnequipped?.InvokeSafe(unequipped);
+                return true;
             }
             return false;
         }
@@ -115,12 +118,12 @@ namespace SunsetSystems.Entities.Characters
                 return;
             }
             EquipmentSlots ??= InitializeEquipmentSlots();
-
+            var itemDB = DatabaseHolder.Instance.GetDatabase<ItemDatabase>();
             foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
             {
                 if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))
                 {
-                    if (ItemDatabase.Instance.TryGetEntryByReadableID(templateSlot, out var item) && item is IEquipableItem equipable && mySlot.TryEquipItem(equipable, out var _))
+                    if (itemDB.TryGetEntryByReadableID(templateSlot, out var item) && item is IEquipableItem equipable && mySlot.TryEquipItem(equipable, out var _))
                     {
                         Debug.Log($"Injected item {mySlot.GetEquippedItem()} into slot {mySlot.ID}! Creature: {transform.parent.parent.name}");
                         ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());

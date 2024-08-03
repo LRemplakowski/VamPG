@@ -99,12 +99,12 @@ namespace MyLib.Shared.Database
             return data[assetKey16];
         }
 
-        public short GetAssetID<U>(U asset)
+        public short GetAssetID<U>(U asset) where U : UnityEngine.Object
         {
             foreach (var key in data.mKeys)
             {
                 var databaseEntry = data[key];
-                if (databaseEntry.AssetObject.Equals(asset))
+                if (databaseEntry.AssetObject == asset)
                     return databaseEntry.AssetKey16;
             }
             return -1;

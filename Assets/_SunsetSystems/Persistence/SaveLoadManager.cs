@@ -1,28 +1,44 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
-using UnityEngine.SceneManagement;
+using UnityEngine;
 
 namespace SunsetSystems.Persistence
 {
-    public static class SaveLoadManager
+    
+    public class SaveLoadManager : SerializedMonoBehaviour
     {
+        private static SaveLoadManager _instance;
+
+        private const string SAVE_PATH = "Saves/";
         private const string META_DATA = "SAVE_META";
         private const string GAME_DATA = "SAVE_GAME";
 
-        private static GlobalPersistenceData _gameData = new();
+        [ShowInInspector, ReadOnly]
+        private GlobalPersistenceData _gameData = new();
+        private static GlobalPersistenceData GameData => _instance._gameData;
+
+        [RuntimeInitializeOnLoadMethod]
+        public static void InitializeSaveSystem()
+        {
+            if (_instance != null)
+                return;
+            GameObject saveLoadGO = new("Save System Manager");
+            DontDestroyOnLoad(saveLoadGO);
+            _instance = saveLoadGO.AddComponent<SaveLoadManager>();
+        }
 
         public static void ForceCreateNewSaveData()
         {
-            _gameData = new();
+            _instance._gameData = new();
         }
 
         public static void CreateNewSaveFile(string saveName)
         {
             string date = $"{DateTime.Now:yyyy-M-dd--HH-mm-ss}";
             string saveID = Guid.NewGuid().ToString();
-            string filename = SaveIDToFileName(saveID);
+            string filename = SaveIDToFilePath(saveID);
             SaveMetaData metaData = new()
             {
                 SaveName = saveName,
@@ -32,37 +48,50 @@ namespace SunsetSystems.Persistence
             };
             UpdateRuntimeDataCache();
             ES3.Save(META_DATA, metaData, filename);
-            ES3.Save(GAME_DATA, _gameData, filename);
+            ES3.Save(GAME_DATA, GameData, filename);
         }
 
         public static void UpdateRuntimeDataCache()
         {
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                _gameData.UpdateSaveData(saveable);
+                GameData.UpdateSaveData(saveable);
             }
         }
 
         public static void LoadSavedDataIntoRuntime(string saveID)
         {
             //_gameData.ClearSaveData();
-            ES3.LoadInto(GAME_DATA, SaveIDToFileName(saveID), _gameData);
+            ES3.LoadInto(GAME_DATA, SaveIDToFilePath(saveID), GameData);
         }
 
         public static IEnumerable<SaveMetaData> GetAllSaveMetaData()
         {
-            var saveFiles = ES3.GetFiles();
             List<SaveMetaData> result = new();
+            string[] saveFiles = null;
+            if (ES3.DirectoryExists(SAVE_PATH))
+                saveFiles = ES3.GetFiles(SAVE_PATH);
+            if (saveFiles == null)
+                return result;
             foreach (var saveFile in saveFiles)
             {
-                result.Add(ES3.Load<SaveMetaData>(META_DATA, saveFile));
+                try
+                {
+                    result.Add(ES3.Load<SaveMetaData>(META_DATA, SAVE_PATH + saveFile));
+                }
+                catch (FormatException exception)
+                {
+                    UnityEngine.Debug.LogError($"Exception occured while loading a save file! File {saveFile} may be corrupted!");
+                    UnityEngine.Debug.LogException(exception);
+                    continue;
+                }
             }
             return result;
         }
 
         public static SaveMetaData GetSaveMetaData(string saveID)
         {
-            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFileName(saveID));
+            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFilePath(saveID));
             return metaData;
         }
 
@@ -72,7 +101,7 @@ namespace SunsetSystems.Persistence
             {
                 try
                 {
-                    if (_gameData.TryGetData(saveable.DataKey, out object data))
+                    if (GameData.TryGetData(saveable.DataKey, out object data))
                         saveable.InjectSaveData(data);
                     else
                         UnityEngine.Debug.Log($"There is no saved data for object {saveable}!");
@@ -90,7 +119,7 @@ namespace SunsetSystems.Persistence
 
         public static SceneLoadingDataAsset.LevelLoadingData GetSavedLevelAsset(string saveID)
         {
-            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFileName(saveID));
+            var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFilePath(saveID));
             if (metaData.SaveID == saveID)
                 return metaData.LevelLoadingData;
             return new();
@@ -98,13 +127,13 @@ namespace SunsetSystems.Persistence
 
         public static void DeleteSaveFile(string saveID)
         {
-            string saveFileName = SaveIDToFileName(saveID);
+            string saveFileName = SaveIDToFilePath(saveID);
             ES3.DeleteFile(saveFileName);
         }
 
-        private static string SaveIDToFileName(string saveID)
+        private static string SaveIDToFilePath(string saveID)
         {
-            return $"{saveID}.sav";
+            return $"{SAVE_PATH}{saveID}.sav";
         }
 
         private static string SaveFileNameToSaveID(string fileName)
@@ -114,7 +143,12 @@ namespace SunsetSystems.Persistence
 
         public static bool HasExistingSaves()
         {
-            return ES3.GetFiles().Length > 0;
+            bool result = false;
+            if (ES3.DirectoryExists(SAVE_PATH))
+            {
+                result = ES3.GetFiles(SAVE_PATH).Length > 0;
+            }
+            return result;
         }
     }
 }

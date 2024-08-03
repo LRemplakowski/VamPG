@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Utils.Database
 {
+    [ExecuteAlways]
     public class DatabaseHolder : SerializedMonoBehaviour
     {
         public static DatabaseHolder Instance { get; private set; }
@@ -11,6 +12,17 @@ namespace SunsetSystems.Utils.Database
         private List<ScriptableObject> _databases;
         [ShowInInspector, ReadOnly]
         private Dictionary<System.Type, object> _databaseTypesDictionary = new();
+
+#if UNITY_EDITOR
+        [RuntimeInitializeOnLoadMethod]
+        public static void NullInstanceInEditor()
+        {
+            var instance = Instance;
+            Instance = null;
+            if (instance != null)
+                instance.Awake();
+        }
+#endif
 
         private void Awake()
         {

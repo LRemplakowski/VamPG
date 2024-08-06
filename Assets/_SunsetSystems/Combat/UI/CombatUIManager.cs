@@ -53,7 +53,7 @@ namespace SunsetSystems.Combat.UI
             if (combatant.Faction == Faction.PlayerControlled)
             {
                 UpdateCurrentActorPortrait(combatant);
-                currentActorHealth.UpdateHealthDisplay();
+                currentActorHealth.UpdateHealthDisplay(combatant);
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
                 disciplineBar.ShowAbilities(combatant);

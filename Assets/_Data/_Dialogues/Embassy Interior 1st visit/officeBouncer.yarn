@@ -4,8 +4,8 @@ position: 58,-333
 //if $kateDealsWithBouncer==1 there is no bouncer//
 <<set $talkedToBouncer to true>>
 [nomarkup][An intimidating, almost stereotypical Bouncer in a tight, V-neck black T-shirt and sunglasses crosses his arms before you.][/nomarkup] #line:0d24941 
-Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms. Foster is not taking any visitors at the moment. #line:0e15041 
--> {$pcName}: She's expecting me. <<if $dianaOffice == true and CustomVisited("officeBouncerTechnicalNode1") == false>> #line:0400125 
+Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms. Foster is not taking any visitors at the moment. #line:0e15041
+-> {$pcName}: She's expecting me. <<if ($dianaOffice == true) and (CustomVisited("officeBouncerTechnicalNode1") == false)>> #line:0400125 
     [nomarkup][He glares through his shades.][/nomarkup] Ms. Foster is not taking any visitors at the moment. #line:02ea8fb
     <<jump officeBouncerTechnicalNode1>>
 -> {$pcName}: Kate sent us. <<if $kateAlleyTalk == true and CustomVisited("officeBouncerTechnicalNode2") == false>> #line:0ee6107 
@@ -16,6 +16,7 @@ Office Bouncer: [nomarkup][He says rather tersely.][/nomarkup] Private area. Ms.
     <<else>>
         <<jump drinkFailure>>
     <<endif>>
+-> {$pcName}: Uhm...
 {$kieran}: Sorry to bother you. #line:0764b1c 
 ===
 title: officeBouncerTechnicalNode1

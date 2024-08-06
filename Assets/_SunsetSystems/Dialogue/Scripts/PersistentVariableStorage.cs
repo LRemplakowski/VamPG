@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using Sirenix.Utilities;
 using SunsetSystems.Data;
 using SunsetSystems.Persistence;
@@ -10,14 +12,17 @@ namespace SunsetSystems.Dialogue
 {
     public class PersistentVariableStorage : VariableStorageBehaviour, ISaveable, IResetable
     {
-        [SerializeField]
-        private Dictionary<string, float> _floats = new();
-        [SerializeField]
-        private Dictionary<string, string> _strings = new();
-        [SerializeField]
-        private Dictionary<string, bool> _bools = new();
+        [Title("References")]
         [SerializeField]
         private DialogueVariableConfig _variableInjectionConfig;
+
+        [Title("Runtime")]
+        [ShowInInspector]
+        private Dictionary<string, float> _floats = new();
+        [ShowInInspector]
+        private Dictionary<string, string> _strings = new();
+        [ShowInInspector]
+        private Dictionary<string, bool> _bools = new();
 
         private readonly Dictionary<string, object> _variables = new();
        

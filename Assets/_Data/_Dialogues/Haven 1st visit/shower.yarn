@@ -12,6 +12,7 @@ title: ShowerInteractions
 -> [nomarkup][Fleece the body.] (Wits + Streetwise) [/nomarkup] <<if CustomVisited("FleeceBody") == false>> #line:03acf5e 
     <<jump FleeceBody>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0684ec1 
+    <<PlaySFX "door_knock_heavy">>
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "TAKE_SHOWER">>
 ===
 title: CauseofDeath

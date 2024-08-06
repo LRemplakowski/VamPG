@@ -15,7 +15,15 @@ namespace SunsetSystems.Core.Database
         [SerializeField]
         private Dictionary<string, string> _itemAccessorRegistry = new();
 
-        public static ItemDatabase Instance => DatabaseHolder.Instance.GetDatabase<ItemDatabase>();
+        public static ItemDatabase Instance
+        {
+            get
+            {
+                if (DatabaseHolder.Instance != null)
+                    return DatabaseHolder.Instance.GetDatabase<ItemDatabase>();
+                return null;
+            }
+        }
 
         protected void OnValidate()
         {
@@ -32,13 +40,14 @@ namespace SunsetSystems.Core.Database
 
 #if UNITY_EDITOR
         [Button]
-        private void FindAllItems()
+        public void FindAllItems()
         {
             UnityEditor.EditorUtility.SetDirty(this);
             _itemRegistry = new();
             _itemAccessorRegistry = new();
-            foreach (string path in UnityEditor.AssetDatabase.GetAllAssetPaths())
+            foreach (string guid in UnityEditor.AssetDatabase.FindAssets("t:ScriptableObject"))
             {
+                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
                 BaseItem item = UnityEditor.AssetDatabase.LoadAssetAtPath<BaseItem>(path);
                 if (item != null)
                     Register(item);

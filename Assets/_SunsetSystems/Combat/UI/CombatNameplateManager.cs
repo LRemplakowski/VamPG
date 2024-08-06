@@ -9,16 +9,16 @@ namespace SunsetSystems.Combat.UI
 {
     public class CombatNameplateManager : AbstractObjectPool<CombatNameplate>
     {
+        [Title("References")]
+        [SerializeField, Required]
+        private RectTransform _nameplateParentTransform;
         [Title("Runtime")]
-        [ShowInInspector, ReadOnly]
-        private RectTransform _rectTransform;
         [ShowInInspector, ReadOnly]
         private Dictionary<ICombatant, CombatNameplate> _nameplateMap = new();
 
         protected override void Awake()
         {
             base.Awake();
-            _rectTransform = transform as RectTransform;
         }
 
         private void Update()
@@ -51,7 +51,7 @@ namespace SunsetSystems.Combat.UI
         private void UpdateNameplatePosition(CombatNameplate nameplate, Vector3 worldPosition)
         {
             var screenPoint = Camera.main.WorldToScreenPoint(worldPosition);
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_rectTransform, screenPoint, null, out Vector2 localPoint))
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_nameplateParentTransform, screenPoint, null, out Vector2 localPoint))
             {
                 nameplate.NameplateRect.localPosition = localPoint;
             }

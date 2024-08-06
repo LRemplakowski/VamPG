@@ -50,7 +50,8 @@ namespace MyLib.EditorTools
 
         public override void OnInteractivePreviewGUI(Rect r, GUIStyle background)
         {
-            pEditorGUI.DrawPreviewGUI(r, background, pThisDatabase);
+            if (pEditorGUI != null && pThisDatabase != null)
+                pEditorGUI.DrawPreviewGUI(r, background, pThisDatabase);
         }
     }
 }

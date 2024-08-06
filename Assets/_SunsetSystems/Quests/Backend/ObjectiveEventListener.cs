@@ -16,12 +16,12 @@ namespace SunsetSystems.Journal
         [HideIf("@this.useUltEvents == true")]
         public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted, ObjectiveActiveAfterSceneLoad;
         [ShowIf("@this.useUltEvents == true")]
-        public UltEvent OnObjectiveActive, OnObjectiveInactive, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
+        public UltEvent OnObjectiveActive, OnObjectiveFailed, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
 
         private void OnEnable()
         {
             _objective.OnObjectiveActive += ObjectiveActiveHandler;
-            _objective.OnObjectiveFailed += ObjectiveInactiveHandler;
+            _objective.OnObjectiveFailed += ObjectiveFailedHandler;
             _objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected += ObjectiveDataInjectedHandler;
         }
@@ -29,7 +29,7 @@ namespace SunsetSystems.Journal
         private void OnDisable()
         {
             _objective.OnObjectiveActive -= ObjectiveActiveHandler;
-            _objective.OnObjectiveFailed -= ObjectiveInactiveHandler;
+            _objective.OnObjectiveFailed -= ObjectiveFailedHandler;
             _objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected -= ObjectiveDataInjectedHandler;
         }
@@ -42,10 +42,10 @@ namespace SunsetSystems.Journal
                 ObjectiveActive?.Invoke();
         }
 
-        private void ObjectiveInactiveHandler(Objective obj)
+        private void ObjectiveFailedHandler(Objective obj)
         {
             if (useUltEvents)
-                OnObjectiveInactive?.InvokeSafe();
+                OnObjectiveFailed?.InvokeSafe();
             else
                 ObjectiveInactive?.Invoke();
         }

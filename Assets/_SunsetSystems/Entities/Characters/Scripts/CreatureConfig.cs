@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using SunsetSystems.Utils.Database;
 using SunsetSystems.Utils.Extensions;
-using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
-    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplateProvider
+    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplateProvider, IDatabaseEntry
     {
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; } = "";
@@ -55,16 +54,15 @@ namespace SunsetSystems.Entities.Characters
 
         public ICreatureTemplate CreatureTemplate => new TemplateFromCreatureAsset(this);
 
-        private void OnEnable()
-        {
 #if UNITY_EDITOR
+        private void Awake()
+        {
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {
                 AssignNewID();
             }
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
-                CreatureDatabase.Instance?.RegisterConfig(this);
-#endif
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false)
+                CreatureDatabase.Instance.Register(this);
         }
 
         [Button("Force Validate")]
@@ -75,8 +73,8 @@ namespace SunsetSystems.Entities.Characters
                 AssignNewID();
             }
             _defaultReadableID = FullName.ToCamelCase();
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false && CreatureDatabase.Instance?.IsRegistered(this) == false)
-                CreatureDatabase.Instance?.RegisterConfig(this);
+            if (string.IsNullOrWhiteSpace(DatabaseID) == false)
+                CreatureDatabase.Instance.Register(this);
             if (EquipmentSlotsData == null || EquipmentSlotsData.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length - 1)
             {
                 EquipmentSlotsData = new()
@@ -98,19 +96,16 @@ namespace SunsetSystems.Entities.Characters
 
         private void OnDestroy()
         {
-#if UNITY_EDITOR
-            CreatureDatabase.Instance.UnregisterConfig(this);
-#endif
+            CreatureDatabase.Instance.Unregister(this);
         }
 
         [Button("Randomize ID")]
         private void AssignNewID()
         {
             DatabaseID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
-#endif
         }
+#endif
 
         [Serializable]
         public class TemplateFromCreatureAsset : ICreatureTemplate

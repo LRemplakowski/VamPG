@@ -63,7 +63,7 @@ namespace SunsetSystems
             _objectivePool.ForEach(obView => obView.gameObject.SetActive(false));
             if (QuestJournal.Instance == null)
                 await new WaitUntil(() => QuestJournal.Instance != null);
-            if (QuestJournal.Instance.GetCurrentObjectives(_cachedQuest.ID, out List<Objective> objectives))
+            if (QuestJournal.Instance.GetCurrentObjectives(_cachedQuest.DatabaseID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {

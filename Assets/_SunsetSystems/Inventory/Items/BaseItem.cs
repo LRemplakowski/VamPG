@@ -37,7 +37,7 @@ namespace SunsetSystems.Inventory.Data
                 ReadableID = Name;
             if (string.IsNullOrWhiteSpace(DatabaseID))
                 AssignNewID();
-            ItemDatabase.Instance?.Register(this);
+            ItemDatabase.Instance.Register(this);
         }
 
         private void Reset()
@@ -49,7 +49,7 @@ namespace SunsetSystems.Inventory.Data
         private void OnDestroy()
         {
 #if UNITY_EDITOR
-            ItemDatabase.Instance?.Unregister(this);
+            ItemDatabase.Instance.Unregister(this);
 #endif
         }
 

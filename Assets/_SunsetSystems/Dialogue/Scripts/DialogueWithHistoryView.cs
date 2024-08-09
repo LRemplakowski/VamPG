@@ -15,6 +15,7 @@ using Yarn.Unity;
 using UnityEngine.EventSystems;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Core.Database;
 
 namespace SunsetSystems.Dialogue
 {
@@ -202,7 +203,7 @@ namespace SunsetSystems.Dialogue
                 //    _lineHistoryStringBuilder.Append("<size=26>");
                 appended = true;
                 string speakerName = line.CharacterName;
-                if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
+                if (CreatureDatabase.Instance.TryGetEntryByReadableID(line.CharacterName, out CreatureConfig speakerConfig))
                     speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
                     .Append($"<color=\"red\">{speakerName}: </color>");
@@ -232,10 +233,10 @@ namespace SunsetSystems.Dialogue
             if (string.IsNullOrWhiteSpace(characterID)) 
             {
                 characterID = PartyManager.Instance.MainCharacterKey;
-                if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+                if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out var config))
                     characterName = config.FullName;
             }
-            else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
+            else if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out CreatureConfig config))
             {
                 characterID = config.ReadableID;
                 characterName = config.FullName;

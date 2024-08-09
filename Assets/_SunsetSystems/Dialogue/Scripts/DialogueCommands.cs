@@ -128,7 +128,7 @@ namespace SunsetSystems.Dialogue
         [YarnCommand("DecreaseWillpower")]
         public static void DecreaseWillpower(string characterID, int value)
         {
-            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            if (CreatureDatabase.Instance.TryGetEntry(characterID, out var config))
             {
                 var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
                 if (partyMember != null)

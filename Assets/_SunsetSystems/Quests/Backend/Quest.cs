@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 
@@ -8,10 +9,10 @@ namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Quest", menuName = "Sunset Journal/Quest")]
     [Serializable]
-    public class Quest : ScriptableObject, IGameDataProvider<Quest>
+    public class Quest : ScriptableObject, IGameDataProvider<Quest>, IDatabaseEntry
     {
         [field: SerializeField, ReadOnly]
-        public string ID { get; private set; }
+        public string DatabaseID { get; private set; }
         [field: SerializeField]
         public string ReadableID { get; private set; }
         public string Name;
@@ -34,18 +35,18 @@ namespace SunsetSystems.Journal
         private void OnEnable()
         {
 #if UNITY_EDITOR
-            if (string.IsNullOrWhiteSpace(ID))
+            if (string.IsNullOrWhiteSpace(DatabaseID))
             {
                 AssignNewID();
             }
-            QuestDatabase.Instance?.RegisterQuest(this);
+            QuestDatabase.Instance.Register(this);
 #endif
         }
 
         [Button("Force Validate")]
         private void OnValidate()
         {
-            QuestDatabase.Instance?.RegisterQuest(this);
+            QuestDatabase.Instance.Register(this);
         }
 
         private void Reset()
@@ -56,13 +57,13 @@ namespace SunsetSystems.Journal
         private void OnDestroy()
         {
 #if UNITY_EDITOR
-            QuestDatabase.Instance.UnregisterQuest(this);
+            QuestDatabase.Instance.Unregister(this);
 #endif
         }
 
         private void AssignNewID()
         {
-            ID = System.Guid.NewGuid().ToString();
+            DatabaseID = System.Guid.NewGuid().ToString();
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(this);
 #endif

@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Database;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,11 +8,12 @@ namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
     [Serializable]
-    public class Objective : ScriptableObject
+    public class Objective : SerializedScriptableObject, IDatabaseEntry
     {
         [field: SerializeField, ReadOnly]
         public string DatabaseID { get; private set; }
-        public string ReadableID = "";
+        [field: SerializeField]
+        public string ReadableID { get; private set; }
         public bool IsOptional = false;
         [TextArea(5, 10)]
         public string Description = "";
@@ -29,24 +31,22 @@ namespace SunsetSystems.Journal
         public List<Objective> ObjectivesToCancelOnFail;
 
         #region Database Registration
-
-        private void OnEnable()
-        {
 #if UNITY_EDITOR
+        private void Awake()
+        {
             if (string.IsNullOrWhiteSpace(DatabaseID))
             {
                 AssignNewID();
             }
-            ObjectiveDatabase.Instance?.Register(this);
-#endif
+            ObjectiveDatabase.Instance.Register(this);
         }
 
         [Button("Force Validate")]
         private void OnValidate()
         {
-            ObjectiveDatabase.Instance?.Register(this);
+            ObjectiveDatabase.Instance.Register(this);
         }
-#if UNITY_EDITOR
+
         private void Reset()
         {
             AssignNewID();
@@ -55,7 +55,6 @@ namespace SunsetSystems.Journal
         private void OnDestroy()
         {
             ObjectiveDatabase.Instance.Unregister(this);
-
         }
 
         private void AssignNewID()

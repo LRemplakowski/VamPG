@@ -27,7 +27,7 @@ namespace SunsetSystems.Journal.UI
         {
             _quest = dataProvider.Data;
             _questTitle.text = _quest.Name;
-            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.ID);
+            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.DatabaseID);
         }
     }
 }

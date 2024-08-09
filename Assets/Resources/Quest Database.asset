@@ -16,16 +16,16 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: dccc3f8b59481784cb3b5f1c382a6759, type: 2}
-    - {fileID: 11400000, guid: 9dbff0cbdb4488e4d98f632329eab3b5, type: 2}
     - {fileID: 11400000, guid: 4e21af5dd741ab948a5656c31e7e1bd5, type: 2}
     - {fileID: 11400000, guid: cff1d0bf39be6cb45845a4b49c8b47ef, type: 2}
+    - {fileID: 11400000, guid: dccc3f8b59481784cb3b5f1c382a6759, type: 2}
+    - {fileID: 11400000, guid: 9dbff0cbdb4488e4d98f632329eab3b5, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: _questRegistry
+    - Name: _databaseRegistry
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Journal.Quest,
         SunsetSystems]], mscorlib
@@ -38,13 +38,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: 57d83620-89af-4716-aa65-6c5b321e07fe
+      Data: fdbd5643-0956-4f04-9252-e54b7b11cc4c
     - Name: $v
       Entry: 10
       Data: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 1e2cc0df-f120-42ef-a26b-e7959c831d6d
+      Data: 9f4731c6-752f-4c46-99b6-30a104df3b3d
     - Name: $v
       Entry: 10
       Data: 1
@@ -68,7 +68,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 82287d67-e44a-4b52-aabe-6fa47ee61758
+      Data: 1db17f3a-0361-4d14-a51d-026ed754da4b
     - Name: $v
       Entry: 10
       Data: 2
@@ -80,19 +80,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 425a0d39-64b9-4b03-b8de-e3fa56fbf93c
-    - Name: $v
-      Entry: 10
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 00efd488-0163-488c-9a3f-26bf5817b652
+      Data: 91236446-4c5e-48cc-b109-7dc84575fa89
     - Name: $v
       Entry: 10
       Data: 3
@@ -105,7 +93,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: _questAccessorRegistry
+    - Name: _readableIDRegistry
       Entry: 7
       Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.String,
         mscorlib]], mscorlib
@@ -124,34 +112,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Q_0P_FIX_SINK
-    - Name: $v
-      Entry: 1
-      Data: 57d83620-89af-4716-aa65-6c5b321e07fe
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: Q_0P_MAIN_SATURDAY_START
-    - Name: $v
-      Entry: 1
-      Data: 1e2cc0df-f120-42ef-a26b-e7959c831d6d
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
       Data: Q_0P_BLOODY_HELL
     - Name: $v
       Entry: 1
-      Data: 82287d67-e44a-4b52-aabe-6fa47ee61758
+      Data: fdbd5643-0956-4f04-9252-e54b7b11cc4c
     - Name: 
       Entry: 8
       Data: 
@@ -163,7 +127,31 @@ MonoBehaviour:
       Data: Q_0P_NEVER_TRUST_WHITE_VAN
     - Name: $v
       Entry: 1
-      Data: 00efd488-0163-488c-9a3f-26bf5817b652
+      Data: 9f4731c6-752f-4c46-99b6-30a104df3b3d
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Q_0P_FIX_SINK
+    - Name: $v
+      Entry: 1
+      Data: 1db17f3a-0361-4d14-a51d-026ed754da4b
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 1
+      Data: Q_0P_MAIN_SATURDAY_START
+    - Name: $v
+      Entry: 1
+      Data: 91236446-4c5e-48cc-b109-7dc84575fa89
     - Name: 
       Entry: 8
       Data: 

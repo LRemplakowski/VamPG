@@ -24,7 +24,7 @@ namespace SunsetSystems.Journal.UI
         {
             _textPool.ForEach(text => text.gameObject.SetActive(false));
             _title.text = dataProvider.Data.Name;
-            if (QuestJournal.Instance.GetCurrentObjectives(dataProvider.Data.ID, out List<Objective> objectives))
+            if (QuestJournal.Instance.GetCurrentObjectives(dataProvider.Data.DatabaseID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {

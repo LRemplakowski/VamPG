@@ -133,8 +133,11 @@ namespace SunsetSystems.Dialogue
     [Serializable]
     public class DialogueSaveData
     {
+        [OdinSerialize]
         public Dictionary<string, float> _floats = new();
+        [OdinSerialize]
         public Dictionary<string, string> _strings = new();
+        [OdinSerialize]
         public Dictionary<string, bool> _bools = new();
 
         public DialogueSaveData(Dictionary<string, float> _floats, Dictionary<string, string> _strings, Dictionary<string, bool> _bools)

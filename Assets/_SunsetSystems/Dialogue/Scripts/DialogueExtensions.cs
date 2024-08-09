@@ -1,9 +1,6 @@
-using System.Threading.Tasks;
-using SunsetSystems.Core.AddressableManagement;
-using SunsetSystems.Entities;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Yarn.Unity;
 
 namespace SunsetSystems.Dialogue
@@ -23,7 +20,7 @@ namespace SunsetSystems.Dialogue
                 return true;
             }
 
-            if (CreatureDatabase.Instance.TryGetConfig(speakerID, out CreatureConfig config))
+            if (CreatureDatabase.Instance.TryGetEntryByReadableID(speakerID, out CreatureConfig config))
             {
                 lastID = speakerID;
                 lastSprite = config.Portrait;

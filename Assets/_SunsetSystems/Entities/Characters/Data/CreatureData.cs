@@ -1,6 +1,5 @@
 ﻿using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
-using SunsetSystems.Entities.Characters.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters

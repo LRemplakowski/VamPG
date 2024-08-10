@@ -1,14 +1,11 @@
-using SunsetSystems.Combat;
-using SunsetSystems.Combat.Grid;
+using System.Collections.Generic;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UltEvents;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Interfaces
+namespace SunsetSystems.Combat
 {
     public interface ICombatant : IActionPerformer
     {

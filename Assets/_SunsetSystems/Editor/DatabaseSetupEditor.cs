@@ -12,7 +12,10 @@ namespace SunsetSystems.Editor
     {
         static DatabaseSetupEditor()
         {
-            GetWindow<DatabaseSetupEditor>().Close();
+            var window = GetWindow<DatabaseSetupEditor>();
+            window.LoadDatabaseReferences();
+            window.UpdateStaticReferences();
+            window.Close();
         }
 
         [AssetsOnly]
@@ -23,6 +26,8 @@ namespace SunsetSystems.Editor
         public QuestDatabase QuestDatabase;
         [AssetsOnly]
         public ObjectiveDatabase ObjectiveDatabase;
+        [AssetsOnly]
+        public UMAWardrobeDatabase WardrobeDatabase;
 
         [MenuItem("Tools/Database Setup")]
         public static void OpenWindow()
@@ -56,6 +61,8 @@ namespace SunsetSystems.Editor
             QuestDatabase = AssetDatabase.LoadAssetAtPath<QuestDatabase>(questPath);
             string objectivePath = EditorPrefs.GetString("ObjectiveDatabase");
             ObjectiveDatabase = AssetDatabase.LoadAssetAtPath<ObjectiveDatabase>(objectivePath);
+            string wardrobePath = EditorPrefs.GetString("WardrobeDatabase");
+            WardrobeDatabase = AssetDatabase.LoadAssetAtPath<UMAWardrobeDatabase>(wardrobePath);
         }
 
         private void SaveDatabaseReferences()
@@ -68,6 +75,8 @@ namespace SunsetSystems.Editor
             EditorPrefs.SetString("QuestDatabase", questPath);
             string objectivePath = AssetDatabase.GetAssetPath(ObjectiveDatabase);
             EditorPrefs.SetString("ObjectiveDatabase", objectivePath);
+            string wardrobePath = AssetDatabase.GetAssetPath(WardrobeDatabase);
+            EditorPrefs.SetString("WardrobeDatabase", wardrobePath);
         }
 
         private void UpdateStaticReferences()
@@ -77,6 +86,7 @@ namespace SunsetSystems.Editor
             EditorDatabaseHelper.CreatureDB = CreatureDatabase;
             EditorDatabaseHelper.QuestDB = QuestDatabase;
             EditorDatabaseHelper.ObjectiveDB = ObjectiveDatabase;
+            EditorDatabaseHelper.WardrobeDB = WardrobeDatabase;
         }
     }
 }

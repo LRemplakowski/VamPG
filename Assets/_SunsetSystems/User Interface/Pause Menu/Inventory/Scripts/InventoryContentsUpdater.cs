@@ -41,7 +41,7 @@ namespace SunsetSystems.Inventory.UI
             initializedOnce = true;
         }
 
-        public void UpdateViews(List<IGameDataProvider<InventoryEntry>> data)
+        public void UpdateViews(List<IUserInfertaceDataProvider<InventoryEntry>> data)
         {
             if (!initializedOnce)
                 Initialize();
@@ -55,7 +55,7 @@ namespace SunsetSystems.Inventory.UI
             UpdateMoneyCounter(Mathf.RoundToInt(InventoryManager.Instance.GetMoneyAmount()));
             for (int i = 0; i < data.Count; i++)
             {
-                IGameDataProvider<InventoryEntry> dataProvider = data[i];
+                IUserInfertaceDataProvider<InventoryEntry> dataProvider = data[i];
                 if (dataProvider == null)
                 {
                     Debug.LogError("Null DataProvider while creating view!");

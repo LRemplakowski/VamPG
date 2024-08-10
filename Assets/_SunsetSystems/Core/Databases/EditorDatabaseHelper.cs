@@ -9,6 +9,7 @@ namespace SunsetSystems.Core.Database
         public static CreatureDatabase CreatureDB { get; set; }
         public static QuestDatabase QuestDB { get; set; }
         public static ObjectiveDatabase ObjectiveDB { get; set; }
+        public static UMAWardrobeDatabase WardrobeDB { get; set; }
     }
 }
 #endif

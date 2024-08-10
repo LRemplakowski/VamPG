@@ -9,12 +9,12 @@ namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Quest", menuName = "Sunset Journal/Quest")]
     [Serializable]
-    public class Quest : ScriptableObject, IGameDataProvider<Quest>, IDatabaseEntry
+    public class Quest : AbstractDatabaseEntry<Quest>, IUserInfertaceDataProvider<Quest>
     {
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; }
+        public override string DatabaseID { get; protected set; }
         [field: SerializeField]
-        public string ReadableID { get; private set; }
+        public override string ReadableID { get; protected set; }
         public string Name;
         public QuestCategory Category;
         [TextArea(10, 15)]
@@ -24,50 +24,13 @@ namespace SunsetSystems.Journal
         public List<RewardData> Rewards { get; private set; }
         [SerializeField, SerializeReference]
         private List<Quest> _startQuestsOnCompletion;
-        public Quest Data => this;
+        public Quest UIData => this;
 
         public static event Action<Quest> QuestStarted;
         public static event Action<Quest> QuestCompleted;
         public static event Action<Quest> QuestFailed;
         public static event Action<Quest, Objective> ObjectiveCompleted;
         public static event Action<Quest, Objective> ObjectiveFailed;
-
-        private void OnEnable()
-        {
-#if UNITY_EDITOR
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-            {
-                AssignNewID();
-            }
-            QuestDatabase.Instance.Register(this);
-#endif
-        }
-
-        [Button("Force Validate")]
-        private void OnValidate()
-        {
-            QuestDatabase.Instance.Register(this);
-        }
-
-        private void Reset()
-        {
-            AssignNewID();
-        }
-
-        private void OnDestroy()
-        {
-#if UNITY_EDITOR
-            QuestDatabase.Instance.Unregister(this);
-#endif
-        }
-
-        private void AssignNewID()
-        {
-            DatabaseID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
-        }
 
         public void Begin()
         {
@@ -155,6 +118,16 @@ namespace SunsetSystems.Journal
         public void Fail()
         {
             QuestFailed?.Invoke(this);
+        }
+
+        protected override void RegisterToDatabase()
+        {
+            QuestDatabase.Instance.Register(this);
+        }
+
+        protected override void UnregisterFromDatabase()
+        {
+            QuestDatabase.Instance.Unregister(this);
         }
     }
 

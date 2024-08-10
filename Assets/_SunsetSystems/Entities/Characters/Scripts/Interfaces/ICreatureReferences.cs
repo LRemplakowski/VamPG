@@ -1,18 +1,13 @@
-using SunsetSystems.Core.UMA;
-using SunsetSystems.Entities.Characters;
+using SunsetSystems.UMA;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
-using UnityEngine;
-using UnityEngine.AI;
+using SunsetSystems.Combat;
 
-namespace SunsetSystems.Entities.Creatures.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public interface ICreatureReferences : IEntityReferences
     {
-        //Transform BodyTransform { get; }
-        //GameObject BodyGameObject { get; }
-
         CreatureData CreatureData { get; }
         StatsManager StatsManager { get; }
         INavigationManager NavigationManager { get; }

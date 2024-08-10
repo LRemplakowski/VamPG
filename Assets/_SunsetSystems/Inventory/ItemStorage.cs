@@ -114,7 +114,7 @@ namespace SunsetSystems.Inventory
     }
 
     [Serializable]
-    public struct InventoryEntry : IGameDataProvider<InventoryEntry>
+    public struct InventoryEntry : IUserInfertaceDataProvider<InventoryEntry>
     {
         [NonSerialized, OdinSerialize, ES3Serializable]
         public IBaseItem ItemReference;
@@ -128,6 +128,6 @@ namespace SunsetSystems.Inventory
             this.StackSize = stackSize;
         }
 
-        public InventoryEntry Data => this;
+        public InventoryEntry UIData => this;
     }
 }

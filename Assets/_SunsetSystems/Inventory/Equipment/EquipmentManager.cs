@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Utils.Database;

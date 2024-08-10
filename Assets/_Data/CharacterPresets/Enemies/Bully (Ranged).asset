@@ -7,7 +7,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a390ac3025ada234b967667d830b99ff, type: 3}
   m_Name: Bully (Ranged)
@@ -24,6 +24,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: <BaseLookWardrobeCollection>k__BackingField
+      Entry: 6
+      Data: 
     - Name: <EquipmentSlotsData>k__BackingField
       Entry: 7
       Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Equipment.EquipmentSlotID,
@@ -57,9 +60,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 0
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 1
     - Name: _equippedItem
       Entry: 10
       Data: 0
@@ -79,9 +79,6 @@ MonoBehaviour:
       Entry: 7
       Data: 3|SunsetSystems.Equipment.EquipmentSlot, SunsetSystems
     - Name: <ID>k__BackingField
-      Entry: 3
-      Data: 1
-    - Name: _acceptedCategory
       Entry: 3
       Data: 1
     - Name: _equippedItem
@@ -105,9 +102,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 2
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 2
     - Name: _equippedItem
       Entry: 10
       Data: 2
@@ -129,9 +123,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 3
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 7
     - Name: _equippedItem
       Entry: 6
       Data: 
@@ -153,9 +144,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 4
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 6
     - Name: _equippedItem
       Entry: 6
       Data: 
@@ -177,9 +165,6 @@ MonoBehaviour:
     - Name: <ID>k__BackingField
       Entry: 3
       Data: 5
-    - Name: _acceptedCategory
-      Entry: 3
-      Data: 10
     - Name: _equippedItem
       Entry: 6
       Data: 
@@ -196,21 +181,12 @@ MonoBehaviour:
       Entry: 8
       Data: 
   <DatabaseID>k__BackingField: efca35d1-44f0-48d8-8c5a-32c773c914f2
+  <ReadableID>k__BackingField: CR_HOSTILE_BULLY_RANGED
   _name: Bully
   _lastName: 
-  _overrideReadableID: 1
-  _defaultReadableID: bully
-  _readableIDOverride: ENEMY_BULLY_RANGED
-  <PortraitAssetRef>k__BackingField:
-    m_AssetGUID: 679252e0332b4e14cb36893cdbae19c2
-    m_SubObjectName: ex_con_male_dialog
-    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-    m_EditorAssetChanged: 0
+  <Portrait>k__BackingField: {fileID: 0}
   _statsConfig: {fileID: 11400000, guid: 87908f24de557e240b395bf6a977d091, type: 2}
   <EquipmentConfig>k__BackingField: {fileID: 11400000, guid: 0b6daaf148cd22c47b81187ea0efaf99, type: 2}
-  <BaseUmaRecipes>k__BackingField: []
   _creatureFaction: 1
   _bodyType: 0
   _creatureType: 0
-  _useEquipmentPreset: 0

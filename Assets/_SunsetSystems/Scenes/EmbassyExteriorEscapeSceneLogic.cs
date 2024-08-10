@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Party;
 using UnityEngine;
 using Yarn.Unity;

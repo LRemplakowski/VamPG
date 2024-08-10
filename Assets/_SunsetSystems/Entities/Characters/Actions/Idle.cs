@@ -1,6 +1,4 @@
-﻿using SunsetSystems.Entities.Characters.Interfaces;
-
-namespace SunsetSystems.Entities.Characters.Actions
+﻿namespace SunsetSystems.Entities.Characters.Actions
 {
     [System.Serializable]
     public class Idle : EntityAction

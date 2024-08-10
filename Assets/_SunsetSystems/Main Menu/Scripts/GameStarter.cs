@@ -1,11 +1,10 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Persistence;
-using UnityEngine;
 using Sirenix.OdinInspector;
-using SunsetSystems.Party;
-using UltEvents;
 using SunsetSystems.Core.SceneLoading;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Party;
+using SunsetSystems.Persistence;
+using UltEvents;
+using UnityEngine;
 
 namespace SunsetSystems.Data
 {

@@ -14,9 +14,9 @@ namespace SunsetSystems.Equipment.UI
         [SerializeField]
         private Image _itemIcon;
 
-        public void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<IEquipmentSlot> dataProvider)
         {
-            _cachedSlotData = dataProvider.Data;
+            _cachedSlotData = dataProvider.UIData;
             IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
             {

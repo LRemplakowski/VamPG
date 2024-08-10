@@ -8,12 +8,12 @@ namespace SunsetSystems.Journal
 {
     [CreateAssetMenu(fileName = "New Objective", menuName = "Sunset Journal/Objective")]
     [Serializable]
-    public class Objective : SerializedScriptableObject, IDatabaseEntry
+    public class Objective : AbstractDatabaseEntry<Objective>
     {
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; }
+        public override string DatabaseID { get; protected set; }
         [field: SerializeField]
-        public string ReadableID { get; private set; }
+        public override string ReadableID { get; protected set; }
         public bool IsOptional = false;
         [TextArea(5, 10)]
         public string Description = "";
@@ -29,41 +29,6 @@ namespace SunsetSystems.Journal
         public List<Objective> NextObjectives;
         public List<Objective> NextObjectivesOnFailed;
         public List<Objective> ObjectivesToCancelOnFail;
-
-        #region Database Registration
-#if UNITY_EDITOR
-        private void Awake()
-        {
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-            {
-                AssignNewID();
-            }
-            ObjectiveDatabase.Instance.Register(this);
-        }
-
-        [Button("Force Validate")]
-        private void OnValidate()
-        {
-            ObjectiveDatabase.Instance.Register(this);
-        }
-
-        private void Reset()
-        {
-            AssignNewID();
-        }
-
-        private void OnDestroy()
-        {
-            ObjectiveDatabase.Instance.Unregister(this);
-        }
-
-        private void AssignNewID()
-        {
-            DatabaseID = System.Guid.NewGuid().ToString();
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-#endif
-        #endregion
 
         public void MakeActive()
         {
@@ -92,6 +57,16 @@ namespace SunsetSystems.Journal
             OnObjectiveCompleted?.Invoke(this);
             ObjectivesToCancelOnCompletion.ForEach(o => o.Cancel());
             NextObjectives.ForEach(o => o.MakeActive());
+        }
+
+        protected override void RegisterToDatabase()
+        {
+            ObjectiveDatabase.Instance.Register(this);
+        }
+
+        protected override void UnregisterFromDatabase()
+        {
+            ObjectiveDatabase.Instance.Unregister(this);
         }
     }
 }

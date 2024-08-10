@@ -1,6 +1,6 @@
 ﻿using System;
 using Sirenix.Serialization;
-using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Combat;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {

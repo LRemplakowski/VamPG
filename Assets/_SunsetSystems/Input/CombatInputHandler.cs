@@ -1,10 +1,7 @@
-using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Creatures.Interfaces;
-using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Spellbook;
 using UnityEngine;
 using UnityEngine.EventSystems;

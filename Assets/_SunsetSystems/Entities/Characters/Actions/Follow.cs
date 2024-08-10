@@ -1,9 +1,6 @@
 using System.Collections;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
-using UnityEngine;
-using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {

@@ -1,8 +1,8 @@
 ﻿using Sirenix.Serialization;
-using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Combat;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions.Conditions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     [System.Serializable]
     public class HostileActionCondition : Condition

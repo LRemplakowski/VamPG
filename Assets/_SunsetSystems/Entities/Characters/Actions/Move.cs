@@ -1,9 +1,8 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
 using SunsetSystems.Entities.Characters.Navigation;
-using SunsetSystems.Entities.Interfaces;
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 

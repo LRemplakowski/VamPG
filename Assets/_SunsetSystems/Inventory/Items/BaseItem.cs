@@ -7,14 +7,14 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : ScriptableObject, IRewardable, IGameDataProvider<BaseItem>, IBaseItem
+    public abstract class BaseItem : AbstractDatabaseEntry<IBaseItem>, IRewardable, IUserInfertaceDataProvider<IBaseItem>, IBaseItem
     {
         [field: SerializeField]
         public string Name { get; protected set; }
         [field: SerializeField]
-        public string ReadableID { get; private set; }
+        public override string ReadableID { get; protected set; }
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; }
+        public override string DatabaseID { get; protected set; }
         [field: SerializeField, ReadOnly]
         public ItemCategory ItemCategory { get; protected set; }
         [field: SerializeField, TextArea]
@@ -26,44 +26,21 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField]
         public bool Stackable { get; protected set; }
 
-        public BaseItem Data => this;
-
-        [Button("Force Validate")]
-        private void OnValidate()
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-                Name = name;
-            if (string.IsNullOrEmpty(ReadableID))
-                ReadableID = Name;
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-                AssignNewID();
-            ItemDatabase.Instance.Register(this);
-        }
-
-        private void Reset()
-        {
-            Name = name;
-            AssignNewID();
-        }
-
-        private void OnDestroy()
-        {
-#if UNITY_EDITOR
-            ItemDatabase.Instance.Unregister(this);
-#endif
-        }
-
-        private void AssignNewID()
-        {
-            DatabaseID = System.Guid.NewGuid().ToString();
-#if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
-#endif
-        }
+        public IBaseItem UIData => this;
 
         public void ApplyReward(int amount)
         {
             InventoryManager.Instance.GiveItemToPlayer(this, amount);
+        }
+
+        protected override void RegisterToDatabase()
+        {
+            ItemDatabase.Instance.Register(this);
+        }
+
+        protected override void UnregisterFromDatabase()
+        {
+            ItemDatabase.Instance.Unregister(this);
         }
     }
 }

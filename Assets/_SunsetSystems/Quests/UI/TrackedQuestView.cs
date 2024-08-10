@@ -20,11 +20,11 @@ namespace SunsetSystems.Journal.UI
 
         private List<TextMeshProUGUI> _textPool = new();
 
-        public void UpdateView(IGameDataProvider<Quest> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<Quest> dataProvider)
         {
             _textPool.ForEach(text => text.gameObject.SetActive(false));
-            _title.text = dataProvider.Data.Name;
-            if (QuestJournal.Instance.GetCurrentObjectives(dataProvider.Data.DatabaseID, out List<Objective> objectives))
+            _title.text = dataProvider.UIData.Name;
+            if (QuestJournal.Instance.GetCurrentObjectives(dataProvider.UIData.DatabaseID, out List<Objective> objectives))
             {
                 foreach (Objective objective in objectives)
                 {
@@ -38,7 +38,7 @@ namespace SunsetSystems.Journal.UI
             }
             else
             {
-                Debug.LogError($"No objectives for quest {dataProvider.Data.Name}!");
+                Debug.LogError($"No objectives for quest {dataProvider.UIData.Name}!");
             }
         }
 

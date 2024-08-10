@@ -9,23 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 789be2d9d1235e14da5d5b039ef30506, type: 3}
-  m_Name: Item Database
+  m_Script: {fileID: 11500000, guid: 67c4ad6eef1491b459a4d62abfb40840, type: 3}
+  m_Name: Wardrobe Database
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 11400000, guid: ca66bb7c6fd888145b8098f806c7d339, type: 2}
-    - {fileID: 11400000, guid: ce6ed723fa6174e408d049a17e9a82de, type: 2}
-    - {fileID: 11400000, guid: c831b56668723ca43a8fbb357b90e81d, type: 2}
-    - {fileID: 11400000, guid: 448ebec56acab2747911bdbcfb2481e7, type: 2}
-    - {fileID: 11400000, guid: 13e0d54da432a8344919455167c058b2, type: 2}
-    - {fileID: 11400000, guid: 28f1c59364fe9474aba07d42dd1470b6, type: 2}
-    - {fileID: 11400000, guid: 082dc3191d9a5b341a8a6ff611df3416, type: 2}
-    - {fileID: 11400000, guid: a75e2dc2b72d29042a0256712087af14, type: 2}
-    - {fileID: 11400000, guid: ef5f7d8abe65fbb4e9f08fe717ad520a, type: 2}
-    - {fileID: 11400000, guid: 5bb3b2d82c83e0540b32fe8fa79bb378, type: 2}
+    - {fileID: 11400000, guid: 1982fda9f6b810f45b65de7ef51f91c4, type: 2}
+    - {fileID: 11400000, guid: 5c0d993924b9b604a95058740f78cdab, type: 2}
+    - {fileID: 11400000, guid: 9e21df627aaafe0419968119842407a2, type: 2}
+    - {fileID: 11400000, guid: 88d8e91e3648a6043899770086edc30d, type: 2}
+    - {fileID: 11400000, guid: 1aed28d798a9ed148b9719018902928e, type: 2}
+    - {fileID: 11400000, guid: fa77c93110adab94bbb4a09d413f0583, type: 2}
+    - {fileID: 11400000, guid: 9427cbf300eb3b949a73270da32be998, type: 2}
+    - {fileID: 11400000, guid: ddf6beb91628f1d4ab6e593e4775a28a, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -33,7 +31,7 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _databaseRegistry
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Inventory.Data.IBaseItem,
+      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.UMA.IUMAWardrobeDatabaseItem,
         SunsetSystems]], mscorlib
     - Name: comparer
       Entry: 7
@@ -44,13 +42,13 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 10
+      Data: 8
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: bce0b689-d0ad-4a22-a59d-3657f1641898
+      Data: 06652920-723d-4a24-8cd9-1e1002dd086a
     - Name: $v
       Entry: 10
       Data: 0
@@ -62,7 +60,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: b5a11501-be91-4e27-8db5-b53394331154
+      Data: 3f318930-89cd-48bd-8e09-11d18e5caa62
     - Name: $v
       Entry: 10
       Data: 1
@@ -74,7 +72,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 070cbc6f-75c1-4951-84e6-64df51cbea50
+      Data: ec4f530e-7dbb-431a-8515-836383bc0879
     - Name: $v
       Entry: 10
       Data: 2
@@ -86,7 +84,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: d4e92853-0295-4a14-b44e-4961435ce231
+      Data: ceef3303-28a4-4437-9ae0-f3e5fa5556a4
     - Name: $v
       Entry: 10
       Data: 3
@@ -98,7 +96,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 16e2011e-12e6-4620-9cf7-8d178bca2f38
+      Data: c0e1db46-e451-41d6-8f67-bdbdc96bf474
     - Name: $v
       Entry: 10
       Data: 4
@@ -110,7 +108,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 15981720-cc43-41ec-a048-83889394f1fc
+      Data: 1ca3cf2e-3110-40c8-92ab-7f97a54a8725
     - Name: $v
       Entry: 10
       Data: 5
@@ -122,7 +120,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: 6fffa931-5a63-4527-b8ac-2f2302f0e5dd
+      Data: abb0fdab-878d-4cd5-b0de-fb8b3bb44890
     - Name: $v
       Entry: 10
       Data: 6
@@ -134,34 +132,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: e25052a3-9b85-4e2c-9a56-05231973b8c2
+      Data: 320d4c96-88ba-4228-847c-dd2054aa6bdc
     - Name: $v
       Entry: 10
       Data: 7
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: 40958be5-dbfb-4e5e-97e0-b37316c21f0f
-    - Name: $v
-      Entry: 10
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: e569c904-2a55-4c42-aebd-325e78a3e620
-    - Name: $v
-      Entry: 10
-      Data: 9
     - Name: 
       Entry: 8
       Data: 
@@ -184,16 +158,16 @@ MonoBehaviour:
       Data: 
     - Name: 
       Entry: 12
-      Data: 10
+      Data: 8
     - Name: 
       Entry: 7
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_EMBASSYDRINK
+      Data: BSLK_PRTY_ANASTASIA_KAMINSKA
     - Name: $v
       Entry: 1
-      Data: bce0b689-d0ad-4a22-a59d-3657f1641898
+      Data: 06652920-723d-4a24-8cd9-1e1002dd086a
     - Name: 
       Entry: 8
       Data: 
@@ -202,10 +176,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_TRKT_DEFAULT
+      Data: BSLK_UNIQUE_CATERINA_SFORZA
     - Name: $v
       Entry: 1
-      Data: b5a11501-be91-4e27-8db5-b53394331154
+      Data: 3f318930-89cd-48bd-8e09-11d18e5caa62
     - Name: 
       Entry: 8
       Data: 
@@ -214,10 +188,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_BENZOS
+      Data: BSLK_UNIQUE_DIANA_FOSTER
     - Name: $v
       Entry: 1
-      Data: 070cbc6f-75c1-4951-84e6-64df51cbea50
+      Data: ec4f530e-7dbb-431a-8515-836383bc0879
     - Name: 
       Entry: 8
       Data: 
@@ -226,10 +200,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_VHS
+      Data: BSLK_UNIQUE_DIEGO_VICTIM
     - Name: $v
       Entry: 1
-      Data: d4e92853-0295-4a14-b44e-4961435ce231
+      Data: ceef3303-28a4-4437-9ae0-f3e5fa5556a4
     - Name: 
       Entry: 8
       Data: 
@@ -238,10 +212,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_VAN_KEYS
+      Data: BSLK_UNIQUE_DOMINIC_EVANS
     - Name: $v
       Entry: 1
-      Data: 16e2011e-12e6-4620-9cf7-8d178bca2f38
+      Data: c0e1db46-e451-41d6-8f67-bdbdc96bf474
     - Name: 
       Entry: 8
       Data: 
@@ -250,10 +224,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_BOBBY_PIN
+      Data: BSLK_PARTY_KIERAN_EDEVANE
     - Name: $v
       Entry: 1
-      Data: 15981720-cc43-41ec-a048-83889394f1fc
+      Data: 1ca3cf2e-3110-40c8-92ab-7f97a54a8725
     - Name: 
       Entry: 8
       Data: 
@@ -262,10 +236,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_Q_BATHROOM_KEY
+      Data: BSLK_UNIQUE_LUCIA_ESCOBAR
     - Name: $v
       Entry: 1
-      Data: 6fffa931-5a63-4527-b8ac-2f2302f0e5dd
+      Data: abb0fdab-878d-4cd5-b0de-fb8b3bb44890
     - Name: 
       Entry: 8
       Data: 
@@ -274,34 +248,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: IT_HDS_DEFAULT
+      Data: BSLK_PC_JOURNALIST_FEM
     - Name: $v
       Entry: 1
-      Data: e25052a3-9b85-4e2c-9a56-05231973b8c2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: IT_Q_LUCIA_ORDERS
-    - Name: $v
-      Entry: 1
-      Data: 40958be5-dbfb-4e5e-97e0-b37316c21f0f
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
-      Data: IT_BTS_DEFAULT
-    - Name: $v
-      Entry: 1
-      Data: e569c904-2a55-4c42-aebd-325e78a3e620
+      Data: 320d4c96-88ba-4228-847c-dd2054aa6bdc
     - Name: 
       Entry: 8
       Data: 

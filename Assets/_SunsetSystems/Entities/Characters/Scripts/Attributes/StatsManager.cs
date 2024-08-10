@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
+using Sirenix.OdinInspector;
 using SunsetSystems.Dice;
 using SunsetSystems.Entities.Data;
-using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
-using Sirenix.OdinInspector;
-using System.Linq;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {

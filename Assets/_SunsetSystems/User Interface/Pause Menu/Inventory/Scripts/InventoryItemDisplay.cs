@@ -18,14 +18,14 @@ namespace SunsetSystems.UI
         [SerializeField]
         private TextMeshProUGUI _stackSize;
 
-        public void UpdateView(IGameDataProvider<InventoryEntry> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
             //if (lastLoadedSprite != null)
                 //AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             if (dataProvider != null)
             {
-                _itemEntry = dataProvider.Data;
+                _itemEntry = dataProvider.UIData;
                 _icon.sprite = _itemEntry.ItemReference.Icon;
                 _icon.gameObject.SetActive(true);
                 if (_itemEntry.ItemReference.Stackable)

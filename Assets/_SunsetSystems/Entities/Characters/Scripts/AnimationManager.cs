@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
 using SunsetSystems.Persistence;

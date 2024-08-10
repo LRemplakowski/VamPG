@@ -50,7 +50,7 @@ namespace SunsetSystems.Equipment
             }
         }
 
-        public IEquipmentSlot Data => this;
+        public IEquipmentSlot UIData => this;
 
         [SerializeField]
         private IEquipableItem _equippedItem;

@@ -1,9 +1,8 @@
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public interface ICreature : IEntity, IActionPerformer, ICreatureTemplateProvider
     {

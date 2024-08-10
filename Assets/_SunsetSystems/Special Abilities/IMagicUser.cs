@@ -1,8 +1,6 @@
-using SunsetSystems.Entities.Creatures.Interfaces;
-using SunsetSystems.Entities.Interfaces;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using SunsetSystems.Combat;
+using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Spellbook
 {

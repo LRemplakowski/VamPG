@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using InsaneSystems.RTSSelection;
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Party;
 using SunsetSystems.Utils.Input;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 namespace SunsetSystems.Input
 {

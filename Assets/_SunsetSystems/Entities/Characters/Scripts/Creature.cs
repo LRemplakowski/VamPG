@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Creatures.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
 using SunsetSystems.Utils.Database;
@@ -180,10 +179,7 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                if (DatabaseHolder.Instance != null)
-                    BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
-                else
-                    BaseLookWardrobeCollectionAsset = instance.References.UMAManager.BaseLookWardrobeCollection;
+                BaseLookWardrobeReadableID = instance.References.UMAManager.BaseLookWardrobeReadableID;
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
                 {
@@ -214,9 +210,7 @@ namespace SunsetSystems.Entities.Characters
             [ShowInInspector]
             public CreatureType CreatureType { get; private set; }
             [ShowInInspector]
-            public short BaseLookWardrobeCollectionID { get; private set; }
-            [ShowInInspector]
-            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
+            public string BaseLookWardrobeReadableID { get; private set; }
             [ShowInInspector]
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
             [ShowInInspector]

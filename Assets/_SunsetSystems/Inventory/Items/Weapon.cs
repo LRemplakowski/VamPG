@@ -35,13 +35,15 @@ namespace SunsetSystems.Inventory.Data
         [SerializeField, ShowIf("ShowRange")]
         protected int optimalRange = 0, rangeFalloff = 0;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             ItemCategory = ItemCategory.WEAPON;
         }
 
-        private void OnValidate()
+        protected override void OnValidate()
         {
+            base.OnValidate();
             ItemCategory = ItemCategory.WEAPON;
         }
 

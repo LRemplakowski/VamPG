@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Core.Database
 {
-    public abstract class AbstractDatabase<T> : SerializedScriptableObject, IDatabase<T> where T : IDatabaseEntry
+    public abstract class AbstractDatabase<T> : SerializedScriptableObject, IDatabase<T> where T : IDatabaseEntry<T>
     {
         [SerializeField]
         protected Dictionary<string, T> _databaseRegistry = new();

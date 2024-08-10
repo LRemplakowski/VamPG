@@ -1,6 +1,6 @@
 namespace SunsetSystems.Core.Database
 {
-    public interface IDatabaseEntry
+    public interface IDatabaseEntry<T>
     {
         string DatabaseID { get; }
         string ReadableID { get; }

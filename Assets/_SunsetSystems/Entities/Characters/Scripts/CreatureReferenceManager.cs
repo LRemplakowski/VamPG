@@ -1,19 +1,13 @@
-using SunsetSystems.Core.UMA;
-using SunsetSystems.Entities.Characters;
+using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Navigation;
-using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
+using SunsetSystems.UMA;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace SunsetSystems.Entities.Creatures.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public class CreatureReferenceManager : CachedReferenceManager, ICreatureReferences
     {
-        //[field: SerializeField]
-        //public Transform BodyTransform { get; private set; }
-        //[field: SerializeField]
-        //public GameObject BodyGameObject { get; private set; }
         [field: SerializeField]
         public CreatureData CreatureData { get; private set; }
         [field: SerializeField]

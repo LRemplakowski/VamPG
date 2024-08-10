@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using SunsetSystems.Utils.Database;
-using SunsetSystems.Utils.Extensions;
-using UMA.CharacterSystem;
+using SunsetSystems.UMA;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
     [CreateAssetMenu(fileName = "New Creature Config", menuName = "Character/Creature Config")]
-    public class CreatureConfig : SerializedScriptableObject, ICreatureTemplateProvider, IDatabaseEntry
+    public class CreatureConfig : AbstractDatabaseEntry<CreatureConfig>, ICreatureTemplateProvider
     {
         [field: SerializeField, ReadOnly]
-        public string DatabaseID { get; private set; } = "";
+        public override string DatabaseID { get; protected set; } = "";
+        [field: SerializeField]
+        public override string ReadableID { get; protected set; }
         [SerializeField]
         private string _name = "New";
         public string FirstName { get => _name; }
@@ -24,13 +23,6 @@ namespace SunsetSystems.Entities.Characters
         private string _lastName = "Creature";
         public string LastName { get => _lastName; }
         public string FullName { get => $"{FirstName} {LastName}".Trim(); }
-        [SerializeField]
-        private bool _overrideReadableID;
-        [SerializeField, ReadOnly, HideIf("_overrideReadableID")]
-        private string _defaultReadableID = "";
-        [SerializeField, ShowIf("_overrideReadableID")]
-        private string _readableIDOverride = "";
-        public string ReadableID => _overrideReadableID ? _readableIDOverride : _defaultReadableID;
         [field: SerializeField]
         public Sprite Portrait { get; private set; }
         [SerializeField]
@@ -39,7 +31,7 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public InventoryConfig EquipmentConfig { get; private set; }
         [field: SerializeField]
-        public UMAWardrobeCollection BaseLookWardrobeCollection { get; private set; }
+        public IUMAWardrobeDatabaseItem BaseLookWardrobeCollection { get; private set; }
         [SerializeField]
         private Faction _creatureFaction;
         public Faction Faction { get => _creatureFaction; }
@@ -55,26 +47,9 @@ namespace SunsetSystems.Entities.Characters
         public ICreatureTemplate CreatureTemplate => new TemplateFromCreatureAsset(this);
 
 #if UNITY_EDITOR
-        private void Awake()
+        protected override void OnValidate()
         {
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-            {
-                AssignNewID();
-            }
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false)
-                CreatureDatabase.Instance.Register(this);
-        }
-
-        [Button("Force Validate")]
-        private void OnValidate()
-        {
-            if (string.IsNullOrWhiteSpace(DatabaseID))
-            {
-                AssignNewID();
-            }
-            _defaultReadableID = FullName.ToCamelCase();
-            if (string.IsNullOrWhiteSpace(DatabaseID) == false)
-                CreatureDatabase.Instance.Register(this);
+            base.OnValidate();
             if (EquipmentSlotsData == null || EquipmentSlotsData.Count < Enum.GetValues(typeof(EquipmentSlotID)).Length - 1)
             {
                 EquipmentSlotsData = new()
@@ -88,24 +63,17 @@ namespace SunsetSystems.Entities.Characters
                 };
             }
         }
+#endif
 
-        private void Reset()
+        protected override void RegisterToDatabase()
         {
-            AssignNewID();
+            CreatureDatabase.Instance.Register(this);
         }
 
-        private void OnDestroy()
+        protected override void UnregisterFromDatabase()
         {
             CreatureDatabase.Instance.Unregister(this);
         }
-
-        [Button("Randomize ID")]
-        private void AssignNewID()
-        {
-            DatabaseID = System.Guid.NewGuid().ToString();
-            UnityEditor.EditorUtility.SetDirty(this);
-        }
-#endif
 
         [Serializable]
         public class TemplateFromCreatureAsset : ICreatureTemplate
@@ -126,9 +94,7 @@ namespace SunsetSystems.Entities.Characters
 
             public CreatureType CreatureType { get; private set; }
 
-            public short BaseLookWardrobeCollectionID { get; private set; }
-
-            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
+            public string BaseLookWardrobeReadableID { get; private set; }
 
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
 
@@ -143,10 +109,7 @@ namespace SunsetSystems.Entities.Characters
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                if (DatabaseHolder.Instance != null)
-                    this.BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(asset.BaseLookWardrobeCollection);
-                else
-                    BaseLookWardrobeCollectionAsset = asset.BaseLookWardrobeCollection;
+                this.BaseLookWardrobeReadableID = asset.BaseLookWardrobeCollection.ReadableID;
                 this.EquipmentSlotsData = new();
                 foreach (var item in asset.EquipmentSlotsData)
                 {

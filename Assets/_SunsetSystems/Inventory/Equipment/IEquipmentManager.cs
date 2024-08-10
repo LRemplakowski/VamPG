@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
 
 namespace SunsetSystems.Equipment

@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public interface IBaseItem : IDatabaseEntry
+    public interface IBaseItem : IDatabaseEntry<IBaseItem>
     {
         string Name { get; }
         bool Stackable { get; }

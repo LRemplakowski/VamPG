@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using SunsetSystems.Combat;
 using SunsetSystems.DynamicLog;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions

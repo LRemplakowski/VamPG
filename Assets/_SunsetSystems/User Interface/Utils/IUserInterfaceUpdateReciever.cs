@@ -7,6 +7,6 @@ namespace SunsetSystems.UI.Utils
     {
         void DisableViews();
 
-        void UpdateViews(List<IGameDataProvider<T>> data);
+        void UpdateViews(List<IUserInfertaceDataProvider<T>> data);
     }
 }

@@ -59,7 +59,7 @@ namespace SunsetSystems.UI
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
-                List<IGameDataProvider<IEquipmentSlot>> slots = new();
+                List<IUserInfertaceDataProvider<IEquipmentSlot>> slots = new();
                 var memberEquipment = PartyManager.Instance.GetPartyMemberByID(characterKey).References.EquipmentManager;
                 if (memberEquipment != null)
                 {
@@ -74,7 +74,7 @@ namespace SunsetSystems.UI
 
         private void UpdateInventory()
         {
-            List<IGameDataProvider<InventoryEntry>> items = new();
+            List<IUserInfertaceDataProvider<InventoryEntry>> items = new();
             foreach (InventoryEntry entry in InventoryManager.Instance.GetPlayerInventoryContents())
             {
                 items.Add(entry);

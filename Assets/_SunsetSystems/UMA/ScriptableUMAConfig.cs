@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UMA;
 using UnityEngine;
 
-namespace SunsetSystems.Core.UMA
+namespace SunsetSystems.UMA
 {
     [CreateAssetMenu(fileName = "New UMA Config", menuName = "Sunset Core/UMA Config")]
     public class ScriptableUMAConfig : SerializedScriptableObject

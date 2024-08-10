@@ -1,5 +1,4 @@
-﻿using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
+﻿using SunsetSystems.Combat;
 using System;
 using UnityEngine;
 

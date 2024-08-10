@@ -1,12 +1,9 @@
 using SunsetSystems.Entities.Characters;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using SunsetSystems.Game;
 using SunsetSystems.Combat.Grid;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
 using System.Linq;
 

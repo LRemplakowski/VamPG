@@ -27,11 +27,11 @@ namespace SunsetSystems.Equipment.UI
             
         }
 
-        public void UpdateViews(List<IGameDataProvider<IEquipmentSlot>> data)
+        public void UpdateViews(List<IUserInfertaceDataProvider<IEquipmentSlot>> data)
         {
-            foreach (IGameDataProvider<IEquipmentSlot> slot in data)
+            foreach (IUserInfertaceDataProvider<IEquipmentSlot> slot in data)
             {
-                if (_slotViews.TryGetValue(slot.Data.ID, out EquipmentSlotDisplay view))
+                if (_slotViews.TryGetValue(slot.UIData.ID, out EquipmentSlotDisplay view))
                 {
                     view.UpdateView(slot);
                     view.gameObject.SetActive(true);

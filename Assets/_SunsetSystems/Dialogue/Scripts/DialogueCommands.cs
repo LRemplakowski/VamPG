@@ -1,8 +1,6 @@
-using System;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.Database;
-using SunsetSystems.Entities;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Journal;

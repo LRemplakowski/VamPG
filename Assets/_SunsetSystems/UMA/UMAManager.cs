@@ -41,6 +41,8 @@ namespace SunsetSystems.UMA
 
         private UMAWardrobeCollection WardrobeCollectionFromID(string readableID)
         {
+            if (string.IsNullOrWhiteSpace(readableID))
+                return null;
             if (UMAWardrobeDatabase.Instance.TryGetEntryByReadableID(readableID, out var entry))
                 return entry.Data;
             return null;

@@ -109,7 +109,8 @@ namespace SunsetSystems.Entities.Characters
                 this.Faction = asset.Faction;
                 this.BodyType = asset.BodyType;
                 this.CreatureType = asset.CreatureType;
-                this.BaseLookWardrobeReadableID = asset.BaseLookWardrobeCollection.ReadableID;
+                if (asset.BaseLookWardrobeCollection != null)
+                    this.BaseLookWardrobeReadableID = asset.BaseLookWardrobeCollection.ReadableID;
                 this.EquipmentSlotsData = new();
                 foreach (var item in asset.EquipmentSlotsData)
                 {

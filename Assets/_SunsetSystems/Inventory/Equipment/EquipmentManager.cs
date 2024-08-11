@@ -116,7 +116,7 @@ namespace SunsetSystems.Entities.Characters
                 return;
             }
             EquipmentSlots ??= InitializeEquipmentSlots();
-            var itemDB = DatabaseHolder.Instance.GetDatabase<ItemDatabase>();
+            var itemDB = ItemDatabase.Instance;
             foreach (EquipmentSlotID key in template.EquipmentSlotsData.Keys)
             {
                 if (template.EquipmentSlotsData.TryGetValue(key, out var templateSlot) && EquipmentSlots.TryGetValue(key, out var mySlot))

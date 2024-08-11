@@ -49,7 +49,10 @@ namespace SunsetSystems.Core.Database
 
         public bool TryGetEntryByReadableID(string readableID, out T entry)
         {
-            return TryGetEntry(_readableIDRegistry[readableID], out entry);
+            entry = default;
+            if (_readableIDRegistry.TryGetValue(readableID, out string key))
+                return TryGetEntry(key, out entry);
+            return false;
         }
 
         public bool Register(T entry)

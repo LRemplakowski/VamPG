@@ -1,5 +1,4 @@
 using SunsetSystems.Core.Database;
-using SunsetSystems.Journal;
 using UnityEngine;
 
 namespace SunsetSystems.Journal

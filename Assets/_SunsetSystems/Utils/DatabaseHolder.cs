@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace SunsetSystems.Utils.Database
+namespace SunsetSystems.Core.Database
 {
     public class DatabaseHolder : SerializedMonoBehaviour
     {

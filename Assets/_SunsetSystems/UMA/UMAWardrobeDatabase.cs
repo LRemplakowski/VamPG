@@ -13,7 +13,7 @@ namespace SunsetSystems.Core.Database
 #if UNITY_EDITOR
                 return EditorDatabaseHelper.WardrobeDB;
 #else
-                return DatabaseHolder.Instance.GetDatabase<UMAWardrobeDatabase>()
+                return DatabaseHolder.Instance.GetDatabase<UMAWardrobeDatabase>();
 #endif
             }
         }

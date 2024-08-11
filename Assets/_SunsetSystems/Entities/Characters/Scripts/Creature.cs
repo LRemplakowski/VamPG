@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using SunsetSystems.Utils.Database;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;

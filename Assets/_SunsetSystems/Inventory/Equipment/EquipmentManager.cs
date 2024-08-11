@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.Utils.Database;
 using UltEvents;
 using UnityEngine;
 

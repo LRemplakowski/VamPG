@@ -232,9 +232,11 @@ namespace SunsetSystems.Dialogue
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                characterID = PartyManager.Instance.MainCharacterKey;
-                if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out var config))
+                if (CreatureDatabase.Instance.TryGetEntry(PartyManager.Instance.MainCharacterKey, out var config))
+                {
+                    characterID = config.ReadableID;
                     characterName = config.FullName;
+                }
             }
             else if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out CreatureConfig config))
             {
@@ -256,7 +258,7 @@ namespace SunsetSystems.Dialogue
         {
             if (this.GetSpeakerPortrait(speakerID, out var sprite) && sprite != null)
                 _photo.sprite = sprite;
-            else
+            else if (string.IsNullOrWhiteSpace(speakerID) is false)
                 _photo.sprite = _placeholderPortraitAsset;
         }
 

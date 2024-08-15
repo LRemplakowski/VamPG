@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Core.Database;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
@@ -32,25 +34,30 @@ namespace SunsetSystems.Journal
         public static event Action<Quest, Objective> ObjectiveCompleted;
         public static event Action<Quest, Objective> ObjectiveFailed;
 
+        private HashSet<Objective> _activeObjectives = new();
+
         public void Begin()
         {
+            _activeObjectives = new();
             QuestStarted?.Invoke(this);
+            Objective.OnObjectiveCompleted += OnObjectiveCompleted;
+            Objective.OnObjectiveFailed += OnObjectiveFailed;
+            Objective.OnObjectiveCanceled += OnObjectiveCanceled;
             foreach (Objective o in InitialObjectives)
             {
-                o.OnObjectiveCompleted += OnObjectiveCompleted;
-                o.OnObjectiveFailed += OnObjectiveFailed;
-                o.OnObjectiveCanceled += OnObjectiveCanceled;
                 o.MakeActive();
+                _activeObjectives.Add(o);
             }
         }
 
         //TODO Rework this to sub recursively in quest begin
         private void OnObjectiveCompleted(Objective objective)
         {
+            if (_activeObjectives.Any(ob => ob.DatabaseID == objective.DatabaseID) is false)
+                return;
             Debug.Log($"Completed objective {objective.ReadableID}!");
             ObjectiveCompleted?.Invoke(this, objective);
-            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
-            objective.OnObjectiveFailed -= OnObjectiveFailed;
+            _activeObjectives.Remove(objective);
             objective.ObjectivesToCancelOnCompletion.ForEach(o => o.Cancel());
             if (objective.NextObjectives == null || objective.NextObjectives.Count <= 0)
             {
@@ -60,12 +67,7 @@ namespace SunsetSystems.Journal
             else
             {
                 Debug.Log("Tracking new set of objectives!");
-                foreach (Objective newObjective in objective.NextObjectives)
-                {
-                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
-                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
-                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
-                }
+                _activeObjectives.AddRange(objective.NextObjectives);
             }
         }
 
@@ -73,17 +75,22 @@ namespace SunsetSystems.Journal
         {
             if (objective == null)
                 return;
-            objective.OnObjectiveCompleted += OnObjectiveCompleted;
-            objective.OnObjectiveFailed += OnObjectiveFailed;
-            objective.OnObjectiveCanceled += OnObjectiveCanceled;
+            _activeObjectives ??= new();
+            if (_activeObjectives.Count <= 0)
+            {
+                Objective.OnObjectiveCompleted += OnObjectiveCompleted;
+                Objective.OnObjectiveFailed += OnObjectiveFailed;
+                Objective.OnObjectiveCanceled += OnObjectiveCanceled;
+            }
+            _activeObjectives.Add(objective);
         }
 
         private void OnObjectiveFailed(Objective objective)
         {
+            if (_activeObjectives.Any(ob => ob.DatabaseID == objective.DatabaseID) is false)
+                return;
             ObjectiveFailed?.Invoke(this, objective);
-            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
-            objective.OnObjectiveFailed -= OnObjectiveFailed;
-            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
+            _activeObjectives.Remove(objective);
             objective.ObjectivesToCancelOnFail.ForEach(o => o.Cancel());
             if (objective.NextObjectivesOnFailed == null || objective.NextObjectivesOnFailed.Count <= 0)
             {
@@ -92,20 +99,13 @@ namespace SunsetSystems.Journal
             }
             else
             {
-                foreach (Objective newObjective in objective.NextObjectivesOnFailed)
-                {
-                    newObjective.OnObjectiveCompleted += OnObjectiveCompleted;
-                    newObjective.OnObjectiveFailed += OnObjectiveFailed;
-                    newObjective.OnObjectiveCanceled += OnObjectiveCanceled;
-                }
+                _activeObjectives.AddRange(objective.NextObjectivesOnFailed);
             }
         }
 
         private void OnObjectiveCanceled(Objective objective)
         {
-            objective.OnObjectiveCompleted -= OnObjectiveCompleted;
-            objective.OnObjectiveFailed -= OnObjectiveFailed;
-            objective.OnObjectiveCanceled -= OnObjectiveCanceled;
+            _activeObjectives.Remove(objective);
         }
 
         public void Complete()
@@ -113,11 +113,17 @@ namespace SunsetSystems.Journal
             Rewards.ForEach(rewardData => rewardData.Reward.ApplyReward(rewardData.Amount));
             QuestCompleted?.Invoke(this);
             _startQuestsOnCompletion.ForEach(q => QuestJournal.Instance.BeginQuest(q));
+            Objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            Objective.OnObjectiveFailed -= OnObjectiveFailed;
+            Objective.OnObjectiveCanceled -= OnObjectiveCanceled;
         }
 
         public void Fail()
         {
             QuestFailed?.Invoke(this);
+            Objective.OnObjectiveCompleted -= OnObjectiveCompleted;
+            Objective.OnObjectiveFailed -= OnObjectiveFailed;
+            Objective.OnObjectiveCanceled -= OnObjectiveCanceled;
         }
 
         protected override void RegisterToDatabase()

@@ -17,10 +17,10 @@ namespace SunsetSystems.Journal
         public bool IsOptional = false;
         [TextArea(5, 10)]
         public string Description = "";
-        public event Action<Objective> OnObjectiveActive;
-        public event Action<Objective> OnObjectiveFailed;
-        public event Action<Objective> OnObjectiveCanceled;
-        public event Action<Objective> OnObjectiveCompleted;
+        public static event Action<Objective> OnObjectiveActive;
+        public static event Action<Objective> OnObjectiveFailed;
+        public static event Action<Objective> OnObjectiveCanceled;
+        public static event Action<Objective> OnObjectiveCompleted;
 
         [ReadOnly]
         public bool IsFirst, IsLast;

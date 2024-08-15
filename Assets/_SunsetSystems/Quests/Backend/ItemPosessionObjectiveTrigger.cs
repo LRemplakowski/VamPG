@@ -20,13 +20,16 @@ namespace SunsetSystems.Journal
 
         private void Start()
         {
-            objectiveToTrigger.OnObjectiveActive += StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveFailed += StopHandlingObjective;
-            objectiveToTrigger.OnObjectiveCompleted += StopHandlingObjective;
+            Objective.OnObjectiveActive += StartHandlingObjective;
+            Objective.OnObjectiveFailed += StopHandlingObjective;
+            Objective.OnObjectiveCompleted += StopHandlingObjective;
         }
+
 
         private void StartHandlingObjective(Objective obj)
         {
+            if (obj.DatabaseID != objectiveToTrigger.DatabaseID)
+                return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
                 hasRequiredItems = true;
@@ -65,9 +68,9 @@ namespace SunsetSystems.Journal
 
         private void StopHandlingObjective(Objective obj)
         {
-            objectiveToTrigger.OnObjectiveActive -= StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveFailed -= StopHandlingObjective;
-            objectiveToTrigger.OnObjectiveCompleted -= StopHandlingObjective;
+            Objective.OnObjectiveActive -= StartHandlingObjective;
+            Objective.OnObjectiveFailed -= StopHandlingObjective;
+            Objective.OnObjectiveCompleted -= StopHandlingObjective;
             InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
         }
 

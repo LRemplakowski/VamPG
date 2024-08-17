@@ -3,6 +3,7 @@ using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Combat;
+using SunsetSystems.Spellbook;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -15,5 +16,6 @@ namespace SunsetSystems.Entities.Characters
         IEquipmentManager EquipmentManager { get; }
         IWeaponManager WeaponManager { get; }
         IUMAManager UMAManager { get; }
+        IMagicUser SpellbookManager { get; }
     }
 }

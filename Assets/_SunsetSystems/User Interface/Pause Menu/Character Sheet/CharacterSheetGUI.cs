@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Party;
+using SunsetSystems.Spellbook;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 
@@ -33,8 +34,9 @@ namespace SunsetSystems.UI
             skills.AddRange(data.Skills?.GetSkillList() ?? new());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IUserInfertaceDataProvider<BaseStat>> disciplines = new();
-            //disciplines.AddRange(data.Disciplines?.GetDisciplines() ?? new());
-            //_disciplines.UpdateViews(disciplines);
+            IMagicUser spellbook = creature.References.SpellbookManager;
+            disciplines.AddRange(spellbook.KnownDisciplines);
+            _disciplines.UpdateViews(disciplines);
         }
     }
 }

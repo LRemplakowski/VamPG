@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -7,22 +6,31 @@ using Sirenix.Serialization;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
+using SunsetSystems.Persistence;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    public class ItemPosessionObjectiveTrigger : SerializedMonoBehaviour
+    [RequireComponent(typeof(PersistentSceneObject))]
+    public class ItemPosessionObjectiveTrigger : SerializedMonoBehaviour, IPersistentComponent
     {
         [SerializeField, Required]
         private Objective objectiveToTrigger;
         [OdinSerialize, Required, HideReferenceObjectPicker]
         private List<ItemObjectiveData> requiredItems = new();
 
+        public string ComponentID => "ITEM_POSESSION_TRIGGER";
+
+        private bool _triggered = false;
+
         private void Start()
         {
-            Objective.OnObjectiveActive += StartHandlingObjective;
-            Objective.OnObjectiveFailed += StopHandlingObjective;
-            Objective.OnObjectiveCompleted += StopHandlingObjective;
+            if (!_triggered)
+            {
+                Objective.OnObjectiveActive += StartHandlingObjective;
+                Objective.OnObjectiveFailed += StopHandlingObjective;
+                Objective.OnObjectiveCompleted += StopHandlingObjective;
+            }
         }
 
 
@@ -40,6 +48,7 @@ namespace SunsetSystems.Journal
             if (hasRequiredItems)
             {
                 objectiveToTrigger.Complete();
+                _triggered = true;
             }
             else
             {
@@ -49,7 +58,7 @@ namespace SunsetSystems.Journal
 
         private void OnItemAddedToPlayerInventory(IBaseItem item)
         {
-            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.GetRequiredItems().Any(required => required.DatabaseID == item.DatabaseID)) is false)
+            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.RequiresItem(item)) is false)
                 return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
@@ -63,15 +72,38 @@ namespace SunsetSystems.Journal
             if (hasRequiredItems)
             {
                 objectiveToTrigger.Complete();
+                _triggered = true;
             }
         }
 
         private void StopHandlingObjective(Objective obj)
         {
+            if (obj.DatabaseID != objectiveToTrigger.DatabaseID)
+                return;
             Objective.OnObjectiveActive -= StartHandlingObjective;
             Objective.OnObjectiveFailed -= StopHandlingObjective;
             Objective.OnObjectiveCompleted -= StopHandlingObjective;
             InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
+        }
+
+        public object GetComponentPersistenceData()
+        {
+            return _triggered;
+        }
+
+        public void InjectComponentPersistenceData(object data)
+        {
+            if (data is bool boolData)
+            {
+                _triggered = boolData;
+                if (_triggered)
+                {
+                    Objective.OnObjectiveActive -= StartHandlingObjective;
+                    Objective.OnObjectiveFailed -= StopHandlingObjective;
+                    Objective.OnObjectiveCompleted -= StopHandlingObjective;
+                    InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
+                }
+            }
         }
 
         [Serializable]
@@ -87,6 +119,11 @@ namespace SunsetSystems.Journal
             public IEnumerable<IBaseItem> GetRequiredItems()
             {
                 return requiredItems.AsEnumerable();
+            }
+
+            public bool RequiresItem(IBaseItem item)
+            {
+                return GetRequiredItems().Any(required => required.DatabaseID == item.DatabaseID);
             }
 
             public bool HasRequiredItems()

@@ -17,5 +17,17 @@ namespace SunsetSystems.Core.Database
 #endif
             }
         }
+
+#if UNITY_EDITOR
+        protected override AbstractDatabase<IBaseItem> GetEditorInstance()
+        {
+            return Instance;
+        }
+
+        protected override void SetEditorInstance(AbstractDatabase<IBaseItem> instance)
+        {
+            EditorDatabaseHelper.ItemDB = instance as ItemDatabase;
+        }
+#endif
     }
 }

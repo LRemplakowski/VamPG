@@ -21,5 +21,17 @@ namespace SunsetSystems.Core.Database
 #endif
             }
         }
+
+#if UNITY_EDITOR
+        protected override AbstractDatabase<CreatureConfig> GetEditorInstance()
+        {
+            return Instance;
+        }
+
+        protected override void SetEditorInstance(AbstractDatabase<CreatureConfig> instance)
+        {
+            EditorDatabaseHelper.CreatureDB = instance as CreatureDatabase;
+        }
+#endif
     }
 }

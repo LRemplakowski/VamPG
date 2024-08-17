@@ -9,6 +9,7 @@ namespace SunsetSystems.Spellbook
         ICreatureReferences References { get; }
 
         IEnumerable<DisciplinePower> KnownPowers { get; }
+        IEnumerable<Discipline> KnownDisciplines { get; }
 
         bool UsePower(DisciplinePower power, ITargetable target);
     }

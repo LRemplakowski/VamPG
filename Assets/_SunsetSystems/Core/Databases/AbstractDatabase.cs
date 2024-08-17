@@ -12,6 +12,19 @@ namespace SunsetSystems.Core.Database
         [SerializeField]
         protected Dictionary<string, string> _readableIDRegistry = new();
 
+        private void Awake()
+        {
+#if UNITY_EDITOR
+            if (GetEditorInstance() == null)
+                SetEditorInstance(this);
+#endif
+        }
+
+#if UNITY_EDITOR
+        protected abstract AbstractDatabase<T> GetEditorInstance();
+        protected abstract void SetEditorInstance(AbstractDatabase<T> instance);
+#endif
+
         protected virtual void OnValidate()
         {
             List<string> keysToDelete = new();

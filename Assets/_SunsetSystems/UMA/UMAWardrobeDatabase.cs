@@ -17,5 +17,17 @@ namespace SunsetSystems.Core.Database
 #endif
             }
         }
+
+#if UNITY_EDITOR
+        protected override AbstractDatabase<IUMAWardrobeDatabaseItem> GetEditorInstance()
+        {
+            return Instance;
+        }
+
+        protected override void SetEditorInstance(AbstractDatabase<IUMAWardrobeDatabaseItem> instance)
+        {
+            EditorDatabaseHelper.WardrobeDB = instance as UMAWardrobeDatabase;
+        }
+#endif
     }
 }

@@ -17,5 +17,17 @@ namespace SunsetSystems.Journal
 #endif
             }
         }
+
+#if UNITY_EDITOR
+        protected override AbstractDatabase<Quest> GetEditorInstance()
+        {
+            return Instance;
+        }
+
+        protected override void SetEditorInstance(AbstractDatabase<Quest> instance)
+        {
+            EditorDatabaseHelper.QuestDB = instance as QuestDatabase;
+        }
+#endif
     }
 }

@@ -17,5 +17,17 @@ namespace SunsetSystems.Journal
 #endif
             }
         }
+
+#if UNITY_EDITOR
+        protected override AbstractDatabase<Objective> GetEditorInstance()
+        {
+            return Instance;
+        }
+
+        protected override void SetEditorInstance(AbstractDatabase<Objective> instance)
+        {
+            EditorDatabaseHelper.ObjectiveDB = instance as ObjectiveDatabase;
+        }
+#endif
     }
 }

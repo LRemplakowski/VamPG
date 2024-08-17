@@ -1,6 +1,7 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
+using SunsetSystems.Spellbook;
 using SunsetSystems.UMA;
 using UnityEngine;
 
@@ -22,5 +23,7 @@ namespace SunsetSystems.Entities.Characters
         public IWeaponManager WeaponManager { get; private set; }
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
+        [field: SerializeField]
+        public IMagicUser SpellbookManager { get; private set; }
     }
 }

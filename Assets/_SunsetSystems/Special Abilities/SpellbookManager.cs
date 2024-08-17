@@ -22,6 +22,7 @@ namespace SunsetSystems.Spellbook
         private List<Discipline> Disciplines { get; set; }
 
         public IEnumerable<DisciplinePower> KnownPowers => Disciplines.SelectMany(d => d.GetKnownPowers());
+        public IEnumerable<Discipline> KnownDisciplines => Disciplines;
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 

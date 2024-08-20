@@ -3747,7 +3747,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 14
         _Int: 0
-        _String: System.Collections.Generic.IEnumerable`1[[SunsetSystems.Entities.Interfaces.ICombatant,
+        _String: System.Collections.Generic.IEnumerable`1[[SunsetSystems.Combat.ICombatant,
           SunsetSystems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
           mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
         _X: 0
@@ -3770,7 +3770,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 14
         _Int: 0
-        _String: SunsetSystems.Entities.Interfaces.ICombatant, SunsetSystems, Version=0.0.0.0,
+        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -3782,7 +3782,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 14
         _Int: 0
-        _String: SunsetSystems.Entities.Interfaces.ICombatant, SunsetSystems, Version=0.0.0.0,
+        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -3799,7 +3799,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 14
         _Int: 0
-        _String: SunsetSystems.Entities.Interfaces.ICombatant, SunsetSystems, Version=0.0.0.0,
+        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -3811,7 +3811,7 @@ MonoBehaviour:
       _PersistentArguments:
       - _Type: 14
         _Int: 0
-        _String: SunsetSystems.Entities.Interfaces.ICombatant, SunsetSystems, Version=0.0.0.0,
+        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
         _X: 0
         _Y: 0
@@ -3819,7 +3819,19 @@ MonoBehaviour:
         _W: 0
         _Object: {fileID: 0}
   OnFullTurnCompleted:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 4065193537741608299}
+      _MethodName: OnFullTurnCompleted
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &2421734508816519914
 GameObject:
   m_ObjectHideFlags: 0
@@ -25917,27 +25929,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 22.22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 280
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7055642278769613176, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -11.11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7116944102742014355, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: serializationData.Prefab
@@ -25973,27 +25985,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 440
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7215727471103645149, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -859.99994
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7257501067024632787, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: serializationData.Prefab
@@ -26305,27 +26317,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 31.29
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 280
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8499515361320965123, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -574.355
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8512083969768300026, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
@@ -26401,27 +26413,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 508.70996
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 560
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8713395291179431651, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -254.35498
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8733312212948217471, guid: 8e4bff3ad2ca5e849bbfc881be35f840, type: 3}
       propertyPath: m_AnchorMax.y

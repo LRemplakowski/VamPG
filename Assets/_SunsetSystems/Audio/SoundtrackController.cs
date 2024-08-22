@@ -1,5 +1,6 @@
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace SunsetSystems.Audio
         [SerializeField, Range(0.01f, 10f)]
         private float _trackTransitionTime = 1f;
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
-        private Dictionary<GameState, PlaylistConfig> statePlaylistPairs = new();
+        private Dictionary<GameState, IPlaylist> statePlaylistPairs = new();
         [SerializeField]
         private float _defaultVolume = .5f;
         private float _cachedVolume;
@@ -33,8 +34,9 @@ namespace SunsetSystems.Audio
                 _soundtrackSource.volume = value;
             }
         }
-        private Task _cachedPlaylistTask;
 
+        private Task _cachedPlaylistTask;
+        private IPlaylist _lastPlaylist;
         private bool _playSoundtrack;
 
         private void Awake()
@@ -46,6 +48,7 @@ namespace SunsetSystems.Audio
 
         private void OnValidate()
         {
+            statePlaylistPairs ??= new();
             foreach (GameState state in Enum.GetValues(typeof(GameState)))
             {
                 if (statePlaylistPairs.ContainsKey(state) is false)
@@ -56,7 +59,11 @@ namespace SunsetSystems.Audio
         public void PlayStatePlaylist(GameState gameState)
         {
             _playSoundtrack = true;
-            _cachedPlaylistTask = ExecutePlaylist(statePlaylistPairs[gameState]);
+            if (statePlaylistPairs.TryGetValue(gameState, out IPlaylist statePlaylist) && statePlaylist != _lastPlaylist)
+            {
+                _lastPlaylist = statePlaylist;
+                _cachedPlaylistTask = ExecutePlaylist(statePlaylistPairs[gameState]);
+            }
         }
 
         public void StopSoundtrackImmediate()
@@ -66,7 +73,7 @@ namespace SunsetSystems.Audio
             _cachedPlaylistTask = null;
         }
 
-        private async Task ExecutePlaylist(PlaylistConfig config)
+        private async Task ExecutePlaylist(IPlaylist config)
         {
             Task myTask = _cachedPlaylistTask;
             while (_playSoundtrack)
@@ -106,6 +113,16 @@ namespace SunsetSystems.Audio
                 timeElapsed += Time.deltaTime;
                 await new WaitForUpdate();
             }
+        }
+
+        public void InjectPlaylistData(ScenePlaylistData playlistData)
+        {
+            if (playlistData.Exploration != null)
+                statePlaylistPairs[GameState.Exploration] = playlistData.Exploration;
+            if (playlistData.Combat != null)
+                statePlaylistPairs[GameState.Combat] = playlistData.Combat;
+            if (playlistData.Dialogue != null)
+                statePlaylistPairs[GameState.Conversation] = playlistData.Dialogue;
         }
     }
 }

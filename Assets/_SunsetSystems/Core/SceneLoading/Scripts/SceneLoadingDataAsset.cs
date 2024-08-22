@@ -2,10 +2,8 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
+using SunsetSystems.Audio;
+using Sirenix.Serialization;
 
 namespace SunsetSystems.Core.SceneLoading
 {
@@ -14,29 +12,39 @@ namespace SunsetSystems.Core.SceneLoading
     {
 #if UNITY_EDITOR
         [SerializeField, ES3NonSerializable]
-        private List<SceneAsset> sceneAssets = new();
+        private List<UnityEditor.SceneAsset> sceneAssets = new();
 
         private void OnValidate()
         {
             _loadingData.ScenePaths = new();
-            foreach (SceneAsset asset in sceneAssets)
+            foreach (UnityEditor.SceneAsset asset in sceneAssets)
             {
-                LoadingData.ScenePaths.Add(AssetDatabase.GetAssetPath(asset));
+                LoadingData.ScenePaths.Add(UnityEditor.AssetDatabase.GetAssetPath(asset));
             }
         }
 #endif
         [SerializeField]
         private LevelLoadingData _loadingData = new();
         public LevelLoadingData LoadingData => _loadingData;
+        [OdinSerialize]
+        private ScenePlaylistData _playlistData = new();
+        public ScenePlaylistData PlaylistData => _playlistData;
+    }
 
-        [Serializable]
-        public struct LevelLoadingData
-        {
-            [SerializeField]
-            public bool ShowScenePaths;
-            [SerializeField, ReadOnly, ShowIf("ShowScenePaths")]
-            public List<string> ScenePaths;
-            public readonly IReadOnlyList<string> AddressableScenePaths => ScenePaths.AsReadOnly();
-        }
+    [Serializable]
+    public struct LevelLoadingData
+    {
+        [SerializeField]
+        public bool ShowScenePaths;
+        [SerializeField, ReadOnly, ShowIf("ShowScenePaths")]
+        public List<string> ScenePaths;
+        public readonly IReadOnlyList<string> AddressableScenePaths => ScenePaths.AsReadOnly();
+    }
+
+    [SerializeField]
+    public struct ScenePlaylistData
+    {
+        [SerializeField]
+        public IPlaylist Exploration, Combat, Dialogue;
     }
 }

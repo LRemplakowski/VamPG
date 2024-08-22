@@ -1,5 +1,7 @@
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Constants;
+using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -92,6 +94,11 @@ namespace SunsetSystems.Audio
             PlayerPrefs.SetFloat(SettingsConstants.SFX_VOLUME_KEY, volume);
             PlayerPrefs.Save();
             _sfxController.Volume = volume;
+        }
+
+        public void InjectPlaylistData(ScenePlaylistData playlistData)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -117,7 +117,7 @@ namespace SunsetSystems.Persistence
             }
         }
 
-        public static SceneLoadingDataAsset.LevelLoadingData GetSavedLevelAsset(string saveID)
+        public static LevelLoadingData GetSavedLevelAsset(string saveID)
         {
             var metaData = ES3.Load<SaveMetaData>(META_DATA, SaveIDToFilePath(saveID));
             if (metaData.SaveID == saveID)

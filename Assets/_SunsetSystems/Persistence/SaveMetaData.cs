@@ -10,6 +10,7 @@ namespace SunsetSystems.Persistence
         public string SaveName;
         public string SaveDate;
         public readonly string SaveFileName => $"{SaveID}.sav";
-        public SceneLoadingDataAsset.LevelLoadingData LevelLoadingData;
+        public LevelLoadingData LevelLoadingData;
+        public ScenePlaylistData PlaylistData;
     }
 }

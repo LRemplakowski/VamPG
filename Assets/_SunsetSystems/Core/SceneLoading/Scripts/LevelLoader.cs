@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
+using SunsetSystems.Audio;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Persistence;
@@ -21,7 +22,7 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private Camera loadingCamera;
 
-        public SceneLoadingDataAsset.LevelLoadingData CurrentLoadedLevel { get; private set; }
+        public LevelLoadingData CurrentLoadedLevel { get; private set; }
 
         public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad;
         public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
@@ -44,6 +45,7 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
             CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
+            AudioManager.Instance.InjectPlaylistData(data.PlaylistData);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
@@ -77,6 +79,7 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await Task.Delay(1000);
+            AudioManager.Instance.InjectPlaylistData(saveMetaData.PlaylistData);
             OnLevelLoadEnd?.Invoke();
             await new WaitUntil(HasGeneratorProcessedAllUMA);
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
@@ -91,7 +94,7 @@ namespace SunsetSystems.Core.SceneLoading
             SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
         }
 
-        private async Task DoSceneLoading(SceneLoadingDataAsset.LevelLoadingData data)
+        private async Task DoSceneLoading(LevelLoadingData data)
         {
             var asyncOp = UnityEngine.AddressableAssets.Addressables.LoadSceneAsync(data.AddressableScenePaths[0], LoadSceneMode.Single);
             while (asyncOp.IsDone == false)

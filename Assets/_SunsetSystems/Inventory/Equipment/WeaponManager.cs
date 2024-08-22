@@ -1,18 +1,15 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Animation;
-using SunsetSystems.Combat;
-using SunsetSystems.Combat.UI;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Game;
-using SunsetSystems.Inventory;
-using SunsetSystems.Inventory.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Animation;
+using SunsetSystems.Combat;
+using SunsetSystems.Game;
+using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
 
 namespace SunsetSystems.Equipment
 {
@@ -40,7 +37,7 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private IWeaponInstance weaponInstance;
         [ShowInInspector, ReadOnly]
-        private Dictionary<EquipmentSlotID, WeaponAmmoData> weaponsAmmoData = new();
+        private Dictionary<string, WeaponAmmoData> weaponsAmmoData = new();
 
         public UltEvent<IWeaponInstance> OnWeaponInstanceRebuilt = new();
 
@@ -70,25 +67,9 @@ namespace SunsetSystems.Equipment
             if (combatants.Contains(owner))
             {
                 IWeapon primaryWeapon = GetPrimaryWeapon();
-                if (primaryWeapon != null && primaryWeapon.WeaponType == WeaponType.Ranged)
-                {
-                    WeaponAmmoData primaryWeaponAmmoData = new()
-                    {
-                        MaxAmmo = primaryWeapon.MaxAmmo,
-                        CurrentAmmo = primaryWeapon.MaxAmmo
-                    };
-                    weaponsAmmoData[EquipmentSlotID.PrimaryWeapon] = primaryWeaponAmmoData;
-                }
+                EnsureAmmoData(primaryWeapon);
                 IWeapon secondaryWeapon = GetSecondaryWeapon();
-                if (secondaryWeapon != null && secondaryWeapon.WeaponType == WeaponType.Ranged)
-                {
-                    WeaponAmmoData secondaryWeaponAmmoData = new()
-                    {
-                        MaxAmmo = primaryWeapon.MaxAmmo,
-                        CurrentAmmo = primaryWeapon.MaxAmmo
-                    };
-                    weaponsAmmoData[EquipmentSlotID.SecondaryWeapon] = secondaryWeaponAmmoData;
-                }
+                EnsureAmmoData(secondaryWeapon);
                 _ = RebuildWeaponInstance();
             }
         }
@@ -162,12 +143,12 @@ namespace SunsetSystems.Equipment
             IWeapon selectedWeaponInstance = GetSelectedWeapon();
             if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return true;
-            if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
+            if (weaponsAmmoData.TryGetValue(selectedWeaponInstance.DatabaseID, out WeaponAmmoData ammoData))
             {
                 if (ammoData.CurrentAmmo < count)
                     return false;
                 ammoData.CurrentAmmo -= count;
-                weaponsAmmoData[selectedWeapon] = ammoData;
+                weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
                 return true;
             }
             return false;
@@ -178,10 +159,34 @@ namespace SunsetSystems.Equipment
             IWeapon selectedWeaponInstance = GetSelectedWeapon();
             if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return;
-            if (weaponsAmmoData.TryGetValue(selectedWeapon, out WeaponAmmoData ammoData))
+            if (weaponsAmmoData.TryGetValue(selectedWeaponInstance.DatabaseID, out WeaponAmmoData ammoData))
             {
                 ammoData.CurrentAmmo = ammoData.MaxAmmo;
-                weaponsAmmoData[selectedWeapon] = ammoData;
+                weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
+            }
+        }
+
+        public bool CanReloadSelectedWeapon()
+        {
+            var selectedWeapon = GetSelectedWeapon();
+            return weaponsAmmoData.TryGetValue(selectedWeapon.DatabaseID, out var ammoData) && ammoData.CurrentAmmo < ammoData.MaxAmmo;
+        }
+
+        private void EnsureAmmoData(IWeapon weapon)
+        {
+            if (ValidateWeapon(weapon))
+            {
+                WeaponAmmoData ammoData = new()
+                {
+                    MaxAmmo = weapon.MaxAmmo,
+                    CurrentAmmo = weapon.MaxAmmo
+                };
+                weaponsAmmoData[weapon.DatabaseID] = ammoData;
+            }
+
+            bool ValidateWeapon(IWeapon weapon)
+            {
+                return weapon != null && weapon.WeaponType == WeaponType.Ranged && weaponsAmmoData.ContainsKey(weapon.ReadableID) is false;
             }
         }
 
@@ -200,6 +205,7 @@ namespace SunsetSystems.Equipment
                             _ = RebuildWeaponInstance();
                         break;
                 }
+                EnsureAmmoData(weapon);
             }
         }
 

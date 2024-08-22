@@ -123,18 +123,21 @@ namespace SunsetSystems.Core
             _landlord.References.StatsManager.Die();
         }
 
+        public void MoveCoffeeTable()
+        {
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
+        }
+
         public async void BargeIn()
         {
             SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+
             _havenDoors.Open = true;
             _dominic.References.GameObject.SetActive(true);
             _kieran.References.GameObject.SetActive(true);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranWaypoint.transform.position);
             CameraControl.ForceToPosition(_cameraPositionDominicEnter);

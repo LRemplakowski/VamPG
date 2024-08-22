@@ -93,6 +93,8 @@ namespace SunsetSystems.Combat
     public struct SelectedCombatActionData
     {
         [field: SerializeField]
+        public bool ExecuteImmediate { get; private set; }
+        [field: SerializeField]
         public CombatActionType ActionType { get; private set; }
         [field: SerializeField, ShowIf("@this.ActionType == CombatActionType.UseDiscipline")]
         public DisciplinePower DisciplinePowerData { get; private set; }
@@ -106,6 +108,7 @@ namespace SunsetSystems.Combat
         {
             this.ActionType = ActionType;
             this.DisciplinePowerData = DisciplinePowerData;
+            ExecuteImmediate = false;
         }
     }
 

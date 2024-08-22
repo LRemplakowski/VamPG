@@ -78,6 +78,7 @@ namespace SunsetSystems
                 clip.SetCurve(relativeBonePath, typeof(Transform), "localScale.z", scaleZCurve);
             }
             AssetDatabase.CreateAsset(clip, "Assets/generated clip.anim");
+            AssetDatabase.SaveAssets();
         }
     }
 }

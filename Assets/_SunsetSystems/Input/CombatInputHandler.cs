@@ -54,7 +54,9 @@ namespace SunsetSystems.Input
             CombatManager.Instance.CurrentEncounter.GridManager.ClearHighlightedCell();
             if (_pointerOverGameObject)
             {
+                _selectedActionManager.SetLastGridHit(null);
                 gridHit = null;
+                _selectedActionManager.SetLastTargetableHit(null);
                 targetableHit = null;
                 return;
             }
@@ -63,16 +65,19 @@ namespace SunsetSystems.Input
             {
                 HandleGridCellPointerPosition();
                 gridHit = hit.collider;
+                _selectedActionManager.SetLastGridHit(gridHit);
             }
             if (Physics.Raycast(ray, out hit, raycastRange, targetableLayerMask))
             {
                 if (targetableHit != hit.collider)
                     HandleTargetablePointerPosition();
                 targetableHit = hit.collider;
+                _selectedActionManager.SetLastTargetableHit(targetableHit);
             }
             else
             {
                 targetableHit = null;
+                _selectedActionManager.SetLastTargetableHit(null);
                 _showTargetingLine = false;
             }
 
@@ -100,109 +105,12 @@ namespace SunsetSystems.Input
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
         {
-            if (context.performed is false)
+            if (context.started is false)
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            var actionFlag = _selectedActionManager.SelectedActionData.ActionType;
-            switch (actionFlag)
-            {
-                case CombatActionType when (actionFlag & CombatActionType.Move) != 0:
-                    HandleMoveCombatAction();
-                    break;
-                case CombatActionType when (actionFlag & CombatActionType.RangedAtk) != 0:
-                    HandleRangedAttackCombatAction();
-                    break;
-                case CombatActionType when (actionFlag & CombatActionType.MeleeAtk) != 0:
-                    HandleMeleeAttackCombatAction();
-                    break;
-                case CombatActionType when (actionFlag & CombatActionType.Feed) != 0:
-                    HandleFeedCombatAction();
-                    break;
-                case CombatActionType when (actionFlag & CombatActionType.Reload) != 0:
-                    HandleReloadCombatAction();
-                    break;
-                case CombatActionType when (actionFlag & CombatActionType.UseDiscipline) != 0:
-                    HandleUseDisciplineCombatAction();
-                    break;
-            }
-
-            void HandleMoveCombatAction()
-            {
-                if (gridHit != null)
-                {
-                    IGridCell gridCell = gridHit.gameObject.GetComponent<IGridCell>();
-                    if (gridCell != null)
-                    {
-                        ICombatant currentCombatant = CombatManager.Instance.CurrentActiveActor;
-                        if (gridCell.IsFree && currentCombatant.HasMoved is false)
-                        {
-                            if (currentCombatant.MoveToGridPosition(gridCell.GridPosition))
-                                CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
-                        }
-                    }
-                }
-            }
-
-            void HandleRangedAttackCombatAction()
-            {
-                if (targetableHit != null)
-                {
-                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
-                    if (attackTarget != null && attackTarget.IsAlive)
-                    {
-                        var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
-                        {
-                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
-                        }
-                    }
-                }
-            }
-
-            void HandleMeleeAttackCombatAction()
-            {
-                if (targetableHit != null)
-                {
-                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
-                    if (attackTarget != null && attackTarget.IsAlive)
-                    {
-                        var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Melee)
-                        {
-                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
-                        }
-                    }
-                }
-            }
-
-            void HandleFeedCombatAction()
-            {
-                Debug.Log("Om non nom");
-            }
-
-            void HandleReloadCombatAction()
-            {
-                var currentActor = CombatManager.Instance.CurrentActiveActor;
-                if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
-                {
-                    currentActor.ReloadCurrentWeapon();
-                }
-            }
-
-            void HandleUseDisciplineCombatAction()
-            {
-                DisciplinePower selectedDisciplinePower = _selectedActionManager.SelectedActionData.DisciplinePowerData;
-                IMagicUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
-                if (targetableHit != null)
-                {
-                    ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
-                    if (target != null && selectedDisciplinePower.IsValidTarget(target, currentActorSpellcaster))
-                    {
-                        currentActorSpellcaster.UsePower(selectedDisciplinePower, target);
-                    }
-                }
-            }
+            if (_selectedActionManager.SelectedActionData.ExecuteImmediate is false)
+                _selectedActionManager.ExecuteAction(_selectedActionManager.SelectedActionData);
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)

@@ -62,7 +62,7 @@ namespace SunsetSystems.Audio
             if (statePlaylistPairs.TryGetValue(gameState, out IPlaylist statePlaylist) && statePlaylist != _lastPlaylist)
             {
                 _lastPlaylist = statePlaylist;
-                _cachedPlaylistTask = ExecutePlaylist(statePlaylistPairs[gameState]);
+                _cachedPlaylistTask = ExecutePlaylist(statePlaylist);
             }
         }
 

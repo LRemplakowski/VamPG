@@ -98,7 +98,7 @@ namespace SunsetSystems.Audio
 
         public void InjectPlaylistData(ScenePlaylistData playlistData)
         {
-            throw new NotImplementedException();
+            _soundtrackController.InjectPlaylistData(playlistData);
         }
     }
 }

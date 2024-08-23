@@ -16,9 +16,9 @@ namespace ES3Types
 		{
 			var instance = (SunsetSystems.Core.SceneLoading.ScenePlaylistData)obj;
 			
-			writer.WriteProperty("Exploration", instance.Exploration, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(SunsetSystems.Audio.IPlaylist)));
-			writer.WriteProperty("Combat", instance.Combat, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(SunsetSystems.Audio.IPlaylist)));
-			writer.WriteProperty("Dialogue", instance.Dialogue, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(SunsetSystems.Audio.IPlaylist)));
+			writer.WriteProperty("Exploration", instance.Exploration, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>)));
+			writer.WriteProperty("Combat", instance.Combat, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>)));
+			writer.WriteProperty("Dialogue", instance.Dialogue, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>)));
 		}
 
 		public override object Read<T>(ES3Reader reader)
@@ -31,13 +31,13 @@ namespace ES3Types
 				{
 					
 					case "Exploration":
-						instance.Exploration = reader.Read<SunsetSystems.Audio.IPlaylist>();
+						instance.Exploration = reader.Read<UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>>();
 						break;
 					case "Combat":
-						instance.Combat = reader.Read<SunsetSystems.Audio.IPlaylist>();
+						instance.Combat = reader.Read<UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>>();
 						break;
 					case "Dialogue":
-						instance.Dialogue = reader.Read<SunsetSystems.Audio.IPlaylist>();
+						instance.Dialogue = reader.Read<UnityEngine.AddressableAssets.AssetReferenceT<SunsetSystems.Audio.PlaylistConfig>>();
 						break;
 					default:
 						reader.Skip();

@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using SunsetSystems.Audio;
 using Sirenix.Serialization;
+using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Core.SceneLoading
 {
@@ -45,6 +46,6 @@ namespace SunsetSystems.Core.SceneLoading
     public struct ScenePlaylistData
     {
         [SerializeField]
-        public IPlaylist Exploration, Combat, Dialogue;
+        public AssetReferenceT<PlaylistConfig> Exploration, Combat, Dialogue;
     }
 }

@@ -1,11 +1,13 @@
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.AddressableManagement;
 using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace SunsetSystems.Audio
 {
@@ -38,6 +40,7 @@ namespace SunsetSystems.Audio
         private Task _cachedPlaylistTask;
         private IPlaylist _lastPlaylist;
         private bool _playSoundtrack;
+        private ScenePlaylistData _lastPlaylistData = new();
 
         private void Awake()
         {
@@ -115,14 +118,39 @@ namespace SunsetSystems.Audio
             }
         }
 
-        public void InjectPlaylistData(ScenePlaylistData playlistData)
+        public async void InjectPlaylistData(ScenePlaylistData playlistData)
         {
+            ReleasePreviousDataIfExists();
+            _lastPlaylistData = playlistData;
+            Dictionary<GameState, Task<IPlaylist>> operations = new();
             if (playlistData.Exploration != null)
-                statePlaylistPairs[GameState.Exploration] = playlistData.Exploration;
+            {
+                var op = playlistData.Exploration.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Exploration] = op.Task;
+            }
             if (playlistData.Combat != null)
-                statePlaylistPairs[GameState.Combat] = playlistData.Combat;
+            {
+                var op = playlistData.Combat.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Combat] = op.Task;
+            }
             if (playlistData.Dialogue != null)
-                statePlaylistPairs[GameState.Conversation] = playlistData.Dialogue;
+            {
+                var op = playlistData.Dialogue.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Conversation] = op.Task;
+            }
+            await Task.WhenAll(operations.Values);
+            foreach (var statePlaylist in operations)
+            {
+                statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
+            }
+            PlayStatePlaylist(GameState.Exploration);
+        }
+
+        private void ReleasePreviousDataIfExists()
+        {
+            _lastPlaylistData.Dialogue?.ReleaseAsset();
+            _lastPlaylistData.Combat?.ReleaseAsset();
+            _lastPlaylistData.Dialogue?.ReleaseAsset();
         }
     }
 }

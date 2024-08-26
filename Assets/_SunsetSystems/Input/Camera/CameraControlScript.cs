@@ -90,15 +90,15 @@ namespace SunsetSystems.Input.CameraControl
         {
             _moveTarget += Quaternion.AngleAxis(Camera.main.transform.localRotation.eulerAngles.y, Vector3.up) * _moveDirection * _internalMoveTargetSpeed * Time.fixedDeltaTime;
             Ray ray = new(transform.position + Vector3.up, -Vector3.up);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f, _groundRaycastMask, QueryTriggerInteraction.Collide)){
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, 100f, _groundRaycastMask, QueryTriggerInteraction.Collide)) {
                 _moveTarget = new(_moveTarget.x, hitInfo.point.y, _moveTarget.z);
             }
-            if (_currentBoundingBox){
+            if (_currentBoundingBox) {
                 _moveTarget = _currentBoundingBox.IsPositionWithinBounds(_moveTarget) ? _moveTarget : _currentBoundingBox.ClampPositionToBounds(_moveTarget);
             }
         }
 
-        public Vector3 GetPosition(){
+        public Vector3 GetPosition() {
             mousePos = new Vector2(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue());
             mousePosVector = new Vector3(mousePos.x, 0, mousePos.y);
             Ray ray = Camera.main.ScreenPointToRay(mousePosVector);
@@ -113,9 +113,11 @@ namespace SunsetSystems.Input.CameraControl
 
         public object GetSaveData()
         {
-            CameraSaveData saveData = new();
-            saveData.CurrentBoundingBox = _currentBoundingBox;
-            saveData.RigPosition = _moveTarget;
+            CameraSaveData saveData = new()
+            {
+                CurrentBoundingBox = _currentBoundingBox,
+                RigPosition = _moveTarget
+            };
             return saveData;
         }
 
@@ -123,7 +125,8 @@ namespace SunsetSystems.Input.CameraControl
         {
             if (data is not CameraSaveData saveData)
                 return;
-            _currentBoundingBox = saveData.CurrentBoundingBox;
+            if (saveData.CurrentBoundingBox != null)
+                _currentBoundingBox = saveData.CurrentBoundingBox;
             ForceToPosition(saveData.RigPosition);
             _movedToSavedPosition = true;
         }

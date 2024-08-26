@@ -150,27 +150,29 @@ namespace SunsetSystems.Combat.Grid
             return managedGrid.GetCellGameObject(gridPosition);
         }
 
-        public Vector3Int GetNearestWalkableGridPosition(Vector3 position)
+        public Vector3Int GetNearestWalkableGridPosition(Vector3 position, bool includeOccupied = true)
         {
             Vector3Int bestGridPos = WorldPositionToGridPosition(position);
             GridUnit unit = this[bestGridPos.x, bestGridPos.y, bestGridPos.z];
-            if (unit.Walkable)
+            if (unit.Walkable && (includeOccupied || !unit.IsOccupied))
             {
                 return bestGridPos;
             }
             else
             {
-                unit = CrawlForNearestWalkablePosition(unit, managedGrid);
+                unit = CrawlForNearestWalkablePosition(unit, managedGrid, includeOccupied);
                 return unit.GridPosition;
             }
 
-            static GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo, CachedMultiLevelGrid managedGrid)
+            static GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo, CachedMultiLevelGrid managedGrid, bool includeOccupied)
             {
                 IEnumerable<GridUnit> allWalkableUnits = managedGrid.GetAllWalkableGridUnits();
                 GridUnit result = allWalkableUnits.FirstOrDefault();
                 float gridDistance = float.MaxValue;
                 foreach (GridUnit gridUnit in allWalkableUnits)
                 {
+                    if (includeOccupied is false || gridUnit.IsOccupied)
+                        continue;
                     float newDistance = Mathf.Abs((gridUnit.GridPosition - relativeTo.GridPosition).magnitude);
                     if (newDistance < gridDistance)
                     {

@@ -76,7 +76,7 @@ namespace SunsetSystems.Entities.Characters
 
         public virtual void Die()
         {
-            Health.SuperficialDamage = 10000;
+            Health.SuperficialDamage = Health.MaxValue;
             OnCreatureDied?.Invoke(Owner);
         }
 
@@ -90,8 +90,8 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            //return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
-            return 5;
+            return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            //return 5;
         }
 
         public int GetInitiative()

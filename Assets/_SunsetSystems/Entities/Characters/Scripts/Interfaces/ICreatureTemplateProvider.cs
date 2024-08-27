@@ -1,4 +1,4 @@
-namespace SunsetSystems.Entities.Characters.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public interface ICreatureTemplateProvider
     {

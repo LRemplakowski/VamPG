@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Playables

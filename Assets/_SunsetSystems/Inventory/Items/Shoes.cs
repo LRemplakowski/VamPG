@@ -7,8 +7,15 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Shoes", menuName = "Sunset Inventory/Items/Shoes")]
     public class Shoes : WearableItem
     {
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            ItemCategory = ItemCategory.SHOES;
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
             ItemCategory = ItemCategory.SHOES;
         }
     }

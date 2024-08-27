@@ -18,7 +18,7 @@ namespace SunsetSystems.Entities.Interactable
         public bool TriggerQuest(Quest questToTrigger)
         {
             Debug.Log("Starting quest " + questToTrigger.Name);
-            return QuestJournal.Instance.BeginQuest(questToTrigger.ID);
+            return QuestJournal.Instance.BeginQuest(questToTrigger.DatabaseID);
         }
     }
 }

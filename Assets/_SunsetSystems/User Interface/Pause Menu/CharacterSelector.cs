@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Party;
 using TMPro;
+using UltEvents;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,7 +15,7 @@ namespace SunsetSystems.UI
 
         [Title("Events")]
         [SerializeField]
-        private UnityEvent OnSelectedCharacterChanged;
+        private UltEvent OnSelectedCharacterChanged;
 
         [Title("Runtime")]
         [ShowInInspector]
@@ -54,7 +55,7 @@ namespace SunsetSystems.UI
             int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.Equals(SelectedCharacterKey));
             currentIndex = currentIndex + 1 < PartyManager.Instance.AllCoterieMembers.Count ? currentIndex + 1 : 0;
             _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex];
-            OnSelectedCharacterChanged?.Invoke();
+            OnSelectedCharacterChanged?.InvokeSafe();
             UpdateSelectedText();
         }
 
@@ -63,7 +64,7 @@ namespace SunsetSystems.UI
             int currentIndex = PartyManager.Instance.AllCoterieMembers.FindIndex(cd => cd.Equals(SelectedCharacterKey));
             currentIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : PartyManager.Instance.AllCoterieMembers.Count - 1;
             _selectedCharacterKey = PartyManager.Instance.AllCoterieMembers[currentIndex];
-            OnSelectedCharacterChanged?.Invoke();
+            OnSelectedCharacterChanged?.InvokeSafe();
             UpdateSelectedText();
         }
     }

@@ -52,7 +52,8 @@ namespace SunsetSystems.Spellbook
         public override int GetValue(ModifierType modifierTypesFlag)
         {
             int finalValue = baseValue;
-            Modifiers.ForEach(m => finalValue += (modifierTypesFlag & m.Type) > 0 ? m.Value : 0);
+            if (Modifiers != null)
+                Modifiers.ForEach(m => finalValue += (modifierTypesFlag & m.Type) > 0 ? m.Value : 0);
             return finalValue;
         }
 

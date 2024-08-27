@@ -1,7 +1,5 @@
-﻿using SunsetSystems.Utils.Threading;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace SunsetSystems.Utils
 {
@@ -9,8 +7,7 @@ namespace SunsetSystems.Utils
     {
         public abstract void Initialize();
 
-        protected static HashSet<InitializedSingleton<T>> _initializedSingletons = new();
-        public static IReadOnlyCollection<InitializedSingleton<T>> InitializedSingletons => _initializedSingletons;
+        public abstract void LateInitialize();
 
         protected override void Awake()
         {
@@ -18,7 +15,7 @@ namespace SunsetSystems.Utils
             {
                 instance = this as T;
                 DontDestroyOnLoad(this.gameObject);
-                _initializedSingletons.Add(this);
+                IInitialized.RegisterInitialization(this);
             }
             else
             {
@@ -26,10 +23,10 @@ namespace SunsetSystems.Utils
             }
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            if (_initializedSingletons.Contains(this))
-                _initializedSingletons.Remove(this);
+            if (instance == this)
+                IInitialized.UnregisterInitialization(this);
         }
     }
 }

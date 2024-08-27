@@ -1,24 +1,20 @@
-using SunsetSystems.Core.UMA;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Combat;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
+using SunsetSystems.Spellbook;
+using SunsetSystems.UMA;
 using UnityEngine;
-using UnityEngine.AI;
 
-namespace SunsetSystems.Entities.Creatures.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public class CreatureReferenceManager : CachedReferenceManager, ICreatureReferences
     {
-        [field: SerializeField]
-        public Transform BodyTransform { get; private set; }
-        [field: SerializeField]
-        public GameObject BodyGameObject { get; private set; }
         [field: SerializeField]
         public CreatureData CreatureData { get; private set; }
         [field: SerializeField]
         public StatsManager StatsManager { get; private set; }
         [field: SerializeField]
-        public NavMeshAgent NavMeshAgent { get; private set; }
+        public INavigationManager NavigationManager { get; private set; }
         [field: SerializeField]
         public ICombatant CombatBehaviour { get; private set; }
         [field: SerializeField]
@@ -27,5 +23,7 @@ namespace SunsetSystems.Entities.Creatures.Interfaces
         public IWeaponManager WeaponManager { get; private set; }
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
+        [field: SerializeField]
+        public IMagicUser SpellbookManager { get; private set; }
     }
 }

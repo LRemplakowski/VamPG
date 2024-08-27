@@ -1,7 +1,5 @@
-using SunsetSystems.Journal;
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
@@ -18,22 +16,19 @@ namespace SunsetSystems.Journal
 
         private void OnEnable()
         {
-            _compositeObjective.OnObjectiveActive += StartTracking;
+            Objective.OnObjectiveActive += StartTracking;
+            Objective.OnObjectiveCompleted += PartCompleted;
         }
 
         private void OnDisable()
         {
-            _compositeObjective.OnObjectiveActive -= StartTracking;
+            Objective.OnObjectiveActive -= StartTracking;
+            Objective.OnObjectiveCompleted -= PartCompleted;
         }
 
         private void StartTracking(Objective objective)
         {
             _objectiveActive = true;
-        }
-
-        private void Start()
-        {
-            _compositeParts.ForEach(cp => cp.OnObjectiveCompleted += PartCompleted);
         }
 
         private void Update()
@@ -47,8 +42,8 @@ namespace SunsetSystems.Journal
 
         private void PartCompleted(Objective objective)
         {
-            _completedCount++;
-            objective.OnObjectiveCompleted -= PartCompleted;
+            if (_compositeParts.Any(ob => ob.DatabaseID == objective.DatabaseID))
+                _completedCount++;
         }
 
         public bool CheckCompletion(Objective objective)

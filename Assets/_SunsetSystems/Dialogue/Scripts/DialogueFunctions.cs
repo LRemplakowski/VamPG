@@ -1,7 +1,6 @@
 using System;
-using System.Linq;
+using SunsetSystems.Core.Database;
 using SunsetSystems.Dice;
-using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory;
 using SunsetSystems.Journal;
@@ -53,7 +52,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetIsPartyMemberRecruited")]
         public static bool GetIsPartyMemberRecruited(string readableID)
         {
-            if (CreatureDatabase.Instance.TryGetConfig(readableID, out var config))
+            if (CreatureDatabase.Instance.TryGetEntryByReadableID(readableID, out var config))
                 return PartyManager.Instance.IsRecruitedMember(config.DatabaseID);
             else
                 return false;
@@ -129,7 +128,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction ("GetBloodPoints")]
         public static int GetBloodPoints(string characterID)
         {
-            if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+            if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out var config))
             {
                 var partyMember = PartyManager.Instance.GetPartyMemberByID(config.DatabaseID);
                 if (partyMember != null)
@@ -161,7 +160,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetFirstName")]
         public static string GetFirstName(string characterID)
         {
-            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+            if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out CreatureConfig creatureAsset))
                 return creatureAsset.FirstName;
             return "";
         }
@@ -169,7 +168,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetLastName")]
         public static string GetLastName(string characterID)
         {
-            if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig creatureAsset))
+            if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out CreatureConfig creatureAsset))
                 return creatureAsset.LastName;
             return "";
         }
@@ -189,7 +188,10 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("CustomVisited")]
         public static bool CustomVisited(string nodeID)
         {
-            return DialogueHelper.VariableStorage.TryGetValue($"visited:{nodeID}", out bool visited) && visited;
+            var variableStorage = DialogueHelper.VariableStorage;
+            if (variableStorage != null && variableStorage.TryGetValue($"visited:{nodeID}", out bool visited))
+                return visited;
+            return false;
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using SunsetSystems.Entities.Creatures.Interfaces;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Persistence
 {
     [Serializable]
     public class GlobalPersistenceData
     {
+        [ShowInInspector]
         private Dictionary<string, object> _persistenceDataDictionary = new();
 
         public void UpdateSaveData<T>(T dataProvider) where T : ISaveable

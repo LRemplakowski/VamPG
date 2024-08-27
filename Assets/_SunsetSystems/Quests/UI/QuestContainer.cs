@@ -23,11 +23,11 @@ namespace SunsetSystems.Journal.UI
             QuestSelectorButtonClicked?.Invoke(_quest);
         }
 
-        public void UpdateView(IGameDataProvider<Quest> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<Quest> dataProvider)
         {
-            _quest = dataProvider.Data;
+            _quest = dataProvider.UIData;
             _questTitle.text = _quest.Name;
-            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.ID);
+            _button.interactable = !QuestJournal.Instance.IsQuestCompleted(_quest.DatabaseID);
         }
     }
 }

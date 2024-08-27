@@ -46,8 +46,29 @@ namespace SunsetSystems.Combat.Grid
 
         public GridUnit this[int x, int y, int z]
         {
-            get => levels[y][x, z];
-            private set => levels[y][x, z] = value;
+            get
+            {
+                try
+                {
+                    return levels[y][x, z];
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    Debug.LogException(e);
+                    return levels[0][0, 0];
+                }
+            }
+            private set 
+            {
+                try
+                {
+                    levels[y][x, z] = value;
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    Debug.LogException(e);
+                }
+            }
         }
 
         public GridUnit this[Vector3Int position]
@@ -97,8 +118,11 @@ namespace SunsetSystems.Combat.Grid
             localPosition.y = Mathf.Clamp(localPosition.y, 0, gridHeight * gridCellSize);
             localPosition.z = Mathf.Clamp(localPosition.z, 0, levelDepth * gridCellSize);
             gridPosition.x = Mathf.RoundToInt(localPosition.x / gridCellSize);
+            gridPosition.x = Mathf.Clamp(gridPosition.x, 0, levelWidth - 1);
             gridPosition.y = Mathf.RoundToInt(localPosition.y / gridCellSize);
+            gridPosition.y = Mathf.Clamp(gridPosition.y, 0, gridHeight - 1);
             gridPosition.z = Mathf.RoundToInt(localPosition.z / gridCellSize);
+            gridPosition.z = Mathf.Clamp(gridPosition.z, 0, levelDepth - 1);
             return gridPosition;
         }
 

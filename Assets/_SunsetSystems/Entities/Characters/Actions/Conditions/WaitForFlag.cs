@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions.Conditions
+namespace SunsetSystems.Entities.Characters.Actions
 {
     [Serializable]
     public class WaitForFlag : Condition

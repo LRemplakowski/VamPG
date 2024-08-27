@@ -17,10 +17,10 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_objective != null)
             {
-                _objective.OnObjectiveActive -= OnObjectiveActive;
-                _objective.OnObjectiveFailed -= OnObjectiveInactive;
-                _objective.OnObjectiveActive += OnObjectiveActive;
-                _objective.OnObjectiveFailed += OnObjectiveInactive;
+                Objective.OnObjectiveActive -= OnObjectiveActive;
+                Objective.OnObjectiveFailed -= OnObjectiveInactive;
+                Objective.OnObjectiveActive += OnObjectiveActive;
+                Objective.OnObjectiveFailed += OnObjectiveInactive;
             }
         }
 
@@ -28,19 +28,21 @@ namespace SunsetSystems.Entities.Interactable
         {
             if (_objective != null)
             {
-                _objective.OnObjectiveActive -= OnObjectiveActive;
-                _objective.OnObjectiveFailed -= OnObjectiveInactive;
+                Objective.OnObjectiveActive -= OnObjectiveActive;
+                Objective.OnObjectiveFailed -= OnObjectiveInactive;
             }
         }
 
         private void OnObjectiveActive(Objective objective)
         {
-            ObjectiveActive = true;
+            if (objective.DatabaseID == _objective.DatabaseID)
+                ObjectiveActive = true;
         }
 
         private void OnObjectiveInactive(Objective objective)
         {
-            ObjectiveActive = false;
+            if (objective.DatabaseID == _objective.DatabaseID)
+                ObjectiveActive = false;
         }
 
         public bool CheckCompletion(Objective objective)

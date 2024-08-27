@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Creatures.Interfaces;
-using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
 namespace SunsetSystems.Spellbook
@@ -25,6 +22,7 @@ namespace SunsetSystems.Spellbook
         private List<Discipline> Disciplines { get; set; }
 
         public IEnumerable<DisciplinePower> KnownPowers => Disciplines.SelectMany(d => d.GetKnownPowers());
+        public IEnumerable<Discipline> KnownDisciplines => Disciplines;
 
         private readonly Dictionary<DisciplinePower, int> _powersOnCooldown = new();
 

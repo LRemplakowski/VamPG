@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace SunsetSystems.UI.Utils
 {
-    public interface IGameDataProvider<T>
+    public interface IUserInfertaceDataProvider<T>
     {
-        T Data { get; }
+        T UIData { get; }
     }
 }

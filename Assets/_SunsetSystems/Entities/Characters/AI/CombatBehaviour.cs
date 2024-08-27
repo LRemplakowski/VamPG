@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Combat;
-using SunsetSystems.Entities.Interfaces;
+using System.Linq;
+using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using Sirenix.Utilities;
+using SunsetSystems.Animation;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Combat.UI;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Entities.Characters.Navigation;
+using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
-using Sirenix.OdinInspector;
-using System.Threading.Tasks;
-using System.Linq;
-using SunsetSystems.AI;
 using UltEvents;
-using SunsetSystems.Animation;
-using SunsetSystems.Equipment;
-using Sirenix.Utilities;
-using UnityEngine.AI;
-using SunsetSystems.Entities.Creatures.Interfaces;
+using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
@@ -24,13 +21,9 @@ namespace SunsetSystems.Combat
     {
         [Title("Config")]
         [SerializeField]
+        private Vector3 _combatNameplateOffset = new Vector3(0, 2, 0);
+        [SerializeField]
         private float defaultRaycastOriginY = 1.5f;
-        [SerializeField]
-        private string attackAnimationTrigger;
-        private int attackAnimationTriggerHash;
-        [SerializeField]
-        private string takeHitAnimationTrigger;
-        private int takeHitAnimationTriggerHash;
         [SerializeField]
         private string hasCoverAnimationBoolean;
         private int hasCoverAnimationBooleanHash;
@@ -59,12 +52,11 @@ namespace SunsetSystems.Combat
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
             CombatManager.Instance.CombatEnd += OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
         }
 
         private void Start()
         {
-            attackAnimationTriggerHash = Animator.StringToHash(attackAnimationTrigger);
-            takeHitAnimationTriggerHash = Animator.StringToHash(takeHitAnimationTrigger);
             hasCoverAnimationBooleanHash = Animator.StringToHash(hasCoverAnimationBoolean);
         }
 
@@ -72,6 +64,9 @@ namespace SunsetSystems.Combat
         {
             CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
+            CombatManager.Instance.CombatBegin -= OnCombatBegin;
+            CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
         }
 
         private void Update()
@@ -114,6 +109,15 @@ namespace SunsetSystems.Combat
 
         }
 
+        private void OnWeaponSelected(SelectedWeapon weapon)
+        {
+            if (CombatManager.Instance.CurrentActiveActor.Equals(this))
+            {
+                weaponManager.SetSelectedWeapon(weapon);
+                OnWeaponChanged?.InvokeSafe(this);
+            }
+        }
+
         #region ITargetable
         public IEffectHandler EffectHandler => throw new System.NotImplementedException();
 
@@ -142,6 +146,7 @@ namespace SunsetSystems.Combat
         public IWeapon SecondaryWeapon => Owner.References.WeaponManager.GetSecondaryWeapon();
 
         public Vector3 AimingOrigin => RaycastOrigin;
+        public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
 
         public bool IsInCover => CurrentCoverSources.Count > 0;
         public bool IsAlive => Owner.References.StatsManager.IsAlive();
@@ -157,6 +162,10 @@ namespace SunsetSystems.Combat
         public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnWeaponChanged { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnDamageTaken { get; set; }
 
         [field: Title("Combat Runtime")]
         [field: ShowInInspector, ReadOnly]
@@ -181,6 +190,7 @@ namespace SunsetSystems.Combat
         public bool TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);
+            OnDamageTaken?.InvokeSafe(this);
             return true;
         }
 
@@ -193,9 +203,6 @@ namespace SunsetSystems.Combat
         {
             return Owner.PerformAction(action, clearQueue);
         }
-
-        public new T GetComponent<T>() where T : Component => References.GetCachedComponent<T>();
-        public new T GetComponentInChildren<T>() where T : Component => References.GetCachedComponentInChildren<T>();
 
         public void SignalEndTurn()
         {
@@ -278,7 +285,7 @@ namespace SunsetSystems.Combat
                 }
                 else
                 {
-                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<NavMeshAgent>());
+                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<INavigationManager>());
                     gridManager.ShowCellsInMovementRange(this);
                     if (nearestUnitInRangeAdjacentToTarget != null && MoveToGridPosition(nearestUnitInRangeAdjacentToTarget.GridPosition))
                     {
@@ -311,15 +318,15 @@ namespace SunsetSystems.Combat
             return true;
         }
 
-        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, NavMeshAgent navMeshAgent)
+        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, INavigationManager navigationManager)
         {
             GridUnit unit = null;
             float distance = float.MaxValue;
-            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navMeshAgent, out _);
+            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navigationManager, out _);
             if (target != null)
             {
                 Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(target.Transform.position);
-                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<NavMeshAgent>(), out _);
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<INavigationManager>(), out _);
                 IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
                 foreach (GridUnit commonUnit in commonElements)
                 {
@@ -343,8 +350,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformAttackAnimation()
         {
-            animationController.SetTrigger(attackAnimationTriggerHash);
-            return 2f;
+            animationController.PlayFireWeaponAnimation();
+            return 1f;
         }
 
         /// <summary>
@@ -353,8 +360,8 @@ namespace SunsetSystems.Combat
         /// <returns>Animation duration</returns>
         public float PerformTakeHitAnimation()
         {
-            animationController.SetTrigger(takeHitAnimationTriggerHash);
-            return 2f;
+            animationController.PlayTakeHitAnimation();
+            return 1f;
         }
         #endregion
 

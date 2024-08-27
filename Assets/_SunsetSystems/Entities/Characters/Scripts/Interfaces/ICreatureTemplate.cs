@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using UMA.CharacterSystem;
 
-namespace SunsetSystems.Entities.Characters.Interfaces
+namespace SunsetSystems.Entities.Characters
 {
     public interface ICreatureTemplate
     {
@@ -17,8 +16,7 @@ namespace SunsetSystems.Entities.Characters.Interfaces
         BodyType BodyType { get; }
         CreatureType CreatureType { get; }
 
-        short BaseLookWardrobeCollectionID { get; }
-        UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; }
+        string BaseLookWardrobeReadableID { get; }
 
         Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; }
         StatsData StatsData { get; }

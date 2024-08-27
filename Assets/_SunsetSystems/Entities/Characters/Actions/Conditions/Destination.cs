@@ -1,36 +1,21 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions.Conditions
-{
-    using UnityEngine;
-    using UnityEngine.AI;
+﻿using SunsetSystems.Entities.Characters.Navigation;
+using UnityEngine;
 
+namespace SunsetSystems.Entities.Characters.Actions
+{
     [System.Serializable]
     public class Destination : Condition
     {
         [SerializeField]
-        private NavMeshAgent agent;
+        private INavigationManager agent;
 
-        private bool hasPath = false;
-
-        public Destination(NavMeshAgent agent)
+        public Destination(INavigationManager agent)
         {
             this.agent = agent;
         }
         public override bool IsMet()
         {
-            return AtEndOfPath();
-        }
-
-        private bool AtEndOfPath()
-        {
-            hasPath |= agent.hasPath;
-            if (hasPath && agent.remainingDistance <= agent.stoppingDistance + ActionConsts.COMPLETION_MARGIN)
-            {
-                // Arrived
-                hasPath = false;
-                return true;
-            }
-
-            return false;
+            return agent.FinishedCurrentPath;
         }
     }
 }

@@ -6,11 +6,11 @@ namespace ShaderCrew.SeeThroughShader
 {
     public enum ZoneType
     {
-        Box,
-        Sphere,
-        Cylinder,
-        Cone,
-        //etc.
+        Box = 0,
+        Sphere = 1,
+        Cylinder = 2,
+        Cone = 3,
+        Plane = 4,
     }
     public abstract class ZoneData : ScriptableObject
     {

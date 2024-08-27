@@ -1,14 +1,8 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Interfaces;
 using UltEvents;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -17,49 +11,62 @@ namespace SunsetSystems.Combat.UI
     public class CombatUIManager : SerializedMonoBehaviour
     {
         [Title("References")]
-        [SerializeField]
+        [SerializeField, Required]
         private Image currentActorPortrait;
-        [SerializeField]
+        [SerializeField, Required]
+        private ActionBarUI _actionBarUI;
+        [SerializeField, Required]
         private PlayerHealthDisplay currentActorHealth;
-        [SerializeField]
+        [SerializeField, Required]
         private ResourceBarDisplay apBar, bpBar;
-        [SerializeField]
+        [SerializeField, Required]
         private ActiveAbilitiesDisplayManager disciplineBar;
+        [SerializeField, Required]
+        private CanvasGroup _combatCanvasGroup;
 
         [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
-
-        private List<Selectable> childrenButtons = new();
 
         private void OnEnable()
         {
             currentActorPortrait.color = Color.clear;
         }
 
-        private void Start()
-        {
-            childrenButtons = GetComponentsInChildren<Selectable>(true).ToList();
-        }
-
         public void OnCombatBegin()
         {
-            childrenButtons.ForEach(b => b.interactable = false);
+            _combatCanvasGroup.interactable = false;
+            _combatCanvasGroup.blocksRaycasts = true;
+            _combatCanvasGroup.alpha = 1f;
+        }
+
+        public void OnCombatEnd()
+        {
+            _combatCanvasGroup.interactable = false;
+            _combatCanvasGroup.blocksRaycasts = false;
+            _combatCanvasGroup.alpha = 0f;
         }
 
         public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            childrenButtons.ForEach(button => button.interactable = combatant.Faction is Faction.PlayerControlled);
+            _combatCanvasGroup.interactable = combatant.Faction is Faction.PlayerControlled;
             if (combatant.Faction == Faction.PlayerControlled)
             {
                 UpdateCurrentActorPortrait(combatant);
-                currentActorHealth.UpdateHealthDisplay();
+                currentActorHealth.UpdateHealthDisplay(combatant);
                 apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
                 disciplineBar.ShowAbilities(combatant);
+                _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
+                combatant.OnWeaponChanged += OnWeaponChanged;
             }
+        }
+
+        private void OnWeaponChanged(ICombatant combatant)
+        {
+            _actionBarUI.RefreshAvailableActions();
         }
 
         private void OnActionUsed(ICombatant combatant)

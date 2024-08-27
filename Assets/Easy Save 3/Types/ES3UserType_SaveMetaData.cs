@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("SaveID", "SaveName", "SaveDate", "LevelLoadingData")]
+	[ES3PropertiesAttribute("SaveID", "SaveName", "SaveDate", "LevelLoadingData", "PlaylistData")]
 	public class ES3UserType_SaveMetaData : ES3Type
 	{
 		public static ES3Type Instance = null;
@@ -19,7 +19,8 @@ namespace ES3Types
 			writer.WriteProperty("SaveID", instance.SaveID, ES3Type_string.Instance);
 			writer.WriteProperty("SaveName", instance.SaveName, ES3Type_string.Instance);
 			writer.WriteProperty("SaveDate", instance.SaveDate, ES3Type_string.Instance);
-			writer.WriteProperty("LevelLoadingData", instance.LevelLoadingData, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(SunsetSystems.Core.SceneLoading.SceneLoadingDataAsset.LevelLoadingData)));
+			writer.WriteProperty("LevelLoadingData", instance.LevelLoadingData, ES3UserType_LevelLoadingData.Instance);
+			writer.WriteProperty("PlaylistData", instance.PlaylistData, ES3UserType_ScenePlaylistData.Instance);
 		}
 
 		public override object Read<T>(ES3Reader reader)
@@ -41,7 +42,10 @@ namespace ES3Types
 						instance.SaveDate = reader.Read<System.String>(ES3Type_string.Instance);
 						break;
 					case "LevelLoadingData":
-						instance.LevelLoadingData = reader.Read<SunsetSystems.Core.SceneLoading.SceneLoadingDataAsset.LevelLoadingData>();
+						instance.LevelLoadingData = reader.Read<SunsetSystems.Core.SceneLoading.LevelLoadingData>(ES3UserType_LevelLoadingData.Instance);
+						break;
+					case "PlaylistData":
+						instance.PlaylistData = reader.Read<SunsetSystems.Core.SceneLoading.ScenePlaylistData>(ES3UserType_ScenePlaylistData.Instance);
 						break;
 					default:
 						reader.Skip();

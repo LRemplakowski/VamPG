@@ -5,8 +5,15 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Facewear", menuName = "Sunset Inventory/Items/Facewear")]
     public class Facewear : WearableItem
     {
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            ItemCategory = ItemCategory.FACEWEAR;
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
             ItemCategory = ItemCategory.FACEWEAR;
         }
     }

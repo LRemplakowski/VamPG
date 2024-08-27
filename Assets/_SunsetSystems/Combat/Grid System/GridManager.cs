@@ -5,6 +5,7 @@ using System;
 using UnityEngine.AI;
 using System.Linq;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Entities.Characters.Navigation;
 
 namespace SunsetSystems.Combat.Grid
 {
@@ -43,6 +44,8 @@ namespace SunsetSystems.Combat.Grid
         public void HighlightCell(IGridCell gridCell)
         {
             ClearHighlightedCell();
+            if (gridCell == null)
+                return;
             GridUnit cellData = this[gridCell.GridPosition];
             cellData.Highlighted = true;
             currentlyHighlightedCell = cellData;
@@ -71,7 +74,7 @@ namespace SunsetSystems.Combat.Grid
             currentlyHighlightedCell = null;
         }
 
-        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, NavMeshAgent agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
+        public List<GridUnit> GetCellsInRange(Vector3Int gridPosition, float range, INavigationManager agent, out Dictionary<GridUnit, float> distanceToUnitDictionary)
         {
             distanceToUnitDictionary = new();
             List<GridUnit> unitsInRange = new();
@@ -111,10 +114,10 @@ namespace SunsetSystems.Combat.Grid
         public void ShowCellsInMovementRange(ICombatant combatant)
         {
             HideCellsInMovementRange();
-            Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.BodyTransform.position);
-            NavMeshAgent agent = combatant.References.NavMeshAgent;
+            Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
+            var navigationManager = combatant.References.NavigationManager;
             currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), agent, out Dictionary<GridUnit, float> distanceToUnitDictionary));
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), navigationManager, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 float distanceToUnit = distanceToUnitDictionary[unit];
@@ -147,27 +150,29 @@ namespace SunsetSystems.Combat.Grid
             return managedGrid.GetCellGameObject(gridPosition);
         }
 
-        public Vector3Int GetNearestWalkableGridPosition(Vector3 position)
+        public Vector3Int GetNearestWalkableGridPosition(Vector3 position, bool includeOccupied = true)
         {
             Vector3Int bestGridPos = WorldPositionToGridPosition(position);
             GridUnit unit = this[bestGridPos.x, bestGridPos.y, bestGridPos.z];
-            if (unit.Walkable)
+            if (unit.Walkable && (includeOccupied || !unit.IsOccupied))
             {
                 return bestGridPos;
             }
             else
             {
-                unit = CrawlForNearestWalkablePosition(unit, managedGrid);
+                unit = CrawlForNearestWalkablePosition(unit, managedGrid, includeOccupied);
                 return unit.GridPosition;
             }
 
-            static GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo, CachedMultiLevelGrid managedGrid)
+            static GridUnit CrawlForNearestWalkablePosition(GridUnit relativeTo, CachedMultiLevelGrid managedGrid, bool includeOccupied)
             {
                 IEnumerable<GridUnit> allWalkableUnits = managedGrid.GetAllWalkableGridUnits();
                 GridUnit result = allWalkableUnits.FirstOrDefault();
                 float gridDistance = float.MaxValue;
                 foreach (GridUnit gridUnit in allWalkableUnits)
                 {
+                    if (includeOccupied is false || gridUnit.IsOccupied)
+                        continue;
                     float newDistance = Mathf.Abs((gridUnit.GridPosition - relativeTo.GridPosition).magnitude);
                     if (newDistance < gridDistance)
                     {

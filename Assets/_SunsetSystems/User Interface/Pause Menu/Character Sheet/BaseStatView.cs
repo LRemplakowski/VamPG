@@ -16,9 +16,9 @@ namespace SunsetSystems.UI
         [SerializeField]
         private Sprite _activeChip, _disabledChip;
 
-        public void UpdateView(IGameDataProvider<BaseStat> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<BaseStat> dataProvider)
         {
-            BaseStat stat = dataProvider.Data;
+            BaseStat stat = dataProvider.UIData;
             _text.text = stat.Name.ToSentenceCase();
             for (int i = 0; i < _chips.Count; i++)
             {

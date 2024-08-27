@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Equipment;
 using SunsetSystems.Equipment.UI;
 using SunsetSystems.Inventory;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Inventory.UI;
 using SunsetSystems.Party;
 using SunsetSystems.UI.Utils;
@@ -24,14 +25,14 @@ namespace SunsetSystems.UI
             string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
             UpdateInventory();
-            InventoryManager.Instance.PlayerInventory.OnItemAdded += MarkDirty;
-            InventoryManager.Instance.PlayerInventory.OnItemRemoved += MarkDirty;
+            InventoryManager.OnItemAcquired += MarkDirty;
+            InventoryManager.OnItemLost += MarkDirty;
         }
 
         private void OnDisable()
         {
-            InventoryManager.Instance.PlayerInventory.OnItemAdded -= MarkDirty;
-            InventoryManager.Instance.PlayerInventory.OnItemRemoved -= MarkDirty;
+            InventoryManager.OnItemAcquired -= MarkDirty;
+            InventoryManager.OnItemLost -= MarkDirty;
         }
 
         private void Update()
@@ -43,7 +44,9 @@ namespace SunsetSystems.UI
             }
         }
 
-        private void MarkDirty(InventoryEntry _) => _isDirty = true;
+        public void MarkDirty(IBaseItem _) => MarkDirty();
+
+        public void MarkDirty() => _isDirty = true;
 
         private void Refresh()
         {
@@ -56,7 +59,7 @@ namespace SunsetSystems.UI
         {
             if (PartyManager.Instance.IsRecruitedMember(characterKey))
             {
-                List<IGameDataProvider<IEquipmentSlot>> slots = new();
+                List<IUserInfertaceDataProvider<IEquipmentSlot>> slots = new();
                 var memberEquipment = PartyManager.Instance.GetPartyMemberByID(characterKey).References.EquipmentManager;
                 if (memberEquipment != null)
                 {
@@ -71,8 +74,8 @@ namespace SunsetSystems.UI
 
         private void UpdateInventory()
         {
-            List<IGameDataProvider<InventoryEntry>> items = new();
-            foreach (InventoryEntry entry in InventoryManager.Instance.PlayerInventory.Contents)
+            List<IUserInfertaceDataProvider<InventoryEntry>> items = new();
+            foreach (InventoryEntry entry in InventoryManager.Instance.GetPlayerInventoryContents())
             {
                 items.Add(entry);
             }

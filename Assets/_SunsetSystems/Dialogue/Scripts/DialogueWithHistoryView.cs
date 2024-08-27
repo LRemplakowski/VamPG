@@ -15,6 +15,7 @@ using Yarn.Unity;
 using UnityEngine.EventSystems;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Core.Database;
 
 namespace SunsetSystems.Dialogue
 {
@@ -38,7 +39,9 @@ namespace SunsetSystems.Dialogue
         private bool _showUnavailableOptions;
         [SerializeField]
         private float _lineCompletionDelay = .5f;
-        [Space, Header("Portrait")]
+        [Title("Portrait")]
+        [SerializeField]
+        private Sprite _placeholderPortraitAsset;
         [SerializeField]
         private GameObject _photoParent;
         [SerializeField]
@@ -200,7 +203,7 @@ namespace SunsetSystems.Dialogue
                 //    _lineHistoryStringBuilder.Append("<size=26>");
                 appended = true;
                 string speakerName = line.CharacterName;
-                if (CreatureDatabase.Instance.TryGetConfig(line.CharacterName, out CreatureConfig speakerConfig))
+                if (CreatureDatabase.Instance.TryGetEntryByReadableID(line.CharacterName, out CreatureConfig speakerConfig))
                     speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
                     .Append($"<color=\"red\">{speakerName}: </color>");
@@ -229,32 +232,34 @@ namespace SunsetSystems.Dialogue
             string characterName = characterID;
             if (string.IsNullOrWhiteSpace(characterID)) 
             {
-                characterID = PartyManager.Instance.MainCharacterKey;
-                if (CreatureDatabase.Instance.TryGetConfig(characterID, out var config))
+                if (CreatureDatabase.Instance.TryGetEntry(PartyManager.Instance.MainCharacterKey, out var config))
+                {
+                    characterID = config.ReadableID;
                     characterName = config.FullName;
+                }
             }
-            else if (CreatureDatabase.Instance.TryGetConfig(characterID, out CreatureConfig config))
+            else if (CreatureDatabase.Instance.TryGetEntryByReadableID(characterID, out CreatureConfig config))
             {
                 characterID = config.ReadableID;
                 characterName = config.FullName;
             }
-            else
-            {
-                characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
-                characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
-            }
-            Sprite sprite = this.GetSpeakerPortrait(characterID);
-            if (sprite != null)
-            {
+            //else
+            //{
+            //    if (PartyManager.Instance.MainCharacter == null)
+            //        await new WaitUntil(() => PartyManager.Instance.MainCharacter != null);
+            //    characterID = PartyManager.Instance.MainCharacter.References.CreatureData.ReadableID;
+            //    characterName = PartyManager.Instance.MainCharacter.References.CreatureData.FullName;
+            //}
+            SetSpeakerPortrait(characterID);
+            _photoText.text = characterName;
+        }
+
+        private void SetSpeakerPortrait(string speakerID)
+        {
+            if (this.GetSpeakerPortrait(speakerID, out var sprite) && sprite != null)
                 _photo.sprite = sprite;
-                _photoText.text = characterName;
-                _photoParent.SetActive(true);
-            }
-            else
-            {
-                _photoParent.SetActive(false);
-                Debug.LogError($"Cannot find portrait for creature with ID {characterID} and no placeholder portrait found!");
-            }
+            else if (string.IsNullOrWhiteSpace(speakerID) is false)
+                _photo.sprite = _placeholderPortraitAsset;
         }
 
         public void ClampScrollbar()

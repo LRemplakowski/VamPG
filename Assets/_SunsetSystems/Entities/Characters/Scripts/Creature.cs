@@ -4,11 +4,8 @@ using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
-using SunsetSystems.Entities.Creatures.Interfaces;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Equipment;
-using SunsetSystems.Utils.Database;
 using UMA.CharacterSystem;
 using UnityEngine;
 using UnityEngine.AI;
@@ -92,7 +89,7 @@ namespace SunsetSystems.Entities.Characters
             if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, (int)NavMeshAreas.Walkable))
             {
                 Debug.Log($"Forcing Creature {gameObject.name} to position: {hit.position}!");
-                References.NavMeshAgent.Warp(hit.position);
+                References.NavigationManager.Warp(hit.position);
             }
             else
             {
@@ -100,9 +97,20 @@ namespace SunsetSystems.Entities.Characters
             }
         }
 
-        public void ForceToPosition(Transform positionTransform)
+        public void ForceToPosition(Transform positionTransform) => ForceToPosition(positionTransform.position);
+
+        public void FacePointInSpace(Vector3 point) => References.NavigationManager.FaceDirectionAfterMovementFinished(point);
+
+        public void FaceTransform(Transform transform)
         {
-            ForceToPosition(positionTransform.position);
+            if (transform == null)
+            {
+                Debug.LogError($"Creature {Name} was requested to face a null transfrom!");
+            }
+            else
+            {
+                References.NavigationManager.FaceDirectionAfterMovementFinished(transform.position);
+            }
         }
 
         public void ClearAllActions()
@@ -168,10 +176,7 @@ namespace SunsetSystems.Entities.Characters
                 Faction = instance.Faction;
                 BodyType = instance.References.CreatureData.BodyType;
                 CreatureType = instance.References.CreatureData.CreatureType;
-                if (DatabaseHolder.Instance != null)
-                    BaseLookWardrobeCollectionID = DatabaseHolder.Instance.GetDatabase<WardrobeCollectionDatabaseFile>().GetAssetID(instance.References.UMAManager.BaseLookWardrobeCollection);
-                else
-                    BaseLookWardrobeCollectionAsset = instance.References.UMAManager.BaseLookWardrobeCollection;
+                BaseLookWardrobeReadableID = instance.References.UMAManager.BaseLookWardrobeReadableID;
                 EquipmentSlotsData = new();
                 foreach (var item in instance.References.EquipmentManager.EquipmentSlots)
                 {
@@ -185,28 +190,27 @@ namespace SunsetSystems.Entities.Characters
 
             }
 
+            [ShowInInspector]
             public string DatabaseID { get; private set; }
-
+            [ShowInInspector]
             public string ReadableID { get; private set; }
-
+            [ShowInInspector]
             public string FullName => $"{FirstName} {LastName}".Trim();
-
+            [ShowInInspector]
             public string FirstName { get; private set; }
-
+            [ShowInInspector]
             public string LastName { get; private set; }
-
+            [ShowInInspector]
             public Faction Faction { get; private set; }
-
+            [ShowInInspector]
             public BodyType BodyType { get; private set; }
-
+            [ShowInInspector]
             public CreatureType CreatureType { get; private set; }
-
-            public short BaseLookWardrobeCollectionID { get; private set; }
-
-            public UMAWardrobeCollection BaseLookWardrobeCollectionAsset { get; private set; }
-
+            [ShowInInspector]
+            public string BaseLookWardrobeReadableID { get; private set; }
+            [ShowInInspector]
             public Dictionary<EquipmentSlotID, string> EquipmentSlotsData { get; private set; }
-
+            [ShowInInspector]
             public StatsData StatsData { get; private set; }
         }
         #endregion
@@ -237,7 +241,7 @@ namespace SunsetSystems.Entities.Characters
 
             public CreaturePersistenceData(Creature creature) : base(creature)
             {
-                WorldPosition = creature.References.BodyTransform.position;
+                WorldPosition = creature.References.Transform.position;
                 UMAHidden = false;
                 if (creature.References != null)
                 {

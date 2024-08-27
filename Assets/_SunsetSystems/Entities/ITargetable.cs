@@ -1,9 +1,6 @@
 using SunsetSystems.Spellbook;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace SunsetSystems.Entities.Interfaces
+namespace SunsetSystems.Combat
 {
     public interface ITargetable
     {

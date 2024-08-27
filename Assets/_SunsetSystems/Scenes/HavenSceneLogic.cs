@@ -3,8 +3,8 @@ using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Dialogue;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Characters.Interfaces;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;
@@ -123,26 +123,29 @@ namespace SunsetSystems.Core
             _landlord.References.StatsManager.Die();
         }
 
+        public void MoveCoffeeTable()
+        {
+            _coffeeTableTransform.position = _tablePositionForCover;
+            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+            PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
+        }
+
         public async void BargeIn()
         {
             SceneLoadingUIManager fade = SceneLoadingUIManager.Instance;
             await fade.DoFadeOutAsync(.5f);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
+
             _havenDoors.Open = true;
             _dominic.References.GameObject.SetActive(true);
             _kieran.References.GameObject.SetActive(true);
-            _coffeeTableTransform.position = _tablePositionForCover;
-            _coffeeTableTransform.eulerAngles = _tableRotationForCover;
-            PartyManager.Instance.MainCharacter.ForceToPosition(_pcCoverWaypoint.transform.position);
             _dominic.ForceToPosition(_dominicWaypoint.transform.position);
             _kieran.ForceToPosition(_kieranWaypoint.transform.position);
             CameraControl.ForceToPosition(_cameraPositionDominicEnter);
             await new WaitForFixedUpdate();
             CameraControl.ForceRotation(_cameraRotationDominicEnter);
-            //_ = PartyManager.Instance.MainCharacter.FaceTarget(_pcCoverWaypoint.FaceDirection);
-            //_ = _dominic.FaceTarget(_dominicWaypoint.FaceDirection);
-            //_ = _kieran.FaceTarget(_kieranWaypoint.FaceDirection);
+            PartyManager.Instance.MainCharacter.FaceTransform(_pcCoverWaypoint.FaceDirection);
+            _dominic.FaceTransform(_dominicWaypoint.FaceDirection);
+            _kieran.FaceTransform(_kieranWaypoint.FaceDirection);
             await new WaitForFixedUpdate();
             await fade.DoFadeInAsync(.5f);
         }
@@ -157,9 +160,9 @@ namespace SunsetSystems.Core
             CameraControl.ForceToPosition(_cameraPositionPinnedToWall);
             await new WaitForFixedUpdate();
             CameraControl.ForceRotation(_cameraRotationPinnedToWall);
-            //_ = PartyManager.MainCharacter.FaceTarget(_pcFridgeWaypoint.FaceDirection);
-            //_ = _dominic.FaceTarget(_dominicFridgeWaypoint.FaceDirection);
-            //_ = _kieran.FaceTarget(_kieranFridgeWaypoint.FaceDirection);
+            PartyManager.Instance.MainCharacter.FaceTransform(_pcFridgeWaypoint.FaceDirection);
+            _dominic.FaceTransform(_dominicFridgeWaypoint.FaceDirection);
+            _kieran.FaceTransform(_kieranFridgeWaypoint.FaceDirection);
             await fade.DoFadeInAsync(.5f);
         }
 

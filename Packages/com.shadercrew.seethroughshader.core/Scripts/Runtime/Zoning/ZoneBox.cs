@@ -9,6 +9,7 @@ namespace ShaderCrew.SeeThroughShader
         public ZoneBox(Transform transform)
         {
             this.transform = transform;
+            this.type = (int)ZoneType.Box;
         }
 
 

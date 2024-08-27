@@ -1,16 +1,16 @@
-﻿using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.Combat;
 using SunsetSystems.UI;
 using SunsetSystems.UI.Utils;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Spellbook
 {
     [CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
-    public class DisciplinePower : SerializedScriptableObject, IGameDataProvider<DisciplinePower>
+    public class DisciplinePower : SerializedScriptableObject, IUserInfertaceDataProvider<DisciplinePower>
     {
         [field: SerializeField]
         public string PowerName { get; private set; }
@@ -55,7 +55,7 @@ namespace SunsetSystems.Spellbook
 
         private TooltipContent _powerTooltip;
         public TooltipContent Tooltip => _powerTooltip;
-        public DisciplinePower Data => this;
+        public DisciplinePower UIData => this;
 
         [SerializeField]
         private List<IEffect> effects = new();

@@ -1,11 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace SunsetSystems.Audio
 {
     [CreateAssetMenu(fileName = "New Playlist Config", menuName = "Sunset Audio/Playlist Config")]
-    public class PlaylistConfig : ScriptableObject
+    public class PlaylistConfig : SerializedScriptableObject, IPlaylist
     {
         [SerializeField]
         private List<AudioClip> _tracks = new();
@@ -16,6 +16,8 @@ namespace SunsetSystems.Audio
 
         public AudioClip NextTrack()
         {
+            if (_tracks.Count <= 0)
+                return default;
             AudioClip track;
             if (_firstTrackRequest)
             {
@@ -32,6 +34,8 @@ namespace SunsetSystems.Audio
 
         public AudioClip PreviousTrack()
         {
+            if (_tracks.Count <= 0)
+                return default;
             AudioClip track;
             if (_firstTrackRequest)
             {
@@ -46,7 +50,7 @@ namespace SunsetSystems.Audio
             return track;
         }
 
-        public AudioClip GetCurrentClip()
+        public AudioClip GetCurrentTrack()
         {
             return _tracks[_currentTrackIndex];
         }

@@ -11,7 +11,9 @@ namespace ShaderCrew.SeeThroughShader
         public ZoneSphere(Transform transform)
         {
             this.transform = transform;
-            this.type = 1; //Sphere
+            //this.type = 1; //Sphere
+            this.type = (int)ZoneType.Sphere;
+
         }
 
         public static ZoneSphere CreateInstance(Transform transform)

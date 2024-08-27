@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
-using SunsetSystems.Utils.Threading;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
+using SunsetSystems.Entities.Characters.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,7 +11,7 @@ namespace SunsetSystems.Entities.Characters.Actions
     public class Interact : EntityAction
     {
         private readonly IInteractable target;
-        private readonly NavMeshAgent navMeshAgent;
+        private readonly INavigationManager navMeshAgent;
         [ShowInInspector, ReadOnly]
         private Vector3 destination;
         private IEnumerator delayedInteractionCoroutine;
@@ -23,7 +20,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             this.target = target;
             conditions.Add(new InteractionComplete(target));
-            this.navMeshAgent = owner.References.NavMeshAgent;
+            this.navMeshAgent = owner.References.NavigationManager;
             NavMesh.SamplePosition(target.InteractionTransform.position, out var hit, 1f, NavMesh.AllAreas);
             this.destination = hit.position;
         }
@@ -32,19 +29,16 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             base.Cleanup();
             target.Interacted = false;
-            navMeshAgent.isStopped = true;
             if (delayedInteractionCoroutine != null)
                 Owner.CoroutineRunner.StopCoroutine(delayedInteractionCoroutine);
         }
 
         public override void Begin()
         {
-            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position);
+            float distance = Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position);
             if (distance > target.InteractionDistance)
             {
-                navMeshAgent.isStopped = false;
-                navMeshAgent.ResetPath();
-                if (navMeshAgent.SetDestination(destination))
+                if (navMeshAgent.SetNavigationTarget(destination))
                 {
                     conditions.Add(new Destination(navMeshAgent));
                     delayedInteractionCoroutine = InteractWhenCloseEnough();
@@ -64,9 +58,8 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator InteractWhenCloseEnough()
         {
-            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.BodyTransform.position) > target.InteractionDistance)
+            while (Vector3.Distance(target.InteractionTransform.position, Owner.References.Transform.position) > target.InteractionDistance)
                 yield return null;
-            navMeshAgent.isStopped = true;
             target.TargetedBy = Owner;
             target.Interact();
         }

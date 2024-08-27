@@ -23,11 +23,11 @@ namespace SunsetSystems.UI
             _views.ForEach(v => v.gameObject.SetActive(false));
         }
 
-        public void UpdateViews(List<IGameDataProvider<BaseStat>> data)
+        public void UpdateViews(List<IUserInfertaceDataProvider<BaseStat>> data)
         {
             DisableViews();
             List<Discipline> stats = data
-                .Select(s => s.Data as Discipline)
+                .Select(s => s.UIData as Discipline)
                 .Where(d => d.GetValue() > 0 && (d.GetDisciplineType() & _disciplines) > 0)
                 .OrderBy(d => d.GetDisciplineType())
                 .ToList();

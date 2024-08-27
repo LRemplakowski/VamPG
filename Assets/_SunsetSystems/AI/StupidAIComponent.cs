@@ -57,7 +57,7 @@ namespace SunsetSystems.AI
         private void DecideWhatToDo()
         {
             GridManager grid = context.GridManager;
-            Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.BodyTransform.position);
+            Vector3Int currentGridPosition = grid.WorldPositionToGridPosition(context.Owner.References.Transform.position);
             if (context.CanMove)
             {
                 GridUnit target = null;
@@ -89,7 +89,7 @@ namespace SunsetSystems.AI
                         break;
                     case Inventory.WeaponType.Ranged:
                         target = context.FriendlyCombatants
-                                        .Where(combatant => Vector3.Distance(combatant.References.BodyTransform.position, context.Owner.References.BodyTransform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
+                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
                                         .GetRandom();
                         break;
                 }
@@ -106,7 +106,7 @@ namespace SunsetSystems.AI
 
         private GridUnit FindRandomGridPositionInMovementRange(GridManager grid, Vector3Int currentGridPosition)
         {
-            return grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.NavMeshAgent, out _).FindAll(cell => cell.IsOccupied is false).GetRandom();
+            return grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.NavigationManager, out _).FindAll(cell => cell.IsOccupied is false).GetRandom();
         }
 
         private GridUnit FindGridPositionAdjacentToClosestEnemy(GridManager grid, Vector3Int currentGridPosition)
@@ -124,11 +124,11 @@ namespace SunsetSystems.AI
             }
             GridUnit unit = null;
             distance = float.MaxValue;
-            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.NavMeshAgent, out _);
+            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, context.Owner.MovementRange, context.Owner.References.NavigationManager, out _);
             if (nearestEnemy != null)
             {
                 Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(nearestEnemy.Transform.position);
-                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, nearestEnemy.References.NavMeshAgent, out _);
+                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, nearestEnemy.References.NavigationManager, out _);
                 IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
                 foreach (GridUnit commonUnit in commonElements)
                 {

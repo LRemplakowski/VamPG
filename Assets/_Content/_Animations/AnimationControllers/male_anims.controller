@@ -261,9 +261,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 420, y: -90, z: 0}
+  m_AnyStatePosition: {x: 420, y: -100, z: 0}
   m_EntryPosition: {x: 420, y: -30, z: 0}
-  m_ExitPosition: {x: 620, y: -90, z: 0}
+  m_ExitPosition: {x: 740, y: -100, z: 0}
   m_ParentStateMachinePosition: {x: 90, y: -100, z: 0}
   m_DefaultState: {fileID: -4888126599434463034}
 --- !u!1101 &-6691889662710547714
@@ -354,7 +354,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0.5
   m_TransitionOffset: 0
   m_ExitTime: 0.9509804
   m_HasExitTime: 0
@@ -433,7 +433,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -7574557031589692387}
+  m_Motion: {fileID: 7400000, guid: 315a4f21771d4554484eccf7020139d7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -896,13 +896,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: MoveX
-    m_Type: 1
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: MoveY
+  - m_Name: Speed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1009,30 +1003,30 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: 3f6837bff6bc9004d85ca9a3b28f059b, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.5
+    m_TimeScale: 1
     m_CycleOffset: 0
-    m_DirectBlendParameter: MoveX
+    m_DirectBlendParameter: Speed
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 3f6837bff6bc9004d85ca9a3b28f059b, type: 2}
-    m_Threshold: 2
+    m_Threshold: 0.25
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveX
     m_Mirror: 0
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 7fca672f55b590743a75d026604ba187, type: 2}
-    m_Threshold: 6
+    m_Threshold: 1
     m_Position: {x: 0, y: 0.4}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: MoveX
     m_Mirror: 0
-  m_BlendParameter: MoveY
+  m_BlendParameter: Speed
   m_BlendParameterY: MoveY
   m_MinThreshold: 0
-  m_MaxThreshold: 6
+  m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
@@ -1304,9 +1298,9 @@ AnimatorStateMachine:
   - {fileID: 5816351772087108421}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: 2210774287583399577}
-    second: []
   - first: {fileID: -7084406531890287773}
+    second: []
+  - first: {fileID: 2210774287583399577}
     second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 100, y: 20, z: 0}

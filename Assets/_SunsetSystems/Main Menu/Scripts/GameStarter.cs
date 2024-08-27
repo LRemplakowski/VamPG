@@ -1,11 +1,11 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Persistence;
-using UnityEngine;
 using Sirenix.OdinInspector;
-using SunsetSystems.Party;
-using UltEvents;
 using SunsetSystems.Core.SceneLoading;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Game;
+using SunsetSystems.Party;
+using SunsetSystems.Persistence;
+using UltEvents;
+using UnityEngine;
 
 namespace SunsetSystems.Data
 {
@@ -31,6 +31,7 @@ namespace SunsetSystems.Data
         {
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
+            GameManager.Instance.CurrentState = GameState.Menu;
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)

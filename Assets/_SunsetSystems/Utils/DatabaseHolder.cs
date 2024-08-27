@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace SunsetSystems.Utils.Database
+namespace SunsetSystems.Core.Database
 {
     public class DatabaseHolder : SerializedMonoBehaviour
     {
@@ -19,9 +19,6 @@ namespace SunsetSystems.Utils.Database
             if (Instance == null)
             {
                 Instance = this;
-#if UNITY_EDITOR
-                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
-#endif
                 DontDestroyOnLoad(this);
             }
             else

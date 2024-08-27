@@ -28,6 +28,11 @@ namespace SunsetSystems.UI
             LevelLoader.Instance.BackToMainMenu();
         }
 
+        public void OpenPauseMenu()
+        {
+            OpenMenuScreen(PauseMenuScreen.Settings);
+        }
+
         public void OpenMenuScreen(PauseMenuScreen screen)
         {
             if (GameManager.Instance.CurrentState == GameState.Conversation)

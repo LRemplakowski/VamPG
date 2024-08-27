@@ -4,7 +4,7 @@ using SunsetSystems.UI.Utils;
 
 namespace SunsetSystems.Equipment
 {
-    public interface IEquipmentSlot : IGameDataProvider<IEquipmentSlot>
+    public interface IEquipmentSlot : IUserInfertaceDataProvider<IEquipmentSlot>
     {
         string DefaultItemID { get; }
 

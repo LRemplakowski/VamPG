@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Rendering;
 #if USING_URP
-    using UnityEditor.Rendering.Universal.ShaderGUI;
+using UnityEditor.Rendering.Universal.ShaderGUI;
 #endif
 using UnityEngine;
 using static ShaderCrew.SeeThroughShader.GeneralUtils;
@@ -84,6 +86,10 @@ namespace ShaderCrew.SeeThroughShader
                 }
                 FindPropertiesStandardLit(properties);
                 standardLitGUI.m_MaterialEditor = materialEditor;
+            }
+            else if(rp == RenderPipeline.URP)
+            {
+                FindPropertiesdCullOnlyURP(properties);
             }
         }
 
@@ -178,9 +184,22 @@ namespace ShaderCrew.SeeThroughShader
             }
             else
             {
+                if(seeThroughShaderGUI.syncCullMode.floatValue == 0f)
+                {
+                    GUI.enabled = false;
+                }
                 if (rp == RenderPipeline.BiRP)
                 {
                     standardLitGUI.OnlyCullModeGUI();
+                }
+                else if (rp == RenderPipeline.URP)
+                {
+                    OnlyCullModeGUIURP(materialEditor);
+                }
+                if (seeThroughShaderGUI.syncCullMode.floatValue == 0f)
+                {
+                    GUI.enabled = true;
+                    EditorGUILayout.HelpBox("To be able to sync culling, activate \"Sync Culling Mode\".", MessageType.Info);
                 }
 
             }
@@ -230,7 +249,47 @@ namespace ShaderCrew.SeeThroughShader
 
         }
 
+        public void FindPropertiesdCullOnlyURP(MaterialProperty[] props)
+        {
+            seeThroughShaderGUI.cull = FindProperty("_Cull", props);
 
+        }
+
+
+        public static readonly GUIContent cullingText = EditorGUIUtility.TrTextContent("Render Face",
+    "Specifies which faces to cull from your geometry. Front culls front faces. Back culls backfaces. None means that both sides are rendered.");
+
+        public enum RenderFace
+        {
+            Front = 2,
+            Back = 1,
+            Both = 0
+        }
+
+        
+        public void OnlyCullModeGUIURP(MaterialEditor materialEditor)
+        {
+#if USING_URP
+#if UNITY_2021_1_OR_NEWER
+            materialEditor.PopupShaderProperty(seeThroughShaderGUI.cull, cullingText, Enum.GetNames(typeof(RenderFace)));
+#else
+            //seeThroughShaderGUI.cull.floatValue = (int)(RenderFace)EditorGUILayout.EnumPopup(cullingText, (RenderFace)seeThroughShaderGUI.cull.floatValue);
+            EditorGUI.BeginChangeCheck();
+            EditorGUI.showMixedValue = seeThroughShaderGUI.cull.hasMixedValue;
+            var culling = (RenderFace)seeThroughShaderGUI.cull.floatValue;
+            culling = (RenderFace)EditorGUILayout.EnumPopup(cullingText, culling);
+            if (EditorGUI.EndChangeCheck())
+            {
+                materialEditor.RegisterPropertyChangeUndo(cullingText.text);
+                seeThroughShaderGUI.cull.floatValue = (float)culling;
+                //material.doubleSidedGI = (RenderFace)seeThroughShaderGUI.cull.floatValue != RenderFace.Front;
+            }
+
+            EditorGUI.showMixedValue = false;
+#endif
+#endif
+
+        }
 
     }
 }

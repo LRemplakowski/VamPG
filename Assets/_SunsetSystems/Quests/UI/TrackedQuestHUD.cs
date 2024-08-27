@@ -33,12 +33,12 @@ namespace SunsetSystems.Journal.UI
         {
             if (quests == null)
                 return;
-            List<IGameDataProvider<Quest>> data = new();
+            List<IUserInfertaceDataProvider<Quest>> data = new();
             data.AddRange(quests);
             UpdateViews(data);
         }
 
-        public void UpdateViews(List<IGameDataProvider<Quest>> data)
+        public void UpdateViews(List<IUserInfertaceDataProvider<Quest>> data)
         {
             DisableViews();
             if (data == null || data.Count <= 0)
@@ -49,7 +49,7 @@ namespace SunsetSystems.Journal.UI
             ViewParent.gameObject.SetActive(true);
             for (int i = 0; i < data.Count; i++)
             {
-                IGameDataProvider<Quest> dataProvider = data[i];
+                IUserInfertaceDataProvider<Quest> dataProvider = data[i];
                 if (dataProvider == null)
                 {
                     Debug.LogError("Null DataProvider while creating view!");

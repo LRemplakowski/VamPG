@@ -12,7 +12,10 @@ title: ShowerInteractions
 -> [nomarkup][Fleece the body.] (Wits + Streetwise) [/nomarkup] <<if CustomVisited("FleeceBody") == false>> #line:03acf5e 
     <<jump FleeceBody>>
 -> [nomarkup][Walk away.][/nomarkup] #line:0684ec1 
+    <<PlaySFX "door_knock_heavy">>
     <<CompleteObjective "Q_0P_MAIN_SATURDAY_START" "TAKE_SHOWER">>
+    [nomarkup][As you look at the body under shower you are surprised to hear persistent banging on your apartment doors... it's not a good time for guests.][/nomarkup]
+    -> [nomarkup][End dialogue.][/nomarkup]
 ===
 title: CauseofDeath
 tags:

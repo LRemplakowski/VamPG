@@ -1,7 +1,7 @@
+using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Interfaces;
-using System.Threading.Tasks;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;

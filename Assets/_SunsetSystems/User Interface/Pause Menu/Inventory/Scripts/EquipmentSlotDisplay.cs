@@ -14,9 +14,9 @@ namespace SunsetSystems.Equipment.UI
         [SerializeField]
         private Image _itemIcon;
 
-        public void UpdateView(IGameDataProvider<IEquipmentSlot> dataProvider)
+        public void UpdateView(IUserInfertaceDataProvider<IEquipmentSlot> dataProvider)
         {
-            _cachedSlotData = dataProvider.Data;
+            _cachedSlotData = dataProvider.UIData;
             IEquipableItem itemInSlot = _cachedSlotData.GetEquippedItem();
             if (itemInSlot != null)
             {
@@ -34,7 +34,7 @@ namespace SunsetSystems.Equipment.UI
             if (CanUnequipItem(_cachedSlotData))
             {
                 _cachedSlotData.TryUnequipItem(out var unequipped);
-                InventoryManager.Instance.GiveItemToPlayer(new InventoryEntry(unequipped));
+                InventoryManager.Instance.GiveItemToPlayer(unequipped, postLogMessage: false);
             }
         }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Inventory.Data
@@ -7,8 +5,15 @@ namespace SunsetSystems.Inventory.Data
     [CreateAssetMenu(fileName = "New Other Item", menuName = "Sunset Inventory/Items/Other")]
     public class Other : BaseItem
     {
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            ItemCategory = ItemCategory.OTHER;
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
             ItemCategory = ItemCategory.OTHER;
         }
     }

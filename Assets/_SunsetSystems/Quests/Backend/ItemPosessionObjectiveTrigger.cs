@@ -1,31 +1,43 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Party;
+using SunsetSystems.Persistence;
 using UnityEngine;
 
 namespace SunsetSystems.Journal
 {
-    public class ItemPosessionObjectiveTrigger : SerializedMonoBehaviour
+    [RequireComponent(typeof(PersistentSceneObject))]
+    public class ItemPosessionObjectiveTrigger : SerializedMonoBehaviour, IPersistentComponent
     {
         [SerializeField, Required]
         private Objective objectiveToTrigger;
         [OdinSerialize, Required, HideReferenceObjectPicker]
         private List<ItemObjectiveData> requiredItems = new();
 
+        public string ComponentID => "ITEM_POSESSION_TRIGGER";
+
+        private bool _triggered = false;
+
         private void Start()
         {
-            objectiveToTrigger.OnObjectiveActive += StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveFailed += StopHandlingObjective;
-            objectiveToTrigger.OnObjectiveCompleted += StopHandlingObjective;
+            if (!_triggered)
+            {
+                Objective.OnObjectiveActive += StartHandlingObjective;
+                Objective.OnObjectiveFailed += StopHandlingObjective;
+                Objective.OnObjectiveCompleted += StopHandlingObjective;
+            }
         }
+
 
         private void StartHandlingObjective(Objective obj)
         {
+            if (obj.DatabaseID != objectiveToTrigger.DatabaseID)
+                return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
                 hasRequiredItems = true;
@@ -36,16 +48,17 @@ namespace SunsetSystems.Journal
             if (hasRequiredItems)
             {
                 objectiveToTrigger.Complete();
+                _triggered = true;
             }
             else
             {
-                InventoryManager.Instance.PlayerInventory.OnItemAdded += OnItemAddedToPlayerInventory;
+                InventoryManager.OnItemAcquired += OnItemAddedToPlayerInventory;
             }
         }
 
-        private void OnItemAddedToPlayerInventory(InventoryEntry itemEntry)
+        private void OnItemAddedToPlayerInventory(IBaseItem item)
         {
-            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.GetRequiredItems().Contains(itemEntry._item)) is false)
+            if (requiredItems.Any(requiredItemEntry => requiredItemEntry.RequiresItem(item)) is false)
                 return;
             bool hasRequiredItems = false;
             if (requiredItems.Count > 0)
@@ -59,15 +72,38 @@ namespace SunsetSystems.Journal
             if (hasRequiredItems)
             {
                 objectiveToTrigger.Complete();
+                _triggered = true;
             }
         }
 
         private void StopHandlingObjective(Objective obj)
         {
-            objectiveToTrigger.OnObjectiveActive -= StartHandlingObjective;
-            objectiveToTrigger.OnObjectiveFailed -= StopHandlingObjective;
-            objectiveToTrigger.OnObjectiveCompleted -= StopHandlingObjective;
-            InventoryManager.Instance.PlayerInventory.OnItemAdded -= OnItemAddedToPlayerInventory;
+            if (obj.DatabaseID != objectiveToTrigger.DatabaseID)
+                return;
+            Objective.OnObjectiveActive -= StartHandlingObjective;
+            Objective.OnObjectiveFailed -= StopHandlingObjective;
+            Objective.OnObjectiveCompleted -= StopHandlingObjective;
+            InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
+        }
+
+        public object GetComponentPersistenceData()
+        {
+            return _triggered;
+        }
+
+        public void InjectComponentPersistenceData(object data)
+        {
+            if (data is bool boolData)
+            {
+                _triggered = boolData;
+                if (_triggered)
+                {
+                    Objective.OnObjectiveActive -= StartHandlingObjective;
+                    Objective.OnObjectiveFailed -= StopHandlingObjective;
+                    Objective.OnObjectiveCompleted -= StopHandlingObjective;
+                    InventoryManager.OnItemAcquired -= OnItemAddedToPlayerInventory;
+                }
+            }
         }
 
         [Serializable]
@@ -85,27 +121,58 @@ namespace SunsetSystems.Journal
                 return requiredItems.AsEnumerable();
             }
 
+            public bool RequiresItem(IBaseItem item)
+            {
+                return GetRequiredItems().Any(required => required.DatabaseID == item.DatabaseID);
+            }
+
             public bool HasRequiredItems()
             {
                 int itemCount = 0;
                 foreach (IBaseItem item in requiredItems)
                 {
-                    if (InventoryManager.Instance.GetInventoryContainsItemWithReadableID(item.ReadableID, out int count))
+                    bool hasRequiredItems;
+                    if (InventoryManager.Instance.GetInventoryContainsItemWithReadableID(item.ReadableID, out int oneTypeCount))
                     {
-                        bool hasRequiredItems;
                         switch (countingLogic)
                         {
                             case ItemCountLogic.CountOneType:
-                                hasRequiredItems = count >= requiredCount;
+                                hasRequiredItems = oneTypeCount >= requiredCount;
                                 if (hasRequiredItems)
                                     return true;
                                 break;
                             case ItemCountLogic.CountAllTypes:
-                                itemCount += count;
+                                itemCount += oneTypeCount;
                                 hasRequiredItems = itemCount >= requiredCount;
                                 if (hasRequiredItems)
                                     return true;
                                 break;
+                        }
+                    }
+                    else if (item is IEquipableItem equipable)
+                    {
+                        var equipments = PartyManager.Instance.ActiveParty.Select(member => member.References.EquipmentManager);
+                        oneTypeCount = 0;
+                        foreach (var eq in equipments)
+                        {
+                            if (eq.IsItemEquipped(equipable))
+                            {
+                                switch (countingLogic)
+                                {
+                                    case ItemCountLogic.CountOneType:
+                                        oneTypeCount += 1;
+                                        hasRequiredItems = oneTypeCount >= requiredCount;
+                                        if (hasRequiredItems)
+                                            return true;
+                                        break;
+                                    case ItemCountLogic.CountAllTypes:
+                                        itemCount += 1;
+                                        hasRequiredItems = itemCount >= requiredCount;
+                                        if (hasRequiredItems)
+                                            return true;
+                                        break;
+                                }
+                            }
                         }
                     }
                 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SunsetSystems.UI.Utils;
 
 [Serializable]
-public abstract class BaseStat : IGameDataProvider<BaseStat>
+public abstract class BaseStat : IUserInfertaceDataProvider<BaseStat>
 {
     public event Action OnValueChange;
 
@@ -12,7 +12,7 @@ public abstract class BaseStat : IGameDataProvider<BaseStat>
     [field: NonSerialized]
     protected List<Modifier> Modifiers { get; private set; } = new();
 
-    public BaseStat Data => this;
+    public BaseStat UIData => this;
 
     public BaseStat(BaseStat existing)
     {

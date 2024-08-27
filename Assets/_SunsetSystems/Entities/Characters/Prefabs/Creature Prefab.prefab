@@ -37,6 +37,7 @@ Transform:
   - {fileID: 1410214241305694170}
   - {fileID: 482763929595618258}
   - {fileID: 2593631097689478263}
+  - {fileID: 5605094159454864981}
   m_Father: {fileID: 1617358537211728380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389672268198153684
@@ -94,7 +95,7 @@ MonoBehaviour:
     SerializationNodes: []
   _umaConfig: {fileID: 11400000, guid: 7994749ac24226748a791e7e7af96933, type: 2}
   _umaRoot: {fileID: 1203071946431115676}
-  <BaseLookWardrobeCollection>k__BackingField: {fileID: 0}
+  <BaseLookWardrobeReadableID>k__BackingField: 
   _umaAvatar: {fileID: 0}
 --- !u!1 &680196556232561751
 GameObject:
@@ -159,10 +160,23 @@ MonoBehaviour:
       Data: 1
   weaponParent: {fileID: 1187578031712813030}
   animationController: {fileID: 4678919013744510610}
-  weaponAnimationTypeParam: WeaponAnimationType
   _ignoreAmmo: 0
   _showWeaponOutsideCombat: 0
   selectedWeapon: 0
+  OnWeaponInstanceRebuilt:
+    _PersistentCalls:
+    - _Target: {fileID: 4678919013744510610}
+      _MethodName: OnWeaponChanged
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Equipment.IWeaponInstance, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &880835672601238623
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,9 +357,6 @@ GameObject:
   - component: {fileID: 153986963061837018}
   - component: {fileID: 3758664395462481180}
   - component: {fileID: 8145936593445724197}
-  - component: {fileID: 9211325346875014012}
-  - component: {fileID: 5774849834632775270}
-  - component: {fileID: 9168619727247805947}
   m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
@@ -370,7 +381,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &153986963061837018
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -381,9 +392,10 @@ Animator:
   m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -439,78 +451,6 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
---- !u!195 &9211325346875014012
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203071946431115676}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.3
-  m_Speed: 6
-  m_Acceleration: 6
-  avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0.5
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 5
-  m_ObstacleAvoidanceType: 4
---- !u!136 &5774849834632775270
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203071946431115676}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &9168619727247805947
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203071946431115676}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &3834732813004800264
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +463,9 @@ GameObject:
   - component: {fileID: 5773463509673429870}
   - component: {fileID: 660093643310669083}
   - component: {fileID: 265292995897044542}
+  - component: {fileID: 7708544126274853394}
+  - component: {fileID: 3567113430688830349}
+  - component: {fileID: 3889271833956220231}
   m_Layer: 8
   m_Name: Creature Prefab
   m_TagString: Untagged
@@ -617,32 +560,109 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
+    - {fileID: 409868112203810021}
     - {fileID: 3784422555817380618}
     - {fileID: 1675144160413098596}
     - {fileID: 7860156406871809602}
     - {fileID: 3703066370810871723}
+    - {fileID: 1441128836294789900}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: <CombatBehaviour>k__BackingField
+    - Name: <NavigationManager>k__BackingField
       Entry: 10
       Data: 0
-    - Name: <EquipmentManager>k__BackingField
+    - Name: <CombatBehaviour>k__BackingField
       Entry: 10
       Data: 1
-    - Name: <WeaponManager>k__BackingField
+    - Name: <EquipmentManager>k__BackingField
       Entry: 10
       Data: 2
-    - Name: <UMAManager>k__BackingField
+    - Name: <WeaponManager>k__BackingField
       Entry: 10
       Data: 3
-  <BodyTransform>k__BackingField: {fileID: 1187578031712813030}
-  <BodyGameObject>k__BackingField: {fileID: 1203071946431115676}
+    - Name: <UMAManager>k__BackingField
+      Entry: 10
+      Data: 4
+    - Name: <SpellbookManager>k__BackingField
+      Entry: 10
+      Data: 5
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
-  <NavMeshAgent>k__BackingField: {fileID: 9211325346875014012}
+--- !u!195 &7708544126274853394
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834732813004800264}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.3
+  m_Speed: 6
+  m_Acceleration: 12
+  avoidancePriority: 50
+  m_AngularSpeed: 360
+  m_StoppingDistance: 0.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 5
+  m_ObstacleAvoidanceType: 4
+--- !u!136 &3567113430688830349
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834732813004800264}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!54 &3889271833956220231
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834732813004800264}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &4380623037722673601
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,6 +713,8 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
@@ -828,6 +850,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 660093643310669083}
+    - {fileID: 409868112203810021}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -836,11 +859,15 @@ MonoBehaviour:
     - Name: owner
       Entry: 10
       Data: 0
+    - Name: agent
+      Entry: 10
+      Data: 1
   animator: {fileID: 153986963061837018}
-  agent: {fileID: 9211325346875014012}
   rigBuilder: {fileID: 3758664395462481180}
   moveThreshold: 0.1
-  positionDeltaTolerance: 0.1
+  _weaponAnimationTypeParam: WeaponAnimationType
+  _takeHitAnimationParam: TakeHit
+  _fireWeaponAnimationParam: AttackWithWeapon
 --- !u!1 &5165274126658692935
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,9 +935,8 @@ MonoBehaviour:
     - Name: <MagicUser>k__BackingField
       Entry: 10
       Data: 2
+  _combatNameplateOffset: {x: 0, y: 2, z: 0}
   defaultRaycastOriginY: 1.5
-  attackAnimationTrigger: AttackWithWeapon
-  takeHitAnimationTrigger: TakeHit
   hasCoverAnimationBoolean: InCover
   _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
@@ -920,6 +946,10 @@ MonoBehaviour:
   <OnUsedActionPoint>k__BackingField:
     _PersistentCalls: []
   <OnSpentBloodPoint>k__BackingField:
+    _PersistentCalls: []
+  <OnWeaponChanged>k__BackingField:
+    _PersistentCalls: []
+  <OnDamageTaken>k__BackingField:
     _PersistentCalls: []
 --- !u!1 &6912376922156523433
 GameObject:
@@ -1184,6 +1214,52 @@ MonoBehaviour:
         _Z: 0
         _W: 0
         _Object: {fileID: 0}
+--- !u!1 &6940308080547407485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5605094159454864981}
+  - component: {fileID: 409868112203810021}
+  m_Layer: 0
+  m_Name: Navigation Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5605094159454864981
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6940308080547407485}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &409868112203810021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6940308080547407485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c88b98e58e3b34fb47a6cb9e53f38e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _faceTargetTime: 0.25
+  _navMeshAgent: {fileID: 7708544126274853394}
 --- !u!1 &8102729581408813883
 GameObject:
   m_ObjectHideFlags: 0

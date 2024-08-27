@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
+using Sirenix.OdinInspector;
 using SunsetSystems.Dice;
 using SunsetSystems.Entities.Data;
-using SunsetSystems.Entities.Characters.Interfaces;
 using UltEvents;
-using Sirenix.OdinInspector;
-using System.Linq;
+using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -78,7 +76,7 @@ namespace SunsetSystems.Entities.Characters
 
         public virtual void Die()
         {
-            Health.SuperficialDamage = 10000;
+            Health.SuperficialDamage = Health.MaxValue;
             OnCreatureDied?.Invoke(Owner);
         }
 
@@ -92,8 +90,8 @@ namespace SunsetSystems.Entities.Characters
 
         public int GetCombatSpeed()
         {
-            //return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
-            return 5;
+            return Stats.Attributes.GetAttribute(AttributeType.Speed).GetValue();
+            //return 5;
         }
 
         public int GetInitiative()

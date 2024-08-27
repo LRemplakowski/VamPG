@@ -29,15 +29,15 @@ namespace SunsetSystems.Combat.UI
             {
                 Image chunk = activeChunks[i];
                 float chunkAlpha = chunk.color.a;
-                float targetAlpha = i <= activeCount ? 1f : 0f;
+                float targetAlpha = i < activeCount ? 1f : 0f;
                 if (Mathf.Approximately(chunkAlpha, targetAlpha))
                 {
-                    chunk.CrossFadeAlpha(targetAlpha, 0f, false);
+                    chunk.CrossFadeAlpha(targetAlpha, 0f, true);
                     continue;
                 }
                 else
                 {
-                    chunk.CrossFadeAlpha(targetAlpha, timePerChunk, false);
+                    chunk.CrossFadeAlpha(targetAlpha, timePerChunk, true);
                     yield return new WaitForSeconds(timePerChunk);
                 }
             }

@@ -1,3 +1,4 @@
+using SunsetSystems.Combat;
 using SunsetSystems.Inventory.Data;
 using System;
 using UnityEngine.AddressableAssets;
@@ -10,6 +11,7 @@ namespace SunsetSystems.Inventory
         WeaponFireMode FireMode { get; }
         int MaxAmmo { get; }
 
+        CombatActionType GetWeaponCombatActions();
         RangeData GetRangeData();
         DamageData GetDamageData();
 

@@ -39,17 +39,18 @@ namespace SunsetSystems.Journal
 
         private void OnEnable()
         {
-            _objective.OnObjectiveActive += StartTracking;    
+            Objective.OnObjectiveActive += StartTracking;    
         }
 
         private void OnDisable()
         {
-            _objective.OnObjectiveActive -= StartTracking;
+            Objective.OnObjectiveActive -= StartTracking;
         }
 
         private void StartTracking(Objective obj)
         {
-            _isActive = true;
+            if (obj.DatabaseID == _objective.DatabaseID)
+                _isActive = true;
         }
 
         // Update is called once per frame

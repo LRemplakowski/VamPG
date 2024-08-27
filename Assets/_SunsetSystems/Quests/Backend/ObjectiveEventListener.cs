@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UltEvents;
 using UnityEngine;
@@ -16,51 +17,60 @@ namespace SunsetSystems.Journal
         [HideIf("@this.useUltEvents == true")]
         public UnityEvent ObjectiveActive, ObjectiveInactive, ObjectiveCompleted, ObjectiveActiveAfterSceneLoad;
         [ShowIf("@this.useUltEvents == true")]
-        public UltEvent OnObjectiveActive, OnObjectiveInactive, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
+        public UltEvent OnObjectiveActive, OnObjectiveFailed, OnObjectiveCompleted, OnObjectiveActiveAfterSceneLoad;
 
         private void OnEnable()
         {
-            _objective.OnObjectiveActive += ObjectiveActiveHandler;
-            _objective.OnObjectiveFailed += ObjectiveInactiveHandler;
-            _objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
+            Objective.OnObjectiveActive += ObjectiveActiveHandler;
+            Objective.OnObjectiveFailed += ObjectiveFailedHandler;
+            Objective.OnObjectiveCompleted += ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected += ObjectiveDataInjectedHandler;
         }
 
         private void OnDisable()
         {
-            _objective.OnObjectiveActive -= ObjectiveActiveHandler;
-            _objective.OnObjectiveFailed -= ObjectiveInactiveHandler;
-            _objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
+            Objective.OnObjectiveActive -= ObjectiveActiveHandler;
+            Objective.OnObjectiveFailed -= ObjectiveFailedHandler;
+            Objective.OnObjectiveCompleted -= ObjectiveCompletedHandler;
             QuestJournal.OnObjectiveDataInjected -= ObjectiveDataInjectedHandler;
         }
 
         private void ObjectiveActiveHandler(Objective obj)
         {
-            if (useUltEvents)
-                OnObjectiveActive?.InvokeSafe();
-            else
-                ObjectiveActive?.Invoke();
+            if (obj.DatabaseID == _objective.DatabaseID)
+            {
+                if (useUltEvents)
+                    OnObjectiveActive?.InvokeSafe();
+                else
+                    ObjectiveActive?.Invoke();
+            }
         }
 
-        private void ObjectiveInactiveHandler(Objective obj)
+        private void ObjectiveFailedHandler(Objective obj)
         {
-            if (useUltEvents)
-                OnObjectiveInactive?.InvokeSafe();
-            else
-                ObjectiveInactive?.Invoke();
+            if (obj.DatabaseID == _objective.DatabaseID)
+            {
+                if (useUltEvents)
+                    OnObjectiveFailed?.InvokeSafe();
+                else
+                    ObjectiveInactive?.Invoke();
+            }
         }
 
         private void ObjectiveCompletedHandler(Objective obj)
         {
-            if (useUltEvents)
-                OnObjectiveCompleted?.InvokeSafe();
-            else
-                ObjectiveCompleted?.Invoke();
+            if (obj.DatabaseID == _objective.DatabaseID)
+            {
+                if (useUltEvents)
+                    OnObjectiveCompleted?.InvokeSafe();
+                else
+                    ObjectiveCompleted?.Invoke();
+            }
         }
 
         private void ObjectiveDataInjectedHandler(HashSet<Objective> objectives)
         {
-            if (objectives.Contains(_objective))
+            if (objectives.Any(ob => ob.DatabaseID == _objective.DatabaseID))
             {
                 if (useUltEvents)
                     OnObjectiveActiveAfterSceneLoad?.InvokeSafe();

@@ -22,13 +22,13 @@ namespace SunsetSystems.UI
             _views.ForEach(v => v.gameObject.SetActive(false));
         }
 
-        public void UpdateViews(List<IGameDataProvider<BaseStat>> data)
+        public void UpdateViews(List<IUserInfertaceDataProvider<BaseStat>> data)
         {
             DisableViews();
             List<CreatureAttribute> stats = data
                 .FindAll(a => ((a as CreatureAttribute).AttributeType & _attributes) > 0)
                 .OrderBy(a => (a as CreatureAttribute).AttributeType)
-                .Select(a => a.Data as CreatureAttribute)
+                .Select(a => a.UIData as CreatureAttribute)
                 .ToList();
             foreach (BaseStat stat in stats)
             {

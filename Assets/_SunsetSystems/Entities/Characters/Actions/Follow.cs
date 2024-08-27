@@ -1,16 +1,14 @@
 using System.Collections;
-using SunsetSystems.Entities.Characters.Actions.Conditions;
+using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
-using UnityEngine;
-using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Actions
 {
     [System.Serializable]
     public class Follow : EntityAction
     {
-        private readonly NavMeshAgent followTarget;
-        private readonly NavMeshAgent myAgent;
+        private readonly INavigationManager followTarget;
+        private readonly INavigationManager myAgent;
         private readonly float followDistance;
 
         private IEnumerator followCoroutine;
@@ -18,11 +16,11 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         public Follow(IActionPerformer owner, IEntity followTarget, float followDistance) : base(owner)
         {
-            this.followTarget = followTarget.References.GetCachedComponentInChildren<NavMeshAgent>();
-            myAgent = owner.References.NavMeshAgent;
+            this.followTarget = followTarget.References.GetCachedComponent<INavigationManager>();
+            myAgent = owner.References.NavigationManager;
             following = false;
             this.followDistance = followDistance;
-            conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(this.followTarget, myAgent));
+            conditions.Add(new KeepWithinStoppingDistanceOfFollowTarget(this.followTarget, myAgent, followDistance));
         }
 
         public override void Cleanup()
@@ -30,13 +28,12 @@ namespace SunsetSystems.Entities.Characters.Actions
             base.Cleanup();
             if (followCoroutine != null)
                 Owner.CoroutineRunner.StopCoroutine(followCoroutine);
-            myAgent.isStopped = true;
+            myAgent.StopMovement();
             following = false;
         }
 
         public override void Begin()
         {
-            myAgent.isStopped = false;
             following = true;
             followCoroutine = FollowCoroutine();
             Owner.CoroutineRunner.StartCoroutine(followCoroutine);
@@ -46,8 +43,7 @@ namespace SunsetSystems.Entities.Characters.Actions
         {
             while (following)
             {
-                myAgent.isStopped = false;
-                myAgent.destination = followTarget.transform.position - ((followTarget.transform.position - myAgent.transform.position).normalized * followDistance);
+                myAgent.SetNavigationTarget(followTarget.Position - ((followTarget.Position - myAgent.Position).normalized * followDistance));
                 yield return null;
             }
         }

@@ -1,10 +1,13 @@
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.AddressableManagement;
+using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace SunsetSystems.Audio
 {
@@ -16,7 +19,7 @@ namespace SunsetSystems.Audio
         [SerializeField, Range(0.01f, 10f)]
         private float _trackTransitionTime = 1f;
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
-        private Dictionary<GameState, PlaylistConfig> statePlaylistPairs = new();
+        private Dictionary<GameState, IPlaylist> statePlaylistPairs = new();
         [SerializeField]
         private float _defaultVolume = .5f;
         private float _cachedVolume;
@@ -33,9 +36,11 @@ namespace SunsetSystems.Audio
                 _soundtrackSource.volume = value;
             }
         }
-        private Task _cachedPlaylistTask;
 
+        private Task _cachedPlaylistTask;
+        private IPlaylist _lastPlaylist;
         private bool _playSoundtrack;
+        private ScenePlaylistData _lastPlaylistData = new();
 
         private void Awake()
         {
@@ -46,6 +51,7 @@ namespace SunsetSystems.Audio
 
         private void OnValidate()
         {
+            statePlaylistPairs ??= new();
             foreach (GameState state in Enum.GetValues(typeof(GameState)))
             {
                 if (statePlaylistPairs.ContainsKey(state) is false)
@@ -56,7 +62,11 @@ namespace SunsetSystems.Audio
         public void PlayStatePlaylist(GameState gameState)
         {
             _playSoundtrack = true;
-            _cachedPlaylistTask = ExecutePlaylist(statePlaylistPairs[gameState]);
+            if (statePlaylistPairs.TryGetValue(gameState, out IPlaylist statePlaylist) && statePlaylist != _lastPlaylist)
+            {
+                _lastPlaylist = statePlaylist;
+                _cachedPlaylistTask = ExecutePlaylist(statePlaylist);
+            }
         }
 
         public void StopSoundtrackImmediate()
@@ -66,7 +76,7 @@ namespace SunsetSystems.Audio
             _cachedPlaylistTask = null;
         }
 
-        private async Task ExecutePlaylist(PlaylistConfig config)
+        private async Task ExecutePlaylist(IPlaylist config)
         {
             Task myTask = _cachedPlaylistTask;
             while (_playSoundtrack)
@@ -106,6 +116,41 @@ namespace SunsetSystems.Audio
                 timeElapsed += Time.deltaTime;
                 await new WaitForUpdate();
             }
+        }
+
+        public async void InjectPlaylistData(ScenePlaylistData playlistData)
+        {
+            ReleasePreviousDataIfExists();
+            _lastPlaylistData = playlistData;
+            Dictionary<GameState, Task<IPlaylist>> operations = new();
+            if (playlistData.Exploration != null)
+            {
+                var op = playlistData.Exploration.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Exploration] = op.Task;
+            }
+            if (playlistData.Combat != null)
+            {
+                var op = playlistData.Combat.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Combat] = op.Task;
+            }
+            if (playlistData.Dialogue != null)
+            {
+                var op = playlistData.Dialogue.LoadAssetAsync<IPlaylist>();
+                operations[GameState.Conversation] = op.Task;
+            }
+            await Task.WhenAll(operations.Values);
+            foreach (var statePlaylist in operations)
+            {
+                statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
+            }
+            PlayStatePlaylist(GameState.Exploration);
+        }
+
+        private void ReleasePreviousDataIfExists()
+        {
+            _lastPlaylistData.Dialogue?.ReleaseAsset();
+            _lastPlaylistData.Combat?.ReleaseAsset();
+            _lastPlaylistData.Dialogue?.ReleaseAsset();
         }
     }
 }

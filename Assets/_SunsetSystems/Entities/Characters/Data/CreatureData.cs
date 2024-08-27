@@ -1,5 +1,5 @@
 ﻿using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Interfaces;
+using SunsetSystems.Core.Database;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters
@@ -18,7 +18,7 @@ namespace SunsetSystems.Entities.Characters
         { 
             get 
             {
-                if (_portrait == null && CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+                if (_portrait == null && CreatureDatabase.Instance.TryGetEntry(DatabaseID, out var config))
                     _portrait = config.Portrait;
                 return _portrait;
             } 
@@ -36,7 +36,7 @@ namespace SunsetSystems.Entities.Characters
             LastName = template.LastName;
             DatabaseID = template.DatabaseID;
             ReadableID = template.ReadableID;
-            if (CreatureDatabase.Instance.TryGetConfig(DatabaseID, out var config))
+            if (CreatureDatabase.Instance.TryGetEntry(DatabaseID, out var config))
                 _portrait = config.Portrait;
             Faction = template.Faction;
             BodyType = template.BodyType;

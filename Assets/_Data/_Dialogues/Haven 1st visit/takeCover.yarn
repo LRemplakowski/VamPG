@@ -13,13 +13,13 @@ BANG! BANG! BANG! #line:08bca26
 {$beast}: Just ignore it. I don't want more witnesses. #line:0ca6bb4 
 <<PlaySFX "door_knock_heavy">>
 BANG! BANG! BANG! BANG! #line:0f18873 
+{$pcName}: [nomarkup][Oh my God! What if it's the cops?][/nomarkup] #line:0952dab 
+{$beast}: Who cares? It's them or me. #line:0773750
 <<jump DominicKieranScene>>
 ===
 title: DominicKieranScene
 tags:
----
-{$pcName}: [nomarkup][Oh my God! What if it's the cops?][/nomarkup] #line:0952dab 
-{$beast}: Who cares? It's them or me. #line:0773750 
+--- 
 <<KieranDominicBargeIn>>
 CRACK. [nomarkup][The door bursts open, with two men behind it barging into the room.][/nomarkup] #line:08e78bb 
 [nomarkup][One of them is tall and well-built, his skin unnaturally pale and dark brown hair windswept. The man is clad in a black suit made from some kind of expensive fabric shimmering faintly in your apartment lights.][/nomarkup]
@@ -65,7 +65,7 @@ CRACK. [nomarkup][The door bursts open, with two men behind it barging into the 
 -> [nomarkup][Drop your weapon.][/nomarkup] <<if $gotweapon == true>> #line:0bbfd00 
     {$sheriff}: Sharp. #line:01ea142 
 -> [nomarkup][Run.][/nomarkup] #line:0ef42d5 
-    [nomarkup][Before you have the chance to even take a step, Dominic seemingly reads your mind, moving with inhuman speed to block your exit.][/nomarkup] #line:0b4ff3e 
+    [nomarkup][Before you have the chance to even take a step, man in the suit seemingly reads your mind, moving with inhuman speed to block your exit.][/nomarkup] #line:0b4ff3e 
 {$sheriff}: [nomarkup][He clicks his tongue, but keeps his devilish smirk.][/nomarkup] You sure know how to make an impression. I'll give you that. #line:07a7163 
 [nomarkup][The imposing man pulls out a cigarette and lights it, the flickering flame produced by the zippo lighter in his hand reflected by his sunglasses. The small flame is close enough to make you recoil instinctively, and as it dances in his lenses, you can feel your stomach crawl with discomfort.][/nomarkup]
 [nomarkup][Cornered, there is nowhere to go that isn't pressed further against the fridge. As the man's eyes track you, his smile sends a chill down your spine.][/nomarkup] #line:03b1db4 

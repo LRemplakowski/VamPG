@@ -67,21 +67,27 @@ float _PlayersDataFloatArray[500];
         float _DissolveMaskEnabledGlobal;
         float _PreviewIndicatorLineThicknessGlobal;
 
-        float _AffectedAreaPlayerBasedObstruction;
-        float _AffectedAreaFloor;
-        float _EnableDefaultEffectRadius;
+        float _AffectedAreaPlayerBasedObstructionGlobal;
+        float _AffectedAreaFloorGlobal;
+        float _EnableDefaultEffectRadiusGlobal;
 
+        float _UseCustomTimeGlobal;
+
+        half _DissolveMethodGlobal;
+        half _DissolveTexSpaceGlobal;
 
         sampler2D _DissolveTexGlobal;
         sampler2D _DissolveMaskGlobal;
         sampler2D _ObstructionCurveGlobal;
 #endif
 
+float _STSCustomTime;
 
 struct ShaderData
 {
     float3 worldSpaceNormal;
     float3 worldSpacePosition;
+    float3 localSpacePosition;
 };
 
 struct Surface
@@ -110,11 +116,14 @@ struct Surface
 
 void DoSeeThroughShaderEffect_float(float3 inColor,
                                     float3 tangentNormal, float3 worldPosition,
-                                    float3 worldNormal,
+                                    float3 worldNormal, float4 screenPos,
 
                                     float _numOfPlayersInside, float _tDirection, float _tValue, float _id,
                                     float _TriggerMode, float _RaycastMode,
                                     float _IsExempt,
+
+                                    half _DissolveMethod, half _DissolveTexSpace,
+
 
                                     float4 _DissolveColor, float _DissolveColorSaturation, float _UVs,
                                     float _DissolveEmission, float _DissolveEmissionBooster, float _TexturedEmissionEdge, float _TexturedEmissionEdgeStrength,
@@ -141,6 +150,8 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
                                     float _AnimationEnabled, float _AnimationSpeed,
                                     float _TransitionDuration,
 
+                                    float _UseCustomTime,
+
                                     float _Zoning, float _ZoningMode, bool _IsZoningRevealable, float _ZoningEdgeGradientLength,
                                     float _SyncZonesWithFloorY, float _SyncZonesFloorYOffset,
 
@@ -162,11 +173,13 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
 #endif
     
 #if defined(_REPLACEMENT)
-    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal,
+    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal, screenPos,
 
                                     _numOfPlayersInside, _tDirection, _tValue, _id,
                                     _TriggerMode, _RaycastMode,
                                     _IsExempt,
+    
+                                    _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                                     _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                                     _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -190,6 +203,8 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
 
                                     _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                                     _TransitionDurationGlobal,
+    
+                                    _UseCustomTimeGlobal,
 
                                     _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                                     _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
@@ -207,12 +222,14 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
                                     albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal,
+    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal, screenPos,
 
                                     _numOfPlayersInside, _tDirection, _tValue, _id,
                                     _TriggerMode, _RaycastMode,
                                     _IsExempt,
 
+                                    _DissolveMethod, _DissolveTexSpace,
+    
                                     _DissolveColor, _DissolveColorSaturation, _UVs,
                                     _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
                                     _hasClippedShadows,
@@ -235,6 +252,8 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
 
                                     _AnimationEnabled, _AnimationSpeed,
                                     _TransitionDuration,
+    
+                                    _UseCustomTime,
 
                                     _Zoning, _ZoningMode, _IsZoningRevealable, _ZoningEdgeGradientLength,
                                     _SyncZonesWithFloorY, _SyncZonesFloorYOffset,
@@ -260,11 +279,13 @@ void DoSeeThroughShaderEffect_float(float3 inColor,
 
 void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
                                     float3 tangentNormal, float3 worldPosition,
-                                    float3 worldNormal,
+                                    float3 worldNormal, float4 screenPos,
 
                                     float _numOfPlayersInside, float _tDirection, float _tValue, float _id,
                                     float _TriggerMode, float _RaycastMode,
                                     float _IsExempt,
+
+                                    half _DissolveMethod, half _DissolveTexSpace,
 
                                     float4 _DissolveColor, float _DissolveColorSaturation, float _UVs,
                                     float _DissolveEmission, float _DissolveEmissionBooster, float _TexturedEmissionEdge, float _TexturedEmissionEdgeStrength,
@@ -291,6 +312,8 @@ void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
                                     float _AnimationEnabled, float _AnimationSpeed,
                                     float _TransitionDuration,
 
+                                    float _UseCustomTime,
+
                                     float _Zoning, float _ZoningMode, bool _IsZoningRevealable, float _ZoningEdgeGradientLength,
                                     float _SyncZonesWithFloorY, float _SyncZonesFloorYOffset,
 
@@ -311,11 +334,13 @@ void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
 #endif   
 
 #if defined(_REPLACEMENT)
-    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal,
+    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal, screenPos,
 
                                     _numOfPlayersInside, _tDirection, _tValue, _id,
                                     _TriggerMode, _RaycastMode,
                                     _IsExempt,
+    
+                                    _DissolveMethodGlobal, _DissolveTexSpaceGlobal,
 
                                     _DissolveColorGlobal, _DissolveColorSaturationGlobal, _UVsGlobal,
                                     _DissolveEmissionGlobal, _DissolveEmissionBoosterGlobal, _TexturedEmissionEdgeGlobal, _TexturedEmissionEdgeStrengthGlobal,
@@ -339,6 +364,8 @@ void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
 
                                     _AnimationEnabledGlobal, _AnimationSpeedGlobal,
                                     _TransitionDurationGlobal,
+    
+                                    _UseCustomTimeGlobal,
 
                                     _ZoningGlobal, _ZoningModeGlobal, _IsZoningRevealableGlobal, _ZoningEdgeGradientLengthGlobal,
                                     _SyncZonesWithFloorYGlobal, _SyncZonesFloorYOffsetGlobal,
@@ -356,11 +383,13 @@ void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
                                     albedo, emission, alphaForClipping);
 #else 
     
-    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal,
+    DoSeeThroughShading(inColor, tangentNormal, worldPosition, worldNormal, screenPos,
 
                                     _numOfPlayersInside, _tDirection, _tValue, _id,
                                     _TriggerMode, _RaycastMode,
                                     _IsExempt,
+    
+                                    _DissolveMethod, _DissolveTexSpace,
 
                                     _DissolveColor, _DissolveColorSaturation, _UVs,
                                     _DissolveEmission, _DissolveEmissionBooster, _TexturedEmissionEdge, _TexturedEmissionEdgeStrength,
@@ -384,6 +413,8 @@ void DoSeeThroughShaderEffectAlphaOnly_float(float3 inColor,
 
                                     _AnimationEnabled, _AnimationSpeed,
                                     _TransitionDuration,
+    
+                                    _UseCustomTime,
 
                                     _Zoning, _ZoningMode, _IsZoningRevealable, _ZoningEdgeGradientLength,
                                     _SyncZonesWithFloorY, _SyncZonesFloorYOffset,

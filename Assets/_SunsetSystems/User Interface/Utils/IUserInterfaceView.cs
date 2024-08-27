@@ -4,6 +4,6 @@ namespace SunsetSystems.UI.Utils
 {
     public interface IUserInterfaceView<T>
     {
-        void UpdateView(IGameDataProvider<T> dataProvider);
+        void UpdateView(IUserInfertaceDataProvider<T> dataProvider);
     }
 }

@@ -1,11 +1,11 @@
 ﻿title: kieranDialogue
 tags: 
 ---
-[nomarkup][You drive through Vegas streets. Kieran is a cautious driver adhering to the traffic rules to the letter. He looks a little bit tense. You have time to relax, or talk.][/nomarkup]
--> {$pcName}: Kieran May I ask you some questions?
+[nomarkup][You drive through Vegas streets. Kieran is a cautious driver adhering to the traffic rules to the letter. He looks a little bit tense. You have time to relax, or talk.][/nomarkup] #line:05cc647 
+-> {$pcName}: Kieran May I ask you some questions? #line:0e614f7 
     <<jump askQuestions>>
--> [Stay silent.]
-[nomarkup][You see neon lights coming closer and closer. Time for questions is over. You take a deep breath in anticipation for what is to come. You hope that you find answers to your questions there before someone kills you.][/nomarkup]
+-> [Stay silent.] #line:011080e 
+[nomarkup][You see neon lights coming closer and closer. Time for questions is over. You take a deep breath in anticipation for what is to come. You hope that you find answers to your questions there before someone kills you.][/nomarkup] #line:0789e4e 
 ===
 title: askQuestions
 ---
@@ -174,12 +174,12 @@ title: occultQuestions
 ---
 {$kieran}: Most cannot be warded away with any religious symbols, though there are some anomalous occurrences of this being a trait developed following the Embrace. We also don't tend to sleep in coffins, but there is no accounting for taste. Not judging, of course. As for the super speed - and strength, those are a few abilities that Kindred do have. Training to hone them is a necessity, though. Never forget this. #line:051f8a9 
 -> {$pcName}: So I'm some kind of... let's call it a superhero in the making? Can you teach me everything you mentioned just now? #line:0f53480 
-{$kieran}: That is exactly the kind of mindset which will get you killed, Miss Bardot. One's abilities are not toys.
+{$kieran}: That is exactly the kind of mindset which will get you killed, Miss Bardot. One's abilities are not toys. #line:07c1a8c 
 {$kieran}: And sadly, the answer is once again no. I do not know all of those powers, myself. I am sure you will find a suitable teacher, when the time comes, however. Being Brujah, the powers you possess are quite common amongst Kindred. #line:0748c05
 ===
 title: occultChoices
 ---
-{$kieran}: What else do you want to know?
+{$kieran}: What else do you want to know? #line:067a952 
 -> {$pcName}: Being Brujah... So the powers you get are based on your Clan? #line:0866b7b 
     <<jump superhero>>
 -> {$pcName}: What's your Clan? #line:0813c5a 
@@ -228,6 +228,6 @@ title: kieransClan
 title: unaware
 ---
 {$kieran}: Well, some powers are subtler than others in their usage and effects. It is difficult to detect a supernatural charm or allure, for instance, whereas something like super speed or strength is leagues more noticeable. #line:07000e7 
-{$kieran}: Moreover, it is a fact that your powers are available to you innately through your Sire, but their initial distribution is generally varied.Causes for these fluctuations in initial skill levels of Fledglings are not well-understood.
+{$kieran}: Moreover, it is a fact that your powers are available to you innately through your Sire, but their initial distribution is generally varied.Causes for these fluctuations in initial skill levels of Fledglings are not well-understood. #line:0ab2603 
 <<jump occultChoices>>
 ===

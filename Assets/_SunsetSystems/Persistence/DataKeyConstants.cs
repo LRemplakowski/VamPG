@@ -17,6 +17,6 @@ namespace SunsetSystems.Persistence
         public const string INVENTORY_MANAGER_DATA_KEY = "INVENTORY_MANAGER";
         public const string PERSISTENT_SCENE_OBJECT_DATA_KEY = "PERSISTENT_SCENE_OBJECT";
         public const string ABSTRACT_SCENE_LOGIC_DATA_KEY = "ABSTRACT_SCENE_LOGIC";
-
+        public const string WORLD_MAP_MANAGER_DATA_KEY = "WORLD_MAP_MANAGER";
     }
 }

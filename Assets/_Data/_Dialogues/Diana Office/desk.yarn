@@ -105,7 +105,7 @@ title: deskBook
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][She snorts.][/nomarkup] 69 - nice. #line:00c76e1 
     {$kieran}: ‘66 actually. #line:0d3e4fb 
-    {$anastasia}: You [nomarkup]<i>would</i>[/nomarkup] be a little spoon, wouldn't you, Tinker Bell? #line:0d89fd6 
+    {$anastasia}: You [nomarkup]<i>would</i>[/nomarkup] be a little spoon, wouldn't you, Tinker Bell? #line:0d89fd6 #lastline
 <<endif>>
 <<jump deskExaminationOptions>>
 ===
@@ -115,7 +115,7 @@ title: deskNewspaper
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Why are you looking at this? It's not like someone is gonna post your obituary. #line:07f4e86 
     [nomarkup][Sadly, she's right. And you'd like it to stay that way. Not only because of the issues your death would undoubtedly cause, but also because it would make your passing real - more so than you are willing or capable of acknowledging at the current moment.][/nomarkup] #line:05ea9e1 
-    [nomarkup][Somewhere deep inside, you still hold onto the faint hope that this is just some absurd nightmare, conjured in the wake of yet another drunken stupor...][/nomarkup] #line:014343c 
+    [nomarkup][Somewhere deep inside, you still hold onto the faint hope that this is just some absurd nightmare, conjured in the wake of yet another drunken stupor...][/nomarkup] #line:014343c #lastline
 <<endif>>
 <<jump deskExaminationOptions>>
 ===

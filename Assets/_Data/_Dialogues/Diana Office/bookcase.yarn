@@ -36,21 +36,25 @@ title: bookcaseExamine
 ---
 [nomarkup][The books are placed together in disorganized chaos - with no rhyme or reason to their presence.][/nomarkup] #line:04334e9 
 <<if Roll ("Intelligence","Awareness")>=4>>
-    [nomarkup][That is, they are at first glance... When you examine them more closely, you notice a pattern. Several titles that can be directly linked to something known as the “Hidden Arts” repeat themselves, and a volume of one of them seems to be especially heavily used... It is titled - “The Book of Law” by Aleister Crowley.][/nomarkup] #line:07c9215 
+    [nomarkup][That is, they are at first glance... When you examine them more closely, you notice a pattern. Several titles that can be directly linked to something known as the “Hidden Arts” repeat themselves, and a volume of one of them seems to be especially heavily used... It is titled - “The Book of Law” by Aleister Crowley.][/nomarkup] #line:07c9215 #lastline
     <<set $hiddenArts to true>>
     <<if Roll ("Intelligence","Occult") >=5>>
-        [nomarkup][Aleister Crowley... You recognize that name. He was a prominent English occultist and ceremonial magician. If he's in a vampire's bookshelf, then maybe not all of his body of work is nonsense...][/nomarkup] #line:07ae103 
+        [nomarkup][Aleister Crowley... You recognize that name. He was a prominent English occultist and ceremonial magician. If he's in a vampire's bookshelf, then maybe not all of his body of work is nonsense...][/nomarkup] #line:07ae103 #lastline
     <<elseif Roll ("Wits","Occult")>=3>> 
-        [nomarkup][The “Hidden Arts”, huh? Sounds paranormal enough. You probably shouldn't touch the volume...][/nomarkup] #line:04102b4 
+        [nomarkup][The “Hidden Arts”, huh? Sounds paranormal enough. You probably shouldn't touch the volume...][/nomarkup] #line:04102b4 #lastline
     <<endif>>
 <<endif>>
 <<if $hiddenArts == true>>
     -> {$pcName}: [nomarkup][Take the book.][/nomarkup] #line:08a5386 
+        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran influence) #line:0f594d6 #lastline
+        <<ModifyInfluence 1 $kieran>>
+        <<jump booksHaveTeeth>>
+<<else>>
+    -> {$pcName}: Diana has quite the collection. She appears to read this one quite often, though. [nomarkup][You point at it.][/nomarkup] #line:01a1e74 
+        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran influence) #line:0f594d6 #lastline
+        <<ModifyInfluence 1 $kieran>>
+        <<jump booksHaveTeeth>>
 <<endif>>
--> {$pcName}: Diana has quite the collection. She appears to read this one quite often, though. [nomarkup][You point at it.][/nomarkup] #line:01a1e74 
-    {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran influence) #line:0f594d6 
-    <<ModifyInfluence 1 $kieran>>
-<<jump booksHaveTeeth>>
 ===
 title: booksHaveTeeth
 ---

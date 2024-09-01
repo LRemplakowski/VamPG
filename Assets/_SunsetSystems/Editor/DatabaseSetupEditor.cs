@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Journal;
+using SunsetSystems.WorldMap;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ namespace SunsetSystems.Editor
         public ObjectiveDatabase ObjectiveDatabase;
         [AssetsOnly]
         public UMAWardrobeDatabase WardrobeDatabase;
+        [AssetsOnly]
+        public WorldMapEntryDatabase WorldMapDatabase;
 
         [MenuItem("Tools/Database Setup")]
         public static void OpenWindow()
@@ -63,6 +66,8 @@ namespace SunsetSystems.Editor
             ObjectiveDatabase = AssetDatabase.LoadAssetAtPath<ObjectiveDatabase>(objectivePath);
             string wardrobePath = EditorPrefs.GetString("WardrobeDatabase");
             WardrobeDatabase = AssetDatabase.LoadAssetAtPath<UMAWardrobeDatabase>(wardrobePath);
+            string worldMapPath = EditorPrefs.GetString("WorldMapDatabase");
+            WorldMapDatabase = AssetDatabase.LoadAssetAtPath<WorldMapEntryDatabase>(worldMapPath);
         }
 
         private void SaveDatabaseReferences()
@@ -77,6 +82,8 @@ namespace SunsetSystems.Editor
             EditorPrefs.SetString("ObjectiveDatabase", objectivePath);
             string wardrobePath = AssetDatabase.GetAssetPath(WardrobeDatabase);
             EditorPrefs.SetString("WardrobeDatabase", wardrobePath);
+            string worldMapPath = AssetDatabase.GetAssetPath(WorldMapDatabase);
+            EditorPrefs.SetString("WorldMapDatabase", worldMapPath);
         }
 
         private void UpdateStaticReferences()
@@ -87,6 +94,7 @@ namespace SunsetSystems.Editor
             EditorDatabaseHelper.QuestDB = QuestDatabase;
             EditorDatabaseHelper.ObjectiveDB = ObjectiveDatabase;
             EditorDatabaseHelper.WardrobeDB = WardrobeDatabase;
+            EditorDatabaseHelper.WorldMapDB = WorldMapDatabase;
         }
     }
 }

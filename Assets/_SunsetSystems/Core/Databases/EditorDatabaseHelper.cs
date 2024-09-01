@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using SunsetSystems.Journal;
+using SunsetSystems.WorldMap;
 
 namespace SunsetSystems.Core.Database
 {
@@ -10,6 +11,7 @@ namespace SunsetSystems.Core.Database
         public static QuestDatabase QuestDB { get; set; }
         public static ObjectiveDatabase ObjectiveDB { get; set; }
         public static UMAWardrobeDatabase WardrobeDB { get; set; }
+        public static WorldMapEntryDatabase WorldMapDB { get; set; }
     }
 }
 #endif

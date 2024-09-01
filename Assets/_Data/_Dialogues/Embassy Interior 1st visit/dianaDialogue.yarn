@@ -11,6 +11,7 @@ position: 136,-238
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Well, if she's done spacing out and you two already have some kind of plan, I'd like to hear it. Sharing is caring. #line:0af9e59 
     {$kieran}: [nomarkup][Kieran frowns.][/nomarkup] She does that, sometimes. Please, pay it no mind. #line:09a1f03
+    -> [nomarkup][You try really hard to collect your thoughts.][/nomarkup]
     <<if $toldKieranAboutVision is true>>
         {$kieran}: Another vision? #lastline #line:07c09de
     <<endif>> 

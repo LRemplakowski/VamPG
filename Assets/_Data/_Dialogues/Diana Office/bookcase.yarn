@@ -59,7 +59,7 @@ title: booksHaveTeeth
     {$kieran}: Not generally, no. But in the event they do, you need only gently stroke their spine. You weren't aware, Ms. Goth Queen? [nomarkup][He chuckles.][/nomarkup] #line:05ea42d 
 <<endif>>
 {$kieran}: [nomarkup][He examines the book for a while without taking it from the shelf.][/nomarkup] Everything looks to be in order. #line:0157695 
-[nomarkup][You remove the book from its shelf and open it up to a random page - leafing through it. There's nothing special about it, at first glance. No marks, no hidden compartments cut into the pages...][/nomarkup] #line:057f624 
+[nomarkup][You remove the book from its shelf and open it up to a random page - leafing through it. There's nothing special about it, at first glance. No marks, no hidden compartments cut into the pages...][/nomarkup] #line:057f624 #lastline
 <<if Roll ("Wits","Insight")>=4>>
     -> {$pcName}: Diana doesn't seem like the religious type, to me... #line:0c51020 
     <<set $thelema to true>>
@@ -67,7 +67,7 @@ title: booksHaveTeeth
         {$anastasia}: She, at the very least, does seem to believe in anarchy. For those people, it's hard to say that organized religion doesn't represent an unjustified hierarchy. #line:0bc86e8 
         -> {$pcName}: I'm not talking about that. This book is like a Bible, for Thelema; she consults it often. #line:0f499be 
     <<endif>>
-    {$kieran}: Well, it is often the first stop for any prospective apprentice of the magical arts. Maybe she's finally decided to start doing her homework? #line:03d51b3 
+    {$kieran}: Well, it is often the first stop for any prospective apprentice of the magical arts. Maybe she's finally decided to start doing her homework? #line:03d51b3 #lastline
 <<endif>>
 <<if Roll ("Intelligence","Academics")>=4>>
     -> {$pcName}: It looks like Diana is interested in some majorly esoteric stuff. Does Kate know? #line:05beb70 
@@ -81,7 +81,7 @@ title: booksHaveTeeth
 <<endif>>
 -> [nomarkup][On second thought, I don't want to look at this dusty, old book.][/nomarkup] #line:0e516c9 
 <<if $thelema == true>>
-    [nomarkup][You don't think you'll find anything else in this book... You put it back on the shelf.][/nomarkup] #line:0898f9f 
+    [nomarkup][You don't think you'll find anything else in this book... You put it back on the shelf.][/nomarkup] #line:0898f9f #lastline
 <<endif>>
 <<jump bookcaseInteractions>>
 ===
@@ -134,14 +134,15 @@ title: bookcaseTVAnaTenderMoment
 <<endif>>
 -> [nomarkup][Study Anastasia's expression.][/nomarkup] #line:0320dd7 
 <<if Roll("Wits","Awareness") >= (3 - $layingItOn)>>
-    [nomarkup][There it is, the slightest twitch of the corner of her mouth. And for a split-second, her eyes linger on the screen of the TV before being brought from Kieran to you. There is interest there. This, you are sure of.][/nomarkup] #success #line:0c7efa3 
+    [nomarkup][There it is, the slightest twitch of the corner of her mouth. And for a split-second, her eyes linger on the screen of the TV before being brought from Kieran to you. There is interest there. This, you are sure of.][/nomarkup] #success #line:0c7efa3
     -> {$pcName}: You [nomarkup]<i>do</i>[/nomarkup] seem to like it, though. #line:06d23e3 
     [nomarkup][Anastasia's mouth forms into a taut, straight line. She is intensely not emoting.][/nomarkup] #line:0d22f23 
     <<if Roll ("Wuts","Insight")>=3>>
         [nomarkup][This is as much confirmation as you're going to get.][/nomarkup] #line:0e824e2 
     <<endif>>
     {$anastasia}: I don't have the slightest idea why you give even a crumb of a shit. Don't you have an investigation to wrap up? #line:023358d 
-    -> [nomarkup][You turn the TV off.][/nomarkup] #line:0d1cd53 
+    -> [nomarkup][You turn the TV off.][/nomarkup] #line:0d1cd53
+    [nomarkup][TV goes silent again.][/nomarkup] #lastline
     <<jump bookcaseInteractions>>
 <<else>>
     [nomarkup][You don't catch any signs that Anastasia feels any differently than she has been trying to convey.][/nomarkup] #failure #line:0b883ae 
@@ -153,7 +154,8 @@ title: bookcaseTVAnaTenderMoment
         {$anastasia}: [nomarkup][She laughs so hard you're sure it is heard down below in the club. Between the breathless wheezes, she speaks.][/nomarkup] Oh my god, that would be a new low. Me? Listening to pop music?  #line:020e3ca 
         {$anastasia}: No. Not in this lifetime, or the next. #line:02c7a80 
         [nomarkup][Guess you were mistaken...][/nomarkup] #line:0f4d5d3 
-        -> [nomarkup][You turn the TV off.][/nomarkup] #line:0abfddd 
+        -> [nomarkup][You turn the TV off.][/nomarkup] #line:0abfddd
+        [nomarkup][TV goes silent again.][/nomarkup] #lastline
         <<jump bookcaseInteractions>>
     <<endif>>
 <<endif>>
@@ -169,10 +171,10 @@ Radio: Thank you for your insight, Josh! It's always good to know what's happeni
 <<endif>>
 {$kieran}: [nomarkup][He scratches his chin, rolling up his sleeve.][/nomarkup] It can't be that late... [nomarkup][He looks at the clock, his eyes gradually widening in surprise.][/nomarkup] Oh. It [nomarkup]<i>is</i>[/nomarkup] that late... We need to hurry; and unfortunately, I do not think that Ms. Richmond will have any useful information for us. #line:0f76799 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>    
-    [nomarkup][You turn the radio off, much to Anastasia's disappointment.][/nomarkup] #line:0513daf 
+    [nomarkup][You turn the radio off, much to Anastasia's disappointment.][/nomarkup] #line:0513daf #lastline
     <<jump bookcaseInteractions>>
 <<else>>
-    [nomarkup][You turn the radio off.][/nomarkup] #line:00b99d0 
+    [nomarkup][You turn the radio off.][/nomarkup] #line:00b99d0 #lastline
     <<jump bookcaseInteractions>>
 <<endif>>
 ===

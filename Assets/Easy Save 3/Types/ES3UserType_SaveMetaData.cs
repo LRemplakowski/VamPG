@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("SaveID", "SaveName", "SaveDate", "LevelLoadingData", "PlaylistData")]
+	[ES3PropertiesAttribute("SaveID", "SaveName", "SaveDate", "LevelLoadingData", "PlaylistData", "SaveScreenShot")]
 	public class ES3UserType_SaveMetaData : ES3Type
 	{
 		public static ES3Type Instance = null;
@@ -21,6 +21,7 @@ namespace ES3Types
 			writer.WriteProperty("SaveDate", instance.SaveDate, ES3Type_string.Instance);
 			writer.WriteProperty("LevelLoadingData", instance.LevelLoadingData, ES3UserType_LevelLoadingData.Instance);
 			writer.WriteProperty("PlaylistData", instance.PlaylistData, ES3UserType_ScenePlaylistData.Instance);
+			writer.WriteProperty("SaveScreenShot", instance.SaveScreenShot);
 		}
 
 		public override object Read<T>(ES3Reader reader)
@@ -46,6 +47,9 @@ namespace ES3Types
 						break;
 					case "PlaylistData":
 						instance.PlaylistData = reader.Read<SunsetSystems.Core.SceneLoading.ScenePlaylistData>(ES3UserType_ScenePlaylistData.Instance);
+						break;
+					case "SaveScreenShot":
+						instance.SaveScreenShot = reader.Read<UnityEngine.Texture2D>(ES3Type_Texture2D.Instance);
 						break;
 					default:
 						reader.Skip();

@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
 
 namespace SunsetSystems.Persistence
 {
-    
+
     public class SaveLoadManager : SerializedMonoBehaviour
     {
+        [SerializeField]
+        private Camera _screenShotCamera;
+
         private static SaveLoadManager _instance;
 
         private const string SAVE_PATH = "Saves/";
@@ -19,7 +24,20 @@ namespace SunsetSystems.Persistence
         private GlobalPersistenceData _gameData = new();
         private static GlobalPersistenceData GameData => _instance._gameData;
 
-        [RuntimeInitializeOnLoadMethod]
+        private void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void InitializeSaveSystem()
         {
             if (_instance != null)
@@ -45,6 +63,7 @@ namespace SunsetSystems.Persistence
                 SaveID = saveID,
                 SaveDate = date,
                 LevelLoadingData = LevelLoader.Instance.CurrentLoadedLevel,
+                SaveScreenShot = TakeGameScreenShot(),
             };
             UpdateRuntimeDataCache();
             ES3.Save(META_DATA, metaData, filename);
@@ -63,6 +82,30 @@ namespace SunsetSystems.Persistence
         {
             //_gameData.ClearSaveData();
             ES3.LoadInto(GAME_DATA, SaveIDToFilePath(saveID), GameData);
+        }
+
+        private static Texture2D TakeGameScreenShot()
+        {
+            var camera = _instance._screenShotCamera;
+            if (camera != null)
+            {
+                Texture2D result = new(192, 108, TextureFormat.RGB24, false);
+                RenderTexture renderTexture = new(192, 108, 24);
+                var cameraTransform = camera.transform;
+                cameraTransform.SetPositionAndRotation(Camera.main.transform.position, Camera.main.transform.rotation);
+                camera.gameObject.SetActive(true);
+                camera.targetTexture = renderTexture;
+                camera.Render();
+                RenderTexture.active = renderTexture;
+                result.ReadPixels(new(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+                result.Apply();
+                camera.targetTexture = null;
+                RenderTexture.active = null;
+                Destroy(renderTexture);
+                camera.gameObject.SetActive(false);
+                return result;
+            }
+            return null;
         }
 
         public static IEnumerable<SaveMetaData> GetAllSaveMetaData()

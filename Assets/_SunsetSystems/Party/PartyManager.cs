@@ -122,6 +122,8 @@ namespace SunsetSystems.Party
             {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
+                    if (_activeParty.ContainsKey(key))
+                        continue;
                     _activeParty.Add(key, await InitializePartyMemberInCreatureStorage(template));
                     if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
                         creature.ForceToPosition(savedPosition);                        
@@ -136,6 +138,8 @@ namespace SunsetSystems.Party
             {
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
+                    if (_activeParty.ContainsKey(key))
+                        continue;
                     _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
                     if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
                     {

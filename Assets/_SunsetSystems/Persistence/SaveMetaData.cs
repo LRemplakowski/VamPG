@@ -1,5 +1,6 @@
 ﻿using System;
 using SunsetSystems.Core.SceneLoading;
+using UnityEngine;
 
 namespace SunsetSystems.Persistence
 {
@@ -12,5 +13,6 @@ namespace SunsetSystems.Persistence
         public readonly string SaveFileName => $"{SaveID}.sav";
         public LevelLoadingData LevelLoadingData;
         public ScenePlaylistData PlaylistData;
+        public Texture2D SaveScreenShot;
     }
 }

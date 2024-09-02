@@ -24,6 +24,9 @@ namespace SunsetSystems.Persistence.UI
             _saveMeta = metaData;
             _saveName.text = metaData.SaveName;
             _saveDate.text = GetFormattedSaveDate(metaData.SaveDate);
+            var imgTexture = metaData.SaveScreenShot;
+            if (imgTexture != null)
+                _saveImage.sprite = Sprite.Create(imgTexture, new(0, 0, imgTexture.width, imgTexture.height), new(.5f, .5f));
             _saveScreenManager = manager;
         }
 

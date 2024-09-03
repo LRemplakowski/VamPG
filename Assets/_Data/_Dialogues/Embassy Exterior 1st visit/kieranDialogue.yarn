@@ -172,9 +172,9 @@ title: thanks
     -> {$pcName}: I bet. And me neither. Just the thought of it is painful. Lead pellets have to be excruciating -  especially with that hand cannon of his. #line:08988b5 
         {$kieran}: Well then? Let's get to it. #line:07dd22c 
         -> {$pcName}: Wait, I have some questions! #line:0d68850
-        {$kieran}: [nomarkup][He sighs a little allowing himself to glance at you instead of the road before his gaze goes back to grey asphalt sprinkled with gold light of the street.][/nomarkup] Okay, ask away then.
-            <<jump questionsKieran>>
-        -> End dialogue. #line:0ee9ef1 
+            {$kieran}: [nomarkup][He sighs a little allowing himself to glance at you instead of the road before his gaze goes back to grey asphalt sprinkled with gold light of the street.][/nomarkup] Okay, ask away then. #lastline
+                <<jump questionsKieran>>
+        -> {$pcName}: Yeah, let's do it.
 ===
 title: occultQuestions
 ---

@@ -164,7 +164,7 @@ title: subsequentQuestions
     <<jump finalDeathExplained>>
 -> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and CustomVisited("getToOffice") == false>> #line:0460c71 
     <<jump getToOffice>>
--> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false>>#line:0ffc627 
+-> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false and CustomVisited("getToOffice") == true>>#line:0ffc627 
     <<jump bouncerDifficulties>>
 -> {$pcName}: I should go.
     {$sforzaMask}: An astute observation. Best of luck on your little search.
@@ -186,7 +186,7 @@ position: -357,803
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: [nomarkup][She scoffs, rolling her eyes.][/nomarkup] How generous of you. #line:00168a4 
     {$sforzaMask}: Anastasia, were you hoping that my life would include you? I can't imagine there are many reasons to insult my  admittedly radical but well-meaning gifts towards one very loyal woman. She works hard, and I do try not to begrudge her a dalliance at her whim. #line:00de3e1 
-    {$kieran}: [nomarkup][He glares daggers at Anastasia.][/nomarkup] #line:0ec4c74 
+    {$kieran}: [nomarkup][He glares daggers at Anastasia.][/nomarkup] #lastline #line:0ec4c74 
 <<endif>>
 <<if $dianaMet ==true>>
     -> {$pcName}: She led me into the alley last night. #line:065676d 

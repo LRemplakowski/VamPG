@@ -1,13 +1,11 @@
-using Redcode.Awaiting;
-using Sirenix.OdinInspector;
-using SunsetSystems.Core.AddressableManagement;
-using SunsetSystems.Core.SceneLoading;
-using SunsetSystems.Game;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
+using Sirenix.OdinInspector;
+using SunsetSystems.Core.SceneLoading;
+using SunsetSystems.Game;
 using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace SunsetSystems.Audio
 {
@@ -19,7 +17,9 @@ namespace SunsetSystems.Audio
         [SerializeField, Range(0.01f, 10f)]
         private float _trackTransitionTime = 1f;
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
-        private Dictionary<GameState, IPlaylist> statePlaylistPairs = new();
+        private Dictionary<GameState, IPlaylist> _statePlaylistPairs = new();
+        [ShowInInspector, ReadOnly]
+        private Dictionary<GameState, IPlaylist> _playlistOverrides = new();
         [SerializeField]
         private float _defaultVolume = .5f;
         private float _cachedVolume;
@@ -51,22 +51,33 @@ namespace SunsetSystems.Audio
 
         private void OnValidate()
         {
-            statePlaylistPairs ??= new();
+            _statePlaylistPairs ??= new();
             foreach (GameState state in Enum.GetValues(typeof(GameState)))
             {
-                if (statePlaylistPairs.ContainsKey(state) is false)
-                    statePlaylistPairs[state] = null;
+                if (_statePlaylistPairs.ContainsKey(state) is false)
+                    _statePlaylistPairs[state] = null;
             }
         }
 
         public void PlayStatePlaylist(GameState gameState)
         {
             _playSoundtrack = true;
-            if (statePlaylistPairs.TryGetValue(gameState, out IPlaylist statePlaylist) && statePlaylist != _lastPlaylist)
+            if (GetStatePlaylist(gameState, out var statePlaylist) && statePlaylist != _lastPlaylist)
             {
                 _lastPlaylist = statePlaylist;
                 _cachedPlaylistTask = ExecutePlaylist(statePlaylist);
             }
+        }
+
+        private bool GetStatePlaylist(GameState state, out IPlaylist playlist)
+        {
+            playlist = default;
+            if (_playlistOverrides.TryGetValue(state, out playlist))
+                return true;
+            else if (_statePlaylistPairs.TryGetValue(state, out playlist))
+                return true;
+            else
+                return false;
         }
 
         public void StopSoundtrackImmediate()
@@ -141,7 +152,7 @@ namespace SunsetSystems.Audio
             await Task.WhenAll(operations.Values);
             foreach (var statePlaylist in operations)
             {
-                statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
+                _statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
             }
             PlayStatePlaylist(GameState.Exploration);
         }

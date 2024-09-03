@@ -36,6 +36,10 @@ namespace SunsetSystems.Combat.UI
 
         public void UpdateNameplateData(CombatNameplateData nameplateData)
         {
+            if (nameplateData.CurrentHP <= 0)
+            {
+                gameObject.SetActive(false);
+            }
             _name.text = nameplateData.Name;
             _healthValue.text = $"{nameplateData.CurrentHP}/{nameplateData.MaxHP}";
             _healthSlider.value = nameplateData.HealthPercentage;

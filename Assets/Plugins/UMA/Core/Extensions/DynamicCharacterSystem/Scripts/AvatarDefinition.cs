@@ -127,14 +127,12 @@ public struct AvatarDefinition
 
             for (int i = 0; i < col.channelCount; i++)
             {
-                if (col.isDefault(i))
+                if (!col.isDefault(i))
                 {
-                    continue;
+                    Color Mask = col.channelMask[i];
+                    Color Additive = col.channelAdditiveMask[i];
+                    colorchannels.Add(new ColorDef(i, ColorDef.ToUInt(Mask), ColorDef.ToUInt(Additive)));
                 }
-
-                Color Mask = col.channelMask[i];
-                Color Additive = col.channelAdditiveMask[i];
-                colorchannels.Add(new ColorDef(i, ColorDef.ToUInt(Mask), ColorDef.ToUInt(Additive)));
             }
             if (colorchannels.Count > 0)
             {
@@ -207,7 +205,7 @@ public struct AvatarDefinition
     public string ToCompressedString(string seperator = "\n")
     {
         StringBuilder theString = new StringBuilder();
-        theString.Append("AA*");
+        theString.Append("BB*");
         theString.Append(seperator);
         theString.Append("R:");
         theString.Append(RaceName);
@@ -233,7 +231,7 @@ public struct AvatarDefinition
                 theString.Append(scd.name);
                 theString.Append(',');
                 theString.Append(scd.count);
-                theString.Append('=');
+                theString.Append('>');
                 for (int i1 = 0; i1 < scd.channels.Length; i1++)
                 {
                     ColorDef c = scd.channels[i1];
@@ -256,8 +254,9 @@ public struct AvatarDefinition
                         theString.Append(';');
                     }
                 }
-                theString.Append(seperator);
+                theString.Append('<');
             }
+            theString.Append(seperator);
         }
 
         if (Dna != null)
@@ -276,13 +275,117 @@ public struct AvatarDefinition
         return theString.ToString();
     }
 
-    public static AvatarDefinition FromCompressedString(string compressed,char seperator='\n')
+    public static AvatarDefinition FromCompressedString(string compressed, char seperator = '\n')
+    {
+        if (compressed.StartsWith("AA*"))
+        {
+            return FromCompressedStringV1(compressed.Substring(3), seperator);
+        }
+        else
+        {
+            return FromCompressedStringV2(compressed.Substring(3), seperator);
+        }
+    }
+    public static AvatarDefinition FromCompressedStringV1(string compressed, char seperator = '\n')
     {
         char[] splitter = new char[1];
         AvatarDefinition adf = new AvatarDefinition();
         splitter[0] = seperator;
         string[] SplitLines = compressed.Split(splitter);
         List<SharedColorDef> Colors = new List<SharedColorDef>();
+
+        foreach (string s in SplitLines)
+        {
+            if (String.IsNullOrEmpty(s)) continue;
+            switch (s[0])
+            {
+                case 'R':
+                    // Unpack Race
+                    adf.RaceName = s.Substring(2).Trim();
+                    break;
+                case 'W':
+                    // Unpack Wardrobe
+                    splitter[0] = ',';
+                    adf.Wardrobe = s.Substring(2).Trim().Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                    break;
+                case 'C':
+                    // Unpack Colors
+                    splitter[0] = '=';
+                    string[] SharedColor = s.Substring(2).Trim().Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                    if (SharedColor.Length > 1)
+                    {
+                        SharedColorDef scd = new SharedColorDef();
+                        splitter[0] = ',';
+                        string[] maincol = SharedColor[0].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                        if (maincol.Length > 1)
+                        {
+                            scd.name = maincol[0];
+                            scd.count = Convert.ToInt32(maincol[1]);
+
+                            splitter[0] = ';';
+                            string[] ColorDefs = SharedColor[1].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                            List<ColorDef> theColors = new List<ColorDef>();
+                            if (ColorDefs != null)
+                            {
+                                if (ColorDefs.Length > 0)
+                                {
+                                    foreach (string c in ColorDefs)
+                                    {
+                                        splitter[0] = ',';
+                                        string[] vals = c.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                                        if (vals.Length == 2)
+                                        {
+                                            ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), 0);
+                                            theColors.Add(cdef);
+                                        }
+                                        else if (vals.Length == 3)
+                                        {
+                                            ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), Convert.ToUInt32(vals[2], 16));
+                                            theColors.Add(cdef);
+                                        }
+                                    }
+                                }
+
+                            }
+                            scd.channels = theColors.ToArray();
+                            Colors.Add(scd);
+                        }
+                    }
+                    break;
+                case 'D':
+                    // Unpack DNA
+                    splitter[0] = ';';
+                    string[] Dna = s.Substring(2).Trim().Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                    if (Dna.Length > 0)
+                    {
+                        List<DnaDef> theDna = new List<DnaDef>();
+                        foreach (string d in Dna)
+                        {
+                            splitter[0] = '=';
+                            string[] dnaval = d.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                            if (dnaval.Length > 1)
+                            {
+                                DnaDef newDna = new DnaDef(dnaval[0], Convert.ToInt32(dnaval[1], 16));
+                                theDna.Add(newDna);
+                            }
+                        }
+                        adf.Dna = theDna.ToArray();
+                    }
+                    break;
+            }
+        }
+
+        adf.Colors = Colors.ToArray();
+        return adf;
+    }
+
+    public static AvatarDefinition FromCompressedStringV2(string compressed,char seperator='\n')
+    {
+        char[] splitter = new char[1];
+        AvatarDefinition adf = new AvatarDefinition();
+        splitter[0] = seperator;
+        string[] SplitLines = compressed.Split(splitter);
+        //  List<SharedColorDef> Colors = new List<SharedColorDef>();
 
         for (int i = 0; i < SplitLines.Length; i++)
         {
@@ -305,57 +408,7 @@ public struct AvatarDefinition
                     break;
                 case 'C':
                     // Unpack Colors
-                    splitter[0] = '=';
-                    string[] SharedColor = s.Substring(2).Trim().Split(splitter, StringSplitOptions.RemoveEmptyEntries);
-                    if (SharedColor.Length > 1)
-                    {
-                        SharedColorDef scd = new SharedColorDef();
-                        List<string> ShaderParms = new List<string>();
-                        splitter[0] = ',';
-                        string[] maincol = SharedColor[0].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
-                        if (maincol.Length > 1)
-                        {
-                            scd.name = maincol[0];
-                            scd.count = Convert.ToInt32(maincol[1]);
-
-                            splitter[0] = ';';
-                            string[] ColorDefs = SharedColor[1].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
-                            List<ColorDef> theColors = new List<ColorDef>();
-                            if (ColorDefs != null)
-                            {
-                                if (ColorDefs.Length > 0)
-                                {
-                                    for (int i1 = 0; i1 < ColorDefs.Length; i1++)
-                                    {
-                                        if (String.IsNullOrEmpty(ColorDefs[i1]))
-                                            continue;
-                                        if (ColorDefs[i1][0] == 'P')
-                                        {
-                                            ShaderParms.Add(Base64Decode(ColorDefs[i1].Substring(2)));
-                                            continue;
-                                        }
-                                        string c = ColorDefs[i1];
-                                        splitter[0] = ',';
-                                        string[] vals = c.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
-                                        if (vals.Length == 2)
-                                        {
-                                            ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), 0);
-                                            theColors.Add(cdef);
-                                        }
-                                        else if (vals.Length == 3)
-                                        {
-                                            ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), Convert.ToUInt32(vals[2], 16));
-                                            theColors.Add(cdef);
-                                        }
-                                    }
-                                }
-
-                            }
-                            scd.channels = theColors.ToArray();
-                            scd.shaderParms = ShaderParms.ToArray();
-                            Colors.Add(scd);
-                        }
-                    }
+                    adf.Colors = UnpackColors(s);
                     break;
                 case 'D':
                     // Unpack DNA
@@ -381,8 +434,77 @@ public struct AvatarDefinition
             }
         }
 
-        adf.Colors = Colors.ToArray();
+        //adf.Colors = Colors.ToArray();
         return adf;
+    }
+
+    private static SharedColorDef[] UnpackColors(string s)
+    {
+        List<SharedColorDef> colors = new List<SharedColorDef>();
+
+        string[] encodedColors = s.Split(new char[] { '<' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for(int i= 0; i < encodedColors.Length; i++)
+        {
+            UnpackAColor(colors, encodedColors[i]);
+        }
+
+        return colors.ToArray();
+    }
+
+    private static void UnpackAColor(List<SharedColorDef> Colors, string s)
+    {
+        char[] splitter = { '>' };
+        string[] SharedColor = s.Substring(2).Trim().Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+        if (SharedColor.Length > 1)
+        {
+            SharedColorDef scd = new SharedColorDef();
+            List<string> ShaderParms = new List<string>();
+            splitter[0] = ',';
+            string[] maincol = SharedColor[0].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+            if (maincol.Length > 1)
+            {
+                scd.name = maincol[0];
+                scd.count = Convert.ToInt32(maincol[1]);
+
+                splitter[0] = ';';
+                string[] ColorDefs = SharedColor[1].Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                List<ColorDef> theColors = new List<ColorDef>();
+                if (ColorDefs != null)
+                {
+                    if (ColorDefs.Length > 0)
+                    {
+                        for (int i1 = 0; i1 < ColorDefs.Length; i1++)
+                        {
+                            if (String.IsNullOrEmpty(ColorDefs[i1]))
+                                continue;
+                            if (ColorDefs[i1][0] == 'P')
+                            {
+                                ShaderParms.Add(Base64Decode(ColorDefs[i1].Substring(2)));
+                                continue;
+                            }
+                            string c = ColorDefs[i1];
+                            splitter[0] = ',';
+                            string[] vals = c.Split(splitter, StringSplitOptions.RemoveEmptyEntries);
+                            if (vals.Length == 2)
+                            {
+                                ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), 0);
+                                theColors.Add(cdef);
+                            }
+                            else if (vals.Length == 3)
+                            {
+                                ColorDef cdef = new ColorDef(Convert.ToInt32(vals[0]), Convert.ToUInt32(vals[1], 16), Convert.ToUInt32(vals[2], 16));
+                                theColors.Add(cdef);
+                            }
+                        }
+                    }
+
+                }
+                scd.channels = theColors.ToArray();
+                scd.shaderParms = ShaderParms.ToArray();
+                Colors.Add(scd);
+            }
+        }
     }
 
     // Ascii version of the string. Not as good as binary formatter,

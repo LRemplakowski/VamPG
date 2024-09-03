@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace UMA
 {
@@ -210,6 +211,9 @@ namespace UMA
             public bool isSwapSlot;
             public string swapTag;
 			public int uvOverride;
+			public bool isDisabled;
+		    public int expandAlongNormal; // Fixed point expansion along normals. divided by 10,000,000
+	
 		}
 
         [System.Serializable]
@@ -367,6 +371,7 @@ namespace UMA
 			public short[] colors;
 			public string[] ShaderParms;
 			public bool alwaysUpdate;
+			public bool alwaysUpdateParms;
 			public bool isBaseColor;
 			public int displayColor;
 			public PackedOverlayColorDataV3()
@@ -407,6 +412,7 @@ namespace UMA
 				if (colorData.HasPropertyBlock)
                 {
 					alwaysUpdate = colorData.PropertyBlock.alwaysUpdate;
+					alwaysUpdateParms = colorData.PropertyBlock.alwaysUpdateParms;
                 }
 #if UNITY_EDITOR
 				isBaseColor = colorData.isBaseColor;
@@ -454,6 +460,7 @@ namespace UMA
                     {
 						overlayColorData.PropertyBlock = new UMAMaterialPropertyBlock();
 						overlayColorData.PropertyBlock.alwaysUpdate = alwaysUpdate; 
+						overlayColorData.PropertyBlock.alwaysUpdateParms = alwaysUpdateParms;
 						for(int i=0;i<ShaderParms.Length;i++)
                         {
 							overlayColorData.PropertyBlock.shaderProperties.Add(UMAProperty.FromString(ShaderParms[i]));
@@ -593,6 +600,8 @@ namespace UMA
                     tempPackedSlotData.swapTag = umaRecipe.slotDataList[i].swapTag;
                     tempPackedSlotData.isSwapSlot = umaRecipe.slotDataList[i].isSwapSlot;
 					tempPackedSlotData.uvOverride = umaRecipe.slotDataList[i].UVSet;
+					tempPackedSlotData.isDisabled = umaRecipe.slotDataList[i].isDisabled;
+                    tempPackedSlotData.expandAlongNormal = umaRecipe.slotDataList[i].expandAlongNormal;
 
 					bool copiedOverlays = false;
 					for (int i2 = 0; i2 < i; i2++)
@@ -946,7 +955,13 @@ namespace UMA
                 {
                     var tempSlotData = context.InstantiateSlot(packedSlot.id);
 					if (tempSlotData == null)
+					{
+						if (Debug.isDebugBuild)
+						{
+							throw new UMAResourceNotFoundException("Slot " + packedSlot.id + " not found in context. Skipping.");
+                        }
 						continue;
+					}
 					if (packedSlot.Tags != null)
                     {
                         tempSlotData.tags = packedSlot.Tags.Clone() as string[];
@@ -972,15 +987,20 @@ namespace UMA
                     tempSlotData.isSwapSlot = packedSlot.isSwapSlot;
                     tempSlotData.swapTag = packedSlot.swapTag;
 					tempSlotData.UVSet = packedSlot.uvOverride;
+					tempSlotData.isDisabled = packedSlot.isDisabled;
+                    tempSlotData.expandAlongNormal = packedSlot.expandAlongNormal;
+
 
                     umaRecipe.slotDataList[i] = tempSlotData;
 
                     if (packedSlot.copyIdx == -1)
                     {
-                        for (int i2 = 0; i2 < packedSlot.overlays.Length; i2++)
-                        {
-                            PackedOverlayDataV3 packedOverlay = packedSlot.overlays[i2];
-                            OverlayData overlayData = context.InstantiateOverlay(packedOverlay.id);
+						for (int i2 = 0; i2 < packedSlot.overlays.Length; i2++)
+						{
+							PackedOverlayDataV3 packedOverlay = packedSlot.overlays[i2];
+
+							OverlayData overlayData = context.InstantiateOverlay(packedOverlay.id);
+
                             overlayData.rect = new Rect(
                                 packedOverlay.rect[0],
                                 packedOverlay.rect[1],

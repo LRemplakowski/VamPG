@@ -169,7 +169,6 @@ namespace UMA
 			{
 				CleanupNativeArrays();
 
-				//Debug.Log("Creating native arrays in mesh combiner");
 				nativeBoneWeights = new NativeArray<BoneWeight1>(boneWeightCount, Allocator.Persistent);
 				nativeBonesPerVertex = new NativeArray<byte>(vertexCount, Allocator.Persistent);
 			}
@@ -231,8 +230,16 @@ namespace UMA
                 CombineInstance source = sources[k];
                 // source.meshData.sl
                 int sourceVertexCount = source.meshData.vertices.Length;
-				BuildBoneWeights(source.meshData, nativeBoneWeights, nativeBonesPerVertex, vertexIndex, boneWeightIndex, sourceVertexCount, source.meshData.boneNameHashes, source.meshData.bindPoses, bonesCollection, bindPoses, bonesList);
-				Array.Copy(source.meshData.vertices, 0, vertices, vertexIndex, sourceVertexCount);
+				BuildBoneWeights(source.meshData, nativeBoneWeights, nativeBonesPerVertex, vertexIndex, boneWeightIndex, bonesCollection, bindPoses, bonesList);
+
+                if (source.slotData.expandAlongNormal > 0)
+                {
+                    ArrayCopyandExpand(source.meshData, source.slotData.expandAlongNormal, ref vertices, vertexIndex, sourceVertexCount);
+                }
+                else
+                {
+					Array.Copy(source.meshData.vertices, 0, vertices, vertexIndex, sourceVertexCount);
+                }
 
 				if (has_normals)
 				{
@@ -314,154 +321,90 @@ namespace UMA
 					}
 				}
 
-				if (has_blendShapes) 
-				{
-					// calculate the group of blendshapes
-					// use that instead of source.meshData.blendShapes.
-					List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
-                    // 	int sourceBlendShapeLength = source.meshData.blendShapes.Length;
-                    // for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
-                    for (int j = 0; j < sourceShapes.Count; j++)
-					{
-                        UMABlendShape ubs = sourceShapes[j];
-                        string shapeName = ubs.shapeName;// source.meshData.blendShapes[shapeIndex].shapeName;
-
-						//If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
-						if (!blendShapeSettings.loadAllBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
+                if (has_blendShapes)
+                {
+                    //if (source.meshData.blendShapes != null && source.meshData.blendShapes.Length > 0)
+                    {
+                        List<UMABlendShape> sourceShapes = GetBlendshapeSources(source.meshData, recipe);
+                        int sourceBlendShapeLength = sourceShapes.Count;
+                        for (int shapeIndex = 0; shapeIndex < sourceBlendShapeLength; shapeIndex++)
                         {
-                            continue;
-                        }
+							UMABlendShape ubs = sourceShapes[shapeIndex];
+                            string shapeName = ubs.shapeName;
 
-                        #region BlendShape Baking
-                        if (BakeBlendShape(blendShapeSettings.blendShapes, ubs /*source.meshData.blendShapes[shapeIndex]*/, ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
-                        {
-                            continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
-                        }
-                        #endregion
-
-                        //If our dictionary contains the shape name, which it should
-                        if (blendShapeNames.ContainsKey(shapeName))
-						{
-                            if (blendShapeSettings.loadAllFrames)
+                            //If we aren't loading all blendshapes and we don't find the blendshape name in the list of explicit blendshapes to combine, then skip to the next one.
+                            if (blendShapeSettings.ignoreBlendShapes && !blendShapeSettings.blendShapes.ContainsKey(shapeName))
                             {
-							//UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
-                                int currentShape = blendShapeNames[shapeName].index;
+                                continue;
+                            }
 
-                                if (blendShapes[currentShape].frames.Length != ubs.frames.Length)
-							{
-								if (Debug.isDebugBuild)
+                            #region BlendShape Baking
+                            if (BakeBlendShape(blendShapeSettings.blendShapes, ubs, ref vertexIndex, vertices, normals, tangents, has_normals, has_tangents))
+                            {
+                                continue; //If we baked this blendshape, then continue to the next one and skip adding the regular blendshape.
+                            }
+                            #endregion
+
+                            //If our dictionary contains the shape name, which it should
+                            if (blendShapeNames.ContainsKey(shapeName))
+                            {
+                                UMABlendShape[] sourceBlendShapes = source.meshData.blendShapes;
+                                int i = blendShapeNames[shapeName].index;
+
+                                if (blendShapes[i].frames.Length != ubs.frames.Length)
                                 {
-                                    Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
-                                }
-
-                                break;
-							}
-
-							for (int frameIndex = 0; frameIndex < ubs.frames.Length; frameIndex++)
-							{
-                                    bool normalsCopied = false;
-                                    bool tangentsCopied = false;
-                                    Array.Copy(ubs.frames[frameIndex].deltaVertices, 0, blendShapes[currentShape].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
-
-								Vector3[] sourceDeltaNormals = ubs.frames[frameIndex].deltaNormals;
-								Vector3[] sourceDeltaTangents = ubs.frames[frameIndex].deltaTangents;
-
-								//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
-								if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
-                                {
-                                        if (blendShapes[currentShape].frames[0].deltaNormals == null || blendShapes[currentShape].frames[0].deltaNormals.Length == sourceVertexCount)
-                                        {
-                                            blendShapes[currentShape].frames[0].deltaNormals = new Vector3[sourceVertexCount];
-                                        }
-                                        Array.Copy(sourceDeltaNormals, 0, blendShapes[currentShape].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
-                                        normalsCopied = true;
-                                }
-
-                                if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
-                                {
-                                        if (blendShapes[currentShape].frames[0].deltaTangents == null || blendShapes[currentShape].frames[0].deltaTangents.Length == sourceVertexCount)
-                                        {
-                                            blendShapes[currentShape].frames[0].deltaTangents = new Vector3[sourceVertexCount];
-                                        }
-                                        tangentsCopied = true;
-                                        Array.Copy(sourceDeltaTangents, 0, blendShapes[currentShape].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
+                                    if (Debug.isDebugBuild)
+                                    {
+                                        Debug.LogError("SkinnedMeshCombiner: mesh blendShape frame counts don't match!");
                                     }
 
-                                    if (!normalsCopied)
-                                    {
-                                        blendShapes[currentShape].frames[frameIndex].deltaNormals = new Vector3[0];
+                                    break;
+                                }
+
+                                for (int frameIndex = 0; frameIndex < ubs.frames.Length; frameIndex++)
+                                {
+                                    Array.Copy(ubs.frames[frameIndex].deltaVertices, 0, blendShapes[i].frames[frameIndex].deltaVertices, vertexIndex, sourceVertexCount);
+
+                                    Vector3[] sourceDeltaNormals = ubs.frames[frameIndex].deltaNormals;
+                                    Vector3[] sourceDeltaTangents = ubs.frames[frameIndex].deltaTangents;
+
+									if (blendShapeSettings.loadNormals)
+									{
+										//if out dictionary says at least one source has normals or tangents and the current source has normals or tangents then copy them.
+										if (blendShapeNames[shapeName].hasNormals && sourceDeltaNormals.Length > 0)
+                                        {
+                                            Array.Copy(sourceDeltaNormals, 0, blendShapes[i].frames[frameIndex].deltaNormals, vertexIndex, sourceVertexCount);
+                                        }
                                     }
-                                    if (!tangentsCopied)
+									else
+									{
+                                        blendShapes[i].frames[frameIndex].deltaNormals = new Vector3[0];
+                                    }
+
+									if (blendShapeSettings.loadTangents)
+									{
+										if (blendShapeNames[shapeName].hasTangents && sourceDeltaTangents.Length > 0)
+                                        {
+                                            Array.Copy(sourceDeltaTangents, 0, blendShapes[i].frames[frameIndex].deltaTangents, vertexIndex, sourceVertexCount);
+                                        }
+                                    }
+                                    else
                                     {
-                                        blendShapes[currentShape].frames[frameIndex].deltaTangents = new Vector3[0];
+                                        blendShapes[i].frames[frameIndex].deltaTangents = new Vector3[0];
                                     }
                                 }
                             }
                             else
                             {
-                                int currentShape = blendShapeNames[shapeName].index;
-                                int lastFrame = ubs.frames.Length - 1;
-                                bool normalsCopied = false;
-                                bool tangentsCopied = false;
-
-                                if (blendShapes[currentShape].frames != null && blendShapes[currentShape].frames.Length > 1)
+                                if (Debug.isDebugBuild)
                                 {
-                                    blendShapes[currentShape].frames = new UMABlendFrame[1];
+                                    Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
                                 }
-
-                                blendShapes[currentShape].frames = new UMABlendFrame[1];
-
-                                Array.Copy(ubs.frames[lastFrame].deltaVertices, 0, blendShapes[currentShape].frames[0].deltaVertices, vertexIndex, sourceVertexCount);
-
-                                if (blendShapeSettings.loadNormals && blendShapeNames[shapeName].hasNormals)
-                                {
-                                    Vector3[] sourceDeltaNormals = ubs.frames[lastFrame].deltaNormals;
-                                    if (sourceDeltaNormals.Length > 0)
-                                    {
-                                        normalsCopied = true;
-                                        if (blendShapes[currentShape].frames[0].deltaNormals == null || blendShapes[currentShape].frames[0].deltaNormals.Length == sourceVertexCount)
-                                        {
-                                            blendShapes[currentShape].frames[0].deltaNormals = new Vector3[sourceVertexCount];
-                                        }
-                                        Array.Copy(sourceDeltaNormals, 0, blendShapes[currentShape].frames[0].deltaNormals, vertexIndex, sourceVertexCount);
-                                    }
-
-                                }
-
-                                if (blendShapeSettings.loadTangents && blendShapeNames[shapeName].hasTangents)
-                                {
-                                    Vector3[] sourceDeltaTangents = ubs.frames[lastFrame].deltaTangents;
-                                    if (sourceDeltaTangents.Length > 0)
-                                    {
-                                        tangentsCopied = true;
-                                        if (blendShapes[currentShape].frames[0].deltaTangents == null || blendShapes[currentShape].frames[0].deltaTangents.Length == sourceVertexCount)
-                                        {
-                                            blendShapes[currentShape].frames[0].deltaTangents = new Vector3[sourceVertexCount];
-                                        }
-                                        Array.Copy(sourceDeltaTangents, 0, blendShapes[currentShape].frames[0].deltaTangents, vertexIndex, sourceVertexCount);
-                                    }
-                                }
-
-                                if (!normalsCopied)
-                                {
-                                    blendShapes[currentShape].frames[0].deltaNormals = new Vector3[0];
-                                }
-                                if (!tangentsCopied)
-                                {
-                                    blendShapes[currentShape].frames[0].deltaTangents = new Vector3[0];
-                                }
-                            }
-						}
-						else
-						{
-							if (Debug.isDebugBuild)
-                            {
-                                Debug.LogError("BlendShape " + shapeName + " not found in dictionary!");
                             }
                         }
+                    }
+                }
 
-					}
-				}
 				if (has_clothSkinning)
 				{
 					localClothVertices.Clear();
@@ -602,6 +545,19 @@ namespace UMA
 			}
 			target.boneNameHashes = bonesList.ToArray();
 		}
+
+#if UMA_BURSTCOMPILE
+        [BurstCompile]
+#endif
+        private static void ArrayCopyandExpand(UMAMeshData meshData, int expandAlongNormal, ref Vector3[] vertices, int vertexIndex, int sourceVertexCount)
+        {
+            float expandAlongNormalF = ((float)expandAlongNormal)/1000000f;
+            for (int i = vertexIndex; i < vertexIndex + sourceVertexCount; i++)
+            {
+                Vector3 v = meshData.vertices[i - vertexIndex];
+                vertices[i] = v + (meshData.normals[i - vertexIndex] * expandAlongNormalF);
+            }
+        }
 
 		public static UMAMeshData ShallowInstanceMesh(UMAMeshData source, BitArray[] triangleMask = null)
 		{
@@ -1066,9 +1022,14 @@ namespace UMA
             }
 		} */
 
-		private static void BuildBoneWeights(UMAMeshData data, NativeArray<BoneWeight1> dest, NativeArray<byte> destBonesPerVertex, int destIndex, int destBoneweightIndex, int count, int[] bones, Matrix4x4[] bindPoses, Dictionary<int, BoneIndexEntry> bonesCollection, List<Matrix4x4> bindPosesList, List<int> bonesList)
+
+        private static void BuildBoneWeights(UMAMeshData data, NativeArray<BoneWeight1> dest, NativeArray<byte> destBonesPerVertex, int destIndex, int destBoneweightIndex, Dictionary<int, BoneIndexEntry> bonesCollection, List<Matrix4x4> bindPosesList, List<int> bonesList)
 		{
-			int[] boneMapping = new int[bones.Length];
+			var bones = data.boneNameHashes;
+			var bindPoses = data.bindPoses;
+			int count = data.vertices.Length;
+
+            int[] boneMapping = new int[bones.Length];
 
 			for (int i = 0; i < boneMapping.Length; i++)
 			{
@@ -1091,8 +1052,15 @@ namespace UMA
 				dest[i + destBoneweightIndex] = b;
 			}
 #else
-			NativeArray<byte>.Copy(data.ManagedBonesPerVertex, 0, destBonesPerVertex, destIndex, data.ManagedBonesPerVertex.Length);
-			NativeArray<BoneWeight1>.Copy(data.ManagedBoneWeights, 0, dest, destBoneweightIndex, data.ManagedBoneWeights.Length);
+			try
+			{
+				NativeArray<byte>.Copy(data.ManagedBonesPerVertex, 0, destBonesPerVertex, destIndex, data.ManagedBonesPerVertex.Length);
+				NativeArray<BoneWeight1>.Copy(data.ManagedBoneWeights, 0, dest, destBoneweightIndex, data.ManagedBoneWeights.Length);
+			}
+			catch 
+			{
+                Debug.LogError("Error copying bone weights");
+            }
 
 			BoneWeight1 b = new BoneWeight1();
 			for (int i = 0; i < data.ManagedBoneWeights.Length; i++)

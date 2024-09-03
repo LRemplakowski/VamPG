@@ -29,26 +29,26 @@ namespace UMA
 		/// <summary>
 		/// Callback event when character is created.
 		/// </summary>
-		public UMADataEvent CharacterCreated = new();
+		public UMADataEvent CharacterCreated;
 		/// <summary>
 		/// Callback event when character is started.
 		/// </summary>
-		public UMADataEvent CharacterBegun = new();
+		public UMADataEvent CharacterBegun;
 		/// <summary>
 		/// Callback event when character is destroyed.
 		/// </summary>
-		public UMADataEvent CharacterDestroyed = new();
+		public UMADataEvent CharacterDestroyed;
 		/// <summary>
 		/// Callback event when character is updated.
 		/// </summary>
-		public UMADataEvent CharacterUpdated = new();
+		public UMADataEvent CharacterUpdated;
 		/// <summary>
 		/// Callback event when character DNA is updated.
 		/// </summary>
-		public UMADataEvent CharacterDnaUpdated = new();
+		public UMADataEvent CharacterDnaUpdated;
 
-		public UMADataEvent AnimatorStateSaved = new();
-		public UMADataEvent AnimatorStateRestored = new();
+		public UMADataEvent AnimatorStateSaved;
+		public UMADataEvent AnimatorStateRestored;
 
 		public virtual void Start()
 		{
@@ -208,8 +208,8 @@ namespace UMA
 				umaData.CleanAvatar();
 				if (DestroyRoot)
 				{
-				UMAUtils.DestroySceneObject(umaData.umaRoot);
-				umaData.umaRoot = null;
+					UMAUtils.DestroySceneObject(umaData.umaRoot);
+					umaData.umaRoot = null;
 					umaData.skeleton = null;
 				}
 				umaData.SetRenderers(null);

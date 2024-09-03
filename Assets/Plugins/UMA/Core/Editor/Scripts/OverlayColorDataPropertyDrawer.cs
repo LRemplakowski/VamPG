@@ -56,27 +56,47 @@ namespace UMA.Editors
 			name.isExpanded = EditorGUILayout.Foldout(name.isExpanded, label);
 			if (!name.isExpanded)
             {
-                name.stringValue = EditorGUILayout.TextField(new GUIContent(""), name.stringValue);
+                //name.stringValue = EditorGUILayout.TextField(new GUIContent(""), name.stringValue);
+                if (mask.arraySize > 0)
+                {
+					SerializedProperty colProp = mask.GetArrayElementAtIndex(0);
+					//Color c = colProp.colorValue;
+					//EditorGUILayout.ColorField(c, GUILayout.Width(120));
+					EditorGUILayout.PropertyField(colProp);
+                    //if (colProp.colorValue != c)
+					//{
+                    //    colProp.colorValue = c;
+                    //}
+                }
+				else
+                {
+					EditorGUILayout.ColorField(Color.white, GUILayout.Width(120));
+                }
+                bool delete = GUILayout.Button("X", GUILayout.Width(20));
+                if (delete)
+                {
+                    property.FindPropertyRelative("deleteThis").boolValue = true;
+                }
             }
 
             EditorGUILayout.EndHorizontal();
 			if (name.isExpanded)
 			{
 				EditorGUILayout.PropertyField(property.FindPropertyRelative("name"));
-                EditorGUILayout.PropertyField(property.FindPropertyRelative("isBaseColor"));
+				EditorGUILayout.PropertyField(property.FindPropertyRelative("isBaseColor"));
 				EditorGUILayout.PropertyField(displayColor);
 
-                if (ocd != null)
+				if (ocd != null)
 				{
 					string Name = property.FindPropertyRelative("name").stringValue;
 					int ChannelCount = EditorGUILayout.IntSlider(Channels, ocd.channelCount, 0, 16);
 					if (ChannelCount != ocd.channelCount)
 					{
 						ocd.SetChannels(ChannelCount);
-                        if (dca != null)
-                        {
-                            EditorUtility.SetDirty(dca);
-                        }
+						if (dca != null)
+						{
+							EditorUtility.SetDirty(dca);
+						}
 					}
 				}
 
@@ -117,22 +137,22 @@ namespace UMA.Editors
 					GUILayout.Space(5);
 				}
 				if (ocd != null)
-                {
+				{
 					if (ocd.PropertyBlock != null)
-                    {
+					{
 						if (UMAMaterialPropertyBlockDrawer.OnGUI(ocd.PropertyBlock))
-                        {
+						{
 							if (dca != null)
 							{
-                                EditorUtility.SetDirty(dca);
-                                AssetDatabase.SaveAssets();
-                            }
-                        }
+								EditorUtility.SetDirty(dca);
+								AssetDatabase.SaveAssets();
+							}
+						}
 					}
 					else
-                    {
+					{
 						if (GUILayout.Button("Add Properties Block"))
-                        {
+						{
 							ocd.PropertyBlock = new UMAMaterialPropertyBlock();
 							EditorUtility.SetDirty(dca);
 							AssetDatabase.SaveAssets();
@@ -143,26 +163,18 @@ namespace UMA.Editors
 			}
 			else
 			{
-					if (mask.arraySize > 0)
-					{
-						EditorGUILayout.PropertyField(mask.GetArrayElementAtIndex(0), new GUIContent("BaseColor"));
-						if (additive.arraySize >= 3)
-                    {
-                        EditorGUILayout.PropertyField(additive.GetArrayElementAtIndex(2), new GUIContent("Metallic/Gloss", "Color is metallicness (Black is not metallic), Alpha is glossiness (Black is not glossy)"));
-                    }
-                    else
-						{
-							//color didn't have a metallic gloss channel so show button to add one?
-						}
-					}
-                EditorGUILayout.PropertyField(displayColor);
+			//	if (mask.arraySize > 0)
+			//	{
+			//		EditorGUILayout.PropertyField(mask.GetArrayElementAtIndex(0), new GUIContent("BaseColor"));
+			//	}
+			//	EditorGUILayout.PropertyField(displayColor);
 
-                //	if (ocd.HasProperties)
-                //	{
-                //		EditorGUILayout.LabelField("Has Properties");
-                //	}
-            }
-            EditorGUILayout.Space();
+				//	if (ocd.HasProperties)
+				//	{
+				//		EditorGUILayout.LabelField("Has Properties");
+				//	}
+			}
+            //EditorGUILayout.Space();
 			EditorGUI.EndProperty();
 		}
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

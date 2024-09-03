@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using Unity.Collections.LowLevel.Unsafe;
 
 namespace UMA.Editors
 {
@@ -13,7 +14,6 @@ namespace UMA.Editors
         private GUIStyle _centeredStyle;
         private SerializedProperty _shaderParms;
         private bool[] channelExpanded = new bool[3];
-        private bool channelListExpanded = true;
 
         private bool shaderParmsFoldout = false;
         public void OnEnable()
@@ -49,7 +49,13 @@ namespace UMA.Editors
 
             showHelp = EditorGUILayout.Toggle("Show Help", showHelp);
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("_material"), new GUIContent( "Default Material", "The Unity Material to link to."));
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_material"), new GUIContent( "Default Material", "The Unity Material to link to."),GUILayout.ExpandWidth(true));
+            if (GUILayout.Button("Inspect", GUILayout.Width(60)))
+            {
+                InspectorUtlity.InspectTarget(serializedObject.FindProperty("_material").objectReferenceValue);
+            }
+            GUILayout.EndHorizontal();
             if (showHelp)
             {
                 EditorGUILayout.HelpBox("Default Material: This is the material that will be used if no other material is found.", MessageType.Info);
@@ -60,7 +66,42 @@ namespace UMA.Editors
             {
                 EditorGUILayout.HelpBox("SRP Materials: These are the materials that will be used for the various SRP pipelines. If no SRP materials are found, the default material will be used.", MessageType.Info);
             }
-
+            GUILayout.BeginHorizontal(); 
+            if (GUILayout.Button("Create from default"))
+            {
+                serializedObject.ApplyModifiedProperties();
+                source.srpMaterials.Add(source.CreateSRPMaterial(UMAUtils.PipelineType.BuiltInPipeline));
+                serializedObject.Update();
+                source.SetupSRP(true);
+            }
+            if (GUILayout.Button("Force save Materials"))
+            {
+                serializedObject.ApplyModifiedProperties();
+                EditorUtility.SetDirty(target);
+                AssetDatabase.SaveAssetIfDirty(target);
+            }
+            if (GUILayout.Button("Refresh Materials"))
+            {
+                serializedObject.Update();
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Init for each SRP"))
+            {
+                serializedObject.ApplyModifiedProperties();
+                source.srpMaterials.Clear();
+                source.srpMaterials.Add(source.CreateSRPMaterial(UMAUtils.PipelineType.BuiltInPipeline));
+                source.srpMaterials.Add(source.CreateSRPMaterial(UMAUtils.PipelineType.UniversalPipeline));
+                source.srpMaterials.Add(source.CreateSRPMaterial(UMAUtils.PipelineType.HDPipeline));
+                serializedObject.Update();
+            }
+            if (GUILayout.Button("Clear SRP Materials"))
+            {
+                serializedObject.ApplyModifiedProperties();
+                source.srpMaterials.Clear();
+                serializedObject.Update();
+            }
+            GUILayout.EndHorizontal();
 
             EditorGUILayout.PropertyField(materialTypeProperty, new GUIContent( "Material Type", "To atlas or not to atlas- that is the question."));
             if (showHelp)
@@ -69,7 +110,7 @@ namespace UMA.Editors
             }
             if (MatType == UMAMaterial.MaterialType.UseExistingTextures)
             {
-                EditorGUILayout.PropertyField(serializedObject.FindProperty("secondPass"), new GUIContent("Second Pass", "The Unity Material for a second pass. Usually NULL."));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("_secondPass"), new GUIContent("Second Pass", "The Unity Material for a second pass. Usually NULL."));
             }
             EditorGUILayout.PropertyField(serializedObject.FindProperty("translateSRP"), new GUIContent("Translate SRP", "When checked, this will automatically translate the UMAMaterial property names to URP/HDRP names (ie - _MainTex becomes _BaseMap etc.)"));
 
@@ -114,6 +155,11 @@ namespace UMA.Editors
                 }
                 else
                 {
+                    int channelCount = serializedObject.FindProperty("channels").arraySize;
+                    if (channelCount != (target as UMAMaterial).channels.Length)
+                    {
+                        serializedObject.ApplyModifiedProperties();
+                    }
                     DrawChannelList(serializedObject.FindProperty("channels"), (UMAMaterial.MaterialType)materialTypeProperty.intValue);
                 }
 
@@ -132,14 +178,27 @@ namespace UMA.Editors
             bool wasChanged = serializedObject.ApplyModifiedProperties();
             if (wasChanged)
             {
+                serializedObject.ApplyModifiedProperties();
+                source.SetupSRP(true);
                 UMAMaterial.MaterialType NewMatType = (UMAMaterial.MaterialType)materialTypeProperty.intValue;
                 if (MatType != NewMatType)
                 {
                     if (NewMatType != UMAMaterial.MaterialType.UseExistingTextures)
                     {
                         // second Pass only used for UseExistingTextures
-                        var secondPassProperty = serializedObject.FindProperty("secondPass");
+                        var secondPassProperty = serializedObject.FindProperty("_secondPass");
                         secondPassProperty.SetValue<Object>(null);
+                        if (MatType == UMAMaterial.MaterialType.UseExistingTextures)
+                        {
+                            var list = serializedObject.FindProperty("channels");
+                            for (int i = 0; i < list.arraySize; i++)
+                            {
+                                SerializedProperty channel = list.GetArrayElementAtIndex(i);
+                                var channelProperty = channel.FindPropertyRelative("channelType");
+                                channelProperty.intValue = (int)UMAMaterial.ChannelType.Texture;
+                            }
+                            serializedObject.ApplyModifiedProperties();
+                        }
                     }
                     if (NewMatType == UMAMaterial.MaterialType.UseExistingMaterial)
                     {
@@ -164,14 +223,36 @@ namespace UMA.Editors
             }
         }
 
+        public bool IsChannelValid(int channel)
+        {
+            UMAMaterial source = target as UMAMaterial;
+            if (channel >= source.channels.Length)
+            {
+                return false;
+            }
+            var matchan = source.channels[channel];
+
+            if (!string.IsNullOrEmpty(matchan.materialPropertyName) && source.material != null)
+            {
+                if (!source.material.HasProperty(matchan.materialPropertyName) && !matchan.NonShaderTexture)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+ 
         //Maybe eventually we can use the new IMGUI classes once older unity version are no longer supported.
         private void DrawChannelList(SerializedProperty list, UMAMaterial.MaterialType materialType)
         {
             // EditorGUILayout.PropertyField(list, new GUIContent("Texture Channels", "List of texture channels to be used in this material."));
-            channelListExpanded = GUIHelper.FoldoutBar(channelListExpanded, "Texture Channels");
-            if (channelListExpanded)
+            // channelListExpanded = GUIHelper.FoldoutBar(channelListExpanded, "Texture Channels");
+            //if (channelListExpanded)
+            //GUIHelper.FoldoutBar(channelListExpanded, "Texture Channels");
             {
                 GUIHelper.BeginVerticalPadded(10, new Color(0.75f, 0.875f, 1f));
+                GUILayout.Label("Texture Channels", _centeredStyle);
                 EditorGUILayout.PropertyField(list.FindPropertyRelative("Array.size"));
                 if (channelExpanded.Length != list.arraySize )
                 {
@@ -182,10 +263,19 @@ namespace UMA.Editors
                 {
                     SerializedProperty channel = list.GetArrayElementAtIndex(i);
                     SerializedProperty materialPropertyName = channel.FindPropertyRelative("materialPropertyName");//Let's get this eary to be able to use it in the element header.
-                                                                                                                   // EditorGUILayout.PropertyField(channel, new GUIContent("Channel " + i + ": " + materialPropertyName.stringValue));
-                                                                                                                   // EditorGUILayout.LabelField(new GUIContent("Channel " + i + ": " + materialPropertyName.stringValue),EditorStyles.toolbar);
+                                          
+                    // EditorGUILayout.PropertyField(channel, new GUIContent("Channel " + i + ": " + materialPropertyName.stringValue));
+                    
+                    string error = "";
+                    if (!IsChannelValid(i))
+                    {
+                           error = " - Error: Not Found!";
+                    }
+                        
+                        
+                        // EditorGUILayout.LabelField(new GUIContent("Channel " + i + ": " + materialPropertyName.stringValue),EditorStyles.toolbar);
 
-                    channelExpanded[i] = GUIHelper.FoldoutBar(channelExpanded[i],"Channel " + i + ": " + materialPropertyName.stringValue);
+                    channelExpanded[i] = GUIHelper.FoldoutBar(channelExpanded[i],"Channel " + i + ": " + materialPropertyName.stringValue + error );
                     if (channelExpanded[i])
                     {
                         GUIHelper.BeginVerticalPadded(10, new Color(0.85f, 0.85f, 0.85f));
@@ -227,10 +317,16 @@ namespace UMA.Editors
                         EditorGUILayout.PropertyField( materialPropertyName, new GUIContent("Material Property Name", "The name of the property this texture corresponds to in the shader used by this material."), GUILayout.MinWidth(300));
                         if (_shaderProperties != null)
                         {
+                            string oldValue = materialPropertyName.stringValue;
                             int selection = EditorGUILayout.Popup(0, _shaderProperties, GUILayout.MinWidth(100), GUILayout.MaxWidth(200));
+                            if (oldValue != materialPropertyName.stringValue) 
+                            {
+                                UpdateCurrentSRP(i, materialPropertyName.stringValue, serializedObject);
+                            }
                             if (selection > 0)
                             {
                                 materialPropertyName.stringValue = _shaderProperties[selection];
+                                UpdateCurrentSRP(i, _shaderProperties[selection],serializedObject);
                             }
                         }
                         EditorGUILayout.EndHorizontal();
@@ -270,6 +366,23 @@ namespace UMA.Editors
                     GUILayout.Space(8);
                 }
                 GUIHelper.EndVerticalPadded(10);
+            }
+        }
+
+        private void UpdateCurrentSRP(int i, string v, SerializedObject sobj)
+        {
+            // Update the current SRP property name from the array
+            UMAMaterial source = target as UMAMaterial;
+            if (source.srpMaterials != null)
+            {
+                foreach (UMAMaterial.SRPMaterial srpMaterial in source.srpMaterials)
+                {
+                    if (srpMaterial.SRP == UMAUtils.CurrentPipeline)
+                    {
+                        srpMaterial.alternateKeywords[i] = v;
+                        sobj.Update();
+                    }
+                }
             }
         }
 

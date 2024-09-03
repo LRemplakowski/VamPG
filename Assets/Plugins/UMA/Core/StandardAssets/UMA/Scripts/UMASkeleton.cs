@@ -80,12 +80,12 @@ namespace UMA
 		/// Initializes a new UMASkeleton from a transform hierarchy.
 		/// </summary>
 		/// <param name="rootBone">Root transform.</param>
-		public UMASkeleton(Transform rootBone)
+		public UMASkeleton(Transform rootBone, UMAGeneratorBase umaGenerator)
 		{
 			rootBoneHash = UMAUtils.StringToHash(rootBone.name);
 			this.boneHashData = new Dictionary<int, BoneData>();
 			BeginSkeletonUpdate();
-			AddBonesRecursive(rootBone);
+			AddBonesRecursive(rootBone, umaGenerator);
 			EndSkeletonUpdate();
 		}
 
@@ -139,9 +139,9 @@ namespace UMA
 			// The default MeshCombiner is ignoring the animated bones, virtual method added to share common interface.
 		}
 
-		private void AddBonesRecursive(Transform transform)
+		private void AddBonesRecursive(Transform transform, UMAGeneratorBase umaGenerator)
 		{
-			if (transform.tag == UMAContextBase.IgnoreTag)
+			if (transform.tag == umaGenerator.ignoreTag)
             {
                 return;
             }
@@ -175,7 +175,7 @@ namespace UMA
 			for (int i = 0; i < transform.childCount; i++)
 			{
 				var child = transform.GetChild(i);
-				AddBonesRecursive(child);
+				AddBonesRecursive(child, umaGenerator);
 			}
 		}
 
@@ -410,7 +410,13 @@ namespace UMA
 			return boneNames;
 		}
 
-		public virtual void Set(int nameHash, Vector3 position, Vector3 scale, Quaternion rotation)
+		public bool isValid()
+        {
+			if (rootBoneHash == 0) return false;
+			return true;
+        }
+
+        public virtual void Set(int nameHash, Vector3 position, Vector3 scale, Quaternion rotation)
 		{
 			BoneData db;
 			if (boneHashData.TryGetValue(nameHash, out db))
@@ -790,5 +796,24 @@ namespace UMA
 		{
 			return boneHashData[nameHash].boneTransform.localRotation;
 		}
-	}
+
+        internal void ReplaceBone(UMASavedItem usi)
+        {
+			ReplaceBoneRecursively(usi.Object);
+        }
+
+		internal void ReplaceBoneRecursively(Transform transform)
+		{
+            int nameHash = UMAUtils.StringToHash(transform.name);
+			BoneData bd = GetBone(nameHash);
+			if (bd != null)
+			{
+                bd.boneTransform = transform;
+            }
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                ReplaceBoneRecursively(transform.GetChild(i));
+            }
+        }
+    }
 }

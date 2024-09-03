@@ -53,7 +53,8 @@ namespace UMA.Editors
 		public bool addToGlobalLibrary;
 		public bool binarySerialization;
 		public bool calcTangents=true;
-		public string errmsg = "";
+		public bool udimAdjustment = true;
+        public string errmsg = "";
 		public List<string> Tags = new List<string>();
 		public bool showTags;
 		public bool nameAfterMaterial=false;
@@ -61,8 +62,10 @@ namespace UMA.Editors
 		private ReorderableList boneList;
 		private bool boneListInitialized;
 		public string BoneStripper;
+		private bool useRootFolder=false;
+		public bool keepAllBones = false;
 
-		string GetAssetFolder()
+        string GetAssetFolder()
 		{
 			int index = slotName.LastIndexOf('/');
 			if( index > 0 )
@@ -155,8 +158,15 @@ namespace UMA.Editors
 			binarySerialization = EditorGUILayout.Toggle(new GUIContent("Binary Serialization", "Forces the created Mesh object to be serialized as binary. Recommended for large meshes and blendshapes."), binarySerialization);
 			addToGlobalLibrary = EditorGUILayout.Toggle("Add To Global Library", addToGlobalLibrary);
 			EditorGUILayout.EndHorizontal();
-			calcTangents = EditorGUILayout.Toggle("Calculate Tangents", calcTangents);
-			BoneStripper = EditorGUILayout.TextField("Strip from Bones:", BoneStripper);
+			EditorGUILayout.BeginHorizontal();
+            calcTangents = EditorGUILayout.Toggle("Calculate Tangents", calcTangents);
+            udimAdjustment = EditorGUILayout.Toggle("Adjust for UDIM", udimAdjustment);
+            EditorGUILayout.EndHorizontal();
+			EditorGUILayout.BeginHorizontal();
+            useRootFolder = EditorGUILayout.Toggle("Write to Root Folder", useRootFolder);
+            keepAllBones = EditorGUILayout.Toggle("Keep All Bones", keepAllBones);
+            EditorGUILayout.EndHorizontal();
+            BoneStripper = EditorGUILayout.TextField("Strip from Bones:", BoneStripper);
 			boneList.DoLayoutList();
 			GUIHelper.EndVerticalPadded(10);
 			DoDragDrop();
@@ -171,13 +181,14 @@ namespace UMA.Editors
 			GUILayout.Label("Single Slot Processing", EditorStyles.boldLabel);
 
 			var newslotMesh = EditorGUILayout.ObjectField("Slot Mesh  ", slotMesh, typeof(SkinnedMeshRenderer), false) as SkinnedMeshRenderer;
-			if (newslotMesh != slotMesh)
-			{
-				errmsg = "";
-				slotMesh = newslotMesh;
-			}
+            if (newslotMesh != slotMesh)
+            {
+                errmsg = "";
+                slotMesh = newslotMesh;
+                slotName = newslotMesh.name;
+            }
 
-			slotName = EditorGUILayout.TextField("Slot Name", slotName);
+            slotName = EditorGUILayout.TextField("Slot Name", slotName);
 
 
 
@@ -194,7 +205,7 @@ namespace UMA.Editors
 					{
 						if (v.x > 1.0f || v.x < 0.0f || v.y > 1.0f || v.y < 0.0f)
 						{
-							errmsg = "UV Coordinates are out of range and will likely have issues with atlassed materials. Textures should not be tiled unless using non-atlassed materials.";
+							errmsg = "UV Coordinates are out of range and will likely have issues with atlassed materials. Textures should not be tiled unless using non-atlassed materials. If this slot is using UDIMs, please check the box to adjust for UDIM in the slot options.";
 							break;
 						}
 					}
@@ -406,7 +417,26 @@ namespace UMA.Editors
 				}
 				Debug.Log("Stripped " + stripCount + " Bones");
 			}
-			SlotDataAsset slot = UMASlotProcessingUtil.CreateSlotData(AssetDatabase.GetAssetPath(slotFolder), GetAssetFolder(), GetAssetName(),GetSlotName(slotMesh),nameAfterMaterial, slotMesh, material, normalReferenceMesh,KeepList, RootBone, binarySerialization,calcTangents,BoneStripper);
+
+            SlotBuilderParameters sbp = new SlotBuilderParameters();
+            sbp.calculateTangents = calcTangents;
+            sbp.binarySerialization = binarySerialization;
+            sbp.nameByMaterial = nameAfterMaterial;
+            sbp.stripBones = BoneStripper;
+            sbp.rootBone = RootBone;
+            sbp.assetName = GetAssetName();
+            sbp.slotName = GetSlotName(slotMesh);
+            sbp.assetFolder = GetAssetFolder();
+            sbp.slotFolder = AssetDatabase.GetAssetPath(slotFolder);
+            sbp.keepList = KeepList;
+            sbp.slotMesh = slotMesh;
+            sbp.seamsMesh = normalReferenceMesh;
+            sbp.material = material;
+            sbp.udimAdjustment = udimAdjustment;
+            sbp.useRootFolder = false;
+			sbp.keepAllBones = keepAllBones;
+
+            SlotDataAsset slot = UMASlotProcessingUtil.CreateSlotData(sbp);
 			slot.tags = Tags.ToArray();
 			return slot;
 		}

@@ -43,11 +43,17 @@ namespace UMA
 		[Tooltip("UMA will ignore items with this tag when rebuilding the skeleton.")]
 		public string ignoreTag = "UMAIgnore";
 
-		[NonSerialized]
+		[Tooltip("UMA will keep items with this tag when rebuilding the skeleton. Any new bone created during the build process will be replaced with the previous copy, keeping components and references intact.")]
+		public string keepTag = "UMAKeepChain";
+
+		[Tooltip("Default Renderer Asset to use for the generated SkinnedMeshRenderer")]
+        public UMARendererAsset defaultRendererAsset;
+
+        [NonSerialized]
 		public bool FreezeTime;
 
 		public bool SaveAndRestoreIgnoredItems;
-
+		 
 		protected OverlayData _defaultOverlayData;
 		public OverlayData defaultOverlaydata
 		{
@@ -212,11 +218,15 @@ namespace UMA
                     return;
                 }
 
-                if (animator == false)
+                if (animator == null)
                 {
                     return;
                 }
 
+				if (animator.isActiveAndEnabled == false) {
+					return;
+				}
+					
                 if (animator.layerCount == stateHashes.Length)
 				{
 					for (int i = 0; i < animator.layerCount; i++)
@@ -299,8 +309,7 @@ namespace UMA
 				{
 					var umaTransform = umaData.transform;
 					var oldParent = umaTransform.parent;
-					var originalRot = umaTransform.localRotation;
-					var originalPos = umaTransform.localPosition;
+					umaTransform.GetLocalPositionAndRotation(out var originalPos, out var originalRot);
                     var animator = umaData.animator;
 
                     //umaTransform.SetParent(null, false);
@@ -367,7 +376,11 @@ namespace UMA
 			{
 				case RaceData.UMATarget.Humanoid:
 					umaTPose.DeSerialize();
-					animator.avatar = CreateAvatar(umaData, umaTPose);
+					var avatar = CreateAvatar(umaData, umaTPose);
+					if (avatar != null)
+					{
+                        animator.avatar = avatar;
+                    }
 					break;
 				case RaceData.UMATarget.Generic:
 					animator.avatar = CreateGenericAvatar(umaData);
@@ -434,10 +447,18 @@ namespace UMA
 			umaTPose.DeSerialize();
 			HumanDescription description = CreateHumanDescription(umaData, umaTPose);
 			//DebugLogHumanAvatar(umaData.gameObject, description);
-			Avatar res = AvatarBuilder.BuildHumanAvatar(umaData.gameObject, description);
-			CreatedAvatars.Add(res.GetInstanceID());
-			res.name = umaData.name;
-			return res;
+			try
+			{
+				Avatar res = AvatarBuilder.BuildHumanAvatar(umaData.gameObject, description);
+				CreatedAvatars.Add(res.GetInstanceID());
+				res.name = umaData.name;
+				return res;
+			}
+            catch (Exception ex)
+			{
+                Debug.LogError("Error creating avatar: " + ex.Message);
+                return null;
+            }
 		}
 
 		/// <summary>

@@ -4277,6 +4277,9 @@ MonoBehaviour:
   WardrobeRemoved:
     m_PersistentCalls:
       m_Calls: []
+  CharacterStart:
+    m_PersistentCalls:
+      m_Calls: []
   BuildCharacterBegun:
     m_PersistentCalls:
       m_Calls: []
@@ -4287,11 +4290,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   hide: 0
+  markNotReadable: 1
+  markDynamic: 1
   loadBlendShapes: 0
   loadOnlyUsedBlendshapes: 1
   loadBlendshapeNormals: 1
   loadBlendshapeTangents: 1
   loadAllFrames: 1
+  forceKeepBlendshapes: []
   keepAvatar: 0
   rawAvatar: 0
   keepPredefinedDNA: 0
@@ -4305,11 +4311,6 @@ MonoBehaviour:
   preloadWardrobeRecipes:
     loadDefaultRecipes: 1
     recipes:
-    - _recipeName: Dominic_facial_hair_overlay
-      _enabledInDefaultWardrobe: 1
-      _compatibleRaces:
-      - VampireMale
-      - VampireFemale
     - _recipeName: shoes_Recipe
       _enabledInDefaultWardrobe: 1
       _compatibleRaces:
@@ -4353,10 +4354,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 1
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
@@ -4374,10 +4377,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 1
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
@@ -4395,10 +4400,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 1
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
@@ -4418,10 +4425,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 0
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
       _name: 
       _color: {r: 1, g: 1, b: 1, a: 1}
@@ -4445,13 +4454,14 @@ MonoBehaviour:
   ensureSharedColors: 0
   defaultSaveOptions: 15
   BoundsOffset: {x: 0, y: 0, z: 0}
-  editorTimeGeneration: 1
+  editorTimeGeneration: 0
   showPlaceholder: 1
   previewModel: 0
   customModel: {fileID: 0}
   customRotation: {x: 0, y: 0, z: 0}
   previewColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   _buildCharacterEnabled: 1
+  debugVertexes: 1
 --- !u!114 &7147422895461120365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4478,6 +4488,8 @@ MonoBehaviour:
   isShapeDirty: 0
   isTextureDirty: 0
   isAtlasDirty: 0
+  markNotReadable: 1
+  markDynamic: 0
   animationController: {fileID: 0}
   CharacterCreated:
     m_PersistentCalls:
@@ -4523,6 +4535,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4543,6 +4556,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4557,6 +4571,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4577,6 +4592,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 11400000, guid: e840e7595fb6b5d44bf0f709bcc9c6e7, type: 2}
       BlendshapeSlotNames: []
@@ -4591,6 +4607,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4611,6 +4628,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4625,6 +4643,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4645,6 +4664,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4659,6 +4679,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4679,6 +4700,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4693,6 +4715,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4713,6 +4736,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4727,6 +4751,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4747,6 +4772,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4761,6 +4787,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4781,6 +4808,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4795,6 +4823,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4815,6 +4844,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4829,6 +4859,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4849,6 +4880,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4863,6 +4895,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4883,6 +4916,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4897,6 +4931,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4917,6 +4952,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4931,6 +4967,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4951,6 +4988,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -4965,6 +5003,7 @@ MonoBehaviour:
       BlendshapeFoldout: 0
       ClipPlaneFoldout: 0
       isDeleted: 0
+      expandAlongNormal: 0
       overSmoosh: 0.01
       smooshDistance: 0.001
       smooshInvertX: 0
@@ -4985,6 +5024,7 @@ MonoBehaviour:
         width: 0
         height: 0
       tempHidden: 0
+      isDisabled: 0
       UVSet: 0
       altMaterial: {fileID: 0}
       BlendshapeSlotNames: []
@@ -5005,10 +5045,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 0
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
     - name: clothes_chest
       channelMask:
@@ -5023,10 +5065,12 @@ MonoBehaviour:
       - {r: 0, g: 0, b: 0, a: 0}
       PropertyBlock:
         alwaysUpdate: 0
+        alwaysUpdateParms: 0
         serializedProperties: []
       foldout: 0
       showAdvanced: 0
       isBaseColor: 0
+      deleteThis: 0
       displayColor: {r: 1, g: 1, b: 1, a: 1}
   animator: {fileID: 0}
   KeepAvatar: 0
@@ -9661,6 +9705,8 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

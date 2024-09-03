@@ -25,6 +25,7 @@ namespace UMA
 		public bool foldout;
 		public bool showAdvanced;
 		public bool isBaseColor = false;
+		public bool deleteThis = false;
 #endif
         public Color displayColor = Color.white;
 
@@ -87,12 +88,12 @@ namespace UMA
 		{
 			if (Channel <= channelCount)
 			{
-				if (channelMask[Channel] == Color.white)
+				uint multiply = ColorDef.ToUInt(channelMask[Channel]);
+				uint additive = ColorDef.ToUInt(channelAdditiveMask[Channel]);
+
+				if (multiply == 0xffffffff && additive == 0)
 				{
-					if (channelAdditiveMask[Channel] == EmptyAdditive)
-					{
-						return true;
-					}
+					return true;
 				}
 			}
 			return false;
@@ -148,6 +149,7 @@ namespace UMA
             {
 				res.PropertyBlock = new UMAMaterialPropertyBlock();
 				res.PropertyBlock.alwaysUpdate = PropertyBlock.alwaysUpdate;
+				res.PropertyBlock.alwaysUpdateParms = PropertyBlock.alwaysUpdateParms;
 				res.PropertyBlock.shaderProperties = new List<UMAProperty>(PropertyBlock.shaderProperties.Count);
 				for(int i=0;i<PropertyBlock.shaderProperties.Count;i++)
                 {
@@ -444,6 +446,7 @@ namespace UMA
 			if (PropertyBlock != null)
 			{
                 dest.PropertyBlock.alwaysUpdate = PropertyBlock.alwaysUpdate;
+				dest.PropertyBlock.alwaysUpdateParms = PropertyBlock.alwaysUpdateParms;
                 dest.PropertyBlock.shaderProperties = new List<UMAProperty>(PropertyBlock.shaderProperties.Count);
                 for (int i = 0; i < PropertyBlock.shaderProperties.Count; i++)
 				{
@@ -455,20 +458,26 @@ namespace UMA
             dest.isBaseColor = isBaseColor;
 #endif
 		}
-		public void AssignFrom(OverlayColorData src)
+		public void AssignFrom(OverlayColorData src, bool CopyParmsOnly=false)
 		{
-			if (src.name != null)
+			if (CopyParmsOnly == false)
 			{
-				name = String.Copy(src.name);
-			}
-			EnsureChannels(src.channelMask.Length);
-			for (int i = 0; i < src.channelMask.Length; i++)
-			{
-				channelMask[i] = src.channelMask[i];
-			}
-			for (int i = 0; i < src.channelAdditiveMask.Length; i++)
-			{
-				channelAdditiveMask[i] = src.channelAdditiveMask[i];
+#if UNITY_EDITOR
+                isBaseColor = src.isBaseColor;
+#endif
+                if (src.name != null)
+				{
+					name = String.Copy(src.name);
+				}
+				EnsureChannels(src.channelMask.Length);
+				for (int i = 0; i < src.channelMask.Length; i++)
+				{
+					channelMask[i] = src.channelMask[i];
+				}
+				for (int i = 0; i < src.channelAdditiveMask.Length; i++)
+				{
+					channelAdditiveMask[i] = src.channelAdditiveMask[i];
+				}
 			}
 
 			displayColor = src.displayColor;
@@ -476,6 +485,7 @@ namespace UMA
 			if (src.PropertyBlock != null)
 			{
 				PropertyBlock.alwaysUpdate = src.PropertyBlock.alwaysUpdate;
+				PropertyBlock.alwaysUpdateParms = src.PropertyBlock.alwaysUpdateParms;
 				PropertyBlock.shaderProperties = new List<UMAProperty>(src.PropertyBlock.shaderProperties.Count);
 				for (int i = 0; i < src.PropertyBlock.shaderProperties.Count; i++)
 				{
@@ -483,9 +493,6 @@ namespace UMA
 					PropertyBlock.shaderProperties.Add(up.Clone());
 				}
 			}
-#if UNITY_EDITOR
-			isBaseColor = src.isBaseColor;
-#endif
         }
     }
 }

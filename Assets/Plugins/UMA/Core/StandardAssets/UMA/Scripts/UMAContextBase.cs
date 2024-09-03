@@ -8,8 +8,6 @@ namespace UMA
     /// </summary>
     public abstract class UMAContextBase : MonoBehaviour
 	{
-		public static string IgnoreTag;
-
 		private static UMAContextBase _instance;
 		public static UMAContextBase Instance
 		{
@@ -19,6 +17,11 @@ namespace UMA
 				{
 					_instance = GameObject.FindObjectOfType<UMAContextBase>();
 				}
+				if (_instance == null)
+				{
+					_instance = new GameObject("UMAContext").AddComponent<UMAGlobalContext>();
+					_instance.hideFlags = HideFlags.HideAndDontSave;
+                }
 				return _instance;
 			}
 			set
@@ -28,6 +31,12 @@ namespace UMA
 		}
 
 #pragma warning disable 618
+		public virtual void Awake()
+		{
+			if (_instance == null)
+				_instance = this;
+		}
+
 		public abstract void Start();
 
 		/// <summary>

@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: UMA_Mat_Diffuse_Normal_Metallic_Occlusion_Skin_Smoothness
   m_EditorClassIdentifier: 
   translateSRP: 1
-  material: {fileID: 2100000, guid: 21805e8451a50a84f8995d877a7b42db, type: 2}
+  AutoSetSRPMaterials: 1
+  _material: {fileID: 2100000, guid: 21805e8451a50a84f8995d877a7b42db, type: 2}
+  _secondPass: {fileID: 0}
+  srpMaterials: []
   materialType: 1
   channels:
   - channelType: 0
@@ -47,3 +50,5 @@ MonoBehaviour:
   shaderParms: []
   MaskWithCurrentColor: 0
   maskMultiplier: {r: 1, g: 1, b: 1, a: 1}
+  MaterialName: 
+  ShaderName: 

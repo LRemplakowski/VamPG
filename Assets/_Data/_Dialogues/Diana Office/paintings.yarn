@@ -256,7 +256,11 @@ title: beastTalk
         -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #lastline #line:0ca6b02 
     <<endif>>
 <<endif>>
-<<jump paintingsInteractions>>
+<<if $safeFailCounter >= 4>>
+    <<jump safeQuestions>>
+<<else>>
+    <<jump paintingsInteractions>>
+<<endif>>
 ===
 title: anaAndKieranConflict
 ---

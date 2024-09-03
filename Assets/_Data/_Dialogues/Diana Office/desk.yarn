@@ -64,6 +64,7 @@ title: throwAsh
             [nomarkup][You put the ashtray back on the desk.][/nomarkup] #lastline #line:0f7fd6b 
             <<jump deskExaminationOptions>>
 <<else>>
+    <<set $safeFailCounter to inc($safeFailCounter)>> 
     [nomarkup][The ashtray silently stares back at you, the stubborn black soot still caked to it. Maybe it's nothing special after all, and you're putting an irrational amount of importance on this?][/nomarkup] #lastline #line:03f5de0 
     <<jump deskExaminationOptions>>
 <<endif>>
@@ -128,38 +129,30 @@ title: computerTurnedOn
     <<else>>
         <<jump hackingFailure>>
     <<endif>>
-<<if $thelema ==true>>
--> [nomarkup][Enter the password - “Thelema”.][/nomarkup] #line:0e990ce 
-        <<jump accessGranted>>
-<<endif>>
-<<if $satanDate ==true>>
--> [nomarkup][Enter the password - "Satan".][/nomarkup] #line:019d5c0 
-        [nomarkup][It was worth a shot. Hope this computer doesn't need an exorcism, now...][/nomarkup] #line:0baf60c 
-        <<jump wrongPassword>>
--> [nomarkup][Enter the password - "LaVey".][/nomarkup] #line:03c429b 
-        [nomarkup][It was worth a shot. Diana seems to have gone through his biography with a fine-toothed comb, after all...][/nomarkup] #line:07e6146 
-        <<jump wrongPassword>>
-<<endif>>
+-> [nomarkup][Enter the password - “Thelema”.][/nomarkup] <<if $thelema == true>> #line:0e990ce 
+    <<jump accessGranted>>
+-> [nomarkup][Enter the password - "Satan".][/nomarkup] <<if $satanDate == true>> #line:019d5c0 
+    [nomarkup][It was worth a shot. Hope this computer doesn't need an exorcism, now...][/nomarkup] #line:0baf60c 
+    <<jump wrongPassword>>
+-> [nomarkup][Enter the password - "LaVey".][/nomarkup] <<if $satanDate == true>> #line:03c429b 
+    [nomarkup][It was worth a shot. Diana seems to have gone through his biography with a fine-toothed comb, after all...][/nomarkup] #line:07e6146 
+    <<jump wrongPassword>>
 -> [nomarkup][Enter the password - "Anarchy".][/nomarkup] #line:0f38d4b 
-        [nomarkup][It was worth a shot, given Diana's general demeanor.][/nomarkup] #line:0c862f7 
-        <<jump wrongPassword>>
+    [nomarkup][It was worth a shot, given Diana's general demeanor.][/nomarkup] #line:0c862f7 
+    <<jump wrongPassword>>
 -> [nomarkup][Enter the password - "Embassy".][/nomarkup] #line:0144ca1 
-        [nomarkup][It was worth a shot. This place seems important to her, after all...][/nomarkup] #line:009c1be 
-        <<jump wrongPassword>>
+    [nomarkup][It was worth a shot. This place seems important to her, after all...][/nomarkup] #line:009c1be 
+    <<jump wrongPassword>>
 -> [nomarkup][Enter the password - "Password".][/nomarkup] #line:0ae5f04 
-        [nomarkup][Ah, the old standby. You also try replacing the letters with special characters: from Passw0rd all the way up to the almost-illegible P@$$w0rd. You hope that Diana is <i>so</i> predictable.][/nomarkup] #line:00cccee 
-        <<jump wrongPassword>>
-<<if $goldBugPassword ==true>>
-    -> [nomarkup][Enter the password - "Gold-Bug".][/nomarkup] #line:0535c12 
-        <<jump wrongPassword>>
-<<endif>>
-<<if $aidanFoster == true>>
-    -> [nomarkup][Enter the password - "Aidan".][/nomarkup] #line:08098b0 
-        [nomarkup][It was worth a shot. A long-lost lover immortalized in a computer password might have been too cheesy for her, though.][/nomarkup] #line:0147b49 
-        <<jump wrongPassword>>
-<<endif>>
+    :[nomarkup][Ah, the old standby. You also try replacing the letters with special characters: from Passw0rd all the way up to the almost-illegible P@$$w0rd. You hope that Diana is <i>so</i> predictable.][/nomarkup] #line:00cccee 
+    <<jump wrongPassword>>
+-> [nomarkup][Enter the password - "Gold-Bug".][/nomarkup] <<if $goldBugPassword == true>> #line:0535c12 
+    <<jump wrongPassword>>
+-> [nomarkup][Enter the password - "Aidan".][/nomarkup] <<if $aidanFoster == true>> #line:08098b0 
+    [nomarkup][It was worth a shot. A long-lost lover immortalized in a computer password might have been too cheesy for her, though.][/nomarkup] #line:0147b49 
+    <<jump wrongPassword>>
 -> [nomarkup][Leave computer as it is.][/nomarkup] #line:0aa3bb5 
-        <<jump deskInteractions>>
+    <<jump deskInteractions>>
 ===
 title: hackingSuccess
 ---
@@ -172,6 +165,7 @@ title: hackingSuccess
 ===
 title: hackingFailure
 ---
+<<set $safeFailCounter to inc($safeFailCounter)>>
 [nomarkup][Stupid machine! Despite your every attempt, the computer refuses to allow you past the login screen - the input cursor's incessant flashing taunting you relentlessly... Your frustration and anger threaten to boil over into a white-hot rage.][/nomarkup] #failure #lastline #line:0d9f1de 
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0d18ca5 
@@ -211,10 +205,8 @@ title: accessGranted
     <<jump recentLogs>>
 -> [nomarkup][Examine older logs.] (Intelligence + Finance)[/nomarkup] <<if CustomVisited("olderLogs") == false>> #line:0c00f59 
     <<jump olderLogs>>
-<<if $safeDiscovered ==true>>
-    -> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if CustomVisited("searchQuerry") == false>> #line:085e30a 
-        <<jump searchQuerry>>
-<<endif>>
+-> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if CustomVisited("searchQuerry") == false and if $safeDiscovered == true>> #line:085e30a 
+    <<jump searchQuerry>>
 -> [nomarkup][Leave computer as it is.][/nomarkup] #line:03c5c3c 
 ===
 title: recentLogs
@@ -319,10 +311,11 @@ title: drawerSuccess
 {$kieran}: Something useful in there? #lastline #line:0b15cea
 -> [nomarkup][Sift through the documents.] (Resolve + Investigation)[/nomarkup] #line:0aba321 
 <<if Roll ("Resolve","Investigation") >=4>>
-<<set $safeCode to true>>
+    <<set $safeCode to true>>
     [nomarkup][Most of what you discover as you search are receipts, placed here for safe-keeping. Eventually, though, you find one about a wall safe, filed along with its manual, as well as a note stating its combination - 1969.][/nomarkup] #lastline #success #line:030c021 
     <<jump deskInteractions>>
 <<else>>
+    <<set $safeFailCounter to inc($safeFailCounter)>>
     [nomarkup][You see nothing you can use, but the oldest documents here are from 1969.][/nomarkup] #lastline #failure #line:061b72d 
     <<jump deskInteractions>>
 <<endif>>

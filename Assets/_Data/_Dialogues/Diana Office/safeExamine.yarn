@@ -2,19 +2,23 @@
 position: -171,-476
 ---
 [nomarkup][It looks just like a normal, civilian-use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #line:0e7f551 
--> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if CustomVisited("safeResolveRoll") == false>> #line:05d4917 
-    <<jump safeResolveRoll>>
--> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if CustomVisited("safeStrengthRoll") == false and GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:03cddc8 
-    <<jump safeStrengthRoll>>
--> [nomarkup][Open the safe with a 1966 combination.][/nomarkup] <<if $satanDate == true and CustomVisited("safeSatan") == false>> #line:08271ae 
-    <<jump safeSatan>>
--> [nomarkup][Open the safe with a 1969 combination.][/nomarkup] <<if $safeCode == true>> #line:03859ca 
-    <<jump safeOpenedwCode>>
--> [nomarkup][Open the safe with a 1972 combination.][/nomarkup] <<if $aidanFoster == true and CustomVisited("safeFoster") == false>>
-    <<jump safeFoster>>
--> [nomarkup][Open the safe with a 4113 combination.][/nomarkup] <<if $goldBugCode == true and CustomVisited("safeGoldBug") == false>> #line:0278058 
-    <<jump safeGoldBug>>
--> [nomarkup][Step away.][/nomarkup] #line:0cf47c3 
+<<if $safeFailCounter >= 4>>
+    <<jump beastOpens>>
+<<else>>
+    -> [nomarkup][Try to open the safe without combination.][Resolve + Larceny][/nomarkup] <<if CustomVisited("safeResolveRoll") == false>> #line:05d4917 
+        <<jump safeResolveRoll>>
+    -> [nomarkup][Try to pry open the safe.][Strength + Larceny][/nomarkup] <<if CustomVisited("safeStrengthRoll") == false and GetHasItem("IT_WPN_ML_CROWBAR") == true>> #line:03cddc8 
+        <<jump safeStrengthRoll>>
+    -> [nomarkup][Open the safe with a 1966 combination.][/nomarkup] <<if $satanDate == true and CustomVisited("safeSatan") == false>> #line:08271ae 
+        <<jump safeSatan>>
+    -> [nomarkup][Open the safe with a 1969 combination.][/nomarkup] <<if $safeCode == true>> #line:03859ca 
+        <<jump safeOpenedwCode>>
+    -> [nomarkup][Open the safe with a 1972 combination.][/nomarkup] <<if $aidanFoster == true and CustomVisited("safeFoster") == false>>
+        <<jump safeFoster>>
+    -> [nomarkup][Open the safe with a 4113 combination.][/nomarkup] <<if $goldBugCode == true and CustomVisited("safeGoldBug") == false>> #line:0278058 
+        <<jump safeGoldBug>>
+    -> [nomarkup][Step away.][/nomarkup] #line:0cf47c3 
+<<endif>>
 ===
 title: safeResolveRoll
 position: 274,-762
@@ -234,4 +238,22 @@ title: safeFoster
 title: safeGoldBug
 ---
 <<jump safeFailure>>
+===
+title: beastOpens
+---
+[nomarkup][Only looking at a safe knob makes you furious. Your breath gets short, your new fangs irritate you in the mouth. Something is crawling up your spine, just like drunken rage. Your vision becomes red as you are pushed back in your mind when the tsunami of blood took control over you.][/nomarkup]
+[nomarkup][You see your arms like in a dream sequence, grabbing the safe doors by the hinges you just rip it off like a piece of paper and throw it at your partners in crime. Yes... yes there it is! You felt it on the verges of your senses - blood. The blood you know... you grab a vial and down it in a one gulp][/nomarkup]
+[nomarkup][As the last drop runs down your throat it feels like an ice that revive you. You shake your head looking at the aftermath of your actions...]
+<<if $beastTalk == false>>
+    <<jump beastTalk>>
+<<else>>
+    [nomarkup][The safe is opened... but at what cost? At least you can see what it contains. Kieran though looks a little bit pissed][/nomarkup]
+    {$kieran}: This vial could contain an important piece of the puzzle we are trying to solve right now you know...
+<<endif>>
+[nomarkup][The safe contains some cash and a few documents - nothing too crazy. There's also a gun lying inside along with some ammunition - .45 caliber - not what your gun is using.][/nomarkup]
+<<if GetIsPartyMemberRecruited($anastasia) is true>>
+    {$anastasia}: [nomarkup][She pumps her fist, before inching closer to peer eagerly over your shoulder and into the safe.][/nomarkup] That was smooth as butter. Let's dig into our ill-gotten gains. How do we split the spoils? 
+    {$kieran}: [nomarkup][He grimaces.][/nomarkup] I will not take Diana's money, and I suggest you do not, either. #lastline 
+<<endif>>
+<<jump safeQuestions>>
 ===

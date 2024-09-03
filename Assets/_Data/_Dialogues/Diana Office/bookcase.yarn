@@ -78,20 +78,20 @@ title: booksHaveTeeth
         -> {$pcName}: I'm not talking about that. This book is like a Bible, for Thelema; she consults it often. #line:0f499be 
     <<endif>>
     {$kieran}: Well, it is often the first stop for any prospective apprentice of the magical arts. Maybe she's finally decided to start doing her homework? #line:03d51b3 #lastline
-<<endif>>
-<<if Roll ("Intelligence","Academics")>=4>>
+<<elseif Roll ("Intelligence","Academics")>=4>>
     -> {$pcName}: It looks like Diana is interested in some majorly esoteric stuff. Does Kate know? #line:05beb70 
     <<set $thelema to true>>
     {$kieran}: [nomarkup][He thinks for a second, but ultimately shakes his head.][/nomarkup] I do not think so. Like I said, she never showed interest in such topics. [nomarkup][He rubs his forehead.][nomarkup] I don't know what may have happened to change that. Maybe her reason for reading it so diligently is more about Thelema, and not magick, in particular? #line:0cc5e56 
-<<endif>>
-<<if Roll ("Resolve","Investigation")>=4>>
+<<elseif Roll ("Resolve","Investigation")>=4>>
     -> {$pcName}: [nomarkup][You thoroughly examine the book's cover, revealing a small monogram on the front page.][/nomarkup] Do you recognize that symbol, Kieran? #line:0fb486b 
     <<set $thelema to true>>
     {$kieran}: [nomarkup][He stares at it intensely for a few moments.][/nomarkup] It's not one that I know of, nor is it Thelema's hexagram. Maybe it's someone's sigil? I am sure it's not Kate's, at the very least. #lastline #line:0326a7d 
 <<endif>>
--> [nomarkup][On second thought, I don't want to look at this dusty, old book.][/nomarkup] #line:0e516c9 
 <<if $thelema == true>>
     [nomarkup][You don't think you'll find anything else in this book... You put it back on the shelf.][/nomarkup] #line:0898f9f #lastline
+<<else>>
+    <<set $safeFailCounter to inc($safeFailCounter)>>
+    -> [nomarkup][On second thought, I don't want to look at this dusty, old book.][/nomarkup]
 <<endif>>
 <<jump bookcaseInteractions>>
 ===

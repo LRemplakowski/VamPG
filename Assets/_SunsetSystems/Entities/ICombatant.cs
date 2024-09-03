@@ -42,6 +42,7 @@ namespace SunsetSystems.Combat
         bool MoveToGridPosition(Vector3Int gridPosition);
         bool AttackCreatureUsingCurrentWeapon(ICombatant target);
         bool ReloadCurrentWeapon();
+        bool IsTargetInRange(ICombatant target);
 
 
         float PerformAttackAnimation();

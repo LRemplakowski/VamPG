@@ -318,6 +318,11 @@ namespace SunsetSystems.Combat
             return true;
         }
 
+        public bool IsTargetInRange(ICombatant target)
+        {
+            return Vector3.Distance(References.Transform.position, target.References.Transform.position) <= weaponManager.GetSelectedWeapon().GetRangeData().maxRange;
+        }
+
         private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, INavigationManager navigationManager)
         {
             GridUnit unit = null;

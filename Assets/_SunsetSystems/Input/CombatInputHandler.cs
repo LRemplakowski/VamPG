@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Game;
 using SunsetSystems.Spellbook;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,7 +39,7 @@ namespace SunsetSystems.Input
 
         private void Update()
         {
-            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
+            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false || GameManager.Instance.CurrentState != GameState.Combat)
                 _showTargetingLine = false;
             _pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
             _targetingLineRenderer.gameObject.SetActive(_showTargetingLine);
@@ -96,9 +97,16 @@ namespace SunsetSystems.Input
                     _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
-                    _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
-                    _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
-                    current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
+                    if (target.IsAlive && current.IsTargetInRange(target))
+                    {
+                        _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
+                        _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
+                        current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
+                    }
+                    else
+                    {
+                        _showTargetingLine = false;
+                    }
                 }
             }
         }

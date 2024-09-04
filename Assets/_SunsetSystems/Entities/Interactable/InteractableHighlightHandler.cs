@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -29,10 +30,13 @@ namespace SunsetSystems.Entities.Interactable
         }
 #endif
 
-        public void Start()
+        public async void Start()
         {
             if (_findRenderersAtRuntime && _rendererParent != null)
+            {
+                await new WaitForSeconds(1f);
                 _highlightRenderers = _rendererParent.GetComponentsInChildren<Renderer>().ToList();
+            }
             foreach (Renderer renderer in _highlightRenderers)
             {
                 _rendererLayerCache[renderer] = renderer.gameObject.layer;

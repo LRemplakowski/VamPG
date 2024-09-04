@@ -57,7 +57,7 @@ namespace SunsetSystems.Combat
                 crit |= attackModifier.CriticalMod;
                 if (crit)
                     damage = Mathf.RoundToInt(damage * 1.5f);
-                damageReduction = CalculateDefenderDamageReduction(defender, attacker.CurrentWeapon.WeaponType) + attackModifier.DamageReductionMod;
+                damageReduction = CalculateDefenderDamageReduction(defender, attacker.WeaponManager.GetSelectedWeapon().WeaponType) + attackModifier.DamageReductionMod;
                 adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
             if (attacker.IsPlayerControlled)
@@ -94,8 +94,8 @@ namespace SunsetSystems.Combat
         private static int CalculateAttackDamage(ICombatant attacker, ICombatant defender)
         {
             int damage = 0;
-            IWeapon selectedWeapon = attacker.CurrentWeapon;
-            float weaponDamageMod = attacker.PrimaryWeapon.Equals(selectedWeapon) ? 1f : 0.6f;
+            IWeapon selectedWeapon = attacker.WeaponManager.GetSelectedWeapon();
+            float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
             switch (selectedWeapon.WeaponType)
             {
                 case WeaponType.Melee:
@@ -113,7 +113,7 @@ namespace SunsetSystems.Combat
         {
             double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
             double result = 0d;
-            if (attacker.CurrentWeapon.GetRangeData().shortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
+            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().shortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;

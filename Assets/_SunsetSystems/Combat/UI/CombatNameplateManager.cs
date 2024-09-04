@@ -36,7 +36,7 @@ namespace SunsetSystems.Combat.UI
                 var nameplate = GetPooledObject();
                 nameplate.UpdateNameplateData(new(combatant));
                 _nameplateMap[combatant] = nameplate;
-                combatant.OnWeaponChanged += OnCombatantUpdate;
+                combatant.WeaponManager.OnWeaponChanged += OnCombatantUpdate;
                 combatant.OnDamageTaken += OnCombatantUpdate;
                 UpdateNameplatePosition(nameplate, combatant.NameplatePosition);
             }
@@ -62,7 +62,7 @@ namespace SunsetSystems.Combat.UI
             foreach (var kvpair in _nameplateMap)
             {
                 var combatant = kvpair.Key;
-                combatant.OnWeaponChanged -= OnCombatantUpdate;
+                combatant.WeaponManager.OnWeaponChanged -= OnCombatantUpdate;
                 combatant.OnDamageTaken -= OnCombatantUpdate;
                 ReturnObject(kvpair.Value);
             }

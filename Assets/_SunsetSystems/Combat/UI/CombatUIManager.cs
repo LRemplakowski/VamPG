@@ -60,7 +60,7 @@ namespace SunsetSystems.Combat.UI
                 _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
-                combatant.OnWeaponChanged += OnWeaponChanged;
+                combatant.WeaponManager.OnWeaponChanged += OnWeaponChanged;
             }
         }
 
@@ -101,6 +101,7 @@ namespace SunsetSystems.Combat.UI
         {
             combatant.OnUsedActionPoint -= OnActionUsed;
             combatant.OnSpentBloodPoint -= OnBloodPointSpent;
+            combatant.WeaponManager.OnWeaponChanged -= OnWeaponChanged;
         }
 
         public void SelectCombatAction(SelectedCombatActionData actionData)

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using SunsetSystems.Animation;
 using SunsetSystems.Combat;
+using SunsetSystems.Combat.UI;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
@@ -39,18 +40,24 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private Dictionary<string, WeaponAmmoData> weaponsAmmoData = new();
 
-        public UltEvent<IWeaponInstance> OnWeaponInstanceRebuilt = new();
+        [Title("Events")]
+        [field: SerializeField]
+        public UltEvent<ICombatant> OnWeaponChanged { get; set; }
+        [field: SerializeField]
+        public UltEvent<IWeaponInstance> OnWeaponInstanceRebuilt { get; set; }
 
         private void OnEnable()
         {
             CombatManager.Instance.CombatBegin += OnCombatStart;
             CombatManager.Instance.CombatEnd += OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
         }
 
         private void OnDisable()
         {
             CombatManager.Instance.CombatBegin -= OnCombatStart;
             CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
         }
 
         private void Start()
@@ -59,6 +66,15 @@ namespace SunsetSystems.Equipment
             weaponsAmmoData ??= new();
             if (_showWeaponOutsideCombat)
                 OnCombatStart(new List<ICombatant>() { owner });
+        }
+
+        private void OnWeaponSelected(SelectedWeapon weapon)
+        {
+            if (CombatManager.Instance.CurrentActiveActor.Equals(this))
+            {
+                SetSelectedWeapon(weapon);
+                OnWeaponChanged?.InvokeSafe(owner);
+            }
         }
 
         private void OnCombatStart(IEnumerable<ICombatant> combatants)
@@ -190,7 +206,7 @@ namespace SunsetSystems.Equipment
             }
         }
 
-        public void OnItemEquipped(IEquipableItem item)
+        public async void OnItemEquipped(IEquipableItem item)
         {
             if (item is IWeapon weapon)
             {
@@ -198,14 +214,15 @@ namespace SunsetSystems.Equipment
                 {
                     case EquipmentSlotID.PrimaryWeapon:
                         if (GetPrimaryWeapon() == weapon)
-                            _ = RebuildWeaponInstance();
+                            await RebuildWeaponInstance();
                         break;
                     case EquipmentSlotID.SecondaryWeapon:
                         if (GetSecondaryWeapon() == weapon)
-                            _ = RebuildWeaponInstance();
+                            await RebuildWeaponInstance();
                         break;
                 }
                 EnsureAmmoData(weapon);
+                OnWeaponChanged?.Invoke(owner);
             }
         }
 

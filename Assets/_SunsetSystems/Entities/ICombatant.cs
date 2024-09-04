@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using SunsetSystems.Spellbook;
 using UltEvents;
@@ -12,16 +13,13 @@ namespace SunsetSystems.Combat
         UltEvent<ICombatant> OnChangedGridPosition { get; set; }
         UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
-        UltEvent<ICombatant> OnWeaponChanged { get; set; }
         UltEvent<ICombatant> OnDamageTaken { get; set; }
 
         IMagicUser MagicUser { get; }
         Faction Faction { get; }
 
         bool IsPlayerControlled { get; }
-        IWeapon CurrentWeapon { get; }
-        IWeapon PrimaryWeapon { get; }
-        IWeapon SecondaryWeapon { get; }
+        IWeaponManager WeaponManager {get;}
 
         Vector3 AimingOrigin { get; }
         Vector3 NameplatePosition { get; }

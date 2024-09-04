@@ -15,7 +15,7 @@ namespace SunsetSystems.Combat.UI
             Name = dataSource.References.CreatureData.FullName;
             CurrentHP = dataSource.References.StatsManager.Health.GetValue();
             MaxHP = dataSource.References.StatsManager.Health.MaxValue;
-            CurrentWeapon = dataSource.CurrentWeapon.WeaponType;
+            CurrentWeapon = dataSource.WeaponManager.GetSelectedWeapon().WeaponType;
             HealthPercentage = CurrentHP / MaxHP;
         }
     }

@@ -89,7 +89,7 @@ namespace SunsetSystems.AI
                         break;
                     case Inventory.WeaponType.Ranged:
                         target = context.FriendlyCombatants
-                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.CurrentWeapon?.GetRangeData().maxRange)
+                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.WeaponManager.GetSelectedWeapon()?.GetRangeData().maxRange)
                                         .GetRandom();
                         break;
                 }

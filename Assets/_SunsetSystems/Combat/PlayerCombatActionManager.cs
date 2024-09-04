@@ -1,11 +1,8 @@
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Spellbook;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -146,7 +143,7 @@ namespace SunsetSystems.Combat
                     if (attackTarget != null && attackTarget.IsAlive)
                     {
                         var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
+                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Ranged)
                         {
                             currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
                         }
@@ -162,7 +159,7 @@ namespace SunsetSystems.Combat
                     if (attackTarget != null && attackTarget.IsAlive)
                     {
                         var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Melee)
+                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Melee)
                         {
                             currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
                         }
@@ -178,7 +175,7 @@ namespace SunsetSystems.Combat
             void HandleReloadCombatAction()
             {
                 var currentActor = CombatManager.Instance.CurrentActiveActor;
-                if (currentActor.CurrentWeapon.WeaponType is Inventory.WeaponType.Ranged)
+                if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Ranged)
                 {
                     currentActor.ReloadCurrentWeapon();
                 }

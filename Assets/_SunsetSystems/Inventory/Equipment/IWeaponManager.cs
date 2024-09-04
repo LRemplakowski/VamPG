@@ -1,9 +1,13 @@
+using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
+using UltEvents;
 
 namespace SunsetSystems.Equipment
 {
     public interface IWeaponManager
     {
+        UltEvent<ICombatant> OnWeaponChanged { get; set; }
+
         void SetSelectedWeapon(SelectedWeapon weapon);
         IWeapon GetSelectedWeapon();
         IWeapon GetPrimaryWeapon();

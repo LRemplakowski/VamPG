@@ -52,7 +52,6 @@ namespace SunsetSystems.Combat
             CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
             CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
             CombatManager.Instance.CombatEnd += OnCombatEnd;
-            WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
         }
 
         private void Start()
@@ -66,7 +65,6 @@ namespace SunsetSystems.Combat
             CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
             CombatManager.Instance.CombatBegin -= OnCombatBegin;
             CombatManager.Instance.CombatEnd -= OnCombatEnd;
-            WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
         }
 
         private void Update()
@@ -109,15 +107,6 @@ namespace SunsetSystems.Combat
 
         }
 
-        private void OnWeaponSelected(SelectedWeapon weapon)
-        {
-            if (CombatManager.Instance.CurrentActiveActor.Equals(this))
-            {
-                weaponManager.SetSelectedWeapon(weapon);
-                OnWeaponChanged?.InvokeSafe(this);
-            }
-        }
-
         #region ITargetable
         public IEffectHandler EffectHandler => throw new System.NotImplementedException();
 
@@ -139,11 +128,8 @@ namespace SunsetSystems.Combat
 
         #region ICombatant
         public MonoBehaviour CoroutineRunner => Owner.CoroutineRunner;
-        public IWeapon CurrentWeapon => Owner.References.WeaponManager.GetSelectedWeapon();
 
-        public IWeapon PrimaryWeapon => Owner.References.WeaponManager.GetPrimaryWeapon();
-
-        public IWeapon SecondaryWeapon => Owner.References.WeaponManager.GetSecondaryWeapon();
+        public IWeaponManager WeaponManager => Owner.References.WeaponManager;
 
         public Vector3 AimingOrigin => RaycastOrigin;
         public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
@@ -162,8 +148,6 @@ namespace SunsetSystems.Combat
         public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
-        [field: SerializeField]
-        public UltEvent<ICombatant> OnWeaponChanged { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnDamageTaken { get; set; }
 

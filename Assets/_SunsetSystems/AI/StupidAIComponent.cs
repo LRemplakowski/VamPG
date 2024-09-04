@@ -143,8 +143,7 @@ namespace SunsetSystems.AI
                     }
                 }
             }
-            if (unit == null)
-                unit = FindRandomGridPositionInMovementRange(grid, currentGridPosition);
+            unit ??= FindRandomGridPositionInMovementRange(grid, currentGridPosition);
             return unit;
         }
 

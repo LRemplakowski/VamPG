@@ -66,7 +66,7 @@ namespace SunsetSystems.Inventory
             return false;
         }
 
-        public void GiveItemToPlayer(BaseItem item, int amount) => GiveItemToPlayer(item, amount);
+        public void GiveItemToPlayer(BaseItem item, int amount) => GiveItemToPlayer(item, amount, true);
 
         public bool TakeItemFromPlayer(IBaseItem item, int amount = 1, bool postLogMessage = true)
         {

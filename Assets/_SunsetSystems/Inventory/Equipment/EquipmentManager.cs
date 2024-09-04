@@ -88,6 +88,7 @@ namespace SunsetSystems.Entities.Characters
             if (EquipmentSlots.TryGetValue(slotID, out IEquipmentSlot slot) && slot.TryUnequipItem(out unequipped))
             {
                 ItemUnequipped?.InvokeSafe(unequipped);
+                ItemEquipped?.InvokeSafe(slot.GetEquippedItem());
                 return true;
             }
             return false;

@@ -1,13 +1,15 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Party;
+using SunsetSystems.UI;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SunsetSystems.Equipment.UI
 {
-    public class EquipmentSlotDisplay : Button, IUserInterfaceView<IEquipmentSlot>
+    public class EquipmentSlotDisplay : SerializedMonoBehaviour, IUserInterfaceView<IEquipmentSlot>
     {
         [SerializeField, ReadOnly]
         private IEquipmentSlot _cachedSlotData;
@@ -33,8 +35,10 @@ namespace SunsetSystems.Equipment.UI
         {
             if (CanUnequipItem(_cachedSlotData))
             {
-                _cachedSlotData.TryUnequipItem(out var unequipped);
-                InventoryManager.Instance.GiveItemToPlayer(unequipped, postLogMessage: false);
+                var currentCharacter = CharacterSelector.SelectedCharacterKey;
+                var eqManager = PartyManager.Instance.GetPartyMemberByID(currentCharacter).References.EquipmentManager;
+                if (eqManager.UnequipItem(_cachedSlotData.ID, out var unequipped))
+                    InventoryManager.Instance.GiveItemToPlayer(unequipped, postLogMessage: false);
             }
         }
 

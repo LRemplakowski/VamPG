@@ -70,7 +70,7 @@ namespace SunsetSystems.Equipment
 
         private void OnWeaponSelected(SelectedWeapon weapon)
         {
-            if (CombatManager.Instance.CurrentActiveActor.Equals(this))
+            if (CombatManager.Instance.CurrentActiveActor.Equals(owner))
             {
                 SetSelectedWeapon(weapon);
                 OnWeaponChanged?.InvokeSafe(owner);
@@ -241,12 +241,13 @@ namespace SunsetSystems.Equipment
                             ReleaseCurrentWeaponInstance();
                         break;
                 }
+                OnWeaponChanged?.Invoke(owner);
             }
         }
 
         public void OnAnimationEvent(string eventType)
         {
-            if (string.Equals(eventType, FIRE_WEAPON_EVENT))
+            if (string.Equals(eventType, FIRE_WEAPON_EVENT) && weaponInstance != null)
                 weaponInstance.FireWeapon();
         }
 

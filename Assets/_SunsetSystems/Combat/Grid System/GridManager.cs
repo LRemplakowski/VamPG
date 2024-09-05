@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using System.Linq;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Navigation;
+using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Combat.Grid
 {
@@ -26,6 +27,7 @@ namespace SunsetSystems.Combat.Grid
 
         private GridUnit currentlyHighlightedCell;
         private readonly List<GridUnit> currentlyHighlitedGridUnits = new();
+        private readonly Dictionary<ICombatant, GridUnit> _occupiedGridCells = new();
 
 
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition) => managedGrid.GridPositionToWorldPosition(gridPosition);
@@ -56,12 +58,34 @@ namespace SunsetSystems.Combat.Grid
         {
             GridUnit cellObject = this[cell.GridPosition];
             cellObject.Occupier = combatant;
+            if (_occupiedGridCells.TryAdd(combatant, cellObject))
+                combatant.References.StatsManager.OnCreatureDied += OnOccupierDied;
+            else
+                Debug.LogError($"Combatant {combatant} moved into already occupied grid cell! This should not happen!");
             managedGrid.MarkCellDirty(cellObject);
+        }
+
+        private void OnOccupierDied(ICreature creature)
+        {
+            var combatant = creature.References.CombatBehaviour;
+            if (_occupiedGridCells.TryGetValue(combatant, out var gridCell))
+            {
+                ClearOccupierFromCell(gridCell);
+            }
+            else
+            {
+                creature.References.StatsManager.OnCreatureDied -= OnOccupierDied;
+                Debug.LogWarning($"Combatant {combatant} died, but it had no assigned grid cell! This might be a bug!");
+            }
         }
 
         public void ClearOccupierFromCell(IGridCell cell)
         {
-            this[cell.GridPosition].Occupier = null;
+            var gridUnit = this[cell.GridPosition];
+            var occupier = gridUnit.Occupier;
+            gridUnit.Occupier = null;
+            occupier.References.StatsManager.OnCreatureDied -= OnOccupierDied;
+            _occupiedGridCells.Remove(occupier);
             managedGrid.MarkCellDirty(cell);
         }
 

@@ -122,7 +122,7 @@ namespace SunsetSystems.Dialogue
         [YarnFunction("GetCompanionInfluence")]
         public static int GetCompanionInfluence(string companionID)
         {
-            return 0;
+            return RelationshipManager.Instance.GetInfluence(companionID);
         }
 
         [YarnFunction ("GetBloodPoints")]

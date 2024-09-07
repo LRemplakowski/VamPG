@@ -209,7 +209,7 @@ title: paintingsDestroyed
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Such depths of emotion! The viciousness on display was captivating. You should make your own exhibition one day. [nomarkup][She grins.][/nomarkup] #line:0183fc2 
 <<endif>>
-{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (Kieran influence -1)[/nomarkup] #line:04a3041 
+{$kieran}: Why did you do that? Is this how you conduct investigations? [nomarkup][He gestures to the shreds of colorful canvas strewn about.] (-1 Kieran influence)[/nomarkup] #line:04a3041 
 <<ModifyInfluence -1 $kieran>>
 -> {$pcName}: I... don't know what came over me. <<if CustomVisited("beastTalk") == false>> #line:0e9e8bb 
     <<jump beastTalk>>
@@ -299,10 +299,10 @@ title: anaAndKieranConflict
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another, then back at you.][/nomarkup] #line:0968b83 
     {$anastasia}: [nomarkup][She raises an eyebrow with a smirk.][/nomarkup] Why? You gotta give a good reason, kid. #line:03a1d87 
     -> {$pcName}: Very well. It is only that... When you act so emotional and childish while invoking my name, I cannot help but think that I mistakenly stumbled into a daycare, rather than one of the Vegas Strip's finest night clubs. #line:03f7e44 
-    {$anastasia}: I am not a child. But if I was, that'd make you a fetus, little miss Desiree-conciler the pacifier. [nomarkup][She spits.] [-1 Anastasia influence][/nomarkup] #line:02c5afb
+    {$anastasia}: I am not a child. But if I was, that'd make you a fetus, little miss Desiree-conciler the pacifier. [nomarkup][She spits.][/nomarkup] (-1 Anastasia Influence) #line:02c5afb
     <<ModifyInfluence -1 $anastasia>>
     -> {$pcName}: That being said, Kieran is my adoptive Sire, and if any information pertinent to this investigation comes up, I trust him to relay it to me when his judgment deems the time to be right. #line:066cd94
-    {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. [nomarkup][Kieran influence +1][/nomarkup] #line:00780ed 
+    {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. (Kieran influence +1) #line:00780ed 
     <<ModifyInfluence 1 $kieran>>
     {$anastasia}: Ugh. #lastline #line:0177a57 
 <<jump paintingsInteractions>>

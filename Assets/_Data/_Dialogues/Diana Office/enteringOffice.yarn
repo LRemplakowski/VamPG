@@ -47,7 +47,7 @@ title: anastasiaIsPresent
 ===
 title: sidingWithKieran
 ---
-{$anastasia}: Problems? I don't have any... At least for now. Try not to be a narc, and we can keep it that way. (-1 Anastasia Reputation) #line:0fc5743 
+{$anastasia}: Problems? I don't have any... At least for now. Try not to be a narc, and we can keep it that way. (-1 Anastasia Influence) #line:0fc5743 
 <<ModifyInfluence -1 $anastasia>>
 {$kieran}: [nomarkup][He blinks, then straightens up with a deep frown etched on his face, crossing his arms sternly.][/nomarkup] And what is that intended to mean, miss Kaminska? #line:029543c 
 <<if Roll ("Intelligence","Awareness")>=3>>
@@ -103,15 +103,15 @@ title: anaKieranBanter
     <<set $kieranOutburst to true>>
 <<endif>>
 {$anastasia}: Fine, can do. Dunno what his problem is, though. [nomarkup][She shrugs, the ghost of a smirk still present on her lips, turning on her heel and wandering off to idly browse the office.][/nomarkup] #line:0a58448 
-{$kieran}: [nomarkup][As soon as she backs off, the tension drains from Kieran's posture. He huffs out a long sigh, then turns to you.][/nomarkup] Ready to return to the investigation, miss Bardot? (+1 Kieran Reputation) #line:03301db 
+{$kieran}: [nomarkup][As soon as she backs off, the tension drains from Kieran's posture. He huffs out a long sigh, then turns to you.][/nomarkup] Ready to return to the investigation, miss Bardot? (+1 Kieran Influence) #line:03301db 
 <<ModifyInfluence 1 $kieran>>
 <<jump neutralResponse>>
 ===
 title: sidingWithAnastasia
 ---
-{$kieran}: [nomarkup][He frowns.][/nomarkup] I apologize if I'm not eager to “mess around” with a miscreant like her when my objective and the consequences for failure have been made abundantly clear. They should be just as comprehensible and urgent, to you. (-1 Kieran Reputation) #line:019aac3 
+{$kieran}: [nomarkup][He frowns.][/nomarkup] I apologize if I'm not eager to “mess around” with a miscreant like her when my objective and the consequences for failure have been made abundantly clear. They should be just as comprehensible and urgent, to you. (-1 Kieran Influence) #line:019aac3 
 <<ModifyInfluence -1 kieran>>
-{$anastasia}: [nomarkup][She sticks out her tongue at Kieran, then shows her teeth in a satisfied grin.][/nomarkup] I win. Sucks to suck, Fido - looks like you're in the dog house on this one. (+1 Anastasia Reputation) #line:0107fc8 
+{$anastasia}: [nomarkup][She sticks out her tongue at Kieran, then shows her teeth in a satisfied grin.][/nomarkup] I win. Sucks to suck, Fido - looks like you're in the dog house on this one. (+1 Anastasia Influence) #line:0107fc8 
 <<ModifyInfluence 1 anastasia>>
 [nomarkup][Kieran rolls his eyes and sighs, disappointed. With whom? Hard to say. And he isn't eager to clarify his qualms, either.][/nomarkup] #line:08429d7 
 <<jump neutralResponse>>

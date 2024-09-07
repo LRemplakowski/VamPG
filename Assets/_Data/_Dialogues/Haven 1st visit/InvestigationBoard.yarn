@@ -6,7 +6,8 @@ tags:
     {$kieran}: Your...choice of interior design. The layout of your home tells me you are someone who moves about frequently, while the contents of this board indicate you are either a workaholic or desperate, and have a minor obsession with the behavioral patterns of other people.
     {$kieran}: Thus, I made a guess as to your profession: a journalist or an investigator... Or a stalker in the making. #line:0333c8f 
     -> {$pcName}: It's an apartment, not a house. #line:001277b 
-        {$kieran}: Please do not bring the conversation here; I do not care for semantic arguments. [nomarkup][-1 Kieran Influence][/nomarkup] #line:07e5918 
+        {$kieran}: Please do not bring the conversation here; I do not care for semantic arguments. (-1 Kieran Influence) #line:07e5918
+        <<ModifyInfluence -1 $kieran>> 
     -> {$pcName}: This is where I keep track of UFO sightings. #line:08dba13 
         {$kieran}: And yet, you did not see us coming. #line:0762700 
 <<else>>

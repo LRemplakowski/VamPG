@@ -51,12 +51,12 @@ title: bookcaseExamine
 <<endif>>
 <<if $hiddenArts == true>>
     -> {$pcName}: [nomarkup][Take the book.][/nomarkup] #line:08a5386 
-        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran influence) #line:0f594d6
+        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran Influence) #line:0f594d6
         <<ModifyInfluence 1 $kieran>>
         <<jump booksHaveTeeth>>
 <<else>>
     -> {$pcName}: Diana has quite the collection. She appears to read this one quite often, though. [nomarkup][You point at it.][/nomarkup] #line:01a1e74 
-        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran influence)
+        {$kieran}: [nomarkup][He peers for a while at the book you pointed out and its volumes.][/nomarkup] [nomarkup]<i>Liber Al vel Legis</i>[/nomarkup] by Aleister Crowley. Good eyes. Let me check them first. I do not think there is a trap, but with matters of the occult, you're better safe than sorry. (+1 Kieran Influence)
         <<ModifyInfluence 1 $kieran>>
         <<jump booksHaveTeeth>>
 <<endif>>

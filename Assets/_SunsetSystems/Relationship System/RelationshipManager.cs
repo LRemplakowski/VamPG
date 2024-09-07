@@ -92,6 +92,11 @@ namespace SunsetSystems
             {
                 InfluenceData = dataSource._influenceData;
             }
+
+            public RelationshipSaveData() : base()
+            {
+                InfluenceData = new();
+            }
         }
     }
 }

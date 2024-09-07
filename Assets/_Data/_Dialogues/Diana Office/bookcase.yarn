@@ -81,7 +81,7 @@ title: booksHaveTeeth
 <<elseif Roll ("Intelligence","Academics")>=4>>
     -> {$pcName}: It looks like Diana is interested in some majorly esoteric stuff. Does Kate know? #line:05beb70 
     <<set $thelema to true>>
-    {$kieran}: [nomarkup][He thinks for a second, but ultimately shakes his head.][/nomarkup] I do not think so. Like I said, she never showed interest in such topics. [nomarkup][He rubs his forehead.][nomarkup] I don't know what may have happened to change that. Maybe her reason for reading it so diligently is more about Thelema, and not magick, in particular? #line:0cc5e56 
+    {$kieran}: [nomarkup][He thinks for a second, but ultimately shakes his head.][/nomarkup] I do not think so. Like I said, she never showed interest in such topics. [nomarkup][He rubs his forehead.][/nomarkup] I don't know what may have happened to change that. Maybe her reason for reading it so diligently is more about Thelema, and not magick, in particular? #line:0cc5e56 
 <<elseif Roll ("Resolve","Investigation")>=4>>
     -> {$pcName}: [nomarkup][You thoroughly examine the book's cover, revealing a small monogram on the front page.][/nomarkup] Do you recognize that symbol, Kieran? #line:0fb486b 
     <<set $thelema to true>>
@@ -97,7 +97,7 @@ title: booksHaveTeeth
 ===
 title: bookcaseExcamineNormal
 ---
-[nomarkup][Nothing too interesting here. Some biographies, trivia books. Advice and reference books about the economy and business management. One book stands out, though. The Gold-Bug and Other Short Stories by Edgar Allan Poe.][/nomarkup] #lastline #line:0442577 
+[nomarkup][Nothing too interesting here. Some biographies, trivia books. Advice and reference books about the economy and business management. One book stands out, though. The Gold-Bug and Other Short Stories by Edgar Allan Poe.][/nomarkup] #line:0442577 
 <<set $goldBugPassword to true>>
 [nomarkup][Maybe it's you, or maybe it's here for a reason. None of the other books on the shelves are anthologies. Not to mention poems or similar.][/nomarkup] #line:09ca8e2 
 -> [nomarkup][Open the book.][/nomarkup] #line:0738468 
@@ -231,7 +231,7 @@ title: poeExamineAcademicsRollSuccess
 ===
 title: poeBookExamineMentalSuccess
 ---
-A good glass in the bishop's hostel and in the devil's seat...\\n Forty-one degrees and thirteen minutes...\\n Northeast and by north...\\n The main branch, seventh limb, east side...\\n Shoot from the left eye of the death's-head...\\n A beeline from the tree, through the shot fifty feet out. #line:08b5f85 
+A good glass in the bishop's hostel and in the devil's seat...\\n Forty-one degrees and thirteen minutes...\\n Northeast and by north...\\n The main branch, seventh limb, east side...\\n Shoot from the left eye of the death's-head...\\n A beeline from the tree, through the shot fifty feet out. #lastline #line:08b5f85 
 <<set $goldBugCombination to true>>
 <<if $safeDiscovered == true>>
     {$kieran}: Desiree, do you think there is a code for a safe hidden in this riddle? #line:026658d 

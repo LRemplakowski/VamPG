@@ -28,7 +28,7 @@ position: -407,-310
     {$bartender}: Coming right up! [nomarkup][She rushes to the other end of the bar and starts making your drink.][/nomarkup] #line:0d7a9d5 
     <<GiveItem "IT_Q_EMBASSYDRINK">>
     <<RemoveMoney 5>>
-    {$kieran}: You know you won't be able to drink it, right?
+    {$kieran}: You know you won't be able to drink it, right? #lastline
     <<if GetIsPartyMemberRecruited($anastasia) is true>>
         {$anastasia}: Oh, come on. A little bit of bile and blood never hurt anyone.
     <<endif>>

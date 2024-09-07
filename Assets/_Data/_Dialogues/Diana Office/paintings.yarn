@@ -4,7 +4,7 @@ tags:
 [nomarkup][The wall is decorated with kitsch, “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup] #line:04e5553 
 <<if Roll ("Wits","Insight")>=3>>
     <<set $paintingsOutOfPlace to -1>>
-    [nomarkup][The general vibe of the surroundings and Diana's seemingly proletarian punk aesthetic, coupled with her rough, confrontational attitude - they clash with this display of fine art. The paintings are out of place, and that's for damn sure.][/nomarkup] # lastline #line:07d075d 
+    [nomarkup][The general vibe of the surroundings and Diana's seemingly proletarian punk aesthetic, coupled with her rough, confrontational attitude - they clash with this display of fine art. The paintings are out of place, and that's for damn sure.][/nomarkup] #lastline #line:07d075d 
 <<endif>>
 <<jump paintingsInteractions>>
 ===
@@ -196,7 +196,7 @@ title: paintingAwarenessFailure
 {$kieran}: ...ardot? Miss Bardot! #line:0d77c66 
 [nomarkup][Kieran's voice jolts you back into the land of the living - and indisputably conscious.][/nomarkup] #line:0cc506c 
 {$kieran}: Are you alright? You seemed... transfixed. Did you notice something about the art? #line:0d4385d 
--> {$pcName}: No, but I think I have an opinion about this piece. #line:05806b8
+-> {$pcName}: No, but I think I have an opinion about this piece. #lastline #line:05806b8
 <<jump paintingsOpinion>>
 ===
 title: paintingsDestroyed

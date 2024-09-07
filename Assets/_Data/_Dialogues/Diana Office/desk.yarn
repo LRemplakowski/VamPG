@@ -170,12 +170,12 @@ title: hackingFailure
 <<if GetBloodPoints($pcName) >1>>
     -> [nomarkup][Try to suppress the feeling.][-1 Willpower][/nomarkup] #line:0d18ca5 
         <<DecreaseWillpower ($pcName, 1)>>
-        <<jump deskInteractions>>
+        <<jump computerTurnedOn>>
     -> [nomarkup][Give in to the feeling.][/nomarkup] #line:0c1013c 
         <<jump computerDestroyed>>
 <<else>>
     -> [nomarkup][You grit your teeth, staring daggers at the computer screen. You can't reason with a machine, and a machine has infinite patience.][/nomarkup] #line:03833e3 
-        <<jump deskInteractions>>
+        <<jump computerTurnedOn>>
 <<endif>>
 ===
 title: computerDestroyed
@@ -195,8 +195,8 @@ title: computerDestroyed
 ===
 title: wrongPassword
 ---
-[nomarkup][You write the password in every possible way that got into your head. It looks like it isn't it.][/nomarkup] #line:0b2980b 
-<<jump deskExaminationOptions>>
+[nomarkup][You write the password in every possible way that got into your head. It looks like it isn't it.][/nomarkup] #lastline #line:0b2980b 
+<<jump computerTurnedOn>>
 ===
 title: accessGranted
 ---
@@ -205,7 +205,7 @@ title: accessGranted
     <<jump recentLogs>>
 -> [nomarkup][Examine older logs.] (Intelligence + Finance)[/nomarkup] <<if CustomVisited("olderLogs") == false>> #line:0c00f59 
     <<jump olderLogs>>
--> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if CustomVisited("searchQuerry") == false and if $safeDiscovered == true>> #line:085e30a 
+-> [nomarkup][Search logs for “safe” keyword.][/nomarkup] <<if CustomVisited("searchQuerry") == false and $safeDiscovered == true>> #line:085e30a 
     <<jump searchQuerry>>
 -> [nomarkup][Leave computer as it is.][/nomarkup] #line:03c5c3c 
 ===

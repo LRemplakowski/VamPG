@@ -56,14 +56,17 @@ namespace SunsetSystems
 
         public void ModifyInfluence(string readableID, int value)
         {
-            _influenceData[readableID] += value;
+            if (_influenceData.TryGetValue(readableID, out var stored))
+                _influenceData[readableID] = stored + value;
+            else
+                _influenceData[readableID] = value;
             if (CreatureDatabase.Instance.TryGetEntryByReadableID(readableID, out CreatureConfig entry))
                 LogInfluenceModification(entry.FullName, value);
         }
 
         private void LogInfluenceModification(string characterName, int influenceMod)
         {
-            string message = default;
+            string message;
             if (influenceMod > 0)
                 message = $"{characterName}: Gained {influenceMod} influence.";
             else

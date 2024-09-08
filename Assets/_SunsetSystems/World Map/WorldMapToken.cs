@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -33,7 +30,7 @@ namespace SunsetSystems.WorldMap
 
         public void MapTokenClicked()
         {
-            _uiManager.HandleTokenClick(_tokenData);
+            _uiManager.ShowAreaDescription(_tokenData);
         }
 
         private void SetupTokenVisuals()

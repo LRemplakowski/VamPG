@@ -11,6 +11,8 @@ namespace SunsetSystems.WorldMap
 {
     public class WorldMapManager : SerializedMonoBehaviour, IWorldMapManager, ISaveable
     {
+        public static IWorldMapManager Instance { get; private set; }
+
         [Title("References")]
         [SerializeField]
         private List<IWorldMapData> _defaultUnlockedMaps = new();
@@ -23,8 +25,16 @@ namespace SunsetSystems.WorldMap
 
         private void Awake()
         {
-            ISaveable.RegisterSaveable(this);
-            _unlockedMaps.AddRange(_defaultUnlockedMaps);
+            if (Instance == null)
+            {
+                Instance = this;
+                ISaveable.RegisterSaveable(this);
+                _unlockedMaps.AddRange(_defaultUnlockedMaps);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
 
         private void OnDestroy()

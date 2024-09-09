@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
@@ -7,14 +8,14 @@ namespace SunsetSystems.WorldMap
     [CreateAssetMenu(fileName = "New World Map Asset", menuName = "Sunset World Map/World Map Asset")]
     public class WorldMapDataAsset : AbstractDatabaseEntry<IWorldMapData>, IWorldMapData
     {
-        [field: SerializeField]
+        [field: SerializeField, ReadOnly]
         public override string DatabaseID { get; protected set; }
         [field: SerializeField]
         public override string ReadableID { get; protected set; }
 
         [SerializeField]
         private string _fallbackName;
-        [SerializeField]
+        [SerializeField, TextArea]
         private string _fallbackDescription;
         [SerializeField]
         private Sprite _areaIcon;

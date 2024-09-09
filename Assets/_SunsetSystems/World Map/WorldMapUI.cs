@@ -13,15 +13,22 @@ namespace SunsetSystems.WorldMap
         private IWorldMapManager _worldMapManager;
         [SerializeField]
         private Transform _mapTokenParent;
-        [SerializeField]
+        [SerializeField, Required]
         private CanvasGroup _mapCanvasGroup;
+        [SerializeField, Required]
+        private AreaDescription _areaDescriptionWindow;
+        [SerializeField, Required]
+        private WorldMapTravelConfirmation _areaConfirmatonScreen;
 
         [Title("Data")]
         [SerializeField]
         private List<IWorldMapToken> _mapTokens = new();
 
         [Title("Runtime")]
-        private Dictionary<string, IWorldMapToken> _idTokenDictionary = new();
+        [ShowInInspector]
+        private IWorldMapData _selectedMap;
+        [ShowInInspector]
+        private readonly Dictionary<string, IWorldMapToken> _idTokenDictionary = new();
 
         [Title("Editor Utility")]
         [SerializeField]
@@ -66,9 +73,23 @@ namespace SunsetSystems.WorldMap
             }
         }
 
-        public void HandleTokenClick(IWorldMapData tokenData)
+        public void ShowAreaDescription(IWorldMapData tokenData)
         {
-            _worldMapManager.TravelToMap(tokenData);
+            _selectedMap = tokenData;
+            _ = _areaDescriptionWindow.ShowDescription(tokenData);
+        }
+
+        public void ToogleTravelConfirmationPopup(bool show)
+        {
+            if (show)
+                _areaConfirmatonScreen.ShowConfirmationWindow();
+            else
+                _areaConfirmatonScreen.HideConfirmationWindow();
+        }
+
+        public void ConfirmTravelToSelectedArea()
+        {
+            _worldMapManager.TravelToMap(_selectedMap);
         }
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -24,6 +21,16 @@ namespace SunsetSystems.WorldMap
         [ShowInInspector, ReadOnly]
         private WorldMapUI _uiManager;
 
+        [Title("Editor Utility")]
+        [SerializeField]
+        private bool _autoUpdateVisuals = true;
+
+        private void OnValidate()
+        {
+            if (_autoUpdateVisuals)
+                SetupTokenVisuals();
+        }
+
         private void Start()
         {
             SetupTokenVisuals();
@@ -33,9 +40,10 @@ namespace SunsetSystems.WorldMap
 
         public void MapTokenClicked()
         {
-            _uiManager.HandleTokenClick(_tokenData);
+            _uiManager.ShowAreaDescription(_tokenData);
         }
 
+        [Button]
         private void SetupTokenVisuals()
         {
             if (_tokenData == null)

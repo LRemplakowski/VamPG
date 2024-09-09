@@ -17,6 +17,8 @@ namespace SunsetSystems.WorldMap
         private CanvasGroup _mapCanvasGroup;
         [SerializeField, Required]
         private AreaDescription _areaDescriptionWindow;
+        [SerializeField, Required]
+        private WorldMapTravelConfirmation _areaConfirmatonScreen;
 
         [Title("Data")]
         [SerializeField]
@@ -79,12 +81,15 @@ namespace SunsetSystems.WorldMap
 
         public void ToogleTravelConfirmationPopup(bool show)
         {
-
+            if (show)
+                _areaConfirmatonScreen.ShowConfirmationWindow();
+            else
+                _areaConfirmatonScreen.HideConfirmationWindow();
         }
 
         public void ConfirmTravelToSelectedArea()
         {
-
+            _worldMapManager.TravelToMap(_selectedMap);
         }
     }
 }

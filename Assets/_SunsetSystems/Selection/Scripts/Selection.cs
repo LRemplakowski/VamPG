@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using SunsetSystems.Utils;
-using SunsetSystems.Utils.Threading;
 
 namespace InsaneSystems.RTSSelection
 {

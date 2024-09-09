@@ -21,6 +21,16 @@ namespace SunsetSystems.WorldMap
         [ShowInInspector, ReadOnly]
         private WorldMapUI _uiManager;
 
+        [Title("Editor Utility")]
+        [SerializeField]
+        private bool _autoUpdateVisuals = true;
+
+        private void OnValidate()
+        {
+            if (_autoUpdateVisuals)
+                SetupTokenVisuals();
+        }
+
         private void Start()
         {
             SetupTokenVisuals();
@@ -33,6 +43,7 @@ namespace SunsetSystems.WorldMap
             _uiManager.ShowAreaDescription(_tokenData);
         }
 
+        [Button]
         private void SetupTokenVisuals()
         {
             if (_tokenData == null)

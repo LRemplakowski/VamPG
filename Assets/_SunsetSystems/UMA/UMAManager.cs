@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
@@ -100,8 +101,7 @@ namespace SunsetSystems.UMA
                 _umaAvatar.raceAnimationControllers.animators.Add(femaleAnimator);
             }
             _umaAvatar.WardrobeRecipes.Clear();
-            if (_baseLookWardrobeCollection != null)
-                _umaAvatar.LoadWardrobeCollection(_baseLookWardrobeCollection);
+            DoLoadBaseLook(_baseLookWardrobeCollection);
         }
 
         private void SetBodyType(BodyType bodyType)
@@ -114,9 +114,18 @@ namespace SunsetSystems.UMA
             if (_baseLookWardrobeCollection != null)
                 _umaAvatar.UnloadWardrobeCollection(_baseLookWardrobeCollection.name);
             _baseLookWardrobeCollection = WardrobeCollectionFromID(wardrobeID);
-            if (_baseLookWardrobeCollection == null)
-                return;
-            _umaAvatar.LoadWardrobeCollection(_baseLookWardrobeCollection);
+            DoLoadBaseLook(_baseLookWardrobeCollection);
+        }
+
+        private void DoLoadBaseLook(UMAWardrobeCollection baseLookCollection)
+        {
+            if (baseLookCollection != null)
+            {
+                _umaAvatar.LoadWardrobeCollection(baseLookCollection);
+                var skinColor = baseLookCollection.SharedColors.First(sc => sc.name == "Skin");
+                if (skinColor)
+                    _umaAvatar.SetColor(skinColor.name, skinColor);
+            }
         }
 
         public async void OnItemEquipped(IEquipableItem item)

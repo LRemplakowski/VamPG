@@ -100,5 +100,9 @@ namespace SunsetSystems.Audio
         {
             _soundtrackController.InjectPlaylistData(playlistData);
         }
+
+        public void SetPlaylistOverride(GameState state, IPlaylist playlist) => _soundtrackController.SetStatePlaylistOverride(state, playlist);
+
+        public void ClearPlaylistOverride(GameState state) => _soundtrackController.ClearStatePlaylistOverride(state);
     }
 }

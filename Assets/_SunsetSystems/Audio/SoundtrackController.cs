@@ -163,5 +163,18 @@ namespace SunsetSystems.Audio
             _lastPlaylistData.Combat?.ReleaseAsset();
             _lastPlaylistData.Dialogue?.ReleaseAsset();
         }
+
+        public void SetStatePlaylistOverride(GameState state, IPlaylist playlistOverride)
+        {
+            if (_playlistOverrides.TryGetValue(state, out var existingOverride) && existingOverride != playlistOverride)
+                    _playlistOverrides[state] = playlistOverride;
+            PlayStatePlaylist(GameManager.Instance.CurrentState);
+        }
+
+        public void ClearStatePlaylistOverride(GameState state)
+        {
+            _playlistOverrides.Remove(state);
+            PlayStatePlaylist(GameManager.Instance.CurrentState);
+        }
     }
 }

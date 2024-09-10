@@ -31,29 +31,32 @@ MonoBehaviour:
   MeshHideAssets: []
   OverrideDNA:
     PreloadValues: []
+  disabled: 0
   recipeString: '{"packedRecipeType":"WardrobeCollection","name":"Anastasia Outfit
-    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"Hair","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"clothes_legs","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false},{"name":"lipstick","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"isBaseColor":false}],"wardrobeSet":[],"raceAnimatorController":""}'
+    Wardrobe Collection","race":"","dna":[],"characterColors":[{"name":"clothes_legs","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"alwaysUpdateParms":false,"isBaseColor":false,"displayColor":-1},{"name":"lipstick","colors":[255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0,255,255,255,255,0,0,0,0],"ShaderParms":[],"alwaysUpdate":false,"alwaysUpdateParms":false,"isBaseColor":false,"displayColor":-1}],"wardrobeSet":[],"raceAnimatorController":""}'
+  forceKeep: 0
+  labelLocalFiles: 0
   coverImages: []
   wardrobeCollection:
     sets:
     - targetRace: VampireFemale
       wardrobeSet:
+      - slot: Neck
+        recipe: necklace01_Recipe
+      - slot: Eyebrows
+        recipe: female_lipstick_Recipe
+      - slot: Face
+        recipe: headband01_Recipe
+      - slot: Chest
+        recipe: bra01_Recipe
       - slot: Arms
         recipe: armbands_Recipe
       - slot: Hands
         recipe: female_gloves_recipe
+      - slot: Waist
+        recipe: wide_belt01_Recipe
       - slot: Legs
         recipe: slim_pants01_Recipe
       - slot: Feet
         recipe: martens01_Recipe
-      - slot: Eyebrows
-        recipe: female_lipstick_Recipe
-      - slot: Chest
-        recipe: bra01_Recipe
-      - slot: Waist
-        recipe: wide_belt01_Recipe
-      - slot: Face
-        recipe: headband01_Recipe
-      - slot: Neck
-        recipe: necklace01_Recipe
   arbitraryRecipes: []

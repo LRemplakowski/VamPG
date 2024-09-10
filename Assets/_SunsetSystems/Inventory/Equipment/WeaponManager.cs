@@ -114,6 +114,10 @@ namespace SunsetSystems.Equipment
 
         private async Task RebuildWeaponInstance()
         {
+#if UNITY_EDITOR
+            if (UnityEditor.EditorApplication.isPlaying is false)
+                return;
+#endif
             if (weaponInstance != null)
                 ReleaseCurrentWeaponInstance();
             if (GameManager.Instance.IsCurrentState(GameState.Combat) is false && _showWeaponOutsideCombat is false)

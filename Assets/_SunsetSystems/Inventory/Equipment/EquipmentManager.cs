@@ -126,6 +126,10 @@ namespace SunsetSystems.Entities.Characters
                         Debug.Log($"Injected item {mySlot.GetEquippedItem()} into slot {mySlot.ID}! Creature: {transform.parent.parent.name}");
                         ItemEquipped?.InvokeSafe(EquipmentSlots[key].GetEquippedItem());
                     }
+                    else
+                    {
+                        Debug.LogError($"Could not inject item {item} into slot {key} of creature {transform.parent.parent.name}!");
+                    }
                 }
             }
 #if UNITY_EDITOR

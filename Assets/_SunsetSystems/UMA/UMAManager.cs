@@ -122,9 +122,8 @@ namespace SunsetSystems.UMA
             if (baseLookCollection != null)
             {
                 _umaAvatar.LoadWardrobeCollection(baseLookCollection);
-                var skinColor = baseLookCollection.SharedColors.First(sc => sc.name == "Skin");
-                if (skinColor)
-                    _umaAvatar.SetColor(skinColor.name, skinColor);
+                foreach (var baseColor in baseLookCollection.SharedColors)
+                    _umaAvatar.SetColor(baseColor.name, baseColor);
             }
         }
 

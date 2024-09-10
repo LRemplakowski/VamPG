@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using SunsetSystems.Core;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters;
@@ -42,9 +43,9 @@ namespace SunsetSystems.Party
         public List<ICreature> ActiveParty => _activeParty.Values.ToList();
         public List<ICreature> Companions => _activeParty.Where(kv => kv.Key != Instance._mainCharacterKey).Select(kv => kv.Value).ToList();
         [SerializeField]
-        private List<string> _activeCoterieMemberKeys = new();
+        private HashSet<string> _activeCoterieMemberKeys = new();
         [SerializeField]
-        private List<string> _coterieMemberKeysCache = new();
+        private HashSet<string> _coterieMemberKeysCache = new();
         [SerializeField]
         private Dictionary<string, ICreatureTemplate> _cachedPartyTemplates = new();
 
@@ -292,7 +293,7 @@ namespace SunsetSystems.Party
             _partyPositions = new();
             saveData.CachedPartyTemplates.Keys.ToList().ForEach(key => _cachedPartyTemplates.Add(key, saveData.CachedPartyTemplates[key]));
             _coterieMemberKeysCache.AddRange(_cachedPartyTemplates.Keys);
-            _activeCoterieMemberKeys = saveData.ActiveMemberKeys;
+            _activeCoterieMemberKeys = new(saveData.ActiveMemberKeys);
             _mainCharacterKey = saveData.MainCharacterKey;
 
             foreach (string key in _activeCoterieMemberKeys)

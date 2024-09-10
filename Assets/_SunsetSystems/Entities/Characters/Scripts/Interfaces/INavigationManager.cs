@@ -16,5 +16,6 @@ namespace SunsetSystems.Entities.Characters.Navigation
         void FaceDirectionAfterMovementFinished(Vector3 point);
         bool SetNavigationTarget(Vector3 target);
         void StopMovement();
+        void SetNavigationEnabled(bool enabled);
     }
 }

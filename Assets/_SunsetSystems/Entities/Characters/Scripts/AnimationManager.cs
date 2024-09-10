@@ -245,6 +245,7 @@ namespace SunsetSystems.Animation
 
             public AnimatorPersistenceData(AnimationManager animationManager)
             {
+                AnimatorStateData = new();
                 for (int i = 0; i < animationManager.animator.layerCount; i++)
                 {
                     AnimatorStateData[i] = animationManager.animator.GetCurrentAnimatorStateInfo(i).shortNameHash;
@@ -253,7 +254,7 @@ namespace SunsetSystems.Animation
 
             public AnimatorPersistenceData()
             {
-
+                AnimatorStateData = new();
             }
         }
     }

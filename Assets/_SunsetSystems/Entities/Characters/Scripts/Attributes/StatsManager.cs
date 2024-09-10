@@ -77,7 +77,7 @@ namespace SunsetSystems.Entities.Characters
         public virtual void Die()
         {
             Health.SuperficialDamage = Health.MaxValue;
-            OnCreatureDied?.Invoke(Owner);
+            OnCreatureDied?.InvokeSafe(Owner);
         }
 
         public void Heal(int amount)

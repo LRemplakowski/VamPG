@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using Sirenix.OdinInspector;
+using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Navigation
 {
-    public class NavigationManager : MonoBehaviour, INavigationManager
+    public class NavigationManager : MonoBehaviour, INavigationManager, IPersistentComponent
     {
+        public const string COMPONENT_ID = "NAVIGATION_MANAGER";
+
         [Title("Config")]
         [SerializeField]
         private float _faceTargetTime = .5f;
@@ -39,6 +43,8 @@ namespace SunsetSystems.Entities.Characters.Navigation
 
         public float CurrentSpeed => _navMeshAgent.velocity.magnitude;
         public float MaxSpeed => _navMeshAgent.speed;
+
+        public string ComponentID => COMPONENT_ID;
 
         public bool Warp(Vector3 position) => _navMeshAgent.Warp(position);
         public bool CalculatePath(Vector3 targetPosition, NavMeshPath path) => _navMeshAgent.CalculatePath(targetPosition, path);
@@ -82,12 +88,47 @@ namespace SunsetSystems.Entities.Characters.Navigation
 
         public bool SetNavigationTarget(Vector3 target)
         {
+            if (_navMeshAgent.isActiveAndEnabled is false)
+                return false;
             return _navMeshAgent.SetDestination(target);
         }
 
         public void StopMovement()
         {
             _navMeshAgent.ResetPath();
+        }
+
+        public void SetNavigationEnabled(bool enabled)
+        {
+            _navMeshAgent.enabled = enabled;
+        }
+
+        public object GetComponentPersistenceData()
+        {
+            return new NavigatorPeristenceData(this);
+        }
+
+        public void InjectComponentPersistenceData(object data)
+        {
+            if (data is not NavigatorPeristenceData navData)
+                return;
+            _navMeshAgent.enabled = navData.NavigationEnabled;
+        }
+
+        [Serializable]
+        public class NavigatorPeristenceData
+        {
+            public bool NavigationEnabled;
+
+            public NavigatorPeristenceData(NavigationManager navigationManager)
+            {
+                NavigationEnabled = navigationManager._navMeshAgent.enabled;
+            }
+
+            public NavigatorPeristenceData()
+            {
+                NavigationEnabled = true;
+            }
         }
     }
 }

@@ -521,6 +521,8 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
+    - {fileID: 4678919013744510610}
+    - {fileID: 409868112203810021}
     - {fileID: 265292995897044542}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -533,7 +535,13 @@ MonoBehaviour:
         SunsetSystems]], mscorlib
     - Name: 
       Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 10
       Data: 0
+    - Name: 
+      Entry: 10
+      Data: 1
     - Name: 
       Entry: 13
       Data: 
@@ -542,7 +550,7 @@ MonoBehaviour:
       Data: 
     - Name: _references
       Entry: 10
-      Data: 0
+      Data: 2
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
   <EnablePersistence>k__BackingField: 0
@@ -1322,6 +1330,17 @@ MonoBehaviour:
       - _Type: 2
         _Int: 0
         _String: Die
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
+    - _Target: {fileID: 409868112203810021}
+      _MethodName: SetNavigationEnabled
+      _PersistentArguments:
+      - _Type: 1
+        _Int: 0
+        _String: 
         _X: 0
         _Y: 0
         _Z: 0

@@ -166,7 +166,7 @@ namespace SunsetSystems.Audio
 
         public void SetStatePlaylistOverride(GameState state, IPlaylist playlistOverride)
         {
-            if (_playlistOverrides.TryGetValue(state, out var existingOverride) && existingOverride != playlistOverride)
+            if (_playlistOverrides.TryGetValue(state, out var existingOverride) || existingOverride != playlistOverride)
                     _playlistOverrides[state] = playlistOverride;
             PlayStatePlaylist(GameManager.Instance.CurrentState);
         }

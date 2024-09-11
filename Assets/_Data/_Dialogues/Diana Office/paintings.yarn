@@ -1,5 +1,6 @@
 ﻿title: paintings
 tags:
+position: -273,-1167
 ---
 [nomarkup][The wall is decorated with kitsch, “post-modern” affronts to art that you just know would somehow do well in the Arts District. Poor investments, for sure, unless tax-evasion is the end goal.][/nomarkup] #line:04e5553 
 <<if Roll ("Wits","Insight")>=3>>
@@ -9,6 +10,7 @@ tags:
 <<jump paintingsInteractions>>
 ===
 title: paintingsInteractions
+position: -225,-696
 ---
 -> [nomarkup][Examine the paintings more closely.] (Resolve+Awareness)[/nomarkup] <<if CustomVisited("paintingAwarenessRoll") == false>> #line:0d08a4a 
     <<jump paintingAwarenessRoll>>
@@ -22,9 +24,12 @@ title: paintingsInteractions
     <<jump safeExamine>>
 -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if CustomVisited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
     <<jump successContinued>>
+-> [nomarkup][Examine destroyed paintings.][/nomarkup] <<if $paintingsDestroyed and CustomVisited("examineScraps") is false>>
+    <<jump examineScraps>>
 -> [nomarkup][Step away.][/nomarkup] #line:0c06753 
 ===
 title: paintingAwarenessRoll
+position: 663,-678
 ---
 <<if Roll("resolve","awareness") >=(3-$paintingsOutOfPlace)>>
     <<jump paintingAwarenessSuccess>>
@@ -33,6 +38,7 @@ title: paintingAwarenessRoll
 <<endif>>
 ===
 title: paintingIntelligenceRoll
+position: -557,-77
 ---
 <<if Roll("inteligence","finance") >=(4-$paintingsOutOfPlace)>>
     <<jump paintingIntelligenceSuccess>>
@@ -41,6 +47,7 @@ title: paintingIntelligenceRoll
 <<endif>>
 ===
 title: paintingWitsRoll
+position: 176,-1147
 ---
 <<if Roll("wits","insight") >=3>>
     <<jump paintingWitsSuccess>>
@@ -49,6 +56,7 @@ title: paintingWitsRoll
 <<endif>>
 ===
 title: paintingAwarenessSuccess
+position: 1229,243
 ---
 [nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, but you manage to see past that - noticing that the largest of the paintings in the polyptych casts an uneven shadow on the wall, its frame slightly askew. You reach up to straighten it, but the panel comes loose, revealing a safe hidden in an alcove behind the artwork.][/nomarkup] #success #line:03f7be6 
 [nomarkup][Flipping the canvas over to place it gently to the side, you also notice a stamp affixed to the painting's back.][/nomarkup] #line:038c1c7
@@ -56,6 +64,7 @@ title: paintingAwarenessSuccess
 <<jump successContinued>>
 ===
 title: successContinued
+position: 1190,619
 ---
 <<set $safeDiscovered to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -71,7 +80,9 @@ title: successContinued
 -> [Step away.] #line:03b4936 
 ===
 title: opinionsStart
+position: -92,330
 ---
+<<set $artTalk to true>>
 {$kieran}: Did you find something? #line:02cb4fa 
 -> {$pcName}: I'm not sure. Call it a gut feeling. #line:0932b04 
 <<if (GetCompanionInfluence($kieran) >4) or ($toldKieranAboutVision ==true)>>
@@ -97,6 +108,7 @@ title: opinionsStart
 <<jump paintingsInteractions>>
 ===
 title: paintingsOpinion
+position: 775,-49
 ---
 <<if CustomVisited("paintingsOpinion") == false>>
     [nomarkup][You feel as if you should have an opinion about the art in front of you...][/nomarkup] #line:0676976 
@@ -121,6 +133,7 @@ title: paintingsOpinion
 <<endif>>
 ===
 title: paintingIntelligenceSuccess
+position: 584,623
 ---
 [nomarkup][You appraise that this particular set of artwork is worth quite a bit. It had to be bought in one of the local galleries or at an auction, since such pieces often have stamps or notes on their backs. These serve as receipts, of sorts, containing information about when or where the set was bought.][/nomarkup] #success #line:013991a 
 [nomarkup][You stare at the piece, and the picture, which seems to have been made under the influence of various illicit substances, stares back - at least for a few moments... But then, snapping out of your trance-like state, you dislodge it from the wall.][/nomarkup] #line:0e57bc8 
@@ -130,6 +143,7 @@ title: paintingIntelligenceSuccess
 <<jump successContinued>>
 ===
 title: paintingIntelligenceFailure
+position: -605,207
 ---
 <<if $artTalk == true>>
     [nomarkup][Regardless of your opinion, you're almost certain that these paintings can't have been worth much.][/nomarkup] #failure #line:066c4d9 
@@ -140,6 +154,7 @@ title: paintingIntelligenceFailure
 <<endif>>
 ===
 title: paintingWitsSuccess
+position: 856,842
 ---
 [nomarkup][This painting is not just a simple wall decoration. It's here for a reason. It doesn't mesh well with the image of Diana as a British punk rocker. She'd just place <i>Sex Pistols</i> or <i>The Exploited</i> posters on the wall if she wanted to express that portion of her identity.][/nomarkup] #success #line:098448f 
 [nomarkup][Maybe there's something worth looking for behind one part of this polyptych? You go with your gut, and dislodge its frame...][/nomarkup] #line:0c002bd 
@@ -149,6 +164,7 @@ title: paintingWitsSuccess
 <<jump successContinued>>
 ===
 title: paintingWitsFailure
+position: 386,-959
 ---
 [nomarkup][You stand in the middle of the office, waiting for the universe to bring ideas and revelations to you. You anticipate their grandeur, almost to herald the arrival of that first bit of understanding as to why you feel this way, but... None ever come.][/nomarkup] #failure #line:0cf5daa 
 [nomarkup][Your eyes refocus, only to be met with Anastasia's hand being waved mere inches in front of your face.][/nomarkup] #line:0ad5e7a 
@@ -161,6 +177,7 @@ title: paintingWitsFailure
 <<endif>>
 ===
 title: paintingSuccessExamination
+position: 1740,623
 ---
 <<set $aidanFoster to true>>
 <<set $safeCode to true>>
@@ -168,7 +185,7 @@ title: paintingSuccessExamination
 [nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup] #line:08877b9 
 [nomarkup][It looks quite new. Maybe a bit yellowed. The text indicates that it was bought in the Vibrant Vistas Gallery in the Arts District. It also says that this particular piece was bought on the 17th of June, 1969.][/nomarkup] #line:06c123e 
 {$kieran}: Vibrant Vistas Gallery... The address... I believe it's somewhere in the Arts District. And the date:the 17th of June, 1969. This is probably when it was bought. #line:0d53691 
-<<if GetIsPartyMemberRecruited($anastasia) is true and $PaintingsDestroyed ==true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true and $PaintingsDestroyed == true>>
     {$anastasia}: Great! Now we know where we can find more art to tear into. [nomarkup][She chuckles.][/nomarkup] #line:05774dc 
 <<endif>>
 [nomarkup][Your attention is caught by a small handwritten note on the stamp - “For my beloved Diana, on one of the most important days of her life. - Aidan Foster.”][/nomarkup] #line:0b50f52 
@@ -186,20 +203,28 @@ title: paintingSuccessExamination
     {$kieran}: When I was Kate's ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy's name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision. #lastline #line:03dfb9b 
 <<endif>>
 -> {$pcName}: Good to know. May be important. Thanks Kieran. #line:0893dd5 
-<<if $paintingsDestroyed ==false>>
+<<if $paintingsDestroyed == false>>
     [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup] #line:0d6d4a6 
 <<endif>>
 ===
 title: paintingAwarenessFailure
+position: 748,-378
 ---
+<<set $artTalk to true>>
 [nomarkup][The vibrantly colored soup of mismatched geometric shapes is nauseating, leaving you bewildered and disoriented, but you can't seem to take your eyes off of the swirling shades.][/nomarkup] #failure #line:0ef5790 
 {$kieran}: ...ardot? Miss Bardot! #line:0d77c66 
 [nomarkup][Kieran's voice jolts you back into the land of the living - and indisputably conscious.][/nomarkup] #line:0cc506c 
 {$kieran}: Are you alright? You seemed... transfixed. Did you notice something about the art? #line:0d4385d 
--> {$pcName}: No, but I think I have an opinion about this piece. #lastline #line:05806b8
-<<jump paintingsOpinion>>
+-> {$pcName}: No, but I think I have an opinion about this piece. #line:05806b8
+<<if GetIsPartyMemberRecruited($anastasia)>>
+    <<jump paintingsOpinion>>
+<<else>>
+    {$kieran}: I do not believe now is the proper time for art connoisseurship.
+    <<jump paintingsInteractions>>
+<<endif>>
 ===
 title: paintingsDestroyed
+position: -1440,-287
 ---
 [nomarkup][Flimsy old paintings aren't a difficult obstacle for you to overcome, amounting to nothing more than plain canvas stretched over a wooden frame, then hung on a wall. Plain canvas that you, in all your senseless rage, are staring at, nostrils flaring with each unnecessary breath - every muscle in your body tensing... Ready to strike.][/nomarkup]  #line:0f4e1fd 
 [nomarkup][In a single swift motion, you punch through the frame, ripping and tearing at the canvas - leaving miserable shreds as a witness to your growing frustration. Somehow, you feel better...][/nomarkup] #line:0e7d4d1 
@@ -218,6 +243,7 @@ title: paintingsDestroyed
 <<jump paintingsInteractions>>
 ===
 title: beastTalk
+position: -1386,57
 ---
 {$kieran}: [nomarkup][He frowns, not out of anger or judgment, but concern.][/nomarkup] I know what you are talking about. Just try your best to suppress those impulses. Otherwise, we may end up with no leads at all, in this investigation. #line:012f469 
 -> {$pcName}: Is there something you're not telling me? #line:0f1eb5b 
@@ -263,6 +289,7 @@ title: beastTalk
 <<endif>>
 ===
 title: anaAndKieranConflict
+position: -1320,398
 ---
 {$innerVoice}: Shit... #line:0560752 
 {$beast}: I don't want to die... I must survive. #line:088157a 
@@ -308,6 +335,7 @@ title: anaAndKieranConflict
 <<jump paintingsInteractions>>
 ===
 title: examineScraps
+position: 219,24
 ---
 [nomarkup][The paintings, or what is left of them, litters the floor - the wood frames shattered as canvas scraps try desperately to cling to the splintered mounting. Some of the old, dry paint has crumbled to dust, leaving scattered piles of vibrant powder upon the floor. But, in the midst of this wanton destruction, you spy a ripped paper stamp... Weird.][/nomarkup] #line:0fa3f84 
 [nomarkup][At least you're still in one piece after that minor freakout. Unfortunately, though, you can't say the same about the paintings... A heavy steel safe sits behind what is left of one of the pieces of art, awaiting your inspection.][nomarkup] #line:0dadf45 

@@ -1,5 +1,6 @@
 title: bookcase
 tags:
+position: -206,-1792
 ---
 <<if CustomVisited("firstBookcaseVisit") == false>>
     <<jump firstBookcaseVisit>>
@@ -9,6 +10,7 @@ tags:
 <<jump bookcaseInteractions>>
 ===
 title: firstBookcaseVisit
+position: 714,-1674
 ---
 [nomarkup][The bookcase is filled with a myriad of items. Not only books, but a large TV, radio, some decorative vases... Modern books sit upon the shelves, but there are also several occult tomes which line the wall - the faint scent of lignin permeating the air. These books must be pretty old.][/nomarkup] #line:0723eb9 
 [nomarkup][Several scrolls lean against the farthest shelf on top, and you ponder whether they are made from paper or parchment. A traditional quill is even nestled amongst them, gaining dust with time. What a strange, dissonant fusion of new and old...][/nomarkup] #line:04c2c4b 
@@ -24,6 +26,7 @@ title: firstBookcaseVisit
 <<jump bookcaseInteractions>>
 ===
 title: bookcaseInteractions
+position: -906,-1095
 ---
 -> [nomarkup][Examine the books Kieran is interested in.][/nomarkup] <<if CustomVisited("bookcaseExamine") == false>> #line:065b815 
     <<jump bookcaseExamine>>
@@ -38,6 +41,7 @@ title: bookcaseInteractions
 -> [nomarkup][Step back.][/nomarkup] #line:02ac943 
 ===
 title: bookcaseExamine
+position: -1609,-2088
 ---
 [nomarkup][The books are placed together in disorganized chaos - with no rhyme or reason to their presence.][/nomarkup] #lastline #line:04334e9 
 <<if Roll ("Intelligence","Awareness")>=4>>
@@ -63,6 +67,7 @@ title: bookcaseExamine
 <<jump bookcaseInteractions>>
 ===
 title: booksHaveTeeth
+position: -1628,-1244
 ---
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: What? Now even books have teeth? #line:06ff0e5 
@@ -96,6 +101,7 @@ title: booksHaveTeeth
 <<jump bookcaseInteractions>>
 ===
 title: bookcaseExcamineNormal
+position: 2202,1634
 ---
 [nomarkup][Nothing too interesting here. Some biographies, trivia books. Advice and reference books about the economy and business management. One book stands out, though. The Gold-Bug and Other Short Stories by Edgar Allan Poe.][/nomarkup] #line:0442577 
 <<set $goldBugPassword to true>>
@@ -110,6 +116,7 @@ title: bookcaseExcamineNormal
 <<endif>>
 ===
 title: bookcaseTV
+position: 2125,-412
 ---
 [nomarkup][You find yourself watching late night MTV. From what you can see, it's one of the latest video clips from Madonna. You aren't really that well-versed in modern day music - not enough to discern for sure which album it's from, but in the video, the young performer looks similar to a famous photo of Marilyn Monroe.][/nomarkup] #line:0738db3 
 {$kieran}: Why are we doing this, exactly? #line:0514757 
@@ -133,6 +140,7 @@ title: bookcaseTV
     <<endif>>
 ===
 title: bookcaseTVAnaTenderMoment
+position: 1692,-987
 ---
 [nomarkup][You move to press the power button, but Anastasia stops you. You glance over at her in surprise.][/nomarkup] #line:002a837 
 {$kieran}: Oh, do you like this kind of music, Ms. Goth Queen? What an interesting surprise. #line:0dc9de1 
@@ -170,6 +178,7 @@ title: bookcaseTVAnaTenderMoment
 <<jump bookcaseInteractions>>
 ===
 title: bookcaseRadio
+position: 2087,315
 ---
 [nomarkup][The radio crackles to life. It seems that the current broadcast is already in progress.][/nomarkup] #line:045b27a 
 Radio: Thank you for your insight, Josh! It's always good to know what's happening in the city! Aaaaand... in other news... #line:0b9a54a 
@@ -188,6 +197,7 @@ Radio: Thank you for your insight, Josh! It's always good to know what's happeni
 <<endif>>
 ===
 title: poeBookExamine
+position: -591,2368
 ---
 [nomarkup][Poe was considered a master of ciphers during his time... Maybe a safe combination is hidden within one of his short stories? You leaf through the book, searching for answers... or maybe just a nudge in the right direction?][/nomarkup] #line:08cb261 
 [nomarkup][It's hard to say which you'll find within its pages; you <i>are</i> operating on a gut feeling and not much else, here. The Gold-Bug is marked, though, that much is certain.][/nomarkup] #line:0c8d71d 
@@ -195,12 +205,14 @@ title: poeBookExamine
 <<jump poeCode>>
 ===
 title: poeCode
+position: -1327,1711
 ---
 :[nomarkup][53‡‡†305))6*;4826)4‡.)4‡);80<br>6*;48†8¶60))85;1‡(;;‡*8†83(88)<br>5*†;46(;88*96*?;8)*‡(;485);5*†<br>2:*‡(;4956*2(5*-4)8¶8*;40692<br>85);)6†8)4‡‡;1(‡9;48081;8:8‡1<br>;48†85;4)485†528806*81(‡9;48<br>;(88;4(‡?34;48)4‡;161;:188;‡?;][/nomarkup] #line:0fea452 
 [nomarkup][You search carefully for the decryption key. It was present in the original story, as was the solution, but the pages on which those would have been written are ripped away.][/nomarkup] #lastline #line:09be44e 
 <<jump poeBookExamineQuestions>>
 ===
 title: poeBookExamineQuestions
+position: -432,-386
 ---
 -> [nomarkup][Try to recall the code.] (Intelligence+Academics)[/nomarkup] <<if CustomVisited("poeExamineAcademicsRoll") == false and $goldBugCombination == false>> #line:0d8cc1f 
     <<jump poeExamineAcademicsRoll>>
@@ -217,6 +229,7 @@ title: poeBookExamineQuestions
     <<jump bookcase>>
 ===
 title: poeExamineAcademicsRoll
+position: 262,-912
 ---
 <<if Roll("Intelligence","Academics") >=4>>
     <<jump poeExamineAcademicsRollSuccess>>
@@ -225,11 +238,13 @@ title: poeExamineAcademicsRoll
 <<endif>>
 ===
 title: poeExamineAcademicsRollSuccess
+position: 485,-384
 ---
 [nomarkup][Focusing on the jumble of strange symbols in front of you, your memory of the code comes back to you. Then, through trial and error, you piece the decryption key together, deciphering the message.][/nomarkup] #success #line:06d8d75 
 <<jump poeBookExamineMentalSuccess>>
 ===
 title: poeBookExamineMentalSuccess
+position: 881,-95
 ---
 A good glass in the bishop's hostel and in the devil's seat...\\n Forty-one degrees and thirteen minutes...\\n Northeast and by north...\\n The main branch, seventh limb, east side...\\n Shoot from the left eye of the death's-head...\\n A beeline from the tree, through the shot fifty feet out. #lastline #line:08b5f85 
 <<set $goldBugCombination to true>>
@@ -247,11 +262,13 @@ A good glass in the bishop's hostel and in the devil's seat...\\n Forty-one degr
 <<jump bookcaseInteractions>>
 ===
 title: poeExamineFailure
+position: -1308,-317
 ---
 [nomarkup][It's no use. You could spend the entire evening trying to break this code, but all you would gain is a headache... or maybe a lack of it, since by the next night, you wouldn't have any head to speak of...][/nomarkup] #failure #lastline #line:047d4a2 
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineInvestigationRoll
+position: -1046,94
 ---
 <<if Roll("intelligence","investigation") >=4>>
     <<jump poeExamineInvestigationRollSuccess>>
@@ -260,12 +277,14 @@ title: poeExamineInvestigationRoll
 <<endif>>
 ===
 title: poeExamineInvestigationRollSuccess
+position: -1067,669
 ---
 <<set $goldBugCombination to true>>
 [nomarkup][Alright, deep breath. In your time as a PI, you've had to deal with this kind of stuff more than once. This one doesn't look to be too difficult. You would guess it's a simple substitution cipher, which means that all you need to do is to recreate the decryption key using logic and common linguistic patterns...][/nomarkup] #success #line:0b81818 
 <<jump poeBookExamineMentalSuccess>>
 ===
 title: poeExamineAwarenessRoll
+position: -561,911
 ---
 <<if Roll("resolve","awareness") >=3>>
     <<jump poeExamineAwarenessRollSuccess>>
@@ -274,6 +293,7 @@ title: poeExamineAwarenessRoll
 <<endif>>
 ===
 title:poeExamineAwarenessRollSuccess
+position: 504,736
 ---
 [nomarkup][You don't have time to play around with some stupid riddle from a story that's nearly 100 years old. There has to be a simpler solution than breaking the code. It's from a book, after all - and a well-known one, at that...][/nomarkup] #success #line:0fc704f
 [nomarkup][You look around the shelves. Then up. As you glance toward the top of the shelf, you see a piece of paper tucked under a pile of other books, protruding just off the edge.][/nomarkup] #line:00a3aab 
@@ -281,6 +301,7 @@ title:poeExamineAwarenessRollSuccess
     <<jump poeMissingPagesDexterityRoll>>
 ===
 title: poeMissingPagesDexterityRoll
+position: 1389,-509
 ---
 <<if Roll("Dexterity","Athletics") >=3>>
     <<jump poeMissingPagesDexteritySuccess>>
@@ -289,12 +310,14 @@ title: poeMissingPagesDexterityRoll
 <<endif>>
 ===
 title: poeMissingPagesDexteritySuccess
+position: 925,624
 ---
 [nomarkup][The shelf is really high up there. Even on your tip-toes, it's a stretch. You look around for something you can climb on, but all you can see is heavy furniture. Praying that the shelves won't break under your weight, you decide to use them as an improvised ladder.][/nomarkup] #success #line:00e598f 
 [nomarkup][Luckily for you, the bookshelf is made from solid mahogany, and you are able to reach the pages before causing any damage. Just as suspected, these are the missing pages containing the decryption key and riddle solution from the story.][/nomarkup]  #line:04a2a95 
 <<jump poeBookExamineMentalSuccess>>
 ===
 title: poeMissingPagesDexterityFailure
+position: 270,1119
 ---
 [nomarkup][The shelf is really high up there. Even on your tip-toes, it's a stretch. You look around for something you can climb on, but all you can see is heavy furniture and nothing else. Praying that the shelves won't break under your weight, you decide to use them as an improvised ladder, but all you achieve is wounded pride as you slip and fall on your ass...][/nomarkup] #failure #line:0fb4b9b 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
@@ -305,11 +328,13 @@ title: poeMissingPagesDexterityFailure
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineFailureAwareness
+position: -173,1699
 ---
 [nomarkup][You look around - even under the shelf. You find nothing relevant to the current search.][/nomarkup] #lastline #line:06936b9 
 <<jump poeBookExamineQuestions>>
 ===
 title: poeExamineAthleticsRoll
+position: 1335,997
 ---
 <<if Roll("Strength","Athletics") >=3>>
     <<jump poeExamineAthleticsSuccess>>
@@ -318,6 +343,7 @@ title: poeExamineAthleticsRoll
 <<endif>>
 ===
 title: poeExamineAthleticsSuccess
+position: 1318,189
 ---
 <<if GetPartyHasDiscipline ("Potence") == true>>
     [nomarkup][This CRT TV is heavier than it looks, but with a good grip and no assistance (thank you very much), you are able to tilt the TV out of the shelf as far as the cable allows.][/nomarkup] #success #line:058d792 
@@ -329,6 +355,7 @@ title: poeExamineAthleticsSuccess
 <<jump poeBookExamineMentalSuccess>>
 ===
 title:  poeExamineAthleticsFailure
+position: 904,1585
 ---
 [nomarkup][The TV is too heavy; you barely manage to shift it a smidgen. Not to mention, you've pulled it just out of its resting place on the shelf, disturbing the dust around it.][/nomarkup] #failure #line:0364ad5 
 [nomarkup][The debris rise into the air in plumes of particles irritating to your newly dead respiratory system, since you haven't remembered to stop breathing - at least not yet. Force of habit.][/nomarkup]  #line:01dc525 

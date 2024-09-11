@@ -11,6 +11,7 @@ namespace SunsetSystems.Inventory
         WeaponFireMode FireMode { get; }
         int MaxAmmo { get; }
 
+        bool GetWeaponUsesAmmo();
         CombatActionType GetWeaponCombatActions();
         RangeData GetRangeData();
         DamageData GetDamageData();

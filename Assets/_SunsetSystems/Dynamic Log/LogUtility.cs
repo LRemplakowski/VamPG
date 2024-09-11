@@ -15,16 +15,16 @@ namespace SunsetSystems.DynamicLog
             {
                 if (attack.Critical)
                 {
-                    result = $"{attackerName} critically hits {targetName} and deals {attack.AdjustedDamage} damage!";
+                    result = $"{attackerName.Trim()} critically hits {targetName.Trim()} and deals {attack.AdjustedDamage} damage!";
                 }
                 else
                 {
-                    result = $"{attackerName} hits {targetName} and deals {attack.AdjustedDamage} damage!";
+                    result = $"{attackerName.Trim()} hits {targetName.Trim()} and deals {attack.AdjustedDamage} damage!";
                 }
             }
             else
             {
-                result = $"{attackerName} misses {targetName}!";
+                result = $"{attackerName.Trim()} misses {targetName.Trim()}!";
             }
             return result;
         }

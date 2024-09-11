@@ -45,6 +45,8 @@ namespace SunsetSystems.Equipment
         public UltEvent<ICombatant> OnWeaponChanged { get; set; }
         [field: SerializeField]
         public UltEvent<IWeaponInstance> OnWeaponInstanceRebuilt { get; set; }
+        [field: SerializeField]
+        public UltEvent<ICombatant, WeaponAmmoData> OnAmmoChanged { get; set; }
 
         private void OnEnable()
         {
@@ -158,6 +160,13 @@ namespace SunsetSystems.Equipment
             return equipmentManager.EquipmentSlots[EquipmentSlotID.SecondaryWeapon].GetEquippedItem() as IWeapon;
         }
 
+        public WeaponAmmoData GetSelectedWeaponAmmoData()
+        {
+            if (weaponsAmmoData.TryGetValue(GetSelectedWeapon()?.DatabaseID, out var ammoData))
+                return ammoData;
+            return new();
+        }
+
         public bool UseAmmoFromSelectedWeapon(int count)
         {
             IWeapon selectedWeaponInstance = GetSelectedWeapon();
@@ -169,6 +178,7 @@ namespace SunsetSystems.Equipment
                     return false;
                 ammoData.CurrentAmmo -= count;
                 weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
+                OnAmmoChanged?.InvokeSafe(owner, ammoData);
                 return true;
             }
             return false;
@@ -183,6 +193,7 @@ namespace SunsetSystems.Equipment
             {
                 ammoData.CurrentAmmo = ammoData.MaxAmmo;
                 weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
+                OnAmmoChanged?.InvokeSafe(owner, ammoData);
             }
         }
 
@@ -253,11 +264,6 @@ namespace SunsetSystems.Equipment
         {
             if (string.Equals(eventType, FIRE_WEAPON_EVENT) && weaponInstance != null)
                 weaponInstance.FireWeapon();
-        }
-
-        private struct WeaponAmmoData
-        {
-            public int CurrentAmmo, MaxAmmo;
         }
     }
 }

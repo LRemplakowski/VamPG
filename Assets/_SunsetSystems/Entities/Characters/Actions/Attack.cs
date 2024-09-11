@@ -67,7 +67,8 @@ namespace SunsetSystems.Entities.Characters.Actions
             float waitForAttackFinish = attacker.PerformAttackAnimation();
             float waitForTakeHitFinish = defender.PerformTakeHitAnimation();
             yield return new WaitForSeconds(Mathf.Max(waitForAttackFinish, waitForTakeHitFinish));
-            defender.TakeDamage(attackResult.AdjustedDamage);
+            if (attackResult.Successful)
+                defender.TakeDamage(attackResult.AdjustedDamage);
             attackFinished.Value = true;
         }
     } 

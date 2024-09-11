@@ -751,13 +751,37 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: _activeCoterieMemberKeys
+      Entry: 7
+      Data: 2|System.Collections.Generic.HashSet`1[[System.String, mscorlib]], System.Core
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: _coterieMemberKeysCache
+      Entry: 7
+      Data: 3|System.Collections.Generic.HashSet`1[[System.String, mscorlib]], System.Core
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
     - Name: _cachedPartyTemplates
       Entry: 7
-      Data: 2|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Entities.Characters.ICreatureTemplate,
+      Data: 4|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[SunsetSystems.Entities.Characters.ICreatureTemplate,
         SunsetSystems]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 3|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
+      Data: 5|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
         mscorlib]], mscorlib
     - Name: 
       Entry: 8
@@ -775,8 +799,6 @@ MonoBehaviour:
   _defaultPartyLayer: Party Member
   _forceSpawnPartyInStorage: 0
   _mainCharacterKey: 
-  _activeCoterieMemberKeys: []
-  _coterieMemberKeysCache: []
   OnActivePartyInitialized:
     _PersistentCalls:
     - _Target: {fileID: 6962113855649037350}
@@ -7647,7 +7669,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:

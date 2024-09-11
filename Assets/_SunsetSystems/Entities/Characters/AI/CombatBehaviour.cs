@@ -299,6 +299,7 @@ namespace SunsetSystems.Combat
                 return false;
             weaponManager.ReloadSelectedWeapon();
             HasActed = true;
+            OnUsedActionPoint?.InvokeSafe(this);
             return true;
         }
 

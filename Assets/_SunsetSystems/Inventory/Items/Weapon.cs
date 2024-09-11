@@ -47,21 +47,30 @@ namespace SunsetSystems.Inventory.Data
             ItemCategory = ItemCategory.WEAPON;
         }
 
+        public bool GetWeaponUsesAmmo()
+        {
+            return WeaponType == WeaponType.Ranged && MaxAmmo > 0;
+        }
+
         public RangeData GetRangeData()
         {
-            RangeData data = new();
-            data.optimalRange = optimalRange;
-            data.rangeFalloff = rangeFalloff;
-            data.maxRange = optimalRange + (2 * rangeFalloff);
-            data.shortRange = optimalRange - rangeFalloff;
+            RangeData data = new()
+            {
+                optimalRange = optimalRange,
+                rangeFalloff = rangeFalloff,
+                maxRange = optimalRange + (2 * rangeFalloff),
+                shortRange = optimalRange - rangeFalloff
+            };
             return data;
         }
 
         public DamageData GetDamageData()
         {
-            DamageData data = new();
-            data.damageModifier = DamageModifier;
-            data.damageType = DamageType;
+            DamageData data = new()
+            {
+                damageModifier = DamageModifier,
+                damageType = DamageType
+            };
             return data;
         }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interfaces;
+using SunsetSystems.Equipment;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,6 +24,8 @@ namespace SunsetSystems.Combat.UI
         private ActiveAbilitiesDisplayManager disciplineBar;
         [SerializeField, Required]
         private CanvasGroup _combatCanvasGroup;
+        [SerializeField, Required]
+        private AmmoDisplay _ammoCounter;
 
         [Title("Events")]
         public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
@@ -60,13 +63,18 @@ namespace SunsetSystems.Combat.UI
                 _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
-                combatant.WeaponManager.OnWeaponChanged += OnWeaponChanged;
+                var weaponManager = combatant.WeaponManager;
+                _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
+                _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
+                weaponManager.OnWeaponChanged += OnWeaponChanged;
+                weaponManager.OnAmmoChanged += OnAmmoChanged;
             }
         }
 
         private void OnWeaponChanged(ICombatant combatant)
         {
             _actionBarUI.RefreshAvailableActions();
+            _ammoCounter.SetAmmoCounterVisible(combatant.References.WeaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
         }
 
         private void OnActionUsed(ICombatant combatant)
@@ -77,6 +85,11 @@ namespace SunsetSystems.Combat.UI
         private void OnBloodPointSpent(ICombatant combatant)
         {
             bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
+        }
+
+        private void OnAmmoChanged(ICombatant combatant, WeaponAmmoData ammoData)
+        {
+            _ammoCounter.UpdateAmmoData(ammoData);
         }
 
         private void UpdateCurrentActorPortrait(ICombatant actor)
@@ -101,7 +114,9 @@ namespace SunsetSystems.Combat.UI
         {
             combatant.OnUsedActionPoint -= OnActionUsed;
             combatant.OnSpentBloodPoint -= OnBloodPointSpent;
-            combatant.WeaponManager.OnWeaponChanged -= OnWeaponChanged;
+            var weaponManager = combatant.WeaponManager;
+            weaponManager.OnWeaponChanged -= OnWeaponChanged;
+            weaponManager.OnAmmoChanged -= OnAmmoChanged;
         }
 
         public void SelectCombatAction(SelectedCombatActionData actionData)

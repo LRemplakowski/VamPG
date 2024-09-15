@@ -47,7 +47,7 @@ position: 241,17
 ---
 Office Bouncer: [nomarkup][The Bouncer scans the room nervously.][/nomarkup] I shouldn't drink on duty. #success #line:06b94f1 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: But you want to. #line:0c8ca12 
+    {$anastasia}: But you want to. #lastline #line:0c8ca12 
 <<endif>>
 -> {$pcName}: Come on. Nobody's looking. #line:07514c0 
 [nomarkup][Without a word, the Bouncer grabs the drinks and greedily drinks it in one gulp.][/nomarkup] #line:0e7521a 

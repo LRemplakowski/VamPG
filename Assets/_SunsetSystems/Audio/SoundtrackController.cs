@@ -129,40 +129,69 @@ namespace SunsetSystems.Audio
             }
         }
 
-        public async void InjectPlaylistData(ScenePlaylistData playlistData)
+        public void InjectPlaylistData(ScenePlaylistData playlistData)
         {
-            ReleasePreviousDataIfExists();
-            _lastPlaylistData = playlistData;
-            Dictionary<GameState, Task<IPlaylist>> operations = new();
+            //ReleasePreviousDataIfExists();
+            //_lastPlaylistData = playlistData;
+            //Dictionary<GameState, Task<IPlaylist>> operations = new();
             if (playlistData.Exploration != null)
             {
-                var op = playlistData.Exploration.LoadAssetAsync<IPlaylist>();
-                operations[GameState.Exploration] = op.Task;
+                //var op = playlistData.Exploration.LoadAssetAsync<IPlaylist>();
+                //operations[GameState.Exploration] = op.Task;
+                _statePlaylistPairs[GameState.Exploration] = playlistData.Exploration;
             }
             if (playlistData.Combat != null)
             {
-                var op = playlistData.Combat.LoadAssetAsync<IPlaylist>();
-                operations[GameState.Combat] = op.Task;
+                //var op = playlistData.Combat.LoadAssetAsync<IPlaylist>();
+                //operations[GameState.Combat] = op.Task;
+                _statePlaylistPairs[GameState.Combat] = playlistData.Combat;
             }
             if (playlistData.Dialogue != null)
             {
-                var op = playlistData.Dialogue.LoadAssetAsync<IPlaylist>();
-                operations[GameState.Conversation] = op.Task;
+                //var op = playlistData.Dialogue.LoadAssetAsync<IPlaylist>();
+                //operations[GameState.Conversation] = op.Task;
+                _statePlaylistPairs[GameState.Conversation] = playlistData.Dialogue;
             }
-            await Task.WhenAll(operations.Values);
-            foreach (var statePlaylist in operations)
+            //await Task.WhenAll(operations.Values);
+            //foreach (var statePlaylist in operations)
+            //{
+            //    _statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
+            //}
+            PlayStatePlaylist(GameState.Exploration);
+        }
+
+        public void InjectPlaylistDataAsOverrides(ScenePlaylistData playlistData)
+        {
+            if (playlistData.Exploration != null)
             {
-                _statePlaylistPairs[statePlaylist.Key] = statePlaylist.Value.Result;
+                _playlistOverrides[GameState.Exploration] = playlistData.Exploration;
+            }
+            if (playlistData.Combat != null)
+            {
+                _playlistOverrides[GameState.Combat] = playlistData.Combat;
+            }
+            if (playlistData.Dialogue != null)
+            {
+                _playlistOverrides[GameState.Conversation] = playlistData.Dialogue;
             }
             PlayStatePlaylist(GameState.Exploration);
         }
 
-        private void ReleasePreviousDataIfExists()
+        public ScenePlaylistData GetCurrentOverridesAsPlaylistData()
         {
-            _lastPlaylistData.Dialogue?.ReleaseAsset();
-            _lastPlaylistData.Combat?.ReleaseAsset();
-            _lastPlaylistData.Dialogue?.ReleaseAsset();
+            ScenePlaylistData playlistData = new();
+            _playlistOverrides.TryGetValue(GameState.Exploration, out playlistData.Exploration);
+            _playlistOverrides.TryGetValue(GameState.Combat, out playlistData.Combat);
+            _playlistOverrides.TryGetValue(GameState.Conversation, out playlistData.Dialogue);
+            return playlistData;
         }
+
+        //private void ReleasePreviousDataIfExists()
+        //{
+        //    _lastPlaylistData.Dialogue?.ReleaseAsset();
+        //    _lastPlaylistData.Combat?.ReleaseAsset();
+        //    _lastPlaylistData.Dialogue?.ReleaseAsset();
+        //}
 
         public void SetStatePlaylistOverride(GameState state, IPlaylist playlistOverride)
         {

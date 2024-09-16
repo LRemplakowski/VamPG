@@ -44,8 +44,7 @@ namespace SunsetSystems.Core.SceneLoading
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await new WaitForSeconds(0.1f);
-            CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
-            AudioManager.Instance.InjectPlaylistData(data.PlaylistData);
+            CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneDefaultEntryWaypoint().transform);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             loadingCamera.gameObject.SetActive(false);
@@ -79,7 +78,7 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.LoadSavedDataIntoRuntime(saveID);
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
             await Task.Delay(1000);
-            AudioManager.Instance.InjectPlaylistData(saveMetaData.PlaylistData);
+            AudioManager.Instance.InjectPlaylistDataAsOverrides(saveMetaData.PlaylistData);
             OnLevelLoadEnd?.Invoke();
             await new WaitUntil(HasGeneratorProcessedAllUMA);
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);

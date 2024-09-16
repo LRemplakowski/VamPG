@@ -110,7 +110,7 @@ namespace SunsetSystems.Party
         {
             if (string.IsNullOrWhiteSpace(_mainCharacterKey))
                 return;
-            var waypoint = WaypointManager.Instance.GetSceneEntryWaypoint();
+            var waypoint = WaypointManager.Instance.GetSceneDefaultEntryWaypoint();
             if (waypoint != null && !_forceSpawnPartyInStorage)
                 InitializePartyAtPosition(waypoint.transform.position);
             else

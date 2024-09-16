@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Audio;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
 
@@ -63,6 +64,7 @@ namespace SunsetSystems.Persistence
                 SaveID = saveID,
                 SaveDate = date,
                 LevelLoadingData = LevelLoader.Instance.CurrentLoadedLevel,
+                PlaylistData = AudioManager.Instance.GetCurrentPlaylistOverrides(),
                 SaveScreenShot = TakeGameScreenShot(),
             };
             UpdateRuntimeDataCache();

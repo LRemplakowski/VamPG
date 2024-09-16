@@ -22,7 +22,7 @@ namespace SunsetSystems.Core
         {
             _sceneWaypoints ??= new();
             _sceneWaypoints.Clear();
-            var sceneWpts = FindObjectsOfType<Waypoint>(true);
+            var sceneWpts = FindObjectsByType<Waypoint>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (var wp in sceneWpts)
             {
                 _sceneWaypoints[wp.WaypointTag] = wp;
@@ -42,7 +42,7 @@ namespace SunsetSystems.Core
             GameManager.Instance.OnLevelStart += ClearWaypointOverride;
         }
 
-        public Waypoint GetSceneEntryWaypoint()
+        public Waypoint GetSceneDefaultEntryWaypoint()
         {
             if (string.IsNullOrWhiteSpace(_waypointOverride) is false && _sceneWaypoints.TryGetValue(_waypointOverride, out var waypointOverride))
                 return waypointOverride;

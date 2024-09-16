@@ -63,6 +63,11 @@ namespace SunsetSystems.Core.Database
         public bool TryGetEntryByReadableID(string readableID, out T entry)
         {
             entry = default;
+            if (string.IsNullOrWhiteSpace(readableID))
+            {
+                Debug.LogError($"Requested entry from a database, but ReadableID is null!");
+                return false;
+            }
             if (_readableIDRegistry.TryGetValue(readableID, out string key))
                 return TryGetEntry(key, out entry);
             return false;

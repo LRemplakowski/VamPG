@@ -91,7 +91,7 @@ namespace SunsetSystems.Core
             await fade.DoFadeOutAsync(.5f);
             await new WaitForUpdate();
             _desireeOnBed.SetActive(false);
-            _desiree.ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform.position);
+            _desiree.ForceToPosition(WaypointManager.Instance.GetSceneDefaultEntryWaypoint().transform.position);
             await fade.DoFadeInAsync(.5f);
         }
 

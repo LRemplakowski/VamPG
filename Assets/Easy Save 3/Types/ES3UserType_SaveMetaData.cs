@@ -46,7 +46,7 @@ namespace ES3Types
 						instance.LevelLoadingData = reader.Read<SunsetSystems.Core.SceneLoading.LevelLoadingData>(ES3UserType_LevelLoadingData.Instance);
 						break;
 					case "PlaylistData":
-						instance.PlaylistData = reader.Read<SunsetSystems.Core.SceneLoading.ScenePlaylistData>(ES3UserType_ScenePlaylistData.Instance);
+						instance.PlaylistData = reader.Read<SunsetSystems.Audio.ScenePlaylistData>(ES3UserType_ScenePlaylistData.Instance);
 						break;
 					case "SaveScreenShot":
 						instance.SaveScreenShot = reader.Read<UnityEngine.Texture2D>(ES3Type_Texture2D.Instance);

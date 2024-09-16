@@ -27,9 +27,6 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField]
         private LevelLoadingData _loadingData = new();
         public LevelLoadingData LoadingData => _loadingData;
-        [OdinSerialize]
-        private ScenePlaylistData _playlistData = new();
-        public ScenePlaylistData PlaylistData => _playlistData;
     }
 
     [Serializable]
@@ -40,12 +37,5 @@ namespace SunsetSystems.Core.SceneLoading
         [SerializeField, ReadOnly, ShowIf("ShowScenePaths")]
         public List<string> ScenePaths;
         public readonly IReadOnlyList<string> AddressableScenePaths => ScenePaths.AsReadOnly();
-    }
-
-    [SerializeField]
-    public struct ScenePlaylistData
-    {
-        [SerializeField]
-        public AssetReferenceT<PlaylistConfig> Exploration, Combat, Dialogue;
     }
 }

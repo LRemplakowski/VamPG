@@ -62,7 +62,7 @@ namespace SunsetSystems.Input.CameraControl
         public void MoveToLevelStartPosition()
         {
             if (_movedToSavedPosition is false)
-                ForceToPosition(WaypointManager.Instance.GetSceneEntryWaypoint().transform);
+                ForceToPosition(WaypointManager.Instance.GetSceneDefaultEntryWaypoint().transform);
         }
 
         public void ForceToPosition(Vector3 position) => _moveTarget = position;

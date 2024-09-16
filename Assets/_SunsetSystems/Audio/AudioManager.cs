@@ -101,6 +101,16 @@ namespace SunsetSystems.Audio
             _soundtrackController.InjectPlaylistData(playlistData);
         }
 
+        public void InjectPlaylistDataAsOverrides(ScenePlaylistData playlistData)
+        {
+            _soundtrackController.InjectPlaylistDataAsOverrides(playlistData);
+        }
+
+        public ScenePlaylistData GetCurrentPlaylistOverrides()
+        {
+            return _soundtrackController.GetCurrentOverridesAsPlaylistData();
+        }
+
         public void SetPlaylistOverride(GameState state, IPlaylist playlist) => _soundtrackController.SetStatePlaylistOverride(state, playlist);
 
         public void ClearPlaylistOverride(GameState state) => _soundtrackController.ClearStatePlaylistOverride(state);

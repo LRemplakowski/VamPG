@@ -53,7 +53,7 @@ position: -707,-22
 <<jump safeOpened>>
 ===
 title: safeFailure
-position: 14,-207
+position: 358,218
 ---
 [nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #line:008d6ba 
 <<set $satanDate to false>>
@@ -80,7 +80,7 @@ position: -1111,-157
 <<jump safeQuestions>>
 ===
 title: safeQuestions
-position: -898,282
+position: -941,277
 ---
 -> [nomarkup][Examine the gun.] (Intelligence + Firearms)[/nomarkup] <<if CustomVisited("gunRoll") == false>> #line:010783e
     <<jump gunRoll>>
@@ -101,6 +101,7 @@ title: gunRoll
 <<endif>>
 ===
 title: bloodMedRoll
+position: -636,499
 ---
 <<if Roll("Intelligence","Medicine") >=3>>
     <<jump safeBloodIdentified>>
@@ -109,19 +110,19 @@ title: bloodMedRoll
 <<endif>>
 ===
 title: safeGunExamine
-position: -654,747
+position: -837,1018
 ---
 [nomarkup][The gun is a standard issue Colt 1911A1. The magazine is full, but its safety is engaged. The only difference between a normal gun and this one is that the serial number on this one has been filed off.][/nomarkup] #success #lastline #line:0cdcbc2 
 <<jump safeQuestions>>
 ===
 title: safeGunExamineFail
-position: -1256,686
+position: -1439,957
 ---
 [nomarkup][It's a gun like any other. It has a barrel, a handle and a magazine. You probably would be able to shoot with that thing and not hurt yourself in the process. Probably.][/nomarkup] #failure #lastline #line:099beb4 
 <<jump safeQuestions>>
 ===
 title: safeDocumentsExamine
-position: -982,799
+position: -1165,1070
 ---
 [nomarkup][You rummage through the documents. Nothing particularly interesting. Just financial records and the like. But when you flip through one of the stapled packets, a folded up piece of paper that had been loosely stuck between its pages falls to the floor. You pick it up to examine it.][/nomarkup] #line:03c1d1c 
 Love Letter: For my beloved Diana, the only one who can see me for who I am and pierce the darkness I've armored myself with... The only person who knows my pain intimately enough to stave my Beast away... #line:0999c1e 
@@ -140,7 +141,7 @@ Lucia #line:00d2b26
 {$kieran}: That didn't sound good... We need to leave. Now. [nomarkup][Kieran looks concerned.][/nomarkup] #line:0cb4a25 
 ===
 title: safeBloodIdentified
-position: -531,378
+position: -266,539
 ---
 [nomarkup][You take the bottle and examine it more closely. At first, it appears to be a thick, red wine. But on closer inspection, it's far too viscous. It's not wine at all - it's blood.][/nomarkup] #success #line:024ce18 
 -> {$pcName}: I think I found... blood? #line:00843d3 
@@ -148,24 +149,25 @@ position: -531,378
 <<jump bloodVialRolls>>
 ===
 title: bloodVialRolls
-position: -125,525
+position: 31,551
 ---
 -> {$pcName}: Hold on, what are you going to do with it? #line:04960dc 
     {$kieran}: Please, I know that you do not trust me, but we don't have time to argue. (-1 Kieran Influence) #lastline #line:0c20ec5 
     <<ModifyInfluence -1 $kieran>>
     -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:09ba39d 
-    <<jump bloodVialKieranExamine>>
+        <<jump bloodVialKieranExamine>>
 -> [nomarkup][Give Kieran the vial.][/nomarkup] #line:031d09b 
     <<jump bloodVialKieranExamine>>
 ===
 title: bloodVialSuccess
-position: -45,814
+position: 73,357
 ---
 [nomarkup][You have no idea what's in the vial.][/nomarkup]
 {$kieran}: I don't think that's ordinary blood. Allow me. [nomarkup][He holds out his hand expectantly.][/nomarkup] 
 <<jump bloodVialKieranExamine>>
 ===
 title: bloodVialKieranExamine
+position: 458,599
 ---
 [nomarkup][Without another word, you place the vial in the palm of Kieran's waiting hand.][/nomarkup] #line:045718d 
 [nomarkup][He uncorks the glass receptacle, tilting it gently towards his palm. Allowing a droplet of the fluid to splash onto his skin, he quickly tastes it. A puzzled expression then flashes across his features, his brows furrowed, as he reseals it.][/nomarkup] #lastline #line:03c693e 
@@ -213,7 +215,7 @@ position: -284,185
 <<ModifyInfluence -2 $kieran>>
 -> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
 [nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #lastline #line:0e13ecd 
-<<GiveMoney (500)>>
+<<GiveMoney(500)>>
 <<jump safeQuestions>>
 ===
 title: safeResolveFailure
@@ -229,18 +231,22 @@ position: -297,5
 <<jump safeExamine>>
 ===
 title: safeSatan
+position: 446,-380
 ---
 <<jump safeFailure>>
 ===
 title: safeFoster
+position: 710,-66
 ---
 <<jump safeFailure>>
 ===
 title: safeGoldBug
+position: 699,-356
 ---
 <<jump safeFailure>>
 ===
 title: beastOpens
+position: -968,-471
 ---
 [nomarkup][Only looking at a safe knob makes you furious. Your breath gets short, your new fangs irritate you in the mouth. Something is crawling up your spine, just like drunken rage. Your vision becomes red as you are pushed back in your mind when the tsunami of blood took control over you.][/nomarkup]
 [nomarkup][You see your arms like in a dream sequence, grabbing the safe doors by the hinges you just rip it off like a piece of paper and throw it at your partners in crime. Yes... yes there it is! You felt it on the verges of your senses - blood. The blood you know... you grab a vial and down it in a one gulp][/nomarkup]

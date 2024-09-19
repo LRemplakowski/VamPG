@@ -25,14 +25,19 @@ namespace SunsetSystems.UI
             string characterKey = CharacterSelector.SelectedCharacterKey;
             UpdateEquipment(characterKey);
             UpdateInventory();
+            UpdateMoney(InventoryManager.Instance.GetMoneyAmount());
             InventoryManager.OnItemAcquired += MarkDirty;
             InventoryManager.OnItemLost += MarkDirty;
+            InventoryManager.OnMoneyGained += OnMoneyChanged;
+            InventoryManager.OnMoneyLost += OnMoneyChanged;
         }
 
         private void OnDisable()
         {
             InventoryManager.OnItemAcquired -= MarkDirty;
             InventoryManager.OnItemLost -= MarkDirty;
+            InventoryManager.OnMoneyGained -= OnMoneyChanged;
+            InventoryManager.OnMoneyLost -= OnMoneyChanged;
         }
 
         private void Update()
@@ -44,9 +49,9 @@ namespace SunsetSystems.UI
             }
         }
 
-        public void MarkDirty(IBaseItem _) => MarkDirty();
-
-        public void MarkDirty() => _isDirty = true;
+        private void OnMoneyChanged(float current, float change) => UpdateMoney(current);
+        private void MarkDirty(IBaseItem _) => MarkDirty();
+        private void MarkDirty() => _isDirty = true;
 
         private void Refresh()
         {
@@ -80,6 +85,11 @@ namespace SunsetSystems.UI
                 items.Add(entry);
             }
             _inventoryContentsUpdater.UpdateViews(items);
+        }
+
+        private void UpdateMoney(float currentMoney)
+        {
+            _inventoryContentsUpdater.UpdateMoneyCounter(currentMoney);
         }
     }
 }

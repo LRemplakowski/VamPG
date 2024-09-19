@@ -1,12 +1,9 @@
-using SunsetSystems.Inventory.Data;
-using SunsetSystems.UI.Utils;
-using SunsetSystems.UI;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using SunsetSystems.UI;
+using SunsetSystems.UI.Utils;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 namespace SunsetSystems.Inventory.UI
 {
@@ -52,7 +49,6 @@ namespace SunsetSystems.Inventory.UI
                 return;
             }
             ViewParent.gameObject.SetActive(true);
-            UpdateMoneyCounter(Mathf.RoundToInt(InventoryManager.Instance.GetMoneyAmount()));
             for (int i = 0; i < data.Count; i++)
             {
                 IUserInfertaceDataProvider<InventoryEntry> dataProvider = data[i];
@@ -77,9 +73,9 @@ namespace SunsetSystems.Inventory.UI
             }
         }
 
-        public void UpdateMoneyCounter(int money)
+        public void UpdateMoneyCounter(float money)
         {
-            _moneyText.text = $"{money.ToString("$ 0", System.Globalization.CultureInfo.CurrentCulture)}$";
+            _moneyText.text = $"${money:0.00}";
         }
 
 

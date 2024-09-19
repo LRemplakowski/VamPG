@@ -1,5 +1,5 @@
 ﻿title: safeExamine
-position: -171,-476
+position: -177,-434
 ---
 [nomarkup][It looks just like a normal, civilian-use, wall mounted safe. There's nothing out of the ordinary about it. There is one knob and it probably needs 4 digits to open. It would take ages to guess the combination and time is too precious to waste it around.][/nomarkup] #lastline #line:0e7f551 
 <<if $safeFailCounter >= 4>>
@@ -21,7 +21,7 @@ position: -171,-476
 <<endif>>
 ===
 title: safeResolveRoll
-position: 274,-762
+position: -18,-1131
 ---
 <<if Roll("Resolve","Larceny")>=6>>
     <<jump safeOpenedwoCode>>
@@ -30,7 +30,7 @@ position: 274,-762
 <<endif>>
 ===
 title: safeStrengthRoll
-position: -474,-221
+position: -568,-236
 ---
 <<if Roll("Strength","Larceny")>=6>>
     <<jump safeForceOpened>>
@@ -47,13 +47,13 @@ position: -378,-751
 <<jump safeOpened>>
 ===
 title: safeForceOpened
-position: -707,-22
+position: -674,-46
 ---
 [nomarkup][Good thing you didn't forget the old crowbar you keep stashed in your home. It'll be handy, here. You jimmy the crowbar into the slit between the safe's frame and the doors - applying a gradually increasing amount of force. Using the wall to push this improvised lever forth, you make several attempts, thankful that your body is undead - otherwise you'd be exhausted - until finally, you feel the lock give in to your brute strength.][/nomarkup] #success #line:05a227e 
 <<jump safeOpened>>
 ===
 title: safeFailure
-position: 358,218
+position: 457,-418
 ---
 [nomarkup][Despite your effort you give up after several minutes of fruitless fight with the safe. It is still closed and it'll remain closed until you'll find a safe combination.][/nomarkup] #line:008d6ba 
 <<set $satanDate to false>>
@@ -61,7 +61,7 @@ position: 358,218
 <<jump safeExamine>>
 ===
 title: safeOpenedwCode
-position: -756,-282
+position: -804,-278
 ---
 [nomarkup][You hear the click of the mechanical lock opening.][/nomarkup] #lastline #line:0f81031 
 <<jump safeOpened>>
@@ -215,33 +215,33 @@ position: -284,185
 <<ModifyInfluence -2 $kieran>>
 -> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
 [nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #lastline #line:0e13ecd 
-<<GiveMoney(500)>>
+<<GiveMoney 500>>
 <<jump safeQuestions>>
 ===
 title: safeResolveFailure
-position: 282,-547
+position: 288,-1086
 ---
 [nomarkup][Despite your best efforts, you give up after several minutes of fruitless fiddling with the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:0b8b221 
 <<jump safeExamine>>
 ===
 title: safeStrenghtFailure
-position: -297,5
+position: -434,-89
 ---
 [nomarkup][Despite your best efforts, you give up after several minutes of fruitless conflict with the door to the safe. It is still locked tightly, and it will remain so until you find a safe combination that works.][/nomarkup] #failure #line:050d36f 
 <<jump safeExamine>>
 ===
 title: safeSatan
-position: 446,-380
+position: 296,-706
 ---
 <<jump safeFailure>>
 ===
 title: safeFoster
-position: 710,-66
+position: 716,-557
 ---
 <<jump safeFailure>>
 ===
 title: safeGoldBug
-position: 699,-356
+position: 705,-847
 ---
 <<jump safeFailure>>
 ===

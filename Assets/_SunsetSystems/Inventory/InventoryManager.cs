@@ -23,7 +23,9 @@ namespace SunsetSystems.Inventory
 
         public string DataKey => DataKeyConstants.INVENTORY_MANAGER_DATA_KEY;
 
+        public delegate void MoneyEvent(float currentMoney, float valueChange);
         public static event Action<IBaseItem> OnItemAcquired, OnItemLost;
+        public static event MoneyEvent OnMoneyGained, OnMoneyLost;
 
         public void ResetOnGameStart()
         {
@@ -113,6 +115,7 @@ namespace SunsetSystems.Inventory
         public void AddMoney(float value)
         {
             _money += value;
+            OnMoneyGained?.Invoke(_money, value);
         }
 
         public bool TryRemoveMoney(float value)
@@ -120,6 +123,7 @@ namespace SunsetSystems.Inventory
             if (value > _money)
                 return false;
             _money -= value;
+            OnMoneyLost?.Invoke(_money, value);
             return true;
         }
 
@@ -154,7 +158,7 @@ namespace SunsetSystems.Inventory
                     }
                 }
             }
-            _money = saveData.Money;
+            SetMoney(saveData.Money);
         }
     }
 

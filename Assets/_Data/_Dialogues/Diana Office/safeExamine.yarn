@@ -88,7 +88,7 @@ position: -941,277
     <<jump safeDocumentsExamine>>
 -> [nomarkup][Examine the vial.] (Intelligence + Medicine)[/nomarkup] <<if CustomVisited("bloodMedRoll") == false>> #line:06887c6 
     <<jump bloodMedRoll>>
--> [nomarkup][Take the money.][/nomarkup] <<if CustomVisited("safeMoney") == false>> #line:07ec05b 
+-> [nomarkup][Take the money.][/nomarkup] <<if CustomVisited("takeSafeMoney") == false>> #line:07ec05b 
     <<jump takeSafeMoney>>
 -> [nomarkup][Step away.][/nomarkup]
 ===
@@ -210,12 +210,13 @@ position: -370,798
 title: takeSafeMoney
 position: -284,185
 ---
+[nomarkup][Kieran gives you a disapproving look.][/nomarkup]
 -> {$pcName}: I need to pay my bills Kieran. #line:0212bfb 
-{$kieran}: That is by no means a good enough reason to steal! (-2 Kieran influence) #line:0a341aa 
 <<ModifyInfluence -2 $kieran>>
+{$kieran}: That is by no means a good enough reason to steal! (-2 Kieran influence) #line:0a341aa 
 -> {$pcName}: In my situation, it is. Besides, we've already committed graver sins than that, today. #line:0051af0 
 [nomarkup][As you stuff the money into your pockets, he shakes his head - clearly very disappointed.][/nomarkup] #lastline #line:0e13ecd 
-<<GiveMoney 500>>
+<<AddMoney 500>>
 <<jump safeQuestions>>
 ===
 title: safeResolveFailure
@@ -250,7 +251,7 @@ position: -968,-471
 ---
 [nomarkup][Only looking at a safe knob makes you furious. Your breath gets short, your new fangs irritate you in the mouth. Something is crawling up your spine, just like drunken rage. Your vision becomes red as you are pushed back in your mind when the tsunami of blood took control over you.][/nomarkup]
 [nomarkup][You see your arms like in a dream sequence, grabbing the safe doors by the hinges you just rip it off like a piece of paper and throw it at your partners in crime. Yes... yes there it is! You felt it on the verges of your senses - blood. The blood you know... you grab a vial and down it in a one gulp][/nomarkup]
-[nomarkup][As the last drop runs down your throat it feels like an ice that revive you. You shake your head looking at the aftermath of your actions...]
+[nomarkup][As the last drop runs down your throat it feels like an ice that revive you. You shake your head looking at the aftermath of your actions...][/nomarkup]
 <<if $beastTalk == false>>
     <<jump beastTalk>>
 <<else>>

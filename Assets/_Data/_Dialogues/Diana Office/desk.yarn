@@ -133,7 +133,7 @@ title: computerTurnedOn
 position: -673,-267
 ---
 [nomarkup][As soon as you flip the switch on the side of the box nesting the screen, it flashes to life. A series of scratches and metallic bleeps are emitted from the steel cube. The glass screen shows a series of letters, which disappear less than a second later, the system prompting you for a password.][/nomarkup] #line:0239e06 
--> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.] (Intelligence + Technology)[/nomarkup] <<if CustomVisited("hackingFailure") == false or CustomVisited("hackingSuccess") == false>> #line:07dd03a 
+-> [nomarkup][Maybe you don't own one of these machines yourself (and you won't anytime soon), but you know some tricks that may help you here.] (Intelligence + Technology)[/nomarkup] <<if (CustomVisited("hackingFailure") and CustomVisited("hackingSuccess")) is false >> #line:07dd03a 
     <<if Roll("intelligence","technology")>=(4-$computerModelIdentified)>>
         <<jump hackingSuccess>>
     <<else>>

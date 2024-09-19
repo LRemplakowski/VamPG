@@ -18,13 +18,13 @@ position: -225,-696
     <<jump paintingIntelligenceRoll>>
 -> [nomarkup][Those seem to be completely out of place... you wonder why...] (Wits+Insight)[/nomarkup] <<if CustomVisited("paintingWitsRoll") == false>> #line:0b6d950   
     <<jump paintingWitsRoll>>
--> [nomarkup][Destroy the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:063d360 
+-> [nomarkup][Destroy the paintings.][/nomarkup] <<if CustomVisited("paintingsDestroyed") == false>> #line:063d360 
     <<jump paintingsDestroyed>>
 -> [nomarkup][Examine the safe.][/nomarkup] <<if $paintingsPutDown == true>> #line:0847f88 
     <<jump safeExamine>>
 -> [nomarkup][Take down one of the paintings.][/nomarkup] <<if CustomVisited("successContinued") == false and $safeDiscovered == true>> #line:033b9e3 
     <<jump successContinued>>
--> [nomarkup][Examine destroyed paintings.][/nomarkup] <<if $paintingsDestroyed and CustomVisited("examineScraps") is false>>
+-> [nomarkup][Examine destroyed paintings.][/nomarkup] <<if CustomVisited("paintingsDestroyed") and CustomVisited("examineScraps") is false>>
     <<jump examineScraps>>
 -> [nomarkup][Step away.][/nomarkup] #line:0c06753 
 ===
@@ -71,9 +71,9 @@ position: 1190,619
     {$anastasia}: Jackpot! Now we just have to pry it open. #line:08ce67d 
 <<endif>>
 {$kieran}: As long as we're missing the correct combination, prying it open would take the entire night... or several. #lastline #line:08cdc27 
--> [nomarkup][Look at the paintings.][/nomarkup] <<if $paintingsDestroyed == false>> #line:080811b 
+-> [nomarkup][Look at the paintings.][/nomarkup] <<if CustomVisited("paintingsDestroyed") == false>> #line:080811b 
     <<jump opinionsStart>>
--> [nomarkup][Examine the stamp.][/nomarkup] <<if $paintingsDestroyed == false>> #line:08344ae 
+-> [nomarkup][Examine the stamp.][/nomarkup] <<if CustomVisited("paintingsDestroyed") == false>> #line:08344ae 
     <<jump paintingSuccessExamination>>
 -> [nomarkup][Examine the safe.][/nomarkup] #line:0ad9884 
     <<jump safeExamine>>
@@ -185,7 +185,7 @@ position: 1740,623
 [nomarkup][You squat and squint your eyes trying to read what is written on the piece of paper glued to the canvas.][/nomarkup] #line:08877b9 
 [nomarkup][It looks quite new. Maybe a bit yellowed. The text indicates that it was bought in the Vibrant Vistas Gallery in the Arts District. It also says that this particular piece was bought on the 17th of June, 1969.][/nomarkup] #line:06c123e 
 {$kieran}: Vibrant Vistas Gallery... The address... I believe it's somewhere in the Arts District. And the date:the 17th of June, 1969. This is probably when it was bought. #line:0d53691 
-<<if GetIsPartyMemberRecruited($anastasia) is true and $PaintingsDestroyed == true>>
+<<if GetIsPartyMemberRecruited($anastasia) is true and CustomVisited("paintingsDestroyed") == true>>
     {$anastasia}: Great! Now we know where we can find more art to tear into. [nomarkup][She chuckles.][/nomarkup] #line:05774dc 
 <<endif>>
 [nomarkup][Your attention is caught by a small handwritten note on the stamp - “For my beloved Diana, on one of the most important days of her life. - Aidan Foster.”][/nomarkup] #line:0b50f52 
@@ -203,7 +203,7 @@ position: 1740,623
     {$kieran}: When I was Kate's ghoul, I helped Diana from time to time with the papers and stumbled upon an envelope with the guy's name on it. Asking her about it was [nomarkup]<i>not</i>[/nomarkup] the correct decision. #lastline #line:03dfb9b 
 <<endif>>
 -> {$pcName}: Good to know. May be important. Thanks Kieran. #line:0893dd5 
-<<if $paintingsDestroyed == false>>
+<<if CustomVisited("paintingsDestroyed") == false>>
     [nomarkup][You leave the painting alone. You will not gain more information from it.][/nomarkup] #line:0d6d4a6 
 <<endif>>
 ===
@@ -230,7 +230,6 @@ position: -1440,-287
 [nomarkup][In a single swift motion, you punch through the frame, ripping and tearing at the canvas - leaving miserable shreds as a witness to your growing frustration. Somehow, you feel better...][/nomarkup] #line:0e7d4d1 
 [nomarkup][But it is not long before the beginnings of anxious dread and terror seep into your thoughts, along with a chilling realization - This act was something not entirely within your control.][/nomarkup] #line:068d00c 
 <<set $safeDiscovered to true>>
-<<set $paintingsDestroyed to true>>
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
     {$anastasia}: Such depths of emotion! The viciousness on display was captivating. You should make your own exhibition one day. [nomarkup][She grins.][/nomarkup] #line:0183fc2 
 <<endif>>
@@ -282,7 +281,7 @@ position: -1386,57
         -> {$pcName}: Yes Kieran, I know, your ass is on the line, you repeat it all the time. #lastline #line:0ca6b02 
     <<endif>>
 <<endif>>
-<<if $safeFailCounter >= 4>>
+<<if CustomVisited("beastOpens")>>
     <<jump safeQuestions>>
 <<else>>
     <<jump paintingsInteractions>>
@@ -294,7 +293,7 @@ position: -1320,398
 {$innerVoice}: Shit... #line:0560752 
 {$beast}: I don't want to die... I must survive. #line:088157a 
 -> [nomarkup][You straighten up where you stand, you have no choice but to say something. Otherwise this quarrel will not end.] (Composure + Leadership) [/nomarkup]
-<<if Roll ("Composure","Leadership")>=2>>
+<<if Roll("Composure","Leadership")>=2>>
     -> {$pcName}: Listen up, guys... BOTH of you. This is my investigation and we'll do as I say, alright? It's not only his ass on the line, but mine too. [nomarkup][You say firmly.][/nomarkup] #success #line:00b25cf 
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0cbb9fc 
     {$kieran}: We'll finish this conversation at another, more opportune, time. #line:0c589a9 
@@ -304,8 +303,8 @@ position: -1320,398
     [nomarkup][Anastasia and Kieran focus on you, then turn to stare at one another.][/nomarkup] #line:0822982 
     {$kieran}: That was exceedingly rude. We're helping you with this investigation, and this is the thanks we get? (-1 Kieran Influence) #line:081baa7 
     <<ModifyInfluence -1 $kieran>>
-    {$anastasia}: [nomarkup][She whistles in appreciation, turning her head to regard Kieran.][/nomarkup] Speak for yourself. Nice lung capacity, Bumblebee. (+1 Anastasia Influence) #line:0448073 
     <<ModifyInfluence 1 $anastasia>>
+    {$anastasia}: [nomarkup][She whistles in appreciation, turning her head to regard Kieran.][/nomarkup] Speak for yourself. Nice lung capacity, Bumblebee. (+1 Anastasia Influence) #line:0448073 
     -> {$pcName}: Bumblebee? #line:0c323f6 
     {$kieran}: Your clothing, miss Bardot. I think our companion here is referring to the color scheme and pattern. #line:001185e 
     [nomarkup][You look down at the black and yellow striped sweater you slipped into before exiting your apartment.][/nomarkup] #line:01fc98a 
@@ -332,12 +331,16 @@ position: -1320,398
     {$kieran}: [nomarkup][He nods once in acknowledgement, his expression pleased.][/nomarkup] Quite right. I believe that with that, we have put the relevant concerns to rest. (Kieran influence +1) #line:00780ed 
     <<ModifyInfluence 1 $kieran>>
     {$anastasia}: Ugh. #lastline #line:0177a57 
-<<jump paintingsInteractions>>
+<<if CustomVisited("beastOpens")>>
+    <<jump safeQuestions>>
+<<else>>
+    <<jump paintingsInteractions>>
+<<endif>>
 ===
 title: examineScraps
 position: 219,24
 ---
 [nomarkup][The paintings, or what is left of them, litters the floor - the wood frames shattered as canvas scraps try desperately to cling to the splintered mounting. Some of the old, dry paint has crumbled to dust, leaving scattered piles of vibrant powder upon the floor. But, in the midst of this wanton destruction, you spy a ripped paper stamp... Weird.][/nomarkup] #line:0fa3f84 
-[nomarkup][At least you're still in one piece after that minor freakout. Unfortunately, though, you can't say the same about the paintings... A heavy steel safe sits behind what is left of one of the pieces of art, awaiting your inspection.][nomarkup] #line:0dadf45 
+[nomarkup][At least you're still in one piece after that minor freakout. Unfortunately, though, you can't say the same about the paintings... A heavy steel safe sits behind what is left of one of the pieces of art, awaiting your inspection.][/nomarkup] #line:0dadf45 
 <<jump successContinued>>
 ===

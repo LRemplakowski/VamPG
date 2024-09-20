@@ -32,7 +32,7 @@ title: carInteractions
     -> [nomarkup][Look behind at Diana.][/nomarkup] <<if CustomVisited("lookAtDiana") == false>> #line:0d105db 
     <<jump lookAtDiana>>
 <<endif>>
-<<if $beastTalk == false>>
+<<if CustomVisited("beastTalk") == false>>
     -> {$pcName}: ... maybe you could tell me something about this strange voice in my head? <<if CustomVisited("dominicBeast") == false>> #line:0fbf7a3 
         <<jump dominicBeast>>
 <<else>>

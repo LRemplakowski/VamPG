@@ -76,7 +76,8 @@ namespace SunsetSystems.Core.Database
         public bool Register(T entry)
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorUtility.SetDirty(this);
+            if (this != null)
+                UnityEditor.EditorUtility.SetDirty(this);
 #endif
             _databaseRegistry ??= new();
             _readableIDRegistry ??= new();

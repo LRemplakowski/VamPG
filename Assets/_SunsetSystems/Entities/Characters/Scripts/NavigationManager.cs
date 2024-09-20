@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using Sirenix.OdinInspector;
+using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace SunsetSystems.Entities.Characters.Navigation
 {
-    public class NavigationManager : MonoBehaviour, INavigationManager, IPersistentComponent
+    public class NavigationManager : SerializedMonoBehaviour, INavigationManager, IPersistentComponent
     {
         public const string COMPONENT_ID = "NAVIGATION_MANAGER";
 
@@ -17,6 +18,8 @@ namespace SunsetSystems.Entities.Characters.Navigation
         [Title("References")]
         [SerializeField, Required]
         private NavMeshAgent _navMeshAgent;
+        [SerializeField, Required]
+        private IActionPerformer _actionPerformer;
 
         private Coroutine _faceTargetCoroutine;
 
@@ -37,7 +40,7 @@ namespace SunsetSystems.Entities.Characters.Navigation
             {
                 if (_navMeshAgent.pathPending)
                     return true;
-                return _navMeshAgent.hasPath && CurrentSpeed > 0.1f;
+                return _navMeshAgent.hasPath && !GetAgentFinishedMovement() || _actionPerformer.PeekCurrentAction is Move;
             }
         }
 

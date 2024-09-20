@@ -169,15 +169,15 @@ namespace SunsetSystems.Equipment
 
         public bool UseAmmoFromSelectedWeapon(int count)
         {
-            IWeapon selectedWeaponInstance = GetSelectedWeapon();
-            if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
+            IWeapon selectedWeapon = GetSelectedWeapon();
+            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
                 return true;
-            if (weaponsAmmoData.TryGetValue(selectedWeaponInstance.DatabaseID, out WeaponAmmoData ammoData))
+            if (weaponsAmmoData.TryGetValue(selectedWeapon.DatabaseID, out WeaponAmmoData ammoData))
             {
                 if (ammoData.CurrentAmmo < count)
                     return false;
                 ammoData.CurrentAmmo -= count;
-                weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
+                weaponsAmmoData[selectedWeapon.DatabaseID] = ammoData;
                 OnAmmoChanged?.InvokeSafe(owner, ammoData);
                 return true;
             }
@@ -186,13 +186,14 @@ namespace SunsetSystems.Equipment
 
         public void ReloadSelectedWeapon()
         {
-            IWeapon selectedWeaponInstance = GetSelectedWeapon();
-            if (selectedWeaponInstance == null || selectedWeaponInstance.WeaponType == WeaponType.Melee || _ignoreAmmo)
+            IWeapon selectedWeaponData = GetSelectedWeapon();
+            if (selectedWeaponData == null)
                 return;
-            if (weaponsAmmoData.TryGetValue(selectedWeaponInstance.DatabaseID, out WeaponAmmoData ammoData))
+            if (weaponsAmmoData.TryGetValue(selectedWeaponData.DatabaseID, out WeaponAmmoData ammoData))
             {
                 ammoData.CurrentAmmo = ammoData.MaxAmmo;
-                weaponsAmmoData[selectedWeaponInstance.DatabaseID] = ammoData;
+                weaponsAmmoData[selectedWeaponData.DatabaseID] = ammoData;
+                weaponInstance?.PlayReloadSFX();
                 OnAmmoChanged?.InvokeSafe(owner, ammoData);
             }
         }
@@ -263,7 +264,7 @@ namespace SunsetSystems.Equipment
         public void OnAnimationEvent(string eventType)
         {
             if (string.Equals(eventType, FIRE_WEAPON_EVENT) && weaponInstance != null)
-                weaponInstance.FireWeapon();
+                weaponInstance.PlayFireWeaponFX();
         }
     }
 }

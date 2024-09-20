@@ -101,7 +101,6 @@ namespace SunsetSystems.Core.SceneLoading
                 loadingScreenUI.UpadteLoadingBar(asyncOp.PercentComplete);
                 await Task.Yield();
             }
-
             List<Task> loadingOps = new();
             for (int i = 1; i < data.AddressableScenePaths.Count; i++)
             {

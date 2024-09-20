@@ -1,13 +1,11 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Animation;
-using SunsetSystems.Audio;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.VFX;
 
 namespace SunsetSystems.Equipment
 {
+    [RequireComponent(typeof(AudioSource))]
     public class WeaponInstance : SerializedMonoBehaviour, IWeaponInstance
     {
         [Title("Config")]
@@ -24,13 +22,25 @@ namespace SunsetSystems.Equipment
         private Rigidbody bulletPrefab;
         [SerializeField]
         private AudioClip shotSFX;
+        [SerializeField]
+        private AudioClip reloadSFX;
+        [Title("Components")]
+        [SerializeField]
+        private AudioSource _weaponAudioSource;
         [field: SerializeField]
         public WeaponAnimationDataProvider WeaponAnimationData { get; private set; }
 
         public GameObject GameObject => this.gameObject;
 
+        private void OnValidate()
+        {
+            if (_weaponAudioSource == null)
+                _weaponAudioSource = GetComponent<AudioSource>();
+        }
+
+        [Title("Editor Utility")]
         [Button]
-        public void FireWeapon()
+        public void PlayFireWeaponFX()
         {
             if (muzzleFlash != null)
                 muzzleFlash.Play();
@@ -41,7 +51,14 @@ namespace SunsetSystems.Equipment
                 Destroy(bulletInstance.gameObject, bulletLifetime);
             }
             if (shotSFX != null)
-                AudioManager.Instance.PlaySFXOneShot(shotSFX);
+                _weaponAudioSource.PlayOneShot(shotSFX);
+        }
+
+        [Button]
+        public void PlayReloadSFX()
+        {
+            if (reloadSFX != null)
+                _weaponAudioSource.PlayOneShot(reloadSFX);
         }
     }
 }

@@ -126,6 +126,8 @@ VFXRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_StaticBatchInfo:
@@ -246,7 +248,6 @@ MonoBehaviour:
   Position: {x: 0.03, y: 0.045, z: 0.02}
   Orientation: {x: -0.000000030908623, y: -0.7071068, z: -0.7071068, w: 0.000000030908623}
   IgnoreTag: UMAIgnore
-  _cleanUpMountPoint: 1
   setScale: 0
   MountOnStart: 1
 --- !u!114 &8246740420057270508
@@ -293,6 +294,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 7557897629658197417}
   bulletPrefab: {fileID: 0}
   shotSFX: {fileID: 8300000, guid: 4c31b955e73b8a547b4212d90dbff16b, type: 3}
+  reloadSFX: {fileID: 8300000, guid: e9681ca6b6dd6164ead8cad91371b5c2, type: 3}
   <WeaponAnimationData>k__BackingField: {fileID: 8246740420057270508}
 --- !u!1 &6929899559275216211
 GameObject:

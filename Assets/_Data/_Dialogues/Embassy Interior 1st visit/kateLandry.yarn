@@ -162,9 +162,9 @@ title: subsequentQuestions
     <<jump camarillaExplained>>
 -> {$pcName}: Final Death? <<if CustomVisited("previousPrince") == true>> #line:0a6fbab 
     <<jump finalDeathExplained>>
--> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and CustomVisited("getToOffice") == false>> #line:0460c71 
+-> {$pcName}: I need to get into Diana's office. <<if $dianaMet == true and CustomVisited("getToOffice") == false and CustomVisited("afterBouncerCutscene") == false>> #line:0460c71 
     <<jump getToOffice>>
--> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false and CustomVisited("getToOffice") == true>>#line:0ffc627 
+-> {$pcName}: The bouncer is being difficult. <<if $talkedToBouncer == true and CustomVisited("bouncerDifficulties") == false and CustomVisited("getToOffice") == true and CustomVisited("afterBouncerCutscene") == false>>#line:0ffc627 
     <<jump bouncerDifficulties>>
 -> {$pcName}: I should go.
     {$sforzaMask}: An astute observation. Best of luck on your little search.

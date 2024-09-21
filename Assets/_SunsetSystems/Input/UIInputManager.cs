@@ -20,6 +20,7 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnPointerPosition += OnPointerPosition;
             SunsetInputHandler.OnJournal += OnJournal;
             SunsetInputHandler.OnHighlightInteractables += OnHighlightInteractablesAction;
+            SunsetInputHandler.OnHelp += OnHelp;
         }
 
         private void OnDisable()
@@ -30,6 +31,7 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
             SunsetInputHandler.OnJournal -= OnJournal;
             SunsetInputHandler.OnHighlightInteractables -= OnHighlightInteractablesAction;
+            SunsetInputHandler.OnHelp -= OnHelp;
         }
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
@@ -74,6 +76,11 @@ namespace SunsetSystems.Input
         private void OnHighlightInteractablesAction(InputAction.CallbackContext context)
         {
             _gameplayScreenHandler.OnHighlightInteractablesAction(context);
+        }
+
+        private void OnHelp(InputAction.CallbackContext context)
+        {
+            _gameplayScreenHandler.OnHelpAction(context);
         }
     }
 }

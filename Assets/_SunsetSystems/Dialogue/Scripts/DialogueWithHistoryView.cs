@@ -1,26 +1,27 @@
-using Sirenix.OdinInspector;
-using Redcode.Awaiting;
-using SunsetSystems.Audio;
-using SunsetSystems.Party;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Redcode.Awaiting;
+using Sirenix.OdinInspector;
+using SunsetSystems.Audio;
+using SunsetSystems.Core.Database;
+using SunsetSystems.Entities.Characters;
+using SunsetSystems.Party;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Yarn.Unity;
-using UnityEngine.EventSystems;
-using SunsetSystems.Entities;
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Core.Database;
 
 namespace SunsetSystems.Dialogue
 {
     public class DialogueWithHistoryView : DialogueViewBase
     {
+        [Title("Config")]
         [SerializeField, Required]
         private TextMeshProUGUI _lineHistory;
         [SerializeField]
@@ -39,6 +40,10 @@ namespace SunsetSystems.Dialogue
         private bool _showUnavailableOptions;
         [SerializeField]
         private float _lineCompletionDelay = .5f;
+        [SerializeField]
+        private Color _speakerNameColor = Color.red;
+        [SerializeField]
+        private Color _bracketedTextColor = Color.gray;
         [Title("Portrait")]
         [SerializeField]
         private Sprite _placeholderPortraitAsset;
@@ -206,14 +211,24 @@ namespace SunsetSystems.Dialogue
                 if (CreatureDatabase.Instance.TryGetEntryByReadableID(line.CharacterName, out CreatureConfig speakerConfig))
                     speakerName = speakerConfig.FullName;
                 _lineHistoryStringBuilder
-                    .Append($"<color=\"red\">{speakerName}: </color>");
+                    .Append($"<color={ColorToHex(_speakerNameColor)}>{speakerName}: </color>");
             }
             //if (appended)
             //    _lineHistoryStringBuilder.AppendLine("</size>");
+            var text = ColorizeSquareBracketText(line.TextWithoutCharacterName.Text, _bracketedTextColor);
             _lineHistoryStringBuilder
-                .AppendLine(line.TextWithoutCharacterName.Text);
+                .AppendLine(text);
             return _lineHistoryStringBuilder.ToString();
         }
+
+        private static string ColorizeSquareBracketText(string inputText, Color bracketedTextColor) 
+        {
+            string pattern = @"\[(.*?)\]";
+            string result = Regex.Replace(inputText, pattern, match => $"<color={ColorToHex(bracketedTextColor)}>{match.Value}</color>");
+            return result;
+        }
+
+        private static string ColorToHex(Color color) => $"#{ColorUtility.ToHtmlStringRGBA(color)}";
 
         private bool AppendRollPrefix(LocalizedLine dialogueLine)
         {

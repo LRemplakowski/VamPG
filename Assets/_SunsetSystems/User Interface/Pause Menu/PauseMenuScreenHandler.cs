@@ -28,10 +28,8 @@ namespace SunsetSystems.UI
             LevelLoader.Instance.BackToMainMenu();
         }
 
-        public void OpenPauseMenu()
-        {
-            OpenMenuScreen(PauseMenuScreen.Settings);
-        }
+        public void OpenPauseMenu() => OpenMenuScreen(PauseMenuScreen.Settings);
+        public void ClosePauseMenu() => OpenMenuScreen(PauseMenuScreen.None);
 
         public void OpenMenuScreen(PauseMenuScreen screen)
         {

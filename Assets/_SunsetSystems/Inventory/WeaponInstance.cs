@@ -27,6 +27,8 @@ namespace SunsetSystems.Equipment
         [Title("Components")]
         [SerializeField]
         private AudioSource _weaponAudioSource;
+        [SerializeField]
+        private UMAMountedItem _umaMount;
         [field: SerializeField]
         public WeaponAnimationDataProvider WeaponAnimationData { get; private set; }
 
@@ -36,6 +38,20 @@ namespace SunsetSystems.Equipment
         {
             if (_weaponAudioSource == null)
                 _weaponAudioSource = GetComponent<AudioSource>();
+            if (_umaMount == null)
+                _umaMount = GetComponent<UMAMountedItem>();
+        }
+
+        private void Awake()
+        {
+            if (_umaMount == null)
+                _umaMount = GetComponent<UMAMountedItem>();
+        }
+
+        private void Start()
+        {
+            if (_umaMount != null)
+                _umaMount.MountItem();
         }
 
         [Title("Editor Utility")]

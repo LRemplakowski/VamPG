@@ -74,7 +74,9 @@ namespace SunsetSystems.Combat.UI
         private void OnWeaponChanged(ICombatant combatant)
         {
             _actionBarUI.RefreshAvailableActions();
-            _ammoCounter.SetAmmoCounterVisible(combatant.References.WeaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
+            var weaponManager = combatant.References.WeaponManager;
+            _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
+            _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
         }
 
         private void OnActionUsed(ICombatant combatant)

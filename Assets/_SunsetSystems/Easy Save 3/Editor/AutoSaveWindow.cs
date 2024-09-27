@@ -147,7 +147,8 @@ namespace ES3Editor
                 parentObjects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
             else // Prefabs
             {
-                var prefabs = ES3ReferenceMgr.Current.prefabs;
+                var mgr = ES3ReferenceMgr.GetManagerFromScene(SceneManager.GetActiveScene(), false);
+                var prefabs = mgr.prefabs;
                 parentObjects = new GameObject[prefabs.Count];
                 for (int i = 0; i < prefabs.Count; i++)
                     if(prefabs[i] != null)

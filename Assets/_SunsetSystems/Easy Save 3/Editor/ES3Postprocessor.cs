@@ -21,11 +21,6 @@ using ES3Internal;
 [InitializeOnLoad]
 public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
 {
-    public static ES3ReferenceMgr RefMgr
-    {
-        get { return (ES3ReferenceMgr)ES3ReferenceMgr.Current; }
-    }
-
     public static GameObject lastSelected = null;
 
 
@@ -79,7 +74,7 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
     {
         if (scene != null && scene.isLoaded)
         {
-            var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene);
+            var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene, false);
             if (mgr != null)
                 mgr.RefreshDependencies(isEnteringPlayMode);
         }
@@ -92,9 +87,9 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
         if (!scene.isLoaded)
             return;
 
-        var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene);
+        var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene, false);
 
-        if (mgr != null)
+        if (mgr != null && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences && ES3Settings.defaultSettingsScriptableObject.updateReferencesWhenSceneChanges)
             mgr.AddDependencies(c);
     }
 
@@ -140,7 +135,7 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
             else
                 continue;
 
-            var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene);
+            var mgr = (ES3ReferenceMgr)ES3ReferenceMgr.GetManagerFromScene(scene, false);
 
             if (mgr == null)
                 return;
@@ -249,18 +244,20 @@ public class ES3Postprocessor : UnityEditor.AssetModificationProcessor
     public static GameObject AddManagerToScene()
     {
         GameObject mgr = null;
-        if (RefMgr != null)
-            mgr = RefMgr.gameObject;
+
+        var mgrComponent = ES3ReferenceMgr.GetManagerFromScene(SceneManager.GetActiveScene(), false);
+        if (mgrComponent != null)
+            mgr = mgrComponent.gameObject;
 
         if (mgr == null)
             mgr = new GameObject("Easy Save 3 Manager");
 
         if (mgr.GetComponent<ES3ReferenceMgr>() == null)
         {
-            mgr.AddComponent<ES3ReferenceMgr>();
+            var refMgr = mgr.AddComponent<ES3ReferenceMgr>();
 
             if (!Application.isPlaying && ES3Settings.defaultSettingsScriptableObject.autoUpdateReferences)
-                RefMgr.RefreshDependencies();
+                refMgr.RefreshDependencies();
         }
 
         if (mgr.GetComponent<ES3AutoSaveMgr>() == null)

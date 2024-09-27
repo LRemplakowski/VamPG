@@ -1,14 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Interactable;
-using SunsetSystems.Utils.Input;
 using SunsetSystems.Utils.ObjectPooling;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace SunsetSystems.UI
@@ -68,7 +64,7 @@ namespace SunsetSystems.UI
                 return;
             }
             Vector3 screenPoint = Camera.main.WorldToScreenPoint(nameplateReciever.NameplateWorldPosition);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(this.transform as RectTransform, screenPoint, Camera.main, out Vector2 nameplatePosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(this.transform as RectTransform, screenPoint, null, out Vector2 nameplatePosition);
             (_hoverNameplate.transform as RectTransform).localPosition = nameplatePosition;
             _hoverNameplate.SetNameplateText(nameplateReciever.NameplateText);
             _hoverNameplate.gameObject.SetActive(true);

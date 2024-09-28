@@ -8,13 +8,14 @@ namespace SunsetSystems.Tooltips
     {
         [Title("Tooltip Common")]
         [SerializeField]
-        private bool _alwaysUpdatePosition;
-        [SerializeField]
         private RectTransform _myRect;
+        [Title("Tooltip Common Runtime")]
         [ShowInInspector, ReadOnly]
         private RectTransform _parentRect;
         [ShowInInspector, ReadOnly]
         protected T _contextReference;
+        [ShowInInspector, ReadOnly]
+        private bool _alwaysUpdatePosition;
 
         private void Update()
         {

@@ -10,9 +10,12 @@ using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class InteractableEntity : PersistentEntity, IInteractable, INameplateReciever
+    public class InteractableEntity : PersistentEntity, IInteractable, IHoverNameplateSource
     {
         public static readonly HashSet<IInteractable> InteractablesInScene = new();
+
+        public GameObject NameplateSource => gameObject;
+        public Vector3 NameplateWorldPosition => transform.position + _nameplateOffset;
 
         [field: Title("References")]
         [field: SerializeField]
@@ -80,9 +83,6 @@ namespace SunsetSystems.Entities.Interactable
         public string NameplateText => _nameplateName;
         [SerializeField]
         private Vector3 _nameplateOffset = new (0, 3, 0);
-
-        public Vector3 NameplateWorldPosition => transform.position + _nameplateOffset;
-
         [SerializeField]
         private bool _interactableOnce = false;
 
@@ -118,7 +118,6 @@ namespace SunsetSystems.Entities.Interactable
                 _references = GetComponent<IEntityReferences>();
             if (InteractionHandlers == null)
                 InteractionHandlers = new();
-            //IHH added
             if (_highlightHandler == null)
                 _highlightHandler = GetComponent<IHighlightHandler>();
 
@@ -127,12 +126,9 @@ namespace SunsetSystems.Entities.Interactable
         protected virtual void Awake()
         {
             if (InteractionTransform == null)
-            {
                 InteractionTransform = this.transform;
-            }
             if (Interactable)
                 InteractablesInScene.Add(this);
-            //Added IHH
             if (_highlightHandler == null)
                 _highlightHandler = GetComponent<IHighlightHandler>();
 
@@ -194,12 +190,6 @@ namespace SunsetSystems.Entities.Interactable
             TargetedBy = null;
         }
 
-        public void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
-        }
-
         private void HandleHoverHiglight()
         {
             if (_highlightHandler != null && Interactable)
@@ -208,14 +198,7 @@ namespace SunsetSystems.Entities.Interactable
 
         private void HandleNameplate()
         {
-            if (Interactable && IsHoveredOver)
-            {
-                NameplateManager.Instance.AddNameplateSource(this);
-            }
-            else
-            {
-                NameplateManager.Instance.RemoveNameplateSource(this);
-            }    
+            IHoverNameplateSource.OnHoverStatusChange?.Invoke(this, Interactable && IsHoveredOver);   
         }
 
         public void ResetInteraction()
@@ -271,6 +254,12 @@ namespace SunsetSystems.Entities.Interactable
             {
 
             }
+        }
+
+        public void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(InteractionTransform.position, _interactionDistance);
         }
     }
 }

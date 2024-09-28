@@ -1,10 +1,7 @@
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities;
-using SunsetSystems.Game;
-using SunsetSystems.Inventory.UI;
+using SunsetSystems.Tooltips;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Yarn.Unity;
 
 namespace SunsetSystems.UI
 {
@@ -17,7 +14,7 @@ namespace SunsetSystems.UI
 
         public void OnPointerPositionAction(InputAction.CallbackContext context)
         {
-            _nameplateManager.OnPointerPosition(context);
+
         }
 
         public void OnHighlightInteractablesAction(InputAction.CallbackContext context)

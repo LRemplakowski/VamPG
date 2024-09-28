@@ -34,6 +34,7 @@ namespace SunsetSystems.Tooltips
             {
                 Debug.Log($"{gameObject.name} >>> Removing tooltip from source: {tooltipContext.TooltipSource}");
                 _tooltipPool.ReturnObject(tooltipInstance);
+                _activeTooltips.Remove(tooltipContext.TooltipSource);
             }
         }
 

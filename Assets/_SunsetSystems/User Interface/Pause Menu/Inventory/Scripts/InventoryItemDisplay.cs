@@ -1,28 +1,50 @@
+using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
+using SunsetSystems.Tooltips;
 using SunsetSystems.UI.Utils;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SunsetSystems.UI
 {
-    public class InventoryItemDisplay : Button, IUserInterfaceView<InventoryEntry>
+    public class InventoryItemDisplay : SerializedMonoBehaviour, IUserInterfaceView<InventoryEntry>, IPointerEnterHandler, IPointerExitHandler
     {
-        [SerializeField, ReadOnly]
-        private InventoryEntry _itemEntry;
-        [SerializeField]
+        public static Action<InventoryItemDisplay> OnPointerEnterItem, OnPointerExitItem;
+
+        [Title("Config")]
+        [SerializeField, Required]
+        private RectTransform _tooltipHookPoint;
+        [SerializeField, Required]
+        private Button _button;
+        [SerializeField, Required]
         private Image _icon;
-        [SerializeField]
+        [SerializeField, Required]
         private TextMeshProUGUI _stackSize;
+        [Title("Runtime")]
+        [ShowInInspector, ReadOnly]
+        private InventoryEntry _itemEntry;
+        [field: ShowInInspector, ReadOnly]
+        public InventoryNameplateData TooltipData { get; private set; }
+
+        private void Awake()
+        {
+            if (_tooltipHookPoint == null)
+                _tooltipHookPoint = transform as RectTransform;
+        }
+
+        private void Start()
+        {
+            TooltipData = new(this);
+        }
 
         public void UpdateView(IUserInfertaceDataProvider<InventoryEntry> dataProvider)
         {
             ResetView();
-            //if (lastLoadedSprite != null)
-                //AddressableManager.Instance.ReleaseAsset(lastLoadedSprite);
             if (dataProvider != null)
             {
                 _itemEntry = dataProvider.UIData;
@@ -37,13 +59,13 @@ namespace SunsetSystems.UI
                 {
                     _stackSize.gameObject.SetActive(false);
                 }
-                interactable = true;
+                _button.interactable = true;
             }
             else
             {
                 _icon.gameObject.SetActive(false);
                 _stackSize.gameObject.SetActive(false);
-                interactable = false;
+                _button.interactable = false;
             }
         }
 
@@ -76,9 +98,9 @@ namespace SunsetSystems.UI
         private void ResetView()
         {
             _icon.gameObject.SetActive(false);
-            //_itemEntry = null;
+            _itemEntry = new();
             _stackSize.gameObject.SetActive(false);
-            interactable = false;
+            _button.interactable = false;
         }
 
         public void OpentContextMenu()
@@ -86,13 +108,30 @@ namespace SunsetSystems.UI
             //TODO: Actually make a context menu for an item instead of just equipping it
         }
 
-        //public override void OnPointerClick(PointerEventData eventData)
-        //{
-        //    base.OnPointerClick(eventData);
-        //    if (eventData.button.Equals(PointerEventData.InputButton.Right) && interactable)
-        //    {
-        //        OpentContextMenu();
-        //    }
-        //}
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_itemEntry.ItemReference != null)
+                OnPointerEnterItem?.Invoke(this);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (_itemEntry.ItemReference != null)
+                OnPointerExitItem?.Invoke(this);
+        }
+
+        public class InventoryNameplateData : ITooltipContext
+        {
+            private readonly InventoryItemDisplay _dataSource;
+
+            public GameObject TooltipSource => _dataSource.gameObject;
+            public Vector3 TooltipPosition => _dataSource._tooltipHookPoint.position;
+            public string ItemNameText => _dataSource._itemEntry.ItemReference?.Name;
+
+            public InventoryNameplateData(InventoryItemDisplay dataSource)
+            {
+                _dataSource = dataSource;
+            }
+        }
     }
 }

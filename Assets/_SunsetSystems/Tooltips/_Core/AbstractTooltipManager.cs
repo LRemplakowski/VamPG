@@ -11,10 +11,10 @@ namespace SunsetSystems.Tooltips
         [TabGroup("Tooltip Manager")]
         [Title("Config")]
         [SerializeField, LabelWidth(300)]
-        protected bool _alwaysUpdateTooltipPosition;
+        protected bool _alwaysUpdateTooltipPosition = false;
         [TabGroup("Tooltip Manager")]
         [SerializeField, LabelWidth(300)]
-        protected bool _translateTooltipPositionToCanvasSpace;
+        protected bool _convertPositionToCanvasSpace = true;
         [TabGroup("Tooltip Manager")]
         [Title("References")]
         [SerializeField]
@@ -46,6 +46,8 @@ namespace SunsetSystems.Tooltips
                 {
                     Debug.Log($"{gameObject.name} >>> Updating tooltip from source: {tooltipContext.TooltipSource}");
                     tooltip.SetParentTransfrom(_tooltipParentRect);
+                    tooltip.SetConvertPositionToCanvasSpace(_convertPositionToCanvasSpace);
+                    tooltip.UpdateTooltipPosition();
                     tooltip.SetAlwaysUpdatePosition(_alwaysUpdateTooltipPosition);
                 }
                 else
@@ -60,8 +62,10 @@ namespace SunsetSystems.Tooltips
                 if (tooltip.InjectTooltipData(tooltipContext))
                 {
                     Debug.Log($"{gameObject.name} >>> Creating new tooltip from source: {tooltipContext.TooltipSource}");
-                    tooltip.SetAlwaysUpdatePosition(_alwaysUpdateTooltipPosition);
                     tooltip.SetParentTransfrom(_tooltipParentRect);
+                    tooltip.SetConvertPositionToCanvasSpace(_convertPositionToCanvasSpace);
+                    tooltip.UpdateTooltipPosition();
+                    tooltip.SetAlwaysUpdatePosition(_alwaysUpdateTooltipPosition);
                     _activeTooltips[tooltipContext.TooltipSource] = tooltip;
                 }
                 else

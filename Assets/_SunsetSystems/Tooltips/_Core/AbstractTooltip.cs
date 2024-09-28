@@ -16,6 +16,8 @@ namespace SunsetSystems.Tooltips
         protected T _contextReference;
         [ShowInInspector, ReadOnly]
         private bool _alwaysUpdatePosition;
+        [ShowInInspector, ReadOnly]
+        private bool _convertPositionToCanvasSpace;
 
         private void Update()
         {
@@ -59,9 +61,21 @@ namespace SunsetSystems.Tooltips
 
         public void UpdateTooltipPosition()
         {
-            var screenPoint = Camera.main.WorldToScreenPoint(_contextReference.TooltipPosition);
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentRect, screenPoint, null, out Vector2 localPoint))
-                _myRect.localPosition = localPoint;
+            if (_convertPositionToCanvasSpace)
+            {
+                var screenPoint = Camera.main.WorldToScreenPoint(_contextReference.TooltipPosition);
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_parentRect, screenPoint, null, out Vector2 localPoint))
+                    _myRect.localPosition = localPoint;
+            }
+            else
+            {
+                _myRect.position = _contextReference.TooltipPosition;
+            }
+        }
+
+        public void SetConvertPositionToCanvasSpace(bool convert)
+        {
+            _convertPositionToCanvasSpace = convert;
         }
 
         public void SetAlwaysUpdatePosition(bool update)

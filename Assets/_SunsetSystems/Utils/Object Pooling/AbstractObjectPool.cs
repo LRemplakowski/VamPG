@@ -67,6 +67,7 @@ namespace SunsetSystems.Utils.ObjectPooling
         {
             returned.ResetObject();
             returned.gameObject.SetActive(false);
+            returned.transform.SetParent(_poolParent);
             _objectPool.Enqueue(returned);
         }
     }

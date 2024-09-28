@@ -904,6 +904,8 @@ public class ES3
 
     #region Other ES3 Methods
 
+#if !DISABLE_ENCRYPTION
+
     public static byte[] EncryptBytes(byte[] bytes, string password=null)
     {
         if (string.IsNullOrEmpty(password))
@@ -927,6 +929,8 @@ public class ES3
     {
         return ES3Settings.defaultSettings.encoding.GetString(DecryptBytes(Convert.FromBase64String(str), password));
     }
+
+#endif
 
     public static byte[] CompressBytes(byte[] bytes)
     {

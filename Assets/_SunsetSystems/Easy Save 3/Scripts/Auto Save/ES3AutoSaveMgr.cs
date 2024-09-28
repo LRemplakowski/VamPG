@@ -95,7 +95,7 @@ public class ES3AutoSaveMgr : MonoBehaviour
 
 
         // Ensure that the reference manager for this scene has been initialised.
-        var mgr = ES3ReferenceMgr.GetManagerFromScene(this.gameObject.scene);
+        var mgr = ES3ReferenceMgr.GetManagerFromScene(this.gameObject.scene, false);
         mgr.Awake();
 
         var gameObjects = ES3.Load<GameObject[]>(key, new GameObject[0], settings);

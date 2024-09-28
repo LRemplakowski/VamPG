@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using ES3Internal;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 namespace ES3Editor
 {
@@ -43,10 +44,11 @@ namespace ES3Editor
                 var es3Prefab = Undo.AddComponent<ES3Prefab>(go);
                 es3Prefab.GeneratePrefabReferences();
 
-                if (ES3ReferenceMgr.Current != null)
+                var mgr = ES3ReferenceMgr.GetManagerFromScene(SceneManager.GetActiveScene());
+                if (mgr != null)
                 {
-                    ES3ReferenceMgr.Current.AddPrefab(es3Prefab);
-                    EditorUtility.SetDirty(ES3ReferenceMgr.Current);
+                    mgr.AddPrefab(es3Prefab);
+                    EditorUtility.SetDirty(mgr);
                 }
             }
 		}

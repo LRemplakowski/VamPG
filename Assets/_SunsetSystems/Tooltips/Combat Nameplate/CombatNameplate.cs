@@ -2,18 +2,15 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Inventory;
-using SunsetSystems.Utils.ObjectPooling;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SunsetSystems.Combat.UI
+namespace SunsetSystems.Tooltips
 {
-    public class CombatNameplate : SerializedMonoBehaviour, IPooledObject
+    public class CombatNameplate : AbstractTooltip<CombatNameplateData>
     {
         [Title("References")]
-        [field: SerializeField, Required]
-        public RectTransform NameplateRect { get; private set; }
         [SerializeField, Required]
         private TextMeshProUGUI _name;
         [SerializeField, Required]
@@ -34,20 +31,20 @@ namespace SunsetSystems.Combat.UI
             }
         }
 
-        public void UpdateNameplateData(CombatNameplateData nameplateData)
+        protected override void UpdateTooltipFromContext(CombatNameplateData context)
         {
-            if (nameplateData.CurrentHP <= 0)
+            if (context.CurrentHP <= 0)
             {
                 gameObject.SetActive(false);
             }
-            _name.text = nameplateData.Name;
-            _healthValue.text = $"{nameplateData.CurrentHP}/{nameplateData.MaxHP}";
-            _healthSlider.value = nameplateData.HealthPercentage;
-            if (_weaponTypeIcons.TryGetValue(nameplateData.CurrentWeapon, out var icon))
+            _name.text = context.Name;
+            _healthValue.text = $"{context.CurrentHP}/{context.MaxHP}";
+            _healthSlider.value = context.HealthPercentage;
+            if (_weaponTypeIcons.TryGetValue(context.CurrentWeapon, out var icon))
                 _enemyTypeImage.sprite = icon;
         }
 
-        public void ResetObject()
+        protected override void DoCleanUp()
         {
             _name.text = "";
             _healthValue.text = "";

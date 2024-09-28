@@ -63,7 +63,7 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
             var sceneWasOpen = loadedScenePaths.Contains(buildSettingsScene.path);
             var scene = EditorSceneManager.OpenScene(buildSettingsScene.path, OpenSceneMode.Additive);
 
-            var mgr = ES3ReferenceMgr.GetManagerFromScene(scene);
+            var mgr = ES3ReferenceMgr.GetManagerFromScene(scene, false);
 
             if (mgr != null)
             {
@@ -100,7 +100,7 @@ public class ES3ReferenceMgr : ES3ReferenceMgrBase
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
     public void Optimize()
     {
-        var dependencies = EditorUtility.CollectDependencies(this.gameObject.scene.GetRootGameObjects());
+        var dependencies = EditorUtility.CollectDependencies(this.gameObject.scene.GetRootGameObjects().Where(go => go != this.gameObject).ToArray());
         var notDependenciesOfScene = new HashSet<UnityEngine.Object>();
 
         foreach (var kvp in idRef)

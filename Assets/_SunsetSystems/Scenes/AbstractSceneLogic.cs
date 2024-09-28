@@ -10,7 +10,7 @@ namespace SunsetSystems.Core
     [RequireComponent(typeof(UniqueId))]
     public abstract class AbstractSceneLogic : SerializedMonoBehaviour, ISaveable
     {
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private UniqueId _unique;
 
         public string DataKey => _unique.Id;

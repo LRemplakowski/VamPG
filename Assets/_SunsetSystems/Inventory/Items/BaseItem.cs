@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
+using SunsetSystems.Economy;
 using SunsetSystems.Journal;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Inventory.Data
 {
-    public abstract class BaseItem : AbstractDatabaseEntry<IBaseItem>, IRewardable, IUserInfertaceDataProvider<IBaseItem>, IBaseItem
+    public abstract class BaseItem : AbstractDatabaseEntry<IBaseItem>, IRewardable, IUserInfertaceDataProvider<IBaseItem>, IBaseItem, ITradeable
     {
         [field: SerializeField]
         public string Name { get; protected set; }
@@ -17,6 +18,8 @@ namespace SunsetSystems.Inventory.Data
         public override string DatabaseID { get; protected set; }
         [field: SerializeField, ReadOnly]
         public ItemCategory ItemCategory { get; protected set; }
+        [SerializeField, Min(0)]
+        private float _itemCashValue;
         [field: SerializeField, TextArea]
         public string ItemDescription { get; protected set; }
         [field: SerializeField]
@@ -31,6 +34,22 @@ namespace SunsetSystems.Inventory.Data
         public void ApplyReward(int amount)
         {
             InventoryManager.Instance.GiveItemToPlayer(this, amount);
+        }
+
+        public bool Buy(int amount)
+        {
+            InventoryManager.Instance.GiveItemToPlayer(this, amount);
+            return true;
+        }
+
+        public bool Sell(int amount)
+        {
+            return InventoryManager.Instance.TakeItemFromPlayer(this, amount, false);
+        }
+
+        public float GetBaseValue()
+        {
+            return _itemCashValue;
         }
 
         protected override void RegisterToDatabase()

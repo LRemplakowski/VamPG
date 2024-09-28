@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using SunsetSystems.Audio;
 using SunsetSystems.Persistence;
@@ -10,8 +11,10 @@ namespace SunsetSystems.Core
 {
     public class DefaultSceneLogic : AbstractSceneLogic
     {
-        [OdinSerialize]
+        [Title("Audio")]
+        [OdinSerialize, InlineProperty]
         private ScenePlaylistData _defaultScenePlaylists;
+        [field: Title("Events")]
         [field: SerializeField]
         public UltEvent OnSceneStart { get; private set; }
 

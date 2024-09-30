@@ -1,29 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using SunsetSystems.Economy;
-using UnityEngine;
+using SunsetSystems.Economy.UI;
 
 namespace SunsetSystems
 {
-    public class BoonTradeOffer : ITradeOffer
+    [Serializable]
+    public class BoonTradeOffer : AbstractTradeOffer
     {
         public int RequiredBoonScore;
         public string RequiredBoonSource;
         public bool RequiresSpecificBoon;
 
-        public bool AcceptOffer()
+        public override bool AcceptOffer()
         {
             throw new System.NotImplementedException();
         }
 
-        public bool CanPlayerAffordOffer()
+        public override bool CanPlayerAffordOffer()
         {
             throw new System.NotImplementedException();
         }
 
-        public float GetCost()
+        public override float GetCost()
         {
             throw new System.NotImplementedException();
+        }
+
+        public override ITradeOfferViewData GetOfferViewData()
+        {
+            throw new NotImplementedException();
         }
     }
 }

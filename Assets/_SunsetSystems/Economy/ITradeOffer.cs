@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using SunsetSystems.Economy.UI;
 
 namespace SunsetSystems.Economy
 {
     public interface ITradeOffer
     {
-        public float GetCost();
-        public bool AcceptOffer();
-        public bool CanPlayerAffordOffer();
+        float GetCost();
+        bool AcceptOffer();
+        bool CanPlayerAffordOffer();
+        ITradeOfferViewData GetOfferViewData();
     }
 }

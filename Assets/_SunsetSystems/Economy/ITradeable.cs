@@ -1,13 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.Economy
 {
     public interface ITradeable
     {
-        bool Buy(int amount);
-        bool Sell(int amount);
+        bool HandlePlayerBought(int amount);
+        bool HandlePlayerSold(int amount);
         float GetBaseValue();
+        TradeCategory GetTradeCategory();
+        string GetTradeName();
+        Sprite GetTradeIcon();
     }
 }

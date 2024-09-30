@@ -36,13 +36,13 @@ namespace SunsetSystems.Inventory.Data
             InventoryManager.Instance.GiveItemToPlayer(this, amount);
         }
 
-        public bool Buy(int amount)
+        public bool HandlePlayerBought(int amount)
         {
             InventoryManager.Instance.GiveItemToPlayer(this, amount);
             return true;
         }
 
-        public bool Sell(int amount)
+        public bool HandlePlayerSold(int amount)
         {
             return InventoryManager.Instance.TakeItemFromPlayer(this, amount, false);
         }
@@ -51,6 +51,15 @@ namespace SunsetSystems.Inventory.Data
         {
             return _itemCashValue;
         }
+
+        public TradeCategory GetTradeCategory()
+        {
+            return TradeCategory.Item;
+        }
+
+        public string GetTradeName() => Name;
+
+        public Sprite GetTradeIcon() => Icon;
 
         protected override void RegisterToDatabase()
         {

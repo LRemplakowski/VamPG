@@ -10,6 +10,11 @@ namespace SunsetSystems.Economy.UI
         [SerializeField]
         private TextMeshProUGUI _confirmationText;
 
+        public bool IsActive()
+        {
+            return _confirmationWindowCanvasGroup.interactable;
+        }
+
         public void SetConfirmationWindowVisible(bool visible)
         {
             _confirmationWindowCanvasGroup.alpha = visible ? 1 : 0;

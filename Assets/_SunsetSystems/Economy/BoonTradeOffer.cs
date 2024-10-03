@@ -1,15 +1,33 @@
 using System;
-using SunsetSystems.Economy;
+using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using SunsetSystems.Economy.UI;
+using UnityEngine;
 
-namespace SunsetSystems
+namespace SunsetSystems.Economy
 {
     [Serializable]
     public class BoonTradeOffer : AbstractTradeOffer
     {
+        [SerializeField, ReadOnly]
+        private TradeOfferType _offerType;
+
         public int RequiredBoonScore;
         public string RequiredBoonSource;
         public bool RequiresSpecificBoon;
+        [OdinSerialize, ReadOnly]
+        private ITradeable _offeredItem;
+
+        public BoonTradeOffer() : base(null)
+        {
+
+        }
+
+        public BoonTradeOffer(ITradeable offeredItem, TradeOfferType offerType, IMerchant merchant) : base(merchant)
+        {
+            _offeredItem = offeredItem;
+            _offerType = offerType;
+        }
 
         public override bool AcceptOffer()
         {

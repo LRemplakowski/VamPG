@@ -21,7 +21,7 @@ namespace SunsetSystems.Economy.UI
         {
             _tradeOfferViews.ForEach(view => _offerViewPool.ReturnObject(view));
             _tradeOfferViews.Clear();
-            merchant.GetAvailableTradeOffers(TradeOfferType.Buy, merchant.GetSupportedCurrencies(), out var offers);
+            merchant.GetAvailableTradeOffers(TradeOfferType.BuyFromPlayer, merchant.GetSupportedCurrencies(), out var offers);
             foreach (var offer in offers)
             {
                 var offerView = _offerViewPool.GetPooledObject();
@@ -29,6 +29,26 @@ namespace SunsetSystems.Economy.UI
                 _tradeOfferViews.Add(offerView);
             }
             gameObject.SetActive(true);
+        }
+
+        public void CloseTradeInterface()
+        {
+            gameObject.SetActive(false);
+            _tradeOfferViews.ForEach(view => _offerViewPool.ReturnObject(view));
+            _tradeOfferViews.Clear();
+            _cachedTradeConfirmDelegate = null;
+        }
+
+        public void OnCancel()
+        {
+            if (_tradeConfirmationWindow.IsActive())
+            {
+                OnTradeCanceled();
+            }
+            else
+            {
+                CloseTradeInterface();
+            }
         }
 
         public void ShowTradeConfirmation(Func<bool> onTradeConfirmedDelegate, ITradeOfferViewData viewData)

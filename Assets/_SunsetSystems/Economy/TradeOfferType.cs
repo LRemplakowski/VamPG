@@ -2,6 +2,6 @@
 {
     public enum TradeOfferType
     {
-        Buy, Sell
+        BuyFromPlayer, SellToPlayer
     }
 }

@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Inventory.Data;
+using UMA;
 using UMA.CharacterSystem;
 using UnityEngine;
 
@@ -37,7 +38,7 @@ namespace SunsetSystems.UMA
             if (_umaAvatar == null)
                 PrepareUMA();
             LoadDefaultWardrobeCollection(BaseLookWardrobeReadableID);
-            _umaAvatar.BuildCharacter(true);
+            RebuildOnNextFrame();
         }
 
         private UMAWardrobeCollection WardrobeCollectionFromID(string readableID)
@@ -49,11 +50,22 @@ namespace SunsetSystems.UMA
             return null;
         }
 
-        private IEnumerator RebuildUmaOnNextFrame()
+
+
+        private void RebuildOnNextFrame()
         {
-            yield return null;
-            _umaAvatar.BuildCharacter(true);
-            _updateOnNextFrame = null;
+            if (_updateOnNextFrame == null)
+            {
+                _updateOnNextFrame = RebuildUmaOnNextFrame();
+                _ = StartCoroutine(_updateOnNextFrame);
+            }
+
+            IEnumerator RebuildUmaOnNextFrame()
+            {
+                yield return null;
+                _umaAvatar.BuildCharacter(true);
+                _updateOnNextFrame = null;
+            }
         }
 
         public void BuildUMAFromTemplate(ICreatureTemplate template)
@@ -63,7 +75,7 @@ namespace SunsetSystems.UMA
             SetBodyType(template.BodyType);
             BaseLookWardrobeReadableID = template.BaseLookWardrobeReadableID;
             LoadDefaultWardrobeCollection(BaseLookWardrobeReadableID);
-            _umaAvatar.BuildCharacter();
+            RebuildOnNextFrame();
 #if UNITY_EDITOR
             if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode is false)
             {
@@ -78,6 +90,7 @@ namespace SunsetSystems.UMA
             if (!_umaRoot.TryGetComponent(out _umaAvatar))
             {
                 _umaAvatar = _umaRoot.AddComponent<DynamicCharacterAvatar>();
+                _umaAvatar.BuildCharacterEnabled = false;
 #if UNITY_EDITOR
                 _umaAvatar.editorTimeGeneration = false;
 #endif
@@ -99,6 +112,7 @@ namespace SunsetSystems.UMA
                 };
                 _umaAvatar.raceAnimationControllers.animators.Add(maleAnimator);
                 _umaAvatar.raceAnimationControllers.animators.Add(femaleAnimator);
+                _umaAvatar.BuildCharacter();
             }
             _umaAvatar.WardrobeRecipes.Clear();
             DoLoadBaseLook(_baseLookWardrobeCollection);
@@ -137,11 +151,7 @@ namespace SunsetSystems.UMA
                     if (_umaAvatar.umaData == null)
                         await new WaitUntil(() => _umaAvatar.umaData != null);
                     _umaAvatar.umaData.Dirty();
-                    if (_updateOnNextFrame == null)
-                    {
-                        _updateOnNextFrame = RebuildUmaOnNextFrame();
-                        _ = StartCoroutine(_updateOnNextFrame);
-                    }
+                    RebuildOnNextFrame();
                 }
                 else
                 {
@@ -160,11 +170,7 @@ namespace SunsetSystems.UMA
                     if (_umaAvatar.umaData == null)
                         await new WaitUntil(() => _umaAvatar.umaData != null);
                     _umaAvatar.umaData.Dirty();
-                    if (_updateOnNextFrame == null)
-                    {
-                        _updateOnNextFrame = RebuildUmaOnNextFrame();
-                        _ = StartCoroutine(_updateOnNextFrame);
-                    }
+                    RebuildOnNextFrame();
                 }
             }
         }

@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Economy.UI;
 using SunsetSystems.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,8 @@ namespace SunsetSystems.Input
         private PauseMenuScreenHandler _pauseScreenHandler;
         [SerializeField]
         private GameplayScreenHandler _gameplayScreenHandler;
+        [SerializeField]
+        private TradingInterface _tradingInterface;
 
         private void OnEnable()
         {

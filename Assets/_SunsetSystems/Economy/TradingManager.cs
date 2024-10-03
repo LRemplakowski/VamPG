@@ -21,6 +21,7 @@ namespace SunsetSystems.Economy
                 Destroy(gameObject);
         }
 
+        [Button]
         public void StartTrade(IMerchant merchant)
         {
             _tradeUI.InitializeTradeInterface(merchant);

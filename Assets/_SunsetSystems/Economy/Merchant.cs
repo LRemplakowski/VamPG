@@ -12,7 +12,7 @@ namespace SunsetSystems.Economy
         private Currency _supportedCurrencies;
         [BoxGroup("Merchant Config")]
         [SerializeField]
-        private float _playerBuyMultiplier = 1f, _playerSellMultiplier = 1f;
+        private float _buyFromPlayerMarkup = 1f, _sellToPlayerMarkup = 1f;
         [BoxGroup("Merchant Config")]
         [SerializeField]
         private bool _buysOnlySpecificTradeables = false;
@@ -46,7 +46,7 @@ namespace SunsetSystems.Economy
         [Button(Expanded = true), ShowIf("SupportsCash"), PropertyOrder(0)]
         public void AddCashOffer(ITradeable offeredItem)
         {
-            _cashOffers.Add(new(offeredItem, TradeOfferType.Buy, this));
+            _cashOffers.Add(new(offeredItem, TradeOfferType.SellToPlayer, this));
         }
 
         [TabGroup("Boon Offers")]
@@ -64,7 +64,12 @@ namespace SunsetSystems.Economy
 
         private void Start()
         {
+            ITradeOffer.OnTradeOfferAccepted += OnOfferAccepted;
+        }
 
+        private void OnDestroy()
+        {
+            ITradeOffer.OnTradeOfferAccepted -= OnOfferAccepted;
         }
 
         public bool GetAvailableTradeOffers(TradeOfferType offerType, Currency currencyType, out IEnumerable<AbstractTradeOffer> tradeOffers)
@@ -82,17 +87,20 @@ namespace SunsetSystems.Economy
 
         public float GetMerchantSellMarkup()
         {
-            return _playerSellMultiplier;
+            return _sellToPlayerMarkup;
         }
 
         public float GetMerchantBuyMarkup()
         {
-            return _playerBuyMultiplier;
+            return _buyFromPlayerMarkup;
         }
 
-        public bool FinalizeOffer(AbstractTradeOffer offer)
+        public void OnOfferAccepted(ITradeOffer offer)
         {
-            throw new System.NotImplementedException();
+            if (offer.IsOfferedByMerchant(this))
+            {
+
+            }
         }
     }
 }

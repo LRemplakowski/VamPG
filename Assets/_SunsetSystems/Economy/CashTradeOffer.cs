@@ -10,10 +10,7 @@ namespace SunsetSystems.Economy
     [Serializable]
     public class CashTradeOffer : AbstractTradeOffer
     {
-        [SerializeField, HideInTables]
-        private IMerchant _ownerConfig;
-
-        [SerializeField, ReadOnly, TableColumnWidth(80, false)]
+        [SerializeField, ReadOnly, TableColumnWidth(120, false)]
         private TradeOfferType _offerType;
         [LabelWidth(120)]
         [SerializeField, VerticalGroup("Price Settings")]
@@ -36,14 +33,13 @@ namespace SunsetSystems.Economy
         [OdinSerialize, PropertyOrder(3), TableColumnWidth(180, false)]
         private ITradeable _offerItem;
 
-        public CashTradeOffer()
+        public CashTradeOffer() : base(null)
         {
 
         }
 
-        public CashTradeOffer(ITradeable offerItem, TradeOfferType offerType, IMerchant owner)
+        public CashTradeOffer(ITradeable offerItem, TradeOfferType offerType, IMerchant owner) : base(owner)
         {
-            _ownerConfig = owner;
             _offerItem = offerItem;
             _offerType = offerType;
             _unitAmount = 1;
@@ -51,22 +47,29 @@ namespace SunsetSystems.Economy
 
         public override bool AcceptOffer()
         {
-            return _offerType switch
+            bool result = false;
+            switch (_offerType)
             {
-                TradeOfferType.Buy => _offerItem.HandlePlayerBought(_unitAmount),
-                TradeOfferType.Sell => _offerItem.HandlePlayerSold(_unitAmount),
-                _ => false,
-            };
+                case TradeOfferType.BuyFromPlayer:
+                    result = _offerItem.HandlePlayerSold(_unitAmount);
+                    break;
+                case TradeOfferType.SellToPlayer:
+                    result = _offerItem.HandlePlayerBought(_unitAmount);
+                    break;
+            }
+            if (result)
+                ITradeOffer.OnTradeOfferAccepted?.Invoke(this);
+            return result;
         }
 
         private float GetMerchantMarkup()
         {
-            if (_ownerConfig == null)
+            if (OwnerConfig == null)
                 return 0;
             return _offerType switch
             {
-                TradeOfferType.Buy => _ownerConfig.GetMerchantBuyMarkup(),
-                TradeOfferType.Sell => _ownerConfig.GetMerchantSellMarkup(),
+                TradeOfferType.BuyFromPlayer => OwnerConfig.GetMerchantBuyMarkup(),
+                TradeOfferType.SellToPlayer => OwnerConfig.GetMerchantSellMarkup(),
                 _ => 0f,
             };
         }

@@ -307,7 +307,6 @@ GameObject:
   m_Component:
   - component: {fileID: 47072572181172758}
   - component: {fileID: 47072572736257757}
-  - component: {fileID: 7294060555853319670}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -366,21 +365,13 @@ MonoBehaviour:
     - _Target: {fileID: 8763309741657221742}
       _MethodName: MoveToLevelStartPosition
       _PersistentArguments: []
+  OnBeforePersistentDataCache:
+    _PersistentCalls:
+    - _Target: {fileID: 2450861732199015913}
+      _MethodName: ClearAllPickables
+      _PersistentArguments: []
   OnLevelExit:
     _PersistentCalls: []
---- !u!114 &7294060555853319670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47072572736257758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
 --- !u!1 &86912332336722961
 GameObject:
   m_ObjectHideFlags: 0
@@ -5504,6 +5495,7 @@ Transform:
   - {fileID: 8647874132416996015}
   - {fileID: 4505304992540223626}
   - {fileID: 6046446831958464308}
+  - {fileID: 2941742159879055066}
   m_Father: {fileID: 5684286085573570492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2826342834827592879
@@ -7330,8 +7322,6 @@ GameObject:
   - component: {fileID: 3369841666507099188}
   - component: {fileID: 7422499650402796408}
   - component: {fileID: 7464563001163683483}
-  - component: {fileID: 6484991971934975808}
-  - component: {fileID: 386721807662339428}
   m_Layer: 0
   m_Name: Inventory Manager
   m_TagString: Untagged
@@ -7423,32 +7413,6 @@ MonoBehaviour:
     _PersistentCalls: []
   OnItemRemoved:
     _PersistentCalls: []
---- !u!114 &6484991971934975808
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3369841666507099191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd3f36d87db2ac447a3cb25339c61571, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tag: InventoryManager
---- !u!114 &386721807662339428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3369841666507099191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
 --- !u!1 &3373438527360932827
 GameObject:
   m_ObjectHideFlags: 0
@@ -11183,6 +11147,7 @@ MonoBehaviour:
     SerializationNodes: []
   _pauseScreenHandler: {fileID: 900467796158517555}
   _gameplayScreenHandler: {fileID: 2146170913191627318}
+  _tradingInterface: {fileID: 0}
 --- !u!1 &5809669675316618756
 GameObject:
   m_ObjectHideFlags: 0
@@ -11192,7 +11157,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1535922929522897298}
-  - component: {fileID: 4223965962962850600}
   - component: {fileID: 680596422096700416}
   m_Layer: 0
   m_Name: Experience Manager
@@ -11216,19 +11180,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1529408134919660166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4223965962962850600
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5809669675316618756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
 --- !u!114 &680596422096700416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12469,7 +12420,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9165693303196109145}
   - component: {fileID: 4528754766922320062}
-  - component: {fileID: 8106509443737825029}
   m_Layer: 0
   m_Name: Quest Journal
   m_TagString: Untagged
@@ -12550,19 +12500,6 @@ MonoBehaviour:
       Entry: 8
       Data: 
   _trackedQuests: []
---- !u!114 &8106509443737825029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6280094187835619498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
 --- !u!1 &6289269374809719199
 GameObject:
   m_ObjectHideFlags: 0
@@ -13896,6 +13833,78 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!1 &6826927460466975233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2941742159879055066}
+  - component: {fileID: 2450861732199015913}
+  - component: {fileID: 6273536307172892725}
+  m_Layer: 0
+  m_Name: Pickable Items Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2941742159879055066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826927460466975233}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1529408134919660166}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2450861732199015913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826927460466975233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6508aff4ec74ef145a0b0c1330637234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 6273536307172892725}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _pickablePrefab
+      Entry: 10
+      Data: 0
+--- !u!114 &6273536307172892725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826927460466975233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5e38ccf5ddf904bb02121f803071bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _poolParent: {fileID: 2941742159879055066}
+  _objectPrefab: {fileID: 2323684638156469096, guid: f73ce984cd9664a429cc537c77861a91, type: 3}
 --- !u!1 &6953175992493996394
 GameObject:
   m_ObjectHideFlags: 0
@@ -16242,7 +16251,6 @@ GameObject:
   - component: {fileID: 8400243579288208857}
   - component: {fileID: 8400243579288208856}
   - component: {fileID: 8400243579288208871}
-  - component: {fileID: 4016967007570032648}
   - component: {fileID: 7833747221054026662}
   m_Layer: 0
   m_Name: Dialogue Manager
@@ -16376,19 +16384,6 @@ MonoBehaviour:
     SerializationNodes: []
   _dialogueRunner: {fileID: 8400243579288208858}
   <DefaultTypewriterValue>k__BackingField: 15
---- !u!114 &4016967007570032648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8400243579288208861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d1796f3dc38e334ca54f2b0a067111d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _id: 
 --- !u!114 &7833747221054026662
 MonoBehaviour:
   m_ObjectHideFlags: 0

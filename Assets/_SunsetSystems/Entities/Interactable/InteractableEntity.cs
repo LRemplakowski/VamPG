@@ -1,16 +1,15 @@
-﻿using Sirenix.OdinInspector;
-using Sirenix.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using SunsetSystems.Core.Localization;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.UI;
-using System;
-using System.Collections.Generic;
 using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class InteractableEntity : PersistentEntity, IInteractable, IHoverNameplateSource
+    public class InteractableEntity : PersistentEntity, IInteractable, IHoverNameplateSource, ILocalizationTarget
     {
         public static readonly HashSet<IInteractable> InteractablesInScene = new();
 
@@ -205,6 +204,11 @@ namespace SunsetSystems.Entities.Interactable
         {
             _interacted = false;
             Interactable = true;
+        }
+
+        public void SetLocalizedText(string text)
+        {
+            _nameplateName = text;
         }
 
         public override object GetPersistenceData()

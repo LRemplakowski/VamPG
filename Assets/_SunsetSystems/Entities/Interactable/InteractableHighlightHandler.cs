@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using SunsetSystems.Core.Rendering;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Interactable
 {
-    public class InteractableHighlightHandler : SerializedMonoBehaviour, IHighlightHandler
+    public class InteractableHighlightHandler : SerializedMonoBehaviour, IHighlightHandler, IRendererProcessor
     {
         [Title("Config")]
         [SerializeField, ValueDropdown("GetLayerNames")]
@@ -37,6 +38,11 @@ namespace SunsetSystems.Entities.Interactable
                 await new WaitForSeconds(1f);
                 _highlightRenderers = _rendererParent.GetComponentsInChildren<Renderer>().ToList();
             }
+            CacheDefaultRendererLayers();
+        }
+
+        private void CacheDefaultRendererLayers()
+        {
             foreach (Renderer renderer in _highlightRenderers)
             {
                 _rendererLayerCache[renderer] = renderer.gameObject.layer;
@@ -55,6 +61,16 @@ namespace SunsetSystems.Entities.Interactable
                 else if (_rendererLayerCache.TryGetValue(renderer, out var cachedLayer))
                     renderer.gameObject.layer = cachedLayer;
             }
+        }
+
+        public void InjectRenderers(IEnumerable<Renderer> renderers)
+        {
+            SetHighlightActive(false);
+            _rendererLayerCache.Clear();
+            _highlightRenderers.Clear();
+            if (renderers != null)
+                _highlightRenderers.AddRange(renderers);
+            CacheDefaultRendererLayers();
         }
     }
 }

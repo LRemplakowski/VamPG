@@ -24,7 +24,7 @@ namespace SunsetSystems.Core.SceneLoading
 
         public LevelLoadingData CurrentLoadedLevel { get; private set; }
 
-        public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad;
+        public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad, OnBeforePersistentDataCache;
         public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
 
         public async Task LoadNewScene(SceneLoadingDataAsset data)
@@ -32,6 +32,7 @@ namespace SunsetSystems.Core.SceneLoading
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
             await new WaitForUpdate();
             loadingCamera.gameObject.SetActive(true);
+            OnBeforePersistentDataCache?.Invoke();
             SaveLoadManager.UpdateRuntimeDataCache();
             OnLevelLoadStart?.Invoke();
             loadingScreenUI.EnableAndResetLoadingScreen();

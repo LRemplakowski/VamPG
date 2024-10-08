@@ -19,5 +19,6 @@ namespace SunsetSystems.Persistence
         public const string ABSTRACT_SCENE_LOGIC_DATA_KEY = "ABSTRACT_SCENE_LOGIC";
         public const string WORLD_MAP_MANAGER_DATA_KEY = "WORLD_MAP_MANAGER";
         public const string RELATIONSHIP_MANAGER_DATA_KEY = "RELATIONSHIP_MANAGER";
+        public const string PICKABLES_MANAGER_DATA_KEY = "PICKABLES_MANAGER";
     }
 }

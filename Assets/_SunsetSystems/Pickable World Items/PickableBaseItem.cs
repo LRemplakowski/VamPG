@@ -117,6 +117,9 @@ namespace SunsetSystems.PickableItems
 
         private void SetupMeshColliders(IEnumerable<Renderer> renderers)
         {
+            var existingColliders = _pickableMeshInstance.GetComponentsInChildren<Collider>();
+            if (existingColliders != null && existingColliders.Length > 0)
+                return;
             foreach (var renderer in renderers)
             {
                 if (renderer.TryGetComponent(out Collider _))

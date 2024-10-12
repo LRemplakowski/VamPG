@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1719639746401114
+--- !u!1 &1123880707695192
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,7 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4424960839273398}
+  - component: {fileID: 4030289527095174}
+  - component: {fileID: 33551592903756870}
+  - component: {fileID: 23716681661250714}
   m_Layer: 0
   m_Name: Furniture_Armchair_03_Prefab
   m_TagString: Untagged
@@ -16,93 +18,137 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4424960839273398
+--- !u!4 &4030289527095174
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1719639746401114}
+  m_GameObject: {fileID: 1123880707695192}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.00349, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3652108107665490375}
+  - {fileID: 3675828506744437674}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &3652108107665890115
+--- !u!33 &33551592903756870
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123880707695192}
+  m_Mesh: {fileID: 4300000, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+--- !u!23 &23716681661250714
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123880707695192}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_RenderingLayerMask: 257
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e7c747c22a0298d4b962e8c728faa03b, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &3785719622150184001
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 4424960839273398}
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4030289527095174}
     m_Modifications:
-    - target: {fileID: 100004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_Name
-      value: armchair03
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00037
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.000000021855694
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
+    - target: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2300000, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+    - target: {fileID: -7511558181221131132, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 41403f9facddb3d4980804b31ed2e185, type: 2}
-    - target: {fileID: 2300000, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: 41403f9facddb3d4980804b31ed2e185, type: 2}
-    - target: {fileID: 2300002, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 41403f9facddb3d4980804b31ed2e185, type: 2}
+      objectReference: {fileID: 2100000, guid: e7c747c22a0298d4b962e8c728faa03b, type: 2}
+    - target: {fileID: 919132149155446097, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+      propertyPath: m_Name
+      value: MSH_Furniture_Armchair_04
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
---- !u!4 &3652108107665490375 stripped
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+--- !u!4 &3675828506744437674 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400004, guid: 4ee669730220f4f4cb3eacb33d96c803, type: 3}
-  m_PrefabInstance: {fileID: 3652108107665890115}
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e6de05233ad7dfb4f85d67d8af7093be, type: 3}
+  m_PrefabInstance: {fileID: 3785719622150184001}
   m_PrefabAsset: {fileID: 0}

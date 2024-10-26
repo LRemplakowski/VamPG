@@ -78,6 +78,7 @@ namespace SunsetSystems.PickableItems
         }
 
 #if UNITY_EDITOR
+        [Title("Editor Utility")]
         [Button]
         public void SetupPickableEditor(IBaseItem item)
         {
@@ -112,6 +113,13 @@ namespace SunsetSystems.PickableItems
             _pickableMeshInstance = null;
             _highlightHandler.InjectRenderers(null);
             _pickableNameplate.SetLocalizedText("");
+        }
+
+        [Button]
+        public void UpdateObjectName()
+        {
+            if (_itemReference != null)
+                gameObject.name = _itemReference.Name;
         }
 #endif
 

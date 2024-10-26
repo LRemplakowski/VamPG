@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
-using SunsetSystems.UI.Pause;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +10,7 @@ namespace SunsetSystems.UI
     public class PauseMenuScreenHandler : SerializedMonoBehaviour
     {
         [SerializeField]
-        private PauseUISelector inventory, journal, settings, characterSheet;
+        private GameObject inventory, journal, settings, characterSheet;
         [SerializeField]
         private GameObject _characterSelector;
         [SerializeField]
@@ -21,6 +20,7 @@ namespace SunsetSystems.UI
         private UltEvent _onReturnToMenu;
         
         public PauseMenuScreen CurrentActiveScreen { get; private set; }
+        private GameObject _lastSelectedScreen;
 
         public void QuitToMenu()
         {
@@ -35,32 +35,39 @@ namespace SunsetSystems.UI
         {
             if (GameManager.Instance.CurrentState == GameState.Conversation)
                 return;
+            if (_lastSelectedScreen != null)
+                _lastSelectedScreen.SetActive(false);
             switch (screen)
             {
                 case PauseMenuScreen.Settings:
                     gameObject.SetActive(true);
                     _characterSelector.SetActive(false);
-                    settings.SelectGUIScreen();
+                    settings.SetActive(true);
+                    _lastSelectedScreen = settings;
                     break;
                 case PauseMenuScreen.Inventory:
                     gameObject.SetActive(true);
                     _characterSelector.SetActive(true);
-                    inventory.SelectGUIScreen();
+                    inventory.SetActive(true);
+                    _lastSelectedScreen = inventory;
                     break;
                 case PauseMenuScreen.CharacterSheet:
                     gameObject.SetActive(true);
                     _characterSelector.SetActive(true);
-                    characterSheet.SelectGUIScreen();
+                    characterSheet.SetActive(true);
+                    _lastSelectedScreen = characterSheet;
                     break;
                 case PauseMenuScreen.Journal:
                     gameObject.SetActive(true);
                     _characterSelector.SetActive(false);
-                    journal.SelectGUIScreen();
+                    journal.SetActive(true);
+                    _lastSelectedScreen = journal;
                     break;
                 case PauseMenuScreen.Map:
                     break;
                 case PauseMenuScreen.None:
                     gameObject.SetActive(false);
+                    _lastSelectedScreen = null;
                     break;
             }
             CurrentActiveScreen = screen;

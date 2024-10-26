@@ -35,7 +35,7 @@ namespace SunsetSystems.Core.Database
             }
             keysToDelete.ForEach(key => _databaseRegistry.Remove(key));
             _readableIDRegistry = new();
-            _databaseRegistry.Values.ToList().ForEach(baseItem => _readableIDRegistry.Add(baseItem.ReadableID, baseItem.DatabaseID));
+            _databaseRegistry.Values.ToList().ForEach(baseItem => _readableIDRegistry.TryAdd(baseItem.ReadableID, baseItem.DatabaseID));
         }
 
 #if UNITY_EDITOR
@@ -84,12 +84,12 @@ namespace SunsetSystems.Core.Database
             if (_databaseRegistry.ContainsKey(entry.DatabaseID))
             {
                 _readableIDRegistry = new();
-                _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.Add(item.ReadableID, item.DatabaseID));
+                _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
                 return false;
             }
-            _databaseRegistry.Add(entry.DatabaseID, entry);
+            _databaseRegistry.TryAdd(entry.DatabaseID, entry);
             _readableIDRegistry = new();
-            _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.Add(item.ReadableID, item.DatabaseID));
+            _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
             return true;
         }
 
@@ -101,7 +101,7 @@ namespace SunsetSystems.Core.Database
             if (_databaseRegistry.Remove(entry.DatabaseID))
             {
                 _readableIDRegistry = new();
-                _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.Add(item.ReadableID, item.DatabaseID));
+                _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
             }
         }
     }

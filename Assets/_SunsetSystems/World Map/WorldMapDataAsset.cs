@@ -15,7 +15,7 @@ namespace SunsetSystems.WorldMap
 
         [SerializeField]
         private string _fallbackName;
-        [SerializeField, TextArea]
+        [SerializeField, MultiLineProperty]
         private string _fallbackDescription;
         [SerializeField]
         private Sprite _areaIcon;

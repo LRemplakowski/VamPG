@@ -1,20 +1,18 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace SunsetSystems.UI.Pause
+namespace SunsetSystems.UI
 {
     public class PauseUISelector : MonoBehaviour
     {
+        [SerializeField, Required]
+        private PauseMenuScreenHandler _pauseMenuHandler;
         [SerializeField]
-        private GameObject _targetGuiScreen;
-        private static GameObject _currentGuiScreen;
+        private PauseMenuScreen _targetGuiScreen;
 
         public void SelectGUIScreen()
         {
-            if (_currentGuiScreen)
-                _currentGuiScreen.SetActive(false);
-            if (_targetGuiScreen)
-                _targetGuiScreen.SetActive(true);
-            _currentGuiScreen = _targetGuiScreen;
+            _pauseMenuHandler.OpenMenuScreen(_targetGuiScreen);
         }
     }
 }

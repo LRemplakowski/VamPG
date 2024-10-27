@@ -54,6 +54,8 @@ namespace SunsetSystems.Entities.Characters.Navigation
 
         private bool GetAgentFinishedMovement()
         {
+            if (_navMeshAgent.isStopped)
+                return true;
             return _navMeshAgent.pathStatus switch
             {
                 NavMeshPathStatus.PathComplete => _navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance,

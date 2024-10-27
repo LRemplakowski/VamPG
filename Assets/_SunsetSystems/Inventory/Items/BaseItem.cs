@@ -63,12 +63,12 @@ namespace SunsetSystems.Inventory.Data
 
         protected override void RegisterToDatabase()
         {
-            ItemDatabase.Instance.Register(this);
+            ItemDatabase.Instance?.Register(this);
         }
 
         protected override void UnregisterFromDatabase()
         {
-            ItemDatabase.Instance.Unregister(this);
+            ItemDatabase.Instance?.Unregister(this);
         }
     }
 }

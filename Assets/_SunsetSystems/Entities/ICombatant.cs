@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Equipment;
@@ -30,8 +31,13 @@ namespace SunsetSystems.Combat
 
         int MovementRange { get; }
         int SprintRange { get; }
+        [Obsolete]
         bool HasMoved { get; }
+        [Obsolete]
         bool HasActed { get; }
+
+        bool GetCanMove();
+        int GetRemainingActionPoints();
 
         bool TakeDamage(int amount);
         int GetAttributeValue(AttributeType attributeType);
@@ -41,9 +47,5 @@ namespace SunsetSystems.Combat
         bool AttackCreatureUsingCurrentWeapon(ICombatant target);
         bool ReloadCurrentWeapon();
         bool IsTargetInRange(ICombatant target);
-
-
-        float PerformAttackAnimation();
-        float PerformTakeHitAnimation();
     }
 }

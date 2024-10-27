@@ -1,17 +1,12 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEngine;
 using Redcode.Awaiting;
-using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Party;
-using SunsetSystems.Animation;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Party;
 using UltEvents;
+using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
@@ -124,6 +119,8 @@ namespace SunsetSystems.Combat
             await Task.Yield();
             CombatEnd?.Invoke();
             CurrentEncounter = null;
+            Actors = null;
+            CurrentActiveActor = null;
         }
 
         private static async Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
@@ -157,6 +154,11 @@ namespace SunsetSystems.Combat
         public int GetRound()
         {
             return turnCounter;
+        }
+
+        public bool IsCurrentActiveActor(ICombatant actor)
+        {
+            return _currentActiveActor == actor;
         }
 
         public List<ICombatant> GetCombatantsInTurnOrder()

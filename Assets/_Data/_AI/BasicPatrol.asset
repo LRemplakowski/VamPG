@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: BasicPatrol
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(841,141)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.SelectorEvaluator","NodeData":{"Offset":"(0,120)"},"ID":1,"Name":"Selector
+        Evaluator","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-150,170)"},"ID":2,"Name":"Sequence","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"IsMyTurn","NodeData":{"Offset":"(-120,130)"},"ID":3,"Name":"Is
+        My Turn","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"AI
+        Context","IsShared":true}},{"Type":"CanMove","NodeData":{"Offset":"(0,130)"},"ID":4,"Name":"Can
+        Move","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"AI
+        Context","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.Movement.Patrol","NodeData":{"Offset":"(120,130)"},"ID":5,"Name":"Patrol","Instant":true,"SharedBoolm_RandomPatrol":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"SharedFloatm_WaypointPauseDuration":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0},"SharedGameObjectListm_Waypoints":{"Type":"BehaviorDesigner.Runtime.SharedGameObjectList","Name":"Patrol
+        Waypoints","IsShared":true,"List`1mValue":[]},"SharedFloatm_Speed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4},"SharedFloatm_AngularSpeed":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":120},"SharedFloatm_ArriveDistance":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolm_StopOnTaskEnd":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedBoolm_UpdateRotation":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Idle","NodeData":{"Offset":"(310,150)"},"ID":6,"Name":"Idle","Instant":true}]},"DetachedTasks":[{"Type":"BehaviorDesigner.Runtime.Tasks.ConditionalEvaluator","NodeData":{"Offset":"(1021.96606,547.2815)"},"ID":7,"Name":"Conditional
+        Evaluator","Instant":true,"SharedBoolreevaluate":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":false},"ConditionalconditionalTask":{"Type":"CanMove","SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"AI
+        Context","IsShared":true}},"BooleangraphLabel":false},{"Type":"BehaviorDesigner.Runtime.Tasks.Interrupt","NodeData":{"Offset":"(866.650757,723.9659)"},"ID":8,"Name":"Interrupt","Instant":true}],"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedGameObjectList","Name":"Patrol
+        Waypoints","IsShared":true,"List`1mValue":[]},{"Type":"SharedAIContext","Name":"AI
+        Context","IsShared":true}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.10

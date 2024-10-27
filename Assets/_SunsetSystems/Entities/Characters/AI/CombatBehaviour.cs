@@ -45,6 +45,9 @@ namespace SunsetSystems.Combat
 
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
+        private float _distanceMovedThisTurn = 0f;
+        private Vector3 _positionLastFrame;
+
         #region Unity Messages
         private void OnEnable()
         {
@@ -57,6 +60,7 @@ namespace SunsetSystems.Combat
         private void Start()
         {
             hasCoverAnimationBooleanHash = Animator.StringToHash(hasCoverAnimationBoolean);
+            _positionLastFrame = transform.position;
         }
 
         private void OnDisable()
@@ -69,7 +73,10 @@ namespace SunsetSystems.Combat
 
         private void Update()
         {
-            if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
+            if (transform.position != _positionLastFrame)
+                _distanceMovedThisTurn += Vector3.Distance(transform.position, _positionLastFrame);
+            _positionLastFrame = transform.position;
+            if (CombatManager.Instance.IsCurrentActiveActor(this))
             {
                 if (HasActionsQueued is false && HasMoved && HasActed && IsPlayerControlled is false)
                 {
@@ -97,6 +104,8 @@ namespace SunsetSystems.Combat
         {
             if (currentActor.Equals(this))
             {
+                _distanceMovedThisTurn = 0f;
+                _positionLastFrame = transform.position;
                 HasMoved = false;
                 HasActed = false;
             }
@@ -171,6 +180,16 @@ namespace SunsetSystems.Combat
 
         public Transform Transform => Owner.Transform;
 
+        public bool GetCanMove()
+        {
+            return SprintRange > Mathf.CeilToInt(_distanceMovedThisTurn);
+        }
+
+        public int GetRemainingActionPoints()
+        {
+            return 0;
+        }
+
         public bool TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);
@@ -190,7 +209,7 @@ namespace SunsetSystems.Combat
 
         public void SignalEndTurn()
         {
-            if (CombatManager.Instance.CurrentActiveActor?.Equals(this) ?? false)
+            if (CombatManager.Instance.IsCurrentActiveActor(this))
                 CombatManager.Instance.NextRound();
         }
 
@@ -332,26 +351,6 @@ namespace SunsetSystems.Combat
                 }
             }
             return unit;
-        }
-
-        /// <summary>
-        /// Instructs combatant to perform attack animation with current weapon.
-        /// </summary>
-        /// <returns>Animation duration</returns>
-        public float PerformAttackAnimation()
-        {
-            animationController.PlayFireWeaponAnimation();
-            return 1f;
-        }
-
-        /// <summary>
-        /// Instructs combatant to perform getting hit animation.
-        /// </summary>
-        /// <returns>Animation duration</returns>
-        public float PerformTakeHitAnimation()
-        {
-            animationController.PlayTakeHitAnimation();
-            return 1f;
         }
         #endregion
 

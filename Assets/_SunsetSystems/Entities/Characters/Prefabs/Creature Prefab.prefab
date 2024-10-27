@@ -38,6 +38,7 @@ Transform:
   - {fileID: 482763929595618258}
   - {fileID: 2593631097689478263}
   - {fileID: 5605094159454864981}
+  - {fileID: 225109557017388465}
   m_Father: {fileID: 1617358537211728380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389672268198153684
@@ -578,6 +579,7 @@ MonoBehaviour:
     - {fileID: 7860156406871809602}
     - {fileID: 3703066370810871723}
     - {fileID: 1441128836294789900}
+    - {fileID: 4678919013744510610}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -601,6 +603,9 @@ MonoBehaviour:
     - Name: <SpellbookManager>k__BackingField
       Entry: 10
       Data: 5
+    - Name: <AnimationManager>k__BackingField
+      Entry: 10
+      Data: 6
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
 --- !u!195 &7708544126274853394
@@ -876,6 +881,7 @@ MonoBehaviour:
       Data: 1
   animator: {fileID: 153986963061837018}
   rigBuilder: {fileID: 3758664395462481180}
+  _runSpeedThreshold: 6
   moveThreshold: 0.1
   _weaponAnimationTypeParam: WeaponAnimationType
   _takeHitAnimationParam: TakeHit
@@ -1560,3 +1566,60 @@ MonoBehaviour:
   <Faction>k__BackingField: 2
   <BodyType>k__BackingField: 0
   <CreatureType>k__BackingField: 2
+--- !u!1 &8609221204999721387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 225109557017388465}
+  - component: {fileID: 3027579589492726522}
+  m_Layer: 0
+  m_Name: AI Context
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &225109557017388465
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609221204999721387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3027579589492726522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609221204999721387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c1742f7219c85a4ab8bf6f1842f7d47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 3784422555817380618}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _combatBehaviour
+      Entry: 10
+      Data: 0

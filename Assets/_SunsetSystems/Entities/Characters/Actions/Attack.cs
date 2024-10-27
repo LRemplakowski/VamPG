@@ -64,9 +64,9 @@ namespace SunsetSystems.Entities.Characters.Actions
             faceTargetSubaction.Begin();
             while (faceTargetSubaction.EvaluateAction() is false)
                 yield return null;
-            float waitForAttackFinish = attacker.PerformAttackAnimation();
-            float waitForTakeHitFinish = defender.PerformTakeHitAnimation();
-            yield return new WaitForSeconds(Mathf.Max(waitForAttackFinish, waitForTakeHitFinish));
+            attacker.References.AnimationManager.PlayFireWeaponAnimation();
+            defender.References.AnimationManager.PlayTakeHitAnimation();
+            yield return new WaitForSeconds(1f);
             if (attackResult.Successful)
                 defender.TakeDamage(attackResult.AdjustedDamage);
             attackFinished.Value = true;

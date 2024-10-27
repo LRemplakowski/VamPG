@@ -4,6 +4,7 @@ using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Combat;
 using SunsetSystems.Spellbook;
+using SunsetSystems.Animation;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -17,5 +18,6 @@ namespace SunsetSystems.Entities.Characters
         IWeaponManager WeaponManager { get; }
         IUMAManager UMAManager { get; }
         IMagicUser SpellbookManager { get; }
+        IAnimationManager AnimationManager { get; }
     }
 }

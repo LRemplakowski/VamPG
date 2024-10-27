@@ -12,7 +12,7 @@ using UnityEngine.Animations.Rigging;
 
 namespace SunsetSystems.Animation
 {
-    public class AnimationManager : SerializedMonoBehaviour, IPersistentComponent
+    public class AnimationManager : SerializedMonoBehaviour, IPersistentComponent, IAnimationManager
     {
         public enum CreatureAnimationLayer
         {
@@ -36,6 +36,8 @@ namespace SunsetSystems.Animation
         private RigBuilder rigBuilder;
 
         [Title("Config")]
+        [SerializeField]
+        private float _runSpeedThreshold = 6f;
         [SerializeField]
         private float moveThreshold = .5f;
         [SerializeField]
@@ -81,7 +83,7 @@ namespace SunsetSystems.Animation
         private void SynchronizeAnimatorWithNavMeshAgent()
         {
             bool agentOnMove = agent.IsMoving;
-            float agentSpeed = agent.CurrentSpeed / agent.MaxSpeed;
+            float agentSpeed = agent.CurrentSpeed / _runSpeedThreshold;
             animator.SetBool(_animatorOnMove, agentOnMove);
             animator.SetFloat(_animatorSpeed, agentSpeed);
         }
@@ -97,7 +99,7 @@ namespace SunsetSystems.Animation
             {
                 float lerp = 0f;
                 float startWeight = 1 - targetWeight;
-                if (animator.GetLayerWeight(index) == targetWeight)
+                if (Mathf.Approximately(animator.GetLayerWeight(index), targetWeight))
                     yield break;
                 while (lerp < time)
                 {

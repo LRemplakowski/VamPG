@@ -1,3 +1,4 @@
+using SunsetSystems.Animation;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
@@ -25,5 +26,7 @@ namespace SunsetSystems.Entities.Characters
         public IUMAManager UMAManager { get; private set; }
         [field: SerializeField]
         public IMagicUser SpellbookManager { get; private set; }
+        [field: SerializeField]
+        public IAnimationManager AnimationManager { get; private set; }
     }
 }

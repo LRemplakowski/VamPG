@@ -25,18 +25,6 @@ namespace SunsetSystems.Equipment
             return equipmentSlots;
         }
 
-        public EquipmentData(InventoryConfig config)
-        {
-            EquipmentSlots = GetSlotsPreset();
-            foreach (EquipmentSlotID key in config.Equipment.EquipmentSlots.Keys)
-            {
-                if (EquipmentSlots.ContainsKey(key))
-                {
-                    EquipmentSlots[key] = config.Equipment.EquipmentSlots[key];
-                }    
-            }
-        }
-
         public EquipmentData(EquipmentData existing)
         {
             EquipmentSlots = new();

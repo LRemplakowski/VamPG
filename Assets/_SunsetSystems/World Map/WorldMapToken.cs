@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SunsetSystems.WorldMap
@@ -65,6 +66,21 @@ namespace SunsetSystems.WorldMap
         public void SetVisible(bool visible)
         {
             gameObject.SetActive(visible);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

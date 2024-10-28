@@ -25,14 +25,16 @@ namespace SunsetSystems.WorldMap
         private List<IWorldMapToken> _mapTokens = new();
 
         [Title("Runtime")]
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         private IWorldMapData _selectedMap;
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         private readonly Dictionary<string, IWorldMapToken> _idTokenDictionary = new();
 
         [Title("Editor Utility")]
         [SerializeField]
         private bool _autoCacheTokensInParent = true;
+
+        private bool _lockCurrentToken = false;
 
         private void OnValidate()
         {
@@ -69,7 +71,10 @@ namespace SunsetSystems.WorldMap
             foreach (IWorldMapData map in unlockedMaps)
             {
                 if (_idTokenDictionary.TryGetValue(map.DatabaseID, out IWorldMapToken token))
+                {
                     token.SetVisible(true);
+                    token.SetUnlocked(true);
+                }
             }
         }
 
@@ -77,6 +82,12 @@ namespace SunsetSystems.WorldMap
         {
             _selectedMap = tokenData;
             _ = _areaDescriptionWindow.ShowDescription(tokenData);
+        }
+
+        public void HideAreaDescription()
+        {
+            _selectedMap = null;
+            _ = _areaDescriptionWindow.HideDescription();
         }
 
         public void ToogleTravelConfirmationPopup(bool show)
@@ -90,6 +101,25 @@ namespace SunsetSystems.WorldMap
         public void ConfirmTravelToSelectedArea()
         {
             _worldMapManager.TravelToMap(_selectedMap);
+        }
+
+        public void HandleTokenHoveredOver(bool hovered, IWorldMapData tokenData)
+        {
+            if (_lockCurrentToken)
+                return;
+            if (hovered)
+                ShowAreaDescription(tokenData);
+            else
+                HideAreaDescription();
+        }
+
+        public void LockTokenDescription(bool locked, IWorldMapData tokenData)
+        {
+            _lockCurrentToken = locked;
+            if (locked && tokenData != _selectedMap)
+                ShowAreaDescription(tokenData);
+            else
+                HideAreaDescription();
         }
     }
 }

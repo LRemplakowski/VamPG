@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace SunsetSystems.Input.CameraControl
 {
-    [RequireComponent(typeof(Tagger))]
     public class BoundingBox : MonoBehaviour
     {
         [SerializeField]

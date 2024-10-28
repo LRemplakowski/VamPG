@@ -133,6 +133,7 @@ namespace SunsetSystems.Game
         Combat,
         Conversation,
         Menu,
-        GamePaused
+        GamePaused, 
+        WorldMap
     }
 }

@@ -24,13 +24,13 @@ namespace InsaneSystems.RTSSelection.UI
 
             if (!wasActivated)
                 DisableRect();
-            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction += OnPointerPosition;
         }
 
 
         private void OnDestroy()
         {
-            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction -= OnPointerPosition;
         }
 
         public void EnableRect(Vector3 atScreenPoint)

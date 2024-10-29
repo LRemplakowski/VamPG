@@ -23,12 +23,12 @@ namespace InsaneSystems.RTSSelection
 
         private void OnEnable()
         {
-            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction += OnPointerPosition;
         }
 
         private void OnDisable()
         {
-            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction -= OnPointerPosition;
         }
 
         public override void Initialize()

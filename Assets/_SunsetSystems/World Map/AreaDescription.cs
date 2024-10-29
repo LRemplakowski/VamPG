@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Redcode.Awaiting;
@@ -50,10 +48,10 @@ namespace SunsetSystems
         }
 
         [Button]
-        public async Task ShowDescription(IWorldMapData mapData)
+        public async Task ShowDescription(IWorldMapData mapData, bool preHideEvenIfAlreadyVisible = true)
         {
             ForceCompletePreviousTween();
-            if (_isVisible)
+            if (_isVisible && preHideEvenIfAlreadyVisible)
                 await HideDescription();
             InjectMapData(mapData);
             _showHideTween = _tweenTransform.DOMove(_shownPosition.position, _windowMoveTime);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
@@ -21,24 +22,21 @@ namespace SunsetSystems.Input
         {
             SunsetInputHandler.OnPrimaryAction += OnPrimaryAction;
             SunsetInputHandler.OnSecondaryAction += OnSecondaryAction;
-            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction += OnPointerPosition;
+            SunsetInputHandler.OnCameraMoveAction += OnCameraMove;
         }
 
         private void OnDisable()
         {
             SunsetInputHandler.OnPrimaryAction -= OnPrimaryAction;
             SunsetInputHandler.OnSecondaryAction -= OnSecondaryAction;
-            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
-        }
-
-        private static bool DoesAnyUIHitBlockRaycasts(List<RaycastResult> hits)
-        {
-            return hits.Any((hit) => { var cg = hit.gameObject.GetComponentInParent<CanvasGroup>(); return cg != null && cg.blocksRaycasts; });
+            SunsetInputHandler.OnPointerPositionAction -= OnPointerPosition;
+            SunsetInputHandler.OnCameraMoveAction -= OnCameraMove;
         }
 
         private void OnPrimaryAction(InputAction.CallbackContext context)
         {
-            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits)) is false)
+            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && InputHelper.DoesAnyUIHitBlockRaycasts(hits)) is false)
             {
                 if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                     handler.HandlePrimaryAction(context);
@@ -48,7 +46,7 @@ namespace SunsetSystems.Input
 
         private void OnSecondaryAction(InputAction.CallbackContext context)
         {
-            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && DoesAnyUIHitBlockRaycasts(hits)) is false)
+            if ((InputHelper.IsRaycastHittingUIObject(mousePosition, out List<RaycastResult> hits) && InputHelper.DoesAnyUIHitBlockRaycasts(hits)) is false)
             {
                 if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                     handler.HandleSecondaryAction(context);
@@ -61,6 +59,13 @@ namespace SunsetSystems.Input
                 mousePosition = context.ReadValue<Vector2>();
             if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
                 handler.HandlePointerPosition(context);
+        }
+
+
+        private void OnCameraMove(InputAction.CallbackContext context)
+        {
+            if (gameplayInputHandlers.TryGetValue(GameManager.Instance.CurrentState, out IGameplayInputHandler handler))
+                handler.HandleCameraMoveAction(context);
         }
     }
 }

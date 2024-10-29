@@ -61,10 +61,22 @@ namespace SunsetSystems.Tooltips
         {
             if (context.performed)
             {
+                HighlightAllInteractables(true);
+            }
+            else if (context.canceled)
+            {
+                HighlightAllInteractables(false);
+            }
+        }
+
+        public void HighlightAllInteractables(bool highlight) 
+        {
+            if (highlight)
+            {
                 _alwaysActiveNameplateSources.AddRange(InteractableEntity.InteractablesInScene.Select(interactable => interactable as IHoverNameplateSource));
                 _alwaysActiveNameplateSources.ForEach(active => HandleNameplateHover(active, true));
             }
-            else if (context.canceled)
+            else
             {
                 var previouslyActiveCache = new List<IHoverNameplateSource>(_alwaysActiveNameplateSources);
                 _alwaysActiveNameplateSources.Clear();

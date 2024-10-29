@@ -13,7 +13,8 @@ public class SunsetInputHandler : SerializedMonoBehaviour
     // Mouse input
     public static event Action<InputAction.CallbackContext> OnPrimaryAction;
     public static event Action<InputAction.CallbackContext> OnSecondaryAction;
-    public static event Action<InputAction.CallbackContext> OnPointerPosition;
+    public static event Action<InputAction.CallbackContext> OnPointerPositionAction;
+    public static event Action<InputAction.CallbackContext> OnCameraMoveAction;
     // Keyboard input
     public static event Action<InputAction.CallbackContext> OnInventory;
     public static event Action<InputAction.CallbackContext> OnJournal;
@@ -41,7 +42,12 @@ public class SunsetInputHandler : SerializedMonoBehaviour
 
     public void PointerPosition(InputAction.CallbackContext context)
     {
-        OnPointerPosition?.Invoke(context);
+        OnPointerPositionAction?.Invoke(context);
+    }
+
+    public void CameraMoveAction(InputAction.CallbackContext context)
+    {
+        OnCameraMoveAction?.Invoke(context);
     }
 
     public void InventoryAction(InputAction.CallbackContext context)

@@ -81,7 +81,7 @@ namespace SunsetSystems.WorldMap
         public void ShowAreaDescription(IWorldMapData tokenData)
         {
             _selectedMap = tokenData;
-            _ = _areaDescriptionWindow.ShowDescription(tokenData);
+            _ = _areaDescriptionWindow.ShowDescription(tokenData, false);
         }
 
         public void HideAreaDescription()
@@ -115,11 +115,42 @@ namespace SunsetSystems.WorldMap
 
         public void LockTokenDescription(bool locked, IWorldMapData tokenData)
         {
-            _lockCurrentToken = locked;
-            if (locked && tokenData != _selectedMap)
-                ShowAreaDescription(tokenData);
-            else
+            if (locked == false)
+            {
                 HideAreaDescription();
+                SetLocked(false);
+                return;
+            }
+            if (IsLocked() && IsCurrentSelectedToken(tokenData) is false)
+            {
+                ShowAreaDescription(tokenData);
+                return;
+            }
+            ShowAreaDescription(tokenData);
+            SetLocked(true);
+        }
+
+        private bool IsLocked()
+        {
+            return _lockCurrentToken;
+        }
+
+        private void SetLocked(bool locked)
+        {
+            _lockCurrentToken = locked;
+        }
+
+        private bool IsCurrentSelectedToken(IWorldMapData newToken)
+        {
+            try
+            {
+                return newToken.DatabaseID == _selectedMap.DatabaseID;
+            }
+            catch (NullReferenceException)
+            {
+                Debug.LogError("WorlMapUI >>> IsCurrentSelectedToken(IWorldMapData) >>> Recieved null token!");
+                return false;
+            }
         }
     }
 }

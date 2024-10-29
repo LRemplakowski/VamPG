@@ -5,6 +5,7 @@ using InsaneSystems.RTSSelection;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Party;
 using SunsetSystems.Utils.Input;
 using UnityEngine;
@@ -100,6 +101,12 @@ namespace SunsetSystems.Input
         public void HandleSecondaryAction(InputAction.CallbackContext context)
         {
             Debug.LogWarning("Secondary action not implemented!");
+        }
+
+
+        public void HandleCameraMoveAction(InputAction.CallbackContext context)
+        {
+            CameraControlScript.Instance.OnMove(context);
         }
 
         private void MoveCreaturesToPosition(List<ICreature> creatures)

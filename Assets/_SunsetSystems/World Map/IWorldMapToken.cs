@@ -2,7 +2,7 @@ using UnityEngine.EventSystems;
 
 namespace SunsetSystems.WorldMap
 {
-    public interface IWorldMapToken : IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public interface IWorldMapToken : IPointerClickHandler
     {
         IWorldMapData GetData();
 

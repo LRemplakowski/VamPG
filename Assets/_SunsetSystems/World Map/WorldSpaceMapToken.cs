@@ -33,23 +33,14 @@ namespace SunsetSystems.WorldMap
 
         public void SetVisible(bool visible)
         {
-            //gameObject.SetActive(visible);
+            gameObject.SetActive(visible);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left)
-                _uiManager.LockTokenDescription(true, _representedArea);
-        }
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            _uiManager.HandleTokenHoveredOver(true, _representedArea);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            _uiManager.HandleTokenHoveredOver(false, _representedArea);
+            if (_canHighlight)
+                if (eventData.button == PointerEventData.InputButton.Left)
+                    _uiManager.LockTokenDescription(true, _representedArea);
         }
     }
 }

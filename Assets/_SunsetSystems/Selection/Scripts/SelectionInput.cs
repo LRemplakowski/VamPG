@@ -22,13 +22,13 @@ namespace InsaneSystems.RTSSelection
         private void OnEnable()
         {
             SunsetInputHandler.OnPrimaryAction += OnPrimaryAction;
-            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction += OnPointerPosition;
         }
 
         private void OnDisable()
         {
             SunsetInputHandler.OnPrimaryAction -= OnPrimaryAction;
-            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction -= OnPointerPosition;
         }
 
         private void Start()

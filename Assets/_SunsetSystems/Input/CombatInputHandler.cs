@@ -3,6 +3,7 @@ using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Game;
+using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Spellbook;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,7 +40,7 @@ namespace SunsetSystems.Input
 
         private void Update()
         {
-            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false || GameManager.Instance.CurrentState != GameState.Combat)
+            if (CombatManager.Instance.IsActiveActorPlayerControlled() is false || GameManager.Instance.IsCurrentState(GameState.Combat) is false)
                 _showTargetingLine = false;
             _pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
             _targetingLineRenderer.gameObject.SetActive(_showTargetingLine);
@@ -140,6 +141,11 @@ namespace SunsetSystems.Input
                 case CombatActionType.Reload:
                     break;
             }
+        }
+
+        public void HandleCameraMoveAction(InputAction.CallbackContext context)
+        {
+            CameraControlScript.Instance.OnMove(context);
         }
     }
 }

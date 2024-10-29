@@ -35,10 +35,11 @@ namespace SunsetSystems.Game
         }
 
         [Title("Events")]
+        // Called when level is done loading but before injecting persistence data in ISaveable objects
         public UltEvent OnBeforePersistentDataLoad = new();
         // Called when level is done loading & all the persistent data already is injected
         public UltEvent OnLevelStart = new();
-        // Called before unloading current level and before caching the persistent data
+        // Called before unloading current level and before caching the persistent data in ISaveable objects
         public UltEvent OnBeforePersistentDataCache = new();
         // Called when we start to unload the current level and all the persistent data has been cached
         public UltEvent OnLevelExit = new();

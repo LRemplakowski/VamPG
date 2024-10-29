@@ -22,8 +22,17 @@ namespace SunsetSystems.Input.CameraControl
         public BoundingBox CurrentBoundingBox { set => _currentBoundingBox = value; }
 
         //Save/Load variables
-       
         public string DataKey => DataKeyConstants.CAMERA_CONTROL_SCRIPT_DATA_KEY;
+        private bool _movedToSavedPosition = false;
+
+        // Runtime
+        private float _internalMoveTargetSpeed => _cameraMoveSpeed + 2;
+        private Vector3 _moveTarget;
+        private Vector3 _moveDirection;
+        private float _rotationDirection;
+        private Vector2 _zoomDirection;
+        private static Vector2 mousePos;
+        private static Vector3 mousePosVector;
 
 
         private void Awake()
@@ -39,24 +48,14 @@ namespace SunsetSystems.Input.CameraControl
             }
         }
 
-        private void OnDestroy()
-        {
-            ISaveable.UnregisterSaveable(this);
-        }
-
-        private float _internalMoveTargetSpeed => _cameraMoveSpeed + 2;
-        private Vector3 _moveTarget;
-        private Vector3 _moveDirection;
-        private float _rotationDirection;
-        private Vector2 _zoomDirection;
-        private static Vector2 mousePos;
-        private static Vector3 mousePosVector;
-
-        private bool _movedToSavedPosition = false;
-
         private void Start()
         {
             _moveTarget = transform.position;
+        }
+
+        private void OnDestroy()
+        {
+            ISaveable.UnregisterSaveable(this);
         }
 
         public void MoveToLevelStartPosition()

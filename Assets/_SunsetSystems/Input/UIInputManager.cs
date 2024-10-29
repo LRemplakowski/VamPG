@@ -20,7 +20,7 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnInventory += OnInventory;
             SunsetInputHandler.OnCharacterSheet += OnCharacterSheet;
             SunsetInputHandler.OnEscape += OnCancel;
-            SunsetInputHandler.OnPointerPosition += OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction += OnPointerPosition;
             SunsetInputHandler.OnJournal += OnJournal;
             SunsetInputHandler.OnHighlightInteractables += OnHighlightInteractablesAction;
             SunsetInputHandler.OnHelp += OnHelp;
@@ -31,7 +31,7 @@ namespace SunsetSystems.Input
             SunsetInputHandler.OnInventory -= OnInventory;
             SunsetInputHandler.OnCharacterSheet -= OnCharacterSheet;
             SunsetInputHandler.OnEscape -= OnCancel;
-            SunsetInputHandler.OnPointerPosition -= OnPointerPosition;
+            SunsetInputHandler.OnPointerPositionAction -= OnPointerPosition;
             SunsetInputHandler.OnJournal -= OnJournal;
             SunsetInputHandler.OnHighlightInteractables -= OnHighlightInteractablesAction;
             SunsetInputHandler.OnHelp -= OnHelp;

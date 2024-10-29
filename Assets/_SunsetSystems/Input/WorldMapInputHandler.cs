@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.Input.CameraControl;
 using SunsetSystems.WorldMap;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace SunsetSystems.Input
 {
@@ -26,6 +24,10 @@ namespace SunsetSystems.Input
             {
                 hit.collider.TryGetComponent(out _lastHitToken);
             }
+            else
+            {
+                _lastHitToken = null;
+            }
         }
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
@@ -37,6 +39,15 @@ namespace SunsetSystems.Input
         {
             if (context.started && _lastHitToken == null)
                 _worldMapUIManager.LockTokenDescription(false, null);
+        }
+
+        public void HandleCameraMoveAction(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                _worldMapUIManager.LockTokenDescription(false, null);
+            }
+            CameraControlScript.Instance.OnMove(context);
         }
     }
 }

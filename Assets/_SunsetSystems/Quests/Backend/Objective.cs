@@ -61,12 +61,12 @@ namespace SunsetSystems.Journal
 
         protected override void RegisterToDatabase()
         {
-            ObjectiveDatabase.Instance.Register(this);
+            ObjectiveDatabase.Instance?.Register(this);
         }
 
         protected override void UnregisterFromDatabase()
         {
-            ObjectiveDatabase.Instance.Unregister(this);
+            ObjectiveDatabase.Instance?.Unregister(this);
         }
     }
 }

@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Interactable;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,16 +9,27 @@ namespace SunsetSystems.WorldMap
     public class WorldSpaceMapToken : SerializedMonoBehaviour, IWorldMapToken
     {
         [Title("Config")]
-        [SerializeField]
+        [SerializeField, Required]
         private IWorldMapData _representedArea;
         [SerializeField]
         private IHighlightHandler _highlightHanger;
+        [SerializeField]
+        private GameObject _linkedGameObject;
+        [SerializeField, Required]
+        private TextMeshPro _areaTitle;
 
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
         private WorldMapUI _uiManager;
         [ShowInInspector, ReadOnly]
         private bool _canHighlight;
+
+        private void Start()
+        {
+            if (_linkedGameObject != null)
+                transform.SetPositionAndRotation(_linkedGameObject.transform.position, _linkedGameObject.transform.rotation);
+            UpdateAreaTitle();
+        }
 
         public IWorldMapData GetData()
         {
@@ -33,7 +45,8 @@ namespace SunsetSystems.WorldMap
 
         public void SetVisible(bool visible)
         {
-            gameObject.SetActive(visible);
+            UpdateActiveGameObjects(visible);
+            UpdateAreaTitle();
         }
 
         public void OnPointerClick(PointerEventData eventData)
@@ -41,6 +54,19 @@ namespace SunsetSystems.WorldMap
             if (_canHighlight)
                 if (eventData.button == PointerEventData.InputButton.Left)
                     _uiManager.LockTokenDescription(true, _representedArea);
+        }
+
+        private void UpdateAreaTitle()
+        {
+            if (_areaTitle != null && _representedArea != null)
+                _areaTitle.SetText(_representedArea.GetAreaName());
+        }
+
+        private void UpdateActiveGameObjects(bool active)
+        {
+            if (_linkedGameObject != null)
+                _linkedGameObject.SetActive(active);
+            gameObject.SetActive(active);
         }
     }
 }

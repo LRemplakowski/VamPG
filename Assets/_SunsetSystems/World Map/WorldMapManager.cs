@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace SunsetSystems.WorldMap
 {
     public class WorldMapManager : SerializedMonoBehaviour, IWorldMapManager, ISaveable
     {
+        [ShowInInspector]
         public static IWorldMapManager Instance { get; private set; }
 
         [Title("References")]
@@ -19,13 +21,15 @@ namespace SunsetSystems.WorldMap
 
         [Title("Runtime")]
         [ShowInInspector]
+        private string _currentLoadedMap;
+        [ShowInInspector]
         private HashSet<IWorldMapData> _unlockedMaps = new();
 
         public string DataKey => DataKeyConstants.WORLD_MAP_MANAGER_DATA_KEY;
 
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance is null)
             {
                 Instance = this;
                 ISaveable.RegisterSaveable(this);
@@ -71,8 +75,16 @@ namespace SunsetSystems.WorldMap
             _ = LevelLoader.Instance.LoadNewScene(mapData.LevelData);
         }
 
+        public bool IsCurrentMap(IWorldMapData mapData)
+        {
+            if (mapData != null)
+                return mapData.DatabaseID == _currentLoadedMap;
+            return false;
+        }
+
         public object GetSaveData()
         {
+            
             return new WorldMapSaveData(this);
         }
 

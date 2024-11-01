@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SunsetSystems.WorldMap
 {
     public class WorldMapUI : SerializedMonoBehaviour
     {
+        [Title("Travel Buttons")]
+        [SerializeField, Required]
+        private Button _enterCurrentArea;
+        [SerializeField, Required]
+        private Button _travelToArea;
+
         [Title("References")]
         [SerializeField, Required]
         private IWorldMapManager _worldMapManager;
@@ -56,12 +63,40 @@ namespace SunsetSystems.WorldMap
         private void Awake()
         {
             EnsureTokenParent();
-            _mapTokens.ForEach(token => _idTokenDictionary[token.GetData().DatabaseID] = token);
         }
 
         private void Start()
         {
-            _mapTokens.ForEach(token => token.InjectTokenManager(this));
+            InitialTokenSetup();
+            ShowUnlockedMapTokens();
+        }
+
+        private void Update()
+        {
+            
+        }
+
+        private void InitialTokenSetup()
+        {
+            foreach (var token in _mapTokens)
+            {
+                _idTokenDictionary[token.GetData().DatabaseID] = token;
+                token.InjectTokenManager(this);
+                token.SetVisible(false);
+            }
+        }
+
+        private void ShowUnlockedMapTokens()
+        {
+            var unlockedMaps = _worldMapManager.GetUnlockedMaps();
+            foreach (IWorldMapData map in unlockedMaps)
+            {
+                if (_idTokenDictionary.TryGetValue(map.DatabaseID, out IWorldMapToken token))
+                {
+                    token.SetVisible(true);
+                    token.SetUnlocked(true);
+                }
+            }
         }
 
         private void OnEnable()

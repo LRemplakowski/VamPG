@@ -10,5 +10,6 @@ namespace SunsetSystems.WorldMap
         bool IsMapUnlocked(IWorldMapData mapData);
         void SetMapUnlocked(IWorldMapData mapData, bool unlocked);
         void TravelToMap(IWorldMapData mapData);
+        bool IsCurrentMap(IWorldMapData mapData);
     }
 }

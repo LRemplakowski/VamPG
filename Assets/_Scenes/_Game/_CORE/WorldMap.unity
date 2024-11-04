@@ -163,6 +163,8 @@ GameObject:
   - component: {fileID: 13608182}
   - component: {fileID: 13608183}
   - component: {fileID: 13608184}
+  - component: {fileID: 13608186}
+  - component: {fileID: 13608185}
   m_Layer: 0
   m_Name: Travel Confirmation
   m_TagString: Untagged
@@ -214,6 +216,7 @@ MonoBehaviour:
   _confirmationButton: {fileID: 0}
   _cancelButton: {fileID: 0}
   _uiManager: {fileID: 527059722}
+  _travelText: {fileID: 0}
 --- !u!225 &13608184
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -226,6 +229,44 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &13608185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13608181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &13608186
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13608181}
+  m_CullTransparentMesh: 1
 --- !u!1001 &23672304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -986,6 +1027,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 1577343959}
+    - {fileID: 13608183}
     - {fileID: 690963879}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -995,6 +1037,12 @@ MonoBehaviour:
     - Name: _worldMapManager
       Entry: 10
       Data: 0
+    - Name: _areaTravelConfirmatonScreen
+      Entry: 10
+      Data: 1
+    - Name: _areaEnterConfirmationScreen
+      Entry: 6
+      Data: 
     - Name: _mapTokens
       Entry: 7
       Data: 0|System.Collections.Generic.List`1[[SunsetSystems.WorldMap.IWorldMapToken,
@@ -1004,7 +1052,7 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 10
-      Data: 1
+      Data: 2
     - Name: 
       Entry: 13
       Data: 
@@ -1012,11 +1060,12 @@ MonoBehaviour:
       Entry: 8
       Data: 
   _enterCurrentArea: {fileID: 640011041}
+  _enterAreaButtonOffset: {x: 0, y: 60}
   _travelToArea: {fileID: 767960546}
+  _travelToAreaButtonOffset: {x: 0, y: 60}
   _mapTokenParent: {fileID: 1643018810}
   _mapCanvasGroup: {fileID: 527059721}
   _areaDescriptionWindow: {fileID: 204364605}
-  _areaConfirmatonScreen: {fileID: 13608183}
   _autoCacheTokensInParent: 1
 --- !u!1 &541169689 stripped
 GameObject:
@@ -1633,7 +1682,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 640011039}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 527059722}
+        m_TargetAssemblyTypeName: SunsetSystems.WorldMap.WorldMapUI, SunsetSystems
+        m_MethodName: ToggleEnterAreaConfirmationPopup
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &659562273
 GameObject:
   m_ObjectHideFlags: 0
@@ -2419,7 +2480,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 767960547}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 527059722}
+        m_TargetAssemblyTypeName: SunsetSystems.WorldMap.WorldMapUI, SunsetSystems
+        m_MethodName: ToogleTravelConfirmationPopup
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &767960547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4154,6 +4227,9 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: _currentTraveledToMap
+      Entry: 10
+      Data: 0
 --- !u!1 &1591401601 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 207863791360451298, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}

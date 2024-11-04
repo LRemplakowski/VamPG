@@ -42,11 +42,6 @@ namespace SunsetSystems.Core.SceneLoading.UI
             loadingScreenProviderConfig.ReleaseLoadingScreens();           
         }
 
-        private void Start()
-        {
-            transitionAnimator = FindObjectOfType<FadeScreenAnimator>(true);
-        }
-
         public void SetUnloadingProgress(float value)
         {
             loadingBar.value = value / 2;

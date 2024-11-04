@@ -82,5 +82,10 @@ namespace SunsetSystems.WorldMap
         {
             throw new System.NotImplementedException();
         }
+
+        public Vector3 GetTokenPosition()
+        {
+            return transform.position;
+        }
     }
 }

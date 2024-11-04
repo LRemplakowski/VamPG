@@ -11,5 +11,8 @@ namespace SunsetSystems.WorldMap
         void SetMapUnlocked(IWorldMapData mapData, bool unlocked);
         void TravelToMap(IWorldMapData mapData);
         bool IsCurrentMap(IWorldMapData mapData);
+        IWorldMapData GetCurrentMap();
+        bool EnterCurrentMap();
+        float GetTravelTime(IWorldMapData start, IWorldMapData end);
     }
 }

@@ -53,7 +53,7 @@ namespace SunsetSystems.WorldMap
         {
             if (_canHighlight)
                 if (eventData.button == PointerEventData.InputButton.Left)
-                    _uiManager.LockTokenDescription(true, _representedArea);
+                    _uiManager.LockTokenDescription(true, _representedArea, this);
         }
 
         private void UpdateAreaTitle()
@@ -67,6 +67,11 @@ namespace SunsetSystems.WorldMap
             if (_linkedGameObject != null)
                 _linkedGameObject.SetActive(active);
             gameObject.SetActive(active);
+        }
+
+        public Vector3 GetTokenPosition()
+        {
+            return transform.position;
         }
     }
 }

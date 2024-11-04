@@ -26,7 +26,7 @@ namespace SunsetSystems.Persistence
         {
             _unique = _unique != null ? _unique : GetComponent<UniqueId>();
             persistentEntitiesSet ??= new();
-            var persistentSceneObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IPersistentObject>();
+            var persistentSceneObjects = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None).OfType<IPersistentObject>();
             persistentEntitiesSet.AddRange(persistentSceneObjects);
             persistentEntitiesSet.RemoveWhere(element => element == null);
         }

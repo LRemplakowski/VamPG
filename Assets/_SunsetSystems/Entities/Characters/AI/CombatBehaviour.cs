@@ -190,6 +190,11 @@ namespace SunsetSystems.Combat
             return 0;
         }
 
+        public int GetRemainingMovement()
+        {
+            return SprintRange - Mathf.CeilToInt(_distanceMovedThisTurn);
+        }
+
         public bool TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);

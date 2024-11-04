@@ -67,12 +67,12 @@ namespace SunsetSystems.Entities.Characters
 
         protected override void RegisterToDatabase()
         {
-            CreatureDatabase.Instance.Register(this);
+            CreatureDatabase.Instance?.Register(this);
         }
 
         protected override void UnregisterFromDatabase()
         {
-            CreatureDatabase.Instance.Unregister(this);
+            CreatureDatabase.Instance?.Unregister(this);
         }
 
         [Serializable]

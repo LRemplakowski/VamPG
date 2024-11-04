@@ -12,8 +12,12 @@ namespace SunsetSystems.WorldMap
         [Title("Travel Buttons")]
         [SerializeField, Required]
         private Button _enterCurrentArea;
+        [SerializeField]
+        private Vector2 _enterAreaButtonOffset;
         [SerializeField, Required]
         private Button _travelToArea;
+        [SerializeField]
+        private Vector2 _travelToAreaButtonOffset;
 
         [Title("References")]
         [SerializeField, Required]
@@ -25,7 +29,9 @@ namespace SunsetSystems.WorldMap
         [SerializeField, Required]
         private AreaDescription _areaDescriptionWindow;
         [SerializeField, Required]
-        private WorldMapTravelConfirmation _areaConfirmatonScreen;
+        private IWorldMapConfirmationWindow _areaTravelConfirmatonScreen;
+        [SerializeField, Required]
+        private IWorldMapConfirmationWindow _areaEnterConfirmationScreen;
 
         [Title("Data")]
         [SerializeField]
@@ -34,6 +40,10 @@ namespace SunsetSystems.WorldMap
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
         private IWorldMapData _selectedMap;
+        [ShowInInspector, ReadOnly]
+        private IWorldMapToken _selectedToken;
+        [ShowInInspector, ReadOnly]
+        private IWorldMapToken _currentAreaToken;
         [ShowInInspector, ReadOnly]
         private readonly Dictionary<string, IWorldMapToken> _idTokenDictionary = new();
 
@@ -73,7 +83,8 @@ namespace SunsetSystems.WorldMap
 
         private void Update()
         {
-            
+            UpdateTravelToAreaButton();
+            UpdateEnterCurrentAreaButton();
         }
 
         private void InitialTokenSetup()
@@ -84,6 +95,25 @@ namespace SunsetSystems.WorldMap
                 token.InjectTokenManager(this);
                 token.SetVisible(false);
             }
+            var currentMap = _worldMapManager.GetCurrentMap();
+            if (currentMap != null)
+                _idTokenDictionary.TryGetValue(currentMap.DatabaseID, out _currentAreaToken);
+        }
+
+        private void UpdateTravelToAreaButton()
+        {
+            bool showTravelButton = _selectedMap != null && _worldMapManager.IsCurrentMap(_selectedMap) == false;
+            _travelToArea.gameObject.SetActive(showTravelButton);
+            if (showTravelButton)
+                MoveButtonToTokenPosition(_travelToArea, _selectedToken, _travelToAreaButtonOffset);
+        }
+
+        private void UpdateEnterCurrentAreaButton()
+        {
+            bool showEnterButton = _worldMapManager.GetCurrentMap() != null;
+            _enterCurrentArea.gameObject.SetActive(showEnterButton);
+            if (showEnterButton)
+                MoveButtonToTokenPosition(_enterCurrentArea, _currentAreaToken, _enterAreaButtonOffset);
         }
 
         private void ShowUnlockedMapTokens()
@@ -99,23 +129,10 @@ namespace SunsetSystems.WorldMap
             }
         }
 
-        private void OnEnable()
-        {
-            var unlockedMaps = _worldMapManager.GetUnlockedMaps();
-            _mapTokens.ForEach(token => token.SetVisible(false));
-            foreach (IWorldMapData map in unlockedMaps)
-            {
-                if (_idTokenDictionary.TryGetValue(map.DatabaseID, out IWorldMapToken token))
-                {
-                    token.SetVisible(true);
-                    token.SetUnlocked(true);
-                }
-            }
-        }
-
         public void ShowAreaDescription(IWorldMapData tokenData)
         {
             _selectedMap = tokenData;
+            _idTokenDictionary.TryGetValue(tokenData.DatabaseID, out _selectedToken);
             _ = _areaDescriptionWindow.ShowDescription(tokenData, false);
         }
 
@@ -128,14 +145,36 @@ namespace SunsetSystems.WorldMap
         public void ToogleTravelConfirmationPopup(bool show)
         {
             if (show)
-                _areaConfirmatonScreen.ShowConfirmationWindow();
+                _areaTravelConfirmatonScreen.ShowConfirmationWindow(_selectedMap);
             else
-                _areaConfirmatonScreen.HideConfirmationWindow();
+                _areaTravelConfirmatonScreen.HideConfirmationWindow();
+        }
+
+        public void ToggleEnterAreaConfirmationPopup(bool show)
+        {
+            if (show)
+            {
+                _areaEnterConfirmationScreen.ShowConfirmationWindow(_worldMapManager.GetCurrentMap());
+            }
+            else
+            {
+                _areaEnterConfirmationScreen.HideConfirmationWindow();
+            }
         }
 
         public void ConfirmTravelToSelectedArea()
         {
             _worldMapManager.TravelToMap(_selectedMap);
+            _idTokenDictionary.TryGetValue(_selectedMap.DatabaseID, out _currentAreaToken);
+        }
+
+        private void MoveButtonToTokenPosition(Button button, IWorldMapToken token, Vector2 buttonOffset)
+        {
+            if (token == null || button == null)
+                return;
+            Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, token.GetTokenPosition());
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, screenPoint, null, out var tokenCanvasPosition);
+            button.transform.localPosition = tokenCanvasPosition + buttonOffset;
         }
 
         public void HandleTokenHoveredOver(bool hovered, IWorldMapData tokenData)
@@ -148,20 +187,23 @@ namespace SunsetSystems.WorldMap
                 HideAreaDescription();
         }
 
-        public void LockTokenDescription(bool locked, IWorldMapData tokenData)
+        public void LockTokenDescription(bool locked, IWorldMapData tokenData, IWorldMapToken sourceToken)
         {
             if (locked == false)
             {
                 HideAreaDescription();
                 SetLocked(false);
+                SetSelectedToken(null);
                 return;
             }
             if (IsLocked() && IsCurrentSelectedToken(tokenData) is false)
             {
                 ShowAreaDescription(tokenData);
+                SetSelectedToken(sourceToken);
                 return;
             }
             ShowAreaDescription(tokenData);
+            SetSelectedToken(sourceToken);
             SetLocked(true);
         }
 
@@ -175,6 +217,11 @@ namespace SunsetSystems.WorldMap
             _lockCurrentToken = locked;
         }
 
+        private void SetSelectedToken(IWorldMapToken token)
+        {
+            _selectedToken = token;
+        }
+
         private bool IsCurrentSelectedToken(IWorldMapData newToken)
         {
             try
@@ -186,6 +233,11 @@ namespace SunsetSystems.WorldMap
                 Debug.LogError("WorlMapUI >>> IsCurrentSelectedToken(IWorldMapData) >>> Recieved null token!");
                 return false;
             }
+        }
+
+        internal void ConfirmEntryToCurrentArea()
+        {
+            throw new NotImplementedException();
         }
     }
 }

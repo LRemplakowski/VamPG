@@ -38,6 +38,7 @@ namespace SunsetSystems.Combat
 
         bool GetCanMove();
         int GetRemainingActionPoints();
+        int GetRemainingMovement();
 
         bool TakeDamage(int amount);
         int GetAttributeValue(AttributeType attributeType);

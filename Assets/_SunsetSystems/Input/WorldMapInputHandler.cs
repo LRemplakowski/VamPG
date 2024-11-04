@@ -38,14 +38,14 @@ namespace SunsetSystems.Input
         public void HandleSecondaryAction(InputAction.CallbackContext context)
         {
             if (context.started && _lastHitToken == null)
-                _worldMapUIManager.LockTokenDescription(false, null);
+                _worldMapUIManager.LockTokenDescription(false, null, null);
         }
 
         public void HandleCameraMoveAction(InputAction.CallbackContext context)
         {
             if (context.started)
             {
-                _worldMapUIManager.LockTokenDescription(false, null);
+                _worldMapUIManager.LockTokenDescription(false, null, null);
             }
             CameraControlScript.Instance.OnMove(context);
         }

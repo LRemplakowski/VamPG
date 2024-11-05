@@ -12,7 +12,7 @@ namespace SunsetSystems.Utils
             {
                 if (instance == null)
                 {
-                    instance = FindObjectOfType<T>();
+                    instance = FindAnyObjectByType<T>(FindObjectsInactive.Exclude);
                     if (instance == null)
                     {
                         GameObject obj = new()

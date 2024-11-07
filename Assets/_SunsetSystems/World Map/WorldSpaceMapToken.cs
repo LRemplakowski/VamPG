@@ -26,8 +26,7 @@ namespace SunsetSystems.WorldMap
 
         private void Start()
         {
-            if (_linkedGameObject != null)
-                transform.SetPositionAndRotation(_linkedGameObject.transform.position, _linkedGameObject.transform.rotation);
+            MoveTokenToLinkedObjectPosition();
             UpdateAreaTitle();
         }
 
@@ -72,6 +71,13 @@ namespace SunsetSystems.WorldMap
         public Vector3 GetTokenPosition()
         {
             return transform.position;
+        }
+
+        [Button]
+        private void MoveTokenToLinkedObjectPosition()
+        {
+            if (_linkedGameObject != null)
+                transform.SetPositionAndRotation(_linkedGameObject.transform.position, _linkedGameObject.transform.rotation);
         }
     }
 }

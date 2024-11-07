@@ -7,11 +7,20 @@ namespace SunsetSystems.Core.TimeFlow
     public class TimeManager : SerializedMonoBehaviour
     {
         [SerializeField]
+        private bool _progressTimeOnUpdate = false;
+        [SerializeField, ShowIf("_progressTimeOnUpdate")]
+        private float _timeFlowRate = 1f;
+        [SerializeField]
         private SunriseSunsetData _sunriseSunsetData;
 
         private DateTime _gameDate = new(1986, 6, 14, 20, 0, 0);
         private DateTime _cachedCycleSunrise;
         private DateTime _cachedCycleSunset;
+        private TimeUpdateData _cachedTimeUpdate;
+        [Title("Day Night Cycle")]
+        [ShowInInspector, ReadOnly, LabelText("Is Day")]
+        private bool _cachedIsDay;
+
         [Title("Calendar")]
         [ShowInInspector, ReadOnly]
         private int Year => _gameDate.Year;
@@ -27,23 +36,65 @@ namespace SunsetSystems.Core.TimeFlow
         [ShowInInspector, ReadOnly]
         private int Second => _gameDate.Second;
 
-        public static event Action<DateTime> OnTimeUpdated;
-        public static event Action<DateTime> OnDayChanged;
+        public delegate void TimeUpdateDelegate(in TimeUpdateData timeData);
+        public static event TimeUpdateDelegate OnTimeUpdated;
 
-        //public void AddTime(double minutes)
-        //{
-        //    _gameDate = _gameDate.AddMinutes(minutes);
-        //    OnTimeUpdated?.Invoke(_gameDate);
-        //}
+        public readonly struct TimeUpdateData
+        {
+            public readonly DateTime CurrentTime;
+            public readonly bool IsDay;
+            public readonly DateTime SunriseTime;
+            public readonly DateTime SunsetTime;
 
-        //public void AddDate(int days, int months = 0, int years = 0)
-        //{
-        //    _gameDate = _gameDate.AddDays(days);
-        //    _gameDate = _gameDate.AddMonths(months);
-        //    _gameDate = _gameDate.AddYears(years);
-        //    if (days != 0 || months != 0 || years != 0)
-        //        OnDayChanged?.Invoke(_gameDate);
-        //}
+            public TimeUpdateData(DateTime currentTime, bool isDay, DateTime sunriseTime, DateTime sunsetTime)
+            {
+                CurrentTime = currentTime;
+                IsDay = isDay;
+                SunriseTime = sunriseTime;
+                SunsetTime = sunsetTime;
+            }
+        }
+
+        private void Start()
+        {
+            UpdateSunriseSunsetCache();
+            _cachedTimeUpdate = new(GetCurrentTime(), GetCachedIsDay(), GetCachedSunriseTime(), GetCachedSunsetTime());
+            OnTimeUpdated?.Invoke(in _cachedTimeUpdate);
+        }
+
+        private void Update()
+        {
+            if (_progressTimeOnUpdate)
+                AddTime(0, 0, Time.deltaTime * _timeFlowRate);
+        }
+
+        [BoxGroup("Editor Utility")]
+        [Button]
+        public void AddDate(int days, int months, int years)
+        {
+            var updatedTime = GetCurrentTime();
+            if (days > 0)
+                updatedTime = updatedTime.AddDays(days);
+            if (months > 0)
+                updatedTime = updatedTime.AddMonths(months);
+            if (years > 0)
+                updatedTime = updatedTime.AddYears(years);
+            SetCurrentTime(updatedTime);
+        }
+
+        [BoxGroup("Editor Utility")]
+        [Button]
+        public void AddTime(double hours, double minutes, double seconds)
+        {
+            var updatedTime = GetCurrentTime();
+            if (hours > 0)
+                updatedTime = updatedTime.AddHours(hours);
+            if (minutes > 0)
+                updatedTime = updatedTime.AddMinutes(minutes);
+            if (seconds > 0)
+                updatedTime = updatedTime.AddSeconds(seconds);
+            SetCurrentTime(updatedTime);
+        }
 
         private void UpdateSunriseSunsetCache()
         {
@@ -59,15 +110,18 @@ namespace SunsetSystems.Core.TimeFlow
             }
         }
 
-        public bool IsDay()
+        public bool GetCachedIsDay() => _cachedIsDay;
+        private bool IsDay()
         {
             var currentTime = GetCurrentTime();
             bool wasLastSunriseToday = IsSameDay(currentTime, GetLastSunrise());
             bool isNextSunsetToday = IsSameDay(currentTime, GetNextSunset());
-            return wasLastSunriseToday && isNextSunsetToday;
+            _cachedIsDay = wasLastSunriseToday && isNextSunsetToday;
+            return GetCachedIsDay();
         }
 
-        public bool IsNight()
+        public bool GetCachedIsNight() => !GetCachedIsDay();
+        private bool IsNight()
         {
             return !IsDay();
         }
@@ -170,7 +224,7 @@ namespace SunsetSystems.Core.TimeFlow
 
         private bool IsDifferentDay(DateTime timeA, DateTime timeB)
         {
-            return timeA.Day != timeB.Day || timeA.Month != timeB.Month || timeA.Year != timeB.Year;
+            return !IsSameDay(timeA, timeB);
         }
 
         private bool IsSameDay(DateTime timeA, DateTime timeB)
@@ -178,7 +232,27 @@ namespace SunsetSystems.Core.TimeFlow
             return timeA.Day == timeB.Day && timeA.Month == timeB.Month && timeA.Year == timeB.Year;
         }
 
-        public void SetDateTime(DateTime newDateTime) => _gameDate = newDateTime;
+        private bool IsCurrentTimePastDayNightTreshold()
+        {
+            return GetCachedIsDay() && GetCurrentTime() > GetCachedSunsetTime() || GetCachedIsNight() && GetCurrentTime() > GetCachedSunriseTime();
+        }
+
+        public void SetCurrentTime(DateTime newDateTime) => SetCurrentTime(newDateTime, false);
+        public void SetCurrentTime(DateTime newDateTime, bool preventTimeUpdateEvent)
+        {
+            if (newDateTime == GetCurrentTime())
+                return;
+            var previousDate = _gameDate;
+            _gameDate = newDateTime;
+            if (IsCurrentTimePastDayNightTreshold() || IsDifferentDay(_gameDate, previousDate))
+                UpdateSunriseSunsetCache();
+            _cachedTimeUpdate = new TimeUpdateData(GetCurrentTime(), GetCachedIsDay(), GetCachedSunriseTime(), GetCachedSunsetTime());
+            if (!preventTimeUpdateEvent)
+                OnTimeUpdated?.Invoke(in _cachedTimeUpdate);
+        }
+
         public DateTime GetCurrentTime() => _gameDate;
+        public DateTime GetCachedSunriseTime() => _cachedCycleSunrise;
+        public DateTime GetCachedSunsetTime() => _cachedCycleSunset;
     }
 }

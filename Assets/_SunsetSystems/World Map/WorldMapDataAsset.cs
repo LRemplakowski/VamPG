@@ -2,6 +2,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Core.Database;
 using SunsetSystems.Core.SceneLoading;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace SunsetSystems.WorldMap
 {
@@ -13,6 +14,10 @@ namespace SunsetSystems.WorldMap
         [field: SerializeField]
         public override string ReadableID { get; protected set; }
 
+        [SerializeField]
+        private LocalizedString _localizedName;
+        [SerializeField]
+        private LocalizedString _localizedDescription;
         [SerializeField]
         private string _fallbackName;
         [SerializeField, MultiLineProperty]
@@ -46,14 +51,30 @@ namespace SunsetSystems.WorldMap
 
         private bool TryGetLocalizedName(out string localizedName)
         {
-            localizedName = "";
-            return false;
+            if (_localizedName.IsEmpty)
+            {
+                localizedName = "";
+                return false;
+            }
+            else
+            {
+                localizedName = _localizedName.GetLocalizedString();
+                return true;
+            }
         }
 
         private bool TryGetLocalizedDescription(out string localizedDesc)
         {
-            localizedDesc = "";
-            return false;
+            if (_localizedDescription.IsEmpty)
+            {
+                localizedDesc = "";
+                return false;
+            }
+            else
+            {
+                localizedDesc = _localizedDescription.GetLocalizedString();
+                return true;
+            }
         }
 
         #region Database

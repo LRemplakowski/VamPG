@@ -19,6 +19,10 @@ namespace SunsetSystems.WorldMap
         [SerializeField]
         private Vector2 _travelToAreaButtonOffset;
 
+        [Title("Player Token")]
+        [SerializeField, Required]
+        private WorldMapPlayerToken _playerToken;
+
         [Title("References")]
         [SerializeField, Required]
         private IWorldMapManager _worldMapManager;
@@ -38,8 +42,6 @@ namespace SunsetSystems.WorldMap
         private List<IWorldMapToken> _mapTokens = new();
 
         [Title("Runtime")]
-        [ShowInInspector, ReadOnly]
-        private IWorldMapData _selectedMap;
         [ShowInInspector, ReadOnly]
         private IWorldMapToken _selectedToken;
         [ShowInInspector, ReadOnly]
@@ -79,9 +81,10 @@ namespace SunsetSystems.WorldMap
         {
             InitialTokenSetup();
             ShowUnlockedMapTokens();
+            _playerToken.MoveToToken(_currentAreaToken, true);
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             UpdateTravelToAreaButton();
             UpdateEnterCurrentAreaButton();
@@ -91,7 +94,9 @@ namespace SunsetSystems.WorldMap
         {
             foreach (var token in _mapTokens)
             {
-                _idTokenDictionary[token.GetData().DatabaseID] = token;
+                var tokenMapData = token.GetData();
+                if (tokenMapData != null)
+                    _idTokenDictionary[tokenMapData.DatabaseID] = token;
                 token.InjectTokenManager(this);
                 token.SetVisible(false);
             }
@@ -102,7 +107,8 @@ namespace SunsetSystems.WorldMap
 
         private void UpdateTravelToAreaButton()
         {
-            bool showTravelButton = _selectedMap != null && _worldMapManager.IsCurrentMap(_selectedMap) == false;
+            var selectedMap = _worldMapManager.GetSelectedMap();
+            bool showTravelButton = selectedMap != null && _worldMapManager.IsCurrentMap(selectedMap) == false;
             _travelToArea.gameObject.SetActive(showTravelButton);
             if (showTravelButton)
                 MoveButtonToTokenPosition(_travelToArea, _selectedToken, _travelToAreaButtonOffset);
@@ -131,21 +137,19 @@ namespace SunsetSystems.WorldMap
 
         public void ShowAreaDescription(IWorldMapData tokenData)
         {
-            _selectedMap = tokenData;
             _idTokenDictionary.TryGetValue(tokenData.DatabaseID, out _selectedToken);
             _ = _areaDescriptionWindow.ShowDescription(tokenData, false);
         }
 
         public void HideAreaDescription()
         {
-            _selectedMap = null;
             _ = _areaDescriptionWindow.HideDescription();
         }
 
         public void ToogleTravelConfirmationPopup(bool show)
         {
             if (show)
-                _areaTravelConfirmatonScreen.ShowConfirmationWindow(_selectedMap);
+                _areaTravelConfirmatonScreen.ShowConfirmationWindow(_worldMapManager.GetSelectedMap());
             else
                 _areaTravelConfirmatonScreen.HideConfirmationWindow();
         }
@@ -164,8 +168,9 @@ namespace SunsetSystems.WorldMap
 
         public void ConfirmTravelToSelectedArea()
         {
-            _worldMapManager.TravelToMap(_selectedMap);
-            _idTokenDictionary.TryGetValue(_selectedMap.DatabaseID, out _currentAreaToken);
+            _worldMapManager.TravelToSelectedMap();
+            _idTokenDictionary.TryGetValue(_worldMapManager.GetSelectedMap().DatabaseID, out _currentAreaToken);
+            UpdatePlayerTokenDestination();
         }
 
         private void MoveButtonToTokenPosition(Button button, IWorldMapToken token, Vector2 buttonOffset)
@@ -175,6 +180,11 @@ namespace SunsetSystems.WorldMap
             Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(Camera.main, token.GetTokenPosition());
             RectTransformUtility.ScreenPointToLocalPointInRectangle(transform as RectTransform, screenPoint, null, out var tokenCanvasPosition);
             button.transform.localPosition = tokenCanvasPosition + buttonOffset;
+        }
+
+        private void UpdatePlayerTokenDestination()
+        {
+            _playerToken.MoveToToken(_selectedToken);
         }
 
         public void HandleTokenHoveredOver(bool hovered, IWorldMapData tokenData)
@@ -193,15 +203,17 @@ namespace SunsetSystems.WorldMap
             {
                 HideAreaDescription();
                 SetLocked(false);
-                SetSelectedToken(null);
+                //SetSelectedToken(null);
                 return;
             }
-            if (IsLocked() && IsCurrentSelectedToken(tokenData) is false)
+            if (IsLocked() && IsCurrentSelectedToken(sourceToken) is false)
             {
+                _worldMapManager.SetSelectedMap(tokenData);
                 ShowAreaDescription(tokenData);
                 SetSelectedToken(sourceToken);
                 return;
             }
+            _worldMapManager.SetSelectedMap(tokenData);
             ShowAreaDescription(tokenData);
             SetSelectedToken(sourceToken);
             SetLocked(true);
@@ -222,11 +234,11 @@ namespace SunsetSystems.WorldMap
             _selectedToken = token;
         }
 
-        private bool IsCurrentSelectedToken(IWorldMapData newToken)
+        private bool IsCurrentSelectedToken(IWorldMapToken newToken)
         {
             try
             {
-                return newToken.DatabaseID == _selectedMap.DatabaseID;
+                return newToken.GetData().DatabaseID == _selectedToken.GetData().DatabaseID;
             }
             catch (NullReferenceException)
             {
@@ -235,9 +247,9 @@ namespace SunsetSystems.WorldMap
             }
         }
 
-        internal void ConfirmEntryToCurrentArea()
+        public void ConfirmEntryToCurrentArea()
         {
-            throw new NotImplementedException();
+            _worldMapManager.EnterCurrentMap();
         }
     }
 }

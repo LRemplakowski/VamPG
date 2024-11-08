@@ -12,11 +12,11 @@ namespace SunsetSystems.WorldMap
         [SerializeField, Required]
         private IWorldMapData _representedArea;
         [SerializeField]
-        private IHighlightHandler _highlightHanger;
-        [SerializeField]
-        private GameObject _linkedGameObject;
+        private IHighlightHandler _highlightHandler;
         [SerializeField, Required]
         private TextMeshPro _areaTitle;
+        [SerializeField]
+        private Transform _playerTokenDestination;
 
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
@@ -26,7 +26,6 @@ namespace SunsetSystems.WorldMap
 
         private void Start()
         {
-            MoveTokenToLinkedObjectPosition();
             UpdateAreaTitle();
         }
 
@@ -63,8 +62,6 @@ namespace SunsetSystems.WorldMap
 
         private void UpdateActiveGameObjects(bool active)
         {
-            if (_linkedGameObject != null)
-                _linkedGameObject.SetActive(active);
             gameObject.SetActive(active);
         }
 
@@ -73,11 +70,9 @@ namespace SunsetSystems.WorldMap
             return transform.position;
         }
 
-        [Button]
-        private void MoveTokenToLinkedObjectPosition()
+        public Vector3 GetPlayerTokenDestination()
         {
-            if (_linkedGameObject != null)
-                transform.SetPositionAndRotation(_linkedGameObject.transform.position, _linkedGameObject.transform.rotation);
+            return _playerTokenDestination.position;
         }
     }
 }

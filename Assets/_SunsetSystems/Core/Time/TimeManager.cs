@@ -1,10 +1,11 @@
 using System;
 using Sirenix.OdinInspector;
+using SunsetSystems.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Core.TimeFlow
 {
-    public class TimeManager : SerializedMonoBehaviour
+    public class TimeManager : Singleton<TimeManager>
     {
         [SerializeField]
         private bool _progressTimeOnUpdate = false;
@@ -66,6 +67,12 @@ namespace SunsetSystems.Core.TimeFlow
         {
             if (_progressTimeOnUpdate)
                 AddTime(0, 0, Time.deltaTime * _timeFlowRate);
+        }
+
+        public void AddTimeSpan(TimeSpan timeSpan)
+        {
+            var updatedTime = GetCurrentTime() + timeSpan;
+            SetCurrentTime(updatedTime);
         }
 
         [BoxGroup("Editor Utility")]
@@ -254,5 +261,7 @@ namespace SunsetSystems.Core.TimeFlow
         public DateTime GetCurrentTime() => _gameDate;
         public DateTime GetCachedSunriseTime() => _cachedCycleSunrise;
         public DateTime GetCachedSunsetTime() => _cachedCycleSunset;
+        public TimeSpan GetTimeToSunrise() => TimeUtility.GetTimeSpanBetweenDates(in _gameDate, GetNextSunrise());
+        public TimeSpan GetTimeToSunset() => TimeUtility.GetTimeSpanBetweenDates(in _gameDate, GetNextSunset());
     }
 }

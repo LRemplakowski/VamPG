@@ -24,5 +24,20 @@ namespace SunsetSystems.Core.TimeFlow
             time12Hour = dateTime.ToString("h:mm tt", CultureInfo.InvariantCulture);
         }
 
+        public static TimeSpan GetTimeSpanBetweenDates(in DateTime dateA, in DateTime dateB)
+        {
+            if (dateA > dateB)
+            {
+                return dateA - dateB;
+            }
+            else if (dateB > dateA)
+            {
+                return dateB - dateA;
+            }
+            else
+            {
+                return TimeSpan.Zero;
+            }
+        }
     }
 }

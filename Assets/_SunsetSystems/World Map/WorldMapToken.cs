@@ -87,5 +87,10 @@ namespace SunsetSystems.WorldMap
         {
             return transform.position;
         }
+
+        public Vector3 GetPlayerTokenDestination()
+        {
+            return transform.position;
+        }
     }
 }

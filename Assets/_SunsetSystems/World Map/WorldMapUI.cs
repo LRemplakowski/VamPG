@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -82,6 +83,12 @@ namespace SunsetSystems.WorldMap
             InitialTokenSetup();
             ShowUnlockedMapTokens();
             _playerToken.MoveToToken(_currentAreaToken, true);
+            WorldMapManager.OnUnlockedMapsUpdated += OnMapsUpdated;
+        }
+
+        private void OnDestroy()
+        {
+            WorldMapManager.OnUnlockedMapsUpdated -= OnMapsUpdated;
         }
 
         private void LateUpdate()
@@ -133,6 +140,14 @@ namespace SunsetSystems.WorldMap
                     token.SetUnlocked(true);
                 }
             }
+        }
+
+        private void OnMapsUpdated()
+        {
+            LockAllTokens();
+            ShowUnlockedMapTokens();
+
+            void LockAllTokens() => _idTokenDictionary.Values.ForEach(token => token.SetUnlocked(false));
         }
 
         public void ShowAreaDescription(IWorldMapData tokenData)

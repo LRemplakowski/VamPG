@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 48ed3531ec4d7c84d82d5deacff4ecaf, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 657339945779724392
   m_TableData:
   - m_Id: 263123193856
     m_Localized: Enter Area
@@ -26,6 +27,36 @@ MonoBehaviour:
     m_Localized: Travel
     m_Metadata:
       m_Items: []
+  - m_Id: 259207812960256
+    m_Localized: Travel Confirmation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263099942522880
+    m_Localized: Confirm
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263149670191104
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 267140005187584
+    m_Localized: Are you sure you wish to travel to {AREA_NAME}?
+    m_Metadata:
+      m_Items:
+      - rid: 657339945779724392
+  - m_Id: 272136352387072
+    m_Localized: Enter Area Confirmation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 272242501832704
+    m_Localized: Are you sure you wish to enter {AREA_NAME}?
+    m_Metadata:
+      m_Items:
+      - rid: 657339945779724392
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 657339945779724392
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 00501d61f6f2000000509d659af70000

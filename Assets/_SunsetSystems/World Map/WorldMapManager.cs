@@ -29,6 +29,7 @@ namespace SunsetSystems.WorldMap
         public string DataKey => DataKeyConstants.WORLD_MAP_MANAGER_DATA_KEY;
 
         public static event Action<IWorldMapData> OnCurrentMapChanged;
+        public static event Action OnUnlockedMapsUpdated;
 
         private void Awake()
         {
@@ -69,6 +70,7 @@ namespace SunsetSystems.WorldMap
                 _unlockedMaps.Add(mapData);
             else
                 _unlockedMaps.Remove(mapData);
+            OnUnlockedMapsUpdated?.Invoke();
         }
 
         public void SetSelectedMap(IWorldMapData mapData) => _currentSelectedMap = mapData;
@@ -118,13 +120,14 @@ namespace SunsetSystems.WorldMap
         {
             if (data is not WorldMapSaveData mapData)
                 return;
-            _unlockedMaps ??= new();
+            _unlockedMaps = new();
             foreach (var mapID in mapData.UnlockedMapsIDs)
             {
                 if (WorldMapEntryDatabase.Instance.TryGetEntry(mapID, out IWorldMapData entry))
                     _unlockedMaps.Add(entry);
             }
             WorldMapEntryDatabase.Instance.TryGetEntry(mapData.LastTraveledToMap, out _currentTraveledToMap);
+            OnUnlockedMapsUpdated?.Invoke();
         }
 
         [Serializable]

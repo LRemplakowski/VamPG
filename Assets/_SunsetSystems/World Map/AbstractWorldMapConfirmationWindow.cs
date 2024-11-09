@@ -12,10 +12,6 @@ namespace SunsetSystems.WorldMap
         [SerializeField]
         private CanvasGroup _canvasGroup;
         [SerializeField]
-        private Button _confirmationButton;
-        [SerializeField]
-        private Button _cancelButton;
-        [SerializeField]
         protected WorldMapUI _uiManager;
 
         private Coroutine _uiLerpCoroutine;

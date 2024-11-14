@@ -66,6 +66,9 @@ namespace SunsetSystems.Core.SceneLoading
                 case TransitionType.InternalTransition:
                     MoveToArea(_targetEntryPoint, _targetBoundingBox);
                     break;
+                case TransitionType.WorldMap:
+                    MoveToWorldMap();
+                    break;
                 default:
                     return false;
             }
@@ -74,7 +77,6 @@ namespace SunsetSystems.Core.SceneLoading
 
         private void MoveToScene(SceneLoadingDataAsset data)
         {
-            SaveLoadManager.UpdateRuntimeDataCache();
             if (_overrideDefaultWaypoint)
                 WaypointManager.Instance.OverrideSceneWaypoint(_targetWaypointTag);
             _ = LevelLoader.Instance.LoadNewScene(data);
@@ -86,6 +88,11 @@ namespace SunsetSystems.Core.SceneLoading
                 StopCoroutine(_internalTransitionCoroutine);
             _internalTransitionCoroutine = FadeOutScreenAndMoveToArea(waypoint, cameraBoundingBox);
             StartCoroutine(_internalTransitionCoroutine);
+        }
+
+        private void MoveToWorldMap()
+        {
+            _ = LevelLoader.Instance.LoadWorldMap();
         }
 
         private IEnumerator FadeOutScreenAndMoveToArea(Waypoint waypoint, BoundingBox cameraBoundingBox)
@@ -142,6 +149,6 @@ namespace SunsetSystems.Core.SceneLoading
 
     public enum TransitionType
     {
-        SceneTransition, InternalTransition
+        SceneTransition, InternalTransition, WorldMap
     }
 }

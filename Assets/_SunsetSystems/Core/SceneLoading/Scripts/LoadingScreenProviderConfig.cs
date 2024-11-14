@@ -14,30 +14,13 @@ namespace SunsetSystems.Core.SceneLoading.UI
     {
         [SerializeField]
         private List<AssetReference> defaultLoadingScreens = new();
+        [ShowInInspector, ReadOnly]
+        private readonly List<AssetReference> _loadedScreens = new();
 
-        private readonly List<AssetReference> loadedScreens = new();
-
-        //private void OnValidate()
-        //{
-        //    List<AssetReference> nonSprites = new();
-        //    foreach (var assetRef in defaultLoadingScreens)
-        //    {
-        //        if (assetRef != null && assetRef is not AssetReferenceSprite)
-        //            nonSprites.Add(assetRef);
-        //    }
-        //    defaultLoadingScreens.RemoveAll(assetRef => nonSprites.Contains(assetRef));
-        //}
-
-        //private void OnEnable()
-        //{
-        //    loadedScreens.Clear();
-        //}
-
-        //private void OnDisable()
-        //{
-        //    List<AssetReference> toRelease = new(loadedScreens);
-        //    toRelease.ForEach(screen => ReturnAsset(screen));
-        //}
+        private void Awake()
+        {
+            _loadedScreens.Clear();
+        }
 
         public async Task<Sprite> GetRandomLoadingScreenAsync()
         {
@@ -47,21 +30,21 @@ namespace SunsetSystems.Core.SceneLoading.UI
 
         public void ReleaseLoadingScreens()
         {
-            List<AssetReference> toRelease = new(loadedScreens);
+            List<AssetReference> toRelease = new(_loadedScreens);
             toRelease.ForEach(screen => ReturnAsset(screen));
         }
 
         public async Task<Sprite> GetAssetAsync(AssetReference assetReference)
         {
-            loadedScreens.Add(assetReference);
+            _loadedScreens.Add(assetReference);
             var asyncOp = Addressables.LoadAssetAsync<Sprite>(assetReference);
-            await new WaitUntil(() => asyncOp.IsDone);
+            await asyncOp.Task;
             return asyncOp.Result;
         }
 
         public void ReturnAsset(AssetReference asset)
         {
-            if (loadedScreens.Remove(asset))
+            if (_loadedScreens.Remove(asset))
                 Addressables.Release(asset);
         }
     }

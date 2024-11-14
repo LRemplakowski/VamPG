@@ -19,7 +19,7 @@ namespace SunsetSystems.WorldMap
         private List<IWorldMapData> _defaultUnlockedMaps = new();
 
         [Title("Runtime")]
-        [SerializeField]
+        [ShowInInspector]
         private IWorldMapData _currentTraveledToMap;
         [ShowInInspector]
         private IWorldMapData _currentSelectedMap;
@@ -90,6 +90,8 @@ namespace SunsetSystems.WorldMap
         }
 
         public IWorldMapData GetCurrentMap() => _currentTraveledToMap;
+
+        public void SetCurrentMap(WorldMapDataAsset map) => _currentTraveledToMap = map;
 
         public IWorldMapData GetPlayerHavenMap() => _currentPlayerHaven;
 

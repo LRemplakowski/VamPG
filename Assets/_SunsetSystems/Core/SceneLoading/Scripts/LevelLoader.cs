@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
+using Sirenix.OdinInspector;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Input.CameraControl;
@@ -15,6 +16,8 @@ namespace SunsetSystems.Core.SceneLoading
 {
     public class LevelLoader : Singleton<LevelLoader>
     {
+        [SerializeField, Required]
+        private SceneLoadingDataAsset _worldMapScene;
         [SerializeField]
         private SceneLoadingUIManager loadingScreenUI;
         [SerializeField]
@@ -27,6 +30,11 @@ namespace SunsetSystems.Core.SceneLoading
         public static event Action OnLevelLoadStart, OnLevelLoadEnd, OnBeforePersistentDataLoad, OnBeforePersistentDataCache;
         public static event Action OnAfterScreenFadeOut, OnBeforeScreenFadeIn;
 
+        public async Task LoadWorldMap()
+        {
+            await LoadNewScene(_worldMapScene);
+        }
+
         public async Task LoadNewScene(SceneLoadingDataAsset data)
         {
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);
@@ -36,15 +44,14 @@ namespace SunsetSystems.Core.SceneLoading
             SaveLoadManager.UpdateRuntimeDataCache();
             OnLevelLoadStart?.Invoke();
             loadingScreenUI.EnableAndResetLoadingScreen();
-            await new WaitForSeconds(.5f);
+            await new WaitForUpdate();
             await loadingScreenUI.DoFadeInAsync(loadingCrossfadeTime / 2f);
             await DoSceneLoading(data.LoadingData);
             CurrentLoadedLevel = data.LoadingData;
-            await new WaitForSeconds(1f);
             await new WaitUntil(HasGeneratorProcessedAllUMA);
             OnBeforePersistentDataLoad?.Invoke();
             SaveLoadManager.InjectRuntimeDataIntoSaveables();
-            await new WaitForSeconds(0.1f);
+            await new WaitForUpdate();
             CameraControlScript.Instance.ForceToPosition(WaypointManager.Instance.GetSceneDefaultEntryWaypoint().transform);
             OnLevelLoadEnd?.Invoke();
             await loadingScreenUI.DoFadeOutAsync(loadingCrossfadeTime / 2f);

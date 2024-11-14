@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -13,11 +14,26 @@ namespace SunsetSystems.WorldMap
 
         public void MoveToToken(IWorldMapToken token, bool warp = false)
         {
-            Vector3 targetPosition = NavMeshPointFromWorldPosition(token.GetPlayerTokenDestination());
-            if (warp)
-                _navMeshAgent.Warp(targetPosition);
-            else
-                _navMeshAgent.SetDestination(targetPosition);
+            Vector3 targetPosition = transform.position;
+            try
+            {
+                targetPosition = NavMeshPointFromWorldPosition(token.GetPlayerTokenDestination());
+            }
+            catch (NullReferenceException)
+            {
+                Debug.LogError($"WorldMapPlayerToken >>> MoveToToken >>> Null token given!");
+            }
+            finally
+            {
+                if (warp)
+                {
+                    _navMeshAgent.Warp(targetPosition);
+                }
+                else
+                {
+                    _navMeshAgent.SetDestination(targetPosition);
+                }
+            }
         }
 
         private Vector3 NavMeshPointFromWorldPosition(Vector3 worldPosition)

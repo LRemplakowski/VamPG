@@ -10,6 +10,15 @@ namespace SunsetSystems.WorldMap
 {
     public class WorldMapUI : SerializedMonoBehaviour
     {
+        [Title("Initialization")]
+        [SerializeField]
+        private InitializationMode _initializationMode;
+
+        private enum InitializationMode
+        {
+            InitializeOnStart, ManualInitialization
+        }
+
         [Title("Travel Buttons")]
         [SerializeField, Required]
         private Button _enterCurrentArea;
@@ -27,7 +36,7 @@ namespace SunsetSystems.WorldMap
         [Title("References")]
         [SerializeField, Required]
         private IWorldMapManager _worldMapManager;
-        [SerializeField]
+        [SerializeField, Required]
         private Transform _mapTokenParent;
         [SerializeField, Required]
         private CanvasGroup _mapCanvasGroup;
@@ -80,14 +89,15 @@ namespace SunsetSystems.WorldMap
         private void Awake()
         {
             EnsureTokenParent();
+            WorldMapManager.OnUnlockedMapsUpdated += OnMapsUpdated;
         }
 
         private void Start()
         {
-            InitialTokenSetup();
-            ShowUnlockedMapTokens();
-            _playerToken.MoveToToken(_currentAreaToken, true);
-            WorldMapManager.OnUnlockedMapsUpdated += OnMapsUpdated;
+            if (_initializationMode == InitializationMode.InitializeOnStart)
+            {
+                Initialize();
+            }
         }
 
         private void OnDestroy()
@@ -101,6 +111,14 @@ namespace SunsetSystems.WorldMap
             UpdateEnterCurrentAreaButton();
         }
 
+        public void Initialize()
+        {
+            InitialTokenSetup();
+            ShowUnlockedMapTokens();
+            UpdateCurrentMapToken();
+            WarpPlayerToCurrentAreaToken();
+        }
+
         private void InitialTokenSetup()
         {
             foreach (var token in _mapTokens)
@@ -112,12 +130,22 @@ namespace SunsetSystems.WorldMap
                 }
                 token.InjectTokenManager(this);
                 token.SetVisible(false);
+                token.SetUnlocked(false);
             }
+        }
+
+        private void UpdateCurrentMapToken()
+        {
             var currentMap = _worldMapManager.GetCurrentMap();
             if (currentMap != null)
             {
                 _idTokenDictionary.TryGetValue(currentMap.DatabaseID, out _currentAreaToken);
             }
+        }
+
+        private void WarpPlayerToCurrentAreaToken()
+        {
+            _playerToken.MoveToToken(_currentAreaToken, true);
         }
 
         private void UpdateTravelToAreaButton()
@@ -201,7 +229,7 @@ namespace SunsetSystems.WorldMap
         {
             _worldMapManager.TravelToSelectedMap();
             _idTokenDictionary.TryGetValue(_worldMapManager.GetSelectedMap().DatabaseID, out _currentAreaToken);
-            UpdatePlayerTokenDestination();
+            MovePlayerToSelectedToken();
         }
 
         private void MoveButtonToTokenPosition(Button button, IWorldMapToken token, Vector2 buttonOffset)
@@ -213,7 +241,7 @@ namespace SunsetSystems.WorldMap
             button.transform.localPosition = tokenCanvasPosition + buttonOffset;
         }
 
-        private void UpdatePlayerTokenDestination()
+        private void MovePlayerToSelectedToken()
         {
             _playerToken.MoveToToken(_selectedToken);
         }

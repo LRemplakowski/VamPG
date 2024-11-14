@@ -60,9 +60,13 @@ namespace SunsetSystems.WorldMap
         {
             EnsureTokenParent();
             if (_autoCacheTokensInParent)
+            {
                 CacheMapTokens();
+            }
             else
+            {
                 _mapTokens = _mapTokens.Distinct().ToList();
+            }
         }
 
         [Button]
@@ -103,13 +107,17 @@ namespace SunsetSystems.WorldMap
             {
                 var tokenMapData = token.GetData();
                 if (tokenMapData != null)
+                {
                     _idTokenDictionary[tokenMapData.DatabaseID] = token;
+                }
                 token.InjectTokenManager(this);
                 token.SetVisible(false);
             }
             var currentMap = _worldMapManager.GetCurrentMap();
             if (currentMap != null)
+            {
                 _idTokenDictionary.TryGetValue(currentMap.DatabaseID, out _currentAreaToken);
+            }
         }
 
         private void UpdateTravelToAreaButton()
@@ -118,7 +126,9 @@ namespace SunsetSystems.WorldMap
             bool showTravelButton = selectedMap != null && _worldMapManager.IsCurrentMap(selectedMap) == false;
             _travelToArea.gameObject.SetActive(showTravelButton);
             if (showTravelButton)
+            {
                 MoveButtonToTokenPosition(_travelToArea, _selectedToken, _travelToAreaButtonOffset);
+            }
         }
 
         private void UpdateEnterCurrentAreaButton()
@@ -126,7 +136,9 @@ namespace SunsetSystems.WorldMap
             bool showEnterButton = _worldMapManager.GetCurrentMap() != null;
             _enterCurrentArea.gameObject.SetActive(showEnterButton);
             if (showEnterButton)
+            {
                 MoveButtonToTokenPosition(_enterCurrentArea, _currentAreaToken, _enterAreaButtonOffset);
+            }
         }
 
         private void ShowUnlockedMapTokens()
@@ -164,9 +176,13 @@ namespace SunsetSystems.WorldMap
         public void ToogleTravelConfirmationPopup(bool show)
         {
             if (show)
+            {
                 _areaTravelConfirmatonScreen.ShowConfirmationWindow(_worldMapManager.GetSelectedMap());
+            }
             else
+            {
                 _areaTravelConfirmatonScreen.HideConfirmationWindow();
+            }
         }
 
         public void ToggleEnterAreaConfirmationPopup(bool show)
@@ -207,9 +223,13 @@ namespace SunsetSystems.WorldMap
             if (_lockCurrentToken)
                 return;
             if (hovered)
+            {
                 ShowAreaDescription(tokenData);
+            }
             else
+            {
                 HideAreaDescription();
+            }
         }
 
         public void LockTokenDescription(bool locked, IWorldMapData tokenData, IWorldMapToken sourceToken)

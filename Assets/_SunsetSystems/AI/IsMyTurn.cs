@@ -4,14 +4,11 @@ using UnityEngine;
 [TaskCategory("Turn System")]
 public class IsMyTurn : Conditional
 {
-    [SerializeField]
+    [SerializeField, SharedRequired]
 	private SharedAIContext _aiContext;
 
     public override TaskStatus OnUpdate()
 	{
-        if (_aiContext.Value.IsMyTurn())
-            return TaskStatus.Success;
-        else
-            return TaskStatus.Failure;
-	}
+        return _aiContext.Value.IsMyTurn() ? TaskStatus.Success : TaskStatus.Failure;
+    }
 }

@@ -39,7 +39,7 @@ namespace SunsetSystems.Combat
         [field: SerializeField, Required]
         public ICreature Owner { get; private set; }
         [field: SerializeField, Required]
-        public IMagicUser MagicUser { get; private set; }
+        public IAbilityUser MagicUser { get; private set; }
         [SerializeField, Required]
         private AnimationManager animationController;
 
@@ -278,7 +278,7 @@ namespace SunsetSystems.Combat
             if (HasActed)
                 return false;
             IWeapon currentWeapon = weaponManager.GetSelectedWeapon();
-            if (currentWeapon == null || currentWeapon.WeaponType is WeaponType.Melee)
+            if (currentWeapon == null || currentWeapon.WeaponType is Inventory.AbilityRange.Melee)
             {
                 GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
                 Vector3Int currentGridPosition = gridManager.WorldPositionToGridPosition(Transform.position);
@@ -306,7 +306,7 @@ namespace SunsetSystems.Combat
                     gridManager.HideCellsInMovementRange();
                 }
             }
-            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().maxRange && weaponManager.UseAmmoFromSelectedWeapon(1))
+            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().MaxRange && weaponManager.UseAmmoFromSelectedWeapon(1))
             {
                 HasActed = true;
                 HasMoved = true;
@@ -329,7 +329,7 @@ namespace SunsetSystems.Combat
 
         public bool IsTargetInRange(ICombatant target)
         {
-            return Vector3.Distance(References.Transform.position, target.References.Transform.position) <= weaponManager.GetSelectedWeapon().GetRangeData().maxRange;
+            return Vector3.Distance(References.Transform.position, target.References.Transform.position) <= weaponManager.GetSelectedWeapon().GetRangeData().MaxRange;
         }
 
         private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, INavigationManager navigationManager)

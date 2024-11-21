@@ -16,7 +16,7 @@ namespace SunsetSystems.Combat
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         UltEvent<ICombatant> OnDamageTaken { get; set; }
 
-        IMagicUser MagicUser { get; }
+        IAbilityUser MagicUser { get; }
         Faction Faction { get; }
 
         bool IsPlayerControlled { get; }

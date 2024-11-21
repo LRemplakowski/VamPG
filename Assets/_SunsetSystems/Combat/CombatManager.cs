@@ -176,7 +176,7 @@ namespace SunsetSystems.Combat
         {
             int length = array.Length;
             ICombatant[] result = new ICombatant[array.Length];
-            // Ensure shiftAmount is within the range of the array length
+            // Ensure shiftAmount is within the _range of the array length
             shiftAmount %= length;
 
             // Shift indices to the left by X positions

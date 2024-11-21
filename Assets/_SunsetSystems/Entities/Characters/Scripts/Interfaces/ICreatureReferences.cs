@@ -17,7 +17,7 @@ namespace SunsetSystems.Entities.Characters
         IEquipmentManager EquipmentManager { get; }
         IWeaponManager WeaponManager { get; }
         IUMAManager UMAManager { get; }
-        IMagicUser SpellbookManager { get; }
+        IAbilityUser SpellbookManager { get; }
         IAnimationManager AnimationManager { get; }
     }
 }

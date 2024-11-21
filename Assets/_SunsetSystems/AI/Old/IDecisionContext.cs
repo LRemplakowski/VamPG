@@ -20,6 +20,6 @@ namespace SunsetSystems.AI
         bool CanAct { get; }
         bool IsMyTurn { get; }
 
-        WeaponType CurrentWeaponType { get;  }
+        AbilityRange CurrentWeaponType { get;  }
     }
 }

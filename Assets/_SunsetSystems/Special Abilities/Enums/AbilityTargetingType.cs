@@ -1,6 +1,6 @@
 ﻿namespace SunsetSystems.Spellbook
 {
-    public enum Target
+    public enum AbilityTargetingType
     {
         Self,
         Friendly,

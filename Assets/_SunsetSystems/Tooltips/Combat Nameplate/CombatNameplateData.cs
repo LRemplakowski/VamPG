@@ -11,7 +11,7 @@ namespace SunsetSystems.Tooltips
         public float CurrentHP => _dataSource.References.StatsManager.Health.GetValue();
         public float MaxHP => _dataSource.References.StatsManager.Health.MaxValue;
         public float HealthPercentage => CurrentHP / MaxHP;
-        public WeaponType CurrentWeapon => _dataSource.WeaponManager.GetSelectedWeapon().WeaponType;
+        public AbilityRange CurrentWeapon => _dataSource.WeaponManager.GetSelectedWeapon().WeaponType;
 
         public GameObject TooltipSource => _dataSource.References.GameObject;
         public Vector3 TooltipPosition => _dataSource.NameplatePosition;

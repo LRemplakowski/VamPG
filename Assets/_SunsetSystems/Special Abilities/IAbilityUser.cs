@@ -4,7 +4,7 @@ using SunsetSystems.Entities.Characters;
 
 namespace SunsetSystems.Spellbook
 {
-    public interface IMagicUser
+    public interface IAbilityUser
     {
         ICreatureReferences References { get; }
 

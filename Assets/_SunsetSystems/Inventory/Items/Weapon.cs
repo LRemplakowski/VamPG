@@ -16,7 +16,7 @@ namespace SunsetSystems.Inventory.Data
         [field: SerializeField]
         public DamageType DamageType { get; private set; }
         [field: SerializeField]
-        public WeaponType WeaponType { get; private set; }
+        public AbilityRange WeaponType { get; private set; }
         [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
         public WeaponFireMode FireMode { get; private set; }
         [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
@@ -31,7 +31,7 @@ namespace SunsetSystems.Inventory.Data
         public SkillType AssociatedSkill { get; private set; }
 
         [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Used in ShowIf Attribute")]
-        private bool ShowRange => WeaponType == WeaponType.Ranged;
+        private bool ShowRange => WeaponType == AbilityRange.Ranged;
         [SerializeField, ShowIf("ShowRange")]
         protected int optimalRange = 0, rangeFalloff = 0;
 
@@ -49,17 +49,17 @@ namespace SunsetSystems.Inventory.Data
 
         public bool GetWeaponUsesAmmo()
         {
-            return WeaponType == WeaponType.Ranged && MaxAmmo > 0;
+            return WeaponType == AbilityRange.Ranged && MaxAmmo > 0;
         }
 
         public RangeData GetRangeData()
         {
             RangeData data = new()
             {
-                optimalRange = optimalRange,
-                rangeFalloff = rangeFalloff,
-                maxRange = optimalRange + (2 * rangeFalloff),
-                shortRange = optimalRange - rangeFalloff
+                OptimalRange = optimalRange,
+                RangeFalloff = rangeFalloff,
+                MaxRange = optimalRange + (2 * rangeFalloff),
+                ShortRange = optimalRange - rangeFalloff
             };
             return data;
         }
@@ -68,8 +68,8 @@ namespace SunsetSystems.Inventory.Data
         {
             DamageData data = new()
             {
-                damageModifier = DamageModifier,
-                damageType = DamageType
+                DamageModifier = DamageModifier,
+                DamageType = DamageType
             };
             return data;
         }
@@ -81,10 +81,10 @@ namespace SunsetSystems.Inventory.Data
             CombatActionType result = CombatActionType.None;
             switch (this.WeaponType)
             {
-                case WeaponType.Melee:
+                case AbilityRange.Melee:
                     result |= CombatActionType.MeleeAtk;
                     break;
-                case WeaponType.Ranged:
+                case AbilityRange.Ranged:
                     result |= CombatActionType.RangedAtk;
                     result |= CombatActionType.Reload;
                     break;

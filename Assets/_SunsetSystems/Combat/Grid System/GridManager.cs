@@ -104,7 +104,7 @@ namespace SunsetSystems.Combat.Grid
             List<GridUnit> unitsInRange = new();
             // Calculate the path
             NavMeshPath path = new();
-            // Calculate the maximum grid distance within range
+            // Calculate the maximum grid distance within _range
             float maxGridDistance = range * managedGrid.GridCellSize;
 
             foreach (GridUnit unit in managedGrid.GetAllWalkableGridUnits())

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Core.Database
 {
-    [CreateAssetMenu(fileName = "Creature Database", menuName = "Entities/Creature Database")]
+    [CreateAssetMenu(fileName = "Creature Database", menuName = "Sunset Entities/Creature Database")]
     public class CreatureDatabase : AbstractDatabase<CreatureConfig>
     {
         public List<string> ReadableIDs => _readableIDRegistry.Keys.ToList();

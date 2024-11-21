@@ -76,15 +76,15 @@ namespace SunsetSystems.Combat
             return result;
         }
 
-        private static int CalculateDefenderDamageReduction(ICombatant defender, WeaponType attackType)
+        private static int CalculateDefenderDamageReduction(ICombatant defender, Inventory.AbilityRange attackType)
         {
             int damageReduction = 0;
             switch (attackType)
             {
-                case WeaponType.Melee:
+                case Inventory.AbilityRange.Melee:
                     damageReduction += defender.GetAttributeValue(AttributeType.Stamina);
                     break;
-                case WeaponType.Ranged:
+                case Inventory.AbilityRange.Ranged:
                     damageReduction += defender.GetAttributeValue(AttributeType.Dexterity);
                     break;
             }
@@ -98,11 +98,11 @@ namespace SunsetSystems.Combat
             float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
             switch (selectedWeapon.WeaponType)
             {
-                case WeaponType.Melee:
-                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().damageModifier) * weaponDamageMod);
+                case Inventory.AbilityRange.Melee:
+                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                     break;
-                case WeaponType.Ranged:
-                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().damageModifier) * weaponDamageMod);
+                case Inventory.AbilityRange.Ranged:
+                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                     break;
             }
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
@@ -113,7 +113,7 @@ namespace SunsetSystems.Combat
         {
             double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
             double result = 0d;
-            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().shortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
+            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().ShortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;

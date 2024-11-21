@@ -34,7 +34,7 @@ namespace SunsetSystems.UI
             skills.AddRange(data.Skills?.GetSkillList() ?? new());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IUserInfertaceDataProvider<BaseStat>> disciplines = new();
-            IMagicUser spellbook = creature.References.SpellbookManager;
+            IAbilityUser spellbook = creature.References.SpellbookManager;
             disciplines.AddRange(spellbook.KnownDisciplines);
             _disciplines.UpdateViews(disciplines);
         }

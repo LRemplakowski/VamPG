@@ -170,7 +170,7 @@ namespace SunsetSystems.Equipment
         public bool UseAmmoFromSelectedWeapon(int count)
         {
             IWeapon selectedWeapon = GetSelectedWeapon();
-            if (selectedWeapon == null || selectedWeapon.WeaponType == WeaponType.Melee || _ignoreAmmo)
+            if (selectedWeapon == null || selectedWeapon.WeaponType == AbilityRange.Melee || _ignoreAmmo)
                 return true;
             if (weaponsAmmoData.TryGetValue(selectedWeapon.DatabaseID, out WeaponAmmoData ammoData))
             {
@@ -218,7 +218,7 @@ namespace SunsetSystems.Equipment
 
             bool ValidateWeapon(IWeapon weapon)
             {
-                return weapon != null && weapon.WeaponType == WeaponType.Ranged && weaponsAmmoData.ContainsKey(weapon.ReadableID) is false;
+                return weapon != null && weapon.WeaponType == AbilityRange.Ranged && weaponsAmmoData.ContainsKey(weapon.ReadableID) is false;
             }
         }
 

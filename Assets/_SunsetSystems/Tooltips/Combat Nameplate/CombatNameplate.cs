@@ -21,11 +21,11 @@ namespace SunsetSystems.Tooltips
         private Image _enemyTypeImage;
         [Title("Config")]
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
-        private Dictionary<WeaponType, Sprite> _weaponTypeIcons = new();
+        private Dictionary<Inventory.AbilityRange, Sprite> _weaponTypeIcons = new();
 
         private void OnValidate()
         {
-            foreach (WeaponType weaponType in Enum.GetValues(typeof(WeaponType)))
+            foreach (Inventory.AbilityRange weaponType in Enum.GetValues(typeof(Inventory.AbilityRange)))
             {
                 _weaponTypeIcons.TryAdd(weaponType, null);
             }

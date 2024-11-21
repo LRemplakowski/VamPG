@@ -143,7 +143,7 @@ namespace SunsetSystems.Combat
                     if (attackTarget != null && attackTarget.IsAlive)
                     {
                         var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Ranged)
+                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
                         {
                             currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
                         }
@@ -159,7 +159,7 @@ namespace SunsetSystems.Combat
                     if (attackTarget != null && attackTarget.IsAlive)
                     {
                         var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Melee)
+                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Melee)
                         {
                             currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
                         }
@@ -175,7 +175,7 @@ namespace SunsetSystems.Combat
             void HandleReloadCombatAction()
             {
                 var currentActor = CombatManager.Instance.CurrentActiveActor;
-                if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.WeaponType.Ranged)
+                if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
                 {
                     currentActor.ReloadCurrentWeapon();
                 }
@@ -184,7 +184,7 @@ namespace SunsetSystems.Combat
             void HandleUseDisciplineCombatAction()
             {
                 DisciplinePower selectedDisciplinePower = SelectedActionData.DisciplinePowerData;
-                IMagicUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
+                IAbilityUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
                 if (targetableHit != null)
                 {
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();

@@ -6,6 +6,7 @@ using SunsetSystems.UI;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using SunsetSystems.Inventory;
 
 namespace SunsetSystems.Spellbook
 {
@@ -41,17 +42,17 @@ namespace SunsetSystems.Spellbook
         public int SecondaryLevel { get => secondaryLevel; }
 
         [SerializeField]
-        private Target _target = Target.Self;
-        public Target Target { get => _target; }
+        private AbilityTargetingType _target = AbilityTargetingType.Self;
+        public AbilityTargetingType Target { get => _target; }
         [SerializeField]
         private Duration _duration = Duration.Immediate;
         public Duration Duration => _duration;
         [SerializeField]
-        private Range range = Range.Ranged;
-        public Range Range { get => range; }
+        private AbilityRange _range = AbilityRange.Ranged;
+        public AbilityRange Range { get => _range; }
         [SerializeField]
-        private TargetableCreatureType _targetableCreatureType = TargetableCreatureType.Any;
-        public TargetableCreatureType TargetableCreatureType { get => _targetableCreatureType; }
+        private TargetableEntityType _targetableCreatureType;
+        public TargetableEntityType TargetableCreatureType { get => _targetableCreatureType; }
 
         private TooltipContent _powerTooltip;
         public TooltipContent Tooltip => _powerTooltip;
@@ -74,16 +75,16 @@ namespace SunsetSystems.Spellbook
         }
 
 
-        public bool IsValidTarget(ITargetable target, IMagicUser caster)
+        public bool IsValidTarget(ITargetable target, IAbilityUser caster)
         {
             return _target switch
             {
-                Target.Self => target.IsMe(caster.References.CombatBehaviour),
-                Target.Friendly => target.IsFriendlyTowards(caster.References.CombatBehaviour),
-                Target.Hostile => target.IsHostileTowards(caster.References.CombatBehaviour),
-                Target.AOE_Friendly => throw new NotImplementedException(),
-                Target.AOE_Hostile => throw new NotImplementedException(),
-                Target.Invalid => false,
+                AbilityTargetingType.Self => target.IsMe(caster.References.CombatBehaviour),
+                AbilityTargetingType.Friendly => target.IsFriendlyTowards(caster.References.CombatBehaviour),
+                AbilityTargetingType.Hostile => target.IsHostileTowards(caster.References.CombatBehaviour),
+                AbilityTargetingType.AOE_Friendly => throw new NotImplementedException(),
+                AbilityTargetingType.AOE_Hostile => throw new NotImplementedException(),
+                AbilityTargetingType.Invalid => false,
                 _ => false,
             };
         }

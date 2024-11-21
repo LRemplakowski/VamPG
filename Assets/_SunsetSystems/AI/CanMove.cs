@@ -6,14 +6,18 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Turn System/")]
 public class CanMove : Conditional
 {
-	[SerializeField]
+	[SerializeField, SharedRequired]
 	private SharedAIContext _aiContext;
 
 	public override TaskStatus OnUpdate()
 	{
-		if (_aiContext.Value.CanMove())
-			return TaskStatus.Success;
-		else
-			return TaskStatus.Failure;
-	}
+        if (_aiContext.Value.CanMove())
+        {
+            return TaskStatus.Success;
+        }
+        else
+        {
+            return TaskStatus.Failure;
+        }
+    }
 }

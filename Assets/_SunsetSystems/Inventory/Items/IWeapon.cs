@@ -7,7 +7,7 @@ namespace SunsetSystems.Inventory
 {
     public interface IWeapon : IEquipableItem
     {
-        WeaponType WeaponType { get; }
+        AbilityRange WeaponType { get; }
         WeaponFireMode FireMode { get; }
         int MaxAmmo { get; }
 
@@ -21,13 +21,13 @@ namespace SunsetSystems.Inventory
 
     public struct RangeData
     {
-        public int shortRange, optimalRange, maxRange, rangeFalloff;
+        public int ShortRange, OptimalRange, MaxRange, RangeFalloff;
     }
 
     public struct DamageData
     {
-        public int damageModifier;
-        public DamageType damageType;
+        public int DamageModifier;
+        public DamageType DamageType;
     }
 
     public enum DamageType
@@ -43,8 +43,9 @@ namespace SunsetSystems.Inventory
         Auto = 1 << 2
     }
 
-    public enum WeaponType
+    public enum AbilityRange
     {
-        Melee, Ranged
+        Melee,
+        Ranged,
     }
 }

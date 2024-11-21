@@ -80,7 +80,7 @@ namespace ES3Types
 					throw new IndexOutOfRangeException("The collection we are loading is longer than the collection provided as a parameter.");
 			}
 
-			// If we loaded fewer items than the parameter collection, throw index out of range exception.
+			// If we loaded fewer items than the parameter collection, throw index out of _range exception.
 			if(itemsLoaded != queue.Count)
 				throw new IndexOutOfRangeException("The collection we are loading is shorter than the collection provided as a parameter.");
 
@@ -137,7 +137,7 @@ namespace ES3Types
 					throw new IndexOutOfRangeException("The collection we are loading is longer than the collection provided as a parameter.");
 			}
 
-			// If we loaded fewer items than the parameter collection, throw index out of range exception.
+			// If we loaded fewer items than the parameter collection, throw index out of _range exception.
 			if(itemsLoaded != collection.Count)
 				throw new IndexOutOfRangeException("The collection we are loading is shorter than the collection provided as a parameter.");
 

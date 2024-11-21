@@ -11,7 +11,7 @@ namespace SunsetSystems.Spellbook
     /// <summary>
     /// Component to be added to creature to manage individual powers known by the creature.
     /// </summary>
-    public class SpellbookManager : SerializedMonoBehaviour, IMagicUser
+    public class SpellbookManager : SerializedMonoBehaviour, IAbilityUser
     {
         [SerializeField]
         private ICreature _owner;
@@ -54,7 +54,7 @@ namespace SunsetSystems.Spellbook
         private void ApplyPasivePowers()
         {
             Debug.LogWarning("PASSIVE POWERS NOT IMPLEMENTED");
-            List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.Target is Target.Self && p.Duration is Duration.Passive);
+            List<DisciplinePower> passivePowers = Disciplines.SelectMany(d => d.GetKnownPowers()).ToList().FindAll(p => p != null && p.Target is AbilityTargetingType.Self && p.Duration is Duration.Passive);
             //passivePowers.ForEach(p => p.GetEffects().ForEach(e => selfEffectHandler.HandleEffect(e));
         }
 

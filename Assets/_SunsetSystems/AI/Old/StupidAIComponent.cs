@@ -63,14 +63,14 @@ namespace SunsetSystems.AI
                 GridUnit target = null;
                 switch (context.CurrentWeaponType)
                 {
-                    case Inventory.WeaponType.Melee:
+                    case Inventory.AbilityRange.Melee:
                         target = FindGridPositionAdjacentToClosestEnemy(grid, currentGridPosition);
                         if (target != null)
                             context.Owner.MoveToGridPosition(target.GridPosition);
                         else
                             context.Owner.SignalEndTurn();
                         break;
-                    case Inventory.WeaponType.Ranged:
+                    case Inventory.AbilityRange.Ranged:
                         target = FindRandomGridPositionInMovementRange(grid, currentGridPosition);
                         if (target != null)
                             context.Owner.MoveToGridPosition(target.GridPosition);
@@ -84,12 +84,12 @@ namespace SunsetSystems.AI
                 ICombatant target = null;
                 switch (context.CurrentWeaponType)
                 {
-                    case Inventory.WeaponType.Melee:
+                    case Inventory.AbilityRange.Melee:
                         target = FindTargetInAdjacentSquares(grid, currentGridPosition);
                         break;
-                    case Inventory.WeaponType.Ranged:
+                    case Inventory.AbilityRange.Ranged:
                         target = context.FriendlyCombatants
-                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.WeaponManager.GetSelectedWeapon()?.GetRangeData().maxRange)
+                                        .Where(combatant => Vector3.Distance(combatant.References.Transform.position, context.Owner.References.Transform.position) <= context.Owner.WeaponManager.GetSelectedWeapon()?.GetRangeData().MaxRange)
                                         .GetRandom();
                         break;
                 }

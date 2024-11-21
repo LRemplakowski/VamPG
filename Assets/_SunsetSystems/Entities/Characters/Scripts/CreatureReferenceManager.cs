@@ -25,7 +25,7 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
         [field: SerializeField]
-        public IMagicUser SpellbookManager { get; private set; }
+        public IAbilityUser SpellbookManager { get; private set; }
         [field: SerializeField]
         public IAnimationManager AnimationManager { get; private set; }
     }

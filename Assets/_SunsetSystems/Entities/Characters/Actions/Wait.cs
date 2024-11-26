@@ -1,5 +1,5 @@
 
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using UnityEngine;
 
 namespace SunsetSystems.Entities.Characters.Actions

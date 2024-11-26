@@ -20,19 +20,24 @@ MonoBehaviour:
       parentIndex: 
       startIndex: 
       variableStartIndex: 
-      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(178.102066,85.29506)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(3.310398,146.545044)"},"ID":1,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(140.133469,145.745438)"},"ID":2,"Name":"Turn
-        Based Behaviour","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"IsInTurnMode","NodeData":{"Offset":"(-115.66684,160)"},"ID":3,"Name":"Is
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(178.102066,85.29506)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(3.310398,146.545044)"},"ID":1,"Name":"Selector","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(140.133469,145.745438)"},"ID":2,"Name":"Turn
+        Based Behaviour","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"IsInTurnMode","NodeData":{"Offset":"(-115.66684,160)"},"ID":3,"Name":"Is
         In Turn Mode","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"IsMyTurn","NodeData":{"Offset":"(-4.51789665,160.282227)"},"ID":4,"Name":"Is
         My Turn","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(140,155.789429)"},"ID":5,"Name":"Prepare
-        Next Action","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"SelectNextAbility","NodeData":{"Offset":"(-294.888855,168.3498)"},"ID":6,"Name":"Select
-        Next Ability","Instant":true},{"Type":"SelectNextTarget","NodeData":{"Offset":"(-145.458008,174.646179)"},"ID":7,"Name":"Select
-        Next Target","Instant":true},{"Type":"SelectNextPosition","NodeData":{"Offset":"(-1.19714355,174.29834)"},"ID":8,"Name":"Select
-        Next Position","Instant":true},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(146.388,172.833313)"},"ID":9,"Name":"Perform
-        Actions","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(0,190)","Collapsed":true},"ID":10,"Name":"Change
-        Position","Instant":true,"AbortTypeabortType":"Self","Children":[{"Type":"CanMove","NodeData":{"Offset":"(-255.59967,174.798462)"},"ID":11,"Name":"Can
+        Next Action","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"SelectNextAbility","NodeData":{"Offset":"(-294.888855,168.3498)"},"ID":6,"Name":"Select
+        Next Ability","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"SelectNextTarget","NodeData":{"Offset":"(-145.458008,174.646179)"},"ID":7,"Name":"Select
+        Next Target","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"SelectNextPosition","NodeData":{"Offset":"(-1.19714355,174.29834)"},"ID":8,"Name":"Select
+        Next Position","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(146.388,172.833313)"},"ID":9,"Name":"Perform
+        Actions","Instant":false,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-173.469437,200.204086)"},"ID":10,"Name":"Change
+        Position","Instant":false,"AbortTypeabortType":"Self","Children":[{"Type":"CanMove","NodeData":{"Offset":"(-255.59967,174.798462)"},"ID":11,"Name":"Can
         Move","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"BehaviorDesigner.Runtime.Tasks.Inverter","NodeData":{"Offset":"(-144.83989,169.473816)"},"ID":12,"Name":"Inverter","Instant":true,"Children":[{"Type":"ShouldKeepCurrentPosition","NodeData":{"Offset":"(0.66765213,106.645889)"},"ID":13,"Name":"Should
         Keep Current Position","Instant":true,"Single_keepPositionThreshold":40,"Single_inCoverScore":10,"Single_currentPositionScore":10,"Single_hasTargetsInRange":10,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}}]},{"Type":"MoveToNextPosition","NodeData":{"Offset":"(4.38526249,173.919312)"},"ID":14,"Name":"Move
-        To Next Position","Instant":false,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}}]}]}]}]}]},"Variables":[{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}]}'
+        To Next Position","Instant":false,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(162.555054,203.843018)"},"ID":15,"Name":"Perform
+        Selected Action","Instant":false,"AbortTypeabortType":"Self","Children":[{"Type":"CanAct","NodeData":{"Offset":"(-155.47168,171.926422)"},"ID":16,"Name":"Can
+        Act","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"IsCurrentTargetInRange","NodeData":{"Offset":"(0.844072342,165.729858)"},"ID":17,"Name":"Is
+        Current Target In Range","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}},{"Type":"ExecuteSelectedAction","NodeData":{"Offset":"(200.344788,168.824829)"},"ID":18,"Name":"Execute
+        Selected Action","Instant":true,"SharedAIContext_aiContext":{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}}]},{"Type":"EndTurn","NodeData":{"Offset":"(367.083923,201.061462)"},"ID":19,"Name":"End
+        Turn","Instant":true}]}]}]}]},"Variables":[{"Type":"SharedAIContext","Name":"DecisionContext","IsShared":true}]}'
       fieldSerializationData:
         typeName: []
         fieldNameHash: 

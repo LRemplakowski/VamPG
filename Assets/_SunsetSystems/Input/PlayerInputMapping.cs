@@ -522,6 +522,24 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""7f799ec4-2fbf-44ff-9ee2-6af14c409070"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Forward Dialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""3e128fb0-89e6-48de-8215-96a35ed4c387"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -588,6 +606,28 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""RightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""801ca9ce-5561-47b1-83dc-8004314926b6"",
+                    ""path"": ""*/{Submit}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfb82841-5e41-419f-b251-7b84a7686d83"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Forward Dialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -681,6 +721,8 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         m_UI_Cancel = m_UI.FindAction("Cancel", throwIfNotFound: true);
         m_UI_Scroll = m_UI.FindAction("Scroll", throwIfNotFound: true);
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
+        m_UI_Submit = m_UI.FindAction("Submit", throwIfNotFound: true);
+        m_UI_ForwardDialogue = m_UI.FindAction("Forward Dialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -905,6 +947,8 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Cancel;
     private readonly InputAction m_UI_Scroll;
     private readonly InputAction m_UI_RightClick;
+    private readonly InputAction m_UI_Submit;
+    private readonly InputAction m_UI_ForwardDialogue;
     public struct UIActions
     {
         private @PlayerInputMapping m_Wrapper;
@@ -914,6 +958,8 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         public InputAction @Cancel => m_Wrapper.m_UI_Cancel;
         public InputAction @Scroll => m_Wrapper.m_UI_Scroll;
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
+        public InputAction @Submit => m_Wrapper.m_UI_Submit;
+        public InputAction @ForwardDialogue => m_Wrapper.m_UI_ForwardDialogue;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -938,6 +984,12 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @RightClick.started += instance.OnRightClick;
             @RightClick.performed += instance.OnRightClick;
             @RightClick.canceled += instance.OnRightClick;
+            @Submit.started += instance.OnSubmit;
+            @Submit.performed += instance.OnSubmit;
+            @Submit.canceled += instance.OnSubmit;
+            @ForwardDialogue.started += instance.OnForwardDialogue;
+            @ForwardDialogue.performed += instance.OnForwardDialogue;
+            @ForwardDialogue.canceled += instance.OnForwardDialogue;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -957,6 +1009,12 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
             @RightClick.started -= instance.OnRightClick;
             @RightClick.performed -= instance.OnRightClick;
             @RightClick.canceled -= instance.OnRightClick;
+            @Submit.started -= instance.OnSubmit;
+            @Submit.performed -= instance.OnSubmit;
+            @Submit.canceled -= instance.OnSubmit;
+            @ForwardDialogue.started -= instance.OnForwardDialogue;
+            @ForwardDialogue.performed -= instance.OnForwardDialogue;
+            @ForwardDialogue.canceled -= instance.OnForwardDialogue;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1044,5 +1102,7 @@ public partial class @PlayerInputMapping: IInputActionCollection2, IDisposable
         void OnCancel(InputAction.CallbackContext context);
         void OnScroll(InputAction.CallbackContext context);
         void OnRightClick(InputAction.CallbackContext context);
+        void OnSubmit(InputAction.CallbackContext context);
+        void OnForwardDialogue(InputAction.CallbackContext context);
     }
 }

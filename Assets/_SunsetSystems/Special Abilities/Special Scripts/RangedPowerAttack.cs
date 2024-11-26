@@ -5,7 +5,7 @@ using SunsetSystems.Entities.Interfaces;
 using System;
 using UnityEngine;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "RangedPowerAttack", menuName = "Scriptable Powers/Ranged Power Attack")]
     public class RangedPowerAttack : DisciplineScript

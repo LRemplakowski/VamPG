@@ -11750,6 +11750,9 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
+    - Name: _currentPlayerHaven
+      Entry: 6
+      Data: 
     - Name: _defaultUnlockedMaps
       Entry: 7
       Data: 0|System.Collections.Generic.List`1[[SunsetSystems.WorldMap.IWorldMapData,
@@ -16400,11 +16403,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueView: {fileID: 9014010067603856331}
-  continueActionType: 3
+  continueActionType: 4
   continueActionKeyCode: 32
   continueActionButtonName: Jump
   continueActionOnButtonRelease: 0
-  continueActionReference: {fileID: 0}
+  continueActionReference: {fileID: -4980336869216839640, guid: 2d26b75c6cc56fd4394301de7c0a5752, type: 3}
   continueAction:
     m_Name: Skip
     m_Type: 1
@@ -16412,15 +16415,7 @@ MonoBehaviour:
     m_Id: f5becab5-6dac-4d21-9899-390ba0da489d
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 6ee9e5e1-91a6-48b7-9ca8-2c007c709a93
-      m_Path: Submit
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Skip
-      m_Flags: 0
+    m_SingletonActionBindings: []
     m_Flags: 0
   enableActionOnStart: 1
 --- !u!1 &8527708237070616908

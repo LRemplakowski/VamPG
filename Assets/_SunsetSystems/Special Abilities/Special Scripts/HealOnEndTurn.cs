@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "HealOnEndTurn", menuName = "Scriptable Powers/Heal On End Turn")]
     public class HealOnEndTurn : DisciplineScript

@@ -1,4 +1,4 @@
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using SunsetSystems.UI.Utils;
 using System.Collections;
 using System.Collections.Generic;

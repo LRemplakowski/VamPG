@@ -1,10 +1,10 @@
 using Sirenix.OdinInspector;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     public class CreatureSpellEffectHandler : SerializedMonoBehaviour, IEffectHandler
     {
-        public void HandleEffect(IEffect effect, IAbilityUser caster)
+        public void HandleEffect(IEffect effect, ISpellbookManager caster)
         {
             effect.ApplyEffect(this);
         }

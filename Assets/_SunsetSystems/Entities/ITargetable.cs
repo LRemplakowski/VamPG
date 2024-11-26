@@ -1,4 +1,4 @@
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 
 namespace SunsetSystems.Combat
 {

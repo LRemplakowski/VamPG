@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using UltEvents;
 using UnityEngine;
 
@@ -16,7 +16,8 @@ namespace SunsetSystems.Combat
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         UltEvent<ICombatant> OnDamageTaken { get; set; }
 
-        IAbilityUser MagicUser { get; }
+        IAbilityUser AbilityUser { get; }
+        ITargetable Targetable { get; }
         Faction Faction { get; }
 
         bool IsPlayerControlled { get; }

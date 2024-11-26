@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 
 namespace SunsetSystems.Dice
 {

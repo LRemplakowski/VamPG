@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using Sirenix.OdinInspector;
+using SunsetSystems.Abilities;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Game;
@@ -16,6 +18,10 @@ namespace SunsetSystems.AI
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
         private IGridCell _selectedPosition;
+
+        public IAbility SelectedAbility { get; set; }
+        public ITargetable SelectedTarget { get; set; }
+        public IGridCell SelectedPosition { get; set; }
 
         private CombatManager _combatManager;
         private GameManager _gameManager;
@@ -45,6 +51,8 @@ namespace SunsetSystems.AI
         {
             return _combatBehaviour.IsInCover;
         }
+
+        public IAbilityUser GetAbilityUser() => _combatBehaviour.AbilityUser;
 
         public int GetTargetsInWeaponRange()
         {
@@ -92,6 +100,12 @@ namespace SunsetSystems.AI
             var gridManager = _combatManager.CurrentEncounter.GridManager;
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
             return lastSelectedPosition != _selectedPosition;
+        }
+
+        public bool GetHasEnoughActionPoints(IAbility selectedAbility)
+        {
+            ref var abilityCost = ref selectedAbility.GetActionPointCost(_combatBehaviour.AbilityUser);
+            return abilityCost.ActionPointCost <= _combatBehaviour.GetRemainingActionPoints();
         }
     }
 }

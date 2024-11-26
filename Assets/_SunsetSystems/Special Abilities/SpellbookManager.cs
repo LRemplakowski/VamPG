@@ -6,12 +6,12 @@ using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     /// <summary>
     /// Component to be added to creature to manage individual powers known by the creature.
     /// </summary>
-    public class SpellbookManager : SerializedMonoBehaviour, IAbilityUser
+    public class SpellbookManager : SerializedMonoBehaviour, ISpellbookManager
     {
         [SerializeField]
         private ICreature _owner;

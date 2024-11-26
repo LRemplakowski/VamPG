@@ -2,7 +2,7 @@ using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory.Data;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using System;
 using UnityEngine;
 using SunsetSystems.Inventory;

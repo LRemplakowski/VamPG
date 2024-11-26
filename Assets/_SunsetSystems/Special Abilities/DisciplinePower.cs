@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using SunsetSystems.Inventory;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "New Power", menuName = "Character/Power")]
     public class DisciplinePower : SerializedScriptableObject, IUserInfertaceDataProvider<DisciplinePower>
@@ -75,7 +75,7 @@ namespace SunsetSystems.Spellbook
         }
 
 
-        public bool IsValidTarget(ITargetable target, IAbilityUser caster)
+        public bool IsValidTarget(ITargetable target, ISpellbookManager caster)
         {
             return _target switch
             {

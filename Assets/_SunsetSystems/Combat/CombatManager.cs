@@ -108,7 +108,7 @@ namespace SunsetSystems.Combat
                 _combatUICanvasGroup.interactable = active;
         }
 
-        private ICombatant DecideFirstActor(List<ICombatant> creatures)
+        private ICombatant DecideFirstActor(IList<ICombatant> creatures)
         {
             //creatures.OrderByDescending(creature => creature.References.GetComponentInChildren<StatsManager>().GetInitiative());
             return creatures[0];
@@ -123,7 +123,7 @@ namespace SunsetSystems.Combat
             CurrentActiveActor = null;
         }
 
-        private static async Task MoveAllCreaturesToNearestGridPosition(List<ICombatant> actors, Encounter currentEncounter)
+        private static async Task MoveAllCreaturesToNearestGridPosition(IEnumerable<ICombatant> actors, Encounter currentEncounter)
         {
             List<Task> tasks = new();
             foreach (ICombatant combatant in actors)

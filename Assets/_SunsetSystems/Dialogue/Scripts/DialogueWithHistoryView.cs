@@ -148,6 +148,7 @@ namespace SunsetSystems.Dialogue
             string formattedLineText = BuildFormattedText(dialogueLine);
             _lineHistory.text = formattedLineText;
             LayoutRebuilder.MarkLayoutForRebuild(_lineHistory.transform.parent as RectTransform);
+            await new WaitForUpdate();
             if (_typewriterEffect && _typeSpeed > 0)
             {
                 if (AudioManager.Instance != null)

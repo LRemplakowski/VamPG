@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     [System.Serializable]
     public class Discipline : BaseStat

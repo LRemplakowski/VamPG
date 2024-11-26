@@ -1,16 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
-using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters;
+using UnityEngine;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     public interface IAbilityUser
     {
-        ICreatureReferences References { get; }
-
-        IEnumerable<DisciplinePower> KnownPowers { get; }
-        IEnumerable<Discipline> KnownDisciplines { get; }
-
-        bool UsePower(DisciplinePower power, ITargetable target);
+        IEnumerable<IAbility> GetAllAbilities();
     }
 }

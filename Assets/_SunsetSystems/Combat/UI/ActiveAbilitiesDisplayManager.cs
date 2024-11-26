@@ -1,8 +1,6 @@
-using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Spellbook;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -20,10 +18,10 @@ namespace SunsetSystems.Combat.UI
         {
             buttonInstances.ForEach(b => Addressables.ReleaseInstance(b));
             buttonInstances.Clear();
-            IEnumerable<DisciplinePower> knownPowers = currentActor.MagicUser.KnownPowers;
-            foreach (DisciplinePower power in knownPowers)
+            var knownPowers = currentActor.AbilityUser.GetAllAbilities();
+            foreach (var ability in knownPowers)
             {
-                Task<GameObject> buttonTask = Addressables.InstantiateAsync(power.PowerGUIButtonAsset, buttonsParent).Task;
+                Task<GameObject> buttonTask = Addressables.InstantiateAsync(ability.GetAbilityUIData().GetAbilityGUIButtonAsset(), buttonsParent).Task;
                 _ = Task.Run(async () =>
                 {
                     await buttonTask;

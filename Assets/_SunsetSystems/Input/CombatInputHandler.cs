@@ -4,7 +4,7 @@ using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;

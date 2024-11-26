@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     [Flags]
     public enum TargetableEntityType

@@ -2,7 +2,7 @@ using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -183,14 +183,14 @@ namespace SunsetSystems.Combat
 
             void HandleUseDisciplineCombatAction()
             {
-                DisciplinePower selectedDisciplinePower = SelectedActionData.DisciplinePowerData;
-                IAbilityUser currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.MagicUser;
+                IAbility selectedDisciplinePower = SelectedActionData.DisciplinePowerData;
+                var currentActorSpellcaster = CombatManager.Instance.CurrentActiveActor.AbilityUser;
                 if (targetableHit != null)
                 {
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
-                    if (target != null && selectedDisciplinePower.IsValidTarget(target, currentActorSpellcaster))
+                    if (target != null && selectedDisciplinePower.IsValidTarget(currentActorSpellcaster, target))
                     {
-                        currentActorSpellcaster.UsePower(selectedDisciplinePower, target);
+                        selectedDisciplinePower.Execute(currentActorSpellcaster, target);
                     }
                 }
             }
@@ -215,14 +215,14 @@ namespace SunsetSystems.Combat
         [field: SerializeField]
         public CombatActionType ActionType { get; private set; }
         [field: SerializeField, ShowIf("@this.ActionType == CombatActionType.UseDiscipline")]
-        public DisciplinePower DisciplinePowerData { get; private set; }
+        public IAbility DisciplinePowerData { get; private set; }
 
         public SelectedCombatActionData(CombatActionType ActionType) : this(ActionType, null)
         {
 
         }
 
-        public SelectedCombatActionData(CombatActionType ActionType, DisciplinePower DisciplinePowerData)
+        public SelectedCombatActionData(CombatActionType ActionType, IAbility DisciplinePowerData)
         {
             this.ActionType = ActionType;
             this.DisciplinePowerData = DisciplinePowerData;

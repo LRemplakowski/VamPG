@@ -1,8 +1,8 @@
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     public interface IEffectHandler
     {
         EffectHandlerSceneContext GetContext();
-        void HandleEffect(IEffect effect, IAbilityUser caster);
+        void HandleEffect(IEffect effect, ISpellbookManager caster);
     }
 }

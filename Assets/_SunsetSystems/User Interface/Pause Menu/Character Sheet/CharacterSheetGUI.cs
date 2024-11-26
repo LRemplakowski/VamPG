@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Data;
 using SunsetSystems.Party;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using SunsetSystems.UI.Utils;
 using UnityEngine;
 
@@ -34,7 +34,7 @@ namespace SunsetSystems.UI
             skills.AddRange(data.Skills?.GetSkillList() ?? new());
             _skills.ForEach(skillGroup => skillGroup.UpdateViews(skills));
             List<IUserInfertaceDataProvider<BaseStat>> disciplines = new();
-            IAbilityUser spellbook = creature.References.SpellbookManager;
+            ISpellbookManager spellbook = creature.References.SpellbookManager;
             disciplines.AddRange(spellbook.KnownDisciplines);
             _disciplines.UpdateViews(disciplines);
         }

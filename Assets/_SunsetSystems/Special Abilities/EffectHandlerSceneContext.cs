@@ -1,4 +1,4 @@
-namespace SunsetSystems.Spellbook
+namespace SunsetSystems.Abilities
 {
     public struct EffectHandlerSceneContext
     {

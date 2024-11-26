@@ -2,7 +2,7 @@ using SunsetSystems.Animation;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using SunsetSystems.UMA;
 using UnityEngine;
 
@@ -25,7 +25,7 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public IUMAManager UMAManager { get; private set; }
         [field: SerializeField]
-        public IAbilityUser SpellbookManager { get; private set; }
+        public ISpellbookManager SpellbookManager { get; private set; }
         [field: SerializeField]
         public IAnimationManager AnimationManager { get; private set; }
     }

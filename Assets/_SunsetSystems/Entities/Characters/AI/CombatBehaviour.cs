@@ -3,15 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using SunsetSystems.Abilities;
 using SunsetSystems.Animation;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Combat.UI;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Actions;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
-using SunsetSystems.Spellbook;
 using UltEvents;
 using UnityEngine;
 
@@ -38,8 +37,8 @@ namespace SunsetSystems.Combat
         public LineRenderer LineRenderer { get; private set; }
         [field: SerializeField, Required]
         public ICreature Owner { get; private set; }
-        [field: SerializeField, Required]
-        public IAbilityUser MagicUser { get; private set; }
+        [SerializeField, Required]
+        private IAbilityUser _abilityUser;
         [SerializeField, Required]
         private AnimationManager animationController;
 
@@ -179,6 +178,10 @@ namespace SunsetSystems.Combat
         public bool HasActionsQueued => Owner.HasActionsQueued;
 
         public Transform Transform => Owner.Transform;
+
+        public IAbilityUser AbilityUser => _abilityUser;
+
+        public ITargetable Targetable => this;
 
         public bool GetCanMove()
         {

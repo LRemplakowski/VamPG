@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SunsetSystems.Spellbook;
+using SunsetSystems.Abilities;
 using System.Linq;
 
 namespace SunsetSystems.Entities.Data

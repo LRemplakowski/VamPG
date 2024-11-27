@@ -1,12 +1,16 @@
 using BehaviorDesigner.Runtime.Tasks;
 using SunsetSystems.Combat;
+using UnityEngine;
 
 [TaskCategory("Turn System")]
 public class EndTurn : Action
 {
-	public override void OnStart()
+    [SerializeField, SharedRequired]
+    private SharedAIContext _aiContext;
+
+    public override void OnStart()
 	{
-		CombatManager.Instance.NextRound();
+		_aiContext.Value.GetCombatant().SignalEndTurn();
 	}
 
 	public override TaskStatus OnUpdate()

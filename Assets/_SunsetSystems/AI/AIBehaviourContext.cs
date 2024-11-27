@@ -6,6 +6,7 @@ using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory;
+using SunsetSystems.Utils.Extensions;
 using UnityEngine;
 
 namespace SunsetSystems.AI
@@ -20,7 +21,7 @@ namespace SunsetSystems.AI
         private IGridCell _selectedPosition;
 
         public IAbility SelectedAbility { get; set; }
-        public ITargetable SelectedTarget { get; set; }
+        public ICombatant SelectedTarget { get; set; }
         public IGridCell SelectedPosition { get; set; }
 
         private CombatManager _combatManager;
@@ -52,44 +53,39 @@ namespace SunsetSystems.AI
             return _combatBehaviour.IsInCover;
         }
 
+        public bool IsCurrentTargetInAbilityRange()
+        {
+            return IsInAbilityRange(SelectedAbility, _combatBehaviour, SelectedTarget);
+        }
+
         public IAbilityUser GetAbilityUser() => _combatBehaviour.AbilityUser;
+        public ICombatant GetCombatant() => _combatBehaviour;
 
         public int GetTargetsInWeaponRange()
         {
-            var currentWeapon = _combatBehaviour.WeaponManager.GetSelectedWeapon();
-            return _combatManager.LivingActors.Where(actor => IsHostileToMe(actor) && IsInWeaponRange(currentWeapon, actor)).Count();
+            return _combatManager.LivingActors.Where(actor => IsHostileToMe(actor) && IsInAbilityRange(SelectedAbility, _combatBehaviour, actor)).Count();
         }
 
-        private bool IsHostileToMe(ICombatant target)
+        private bool IsHostileToMe(ITargetable target)
         {
-            return _combatBehaviour.Faction switch
-            {
-                Faction.None => false,
-                Faction.Hostile => target.Faction == Faction.Friendly && target.Faction == Faction.PlayerControlled,
-                Faction.Neutral => false,
-                Faction.Friendly => target.Faction == Faction.Hostile,
-                Faction.PlayerControlled => target.Faction == Faction.Hostile,
-                _ => false,
-            };
+            return target.IsHostileTowards(_combatBehaviour);
         }
 
-        private bool IsInWeaponRange(IWeapon weapon, ICombatant target)
+        private static bool IsInAbilityRange(IAbility ability, ICombatant attacker, ICombatant target)
         {
-            return weapon.WeaponType switch
+            ref var abilityTargetingData = ref ability.GetTargetingData(attacker.AbilityUser);
+            return abilityTargetingData.GetRangeType() switch
             {
-                AbilityRange.Melee => IsInMeleeRange(target),
-                AbilityRange.Ranged => IsInRange(target, weapon.GetRangeData().MaxRange),
+                AbilityRange.Melee => IsInMeleeRange(attacker, target),
+                AbilityRange.Ranged => IsInRange(attacker, target, abilityTargetingData.GetRangeData().MaxRange),
                 _ => false,
             };
 
-            bool IsInMeleeRange(ICombatant target)
-            {
-                return IsInRange(target, 1.6f);
-            }
+            static bool IsInMeleeRange(ICombatant attacker, ICombatant target) => IsInRange(attacker, target, 1.6f);
 
-            bool IsInRange(ICombatant target, float range)
+            static bool IsInRange(ICombatant attacker, ICombatant target, float range)
             {
-                return Vector3.Distance(_combatBehaviour.Transform.position, target.Transform.position) <= range;
+                return Vector3.Distance(attacker.Transform.position, target.Transform.position) <= range;
             }
         }
 
@@ -99,6 +95,8 @@ namespace SunsetSystems.AI
             var movementRange = _combatBehaviour.GetRemainingMovement();
             var gridManager = _combatManager.CurrentEncounter.GridManager;
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
+            if (positionsInRange.Count() > 0)
+                lastSelectedPosition = positionsInRange.GetRandom();
             return lastSelectedPosition != _selectedPosition;
         }
 

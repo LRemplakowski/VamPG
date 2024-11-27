@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
-    public interface ICombatant : IActionPerformer
+    public interface ICombatant : IActionPerformer, ITargetable
     {
         UltEvent<ICombatant> OnChangedGridPosition { get; set; }
         UltEvent<ICombatant> OnUsedActionPoint { get; set; }

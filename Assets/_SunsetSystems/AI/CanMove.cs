@@ -11,13 +11,11 @@ public class CanMove : Conditional
 
 	public override TaskStatus OnUpdate()
 	{
-        if (_aiContext.Value.CanMove())
-        {
-            return TaskStatus.Success;
-        }
-        else
-        {
-            return TaskStatus.Failure;
-        }
+        return HasEnoughMovementPoints() ? TaskStatus.Success : TaskStatus.Failure;
+    }
+
+    private bool HasEnoughMovementPoints()
+    {
+        return _aiContext.Value.CanMove();
     }
 }

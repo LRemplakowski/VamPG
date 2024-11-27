@@ -4,5 +4,6 @@ public enum Faction
     Hostile,
     Neutral,
     Friendly,
-    PlayerControlled
+    PlayerControlled,
+    AttackAll
 }

@@ -10,11 +10,8 @@ public class CanAct : Conditional
 
 	public override TaskStatus OnUpdate()
 	{
-		if (HasEnoughActionPoints())
-			return TaskStatus.Success;
-		else
-			return TaskStatus.Failure;
-	}
+        return HasEnoughActionPoints() ? TaskStatus.Success : TaskStatus.Failure;
+    }
 
 	private bool HasEnoughActionPoints()
 	{

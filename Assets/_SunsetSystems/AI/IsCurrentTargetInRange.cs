@@ -10,6 +10,11 @@ public class IsCurrentTargetInRange : Conditional
 
     public override TaskStatus OnUpdate()
 	{
-		return TaskStatus.Success;
+        return IsTargetInRange() ? TaskStatus.Success : TaskStatus.Failure;
 	}
+
+    private bool IsTargetInRange()
+    {
+        return _aiContext.Value.IsCurrentTargetInAbilityRange();
+    }
 }

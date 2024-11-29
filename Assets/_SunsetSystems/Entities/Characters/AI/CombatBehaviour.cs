@@ -130,7 +130,19 @@ namespace SunsetSystems.Combat
 
         public bool IsMe(ICombatant other)
         {
-            throw new System.NotImplementedException();
+            return Equals(other);
+        }
+
+        public bool IsValidEntityType(TargetableEntityType validTargetsFlag) 
+        {
+            return References.CreatureData.CreatureType switch
+            {
+                CreatureType.Mortal => validTargetsFlag.HasFlag(TargetableEntityType.Mortal),
+                CreatureType.Ghul => validTargetsFlag.HasFlag(TargetableEntityType.Ghoul),
+                CreatureType.Vampire => validTargetsFlag.HasFlag(TargetableEntityType.Vampire),
+                CreatureType.Invalid => false,
+                _ => false,
+            };
         }
         #endregion
 

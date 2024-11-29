@@ -1,9 +1,12 @@
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Abilities
 {
     public interface IAbilityUIData
     {
-        AssetReference GetAbilityGUIButtonAsset();
+        Sprite GetAbilityIcon();
+        string GetLocalizedName();
+        string GetLocalizedDescription();
     }
 }

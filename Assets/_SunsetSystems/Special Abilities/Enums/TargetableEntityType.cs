@@ -6,7 +6,10 @@ namespace SunsetSystems.Abilities
     public enum TargetableEntityType
     {
         Mortal = 1 << 0,
-        Vampire = 1 << 1,
-        Object = 1 << 2,
+        Ghoul = 1 << 1,
+        Vampire = 1 << 2,
+        Object = 1 << 3,
+        Position = 1 << 4,
+        Any = int.MaxValue,
     }
 }

@@ -8,6 +8,8 @@ namespace SunsetSystems.Combat
         bool IsHostileTowards(ICombatant other);
         bool IsMe(ICombatant other);
 
+        bool IsValidEntityType(TargetableEntityType validTargetsFlag);
+
         IEffectHandler EffectHandler { get; }
     }
 }

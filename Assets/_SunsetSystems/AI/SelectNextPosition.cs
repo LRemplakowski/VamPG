@@ -10,7 +10,7 @@ public class SelectNextPosition : Action
 
     public override void OnStart()
 	{
-		
+		_aiContext.Value.SelectNextPosition();
 	}
 
 	public override TaskStatus OnUpdate()

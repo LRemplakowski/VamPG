@@ -10,9 +10,9 @@ namespace SunsetSystems.Entities.Characters.Actions
         [field: OdinSerialize]
         protected ICombatant Attacker { get; private set; }
         [field: OdinSerialize]
-        protected ICombatant Target { get; private set; }
+        protected ITargetable Target { get; private set; }
 
-        public HostileAction(ICombatant target, ICombatant attacker) : base(attacker, false)
+        public HostileAction(ITargetable target, ICombatant attacker) : base(attacker, false)
         {
             Attacker = attacker;
             Target = target;

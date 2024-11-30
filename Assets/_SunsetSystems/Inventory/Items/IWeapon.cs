@@ -21,7 +21,14 @@ namespace SunsetSystems.Inventory
 
     public struct RangeData
     {
-        public int ShortRange, OptimalRange, MaxRange, RangeFalloff;
+        public int ShortRange, OptimalRange, MaxRange;
+
+        public RangeData(int shortRange, int optimalRange, int maxRange)
+        {
+            ShortRange = shortRange;
+            OptimalRange = optimalRange;
+            MaxRange = maxRange;
+        }
     }
 
     public struct DamageData

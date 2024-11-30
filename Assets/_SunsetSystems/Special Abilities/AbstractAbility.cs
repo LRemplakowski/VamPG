@@ -21,12 +21,22 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private AbilityCategory _categoryMask;
 
-        public bool Execute(IAbilityUser abilityUser, ITargetable target, Action onCompleted = null)
+        public bool Execute(IAbilityContext context, ITargetable target, Action onCompleted = null)
         {
-            bool canUse = CanExecuteAbility(abilityUser, target);
+            bool canUse = CanExecuteAbility(context, target);
             if (canUse)
             {
-                _ = ExecuteAbilityAsync(abilityUser, target, onCompleted);
+                _ = DoExecuteAbility(context, target, onCompleted);
+            }
+            return canUse;
+        }
+
+        public async Awaitable<bool> ExecuteAsync(IAbilityContext context, ITargetable target, Action onCompleted = null)
+        {
+            bool canUse = CanExecuteAbility(context, target);
+            if (canUse)
+            {
+                await DoExecuteAbility(context, target, onCompleted);
             }
             return canUse;
         }
@@ -63,8 +73,8 @@ namespace SunsetSystems.Abilities
 
         public abstract bool IsValidTarget(IAbilityUser abilityUser, ITargetable target);
 
-        protected abstract Awaitable ExecuteAbilityAsync(IAbilityUser abilityUser, ITargetable target, Action onCompleted);
-        protected abstract bool CanExecuteAbility(IAbilityUser abilityUser, ITargetable target);
+        protected abstract Awaitable DoExecuteAbility(IAbilityContext abilityUser, ITargetable target, Action onCompleted);
+        protected abstract bool CanExecuteAbility(IAbilityContext abilityUser, ITargetable target);
 
         protected abstract int GetMovementPointCost(IAbilityUser abilityUser, ITargetable target);
         protected abstract int GetActionPointCost(IAbilityUser abilityUser, ITargetable target);

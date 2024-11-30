@@ -17,12 +17,12 @@ namespace SunsetSystems.Entities.Characters.Actions
 
         private IEnumerator attackRoutine;
 
-        public Attack(ICombatant target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
+        public Attack(ITargetable target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
         {
             _attackModifier = attackModifier;
         }
 
-        public Attack(ICombatant target, ICombatant attacker) : base(target, attacker)
+        public Attack(ITargetable target, ICombatant attacker) : base(target, attacker)
         {
             attackFinished = new() { Value = false };
         }
@@ -39,13 +39,13 @@ namespace SunsetSystems.Entities.Characters.Actions
             if (attackRoutine != null)
                 return;
             conditions.Add(new WaitForFlag(attackFinished));
-            Debug.Log(Attacker.References.GameObject.name + " attacks " + Target.References.GameObject.name);
+            //Debug.Log(Attacker.References.GameObject.name + " attacks " + Target.References.GameObject.name);
             AttackResult result = CombatCalculator.CalculateAttackResult(Attacker, Target, _attackModifier);
             LogAttack(Attacker, Target, result);
             attackRoutine = PerformAttack(Attacker, Target, result);
             Attacker.CoroutineRunner.StartCoroutine(attackRoutine);
 
-            static void LogAttack(ICombatant attacker, ICombatant target, AttackResult result)
+            static void LogAttack(ICombatant attacker, ITargetable target, AttackResult result)
             {
                 string logMessage = LogUtility.LogMessageFromAttackResult(attacker, target, result);
                 DynamicLogManager.Instance.PostLogMessage(logMessage);
@@ -58,14 +58,14 @@ namespace SunsetSystems.Entities.Characters.Actions
             }
         }
 
-        private IEnumerator PerformAttack(ICombatant attacker, ICombatant defender, AttackResult attackResult)
+        private IEnumerator PerformAttack(ICombatant attacker, ITargetable defender, AttackResult attackResult)
         {
-            faceTargetSubaction = new(attacker, defender.Transform, 180f);
+            faceTargetSubaction = new(attacker, defender.CombatContext.Transform, 180f);
             faceTargetSubaction.Begin();
             while (faceTargetSubaction.EvaluateAction() is false)
                 yield return null;
             attacker.References.AnimationManager.PlayFireWeaponAnimation();
-            defender.References.AnimationManager.PlayTakeHitAnimation();
+            //defender.References.AnimationManager.PlayTakeHitAnimation();
             yield return new WaitForSeconds(1f);
             if (attackResult.Successful)
                 defender.TakeDamage(attackResult.AdjustedDamage);

@@ -41,7 +41,7 @@ namespace SunsetSystems.Combat
         int GetRemainingActionPoints();
         int GetRemainingMovement();
 
-        bool TakeDamage(int amount);
+        //bool TakeDamage(int amount);
         int GetAttributeValue(AttributeType attributeType);
         void SignalEndTurn();
 

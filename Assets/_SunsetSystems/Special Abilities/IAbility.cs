@@ -1,16 +1,18 @@
 using System;
 using SunsetSystems.Combat;
+using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
     public interface IAbility
     {
-        public IAbilityTargetingData GetTargetingData(IAbilityUser abilityUser);
-        public IAbilityCostData GetAbilityCosts(IAbilityUser abilityUser, ITargetable target);
-        public IAbilityUIData GetAbilityUIData();
-        public AbilityCategory GetCategories();
+        IAbilityTargetingData GetTargetingData(IAbilityUser abilityUser);
+        IAbilityCostData GetAbilityCosts(IAbilityUser abilityUser, ITargetable target);
+        IAbilityUIData GetAbilityUIData();
+        AbilityCategory GetCategories();
 
-        public bool Execute(IAbilityUser abilityUser, ITargetable target, Action onCompleted = null);
-        public bool IsValidTarget(IAbilityUser abilityUser, ITargetable target);
+        bool Execute(IAbilityContext abilityUser, ITargetable target, Action onCompleted = null);
+        Awaitable<bool> ExecuteAsync(IAbilityContext context, ITargetable target, Action onCompleted = null);
+        bool IsValidTarget(IAbilityUser abilityUser, ITargetable target);
     }
 }

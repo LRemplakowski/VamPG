@@ -190,7 +190,7 @@ namespace SunsetSystems.Combat
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
                     if (target != null && selectedDisciplinePower.IsValidTarget(currentActorAbilityManager, target))
                     {
-                        selectedDisciplinePower.Execute(currentActorAbilityManager, target);
+                        currentActorAbilityManager.ExecutAbility(selectedDisciplinePower, target);
                     }
                 }
             }

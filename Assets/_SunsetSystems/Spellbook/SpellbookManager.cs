@@ -75,10 +75,10 @@ namespace SunsetSystems.Abilities
                                 Debug.LogError($"Target {_owner} is invalid for effect {effect}!");
                             break;
                         case AffectedHandler.Target:
-                            if (effect.ValidateTarget(target.EffectHandler.GetContext()))
-                                target.EffectHandler.HandleEffect(effect, this);
-                            else
-                                Debug.LogError($"Target {target} is invalid for effect {effect}!");
+                            //if (effect.ValidateTarget(target.EffectHandler.GetContext()))
+                            //    target.EffectHandler.HandleEffect(effect, this);
+                            //else
+                            //    Debug.LogError($"Target {target} is invalid for effect {effect}!");
                             break;
                     }
                 }

@@ -6,10 +6,10 @@ namespace SunsetSystems.DynamicLog
 {
     public static class LogUtility
     {
-        public static string LogMessageFromAttackResult(ICombatant attacker, ICombatant target, AttackResult attack)
+        public static string LogMessageFromAttackResult(ICombatant attacker, ITargetable target, AttackResult attack)
         {
             var attackerName = attacker.References.CreatureData.FullName;
-            var targetName = target.References.CreatureData.FullName;
+            var targetName = target.GetLocalizedName();
             string result;
             if (attack.Successful)
             {

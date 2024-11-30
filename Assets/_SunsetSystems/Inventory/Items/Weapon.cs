@@ -57,7 +57,6 @@ namespace SunsetSystems.Inventory.Data
             RangeData data = new()
             {
                 OptimalRange = optimalRange,
-                RangeFalloff = rangeFalloff,
                 MaxRange = optimalRange + (2 * rangeFalloff),
                 ShortRange = optimalRange - rangeFalloff
             };

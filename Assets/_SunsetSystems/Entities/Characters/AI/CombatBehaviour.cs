@@ -22,8 +22,6 @@ namespace SunsetSystems.Combat
         [SerializeField]
         private Vector3 _combatNameplateOffset = new Vector3(0, 2, 0);
         [SerializeField]
-        private float defaultRaycastOriginY = 1.5f;
-        [SerializeField]
         private string hasCoverAnimationBoolean;
         private int hasCoverAnimationBooleanHash;
 
@@ -116,7 +114,7 @@ namespace SunsetSystems.Combat
         }
 
         #region ITargetable
-        public IEffectHandler EffectHandler => throw new System.NotImplementedException();
+        public ICombatContext CombatContext { get; }
 
         public bool IsFriendlyTowards(ICombatant other)
         {
@@ -210,11 +208,11 @@ namespace SunsetSystems.Combat
             return SprintRange - Mathf.CeilToInt(_distanceMovedThisTurn);
         }
 
-        public bool TakeDamage(int amount)
+        public void TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);
             OnDamageTaken?.InvokeSafe(this);
-            return true;
+            //return true;
         }
 
         public int GetAttributeValue(AttributeType attributeType)
@@ -372,6 +370,10 @@ namespace SunsetSystems.Combat
             }
             return unit;
         }
+        #endregion
+
+        #region INamedObject
+        public string GetLocalizedName() => References.CreatureData.FullName;
         #endregion
 
         public override string ToString()

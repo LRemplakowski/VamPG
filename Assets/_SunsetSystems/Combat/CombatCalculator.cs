@@ -1,11 +1,7 @@
-using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Entities;
-using SunsetSystems.Inventory.Data;
-using SunsetSystems.Abilities;
 using System;
-using UnityEngine;
+using SunsetSystems.Abilities;
 using SunsetSystems.Inventory;
+using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
@@ -20,12 +16,12 @@ namespace SunsetSystems.Combat
 
         private static readonly System.Random _random = new();
 
-        public static AttackResult CalculateAttackResult(ICombatant attacker, ICombatant defender)
+        public static AttackResult CalculateAttackResult(ICombatant attacker, ITargetable defender)
         {
             return CalculateAttackResult(attacker, defender, new());
         }
 
-        public static AttackResult CalculateAttackResult(ICombatant attacker, ICombatant defender, AttackModifier attackModifier)
+        public static AttackResult CalculateAttackResult(ICombatant attacker, ITargetable defender, AttackModifier attackModifier)
         {
             int damage = 0;
             int damageReduction = 0;
@@ -33,7 +29,7 @@ namespace SunsetSystems.Combat
             double critChance = 0;
             double critRoll = 0;
 
-            float heightDifference = attacker.References.Transform.position.y - defender.References.Transform.position.y;
+            float heightDifference = attacker.References.Transform.position.y - defender.CombatContext.Transform.position.y;
             if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
             {
                 attackModifier.HitChanceMod += .1d;
@@ -76,32 +72,32 @@ namespace SunsetSystems.Combat
             return result;
         }
 
-        private static int CalculateDefenderDamageReduction(ICombatant defender, Inventory.AbilityRange attackType)
+        private static int CalculateDefenderDamageReduction(ITargetable defender, AbilityRange attackType)
         {
             int damageReduction = 0;
             switch (attackType)
             {
-                case Inventory.AbilityRange.Melee:
-                    damageReduction += defender.GetAttributeValue(AttributeType.Stamina);
+                case AbilityRange.Melee:
+                    damageReduction += defender.CombatContext.GetAttributeValue(AttributeType.Stamina);
                     break;
-                case Inventory.AbilityRange.Ranged:
-                    damageReduction += defender.GetAttributeValue(AttributeType.Dexterity);
+                case AbilityRange.Ranged:
+                    damageReduction += defender.CombatContext.GetAttributeValue(AttributeType.Dexterity);
                     break;
             }
             return damageReduction;
         }
 
-        private static int CalculateAttackDamage(ICombatant attacker, ICombatant defender)
+        private static int CalculateAttackDamage(ICombatant attacker, ITargetable defender)
         {
             int damage = 0;
             IWeapon selectedWeapon = attacker.WeaponManager.GetSelectedWeapon();
             float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
             switch (selectedWeapon.WeaponType)
             {
-                case Inventory.AbilityRange.Melee:
+                case AbilityRange.Melee:
                     damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                     break;
-                case Inventory.AbilityRange.Ranged:
+                case AbilityRange.Ranged:
                     damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                     break;
             }
@@ -109,23 +105,23 @@ namespace SunsetSystems.Combat
             return damage;
         }
 
-        private static double CalculateHitChance(ICombatant attacker, ICombatant defender)
+        private static double CalculateHitChance(ICombatant attacker, ITargetable defender)
         {
             double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
             double result = 0d;
-            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().ShortRange >= Vector3.Distance(attacker.References.Transform.position, defender.References.Transform.position))
+            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().ShortRange >= Vector3.Distance(attacker.References.Transform.position, defender.CombatContext.Transform.position))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;
         }
 
-        private static double CalculateDodgeChance(ICombatant defender, ICombatant attacker)
+        private static double CalculateDodgeChance(ITargetable defender, ICombatant attacker)
         {
             double result = BASE_DODGE_CHANCE;
             bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out ICover coverSource);
             if (hasCover)
             {
-                int defenderDexterity = defender.GetAttributeValue(AttributeType.Dexterity);
+                int defenderDexterity = defender.CombatContext.GetAttributeValue(AttributeType.Dexterity);
                 switch (coverSource.Quality)
                 {
                     case CoverQuality.Half:

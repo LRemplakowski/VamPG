@@ -1,15 +1,19 @@
 using SunsetSystems.Abilities;
+using SunsetSystems.Localization;
+using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
-    public interface ITargetable
+    public interface ITargetable : INamedObject
     {
+        ICombatContext CombatContext { get; }
+
         bool IsFriendlyTowards(ICombatant other);
         bool IsHostileTowards(ICombatant other);
         bool IsMe(ICombatant other);
 
         bool IsValidEntityType(TargetableEntityType validTargetsFlag);
 
-        IEffectHandler EffectHandler { get; }
+        void TakeDamage(int damage);
     }
 }

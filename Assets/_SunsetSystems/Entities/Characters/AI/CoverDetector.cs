@@ -1,3 +1,4 @@
+using System.Linq;
 using SunsetSystems.Combat;
 using UnityEngine;
 
@@ -14,12 +15,12 @@ public class CoverDetector : MonoBehaviour
             _instance = this;
     }
 
-    public static bool FiringLineObstructedByCover(ICombatant attacker, ICombatant target, out ICover coverSource)
+    public static bool FiringLineObstructedByCover(ICombatant attacker, ITargetable target, out ICover coverSource)
     {
-        if (target.IsInCover)
+        if (target.CombatContext.IsInCover)
         {
             Vector3 attackerRaycast = attacker.AimingOrigin;
-            Vector3 targetRaycast = target.AimingOrigin;
+            Vector3 targetRaycast = target.CombatContext.AimingOrigin;
             float distance = Vector3.Distance(attackerRaycast, targetRaycast);
             Vector3 direction = (attackerRaycast - targetRaycast).normalized;
             RaycastHit[] hits = Physics.RaycastAll(new Ray(attackerRaycast, direction), distance, _instance.coverLayerMask);
@@ -28,7 +29,7 @@ public class CoverDetector : MonoBehaviour
                 foreach (RaycastHit hit in hits)
                 {
                     coverSource = hit.collider.GetComponent<ICover>();
-                    if (target.CurrentCoverSources.Contains(coverSource))
+                    if (target.CombatContext.CurrentCoverSources.Contains(coverSource))
                     {
                         return true;
                     }

@@ -1,4 +1,4 @@
-﻿using SunsetSystems.Entities.Characters.Actions;
+﻿using SunsetSystems.ActionSystem;
 using UnityEngine;
 
 public interface IInteractable

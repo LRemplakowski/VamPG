@@ -1,6 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory;
 using System.Collections.Generic;

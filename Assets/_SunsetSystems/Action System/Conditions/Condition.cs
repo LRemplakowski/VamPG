@@ -1,6 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     public abstract class Condition
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Localization;
 using SunsetSystems.Core.Rendering;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;

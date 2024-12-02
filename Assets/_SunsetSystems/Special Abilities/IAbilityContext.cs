@@ -1,5 +1,5 @@
 using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 
 namespace SunsetSystems.Abilities
 {

@@ -15,12 +15,12 @@ public class CoverDetector : MonoBehaviour
             _instance = this;
     }
 
-    public static bool FiringLineObstructedByCover(ICombatant attacker, ITargetable target, out ICover coverSource)
+    public static bool FiringLineObstructedByCover(IAttackContext context, out ICover coverSource)
     {
-        if (target.CombatContext.IsInCover)
+        if (context.IsInCover(AttackParticipant.Target))
         {
-            Vector3 attackerRaycast = attacker.AimingOrigin;
-            Vector3 targetRaycast = target.CombatContext.AimingOrigin;
+            Vector3 attackerRaycast = context.GetAimingPosition(AttackParticipant.Attacker);
+            Vector3 targetRaycast = context.GetAimingPosition(AttackParticipant.Target);
             float distance = Vector3.Distance(attackerRaycast, targetRaycast);
             Vector3 direction = (attackerRaycast - targetRaycast).normalized;
             RaycastHit[] hits = Physics.RaycastAll(new Ray(attackerRaycast, direction), distance, _instance.coverLayerMask);
@@ -29,7 +29,7 @@ public class CoverDetector : MonoBehaviour
                 foreach (RaycastHit hit in hits)
                 {
                     coverSource = hit.collider.GetComponent<ICover>();
-                    if (target.CombatContext.CurrentCoverSources.Contains(coverSource))
+                    if (context.GetCoverSources(AttackParticipant.Target).Contains(coverSource))
                     {
                         return true;
                     }

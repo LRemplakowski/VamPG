@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using SunsetSystems.Abilities;

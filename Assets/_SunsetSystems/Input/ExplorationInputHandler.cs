@@ -4,7 +4,7 @@ using BehaviorDesigner.Runtime;
 using InsaneSystems.RTSSelection;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Input.CameraControl;
 using SunsetSystems.Party;
 using SunsetSystems.Utils.Input;

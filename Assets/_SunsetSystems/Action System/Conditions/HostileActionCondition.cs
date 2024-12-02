@@ -2,7 +2,7 @@
 using SunsetSystems.Combat;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class HostileActionCondition : Condition

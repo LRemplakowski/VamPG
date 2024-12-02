@@ -10,6 +10,7 @@ namespace SunsetSystems.Combat
         Transform Transform { get; }
         bool IsInCover { get; }
         Vector3 AimingOrigin { get; }
+        bool IsPlayerControlled { get; }
 
         IEnumerable<ICover> CurrentCoverSources { get; }
 

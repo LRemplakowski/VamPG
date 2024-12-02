@@ -1,6 +1,4 @@
 using System;
-using SunsetSystems.Abilities;
-using SunsetSystems.Inventory;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -16,28 +14,25 @@ namespace SunsetSystems.Combat
 
         private static readonly System.Random _random = new();
 
-        public static AttackResult CalculateAttackResult(ICombatant attacker, ITargetable defender)
+        public static AttackResult CalculateAttackResult(IAttackContext context)
         {
-            return CalculateAttackResult(attacker, defender, new());
-        }
-
-        public static AttackResult CalculateAttackResult(ICombatant attacker, ITargetable defender, AttackModifier attackModifier)
-        {
+            var attackModifier = context.GetBaseAttackModifier();
             int damage = 0;
             int damageReduction = 0;
             int adjustedDamage = 0;
             double critChance = 0;
             double critRoll = 0;
 
-            float heightDifference = attacker.References.Transform.position.y - defender.CombatContext.Transform.position.y;
-            if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
-            {
-                attackModifier.HitChanceMod += .1d;
-                attackModifier.DamageMod += 2;
-            }
+            attackModifier += context.GetHeightAttackModifier();
+            //float heightDifference = attacker.References.Transform.position.y - defender.CombatContext.Transform.position.y;
+            //if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+            //{
+            //    attackModifier.HitChanceMod += .1d;
+            //    attackModifier.DamageMod += 2;
+            //}
 
-            double attackerHitChance = CalculateHitChance(attacker, defender) + attackModifier.HitChanceMod;
-            double defenderDodgeChance = CalculateDodgeChance(defender, attacker) + attackModifier.DodgeChanceMod;
+            double attackerHitChance = CalculateHitChance(context) + attackModifier.HitChanceMod;
+            double defenderDodgeChance = CalculateDodgeChance(context) + attackModifier.DodgeChanceMod;
             bool hit = false;
             bool crit = false;
             hit |= attackerHitChance - defenderDodgeChance >= 1d;
@@ -46,17 +41,17 @@ namespace SunsetSystems.Combat
             hit |= attackModifier.SuccessMod;
             if (hit)
             {
-                critChance = CalculateCritChance(attacker) + attackModifier.CritChanceMod;
-                damage = CalculateAttackDamage(attacker, defender) + attackModifier.DamageMod;
+                critChance = CalculateCritChance(context) + attackModifier.CritChanceMod;
+                damage = CalculateAttackDamage(context) + attackModifier.DamageMod;
                 critRoll = _random.NextDouble() + attackModifier.CritRollMod;
                 crit |= critRoll < critChance;
                 crit |= attackModifier.CriticalMod;
                 if (crit)
                     damage = Mathf.RoundToInt(damage * 1.5f);
-                damageReduction = CalculateDefenderDamageReduction(defender, attacker.WeaponManager.GetSelectedWeapon().WeaponType) + attackModifier.DamageReductionMod;
+                damageReduction = CalculateDefenderDamageReduction(context) + attackModifier.DamageReductionMod;
                 adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
-            if (attacker.IsPlayerControlled)
+            if (context.IsPlayerControlled(AttackParticipant.Attacker))
             {
                 Debug.LogError($"ADDED 10 TO PLAYER DAMAGE! THIS IS TEMPORARY, REMOVE IT!");
                 adjustedDamage += 10;
@@ -65,63 +60,55 @@ namespace SunsetSystems.Combat
             return new(attackerHitChance, defenderDodgeChance, hitRoll, critChance, critRoll, damage, damageReduction, adjustedDamage, hit, crit);
         }
 
-        private static double CalculateCritChance(ICombatant attacker)
+        private static double CalculateCritChance(IAttackContext context)
         {
             double result = BASE_CRIT_CHANCE;
-            result += attacker.GetAttributeValue(AttributeType.Wits) * 0.01d;
+            result += context.GetAttributeValue(AttackParticipant.Attacker, AttributeType.Wits) * 0.01d;
             return result;
         }
 
-        private static int CalculateDefenderDamageReduction(ITargetable defender, AbilityRange attackType)
+        private static int CalculateDefenderDamageReduction(IAttackContext context)
         {
-            int damageReduction = 0;
-            switch (attackType)
-            {
-                case AbilityRange.Melee:
-                    damageReduction += defender.CombatContext.GetAttributeValue(AttributeType.Stamina);
-                    break;
-                case AbilityRange.Ranged:
-                    damageReduction += defender.CombatContext.GetAttributeValue(AttributeType.Dexterity);
-                    break;
-            }
-            return damageReduction;
+            return context.GetDamageReduction();
         }
 
-        private static int CalculateAttackDamage(ICombatant attacker, ITargetable defender)
+        private static int CalculateAttackDamage(IAttackContext context)
         {
-            int damage = 0;
-            IWeapon selectedWeapon = attacker.WeaponManager.GetSelectedWeapon();
-            float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
-            switch (selectedWeapon.WeaponType)
-            {
-                case AbilityRange.Melee:
-                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-                    break;
-                case AbilityRange.Ranged:
-                    damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-                    break;
-            }
+            int damage = context.GetAttackDamage();
+            //IWeapon selectedWeapon = attacker.WeaponManager.GetSelectedWeapon();
+            //float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
+            //switch (selectedWeapon.WeaponType)
+            //{
+            //    case AbilityRange.Melee:
+            //        damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
+            //        break;
+            //    case AbilityRange.Ranged:
+            //        damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
+            //        break;
+            //}
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             return damage;
         }
 
-        private static double CalculateHitChance(ICombatant attacker, ITargetable defender)
+        private static double CalculateHitChance(IAttackContext attackContext)
         {
-            double attributeModifier = attacker.GetAttributeValue(AttributeType.Wits);
+            double attributeModifier = attackContext.GetAttributeValue(AttackParticipant.Attacker, AttributeType.Wits);
             double result = 0d;
-            if (attacker.WeaponManager.GetSelectedWeapon().GetRangeData().ShortRange >= Vector3.Distance(attacker.References.Transform.position, defender.CombatContext.Transform.position))
+            var attackerPosition = attackContext.GetPosition(AttackParticipant.Attacker);
+            var targetPosition = attackContext.GetPosition(AttackParticipant.Target);
+            if (attackContext.GetAttackRangeData().ShortRange >= Vector3.Distance(attackerPosition, targetPosition))
                 result -= SHORT_RANGE_HIT_PENALTY;
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;
         }
 
-        private static double CalculateDodgeChance(ITargetable defender, ICombatant attacker)
+        private static double CalculateDodgeChance(IAttackContext attackContext)
         {
             double result = BASE_DODGE_CHANCE;
-            bool hasCover = CoverDetector.FiringLineObstructedByCover(attacker, defender, out ICover coverSource);
+            bool hasCover = CoverDetector.FiringLineObstructedByCover(attackContext, out ICover coverSource);
             if (hasCover)
             {
-                int defenderDexterity = defender.CombatContext.GetAttributeValue(AttributeType.Dexterity);
+                int defenderDexterity = attackContext.GetAttributeValue(AttackParticipant.Target, AttributeType.Dexterity);
                 switch (coverSource.Quality)
                 {
                     case CoverQuality.Half:
@@ -143,9 +130,27 @@ namespace SunsetSystems.Combat
         public double CritChanceMod, CritRollMod;
         public int DamageMod, DamageReductionMod, AdjustedDamageMod;
         public bool SuccessMod, CriticalMod;
+
+        public static AttackModifier operator +(AttackModifier a, AttackModifier b)
+        {
+            return new AttackModifier
+            {
+                HitChanceMod = a.HitChanceMod + b.HitChanceMod,
+                DodgeChanceMod = a.DodgeChanceMod + b.DodgeChanceMod,
+                HitRollMod = a.HitRollMod + b.HitRollMod,
+                CritChanceMod = a.CritChanceMod + b.CritChanceMod,
+                CritRollMod = a.CritRollMod + b.CritRollMod,
+                DamageMod = a.DamageMod + b.DamageMod,
+                DamageReductionMod = a.DamageReductionMod + b.DamageReductionMod,
+                AdjustedDamageMod = a.AdjustedDamageMod + b.AdjustedDamageMod,
+                SuccessMod = a.SuccessMod || b.SuccessMod,
+                CriticalMod = a.CriticalMod || b.CriticalMod
+            };
+        }
     }
 
-    public struct AttackResult
+
+    public readonly struct AttackResult
     {
         public readonly double AttackerHitChance, DefenderDodgeChance, HitRoll;
         public readonly double CritChance, CritRoll;

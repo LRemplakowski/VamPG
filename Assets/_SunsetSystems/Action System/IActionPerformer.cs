@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
+using SunsetSystems.Entities.Characters;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     public interface IActionPerformer
     {

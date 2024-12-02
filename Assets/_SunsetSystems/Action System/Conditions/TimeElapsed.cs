@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     public class TimeElapsed : Condition
     {

@@ -7,7 +7,7 @@ using Sirenix.Utilities;
 using SunsetSystems.Core;
 using SunsetSystems.Data;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Creatures;
 using SunsetSystems.Persistence;
 using UltEvents;

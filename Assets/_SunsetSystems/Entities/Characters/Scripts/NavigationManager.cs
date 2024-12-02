@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Persistence;
 using UnityEngine;
 using UnityEngine.AI;

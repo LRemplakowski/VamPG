@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Party;
 using UltEvents;
 using UnityEngine;

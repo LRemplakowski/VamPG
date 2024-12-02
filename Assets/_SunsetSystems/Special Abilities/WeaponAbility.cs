@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
@@ -21,12 +21,15 @@ namespace SunsetSystems.Abilities
         private int _numberOfAttacks = 1;
         [BoxGroup("Weapon Ability")]
         [SerializeField]
-        private int _ammoUsed = 0;
+        private int _ammoPerAttack = 0;
+        [BoxGroup("Weapon Ability")]
+        [SerializeField]
+        private AttackType _attackType = AttackType.WeaponMelee;
 
         protected async override Awaitable DoExecuteAbility(IAbilityContext context, ITargetable target, Action onCompleted)
         {
             var actionPerformer = context.ActionPerformer;
-            var shootingAction = new Attack(target, context.UserCombatBehaviour);
+            var shootingAction = new WeaponAbilityAction(this, context.User, context.UserCombatBehaviour, target);
             await context.ActionPerformer.PerformAction(shootingAction);
             onCompleted?.Invoke();
         }
@@ -35,5 +38,9 @@ namespace SunsetSystems.Abilities
         {
             return new RangeData(_baseShortRange, _baseOptimalRange, _baseMaxRange);
         }
+
+        public int GetAmmoPerAttack() => _ammoPerAttack;
+        public int GetNumberOfAttacks() => _numberOfAttacks;
+        public AttackType GetAttackType() => _attackType;
     }
 }

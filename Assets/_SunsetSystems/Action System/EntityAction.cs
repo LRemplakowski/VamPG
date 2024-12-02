@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public abstract class EntityAction

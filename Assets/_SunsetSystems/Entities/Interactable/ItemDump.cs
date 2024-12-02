@@ -1,5 +1,5 @@
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.Data;
 using UnityEngine;

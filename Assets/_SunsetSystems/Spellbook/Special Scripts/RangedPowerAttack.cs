@@ -1,6 +1,6 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interfaces;
 using System;
 using UnityEngine;

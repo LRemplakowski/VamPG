@@ -4,7 +4,7 @@ using UnityEngine;
 using SunsetSystems.Inventory;
 using SunsetSystems.Inventory.UI;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 
 namespace SunsetSystems.Entities.Interactable
 {

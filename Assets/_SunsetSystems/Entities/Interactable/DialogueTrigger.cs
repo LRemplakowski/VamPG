@@ -3,7 +3,7 @@ using SunsetSystems.Dialogue;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using UltEvents;
 using SunsetSystems.Core.SceneLoading.UI;
 using System.Threading.Tasks;

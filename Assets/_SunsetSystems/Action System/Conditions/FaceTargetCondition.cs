@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class FaceTargetCondition : Condition

@@ -1,6 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Persistence;
 using UnityEngine;
 

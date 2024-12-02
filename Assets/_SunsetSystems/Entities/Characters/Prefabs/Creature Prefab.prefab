@@ -938,7 +938,6 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 7860156406871809602}
     - {fileID: 660093643310669083}
-    - {fileID: 1441128836294789900}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -950,11 +949,10 @@ MonoBehaviour:
     - Name: <Owner>k__BackingField
       Entry: 10
       Data: 1
-    - Name: <MagicUser>k__BackingField
-      Entry: 10
-      Data: 2
+    - Name: _abilityUser
+      Entry: 6
+      Data: 
   _combatNameplateOffset: {x: 0, y: 2, z: 0}
-  defaultRaycastOriginY: 1.5
   hasCoverAnimationBoolean: InCover
   _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
@@ -966,7 +964,10 @@ MonoBehaviour:
   <OnSpentBloodPoint>k__BackingField:
     _PersistentCalls: []
   <OnDamageTaken>k__BackingField:
-    _PersistentCalls: []
+    _PersistentCalls:
+    - _Target: {fileID: 4678919013744510610}
+      _MethodName: PlayTakeHitAnimation
+      _PersistentArguments: []
 --- !u!1 &6912376922156523433
 GameObject:
   m_ObjectHideFlags: 0

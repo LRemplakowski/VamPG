@@ -1,6 +1,6 @@
 ﻿using Sirenix.Serialization;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class InteractionComplete : Condition

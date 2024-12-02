@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core.Localization;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interfaces;
 using UltEvents;
 using UnityEngine;

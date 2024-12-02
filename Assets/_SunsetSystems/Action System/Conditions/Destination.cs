@@ -1,7 +1,7 @@
 ﻿using SunsetSystems.Entities.Characters.Navigation;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class Destination : Condition

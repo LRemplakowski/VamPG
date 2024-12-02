@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Core.SceneLoading.UI;
 using SunsetSystems.Dialogue;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interactable;
 using SunsetSystems.Game;
 using SunsetSystems.Input.CameraControl;

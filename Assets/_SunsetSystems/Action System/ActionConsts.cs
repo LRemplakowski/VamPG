@@ -1,4 +1,4 @@
-﻿namespace SunsetSystems.Entities.Characters.Actions
+﻿namespace SunsetSystems.ActionSystem
 {
 		public static class ActionConsts
 		{

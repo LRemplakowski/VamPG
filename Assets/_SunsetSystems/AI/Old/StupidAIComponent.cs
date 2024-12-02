@@ -3,7 +3,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Utils.Extensions;
 using UnityEngine;

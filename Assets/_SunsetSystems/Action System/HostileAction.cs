@@ -2,7 +2,7 @@
 using Sirenix.Serialization;
 using SunsetSystems.Combat;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [Serializable]
     public abstract class HostileAction : EntityAction

@@ -1,12 +1,10 @@
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters.Actions;
-using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SunsetSystems.AI

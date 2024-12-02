@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class FaceTarget : EntityAction

@@ -6,7 +6,7 @@ using SunsetSystems.Entities.Characters.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class Move : EntityAction

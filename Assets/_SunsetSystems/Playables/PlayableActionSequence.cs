@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 using UnityEngine;
 
 namespace SunsetSystems.Playables

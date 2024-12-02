@@ -2,7 +2,7 @@ using System.Collections;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Interfaces;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
     public class Follow : EntityAction

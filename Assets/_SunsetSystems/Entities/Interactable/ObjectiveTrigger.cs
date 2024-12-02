@@ -1,7 +1,7 @@
 using UnityEngine;
 using SunsetSystems.Journal;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Characters.Actions;
+using SunsetSystems.ActionSystem;
 
 namespace SunsetSystems.Entities.Interactable
 {

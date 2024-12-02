@@ -2,7 +2,7 @@
 using SunsetSystems.Abilities;
 using UnityEngine;
 
-namespace SunsetSystems.Entities.Characters.Actions
+namespace SunsetSystems.ActionSystem
 {
     public class Wait : EntityAction
     {

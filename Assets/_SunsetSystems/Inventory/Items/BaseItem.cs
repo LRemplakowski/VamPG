@@ -18,9 +18,9 @@ namespace SunsetSystems.Inventory.Data
         public override string DatabaseID { get; protected set; }
         [field: SerializeField, ReadOnly]
         public ItemCategory ItemCategory { get; protected set; }
-        [SerializeField, Min(0)]
+        [SerializeField, MinValue(0)]
         private float _itemCashValue;
-        [field: SerializeField, TextArea]
+        [field: SerializeField, MultiLineProperty]
         public string ItemDescription { get; protected set; }
         [field: SerializeField]
         public AssetReferenceGameObject WorldSpaceRepresentation { get; protected set; }

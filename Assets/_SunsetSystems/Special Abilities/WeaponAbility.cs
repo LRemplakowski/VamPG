@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using SunsetSystems.Combat;
 using SunsetSystems.ActionSystem;
+using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
@@ -20,11 +18,20 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private int _numberOfAttacks = 1;
         [BoxGroup("Weapon Ability")]
+        [SerializeField, PropertyRange(0, 5)]
+        private float _delayBetweenAttacks = .2f;
+        [BoxGroup("Weapon Ability")]
         [SerializeField]
         private int _ammoPerAttack = 0;
         [BoxGroup("Weapon Ability")]
         [SerializeField]
+        private int _damageBonus = 0;
+        [BoxGroup("Weapon Ability")]
+        [SerializeField]
         private AttackType _attackType = AttackType.WeaponMelee;
+        [BoxGroup("Weapon Ability")]
+        [SerializeField]
+        private DamageType _damageType = DamageType.Piercing;
 
         protected async override Awaitable DoExecuteAbility(IAbilityContext context, ITargetable target, Action onCompleted)
         {
@@ -41,6 +48,9 @@ namespace SunsetSystems.Abilities
 
         public int GetAmmoPerAttack() => _ammoPerAttack;
         public int GetNumberOfAttacks() => _numberOfAttacks;
+        public int GetDamageBonus() => _damageBonus;
+        public float GetDelayBetweenAttacks() => _delayBetweenAttacks;
         public AttackType GetAttackType() => _attackType;
+        public DamageType GetDamageType() => _damageType;
     }
 }

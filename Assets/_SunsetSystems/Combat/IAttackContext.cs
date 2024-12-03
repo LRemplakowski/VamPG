@@ -9,6 +9,7 @@ namespace SunsetSystems.Combat
     {
         int GetAttackDamage();
         int GetDamageReduction();
+        float GetCriticalDamageMultiplier();
         int GetAttributeValue(AttackParticipant entity, AttributeType attributeType);
         Vector3 GetPosition(AttackParticipant entity);
         Vector3 GetAimingPosition(AttackParticipant entity);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Abilities;
@@ -24,6 +25,7 @@ namespace SunsetSystems.ActionSystem
         public WeaponAbilityAction(WeaponAbility weaponAbility, IAbilityUser user, ICombatant attacker, ITargetable target) : base(target, attacker)
         {
             _weaponAbility = weaponAbility;
+            _abilityUser = user;
             _attackFinished = new() { Value = false };
         }
 
@@ -38,14 +40,40 @@ namespace SunsetSystems.ActionSystem
 
         public override void Begin()
         {
-            if (_attackRoutine != null)
+            if (Attacker.WeaponManager.HasEnoughAmmoInSelectedWeapon(_weaponAbility.GetAmmoPerAttack() * _weaponAbility.GetNumberOfAttacks()) is false)
+            {
+                Abort();
                 return;
+            }
+            if (_attackRoutine != null)
+            {
+                return;
+            }
             conditions.Add(new WaitForFlag(_attackFinished));
-            //Debug.Log(Attacker.References.GameObject.name + " attacks " + Target.References.GameObject.name);
-            AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromWeaponAbilityAction(this));
-            LogAttack(Attacker, Target, result);
-            _attackRoutine = PerformAttack(Attacker, Target, result);
+            Debug.Log(Attacker.CombatContext.GameObject.name + " attacks " + Target.CombatContext.GameObject.name);
+            _attackRoutine = PerformAttack(Attacker, Target);
             Attacker.CoroutineRunner.StartCoroutine(_attackRoutine);
+        }
+
+        private IEnumerator PerformAttack(ICombatant attacker, ITargetable defender)
+        {
+            var attackContext = new AttackContextFromWeaponAbilityAction(this);
+            _faceTargetSubaction = new(attacker, defender.CombatContext.Transform, 180f);
+            _faceTargetSubaction.Begin();
+            while (_faceTargetSubaction.EvaluateAction() is false)
+                yield return null;
+            attacker.References.AnimationManager.PlayFireWeaponAnimation();
+            for (int i = 0; i < _weaponAbility.GetNumberOfAttacks(); i++)
+            {
+                AttackResult result = CombatCalculator.CalculateAttackResult(attackContext);
+                LogAttack(Attacker, Target, result);
+                if (result.Successful && attacker.WeaponManager.UseAmmoFromSelectedWeapon(_weaponAbility.GetAmmoPerAttack()))
+                {
+                    defender.TakeDamage(result.AdjustedDamage);
+                }
+                yield return new WaitForSeconds(_weaponAbility.GetDelayBetweenAttacks());
+            }
+            _attackFinished.Value = true;
 
             static void LogAttack(ICombatant attacker, ITargetable target, AttackResult result)
             {
@@ -56,40 +84,32 @@ namespace SunsetSystems.ActionSystem
                     $"Defender dodge chance = {result.DefenderDodgeChance}\n" +
                     $"Attack roll: {result.HitRoll} vs difficulty {result.AttackerHitChance - result.DefenderDodgeChance}\n" +
                     $"Damage dealt: {result.Damage} - {result.DamageReduction} = {result.AdjustedDamage}");
-
             }
-        }
-
-        private IEnumerator PerformAttack(ICombatant attacker, ITargetable defender, AttackResult attackResult)
-        {
-            _faceTargetSubaction = new(attacker, defender.CombatContext.Transform, 180f);
-            _faceTargetSubaction.Begin();
-            while (_faceTargetSubaction.EvaluateAction() is false)
-                yield return null;
-            attacker.References.AnimationManager.PlayFireWeaponAnimation();
-            //defender.References.AnimationManager.PlayTakeHitAnimation();
-            if (attackResult.Successful)
-                defender.TakeDamage(attackResult.AdjustedDamage);
-            _attackFinished.Value = true;
         }
 
         private readonly struct AttackContextFromWeaponAbilityAction : IAttackContext
         {
-            private readonly WeaponAbilityAction _action;
+            private readonly WeaponAbility _ability;
+            private readonly ICombatant _attacker;
+            private readonly ITargetable _target;
+            private readonly IAbilityUser _abilityUser;
             private readonly IAbilityTargetingData _abilityTargetingData;
 
             public AttackContextFromWeaponAbilityAction(WeaponAbilityAction action)
             {
-                _action = action;
-                _abilityTargetingData = _action._weaponAbility.GetTargetingData(_action._abilityUser);
+                _ability = action._weaponAbility;
+                _attacker = action.Attacker;
+                _target = action.Target;
+                _abilityUser = action._abilityUser;
+                _abilityTargetingData = _ability.GetTargetingData(_abilityUser);
             }
 
             public readonly Vector3 GetAimingPosition(AttackParticipant entity)
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.Transform.position,
-                    AttackParticipant.Target => _action.Target.CombatContext.Transform.position,
+                    AttackParticipant.Attacker => _attacker.CombatContext.Transform.position,
+                    AttackParticipant.Target => _target.CombatContext.Transform.position,
                     _ => Vector3.zero,
                 };
             }
@@ -97,26 +117,22 @@ namespace SunsetSystems.ActionSystem
             public readonly int GetAttackDamage()
             {
                 int damage = 0;
-                IWeapon selectedWeapon = _action.Attacker.WeaponManager.GetSelectedWeapon();
-                float weaponDamageMod = _action.Attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
-                switch (GetAttackType())
+                var attackerContext = _attacker.CombatContext;
+                float weaponDamageMod = attackerContext.IsUsingPrimaryWeapon ? 1f : 0.6f;
+                damage += attackerContext.CurrentWeaponDamageBonus;
+                damage += _ability.GetDamageBonus();
+                damage += GetAttackType() switch
                 {
-                    case AttackType.WeaponMelee:
-                        damage = Mathf.RoundToInt((_action.Attacker.CombatContext.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-                        break;
-                    case AttackType.WeaponRanged:
-                        damage = Mathf.RoundToInt((_action.Attacker.CombatContext.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-                        break;
-                    case AttackType.MagicMelee:
-                        break;
-                    case AttackType.MagicRanged:
-                        break;
-                    case AttackType.WeaponAOE:
-                        break;
-                    case AttackType.MagicAOE:
-                        break;
-                }
-                return damage;
+                    AttackType.WeaponMelee => attackerContext.GetAttributeValue(AttributeType.Strength),
+                    AttackType.WeaponRanged => attackerContext.GetAttributeValue(AttributeType.Composure),
+                    _ => throw new NotImplementedException(),
+                };
+                return Mathf.RoundToInt(damage * weaponDamageMod);
+            }
+
+            public readonly float GetCriticalDamageMultiplier()
+            {
+                return 1.5f;
             }
 
             public readonly RangeData GetAttackRangeData()
@@ -126,15 +142,15 @@ namespace SunsetSystems.ActionSystem
 
             public readonly AttackType GetAttackType()
             {
-                return _action._weaponAbility.GetAttackType();
+                return _ability.GetAttackType();
             }
 
             public readonly int GetAttributeValue(AttackParticipant entity, AttributeType attributeType)
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.GetAttributeValue(attributeType),
-                    AttackParticipant.Target => _action.Target.CombatContext.GetAttributeValue(attributeType),
+                    AttackParticipant.Attacker => _attacker.CombatContext.GetAttributeValue(attributeType),
+                    AttackParticipant.Target => _target.CombatContext.GetAttributeValue(attributeType),
                     _ => 0,
                 };
             }
@@ -148,8 +164,8 @@ namespace SunsetSystems.ActionSystem
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.CurrentCoverSources,
-                    AttackParticipant.Target => _action.Target.CombatContext.CurrentCoverSources,
+                    AttackParticipant.Attacker => _attacker.CombatContext.CurrentCoverSources,
+                    AttackParticipant.Target => _target.CombatContext.CurrentCoverSources,
                     _ => new List<ICover>(),
                 };
             }
@@ -158,8 +174,8 @@ namespace SunsetSystems.ActionSystem
             {
                 return GetAttackType() switch
                 {
-                    AttackType.WeaponMelee => _action.Target.CombatContext.GetAttributeValue(AttributeType.Stamina),
-                    AttackType.WeaponRanged => _action.Target.CombatContext.GetAttributeValue(AttributeType.Dexterity),
+                    AttackType.WeaponMelee => _target.CombatContext.GetAttributeValue(AttributeType.Stamina),
+                    AttackType.WeaponRanged => _target.CombatContext.GetAttributeValue(AttributeType.Dexterity),
                     AttackType.MagicMelee => throw new System.NotImplementedException(),
                     AttackType.MagicRanged => throw new System.NotImplementedException(),
                     AttackType.WeaponAOE => throw new System.NotImplementedException(),
@@ -171,8 +187,8 @@ namespace SunsetSystems.ActionSystem
             public readonly AttackModifier GetHeightAttackModifier()
             {
                 AttackModifier heightAttackMod = new();
-                float heightDifference = _action.Attacker.CombatContext.Transform.position.y - _action.Target.CombatContext.Transform.position.y;
-                if (heightDifference > 2f && _action.Attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
+                float heightDifference = _attacker.CombatContext.Transform.position.y - _target.CombatContext.Transform.position.y;
+                if (heightDifference > 2f && _attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
                 {
                     heightAttackMod.HitChanceMod += .1d;
                     heightAttackMod.DamageMod += 2;
@@ -184,8 +200,8 @@ namespace SunsetSystems.ActionSystem
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.Transform.position,
-                    AttackParticipant.Target => _action.Target.CombatContext.Transform.position,
+                    AttackParticipant.Attacker => _attacker.CombatContext.Transform.position,
+                    AttackParticipant.Target => _target.CombatContext.Transform.position,
                     _ => Vector3.zero,
                 };
             }
@@ -194,8 +210,8 @@ namespace SunsetSystems.ActionSystem
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.IsInCover,
-                    AttackParticipant.Target => _action.Target.CombatContext.IsInCover,
+                    AttackParticipant.Attacker => _attacker.CombatContext.IsInCover,
+                    AttackParticipant.Target => _target.CombatContext.IsInCover,
                     _ => false,
                 };
             }
@@ -204,8 +220,8 @@ namespace SunsetSystems.ActionSystem
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _action.Attacker.CombatContext.IsPlayerControlled,
-                    AttackParticipant.Target => _action.Target.CombatContext.IsPlayerControlled,
+                    AttackParticipant.Attacker => _attacker.CombatContext.IsPlayerControlled,
+                    AttackParticipant.Target => _target.CombatContext.IsPlayerControlled,
                     _ => false,
                 };
             }

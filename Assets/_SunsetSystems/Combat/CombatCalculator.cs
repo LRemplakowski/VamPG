@@ -17,20 +17,12 @@ namespace SunsetSystems.Combat
         public static AttackResult CalculateAttackResult(IAttackContext context)
         {
             var attackModifier = context.GetBaseAttackModifier();
+            attackModifier += context.GetHeightAttackModifier();
             int damage = 0;
             int damageReduction = 0;
             int adjustedDamage = 0;
             double critChance = 0;
             double critRoll = 0;
-
-            attackModifier += context.GetHeightAttackModifier();
-            //float heightDifference = attacker.References.Transform.position.y - defender.CombatContext.Transform.position.y;
-            //if (heightDifference > 2f && attacker.References.GetCachedComponentInChildren<SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
-            //{
-            //    attackModifier.HitChanceMod += .1d;
-            //    attackModifier.DamageMod += 2;
-            //}
-
             double attackerHitChance = CalculateHitChance(context) + attackModifier.HitChanceMod;
             double defenderDodgeChance = CalculateDodgeChance(context) + attackModifier.DodgeChanceMod;
             bool hit = false;
@@ -47,7 +39,9 @@ namespace SunsetSystems.Combat
                 crit |= critRoll < critChance;
                 crit |= attackModifier.CriticalMod;
                 if (crit)
-                    damage = Mathf.RoundToInt(damage * 1.5f);
+                {
+                    damage = Mathf.RoundToInt(damage * GetCriticalDamageMultiplier(context));
+                }
                 damageReduction = CalculateDefenderDamageReduction(context) + attackModifier.DamageReductionMod;
                 adjustedDamage = (damage > damageReduction ? damage - damageReduction : 1) + attackModifier.AdjustedDamageMod;
             }
@@ -67,6 +61,11 @@ namespace SunsetSystems.Combat
             return result;
         }
 
+        private static float GetCriticalDamageMultiplier(IAttackContext context)
+        {
+            return context.GetCriticalDamageMultiplier();
+        }
+
         private static int CalculateDefenderDamageReduction(IAttackContext context)
         {
             return context.GetDamageReduction();
@@ -75,17 +74,6 @@ namespace SunsetSystems.Combat
         private static int CalculateAttackDamage(IAttackContext context)
         {
             int damage = context.GetAttackDamage();
-            //IWeapon selectedWeapon = attacker.WeaponManager.GetSelectedWeapon();
-            //float weaponDamageMod = attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
-            //switch (selectedWeapon.WeaponType)
-            //{
-            //    case AbilityRange.Melee:
-            //        damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-            //        break;
-            //    case AbilityRange.Ranged:
-            //        damage = Mathf.RoundToInt((attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
-            //        break;
-            //}
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             return damage;
         }
@@ -97,7 +85,9 @@ namespace SunsetSystems.Combat
             var attackerPosition = attackContext.GetPosition(AttackParticipant.Attacker);
             var targetPosition = attackContext.GetPosition(AttackParticipant.Target);
             if (attackContext.GetAttackRangeData().ShortRange >= Vector3.Distance(attackerPosition, targetPosition))
+            {
                 result -= SHORT_RANGE_HIT_PENALTY;
+            }
             result += BASE_HIT_CHANCE + (attributeModifier * 0.01d);
             return result;
         }

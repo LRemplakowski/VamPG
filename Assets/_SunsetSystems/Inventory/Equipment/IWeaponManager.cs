@@ -15,6 +15,7 @@ namespace SunsetSystems.Equipment
         IWeapon GetSecondaryWeapon();
         WeaponAmmoData GetSelectedWeaponAmmoData();
 
+        bool HasEnoughAmmoInSelectedWeapon(int ammo);
         bool UseAmmoFromSelectedWeapon(int count);
         void ReloadSelectedWeapon();
     }

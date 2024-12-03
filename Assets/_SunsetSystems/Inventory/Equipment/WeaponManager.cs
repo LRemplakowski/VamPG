@@ -167,6 +167,12 @@ namespace SunsetSystems.Equipment
             return new();
         }
 
+        public bool HasEnoughAmmoInSelectedWeapon(int ammo)
+        {
+            IWeapon selectedWeapon = GetSelectedWeapon();
+            return weaponsAmmoData.TryGetValue(selectedWeapon.DatabaseID, out var ammoData) && ammoData.CurrentAmmo >= ammo;
+        }
+
         public bool UseAmmoFromSelectedWeapon(int count)
         {
             IWeapon selectedWeapon = GetSelectedWeapon();

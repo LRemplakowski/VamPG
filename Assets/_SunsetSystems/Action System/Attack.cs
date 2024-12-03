@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Combat;
 using SunsetSystems.DynamicLog;
@@ -7,7 +8,8 @@ using UnityEngine;
 
 namespace SunsetSystems.ActionSystem
 {
-    [System.Serializable]
+    [Obsolete]
+    [Serializable]
     public class Attack : HostileAction
     {
         [SerializeField]
@@ -112,6 +114,11 @@ namespace SunsetSystems.ActionSystem
                         break;
                 }
                 return damage;
+            }
+
+            public float GetCriticalDamageMultiplier()
+            {
+                return 1.5f;
             }
 
             public RangeData GetAttackRangeData()

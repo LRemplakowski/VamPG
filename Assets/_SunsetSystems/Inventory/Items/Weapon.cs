@@ -17,9 +17,9 @@ namespace SunsetSystems.Inventory.Data
         public DamageType DamageType { get; private set; }
         [field: SerializeField]
         public AbilityRange WeaponType { get; private set; }
-        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
+        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.AbilityRange.Ranged")]
         public WeaponFireMode FireMode { get; private set; }
-        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.WeaponType.Ranged")]
+        [field: SerializeField, ShowIf("@this.WeaponType == SunsetSystems.Inventory.AbilityRange.Ranged")]
         public int MaxAmmo { get; private set; } = 3;
         [SerializeField]
         private bool _overrideWeaponActions = false;

@@ -10,23 +10,23 @@ namespace SunsetSystems.Inventory.Data
 {
     public abstract class BaseItem : AbstractDatabaseEntry<IBaseItem>, IRewardable, IUserInfertaceDataProvider<IBaseItem>, IBaseItem, ITradeable
     {
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Base Item")]
         public string Name { get; protected set; }
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Base Item")]
         public override string ReadableID { get; protected set; }
-        [field: SerializeField, ReadOnly]
+        [field: SerializeField, ReadOnly, BoxGroup("Base Item")]
         public override string DatabaseID { get; protected set; }
-        [field: SerializeField, ReadOnly]
+        [field: SerializeField, ReadOnly, BoxGroup("Base Item")]
         public ItemCategory ItemCategory { get; protected set; }
-        [SerializeField, MinValue(0)]
+        [SerializeField, MinValue(0), BoxGroup("Base Item")]
         private float _itemCashValue;
-        [field: SerializeField, MultiLineProperty]
+        [field: SerializeField, MultiLineProperty, BoxGroup("Base Item")]
         public string ItemDescription { get; protected set; }
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Base Item")]
         public AssetReferenceGameObject WorldSpaceRepresentation { get; protected set; }
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Base Item")]
         public Sprite Icon { get; protected set; }
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Base Item")]
         public bool Stackable { get; protected set; }
 
         public IBaseItem UIData => this;

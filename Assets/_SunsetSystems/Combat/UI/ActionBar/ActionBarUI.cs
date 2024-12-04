@@ -24,16 +24,16 @@ namespace SunsetSystems.Combat.UI
         private CombatActionType GetAvailableActions()
         {
             CombatActionType result = CombatActionType.None;
-            result |= _defaultActions;
-            result |= GetWeaponActions();
+            //result |= _defaultActions;
+            //result |= GetWeaponActions();
             return result;
 
-            static CombatActionType GetWeaponActions()
-            {
-                var combatant = CombatManager.Instance.CurrentActiveActor;
-                var weapon = combatant.References.GetCachedComponentInChildren<IWeaponManager>().GetSelectedWeapon();
-                return weapon.GetWeaponCombatActions();
-            }
+            //static CombatActionType GetWeaponActions()
+            //{
+            //    var combatant = CombatManager.Instance.CurrentActiveActor;
+            //    var weapon = combatant.References.GetCachedComponentInChildren<IWeaponManager>().GetSelectedWeapon();
+            //    return weapon.GetWeaponCombatActions();
+            //}
         }
     }
 }

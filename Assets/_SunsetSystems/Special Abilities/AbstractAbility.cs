@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
@@ -15,28 +16,40 @@ namespace SunsetSystems.Abilities
         [SerializeField, MultiLineProperty]
         private string _fallbackDescription;
         [BoxGroup("UI Data")]
-        [SerializeField]
-        private Sprite _icon;
+        [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
+        private Dictionary<IAbilityUIData.IconState, Sprite> _icons = new();
         [BoxGroup("Ability Core")]
         [SerializeField]
         private AbilityCategory _categoryMask;
 
-        public bool Execute(IAbilityContext context, ITargetable target, Action onCompleted = null)
+        private void OnValidate()
         {
-            bool canUse = CanExecuteAbility(context, target);
+            _icons ??= new();
+            foreach (IAbilityUIData.IconState iconState in Enum.GetValues(typeof(IAbilityUIData.IconState)))
+            {
+                if (_icons.ContainsKey(iconState) is false)
+                {
+                    _icons[iconState] = null;
+                }
+            }
+        }
+
+        public bool Execute(IAbilityContext context, Action onCompleted = null)
+        {
+            bool canUse = CanExecuteAbility(context);
             if (canUse)
             {
-                _ = DoExecuteAbility(context, target, onCompleted);
+                _ = DoExecuteAbility(context, onCompleted);
             }
             return canUse;
         }
 
-        public async Awaitable<bool> ExecuteAsync(IAbilityContext context, ITargetable target, Action onCompleted = null)
+        public async Awaitable<bool> ExecuteAsync(IAbilityContext context, Action onCompleted = null)
         {
-            bool canUse = CanExecuteAbility(context, target);
+            bool canUse = CanExecuteAbility(context);
             if (canUse)
             {
-                await DoExecuteAbility(context, target, onCompleted);
+                await DoExecuteAbility(context, onCompleted);
             }
             return canUse;
         }
@@ -51,14 +64,14 @@ namespace SunsetSystems.Abilities
             return new AbilityUIData(this);
         }
 
-        public IAbilityCostData GetAbilityCosts(IAbilityUser abilityUser, ITargetable target)
+        public IAbilityCostData GetAbilityCosts(IAbilityContext context)
         {
-            return new AbilityCost(abilityUser, target, this);
+            return new AbilityCost(context, this);
         }
 
-        public IAbilityTargetingData GetTargetingData(IAbilityUser abilityUser)
+        public IAbilityTargetingData GetTargetingData(IAbilityContext context)
         {
-            return new AbilityTargetingData(abilityUser, this);
+            return new AbilityTargetingData(context, this);
         }
 
         private string GetLocalizedName()
@@ -71,19 +84,19 @@ namespace SunsetSystems.Abilities
             return _fallbackDescription;
         }
 
-        public abstract bool IsValidTarget(IAbilityUser abilityUser, ITargetable target);
+        public abstract bool IsValidTarget(IAbilityContext context);
 
-        protected abstract Awaitable DoExecuteAbility(IAbilityContext abilityUser, ITargetable target, Action onCompleted);
-        protected abstract bool CanExecuteAbility(IAbilityContext abilityUser, ITargetable target);
+        protected abstract Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted);
+        protected abstract bool CanExecuteAbility(IAbilityContext context);
 
-        protected abstract int GetMovementPointCost(IAbilityUser abilityUser, ITargetable target);
-        protected abstract int GetActionPointCost(IAbilityUser abilityUser, ITargetable target);
-        protected abstract int GetBloodPointCost(IAbilityUser abilityUser, ITargetable target);
+        protected abstract int GetMovementPointCost(IAbilityContext context);
+        protected abstract int GetActionPointCost(IAbilityContext context);
+        protected abstract int GetBloodPointCost(IAbilityContext context);
 
-        protected abstract AbilityTargetingType GetAbilityTargetingType(IAbilityUser abilityUser);
-        protected abstract RangeData GetAbilityRangeData(IAbilityUser abilityUser);
-        protected abstract AbilityRange GetAbilityRangeType(IAbilityUser abilityUser);
-        protected abstract TargetableEntityType GetValidTargetsFlag(IAbilityUser abilityUser);
+        protected abstract AbilityTargetingType GetAbilityTargetingType(IAbilityContext context);
+        protected abstract RangeData GetAbilityRangeData(IAbilityContext context);
+        protected abstract AbilityRange GetAbilityRangeType(IAbilityContext context);
+        protected abstract TargetableEntityType GetValidTargetsFlag(IAbilityContext context);
 
         private readonly struct AbilityCost : IAbilityCostData
         {
@@ -91,11 +104,11 @@ namespace SunsetSystems.Abilities
             public int ActionPointCost { get; }
             public int BloodCost { get; }
 
-            public AbilityCost(IAbilityUser abilityUser, ITargetable target, AbstractAbility ability)
+            public AbilityCost(IAbilityContext context, AbstractAbility ability)
             {
-                MovementCost = ability.GetMovementPointCost(abilityUser, target);
-                ActionPointCost = ability.GetActionPointCost(abilityUser, target);
-                BloodCost = ability.GetBloodPointCost(abilityUser, target);
+                MovementCost = ability.GetMovementPointCost(context);
+                ActionPointCost = ability.GetActionPointCost(context);
+                BloodCost = ability.GetBloodPointCost(context);
             }
         }
 
@@ -106,12 +119,12 @@ namespace SunsetSystems.Abilities
             private readonly AbilityRange _rangeType;
             private readonly TargetableEntityType _validTargetsFlag;
 
-            public AbilityTargetingData(IAbilityUser abilityUser, AbstractAbility ability)
+            public AbilityTargetingData(IAbilityContext context, AbstractAbility ability)
             {
-                _targetingType = ability.GetAbilityTargetingType(abilityUser);
-                _rangeData = ability.GetAbilityRangeData(abilityUser);
-                _rangeType = ability.GetAbilityRangeType(abilityUser);
-                _validTargetsFlag = ability.GetValidTargetsFlag(abilityUser);
+                _targetingType = ability.GetAbilityTargetingType(context);
+                _rangeData = ability.GetAbilityRangeData(context);
+                _rangeType = ability.GetAbilityRangeType(context);
+                _validTargetsFlag = ability.GetValidTargetsFlag(context);
             }
 
             public AbilityTargetingType GetAbilityTargetingType()
@@ -137,20 +150,20 @@ namespace SunsetSystems.Abilities
 
         private readonly struct AbilityUIData : IAbilityUIData
         {
-            public readonly Sprite _icon;
+            public readonly Dictionary<IAbilityUIData.IconState, Sprite> _icons;
             public readonly Func<string> _localizedName;
             public readonly Func<string> _localizedDescription;
 
             public AbilityUIData(AbstractAbility ability)
             {
-                _icon = ability._icon;
+                _icons = new(ability._icons);
                 _localizedName = ability.GetLocalizedName;
                 _localizedDescription = ability.GetLocalizedDescription;
             }
 
-            public Sprite GetAbilityIcon()
+            public Sprite GetAbilityIcon(IAbilityUIData.IconState iconState)
             {
-                return _icon;
+                return _icons.TryGetValue(iconState, out var icon) ? icon : null;
             }
 
             public string GetLocalizedName()

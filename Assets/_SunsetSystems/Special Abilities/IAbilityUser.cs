@@ -8,9 +8,12 @@ namespace SunsetSystems.Abilities
 {
     public interface IAbilityUser
     {
+        IEnumerable<IAbility> GetCoreAbilities();
         IEnumerable<IAbility> GetAllAbilities();
 
+        IAbilityContext GetAbilityContext(ITargetable target);
+
         Awaitable<bool> ExecuteAbilityAsync(IAbility ability, ITargetable target);
-        bool ExecutAbility(IAbility ability, ITargetable target, Action onCompleted = null);
+        bool ExecuteAbility(IAbility ability, ITargetable target, Action onCompleted = null);
     }
 }

@@ -15,7 +15,7 @@ public class ExecuteSelectedAction : Action
 	{
 		_actionFinished = false;
 		var context = _aiContext.Value;
-		_executionFailed = !context.GetAbilityUser().ExecutAbility(context.SelectedAbility, context.SelectedTarget, OnExecutionFinished);
+		_executionFailed = !context.GetAbilityUser().ExecuteAbility(context.SelectedAbility, context.SelectedTarget, OnExecutionFinished);
 	}
 
 	public override TaskStatus OnUpdate()

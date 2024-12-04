@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Equipment;
-using SunsetSystems.Inventory;
-using SunsetSystems.Abilities;
 using UltEvents;
 using UnityEngine;
 
@@ -16,8 +14,6 @@ namespace SunsetSystems.Combat
         UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         UltEvent<ICombatant> OnDamageTaken { get; set; }
 
-        IAbilityUser AbilityUser { get; }
-        ITargetable Targetable { get; }
         Faction Faction { get; }
 
         bool IsPlayerControlled { get; }

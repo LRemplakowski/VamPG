@@ -78,7 +78,7 @@ namespace SunsetSystems.Abilities
                             //if (effect.ValidateTarget(target.EffectHandler.GetContext()))
                             //    target.EffectHandler.HandleEffect(effect, this);
                             //else
-                            //    Debug.LogError($"Target {target} is invalid for effect {effect}!");
+                            //    Debug.LogError($"TargetCharacter {target} is invalid for effect {effect}!");
                             break;
                     }
                 }

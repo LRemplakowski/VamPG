@@ -6,7 +6,7 @@ namespace Glitchers
 {
     /// <summary>
     /// Author: Glitchers
-    /// Source: https://gist.github.com/glitchersgames/c1d33a635fa0ca76e38de0591bb1b798
+    /// SourceCombatBehaviour: https://gist.github.com/glitchersgames/c1d33a635fa0ca76e38de0591bb1b798
     /// </summary>
     public static class FindInterfaces
     {

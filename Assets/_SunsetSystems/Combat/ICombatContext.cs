@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SunsetSystems.Abilities;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -7,11 +8,16 @@ namespace SunsetSystems.Combat
     {
         GameObject GameObject { get; }
         Transform Transform { get; }
+        Vector3 AimingOrigin { get; }
         bool IsInCover { get; }
         bool IsPlayerControlled { get; }
         bool IsUsingPrimaryWeapon { get; }
-        Vector3 AimingOrigin { get; }
-        int CurrentWeaponDamageBonus { get; }
+        bool IsSelectedWeaponUsingAmmo { get; }
+        int SelectedWeaponDamageBonus { get; }
+        int SelectedWeaponCurrentAmmo { get; }
+        int SelectedWeaponMaxAmmo { get; }
+
+        IAbilityUser AbilityUser { get; }
 
         IEnumerable<ICover> CurrentCoverSources { get; }
 

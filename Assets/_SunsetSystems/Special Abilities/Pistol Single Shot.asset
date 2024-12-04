@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49ca4142550d46348bec21bc432a3a7c, type: 3}
-  m_Name: New Weapon Ability
+  m_Name: Pistol Single Shot
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -31,12 +31,11 @@ MonoBehaviour:
   _baseMovementCost: 0
   _baseAPCost: 1
   _baseBloodCost: 0
-  _baseMaxRange: 1
-  _baseOptimalRange: 1
-  _baseShortRange: 1
+  _baseAbilityRange: 1
+  _rangeFalloff: 1
   _numberOfAttacks: 1
   _delayBetweenAttacks: 0.2
-  _ammoPerAttack: 0
+  _ammoPerAttack: 1
   _damageBonus: 0
-  _attackType: 0
+  _attackType: 1
   _damageType: 1

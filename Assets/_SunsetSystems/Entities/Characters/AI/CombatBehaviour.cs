@@ -189,10 +189,6 @@ namespace SunsetSystems.Combat
 
         public Transform Transform => Owner.Transform;
 
-        public IAbilityUser AbilityUser => _abilityUser;
-
-        public ITargetable Targetable => this;
-
         public bool GetCanMove()
         {
             return SprintRange > Mathf.CeilToInt(_distanceMovedThisTurn);
@@ -212,7 +208,6 @@ namespace SunsetSystems.Combat
         {
             Owner.References.StatsManager.TakeDamage(amount);
             OnDamageTaken?.InvokeSafe(this);
-            //return true;
         }
 
         public int GetAttributeValue(AttributeType attributeType)

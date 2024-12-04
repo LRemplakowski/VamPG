@@ -8,11 +8,9 @@ namespace SunsetSystems.Inventory
     public interface IWeapon : IEquipableItem
     {
         AbilityRange WeaponType { get; }
-        WeaponFireMode FireMode { get; }
         int MaxAmmo { get; }
 
         bool GetWeaponUsesAmmo();
-        CombatActionType GetWeaponCombatActions();
         RangeData GetRangeData();
         DamageData GetDamageData();
 

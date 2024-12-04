@@ -58,7 +58,7 @@ namespace SunsetSystems.AI
             return IsInAbilityRange(SelectedAbility, _combatBehaviour, SelectedTarget);
         }
 
-        public IAbilityUser GetAbilityUser() => _combatBehaviour.AbilityUser;
+        public IAbilityUser GetAbilityUser() => _combatBehaviour.CombatContext.AbilityUser;
         public ICombatant GetCombatant() => _combatBehaviour;
 
         public int GetTargetsInWeaponRange()
@@ -73,7 +73,7 @@ namespace SunsetSystems.AI
 
         private static bool IsInAbilityRange(IAbility ability, ICombatant attacker, ICombatant target)
         {
-            var abilityTargetingData = ability.GetTargetingData(attacker.AbilityUser);
+            var abilityTargetingData = ability.GetTargetingData(attacker.CombatContext.AbilityUser.GetAbilityContext(target));
             return abilityTargetingData.GetRangeType() switch
             {
                 AbilityRange.Melee => IsInMeleeRange(attacker, target),
@@ -96,13 +96,15 @@ namespace SunsetSystems.AI
             var gridManager = _combatManager.CurrentEncounter.GridManager;
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
             if (positionsInRange.Count() > 0)
+            {
                 lastSelectedPosition = positionsInRange.GetRandom();
+            }
             return lastSelectedPosition != _selectedPosition;
         }
 
         public bool GetHasEnoughActionPoints(IAbility selectedAbility)
         {
-            var abilityCost = selectedAbility.GetAbilityCosts(_combatBehaviour.AbilityUser, SelectedTarget);
+            var abilityCost = selectedAbility.GetAbilityCosts(_combatBehaviour.CombatContext.AbilityUser.GetAbilityContext(SelectedTarget));
             return abilityCost.ActionPointCost <= _combatBehaviour.GetRemainingActionPoints();
         }
     }

@@ -183,14 +183,14 @@ namespace SunsetSystems.Combat
 
             void HandleUseDisciplineCombatAction()
             {
-                IAbility selectedDisciplinePower = SelectedActionData.DisciplinePowerData;
-                var currentActorAbilityManager = CombatManager.Instance.CurrentActiveActor.AbilityUser;
+                IAbility selectedAbility = SelectedActionData.AbilityData;
+                var abilityManager = CombatManager.Instance.CurrentActiveActor.CombatContext.AbilityUser;
                 if (targetableHit != null)
                 {
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
-                    if (target != null && selectedDisciplinePower.IsValidTarget(currentActorAbilityManager, target))
+                    if (target != null && selectedAbility.IsValidTarget(abilityManager.GetAbilityContext(target)))
                     {
-                        currentActorAbilityManager.ExecutAbility(selectedDisciplinePower, target);
+                        abilityManager.ExecuteAbility(selectedAbility, target);
                     }
                 }
             }
@@ -215,17 +215,17 @@ namespace SunsetSystems.Combat
         [field: SerializeField]
         public CombatActionType ActionType { get; private set; }
         [field: SerializeField, ShowIf("@this.ActionType == CombatActionType.UseDiscipline")]
-        public IAbility DisciplinePowerData { get; private set; }
+        public IAbility AbilityData { get; private set; }
 
         public SelectedCombatActionData(CombatActionType ActionType) : this(ActionType, null)
         {
 
         }
 
-        public SelectedCombatActionData(CombatActionType ActionType, IAbility DisciplinePowerData)
+        public SelectedCombatActionData(CombatActionType ActionType, IAbility AbilityData)
         {
             this.ActionType = ActionType;
-            this.DisciplinePowerData = DisciplinePowerData;
+            this.AbilityData = AbilityData;
             ExecuteImmediate = false;
         }
     }

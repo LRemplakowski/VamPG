@@ -6,13 +6,13 @@ namespace SunsetSystems.Abilities
 {
     public interface IAbility
     {
-        IAbilityTargetingData GetTargetingData(IAbilityUser abilityUser);
-        IAbilityCostData GetAbilityCosts(IAbilityUser abilityUser, ITargetable target);
+        IAbilityTargetingData GetTargetingData(IAbilityContext context);
+        IAbilityCostData GetAbilityCosts(IAbilityContext context);
         IAbilityUIData GetAbilityUIData();
         AbilityCategory GetCategories();
 
-        bool Execute(IAbilityContext abilityUser, ITargetable target, Action onCompleted = null);
-        Awaitable<bool> ExecuteAsync(IAbilityContext context, ITargetable target, Action onCompleted = null);
-        bool IsValidTarget(IAbilityUser abilityUser, ITargetable target);
+        bool Execute(IAbilityContext context, Action onCompleted = null);
+        Awaitable<bool> ExecuteAsync(IAbilityContext context, Action onCompleted = null);
+        bool IsValidTarget(IAbilityContext context);
     }
 }

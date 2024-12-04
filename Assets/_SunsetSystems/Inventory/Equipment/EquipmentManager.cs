@@ -15,6 +15,7 @@ namespace SunsetSystems.Entities.Characters
         [field: Title("Data")]
         [field: SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
         public Dictionary<EquipmentSlotID, IEquipmentSlot> EquipmentSlots { get; private set; }
+        public IEnumerable<IBaseItem> EquippedItems => EquipmentSlots.Values.Select(slot => slot.GetEquippedItem());
 
         [Title("Events")]
         public UltEvent<IEquipableItem> ItemEquipped;

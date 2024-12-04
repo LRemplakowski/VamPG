@@ -1,13 +1,10 @@
-using System;
-using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
-    public class BaseAbility : AbstractAbility
+    public abstract class BaseAbility : AbstractAbility
     {
         [SerializeField, BoxGroup("Ability Core")]
         protected TargetableEntityType _validTargetsFlag;
@@ -17,63 +14,44 @@ namespace SunsetSystems.Abilities
         protected AbilityTargetingType _abilityTargetingType;
         [SerializeField, BoxGroup("Ability Cost")]
         protected int _baseMovementCost = 0, _baseAPCost = 0, _baseBloodCost = 0;
-        [SerializeField, BoxGroup("Ability Range"), MinValue(1)]
-        protected int _baseMaxRange = 1;
 
-        public override bool IsValidTarget(IAbilityUser abilityUser, ITargetable target)
+        public override bool IsValidTarget(IAbilityContext context)
         {
-            bool targetIsValidEntity = target.IsValidEntityType(GetValidTargetsFlag(abilityUser));
+            bool targetIsValidEntity = context.TargetCharacter.IsValidEntityType(GetValidTargetsFlag(context));
             return targetIsValidEntity;
         }
 
-        protected override bool CanExecuteAbility(IAbilityContext abilityContext, ITargetable target)
+        protected override bool CanExecuteAbility(IAbilityContext context)
         {
-            return abilityContext != null && target != null;
+            return context != null && context.TargetCharacter != null;
         }
 
-        protected override async Awaitable DoExecuteAbility(IAbilityContext abilityContext, ITargetable target, Action onCompleted)
-        {
-            await Task.Yield();
-            Debug.Log($"{abilityContext.User} used {name} against {target}!");
-            onCompleted?.Invoke();
-        }
-
-        protected override RangeData GetAbilityRangeData(IAbilityUser abilityUser)
-        {
-            return new()
-            {
-                ShortRange = _baseMaxRange,
-                MaxRange = _baseMaxRange,
-                OptimalRange = _baseMaxRange
-            };
-        }
-
-        protected override AbilityRange GetAbilityRangeType(IAbilityUser abilityUser)
+        protected override AbilityRange GetAbilityRangeType(IAbilityContext context)
         {
             return _targetingDistanceType;
         }
 
-        protected override AbilityTargetingType GetAbilityTargetingType(IAbilityUser abilityUser)
+        protected override AbilityTargetingType GetAbilityTargetingType(IAbilityContext context)
         {
             return _abilityTargetingType;
         }
 
-        protected override int GetActionPointCost(IAbilityUser abilityUser, ITargetable target)
+        protected override int GetActionPointCost(IAbilityContext context)
         {
             return _baseAPCost;
         }
 
-        protected override int GetBloodPointCost(IAbilityUser abilityUser, ITargetable target)
+        protected override int GetBloodPointCost(IAbilityContext context)
         {
             return _baseBloodCost;
         }
 
-        protected override int GetMovementPointCost(IAbilityUser abilityUser, ITargetable target)
+        protected override int GetMovementPointCost(IAbilityContext context)
         {
             return _baseMovementCost;
         }
 
-        protected override TargetableEntityType GetValidTargetsFlag(IAbilityUser abilityUser)
+        protected override TargetableEntityType GetValidTargetsFlag(IAbilityContext context)
         {
             return _validTargetsFlag;
         }

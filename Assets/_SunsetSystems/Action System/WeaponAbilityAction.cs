@@ -16,16 +16,16 @@ namespace SunsetSystems.ActionSystem
         [SerializeField]
         private FaceTarget _faceTargetSubaction;
         [SerializeField]
-        private WeaponAbility _weaponAbility;
+        private WeaponAttackAbility _weaponAbility;
         [SerializeField]
-        private IAbilityUser _abilityUser;
+        private IAbilityContext _abilityContext;
 
         private IEnumerator _attackRoutine;
 
-        public WeaponAbilityAction(WeaponAbility weaponAbility, IAbilityUser user, ICombatant attacker, ITargetable target) : base(target, attacker)
+        public WeaponAbilityAction(WeaponAttackAbility weaponAbility, IAbilityContext context) : base(context.TargetCharacter, context.SourceCombatBehaviour)
         {
             _weaponAbility = weaponAbility;
-            _abilityUser = user;
+            _abilityContext = context;
             _attackFinished = new() { Value = false };
         }
 
@@ -89,10 +89,10 @@ namespace SunsetSystems.ActionSystem
 
         private readonly struct AttackContextFromWeaponAbilityAction : IAttackContext
         {
-            private readonly WeaponAbility _ability;
+            private readonly WeaponAttackAbility _ability;
             private readonly ICombatant _attacker;
             private readonly ITargetable _target;
-            private readonly IAbilityUser _abilityUser;
+            private readonly IAbilityContext _abilityContext;
             private readonly IAbilityTargetingData _abilityTargetingData;
 
             public AttackContextFromWeaponAbilityAction(WeaponAbilityAction action)
@@ -100,8 +100,8 @@ namespace SunsetSystems.ActionSystem
                 _ability = action._weaponAbility;
                 _attacker = action.Attacker;
                 _target = action.Target;
-                _abilityUser = action._abilityUser;
-                _abilityTargetingData = _ability.GetTargetingData(_abilityUser);
+                _abilityContext = action._abilityContext;
+                _abilityTargetingData = _ability.GetTargetingData(_abilityContext);
             }
 
             public readonly Vector3 GetAimingPosition(AttackParticipant entity)
@@ -119,7 +119,7 @@ namespace SunsetSystems.ActionSystem
                 int damage = 0;
                 var attackerContext = _attacker.CombatContext;
                 float weaponDamageMod = attackerContext.IsUsingPrimaryWeapon ? 1f : 0.6f;
-                damage += attackerContext.CurrentWeaponDamageBonus;
+                damage += attackerContext.SelectedWeaponDamageBonus;
                 damage += _ability.GetDamageBonus();
                 damage += GetAttackType() switch
                 {

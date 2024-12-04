@@ -7,21 +7,21 @@ using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
-    [CreateAssetMenu(fileName = "New Weapon Ability", menuName = "Sunset Abilities/Weapon Ability")]
-    public sealed class WeaponAbility : BaseAbility
+    [CreateAssetMenu(fileName = "New Weapon Ability", menuName = "Sunset Abilities/Weapon Attack")]
+    public sealed class WeaponAttackAbility : BaseAbility
     {
-        [SerializeField, BoxGroup("Ability Range"), MinValue(1)]
-        private int _baseOptimalRange = 1;
-        [SerializeField, BoxGroup("Ability Range"), MinValue(1)]
-        private int _baseShortRange = 1;
+        [SerializeField, BoxGroup("Ability Range"), MinValue(0)]
+        private int _baseAbilityRange = 1;
+        [SerializeField, BoxGroup("Ability Range"), MinValue(0)]
+        private int _rangeFalloff = 1;
         [BoxGroup("Weapon Ability")]
-        [SerializeField]
+        [SerializeField, MinValue(1)]
         private int _numberOfAttacks = 1;
         [BoxGroup("Weapon Ability")]
         [SerializeField, PropertyRange(0, 5)]
         private float _delayBetweenAttacks = .2f;
         [BoxGroup("Weapon Ability")]
-        [SerializeField]
+        [SerializeField, MinValue(0)]
         private int _ammoPerAttack = 0;
         [BoxGroup("Weapon Ability")]
         [SerializeField]
@@ -33,17 +33,22 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private DamageType _damageType = DamageType.Piercing;
 
-        protected async override Awaitable DoExecuteAbility(IAbilityContext context, ITargetable target, Action onCompleted)
+        protected async override Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
         {
-            var actionPerformer = context.ActionPerformer;
-            var shootingAction = new WeaponAbilityAction(this, context.User, context.UserCombatBehaviour, target);
-            await context.ActionPerformer.PerformAction(shootingAction);
+            var actionPerformer = context.SourceActionPerformer;
+            var shootingAction = new WeaponAbilityAction(this, context);
+            await actionPerformer.PerformAction(shootingAction);
             onCompleted?.Invoke();
         }
 
-        protected override RangeData GetAbilityRangeData(IAbilityUser abilityUser)
+        protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
-            return new RangeData(_baseShortRange, _baseOptimalRange, _baseMaxRange);
+            return new()
+            {
+                OptimalRange = _baseAbilityRange,
+                MaxRange = _baseAbilityRange + (2 * _rangeFalloff),
+                ShortRange = _baseAbilityRange - _rangeFalloff
+            };
         }
 
         public int GetAmmoPerAttack() => _ammoPerAttack;

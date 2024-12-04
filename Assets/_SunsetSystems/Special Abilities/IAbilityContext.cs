@@ -1,12 +1,15 @@
 using SunsetSystems.Combat;
 using SunsetSystems.ActionSystem;
+using SunsetSystems.Combat.Grid;
 
 namespace SunsetSystems.Abilities
 {
     public interface IAbilityContext
     {
-        IAbilityUser User { get; }
-        IActionPerformer ActionPerformer { get; }
-        ICombatant UserCombatBehaviour { get; }
+        IActionPerformer SourceActionPerformer { get; }
+        ICombatant SourceCombatBehaviour { get; }
+        ITargetable TargetCharacter { get; }
+        IGridCell TargetPosition { get; }
+        GridManager GridManager { get; }
     }
 }

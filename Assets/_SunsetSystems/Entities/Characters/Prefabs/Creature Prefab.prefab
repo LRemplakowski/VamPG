@@ -29,16 +29,17 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6294523937178330853}
-  - {fileID: 8213438480378527713}
-  - {fileID: 2550384045447636604}
-  - {fileID: 7137076084159866363}
-  - {fileID: 7744861580169095031}
+  - {fileID: 7290814988058129320}
+  - {fileID: 225109557017388465}
   - {fileID: 1410214241305694170}
+  - {fileID: 7137076084159866363}
+  - {fileID: 6294523937178330853}
+  - {fileID: 2550384045447636604}
+  - {fileID: 5605094159454864981}
+  - {fileID: 8213438480378527713}
+  - {fileID: 7744861580169095031}
   - {fileID: 482763929595618258}
   - {fileID: 2593631097689478263}
-  - {fileID: 5605094159454864981}
-  - {fileID: 225109557017388465}
   m_Father: {fileID: 1617358537211728380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389672268198153684
@@ -192,6 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7744861580169095031}
   - component: {fileID: 1441128836294789900}
+  - component: {fileID: 5977690044788555726}
   m_Layer: 0
   m_Name: Spellbook Manager
   m_TagString: Untagged
@@ -231,6 +233,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 660093643310669083}
+    - {fileID: 5977690044788555726}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -240,8 +243,8 @@ MonoBehaviour:
       Entry: 10
       Data: 0
     - Name: selfEffectHandler
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1
   <Disciplines>k__BackingField:
   - <Icon>k__BackingField: {fileID: 0}
     baseValue: 0
@@ -319,6 +322,27 @@ MonoBehaviour:
     baseValue: 0
     disciplineType: 262144
     knownPowers: []
+--- !u!114 &5977690044788555726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880835672601238623}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c77d8aa76e7f564d9539ab5b9686759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
 --- !u!1 &990508043532713649
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,6 +962,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 7860156406871809602}
     - {fileID: 660093643310669083}
+    - {fileID: 1394576741260524333}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -950,8 +975,8 @@ MonoBehaviour:
       Entry: 10
       Data: 1
     - Name: _abilityUser
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 2
   _combatNameplateOffset: {x: 0, y: 2, z: 0}
   hasCoverAnimationBoolean: InCover
   _raycastOrigin: {fileID: 6596153777422388182}
@@ -1290,6 +1315,76 @@ MonoBehaviour:
       Data: 0
   _faceTargetTime: 0.25
   _navMeshAgent: {fileID: 7708544126274853394}
+--- !u!1 &8070940175785232470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7290814988058129320}
+  - component: {fileID: 1394576741260524333}
+  m_Layer: 0
+  m_Name: Ability User
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7290814988058129320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8070940175785232470}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1394576741260524333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8070940175785232470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4faa17c9e2ada5d4e9cbd6070c24c2d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 265292995897044542}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _references
+      Entry: 10
+      Data: 0
+    - Name: _defaultAbilities
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Abilities.IAbility,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
 --- !u!1 &8102729581408813883
 GameObject:
   m_ObjectHideFlags: 0

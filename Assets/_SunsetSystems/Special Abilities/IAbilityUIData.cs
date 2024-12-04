@@ -1,12 +1,16 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace SunsetSystems.Abilities
 {
     public interface IAbilityUIData
     {
-        Sprite GetAbilityIcon();
+        Sprite GetAbilityIcon(IconState iconState);
         string GetLocalizedName();
         string GetLocalizedDescription();
+
+        public enum IconState
+        {
+            Default, Highlighted, Pressed, Selected, Disabled
+        }
     }
 }

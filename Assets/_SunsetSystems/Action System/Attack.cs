@@ -43,7 +43,7 @@ namespace SunsetSystems.ActionSystem
             if (attackRoutine != null)
                 return;
             conditions.Add(new WaitForFlag(attackFinished));
-            //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetCharacter.References.GameObject.name);
+            //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetObject.References.GameObject.name);
             AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(Attacker, Target, _attackModifier));
             LogAttack(Attacker, Target, result);
             attackRoutine = PerformAttack(Attacker, Target, result);

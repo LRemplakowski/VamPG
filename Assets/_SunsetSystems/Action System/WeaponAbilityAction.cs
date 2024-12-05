@@ -22,7 +22,7 @@ namespace SunsetSystems.ActionSystem
 
         private IEnumerator _attackRoutine;
 
-        public WeaponAbilityAction(WeaponAttackAbility weaponAbility, IAbilityContext context) : base(context.TargetCharacter, context.SourceCombatBehaviour)
+        public WeaponAbilityAction(WeaponAttackAbility weaponAbility, IAbilityContext context) : base(context.TargetObject, context.SourceCombatBehaviour)
         {
             _weaponAbility = weaponAbility;
             _abilityContext = context;

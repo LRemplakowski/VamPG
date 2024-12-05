@@ -105,7 +105,7 @@ namespace SunsetSystems.Abilities
 
             public IActionPerformer SourceActionPerformer => SourceCombatBehaviour;
             public ICombatant SourceCombatBehaviour => _abilityManager._references.CombatBehaviour;
-            public ITargetable TargetCharacter => _targetCharacter.Invoke();
+            public ITargetable TargetObject => _targetCharacter.Invoke();
             public IGridCell TargetPosition => _targetPosition.Invoke();
             public GridManager GridManager => CombatManager.Instance.CurrentEncounter.GridManager;
 

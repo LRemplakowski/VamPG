@@ -11,7 +11,7 @@ namespace SunsetSystems.Abilities
     {
         public override bool IsValidTarget(IAbilityContext context)
         {
-            return base.IsValidTarget(context) && context.TargetCharacter.CombatContext.IsSelectedWeaponUsingAmmo;
+            return base.IsValidTarget(context) && context.TargetObject.CombatContext.IsSelectedWeaponUsingAmmo;
         }
 
         protected override async Awaitable DoExecuteAbility(IAbilityContext abilityContext, Action onCompleted)

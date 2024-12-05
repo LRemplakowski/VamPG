@@ -8,7 +8,7 @@ namespace SunsetSystems.Abilities
     {
         IActionPerformer SourceActionPerformer { get; }
         ICombatant SourceCombatBehaviour { get; }
-        ITargetable TargetCharacter { get; }
+        ITargetable TargetObject { get; }
         IGridCell TargetPosition { get; }
         GridManager GridManager { get; }
     }

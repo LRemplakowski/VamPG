@@ -17,13 +17,24 @@ namespace SunsetSystems.Abilities
 
         public override bool IsValidTarget(IAbilityContext context)
         {
-            bool targetIsValidEntity = context.TargetCharacter.IsValidEntityType(GetValidTargetsFlag(context));
+            bool targetIsValidEntity = context.TargetObject.IsValidEntityType(GetValidTargetsFlag(context));
             return targetIsValidEntity;
         }
 
         protected override bool CanExecuteAbility(IAbilityContext context)
         {
-            return context != null;
+            return HasValidContext(context) && CanAffordCost(context);
+        }
+
+        protected bool HasValidContext(IAbilityContext context) => context != null;
+
+        protected bool CanAffordCost(IAbilityContext context)
+        {
+            bool result = true;
+            result &= GetMovementPointCost(context) <= context.SourceCombatBehaviour.GetRemainingMovement();
+            result &= GetActionPointCost(context) <= context.SourceCombatBehaviour.GetRemainingActionPoints();
+            result &= GetBloodPointCost(context) <= context.SourceCombatBehaviour.GetRemainingBloodPoints();
+            return result;
         }
 
         protected override AbilityRange GetAbilityRangeType(IAbilityContext context)

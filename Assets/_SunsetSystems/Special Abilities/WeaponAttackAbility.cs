@@ -41,6 +41,14 @@ namespace SunsetSystems.Abilities
             onCompleted?.Invoke();
         }
 
+        protected override bool CanExecuteAbility(IAbilityContext context)
+        {
+            return base.CanExecuteAbility(context)
+                   && HasValidTargetable(context);
+
+            static bool HasValidTargetable(IAbilityContext context) => context.TargetObject != null;
+        }
+
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
             return new()

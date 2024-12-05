@@ -204,6 +204,11 @@ namespace SunsetSystems.Combat
             return SprintRange - Mathf.CeilToInt(_distanceMovedThisTurn);
         }
 
+        public int GetRemainingBloodPoints()
+        {
+            return 0;
+        }
+
         public void TakeDamage(int amount)
         {
             Owner.References.StatsManager.TakeDamage(amount);

@@ -45,5 +45,6 @@ namespace SunsetSystems.Combat
         bool AttackCreatureUsingCurrentWeapon(ICombatant target);
         bool ReloadCurrentWeapon();
         bool IsTargetInRange(ICombatant target);
+        int GetRemainingBloodPoints();
     }
 }

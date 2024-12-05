@@ -6,6 +6,7 @@ using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Input;
 using UnityEngine;
 
 namespace SunsetSystems.Abilities
@@ -19,9 +20,36 @@ namespace SunsetSystems.Abilities
 
         private AbilityContext _abilityContext;
 
+        private ITargetable _characterTarget;
+        private IGridCell _positionTarget;
+
         private void Awake()
         {
             _abilityContext = new(this);
+            CombatInputHandler.OnTargetingDataUpdate += OnUpdatePlayerTargetingData;
+        }
+
+        private void OnDestroy()
+        {
+            CombatInputHandler.OnTargetingDataUpdate -= OnUpdatePlayerTargetingData;
+        }
+
+        private void OnUpdatePlayerTargetingData(ITargetable character, IGridCell position)
+        {
+            if (_references.CreatureData.Faction is not Faction.PlayerControlled)
+                return;
+            SetCurrentTargetObject(character);
+            SetCurrentTargetPosition(position);
+        }
+
+        public void SetCurrentTargetObject(ITargetable targetable)
+        {
+            _characterTarget = targetable;
+        }
+
+        public void SetCurrentTargetPosition(IGridCell position)
+        {
+            _positionTarget = position;
         }
 
         public bool ExecuteAbility(IAbility ability, ITargetable target, Action onCompleted = null)
@@ -59,14 +87,14 @@ namespace SunsetSystems.Abilities
             return new List<IAbility>();
         }
 
-        private ITargetable GetCurrentTargetCharacter()
+        private ITargetable GetCurrentTargetObject()
         {
-            return null;
+            return _characterTarget;
         }
 
         private IGridCell GetCurrentTargetPosition()
         {
-            return null;
+            return _positionTarget;
         }
 
         private class AbilityContext : IAbilityContext
@@ -84,7 +112,7 @@ namespace SunsetSystems.Abilities
             public AbilityContext(AbilityManager abilityManager)
             {
                 _abilityManager = abilityManager;
-                _targetCharacter = abilityManager.GetCurrentTargetCharacter;
+                _targetCharacter = abilityManager.GetCurrentTargetObject;
                 _targetPosition = abilityManager.GetCurrentTargetPosition;
             }
         }

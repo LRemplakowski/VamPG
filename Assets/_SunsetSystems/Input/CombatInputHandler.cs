@@ -31,7 +31,12 @@ namespace SunsetSystems.Input
         private bool _showTargetingLine;
 
         private Collider gridHit;
+        private IGridCell _gridComponent;
         private Collider targetableHit;
+        private ITargetable _targetableComponent;
+
+        public delegate void TargetingContextDelegate(ITargetable targetable, IGridCell gridCell);
+        public static event TargetingContextDelegate OnTargetingDataUpdate;
 
         private void Start()
         {
@@ -56,8 +61,10 @@ namespace SunsetSystems.Input
             CombatManager.Instance.CurrentEncounter.GridManager.ClearHighlightedCell();
             if (_pointerOverGameObject)
             {
+                _gridComponent = null;
                 _selectedActionManager.SetLastGridHit(null);
                 gridHit = null;
+                _targetableComponent = null;
                 _selectedActionManager.SetLastTargetableHit(null);
                 targetableHit = null;
                 return;
@@ -65,39 +72,42 @@ namespace SunsetSystems.Input
             Ray ray = Camera.main.ScreenPointToRay(mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, raycastRange, gridLayerMask))
             {
-                HandleGridCellPointerPosition();
+                HandleGridCellPointerPosition(out _gridComponent);
                 gridHit = hit.collider;
                 _selectedActionManager.SetLastGridHit(gridHit);
             }
             if (Physics.Raycast(ray, out hit, raycastRange, targetableLayerMask))
             {
                 if (targetableHit != hit.collider)
-                    HandleTargetablePointerPosition();
+                    HandleTargetablePointerPosition(out _targetableComponent);
                 targetableHit = hit.collider;
                 _selectedActionManager.SetLastTargetableHit(targetableHit);
             }
             else
             {
                 targetableHit = null;
+                _targetableComponent = null;
                 _selectedActionManager.SetLastTargetableHit(null);
                 _showTargetingLine = false;
             }
+            OnTargetingDataUpdate?.Invoke(_targetableComponent, _gridComponent);
 
-            void HandleGridCellPointerPosition()
+            void HandleGridCellPointerPosition(out IGridCell gridCell)
             {
-                if (hit.collider.gameObject.TryGetComponent<IGridCell>(out var gridCell))
+                if (hit.collider.gameObject.TryGetComponent(out gridCell))
                 {
                     CombatManager.Instance.CurrentEncounter.GridManager.HighlightCell(gridCell);
                 }
             }
 
-            void HandleTargetablePointerPosition()
+            void HandleTargetablePointerPosition(out ITargetable targetable)
             {
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
                     _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
+                    targetable = target;
                     if (target.IsAlive && current.IsTargetInRange(target))
                     {
                         _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
@@ -108,6 +118,10 @@ namespace SunsetSystems.Input
                     {
                         _showTargetingLine = false;
                     }
+                }
+                else
+                {
+                    targetable = null;
                 }
             }
         }

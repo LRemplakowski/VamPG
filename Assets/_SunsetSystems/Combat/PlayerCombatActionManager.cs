@@ -214,7 +214,7 @@ namespace SunsetSystems.Combat
         public bool ExecuteImmediate { get; private set; }
         [field: SerializeField]
         public CombatActionType ActionType { get; private set; }
-        [field: SerializeField, ShowIf("@this.ActionType == CombatActionType.UseDiscipline")]
+        [field: SerializeField]
         public IAbility AbilityData { get; private set; }
 
         public SelectedCombatActionData(CombatActionType ActionType) : this(ActionType, null)

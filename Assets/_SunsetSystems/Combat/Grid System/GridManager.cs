@@ -29,6 +29,7 @@ namespace SunsetSystems.Combat.Grid
         private readonly List<GridUnit> currentlyHighlitedGridUnits = new();
         private readonly Dictionary<ICombatant, GridUnit> _occupiedGridCells = new();
 
+        public float GetGridScale() => managedGrid.GridCellSize;
 
         public Vector3 GridPositionToWorldPosition(Vector3Int gridPosition) => managedGrid.GridPositionToWorldPosition(gridPosition);
         public Vector3Int WorldPositionToGridPosition(Vector3 worldPosition) => managedGrid.WorldPositionToGridPosition(worldPosition);
@@ -118,11 +119,7 @@ namespace SunsetSystems.Combat.Grid
                     if (agent.CalculatePath(unitWorldPosition, path))
                     {
                         // Calculate path length
-                        float pathLength = 0;
-                        for (int i = 1; i < path.corners.Length; i++)
-                        {
-                            pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
-                        }
+                        float pathLength = path.GetPathLength();
                         if (pathLength <= maxGridDistance)
                         {
                             unitsInRange.Add(unit);

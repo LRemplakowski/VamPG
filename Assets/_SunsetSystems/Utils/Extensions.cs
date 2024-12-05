@@ -2,9 +2,21 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public static class Extensions
 {
+    public static float GetPathLength(this NavMeshPath path)
+    {
+        // Calculate path length
+        float pathLength = 0;
+        for (int i = 1; i < path.corners.Length; i++)
+        {
+            pathLength += Vector3.Distance(path.corners[i - 1], path.corners[i]);
+        }
+        return pathLength;
+    }
+
     public static bool IsNullOrEmpty<T>(this T[] array)
     {
         if (array == null || array.Length == 0)
@@ -24,50 +36,6 @@ public static class Extensions
     {
         List<T> result = new();
         if (go.TryFindAllGameObjectsWithTag(tag, out List<GameObject> found))
-        {
-            foreach (GameObject f in found)
-            {
-                if (f.TryGetComponent<T>(out T component))
-                    result.Add(component);
-            }
-        }
-        return result;
-    }
-
-    public static bool TryFindFirstGameObjectWithTag(this GameObject go, string tag, out GameObject result)
-    {
-        bool found = false;
-        result = null;
-        if (Tagger.tags.TryGetValue(tag, out List<GameObject> value))
-        {
-            if (value.Count > 0)
-                result = value[0];
-            else
-                return false;
-            found = result != null;
-        }
-        return found;
-    }
-
-    public static T FindFirstComponentWithTag<T>(this GameObject go, string tag) where T : Component
-    {
-        T result = null;
-        if (go.TryFindFirstGameObjectWithTag(tag, out GameObject found))
-            result = found.GetComponent<T>();
-        return result;
-    }
-
-    public static bool TryFindAllGameObjectsWithTag(this Component co, string tag, out List<GameObject> result)
-    {
-        bool found = Tagger.tags.TryGetValue(tag, out List<GameObject> value);
-        result = value;
-        return found;
-    }
-
-    public static List<T> FindAllComponentsWithTag<T>(this Component co, string tag) where T : Component
-    {
-        List<T> result = new();
-        if (co.TryFindAllGameObjectsWithTag(tag, out List<GameObject> found))
         {
             foreach (GameObject f in found)
             {

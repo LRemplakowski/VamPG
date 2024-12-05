@@ -23,7 +23,7 @@ namespace SunsetSystems.Abilities
 
         protected override bool CanExecuteAbility(IAbilityContext context)
         {
-            return context != null && context.TargetCharacter != null;
+            return context != null;
         }
 
         protected override AbilityRange GetAbilityRangeType(IAbilityContext context)

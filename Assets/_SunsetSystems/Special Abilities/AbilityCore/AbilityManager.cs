@@ -16,6 +16,12 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private ICreatureReferences _references;
         [SerializeField]
+        private IMovementPointUser _movementPointUser;
+        [SerializeField]
+        private IActionPointUser _actionPointUser;
+        [SerializeField]
+        private IBloodPointUser _bloodPointUser;
+        [SerializeField]
         private List<IAbility> _defaultAbilities = new();
 
         private AbilityContext _abilityContext;
@@ -26,15 +32,15 @@ namespace SunsetSystems.Abilities
         private void Awake()
         {
             _abilityContext = new(this);
-            CombatInputHandler.OnTargetingDataUpdate += OnUpdatePlayerTargetingData;
+            CombatInputHandler.OnTargetingDataUpdate += UpdatePlayerTargetingData;
         }
 
         private void OnDestroy()
         {
-            CombatInputHandler.OnTargetingDataUpdate -= OnUpdatePlayerTargetingData;
+            CombatInputHandler.OnTargetingDataUpdate -= UpdatePlayerTargetingData;
         }
 
-        private void OnUpdatePlayerTargetingData(ITargetable character, IGridCell position)
+        private void UpdatePlayerTargetingData(ITargetable character, IGridCell position)
         {
             if (_references.CreatureData.Faction is not Faction.PlayerControlled)
                 return;
@@ -52,19 +58,52 @@ namespace SunsetSystems.Abilities
             _positionTarget = position;
         }
 
-        public bool ExecuteAbility(IAbility ability, ITargetable target, Action onCompleted = null)
+        public bool ExecuteAbility(IAbility ability, Action onCompleted = null)
         {
-            return ability.Execute(GetAbilityContext(target), onCompleted);
+            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
+            {
+                return ability.Execute(GetCurrentAbilityContext(), onCompleted);
+            }
+            return false;
         }
 
-        public async Awaitable<bool> ExecuteAbilityAsync(IAbility ability, ITargetable target)
+        public async Awaitable<bool> ExecuteAbilityAsync(IAbility ability)
         {
-            return await ability.ExecuteAsync(GetAbilityContext(target));
+            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
+            {
+                return await ability.ExecuteAsync(GetCurrentAbilityContext());
+            }
+            return false;
         }
 
-        public IAbilityContext GetAbilityContext(ITargetable target)
+        private bool ConsumeAbilityCost(IAbility ability)
+        {
+            var cost = ability.GetAbilityCosts(GetCurrentAbilityContext());
+            bool result = true;
+            result &= _movementPointUser.UseMovementPoints(cost.MovementCost);
+            result &= _actionPointUser.UseActionPoints(cost.ActionPointCost);
+            result &= _bloodPointUser.UseBloodPoints(cost.BloodCost);
+            return result;
+        }
+
+        public IAbilityContext GetCurrentAbilityContext()
         {
             return _abilityContext;
+        }
+
+        public bool GetCanAffordAbility(IAbility ability)
+        {
+            var cost = ability.GetAbilityCosts(GetCurrentAbilityContext());
+            bool result = true;
+            result &= _movementPointUser.GetCurrentMovementPoints() >= cost.MovementCost;
+            result &= _actionPointUser.GetCurrentActionPoints() >= cost.ActionPointCost;
+            result &= _bloodPointUser.GetCurrentBloodPoints() >= cost.BloodCost;
+            return result;
+        }
+
+        public bool GetHasValidAbilityContext(IAbility ability)
+        {
+            return ability.IsContextValidForExecution(GetCurrentAbilityContext());
         }
 
         public IEnumerable<IAbility> GetAllAbilities()

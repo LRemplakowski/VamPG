@@ -12,10 +12,12 @@ namespace SunsetSystems.Abilities
         IEnumerable<IAbility> GetCoreAbilities();
         IEnumerable<IAbility> GetAllAbilities();
 
-        IAbilityContext GetAbilityContext(ITargetable target);
+        IAbilityContext GetCurrentAbilityContext();
+        bool GetCanAffordAbility(IAbility ability);
+        bool GetHasValidAbilityContext(IAbility ability);
 
-        Awaitable<bool> ExecuteAbilityAsync(IAbility ability, ITargetable target);
-        bool ExecuteAbility(IAbility ability, ITargetable target, Action onCompleted = null);
+        Awaitable<bool> ExecuteAbilityAsync(IAbility ability);
+        bool ExecuteAbility(IAbility ability, Action onCompleted = null);
 
         void SetCurrentTargetObject(ITargetable targetable);
         void SetCurrentTargetPosition(IGridCell position);

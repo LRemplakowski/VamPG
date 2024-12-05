@@ -188,9 +188,10 @@ namespace SunsetSystems.Combat
                 if (targetableHit != null)
                 {
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
-                    if (target != null && selectedAbility.IsValidTarget(abilityManager.GetAbilityContext(target)))
+                    abilityManager.SetCurrentTargetObject(target);
+                    if (abilityManager.GetHasValidAbilityContext(selectedAbility))
                     {
-                        abilityManager.ExecuteAbility(selectedAbility, target);
+                        abilityManager.ExecuteAbility(selectedAbility);
                     }
                 }
             }

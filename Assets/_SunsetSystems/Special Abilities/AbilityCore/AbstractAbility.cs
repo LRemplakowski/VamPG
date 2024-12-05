@@ -36,7 +36,7 @@ namespace SunsetSystems.Abilities
 
         public bool Execute(IAbilityContext context, Action onCompleted = null)
         {
-            bool canUse = CanExecuteAbility(context);
+            bool canUse = IsContextValidForExecution(context);
             if (canUse)
             {
                 _ = DoExecuteAbility(context, onCompleted);
@@ -46,7 +46,7 @@ namespace SunsetSystems.Abilities
 
         public async Awaitable<bool> ExecuteAsync(IAbilityContext context, Action onCompleted = null)
         {
-            bool canUse = CanExecuteAbility(context);
+            bool canUse = IsContextValidForExecution(context);
             if (canUse)
             {
                 await DoExecuteAbility(context, onCompleted);
@@ -84,10 +84,9 @@ namespace SunsetSystems.Abilities
             return _fallbackDescription;
         }
 
-        public abstract bool IsValidTarget(IAbilityContext context);
+        public abstract bool IsContextValidForExecution(IAbilityContext context);
 
         protected abstract Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted);
-        protected abstract bool CanExecuteAbility(IAbilityContext context);
 
         protected abstract int GetMovementPointCost(IAbilityContext context);
         protected abstract int GetActionPointCost(IAbilityContext context);

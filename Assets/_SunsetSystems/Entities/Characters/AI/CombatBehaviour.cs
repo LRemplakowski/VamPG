@@ -43,6 +43,7 @@ namespace SunsetSystems.Combat
         public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
 
         private float _distanceMovedThisTurn = 0f;
+        private int _availableActionPoints = 2;
         private Vector3 _positionLastFrame;
 
         #region Unity Messages
@@ -89,6 +90,7 @@ namespace SunsetSystems.Combat
             if (actorsInCombat.Contains(this))
             {
                 animationController.SetCombatAnimationsActive(true);
+                _availableActionPoints = 2;
             }
         }
 
@@ -102,6 +104,7 @@ namespace SunsetSystems.Combat
             if (currentActor.Equals(this))
             {
                 _distanceMovedThisTurn = 0f;
+                _availableActionPoints = 2;
                 _positionLastFrame = transform.position;
                 HasMoved = false;
                 HasActed = false;
@@ -196,7 +199,7 @@ namespace SunsetSystems.Combat
 
         public int GetRemainingActionPoints()
         {
-            return 0;
+            return _availableActionPoints;
         }
 
         public int GetRemainingMovement()

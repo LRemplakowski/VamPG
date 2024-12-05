@@ -9,26 +9,11 @@ namespace SunsetSystems.Abilities
     [CreateAssetMenu(fileName = "New Move Ability", menuName = "Sunset Abilities/Move")]
     public class MoveAbility : BaseAbility
     {
-        protected override bool CanExecuteAbility(IAbilityContext context)
+        protected override bool HasValidTarget(IAbilityContext context)
         {
-            return base.CanExecuteAbility(context)
-                   && HasValidTargetPosition(context)
-                   && IsPositionWithinMovementRange(context)
-                   && IsPositionFree(context);
+            return IsPositionNotNull(context) && IsPositionFree(context);
 
-            static bool HasValidTargetPosition(IAbilityContext context) => context.TargetPosition != null;
-
-            static bool IsPositionWithinMovementRange(IAbilityContext context)
-            {
-                var position = context.TargetPosition;
-                var combatBehaviour = context.SourceCombatBehaviour;
-                var navManager = combatBehaviour.References.NavigationManager;
-                var gridManager = context.GridManager;
-                var path = new NavMeshPath();
-                navManager.CalculatePath(position.WorldPosition, path);
-                return combatBehaviour.GetRemainingMovement() >= Mathf.RoundToInt(path.GetPathLength() / gridManager.GetGridScale());
-            }
-
+            static bool IsPositionNotNull(IAbilityContext context) => context.TargetPosition != null;
             static bool IsPositionFree(IAbilityContext context) => context.TargetPosition.IsFree;
         }
 
@@ -46,6 +31,22 @@ namespace SunsetSystems.Abilities
                 OptimalRange = context.SourceCombatBehaviour.MovementRange,
                 MaxRange = context.SourceCombatBehaviour.SprintRange
             };
+        }
+
+        protected override int GetMovementPointCost(IAbilityContext context)
+        {
+            var position = context.TargetPosition;
+            if (position == null)
+            {
+                return int.MaxValue;
+            }
+            var combatBehaviour = context.SourceCombatBehaviour;
+            var navManager = combatBehaviour.References.NavigationManager;
+            var gridManager = context.GridManager;
+            var path = new NavMeshPath();
+            navManager.CalculatePath(position.WorldPosition, path);
+            var movementCost = Mathf.CeilToInt(path.GetPathLength() / gridManager.GetGridScale()) * _baseMovementCost;
+            return movementCost;
         }
     }
 }

@@ -73,7 +73,9 @@ namespace SunsetSystems.AI
 
         private static bool IsInAbilityRange(IAbility ability, ICombatant attacker, ICombatant target)
         {
-            var abilityTargetingData = ability.GetTargetingData(attacker.CombatContext.AbilityUser.GetAbilityContext(target));
+            var abilityUser = attacker.CombatContext.AbilityUser;
+            abilityUser.SetCurrentTargetObject(target);
+            var abilityTargetingData = ability.GetTargetingData(abilityUser.GetCurrentAbilityContext());
             return abilityTargetingData.GetRangeType() switch
             {
                 AbilityRange.Melee => IsInMeleeRange(attacker, target),
@@ -104,8 +106,9 @@ namespace SunsetSystems.AI
 
         public bool GetHasEnoughActionPoints(IAbility selectedAbility)
         {
-            var abilityCost = selectedAbility.GetAbilityCosts(_combatBehaviour.CombatContext.AbilityUser.GetAbilityContext(SelectedTarget));
-            return abilityCost.ActionPointCost <= _combatBehaviour.GetRemainingActionPoints();
+            var abilityUser = _combatBehaviour.CombatContext.AbilityUser;
+            abilityUser.SetCurrentTargetObject(SelectedTarget);
+            return abilityUser.GetCanAffordAbility(selectedAbility);
         }
     }
 }

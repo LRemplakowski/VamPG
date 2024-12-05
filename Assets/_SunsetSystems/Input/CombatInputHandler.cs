@@ -104,7 +104,7 @@ namespace SunsetSystems.Input
             {
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
-                    _showTargetingLine = (_selectedActionManager.SelectedActionData.ActionType & CombatActionType.RangedAtk) > 0;
+                    _showTargetingLine = _selectedActionManager.SelectedActionData.ActionType.HasFlag(CombatActionType.RangedAtk);
                     ICombatant current = CombatManager.Instance.CurrentActiveActor;
                     ICombatant target = creature.References.CombatBehaviour;
                     targetable = target;

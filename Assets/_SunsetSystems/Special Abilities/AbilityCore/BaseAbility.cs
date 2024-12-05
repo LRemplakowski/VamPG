@@ -15,27 +15,12 @@ namespace SunsetSystems.Abilities
         [SerializeField, BoxGroup("Ability Cost")]
         protected int _baseMovementCost = 0, _baseAPCost = 0, _baseBloodCost = 0;
 
-        public override bool IsValidTarget(IAbilityContext context)
+        public sealed override bool IsContextValidForExecution(IAbilityContext context)
         {
-            bool targetIsValidEntity = context.TargetObject.IsValidEntityType(GetValidTargetsFlag(context));
-            return targetIsValidEntity;
+            return IsContextNotNull(context) && HasValidTarget(context);
         }
 
-        protected override bool CanExecuteAbility(IAbilityContext context)
-        {
-            return HasValidContext(context) && CanAffordCost(context);
-        }
-
-        protected bool HasValidContext(IAbilityContext context) => context != null;
-
-        protected bool CanAffordCost(IAbilityContext context)
-        {
-            bool result = true;
-            result &= GetMovementPointCost(context) <= context.SourceCombatBehaviour.GetRemainingMovement();
-            result &= GetActionPointCost(context) <= context.SourceCombatBehaviour.GetRemainingActionPoints();
-            result &= GetBloodPointCost(context) <= context.SourceCombatBehaviour.GetRemainingBloodPoints();
-            return result;
-        }
+        protected bool IsContextNotNull(IAbilityContext context) => context != null;
 
         protected override AbilityRange GetAbilityRangeType(IAbilityContext context)
         {
@@ -66,5 +51,7 @@ namespace SunsetSystems.Abilities
         {
             return _validTargetsFlag;
         }
+
+        protected abstract bool HasValidTarget(IAbilityContext context);
     }
 }

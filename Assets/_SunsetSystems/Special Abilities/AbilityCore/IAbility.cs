@@ -1,5 +1,4 @@
 using System;
-using SunsetSystems.Combat;
 using UnityEngine;
 
 namespace SunsetSystems.Abilities
@@ -13,6 +12,7 @@ namespace SunsetSystems.Abilities
 
         bool Execute(IAbilityContext context, Action onCompleted = null);
         Awaitable<bool> ExecuteAsync(IAbilityContext context, Action onCompleted = null);
-        bool IsValidTarget(IAbilityContext context);
+
+        bool IsContextValidForExecution(IAbilityContext context);
     }
 }

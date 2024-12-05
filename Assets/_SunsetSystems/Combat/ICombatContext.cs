@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SunsetSystems.Abilities;
+using SunsetSystems.Equipment;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -18,6 +19,7 @@ namespace SunsetSystems.Combat
         int SelectedWeaponMaxAmmo { get; }
 
         IAbilityUser AbilityUser { get; }
+        IWeaponManager WeaponManager { get; }
 
         IEnumerable<ICover> CurrentCoverSources { get; }
 

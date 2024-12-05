@@ -33,20 +33,19 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private DamageType _damageType = DamageType.Piercing;
 
+        protected override bool HasValidTarget(IAbilityContext context)
+        {
+            return IsTargetableNotNull(context);
+
+            static bool IsTargetableNotNull(IAbilityContext context) => context.TargetObject != null;
+        }
+
         protected async override Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
         {
             var actionPerformer = context.SourceActionPerformer;
             var shootingAction = new WeaponAbilityAction(this, context);
             await actionPerformer.PerformAction(shootingAction);
             onCompleted?.Invoke();
-        }
-
-        protected override bool CanExecuteAbility(IAbilityContext context)
-        {
-            return base.CanExecuteAbility(context)
-                   && HasValidTargetable(context);
-
-            static bool HasValidTargetable(IAbilityContext context) => context.TargetObject != null;
         }
 
         protected override RangeData GetAbilityRangeData(IAbilityContext context)

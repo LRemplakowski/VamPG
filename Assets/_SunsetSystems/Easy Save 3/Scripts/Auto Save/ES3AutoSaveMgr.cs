@@ -49,7 +49,7 @@ public class ES3AutoSaveMgr : MonoBehaviour
 	public string key = System.Guid.NewGuid().ToString();
 	public SaveEvent saveEvent = SaveEvent.OnApplicationQuit;
 	public LoadEvent loadEvent = LoadEvent.Start;
-	public ES3SerializableSettings settings = new ES3SerializableSettings("AutoSave.es3", ES3.Location.Cache);
+	public ES3SerializableSettings settings = new ES3SerializableSettings("SaveFile.es3", ES3.Location.Cache);
 
 	public HashSet<ES3AutoSave> autoSaves = new HashSet<ES3AutoSave>();
 
@@ -57,6 +57,8 @@ public class ES3AutoSaveMgr : MonoBehaviour
 	{
         if (autoSaves == null || autoSaves.Count == 0)
             return;
+
+        ManageSlots();
 
         // If we're using caching and we've not already cached this file, cache it.
         if (settings.location == ES3.Location.Cache && !ES3.FileExists(settings))
@@ -85,6 +87,8 @@ public class ES3AutoSaveMgr : MonoBehaviour
 
 	public void Load()
 	{
+        ManageSlots();
+
         try
         {
             // If we're using caching and we've not already cached this file, cache it.
@@ -178,5 +182,14 @@ public class ES3AutoSaveMgr : MonoBehaviour
         }
 
         return depth;
+    }
+
+    // Changes the path for this ES3AutoSave if we're using save slots.
+    void ManageSlots()
+    {
+#if ES3_TMPRO && ES3_UGUI
+        if (ES3SlotManager.selectedSlotPath != null)
+            settings.path = ES3SlotManager.selectedSlotPath;
+#endif
     }
 }

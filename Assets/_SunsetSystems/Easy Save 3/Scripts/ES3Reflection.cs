@@ -71,6 +71,11 @@ namespace ES3Internal
             }
         }
 
+        public static ConstructorInfo GetConstructor(Type type, Type[] parameters)
+        {
+            return type.GetTypeInfo().GetConstructor(parameters);
+        }
+
         /*	
 		 * 	Gets the element type of a collection or array.
 		 * 	Returns null if type is not a collection type.

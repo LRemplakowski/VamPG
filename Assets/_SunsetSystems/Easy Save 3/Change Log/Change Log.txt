@@ -1,3 +1,18 @@
+3.5.20
+- Added support for Nullable types.
+- Resolved issue where a Debug.Log call was not stripped from the release package.
+
+3.5.19
+- NEW: Added Save Slots functionality (see https://docs.moodkie.com/easy-save-3/es3-guides/creating-save-slots/).
+- All dependency Texture2Ds of a SpriteAtlas will be automatically excluded from reference managers.
+- Added option to Set Reference ID in context menus, allowing people to add or change a reference to use a specific reference ID.
+- Resolved issue where ES3.GetFiles would not work with some types of relative path.
+- Resolved issue where CharacterController isn't always re-enabled after loading.
+- Resolved issue where excluding references from a manager would not persist in specific situations.
+
+3.5.18
+- Non-functional changes (Asset Store metadata changes)
+
 3.5.17
 - Changed referencing so that in most cases it will find any reference manager if it can't find one in the relevant scene and outputting a warning when this happens.
 

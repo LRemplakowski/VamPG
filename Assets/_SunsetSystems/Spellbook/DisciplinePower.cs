@@ -79,12 +79,12 @@ namespace SunsetSystems.Abilities
         {
             return _target switch
             {
-                AbilityTargetingType.Self => target.IsMe(caster.References.CombatBehaviour),
-                AbilityTargetingType.Friendly => target.IsFriendlyTowards(caster.References.CombatBehaviour),
-                AbilityTargetingType.Hostile => target.IsHostileTowards(caster.References.CombatBehaviour),
-                AbilityTargetingType.AOE_Friendly => throw new NotImplementedException(),
-                AbilityTargetingType.AOE_Hostile => throw new NotImplementedException(),
-                AbilityTargetingType.Invalid => false,
+                //AbilityTargetingType.Self => target.IsMe(caster.References.CombatBehaviour),
+                //AbilityTargetingType.Friendly => target.IsFriendlyTowards(caster.References.CombatBehaviour),
+                //AbilityTargetingType.Hostile => target.IsHostileTowards(caster.References.CombatBehaviour),
+                //AbilityTargetingType.AOE_Friendly => throw new NotImplementedException(),
+                //AbilityTargetingType.AOE_Hostile => throw new NotImplementedException(),
+                //AbilityTargetingType.Invalid => false,
                 _ => false,
             };
         }

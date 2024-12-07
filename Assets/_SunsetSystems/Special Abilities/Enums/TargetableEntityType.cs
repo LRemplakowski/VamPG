@@ -10,6 +10,7 @@ namespace SunsetSystems.Abilities
         Vampire = 1 << 2,
         Object = 1 << 3,
         Position = 1 << 4,
+        Self = 1 << 5,
         Any = int.MaxValue,
     }
 }

@@ -1,5 +1,7 @@
 using Sirenix.OdinInspector;
+using SunsetSystems.Abilities;
 using SunsetSystems.Core;
+using SunsetSystems.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Combat.Grid
 {
-    public class GridUnitObject : SerializedMonoBehaviour, IGridCell
+    public class GridUnitObject : SerializedMonoBehaviour, IGridCell, ITargetable
     {
         [SerializeField]
         private BoxCollider cellCollider;
@@ -123,6 +125,11 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
+        public bool IsValidTarget(TargetableEntityType validTargetsFlag)
+        {
+            return validTargetsFlag.HasFlag(TargetableEntityType.Position);
+        }
+
         public struct GridCellStateData
         {
             public GridCellBaseState BaseState;
@@ -185,7 +192,7 @@ namespace SunsetSystems.Combat.Grid
                     }
                     if (gridUnit.IsOccupied)
                     {
-                        if (gridUnit.Occupier.Faction is Faction.Hostile)
+                        if (gridUnit.Occupier is IFactionMember factionMember && factionMember.GetFaction() is Faction.Hostile)
                             result.SubState = GridCellSubState.Hostile;
                         else
                             result.SubState = GridCellSubState.Friendly;

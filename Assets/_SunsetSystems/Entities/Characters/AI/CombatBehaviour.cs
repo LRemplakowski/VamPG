@@ -13,10 +13,11 @@ using SunsetSystems.Equipment;
 using SunsetSystems.Inventory;
 using UltEvents;
 using UnityEngine;
+using System;
 
 namespace SunsetSystems.Combat
 {
-    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable
+    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable, IMovementPointUser, IActionPointUser, IBloodPointUser
     {
         [Title("Config")]
         [SerializeField]
@@ -117,24 +118,7 @@ namespace SunsetSystems.Combat
         }
 
         #region ITargetable
-        public ICombatContext CombatContext { get; }
-
-        public bool IsFriendlyTowards(ICombatant other)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool IsHostileTowards(ICombatant other)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool IsMe(ICombatant other)
-        {
-            return Equals(other);
-        }
-
-        public bool IsValidEntityType(TargetableEntityType validTargetsFlag) 
+        public bool IsValidTarget(TargetableEntityType validTargetsFlag) 
         {
             return References.CreatureData.CreatureType switch
             {
@@ -197,20 +181,41 @@ namespace SunsetSystems.Combat
             return SprintRange > Mathf.CeilToInt(_distanceMovedThisTurn);
         }
 
-        public int GetRemainingActionPoints()
+        #region IActionPointUser
+        public int GetCurrentActionPoints()
         {
             return _availableActionPoints;
         }
 
-        public int GetRemainingMovement()
+        public bool UseActionPoints(int ap)
+        {
+            return true;
+        }
+        #endregion
+
+        #region IMovementPointUser
+        public int GetCurrentMovementPoints()
         {
             return SprintRange - Mathf.CeilToInt(_distanceMovedThisTurn);
         }
 
-        public int GetRemainingBloodPoints()
+        public bool UseMovementPoints(int mp)
+        {
+            return true;
+        }
+        #endregion
+
+        #region IBloodPointUser
+        public int GetCurrentBloodPoints()
         {
             return 0;
         }
+
+        public bool UseBloodPoints(int bp)
+        {
+            return true;
+        }
+        #endregion
 
         public void TakeDamage(int amount)
         {
@@ -382,6 +387,11 @@ namespace SunsetSystems.Combat
         public override string ToString()
         {
             return $"{base.ToString()} - {Owner}";
+        }
+
+        public ICombatContext GetContext()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private DamageType _damageType = DamageType.Piercing;
 
-        protected override bool HasValidTarget(IAbilityContext context)
+        protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
             return IsTargetableNotNull(context);
 

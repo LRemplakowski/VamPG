@@ -1,5 +1,6 @@
 using System;
 using SunsetSystems.ActionSystem;
+using SunsetSystems.Combat.Grid;
 using SunsetSystems.Inventory;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,34 +10,47 @@ namespace SunsetSystems.Abilities
     [CreateAssetMenu(fileName = "New Move Ability", menuName = "Sunset Abilities/Move")]
     public class MoveAbility : BaseAbility
     {
-        protected override bool HasValidTarget(IAbilityContext context)
+        protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
-            return IsPositionNotNull(context) && IsPositionFree(context);
+            return IsTargetNotNull(context) && GetTargetIsPosition(context, out var gridCell) && IsPositionFree(gridCell);
 
-            static bool IsPositionNotNull(IAbilityContext context) => context.TargetPosition != null;
-            static bool IsPositionFree(IAbilityContext context) => context.TargetPosition.IsFree;
+            static bool IsTargetNotNull(IAbilityContext context) => context.TargetObject != null;
+            static bool GetTargetIsPosition(IAbilityContext context, out IGridCell cell)
+            {
+                cell = default;
+                if (context.TargetObject is IGridCell gridCell)
+                {
+                    cell = gridCell;
+                    return true;
+                }
+                return false;
+            }
+
+            static bool IsPositionFree(IGridCell cell) => cell.IsFree;
         }
 
         protected override async Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
         {
-            var moveAction = new Move(context.SourceCombatBehaviour, context.TargetPosition, context.GridManager);
-            await context.SourceActionPerformer.PerformAction(moveAction);
-            onCompleted?.Invoke();
+            throw new NotImplementedException();
+            //var targetPosition = context.TargetObject as IGridCell;
+            //var moveAction = new Move(context.SourceCombatBehaviour, targetPosition, context.GridManager);
+            //await context.SourceActionPerformer.PerformAction(moveAction);
+            //onCompleted?.Invoke();
         }
 
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
+            if (context.SourceCombatBehaviour is not IMovementPointUser mover)
+                return new();
             return new()
             {
-                OptimalRange = context.SourceCombatBehaviour.MovementRange,
-                MaxRange = context.SourceCombatBehaviour.SprintRange
+                MaxRange = mover.GetCurrentMovementPoints()
             };
         }
 
         protected override int GetMovementPointCost(IAbilityContext context)
         {
-            var position = context.TargetPosition;
-            if (position == null)
+            if (context.TargetObject is not IGridCell position)
             {
                 return int.MaxValue;
             }

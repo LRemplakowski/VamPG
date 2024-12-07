@@ -15,10 +15,11 @@ namespace SunsetSystems.Tooltips
         {
             foreach (var combatant in combatants)
             {
+                var weaponManager = combatant.GetContext().WeaponManager;
                 var tooltipContext = new CombatNameplateData(combatant);
                 var nameplate = ShowTooltip(tooltipContext);
                 _nameplateMap[combatant] = tooltipContext;
-                combatant.WeaponManager.OnWeaponChanged += OnCombatantUpdate;
+                weaponManager.OnWeaponChanged += OnCombatantUpdate;
                 combatant.OnDamageTaken += OnCombatantUpdate;
             }
         }
@@ -34,7 +35,8 @@ namespace SunsetSystems.Tooltips
             foreach (var kvpair in _nameplateMap)
             {
                 var combatant = kvpair.Key;
-                combatant.WeaponManager.OnWeaponChanged -= OnCombatantUpdate;
+                var weaponManager = combatant.GetContext().WeaponManager;
+                weaponManager.OnWeaponChanged -= OnCombatantUpdate;
                 combatant.OnDamageTaken -= OnCombatantUpdate;
                 HideTooltip(kvpair.Value);
             }

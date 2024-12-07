@@ -7,7 +7,7 @@ namespace SunsetSystems.Abilities
     public abstract class BaseAbility : AbstractAbility
     {
         [SerializeField, BoxGroup("Ability Core")]
-        protected TargetableEntityType _validTargetsFlag;
+        protected TargetableEntityType _validTargetsMask;
         [SerializeField, BoxGroup("Ability Core")]
         protected AbilityRange _targetingDistanceType;
         [SerializeField, BoxGroup("Ability Core")]
@@ -17,7 +17,7 @@ namespace SunsetSystems.Abilities
 
         public sealed override bool IsContextValidForExecution(IAbilityContext context)
         {
-            return IsContextNotNull(context) && HasValidTarget(context);
+            return IsContextNotNull(context) && HasValidTarget(context, GetValidTargetsMask(context));
         }
 
         protected bool IsContextNotNull(IAbilityContext context) => context != null;
@@ -47,11 +47,11 @@ namespace SunsetSystems.Abilities
             return _baseMovementCost;
         }
 
-        protected override TargetableEntityType GetValidTargetsFlag(IAbilityContext context)
+        protected override TargetableEntityType GetValidTargetsMask(IAbilityContext context)
         {
-            return _validTargetsFlag;
+            return _validTargetsMask;
         }
 
-        protected abstract bool HasValidTarget(IAbilityContext context);
+        protected abstract bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask);
     }
 }

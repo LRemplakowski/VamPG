@@ -4,16 +4,8 @@ using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
-    public interface ITargetable : INamedObject
+    public interface ITargetable
     {
-        ICombatContext CombatContext { get; }
-
-        bool IsFriendlyTowards(ICombatant other);
-        bool IsHostileTowards(ICombatant other);
-        bool IsMe(ICombatant other);
-
-        bool IsValidEntityType(TargetableEntityType validTargetsFlag);
-
-        void TakeDamage(int damage);
+        bool IsValidTarget(TargetableEntityType validTargetsFlag);
     }
 }

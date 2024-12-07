@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
@@ -95,7 +94,7 @@ namespace SunsetSystems.Abilities
         protected abstract AbilityTargetingType GetAbilityTargetingType(IAbilityContext context);
         protected abstract RangeData GetAbilityRangeData(IAbilityContext context);
         protected abstract AbilityRange GetAbilityRangeType(IAbilityContext context);
-        protected abstract TargetableEntityType GetValidTargetsFlag(IAbilityContext context);
+        protected abstract TargetableEntityType GetValidTargetsMask(IAbilityContext context);
 
         private readonly struct AbilityCost : IAbilityCostData
         {
@@ -123,7 +122,7 @@ namespace SunsetSystems.Abilities
                 _targetingType = ability.GetAbilityTargetingType(context);
                 _rangeData = ability.GetAbilityRangeData(context);
                 _rangeType = ability.GetAbilityRangeType(context);
-                _validTargetsFlag = ability.GetValidTargetsFlag(context);
+                _validTargetsFlag = ability.GetValidTargetsMask(context);
             }
 
             public AbilityTargetingType GetAbilityTargetingType()

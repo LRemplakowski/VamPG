@@ -11,6 +11,7 @@ namespace SunsetSystems.Combat
         Transform Transform { get; }
         Vector3 AimingOrigin { get; }
         bool IsInCover { get; }
+        bool IsAlive { get; }
         bool IsPlayerControlled { get; }
         bool IsUsingPrimaryWeapon { get; }
         bool IsSelectedWeaponUsingAmmo { get; }
@@ -25,5 +26,7 @@ namespace SunsetSystems.Combat
 
         int GetAttributeValue(AttributeType attribute);
         int GetSkillValue(SkillType skill);
+
+        bool GetCanMove();
     }
 }

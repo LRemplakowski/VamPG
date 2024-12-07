@@ -23,7 +23,7 @@ namespace SunsetSystems.Combat
 
         [field: ShowInInspector, ReadOnly]
         public List<ICombatant> Actors { get; private set; }
-        public List<ICombatant> LivingActors => Actors.FindAll(a => a.IsAlive);
+        public List<ICombatant> LivingActors => Actors.FindAll(a => a.GetContext().IsAlive);
 
         [Title("Events")]
         public UltEvent<IEnumerable<ICombatant>> CombatBegin;

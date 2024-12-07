@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
+using SunsetSystems.Entities;
 using SunsetSystems.Game;
 using SunsetSystems.Inventory;
 using SunsetSystems.Utils.Extensions;
@@ -16,6 +17,18 @@ namespace SunsetSystems.AI
         [Title("Config")]
         [SerializeField]
         private ICombatant _combatBehaviour;
+        [SerializeField]
+        private IContextProvider<ICombatContext> _combatContextSource;
+        [SerializeField]
+        private IFactionMember _thisFaction;
+        [SerializeField]
+        private IMovementPointUser _movementPointUser;
+        [SerializeField]
+        private IActionPointUser _actionPointUser;
+        [SerializeField]
+        private IBloodPointUser _bloodPointUser;
+
+        private ICombatContext CombatContext => _combatContextSource.GetContext();
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
         private IGridCell _selectedPosition;
@@ -40,7 +53,7 @@ namespace SunsetSystems.AI
 
         public bool CanMove()
         {
-            return _combatBehaviour.HasActionsQueued is false && _combatBehaviour.GetCanMove();
+            return _combatBehaviour.HasActionsQueued is false && CombatContext.GetCanMove();
         }
 
         public bool IsTurnMode()
@@ -50,30 +63,32 @@ namespace SunsetSystems.AI
 
         public bool IsInCover()
         {
-            return _combatBehaviour.IsInCover;
+            return CombatContext.IsInCover;
         }
 
         public bool IsCurrentTargetInAbilityRange()
         {
-            return IsInAbilityRange(SelectedAbility, _combatBehaviour, SelectedTarget);
+            return IsInAbilityRange(SelectedAbility, CombatContext, SelectedTarget);
         }
 
-        public IAbilityUser GetAbilityUser() => _combatBehaviour.CombatContext.AbilityUser;
+        public IAbilityUser GetAbilityUser() => CombatContext.AbilityUser;
         public ICombatant GetCombatant() => _combatBehaviour;
 
         public int GetTargetsInWeaponRange()
         {
-            return _combatManager.LivingActors.Where(actor => IsHostileToMe(actor) && IsInAbilityRange(SelectedAbility, _combatBehaviour, actor)).Count();
+            return _combatManager.LivingActors.Where(actor => IsHostileToMe(actor) && IsInAbilityRange(SelectedAbility, CombatContext, actor)).Count();
         }
 
         private bool IsHostileToMe(ITargetable target)
         {
-            return target.IsHostileTowards(_combatBehaviour);
+            if (target is not IFactionMember factionMember)
+                return false;
+            return factionMember.IsHostileTowards(_thisFaction);
         }
 
-        private static bool IsInAbilityRange(IAbility ability, ICombatant attacker, ICombatant target)
+        private static bool IsInAbilityRange(IAbility ability, ICombatContext attacker, ICombatant target)
         {
-            var abilityUser = attacker.CombatContext.AbilityUser;
+            var abilityUser = attacker.AbilityUser;
             abilityUser.SetCurrentTargetObject(target);
             var abilityTargetingData = ability.GetTargetingData(abilityUser.GetCurrentAbilityContext());
             return abilityTargetingData.GetRangeType() switch
@@ -83,9 +98,9 @@ namespace SunsetSystems.AI
                 _ => false,
             };
 
-            static bool IsInMeleeRange(ICombatant attacker, ICombatant target) => IsInRange(attacker, target, 1.6f);
+            static bool IsInMeleeRange(ICombatContext attacker, ICombatant target) => IsInRange(attacker, target, 1.6f);
 
-            static bool IsInRange(ICombatant attacker, ICombatant target, float range)
+            static bool IsInRange(ICombatContext attacker, ICombatant target, float range)
             {
                 return Vector3.Distance(attacker.Transform.position, target.Transform.position) <= range;
             }
@@ -94,7 +109,7 @@ namespace SunsetSystems.AI
         public bool SelectNextPosition()
         {
             var lastSelectedPosition = _selectedPosition;
-            var movementRange = _combatBehaviour.GetRemainingMovement();
+            var movementRange = _movementPointUser.GetCurrentMovementPoints();
             var gridManager = _combatManager.CurrentEncounter.GridManager;
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
             if (positionsInRange.Count() > 0)
@@ -106,7 +121,7 @@ namespace SunsetSystems.AI
 
         public bool GetHasEnoughActionPoints(IAbility selectedAbility)
         {
-            var abilityUser = _combatBehaviour.CombatContext.AbilityUser;
+            var abilityUser = CombatContext.AbilityUser;
             abilityUser.SetCurrentTargetObject(SelectedTarget);
             return abilityUser.GetCanAffordAbility(selectedAbility);
         }

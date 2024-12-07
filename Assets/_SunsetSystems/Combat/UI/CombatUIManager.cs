@@ -52,18 +52,18 @@ namespace SunsetSystems.Combat.UI
         public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            _combatCanvasGroup.interactable = combatant.Faction is Faction.PlayerControlled;
-            if (combatant.Faction == Faction.PlayerControlled)
+            _combatCanvasGroup.interactable = combatant.IsPlayerControlled;
+            if (combatant.IsPlayerControlled)
             {
                 UpdateCurrentActorPortrait(combatant);
                 currentActorHealth.UpdateHealthDisplay(combatant);
-                apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
+                //apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
                 bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
                 disciplineBar.ShowAbilities(combatant);
                 _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
                 combatant.OnSpentBloodPoint += OnBloodPointSpent;
-                var weaponManager = combatant.WeaponManager;
+                var weaponManager = combatant.GetContext().WeaponManager;
                 _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
                 _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
                 weaponManager.OnWeaponChanged += OnWeaponChanged;
@@ -81,7 +81,7 @@ namespace SunsetSystems.Combat.UI
 
         private void OnActionUsed(ICombatant combatant)
         {
-            apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
+            //apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
         }
 
         private void OnBloodPointSpent(ICombatant combatant)
@@ -116,7 +116,7 @@ namespace SunsetSystems.Combat.UI
         {
             combatant.OnUsedActionPoint -= OnActionUsed;
             combatant.OnSpentBloodPoint -= OnBloodPointSpent;
-            var weaponManager = combatant.WeaponManager;
+            var weaponManager = combatant.GetContext().WeaponManager;
             weaponManager.OnWeaponChanged -= OnWeaponChanged;
             weaponManager.OnAmmoChanged -= OnAmmoChanged;
         }

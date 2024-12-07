@@ -19,7 +19,7 @@ namespace SunsetSystems.Combat
 
         public void OnCombatRoundBegin(ICombatant actor)
         {
-            if (actor.Faction == Faction.PlayerControlled)
+            if (actor.IsPlayerControlled)
             {
                 this.SelectedActionData = new(CombatActionType.Move);
                 HandleNewSelectedAction(SelectedActionData);
@@ -28,7 +28,7 @@ namespace SunsetSystems.Combat
 
         public void OnFullTurnCompleted(ICombatant actor)
         {
-            if (actor.Faction == Faction.PlayerControlled)
+            if (actor.IsPlayerControlled)
             {
                 this.SelectedActionData = new(CombatActionType.Move);
                 HandleNewSelectedAction(SelectedActionData);
@@ -37,7 +37,7 @@ namespace SunsetSystems.Combat
 
         public void OnCombatRoundEnd(ICombatant actor)
         {
-            if (actor.Faction == Faction.PlayerControlled)
+            if (actor.IsPlayerControlled)
             {
                 CleanupBeforeActionChange(SelectedActionData);
             }
@@ -126,12 +126,13 @@ namespace SunsetSystems.Combat
             {
                 if (gridHit != null && gridHit.TryGetComponent<IGridCell>(out var gridCell))
                 {
-                    ICombatant currentCombatant = CombatManager.Instance.CurrentActiveActor;
-                    if (gridCell.IsFree && currentCombatant.HasMoved is false)
-                    {
-                        if (currentCombatant.MoveToGridPosition(gridCell.GridPosition))
-                            CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
-                    }
+                    throw new NotImplementedException();
+                    //ICombatant currentCombatant = CombatManager.Instance.CurrentActiveActor;
+                    //if (gridCell.IsFree && currentCombatant.HasMoved is false)
+                    //{
+                    //    if (currentCombatant.MoveToGridPosition(gridCell.GridPosition))
+                    //        CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
+                    //}
                 }
             }
 
@@ -139,15 +140,16 @@ namespace SunsetSystems.Combat
             {
                 if (targetableHit != null)
                 {
-                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
-                    if (attackTarget != null && attackTarget.IsAlive)
-                    {
-                        var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
-                        {
-                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
-                        }
-                    }
+                    throw new NotImplementedException();
+                    //ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
+                    //if (attackTarget != null && attackTarget.IsAlive)
+                    //{
+                    //    var currentActor = CombatManager.Instance.CurrentActiveActor;
+                    //    if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
+                    //    {
+                    //        currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
+                    //    }
+                    //}
                 }
             }
 
@@ -155,15 +157,16 @@ namespace SunsetSystems.Combat
             {
                 if (targetableHit != null)
                 {
-                    ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
-                    if (attackTarget != null && attackTarget.IsAlive)
-                    {
-                        var currentActor = CombatManager.Instance.CurrentActiveActor;
-                        if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Melee)
-                        {
-                            currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
-                        }
-                    }
+                    throw new NotImplementedException();
+                    //ICombatant attackTarget = targetableHit.gameObject.GetComponentInParent<ICreature>()?.References.CombatBehaviour;
+                    //if (attackTarget != null && attackTarget.IsAlive)
+                    //{
+                    //    var currentActor = CombatManager.Instance.CurrentActiveActor;
+                    //    if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Melee)
+                    //    {
+                    //        currentActor.AttackCreatureUsingCurrentWeapon(attackTarget);
+                    //    }
+                    //}
                 }
             }
 
@@ -174,25 +177,27 @@ namespace SunsetSystems.Combat
 
             void HandleReloadCombatAction()
             {
-                var currentActor = CombatManager.Instance.CurrentActiveActor;
-                if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
-                {
-                    currentActor.ReloadCurrentWeapon();
-                }
+                throw new NotImplementedException();
+                //var currentActor = CombatManager.Instance.CurrentActiveActor;
+                //if (currentActor.WeaponManager.GetSelectedWeapon().WeaponType is Inventory.AbilityRange.Ranged)
+                //{
+                //    currentActor.ReloadCurrentWeapon();
+                //}
             }
 
             void HandleUseDisciplineCombatAction()
             {
                 IAbility selectedAbility = SelectedActionData.AbilityData;
-                var abilityManager = CombatManager.Instance.CurrentActiveActor.CombatContext.AbilityUser;
+                //var abilityManager = CombatManager.Instance.CurrentActiveActor.CombatContext.AbilityUser;
                 if (targetableHit != null)
                 {
                     ITargetable target = targetableHit.GetComponentInChildren<ITargetable>();
-                    abilityManager.SetCurrentTargetObject(target);
-                    if (abilityManager.GetHasValidAbilityContext(selectedAbility))
-                    {
-                        abilityManager.ExecuteAbility(selectedAbility);
-                    }
+                    throw new NotImplementedException();
+                    //abilityManager.SetCurrentTargetObject(target);
+                    //if (abilityManager.GetHasValidAbilityContext(selectedAbility))
+                    //{
+                    //    abilityManager.ExecuteAbility(selectedAbility);
+                    //}
                 }
             }
         }

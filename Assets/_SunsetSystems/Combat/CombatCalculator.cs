@@ -14,7 +14,7 @@ namespace SunsetSystems.Combat
 
         private static readonly System.Random _random = new();
 
-        public static AttackResult CalculateAttackResult(IAttackContext context)
+        public static AttackResult CalculateAttackResult(in IAttackContext context)
         {
             var attackModifier = context.GetBaseAttackModifier();
             attackModifier += context.GetHeightAttackModifier();
@@ -54,31 +54,31 @@ namespace SunsetSystems.Combat
             return new(attackerHitChance, defenderDodgeChance, hitRoll, critChance, critRoll, damage, damageReduction, adjustedDamage, hit, crit);
         }
 
-        private static double CalculateCritChance(IAttackContext context)
+        private static double CalculateCritChance(in IAttackContext context)
         {
             double result = BASE_CRIT_CHANCE;
             result += context.GetAttributeValue(AttackParticipant.Attacker, AttributeType.Wits) * 0.01d;
             return result;
         }
 
-        private static float GetCriticalDamageMultiplier(IAttackContext context)
+        private static float GetCriticalDamageMultiplier(in IAttackContext context)
         {
             return context.GetCriticalDamageMultiplier();
         }
 
-        private static int CalculateDefenderDamageReduction(IAttackContext context)
+        private static int CalculateDefenderDamageReduction(in IAttackContext context)
         {
             return context.GetDamageReduction();
         }
 
-        private static int CalculateAttackDamage(IAttackContext context)
+        private static int CalculateAttackDamage(in IAttackContext context)
         {
             int damage = context.GetAttackDamage();
             damage = Mathf.Clamp(damage, 1, int.MaxValue);
             return damage;
         }
 
-        private static double CalculateHitChance(IAttackContext attackContext)
+        private static double CalculateHitChance(in IAttackContext attackContext)
         {
             double attributeModifier = attackContext.GetAttributeValue(AttackParticipant.Attacker, AttributeType.Wits);
             double result = 0d;
@@ -92,7 +92,7 @@ namespace SunsetSystems.Combat
             return result;
         }
 
-        private static double CalculateDodgeChance(IAttackContext attackContext)
+        private static double CalculateDodgeChance(in IAttackContext attackContext)
         {
             double result = BASE_DODGE_CHANCE;
             bool hasCover = CoverDetector.FiringLineObstructedByCover(attackContext, out ICover coverSource);

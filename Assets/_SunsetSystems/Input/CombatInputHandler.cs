@@ -8,6 +8,7 @@ using SunsetSystems.Abilities;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using System;
 
 namespace SunsetSystems.Input
 {
@@ -104,20 +105,21 @@ namespace SunsetSystems.Input
             {
                 if (hit.collider.gameObject.TryGetComponent(out ICreature creature))
                 {
-                    _showTargetingLine = _selectedActionManager.SelectedActionData.ActionType.HasFlag(CombatActionType.RangedAtk);
-                    ICombatant current = CombatManager.Instance.CurrentActiveActor;
-                    ICombatant target = creature.References.CombatBehaviour;
-                    targetable = target;
-                    if (target.IsAlive && current.IsTargetInRange(target))
-                    {
-                        _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
-                        _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
-                        current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
-                    }
-                    else
-                    {
-                        _showTargetingLine = false;
-                    }
+                    throw new NotImplementedException();
+                    //_showTargetingLine = _selectedActionManager.SelectedActionData.ActionType.HasFlag(CombatActionType.RangedAtk);
+                    //ICombatant current = CombatManager.Instance.CurrentActiveActor;
+                    //ICombatant target = creature.References.CombatBehaviour;
+                    //targetable = target;
+                    //if (target.GetContext().IsAlive && current.IsTargetInRange(target))
+                    //{
+                    //    _targetingLineRenderer.SetPosition(0, current.AimingOrigin);
+                    //    _targetingLineRenderer.SetPosition(1, target.AimingOrigin);
+                    //    current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.References.Transform.position);
+                    //}
+                    //else
+                    //{
+                    //    _showTargetingLine = false;
+                    //}
                 }
                 else
                 {

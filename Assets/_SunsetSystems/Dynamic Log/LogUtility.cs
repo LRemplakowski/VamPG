@@ -1,15 +1,19 @@
 using SunsetSystems.Combat;
-using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Inventory.Data;
+using SunsetSystems.Localization;
 
 namespace SunsetSystems.DynamicLog
 {
     public static class LogUtility
     {
-        public static string LogMessageFromAttackResult(ICombatant attacker, ITargetable target, AttackResult attack)
+        public static string LogMessageFromAttackResult(ICombatant attacker, ITargetable target, in AttackResult attack)
         {
-            var attackerName = attacker.References.CreatureData.FullName;
-            var targetName = target.GetLocalizedName();
+            if (attacker is not INamedObject namedAttacker)
+                return "";
+            if (target is not INamedObject namedTarget)
+                return "";
+            var attackerName = namedAttacker.GetLocalizedName();
+            var targetName = namedTarget.GetLocalizedName();
             string result;
             if (attack.Successful)
             {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Combat;
 using SunsetSystems.DynamicLog;
+using SunsetSystems.Entities;
 using SunsetSystems.Inventory;
 using UnityEngine;
 
@@ -18,6 +19,12 @@ namespace SunsetSystems.ActionSystem
         private FlagWrapper attackFinished;
         [SerializeField]
         private FaceTarget faceTargetSubaction;
+        [SerializeField]
+        private ICombatContext _attackerContext;
+        [SerializeField]
+        private ICombatContext _targetContext;
+        [SerializeField]
+        private IDamageable _targetDamageable;
 
         private IEnumerator attackRoutine;
 
@@ -29,6 +36,11 @@ namespace SunsetSystems.ActionSystem
         public Attack(ITargetable target, ICombatant attacker) : base(target, attacker)
         {
             attackFinished = new() { Value = false };
+            if (attacker is IContextProvider<ICombatContext> attackerContextSource)
+                _attackerContext = attackerContextSource.GetContext();
+            if (target is IContextProvider<ICombatContext> targetContextSource)
+                _targetContext = targetContextSource.GetContext();
+            _targetDamageable = target as IDamageable;
         }
 
         public override void Cleanup()
@@ -44,7 +56,7 @@ namespace SunsetSystems.ActionSystem
                 return;
             conditions.Add(new WaitForFlag(attackFinished));
             //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetObject.References.GameObject.name);
-            AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(Attacker, Target, _attackModifier));
+            AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(this, _attackModifier));
             LogAttack(Attacker, Target, result);
             attackRoutine = PerformAttack(Attacker, Target, result);
             Attacker.CoroutineRunner.StartCoroutine(attackRoutine);
@@ -64,7 +76,7 @@ namespace SunsetSystems.ActionSystem
 
         private IEnumerator PerformAttack(ICombatant attacker, ITargetable defender, AttackResult attackResult)
         {
-            faceTargetSubaction = new(attacker, defender.CombatContext.Transform, 180f);
+            faceTargetSubaction = new(attacker, _targetContext.Transform, 180f);
             faceTargetSubaction.Begin();
             while (faceTargetSubaction.EvaluateAction() is false)
                 yield return null;
@@ -72,7 +84,7 @@ namespace SunsetSystems.ActionSystem
             //defender.References.AnimationManager.PlayTakeHitAnimation();
             yield return new WaitForSeconds(1f);
             if (attackResult.Successful)
-                defender.TakeDamage(attackResult.AdjustedDamage);
+                _targetDamageable.TakeDamage(attackResult.AdjustedDamage);
             attackFinished.Value = true;
         }
 
@@ -81,20 +93,24 @@ namespace SunsetSystems.ActionSystem
             private readonly ICombatant _attacker;
             private readonly ITargetable _target;
             private readonly AttackModifier _attackModifier;
+            private readonly ICombatContext _attackerContext;
+            private readonly ICombatContext _targetContext;
 
-            public AttackContextFromAttackAction(ICombatant attacker, ITargetable target, AttackModifier attackModifier)
+            public AttackContextFromAttackAction(Attack attackAction, AttackModifier attackModifier)
             {
-                _attacker = attacker;
-                _target = target;
+                _attacker = attackAction.Attacker;
+                _target = attackAction.Target;
                 _attackModifier = attackModifier;
+                _attackerContext = attackAction._attackerContext;
+                _targetContext = attackAction._targetContext;
             }
 
             public Vector3 GetAimingPosition(AttackParticipant entity)
             {
                 return entity switch
                 {
-                    AttackParticipant.Attacker => _attacker.AimingOrigin,
-                    AttackParticipant.Target => _target.CombatContext.AimingOrigin,
+                    AttackParticipant.Attacker => _attackerContext.AimingOrigin,
+                    AttackParticipant.Target => _targetContext.AimingOrigin,
                     _ => Vector3.zero,
                 };
             }
@@ -102,15 +118,15 @@ namespace SunsetSystems.ActionSystem
             public int GetAttackDamage()
             {
                 int damage = 0;
-                IWeapon selectedWeapon = _attacker.WeaponManager.GetSelectedWeapon();
-                float weaponDamageMod = _attacker.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
+                IWeapon selectedWeapon = _attackerContext.WeaponManager.GetSelectedWeapon();
+                float weaponDamageMod = _attackerContext.WeaponManager.GetPrimaryWeapon().Equals(selectedWeapon) ? 1f : 0.6f;
                 switch (selectedWeapon.WeaponType)
                 {
                     case AbilityRange.Melee:
-                        damage = Mathf.RoundToInt((_attacker.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
+                        damage = Mathf.RoundToInt((_attackerContext.GetAttributeValue(AttributeType.Strength) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                         break;
                     case AbilityRange.Ranged:
-                        damage = Mathf.RoundToInt((_attacker.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
+                        damage = Mathf.RoundToInt((_attackerContext.GetAttributeValue(AttributeType.Composure) + selectedWeapon.GetDamageData().DamageModifier) * weaponDamageMod);
                         break;
                 }
                 return damage;
@@ -154,7 +170,7 @@ namespace SunsetSystems.ActionSystem
             public AttackModifier GetHeightAttackModifier()
             {
                 AttackModifier heightAttackMod = new();
-                float heightDifference = _attacker.References.Transform.position.y - _target.CombatContext.Transform.position.y;
+                float heightDifference = _attacker.References.Transform.position.y - _targetContext.Transform.position.y;
                 if (heightDifference > 2f && _attacker.References.GetCachedComponentInChildren<Abilities.SpellbookManager>().GetIsPowerKnown(PassivePowersHelper.Instance.HeightAttackAndDamageBonus))
                 {
                     heightAttackMod.HitChanceMod += .1d;

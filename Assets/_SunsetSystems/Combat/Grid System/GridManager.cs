@@ -7,6 +7,7 @@ using System.Linq;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Entities.Characters;
+using SunsetSystems.Abilities;
 
 namespace SunsetSystems.Combat.Grid
 {
@@ -135,23 +136,25 @@ namespace SunsetSystems.Combat.Grid
         public void ShowCellsInMovementRange(ICombatant combatant)
         {
             HideCellsInMovementRange();
+            if (combatant is not IMovementPointUser mover)
+                return;
             Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
             var navigationManager = combatant.References.NavigationManager;
             currentlyHighlitedGridUnits.Clear();
-            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, combatant.SprintRange + (managedGrid.GridCellSize / 2), navigationManager, out Dictionary<GridUnit, float> distanceToUnitDictionary));
+            currentlyHighlitedGridUnits.AddRange(GetCellsInRange(gridPosition, mover.GetCurrentMovementPoints() + (managedGrid.GridCellSize / 2), navigationManager, out Dictionary<GridUnit, float> distanceToUnitDictionary));
             foreach (GridUnit unit in currentlyHighlitedGridUnits)
             {
                 float distanceToUnit = distanceToUnitDictionary[unit];
-                if (distanceToUnit <= combatant.MovementRange + (managedGrid.GridCellSize / 2) && !combatant.HasMoved)
+                if (distanceToUnit <= mover.GetCurrentMovementPoints() + (managedGrid.GridCellSize / 2) && mover.GetCanMove())
                 {
                     unit.IsInMoveRange = true;
                     managedGrid.MarkCellDirty(unit);
                 }
-                if (distanceToUnit <= combatant.SprintRange + (managedGrid.GridCellSize / 2) && !combatant.HasMoved && !combatant.HasActed)
-                {
-                    unit.IsInSprintRange = true;
-                    managedGrid.MarkCellDirty(unit);
-                }
+                //if (distanceToUnit <= combatant.SprintRange + (managedGrid.GridCellSize / 2) && !combatant.HasMoved && !combatant.HasActed)
+                //{
+                //    unit.IsInSprintRange = true;
+                //    managedGrid.MarkCellDirty(unit);
+                //}
             }
         }
 

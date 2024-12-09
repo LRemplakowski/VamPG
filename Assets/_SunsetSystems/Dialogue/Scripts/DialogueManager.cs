@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
-using SunsetSystems.Constants;
+using SunsetSystems.Core;
 using SunsetSystems.Data;
 using SunsetSystems.Game;
 using SunsetSystems.Utils;

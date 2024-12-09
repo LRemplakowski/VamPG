@@ -4,5 +4,6 @@
     {
         void PlayFireWeaponAnimation();
         void PlayTakeHitAnimation();
+        void SetCoverAnimationsEnabled(bool enabled);
     }
 }

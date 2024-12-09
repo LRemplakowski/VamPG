@@ -36,6 +36,7 @@ Transform:
   - {fileID: 6294523937178330853}
   - {fileID: 2550384045447636604}
   - {fileID: 5605094159454864981}
+  - {fileID: 4358048263007320264}
   - {fileID: 8213438480378527713}
   - {fileID: 7744861580169095031}
   - {fileID: 482763929595618258}
@@ -910,6 +911,7 @@ MonoBehaviour:
   _weaponAnimationTypeParam: WeaponAnimationType
   _takeHitAnimationParam: TakeHit
   _fireWeaponAnimationParam: AttackWithWeapon
+  _inCoverAnimationParam: InCover
 --- !u!1 &5165274126658692935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,6 +1317,109 @@ MonoBehaviour:
       Data: 0
   _faceTargetTime: 0.25
   _navMeshAgent: {fileID: 7708544126274853394}
+--- !u!1 &7874706646623494373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4358048263007320264}
+  - component: {fileID: 1148893699925297192}
+  m_Layer: 0
+  m_Name: Resource Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4358048263007320264
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7874706646623494373}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 2900274695709765927}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1148893699925297192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7874706646623494373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d41e35ff591436a4683bad5bbd57633c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _currentResources
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.ActorResources.ActorResource,
+        SunsetSystems],[System.Int32, mscorlib]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.ActorResources.ActorResource,
+        SunsetSystems]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
 --- !u!1 &8070940175785232470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,6 +1469,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 265292995897044542}
+    - {fileID: 1148893699925297192}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -1372,6 +1478,15 @@ MonoBehaviour:
     - Name: _references
       Entry: 10
       Data: 0
+    - Name: _movementPointUser
+      Entry: 10
+      Data: 1
+    - Name: _actionPointUser
+      Entry: 10
+      Data: 1
+    - Name: _bloodPointUser
+      Entry: 10
+      Data: 1
     - Name: _defaultAbilities
       Entry: 7
       Data: 0|System.Collections.Generic.List`1[[SunsetSystems.Abilities.IAbility,
@@ -1719,3 +1834,18 @@ MonoBehaviour:
     - Name: _combatBehaviour
       Entry: 10
       Data: 0
+    - Name: _combatContextSource
+      Entry: 6
+      Data: 
+    - Name: _thisFaction
+      Entry: 6
+      Data: 
+    - Name: _movementPointUser
+      Entry: 6
+      Data: 
+    - Name: _actionPointUser
+      Entry: 6
+      Data: 
+    - Name: _bloodPointUser
+      Entry: 6
+      Data: 

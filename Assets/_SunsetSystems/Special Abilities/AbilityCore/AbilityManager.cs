@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.ActionSystem;
+using SunsetSystems.ActorResources;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;

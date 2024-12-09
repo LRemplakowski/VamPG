@@ -1,6 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Constants;
+using SunsetSystems.Core;
 using SunsetSystems.Core.SceneLoading;
 using SunsetSystems.Game;
 using UnityEngine;

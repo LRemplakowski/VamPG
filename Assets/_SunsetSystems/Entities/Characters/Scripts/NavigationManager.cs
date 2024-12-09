@@ -10,7 +10,7 @@ namespace SunsetSystems.Entities.Characters.Navigation
 {
     public class NavigationManager : SerializedMonoBehaviour, INavigationManager, IPersistentComponent
     {
-        public const string COMPONENT_ID = "NAVIGATION_MANAGER";
+        private const string COMPONENT_ID = "NAVIGATION_MANAGER";
 
         [Title("Config")]
         [SerializeField]

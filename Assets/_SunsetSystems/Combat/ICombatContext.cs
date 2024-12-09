@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using SunsetSystems.Abilities;
+using SunsetSystems.ActorResources;
 using SunsetSystems.Equipment;
 using UnityEngine;
 
@@ -19,6 +20,9 @@ namespace SunsetSystems.Combat
         int SelectedWeaponCurrentAmmo { get; }
         int SelectedWeaponMaxAmmo { get; }
 
+        IMovementPointUser MovementManager { get; }
+        IActionPointUser ActionPointManager { get; }
+        IBloodPointUser BloodPointManager { get; }
         IAbilityUser AbilityUser { get; }
         IWeaponManager WeaponManager { get; }
 

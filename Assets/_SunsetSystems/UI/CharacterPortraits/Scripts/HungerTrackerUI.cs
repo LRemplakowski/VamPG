@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using SunsetSystems.Constants;
+using SunsetSystems.Core;
 
 namespace UI.CharacterPortraits
 {

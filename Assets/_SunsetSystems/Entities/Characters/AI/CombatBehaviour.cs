@@ -17,7 +17,7 @@ using System;
 
 namespace SunsetSystems.Combat
 {
-    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable, IMovementPointUser, IActionPointUser, IBloodPointUser
+    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable
     {
         [Title("Config")]
         [SerializeField]

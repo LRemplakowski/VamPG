@@ -12,10 +12,15 @@ namespace SunsetSystems.Abilities
     {
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
-            return IsTargetNotNull(context) && GetTargetIsPosition(context, out var gridCell) && IsPositionFree(gridCell);
+            return IsTargetNotNull(context)
+                   && GetTargetHasValidFlag(context, validTargetsMask)
+                   && GetTargetAsGridCell(context, out var gridCell)
+                   && IsPositionFree(gridCell);
 
             static bool IsTargetNotNull(IAbilityContext context) => context.TargetObject != null;
-            static bool GetTargetIsPosition(IAbilityContext context, out IGridCell cell)
+            static bool GetTargetHasValidFlag(IAbilityContext context, TargetableEntityType targetMask) => context.TargetObject.IsValidTarget(targetMask);
+
+            static bool GetTargetAsGridCell(IAbilityContext context, out IGridCell cell)
             {
                 cell = default;
                 if (context.TargetObject is IGridCell gridCell)
@@ -31,17 +36,14 @@ namespace SunsetSystems.Abilities
 
         protected override async Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
         {
-            throw new NotImplementedException();
-            //var targetPosition = context.TargetObject as IGridCell;
-            //var moveAction = new Move(context.SourceCombatBehaviour, targetPosition, context.GridManager);
-            //await context.SourceActionPerformer.PerformAction(moveAction);
-            //onCompleted?.Invoke();
+            var moveAction = new MoveAbilityAction(this, context);
+            await context.SourceActionPerformer.PerformAction(moveAction);
+            onCompleted?.Invoke();
         }
 
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
-            if (context.SourceCombatBehaviour is not IMovementPointUser mover)
-                return new();
+            var mover = context.SourceCombatBehaviour.GetContext().MovementManager;
             return new()
             {
                 MaxRange = mover.GetCurrentMovementPoints()

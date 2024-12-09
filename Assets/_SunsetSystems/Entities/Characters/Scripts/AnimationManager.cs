@@ -49,9 +49,18 @@ namespace SunsetSystems.Animation
         [SerializeField]
         private string _fireWeaponAnimationParam;
         private int _fireWeaponAnimationParamHash;
+        [SerializeField]
+        private string _inCoverAnimationParam;
+        private int _inCoverAnimationParamHash;
 
-        private const string RIGHT_ARM = "CC_Base_R_Upperarm", RIGHT_FOREARM = "CC_Base_R_Forearm", RIGHT_HAND = "CC_Base_R_Hand", RIGHT_HINT = "CC_Base_R_Forearm_Hint";
-        private const string LEFT_ARM = "CC_Base_L_Upperarm", LEFT_FOREARM = "CC_Base_L_Forearm", LEFT_HAND = "CC_Base_L_Hand", LEFT_HINT = "CC_Base_L_Forearm_Hint";
+        private const string RIGHT_ARM = "CC_Base_R_Upperarm", 
+                             RIGHT_FOREARM = "CC_Base_R_Forearm", 
+                             RIGHT_HAND = "CC_Base_R_Hand", 
+                             RIGHT_HINT = "CC_Base_R_Forearm_Hint";
+        private const string LEFT_ARM = "CC_Base_L_Upperarm", 
+                             LEFT_FOREARM = "CC_Base_L_Forearm", 
+                             LEFT_HAND = "CC_Base_L_Hand", 
+                             LEFT_HINT = "CC_Base_L_Forearm_Hint";
 
         private Transform rightHint, leftHint;
         private TwoBoneIKConstraint rightHandConstraint, leftHandConstraint;
@@ -63,16 +72,20 @@ namespace SunsetSystems.Animation
 
         public string ComponentID => ANIMATION_MANAGER_ID;
 
-        private void Start()
+        private void Awake()
         {
-            rigBuilder.layers.Clear();
-            rigBuilder.enabled = false;
-
             _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
             _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
             _weaponAnimationTypeParamHash = Animator.StringToHash(_weaponAnimationTypeParam);
             _takeHitAnimationParamHash = Animator.StringToHash(_takeHitAnimationParam);
             _fireWeaponAnimationParamHash = Animator.StringToHash(_fireWeaponAnimationParam);
+            _inCoverAnimationParamHash = Animator.StringToHash(_inCoverAnimationParam);
+        }
+
+        private void Start()
+        {
+            rigBuilder.layers.Clear();
+            rigBuilder.enabled = false;
         }
 
         private void Update()
@@ -202,6 +215,11 @@ namespace SunsetSystems.Animation
         public void PlayTakeHitAnimation()
         {
             animator.SetTrigger(_takeHitAnimationParamHash);
+        }
+
+        public void SetCoverAnimationsEnabled(bool enabled)
+        {
+            animator.SetBool(_inCoverAnimationParamHash, enabled);
         }
 
         public void SetTrigger(string name)

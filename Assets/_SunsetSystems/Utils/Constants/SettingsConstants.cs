@@ -1,4 +1,4 @@
-namespace SunsetSystems.Constants
+namespace SunsetSystems.Core
 {
     public static class SettingsConstants
     {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
+using SunsetSystems.ActorResources;
 using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities;

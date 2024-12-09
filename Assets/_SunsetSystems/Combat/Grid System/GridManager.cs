@@ -136,8 +136,7 @@ namespace SunsetSystems.Combat.Grid
         public void ShowCellsInMovementRange(ICombatant combatant)
         {
             HideCellsInMovementRange();
-            if (combatant is not IMovementPointUser mover)
-                return;
+            var mover = combatant.GetContext().MovementManager;
             Vector3Int gridPosition = WorldPositionToGridPosition(combatant.References.Transform.position);
             var navigationManager = combatant.References.NavigationManager;
             currentlyHighlitedGridUnits.Clear();

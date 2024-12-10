@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1030980982
+--- !u!1 &1030980958
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,43 +8,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1030980983}
-  - component: {fileID: 1030980984}
-  - component: {fileID: 7346117436210059340}
+  - component: {fileID: 1030980959}
+  - component: {fileID: 1030980960}
+  - component: {fileID: 6505817563226112593}
   m_Layer: 0
-  m_Name: SM_Cup_01
+  m_Name: Clutter_DisposableCup_03_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!4 &1030980983
+--- !u!4 &1030980959
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980982}
+  m_GameObject: {fileID: 1030980958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1030980987}
-  - {fileID: 1030980991}
+  - {fileID: 1030980963}
+  - {fileID: 1030980967}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &1030980984
+--- !u!205 &1030980960
 LODGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980982}
+  m_GameObject: {fileID: 1030980958}
   serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 0.06, z: -0}
-  m_Size: 0.15229
+  m_LocalReferencePoint: {x: 0, y: 0.091575, z: -0}
+  m_Size: 0.193368
   m_FadeMode: 0
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
@@ -52,27 +52,27 @@ LODGroup:
   - screenRelativeHeight: 0.4
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 1030980988}
+    - renderer: {fileID: 1030980964}
   - screenRelativeHeight: 0.01
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 1030980992}
+    - renderer: {fileID: 1030980968}
     - renderer: {fileID: 0}
   m_Enabled: 1
---- !u!65 &7346117436210059340
+--- !u!65 &6505817563226112593
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980982}
+  m_GameObject: {fileID: 1030980958}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.10531901, y: 0.12962517, z: 0.10057001}
-  m_Center: {x: 0.0010404587, y: 0.059757918, z: 0.0006623212}
---- !u!1 &1030980986
+  m_Size: {x: 0.09716655, y: 0.19918233, z: 0.09547234}
+  m_Center: {x: 0.00064270943, y: 0.0918206, z: -0.0012770183}
+--- !u!1 &1030980962
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,38 +80,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1030980987}
-  - component: {fileID: 1030980988}
-  - component: {fileID: 1030980989}
+  - component: {fileID: 1030980963}
+  - component: {fileID: 1030980964}
+  - component: {fileID: 1030980965}
   m_Layer: 0
-  m_Name: SM_Cup_01_LOD0
+  m_Name: SM_Cup_02_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!4 &1030980987
+--- !u!4 &1030980963
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980986}
+  m_GameObject: {fileID: 1030980962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1030980983}
+  m_Father: {fileID: 1030980959}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &1030980988
+--- !u!23 &1030980964
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980986}
+  m_GameObject: {fileID: 1030980962}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -147,15 +147,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1030980989
+--- !u!33 &1030980965
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980986}
-  m_Mesh: {fileID: 4300000, guid: abc00000000015981209862260133381, type: 3}
---- !u!1 &1030980990
+  m_GameObject: {fileID: 1030980962}
+  m_Mesh: {fileID: 4300000, guid: abc00000000011234740101362429668, type: 3}
+--- !u!1 &1030980966
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -163,38 +163,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1030980991}
-  - component: {fileID: 1030980992}
-  - component: {fileID: 1030980993}
+  - component: {fileID: 1030980967}
+  - component: {fileID: 1030980968}
+  - component: {fileID: 1030980969}
   m_Layer: 0
-  m_Name: SM_Cup_01_LOD1
+  m_Name: SM_Cup_02_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!4 &1030980991
+--- !u!4 &1030980967
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980990}
+  m_GameObject: {fileID: 1030980966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1030980983}
+  m_Father: {fileID: 1030980959}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &1030980992
+--- !u!23 &1030980968
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980990}
+  m_GameObject: {fileID: 1030980966}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -230,11 +230,11 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &1030980993
+--- !u!33 &1030980969
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030980990}
-  m_Mesh: {fileID: 4300002, guid: abc00000000015981209862260133381, type: 3}
+  m_GameObject: {fileID: 1030980966}
+  m_Mesh: {fileID: 4300002, guid: abc00000000011234740101362429668, type: 3}

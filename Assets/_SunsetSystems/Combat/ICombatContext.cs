@@ -30,7 +30,5 @@ namespace SunsetSystems.Combat
 
         int GetAttributeValue(AttributeType attribute);
         int GetSkillValue(SkillType skill);
-
-        bool GetCanMove();
     }
 }

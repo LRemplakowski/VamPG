@@ -28,7 +28,6 @@ namespace SunsetSystems.Abilities
         private AbilityContext _abilityContext;
 
         private ITargetable _characterTarget;
-        private IGridCell _positionTarget;
 
         private void Awake()
         {
@@ -41,22 +40,16 @@ namespace SunsetSystems.Abilities
             CombatInputHandler.OnTargetingDataUpdate -= UpdatePlayerTargetingData;
         }
 
-        private void UpdatePlayerTargetingData(ITargetable character, IGridCell position)
+        private void UpdatePlayerTargetingData(ITargetable target)
         {
             if (_references.CreatureData.Faction is not Faction.PlayerControlled)
                 return;
-            SetCurrentTargetObject(character);
-            SetCurrentTargetPosition(position);
+            SetCurrentTargetObject(target);
         }
 
         public void SetCurrentTargetObject(ITargetable targetable)
         {
             _characterTarget = targetable;
-        }
-
-        public void SetCurrentTargetPosition(IGridCell position)
-        {
-            _positionTarget = position;
         }
 
         public bool ExecuteAbility(IAbility ability, Action onCompleted = null)
@@ -132,28 +125,20 @@ namespace SunsetSystems.Abilities
             return _characterTarget;
         }
 
-        private IGridCell GetCurrentTargetPosition()
-        {
-            return _positionTarget;
-        }
-
         private class AbilityContext : IAbilityContext
         {
             private readonly AbilityManager _abilityManager;
             private readonly Func<ITargetable> _targetCharacter;
-            private readonly Func<IGridCell> _targetPosition;
 
             public IActionPerformer SourceActionPerformer => SourceCombatBehaviour;
             public ICombatant SourceCombatBehaviour => _abilityManager._references.CombatBehaviour;
             public ITargetable TargetObject => _targetCharacter.Invoke();
-            public IGridCell TargetPosition => _targetPosition.Invoke();
             public GridManager GridManager => CombatManager.Instance.CurrentEncounter.GridManager;
 
             public AbilityContext(AbilityManager abilityManager)
             {
                 _abilityManager = abilityManager;
                 _targetCharacter = abilityManager.GetCurrentTargetObject;
-                _targetPosition = abilityManager.GetCurrentTargetPosition;
             }
         }
     }

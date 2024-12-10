@@ -52,8 +52,8 @@ namespace SunsetSystems.Combat.UI
         public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            _combatCanvasGroup.interactable = combatant.IsPlayerControlled;
-            if (combatant.IsPlayerControlled)
+            _combatCanvasGroup.interactable = combatant.GetContext().IsPlayerControlled;
+            if (combatant.GetContext().IsPlayerControlled)
             {
                 UpdateCurrentActorPortrait(combatant);
                 currentActorHealth.UpdateHealthDisplay(combatant);

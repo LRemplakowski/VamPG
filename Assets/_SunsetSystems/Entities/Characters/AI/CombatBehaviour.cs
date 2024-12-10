@@ -1,51 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using SunsetSystems.Abilities;
-using SunsetSystems.Animation;
-using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.ActionSystem;
-using SunsetSystems.Entities.Characters.Navigation;
+using SunsetSystems.Animation;
+using SunsetSystems.Entities;
+using SunsetSystems.Entities.Characters;
 using SunsetSystems.Equipment;
-using SunsetSystems.Inventory;
 using UltEvents;
 using UnityEngine;
-using System;
 
 namespace SunsetSystems.Combat
 {
-    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable
+    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable, IFactionMember, IDamageable
     {
         [Title("Config")]
         [SerializeField]
-        private Vector3 _combatNameplateOffset = new Vector3(0, 2, 0);
-        [SerializeField]
-        private string hasCoverAnimationBoolean;
-        private int hasCoverAnimationBooleanHash;
+        private Vector3 _combatNameplateOffset = new(0, 2, 0);
 
         [Title("References")]
         [SerializeField]
         private Transform _raycastOrigin;
         public Vector3 RaycastOrigin => _raycastOrigin.position;
         [SerializeField, Required]
-        private IWeaponManager weaponManager;
+        private IWeaponManager _weaponManager;
         [field: SerializeField]
         public LineRenderer LineRenderer { get; private set; }
         [field: SerializeField, Required]
         public ICreature Owner { get; private set; }
         [SerializeField, Required]
-        private IAbilityUser _abilityUser;
-        [SerializeField, Required]
-        private AnimationManager animationController;
+        private AnimationManager _animationController;
 
-        public bool IsPlayerControlled => Owner.Faction is Faction.PlayerControlled;
-
-        private float _distanceMovedThisTurn = 0f;
-        private int _availableActionPoints = 2;
-        private Vector3 _positionLastFrame;
+        private ICombatContext _combatContext;
 
         #region Unity Messages
         private void OnEnable()
@@ -58,8 +47,7 @@ namespace SunsetSystems.Combat
 
         private void Start()
         {
-            hasCoverAnimationBooleanHash = Animator.StringToHash(hasCoverAnimationBoolean);
-            _positionLastFrame = transform.position;
+            _combatContext = new CombatContext(this);
         }
 
         private void OnDisable()
@@ -72,44 +60,36 @@ namespace SunsetSystems.Combat
 
         private void Update()
         {
-            if (transform.position != _positionLastFrame)
-                _distanceMovedThisTurn += Vector3.Distance(transform.position, _positionLastFrame);
-            _positionLastFrame = transform.position;
             if (CombatManager.Instance.IsCurrentActiveActor(this))
             {
-                if (HasActionsQueued is false && HasMoved && HasActed && IsPlayerControlled is false)
+                if (HasActionsQueued is false && CanMove(this) is false && CanAct(this) is false && GetContext().IsPlayerControlled is false)
                 {
                     SignalEndTurn();
                 }
             }
+
+            static bool CanMove(ICombatant combatant) => combatant.GetContext().MovementManager.GetCanMove();
+            static bool CanAct(ICombatant combatant) => combatant.GetContext().ActionPointManager.CanUseActionPoints();
         }
         #endregion
 
         private void OnCombatBegin(IEnumerable<ICombatant> actorsInCombat)
         {
-            weaponManager.SetSelectedWeapon(SelectedWeapon.Primary);
+            _weaponManager.SetSelectedWeapon(SelectedWeapon.Primary);
             if (actorsInCombat.Contains(this))
             {
-                animationController.SetCombatAnimationsActive(true);
-                _availableActionPoints = 2;
+                _animationController.SetCombatAnimationsActive(true);
             }
         }
 
         private void OnCombatEnd()
         {
-            animationController.SetCombatAnimationsActive(false);
+            _animationController.SetCombatAnimationsActive(false);
         }
 
         private void OnCombatRoundBegin(ICombatant currentActor)
         {
-            if (currentActor.Equals(this))
-            {
-                _distanceMovedThisTurn = 0f;
-                _availableActionPoints = 2;
-                _positionLastFrame = transform.position;
-                HasMoved = false;
-                HasActed = false;
-            }
+
         }
 
         private void OnCombatRoundEnd(ICombatant currentActor)
@@ -131,21 +111,20 @@ namespace SunsetSystems.Combat
         }
         #endregion
 
+        #region IDamageable
+        public void TakeDamage(int amount)
+        {
+            Owner.References.StatsManager.TakeDamage(amount);
+            OnDamageTaken?.InvokeSafe(this);
+        }
+        #endregion
+
         #region ICombatant
         public MonoBehaviour CoroutineRunner => Owner.CoroutineRunner;
-
-        public IWeaponManager WeaponManager => Owner.References.WeaponManager;
 
         public Vector3 AimingOrigin => RaycastOrigin;
         public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
 
-        public bool IsInCover => CurrentCoverSources.Count > 0;
-        public bool IsAlive => Owner.References.StatsManager.IsAlive();
-
-        public IList<ICover> CurrentCoverSources => new List<ICover>();
-
-        public int MovementRange => Owner.References.StatsManager.GetCombatSpeed();
-        public int SprintRange => MovementRange * 2;
         [field: Title("Events")]
         [field: SerializeField]
         public UltEvent<ICombatant> OnChangedGridPosition { get; set; }
@@ -156,18 +135,6 @@ namespace SunsetSystems.Combat
         [field: SerializeField]
         public UltEvent<ICombatant> OnDamageTaken { get; set; }
 
-        [field: Title("Combat Runtime")]
-        [field: ShowInInspector, ReadOnly]
-        public bool HasActed { get; private set; }
-        [field: ShowInInspector, ReadOnly]
-        public bool HasMoved { get; private set; }
-
-        public string ID => Owner.ID;
-
-        public string Name => Owner.Name;
-
-        public Faction Faction => Owner.Faction;
-
         public ICreatureReferences References => Owner.References;
 
         public EntityAction PeekCurrentAction => Owner.PeekCurrentAction;
@@ -175,58 +142,6 @@ namespace SunsetSystems.Combat
         public bool HasActionsQueued => Owner.HasActionsQueued;
 
         public Transform Transform => Owner.Transform;
-
-        public bool GetCanMove()
-        {
-            return SprintRange > Mathf.CeilToInt(_distanceMovedThisTurn);
-        }
-
-        #region IActionPointUser
-        public int GetCurrentActionPoints()
-        {
-            return _availableActionPoints;
-        }
-
-        public bool UseActionPoints(int ap)
-        {
-            return true;
-        }
-        #endregion
-
-        #region IMovementPointUser
-        public int GetCurrentMovementPoints()
-        {
-            return SprintRange - Mathf.CeilToInt(_distanceMovedThisTurn);
-        }
-
-        public bool UseMovementPoints(int mp)
-        {
-            return true;
-        }
-        #endregion
-
-        #region IBloodPointUser
-        public int GetCurrentBloodPoints()
-        {
-            return 0;
-        }
-
-        public bool UseBloodPoints(int bp)
-        {
-            return true;
-        }
-        #endregion
-
-        public void TakeDamage(int amount)
-        {
-            Owner.References.StatsManager.TakeDamage(amount);
-            OnDamageTaken?.InvokeSafe(this);
-        }
-
-        public int GetAttributeValue(AttributeType attributeType)
-        {
-            return Owner.References.StatsManager.GetAttribute(attributeType)?.GetValue() ?? 0;
-        }
 
         public Task PerformAction(EntityAction action, bool clearQueue = false)
         {
@@ -238,160 +153,62 @@ namespace SunsetSystems.Combat
             if (CombatManager.Instance.IsCurrentActiveActor(this))
                 CombatManager.Instance.NextRound();
         }
-
-        [Button]
-        public bool MoveToGridPosition(GridUnitObject gridObject)
-        {
-            return MoveToGridPosition(gridObject.GridPosition);
-        }
-
-        public bool MoveToGridPosition(Vector3Int gridPosition)
-        {
-            if (HasMoved)
-                return false;
-            GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
-            GridUnit gridUnit = gridManager[gridPosition];
-            if (IsPlayerControlled)
-            {
-                if (gridUnit.IsInMoveRange && !HasMoved)
-                {
-                    HasMoved = true;
-                    OnChangedGridPosition?.Invoke(this);
-                    CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
-                    _ = PerformAction(new Move(this, gridUnit, gridManager));
-                    CurrentCoverSources.Clear();
-                    CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
-                    animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
-                    OnUsedActionPoint?.InvokeSafe(this);
-                    return true;
-                }
-                else if (gridUnit.IsInSprintRange && !HasMoved && !HasActed)
-                {
-                    HasActed = true;
-                    HasMoved = true;
-                    OnChangedGridPosition?.Invoke(this);
-                    CombatManager.Instance.CurrentEncounter.GridManager.HideCellsInMovementRange();
-                    _ = PerformAction(new Move(this, gridUnit, gridManager));
-                    CurrentCoverSources.Clear();
-                    CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
-                    animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
-                    OnUsedActionPoint?.InvokeSafe(this);
-                    return true;
-                }
-            }
-            else
-            {
-                HasMoved = true;
-                OnChangedGridPosition?.Invoke(this);
-                _ = PerformAction(new Move(this, gridUnit, gridManager));
-                CurrentCoverSources.Clear();
-                CurrentCoverSources.AddRange(gridUnit.AdjacentCoverSources);
-                animationController.SetBool(hasCoverAnimationBooleanHash, gridUnit.AdjacentToCover);
-                OnUsedActionPoint?.InvokeSafe(this);
-                return true;
-            }
-            return false;
-        }
-
-        [Button]
-        public bool AttackCreatureUsingCurrentWeapon(ICombatant target)
-        {
-            if (HasActed)
-                return false;
-            IWeapon currentWeapon = weaponManager.GetSelectedWeapon();
-            if (currentWeapon == null || currentWeapon.WeaponType is Inventory.AbilityRange.Melee)
-            {
-                GridManager gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
-                Vector3Int currentGridPosition = gridManager.WorldPositionToGridPosition(Transform.position);
-                Vector3Int targetGridPosition = gridManager.WorldPositionToGridPosition(target.Transform.position);
-                if (Vector3Int.Distance(targetGridPosition, currentGridPosition) < 1.5f)
-                {
-                    HasActed = true;
-                    HasMoved = true;
-                    _ = PerformAction(new Attack(target, this));
-                    OnUsedActionPoint?.InvokeSafe(this);
-                    return true;
-                }
-                else
-                {
-                    GridUnit nearestUnitInRangeAdjacentToTarget = FindAdjacentGridPosition(target, gridManager, currentGridPosition, MovementRange, References.GetCachedComponent<INavigationManager>());
-                    gridManager.ShowCellsInMovementRange(this);
-                    if (nearestUnitInRangeAdjacentToTarget != null && MoveToGridPosition(nearestUnitInRangeAdjacentToTarget.GridPosition))
-                    {
-                        HasMoved = true;
-                        HasActed = true;
-                        _ = PerformAction(new Attack(target, this));
-                        OnUsedActionPoint?.InvokeSafe(this);
-                        return true;
-                    }
-                    gridManager.HideCellsInMovementRange();
-                }
-            }
-            else if (Vector3.Distance(Transform.position, target.Transform.position) <= currentWeapon.GetRangeData().MaxRange && weaponManager.UseAmmoFromSelectedWeapon(1))
-            {
-                HasActed = true;
-                HasMoved = true;
-                _ = PerformAction(new Attack(target, this));
-                OnUsedActionPoint?.InvokeSafe(this);
-                return true;
-            }
-            return false;
-        }
-
-        public bool ReloadCurrentWeapon()
-        {
-            if (HasActed)
-                return false;
-            weaponManager.ReloadSelectedWeapon();
-            HasActed = true;
-            OnUsedActionPoint?.InvokeSafe(this);
-            return true;
-        }
-
-        public bool IsTargetInRange(ICombatant target)
-        {
-            return Vector3.Distance(References.Transform.position, target.References.Transform.position) <= weaponManager.GetSelectedWeapon().GetRangeData().MaxRange;
-        }
-
-        private static GridUnit FindAdjacentGridPosition(ICombatant target, GridManager grid, Vector3Int currentGridPosition, float movementRange, INavigationManager navigationManager)
-        {
-            GridUnit unit = null;
-            float distance = float.MaxValue;
-            List<GridUnit> positionList = grid.GetCellsInRange(currentGridPosition, movementRange, navigationManager, out _);
-            if (target != null)
-            {
-                Vector3Int enemyGridPosition = grid.WorldPositionToGridPosition(target.Transform.position);
-                List<GridUnit> walkableCellsNearEnemy = grid.GetCellsInRange(enemyGridPosition, 1.5f, target.References.GetCachedComponent<INavigationManager>(), out _);
-                IEnumerable<GridUnit> commonElements = positionList.Intersect(walkableCellsNearEnemy);
-                foreach (GridUnit commonUnit in commonElements)
-                {
-                    if (commonUnit != null && commonUnit.IsFree)
-                    {
-                        float distanceToCommonUnit = Vector3Int.Distance(currentGridPosition, commonUnit.GridPosition);
-                        if (distanceToCommonUnit < distance)
-                        {
-                            unit = commonUnit;
-                            distance = distanceToCommonUnit;
-                        }
-                    }
-                }
-            }
-            return unit;
-        }
         #endregion
 
         #region INamedObject
         public string GetLocalizedName() => References.CreatureData.FullName;
         #endregion
 
+        #region IContextProvider
+        public ICombatContext GetContext()
+        {
+            return _combatContext;
+        }
+        #endregion
+
+        #region IFactionMember
+        public Faction GetFaction()
+        {
+            return Owner.References.CreatureData.Faction;
+        }
+
+        public bool IsFriendlyTowards(IFactionMember other)
+        {
+            return Owner.References.CreatureData.Faction switch
+            {
+                Faction.None => false,
+                Faction.Hostile => other.GetFaction() is Faction.Hostile,
+                Faction.Neutral => false,
+                Faction.Friendly => other.GetFaction() is Faction.Friendly || other.GetFaction() is Faction.PlayerControlled,
+                Faction.PlayerControlled => other.GetFaction() is Faction.Friendly || other.GetFaction() is Faction.PlayerControlled,
+                Faction.AttackAll => false,
+                _ => false,
+            };
+        }
+
+        public bool IsHostileTowards(IFactionMember other)
+        {
+            return Owner.References.CreatureData.Faction switch
+            {
+                Faction.None => false,
+                Faction.Hostile => other.GetFaction() is not Faction.Hostile,
+                Faction.Neutral => false,
+                Faction.Friendly => other.GetFaction() is Faction.Hostile || other.GetFaction() is Faction.AttackAll,
+                Faction.PlayerControlled => other.GetFaction() is Faction.Hostile || other.GetFaction() is Faction.AttackAll,
+                Faction.AttackAll => true,
+                _ => false,
+            };
+        }
+
+        public bool IsMe(IFactionMember other)
+        {
+            return other?.Equals(this) ?? false;
+        }
+        #endregion
+
         public override string ToString()
         {
             return $"{base.ToString()} - {Owner}";
-        }
-
-        public ICombatContext GetContext()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -11,7 +11,7 @@ public class Skill : BaseStat
 
     public override string Name => skillType.ToString();
 
-    public float Value { get => GetValue(); }
+    public int Value { get => GetValue(); }
     public SkillType SkillType { get => skillType; }
 
     public Skill(Skill existing) : base(existing)

@@ -57,8 +57,6 @@ namespace UnityEngine.UI
             DoStateTransition(base.currentSelectionState, instant: false);
         }
 
-
-
         protected override void DoStateTransition(SelectionState state, bool instant)
         {
             if (!gameObject.activeInHierarchy)
@@ -202,41 +200,54 @@ namespace UnityEngine.UI
         {
             return this;
         }
+
+        public void ClearCompositeData() => compositeData.Clear();
+
+        public void AddSpriteSwapComposite(CustomSpriteState spriteState)
+        {
+            compositeData.Add(new()
+            {
+                Transition = Transition.SpriteSwap,
+                SpriteTransition = spriteState,
+            });
+        }
     }
 
     [Serializable]
     public struct ButtonCompositeData
     {
         public Selectable.Transition Transition;
+        [ShowIf("Transition == Selectable.Transition.ColorTint")]
         public CustomColorBlock ColorTransition;
+        [ShowIf("Transition == Selectable.Transition.SpriteSwap")]
         public CustomSpriteState SpriteTransition;
+        [ShowIf("Transition == Selectable.Transition.Animation")]
         public CustomAnimationTriggers AnimationTransition;
     }
 
     [Serializable]
     public struct CustomColorBlock : IEquatable<CustomColorBlock>
     {
-        [field: SerializeField]
-        public Image Image { get; private set; }
-        [field:SerializeField]
-        public Color NormalColor { get; private set; }
-        [field: SerializeField]
-        public Color HighlightedColor { get; private set; }
-        [field: SerializeField]
-        public Color PressedColor { get; private set; }
-        [field: SerializeField]
-        public Color SelectedColor { get; private set; }
-        [field: SerializeField]
-        public Color DisabledColor { get; private set; }
+        [SerializeField]
+        public Image Image;
+        [SerializeField]
+        public Color NormalColor;
+        [SerializeField]
+        public Color HighlightedColor;
+        [SerializeField]
+        public Color PressedColor;
+        [SerializeField]
+        public Color SelectedColor;
+        [SerializeField]
+        public Color DisabledColor;
+        [SerializeField]
+        public float ColorMultiplier;
+        [SerializeField]
+        public float FadeDuration;
 
-        [field: SerializeField]
-        public float ColorMultiplier { get; private set; }
-        [field: SerializeField]
-        public float FadeDuration { get; private set; }
+        public override readonly bool Equals(object obj) => obj is CustomColorBlock block && Equals(block);
 
-        public override bool Equals(object obj) => obj is CustomColorBlock block && Equals(block);
-
-        public bool Equals(CustomColorBlock other)
+        public readonly bool Equals(CustomColorBlock other)
         {
             return Image == other.Image &&
                 NormalColor == other.NormalColor &&
@@ -248,7 +259,7 @@ namespace UnityEngine.UI
                 FadeDuration == other.FadeDuration;
         }
 
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return base.GetHashCode();
         }
@@ -257,18 +268,18 @@ namespace UnityEngine.UI
     [Serializable]
     public struct CustomSpriteState : IEquatable<CustomSpriteState>
     {
-        [field: SerializeField]
-        public Image Image { get; private set; }
-        [field: SerializeField]
-        public Sprite HighlightedSprite { get; private set; }
-        [field: SerializeField]
-        public Sprite PressedSprite { get; private set; }
-        [field: SerializeField]
-        public Sprite SelectedSprite { get; private set; }
-        [field: SerializeField]
-        public Sprite DisabledSprite { get; private set; }
+        [SerializeField]
+        public Image Image;
+        [SerializeField]
+        public Sprite HighlightedSprite;
+        [SerializeField]
+        public Sprite PressedSprite;
+        [SerializeField]
+        public Sprite SelectedSprite;
+        [SerializeField]
+        public Sprite DisabledSprite;
 
-        public bool Equals(CustomSpriteState other)
+        public readonly bool Equals(CustomSpriteState other)
         {
             return HighlightedSprite == other.HighlightedSprite && PressedSprite == other.PressedSprite && SelectedSprite == other.SelectedSprite && DisabledSprite == other.DisabledSprite;
         }

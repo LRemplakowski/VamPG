@@ -148,7 +148,7 @@ namespace SunsetSystems.Combat
 
         public bool IsActiveActorPlayerControlled()
         {
-            return _currentActiveActor != null && CurrentActiveActor.IsPlayerControlled;
+            return _currentActiveActor != null && CurrentActiveActor.GetContext().IsPlayerControlled;
         }
 
         public int GetRound()
@@ -167,8 +167,7 @@ namespace SunsetSystems.Combat
             if (livingActors.Count <= 0)
                 return livingActors;
             int currentActorIndex = livingActors.IndexOf(CurrentActiveActor);
-            ICombatant[] offsetCopy = new ICombatant[livingActors.Count];
-            offsetCopy = ShiftLeft(livingActors.ToArray(), currentActorIndex);
+            ICombatant[] offsetCopy = ShiftLeft(livingActors.ToArray(), currentActorIndex);
             return offsetCopy.ToList();
         }
 

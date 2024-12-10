@@ -1,13 +1,10 @@
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEngine.AI;
 using System.Linq;
-using SunsetSystems.Entities.Interfaces;
-using SunsetSystems.Entities.Characters.Navigation;
+using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
-using SunsetSystems.Abilities;
+using SunsetSystems.Entities.Characters.Navigation;
+using UnityEngine;
+using UnityEngine.AI;
 
 namespace SunsetSystems.Combat.Grid
 {

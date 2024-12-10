@@ -87,14 +87,6 @@ namespace SunsetSystems.ActorResources
             return ActionPointsToMovementPoints(_currentResources[ActorResource.ActionPoints]);
         }
 
-        public bool GetCanUseBloodPoints()
-        {
-            bool result = true;
-            result &= !HasAnyBlockers(_bloodBlockers);
-            result &= HasResourceRemaining(_currentResources, ActorResource.BloodPoints);
-            return result;
-        }
-
         public bool UseMovementPoints(int amount)
         {
             if (_currentResources.TryGetValue(ActorResource.ActionPoints, out var currentAP) && ActionPointsToMovementPoints(currentAP) >= amount)
@@ -120,6 +112,14 @@ namespace SunsetSystems.ActorResources
         public int GetCurrentBloodPoints()
         {
             return _currentResources[ActorResource.BloodPoints];
+        }
+
+        public bool GetCanUseBloodPoints()
+        {
+            bool result = true;
+            result &= !HasAnyBlockers(_bloodBlockers);
+            result &= HasResourceRemaining(_currentResources, ActorResource.BloodPoints);
+            return result;
         }
 
         public bool UseBloodPoints(int amount)

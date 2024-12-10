@@ -5,6 +5,7 @@ using SunsetSystems.Equipment;
 using SunsetSystems.Abilities;
 using SunsetSystems.UMA;
 using UnityEngine;
+using SunsetSystems.ActorResources;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -28,5 +29,13 @@ namespace SunsetSystems.Entities.Characters
         public ISpellbookManager SpellbookManager { get; private set; }
         [field: SerializeField]
         public IAnimationManager AnimationManager { get; private set; }
+        [field: SerializeField]
+        public IAbilityUser AbilityUser { get; private set; }
+        [field: SerializeField]
+        public IMovementPointUser MovementManager { get; private set; }
+        [field: SerializeField]
+        public IActionPointUser ActionPointManager { get; private set; }
+        [field: SerializeField]
+        public IBloodPointUser BloodPointManager { get; private set; }
     }
 }

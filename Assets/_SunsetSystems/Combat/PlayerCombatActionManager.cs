@@ -19,7 +19,7 @@ namespace SunsetSystems.Combat
 
         public void OnCombatRoundBegin(ICombatant actor)
         {
-            if (actor.IsPlayerControlled)
+            if (actor.GetContext().IsPlayerControlled)
             {
                 this.SelectedActionData = new(CombatActionType.Move);
                 HandleNewSelectedAction(SelectedActionData);
@@ -28,7 +28,7 @@ namespace SunsetSystems.Combat
 
         public void OnFullTurnCompleted(ICombatant actor)
         {
-            if (actor.IsPlayerControlled)
+            if (actor.GetContext().IsPlayerControlled)
             {
                 this.SelectedActionData = new(CombatActionType.Move);
                 HandleNewSelectedAction(SelectedActionData);
@@ -37,7 +37,7 @@ namespace SunsetSystems.Combat
 
         public void OnCombatRoundEnd(ICombatant actor)
         {
-            if (actor.IsPlayerControlled)
+            if (actor.GetContext().IsPlayerControlled)
             {
                 CleanupBeforeActionChange(SelectedActionData);
             }

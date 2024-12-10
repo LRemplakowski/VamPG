@@ -20,6 +20,5 @@ namespace SunsetSystems.Abilities
         bool ExecuteAbility(IAbility ability, Action onCompleted = null);
 
         void SetCurrentTargetObject(ITargetable targetable);
-        void SetCurrentTargetPosition(IGridCell position);
     }
 }

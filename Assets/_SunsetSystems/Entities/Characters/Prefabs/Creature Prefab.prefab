@@ -551,6 +551,7 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 4678919013744510610}
     - {fileID: 409868112203810021}
+    - {fileID: 1148893699925297192}
     - {fileID: 265292995897044542}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -563,13 +564,16 @@ MonoBehaviour:
         SunsetSystems]], mscorlib
     - Name: 
       Entry: 12
-      Data: 2
+      Data: 3
     - Name: 
       Entry: 10
       Data: 0
     - Name: 
       Entry: 10
       Data: 1
+    - Name: 
+      Entry: 10
+      Data: 2
     - Name: 
       Entry: 13
       Data: 
@@ -578,7 +582,7 @@ MonoBehaviour:
       Data: 
     - Name: _references
       Entry: 10
-      Data: 2
+      Data: 3
   <Faction>k__BackingField: 2
   _unique: {fileID: 5773463509673429870}
   <EnablePersistence>k__BackingField: 0
@@ -605,6 +609,8 @@ MonoBehaviour:
     - {fileID: 3703066370810871723}
     - {fileID: 1441128836294789900}
     - {fileID: 4678919013744510610}
+    - {fileID: 1394576741260524333}
+    - {fileID: 1148893699925297192}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -631,6 +637,18 @@ MonoBehaviour:
     - Name: <AnimationManager>k__BackingField
       Entry: 10
       Data: 6
+    - Name: <AbilityUser>k__BackingField
+      Entry: 10
+      Data: 7
+    - Name: <MovementManager>k__BackingField
+      Entry: 10
+      Data: 8
+    - Name: <ActionPointManager>k__BackingField
+      Entry: 10
+      Data: 8
+    - Name: <BloodPointManager>k__BackingField
+      Entry: 10
+      Data: 8
   <CreatureData>k__BackingField: {fileID: 8264689728060061147}
   <StatsManager>k__BackingField: {fileID: 6635432538046156311}
 --- !u!195 &7708544126274853394
@@ -964,26 +982,21 @@ MonoBehaviour:
     ReferencedUnityObjects:
     - {fileID: 7860156406871809602}
     - {fileID: 660093643310669083}
-    - {fileID: 1394576741260524333}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: weaponManager
+    - Name: _weaponManager
       Entry: 10
       Data: 0
     - Name: <Owner>k__BackingField
       Entry: 10
       Data: 1
-    - Name: _abilityUser
-      Entry: 10
-      Data: 2
   _combatNameplateOffset: {x: 0, y: 2, z: 0}
-  hasCoverAnimationBoolean: InCover
   _raycastOrigin: {fileID: 6596153777422388182}
   <LineRenderer>k__BackingField: {fileID: 3027528349183160572}
-  animationController: {fileID: 4678919013744510610}
+  _animationController: {fileID: 4678919013744510610}
   <OnChangedGridPosition>k__BackingField:
     _PersistentCalls: []
   <OnUsedActionPoint>k__BackingField:
@@ -1826,6 +1839,7 @@ MonoBehaviour:
     SerializedBytes: 
     ReferencedUnityObjects:
     - {fileID: 3784422555817380618}
+    - {fileID: 1148893699925297192}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -1835,17 +1849,17 @@ MonoBehaviour:
       Entry: 10
       Data: 0
     - Name: _combatContextSource
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 0
     - Name: _thisFaction
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 0
     - Name: _movementPointUser
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1
     - Name: _actionPointUser
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1
     - Name: _bloodPointUser
-      Entry: 6
-      Data: 
+      Entry: 10
+      Data: 1

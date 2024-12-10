@@ -36,7 +36,7 @@ namespace SunsetSystems.Input
         private Collider targetableHit;
         private ITargetable _targetableComponent;
 
-        public delegate void TargetingContextDelegate(ITargetable targetable, IGridCell gridCell);
+        public delegate void TargetingContextDelegate(ITargetable target);
         public static event TargetingContextDelegate OnTargetingDataUpdate;
 
         private void Start()
@@ -91,7 +91,10 @@ namespace SunsetSystems.Input
                 _selectedActionManager.SetLastTargetableHit(null);
                 _showTargetingLine = false;
             }
-            OnTargetingDataUpdate?.Invoke(_targetableComponent, _gridComponent);
+            if (_targetableComponent != null)
+                OnTargetingDataUpdate?.Invoke(_targetableComponent);
+            else
+                OnTargetingDataUpdate?.Invoke(_gridComponent as ITargetable);
 
             void HandleGridCellPointerPosition(out IGridCell gridCell)
             {

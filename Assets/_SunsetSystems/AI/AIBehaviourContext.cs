@@ -54,7 +54,7 @@ namespace SunsetSystems.AI
 
         public bool CanMove()
         {
-            return _combatBehaviour.HasActionsQueued is false && CombatContext.GetCanMove();
+            return _combatBehaviour.HasActionsQueued is false && CombatContext.MovementManager.GetCanMove();
         }
 
         public bool IsTurnMode()

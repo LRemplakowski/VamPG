@@ -5,6 +5,7 @@ using SunsetSystems.Equipment;
 using SunsetSystems.Combat;
 using SunsetSystems.Abilities;
 using SunsetSystems.Animation;
+using SunsetSystems.ActorResources;
 
 namespace SunsetSystems.Entities.Characters
 {
@@ -19,5 +20,9 @@ namespace SunsetSystems.Entities.Characters
         IUMAManager UMAManager { get; }
         ISpellbookManager SpellbookManager { get; }
         IAnimationManager AnimationManager { get; }
+        IAbilityUser AbilityUser { get; }
+        IMovementPointUser MovementManager { get; }
+        IActionPointUser ActionPointManager { get; }
+        IBloodPointUser BloodPointManager { get; }
     }
 }

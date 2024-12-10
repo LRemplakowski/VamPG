@@ -137,8 +137,6 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            if (_selectedActionManager.SelectedActionData.ExecuteImmediate is false)
-                _selectedActionManager.ExecuteAction(_selectedActionManager.SelectedActionData);
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
@@ -147,19 +145,6 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            switch (_selectedActionManager.SelectedActionData.ActionType)
-            {
-                case CombatActionType.Move:
-                    break;
-                case CombatActionType.RangedAtk:
-                    break;
-                case CombatActionType.MeleeAtk:
-                    break;
-                case CombatActionType.Feed:
-                    break;
-                case CombatActionType.Reload:
-                    break;
-            }
         }
 
         public void HandleCameraMoveAction(InputAction.CallbackContext context)

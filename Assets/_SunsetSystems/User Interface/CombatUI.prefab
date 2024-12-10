@@ -1196,20 +1196,20 @@ MonoBehaviour:
   compositeData:
   - Transition: 3
     ColorTransition:
-      <Image>k__BackingField: {fileID: 0}
-      <NormalColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <HighlightedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <PressedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <SelectedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <DisabledColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <ColorMultiplier>k__BackingField: 0
-      <FadeDuration>k__BackingField: 0
+      Image: {fileID: 0}
+      NormalColor: {r: 0, g: 0, b: 0, a: 0}
+      HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
+      PressedColor: {r: 0, g: 0, b: 0, a: 0}
+      SelectedColor: {r: 0, g: 0, b: 0, a: 0}
+      DisabledColor: {r: 0, g: 0, b: 0, a: 0}
+      ColorMultiplier: 0
+      FadeDuration: 0
     SpriteTransition:
-      <Image>k__BackingField: {fileID: 0}
-      <HighlightedSprite>k__BackingField: {fileID: 0}
-      <PressedSprite>k__BackingField: {fileID: 0}
-      <SelectedSprite>k__BackingField: {fileID: 0}
-      <DisabledSprite>k__BackingField: {fileID: 0}
+      Image: {fileID: 0}
+      HighlightedSprite: {fileID: 0}
+      PressedSprite: {fileID: 0}
+      SelectedSprite: {fileID: 0}
+      DisabledSprite: {fileID: 0}
     AnimationTransition:
       <Animator>k__BackingField: {fileID: 5487841735064110230}
       _normalTrigger: Normal
@@ -3302,12 +3302,7 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects:
-    - {fileID: 631023074603101833}
-    - {fileID: 7448142029300228706}
-    - {fileID: 8714692685460632672}
-    - {fileID: 6912748200634543562}
-    - {fileID: 4215814133722425554}
+    ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -3315,13 +3310,16 @@ MonoBehaviour:
     SerializationNodes:
     - Name: _basicActions
       Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Combat.CombatActionType,
+      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Abilities.IAbility,
         SunsetSystems],[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib
     - Name: comparer
       Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[SunsetSystems.Combat.CombatActionType,
+      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[SunsetSystems.Abilities.IAbility,
         SunsetSystems]], mscorlib
     - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
       Entry: 12
       Data: 0
     - Name: 
@@ -3330,76 +3328,7 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
-    - Name: 
-      Entry: 12
-      Data: 5
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 2
-    - Name: $v
-      Entry: 10
-      Data: 0
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 8
-    - Name: $v
-      Entry: 10
-      Data: 1
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 4
-    - Name: $v
-      Entry: 10
-      Data: 2
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 32
-    - Name: $v
-      Entry: 10
-      Data: 3
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 3
-      Data: 16
-    - Name: $v
-      Entry: 10
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  _defaultActions: 2
+  _abilityButtonPrefab: {fileID: 5760142860369745364, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
 --- !u!1 &7669390228057340736
 GameObject:
   m_ObjectHideFlags: 0
@@ -4787,22 +4716,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reload
       objectReference: {fileID: 0}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<PressedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 636267614, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<DisabledSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 1018659407, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<SelectedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 636267614, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<HighlightedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 636267614, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
     - target: {fileID: 8385339457145965050, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -4815,11 +4728,6 @@ PrefabInstance:
 --- !u!224 &2929563717865048056 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957039446081043022, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-  m_PrefabInstance: {fileID: 121145408843054518}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6912748200634543562 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6791822720029462652, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
   m_PrefabInstance: {fileID: 121145408843054518}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &246037227674730619
@@ -5484,22 +5392,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ranged Attack
       objectReference: {fileID: 0}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<PressedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 621354994, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<DisabledSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -2086032036, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<SelectedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 621354994, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<HighlightedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 621354994, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
     - target: {fileID: 8385339457145965050, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5515,11 +5407,6 @@ PrefabInstance:
 --- !u!224 &1132703280080723538 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957039446081043022, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-  m_PrefabInstance: {fileID: 2788194449503282204}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8714692685460632672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6791822720029462652, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
   m_PrefabInstance: {fileID: 2788194449503282204}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4115299888157192734
@@ -5606,22 +5493,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Melee Attack
       objectReference: {fileID: 0}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<PressedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -625936813, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<DisabledSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -1161766016, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<SelectedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -625936813, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<HighlightedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -625936813, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
     - target: {fileID: 8385339457145965050, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5634,11 +5505,6 @@ PrefabInstance:
 --- !u!224 &1159106000950265936 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957039446081043022, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-  m_PrefabInstance: {fileID: 4115299888157192734}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7448142029300228706 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6791822720029462652, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
   m_PrefabInstance: {fileID: 4115299888157192734}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4613223683389852991
@@ -5835,32 +5701,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Move
       objectReference: {fileID: 0}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<PressedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 848099689, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<DisabledSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -1882247806, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<SelectedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 848099689, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<HighlightedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: 848099689, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
---- !u!1 &631023074603101833 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6791822720029462652, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-  m_PrefabInstance: {fileID: 6233191770239434485}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &9189943955955385531 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957039446081043022, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
@@ -5950,22 +5795,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Feed
       objectReference: {fileID: 0}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<PressedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -1016113475, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<DisabledSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -617727854, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<SelectedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -1016113475, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
-    - target: {fileID: 6964734998283903206, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-      propertyPath: compositeData.Array.data[0].SpriteTransition.<HighlightedSprite>k__BackingField
-      value: 
-      objectReference: {fileID: -1016113475, guid: 0fada1ce6e2b7f9499463fbd4f780580, type: 3}
     - target: {fileID: 8385339457145965050, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -5975,11 +5804,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
---- !u!1 &4215814133722425554 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6791822720029462652, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
-  m_PrefabInstance: {fileID: 7260069064382363822}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5605136472637850336 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2957039446081043022, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}

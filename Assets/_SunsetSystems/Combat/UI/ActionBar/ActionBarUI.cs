@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using SunsetSystems.Abilities;
 using SunsetSystems.Equipment;
 using UnityEngine;
 
@@ -7,33 +8,19 @@ namespace SunsetSystems.Combat.UI
 {
     public class ActionBarUI : SerializedMonoBehaviour
     {
+        [SerializeField, AssetsOnly]
+        private CombatActionSelectorButton _abilityButtonPrefab;
         [SerializeField]
-        private CombatActionType _defaultActions;
-        [SerializeField]
-        private Dictionary<CombatActionType, GameObject> _basicActions = new();
+        private Dictionary<IAbility, GameObject> _basicActions = new();
 
         public void RefreshAvailableActions()
         {
-            var actionFlags = GetAvailableActions();
-            foreach (var key in _basicActions.Keys)
-            {
-                _basicActions[key].SetActive(actionFlags.HasFlag(key));
-            }
+            
         }
 
-        private CombatActionType GetAvailableActions()
+        private IEnumerable<IAbility> GetAvailableActions()
         {
-            CombatActionType result = CombatActionType.None;
-            //result |= _defaultActions;
-            //result |= GetWeaponActions();
-            return result;
-
-            //static CombatActionType GetWeaponActions()
-            //{
-            //    var combatant = CombatManager.Instance.CurrentActiveActor;
-            //    var weapon = combatant.References.GetCachedComponentInChildren<IWeaponManager>().GetSelectedWeapon();
-            //    return weapon.GetWeaponCombatActions();
-            //}
+            return CombatManager.Instance.CurrentActiveActor.GetContext().AbilityUser.GetCoreAbilities();
         }
     }
 }

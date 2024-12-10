@@ -143,10 +143,18 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
-  actionData:
-    <ActionType>k__BackingField: 0
-    <DisciplinePowerData>k__BackingField: {fileID: 0}
+    SerializationNodes:
+    - Name: _actionData
+      Entry: 7
+      Data: SunsetSystems.Combat.SelectedCombatActionData, SunsetSystems
+    - Name: AbilityData
+      Entry: 6
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  _abilityIcon: {fileID: 8385339457145965050}
+  _compositeButton: {fileID: 6964734998283903206}
 --- !u!114 &6964734998283903206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,30 +196,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8091956375655586773}
-  compositeData:
-  - Transition: 2
-    ColorTransition:
-      <Image>k__BackingField: {fileID: 0}
-      <NormalColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <HighlightedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <PressedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <SelectedColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <DisabledColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
-      <ColorMultiplier>k__BackingField: 0
-      <FadeDuration>k__BackingField: 0
-    SpriteTransition:
-      <Image>k__BackingField: {fileID: 8385339457145965050}
-      <HighlightedSprite>k__BackingField: {fileID: 0}
-      <PressedSprite>k__BackingField: {fileID: 0}
-      <SelectedSprite>k__BackingField: {fileID: 0}
-      <DisabledSprite>k__BackingField: {fileID: 0}
-    AnimationTransition:
-      <Animator>k__BackingField: {fileID: 0}
-      _normalTrigger: Normal
-      _highlightedTrigger: Highlighted
-      _pressedTrigger: Pressed
-      _selectedTrigger: Selected
-      _disabledTrigger: Disabled
+  compositeData: []
   OnClick:
     _PersistentCalls:
     - _Target: {fileID: 5760142860369745364}

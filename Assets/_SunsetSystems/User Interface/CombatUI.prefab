@@ -3302,33 +3302,31 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 11400000, guid: 7c4f6bebb0fd4e44f8d7d6511d70cf87, type: 2}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes:
-    - Name: _basicActions
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[SunsetSystems.Abilities.IAbility,
-        SunsetSystems],[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[SunsetSystems.Abilities.IAbility,
-        SunsetSystems]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
+    - Name: _buttonFactory
+      Entry: 10
       Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-  _abilityButtonPrefab: {fileID: 5760142860369745364, guid: 4e96d10bc91fca5498e83350f5db3237, type: 3}
+  _coreButtonsParent: {fileID: 3083835995958379737}
+  OnAbilitySelected:
+    _PersistentCalls:
+    - _Target: {fileID: 3076050279773463816}
+      _MethodName: SelectAbility
+      _PersistentArguments:
+      - _Type: 14
+        _Int: 0
+        _String: SunsetSystems.Abilities.IAbility, SunsetSystems, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        _X: 0
+        _Y: 0
+        _Z: 0
+        _W: 0
+        _Object: {fileID: 0}
 --- !u!1 &7669390228057340736
 GameObject:
   m_ObjectHideFlags: 0

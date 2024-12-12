@@ -1,7 +1,5 @@
 using System;
 using Sirenix.OdinInspector;
-using SunsetSystems.Combat.Grid;
-using SunsetSystems.Entities.Characters;
 using SunsetSystems.Abilities;
 using UnityEngine;
 
@@ -13,8 +11,8 @@ namespace SunsetSystems.Combat
         private CombatManager combatManager;
         [SerializeField, Required]
         private IAbility _defaultAbility;
-        [field: ShowInInspector, ReadOnly]
-        public SelectedCombatActionData SelectedActionData { get; private set; }
+        [ShowInInspector, ReadOnly]
+        public IAbility _selectedAbility;
 
         private Collider gridHit, targetableHit;
 
@@ -22,8 +20,8 @@ namespace SunsetSystems.Combat
         {
             if (actor.GetContext().IsPlayerControlled)
             {
-                this.SelectedActionData = new(_defaultAbility);
-                HandleNewSelectedAction(SelectedActionData);
+                SetSelectedAbility(_defaultAbility);
+                HandleNewSelectedAction(GetSelectedAbility());
             }
         }
 
@@ -31,8 +29,8 @@ namespace SunsetSystems.Combat
         {
             if (actor.GetContext().IsPlayerControlled)
             {
-                this.SelectedActionData = new(_defaultAbility);
-                HandleNewSelectedAction(SelectedActionData);
+                SetSelectedAbility(_defaultAbility);
+                HandleNewSelectedAction(GetSelectedAbility());
             }
         }
 
@@ -40,23 +38,23 @@ namespace SunsetSystems.Combat
         {
             if (actor.GetContext().IsPlayerControlled)
             {
-                CleanupBeforeActionChange(SelectedActionData);
+                CleanupBeforeActionChange(GetSelectedAbility());
             }
         }
 
-        public void OnCombatActionSelected(SelectedCombatActionData actionData)
+        public void OnCombatActionSelected(IAbility newAbility)
         {
-            if (SelectedActionData.AbilityData != actionData.AbilityData)
+            if (GetSelectedAbility() != newAbility)
             {
-                CleanupBeforeActionChange(SelectedActionData);
-                HandleNewSelectedAction(actionData);
+                CleanupBeforeActionChange(GetSelectedAbility());
+                SetSelectedAbility(newAbility);
+                HandleNewSelectedAction(GetSelectedAbility());
             }
-            this.SelectedActionData = actionData;
         }
 
-        private void CleanupBeforeActionChange(SelectedCombatActionData action)
+        private void CleanupBeforeActionChange(IAbility ability)
         {
-            var categories = action.AbilityData.GetCategories();
+            var categories = ability.GetCategories();
             switch (categories)
             {
                 case AbilityCategory when categories.HasFlag(AbilityCategory.Movement):
@@ -72,9 +70,9 @@ namespace SunsetSystems.Combat
             }
         }
 
-        private void HandleNewSelectedAction(SelectedCombatActionData action)
+        private void HandleNewSelectedAction(IAbility ability)
         {
-            var categories = action.AbilityData.GetCategories();
+            var categories = ability.GetCategories();
             switch (categories)
             {
                 case AbilityCategory when categories.HasFlag(AbilityCategory.Movement):
@@ -90,9 +88,9 @@ namespace SunsetSystems.Combat
             }
         }
 
-        public void ExecuteAction(SelectedCombatActionData action)
+        public void ExecuteAction(IAbility ability)
         {
-            combatManager.CurrentActiveActor.GetContext().AbilityUser.ExecuteAbility(action.AbilityData);
+            combatManager.CurrentActiveActor.GetContext().AbilityUser.ExecuteAbility(ability);
         }
 
         public void SetLastGridHit(Collider gridCollider)
@@ -104,17 +102,8 @@ namespace SunsetSystems.Combat
         {
             targetableHit = targetableCollider;
         }
-    }
 
-    [Serializable]
-    public struct SelectedCombatActionData
-    {
-        [SerializeField]
-        public IAbility AbilityData;
-
-        public SelectedCombatActionData(IAbility AbilityData)
-        {
-            this.AbilityData = AbilityData;
-        }
+        private IAbility GetSelectedAbility() => _selectedAbility;
+        private void SetSelectedAbility(IAbility ability) => _selectedAbility = ability;
     }
 }

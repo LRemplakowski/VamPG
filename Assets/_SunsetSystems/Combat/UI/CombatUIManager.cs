@@ -1,5 +1,6 @@
 using System.Collections;
 using Sirenix.OdinInspector;
+using SunsetSystems.Abilities;
 using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
 using UltEvents;
@@ -28,7 +29,7 @@ namespace SunsetSystems.Combat.UI
         private AmmoDisplay _ammoCounter;
 
         [Title("Events")]
-        public UltEvent<SelectedCombatActionData> OnCombatActionSelected;
+        public UltEvent<IAbility> OnCombatActionSelected;
 
         private void OnEnable()
         {
@@ -121,9 +122,9 @@ namespace SunsetSystems.Combat.UI
             weaponManager.OnAmmoChanged -= OnAmmoChanged;
         }
 
-        public void SelectCombatAction(SelectedCombatActionData actionData)
+        public void SelectAbility(IAbility ability)
         {
-            OnCombatActionSelected?.InvokeSafe(actionData);
+            OnCombatActionSelected?.InvokeSafe(ability);
         }
     }
 }

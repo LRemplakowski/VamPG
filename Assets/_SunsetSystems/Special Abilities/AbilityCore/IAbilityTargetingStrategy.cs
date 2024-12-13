@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using SunsetSystems.Combat;
+using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
     public interface IAbilityTargetingStrategy
     {
-        Awaitable<bool> BeginExecute(ITargetingContext context);
+        Awaitable BeginExecute(ITargetingContext context);
     }
 }

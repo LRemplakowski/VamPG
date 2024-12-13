@@ -1,4 +1,5 @@
 using System;
+using SunsetSystems.Abilities.Execution;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Inventory;
@@ -67,7 +68,7 @@ namespace SunsetSystems.Abilities
 
         public override IAbilityExecutionStrategy GetExecutionStrategy()
         {
-            throw new NotImplementedException();
+            return new MoveStrategy(this);
         }
 
         public override IAbilityTargetingStrategy GetTargetingStrategy()

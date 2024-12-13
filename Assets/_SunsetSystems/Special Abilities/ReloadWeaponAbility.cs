@@ -1,4 +1,5 @@
 using System;
+using SunsetSystems.Abilities.Execution;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities;
@@ -56,27 +57,12 @@ namespace SunsetSystems.Abilities
 
         public override IAbilityExecutionStrategy GetExecutionStrategy()
         {
-            throw new NotImplementedException();
+            return new ReloadStrategy();
         }
 
         public override IAbilityTargetingStrategy GetTargetingStrategy()
         {
             throw new NotImplementedException();
-        }
-
-        private class ReloadTargetingStrategy : IAbilityTargetingStrategy
-        {
-            private readonly ReloadWeaponAbility _ability;
-
-            public ReloadTargetingStrategy(ReloadWeaponAbility ability)
-            {
-                _ability = ability;
-            }
-
-            public Awaitable<bool> BeginExecute(ITargetingContext context)
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

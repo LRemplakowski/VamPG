@@ -40,7 +40,7 @@ namespace SunsetSystems.Equipment
         [ShowInInspector, ReadOnly]
         private Dictionary<string, WeaponAmmoData> weaponsAmmoData = new();
 
-        [Title("Events")]
+        [field: Title("Events")]
         [field: SerializeField]
         public UltEvent<ICombatant> OnWeaponChanged { get; set; }
         [field: SerializeField]
@@ -224,7 +224,7 @@ namespace SunsetSystems.Equipment
 
             bool ValidateWeapon(IWeapon weapon)
             {
-                return weapon != null && weapon.WeaponType == AbilityRange.Ranged && weaponsAmmoData.ContainsKey(weapon.ReadableID) is false;
+                return weapon != null && weapon.MaxAmmo > 0 && weaponsAmmoData.ContainsKey(weapon.ReadableID) is false;
             }
         }
 

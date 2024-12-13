@@ -8,7 +8,7 @@ using UnityEngine.AI;
 namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "New Move Ability", menuName = "Sunset Abilities/Move")]
-    public class MoveAbility : BaseAbility
+    public class MoveAbility : AbstractAbilityConfig
     {
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
@@ -63,6 +63,16 @@ namespace SunsetSystems.Abilities
             navManager.CalculatePath(position.WorldPosition, path);
             var movementCost = Mathf.CeilToInt(path.GetPathLength() / gridManager.GetGridScale()) * _baseMovementCost;
             return movementCost;
+        }
+
+        public override IAbilityExecutionStrategy GetExecutionStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAbilityTargetingStrategy GetTargetingStrategy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

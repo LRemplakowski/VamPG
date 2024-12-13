@@ -15,7 +15,7 @@ namespace SunsetSystems.Combat.UI
         private IAbilityButtonFactory _buttonFactory;
         [Title("Events")]
         [InlineProperty]
-        public UltEvent<IAbility> OnAbilitySelected;
+        public UltEvent<IAbilityConfig> OnAbilitySelected;
 
         public void RefreshAvailableActions()
         {
@@ -31,12 +31,12 @@ namespace SunsetSystems.Combat.UI
             }
         }
 
-        private void SelectAbility(IAbility ability)
+        private void SelectAbility(IAbilityConfig ability)
         {
             OnAbilitySelected?.InvokeSafe(ability);
         }
 
-        private IEnumerable<IAbility> GetCoreAbilities()
+        private IEnumerable<IAbilityConfig> GetCoreAbilities()
         {
             return CombatManager.Instance.CurrentActiveActor.GetContext().AbilityUser.GetCoreAbilities();
         }

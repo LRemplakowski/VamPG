@@ -34,7 +34,7 @@ namespace SunsetSystems.AI
         [ShowInInspector, ReadOnly]
         private IGridCell _selectedPosition;
 
-        public IAbility SelectedAbility { get; set; }
+        public IAbilityConfig SelectedAbility { get; set; }
         public ICombatant SelectedTarget { get; set; }
         public IGridCell SelectedPosition { get; set; }
 
@@ -87,7 +87,7 @@ namespace SunsetSystems.AI
             return factionMember.IsHostileTowards(_thisFaction);
         }
 
-        private static bool IsInAbilityRange(IAbility ability, ICombatContext attacker, ICombatant target)
+        private static bool IsInAbilityRange(IAbilityConfig ability, ICombatContext attacker, ICombatant target)
         {
             var abilityUser = attacker.AbilityUser;
             abilityUser.SetCurrentTargetObject(target);
@@ -120,7 +120,7 @@ namespace SunsetSystems.AI
             return lastSelectedPosition != _selectedPosition;
         }
 
-        public bool GetHasEnoughActionPoints(IAbility selectedAbility)
+        public bool GetHasEnoughActionPoints(IAbilityConfig selectedAbility)
         {
             var abilityUser = CombatContext.AbilityUser;
             abilityUser.SetCurrentTargetObject(SelectedTarget);

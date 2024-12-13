@@ -4,6 +4,6 @@ namespace SunsetSystems.Abilities
 {
     public interface IAbilitySource
     {
-        IEnumerable<IAbility> GetAbilities();
+        IEnumerable<IAbilityConfig> GetAbilities();
     }
 }

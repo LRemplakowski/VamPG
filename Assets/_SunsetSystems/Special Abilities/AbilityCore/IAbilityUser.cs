@@ -9,15 +9,15 @@ namespace SunsetSystems.Abilities
 {
     public interface IAbilityUser
     {
-        IEnumerable<IAbility> GetCoreAbilities();
-        IEnumerable<IAbility> GetAllAbilities();
+        IEnumerable<IAbilityConfig> GetCoreAbilities();
+        IEnumerable<IAbilityConfig> GetAllAbilities();
 
         IAbilityContext GetCurrentAbilityContext();
-        bool GetCanAffordAbility(IAbility ability);
-        bool GetHasValidAbilityContext(IAbility ability);
+        bool GetCanAffordAbility(IAbilityConfig ability);
+        bool GetHasValidAbilityContext(IAbilityConfig ability);
 
-        Awaitable<bool> ExecuteAbilityAsync(IAbility ability);
-        bool ExecuteAbility(IAbility ability, Action onCompleted = null);
+        Awaitable<bool> ExecuteAbilityAsync(IAbilityConfig ability);
+        bool ExecuteAbility(IAbilityConfig ability, Action onCompleted = null);
 
         void SetCurrentTargetObject(ITargetable targetable);
     }

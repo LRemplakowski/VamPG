@@ -23,7 +23,7 @@ namespace SunsetSystems.Abilities
         [SerializeField]
         private IBloodPointUser _bloodPointUser;
         [SerializeField]
-        private List<IAbility> _defaultAbilities = new();
+        private List<IAbilityConfig> _defaultAbilities = new();
 
         private AbilityContext _abilityContext;
 
@@ -52,7 +52,7 @@ namespace SunsetSystems.Abilities
             _characterTarget = targetable;
         }
 
-        public bool ExecuteAbility(IAbility ability, Action onCompleted = null)
+        public bool ExecuteAbility(IAbilityConfig ability, Action onCompleted = null)
         {
             if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
             {
@@ -61,7 +61,7 @@ namespace SunsetSystems.Abilities
             return false;
         }
 
-        public async Awaitable<bool> ExecuteAbilityAsync(IAbility ability)
+        public async Awaitable<bool> ExecuteAbilityAsync(IAbilityConfig ability)
         {
             if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
             {
@@ -70,7 +70,7 @@ namespace SunsetSystems.Abilities
             return false;
         }
 
-        private bool ConsumeAbilityCost(IAbility ability)
+        private bool ConsumeAbilityCost(IAbilityConfig ability)
         {
             var cost = ability.GetAbilityCosts(GetCurrentAbilityContext());
             bool result = true;
@@ -85,7 +85,7 @@ namespace SunsetSystems.Abilities
             return _abilityContext;
         }
 
-        public bool GetCanAffordAbility(IAbility ability)
+        public bool GetCanAffordAbility(IAbilityConfig ability)
         {
             var cost = ability.GetAbilityCosts(GetCurrentAbilityContext());
             bool result = true;
@@ -95,29 +95,29 @@ namespace SunsetSystems.Abilities
             return result;
         }
 
-        public bool GetHasValidAbilityContext(IAbility ability)
+        public bool GetHasValidAbilityContext(IAbilityConfig ability)
         {
             return ability.IsContextValidForExecution(GetCurrentAbilityContext());
         }
 
-        public IEnumerable<IAbility> GetAllAbilities()
+        public IEnumerable<IAbilityConfig> GetAllAbilities()
         {
             return GetCoreAbilities().Union(GetAbilitiesFromDisciplines());
         }
 
-        public IEnumerable<IAbility> GetCoreAbilities()
+        public IEnumerable<IAbilityConfig> GetCoreAbilities()
         {
             return _defaultAbilities.Union(GetAbilitiesFromEquipment());
         }
 
-        private IEnumerable<IAbility> GetAbilitiesFromEquipment()
+        private IEnumerable<IAbilityConfig> GetAbilitiesFromEquipment()
         {
             return _references.EquipmentManager.EquippedItems.OfType<IAbilitySource>().SelectMany(item => item.GetAbilities());
         }
 
-        private IEnumerable<IAbility> GetAbilitiesFromDisciplines()
+        private IEnumerable<IAbilityConfig> GetAbilitiesFromDisciplines()
         {
-            return new List<IAbility>();
+            return new List<IAbilityConfig>();
         }
 
         private ITargetable GetCurrentTargetObject()

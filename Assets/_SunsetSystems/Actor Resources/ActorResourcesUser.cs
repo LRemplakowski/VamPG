@@ -38,18 +38,59 @@ namespace SunsetSystems.ActorResources
             }
         }
 
+        private void Start()
+        {
+            InitializeResources();
+        }
+
+        private void InitializeResources()
+        {
+            foreach (var resourceType in _currentResources.Keys)
+            {
+                _currentResources[resourceType] = GetMaxResource(resourceType);
+            }
+        }
+
+        private int GetMaxResource(ActorResource resourceType)
+        {
+            return resourceType switch
+            {
+                ActorResource.ActionPoints => 2,
+                ActorResource.BloodPoints => 5,
+                _ => 0,
+            };
+        }
+
+        private static bool HasAnyBlockers(ICollection<string> blockerCollection) => blockerCollection.Count > 0;
+
+        private static bool HasResourceRemaining(Dictionary<ActorResource, int> resourceMap, ActorResource resource)
+        {
+            return resourceMap.TryGetValue(resource, out var remaining) && remaining > 0;
+        }
+
+        private static int ActionPointsToMovementPoints(int actionPoints) => actionPoints * GameConstants.MOVEMENT_PER_AP;
+
+        private static int MovementPointsToActionPoints(int movementPoints)
+        {
+            int actionPoints = movementPoints / GameConstants.MOVEMENT_PER_AP;
+            actionPoints += movementPoints % GameConstants.MOVEMENT_PER_AP > 0 ? 1 : 0;
+            return actionPoints;
+        }
+
         #region IActionPointUser
+        public int GetCurrentActionPoints()
+        {
+            return _currentResources[ActorResource.ActionPoints];
+        }
+
+        public int GetMaxActionPoints() => GetMaxResource(ActorResource.ActionPoints);
+
         public bool CanUseActionPoints()
         {
             bool result = true;
             result &= !HasAnyBlockers(_apBlockers);
             result &= HasResourceRemaining(_currentResources, ActorResource.ActionPoints);
             return result;
-        }
-
-        public int GetCurrentActionPoints()
-        {
-            return _currentResources[ActorResource.ActionPoints];
         }
 
         public bool UseActionPoints(int amount)
@@ -74,17 +115,19 @@ namespace SunsetSystems.ActorResources
         #endregion
 
         #region IMovementPointUser
+        public int GetCurrentMovementPoints()
+        {
+            return ActionPointsToMovementPoints(_currentResources[ActorResource.ActionPoints]);
+        }
+
+        public int GetMaxMovementPoints() => ActionPointsToMovementPoints(GetMaxResource(ActorResource.ActionPoints));
+
         public bool GetCanMove()
         {
             bool result = true;
             result &= !HasAnyBlockers(_movementBlockers);
             result &= HasResourceRemaining(_currentResources, ActorResource.ActionPoints);
             return result;
-        }
-
-        public int GetCurrentMovementPoints()
-        {
-            return ActionPointsToMovementPoints(_currentResources[ActorResource.ActionPoints]);
         }
 
         public bool UseMovementPoints(int amount)
@@ -114,6 +157,8 @@ namespace SunsetSystems.ActorResources
             return _currentResources[ActorResource.BloodPoints];
         }
 
+        public int GetMaxBloodPoints() => GetMaxResource(ActorResource.BloodPoints);
+
         public bool GetCanUseBloodPoints()
         {
             bool result = true;
@@ -142,22 +187,6 @@ namespace SunsetSystems.ActorResources
             _bloodBlockers.Remove(sourceID);
         }
         #endregion
-
-        private static bool HasAnyBlockers(ICollection<string> blockerCollection) => blockerCollection.Count > 0;
-
-        private static bool HasResourceRemaining(Dictionary<ActorResource, int> resourceMap, ActorResource resource)
-        {
-            return resourceMap.TryGetValue(resource, out var remaining) && remaining > 0;
-        }
-
-        private static int ActionPointsToMovementPoints(int ap) => ap * GameConstants.MOVEMENT_PER_AP;
-
-        private static int MovementPointsToActionPoints(int mp)
-        {
-            int ap = mp / GameConstants.MOVEMENT_PER_AP;
-            ap += mp % GameConstants.MOVEMENT_PER_AP > 0 ? 1 : 0;
-            return ap;
-        }
 
         #region IPersistentComponent
         public object GetComponentPersistenceData()

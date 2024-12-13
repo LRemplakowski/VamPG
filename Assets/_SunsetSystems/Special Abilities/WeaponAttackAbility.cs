@@ -1,5 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
+using SunsetSystems.Abilities.Execution;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
@@ -8,7 +9,7 @@ using UnityEngine;
 namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "New Weapon Ability", menuName = "Sunset Abilities/Weapon Attack")]
-    public sealed class WeaponAttackAbility : BaseAbility
+    public sealed class WeaponAttackAbility : AbstractAbilityConfig
     {
         [SerializeField, BoxGroup("Ability Range"), MinValue(0)]
         private int _baseAbilityRange = 1;
@@ -64,5 +65,15 @@ namespace SunsetSystems.Abilities
         public float GetDelayBetweenAttacks() => _delayBetweenAttacks;
         public AttackType GetAttackType() => _attackType;
         public DamageType GetDamageType() => _damageType;
+
+        public override IAbilityExecutionStrategy GetExecutionStrategy()
+        {
+            return new AttackStrategyFromWeaponAbility(this);
+        }
+
+        public override IAbilityTargetingStrategy GetTargetingStrategy()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

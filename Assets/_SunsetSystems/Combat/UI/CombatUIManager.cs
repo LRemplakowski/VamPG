@@ -29,7 +29,7 @@ namespace SunsetSystems.Combat.UI
         private AmmoDisplay _ammoCounter;
 
         [Title("Events")]
-        public UltEvent<IAbility> OnCombatActionSelected;
+        public UltEvent<IAbilityConfig> OnCombatActionSelected;
 
         private void OnEnable()
         {
@@ -58,8 +58,8 @@ namespace SunsetSystems.Combat.UI
             {
                 UpdateCurrentActorPortrait(combatant);
                 currentActorHealth.UpdateHealthDisplay(combatant);
-                //apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
-                bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
+                apBar.UpdateActiveChunks(combatant.GetContext().ActionPointManager.GetCurrentActionPoints());
+                bpBar.UpdateActiveChunks(combatant.GetContext().BloodPointManager.GetCurrentBloodPoints());
                 disciplineBar.ShowAbilities(combatant);
                 _actionBarUI.RefreshAvailableActions();
                 combatant.OnUsedActionPoint += OnActionUsed;
@@ -75,19 +75,19 @@ namespace SunsetSystems.Combat.UI
         private void OnWeaponChanged(ICombatant combatant)
         {
             _actionBarUI.RefreshAvailableActions();
-            var weaponManager = combatant.References.WeaponManager;
+            var weaponManager = combatant.GetContext().WeaponManager;
             _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
             _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
         }
 
         private void OnActionUsed(ICombatant combatant)
         {
-            //apBar.UpdateActiveChunks((combatant.HasActed ? 0 : 1) + (combatant.HasMoved ? 0 : 1));
+            apBar.UpdateActiveChunks(combatant.GetContext().ActionPointManager.GetCurrentActionPoints());
         }
 
         private void OnBloodPointSpent(ICombatant combatant)
         {
-            bpBar.UpdateActiveChunks(combatant.References.StatsManager.Hunger.GetValue());
+            bpBar.UpdateActiveChunks(combatant.GetContext().BloodPointManager.GetCurrentBloodPoints());
         }
 
         private void OnAmmoChanged(ICombatant combatant, WeaponAmmoData ammoData)
@@ -122,7 +122,7 @@ namespace SunsetSystems.Combat.UI
             weaponManager.OnAmmoChanged -= OnAmmoChanged;
         }
 
-        public void SelectAbility(IAbility ability)
+        public void SelectAbility(IAbilityConfig ability)
         {
             OnCombatActionSelected?.InvokeSafe(ability);
         }

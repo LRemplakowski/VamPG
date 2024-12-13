@@ -10,9 +10,9 @@ namespace SunsetSystems.Combat
         [SerializeField, Required]
         private CombatManager combatManager;
         [SerializeField, Required]
-        private IAbility _defaultAbility;
+        private IAbilityConfig _defaultAbility;
         [ShowInInspector, ReadOnly]
-        public IAbility _selectedAbility;
+        public IAbilityConfig _selectedAbility;
 
         private Collider gridHit, targetableHit;
 
@@ -42,7 +42,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        public void OnCombatActionSelected(IAbility newAbility)
+        public void OnCombatActionSelected(IAbilityConfig newAbility)
         {
             if (GetSelectedAbility() != newAbility)
             {
@@ -52,7 +52,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        private void CleanupBeforeActionChange(IAbility ability)
+        private void CleanupBeforeActionChange(IAbilityConfig ability)
         {
             var categories = ability.GetCategories();
             switch (categories)
@@ -70,7 +70,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        private void HandleNewSelectedAction(IAbility ability)
+        private void HandleNewSelectedAction(IAbilityConfig ability)
         {
             var categories = ability.GetCategories();
             switch (categories)
@@ -88,7 +88,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        public void ExecuteAction(IAbility ability)
+        public void ExecuteAction(IAbilityConfig ability)
         {
             combatManager.CurrentActiveActor.GetContext().AbilityUser.ExecuteAbility(ability);
         }
@@ -103,7 +103,7 @@ namespace SunsetSystems.Combat
             targetableHit = targetableCollider;
         }
 
-        private IAbility GetSelectedAbility() => _selectedAbility;
-        private void SetSelectedAbility(IAbility ability) => _selectedAbility = ability;
+        private IAbilityConfig GetSelectedAbility() => _selectedAbility;
+        private void SetSelectedAbility(IAbilityConfig ability) => _selectedAbility = ability;
     }
 }

@@ -7,17 +7,17 @@ namespace SunsetSystems.Combat.UI
 {
     public interface IAbilityButton
     {
-        void Initialize(IAbility ability, Action<IAbility> selectionDelegate);
+        void Initialize(IAbilityConfig ability, Action<IAbilityConfig> selectionDelegate);
     }
 
     public interface IAbilityButtonFactory
     {
-        IAbilityButton Create(Transform parent, IAbility data, Action<IAbility> selectionDelegate);
+        IAbilityButton Create(Transform parent, IAbilityConfig data, Action<IAbilityConfig> selectionDelegate);
     }
 
     public abstract class AbstractAbilityButtonFactory : SerializedScriptableObject, IAbilityButtonFactory
     {
-        public abstract IAbilityButton Create(Transform parent, IAbility data, Action<IAbility> selectionDelegate);
+        public abstract IAbilityButton Create(Transform parent, IAbilityConfig data, Action<IAbilityConfig> selectionDelegate);
     }
 
     [CreateAssetMenu(fileName = "New Ability Button Facotyr", menuName = "Factories/UI/Ability Button Factory")]
@@ -26,7 +26,7 @@ namespace SunsetSystems.Combat.UI
         [SerializeField, AssetsOnly]
         private IAbilityButton _buttonPrefab;
 
-        public override IAbilityButton Create(Transform parent, IAbility data, Action<IAbility> selectionDelegate)
+        public override IAbilityButton Create(Transform parent, IAbilityConfig data, Action<IAbilityConfig> selectionDelegate)
         {
             var buttonObject = Instantiate(_buttonPrefab as UnityEngine.Object, parent);
             var buttonBehaviour = buttonObject as IAbilityButton;

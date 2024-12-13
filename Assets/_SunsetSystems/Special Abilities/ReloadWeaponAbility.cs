@@ -8,7 +8,7 @@ using UnityEngine;
 namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "New Reload Ability", menuName = "Sunset Abilities/Weapon Reload")]
-    public class ReloadWeaponAbility : BaseAbility
+    public class ReloadWeaponAbility : AbstractAbilityConfig
     {
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsFlag)
         {
@@ -52,6 +52,31 @@ namespace SunsetSystems.Abilities
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
             return new();
+        }
+
+        public override IAbilityExecutionStrategy GetExecutionStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IAbilityTargetingStrategy GetTargetingStrategy()
+        {
+            throw new NotImplementedException();
+        }
+
+        private class ReloadTargetingStrategy : IAbilityTargetingStrategy
+        {
+            private readonly ReloadWeaponAbility _ability;
+
+            public ReloadTargetingStrategy(ReloadWeaponAbility ability)
+            {
+                _ability = ability;
+            }
+
+            public Awaitable<bool> BeginExecute(ITargetingContext context)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

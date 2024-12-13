@@ -31,7 +31,7 @@ namespace SunsetSystems.Inventory.Data
         [SerializeField, ShowIf("ShowRange"), BoxGroup("Weapon")]
         protected int optimalRange = 0, rangeFalloff = 0;
         [SerializeField, BoxGroup("Weapon")]
-        protected List<IAbility> _grantedAbilities = new();
+        protected List<IAbilityConfig> _grantedAbilities = new();
 
         protected override void Awake()
         {
@@ -71,7 +71,7 @@ namespace SunsetSystems.Inventory.Data
             return data;
         }
 
-        public IEnumerable<IAbility> GetAbilities()
+        public IEnumerable<IAbilityConfig> GetAbilities()
         {
             return _grantedAbilities;
         }

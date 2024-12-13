@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
-    public abstract class AbstractAbility : SerializedScriptableObject, IAbility
+    public abstract class AbstractAbilityConfig : SerializedScriptableObject, IAbilityConfig
     {
         [BoxGroup("UI Data")]
         [SerializeField]
@@ -17,9 +17,16 @@ namespace SunsetSystems.Abilities
         [BoxGroup("UI Data")]
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true)]
         private Dictionary<IAbilityUIData.IconState, Sprite> _icons = new();
-        [BoxGroup("Ability Core")]
-        [SerializeField]
+        [SerializeField, BoxGroup("Ability Core")]
         private AbilityCategory _categoryMask;
+        [SerializeField, BoxGroup("Ability Core")]
+        protected TargetableEntityType _validTargetsMask;
+        [SerializeField, BoxGroup("Ability Core")]
+        protected AbilityRange _targetingDistanceType;
+        [SerializeField, BoxGroup("Ability Core")]
+        protected AbilityTargetingType _abilityTargetingType;
+        [SerializeField, BoxGroup("Ability Cost")]
+        protected int _baseMovementCost = 0, _baseAPCost = 0, _baseBloodCost = 0;
 
         private void OnValidate()
         {
@@ -83,18 +90,48 @@ namespace SunsetSystems.Abilities
             return _fallbackDescription;
         }
 
-        public abstract bool IsContextValidForExecution(IAbilityContext context);
+        public bool IsContextValidForExecution(IAbilityContext context)
+        {
+            return IsContextNotNull(context) && HasValidTarget(context, GetValidTargetsMask(context));
+        }
+
+        protected bool IsContextNotNull(IAbilityContext context) => context != null;
+
+        protected virtual AbilityRange GetAbilityRangeType(IAbilityContext context)
+        {
+            return _targetingDistanceType;
+        }
+
+        protected virtual AbilityTargetingType GetAbilityTargetingType(IAbilityContext context)
+        {
+            return _abilityTargetingType;
+        }
+
+        protected virtual int GetActionPointCost(IAbilityContext context)
+        {
+            return _baseAPCost;
+        }
+
+        protected virtual int GetBloodPointCost(IAbilityContext context)
+        {
+            return _baseBloodCost;
+        }
+
+        protected virtual int GetMovementPointCost(IAbilityContext context)
+        {
+            return _baseMovementCost;
+        }
+
+        protected virtual TargetableEntityType GetValidTargetsMask(IAbilityContext context)
+        {
+            return _validTargetsMask;
+        }
 
         protected abstract Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted);
-
-        protected abstract int GetMovementPointCost(IAbilityContext context);
-        protected abstract int GetActionPointCost(IAbilityContext context);
-        protected abstract int GetBloodPointCost(IAbilityContext context);
-
-        protected abstract AbilityTargetingType GetAbilityTargetingType(IAbilityContext context);
+        protected abstract bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask);
+        public abstract IAbilityExecutionStrategy GetExecutionStrategy();
+        public abstract IAbilityTargetingStrategy GetTargetingStrategy();
         protected abstract RangeData GetAbilityRangeData(IAbilityContext context);
-        protected abstract AbilityRange GetAbilityRangeType(IAbilityContext context);
-        protected abstract TargetableEntityType GetValidTargetsMask(IAbilityContext context);
 
         private readonly struct AbilityCost : IAbilityCostData
         {
@@ -102,7 +139,7 @@ namespace SunsetSystems.Abilities
             public int ActionPointCost { get; }
             public int BloodCost { get; }
 
-            public AbilityCost(IAbilityContext context, AbstractAbility ability)
+            public AbilityCost(IAbilityContext context, AbstractAbilityConfig ability)
             {
                 MovementCost = ability.GetMovementPointCost(context);
                 ActionPointCost = ability.GetActionPointCost(context);
@@ -117,7 +154,7 @@ namespace SunsetSystems.Abilities
             private readonly AbilityRange _rangeType;
             private readonly TargetableEntityType _validTargetsFlag;
 
-            public AbilityTargetingData(IAbilityContext context, AbstractAbility ability)
+            public AbilityTargetingData(IAbilityContext context, AbstractAbilityConfig ability)
             {
                 _targetingType = ability.GetAbilityTargetingType(context);
                 _rangeData = ability.GetAbilityRangeData(context);
@@ -152,7 +189,7 @@ namespace SunsetSystems.Abilities
             public readonly Func<string> _localizedName;
             public readonly Func<string> _localizedDescription;
 
-            public AbilityUIData(AbstractAbility ability)
+            public AbilityUIData(AbstractAbilityConfig ability)
             {
                 _icons = new(ability._icons);
                 _localizedName = ability.GetLocalizedName;

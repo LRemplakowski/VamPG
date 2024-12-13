@@ -16,25 +16,25 @@ namespace SunsetSystems.Combat.UI
         private CompositeButton _compositeButton;
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
-        private IAbility _cachedAbility;
-        private Action<IAbility> _selectionDelegate;
+        private IAbilityConfig _cachedAbility;
+        private Action<IAbilityConfig> _selectionDelegate;
 
         public void OnClick()
         {
             _selectionDelegate?.Invoke(_cachedAbility);
         }
 
-        public void Initialize(IAbility ability, Action<IAbility> selectionDelegate)
+        public void Initialize(IAbilityConfig ability, Action<IAbilityConfig> selectionDelegate)
         {
             CacheAbility(ability);
             CacheSelectionDelegate(selectionDelegate);
             SetupButtonVisuals(ability);
         }
 
-        private void CacheAbility(IAbility ability) => _cachedAbility = ability;
-        private void CacheSelectionDelegate(Action<IAbility> selectionDelegate) => _selectionDelegate = selectionDelegate;
+        private void CacheAbility(IAbilityConfig ability) => _cachedAbility = ability;
+        private void CacheSelectionDelegate(Action<IAbilityConfig> selectionDelegate) => _selectionDelegate = selectionDelegate;
 
-        private void SetupButtonVisuals(IAbility ability)
+        private void SetupButtonVisuals(IAbilityConfig ability)
         {
             var abilituGUIdata = ability.GetAbilityUIData();
             _abilityIcon.sprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Default);

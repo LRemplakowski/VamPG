@@ -1,14 +1,20 @@
 ﻿using System;
 using SunsetSystems.Combat;
+using SunsetSystems.Combat.Grid;
+using UnityEngine;
 
 namespace SunsetSystems.Abilities
 {
     public interface ITargetingContext
     {
-        Action<ITargetable> GetTargetHoverDelegate();
+        Action<ITargetable> UpdateTargetDelegate();
+        Action<bool> UpdateTargetingLineVisibilityDelegate();
 
         IAbilityConfig GetSelectedAbility();
-
-        bool TryGetTarget(out ITargetable target);
+        Collider GetLastRaycastCollider();
+        LineRenderer GetTargetingLineRenderer();
+        IAbilityContext GetAbilityContext();
+        ICombatant GetCurrentCombatant();
+        GridManager GetCurrentGrid();
     }
 }

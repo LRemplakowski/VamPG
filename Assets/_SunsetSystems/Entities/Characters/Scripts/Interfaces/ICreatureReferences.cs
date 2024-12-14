@@ -15,6 +15,7 @@ namespace SunsetSystems.Entities.Characters
         StatsManager StatsManager { get; }
         INavigationManager NavigationManager { get; }
         ICombatant CombatBehaviour { get; }
+        ITargetable Targetable { get; }
         IEquipmentManager EquipmentManager { get; }
         IWeaponManager WeaponManager { get; }
         IUMAManager UMAManager { get; }

@@ -12,9 +12,14 @@ namespace SunsetSystems.Combat
         [SerializeField, Required]
         private IAbilityConfig _defaultAbility;
         [ShowInInspector, ReadOnly]
-        public IAbilityConfig _selectedAbility;
+        public IAbilityConfig SelectedAbility;
 
-        private Collider gridHit, targetableHit;
+        private ITargetingContext _targetingContext;
+
+        public void Initialize(ITargetingContext targetingContext)
+        {
+            SetTargetingContext(targetingContext);
+        }
 
         public void OnCombatRoundBegin(ICombatant actor)
         {
@@ -54,38 +59,12 @@ namespace SunsetSystems.Combat
 
         private void CleanupBeforeActionChange(IAbilityConfig ability)
         {
-            var categories = ability.GetCategories();
-            switch (categories)
-            {
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Movement):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Attack):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Support):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Magical):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Debuff):
-                    break;
-            }
+            ability.GetTargetingStrategy().ExecuteTargetingEnd(GetTargetingContext());
         }
 
         private void HandleNewSelectedAction(IAbilityConfig ability)
         {
-            var categories = ability.GetCategories();
-            switch (categories)
-            {
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Movement):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Attack):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Support):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Magical):
-                    break;
-                case AbilityCategory when categories.HasFlag(AbilityCategory.Debuff):
-                    break;
-            }
+            ability.GetTargetingStrategy().ExecuteTargetingBegin(GetTargetingContext());
         }
 
         public void ExecuteAction(IAbilityConfig ability)
@@ -93,17 +72,10 @@ namespace SunsetSystems.Combat
             combatManager.CurrentActiveActor.GetContext().AbilityUser.ExecuteAbility(ability);
         }
 
-        public void SetLastGridHit(Collider gridCollider)
-        {
-            gridHit = gridCollider;
-        }
+        private IAbilityConfig GetSelectedAbility() => SelectedAbility;
+        private void SetSelectedAbility(IAbilityConfig ability) => SelectedAbility = ability;
 
-        public void SetLastTargetableHit(Collider targetableCollider)
-        {
-            targetableHit = targetableCollider;
-        }
-
-        private IAbilityConfig GetSelectedAbility() => _selectedAbility;
-        private void SetSelectedAbility(IAbilityConfig ability) => _selectedAbility = ability;
+        private ITargetingContext GetTargetingContext() => _targetingContext;
+        private void SetTargetingContext(ITargetingContext context) => _targetingContext = context;
     }
 }

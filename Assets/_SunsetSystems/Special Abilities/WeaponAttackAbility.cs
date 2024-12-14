@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities.Execution;
+using SunsetSystems.Abilities.Targeting;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
@@ -33,6 +34,15 @@ namespace SunsetSystems.Abilities
         [BoxGroup("Weapon Ability")]
         [SerializeField]
         private DamageType _damageType = DamageType.Piercing;
+
+        private IAbilityExecutionStrategy _executionStrategy;
+        private IAbilityTargetingStrategy _targetingStrategy;
+
+        private void Awake()
+        {
+            _executionStrategy = new AttackStrategyFromWeaponAbility(this);
+            _targetingStrategy = new TargetCreatureStrategy(this);
+        }
 
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
@@ -68,12 +78,12 @@ namespace SunsetSystems.Abilities
 
         public override IAbilityExecutionStrategy GetExecutionStrategy()
         {
-            return new AttackStrategyFromWeaponAbility(this);
+            return _executionStrategy;
         }
 
         public override IAbilityTargetingStrategy GetTargetingStrategy()
         {
-            throw new NotImplementedException();
+            return _targetingStrategy;
         }
     }
 }

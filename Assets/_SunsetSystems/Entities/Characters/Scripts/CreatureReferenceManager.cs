@@ -20,6 +20,8 @@ namespace SunsetSystems.Entities.Characters
         [field: SerializeField]
         public ICombatant CombatBehaviour { get; private set; }
         [field: SerializeField]
+        public ITargetable Targetable { get; private set; }
+        [field: SerializeField]
         public IEquipmentManager EquipmentManager { get; private set; }
         [field: SerializeField]
         public IWeaponManager WeaponManager { get; private set; }

@@ -39,13 +39,6 @@ namespace SunsetSystems.Abilities
             static bool IsPositionFree(IGridCell cell) => cell.IsFree;
         }
 
-        protected override async Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
-        {
-            var moveAction = new MoveAbilityAction(this, context);
-            await context.SourceActionPerformer.PerformAction(moveAction);
-            onCompleted?.Invoke();
-        }
-
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
             var mover = context.SourceCombatBehaviour.GetContext().MovementManager;

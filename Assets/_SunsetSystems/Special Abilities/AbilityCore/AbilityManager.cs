@@ -54,18 +54,20 @@ namespace SunsetSystems.Abilities
 
         public bool ExecuteAbility(IAbilityConfig ability, Action onCompleted = null)
         {
-            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
+            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability) && ability.IsContextValidForExecution(GetCurrentAbilityContext()))
             {
-                return ability.Execute(GetCurrentAbilityContext(), onCompleted);
+                ability.GetExecutionStrategy().BeginExecute(GetCurrentAbilityContext(), onCompleted);
+                return true;
             }
             return false;
         }
 
         public async Awaitable<bool> ExecuteAbilityAsync(IAbilityConfig ability)
         {
-            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability))
+            if (GetCanAffordAbility(ability) && ConsumeAbilityCost(ability) && ability.IsContextValidForExecution(GetCurrentAbilityContext()))
             {
-                return await ability.ExecuteAsync(GetCurrentAbilityContext());
+                await ability.GetExecutionStrategy().BeginExecute(GetCurrentAbilityContext(), null);
+                return true;
             }
             return false;
         }
@@ -87,6 +89,8 @@ namespace SunsetSystems.Abilities
 
         public bool GetCanAffordAbility(IAbilityConfig ability)
         {
+            if (ability == null)
+                return false;
             var cost = ability.GetAbilityCosts(GetCurrentAbilityContext());
             bool result = true;
             result &= _movementPointUser.GetCurrentMovementPoints() >= cost.MovementCost;

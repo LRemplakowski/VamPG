@@ -45,14 +45,6 @@ namespace SunsetSystems.Abilities
             static bool IsTargetableNotNull(IAbilityContext context) => context.TargetObject != null;
         }
 
-        protected async override Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
-        {
-            var actionPerformer = context.SourceActionPerformer;
-            var shootingAction = new WeaponAbilityAction(this, context);
-            await actionPerformer.PerformAction(shootingAction);
-            onCompleted?.Invoke();
-        }
-
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
             return new()

@@ -89,6 +89,8 @@ namespace SunsetSystems.AI
 
         private static bool IsInAbilityRange(IAbilityConfig ability, ICombatContext attacker, ICombatant target)
         {
+            if (ability == null || target == null || attacker == null)
+                return false;
             var abilityUser = attacker.AbilityUser;
             abilityUser.SetCurrentTargetObject(target);
             var abilityTargetingData = ability.GetTargetingData(abilityUser.GetCurrentAbilityContext());

@@ -40,26 +40,6 @@ namespace SunsetSystems.Abilities
             }
         }
 
-        public bool Execute(IAbilityContext context, Action onCompleted = null)
-        {
-            bool canUse = IsContextValidForExecution(context);
-            if (canUse)
-            {
-                _ = DoExecuteAbility(context, onCompleted);
-            }
-            return canUse;
-        }
-
-        public async Awaitable<bool> ExecuteAsync(IAbilityContext context, Action onCompleted = null)
-        {
-            bool canUse = IsContextValidForExecution(context);
-            if (canUse)
-            {
-                await DoExecuteAbility(context, onCompleted);
-            }
-            return canUse;
-        }
-
         public AbilityCategory GetCategories()
         {
             return _categoryMask;
@@ -127,7 +107,6 @@ namespace SunsetSystems.Abilities
             return _validTargetsMask;
         }
 
-        protected abstract Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted);
         protected abstract bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask);
         public abstract IAbilityExecutionStrategy GetExecutionStrategy();
         public abstract IAbilityTargetingStrategy GetTargetingStrategy();

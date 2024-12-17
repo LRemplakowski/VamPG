@@ -83,13 +83,21 @@ namespace SunsetSystems.Combat
                 return;
             var targetingStrategy = ability.GetTargetingStrategy()
                                     ?? throw new NullReferenceException($"Ability {ability} provided a null Targeting Strategy!");
+            targetingStrategy.RemoveUseAbilityListener(ExecuteSelectedAction);
             targetingStrategy.AddUseAbilityListener(ExecuteSelectedAction);
             targetingStrategy.ExecuteTargetingBegin(GetTargetingContext());
         }
 
         private void ExecuteSelectedAction()
         {
-            ExecuteAction(GetSelectedAbility());
+            var selectedAbility = GetSelectedAbility();
+            _targetingContext.GetCurrentCombatant().GetContext().AbilityUser.ExecuteAbility(selectedAbility, OnFinishedExecution);
+            selectedAbility.GetTargetingStrategy().RemoveUseAbilityListener(ExecuteSelectedAction);
+
+            void OnFinishedExecution()
+            {
+                OnCombatActionSelected(GetSelectedAbility());
+            }
         }
 
         public void ExecuteAction(IAbilityConfig ability)

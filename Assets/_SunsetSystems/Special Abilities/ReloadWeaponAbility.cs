@@ -11,6 +11,9 @@ namespace SunsetSystems.Abilities
     [CreateAssetMenu(fileName = "New Reload Ability", menuName = "Sunset Abilities/Weapon Reload")]
     public class ReloadWeaponAbility : AbstractAbilityConfig
     {
+        private IAbilityExecutionStrategy _executionStrategy;
+        private IAbilityTargetingStrategy _targetingStrategy;
+
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsFlag)
         {
             return IsTargetNotNull(context)
@@ -38,31 +41,13 @@ namespace SunsetSystems.Abilities
             }
         }
 
-        protected override async Awaitable DoExecuteAbility(IAbilityContext context, Action onCompleted)
-        {
-            await Awaitable.MainThreadAsync();
-            var targetCombatContext = (context.TargetObject as IContextProvider<ICombatContext>).GetContext();
-            var weaponManager = targetCombatContext.WeaponManager;
-            var actionPerformer = context.SourceActionPerformer;
-            var reloadAction = new ReloadAction(weaponManager, actionPerformer);
-            await actionPerformer.PerformAction(reloadAction);
-            onCompleted?.Invoke();
-            
-        }
-
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
         {
             return new();
         }
 
-        public override IAbilityExecutionStrategy GetExecutionStrategy()
-        {
-            return new ReloadStrategy();
-        }
+        public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new ReloadStrategy();
 
-        public override IAbilityTargetingStrategy GetTargetingStrategy()
-        {
-            throw new NotImplementedException();
-        }
+        public override IAbilityTargetingStrategy GetTargetingStrategy() => throw new NotImplementedException();
     }
 }

@@ -60,7 +60,7 @@ namespace SunsetSystems.Combat.Grid
             if (_occupiedGridCells.TryAdd(combatant, cellObject))
                 combatant.References.StatsManager.OnCreatureDied += OnOccupierDied;
             else
-                Debug.LogError($"Combatant {combatant} moved into already occupied grid cell! This should not happen!");
+                Debug.LogError($"Combatant {combatant} moved into already occupied grid cell! This should not happen! Grid Cell: {cell.GridPosition}");
             managedGrid.MarkCellDirty(cellObject);
         }
 

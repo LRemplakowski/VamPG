@@ -14,12 +14,14 @@ namespace SunsetSystems.Combat.UI
 
         public void SetAmmoCounterVisible(bool visible)
         {
-            _ammoText.enabled = visible;
+            if (_ammoText)
+                _ammoText.enabled = visible;
         }
 
         public void UpdateAmmoData(WeaponAmmoData ammoData)
         {
-            _ammoText.text = $"{ammoData.CurrentAmmo}/{ammoData.MaxAmmo}";
+            if (_ammoText)
+                _ammoText.text = $"{ammoData.CurrentAmmo}/{ammoData.MaxAmmo}";
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Core;
 using SunsetSystems.Persistence;
@@ -45,7 +46,8 @@ namespace SunsetSystems.ActorResources
 
         private void InitializeResources()
         {
-            foreach (var resourceType in _currentResources.Keys)
+            var keys = _currentResources.Keys.ToList();
+            foreach (var resourceType in keys)
             {
                 _currentResources[resourceType] = GetMaxResource(resourceType);
             }

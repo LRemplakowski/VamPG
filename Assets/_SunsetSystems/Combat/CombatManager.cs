@@ -95,7 +95,7 @@ namespace SunsetSystems.Combat
             Actors = new();
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
             Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
-            CombatBegin?.InvokeSafe(Actors);
+            CombatBegin?.InvokeSafeDynamicFirst(Actors);
             SetCombatUIActive(false);
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             await new WaitForSeconds(1f);
@@ -123,7 +123,7 @@ namespace SunsetSystems.Combat
             CurrentActiveActor = null;
         }
 
-        private static async Task MoveAllCreaturesToNearestGridPosition(IEnumerable<ICombatant> actors, Encounter currentEncounter)
+        private static async Awaitable MoveAllCreaturesToNearestGridPosition(IEnumerable<ICombatant> actors, Encounter currentEncounter)
         {
             List<Task> tasks = new();
             foreach (ICombatant combatant in actors)
@@ -131,7 +131,7 @@ namespace SunsetSystems.Combat
                 Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.Transform.position, false);
                 Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
                 tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager), true));
-                await new WaitForUpdate();
+                await Awaitable.NextFrameAsync();
             }
             await Task.WhenAll(tasks);
         }

@@ -23,7 +23,7 @@ namespace SunsetSystems.Input
         [SerializeField]
         private LayerMask _targetableLayerMask;
 
-        private const int raycastRange = 100;
+        private const float RAYCAST_RANGE = 100;
         private Vector2 _pointerPosition;
 
         private bool _pointerOverGameObject;
@@ -31,9 +31,10 @@ namespace SunsetSystems.Input
 
         private Collider _lastHitCollider;
         private ITargetable _targetableComponent;
+        private bool _targetLocked;
 
-        public delegate void TargetingContextDelegate(ITargetable target);
-        public static event TargetingContextDelegate OnTargetingDataUpdate;
+        public static event Action<ITargetable> OnTargetingDataUpdate;
+        public static event Action<bool> OnTargetLockUpdate;
 
         private ITargetingContext _targetingContext;
 
@@ -53,13 +54,8 @@ namespace SunsetSystems.Input
         {
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false || GameManager.Instance.IsCurrentState(GameState.Combat) is false)
                 SetShowTargetingLine(false);
-            UpdatePointerOverGameObject();
+            SetPointerOverGameObject(EventSystem.current.IsPointerOverGameObject());
             UpdateTargetingLineActive();
-        }
-
-        private void UpdatePointerOverGameObject()
-        {
-            _pointerOverGameObject = EventSystem.current.IsPointerOverGameObject();
         }
 
         private void UpdateTargetingLineActive()
@@ -74,25 +70,18 @@ namespace SunsetSystems.Input
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
             SetPointerPosition(context.ReadValue<Vector2>());
-            CombatManager.Instance.CurrentEncounter.GridManager.ClearHighlightedCell();
-            if (_pointerOverGameObject)
-            {
-                SetLastHitCollider(null);
-                SetCurrentTarget(null);
-                return;
-            }
             Ray ray = Camera.main.ScreenPointToRay(GetPointerPosition());
-            if (Physics.Raycast(ray, out var hit, raycastRange, _targetableLayerMask) && GetLastHitCollider() != hit.collider)
+            if (Physics.Raycast(ray, out var hit, RAYCAST_RANGE, GetRaycastLayerMask()))
             {
                 SetLastHitCollider(hit.collider);
-                _selectedActionManager.SelectedAbility.GetTargetingStrategy().ExecutePointerPosition(GetTargetingContext());
             }
             else
             {
                 SetLastHitCollider(null);
-                SetCurrentTarget(null);
-                SetShowTargetingLine(false);
             }
+            if (GetTargetLocked())
+                return;
+            _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecutePointerPosition(GetTargetingContext());
         }
 
         public void HandlePrimaryAction(InputAction.CallbackContext context)
@@ -101,6 +90,7 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
+            _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecuteTargetSelect(GetTargetingContext());
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
@@ -109,6 +99,7 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
+            _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecuteClearTargetLock(GetTargetingContext());
         }
 
         public void HandleCameraMoveAction(InputAction.CallbackContext context)
@@ -137,6 +128,21 @@ namespace SunsetSystems.Input
         private Collider GetLastHitCollider() => _lastHitCollider;
         private void SetLastHitCollider(Collider collider) => _lastHitCollider = collider;
 
+        private bool GetTargetLocked() => _targetLocked;
+        private void SetTargetLocked(bool locked)
+        {
+            _targetLocked = locked;
+            OnTargetLockUpdate?.Invoke(locked);
+        }
+
+        private LayerMask GetRaycastLayerMask() => _targetableLayerMask;
+
+        private void SetPointerOverGameObject(bool pointerOverGO)
+        {
+            _pointerOverGameObject = pointerOverGO;
+        }
+        private bool GetIsPointerOverGameObject() => _pointerOverGameObject;
+
         private class AbilityTargetingContext : ITargetingContext
         {
             private readonly CombatInputHandler _inputHandler;
@@ -146,45 +152,20 @@ namespace SunsetSystems.Input
                 _inputHandler = inputHandler;
             }
 
-            public IAbilityContext GetAbilityContext()
-            {
-                return GetCurrentCombatant().GetContext().AbilityUser.GetCurrentAbilityContext();
-            }
+            public IAbilityContext GetAbilityContext() => GetCurrentCombatant().GetContext().AbilityUser.GetCurrentAbilityContext();
+            public ICombatant GetCurrentCombatant() => CombatManager.Instance.CurrentActiveActor;
+            public ITargetable GetCurrentTarget() => _inputHandler.GetCurrentTarget();
+            public GridManager GetCurrentGrid() => CombatManager.Instance.CurrentEncounter.GridManager;
+            public Collider GetLastRaycastCollider() => _inputHandler.GetLastHitCollider();
+            public IAbilityConfig GetSelectedAbility() => _inputHandler._selectedActionManager.GetSelectedAbility();
+            public LineRenderer GetTargetingLineRenderer() => _inputHandler.GetTargetingLineRenderer();
 
-            public ICombatant GetCurrentCombatant()
-            {
-                return CombatManager.Instance.CurrentActiveActor;
-            }
+            public bool IsPointerOverUI() => _inputHandler.GetIsPointerOverGameObject();
+            public bool IsTargetLocked() => _inputHandler.GetTargetLocked();
 
-            public GridManager GetCurrentGrid()
-            {
-                return CombatManager.Instance.CurrentEncounter.GridManager;
-            }
-
-            public Collider GetLastRaycastCollider()
-            {
-                return _inputHandler.GetLastHitCollider();
-            }
-
-            public IAbilityConfig GetSelectedAbility()
-            {
-                return _inputHandler._selectedActionManager.SelectedAbility;
-            }
-
-            public LineRenderer GetTargetingLineRenderer()
-            {
-                return _inputHandler.GetTargetingLineRenderer();
-            }
-
-            public Action<ITargetable> UpdateTargetDelegate()
-            {
-                return _inputHandler.SetCurrentTarget;
-            }
-
-            public Action<bool> UpdateTargetingLineVisibilityDelegate()
-            {
-                return _inputHandler.SetShowTargetingLine;
-            }
+            public Action<bool> TargetLockSetDelegate() => _inputHandler.SetTargetLocked;
+            public Action<ITargetable> TargetUpdateDelegate() => _inputHandler.SetCurrentTarget;
+            public Action<bool> TargetingLineUpdateDelegate() => _inputHandler.SetShowTargetingLine;
         }
     }
 }

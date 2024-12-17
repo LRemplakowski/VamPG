@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
-using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Combat.UI
@@ -13,9 +13,8 @@ namespace SunsetSystems.Combat.UI
         private Transform _coreButtonsParent;
         [SerializeField, AssetsOnly]
         private IAbilityButtonFactory _buttonFactory;
-        [Title("Events")]
-        [InlineProperty]
-        public UltEvent<IAbilityConfig> OnAbilitySelected;
+
+        public static event Action<IAbilityConfig> OnAbilitySelected;
 
         public void RefreshAvailableActions()
         {
@@ -33,7 +32,7 @@ namespace SunsetSystems.Combat.UI
 
         private void SelectAbility(IAbilityConfig ability)
         {
-            OnAbilitySelected?.InvokeSafe(ability);
+            OnAbilitySelected?.Invoke(ability);
         }
 
         private IEnumerable<IAbilityConfig> GetCoreAbilities()

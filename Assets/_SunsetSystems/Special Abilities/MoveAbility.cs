@@ -1,5 +1,6 @@
 using System;
 using SunsetSystems.Abilities.Execution;
+using SunsetSystems.Abilities.Targeting;
 using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Inventory;
@@ -11,6 +12,9 @@ namespace SunsetSystems.Abilities
     [CreateAssetMenu(fileName = "New Move Ability", menuName = "Sunset Abilities/Move")]
     public class MoveAbility : AbstractAbilityConfig
     {
+        private IAbilityExecutionStrategy _executionStrategy;
+        private IAbilityTargetingStrategy _targetingStrategy;
+
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
             return IsTargetNotNull(context)
@@ -66,14 +70,7 @@ namespace SunsetSystems.Abilities
             return movementCost;
         }
 
-        public override IAbilityExecutionStrategy GetExecutionStrategy()
-        {
-            return new MoveStrategy(this);
-        }
-
-        public override IAbilityTargetingStrategy GetTargetingStrategy()
-        {
-            throw new NotImplementedException();
-        }
+        public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new MoveStrategy(this);
+        public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new TargetGridStrategy(this);
     }
 }

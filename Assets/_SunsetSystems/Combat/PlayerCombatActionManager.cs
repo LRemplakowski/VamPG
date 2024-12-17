@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
+using SunsetSystems.Combat.UI;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
@@ -12,9 +13,19 @@ namespace SunsetSystems.Combat
         [SerializeField, Required]
         private IAbilityConfig _defaultAbility;
         [ShowInInspector, ReadOnly]
-        public IAbilityConfig SelectedAbility;
+        private IAbilityConfig _selectedAbility;
 
         private ITargetingContext _targetingContext;
+
+        private void Awake()
+        {
+            ActionBarUI.OnAbilitySelected += OnCombatActionSelected;
+        }
+
+        private void OnDestroy()
+        {
+            ActionBarUI.OnAbilitySelected -= OnCombatActionSelected;
+        }
 
         public void Initialize(ITargetingContext targetingContext)
         {
@@ -25,6 +36,7 @@ namespace SunsetSystems.Combat
         {
             if (actor.GetContext().IsPlayerControlled)
             {
+                CleanupBeforeActionChange(GetSelectedAbility());
                 SetSelectedAbility(_defaultAbility);
                 HandleNewSelectedAction(GetSelectedAbility());
             }
@@ -34,6 +46,7 @@ namespace SunsetSystems.Combat
         {
             if (actor.GetContext().IsPlayerControlled)
             {
+                CleanupBeforeActionChange(GetSelectedAbility());
                 SetSelectedAbility(_defaultAbility);
                 HandleNewSelectedAction(GetSelectedAbility());
             }
@@ -49,22 +62,34 @@ namespace SunsetSystems.Combat
 
         public void OnCombatActionSelected(IAbilityConfig newAbility)
         {
-            if (GetSelectedAbility() != newAbility)
-            {
-                CleanupBeforeActionChange(GetSelectedAbility());
-                SetSelectedAbility(newAbility);
-                HandleNewSelectedAction(GetSelectedAbility());
-            }
+            CleanupBeforeActionChange(GetSelectedAbility());
+            SetSelectedAbility(newAbility);
+            HandleNewSelectedAction(GetSelectedAbility());
         }
 
         private void CleanupBeforeActionChange(IAbilityConfig ability)
         {
-            ability.GetTargetingStrategy().ExecuteTargetingEnd(GetTargetingContext());
+            if (ability == null)
+                return;
+            var targetingStrategy = ability.GetTargetingStrategy()
+                                    ?? throw new NullReferenceException($"Ability {ability} provided a null Targeting Strategy!");
+            targetingStrategy.RemoveUseAbilityListener(ExecuteSelectedAction);
+            targetingStrategy.ExecuteTargetingEnd(GetTargetingContext());
         }
 
         private void HandleNewSelectedAction(IAbilityConfig ability)
         {
-            ability.GetTargetingStrategy().ExecuteTargetingBegin(GetTargetingContext());
+            if (ability == null)
+                return;
+            var targetingStrategy = ability.GetTargetingStrategy()
+                                    ?? throw new NullReferenceException($"Ability {ability} provided a null Targeting Strategy!");
+            targetingStrategy.AddUseAbilityListener(ExecuteSelectedAction);
+            targetingStrategy.ExecuteTargetingBegin(GetTargetingContext());
+        }
+
+        private void ExecuteSelectedAction()
+        {
+            ExecuteAction(GetSelectedAbility());
         }
 
         public void ExecuteAction(IAbilityConfig ability)
@@ -72,8 +97,8 @@ namespace SunsetSystems.Combat
             combatManager.CurrentActiveActor.GetContext().AbilityUser.ExecuteAbility(ability);
         }
 
-        private IAbilityConfig GetSelectedAbility() => SelectedAbility;
-        private void SetSelectedAbility(IAbilityConfig ability) => SelectedAbility = ability;
+        public IAbilityConfig GetSelectedAbility() => _selectedAbility;
+        private void SetSelectedAbility(IAbilityConfig ability) => _selectedAbility = ability;
 
         private ITargetingContext GetTargetingContext() => _targetingContext;
         private void SetTargetingContext(ITargetingContext context) => _targetingContext = context;

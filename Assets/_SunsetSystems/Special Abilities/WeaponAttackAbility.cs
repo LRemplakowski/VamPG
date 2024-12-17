@@ -38,12 +38,6 @@ namespace SunsetSystems.Abilities
         private IAbilityExecutionStrategy _executionStrategy;
         private IAbilityTargetingStrategy _targetingStrategy;
 
-        private void Awake()
-        {
-            _executionStrategy = new AttackStrategyFromWeaponAbility(this);
-            _targetingStrategy = new TargetCreatureStrategy(this);
-        }
-
         protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
         {
             return IsTargetableNotNull(context);
@@ -76,14 +70,8 @@ namespace SunsetSystems.Abilities
         public AttackType GetAttackType() => _attackType;
         public DamageType GetDamageType() => _damageType;
 
-        public override IAbilityExecutionStrategy GetExecutionStrategy()
-        {
-            return _executionStrategy;
-        }
+        public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new AttackStrategyFromWeaponAbility(this);
 
-        public override IAbilityTargetingStrategy GetTargetingStrategy()
-        {
-            return _targetingStrategy;
-        }
+        public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new TargetCreatureStrategy(this);
     }
 }

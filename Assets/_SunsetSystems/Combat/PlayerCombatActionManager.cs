@@ -20,11 +20,17 @@ namespace SunsetSystems.Combat
         private void Awake()
         {
             ActionBarUI.OnAbilitySelected += OnCombatActionSelected;
+            CombatManager.OnCombatRoundBegin += OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd += OnCombatRoundEnd;
+            CombatManager.OnFullTurnCompleted += OnFullTurnCompleted;
         }
 
         private void OnDestroy()
         {
             ActionBarUI.OnAbilitySelected -= OnCombatActionSelected;
+            CombatManager.OnCombatRoundBegin -= OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd -= OnCombatRoundEnd;
+            CombatManager.OnFullTurnCompleted -= OnFullTurnCompleted;
         }
 
         public void Initialize(ITargetingContext targetingContext)

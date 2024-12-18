@@ -50,15 +50,15 @@ namespace SunsetSystems.Equipment
 
         private void OnEnable()
         {
-            CombatManager.Instance.CombatBegin += OnCombatStart;
-            CombatManager.Instance.CombatEnd += OnCombatEnd;
+            CombatManager.OnCombatStart += OnCombatStart;
+            CombatManager.OnCombatEnd += OnCombatEnd;
             WeaponSetSelectorButton.OnWeaponSelected += OnWeaponSelected;
         }
 
         private void OnDisable()
         {
-            CombatManager.Instance.CombatBegin -= OnCombatStart;
-            CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            CombatManager.OnCombatStart -= OnCombatStart;
+            CombatManager.OnCombatEnd -= OnCombatEnd;
             WeaponSetSelectorButton.OnWeaponSelected -= OnWeaponSelected;
         }
 
@@ -92,7 +92,7 @@ namespace SunsetSystems.Equipment
             }
         }
 
-        public void OnCombatEnd()
+        public void OnCombatEnd(IEnumerable<ICombatant> _)
         {
             ReleaseCurrentWeaponInstance();
         }

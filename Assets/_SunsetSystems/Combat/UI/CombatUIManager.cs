@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
 using SunsetSystems.Entities.Interfaces;
@@ -28,22 +29,35 @@ namespace SunsetSystems.Combat.UI
         [SerializeField, Required]
         private AmmoDisplay _ammoCounter;
 
-        [Title("Events")]
-        public UltEvent<IAbilityConfig> OnCombatActionSelected;
+        private void Awake()
+        {
+            CombatManager.OnCombatStart += OnCombatBegin;
+            CombatManager.OnCombatEnd += OnCombatEnd;
+            CombatManager.OnCombatRoundBegin += OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd += OnCombatRoundEnd;
+        }
 
         private void OnEnable()
         {
             currentActorPortrait.color = Color.clear;
         }
 
-        public void OnCombatBegin()
+        private void OnDestroy()
+        {
+            CombatManager.OnCombatStart -= OnCombatBegin;
+            CombatManager.OnCombatEnd -= OnCombatEnd;
+            CombatManager.OnCombatRoundBegin -= OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd -= OnCombatRoundEnd;
+        }
+
+        public void OnCombatBegin(IEnumerable<ICombatant> _)
         {
             _combatCanvasGroup.interactable = false;
             _combatCanvasGroup.blocksRaycasts = true;
             _combatCanvasGroup.alpha = 1f;
         }
 
-        public void OnCombatEnd()
+        public void OnCombatEnd(IEnumerable<ICombatant> _)
         {
             _combatCanvasGroup.interactable = false;
             _combatCanvasGroup.blocksRaycasts = false;
@@ -115,16 +129,13 @@ namespace SunsetSystems.Combat.UI
 
         public void OnCombatRoundEnd(ICombatant combatant)
         {
+            var context = combatant.GetContext();
+            
             combatant.OnUsedActionPoint -= OnActionUsed;
             combatant.OnSpentBloodPoint -= OnBloodPointSpent;
             var weaponManager = combatant.GetContext().WeaponManager;
             weaponManager.OnWeaponChanged -= OnWeaponChanged;
             weaponManager.OnAmmoChanged -= OnAmmoChanged;
-        }
-
-        public void SelectAbility(IAbilityConfig ability)
-        {
-            OnCombatActionSelected?.InvokeSafe(ability);
         }
     }
 }

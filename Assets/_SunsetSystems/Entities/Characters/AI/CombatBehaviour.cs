@@ -39,10 +39,10 @@ namespace SunsetSystems.Combat
         #region Unity Messages
         private void OnEnable()
         {
-            CombatManager.Instance.CombatBegin += OnCombatBegin;
-            CombatManager.Instance.CombatRoundBegin += OnCombatRoundBegin;
-            CombatManager.Instance.CombatRoundEnd += OnCombatRoundEnd;
-            CombatManager.Instance.CombatEnd += OnCombatEnd;
+            CombatManager.OnCombatStart += OnCombatBegin;
+            CombatManager.OnCombatRoundBegin += OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd += OnCombatRoundEnd;
+            CombatManager.OnCombatEnd += OnCombatEnd;
         }
 
         private void Start()
@@ -52,21 +52,19 @@ namespace SunsetSystems.Combat
 
         private void OnDisable()
         {
-            CombatManager.Instance.CombatRoundBegin -= OnCombatRoundBegin;
-            CombatManager.Instance.CombatRoundEnd -= OnCombatRoundEnd;
-            CombatManager.Instance.CombatBegin -= OnCombatBegin;
-            CombatManager.Instance.CombatEnd -= OnCombatEnd;
+            CombatManager.OnCombatRoundBegin -= OnCombatRoundBegin;
+            CombatManager.OnCombatRoundEnd -= OnCombatRoundEnd;
+            CombatManager.OnCombatStart -= OnCombatBegin;
+            CombatManager.OnCombatEnd -= OnCombatEnd;
         }
 
         private void Update()
         {
-            if (CombatManager.Instance.IsCurrentActiveActor(this))
-            {
-                if (HasActionsQueued is false && CanMove(this) is false && CanAct(this) is false && GetContext().IsPlayerControlled is false)
-                {
-                    SignalEndTurn();
-                }
-            }
+            if (!CombatManager.Instance.IsCurrentActiveActor(this))
+                return;
+            if (HasActionsQueued || CanMove(this) || CanAct(this) || GetContext().IsPlayerControlled)
+                return;
+            SignalEndTurn();
 
             static bool CanMove(ICombatant combatant) => combatant.GetContext().MovementManager.GetCanMove();
             static bool CanAct(ICombatant combatant) => combatant.GetContext().ActionPointManager.CanUseActionPoints();
@@ -82,7 +80,7 @@ namespace SunsetSystems.Combat
             }
         }
 
-        private void OnCombatEnd()
+        private void OnCombatEnd(IEnumerable<ICombatant> _)
         {
             _animationController.SetCombatAnimationsActive(false);
         }
@@ -126,8 +124,6 @@ namespace SunsetSystems.Combat
         public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
 
         [field: Title("Events")]
-        [field: SerializeField]
-        public UltEvent<ICombatant> OnChangedGridPosition { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
         [field: SerializeField]

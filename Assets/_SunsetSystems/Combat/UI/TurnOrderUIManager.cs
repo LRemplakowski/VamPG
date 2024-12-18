@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
-using SunsetSystems.Entities.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,15 +24,21 @@ namespace SunsetSystems.Combat.UI
         private void OnEnable()
         {
             if (animatePortraitArrows != null)
+            {
                 StopCoroutine(animatePortraitArrows);
+            }
             animatePortraitArrows = AnimateArrows();
             StartCoroutine(animatePortraitArrows);
+            CombatManager.OnCombatRoundBegin += OnCombatRoundBegin;
         }
 
         private void OnDisable()
         {
             if (animatePortraitArrows != null)
+            {
                 StopCoroutine(animatePortraitArrows);
+            }
+            CombatManager.OnCombatRoundBegin -= OnCombatRoundBegin;
         }
 
         private void Start()
@@ -42,7 +47,7 @@ namespace SunsetSystems.Combat.UI
             turnOrderPortraits.ForEach(p => p.transform.parent.gameObject.SetActive(false));
         }
 
-        public async void OnCombatRoundBegin()
+        public async void OnCombatRoundBegin(ICombatant _)
         {
             await UpdatePortraits();
         }
@@ -58,7 +63,9 @@ namespace SunsetSystems.Combat.UI
             for (int i = 0; i < turnOrderPortraits.Count; i++)
             {
                 if (combatantsInOrder.Count <= i)
+                {
                     turnOrderPortraits[i].transform.parent.gameObject.SetActive(false);
+                }
             }
             for (int i = 0; i < turnOrderPortraits.Count; i++)
             {
@@ -72,7 +79,9 @@ namespace SunsetSystems.Combat.UI
                     image.sprite = combatantsInOrder[i].References.CreatureData.Portrait;
                     image.transform.parent.gameObject.SetActive(true);
                     if (!firstIteration)
+                    {
                         await Task.Delay(500);
+                    }
                 }
             }
             firstIteration = true;
@@ -94,7 +103,9 @@ namespace SunsetSystems.Combat.UI
                     yield return null;
                 }
                 if (i <= 0)
+                {
                     i = animatedArrows.Count;
+                }
             }
         }
     }

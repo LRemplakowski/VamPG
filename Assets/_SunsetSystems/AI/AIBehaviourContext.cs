@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities;
@@ -32,10 +33,10 @@ namespace SunsetSystems.AI
         private ICombatContext CombatContext => _combatContextSource.GetContext();
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
-        private IGridCell _selectedPosition;
-
         public IAbilityConfig SelectedAbility { get; set; }
+        [ShowInInspector, ReadOnly]
         public ICombatant SelectedTarget { get; set; }
+        [ShowInInspector, ReadOnly]
         public IGridCell SelectedPosition { get; set; }
 
         private CombatManager _combatManager;
@@ -65,6 +66,11 @@ namespace SunsetSystems.AI
         public bool IsInCover()
         {
             return CombatContext.IsInCover;
+        }
+
+        public IEnumerable<ICombatant> GetAllHostileToMe()
+        {
+            return _combatManager.Actors.Where(actor => actor is IFactionMember factionMember && factionMember.IsHostileTowards(_combatBehaviour as IFactionMember));
         }
 
         public bool IsCurrentTargetInAbilityRange()
@@ -111,7 +117,7 @@ namespace SunsetSystems.AI
 
         public bool SelectNextPosition()
         {
-            var lastSelectedPosition = _selectedPosition;
+            var lastSelectedPosition = SelectedPosition;
             var movementRange = _movementPointUser.GetCurrentMovementPoints();
             var gridManager = _combatManager.CurrentEncounter.GridManager;
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
@@ -119,7 +125,7 @@ namespace SunsetSystems.AI
             {
                 lastSelectedPosition = positionsInRange.GetRandom();
             }
-            return lastSelectedPosition != _selectedPosition;
+            return lastSelectedPosition != SelectedPosition;
         }
 
         public bool GetHasEnoughActionPoints(IAbilityConfig selectedAbility)

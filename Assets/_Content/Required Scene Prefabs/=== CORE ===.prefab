@@ -4384,100 +4384,15 @@ MonoBehaviour:
     SerializationNodes: []
   _combatUICanvasGroup: {fileID: 7351497019749522866}
   CombatBegin:
-    _PersistentCalls:
-    - _Target: {fileID: 7596040335593507918}
-      _MethodName: OnCombatBegin
-      _PersistentArguments: []
-    - _Target: {fileID: 3126255942404792931}
-      _MethodName: OnCombatBegin
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: System.Collections.Generic.IEnumerable`1[[SunsetSystems.Combat.ICombatant,
-          SunsetSystems, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]],
-          mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
+    _PersistentCalls: []
   CombatEnd:
-    _PersistentCalls:
-    - _Target: {fileID: 7596040335593507918}
-      _MethodName: OnCombatEnd
-      _PersistentArguments: []
-    - _Target: {fileID: 3126255942404792931}
-      _MethodName: OnCombatEnd
-      _PersistentArguments: []
+    _PersistentCalls: []
   CombatRoundBegin:
-    _PersistentCalls:
-    - _Target: {fileID: 7596040335593507918}
-      _MethodName: OnCombatRoundBegin
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
-    - _Target: {fileID: 4065193537741608299}
-      _MethodName: OnCombatRoundBegin
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
-    - _Target: {fileID: 6878452909716283678}
-      _MethodName: OnCombatRoundBegin
-      _PersistentArguments: []
+    _PersistentCalls: []
   CombatRoundEnd:
-    _PersistentCalls:
-    - _Target: {fileID: 4065193537741608299}
-      _MethodName: OnCombatRoundEnd
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
-    - _Target: {fileID: 7596040335593507918}
-      _MethodName: OnCombatRoundEnd
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
+    _PersistentCalls: []
   OnFullTurnCompleted:
-    _PersistentCalls:
-    - _Target: {fileID: 4065193537741608299}
-      _MethodName: OnFullTurnCompleted
-      _PersistentArguments:
-      - _Type: 14
-        _Int: 0
-        _String: SunsetSystems.Combat.ICombatant, SunsetSystems, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-        _X: 0
-        _Y: 0
-        _Z: 0
-        _W: 0
-        _Object: {fileID: 0}
+    _PersistentCalls: []
 --- !u!1 &2421734508816519914
 GameObject:
   m_ObjectHideFlags: 0
@@ -13364,9 +13279,6 @@ MonoBehaviour:
     - Name: _defaultAbility
       Entry: 10
       Data: 0
-    - Name: SelectedAbility
-      Entry: 6
-      Data: 
   combatManager: {fileID: 2354639990339636469}
 --- !u!1 &6625142782829519866
 GameObject:
@@ -18835,7 +18747,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 596076449638386105, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: field of view
-      value: 60.000004
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1106735498291519931, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
@@ -18987,31 +18899,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 34.12
+      value: -2.671088
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.92
+      value: 8.166514
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1040.78
+      value: -3.082875
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8944778
+      value: 0.8099856
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.32808957
+      value: 0.47096986
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.285176
+      value: 0.30208868
       objectReference: {fileID: 0}
     - target: {fileID: 8554691751661220614, guid: 822dd1e947124ec4998b5d4f2aee95ec, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.104600996
+      value: -0.17565086
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20085,10 +19997,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 137642054197031126, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 137642054197031126, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
     - target: {fileID: 518829265576291329, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -20532,31 +20440,6 @@ PrefabInstance:
     - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
       propertyPath: serializationData.SerializedFormat
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.data[0]._Target
-      value: 
-      objectReference: {fileID: 4065193537741608299}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.data[0]._MethodName
-      value: OnCombatActionSelected
-      objectReference: {fileID: 0}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.data[0]._PersistentArguments.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._Type
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-      propertyPath: OnCombatActionSelected._PersistentCalls.Array.data[0]._PersistentArguments.Array.data[0]._String
-      value: SunsetSystems.Abilities.IAbility, SunsetSystems, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
       objectReference: {fileID: 0}
     - target: {fileID: 3112217348959333754, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
       propertyPath: serializationData.Prefab
@@ -21200,33 +21083,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 959518495206972224, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
   m_PrefabInstance: {fileID: 4889463466445007174}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6878452909716283678 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2067136167065700440, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-  m_PrefabInstance: {fileID: 4889463466445007174}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fda4145d8ddcaaa439b667180eca1add, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!225 &7351497019749522866 stripped
 CanvasGroup:
   m_CorrespondingSourceObject: {fileID: 2728933472670790900, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
   m_PrefabInstance: {fileID: 4889463466445007174}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7596040335593507918 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3076050279773463816, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
-  m_PrefabInstance: {fileID: 4889463466445007174}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a5c155cffbe67a48a3e9a82b9019dbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &6024187706260284529
 PrefabInstance:
   m_ObjectHideFlags: 0

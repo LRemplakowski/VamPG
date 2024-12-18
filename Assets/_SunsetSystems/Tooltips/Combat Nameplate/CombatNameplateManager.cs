@@ -11,6 +11,18 @@ namespace SunsetSystems.Tooltips
         [ShowInInspector, ReadOnly]
         private Dictionary<ICombatant, ITooltipContext> _nameplateMap = new();
 
+        private void Awake()
+        {
+            CombatManager.OnCombatStart += OnCombatBegin;
+            CombatManager.OnCombatEnd += OnCombatEnd;
+        }
+
+        private void OnDestroy()
+        {
+            CombatManager.OnCombatStart -= OnCombatBegin;
+            CombatManager.OnCombatEnd -= OnCombatEnd;
+        }
+
         public void OnCombatBegin(IEnumerable<ICombatant> combatants)
         {
             foreach (var combatant in combatants)
@@ -30,7 +42,7 @@ namespace SunsetSystems.Tooltips
                 RefreshTooltip(nameplateInstance.TooltipSource);
         }
 
-        public void OnCombatEnd()
+        public void OnCombatEnd(IEnumerable<ICombatant> _)
         {
             foreach (var kvpair in _nameplateMap)
             {

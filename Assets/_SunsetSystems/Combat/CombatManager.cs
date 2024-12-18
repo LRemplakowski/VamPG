@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,12 +26,11 @@ namespace SunsetSystems.Combat
         public List<ICombatant> Actors { get; private set; }
         public List<ICombatant> LivingActors => Actors.FindAll(a => a.GetContext().IsAlive);
 
-        [Title("Events")]
-        public UltEvent<IEnumerable<ICombatant>> CombatBegin;
-        public UltEvent CombatEnd;
-        public UltEvent<ICombatant> CombatRoundBegin;
-        public UltEvent<ICombatant> CombatRoundEnd;
-        public UltEvent<ICombatant> OnFullTurnCompleted;
+        public static event Action<IEnumerable<ICombatant>> OnCombatStart;
+        public static event Action<IEnumerable<ICombatant>> OnCombatEnd;
+        public static event Action<ICombatant> OnCombatRoundBegin;
+        public static event Action<ICombatant> OnCombatRoundEnd;
+        public static event Action<ICombatant> OnFullTurnCompleted;
 
         private int turnCounter;
 
@@ -51,7 +51,7 @@ namespace SunsetSystems.Combat
             Instance = this;
         }
 
-        public void SetCurrentActiveActor(int index)
+        private void SetCurrentActiveActor(int index)
         {
             ICombatant c = null;
             var livingActors = LivingActors;
@@ -68,7 +68,7 @@ namespace SunsetSystems.Combat
         {
             if (CurrentActiveActor != null)
             {
-                CombatRoundEnd?.Invoke(CurrentActiveActor);
+                OnCombatRoundEnd?.Invoke(CurrentActiveActor);
                 Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " finished round " + turnCounter + "!");
                 int index = Actors.IndexOf(CurrentActiveActor);
                 SetCurrentActiveActor(++index < LivingActors.Count ? index : 0);
@@ -83,7 +83,7 @@ namespace SunsetSystems.Combat
                 turnCounter++;
                 OnFullTurnCompleted?.Invoke(CurrentActiveActor);
             }
-            CombatRoundBegin?.InvokeSafeDynamicFirst(CurrentActiveActor);
+            OnCombatRoundBegin?.Invoke(CurrentActiveActor);
             SetCombatUIActive(IsActiveActorPlayerControlled());
             Debug.Log("Combat Manager: " + CurrentActiveActor.References.GameObject.name + " begins round " + turnCounter + "!");
         }
@@ -95,7 +95,7 @@ namespace SunsetSystems.Combat
             Actors = new();
             Actors.AddRange(PartyManager.Instance.ActiveParty.Select(c => c.References.CombatBehaviour));
             Actors.AddRange(encounter.Creatures.FindAll(c => c != null).Select(c => c.References.CombatBehaviour));
-            CombatBegin?.InvokeSafeDynamicFirst(Actors);
+            OnCombatStart?.Invoke(Actors);
             SetCombatUIActive(false);
             await MoveAllCreaturesToNearestGridPosition(Actors, CurrentEncounter);
             await new WaitForSeconds(1f);
@@ -117,7 +117,7 @@ namespace SunsetSystems.Combat
         public async Task EndEncounter(Encounter encounter)
         {
             await Task.Yield();
-            CombatEnd?.Invoke();
+            OnCombatEnd?.Invoke(Actors);
             CurrentEncounter = null;
             Actors = null;
             CurrentActiveActor = null;

@@ -78,6 +78,17 @@ namespace SunsetSystems.Combat.Grid
             }
         }
 
+        public bool TryGetCurrentGridCell(ICombatant occupier, out IGridCell cell)
+        {
+            cell = default;
+            if (_occupiedGridCells.TryGetValue(occupier, out GridUnit gridUnit))
+            {
+                cell = gridUnit;
+                return true;
+            }
+            return false;
+        }
+
         public void ClearOccupierFromCell(IGridCell cell)
         {
             var gridUnit = this[cell.GridPosition];

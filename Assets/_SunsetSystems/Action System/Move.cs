@@ -29,14 +29,11 @@ namespace SunsetSystems.ActionSystem
 
         public Move(ICombatant owner, IGridCell gridCell, GridManager gridInstance) : this(owner, gridInstance.GridPositionToWorldPosition(gridCell.GridPosition))
         {
-            gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
-            owner.OnChangedGridPosition += ClearOccupierFromCell;
-
-            void ClearOccupierFromCell(ICombatant combatant)
+            if (gridInstance.TryGetCurrentGridCell(owner, out IGridCell occupiedCell))
             {
-                gridInstance.ClearOccupierFromCell(gridCell);
-                owner.OnChangedGridPosition -= ClearOccupierFromCell;
+                gridInstance.ClearOccupierFromCell(occupiedCell);
             }
+            gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
         }
 
         public override void Cleanup()

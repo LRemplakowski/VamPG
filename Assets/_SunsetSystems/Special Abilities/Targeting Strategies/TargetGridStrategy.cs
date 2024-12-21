@@ -10,14 +10,14 @@ namespace SunsetSystems.Abilities.Targeting
         private readonly IAbilityConfig _ability;
         private Collider _cachedLastHit;
 
-        private event Action ExecuteAbility;
+        public event Action OnExecutionTriggered;
 
         public TargetGridStrategy(IAbilityConfig ability)
         {
             _ability = ability;
         }
 
-        public void ExecuteTargetSelect(ITargetingContext context)
+        public void ExecuteSetTargetLock(ITargetingContext context)
         {
             Collider hitCollider = context.GetLastRaycastCollider();
             context.GetCurrentGrid().ClearHighlightedCell();
@@ -25,7 +25,7 @@ namespace SunsetSystems.Abilities.Targeting
                 return;
             if (IsCurrentTarget(hitCollider) && context.IsTargetLocked())
             {
-                ExecuteAbility?.Invoke();
+                OnExecutionTriggered?.Invoke();
             }
             else
             {
@@ -77,15 +77,5 @@ namespace SunsetSystems.Abilities.Targeting
 
         private bool IsCurrentTarget(Collider target) => _cachedLastHit == target;
         private static bool IsColliderNull(Collider collider) => collider == null;
-
-        public void AddUseAbilityListener(Action listener)
-        {
-            ExecuteAbility += listener;
-        }
-
-        public void RemoveUseAbilityListener(Action listener)
-        {
-            ExecuteAbility -= listener;
-        }
     }
 }

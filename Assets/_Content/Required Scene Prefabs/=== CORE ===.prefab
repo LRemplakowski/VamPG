@@ -4383,16 +4383,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _combatUICanvasGroup: {fileID: 7351497019749522866}
-  CombatBegin:
-    _PersistentCalls: []
-  CombatEnd:
-    _PersistentCalls: []
-  CombatRoundBegin:
-    _PersistentCalls: []
-  CombatRoundEnd:
-    _PersistentCalls: []
-  OnFullTurnCompleted:
-    _PersistentCalls: []
 --- !u!1 &2421734508816519914
 GameObject:
   m_ObjectHideFlags: 0
@@ -9397,12 +9387,16 @@ MonoBehaviour:
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
-    ReferencedUnityObjects: []
+    ReferencedUnityObjects:
+    - {fileID: 5195329194410603614}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: _executionUI
+      Entry: 10
+      Data: 0
   _selectedActionManager: {fileID: 4065193537741608299}
   _targetingLineRenderer: {fileID: 2205278438602900967}
   _targetableLayerMask:
@@ -20021,6 +20015,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 847619554048417048, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 847619554048417048, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
     - target: {fileID: 865646237102621027, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -21078,6 +21076,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
+--- !u!114 &5195329194410603614 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 847619554048417048, guid: ecf3aee01e457574db1030d1465670ea, type: 3}
+  m_PrefabInstance: {fileID: 4889463466445007174}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13aacb03b64b4ad418c88427d3924223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5659399528152756742 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 959518495206972224, guid: ecf3aee01e457574db1030d1465670ea, type: 3}

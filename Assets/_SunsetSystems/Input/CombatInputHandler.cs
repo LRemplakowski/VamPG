@@ -18,8 +18,9 @@ namespace SunsetSystems.Input
         private PlayerCombatActionManager _selectedActionManager;
         [SerializeField]
         private LineRenderer _targetingLineRenderer;
+        [SerializeField]
+        private IExecutionConfirmationUI _executionUI;
         [Title("Config")]
-
         [SerializeField]
         private LayerMask _targetableLayerMask;
 
@@ -90,7 +91,7 @@ namespace SunsetSystems.Input
                 return;
             if (CombatManager.Instance.IsActiveActorPlayerControlled() is false)
                 return;
-            _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecuteTargetSelect(GetTargetingContext());
+            _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecuteSetTargetLock(GetTargetingContext());
         }
 
         public void HandleSecondaryAction(InputAction.CallbackContext context)
@@ -143,6 +144,8 @@ namespace SunsetSystems.Input
         }
         private bool GetIsPointerOverGameObject() => _pointerOverGameObject;
 
+        private IExecutionConfirmationUI GetExecutionUI() => _executionUI;
+
         private class AbilityTargetingContext : ITargetingContext
         {
             private readonly CombatInputHandler _inputHandler;
@@ -159,6 +162,7 @@ namespace SunsetSystems.Input
             public Collider GetLastRaycastCollider() => _inputHandler.GetLastHitCollider();
             public IAbilityConfig GetSelectedAbility() => _inputHandler._selectedActionManager.GetSelectedAbility();
             public LineRenderer GetTargetingLineRenderer() => _inputHandler.GetTargetingLineRenderer();
+            public IExecutionConfirmationUI GetExecutionUI() => _inputHandler.GetExecutionUI();
 
             public bool IsPointerOverUI() => _inputHandler.GetIsPointerOverGameObject();
             public bool IsTargetLocked() => _inputHandler.GetTargetLocked();

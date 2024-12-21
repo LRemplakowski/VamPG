@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 namespace SunsetSystems.ActorResources
 {
     public interface IActionPointUser
     {
+        event Action<int> OnActionPointUpdate;
+
         int GetCurrentActionPoints();
         int GetMaxActionPoints();
 

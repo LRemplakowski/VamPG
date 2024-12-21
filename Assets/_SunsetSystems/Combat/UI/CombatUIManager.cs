@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using SunsetSystems.Abilities;
-using SunsetSystems.Entities.Interfaces;
 using SunsetSystems.Equipment;
-using UltEvents;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -67,23 +64,41 @@ namespace SunsetSystems.Combat.UI
         public void OnCombatRoundBegin(ICombatant combatant)
         {
             EventSystem.current.SetSelectedGameObject(null);
-            _combatCanvasGroup.interactable = combatant.GetContext().IsPlayerControlled;
-            if (combatant.GetContext().IsPlayerControlled)
+            var context = combatant.GetContext();
+            _combatCanvasGroup.interactable = context.IsPlayerControlled;
+            if (context.IsPlayerControlled)
             {
-                UpdateCurrentActorPortrait(combatant);
-                currentActorHealth.UpdateHealthDisplay(combatant);
-                apBar.UpdateActiveChunks(combatant.GetContext().ActionPointManager.GetCurrentActionPoints());
-                bpBar.UpdateActiveChunks(combatant.GetContext().BloodPointManager.GetCurrentBloodPoints());
-                disciplineBar.ShowAbilities(combatant);
-                _actionBarUI.RefreshAvailableActions();
-                combatant.OnUsedActionPoint += OnActionUsed;
-                combatant.OnSpentBloodPoint += OnBloodPointSpent;
-                var weaponManager = combatant.GetContext().WeaponManager;
-                _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
-                _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
-                weaponManager.OnWeaponChanged += OnWeaponChanged;
-                weaponManager.OnAmmoChanged += OnAmmoChanged;
+                InitialUpdateUserInterface(combatant);
+                SubscribeInterfaceUpdateEvents(combatant);
             }
+        }
+
+        private void SubscribeInterfaceUpdateEvents(ICombatant combatant)
+        {
+            var context = combatant.GetContext();
+            var apManager = context.ActionPointManager;
+            var bpManager = context.BloodPointManager;
+            var weaponManager = context.WeaponManager;
+            apManager.OnActionPointUpdate += OnActionUsed;
+            bpManager.OnBloodPointUpdate += OnBloodPointSpent;
+            weaponManager.OnWeaponChanged += OnWeaponChanged;
+            weaponManager.OnAmmoChanged += OnAmmoChanged;
+        }
+
+        private void InitialUpdateUserInterface(ICombatant dataSource)
+        {
+            var context = dataSource.GetContext();
+            var weaponManager = context.WeaponManager;
+            var apManager = context.ActionPointManager;
+            var bpManager = context.BloodPointManager;
+            UpdateCurrentActorPortrait(dataSource);
+            currentActorHealth.UpdateHealthDisplay(dataSource);
+            apBar.UpdateActiveChunks(apManager.GetCurrentActionPoints());
+            bpBar.UpdateActiveChunks(bpManager.GetCurrentBloodPoints());
+            disciplineBar.ShowAbilities(dataSource);
+            _actionBarUI.RefreshAvailableActions();
+            _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
+            _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
         }
 
         private void OnWeaponChanged(ICombatant combatant)
@@ -94,14 +109,14 @@ namespace SunsetSystems.Combat.UI
             _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
         }
 
-        private void OnActionUsed(ICombatant combatant)
+        private void OnActionUsed(int currentAP)
         {
-            apBar.UpdateActiveChunks(combatant.GetContext().ActionPointManager.GetCurrentActionPoints());
+            apBar.UpdateActiveChunks(currentAP);
         }
 
-        private void OnBloodPointSpent(ICombatant combatant)
+        private void OnBloodPointSpent(int currentBP)
         {
-            bpBar.UpdateActiveChunks(combatant.GetContext().BloodPointManager.GetCurrentBloodPoints());
+            bpBar.UpdateActiveChunks(currentBP);
         }
 
         private void OnAmmoChanged(ICombatant combatant, WeaponAmmoData ammoData)
@@ -130,10 +145,9 @@ namespace SunsetSystems.Combat.UI
         public void OnCombatRoundEnd(ICombatant combatant)
         {
             var context = combatant.GetContext();
-            
-            combatant.OnUsedActionPoint -= OnActionUsed;
-            combatant.OnSpentBloodPoint -= OnBloodPointSpent;
-            var weaponManager = combatant.GetContext().WeaponManager;
+            context.ActionPointManager.OnActionPointUpdate -= OnActionUsed;
+            context.BloodPointManager.OnBloodPointUpdate -= OnBloodPointSpent;
+            var weaponManager = context.WeaponManager;
             weaponManager.OnWeaponChanged -= OnWeaponChanged;
             weaponManager.OnAmmoChanged -= OnAmmoChanged;
         }

@@ -18,6 +18,7 @@ namespace SunsetSystems.Abilities
         ICombatant GetCurrentCombatant();
         ITargetable GetCurrentTarget();
         GridManager GetCurrentGrid();
+        IExecutionConfirmationUI GetExecutionUI();
 
         bool IsPointerOverUI();
         bool IsTargetLocked();

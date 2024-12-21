@@ -1,7 +1,11 @@
+using System;
+
 namespace SunsetSystems.ActorResources
 {
     public interface IBloodPointUser
     {
+        event Action<int> OnBloodPointUpdate;
+
         int GetCurrentBloodPoints();
         int GetMaxBloodPoints();
 

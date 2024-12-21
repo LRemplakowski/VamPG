@@ -14,6 +14,10 @@ namespace SunsetSystems.ActorResources
     {
         private const string COMPONENT_ID = "ACTOR_RESOURCE_MANAGER";
 
+        [Title("References")]
+        [SerializeField, Required]
+        private ICombatant _combatBehaviour;
+
         [Title("Data")]
         [SerializeField, DictionaryDrawerSettings(IsReadOnly = true, KeyLabel = "Resource", ValueLabel = "Current Amount")]
         private Dictionary<ActorResource, int> _currentResources = new();
@@ -28,6 +32,9 @@ namespace SunsetSystems.ActorResources
 
         public string ComponentID => COMPONENT_ID;
 
+        public event Action<int> OnActionPointUpdate;
+        public event Action<int> OnBloodPointUpdate;
+
         private void OnValidate()
         {
             _currentResources ??= new();
@@ -40,9 +47,39 @@ namespace SunsetSystems.ActorResources
             }
         }
 
+        private void Awake()
+        {
+            CombatManager.OnCombatStart += OnCombatStart;
+            CombatManager.OnCombatRoundEnd += OnCombatRoundEnd;
+        }
+
         private void Start()
         {
             InitializeResources();
+        }
+
+        private void OnDestroy()
+        {
+            CombatManager.OnCombatStart -= OnCombatStart;
+            CombatManager.OnCombatRoundEnd -= OnCombatRoundEnd;
+        }
+
+        private void ReplenishResources()
+        {
+            _currentResources[ActorResource.ActionPoints] = GetMaxActionPoints();
+        }
+
+        private void OnCombatStart(IEnumerable<ICombatant> _)
+        {
+            ReplenishResources();
+        }
+
+        private void OnCombatRoundEnd(ICombatant combatant)
+        {
+            if (combatant == _combatBehaviour)
+            {
+                ReplenishResources();
+            }
         }
 
         private void InitializeResources()
@@ -100,7 +137,10 @@ namespace SunsetSystems.ActorResources
         {
             if (_currentResources.TryGetValue(ActorResource.ActionPoints, out var currentAP) && currentAP >= amount)
             {
-                _currentResources[ActorResource.ActionPoints] -= amount;
+                var ap = _currentResources[ActorResource.ActionPoints];
+                ap -= amount;
+                _currentResources[ActorResource.ActionPoints] = ap;
+                OnActionPointUpdate?.Invoke(ap);
                 return true;
             }
             return false;
@@ -174,7 +214,10 @@ namespace SunsetSystems.ActorResources
         {
             if (_currentResources.TryGetValue(ActorResource.ActionPoints, out var currentBP) && currentBP >= amount)
             {
-                _currentResources[ActorResource.BloodPoints] -= amount;
+                var bp = _currentResources[ActorResource.BloodPoints];
+                bp -= amount;
+                _currentResources[ActorResource.BloodPoints] = bp;
+                OnBloodPointUpdate?.Invoke(bp);
                 return true;
             }
             return false;

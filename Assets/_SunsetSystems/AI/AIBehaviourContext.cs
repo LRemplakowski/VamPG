@@ -123,7 +123,7 @@ namespace SunsetSystems.AI
             var positionsInRange = AIHelpers.GetPositionsInRange(_combatBehaviour, movementRange, gridManager);
             if (positionsInRange.Count() > 0)
             {
-                lastSelectedPosition = positionsInRange.GetRandom();
+                SelectedPosition = positionsInRange.GetRandom();
             }
             return lastSelectedPosition != SelectedPosition;
         }

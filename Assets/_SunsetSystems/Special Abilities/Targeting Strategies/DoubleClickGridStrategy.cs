@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace SunsetSystems.Abilities.Targeting
 {
-    public class TargetGridStrategy : IAbilityTargetingStrategy
+    public class DoubleClickGridStrategy : IAbilityTargetingStrategy
     {
         private readonly IAbilityConfig _ability;
         private Collider _cachedLastHit;
 
         public event Action OnExecutionTriggered;
 
-        public TargetGridStrategy(IAbilityConfig ability)
+        public DoubleClickGridStrategy(IAbilityConfig ability)
         {
             _ability = ability;
         }
@@ -64,6 +64,7 @@ namespace SunsetSystems.Abilities.Targeting
             context.TargetUpdateDelegate().Invoke(null);
             context.TargetingLineUpdateDelegate().Invoke(false);
             context.TargetLockSetDelegate().Invoke(false);
+            context.GetExecutionUI().UpdateShowInterface(false, () => false);
         }
 
         public void ExecuteTargetingEnd(ITargetingContext context)
@@ -72,6 +73,7 @@ namespace SunsetSystems.Abilities.Targeting
             context.TargetUpdateDelegate().Invoke(null);
             context.TargetingLineUpdateDelegate().Invoke(false);
             context.TargetLockSetDelegate().Invoke(false);
+            context.GetExecutionUI().UpdateShowInterface(false, () => false);
         }
 
 

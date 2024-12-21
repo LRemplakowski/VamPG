@@ -5,8 +5,7 @@ namespace SunsetSystems.Abilities
 {
     public interface IExecutionConfirmationUI
     {
-        void SetActive(bool active);
-        void SetExectuionValidationDelegate(Func<bool> validationDelegate);
+        void UpdateShowInterface(bool visible, Func<bool> interactableDelegate);
 
         void RegisterConfirmationCallback(UnityAction callback);
         void UnregisterConfirmationCallback(UnityAction callback);

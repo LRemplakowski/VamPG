@@ -22,5 +22,6 @@ namespace SunsetSystems.Abilities
 
         bool IsPointerOverUI();
         bool IsTargetLocked();
+        bool CanExecuteAbility(IAbilityConfig ability);
     }
 }

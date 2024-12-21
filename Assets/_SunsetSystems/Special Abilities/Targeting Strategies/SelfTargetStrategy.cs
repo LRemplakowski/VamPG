@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace SunsetSystems.Abilities.Targeting
 {
@@ -16,6 +13,11 @@ namespace SunsetSystems.Abilities.Targeting
             _ability = abilityConfig;
         }
 
+        public void ExecuteSetTargetLock(ITargetingContext context)
+        {
+
+        }
+
         public void ExecuteClearTargetLock(ITargetingContext context)
         {
             
@@ -23,25 +25,32 @@ namespace SunsetSystems.Abilities.Targeting
 
         public void ExecutePointerPosition(ITargetingContext context)
         {
-            context.TargetUpdateDelegate().Invoke(context.GetCurrentCombatant());
+
         }
 
         public void ExecuteTargetingBegin(ITargetingContext context)
         {
             context.TargetUpdateDelegate().Invoke(context.GetCurrentCombatant());
-            context.GetExecutionUI().SetActive(false);
             context.TargetingLineUpdateDelegate().Invoke(false);
-            context.TargetLockSetDelegate().Invoke(false);
+            context.TargetLockSetDelegate().Invoke(true);
+            var executionUI = context.GetExecutionUI();
+            executionUI.RegisterConfirmationCallback(TriggerExecution);
+            executionUI.UpdateShowInterface(true, () => context.CanExecuteAbility(_ability));
         }
 
         public void ExecuteTargetingEnd(ITargetingContext context)
         {
-            
+            context.TargetUpdateDelegate().Invoke(null);
+            context.TargetingLineUpdateDelegate().Invoke(false);
+            context.TargetLockSetDelegate().Invoke(false);
+            var executionUI = context.GetExecutionUI();
+            executionUI.UnregisterConfirmationCallback(TriggerExecution);
+            executionUI.UpdateShowInterface(false, () => false);
         }
 
-        public void ExecuteSetTargetLock(ITargetingContext context)
+        private void TriggerExecution()
         {
-            context.TargetUpdateDelegate().Invoke(context.GetCurrentCombatant());
+            OnExecutionTriggered?.Invoke();
         }
     }
 }

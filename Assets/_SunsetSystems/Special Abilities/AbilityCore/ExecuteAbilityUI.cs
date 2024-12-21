@@ -19,7 +19,7 @@ namespace SunsetSystems.Abilities
 
         private void Start()
         {
-            SetActive(false);
+            UpdateShowInterface(false, () => false);
         }
 
         public void RegisterConfirmationCallback(UnityAction callback)
@@ -27,18 +27,14 @@ namespace SunsetSystems.Abilities
             _executeAbilityButton.onClick.AddListener(callback);
         }
 
-        public void SetActive(bool active)
+        public void UpdateShowInterface(bool visible, Func<bool> interactableDelegate)
         {
-            float alpha = active ? 1f : 0f;
+            float alpha = visible ? 1f : 0f;
+            bool interactable = interactableDelegate?.Invoke() ?? false;
             _uiCanvasGroup.alpha = alpha;
-            _uiCanvasGroup.interactable = active;
-            _uiCanvasGroup.blocksRaycasts = active;
-            _executeAbilityButton.interactable = active;
-        }
-
-        public void SetExectuionValidationDelegate(Func<bool> validationDelegate)
-        {
-            _shouldEnableButton = validationDelegate;
+            _uiCanvasGroup.interactable = interactable;
+            _uiCanvasGroup.blocksRaycasts = visible;
+            _executeAbilityButton.interactable = interactable;
         }
 
         public void UnregisterConfirmationCallback(UnityAction callback)

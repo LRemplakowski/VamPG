@@ -19,75 +19,47 @@ namespace SunsetSystems.Abilities.Targeting
 
         public void ExecuteSetTargetLock(ITargetingContext context)
         {
-            Collider collider = context.GetLastRaycastCollider();
-            if (collider == null)
-                return;
-            LineRenderer targetingLineRenderer = context.GetTargetingLineRenderer();
-            if (collider.gameObject.TryGetComponent(out ICreature targetCreature) is false)
+            if (ValidateTarget(context, out ICombatant target) is false)
             {
                 ClearTargetingDelegates(context);
+                DisableExecutionUI(context);
                 return;
             }
             ICombatant current = context.GetCurrentCombatant();
-            ICombatant target = targetCreature.References.CombatBehaviour;
-            if (target.GetContext().IsAlive is false)
-            {
-                ClearTargetingDelegates(context);
-                return;
-            }
             context.TargetUpdateDelegate().Invoke(target.References.Targetable);
             var abilityRange = _ability.GetTargetingData(context.GetAbilityContext()).GetRangeData();
             if (IsTargetInRange(current, target, in abilityRange))
             {
+                current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
+                var targetingLineRenderer = context.GetTargetingLineRenderer();
                 targetingLineRenderer.SetPosition(1, target.AimingOrigin);
                 context.TargetingLineUpdateDelegate().Invoke(true);
                 context.TargetLockSetDelegate().Invoke(true);
-                current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
                 var executionUI = context.GetExecutionUI();
                 executionUI.RegisterConfirmationCallback(TriggerExecution);
-                executionUI.SetExectuionValidationDelegate(CanPerformAction);
-                executionUI.SetActive(true);
-            }
-
-            bool CanPerformAction()
-            {
-                var user = context.GetCurrentCombatant().GetContext().AbilityUser;
-                bool canAfford = user.GetCanAffordAbility(_ability);
-                bool hasValidContext = _ability.IsContextValidForExecution(user.GetCurrentAbilityContext());
-                return canAfford && hasValidContext;
+                executionUI.UpdateShowInterface(true, () => context.CanExecuteAbility(_ability));
             }
         }
 
         public void ExecuteClearTargetLock(ITargetingContext context)
         {
             ClearTargetingDelegates(context);
-            var executionUI = context.GetExecutionUI();
-            executionUI.UnregisterConfirmationCallback(TriggerExecution);
-            executionUI.SetActive(false);
+            DisableExecutionUI(context);
         }
 
         public void ExecutePointerPosition(ITargetingContext context)
         {
-            Collider collider = context.GetLastRaycastCollider();
-            if (collider == null)
-                return;
-            LineRenderer targetingLineRenderer = context.GetTargetingLineRenderer();
-            if (collider.gameObject.TryGetComponent(out ICreature targetCreature) is false)
-            {
-                ClearTargetingDelegates(context);
-                return;
-            }
-            ICombatant current = context.GetCurrentCombatant();
-            ICombatant target = targetCreature.References.CombatBehaviour;
-            if (target.GetContext().IsAlive is false)
+            if (ValidateTarget(context, out ICombatant target) is false)
             {
                 ClearTargetingDelegates(context);
                 return;
             }
             context.TargetUpdateDelegate().Invoke(target.References.Targetable);
             var abilityRange = _ability.GetTargetingData(context.GetAbilityContext()).GetRangeData();
+            ICombatant current = context.GetCurrentCombatant();
             if (IsTargetInRange(current, target, in abilityRange))
             {
+                var targetingLineRenderer = context.GetTargetingLineRenderer();
                 targetingLineRenderer.SetPosition(1, target.AimingOrigin);
                 context.TargetingLineUpdateDelegate().Invoke(true);
                 current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
@@ -97,18 +69,14 @@ namespace SunsetSystems.Abilities.Targeting
         public void ExecuteTargetingBegin(ITargetingContext context)
         {
             ClearTargetingDelegates(context);
+            DisableExecutionUI(context);
             context.GetTargetingLineRenderer().SetPosition(0, context.GetCurrentCombatant().AimingOrigin);
-            var executionUI = context.GetExecutionUI();
-            executionUI.UnregisterConfirmationCallback(TriggerExecution);
-            executionUI.SetActive(false);
         }
 
         public void ExecuteTargetingEnd(ITargetingContext context)
         {
             ClearTargetingDelegates(context);
-            var executionUI = context.GetExecutionUI();
-            executionUI.UnregisterConfirmationCallback(TriggerExecution);
-            executionUI.SetActive(false);
+            DisableExecutionUI(context);
         }
 
         private void ClearTargetingDelegates(ITargetingContext context)
@@ -118,9 +86,28 @@ namespace SunsetSystems.Abilities.Targeting
             context.TargetLockSetDelegate().Invoke(false);
         }
 
+        private void DisableExecutionUI(ITargetingContext context)
+        {
+            var executionUI = context.GetExecutionUI();
+            executionUI.UnregisterConfirmationCallback(TriggerExecution);
+            executionUI.UpdateShowInterface(false, () => false);
+        }
+
         private void TriggerExecution()
         {
             OnExecutionTriggered?.Invoke();
+        }
+
+        private static bool ValidateTarget(ITargetingContext context, out ICombatant target)
+        {
+            target = default;
+            var collider = context.GetLastRaycastCollider();
+            if (collider == null)
+                return false;
+            if (collider.TryGetComponent(out ICreature targetCreature) is false)
+                return false;
+            target = targetCreature.References.CombatBehaviour;
+            return target.GetContext().IsAlive;
         }
 
         private static bool IsTargetInRange(ICombatant attacker, ICombatant target, in RangeData abilityRange)

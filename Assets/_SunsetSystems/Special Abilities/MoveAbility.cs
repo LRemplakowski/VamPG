@@ -64,6 +64,6 @@ namespace SunsetSystems.Abilities
         }
 
         public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new MoveStrategy(this);
-        public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new TargetGridStrategy(this);
+        public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new DoubleClickGridStrategy(this);
     }
 }

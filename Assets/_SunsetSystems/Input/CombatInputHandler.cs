@@ -166,6 +166,11 @@ namespace SunsetSystems.Input
 
             public bool IsPointerOverUI() => _inputHandler.GetIsPointerOverGameObject();
             public bool IsTargetLocked() => _inputHandler.GetTargetLocked();
+            public bool CanExecuteAbility(IAbilityConfig ability)
+            {
+                var abilityUser = GetCurrentCombatant().GetContext().AbilityUser;
+                return abilityUser.GetHasValidAbilityContext(ability) && abilityUser.GetCanAffordAbility(ability);
+            }
 
             public Action<bool> TargetLockSetDelegate() => _inputHandler.SetTargetLocked;
             public Action<ITargetable> TargetUpdateDelegate() => _inputHandler.SetCurrentTarget;

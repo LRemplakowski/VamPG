@@ -127,14 +127,10 @@ namespace SunsetSystems.Dialogue
             onDismissalComplete?.Invoke();
         }
 
-        public async override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+        public override void InterruptLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
-            _clampScrollbarNextFrame = true;
-            AudioManager.Instance.PlayTypewriterEnd();
-            await new WaitForUpdate();
-            _clampScrollbarNextFrame = true;
-            _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
-            onDialogueLineFinished?.Invoke();
+            _requestedLineInterrupt = true;
+            //onDialogueLineFinished?.Invoke();
         }
 
         public async override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
@@ -154,8 +150,6 @@ namespace SunsetSystems.Dialogue
                 if (AudioManager.Instance != null)
                     AudioManager.Instance.PlayTyperwriterLoop();
                 await TypewriteText(dialogueLine);
-                if (_requestedLineInterrupt)
-                    return;
             }
             await new WaitForUpdate();
             _lineHistory.maxVisibleCharacters = _lineHistory.textInfo.characterCount;
@@ -167,7 +161,7 @@ namespace SunsetSystems.Dialogue
                 await WaitForProceedToNextLine();
             onDialogueLineFinished?.Invoke();
 
-            async Task WaitForProceedToNextLine()
+            async Awaitable WaitForProceedToNextLine()
             {
                 _proceedToNextLineButton.gameObject.SetActive(true);
                 await new WaitUntil(() => _canProceedToNextLine);
@@ -181,13 +175,13 @@ namespace SunsetSystems.Dialogue
             EventSystem.current.SetSelectedGameObject(null);
         }
 
-        private async Task TypewriteText(LocalizedLine line)
+        private async Awaitable TypewriteText(LocalizedLine line)
         {
             _lineHistory.maxVisibleCharacters += line.CharacterName?.Length ?? 0;
             float _currentVisibleCharacters = _lineHistory.maxVisibleCharacters;
             while (_lineHistory.textInfo.characterCount > _lineHistory.maxVisibleCharacters)
             {
-                await new WaitForUpdate();
+                await Awaitable.NextFrameAsync();
                 if (_requestedLineInterrupt)
                 {
                     _clampScrollbarNextFrame = true;
@@ -337,13 +331,16 @@ namespace SunsetSystems.Dialogue
 
         public override void UserRequestedViewAdvancement()
         {
-            if (_requestedLineInterrupt || _optionsPresented)
+            if (_optionsPresented)
                 return;
-            _clampScrollbarNextFrame = true;
-            AudioManager.Instance.PlayTypewriterEnd();
-            _requestedLineInterrupt = true;
-            RunNextLine();
-            requestInterrupt?.Invoke();
+            if (_proceedToNextLineButton.gameObject.activeInHierarchy && _requestedLineInterrupt)
+            {
+                RunNextLine();
+            }
+            else
+            {
+                requestInterrupt?.Invoke();
+            }
         }
 
 

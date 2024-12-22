@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 400000}
+  - component: {fileID: 1252260056446633658}
   m_Layer: 0
   m_Name: Furniture_Armchair_06_Prefab
   m_TagString: Untagged
@@ -32,6 +33,26 @@ Transform:
   - {fileID: 6010725236619806529}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1252260056446633658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1001 &6116129898052346026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41,32 +62,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 400000}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2.0021668e-10
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -1.7112914e-15
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.0000000754979
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
-      propertyPath: m_LocalRotation.y
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.000000021855694
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 66ae150a3e9c1c548868196d0d702708, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

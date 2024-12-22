@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
@@ -25,37 +24,37 @@ namespace SunsetSystems.Entities.Creatures
         }
 
         [Button]
-        public async Task<ICreature> Create(ICreatureTemplate creatureTemplate)
+        public async Awaitable<ICreature> Create(ICreatureTemplate creatureTemplate)
         {
             ICreature newInstance = await GetNewCreatureInstance();
-            await new WaitForUpdate();
+            await Awaitable.NextFrameAsync();
             newInstance.InjectDataFromTemplate(creatureTemplate);
             return newInstance;
         }
 
-        public async Task<ICreature> Create(ICreatureTemplate creatureTemplate, Transform parent)
+        public async Awaitable<ICreature> Create(ICreatureTemplate creatureTemplate, Transform parent)
         {
             ICreature newInstance = await GetNewCreatureInstance();
-            await new WaitForUpdate();
+            await Awaitable.NextFrameAsync();
             newInstance.InjectDataFromTemplate(creatureTemplate);
             newInstance.Transform.SetParent(parent);
             return newInstance;
         }
 
-        public async Task<ICreature> Create(ICreatureTemplate creatureTemplate, Vector3 position, Quaternion rotation, Transform parent) 
+        public async Awaitable<ICreature> Create(ICreatureTemplate creatureTemplate, Vector3 position, Quaternion rotation, Transform parent) 
         {
             ICreature newInstance = await GetNewCreatureInstance();
-            await new WaitForUpdate();
+            await Awaitable.NextFrameAsync();
             newInstance.InjectDataFromTemplate(creatureTemplate);
             newInstance.Transform.SetParent(parent);
             newInstance.ForceToPosition(position);
             return newInstance;
         }
 
-        private async Task<ICreature> GetNewCreatureInstance()
+        private async Awaitable<ICreature> GetNewCreatureInstance()
         {
             AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(_creaturePrefabReference.RuntimeKey, _creatureStorageTransform.position, Quaternion.identity, _creatureStorageTransform);
-            await handle.Task;
+            await handle;
             return handle.Result.GetComponent<ICreature>();
         }
 

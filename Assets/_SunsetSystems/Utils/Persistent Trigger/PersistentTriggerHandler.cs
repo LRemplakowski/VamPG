@@ -1,6 +1,8 @@
 using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Entities;
+using SunsetSystems.Game;
+using SunsetSystems.Inventory.Data;
 using SunsetSystems.Party;
 using UltEvents;
 using UnityEngine;
@@ -10,6 +12,10 @@ namespace SunsetSystems.Utils.Triggers
     public class PersistentTriggerHandler : PersistentEntity, ITriggerHandler
     {
         [Title("Config")]
+        [SerializeField]
+        private bool _triggerOnlyInGameState = false;
+        [SerializeField, ShowIf("@this._triggerOnlyInGameState")]
+        private GameState _triggerState;
         [SerializeField]
         private bool triggerOnlyOnce;
         [SerializeField]
@@ -48,9 +54,7 @@ namespace SunsetSystems.Utils.Triggers
 
         public void OnTriggerEnter(Collider other)
         {
-            if (triggerOnlyOnce && enterTriggeredOnce)
-                return;
-            if (triggeredOnlyBySpecificObject && triggeringObject != other)
+            if (ValidateTrigger(other, in enterTriggeredOnce) is false)
                 return;
             TriggerEnter?.InvokeSafe(other);
             enterTriggeredOnce = true;
@@ -60,9 +64,7 @@ namespace SunsetSystems.Utils.Triggers
 
         public void OnTriggerExit(Collider other)
         {
-            if (triggerOnlyOnce && exitTriggeredOnce)
-                return;
-            if (triggeredOnlyBySpecificObject && triggeringObject != other)
+            if (ValidateTrigger(other, in exitTriggeredOnce) is false)
                 return;
             TriggerExit?.InvokeSafe(other);
             exitTriggeredOnce = true;
@@ -72,14 +74,21 @@ namespace SunsetSystems.Utils.Triggers
 
         public void OnTriggerStay(Collider other)
         {
-            if (triggerOnlyOnce && stayTriggeredOnce)
-                return;
-            if (triggeredOnlyBySpecificObject && triggeringObject != other)
+            if (ValidateTrigger(other, in stayTriggeredOnce) is false)
                 return;
             TriggerStay?.InvokeSafe(other);
             stayTriggeredOnce = true;
             if (_stopPlayerPartyOnTrigger)
                 PartyManager.Instance.StopTheParty();
+        }
+
+        private bool ValidateTrigger(Collider other, in bool stateTriggeredOnce)
+        {
+            bool result = true;
+            result &= !triggerOnlyOnce || stateTriggeredOnce is false;
+            result &= !triggeredOnlyBySpecificObject || triggeringObject != other;
+            result &= !_triggerOnlyInGameState || GameManager.Instance.IsCurrentState(_triggerState);
+            return result;
         }
 
         private void OnDrawGizmos()

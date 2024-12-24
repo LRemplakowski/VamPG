@@ -1930,6 +1930,7 @@ Shader "SeeThroughShader/BiRP/Standard"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -2180,6 +2181,7 @@ Shader "SeeThroughShader/BiRP/Standard"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -2272,6 +2274,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -2321,6 +2324,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -2983,8 +2987,8 @@ Shader "SeeThroughShader/BiRP/Standard"
 
             #if defined(_OVERRIDE_SHADOWMASK)
                float4 mulColor = saturate(dot(l.ShadowMask, unity_OcclusionMaskSelector));
-               gi.light.color = mulColor;
-               giInput.light.color = mulColor;
+               gi.light.color *= mulColor;
+               giInput.light.color *= mulColor;
             #endif
 
             #if _UNLIT
@@ -4801,6 +4805,7 @@ Shader "SeeThroughShader/BiRP/Standard"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -5051,6 +5056,7 @@ Shader "SeeThroughShader/BiRP/Standard"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -5143,6 +5149,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -5192,6 +5199,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -7698,6 +7706,7 @@ Shader "SeeThroughShader/BiRP/Standard"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -7948,6 +7957,7 @@ Shader "SeeThroughShader/BiRP/Standard"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -8040,6 +8050,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -8089,6 +8100,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -8695,7 +8707,7 @@ Shader "SeeThroughShader/BiRP/Standard"
 
            #if defined(_OVERRIDE_SHADOWMASK)
                float4 mulColor = saturate(dot(l.ShadowMask, unity_OcclusionMaskSelector));
-               gi.light.color = mulColor;
+               gi.light.color *= mulColor;
             #endif
 
            #if _USESPECULAR
@@ -10478,6 +10490,7 @@ Shader "SeeThroughShader/BiRP/Standard"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -10728,6 +10741,7 @@ Shader "SeeThroughShader/BiRP/Standard"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -10820,6 +10834,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -10869,6 +10884,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -13192,6 +13208,7 @@ Shader "SeeThroughShader/BiRP/Standard"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -13442,6 +13459,7 @@ Shader "SeeThroughShader/BiRP/Standard"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -13534,6 +13552,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -13583,6 +13602,7 @@ Shader "SeeThroughShader/BiRP/Standard"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 

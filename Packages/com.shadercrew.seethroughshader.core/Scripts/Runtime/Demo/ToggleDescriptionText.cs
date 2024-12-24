@@ -1,28 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ToggleDescriptionText : MonoBehaviour
+namespace ShaderCrew.SeeThroughShader
 {
-    public GameObject description;
-    // Start is called before the first frame update
-    void Start()
+    public class ToggleDescriptionText : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
+        public GameObject description;
+        // Start is called before the first frame update
+        void Start()
         {
-            if (description.activeSelf)
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.I))
             {
-                description.SetActive(false);
-            }
-            else
-            {
-                description.SetActive(true);
+                if (description.activeSelf)
+                {
+                    description.SetActive(false);
+                }
+                else
+                {
+                    description.SetActive(true);
+                }
             }
         }
     }

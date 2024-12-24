@@ -6,50 +6,13 @@ using UnityEngine.UI;
 namespace ShaderCrew.SeeThroughShader
 {
     [AddComponentMenu(Strings.COMPONENTMENU_TOGGLE_BY_CLICK)]
-    public class ToggleByClick : MonoBehaviour
+    public class ToggleByClick : ToogleByWhateverAbstract
     {
-        public TransitionController seeThroughShaderController;
         bool activated = false;
 
 
         RaycastHit[] hits = new RaycastHit[100];
 
-        void Start()
-        {
-            if (this.isActiveAndEnabled)
-            {
-                InitializeToggle();
-            }
-        }
-
-        //private void OnEnable()
-        //{
-        //    if (seeThroughShaderController == null)
-        //    {
-        //        InitializeToggle();
-        //    }
-        //}
-
-        private void OnDisable()
-        {
-            if (seeThroughShaderController != null)
-            {
-                seeThroughShaderController.destroy();
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (seeThroughShaderController != null)
-            {
-                seeThroughShaderController.destroy();
-            }
-        }
-        private void InitializeToggle()
-        {
-            seeThroughShaderController = new TransitionController(this.transform);           
-
-        }
 
 
         void Update()
@@ -71,26 +34,6 @@ namespace ShaderCrew.SeeThroughShader
                         OnGameObjectClicked(hits[i].transform.gameObject);
                     }
                 }
-
-
-
-                //RaycastHit raycastHit;
-                //RaycastHit[] hit = Physics.RaycastAll(ray);
-                //for (int i = 0; i < hit.Length; i++)
-                //{
-                //    if (hit[i].collider != null && hit[i].transform != null)
-                //    {
-                //        OnGameObjectClicked(hit[i].transform.gameObject);
-                //    }
-                //}
-
-                //if (Physics.Raycast(ray, out raycastHit, 100f))
-                //{
-                //    if (raycastHit.transform != null)
-                //    {
-                //        OnGameObjectClicked(raycastHit.transform.gameObject);
-                //    }
-                //}
             }
         }
 
@@ -105,28 +48,21 @@ namespace ShaderCrew.SeeThroughShader
                 }
                 else
                 {
-                    dectivateSTSEffect();
+                    deactivateSTSEffect();
                     activated = false;
                 }
             }
         }
 
 
-        private void activateSTSEffect()
+        protected override void OnStart()
         {
-            seeThroughShaderController.notifyOnTriggerEnter(this.transform);
-
-        }
-
-        private void dectivateSTSEffect()
-        {
-            seeThroughShaderController.notifyOnTriggerExit(this.transform);
-
         }
 
 
-
-
+        protected override void OnDestroyImpl()
+        {
+        }
     }
 
 

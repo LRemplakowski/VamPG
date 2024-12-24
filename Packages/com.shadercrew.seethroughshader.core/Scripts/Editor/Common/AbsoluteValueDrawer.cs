@@ -1,23 +1,26 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public class AbsoluteValueDrawer : MaterialPropertyDrawer
+namespace ShaderCrew.SeeThroughShader
 {
-
-    public AbsoluteValueDrawer()
+    public class AbsoluteValueDrawer : MaterialPropertyDrawer
     {
-    }
 
-    public override void OnGUI(Rect position, MaterialProperty property, string label, MaterialEditor editor)
-    {
-        if (property.type == MaterialProperty.PropType.Float)
+        public AbsoluteValueDrawer()
         {
-            property.floatValue = Mathf.Max(EditorGUI.FloatField(position, label, property.floatValue), 0);
         }
-        else
-        {
-            editor.DefaultShaderProperty(property, label);
-        }
-    }
 
+        public override void OnGUI(Rect position, MaterialProperty property, string label, MaterialEditor editor)
+        {
+            if (property.type == MaterialProperty.PropType.Float)
+            {
+                property.floatValue = Mathf.Max(EditorGUI.FloatField(position, label, property.floatValue), 0);
+            }
+            else
+            {
+                editor.DefaultShaderProperty(property, label);
+            }
+        }
+
+    }
 }

@@ -85,6 +85,7 @@ float _STSCustomTime = 0;
         float _IsZoningRevealableGlobal;
         float _SyncZonesWithFloorYGlobal;
         float _SyncZonesFloorYOffsetGlobal;
+        float4 _DissolveTexGlobal_TexelSize;
         float4 _ObstructionCurveGlobal_TexelSize;
         float4 _DissolveMaskGlobal_TexelSize;
         float _DissolveMaskEnabledGlobal;
@@ -99,6 +100,7 @@ float _STSCustomTime = 0;
         half _AngleStrength;
         float _Obstruction;
         float _UVs;
+        float4 _DissolveTex_TexelSize;
         float4 _ObstructionCurve_TexelSize;
         float _DissolveMaskEnabled;
         float4 _DissolveMask_TexelSize;
@@ -258,6 +260,7 @@ void AddSeeThroughShaderToShader(inout float3 albedo, inout float3 emission, ino
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -307,6 +310,7 @@ void AddSeeThroughShaderToShader(inout float3 albedo, inout float3 emission, ino
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 

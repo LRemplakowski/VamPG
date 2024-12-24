@@ -231,13 +231,14 @@ ZWrite On
                #pragma vertex Vert
    #pragma fragment Frag
 
-            #pragma target 3.0
+            #pragma target 4.5
 
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
             #pragma instancing_options renderinglayer
+            #pragma multi_compile _ DOTS_INSTANCING_ON
     
             // Keywords
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
@@ -386,6 +387,7 @@ ZWrite On
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -912,6 +914,7 @@ ZWrite On
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -1401,6 +1404,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -1493,6 +1497,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -1542,6 +1547,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -2087,13 +2093,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -2289,6 +2304,12 @@ bool IsAlphaDiscardEnabledMy()
             #else
                #if defined(DYNAMICLIGHTMAP_ON)
                   inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.dynamicLightmapUV.xy, IN.sh, inputData.normalWS);
+               #elif defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)
+               #if UNITY_VERSION >= 60000009
+                  inputData.bakedGI = SAMPLE_GI(IN.sh, IN.worldPos, inputData.normalWS, inputData.viewDirectionWS, IN.pos, IN.probeOcclusion, inputData.shadowMask);
+               #else
+                  inputData.bakedGI = SAMPLE_GI(IN.sh, IN.worldPos, inputData.normalWS, inputData.viewDirectionWS, IN.pos);
+               #endif
                #else
                   inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.sh, inputData.normalWS);
                #endif
@@ -2411,11 +2432,12 @@ bool IsAlphaDiscardEnabledMy()
                #pragma vertex Vert
    #pragma fragment Frag
 
-            #pragma target 3.0
+            #pragma target 4.5
 
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             #pragma multi_compile_instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON
             #pragma multi_compile_fog
             #pragma instancing_options renderinglayer
             
@@ -2554,6 +2576,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -3081,6 +3104,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -3570,6 +3594,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -3662,6 +3687,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -3711,6 +3737,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -4256,13 +4283,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -4438,9 +4474,15 @@ bool IsAlphaDiscardEnabledMy()
                   l.Emission += l.SpecularGI;
                #else
                   #if defined(DYNAMICLIGHTMAP_ON)
-                   inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.dynamicLightmapUV.xy, IN.sh, inputData.normalWS);
+                    inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.dynamicLightmapUV.xy, IN.sh, inputData.normalWS);
+		            #elif defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)
+                  #if UNITY_VERSION >= 60000009
+                     inputData.bakedGI = SAMPLE_GI(IN.sh, IN.worldPos, inputData.normalWS, inputData.viewDirectionWS, IN.pos, IN.probeOcclusion, inputData.shadowMask);
                   #else
-                      inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.sh, inputData.normalWS);
+                     inputData.bakedGI = SAMPLE_GI(IN.sh, IN.worldPos, inputData.normalWS, inputData.viewDirectionWS, IN.pos);
+                  #endif
+                  #else
+                    inputData.bakedGI = SAMPLE_GI(IN.lightmapUV, IN.sh, inputData.normalWS);
                   #endif
                #endif
 
@@ -4506,7 +4548,7 @@ bool IsAlphaDiscardEnabledMy()
                #pragma vertex Vert
    #pragma fragment Frag
 
-            #pragma target 3.0
+            #pragma target 4.5
 
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
@@ -4620,6 +4662,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -5146,6 +5189,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -5635,6 +5679,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -5727,6 +5772,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -5776,6 +5822,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -6321,13 +6368,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -6500,10 +6556,11 @@ bool IsAlphaDiscardEnabledMy()
 
             #define _PASSDEPTH 1
 
-            #pragma target 3.0
+            #pragma target 4.5
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             #pragma multi_compile_instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON
 
             
             #pragma shader_feature_local _NORMALMAP
@@ -6605,6 +6662,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -7131,6 +7189,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -7620,6 +7679,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -7712,6 +7772,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -7761,6 +7822,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -8306,13 +8368,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -8479,7 +8550,7 @@ bool IsAlphaDiscardEnabledMy()
                #pragma vertex Vert
    #pragma fragment Frag
 
-            #pragma target 3.0
+            #pragma target 4.5
 
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
@@ -8589,6 +8660,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -9115,6 +9187,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -9604,6 +9677,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -9696,6 +9770,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -9745,6 +9820,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -10290,13 +10366,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -10454,7 +10539,7 @@ bool IsAlphaDiscardEnabledMy()
                #pragma vertex Vert
    #pragma fragment Frag
 
-            #pragma target 3.0
+            #pragma target 4.5
 
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
@@ -10580,6 +10665,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -11106,6 +11192,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -11595,6 +11682,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -11687,6 +11775,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -11736,6 +11825,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -12281,13 +12371,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 
@@ -12483,6 +12582,7 @@ bool IsAlphaDiscardEnabledMy()
 
         #pragma target 3.5
         #pragma multi_compile_instancing
+        #pragma multi_compile _ DOTS_INSTANCING_ON
         #pragma vertex vert
         #pragma fragment frag
 
@@ -12592,6 +12692,7 @@ bool IsAlphaDiscardEnabledMy()
             float2 dynamicLightmapUV : TEXCOORD9;
          #endif
          #if !defined(LIGHTMAP_ON)
+            float4 probeOcclusion : TEXCOORD8;
             float3 sh : TEXCOORD10;
          #endif
 
@@ -13118,6 +13219,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -13607,6 +13709,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -13699,6 +13802,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -13748,6 +13852,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -14293,13 +14398,22 @@ bool IsAlphaDiscardEnabledMy()
            o.screenPos = ComputeScreenPos(o.pos, _ProjectionParams.x);
           // #endif
 
+          
           #if _PASSFORWARD || _PASSGBUFFER
               float2 uv1 = v.texcoord1.xy;
               OUTPUT_LIGHTMAP_UV(uv1, unity_LightmapST, o.lightmapUV);
               // o.texcoord1.xy = uv1;
-              OUTPUT_SH(o.worldNormal, o.sh);
+              #if UNITY_VERSION < 60000009
+                OUTPUT_SH(o.worldNormal, o.sh);
+              #endif
+              
               #if defined(DYNAMICLIGHTMAP_ON)
                    o.dynamicLightmapUV.xy = v.texcoord2.xy * unity_DynamicLightmapST.xy + unity_DynamicLightmapST.zw;
+                   #if UNITY_VERSION >= 60000009
+                     OUTPUT_SH(o.worldNormal, o.sh);
+                   #endif
+              #elif (defined(PROBE_VOLUMES_L1) || defined(PROBE_VOLUMES_L2)) && UNITY_VERSION >= 60000009
+                   OUTPUT_SH4(vertexInput.positionWS, o.worldNormal.xyz, GetWorldSpaceNormalizeViewDir(vertexInput.positionWS), o.sh, o.probeOcclusion);
               #endif
           #endif
 

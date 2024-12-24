@@ -120,7 +120,7 @@ namespace ShaderCrew.SeeThroughShader
             if (player != null)
             {
                 bool updateRequired = false;
-                if (playableCharactersDestinct.Contains(player))
+                if (playableCharactersDestinct != null && playableCharactersDestinct.Contains(player))
                 {                    
                     playableCharactersDestinct.Remove(player);
                     updateRequired = true;

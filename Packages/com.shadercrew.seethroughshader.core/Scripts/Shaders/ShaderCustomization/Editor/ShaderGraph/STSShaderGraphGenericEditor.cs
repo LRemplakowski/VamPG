@@ -12,6 +12,20 @@ namespace ShaderCrew.SeeThroughShader
         {
             foreach (MaterialProperty materialProperty in properties)
             {
+#if USING_HDRP
+                if (materialProperty.name == "_OpaqueCullMode")
+                {
+                    materialEditor.ShaderProperty(materialProperty, "Cull Mode");
+                    material.SetFloat("_CullMode", materialProperty.floatValue);
+                    material.SetFloat("_CullModeForward", materialProperty.floatValue);
+                }
+#else
+//TEST IN URP AND BIRP
+                //if (materialProperty.name == "_Cull")
+                //{
+                //    materialEditor.ShaderProperty(materialProperty, materialProperty.displayName);
+                //}
+#endif
                 if ((materialProperty.flags & (MaterialProperty.PropFlags.HideInInspector | MaterialProperty.PropFlags.PerRendererData)) != 0)
                     continue;
 

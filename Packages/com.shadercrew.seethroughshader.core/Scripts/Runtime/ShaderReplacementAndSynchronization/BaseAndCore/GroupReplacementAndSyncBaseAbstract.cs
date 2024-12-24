@@ -117,35 +117,6 @@ namespace ShaderCrew.SeeThroughShader
                 {
                     SynchronizeSTSMaterialsWithReferenceMaterial();
 
-                    ////if (transformsWithSTS != null && seeThroughShaderName != null && referenceMaterial != null)
-                    //if (UnityToSTSShaderMapping != null && referenceMaterial != null)
-                    //{
-                    //    if (replacementGroupType == ReplacementGroupType.ListOfMaterials)
-                    //    {
-                    //        if (materialList != null && materialList.Count > 0)
-                    //        {
-                    //            //GeneralUtils.updateSeeThroughShaderMaterialProperties(transformsWithSTS, seeThroughShaderName, referenceMaterial);
-                    //            GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(materialList.ToArray(), UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
-                    //        }
-                    //        else
-                    //        {
-                    //            Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        if (transformsWithSTS != null && transformsWithSTS.Length > 0)
-                    //        {
-                    //            GeneralUtils.updateSeeThroughShaderMaterialPropertiesAndKeywords(transformsWithSTS, UnityToSTSShaderMapping.Values.ToList(), referenceMaterial);
-
-                    //        }
-                    //        else
-                    //        {
-                    //            Debug.LogWarning("No matching materials could be found! Please check your setting of the " + this.GetType().Name + " script on the GameObject with name '" + this.name + "'.");
-                    //        }
-                    //    }
-
-                    //}
                 }
             }
         }

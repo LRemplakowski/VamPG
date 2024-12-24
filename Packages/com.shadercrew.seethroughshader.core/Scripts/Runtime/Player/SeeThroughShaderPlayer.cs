@@ -51,6 +51,7 @@ namespace ShaderCrew.SeeThroughShader
 
 
         PlayersPositionManager posManager;
+        PlayerToCameraRaycastTriggerManager plrRaycastTriggerMgr;
         List<SeeThroughShaderZone> _zonesInside = new List<SeeThroughShaderZone>();
 
 
@@ -58,6 +59,8 @@ namespace ShaderCrew.SeeThroughShader
         private void Awake()
         {
             posManager = GameObject.FindObjectOfType<PlayersPositionManager>();
+            plrRaycastTriggerMgr = GameObject.FindObjectOfType<PlayerToCameraRaycastTriggerManager>();
+
         }
 
         private void OnDisable()
@@ -66,6 +69,11 @@ namespace ShaderCrew.SeeThroughShader
             if (posManager != null)
             {
                 posManager.RemovePlayerAtRuntime(this.gameObject);
+            }
+
+            if (plrRaycastTriggerMgr != null)
+            {
+                plrRaycastTriggerMgr.RemovePlayerAtRuntime(this.gameObject);
             }
 
             if (triggerZoneEventOnDisable)

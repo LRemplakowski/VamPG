@@ -16,6 +16,8 @@ namespace ShaderCrew.SeeThroughShader
 
         private ReorderableList playableCharactersList;
 
+        private SerializedProperty useSceneViewCam;
+
         private SerializedProperty showDebugRays;
         private SerializedProperty timeUntilExit;
 
@@ -25,6 +27,8 @@ namespace ShaderCrew.SeeThroughShader
 
             playerToCameraRaycastTriggerManager = (PlayerToCameraRaycastTriggerManager)target;
 
+
+            useSceneViewCam = serializedObject.FindProperty(nameof(PlayerToCameraRaycastTriggerManager.useSceneViewCam));
 
             showDebugRays = serializedObject.FindProperty(nameof(PlayerToCameraRaycastTriggerManager.ShowDebugRays));
             timeUntilExit = serializedObject.FindProperty(nameof(PlayerToCameraRaycastTriggerManager.timeUntilExit));
@@ -177,6 +181,7 @@ namespace ShaderCrew.SeeThroughShader
             //GUI.backgroundColor = c;
 
             playableCharactersList.DoLayoutList();
+            EditorGUILayout.PropertyField(useSceneViewCam);
             EditorGUILayout.PropertyField(showDebugRays);
             EditorGUILayout.PropertyField(timeUntilExit);
             EditorUtils.usualEnd();

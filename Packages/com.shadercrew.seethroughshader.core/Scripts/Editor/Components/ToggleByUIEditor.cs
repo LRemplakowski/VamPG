@@ -55,7 +55,7 @@ namespace ShaderCrew.SeeThroughShader
                     }
                     else
                     {
-                        toggleByUI.dectivateSTSEffect();
+                        toggleByUI.deactivateSTSEffect();
                     }
                 }
             }

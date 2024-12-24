@@ -429,37 +429,37 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             #pragma target 4.5
             #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma instancing_options renderinglayer
-            
             #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
             #pragma multi_compile_instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #pragma instancing_options renderinglayer
 
 
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
+            #pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
+            #pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC _TRANSPARENT_REFRACTIVE_SORT
+            #pragma shader_feature_local_fragment _ _ENABLE_FOG_ON_TRANSPARENT
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_fragment _ _DISABLE_SSR
+            #pragma shader_feature_local_fragment _ _DISABLE_SSR_TRANSPARENT
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
+
             #pragma multi_compile _ DEBUG_DISPLAY
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
             #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-            #pragma multi_compile_fragment PROBE_VOLUMES_OFF PROBE_VOLUMES_L1 PROBE_VOLUMES_L2
+            #pragma multi_compile_fragment _ PROBE_VOLUMES_L1 PROBE_VOLUMES_L2
             #pragma multi_compile _ DYNAMICLIGHTMAP_ON
             #pragma multi_compile_fragment _ SHADOWS_SHADOWMASK
             #pragma multi_compile_fragment DECALS_OFF DECALS_3RT DECALS_4RT
             #pragma multi_compile_fragment _ DECAL_SURFACE_GRADIENT
-            #pragma multi_compile_fragment SHADOW_LOW SHADOW_MEDIUM SHADOW_HIGH
+            #pragma multi_compile_fragment PUNCTUAL_SHADOW_LOW PUNCTUAL_SHADOW_MEDIUM PUNCTUAL_SHADOW_HIGH
+            #pragma multi_compile_fragment DIRECTIONAL_SHADOW_LOW DIRECTIONAL_SHADOW_MEDIUM DIRECTIONAL_SHADOW_HIGH
+            #pragma multi_compile_fragment AREA_SHADOW_MEDIUM AREA_SHADOW_HIGH
             #pragma multi_compile_fragment SCREEN_SPACE_SHADOWS_OFF SCREEN_SPACE_SHADOWS_ON
             #pragma multi_compile_fragment USE_FPTL_LIGHTLIST USE_CLUSTERED_LIGHTLIST
-            #pragma multi_compile_fragment AREA_SHADOW_MEDIUM AREA_SHADOW_HIGH
             #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile _ USE_LEGACY_LIGHTMAPS
-
-                 
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
                 
         
             //-------------------------------------------------------------------------------------
@@ -579,6 +579,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -592,7 +598,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -654,6 +660,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -738,6 +745,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -1646,6 +1654,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -1738,6 +1747,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -1787,6 +1797,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -2415,7 +2426,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -2975,8 +2986,6 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             
             Cull Back
                 ZTest [_ZTestGBuffer]
-                ColorMask [_LightLayersMaskBuffer4] 4
-                ColorMask [_LightLayersMaskBuffer5] 5
                 Stencil
                 {
                 WriteMask [_StencilWriteMaskGBuffer]
@@ -2986,9 +2995,6 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 CompBack Always
                 PassBack Replace
                 }
-
-                ColorMask [_LightLayersMaskBuffer4] 4
-                ColorMask [_LightLayersMaskBuffer5] 5
 
                 Cull [_CullMode]
 
@@ -3000,32 +3006,28 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             HLSLPROGRAM
         
             #pragma multi_compile _ DOTS_INSTANCING_ON
-            #pragma instancing_options renderinglayer
             #pragma target 4.5
-
             #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
             #pragma multi_compile_instancing
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #pragma instancing_options renderinglayer
+
+            #pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_fragment _ _DISABLE_SSR
+
             #pragma multi_compile _ LOD_FADE_CROSSFADE
             #pragma multi_compile_fragment _ RENDERING_LAYERS
-            //#pragma multi_compile_raytracing _ LIGHT_LAYERS
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
             #pragma multi_compile _ DEBUG_DISPLAY
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
             #pragma multi_compile _ LIGHTMAP_ON
             #pragma multi_compile _ DIRLIGHTMAP_COMBINED
-            #pragma multi_compile_fragment PROBE_VOLUMES_OFF PROBE_VOLUMES_L1 PROBE_VOLUMES_L2
+            #pragma multi_compile_fragment _ PROBE_VOLUMES_L1 PROBE_VOLUMES_L2
             #pragma multi_compile _ DYNAMICLIGHTMAP_ON
             #pragma multi_compile_fragment _ SHADOWS_SHADOWMASK
             #pragma multi_compile_fragment DECALS_OFF DECALS_3RT DECALS_4RT
             #pragma multi_compile_fragment _ DECAL_SURFACE_GRADIENT
             #pragma multi_compile _ USE_LEGACY_LIGHTMAPS
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
 
 
             //-------------------------------------------------------------------------------------
@@ -3151,6 +3153,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -3164,7 +3172,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -3226,6 +3234,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -3310,6 +3319,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -4217,6 +4227,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -4309,6 +4320,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -4358,6 +4370,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -4986,7 +4999,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -5404,15 +5417,8 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             //#pragma multi_compile_local _ _ALPHATEST_ON
 
 
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
             #pragma multi_compile _ WRITE_DECAL_BUFFER
             //-------------------------------------------------------------------------------------
             // Variant Definitions (active field translations to HDRP defines)
@@ -5533,6 +5539,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -5546,7 +5558,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -5608,6 +5620,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -5692,6 +5705,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -6598,6 +6612,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -6690,6 +6705,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -6739,6 +6755,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -7367,7 +7384,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -7795,15 +7812,19 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                       EncodeIntoNormalBuffer(ConvertSurfaceDataToNormalData(surfaceData), outNormalBuffer);
                    #endif
 
-                   #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
-                      DecalPrepassData decalPrepassData;
-                      // We don't have the right to access SurfaceData in a shaderpass.
-                      // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
-                      // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
-                      decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
-                      decalPrepassData.decalLayerMask = GetMeshRenderingDecalLayer();
-                      EncodeIntoDecalPrepassBuffer(decalPrepassData, outDecalBuffer);
-                   #endif
+                   #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
+                        DecalPrepassData decalPrepassData;
+                        #ifdef _DISABLE_DECALS
+                            ZERO_INITIALIZE(DecalPrepassData, decalPrepassData);
+                        #else
+                            // We don't have the right to access SurfaceData in a shaderpass.
+                            // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
+                            // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
+                            decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
+                        #endif
+                        decalPrepassData.renderingLayerMask = GetMeshRenderingLayerMask();
+                        EncodeIntoDecalPrepassBuffer(decalPrepassData, outDecalBuffer);
+                     #endif
 
 
               }
@@ -7859,16 +7880,11 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             #pragma multi_compile _ DOTS_INSTANCING_ON
             #pragma multi_compile _ LOD_FADE_CROSSFADE
 
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
-            #pragma multi_compile _ WRITE_DECAL_BUFFER
+            #pragma multi_compile_fragment _ WRITE_DECAL_BUFFER WRITE_RENDERING_LAYER
+            #pragma multi_compile _ WRITE_NORMAL_BUFFER
+            #pragma multi_compile _ WRITE_MSAA_DEPTH
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+
             //-------------------------------------------------------------------------------------
             // Variant Definitions (active field translations to HDRP defines)
             //-------------------------------------------------------------------------------------
@@ -7895,8 +7911,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             // #define _BLENDMODE_PRESERVE_SPECULAR_LIGHTING 1
 
             #define SHADERPASS SHADERPASS_DEPTH_ONLY
-            #pragma multi_compile _ WRITE_NORMAL_BUFFER
-            #pragma multi_compile _ WRITE_MSAA_DEPTH
+            
             #define _PASSDEPTH 1
 
             
@@ -7988,6 +8003,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -8001,7 +8022,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -8063,6 +8084,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -8147,6 +8169,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -9052,6 +9075,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -9144,6 +9168,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -9193,6 +9218,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -9821,7 +9847,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -10191,7 +10217,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                                 #endif
 
                                 // Decal buffer must be last as it is bind but we can optionally write into it (based on _DISABLE_DECALS)
-                                #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+                                #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                                 , out float4 outDecalBuffer : SV_TARGET_DECAL
                                 #endif
                             #endif
@@ -10251,13 +10277,17 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         EncodeIntoNormalBuffer(ConvertSurfaceDataToNormalData(surfaceData), outNormalBuffer);
                      #endif
 
-                     #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+                     #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                         DecalPrepassData decalPrepassData;
-                        // We don't have the right to access SurfaceData in a shaderpass.
-                        // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
-                        // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
-                        decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
-                        decalPrepassData.decalLayerMask = GetMeshRenderingDecalLayer();
+                        #ifdef _DISABLE_DECALS
+                            ZERO_INITIALIZE(DecalPrepassData, decalPrepassData);
+                        #else
+                            // We don't have the right to access SurfaceData in a shaderpass.
+                            // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
+                            // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
+                            decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
+                        #endif
+                        decalPrepassData.renderingLayerMask = GetMeshRenderingLayerMask();
                         EncodeIntoDecalPrepassBuffer(decalPrepassData, outDecalBuffer);
                      #endif
                   #endif
@@ -10295,8 +10325,13 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             #pragma instancing_options renderinglayer
             #pragma multi_compile_instancing
 
-            //#pragma multi_compile_local _ _ALPHATEST_ON
-            #pragma multi_compile _ LOD_FADE_CROSSFADE
+            #pragma shader_feature _ EDITOR_VISUALIZATION
+            #pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local_fragment _ _ENABLE_FOG_ON_TRANSPARENT
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_raytracing _ _DISABLE_DECALS
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
 
  
             //-------------------------------------------------------------------------------------
@@ -10418,6 +10453,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -10431,7 +10472,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -10493,6 +10534,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -10577,6 +10619,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -11484,6 +11527,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -11576,6 +11620,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -11625,6 +11670,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -12253,7 +12299,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -12669,15 +12715,10 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             #pragma editor_sync_compilation
             #pragma instancing_options renderinglayer
         
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_raytracing _ _DISABLE_DECALS
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
                 
             //-------------------------------------------------------------------------------------
             // Variant Definitions (active field translations to HDRP defines)
@@ -12798,6 +12839,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -12811,7 +12858,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -12873,6 +12920,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -12957,6 +13005,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -13862,6 +13911,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -13954,6 +14004,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -14003,6 +14054,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -14631,7 +14683,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -15064,16 +15116,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
             #pragma multi_compile_instancing
             #pragma editor_sync_compilation
             #pragma instancing_options renderinglayer
+            #pragma multi_compile _ DOTS_INSTANCING_ON
 
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_raytracing _ _DISABLE_DECALS
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
             #pragma multi_compile _ WRITE_DECAL_BUFFER
             #pragma multi_compile _ LOD_FADE_CROSSFADE
 
@@ -15167,6 +15215,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -15180,7 +15234,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -15242,6 +15296,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -15326,6 +15381,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -16229,6 +16285,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -16321,6 +16378,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -16370,6 +16428,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -16998,7 +17057,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -17410,13 +17469,17 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         EncodeIntoNormalBuffer(ConvertSurfaceDataToNormalData(surfaceData), outNormalBuffer);
                      #endif
 
-                     #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+                     #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                         DecalPrepassData decalPrepassData;
-                        // We don't have the right to access SurfaceData in a shaderpass.
-                        // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
-                        // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
-                        decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
-                        decalPrepassData.decalLayerMask = GetMeshRenderingDecalLayer();
+                        #ifdef _DISABLE_DECALS
+                            ZERO_INITIALIZE(DecalPrepassData, decalPrepassData);
+                        #else
+                            // We don't have the right to access SurfaceData in a shaderpass.
+                            // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
+                            // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
+                            decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
+                        #endif
+                        decalPrepassData.renderingLayerMask = GetMeshRenderingLayerMask();
                         EncodeIntoDecalPrepassBuffer(decalPrepassData, outDecalBuffer);
                      #endif
                   #endif
@@ -17571,6 +17634,12 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -17584,7 +17653,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -17646,6 +17715,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -17730,6 +17800,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -18634,6 +18705,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -18726,6 +18798,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -18775,6 +18848,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -19403,7 +19477,7 @@ Shader "SeeThroughShader/HDRP/2023/Lit"
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 
@@ -19854,10 +19928,10 @@ void Frag(  VertexToPixel v2f
              // However it would be painful to have to add a function like ConvertSurfaceDataToDecalPrepassData() to every Material to return geomNormalWS anyway
              // Here we will put the constrain that any Material requiring to support Decal, will need to have geomNormalWS as member of surfaceData (and we already require normalWS anyway)
              decalPrepassData.geomNormalWS = surfaceData.geomNormalWS;
-             decalPrepassData.decalLayerMask = GetMeshRenderingDecalLayer();
+             decalPrepassData.renderingLayerMask = GetMeshRenderingLayerMask();
              #endif
              EncodeIntoDecalPrepassBuffer(decalPrepassData, outDecalBuffer);
-             outDecalBuffer.w = (GetMeshRenderingLightLayer() & 0x000000FF) / 255.0;
+             outDecalBuffer.w = (GetMeshRenderingLayerMask() & 0x000000FF) / 255.0;
          #endif
 
          #ifdef _DEPTHOFFSET_ON
@@ -19890,19 +19964,15 @@ void Frag(  VertexToPixel v2f
         
             #pragma target 4.5
             #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            #pragma multi_compile_instancing
+            #pragma instancing_options renderinglayer
 
 
-
-            //#pragma shader_feature _ _SURFACE_TYPE_TRANSPARENT
-            //#pragma shader_feature_local _BLENDMODE_OFF _BLENDMODE_ALPHA _BLENDMODE_ADD _BLENDMODE_PRE_MULTIPLY
-            //#pragma shader_feature_local _ _ADD_PRECOMPUTED_VELOCITY
-            //#pragma shader_feature_local _ _TRANSPARENT_WRITES_MOTION_VEC
-            //#pragma shader_feature_local _ _ENABLE_FOG_ON_TRANSPARENT
-            //#pragma shader_feature_local _ _DISABLE_DECALS
-            //#pragma shader_feature_local _ _DISABLE_SSR
-            //#pragma shader_feature_local _ _DISABLE_SSR_TRANSPARENT
-            //#pragma shader_feature_local _REFRACTION_OFF _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
-                #pragma multi_compile _ LOD_FADE_CROSSFADE
+            #pragma shader_feature_local _ _DOUBLESIDED_ON
+            #pragma shader_feature_local_fragment _ _DISABLE_DECALS
+            #pragma shader_feature_local_raytracing _ _DISABLE_DECALS
+            #pragma shader_feature_local _ _REFRACTION_PLANE _REFRACTION_SPHERE _REFRACTION_THIN
         
 
             #define SHADERPASS SHADERPASS_FULL_SCREEN_DEBUG
@@ -19994,6 +20064,12 @@ void Frag(  VertexToPixel v2f
         #if !defined(AREA_SHADOW_LOW) && !defined(AREA_SHADOW_MEDIUM) && !defined(AREA_SHADOW_HIGH) // low come from volumetricLighting.compute
             #define AREA_SHADOW_MEDIUM
         #endif
+        #if !defined(PUNCTUAL_SHADOW_ULTRA_LOW) && !defined(PUNCTUAL_SHADOW_LOW) && !defined(PUNCTUAL_SHADOW_MEDIUM) && !defined(PUNCTUAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define PUNCTUAL_SHADOW_MEDIUM
+        #endif
+        #if !defined(DIRECTIONAL_SHADOW_ULTRA_LOW) && !defined(DIRECTIONAL_SHADOW_LOW) && !defined(DIRECTIONAL_SHADOW_MEDIUM) && !defined(DIRECTIONAL_SHADOW_HIGH) // ultra low come from volumetricLighting.compute
+            #define DIRECTIONAL_SHADOW_MEDIUM
+        #endif
       #endif
                  
 
@@ -20007,7 +20083,7 @@ void Frag(  VertexToPixel v2f
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
                 #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
                 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/TextureStack.hlsl" // Required to be include before we include properties as it define DECLARE_STACK_CB
-                // #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
+                #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/DebugMipmapStreamingMacros.hlsl" // Required before including properties as it defines UNITY_TEXTURE_STREAMING_DEBUG_VARS
                 // Always include Shader Graph version
                 // Always include last to avoid double macros
                 #include "Packages/com.unity.shadergraph/ShaderGraphLibrary/Functions.hlsl" // Need to be here for Gradient struct definition
@@ -20069,6 +20145,7 @@ void Frag(  VertexToPixel v2f
 
             CBUFFER_START(UnityPerMaterial)
                float _UseShadowThreshold;
+               float4 _DoubleSidedConstants;
                float _BlendMode;
                float _EnableBlendModePreserveSpecularLighting;
                float _RayTracing;
@@ -20153,6 +20230,7 @@ void Frag(  VertexToPixel v2f
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -21056,6 +21134,7 @@ void Frag(  VertexToPixel v2f
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -21148,6 +21227,7 @@ void Frag(  VertexToPixel v2f
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -21197,6 +21277,7 @@ void Frag(  VertexToPixel v2f
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -21825,7 +21906,7 @@ void Frag(  VertexToPixel v2f
 
             
 
-               #if defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)
+               #if (defined(WRITE_DECAL_BUFFER) && !defined(_DISABLE_DECALS)) || defined(WRITE_RENDERING_LAYER)
                   #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalPrepassBuffer.hlsl"
                #endif
 

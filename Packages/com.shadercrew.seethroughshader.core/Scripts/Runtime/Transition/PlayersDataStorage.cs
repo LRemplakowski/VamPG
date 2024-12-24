@@ -58,7 +58,11 @@ namespace ShaderCrew.SeeThroughShader
 
         public void GeneratePlayerDataForSpecificPlayerPositions(int instancedId, int index)
         {
-            _PlayerDataDict.Add(GetPlayerID(instancedId), new PlayerData(GetPlayerID(instancedId), index));
+            if (!_PlayerDataDict.ContainsKey(GetPlayerID(instancedId)))
+            {
+                _PlayerDataDict.Add(GetPlayerID(instancedId), new PlayerData(GetPlayerID(instancedId), index));
+            }
+            
             UpdatePlayersDatasShaderFloatArray();
         }
 

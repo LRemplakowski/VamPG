@@ -21,7 +21,8 @@ namespace ShaderCrew.SeeThroughShader
     public enum DissolveTexSpace
     {
         Local = 0,
-        World = 1
+        World = 1,
+        Screen = 2,
     }
 
     public class SeeThroughShaderGUI

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace ShaderCrew.SeeThroughShader
 
     public class PlayerAndActivationTime
     {
-        public Dictionary<GameObject, float> playerToLastTriggerActivationTime = new Dictionary<GameObject, float>();        
+        public Dictionary<GameObject, float> playerToLastTriggerActivationTime = new Dictionary<GameObject, float>();
         public PlayerAndActivationTime(GameObject player, float lastTriggerActivationTime)
         {
             playerToLastTriggerActivationTime[player] = lastTriggerActivationTime;
@@ -16,47 +17,86 @@ namespace ShaderCrew.SeeThroughShader
 
     [AddComponentMenu(Strings.COMPONENTMENU_PLAYER_TO_CAMERA_RAYCAST_TRIGGER_MANAGER)]
     public class PlayerToCameraRaycastTriggerManager : MonoBehaviour
-{
+    {
         private Dictionary<ManualTriggerByParent, PlayerAndActivationTime> triggerToPlayerAndActivationTime = new Dictionary<ManualTriggerByParent, PlayerAndActivationTime>();
-        
+
         public List<GameObject> playerList;
         public float timeUntilExit = 0.1f;
+        public bool useSceneViewCam = false;
         public bool ShowDebugRays = false;
 
 
-
-
-
-
-
-
-
-#if UNITY_EDITOR
-        void OnDrawGizmos()
+        public void AddPlayerAtRuntime(GameObject player)
         {
-            Camera cam = Camera.main;
-            if (cam != null && playerList != null && playerList.Count > 0)
+            if (player != null)
             {
-                // iterating through all players that are raycasting to the camera
-                foreach (GameObject player in playerList)
+                if (player.activeSelf)
                 {
-                    if (player != null)
+                    //bool updateRequired = false;
+                    if (playerList == null)
                     {
+                        playerList = new List<GameObject>();
+                        playerList.Add(player);
+                        //  updateRequired = true;
 
-                        if (player.GetComponent<SeeThroughShaderPlayer>() == null)
-                        {
-                            Gizmos.color = new Color(1, 0, 0, 3.0f);
-                            Gizmos.DrawSphere(player.transform.position, 0.5f);
-                            //DrawString("Test", player.transform.position);
-                        }
-                 
+                    }
+                    else if (!playerList.Contains(player))
+                    {
+                        playerList.Add(player);
+                        // updateRequired = true;
                     }
 
                 }
             }
 
         }
-#endif
+
+        public void RemovePlayerAtRuntime(GameObject player)
+        {
+            if (player != null)
+            {
+                if (playerList != null && playerList.Contains(player))
+                {
+                    playerList.Remove(player);
+                }
+            }
+
+
+        }
+
+
+
+
+
+
+//#if UNITY_EDITOR
+//        void OnDrawGizmos()
+//        {
+//            Camera cam = Camera.main;
+//            if (cam != null && playerList != null && playerList.Count > 0)
+//            {
+//                // iterating through all players that are raycasting to the camera
+//                foreach (GameObject player in playerList)
+//                {
+//                    if (player != null)
+//                    {
+
+//                        if (player.GetComponent<SeeThroughShaderPlayer>() == null)
+//                        {
+//                            Gizmos.color = new Color(1, 0, 0, 3.0f);
+//                            Gizmos.DrawSphere(player.transform.position, 0.5f);
+//                            //DrawString("Test", player.transform.position);
+//                        }
+
+//                    }
+
+//                }
+//            }
+
+//        }
+
+
+//#endif
         //public static void DrawString(string text, Vector3 worldPos, Color? textColor = null, Color? backColor = null)
         //{
         //    UnityEditor.Handles.BeginGUI();
@@ -89,22 +129,29 @@ namespace ShaderCrew.SeeThroughShader
         void Update()
         {
             Camera cam = Camera.main;
-                        
+
+#if UNITY_EDITOR
+            if(useSceneViewCam) 
+            {
+                cam = Camera.current;
+            }
+#endif
+
 
             if (cam != null && playerList != null && playerList.Count > 0)
             {
                 // iterating through all players that are raycasting to the camera
                 foreach (GameObject player in playerList)
                 {
-                    if(ShowDebugRays)
+                    if (ShowDebugRays)
                     {
                         Debug.DrawRay(player.transform.position, cam.transform.position - player.transform.position, Color.magenta);
                     }
 
-                    if(player != null)
+                    if (player != null)
                     {
 
-                        if (player.GetComponent<SeeThroughShaderPlayer>() == null) 
+                        if (player.GetComponent<SeeThroughShaderPlayer>() == null)
                         {
                             Gizmos.color = new Color(0, 1, 0, 0.2f);
                             Gizmos.DrawSphere(player.transform.position, 1);
@@ -149,7 +196,7 @@ namespace ShaderCrew.SeeThroughShader
                             }
                         }
                     }
-                    
+
                 }
 
 

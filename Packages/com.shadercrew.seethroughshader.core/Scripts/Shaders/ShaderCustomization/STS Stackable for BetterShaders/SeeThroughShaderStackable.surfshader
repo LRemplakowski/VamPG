@@ -156,6 +156,7 @@ BEGIN_CBUFFER
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     fixed4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -317,6 +318,7 @@ BEGIN_CODE
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -409,6 +411,7 @@ BEGIN_CODE
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -458,6 +461,7 @@ BEGIN_CODE
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 

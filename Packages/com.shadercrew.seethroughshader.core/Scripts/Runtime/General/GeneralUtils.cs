@@ -1260,35 +1260,6 @@ namespace ShaderCrew.SeeThroughShader
             return null;
         }
 
-        //private static Material getFirstInstancedMaterial(Transform[] transforms, List<Shader> STSShaders)
-        //{
-        //    if (transforms != null && transforms.Length > 0)
-        //    {
-        //        foreach (Transform transform in transforms)
-        //        {
-        //            if (transform != null)
-        //            {
-        //                Renderer renderer = transform.GetComponent<Renderer>();
-        //                if (renderer != null)
-        //                {
-        //                    Material[] materials = renderer.materials;
-        //                    if (materials != null && materials.Length > 0)
-        //                    {
-        //                        foreach (Material material in materials)
-        //                        {
-        //                            if (material != null && STSShaders.Contains(material.shader))
-        //                            {
-        //                                return material;
-        //                            }
-        //                        }
-        //                    }
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return null;
-        //}       
         private static Material getFirstInstancedMaterial(Transform[] transforms, List<Shader> STSShaders)
         {
             if (transforms != null && transforms.Length > 0)
@@ -1311,7 +1282,6 @@ namespace ShaderCrew.SeeThroughShader
                                     }
                                 }
                             }
-
                         }
                     }
                 }

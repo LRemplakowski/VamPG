@@ -896,6 +896,7 @@ ZWrite On
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -1385,6 +1386,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -1477,6 +1479,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -1526,6 +1529,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -2937,6 +2941,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -3426,6 +3431,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -3518,6 +3524,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -3567,6 +3574,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -4889,6 +4897,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -5378,6 +5387,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -5470,6 +5480,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -5519,6 +5530,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -6762,6 +6774,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -7251,6 +7264,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -7343,6 +7357,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -7392,6 +7407,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -8635,6 +8651,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -9124,6 +9141,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -9216,6 +9234,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -9265,6 +9284,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 
@@ -10516,6 +10536,7 @@ bool IsAlphaDiscardEnabledMy()
     float4 _ObstructionCurve_TexelSize;      
     float _DissolveMaskEnabled;
     float4 _DissolveMask_TexelSize;
+    float4 _DissolveTex_TexelSize;
     half4 _DissolveColor;
     float _DissolveColorSaturation;
     float _DissolveEmission;
@@ -11005,6 +11026,7 @@ bool IsAlphaDiscardEnabledMy()
         half _DissolveMethodGlobal;
         half _DissolveTexSpaceGlobal;
 
+        float4 _DissolveTexGlobal_TexelSize;
     #endif
 
 
@@ -11097,6 +11119,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMaskGlobal,
                         _ObstructionCurveGlobal,
 
+                        _DissolveTexGlobal_TexelSize,
                         _DissolveMaskGlobal_TexelSize,
                         _ObstructionCurveGlobal_TexelSize,
 
@@ -11146,6 +11169,7 @@ bool IsAlphaDiscardEnabledMy()
                         _DissolveMask,
                         _ObstructionCurve,
 
+                        _DissolveTex_TexelSize,
                         _DissolveMask_TexelSize,
                         _ObstructionCurve_TexelSize,
 

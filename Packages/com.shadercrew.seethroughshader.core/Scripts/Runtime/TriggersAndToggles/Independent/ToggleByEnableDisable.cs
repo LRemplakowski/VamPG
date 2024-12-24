@@ -4,69 +4,51 @@ using UnityEngine;
 
 namespace ShaderCrew.SeeThroughShader
 {
-    public class ToggleByEnableDisable : MonoBehaviour
+    public class ToggleByEnableDisable : ToogleByWhateverAbstract
     {
-        public TransitionController seeThroughShaderController;
-
-        bool initialized = false;
+        public bool invertActivationOrder = false;
 
 
-        void Start()
+        protected override void OnStart()
         {
-            if (this.isActiveAndEnabled)
+            if (invertActivationOrder)
             {
-                InitializeToggle();
-            }
-        }
-
-        private void OnEnable()
-        {
-            if (seeThroughShaderController == null)
-            {
-                InitializeToggle();
                 activateSTSEffect();
             }
         }
 
-        private void OnDisable()
+        void OnEnable()
         {
             if (seeThroughShaderController != null)
             {
-                dectivateSTSEffect();
+                if (invertActivationOrder)
+                {
+                    activateSTSEffect();
+                }
+                else
+                {
+                    deactivateSTSEffect();
+                }
             }
         }
 
-        private void OnDestroy()
+        void OnDisable()
         {
             if (seeThroughShaderController != null)
             {
-                seeThroughShaderController.destroy();
+                if (invertActivationOrder)
+                {
+                    deactivateSTSEffect();
+                }
+                else
+                {
+                    activateSTSEffect();
+                }
             }
         }
-        private void InitializeToggle()
+
+        protected override void OnDestroyImpl()
         {
-            if (!initialized)
-            {
-                seeThroughShaderController = new TransitionController(this.transform);
-                initialized = true;
-            }
-
-
         }
-
-
-
-        private void activateSTSEffect()
-        {
-            seeThroughShaderController.notifyOnTriggerEnter(this.transform);
-
-        }
-
-        private void dectivateSTSEffect()
-        {
-            seeThroughShaderController.notifyOnTriggerExit(this.transform);
-
-        }
-
     }
 }

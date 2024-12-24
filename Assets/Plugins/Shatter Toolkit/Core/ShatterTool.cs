@@ -363,7 +363,7 @@ namespace ShatterToolkit
                     
                     if (!newRigidbody.isKinematic)
                     {
-                        newRigidbody.velocity = rigidbody.GetPointVelocity(newRigidbody.worldCenterOfMass);
+                        newRigidbody.linearVelocity = rigidbody.GetPointVelocity(newRigidbody.worldCenterOfMass);
                         
                         newRigidbody.angularVelocity = rigidbody.angularVelocity;
                     }

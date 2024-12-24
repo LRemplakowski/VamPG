@@ -22,7 +22,7 @@ namespace ShatterToolkit.Helpers
 
                 if (rb != null)
                 {
-                    rb.velocity = mouseRay.direction * speed;
+                    rb.linearVelocity = mouseRay.direction * speed;
                 }
             }
         }

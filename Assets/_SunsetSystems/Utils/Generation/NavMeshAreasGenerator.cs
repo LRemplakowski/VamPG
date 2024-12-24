@@ -38,7 +38,7 @@ namespace UnityEngine.AI
 
         private static void Update([CallerFilePath] string executingFilePath = "")
         {
-            var areaNames = GameObjectUtility.GetNavMeshAreaNames();
+            var areaNames = NavMesh.GetAreaNames();
             var lastHash = EditorPrefs.GetInt(HashSettingsKey);
             var newHash = GetAreaHash(areaNames);
 
@@ -61,7 +61,7 @@ namespace UnityEngine.AI
         private static void GenerateFile(string[] areaNames = default, int hash = 0, string outputPath = null)
         {
             if (areaNames == null)
-                areaNames = GameObjectUtility.GetNavMeshAreaNames();
+                areaNames = NavMesh.GetAreaNames();
 
             if (hash == 0)
                 hash = GetAreaHash(areaNames);

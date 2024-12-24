@@ -1804,13 +1804,13 @@ namespace Kalagaan
             public static eRP GetRenderPipeline()
             {
                 
-                if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset == null)
+                if (UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline == null)
                     return eRP.STANDARD;
                 
-                if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.GetType().Name.Contains("HDRenderPipelineAsset"))
+                if (UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline.GetType().Name.Contains("HDRenderPipelineAsset"))
                     return eRP.HDRP;
 
-                if (UnityEngine.Rendering.GraphicsSettings.renderPipelineAsset.GetType().Name.Contains("UniversalRenderPipelineAsset"))
+                if (UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline.GetType().Name.Contains("UniversalRenderPipelineAsset"))
                     return eRP.URP;
 
                 return eRP.STANDARD;

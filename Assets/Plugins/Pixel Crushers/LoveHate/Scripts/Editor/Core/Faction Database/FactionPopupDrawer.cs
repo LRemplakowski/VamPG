@@ -32,7 +32,7 @@ namespace PixelCrushers.LoveHate
             showReferenceDatabase = (attribute as FactionPopupAttribute).showReferenceDatabase;
             if (database == null)
             {
-                var factionManager = GameObject.FindObjectOfType<FactionManager>();
+                var factionManager = GameObjectUtility.FindFirstObjectByType<FactionManager>();
                 if (factionManager != null)
                 {
                     database = factionManager.factionDatabase;

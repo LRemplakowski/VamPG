@@ -13,7 +13,7 @@ namespace PixelCrushers.LoveHate
     public class GossipTrigger2D : AbstractGossipTrigger
     {
 
-#if USE_PHYSICS2D || !UNITY_2018_1_OR_NEWER
+#if USE_PHYSICS2D
         protected virtual void OnTriggerEnter2D(Collider2D other)
         {
             HandleOnTriggerEnter(other.gameObject);

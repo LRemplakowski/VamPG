@@ -24,7 +24,7 @@ namespace PixelCrushers.LoveHate.Example
 		{
 			base.Start();
 			m_deedReporter = GetComponent<DeedReporter>();
-			interactionUI = FindObjectOfType<InteractionUI>();
+			interactionUI = GameObjectUtility.FindFirstObjectByType<InteractionUI>();
 			StartCoroutine(UpdateUICoroutine());
 		}
 

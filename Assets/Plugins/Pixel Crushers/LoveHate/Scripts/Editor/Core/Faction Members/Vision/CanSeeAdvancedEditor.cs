@@ -13,11 +13,7 @@ namespace PixelCrushers.LoveHate
     public class CanSeeAdvancedEditor : Editor
     {
 
-#if UNITY_5_3 || UNITY_5_3_OR_NEWER
         [DrawGizmo(GizmoType.InSelectionHierarchy)]
-#else
-        [DrawGizmo(GizmoType.SelectedOrChild)]
-#endif
         public static void RenderCustomGizmo(CanSeeAdvanced canSeeAdvanced, GizmoType gizmoType)
         {
             DrawFOVs(canSeeAdvanced);

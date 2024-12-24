@@ -4,6 +4,25 @@ Copyright © Pixel Crushers
 RELEASE NOTES
 -------------
 
+Version 1.10.50:
+[November 19, 2024]
+- Improved: Added exceptions list to DeselectPreviousOnPointerEnter.
+- Improved: When using Input System package, can assign input action references to UIButtonKeyTrigger component.
+
+
+Version 1.10.49:
+[October 17, 2024]
+- Updated for Unity 6 LTS.
+
+
+Version 1.10.48.1:
+[October 10, 2024]
+- Fixed: Deserialization (saved game restoration) of factions that were created at runtime and saved.
+- Fixed: PersistentFactionMember error if component was used before Awake() ran.
+- Fixed: AnimatorSaver no longer saves trigger parameters multiple times on subsequent saves.
+- Improved: Added Activate On Enable checkbox to TimedEvent.
+
+
 Version 1.10.48:
 [September 3, 2024]
 - Updated asmdefs with references to Addressables, Cinemachine, Input System, TextMesh Pro, and Timeline in case those packages are installed.

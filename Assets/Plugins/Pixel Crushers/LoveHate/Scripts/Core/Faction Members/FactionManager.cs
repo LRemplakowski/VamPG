@@ -587,7 +587,7 @@ namespace PixelCrushers.LoveHate
                 var numFactionsToAdd = factionCount - factionDatabase.factions.Length;
                 for (int i = 0; i < numFactionsToAdd; i++)
                 {
-                    newList.Add(new Faction());
+                    newList.Add(new Faction() { traits = new float[factionDatabase.personalityTraitDefinitions.Length] });
                 }
                 factionDatabase.factions = newList.ToArray();
             }

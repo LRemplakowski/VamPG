@@ -41,11 +41,7 @@ namespace PixelCrushers.LoveHate
         {
             var min = property.FindPropertyRelative(minPropertyName).floatValue;
             var max = property.FindPropertyRelative(maxPropertyName).floatValue;
-#if UNITY_4_6 || UNITY_4_7 || UNITY_5_0 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2 || UNITY_5_3
-            EditorGUI.MinMaxSlider(new GUIContent(label), rect, ref min, ref max, -100f, 100f);
-#else
             EditorGUI.MinMaxSlider(rect, new GUIContent(label), ref min, ref max, -100f, 100f);
-#endif
             min = EditorGUI.FloatField(new Rect(rect.x + rect.width, rect.y, rangeTextWidth, rect.height), min);
             max = EditorGUI.FloatField(new Rect(rect.x + rect.width + rangeTextWidth, rect.y, rangeTextWidth, rect.height), max);
             property.FindPropertyRelative(minPropertyName).floatValue = min;

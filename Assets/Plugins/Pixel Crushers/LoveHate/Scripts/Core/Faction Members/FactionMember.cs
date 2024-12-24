@@ -269,7 +269,7 @@ namespace PixelCrushers.LoveHate
             {
                 factionManager = (FactionManager.instance != null) 
                     ? FactionManager.instance
-                    : FindObjectOfType<FactionManager>();
+                    : GameObjectUtility.FindFirstObjectByType<FactionManager>();
             }
             if (factionDatabase == null)
             {

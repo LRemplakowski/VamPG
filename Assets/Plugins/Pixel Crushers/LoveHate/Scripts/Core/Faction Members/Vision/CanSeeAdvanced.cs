@@ -116,8 +116,9 @@ namespace PixelCrushers.LoveHate
         // Preallocated arrays used in raycasts below.
         protected const int MaxHits = 20;
         RaycastHit[] hits = new RaycastHit[MaxHits];
-#if USE_PHYSICS2D || !UNITY_2018_1_OR_NEWER
+#if USE_PHYSICS2D
         protected RaycastHit2D[] hits2D = new RaycastHit2D[MaxHits];
+        protected ContactFilter2D contactFilter2D = new ContactFilter2D();
 #endif
 
         protected virtual bool RaycastHitTarget(Transform target, Vector3 rayStart, Vector3 rayEnd, Dimension dimension)
@@ -125,8 +126,9 @@ namespace PixelCrushers.LoveHate
             var layerMask = factionMember.sightLayerMask;
             if (dimension == Dimension.Is2D)
             {
-#if USE_PHYSICS2D || !UNITY_2018_1_OR_NEWER
-                int numHits = Physics2D.LinecastNonAlloc(rayStart, rayEnd, hits2D, layerMask);
+#if USE_PHYSICS2D
+                contactFilter2D.layerMask = layerMask;
+                int numHits = Physics2D.Linecast(rayStart, rayEnd, contactFilter2D, hits2D);
                 for (int i = 0; i < numHits; i++)
                 {
                     var hit = hits2D[i];

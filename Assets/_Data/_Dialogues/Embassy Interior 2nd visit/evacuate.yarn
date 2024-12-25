@@ -2,9 +2,11 @@
 tags:
 position: -323,-660
 ---
-[nomarkup][As Anastasia's hand balls into a fist you feel all of the muscles in your body tense, she directs with her hand and you dart out, Kieran behind you and Anastasia at the back. Her rosary glinting off the lights of the Embassy as she reaches up and grabs it.][/nomarkup] #line:0143377 
 <<if GetIsPartyMemberRecruited($anastasia) is true>>
-    {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that's it!! #line:028297e 
+    [nomarkup][As Anastasia's hand balls into a fist you feel all of the muscles in your body tense, she directs with her hand and you dart out, Kieran behind you and Anastasia at the back. Her rosary glinting off the lights of the Embassy as she reaches up and grabs it.][/nomarkup] #line:0143377 
+    {$anastasia}: Right behind you! Kieran- get your head lower - Desiree signal with you- yes that's it!! #line:028297e #lastline
+<<else>>
+    [nomarkup][All of the muscles of your body tense, taking just a moment to gather your bearings, you head out. Kieran behind you.][/nomarkup]
 <<endif>>
 -> [nomarkup][Determine the least dangerous path.] (Intelligence+Insight)[/nomarkup] #line:08b200e 
     <<jump evacuateIntRoll>>
@@ -89,11 +91,11 @@ position: 228,476
 <<elseif Roll ("Wits","Insight")>=2>>
     [nomarkup][If you could just get him to let go...][/nomarkup] #line:09d73a4 
 <<endif>>
--> {$pcName}: [nomarkup][You place your hand in his and give him a small, kind smile - the tense muscles around your eyes relaxing as you whisper your last words to him.][/nomarkup] It'll be okay, I'm going to try and get the police and paramedics- I'll come back.(Manipulation+Insight) #line:0f4f0d1 
+-> {$pcName}: [nomarkup][You place your hand in his and give him a small, kind smile - the tense muscles around your eyes relaxing as you whisper your last words to him.][/nomarkup] It'll be okay, I'm going to try and get the police and paramedics- I'll come back. (Manipulation+Insight) #line:0f4f0d1 
     <<jump sootheDoeEyedRoll>>
--> {$pcName}: [nomarkup][Looking at the young man, you take his hand in both of yours and press it down on his leg.][/nomarkup] Look. You can't walk in your current state, and I don't know how to help you. The best shot we have at your survival is for us to go and get help.(Charisma+Leadership) #line:0282591 
+-> {$pcName}: [nomarkup][Looking at the young man, you take his hand in both of yours and press it down on his leg.][/nomarkup] Look. You can't walk in your current state, and I don't know how to help you. The best shot we have at your survival is for us to go and get help. (Charisma+Leadership) #line:0282591 
     <<jump convinceDoeEyedRoll>>
--> {$pcName}: [nomarkup][You grab the doe-eyed man and drag him into cover.][/nomarkup] Get down! NOW!(Charisma+Intimidation) #line:00127b9 
+-> {$pcName}: [nomarkup][You grab the doe-eyed man and drag him into cover.][/nomarkup] Get down! NOW! (Charisma+Intimidation) #line:00127b9 
     <<jump intimidateDoeEyedRoll>>
 -> [nomarkup][Attempt to treat his wounds.][/nomarkup] #line:0fc7a42 
     <<jump medicalAssistance>>

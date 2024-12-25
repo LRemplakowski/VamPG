@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace SunsetSystems.Core.Database
@@ -81,16 +82,11 @@ namespace SunsetSystems.Core.Database
 #endif
             _databaseRegistry ??= new();
             _readableIDRegistry ??= new();
-            if (_databaseRegistry.ContainsKey(entry.DatabaseID))
-            {
-                _readableIDRegistry = new();
-                _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
-                return false;
-            }
-            _databaseRegistry.TryAdd(entry.DatabaseID, entry);
+            bool result = false;
+            result = entry != null && _databaseRegistry.TryAdd(entry.DatabaseID, entry);
             _readableIDRegistry = new();
-            _databaseRegistry.Values.ToList().ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
-            return true;
+            _databaseRegistry.Values.Where(item => item != null).ForEach(item => _readableIDRegistry.TryAdd(item.ReadableID, item.DatabaseID));
+            return result;
         }
 
         public void Unregister(T entry)

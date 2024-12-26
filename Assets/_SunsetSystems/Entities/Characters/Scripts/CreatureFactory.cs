@@ -53,9 +53,9 @@ namespace SunsetSystems.Entities.Creatures
 
         private async Awaitable<ICreature> GetNewCreatureInstance()
         {
-            AsyncOperationHandle<GameObject> handle = Addressables.InstantiateAsync(_creaturePrefabReference.RuntimeKey, _creatureStorageTransform.position, Quaternion.identity, _creatureStorageTransform);
-            await handle;
-            return handle.Result.GetComponent<ICreature>();
+            var opHandle = Addressables.InstantiateAsync(_creaturePrefabReference.RuntimeKey, _creatureStorageTransform.position, Quaternion.identity, _creatureStorageTransform);
+            await opHandle.Task;
+            return opHandle.Result.GetComponent<ICreature>();
         }
 
         public void DestroyCreature(ICreature instance)

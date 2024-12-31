@@ -1,6 +1,7 @@
 using SunsetSystems.Combat;
 using SunsetSystems.Inventory.Data;
 using SunsetSystems.Localization;
+using UnityEngine;
 
 namespace SunsetSystems.DynamicLog
 {
@@ -9,9 +10,16 @@ namespace SunsetSystems.DynamicLog
         public static string LogMessageFromAttackResult(ICombatant attacker, ITargetable target, in AttackResult attack)
         {
             if (attacker is not INamedObject namedAttacker)
+            {
+                Debug.LogError($"Creating log message from attack result failed! Attacker {attacker} is not INamedObject!");
                 return "";
+            }
             if (target is not INamedObject namedTarget)
+            {
+                Debug.LogError($"Creating log message from attack result failed! Target {target} is not INamedObject!");
                 return "";
+            }
+
             var attackerName = namedAttacker.GetLocalizedName();
             var targetName = namedTarget.GetLocalizedName();
             string result;

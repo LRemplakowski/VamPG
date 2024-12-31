@@ -1,6 +1,5 @@
-using System;
 using SunsetSystems.Abilities.Execution;
-using SunsetSystems.ActionSystem;
+using SunsetSystems.Abilities.Targeting;
 using SunsetSystems.Combat;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory;
@@ -48,6 +47,6 @@ namespace SunsetSystems.Abilities
 
         public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new ReloadStrategy();
 
-        public override IAbilityTargetingStrategy GetTargetingStrategy() => throw new NotImplementedException();
+        public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new SelfTargetStrategy(this);
     }
 }

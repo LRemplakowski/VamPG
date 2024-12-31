@@ -8,6 +8,9 @@ namespace SunsetSystems.Abilities.Targeting
 {
     public class TargetCreatureStrategy : IAbilityTargetingStrategy
     {
+        private static readonly Color TargetInRangeColor = Color.red;
+        private static readonly Color TargetOutOfRangeColor = Color.gray;
+
         private readonly IAbilityConfig _ability;
 
         public event Action OnExecutionTriggered;
@@ -28,16 +31,23 @@ namespace SunsetSystems.Abilities.Targeting
             ICombatant current = context.GetCurrentCombatant();
             context.TargetUpdateDelegate().Invoke(target.References.Targetable);
             var abilityRange = _ability.GetTargetingData(context.GetAbilityContext()).GetRangeData();
-            if (IsTargetInRange(current, target, in abilityRange))
+            bool isTargetInRange = IsTargetInRange(current, target, in abilityRange);
+            current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
+            context.TargetLockSetDelegate().Invoke(true);
+            var executionUI = context.GetExecutionUI();
+            if (isTargetInRange)
             {
-                current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
-                var targetingLineRenderer = context.GetTargetingLineRenderer();
-                targetingLineRenderer.SetPosition(1, target.AimingOrigin);
-                context.TargetingLineUpdateDelegate().Invoke(true);
-                context.TargetLockSetDelegate().Invoke(true);
-                var executionUI = context.GetExecutionUI();
+                if (CanShowTargetingLine(in abilityRange))
+                    ShowTargetingLine(context, target.AimingOrigin, TargetInRangeColor);
                 executionUI.RegisterConfirmationCallback(TriggerExecution);
                 executionUI.UpdateShowInterface(true, () => context.CanExecuteAbility(_ability));
+            }
+            else
+            {
+                if (CanShowTargetingLine(in abilityRange))
+                    ShowTargetingLine(context, target.AimingOrigin, TargetOutOfRangeColor);
+                executionUI.UnregisterConfirmationCallback(TriggerExecution);
+                executionUI.UpdateShowInterface(true, () => false);
             }
         }
 
@@ -57,12 +67,11 @@ namespace SunsetSystems.Abilities.Targeting
             context.TargetUpdateDelegate().Invoke(target.References.Targetable);
             var abilityRange = _ability.GetTargetingData(context.GetAbilityContext()).GetRangeData();
             ICombatant current = context.GetCurrentCombatant();
-            if (IsTargetInRange(current, target, in abilityRange))
+            current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
+            if (CanShowTargetingLine(in abilityRange))
             {
-                var targetingLineRenderer = context.GetTargetingLineRenderer();
-                targetingLineRenderer.SetPosition(1, target.AimingOrigin);
-                context.TargetingLineUpdateDelegate().Invoke(true);
-                current.References.NavigationManager.FaceDirectionAfterMovementFinished(target.Transform.position);
+                var targetingLineColor = IsTargetInRange(current, target, in abilityRange) ? TargetInRangeColor : TargetOutOfRangeColor;
+                ShowTargetingLine(context, target.AimingOrigin, in targetingLineColor);
             }
         }
 
@@ -77,6 +86,15 @@ namespace SunsetSystems.Abilities.Targeting
         {
             ClearTargetingDelegates(context);
             DisableExecutionUI(context);
+        }
+
+        private void ShowTargetingLine(ITargetingContext context, in Vector3 target, in Color lineColor)
+        {
+            var targetingLineRenderer = context.GetTargetingLineRenderer();
+            targetingLineRenderer.SetPosition(1, target);
+            targetingLineRenderer.startColor = lineColor;
+            targetingLineRenderer.endColor = lineColor;
+            context.TargetingLineUpdateDelegate().Invoke(true);
         }
 
         private void ClearTargetingDelegates(ITargetingContext context)
@@ -116,5 +134,7 @@ namespace SunsetSystems.Abilities.Targeting
             Vector3 targetPosition = target.Transform.position;
             return Vector3.Distance(attackerPosition, targetPosition) <= abilityRange.MaxRange;
         }
+
+        private static bool CanShowTargetingLine(in RangeData abilityRange) => abilityRange.MaxRange > 1;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Persistence
@@ -44,7 +45,7 @@ namespace SunsetSystems.Persistence
     public interface ISaveable
     {
         private static readonly HashSet<ISaveable> SaveablesCache = new();
-        public static IEnumerable<ISaveable> Saveables => new List<ISaveable>(SaveablesCache);
+        public static IEnumerable<ISaveable> Saveables => SaveablesCache.AsEnumerable();
 
         protected static void RegisterSaveable(ISaveable saveable)
         {

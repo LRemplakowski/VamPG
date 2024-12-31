@@ -140,7 +140,7 @@ namespace SunsetSystems.WorldMap
 
             public WorldMapSaveData(WorldMapManager manager) : base()
             {
-                LastTraveledToMap = manager._currentTraveledToMap.DatabaseID;
+                LastTraveledToMap = manager._currentTraveledToMap?.DatabaseID ?? "";
                 UnlockedMapsIDs = manager.GetUnlockedMaps().Select(map => map.DatabaseID).ToList();
             }
         }

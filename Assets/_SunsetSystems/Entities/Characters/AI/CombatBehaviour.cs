@@ -10,12 +10,13 @@ using SunsetSystems.Animation;
 using SunsetSystems.Entities;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Equipment;
+using SunsetSystems.Localization;
 using UltEvents;
 using UnityEngine;
 
 namespace SunsetSystems.Combat
 {
-    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable, IFactionMember, IDamageable
+    public class CombatBehaviour : SerializedMonoBehaviour, ICombatant, ITargetable, IFactionMember, IDamageable, INamedObject
     {
         [Title("Config")]
         [SerializeField]

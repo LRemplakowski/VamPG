@@ -8,6 +8,7 @@ using SunsetSystems.Combat;
 using SunsetSystems.Combat.Grid;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Input;
+using SunsetSystems.Inventory;
 using UnityEngine;
 
 namespace SunsetSystems.Abilities
@@ -116,7 +117,10 @@ namespace SunsetSystems.Abilities
 
         private IEnumerable<IAbilityConfig> GetAbilitiesFromEquipment()
         {
-            return _references.EquipmentManager.EquippedItems.OfType<IAbilitySource>().SelectMany(item => item.GetAbilities());
+            var selectedWeapon = _references.WeaponManager.GetSelectedWeapon();
+            return _references.EquipmentManager.EquippedItems.OfType<IAbilitySource>()
+                                                             .Where(item => item is not IWeapon weapon || weapon == selectedWeapon)
+                                                             .SelectMany(item => item.GetAbilities());
         }
 
         private IEnumerable<IAbilityConfig> GetAbilitiesFromDisciplines()

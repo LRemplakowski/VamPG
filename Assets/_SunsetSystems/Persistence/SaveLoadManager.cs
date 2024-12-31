@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Redcode.Awaiting;
 using Sirenix.OdinInspector;
 using SunsetSystems.Audio;
 using SunsetSystems.Core.SceneLoading;

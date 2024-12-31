@@ -58,6 +58,13 @@ namespace SunsetSystems.Core.Database
 
         public bool TryGetEntry(string itemID, out T entry)
         {
+            entry = default;
+            if (string.IsNullOrWhiteSpace(itemID))
+            {
+                Debug.LogError($"{this} >>> TryGetEntry recieved null or empty itemID!");
+                return false;
+            }
+
             return _databaseRegistry.TryGetValue(itemID, out entry);
         }
 

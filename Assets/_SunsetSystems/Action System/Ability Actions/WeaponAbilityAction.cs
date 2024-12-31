@@ -12,7 +12,7 @@ namespace SunsetSystems.ActionSystem
 {
     public class WeaponAbilityAction : HostileAction
     {
-        public static event Action<AttackResult> OnAttackResolved;
+        public static event Action<ICombatant, ITargetable, AttackResult> OnAttackResolved;
 
         [SerializeField]
         private FlagWrapper _attackFinished;
@@ -82,7 +82,7 @@ namespace SunsetSystems.ActionSystem
             {
                 result = CombatCalculator.CalculateAttackResult(in attackContext);
                 LogAttack(Attacker, Target, in result);
-                OnAttackResolved?.Invoke(result);
+                OnAttackResolved?.Invoke(Attacker, Target, result);
                 if (result.Successful && _attackerContext.WeaponManager.UseAmmoFromSelectedWeapon(_weaponAbility.GetAmmoPerAttack()))
                 {
                     _targetDamageable.TakeDamage(result.AdjustedDamage);

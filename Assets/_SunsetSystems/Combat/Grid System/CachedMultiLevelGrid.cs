@@ -332,9 +332,11 @@ namespace SunsetSystems.Combat.Grid
 
             void VerifyIfIsWalkable(GridUnit unit)
             {
+                Vector3 originOffset;
                 for (float h = height; h > -1f; h -= .1f)
                 {
-                    if (NavMesh.SamplePosition(levelOrigin + new Vector3(unit.GridPosition.x * cellSize, h, unit.GridPosition.z * cellSize), out NavMeshHit hit, .11f, mask))
+                    originOffset = new Vector3(unit.GridPosition.x * cellSize, h, unit.GridPosition.z * cellSize);
+                    if (NavMesh.SamplePosition(levelOrigin + originOffset, out NavMeshHit hit, .11f, mask))
                     {
                         unit.SurfaceY = hit.position.y;
                         unit.Walkable = true;
@@ -345,8 +347,6 @@ namespace SunsetSystems.Combat.Grid
             void VerifyIfAdjactenToCoverSource(GridUnit unit, HashSet<ICover> coverSourcesCache)
             {
                 Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.GridPosition.x * cellSize, height / 2, unit.GridPosition.z * cellSize);
-                Vector3 boxCastExtentsForward = new(cellSize / 2, height, .1f);
-                Vector3 boxCastExtentsSideways = new(.1f, height, cellSize / 2);
                 CoverQuality coverQuality = CoverQuality.None;
                 FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.forward, ref coverQuality);
                 FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.right, ref coverQuality);

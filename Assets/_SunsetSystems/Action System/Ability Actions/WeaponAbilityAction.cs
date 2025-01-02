@@ -82,11 +82,11 @@ namespace SunsetSystems.ActionSystem
             {
                 result = CombatCalculator.CalculateAttackResult(in attackContext);
                 LogAttack(Attacker, Target, in result);
-                OnAttackResolved?.Invoke(Attacker, Target, result);
                 if (result.Successful && _attackerContext.WeaponManager.UseAmmoFromSelectedWeapon(_weaponAbility.GetAmmoPerAttack()))
                 {
                     _targetDamageable.TakeDamage(result.AdjustedDamage);
                 }
+                OnAttackResolved?.Invoke(Attacker, Target, result);
                 yield return new WaitForSeconds(_weaponAbility.GetDelayBetweenAttacks());
             }
             _attackFinished.Value = true;

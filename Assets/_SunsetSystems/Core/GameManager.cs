@@ -132,8 +132,8 @@ namespace SunsetSystems.Game
     {
         Exploration,
         Combat,
-        Conversation,
-        Menu,
+        Dialogue,
+        MainMenu,
         GamePaused, 
         WorldMap
     }

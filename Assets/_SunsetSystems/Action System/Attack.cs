@@ -5,6 +5,7 @@ using SunsetSystems.Combat;
 using SunsetSystems.DynamicLog;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace SunsetSystems.ActionSystem
@@ -16,17 +17,14 @@ namespace SunsetSystems.ActionSystem
         [SerializeField]
         private AttackModifier _attackModifier;
         [SerializeField]
-        private FlagWrapper attackFinished;
-        [SerializeField]
-        private FaceTarget faceTargetSubaction;
-        [SerializeField]
-        private ICombatContext _attackerContext;
-        [SerializeField]
-        private ICombatContext _targetContext;
+        private FlagWrapper _attackFinished;
         [SerializeField]
         private IDamageable _targetDamageable;
 
-        private IEnumerator attackRoutine;
+        private ICombatContext _attackerContext;
+        private ICombatContext _targetContext;
+        private FaceTarget _faceTargetSubaction;
+        private IEnumerator _attackRoutine;
 
         public Attack(ITargetable target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
         {
@@ -35,31 +33,31 @@ namespace SunsetSystems.ActionSystem
 
         public Attack(ITargetable target, ICombatant attacker) : base(target, attacker)
         {
-            attackFinished = new() { Value = false };
-            if (attacker is IContextProvider<ICombatContext> attackerContextSource)
-                _attackerContext = attackerContextSource.GetContext();
-            if (target is IContextProvider<ICombatContext> targetContextSource)
-                _targetContext = targetContextSource.GetContext();
+            _attackFinished = new() { Value = false };
             _targetDamageable = target as IDamageable;
+            conditions.Add(new WaitForFlag(_attackFinished));
         }
 
         public override void Cleanup()
         {
             base.Cleanup();
-            if (attackRoutine != null)
-                Attacker.CoroutineRunner.StopCoroutine(attackRoutine);
+            if (_attackRoutine != null)
+                Attacker.CoroutineRunner.StopCoroutine(_attackRoutine);
         }
 
         public override void Begin()
         {
-            if (attackRoutine != null)
+            if (_attackRoutine != null)
                 return;
-            conditions.Add(new WaitForFlag(attackFinished));
+            if (Attacker is IContextProvider<ICombatContext> attackerContextSource)
+                _attackerContext = attackerContextSource.GetContext();
+            if (Target is IContextProvider<ICombatContext> targetContextSource)
+                _targetContext = targetContextSource.GetContext();
             //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetObject.References.GameObject.name);
             AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(this, _attackModifier));
             LogAttack(Attacker, Target, result);
-            attackRoutine = PerformAttack(Attacker, Target, result);
-            Attacker.CoroutineRunner.StartCoroutine(attackRoutine);
+            _attackRoutine = PerformAttack(Attacker, Target, result);
+            Attacker.CoroutineRunner.StartCoroutine(_attackRoutine);
 
             static void LogAttack(ICombatant attacker, ITargetable target, AttackResult result)
             {
@@ -76,16 +74,16 @@ namespace SunsetSystems.ActionSystem
 
         private IEnumerator PerformAttack(ICombatant attacker, ITargetable defender, AttackResult attackResult)
         {
-            faceTargetSubaction = new(attacker, _targetContext.Transform, 180f);
-            faceTargetSubaction.Begin();
-            while (faceTargetSubaction.EvaluateAction() is false)
+            _faceTargetSubaction = new(attacker, _targetContext.Transform, 180f);
+            _faceTargetSubaction.Begin();
+            while (_faceTargetSubaction.EvaluateAction() is false)
                 yield return null;
             attacker.References.AnimationManager.PlayFireWeaponAnimation();
             //defender.References.AnimationManager.PlayTakeHitAnimation();
             yield return new WaitForSeconds(1f);
             if (attackResult.Successful)
                 _targetDamageable.TakeDamage(attackResult.AdjustedDamage);
-            attackFinished.Value = true;
+            _attackFinished.Value = true;
         }
 
         private readonly struct AttackContextFromAttackAction : IAttackContext
@@ -139,17 +137,22 @@ namespace SunsetSystems.ActionSystem
 
             public RangeData GetAttackRangeData()
             {
-                throw new System.NotImplementedException();
+                return _attackerContext.WeaponManager.GetSelectedWeapon().GetRangeData();
             }
 
             public AttackType GetAttackType()
             {
-                throw new System.NotImplementedException();
+                return GetAttackRangeData().MaxRange > 1 ? AttackType.WeaponRanged : AttackType.WeaponMelee;
             }
 
             public int GetAttributeValue(AttackParticipant entity, AttributeType attributeType)
             {
-                throw new System.NotImplementedException();
+                return entity switch
+                {
+                    AttackParticipant.Attacker => _attackerContext.GetAttributeValue(attributeType),
+                    AttackParticipant.Target => _targetContext.GetAttributeValue(attributeType),
+                    _ => 0,
+                };
             }
 
             public AttackModifier GetBaseAttackModifier()
@@ -159,12 +162,26 @@ namespace SunsetSystems.ActionSystem
 
             public IEnumerable<ICover> GetCoverSources(AttackParticipant entity)
             {
-                throw new System.NotImplementedException();
+                return entity switch
+                {
+                    AttackParticipant.Attacker => _attackerContext.CurrentCoverSources,
+                    AttackParticipant.Target => _targetContext.CurrentCoverSources,
+                    _ => new List<ICover>(),
+                };
             }
 
             public int GetDamageReduction()
             {
-                throw new System.NotImplementedException();
+                return GetAttackType() switch
+                {
+                    AttackType.WeaponMelee => _attackerContext.GetAttributeValue(AttributeType.Stamina),
+                    AttackType.WeaponRanged => _targetContext.GetAttributeValue(AttributeType.Dexterity),
+                    AttackType.MagicMelee => throw new System.NotImplementedException(),
+                    AttackType.MagicRanged => throw new System.NotImplementedException(),
+                    AttackType.WeaponAOE => throw new System.NotImplementedException(),
+                    AttackType.MagicAOE => throw new System.NotImplementedException(),
+                    _ => int.MaxValue,
+                };
             }
 
             public AttackModifier GetHeightAttackModifier()
@@ -179,19 +196,34 @@ namespace SunsetSystems.ActionSystem
                 return heightAttackMod;
             }
 
-            public Vector3 GetPosition(AttackParticipant entity)
+            public readonly Vector3 GetPosition(AttackParticipant entity)
             {
-                throw new System.NotImplementedException();
+                return entity switch
+                {
+                    AttackParticipant.Attacker => _attackerContext.Transform.position,
+                    AttackParticipant.Target => _targetContext.Transform.position,
+                    _ => Vector3.zero,
+                };
             }
 
-            public bool IsInCover(AttackParticipant entity)
+            public readonly bool IsInCover(AttackParticipant entity)
             {
-                throw new System.NotImplementedException();
+                return entity switch
+                {
+                    AttackParticipant.Attacker => _attackerContext.IsInCover,
+                    AttackParticipant.Target => _targetContext.IsInCover,
+                    _ => false,
+                };
             }
 
-            public bool IsPlayerControlled(AttackParticipant entity)
+            public readonly bool IsPlayerControlled(AttackParticipant entity)
             {
-                throw new System.NotImplementedException();
+                return entity switch
+                {
+                    AttackParticipant.Attacker => _attackerContext.IsPlayerControlled,
+                    AttackParticipant.Target => _targetContext.IsPlayerControlled,
+                    _ => false,
+                };
             }
         }
     } 

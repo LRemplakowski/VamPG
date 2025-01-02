@@ -80,7 +80,7 @@ namespace SunsetSystems.Input.CameraControl
             }
             Vector2 value = context.ReadValue<Vector2>();
             _moveDirection = new Vector3(value.x, 0, value.y);
-            if (GameManager.Instance.CurrentState == GameState.Conversation){
+            if (GameManager.Instance.CurrentState == GameState.Dialogue){
                 _moveDirection = Vector3.zero;
             }
         }

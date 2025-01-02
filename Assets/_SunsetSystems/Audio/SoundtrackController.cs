@@ -149,8 +149,8 @@ namespace SunsetSystems.Audio
             if (playlistData.Dialogue != null)
             {
                 //var op = playlistData.Dialogue.LoadAssetAsync<IPlaylist>();
-                //operations[GameState.Conversation] = op.Task;
-                _statePlaylistPairs[GameState.Conversation] = playlistData.Dialogue;
+                //operations[GameState.Dialogue] = op.Task;
+                _statePlaylistPairs[GameState.Dialogue] = playlistData.Dialogue;
             }
             //await Task.WhenAll(operations.Values);
             //foreach (var statePlaylist in operations)
@@ -172,7 +172,7 @@ namespace SunsetSystems.Audio
             }
             if (playlistData.Dialogue != null)
             {
-                _playlistOverrides[GameState.Conversation] = playlistData.Dialogue;
+                _playlistOverrides[GameState.Dialogue] = playlistData.Dialogue;
             }
             PlayStatePlaylist(GameState.Exploration);
         }
@@ -182,7 +182,7 @@ namespace SunsetSystems.Audio
             ScenePlaylistData playlistData = new();
             _playlistOverrides.TryGetValue(GameState.Exploration, out playlistData.Exploration);
             _playlistOverrides.TryGetValue(GameState.Combat, out playlistData.Combat);
-            _playlistOverrides.TryGetValue(GameState.Conversation, out playlistData.Dialogue);
+            _playlistOverrides.TryGetValue(GameState.Dialogue, out playlistData.Dialogue);
             return playlistData;
         }
 

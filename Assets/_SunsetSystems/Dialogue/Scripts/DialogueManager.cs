@@ -85,7 +85,7 @@ namespace SunsetSystems.Dialogue
                 view.gameObject.SetActive(true);
             }
             _dialogueRunner.StartDialogue(startNode);
-            GameManager.Instance.CurrentState = GameState.Conversation;
+            GameManager.Instance.CurrentState = GameState.Dialogue;
             return true;
         }   
 

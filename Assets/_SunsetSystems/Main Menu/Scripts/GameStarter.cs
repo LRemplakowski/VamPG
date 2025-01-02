@@ -31,7 +31,7 @@ namespace SunsetSystems.Data
         {
             if (!_mainMenuParent)
                 _mainMenuParent = GameObject.FindGameObjectWithTag(MAIN_MENU);
-            GameManager.Instance.CurrentState = GameState.Menu;
+            GameManager.Instance.CurrentState = GameState.MainMenu;
         }
 
         public void SelectBackground(PlayerCharacterBackground selectedBackground)

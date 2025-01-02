@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Redcode.Awaiting;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AI;
@@ -18,7 +19,9 @@ namespace SunsetSystems.Combat.Grid
         [SerializeField, Min(1)]
         private int levelDepth = 10;
         [SerializeField, Min(1)]
-        private int gridHeight;
+        private float levelHeight = 2f;
+        [SerializeField, Min(1), PreviouslySerializedAs("gridHeight")]
+        private int gridLevelsCount;
         [SerializeField, Min(1)]
         private float gridCellSize = 1f;
         public float GridCellSize => gridCellSize;
@@ -114,12 +117,12 @@ namespace SunsetSystems.Combat.Grid
             Vector3 localPosition = transform.InverseTransformPoint(worldPosition);
             Vector3Int gridPosition = Vector3Int.zero;
             localPosition.x = Mathf.Clamp(localPosition.x, 0, levelWidth * gridCellSize);
-            localPosition.y = Mathf.Clamp(localPosition.y, 0, gridHeight * gridCellSize);
+            localPosition.y = Mathf.Clamp(localPosition.y, 0, gridLevelsCount * gridCellSize);
             localPosition.z = Mathf.Clamp(localPosition.z, 0, levelDepth * gridCellSize);
             gridPosition.x = Mathf.RoundToInt(localPosition.x / gridCellSize);
             gridPosition.x = Mathf.Clamp(gridPosition.x, 0, levelWidth - 1);
             gridPosition.y = Mathf.RoundToInt(localPosition.y / gridCellSize);
-            gridPosition.y = Mathf.Clamp(gridPosition.y, 0, gridHeight - 1);
+            gridPosition.y = Mathf.Clamp(gridPosition.y, 0, gridLevelsCount - 1);
             gridPosition.z = Mathf.RoundToInt(localPosition.z / gridCellSize);
             gridPosition.z = Mathf.Clamp(gridPosition.z, 0, levelDepth - 1);
             return gridPosition;
@@ -190,10 +193,10 @@ namespace SunsetSystems.Combat.Grid
         public void BuildGrid()
         {
             cachedCoverSourcesInGrid.Clear();
-            levels = new GridLevel[gridHeight];
-            for (int y = 0; y < gridHeight; y++)
+            levels = new GridLevel[gridLevelsCount];
+            for (int y = 0; y < gridLevelsCount; y++)
             {
-                GridLevel level = new(levelWidth, levelDepth, y, transform.position + Vector3.up * y, gridCellSize);
+                GridLevel level = new(levelWidth, levelDepth, levelHeight, y, transform.position + Vector3.up * y, gridCellSize);
                 level.BuildLevel(gridAreaMask, cachedCoverSourcesInGrid);
                 levels[y] = level;
             }
@@ -202,8 +205,6 @@ namespace SunsetSystems.Combat.Grid
 
         private void OnDrawGizmosSelected()
         {
-            if (showGizmosWhenNotSelected)
-                return;
             Gizmos.color = Color.blue;
             foreach (GridLevel level in levels)
             {
@@ -220,7 +221,8 @@ namespace SunsetSystems.Combat.Grid
                                 Gizmos.color = Color.yellow;
                             else
                                 Gizmos.color = Color.blue;
-                            Gizmos.DrawWireCube(transform.position + new Vector3(x, 0f, z) * gridCellSize + new Vector3(0, unit.SurfaceY, 0), new Vector3(gridCellSize, .1f, gridCellSize));
+                            Gizmos.DrawWireCube(transform.position + new Vector3(x, level.YPosition + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                            Gizmos.DrawWireSphere(transform.position + new Vector3(x, level.YPosition + .05f, z) * gridCellSize, .1f);
                         }
                     }
                 }
@@ -247,7 +249,8 @@ namespace SunsetSystems.Combat.Grid
                                     Gizmos.color = Color.yellow;
                                 else
                                     Gizmos.color = Color.blue;
-                                Gizmos.DrawWireCube(transform.position + new Vector3(x, unit.SurfaceY + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                                Gizmos.DrawWireCube(transform.position + new Vector3(x, level.YPosition + .05f, z) * gridCellSize, new Vector3(gridCellSize, .1f, gridCellSize));
+                                Gizmos.DrawWireSphere(transform.position + new Vector3(x, level.YPosition + .05f, z) * gridCellSize, .1f);
                             }
                         }
                     }
@@ -261,6 +264,8 @@ namespace SunsetSystems.Combat.Grid
     {
         [SerializeField, MinValue(1)]
         private int width = 10, depth = 10;
+        [SerializeField, MinValue(1f)]
+        private float height = 2f;
         [SerializeField, MinValue(0)]
         private int yPosition = 0;
         [SerializeField]
@@ -282,13 +287,14 @@ namespace SunsetSystems.Combat.Grid
             set => gridCells[x, z] = value;
         }
 
-        public GridLevel(int width, int depth, int yPosition, Vector3 levelOrigin, float cellSize)
+        public GridLevel(int width, int depth, float height, int yPosition, Vector3 levelOrigin, float cellSize)
         {
             this.width = width;
             this.yPosition = yPosition;
             this.depth = depth;
             this.levelOrigin = levelOrigin;
             this.cellSize = cellSize;
+            this.height = height;
             gridCells = new GridUnit[width, depth];
         }
 
@@ -307,9 +313,11 @@ namespace SunsetSystems.Combat.Grid
                 for (int z = 0; z < depth; z++)
                 {
                     Vector3Int gridPos = new(x, yPosition, z);
-                    Vector3 worldPos = levelOrigin + new Vector3(gridPos.x * cellSize, gridPos.y * cellSize, gridPos.z * cellSize);
-                    GridUnit newGridUnit = new(gridPos, worldPos);
-                    newGridUnit.CellSize = cellSize;
+                    Vector3 worldPos = levelOrigin + new Vector3(gridPos.x * cellSize, gridPos.y * height, gridPos.z * cellSize);
+                    GridUnit newGridUnit = new(gridPos, worldPos)
+                    {
+                        CellSize = cellSize
+                    };
                     VerifyIfIsWalkable(newGridUnit);
                     if (newGridUnit.Walkable)
                     {
@@ -324,9 +332,9 @@ namespace SunsetSystems.Combat.Grid
 
             void VerifyIfIsWalkable(GridUnit unit)
             {
-                for (int i = 0; i < cellSize * 10; i++)
+                for (float h = height; h > -1f; h -= .1f)
                 {
-                    if (NavMesh.SamplePosition(levelOrigin + new Vector3(unit.GridPosition.x * cellSize, .1f * i, unit.GridPosition.z * cellSize), out NavMeshHit hit, .05f, mask))
+                    if (NavMesh.SamplePosition(levelOrigin + new Vector3(unit.GridPosition.x * cellSize, h, unit.GridPosition.z * cellSize), out NavMeshHit hit, .11f, mask))
                     {
                         unit.SurfaceY = hit.position.y;
                         unit.Walkable = true;
@@ -336,51 +344,34 @@ namespace SunsetSystems.Combat.Grid
 
             void VerifyIfAdjactenToCoverSource(GridUnit unit, HashSet<ICover> coverSourcesCache)
             {
-                Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.GridPosition.x * cellSize, cellSize / 2, unit.GridPosition.z * cellSize);
-                Vector3 boxCastExtentsForward = new(cellSize / 4, cellSize / 2, .1f);
-                Vector3 boxCastExtentsSideways = new(.1f, cellSize / 2, cellSize / 4);
+                Vector3 gridUnitCenter = levelOrigin + new Vector3(unit.GridPosition.x * cellSize, height / 2, unit.GridPosition.z * cellSize);
+                Vector3 boxCastExtentsForward = new(cellSize / 2, height, .1f);
+                Vector3 boxCastExtentsSideways = new(.1f, height, cellSize / 2);
                 CoverQuality coverQuality = CoverQuality.None;
-                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsForward, Vector3.forward, out RaycastHit lastHit, Quaternion.identity, cellSize + 0.1f))
-                {
-                    if (lastHit.collider.TryGetComponent(out ICover cover))
-                    {
-                        unit.AdjacentToCover = true;
-                        unit.AdjacentCoverSources.Add(cover);
-                        coverQuality = cover.Quality;
-                        coverSourcesCache.Add(cover);
-                    }
-                }
-                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsSideways, Vector3.right, out lastHit, Quaternion.identity, cellSize + 0.1f))
-                {
-                    if (lastHit.collider.TryGetComponent(out ICover cover))
-                    {
-                        unit.AdjacentToCover = true;
-                        unit.AdjacentCoverSources.Add(cover);
-                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
-                        coverSourcesCache.Add(cover);
-                    }
-                }
-                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsForward, Vector3.back, out lastHit, Quaternion.identity, cellSize + 0.1f))
-                {
-                    if (lastHit.collider.TryGetComponent(out ICover cover))
-                    {
-                        unit.AdjacentToCover = true;
-                        unit.AdjacentCoverSources.Add(cover);
-                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
-                        coverSourcesCache.Add(cover);
-                    }
-                }
-                if (Physics.BoxCast(gridUnitCenter, boxCastExtentsSideways, Vector3.left, out lastHit, Quaternion.identity, cellSize + 0.1f))
-                {
-                    if (lastHit.collider.TryGetComponent(out ICover cover))
-                    {
-                        unit.AdjacentToCover = true;
-                        unit.AdjacentCoverSources.Add(cover);
-                        coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
-                        coverSourcesCache.Add(cover);
-                    }
-                }
+                FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.forward, ref coverQuality);
+                FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.right, ref coverQuality);
+                FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.back, ref coverQuality);
+                FindCover(unit, coverSourcesCache, gridUnitCenter + Vector3.left, ref coverQuality);
                 unit.CoverQuality = coverQuality;
+
+                static void FindCover(GridUnit unit, HashSet<ICover> coverSourcesCache, Vector3 cellPosition, ref CoverQuality coverQuality)
+                {
+                    Collider[] overlap = new Collider[8];
+                    int overlapCount = Physics.OverlapBoxNonAlloc(cellPosition, new Vector3(unit.CellSize / 3f, unit.CellSize / 3f, unit.CellSize / 3f), overlap);
+                    if (overlapCount > 0)
+                    {
+                        for (int i = 0; i < overlapCount; i++)
+                        {
+                            if (overlap[i].TryGetComponent(out ICover cover))
+                            {
+                                unit.AdjacentToCover = true;
+                                unit.AdjacentCoverSources.Add(cover);
+                                coverQuality = cover.Quality > coverQuality ? cover.Quality : coverQuality;
+                                coverSourcesCache.Add(cover);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

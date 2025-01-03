@@ -103,7 +103,7 @@ namespace SunsetSystems.ActionSystem
                 _targetContext = attackAction._targetContext;
             }
 
-            public Vector3 GetAimingPosition(AttackParticipant entity)
+            public readonly Vector3 GetAimingPosition(AttackParticipant entity)
             {
                 return entity switch
                 {
@@ -113,7 +113,7 @@ namespace SunsetSystems.ActionSystem
                 };
             }
 
-            public int GetAttackDamage()
+            public readonly int GetAttackDamage()
             {
                 int damage = 0;
                 IWeapon selectedWeapon = _attackerContext.WeaponManager.GetSelectedWeapon();
@@ -130,22 +130,22 @@ namespace SunsetSystems.ActionSystem
                 return damage;
             }
 
-            public float GetCriticalDamageMultiplier()
+            public readonly float GetCriticalDamageMultiplier()
             {
                 return 1.5f;
             }
 
-            public RangeData GetAttackRangeData()
+            public readonly RangeData GetAttackRangeData()
             {
                 return _attackerContext.WeaponManager.GetSelectedWeapon().GetRangeData();
             }
 
-            public AttackType GetAttackType()
+            public readonly AttackType GetAttackType()
             {
                 return GetAttackRangeData().MaxRange > 1 ? AttackType.WeaponRanged : AttackType.WeaponMelee;
             }
 
-            public int GetAttributeValue(AttackParticipant entity, AttributeType attributeType)
+            public readonly int GetAttributeValue(AttackParticipant entity, AttributeType attributeType)
             {
                 return entity switch
                 {
@@ -155,12 +155,12 @@ namespace SunsetSystems.ActionSystem
                 };
             }
 
-            public AttackModifier GetBaseAttackModifier()
+            public readonly AttackModifier GetBaseAttackModifier()
             {
                 return _attackModifier;
             }
 
-            public IEnumerable<ICover> GetCoverSources(AttackParticipant entity)
+            public readonly IEnumerable<ICover> GetCoverSources(AttackParticipant entity)
             {
                 return entity switch
                 {
@@ -170,7 +170,7 @@ namespace SunsetSystems.ActionSystem
                 };
             }
 
-            public int GetDamageReduction()
+            public readonly int GetDamageReduction()
             {
                 return GetAttackType() switch
                 {
@@ -184,7 +184,7 @@ namespace SunsetSystems.ActionSystem
                 };
             }
 
-            public AttackModifier GetHeightAttackModifier()
+            public readonly AttackModifier GetHeightAttackModifier()
             {
                 AttackModifier heightAttackMod = new();
                 float heightDifference = _attacker.References.Transform.position.y - _targetContext.Transform.position.y;
@@ -224,6 +224,13 @@ namespace SunsetSystems.ActionSystem
                     AttackParticipant.Target => _targetContext.IsPlayerControlled,
                     _ => false,
                 };
+            }
+
+            public readonly int GetGridDistanceBetweenParticipants()
+            {
+                var worldDistance = Vector3.Distance(_attackerContext.Transform.position, _targetContext.Transform.position);
+                var gridScale = CombatManager.Instance.CurrentEncounter.GridManager.GetGridScale();
+                return Mathf.CeilToInt(worldDistance / gridScale);
             }
         }
     } 

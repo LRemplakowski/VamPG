@@ -25,6 +25,7 @@ namespace SunsetSystems.Tooltips
 
         public void OnCombatBegin(IEnumerable<ICombatant> combatants)
         {
+            _nameplateMap.Clear();
             foreach (var combatant in combatants)
             {
                 var weaponManager = combatant.GetContext().WeaponManager;

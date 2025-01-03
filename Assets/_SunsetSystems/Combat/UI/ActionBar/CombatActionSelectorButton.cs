@@ -1,7 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using SunsetSystems.Abilities;
+using SunsetSystems.Equipment;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +11,29 @@ namespace SunsetSystems.Combat.UI
     {
         [Title("Config")]
         [SerializeField]
-        private Image _abilityIcon;
+        private Image _iconDefault;
         [SerializeField]
-        private CompositeButton _compositeButton;
+        private Image _iconSelected;
+        [SerializeField]
+        private CompositeButton _buttonDefault;
+        [SerializeField]
+        private CompositeButton _buttonSelected;
+        [SerializeField]
+        private AmmoDisplay _ammoCounter;
         [Title("Runtime")]
         [ShowInInspector, ReadOnly]
         private IAbilityConfig _cachedAbility;
         private Action<IAbilityConfig> _selectionDelegate;
+
+        private void Awake()
+        {
+            ActionBarUI.OnAbilitySelected += OnAbilitySelected;
+        }
+
+        private void OnDestroy()
+        {
+            ActionBarUI.OnAbilitySelected -= OnAbilitySelected;
+        }
 
         public void OnClick()
         {
@@ -31,22 +47,68 @@ namespace SunsetSystems.Combat.UI
             SetupButtonVisuals(ability);
         }
 
+        public void SetUpdateAmmoCounterEnabled(bool enabled)
+        {
+            _ammoCounter.SetAmmoCounterVisible(enabled);
+        }
+
+        public void OnUpdateAmmoData(WeaponAmmoData ammoData)
+        {
+            _ammoCounter.UpdateAmmoData(in ammoData);
+        }
+
         private void CacheAbility(IAbilityConfig ability) => _cachedAbility = ability;
         private void CacheSelectionDelegate(Action<IAbilityConfig> selectionDelegate) => _selectionDelegate = selectionDelegate;
 
         private void SetupButtonVisuals(IAbilityConfig ability)
         {
             var abilituGUIdata = ability.GetAbilityUIData();
-            _abilityIcon.sprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Default);
-            _compositeButton.ClearCompositeData();
-            _compositeButton.AddSpriteSwapComposite(new()
+            var defaultSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Default);
+            var highlightedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Highlighted);
+            var pressedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Pressed);
+            var selectedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Selected);
+            var disabledSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Disabled);
+
+            var defaultSpriteStates = new CustomSpriteState()
             {
-                Image = _abilityIcon,
-                HighlightedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Highlighted),
-                PressedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Pressed),
-                SelectedSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Selected),
-                DisabledSprite = abilituGUIdata.GetAbilityIcon(IAbilityUIData.IconState.Disabled)
-            });
+                Image = _iconDefault,
+                HighlightedSprite = highlightedSprite,
+                PressedSprite = pressedSprite,
+                SelectedSprite = selectedSprite,
+                DisabledSprite = disabledSprite
+            };
+            var abilitySelectedSpriteStates = new CustomSpriteState()
+            {
+                Image = _iconSelected,
+                HighlightedSprite = selectedSprite,
+                PressedSprite = selectedSprite,
+                SelectedSprite = selectedSprite,
+                DisabledSprite = disabledSprite
+            };
+            UpdateButtonSprites(_iconDefault, _buttonDefault, defaultSprite, in defaultSpriteStates);
+            UpdateButtonSprites(_iconSelected, _buttonSelected, selectedSprite, in abilitySelectedSpriteStates);
+
+            UpdateAbilitySelected(false);
+        }
+
+        private void OnAbilitySelected(IAbilityConfig config)
+        {
+            UpdateAbilitySelected(config == _cachedAbility);
+        }
+
+        private void UpdateAbilitySelected(bool selected)
+        {
+            _buttonDefault.gameObject.SetActive(!selected);
+            _buttonDefault.interactable = !selected;
+            _buttonSelected.gameObject.SetActive(selected);
+            _buttonSelected.interactable = selected;
+        }
+
+        private static void UpdateButtonSprites(Image icon, CompositeButton button, Sprite normal, in CustomSpriteState buttonSpriteStates)
+        {
+            icon.sprite = normal;
+            button.ClearCompositeData();
+            button.AddSpriteSwapComposite(buttonSpriteStates);
         }
     }
 }

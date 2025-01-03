@@ -7,8 +7,6 @@ namespace SunsetSystems.Combat
 {
     public interface ICombatant : IActionPerformer, ITargetable, IContextProvider<ICombatContext>
     {
-        UltEvent<ICombatant> OnUsedActionPoint { get; set; }
-        UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         UltEvent<ICombatant> OnDamageTaken { get; set; }
 
         Vector3 AimingOrigin { get; }

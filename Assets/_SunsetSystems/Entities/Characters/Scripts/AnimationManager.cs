@@ -25,6 +25,8 @@ namespace SunsetSystems.Animation
         private const string ANIMATOR_PARAM_ON_MOVE = "IsMoving";
         private const string ANIMATOR_PARAM_SPEED = "Speed";
 
+        private const string ANIMATOR_PARAM_DEATH = "IsDead";
+
         [Title("References")]
         [SerializeField, Required]
         private ICreature owner;
@@ -53,6 +55,12 @@ namespace SunsetSystems.Animation
         private string _inCoverAnimationParam;
         private int _inCoverAnimationParamHash;
 
+
+        private readonly int _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
+        private readonly int _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
+
+        private readonly int _isDeadAnimationParamHash = Animator.StringToHash(ANIMATOR_PARAM_DEATH);
+
         private const string RIGHT_ARM = "CC_Base_R_Upperarm", 
                              RIGHT_FOREARM = "CC_Base_R_Forearm", 
                              RIGHT_HAND = "CC_Base_R_Hand", 
@@ -67,15 +75,10 @@ namespace SunsetSystems.Animation
 
         private bool _initializedOnce = false;
 
-        private int _animatorOnMove;
-        private int _animatorSpeed;
-
         public string ComponentID => ANIMATION_MANAGER_ID;
 
         private void Awake()
         {
-            _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
-            _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
             _weaponAnimationTypeParamHash = Animator.StringToHash(_weaponAnimationTypeParam);
             _takeHitAnimationParamHash = Animator.StringToHash(_takeHitAnimationParam);
             _fireWeaponAnimationParamHash = Animator.StringToHash(_fireWeaponAnimationParam);
@@ -220,6 +223,11 @@ namespace SunsetSystems.Animation
         public void SetCoverAnimationsEnabled(bool enabled)
         {
             animator.SetBool(_inCoverAnimationParamHash, enabled);
+        }
+
+        public void TriggerDeathAnimation()
+        {
+            SetBool(_isDeadAnimationParamHash, true);
         }
 
         public void SetTrigger(string name)

@@ -7,6 +7,7 @@ namespace SunsetSystems.Combat
 {
     public interface IAttackContext
     {
+        int GetGridDistanceBetweenParticipants();
         int GetAttackDamage();
         int GetDamageReduction();
         float GetCriticalDamageMultiplier();

@@ -80,6 +80,8 @@ namespace SunsetSystems.Abilities
             result &= _movementPointUser.UseMovementPoints(cost.MovementCost);
             result &= _actionPointUser.UseActionPoints(cost.ActionPointCost);
             result &= _bloodPointUser.UseBloodPoints(cost.BloodCost);
+            if (ability is IAmmoAbility ammoAbility)
+                result &= ConsumeAmmo(ammoAbility);
             return result;
         }
 
@@ -97,6 +99,8 @@ namespace SunsetSystems.Abilities
             result &= _movementPointUser.GetCurrentMovementPoints() >= cost.MovementCost;
             result &= _actionPointUser.GetCurrentActionPoints() >= cost.ActionPointCost;
             result &= _bloodPointUser.GetCurrentBloodPoints() >= cost.BloodCost;
+            if (ability is IAmmoAbility ammoAbility)
+                result &= HasEnoughAmmo(ammoAbility);
             return result;
         }
 
@@ -131,6 +135,17 @@ namespace SunsetSystems.Abilities
         private ITargetable GetCurrentTargetObject()
         {
             return _characterTarget;
+        }
+
+        private bool HasEnoughAmmo(IAmmoAbility ammoAbility)
+        {
+            return _references.WeaponManager.GetSelectedWeaponAmmoData().CurrentAmmo >= ammoAbility.GetAmmoPerUse() * ammoAbility.GetUsesPerExecution();
+        }
+
+        private bool ConsumeAmmo(IAmmoAbility ammoAbility)
+        {
+            var ammoCost = ammoAbility.GetAmmoPerUse() * ammoAbility.GetUsesPerExecution();
+            return _references.WeaponManager.UseAmmoFromSelectedWeapon(ammoCost);
         }
 
         private class AbilityContext : IAbilityContext

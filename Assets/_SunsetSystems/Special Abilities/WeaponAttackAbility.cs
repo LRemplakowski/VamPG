@@ -1,8 +1,6 @@
-using System;
 using Sirenix.OdinInspector;
 using SunsetSystems.Abilities.Execution;
 using SunsetSystems.Abilities.Targeting;
-using SunsetSystems.ActionSystem;
 using SunsetSystems.Combat;
 using SunsetSystems.Inventory;
 using UnityEngine;
@@ -10,7 +8,7 @@ using UnityEngine;
 namespace SunsetSystems.Abilities
 {
     [CreateAssetMenu(fileName = "New Weapon Ability", menuName = "Sunset Abilities/Weapon Attack")]
-    public sealed class WeaponAttackAbility : AbstractAbilityConfig
+    public sealed class WeaponAttackAbility : AbstractAbilityConfig, IAmmoAbility
     {
         [SerializeField, BoxGroup("Ability Range"), MinValue(0)]
         private int _baseAbilityRange = 1;
@@ -38,11 +36,14 @@ namespace SunsetSystems.Abilities
         private IAbilityExecutionStrategy _executionStrategy;
         private IAbilityTargetingStrategy _targetingStrategy;
 
-        protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
+        protected override bool ValidateAbilityTarget(IAbilityContext context)
         {
-            return IsTargetableNotNull(context);
+            return IsTargetDamageable(context);
 
-            static bool IsTargetableNotNull(IAbilityContext context) => context.TargetObject != null;
+            static bool IsTargetDamageable(IAbilityContext context)
+            {
+                return context.TargetObject is IDamageable;
+            }
         }
 
         protected override RangeData GetAbilityRangeData(IAbilityContext context)
@@ -55,15 +56,20 @@ namespace SunsetSystems.Abilities
             };
         }
 
-        public int GetAmmoPerAttack() => _ammoPerAttack;
-        public int GetNumberOfAttacks() => _numberOfAttacks;
+        public int GetAmmoPerUse() => _ammoPerAttack;
+        public int GetUsesPerExecution() => _numberOfAttacks;
         public int GetDamageBonus() => _damageBonus;
         public float GetDelayBetweenAttacks() => _delayBetweenAttacks;
         public AttackType GetAttackType() => _attackType;
         public DamageType GetDamageType() => _damageType;
 
         public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new AttackStrategyFromWeaponAbility(this);
-
         public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new TargetCreatureStrategy(this);
+    }
+
+    public interface IAmmoAbility 
+    {
+        int GetAmmoPerUse();
+        int GetUsesPerExecution();
     }
 }

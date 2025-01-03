@@ -15,15 +15,10 @@ namespace SunsetSystems.Abilities
         private IAbilityExecutionStrategy _executionStrategy;
         private IAbilityTargetingStrategy _targetingStrategy;
 
-        protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask)
+        protected override bool ValidateAbilityTarget(IAbilityContext context)
         {
-            return IsTargetNotNull(context)
-                   && GetTargetHasValidFlag(context, validTargetsMask)
-                   && GetTargetAsGridCell(context, out var gridCell)
+            return GetTargetAsGridCell(context, out var gridCell)
                    && IsPositionFree(gridCell);
-
-            static bool IsTargetNotNull(IAbilityContext context) => context.TargetObject != null;
-            static bool GetTargetHasValidFlag(IAbilityContext context, TargetableEntityType targetMask) => context.TargetObject.IsValidTarget(targetMask);
 
             static bool GetTargetAsGridCell(IAbilityContext context, out IGridCell cell)
             {

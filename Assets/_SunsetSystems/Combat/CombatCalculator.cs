@@ -30,14 +30,14 @@ namespace SunsetSystems.Combat
             hit |= attackerHitChance - defenderDodgeChance >= 1d;
             double hitRoll = _random.NextDouble() + attackModifier.HitRollMod;
             hit |= hitRoll < attackerHitChance - defenderDodgeChance;
-            hit |= attackModifier.SuccessMod;
+            hit |= attackModifier.ForceSuccesfulHit;
             if (hit)
             {
                 critChance = CalculateCritChance(context) + attackModifier.CritChanceMod;
                 damage = CalculateAttackDamage(context) + attackModifier.DamageMod;
                 critRoll = _random.NextDouble() + attackModifier.CritRollMod;
                 crit |= critRoll < critChance;
-                crit |= attackModifier.CriticalMod;
+                crit |= attackModifier.ForceCritical;
                 if (crit)
                 {
                     damage = Mathf.RoundToInt(damage * GetCriticalDamageMultiplier(context));
@@ -82,9 +82,8 @@ namespace SunsetSystems.Combat
         {
             double attributeModifier = attackContext.GetAttributeValue(AttackParticipant.Attacker, AttributeType.Wits);
             double result = 0d;
-            var attackerPosition = attackContext.GetPosition(AttackParticipant.Attacker);
-            var targetPosition = attackContext.GetPosition(AttackParticipant.Target);
-            if (attackContext.GetAttackRangeData().ShortRange >= Vector3.Distance(attackerPosition, targetPosition))
+            int ceiledGridDistance = attackContext.GetGridDistanceBetweenParticipants();
+            if (attackContext.GetAttackRangeData().ShortRange <= ceiledGridDistance)
             {
                 result -= SHORT_RANGE_HIT_PENALTY;
             }
@@ -119,7 +118,7 @@ namespace SunsetSystems.Combat
         public double HitChanceMod, DodgeChanceMod, HitRollMod;
         public double CritChanceMod, CritRollMod;
         public int DamageMod, DamageReductionMod, AdjustedDamageMod;
-        public bool SuccessMod, CriticalMod;
+        public bool ForceSuccesfulHit, ForceCritical;
 
         public static AttackModifier operator +(AttackModifier a, AttackModifier b)
         {
@@ -133,8 +132,8 @@ namespace SunsetSystems.Combat
                 DamageMod = a.DamageMod + b.DamageMod,
                 DamageReductionMod = a.DamageReductionMod + b.DamageReductionMod,
                 AdjustedDamageMod = a.AdjustedDamageMod + b.AdjustedDamageMod,
-                SuccessMod = a.SuccessMod || b.SuccessMod,
-                CriticalMod = a.CriticalMod || b.CriticalMod
+                ForceSuccesfulHit = a.ForceSuccesfulHit || b.ForceSuccesfulHit,
+                ForceCritical = a.ForceCritical || b.ForceCritical
             };
         }
     }

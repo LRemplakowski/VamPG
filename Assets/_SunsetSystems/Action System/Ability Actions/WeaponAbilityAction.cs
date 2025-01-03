@@ -54,11 +54,6 @@ namespace SunsetSystems.ActionSystem
 
         public override void Begin()
         {
-            if (_attackerContext.WeaponManager.HasEnoughAmmoInSelectedWeapon(_weaponAbility.GetAmmoPerAttack() * _weaponAbility.GetNumberOfAttacks()) is false)
-            {
-                Abort();
-                return;
-            }
             if (_attackRoutine != null)
             {
                 return;
@@ -78,11 +73,11 @@ namespace SunsetSystems.ActionSystem
                 yield return null;
             Attacker.References.AnimationManager.PlayFireWeaponAnimation();
             AttackResult result;
-            for (int i = 0; i < _weaponAbility.GetNumberOfAttacks(); i++)
+            for (int i = 0; i < _weaponAbility.GetUsesPerExecution(); i++)
             {
                 result = CombatCalculator.CalculateAttackResult(in attackContext);
                 LogAttack(Attacker, Target, in result);
-                if (result.Successful && _attackerContext.WeaponManager.UseAmmoFromSelectedWeapon(_weaponAbility.GetAmmoPerAttack()))
+                if (result.Successful)
                 {
                     _targetDamageable.TakeDamage(result.AdjustedDamage);
                 }
@@ -243,6 +238,13 @@ namespace SunsetSystems.ActionSystem
                     AttackParticipant.Target => _targetContext.IsPlayerControlled,
                     _ => false,
                 };
+            }
+
+            public readonly int GetGridDistanceBetweenParticipants()
+            {
+                var worldDistance = Vector3.Distance(_attackerContext.Transform.position, _targetContext.Transform.position);
+                var gridScale = CombatManager.Instance.CurrentEncounter.GridManager.GetGridScale();
+                return Mathf.CeilToInt(worldDistance / gridScale);
             }
         }
     }

@@ -28,8 +28,6 @@ namespace SunsetSystems.Combat
         public Vector3 RaycastOrigin => _raycastOrigin.position;
         [SerializeField, Required]
         private IWeaponManager _weaponManager;
-        [field: SerializeField]
-        public LineRenderer LineRenderer { get; private set; }
         [field: SerializeField, Required]
         public ICreature Owner { get; private set; }
         [SerializeField, Required]
@@ -104,7 +102,6 @@ namespace SunsetSystems.Combat
                 CreatureType.Mortal => validTargetsFlag.HasFlag(TargetableEntityType.Mortal),
                 CreatureType.Ghul => validTargetsFlag.HasFlag(TargetableEntityType.Ghoul),
                 CreatureType.Vampire => validTargetsFlag.HasFlag(TargetableEntityType.Vampire),
-                CreatureType.Invalid => false,
                 _ => false,
             };
         }
@@ -125,10 +122,6 @@ namespace SunsetSystems.Combat
         public Vector3 NameplatePosition => References.Transform.position + _combatNameplateOffset;
 
         [field: Title("Events")]
-        [field: SerializeField]
-        public UltEvent<ICombatant> OnUsedActionPoint { get; set; }
-        [field: SerializeField]
-        public UltEvent<ICombatant> OnSpentBloodPoint { get; set; }
         [field: SerializeField]
         public UltEvent<ICombatant> OnDamageTaken { get; set; }
 

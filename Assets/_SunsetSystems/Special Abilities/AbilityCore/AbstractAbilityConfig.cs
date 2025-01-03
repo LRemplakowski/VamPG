@@ -72,7 +72,18 @@ namespace SunsetSystems.Abilities
 
         public bool IsContextValidForExecution(IAbilityContext context)
         {
-            return IsContextNotNull(context) && HasValidTarget(context, GetValidTargetsMask(context));
+            return IsContextNotNull(context) 
+                   && IsTargetableNotNull(context)
+                   && GetTargetHasValidFlag(context, GetValidTargetsMask(context))
+                   && ValidateAbilityTarget(context);
+
+            static bool IsTargetableNotNull(IAbilityContext context) => context.TargetObject != null;
+            static bool GetTargetHasValidFlag(IAbilityContext context, TargetableEntityType flag)
+            {
+                if (flag.HasFlag(TargetableEntityType.Self) && context.SourceCombatBehaviour == context.TargetObject)
+                    return true;
+                return context.TargetObject.IsValidTarget(flag);
+            }
         }
 
         protected bool IsContextNotNull(IAbilityContext context) => context != null;
@@ -107,7 +118,7 @@ namespace SunsetSystems.Abilities
             return _validTargetsMask;
         }
 
-        protected abstract bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsMask);
+        protected abstract bool ValidateAbilityTarget(IAbilityContext context);
         public abstract IAbilityExecutionStrategy GetExecutionStrategy();
         public abstract IAbilityTargetingStrategy GetTargetingStrategy();
         protected abstract RangeData GetAbilityRangeData(IAbilityContext context);

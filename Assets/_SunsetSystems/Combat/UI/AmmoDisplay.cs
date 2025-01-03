@@ -18,7 +18,7 @@ namespace SunsetSystems.Combat.UI
                 _ammoText.enabled = visible;
         }
 
-        public void UpdateAmmoData(WeaponAmmoData ammoData)
+        public void UpdateAmmoData(in WeaponAmmoData ammoData)
         {
             if (_ammoText)
                 _ammoText.text = $"{ammoData.CurrentAmmo}/{ammoData.MaxAmmo}";

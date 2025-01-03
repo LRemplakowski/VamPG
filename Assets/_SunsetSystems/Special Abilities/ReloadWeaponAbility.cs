@@ -13,17 +13,12 @@ namespace SunsetSystems.Abilities
         private IAbilityExecutionStrategy _executionStrategy;
         private IAbilityTargetingStrategy _targetingStrategy;
 
-        protected override bool HasValidTarget(IAbilityContext context, TargetableEntityType validTargetsFlag)
+        protected override bool ValidateAbilityTarget(IAbilityContext context)
         {
-            return IsTargetNotNull(context)
-                   && GetTargetHasValidFlag(context, validTargetsFlag)
-                   && IsTargetCombatContextProvider(context, out var combatContext)
+            return GetTargetHasCombatContext(context, out var combatContext)
                    && IsTargetWeaponUsingAmmo(combatContext);
 
-            static bool GetTargetHasValidFlag(IAbilityContext context, TargetableEntityType flag) => context.TargetObject.IsValidTarget(flag);
-            static bool IsTargetNotNull(IAbilityContext context) => context.TargetObject != null;
-
-            static bool IsTargetCombatContextProvider(IAbilityContext context, out ICombatContext combatContext)
+            static bool GetTargetHasCombatContext(IAbilityContext context, out ICombatContext combatContext)
             {
                 combatContext = default;
                 if (context.TargetObject is IContextProvider<ICombatContext> combatContextProvider)
@@ -46,7 +41,6 @@ namespace SunsetSystems.Abilities
         }
 
         public override IAbilityExecutionStrategy GetExecutionStrategy() => _executionStrategy ??= new ReloadStrategy();
-
         public override IAbilityTargetingStrategy GetTargetingStrategy() => _targetingStrategy ??= new SelfTargetStrategy(this);
     }
 }

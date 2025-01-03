@@ -18,7 +18,7 @@ namespace SunsetSystems.Abilities
             //AttackModifier modifier = new();
             //int casterComposure = caster.References.StatsManager.Stats.Attributes.GetAttribute(AttributeType.Composure).GetValue();
             //modifier.DamageMod = Mathf.RoundToInt(casterComposure * _composureMultiplier);
-            //modifier.CriticalMod = true;
+            //modifier.ForceCritical = true;
             //modifier.HitChanceMod = -0.3d;
             //Attack attack = new(target, caster, modifier);
             //caster.PerformAction(attack);

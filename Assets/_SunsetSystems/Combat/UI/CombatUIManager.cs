@@ -23,8 +23,6 @@ namespace SunsetSystems.Combat.UI
         private ActiveAbilitiesDisplayManager disciplineBar;
         [SerializeField, Required]
         private CanvasGroup _combatCanvasGroup;
-        [SerializeField, Required]
-        private AmmoDisplay _ammoCounter;
 
         private void Awake()
         {
@@ -97,16 +95,14 @@ namespace SunsetSystems.Combat.UI
             bpBar.UpdateActiveChunks(bpManager.GetCurrentBloodPoints());
             disciplineBar.ShowAbilities(dataSource);
             _actionBarUI.RefreshAvailableActions();
-            _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
-            _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
+            _actionBarUI.UpdateAmmoCounter(weaponManager.GetSelectedWeaponAmmoData());
         }
 
         private void OnWeaponChanged(ICombatant combatant)
         {
             _actionBarUI.RefreshAvailableActions();
             var weaponManager = combatant.GetContext().WeaponManager;
-            _ammoCounter.UpdateAmmoData(weaponManager.GetSelectedWeaponAmmoData());
-            _ammoCounter.SetAmmoCounterVisible(weaponManager.GetSelectedWeapon().GetWeaponUsesAmmo());
+            _actionBarUI.UpdateAmmoCounter(weaponManager.GetSelectedWeaponAmmoData());
         }
 
         private void OnActionUsed(int currentAP)
@@ -121,7 +117,7 @@ namespace SunsetSystems.Combat.UI
 
         private void OnAmmoChanged(ICombatant combatant, WeaponAmmoData ammoData)
         {
-            _ammoCounter.UpdateAmmoData(ammoData);
+            _actionBarUI.UpdateAmmoCounter(ammoData);
         }
 
         private void UpdateCurrentActorPortrait(ICombatant actor)

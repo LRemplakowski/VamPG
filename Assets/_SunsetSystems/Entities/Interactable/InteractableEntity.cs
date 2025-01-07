@@ -158,17 +158,6 @@ namespace SunsetSystems.Entities.Interactable
                 _interactionCollider.enabled = Interactable;
         }
 
-        public void ClearHandlers()
-        {
-            InteractionHandlers.Clear();
-        }
-
-        public void AddHandler(GameObject handler)
-        {
-            if (handler.TryGetComponent(out IInteractionHandler interactionHandler))
-                InteractionHandlers.Add(interactionHandler);
-        }
-
         [Button]
         public virtual void Interact()
         {
@@ -225,11 +214,11 @@ namespace SunsetSystems.Entities.Interactable
             Interactable = interactableData.Interactable;
             _interacted = interactableData.Interacted;
             _interactableOnce = interactableData.InteractableOnce;
-            InteractionHandlers = new();
-            foreach (var key in interactableData.InteractionHandlers)
-            {
-                InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(key) as IInteractionHandler);
-            }
+            //InteractionHandlers = new();
+            //foreach (var key in interactableData.InteractionHandlers)
+            //{
+            //    InteractionHandlers.Add(ES3ReferenceMgr.Current.Get(key) as IInteractionHandler);
+            //}
             if (_linkedGameObject)
                 _linkedGameObject.SetActive(interactableData.GameObjectActive);
         }
@@ -247,11 +236,6 @@ namespace SunsetSystems.Entities.Interactable
                 Interactable = interactableEntity.Interactable;
                 Interacted = interactableEntity.Interacted;
                 InteractableOnce = interactableEntity._interactableOnce;
-                InteractionHandlers = new();
-                foreach (var handler in interactableEntity.InteractionHandlers)
-                {
-                    InteractionHandlers.Add(ES3Internal.ES3ReferenceMgrBase.Current.Get(handler as UnityEngine.Object));
-                }
             }
 
             public InteractableEntityPersistenceData() : base()

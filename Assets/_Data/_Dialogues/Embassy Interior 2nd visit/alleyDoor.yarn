@@ -44,7 +44,7 @@ title: alleyDoorForcingStrRoll
 position: 752,132
 ---
 <<set $rollMofifier to 0>>
-<<if GetPlayerHasDiscipline ("Potence")>>
+<<if GetPartyHasDiscipline("Potence")>>
     <<set $rollModifier to 2>>
 <<endif>>
 <<if Roll("Strength","Athletics")>=(4-$rollModifier)>>
@@ -68,7 +68,7 @@ title: alleyDoorForcingMeleeRoll
 position: 363,385
 ---
 <<set $rollMofifier to 0>>
-<<if GetPlayerHasDiscipline ("Potence")>>
+<<if GetPartyHasDiscipline("Potence")>>
     <<set $rollModifier to 2>>
 <<endif>>
 <<if Roll("Strength","Melee")>=(4-$rollModifier)>>

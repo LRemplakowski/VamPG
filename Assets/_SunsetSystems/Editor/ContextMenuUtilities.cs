@@ -16,7 +16,7 @@ namespace SunsetSystems.Utils.Editor
                 {
                     if (comp is not Transform)
                     {
-                        Object.DestroyImmediate(comp);
+                        Undo.DestroyObjectImmediate(comp);
                     }
                 }
                 EditorUtility.SetDirty(gameObject);

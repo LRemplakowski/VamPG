@@ -90,6 +90,8 @@ namespace SunsetSystems.PickableItems
         {
             if (data is not PickableItemsSaveData saveData)
                 return;
+            if (saveData.PickableItems == null)
+                return;
             foreach (var itemData in saveData.PickableItems)
             {
                 if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out var item))
@@ -100,7 +102,7 @@ namespace SunsetSystems.PickableItems
         [Serializable]
         public class PickableItemsSaveData : SaveData
         {
-            public List<PickableItemData> PickableItems;
+            public List<PickableItemData> PickableItems = new();
 
             public PickableItemsSaveData(PickableItemsManager pickablesManager) : base()
             {

@@ -85,7 +85,7 @@ position: 374,33
 title: failureOption
 position: 228,476
 ---
-[nomarkup][As you glance about, planning your next move, your eyes are drawn to and meet the gaze of a young man, the pupils of his deep brown eyes wide with fear. He's right next to you, having crawled into cover with the last of his strength. Bleeding profusely from his leg which he unwittingly drags behind him, he grabs onto your shirt, clinging to it desperately, and you find yourself unable to move.][nomarkup] #line:0481065 
+[nomarkup][As you glance about, planning your next move, your eyes are drawn to and meet the gaze of a young man, the pupils of his deep brown eyes wide with fear. He's right next to you, having crawled into cover with the last of his strength. Bleeding profusely from his leg which he unwittingly drags behind him, he grabs onto your shirt, clinging to it desperately, and you find yourself unable to move.][/nomarkup] #line:0481065 
 <<if Roll ("Intelligence","Medicine")>=3>>
     [nomarkup][This man isn't going to be able to walk without treatment of some kind - that much is for certain.][/nomarkup] #line:03470eb 
 <<elseif Roll ("Wits","Insight")>=2>>
@@ -128,7 +128,7 @@ position: 546,1141
 title: sootheDoeEyedFailure
 position: 855,520
 ---
-[nomarkup][There's something that makes his expression sour, contorting in fear, and he scrambles to get away - out of cover and back into the smoke. You hear shouts from the front of the club as the armed assailants notice his movement. It'll be less safe when you duck out of cover now.][/nomarkup] #line:0efe99c 
+[nomarkup][There's something that makes his expression sour, contorting in fear, and he scrambles to get away - out of cover and back into the smoke. You hear shouts from the front of the club as the armed assailants notice his movement. It'll be less safe when you duck out of cover now.][/nomarkup] #failure #line:0efe99c 
 <<set $doeEyedManAlive to 1>>
 <<set $doeEyedManSeen to 1>>
 <<jump evacuatePhysical>>
@@ -191,7 +191,7 @@ position: 86,959
 title: intimidateDoeEyedFailure
 position: -95,1189
 ---
-[nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #line:0780adc 
+[nomarkup][He stares at you, worrying his lip, then nods, trying to wipe tears out of his eyes as he finally sees his leg. His eyes then widen impossibly farther as he starts to take in fast, shaky breaths.][/nomarkup] #failure #line:0780adc 
 -> [nomarkup][You can't think of what else to say, and at this point, you're panicking, too.][/nomarkup] #line:0293806 
 [nomarkup][He starts to go pale as he begins to sway - knocking into your cover, jostling it and causing the gunfire to briefly cease as you are noticed. It'll be less safe when you duck out of cover now.][/nomarkup] #line:0cae12d 
 <<set $doeEyedManSeen to 1>>

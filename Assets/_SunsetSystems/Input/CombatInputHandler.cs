@@ -80,7 +80,7 @@ namespace SunsetSystems.Input
             {
                 SetLastHitCollider(null);
             }
-            if (GetTargetLocked())
+            if (GetIsTargetLocked())
                 return;
             _selectedActionManager.GetSelectedAbility().GetTargetingStrategy().ExecutePointerPosition(GetTargetingContext());
         }
@@ -129,8 +129,8 @@ namespace SunsetSystems.Input
         private Collider GetLastHitCollider() => _lastHitCollider;
         private void SetLastHitCollider(Collider collider) => _lastHitCollider = collider;
 
-        private bool GetTargetLocked() => _targetLocked;
-        private void SetTargetLocked(bool locked)
+        private bool GetIsTargetLocked() => _targetLocked;
+        private void SetIsTargetLocked(bool locked)
         {
             _targetLocked = locked;
             OnTargetLockUpdate?.Invoke(locked);
@@ -165,14 +165,14 @@ namespace SunsetSystems.Input
             public IExecutionConfirmationUI GetExecutionUI() => _inputHandler.GetExecutionUI();
 
             public bool IsPointerOverUI() => _inputHandler.GetIsPointerOverGameObject();
-            public bool IsTargetLocked() => _inputHandler.GetTargetLocked();
+            public bool IsTargetLocked() => _inputHandler.GetIsTargetLocked();
             public bool CanExecuteAbility(IAbilityConfig ability)
             {
                 var abilityUser = GetCurrentCombatant().GetContext().AbilityUser;
                 return abilityUser.GetHasValidAbilityContext(ability) && abilityUser.GetCanAffordAbility(ability);
             }
 
-            public Action<bool> TargetLockSetDelegate() => _inputHandler.SetTargetLocked;
+            public Action<bool> TargetLockSetDelegate() => _inputHandler.SetIsTargetLocked;
             public Action<ITargetable> TargetUpdateDelegate() => _inputHandler.SetCurrentTarget;
             public Action<bool> TargetingLineUpdateDelegate() => _inputHandler.SetShowTargetingLine;
         }

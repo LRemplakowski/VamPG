@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Persistence;
 using UnityEngine;
 
-namespace SunsetSystems.Experience
+namespace SunsetSystems.CharacterDevelopment
 {
     public class ExperienceManager : SerializedMonoBehaviour, ISaveable
     {
@@ -19,23 +19,49 @@ namespace SunsetSystems.Experience
         protected void Awake()
         {
             if (Instance == null)
+            {
                 Instance = this;
+            }
             else
+            {
                 Destroy(gameObject);
+            }
+            ExperienceReward.OnExperienceAwared += OnExperienceAwarded;
             ISaveable.RegisterSaveable(this);
             
         }
 
         private void OnDestroy()
         {
+            ExperienceReward.OnExperienceAwared -= OnExperienceAwarded;
             ISaveable.UnregisterSaveable(this);
+        }
+
+        private void OnExperienceAwarded(string recipientID, int amount, ExperienceType experienceType)
+        {
+            if (TryAwardExperience(recipientID, amount, experienceType))
+            {
+                Debug.Log($"ExperienceManager >>> Awarded {recipientID} with {amount} {experienceType} experience.");
+            }
+            else
+            {
+                Debug.LogError($"ExperienceManager >>> Failed to award experience to {recipientID}!");
+            }
         }
 
         public void AddCreatureToExperienceManager(string creatureID)
         {
-            bool result = _experienceDataCache.TryAdd(creatureID, new());
-            if (result == false)
-                Debug.LogError($"Cannot add creature to experience manager. Creature with ID {creatureID} is already tracked!");
+            if (string.IsNullOrWhiteSpace(creatureID))
+            {
+                Debug.LogError($"ExperienceManager >>> Failed to add Creature! Given null or whitespace ID!");
+                return;
+            }
+            if (_experienceDataCache.ContainsKey(creatureID))
+            {
+                Debug.LogError($"ExperienceManager >>> Cannot add Creature! Creature is already tracked.");
+                return;
+            }
+            _experienceDataCache[creatureID] = new();
         }
 
         public bool TryAwardExperience(string creatureID, int amount, ExperienceType experienceType)
@@ -44,6 +70,7 @@ namespace SunsetSystems.Experience
             {
                 data.AddExperience(amount, experienceType);
                 _experienceDataCache[creatureID] = data;
+                return true;
             }
             return false;
         }
@@ -52,6 +79,8 @@ namespace SunsetSystems.Experience
         {
             if (_experienceDataCache.TryGetValue(creatureID, out ExperienceData data))
             {
+                if (amount <= 0)
+                    return true;
                 if (data.GetCurrentExperience(experienceType) < amount)
                     return false;
                 data.RemoveExperience(amount, experienceType);
@@ -59,6 +88,11 @@ namespace SunsetSystems.Experience
                 return true;
             }
             return false;
+        }
+
+        public bool TryGetExperienceData(string creatureID, out ExperienceData experienceData)
+        {
+            return _experienceDataCache.TryGetValue(creatureID, out experienceData);
         }
 
         public object GetSaveData()
@@ -149,7 +183,7 @@ namespace SunsetSystems.Experience
             }
         }
 
-        public int GetCurrentExperience(ExperienceType experienceType)
+        public readonly int GetCurrentExperience(ExperienceType experienceType)
         {
             return experienceType switch
             {
@@ -161,7 +195,7 @@ namespace SunsetSystems.Experience
             };
         }
 
-        public int GetTotalExperience(ExperienceType experienceType)
+        public readonly int GetTotalExperience(ExperienceType experienceType)
         {
             return experienceType switch
             {

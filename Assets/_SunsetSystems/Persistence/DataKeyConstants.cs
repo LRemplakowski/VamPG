@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace SunsetSystems.Persistence
 {
     public static class DataKeyConstants
@@ -20,5 +16,6 @@ namespace SunsetSystems.Persistence
         public const string WORLD_MAP_MANAGER_DATA_KEY = "WORLD_MAP_MANAGER";
         public const string RELATIONSHIP_MANAGER_DATA_KEY = "RELATIONSHIP_MANAGER";
         public const string PICKABLES_MANAGER_DATA_KEY = "PICKABLES_MANAGER";
+        public const string LEARNING_MANAGER_DATA_KEY = "LEARNING_MANAGER";
     }
 }

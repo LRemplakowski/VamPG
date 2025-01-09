@@ -142,10 +142,10 @@ namespace SunsetSystems.Inventory
             return new InventorySaveData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not InventorySaveData saveData)
-                return;
+                return false;
             if (saveData.InventoryContents != null)
             {
                 foreach (var itemData in saveData.InventoryContents)
@@ -159,6 +159,7 @@ namespace SunsetSystems.Inventory
                 }
             }
             SetMoney(saveData.Money);
+            return true;
         }
     }
 

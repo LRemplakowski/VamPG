@@ -118,10 +118,10 @@ namespace SunsetSystems.WorldMap
             return new WorldMapSaveData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not WorldMapSaveData mapData)
-                return;
+                return false;
             _unlockedMaps = new();
             foreach (var mapID in mapData.UnlockedMapsIDs)
             {
@@ -130,6 +130,7 @@ namespace SunsetSystems.WorldMap
             }
             WorldMapEntryDatabase.Instance.TryGetEntry(mapData.LastTraveledToMap, out _currentTraveledToMap);
             OnUnlockedMapsUpdated?.Invoke();
+            return true;
         }
 
         [Serializable]

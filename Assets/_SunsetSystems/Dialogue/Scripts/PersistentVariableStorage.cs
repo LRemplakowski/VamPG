@@ -77,11 +77,12 @@ namespace SunsetSystems.Dialogue
             return (_floats, _strings, _bools);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not DialogueSaveData savedData)
-                return;
+                return false;
             SetAllVariables(savedData._floats, savedData._strings, savedData._bools);
+            return true;
         }
 
         public object GetSaveData()

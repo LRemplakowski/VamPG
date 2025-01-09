@@ -46,6 +46,6 @@ namespace SunsetSystems.Core
 
         public abstract object GetSaveData();
 
-        public abstract void InjectSaveData(object data);
+        public abstract bool InjectSaveData(object data);
     }
 }

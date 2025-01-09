@@ -100,11 +100,12 @@ namespace SunsetSystems.CharacterDevelopment
             return new ExperienceSaveData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not ExperienceSaveData expData)
-                return;
+                return false;
             _experienceDataCache = expData.ExperienceDataCache;
+            return true;
         }
 
         [Serializable]

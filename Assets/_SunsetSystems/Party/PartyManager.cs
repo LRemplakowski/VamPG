@@ -283,10 +283,10 @@ namespace SunsetSystems.Party
             }
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not PartySaveData saveData)
-                return;
+                return false;
             _coterieMemberKeysCache = new();
             _cachedPartyTemplates = new();
             _activeParty = new();
@@ -304,6 +304,7 @@ namespace SunsetSystems.Party
                     _partyPositions.Add(key, Vector3.zero);
             }
             _initializeAtSavedPositions = saveData.PartyPositionsScene == SceneManager.GetActiveScene().name;
+            return true;
         }
     }
 

@@ -79,11 +79,12 @@ namespace SunsetSystems
             return new RelationshipSaveData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not RelationshipSaveData saveData)
-                return;
+                return false;
             _influenceData = saveData.InfluenceData;
+            return false;
         }
 
         [Serializable]

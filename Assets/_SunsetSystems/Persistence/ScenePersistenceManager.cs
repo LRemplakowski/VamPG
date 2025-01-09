@@ -81,49 +81,51 @@ namespace SunsetSystems.Persistence
             return data;
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
-            if (data is ScenePersistenceData persistenceData)
+            if (data is not ScenePersistenceData persistenceData)
             {
-                foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
+                return false;
+            }
+            foreach (IPersistentObject persistentEntity in persistentEntitiesSet)
+            {
+                if (persistentEntity == null || string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
                 {
-                    if (persistentEntity == null || string.IsNullOrWhiteSpace(persistentEntity.PersistenceID))
-                    {
-                        Debug.LogWarning($"Encountered a null persistent entity or persistent entity with invalid persitence id! {persistentEntity}");
-                        continue;
-                    }
+                    Debug.LogWarning($"ScenePersistenceManager >>> Encountered a null persistent entity or persistent entity with invalid persitence ID! {persistentEntity}");
+                    continue;
+                }
 
-                    try
-                    {
-                        InjectPersistentData(persistenceData, persistentEntity);
-                    }
-                    catch
-                    {
-                        float retryAfterTime = 10f;
-                        Debug.LogException(new InvalidOperationException($"Injecting data into {persistentEntity} failed! Retrying injection in {Mathf.RoundToInt(retryAfterTime)} seconds!"));
-                        StartCoroutine(RetryInjectionInTime(retryAfterTime));
+                try
+                {
+                    InjectPersistentData(persistenceData, persistentEntity);
+                }
+                catch
+                {
+                    float retryAfterTime = 10f;
+                    Debug.LogException(new InvalidOperationException($"Injecting data into {persistentEntity} failed! Retrying injection in {Mathf.RoundToInt(retryAfterTime)} seconds!"));
+                    StartCoroutine(RetryInjectionInTime(retryAfterTime));
 
-                        IEnumerator RetryInjectionInTime(float time)
+                    IEnumerator RetryInjectionInTime(float time)
+                    {
+                        float timeElapsed = 0f;
+                        while (timeElapsed < time)
                         {
-                            float timeElapsed = 0f;
-                            while (timeElapsed < time)
-                            {
-                                timeElapsed += Time.deltaTime;
-                                yield return null;
-                            }
-                            Debug.Log($"Retrying injection for object {persistentEntity}!");
-                            try
-                            {
-                                InjectPersistentData(persistenceData, persistentEntity);
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.LogError($"Data injection retry for {persistentEntity} failed due to exception {e}! WTF?!");
-                            }
+                            timeElapsed += Time.deltaTime;
+                            yield return null;
+                        }
+                        Debug.Log($"Retrying injection for object {persistentEntity}!");
+                        try
+                        {
+                            InjectPersistentData(persistenceData, persistentEntity);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError($"Data injection retry for {persistentEntity} failed due to exception {e}! WTF?!");
                         }
                     }
                 }
             }
+            return true;
         }
 
         private static void InjectPersistentData(ScenePersistenceData persistenceData, IPersistentObject persistentEntity)

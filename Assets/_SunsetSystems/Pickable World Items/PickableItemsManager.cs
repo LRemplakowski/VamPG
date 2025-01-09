@@ -86,17 +86,20 @@ namespace SunsetSystems.PickableItems
             return new PickableItemsSaveData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not PickableItemsSaveData saveData)
-                return;
+                return false;
             if (saveData.PickableItems == null)
-                return;
+                return false;
             foreach (var itemData in saveData.PickableItems)
             {
-                if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out var item))
+                if (ItemDatabase.Instance.TryGetEntry(itemData.ItemID, out IBaseItem item))
+                {
                     DropItem(item, itemData.WorldPosition, itemData.Rotation);
+                }
             }
+            return true;
         }
 
         [Serializable]

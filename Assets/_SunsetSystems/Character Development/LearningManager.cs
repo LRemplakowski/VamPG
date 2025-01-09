@@ -192,11 +192,12 @@ namespace SunsetSystems.CharacterDevelopment
             return new LearningData(this);
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not LearningData learningData)
-                return;
+                return false;
             _knownLearnablesMap.Clear();
+            return true;
         }
 
         public class LearningData : SaveData

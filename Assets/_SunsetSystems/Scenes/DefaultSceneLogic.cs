@@ -25,9 +25,9 @@ namespace SunsetSystems.Core
             await Task.Yield();
         }
 
-        public override void InjectSaveData(object data)
+        public override bool InjectSaveData(object data)
         {
-            
+            return true;
         }
 
         public override object GetSaveData()

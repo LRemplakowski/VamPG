@@ -120,14 +120,15 @@ namespace SunsetSystems.Input.CameraControl
             return saveData;
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not CameraSaveData saveData)
-                return;
+                return false;
             if (saveData.CurrentBoundingBox != null)
                 _currentBoundingBox = saveData.CurrentBoundingBox;
             ForceToPosition(saveData.RigPosition);
             _movedToSavedPosition = true;
+            return true;
         }
     }
 

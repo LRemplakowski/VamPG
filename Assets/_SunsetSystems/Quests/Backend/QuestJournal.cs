@@ -277,10 +277,10 @@ namespace SunsetSystems.Journal
             return saveData;
         }
 
-        public void InjectSaveData(object data)
+        public bool InjectSaveData(object data)
         {
             if (data is not QuestJournalSaveData saveData)
-                return;
+                return false;
             _activeQuests = new();
             saveData.ActiveQuests.ForEach(questID => { QuestDatabase.Instance.TryGetEntry(questID, out Quest quest); _activeQuests.Add(questID, quest); });
             _completedQuests = new();
@@ -308,6 +308,7 @@ namespace SunsetSystems.Journal
                 }
             }
             OnObjectiveDataInjected?.Invoke(injectedObjectives);
+            return true;
         }
 
         private class QuestJournalSaveData : SaveData

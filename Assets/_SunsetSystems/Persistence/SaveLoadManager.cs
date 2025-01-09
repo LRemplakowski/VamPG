@@ -81,7 +81,8 @@ namespace SunsetSystems.Persistence
         public static void LoadSavedDataIntoRuntime(string saveID)
         {
             //_gameData.ClearSaveData();
-            ES3.LoadInto(GAME_DATA, SaveIDToFilePath(saveID), GameData);
+            string filePath = SaveIDToFilePath(saveID);
+            ES3.LoadInto(GAME_DATA, filePath, GameData);
         }
 
         private static Texture2D TakeGameScreenShot()
@@ -142,20 +143,29 @@ namespace SunsetSystems.Persistence
         {
             foreach (ISaveable saveable in ISaveable.Saveables)
             {
-                try
+                Debug.Log($"SaveLoadManager >>> Started data injection into {saveable}!");
+                if (GameData.TryGetData(saveable.DataKey, out object data))
                 {
-                    if (GameData.TryGetData(saveable.DataKey, out object data))
-                        saveable.InjectSaveData(data);
-                    else
-                        UnityEngine.Debug.Log($"There is no saved data for object {saveable}!");
+                    try
+                    {
+                        bool result = saveable.InjectSaveData(data);
+                        if (result)
+                        {
+                            UnityEngine.Debug.Log($"SaveLoadManager >>> Data injection into {saveable} successful!");
+                        }
+                        else
+                        {
+                            UnityEngine.Debug.LogError($"SaveLoadManager >>> Data injection into {saveable} has failed!");
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        UnityEngine.Debug.LogException(exception, saveable as UnityEngine.Object);
+                    }
                 }
-                catch (Exception exception)
+                else
                 {
-                    UnityEngine.Debug.LogException(exception, saveable as UnityEngine.Object);
-                }
-                finally
-                {
-                    UnityEngine.Debug.Log($"Data injection into {saveable} successful!");
+                    UnityEngine.Debug.LogWarning($"SaveLoadManager >>> There is no saved data for object {saveable}!");
                 }
             }
         }

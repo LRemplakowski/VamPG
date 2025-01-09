@@ -357,7 +357,7 @@ namespace SunsetSystems.Combat.Grid
                 static void FindCover(GridUnit unit, HashSet<ICover> coverSourcesCache, Vector3 cellPosition, ref CoverQuality coverQuality)
                 {
                     Collider[] overlap = new Collider[8];
-                    int overlapCount = Physics.OverlapBoxNonAlloc(cellPosition, new Vector3(unit.CellSize / 3f, unit.CellSize / 3f, unit.CellSize / 3f), overlap);
+                    int overlapCount = Physics.OverlapBoxNonAlloc(cellPosition, new Vector3(unit.CellSize / 4f, unit.CellSize / 4f, unit.CellSize / 4f), overlap);
                     if (overlapCount > 0)
                     {
                         for (int i = 0; i < overlapCount; i++)

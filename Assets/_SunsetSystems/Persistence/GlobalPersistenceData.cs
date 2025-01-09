@@ -59,6 +59,6 @@ namespace SunsetSystems.Persistence
 
         string DataKey { get; }
         object GetSaveData();
-        void InjectSaveData(object data);
+        bool InjectSaveData(object data);
     }
 }

@@ -1,3 +1,164 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d2cf0d69480f698c12f763225654630ac0bc2695be235cc377701b54c6149e75
-size 4580
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: HD_AdvancedFur
+  m_Shader: {fileID: 4800000, guid: 2f1de553f4ac202469eaeb12e2306d51, type: 3}
+  m_ShaderKeywords: _DEPTH_AWARE_ON _DETAIL_O4 _EMISSION
+  m_LightmapFlags: 1
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BrushTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ColorTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DensityTex:
+        m_Texture: {fileID: 2800000, guid: 3080e7aa0c8088d49a3765c1de7d6a1c, type: 3}
+        m_Scale: {x: 20, y: 20}
+        m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Fire:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FurTex:
+        m_Texture: {fileID: 2800000, guid: 3e441fa246363674e95d79f2fdcd5de5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 4034701e6ed75de4e95f8726fe6aca64, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _BrushFactor: 1
+    - _BrushStrength: 8.84
+    - _BrushTextureSize: 16
+    - _BumpScale: 1
+    - _ColorBias: 0.865
+    - _ColorTexIntensity: 1
+    - _ColorThreshold: 3.28
+    - _Curl: 0
+    - _CurlAngle: 11.8
+    - _CurlNumber: 0
+    - _CurlPower: 0.457
+    - _CurlRadius: 0
+    - _CurlRnd: 0
+    - _Cutoff: 0.5
+    - _Cutout: 0.113
+    - _CutoutAlpha: 0.283
+    - _Density: 1
+    - _Depth_Aware: 0
+    - _Detail: 0
+    - _DetailNormalMapScale: 1
+    - _DstBlend: 0
+    - _EmissionThreshold: 4.81
+    - _EnableShell: 0
+    - _EnableStrands: 0
+    - _FurFactor: 0.97
+    - _FurLength: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0
+    - _GlossyReflections: 1
+    - _Gravity: 0
+    - _Length: 0.28
+    - _MaskLOD: 0.191
+    - _Metallic: 0.121
+    - _Mode: 0
+    - _NormalStrength: 0
+    - _NormalSwitch: 0
+    - _OcclusionStrength: 1
+    - _Parallax: 0.02
+    - _Pinch: 1
+    - _RandomLength: 0
+    - _RandomSeed: 0.241
+    - _RimPower: 0.994
+    - _RootShadow: 0.868
+    - _Scale: 1
+    - _ShadowsStrength: 1
+    - _ShellAO: 0.647
+    - _ShellColorStength: 5.14
+    - _ShellHeight: 0.209
+    - _ShellThickness: 0.189
+    - _Size: 19.6
+    - _SizeFaceFactor: 0.191
+    - _Smoothness: 0.159
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
+    - _SrcBlend: 1
+    - _StrandColorThreshold: 2
+    - _StrandHeightMin: 0.135
+    - _Subdivision: 1
+    - _TessEdge: 1.2
+    - _Test: 0
+    - _Thickness: 1
+    - _TipThickness: 0
+    - _UVSec: 0
+    - _Wind: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 0.25735295, g: 0.087045856, b: 0.087045856, a: 1}
+    - _RootColor: {r: 0.49264705, g: 0.49264705, b: 0.49264705, a: 1}
+    - _RootEmissionColor: {r: 0, g: 0, b: 0, a: 0}
+    - _StrandRootColor: {r: 1, g: 1, b: 1, a: 1}
+    - _StrandTipColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TipColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TipEmissionColor: {r: 0, g: 0, b: 0, a: 0}

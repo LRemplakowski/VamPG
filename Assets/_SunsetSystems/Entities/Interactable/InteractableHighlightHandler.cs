@@ -45,7 +45,8 @@ namespace SunsetSystems.Entities.Interactable
         {
             foreach (Renderer renderer in _highlightRenderers)
             {
-                _rendererLayerCache[renderer] = renderer.gameObject.layer;
+                if (renderer != null)
+                    _rendererLayerCache[renderer] = renderer.gameObject.layer;
             }
         }
 

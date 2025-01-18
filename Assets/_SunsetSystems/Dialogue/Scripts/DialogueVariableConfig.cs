@@ -21,7 +21,11 @@ namespace SunsetSystems.Dialogue
         private DialogueSaveData GenerateInjectionData()
         {
             DialogueSaveData injectionData = new();
-            List<string> configIDs = CreatureDatabase.Instance.ReadableIDs ?? new();
+            List<string> configIDs = new();
+            if (CreatureDatabase.Instance != null && CreatureDatabase.Instance.ReadableIDs != null)
+            {
+                configIDs.AddRange(CreatureDatabase.Instance.ReadableIDs);
+            }
             foreach (string configID in configIDs)
             {
                 if (CreatureDatabase.Instance.TryGetEntryByReadableID(configID, out CreatureConfig config))

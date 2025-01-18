@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Trackers:
     health:
-      _maxValue: 20
+      _maxValue: 1
       <SuperficialDamage>k__BackingField: 0
       <AggravatedDamage>k__BackingField: 0
       _trackerType: 0
     willpower:
-      _maxValue: 20
+      _maxValue: 1
       <SuperficialDamage>k__BackingField: 0
       <AggravatedDamage>k__BackingField: 0
       _trackerType: 1
     hunger:
-      _maxValue: 20
+      _maxValue: 0
       <SuperficialDamage>k__BackingField: 0
       <AggravatedDamage>k__BackingField: 0
       _trackerType: 3
     humanity:
-      _maxValue: 20
+      _maxValue: 1
       <SuperficialDamage>k__BackingField: 0
       <AggravatedDamage>k__BackingField: 0
       _trackerType: 2
@@ -38,249 +38,114 @@ MonoBehaviour:
   BloodPotency: 100
   Attributes:
     strength:
-      _baseValue: 1
-      _attributeType: 0
-    dexterity:
-      _baseValue: 1
+      _baseValue: 50
       _attributeType: 1
-    stamina:
-      _baseValue: 1
+    dexterity:
+      _baseValue: 50
       _attributeType: 2
-    charisma:
-      _baseValue: 1
-      _attributeType: 3
-    manipulation:
-      _baseValue: 1
+    stamina:
+      _baseValue: 50
       _attributeType: 4
-    composure:
-      _baseValue: 1
-      _attributeType: 5
-    intelligence:
-      _baseValue: 1
-      _attributeType: 6
-    wits:
-      _baseValue: 1
-      _attributeType: 7
-    resolve:
-      _baseValue: 1
+    charisma:
+      _baseValue: 50
       _attributeType: 8
+    manipulation:
+      _baseValue: 50
+      _attributeType: 16
+    composure:
+      _baseValue: 50
+      _attributeType: 32
+    intelligence:
+      _baseValue: 50
+      _attributeType: 64
+    wits:
+      _baseValue: 50
+      _attributeType: 128
+    resolve:
+      _baseValue: 50
+      _attributeType: 256
     speed:
-      _baseValue: 5
-      _attributeType: 9
+      _baseValue: 50
+      _attributeType: 512
   Skills:
     athletics:
-      baseValue: 0
-      skillType: 0
-    brawl:
-      baseValue: 0
+      baseValue: 5
       skillType: 1
-    craft:
-      baseValue: 0
+    brawl:
+      baseValue: 5
       skillType: 2
-    drive:
-      baseValue: 0
-      skillType: 3
-    firearms:
-      baseValue: 0
+    craft:
+      baseValue: 5
       skillType: 4
-    larceny:
-      baseValue: 0
-      skillType: 5
-    melee:
-      baseValue: 0
-      skillType: 6
-    stealth:
-      baseValue: 0
-      skillType: 7
-    survival:
-      baseValue: 0
+    drive:
+      baseValue: 5
       skillType: 8
-    animalKen:
-      baseValue: 0
-      skillType: 9
-    etiquette:
-      baseValue: 0
-      skillType: 10
-    insight:
-      baseValue: 0
-      skillType: 11
-    intimidation:
-      baseValue: 0
-      skillType: 12
-    leadership:
-      baseValue: 0
-      skillType: 13
-    performance:
-      baseValue: 0
-      skillType: 14
-    persuasion:
-      baseValue: 0
-      skillType: 15
-    streetwise:
-      baseValue: 0
-      skillType: 16
-    subterfuge:
-      baseValue: 0
-      skillType: 17
-    academics:
-      baseValue: 0
-      skillType: 18
-    awarness:
-      baseValue: 0
-      skillType: 19
-    finance:
-      baseValue: 0
-      skillType: 20
-    investigation:
-      baseValue: 0
-      skillType: 21
-    medicine:
-      baseValue: 0
-      skillType: 22
-    occult:
-      baseValue: 0
-      skillType: 23
-    politics:
-      baseValue: 0
-      skillType: 24
-    science:
-      baseValue: 0
-      skillType: 25
-    technology:
-      baseValue: 0
-      skillType: 26
-  Disciplines:
-    animalism:
-      baseValue: 0
-      disciplineType: 0
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    auspex:
-      baseValue: 0
-      disciplineType: 1
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    bloodSorcery:
-      baseValue: 0
-      disciplineType: 2
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    celerity:
-      baseValue: 0
-      disciplineType: 3
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    dominate:
-      baseValue: 0
-      disciplineType: 4
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    fortitude:
-      baseValue: 0
-      disciplineType: 5
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    obfuscate:
-      baseValue: 0
-      disciplineType: 6
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    oblivion:
-      baseValue: 0
-      disciplineType: 7
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    potence:
-      baseValue: 0
-      disciplineType: 8
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    presence:
-      baseValue: 0
-      disciplineType: 9
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    protean:
-      baseValue: 0
-      disciplineType: 10
-      knownPowers:
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-      - {fileID: 0}
-    athletics:
-      baseValue: 0
-      disciplineType: 11
-      knownPowers:
-      - {fileID: 11400000, guid: 5f9fd2a2096e7da40bf4cba8beffc7cb, type: 2}
-      - {fileID: 11400000, guid: bee9a6a3a7504ef428d6bc78b3e3d59e, type: 2}
     firearms:
-      baseValue: 0
-      disciplineType: 12
-      knownPowers:
-      - {fileID: 11400000, guid: 66514fc463c8e3347b10f1d517256ed6, type: 2}
-    melee:
-      baseValue: 0
-      disciplineType: 13
-      knownPowers: []
-    streetwise:
-      baseValue: 0
-      disciplineType: 14
-      knownPowers: []
-    insight:
-      baseValue: 0
-      disciplineType: 15
-      knownPowers: []
-    medicine:
-      baseValue: 0
-      disciplineType: 16
-      knownPowers: []
+      baseValue: 5
+      skillType: 16
     larceny:
-      baseValue: 0
-      disciplineType: 17
-      knownPowers: []
+      baseValue: 5
+      skillType: 32
+    melee:
+      baseValue: 5
+      skillType: 64
+    stealth:
+      baseValue: 5
+      skillType: 128
+    survival:
+      baseValue: 5
+      skillType: 256
+    animalKen:
+      baseValue: 5
+      skillType: 512
+    etiquette:
+      baseValue: 5
+      skillType: 1024
+    insight:
+      baseValue: 5
+      skillType: 2048
     intimidation:
-      baseValue: 0
-      disciplineType: 18
-      knownPowers: []
+      baseValue: 5
+      skillType: 4096
+    leadership:
+      baseValue: 5
+      skillType: 8192
+    performance:
+      baseValue: 5
+      skillType: 16384
+    persuasion:
+      baseValue: 5
+      skillType: 32768
+    streetwise:
+      baseValue: 5
+      skillType: 65536
+    subterfuge:
+      baseValue: 5
+      skillType: 131072
+    academics:
+      baseValue: 5
+      skillType: 262144
+    awarness:
+      baseValue: 5
+      skillType: 524288
+    finance:
+      baseValue: 5
+      skillType: 1048576
+    investigation:
+      baseValue: 5
+      skillType: 2097152
+    medicine:
+      baseValue: 5
+      skillType: 4194304
+    occult:
+      baseValue: 5
+      skillType: 8388608
+    politics:
+      baseValue: 5
+      skillType: 16777216
+    science:
+      baseValue: 5
+      skillType: 33554432
+    technology:
+      baseValue: 5
+      skillType: 67108864

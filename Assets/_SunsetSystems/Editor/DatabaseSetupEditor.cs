@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace SunsetSystems.Editor
 {
-    [InitializeOnLoad]
     public class DatabaseSetupEditor : OdinEditorWindow
     {
         static DatabaseSetupEditor()

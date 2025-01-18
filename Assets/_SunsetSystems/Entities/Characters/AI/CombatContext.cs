@@ -62,6 +62,8 @@ namespace SunsetSystems.Combat
 
         private static IEnumerable<ICover> GetCoverFromCurrentPosition(Vector3 worldPosition)
         {
+            if (CombatManager.Instance.CurrentEncounter == null)
+                return new List<ICover>();
             var gridManager = CombatManager.Instance.CurrentEncounter.GridManager;
             var gridPos = gridManager.WorldPositionToGridPosition(worldPosition);
             var gridCell = gridManager[gridPos];

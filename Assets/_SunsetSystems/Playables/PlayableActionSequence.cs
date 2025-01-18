@@ -4,6 +4,8 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Combat;
 using SunsetSystems.ActionSystem;
 using UnityEngine;
+using SunsetSystems.Combat.Grid;
+using System;
 
 namespace SunsetSystems.Playables
 {
@@ -44,10 +46,22 @@ namespace SunsetSystems.Playables
         {
             foreach (var action in _actionSequence)
             {
+                if (_actionPerformer.HasActionsQueued)
+                    yield return new WaitUntil(() => _actionPerformer.HasActionsQueued is false);
                 _actionPerformer.PerformAction(action, false);
-                while (action.ActionFinished is false && action.ActionCanceled is false)
-                    yield return null;
             }
+            if (_actionPerformer.HasActionsQueued)
+                yield return new WaitUntil(() => _actionPerformer.HasActionsQueued is false);
+            var actionsClone = new List<EntityAction>();
+            foreach (var action in _actionSequence)
+            {
+                if (action is ICloneable cloneable)
+                {
+                    actionsClone.Add(cloneable.Clone() as EntityAction);
+                }
+            }
+            _actionSequence.Clear();
+            _actionSequence.AddRange(actionsClone);
             _sequenceCoroutine = null;
         }
 
@@ -69,12 +83,12 @@ namespace SunsetSystems.Playables
         }
 
         [Button]
-        public void AddAttackAction(ICombatant target, bool forceMiss)
+        public void AddAttackAction(ICombatant target, bool forceMiss, GridManager gridManager)
         {
             if (forceMiss)
-                _actionSequence.Add(new Attack(target, _actionPerformer.References.CombatBehaviour, new() { HitChanceMod = -200 }));
+                _actionSequence.Add(new Attack(target, _actionPerformer.References.CombatBehaviour, new() { HitChanceMod = -200 }, gridManager));
             else
-                _actionSequence.Add(new Attack(target, _actionPerformer.References.CombatBehaviour));
+                _actionSequence.Add(new Attack(target, _actionPerformer.References.CombatBehaviour, gridManager));
             UnityEditor.EditorUtility.SetDirty(this);
         }
 

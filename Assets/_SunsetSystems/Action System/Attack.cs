@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using SunsetSystems.Combat;
+using SunsetSystems.Combat.Grid;
 using SunsetSystems.DynamicLog;
 using SunsetSystems.Entities;
 using SunsetSystems.Inventory;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace SunsetSystems.ActionSystem
 {
     [Obsolete]
     [Serializable]
-    public class Attack : HostileAction
+    public class Attack : HostileAction, ICloneable
     {
         [SerializeField]
         private AttackModifier _attackModifier;
@@ -20,22 +20,30 @@ namespace SunsetSystems.ActionSystem
         private FlagWrapper _attackFinished;
         [SerializeField]
         private IDamageable _targetDamageable;
+        [SerializeField]
+        private GridManager _combatGrid;
 
         private ICombatContext _attackerContext;
         private ICombatContext _targetContext;
         private FaceTarget _faceTargetSubaction;
         private IEnumerator _attackRoutine;
 
-        public Attack(ITargetable target, ICombatant attacker, AttackModifier attackModifier) : this(target, attacker)
+        public Attack(ITargetable target, ICombatant attacker, AttackModifier attackModifier, GridManager combatGrid) : this(target, attacker, combatGrid)
         {
             _attackModifier = attackModifier;
         }
 
-        public Attack(ITargetable target, ICombatant attacker) : base(target, attacker)
+        public Attack(ITargetable target, ICombatant attacker, GridManager combatGrid) : base(target, attacker)
         {
             _attackFinished = new() { Value = false };
             _targetDamageable = target as IDamageable;
+            _combatGrid = combatGrid;
             conditions.Add(new WaitForFlag(_attackFinished));
+        }
+
+        public object Clone()
+        {
+            return new Attack(Target, Attacker, _attackModifier, _combatGrid);
         }
 
         public override void Cleanup()
@@ -93,6 +101,7 @@ namespace SunsetSystems.ActionSystem
             private readonly AttackModifier _attackModifier;
             private readonly ICombatContext _attackerContext;
             private readonly ICombatContext _targetContext;
+            private readonly GridManager _combatGrid;
 
             public AttackContextFromAttackAction(Attack attackAction, AttackModifier attackModifier)
             {
@@ -101,6 +110,7 @@ namespace SunsetSystems.ActionSystem
                 _attackModifier = attackModifier;
                 _attackerContext = attackAction._attackerContext;
                 _targetContext = attackAction._targetContext;
+                _combatGrid = attackAction._combatGrid;
             }
 
             public readonly Vector3 GetAimingPosition(AttackParticipant entity)
@@ -229,7 +239,7 @@ namespace SunsetSystems.ActionSystem
             public readonly int GetGridDistanceBetweenParticipants()
             {
                 var worldDistance = Vector3.Distance(_attackerContext.Transform.position, _targetContext.Transform.position);
-                var gridScale = CombatManager.Instance.CurrentEncounter.GridManager.GetGridScale();
+                var gridScale = _combatGrid.GetGridScale();
                 return Mathf.CeilToInt(worldDistance / gridScale);
             }
         }

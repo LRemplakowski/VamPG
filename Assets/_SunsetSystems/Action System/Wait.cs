@@ -1,10 +1,10 @@
-
+using System;
 using SunsetSystems.Abilities;
 using UnityEngine;
 
 namespace SunsetSystems.ActionSystem
 {
-    public class Wait : EntityAction
+    public class Wait : EntityAction, ICloneable
     {
         [SerializeField]
         private float _waitDuration;
@@ -16,7 +16,13 @@ namespace SunsetSystems.ActionSystem
 
         public override void Begin()
         {
-            conditions.Add(new TimeElapsed(Time.time, _waitDuration));
+            conditions.Clear();
+            conditions.Add(new TimeElapsed(_waitDuration));
+        }
+
+        public object Clone()
+        {
+            return new Wait(_waitDuration, Owner);
         }
     }
 }

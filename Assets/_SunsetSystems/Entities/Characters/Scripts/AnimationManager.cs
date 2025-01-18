@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using SunsetSystems.Entities.Characters;
 using SunsetSystems.Entities.Characters.Navigation;
 using SunsetSystems.Equipment;
+using SunsetSystems.Game;
 using SunsetSystems.Persistence;
 using UMA;
 using UnityEngine;
@@ -55,6 +56,13 @@ namespace SunsetSystems.Animation
         private string _inCoverAnimationParam;
         private int _inCoverAnimationParamHash;
 
+        [SerializeField]
+        private bool _enableStateOverride = false;
+        [SerializeField, ShowIf("_enableStateOverride")]
+        private GameState _stateOverride = GameState.Combat;
+
+        private GameState _stateOverrideLastFrame;
+
 
         private readonly int _animatorOnMove = Animator.StringToHash(ANIMATOR_PARAM_ON_MOVE);
         private readonly int _animatorSpeed = Animator.StringToHash(ANIMATOR_PARAM_SPEED);
@@ -83,6 +91,8 @@ namespace SunsetSystems.Animation
             _takeHitAnimationParamHash = Animator.StringToHash(_takeHitAnimationParam);
             _fireWeaponAnimationParamHash = Animator.StringToHash(_fireWeaponAnimationParam);
             _inCoverAnimationParamHash = Animator.StringToHash(_inCoverAnimationParam);
+
+            _stateOverrideLastFrame = _stateOverride;
         }
 
         private void Start()
@@ -94,6 +104,25 @@ namespace SunsetSystems.Animation
         private void Update()
         {
             SynchronizeAnimatorWithNavMeshAgent();
+            UpdateAnimationStateOverride();
+        }
+
+        private void UpdateAnimationStateOverride()
+        {
+            if (_enableStateOverride is false || _stateOverride == _stateOverrideLastFrame)
+            {
+                return;
+            }
+            switch (_stateOverride)
+            {
+                case GameState.Exploration:
+                    SetCombatAnimationsActive(false);
+                    break;
+                case GameState.Combat:
+                    SetCombatAnimationsActive(true);
+                    break;
+            }
+            _stateOverrideLastFrame = _stateOverride;
         }
 
         private void SynchronizeAnimatorWithNavMeshAgent()
@@ -168,9 +197,13 @@ namespace SunsetSystems.Animation
         {
             animator.SetBool("IsCombat", isCombat);
             if (isCombat)
+            {
                 SetActiveAnimationLayer(CreatureAnimationLayer.Combat);
+            }
             else
+            {
                 SetActiveAnimationLayer(CreatureAnimationLayer.Exploration);
+            }
         }
 
         public void EnableIK(WeaponAnimationDataProvider ikData)

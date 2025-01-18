@@ -769,7 +769,7 @@ namespace UMA
 			{
 				if (Debug.isDebugBuild)
                 {
-                    Debug.LogError("UMAData: Recipe or Generator is not valid!");
+                    Debug.LogError($"UMAData: Recipe or Generator is not valid! {gameObject}", gameObject);
                 }
 			}
 #endif
@@ -1067,7 +1067,7 @@ namespace UMA
 				{
 					if (Debug.isDebugBuild)
                     {
-                        Debug.LogError("UMA recipe missing required race!");
+                        Debug.LogError($"UMA recipe missing required race!");
                     }
 
                     valid = false;

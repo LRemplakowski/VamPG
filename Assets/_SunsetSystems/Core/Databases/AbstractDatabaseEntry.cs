@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using Sirenix.OdinInspector;
 
 namespace SunsetSystems.Core.Database
@@ -34,7 +36,16 @@ namespace SunsetSystems.Core.Database
                 AssignNewID();
             }
             if (string.IsNullOrWhiteSpace(DatabaseID) == false)
-                RegisterToDatabase();
+            {
+                try
+                {
+                    RegisterToDatabase();
+                }
+                catch (NullReferenceException)
+                {
+                    UnityEngine.Debug.LogError($"DatabaseEntry >>> Could not register {this} to Database!", this);
+                }
+            }
 #endif
         }
 
@@ -56,7 +67,7 @@ namespace SunsetSystems.Core.Database
         private void AssignNewID()
         {
 #if UNITY_EDITOR
-            DatabaseID = System.Guid.NewGuid().ToString();
+            DatabaseID = Guid.NewGuid().ToString();
             UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }

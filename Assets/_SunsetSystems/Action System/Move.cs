@@ -9,7 +9,7 @@ using UnityEngine.AI;
 namespace SunsetSystems.ActionSystem
 {
     [System.Serializable]
-    public class Move : EntityAction
+    public class Move : EntityAction, ICloneable
     {
         [SerializeField]
         private INavigationManager navigationManager;
@@ -34,6 +34,11 @@ namespace SunsetSystems.ActionSystem
                 gridInstance.ClearOccupierFromCell(occupiedCell);
             }
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
+        }
+
+        public object Clone()
+        {
+            return new Move(Owner, destination);
         }
 
         public override void Cleanup()

@@ -7,9 +7,9 @@ namespace SunsetSystems.ActionSystem
         [SerializeField]
         private float _startTime, _duration;
 
-        public TimeElapsed(float startTime, float duration)
+        public TimeElapsed(float duration)
         {
-            _startTime = startTime;
+            _startTime = Time.time;
             _duration = duration;
         }
 

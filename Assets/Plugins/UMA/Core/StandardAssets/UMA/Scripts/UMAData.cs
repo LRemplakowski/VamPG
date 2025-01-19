@@ -750,7 +750,11 @@ namespace UMA
 			}
 			else
 			{
-				valid = valid && umaRecipe.Validate();
+				valid &= umaRecipe.Validate();
+				if (!valid)
+				{
+					Debug.LogError($"UMAData >>> Failed to validate UMA recipe {umaRecipe}!");
+				}
 			}
 
 			if (animationController == null)
@@ -759,7 +763,7 @@ namespace UMA
 				{
 					if (Debug.isDebugBuild)
                     {
-                        Debug.LogWarning("No animation controller supplied.");
+                        Debug.LogWarning($"No animation controller supplied. {gameObject}", gameObject);
                     }
                 }
 			}
@@ -1067,7 +1071,7 @@ namespace UMA
 				{
 					if (Debug.isDebugBuild)
                     {
-                        Debug.LogError($"UMA recipe missing required race!");
+                        Debug.LogError($"UMA recipe {this} missing required race!");
                     }
 
                     valid = false;
@@ -1081,10 +1085,10 @@ namespace UMA
 				{
 					if (Debug.isDebugBuild)
                     {
-                        Debug.LogError("UMA recipe slot list is empty!");
+                        Debug.LogError($"UMA recipe {this} slot list is empty!");
                     }
 
-                    valid = false;
+                    return false;
 				}
 				int slotDataCount = 0;
 				for (int i = 0; i < slotDataList.Length; i++)

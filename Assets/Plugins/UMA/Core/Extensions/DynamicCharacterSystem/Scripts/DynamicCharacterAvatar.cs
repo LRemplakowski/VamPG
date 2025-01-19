@@ -2455,7 +2455,7 @@ namespace UMA.CharacterSystem
         //NOTE needs to be public for the editor
         public void UpdateColors(bool triggerDirty = false)
         {
-            if (umaData.umaRecipe.sharedColors == null)
+            if (umaData == null || umaData.umaRecipe == null || umaData.umaRecipe.sharedColors == null)
             {
                 return;
             }

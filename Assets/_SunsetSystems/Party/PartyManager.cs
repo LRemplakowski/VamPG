@@ -106,13 +106,13 @@ namespace SunsetSystems.Party
             return _coterieMemberKeysCache.Contains(key);
         }
 
-        public void StartPlayerParty()
+        public async void StartPlayerParty()
         {
             if (string.IsNullOrWhiteSpace(_mainCharacterKey))
                 return;
             var waypoint = WaypointManager.Instance.GetSceneDefaultEntryWaypoint();
             if (waypoint != null && !_forceSpawnPartyInStorage)
-                InitializePartyAtPosition(waypoint.transform.position);
+                await InitializePartyAtPosition(waypoint.transform.position);
             else
                 InitializePartyInCreatureStorage();
         }
@@ -133,7 +133,7 @@ namespace SunsetSystems.Party
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        private async void InitializePartyAtPosition(Vector3 position)
+        private async Awaitable InitializePartyAtPosition(Vector3 position)
         {
             foreach (string key in Instance._activeCoterieMemberKeys)
             {
@@ -145,6 +145,7 @@ namespace SunsetSystems.Party
                     if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
                     {
                         creature.ForceToPosition(savedPosition);
+                        await Awaitable.NextFrameAsync();
                     }
                 }
                 else

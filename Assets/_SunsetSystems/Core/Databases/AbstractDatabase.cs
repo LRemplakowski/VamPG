@@ -13,18 +13,16 @@ namespace SunsetSystems.Core.Database
         [SerializeField]
         protected Dictionary<string, string> _readableIDRegistry = new();
 
+#if UNITY_EDITOR
         private void Awake()
         {
-#if UNITY_EDITOR
+
             if (GetEditorInstance() == null)
                 SetEditorInstance(this);
-#endif
         }
 
-#if UNITY_EDITOR
         protected abstract AbstractDatabase<T> GetEditorInstance();
         protected abstract void SetEditorInstance(AbstractDatabase<T> instance);
-#endif
 
         protected virtual void OnValidate()
         {
@@ -39,7 +37,6 @@ namespace SunsetSystems.Core.Database
             _databaseRegistry.Values.ToList().ForEach(baseItem => _readableIDRegistry.TryAdd(baseItem.ReadableID, baseItem.DatabaseID));
         }
 
-#if UNITY_EDITOR
         [Button]
         public void FindAllItems()
         {
@@ -84,8 +81,7 @@ namespace SunsetSystems.Core.Database
         public bool Register(T entry)
         {
 #if UNITY_EDITOR
-            if (this != null)
-                UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
             _databaseRegistry ??= new();
             _readableIDRegistry ??= new();

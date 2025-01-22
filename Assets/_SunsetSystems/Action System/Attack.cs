@@ -22,6 +22,8 @@ namespace SunsetSystems.ActionSystem
         private IDamageable _targetDamageable;
         [SerializeField]
         private GridManager _combatGrid;
+        [SerializeField]
+        private bool _preventLogging = false;
 
         private ICombatContext _attackerContext;
         private ICombatContext _targetContext;
@@ -50,7 +52,9 @@ namespace SunsetSystems.ActionSystem
         {
             base.Cleanup();
             if (_attackRoutine != null)
+            {
                 Attacker.CoroutineRunner.StopCoroutine(_attackRoutine);
+            }
         }
 
         public override void Begin()
@@ -63,7 +67,10 @@ namespace SunsetSystems.ActionSystem
                 _targetContext = targetContextSource.GetContext();
             //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetObject.References.GameObject.name);
             AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(this, _attackModifier));
-            LogAttack(Attacker, Target, result);
+            if (!_preventLogging)
+            {
+                LogAttack(Attacker, Target, result);
+            }
             _attackRoutine = PerformAttack(Attacker, Target, result);
             Attacker.CoroutineRunner.StartCoroutine(_attackRoutine);
 

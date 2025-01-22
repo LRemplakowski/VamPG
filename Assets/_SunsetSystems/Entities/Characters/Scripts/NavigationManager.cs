@@ -40,7 +40,7 @@ namespace SunsetSystems.Entities.Characters.Navigation
             {
                 if (_navMeshAgent.pathPending)
                     return true;
-                return _navMeshAgent.hasPath && !GetAgentFinishedMovement() || _actionPerformer.PeekCurrentAction is Move;
+                return _navMeshAgent.hasPath && !GetAgentFinishedMovement() || _actionPerformer.PeekCurrentAction is Move or MoveAbilityAction;
             }
         }
 
@@ -49,7 +49,19 @@ namespace SunsetSystems.Entities.Characters.Navigation
 
         public string ComponentID => COMPONENT_ID;
 
-        public bool Warp(Vector3 position) => _navMeshAgent.Warp(position);
+        public bool Warp(Vector3 position)
+        {
+            if (NavMesh.SamplePosition(position, out NavMeshHit hit, 1f, (int)NavMeshAreas.Walkable))
+            {
+                return _navMeshAgent.Warp(position);
+            }
+            else
+            {
+                Debug.LogError($"{nameof(NavigationManager)} >>> Failed to Warp Creature {GetComponentInParent<ICreatureReferences>().GameObject} to position {position}! Position is not valid!");
+                return false;
+            }
+        }
+
         public bool CalculatePath(Vector3 targetPosition, NavMeshPath path) => _navMeshAgent.CalculatePath(targetPosition, path);
 
         private bool GetAgentFinishedMovement()

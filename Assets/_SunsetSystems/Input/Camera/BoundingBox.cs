@@ -1,9 +1,13 @@
+using System.Linq;
+using CleverCrow.Fluid.UniqueIds;
+using SunsetSystems.Core;
 using SunsetSystems.Utils;
 using UnityEngine;
 
 namespace SunsetSystems.Input.CameraControl
 {
-    public class BoundingBox : MonoBehaviour
+    [RequireComponent(typeof(UniqueId))]
+    public class BoundingBox : MonoBehaviour, IUnique
     {
         [SerializeField]
         private Vector3 _boundingBoxSize = new Vector3(1, 1, 1);
@@ -12,73 +16,44 @@ namespace SunsetSystems.Input.CameraControl
         [SerializeField]
         private Color _gizmoColor = Color.red;
 
+        [SerializeField, HideInInspector]
+        private UniqueId _uniqueID;
+
+        private Bounds _boxBounds;
+
+        private void Awake()
+        {
+            _boxBounds = new(transform.position + _offset, _boundingBoxSize);
+        }
+
+        private void Start()
+        {
+            EnsureID();
+        }
+
+        private void OnValidate()
+        {
+            EnsureID();
+        }
+
+        private void EnsureID()
+        {
+            if (_uniqueID == null)
+            {
+                _uniqueID = GetComponent<UniqueId>();
+            }
+        }
+
+        private ref Bounds GetBounds() => ref _boxBounds;
+
         public bool IsPositionWithinBounds(Vector3 position)
         {
-            bool xBound = IsXWithinBounds(position.x);
-            bool yBound = IsYWithinBounds(position.y);
-            bool zBound = IsZWithinBounds(position.z);
-            return xBound && yBound && zBound;
+            return GetBounds().Contains(position);
         }
 
         public Vector3 ClampPositionToBounds(Vector3 position)
         {
-            return new Vector3
-            {
-                x = Mathf.Clamp(position.x, GetMinX(), GetMaxX()),
-                y = Mathf.Clamp(position.y, GetMinY(), GetMaxY()),
-                z = Mathf.Clamp(position.z, GetMinZ(), GetMaxZ())
-            };
-        }
-
-        private bool IsXWithinBounds(float posX)
-        {
-            float minX = GetMinX();
-            float maxX = GetMaxX();
-            return posX >= minX && posX <= maxX;
-        }
-
-        private bool IsYWithinBounds(float posY)
-        {
-            float minY = GetMinY();
-            float maxY = GetMaxY();
-            return posY >= minY && posY <= maxY;
-        }
-
-        private bool IsZWithinBounds(float posZ)
-        {
-            float minZ = GetMinZ();
-            float maxZ = GetMaxZ();
-            return posZ >= minZ && posZ <= maxZ;
-        }
-
-        private float GetMaxX()
-        {
-            return transform.position.x + _offset.x + Mathf.Abs(_boundingBoxSize.x / 2);
-        }
-
-        private float GetMinX()
-        {
-            return transform.position.x + _offset.x - Mathf.Abs(_boundingBoxSize.x / 2);
-        }
-
-        private float GetMaxY()
-        {
-            return transform.position.y + _offset.y + Mathf.Abs(_boundingBoxSize.y / 2);
-        }
-
-        private float GetMinY()
-        {
-            return transform.position.y + _offset.y - Mathf.Abs(_boundingBoxSize.y / 2);
-        }
-
-        private float GetMaxZ()
-        {
-            return transform.position.z + _offset.z + Mathf.Abs(_boundingBoxSize.z / 2);
-        }
-
-        private float GetMinZ()
-        {
-            return transform.position.z + _offset.z - Mathf.Abs(_boundingBoxSize.z / 2);
+            return GetBounds().ClosestPoint(position);
         }
 
         private void OnDrawGizmos()
@@ -86,6 +61,16 @@ namespace SunsetSystems.Input.CameraControl
             Vector3 boundingBoxCenter = transform.position + _offset;
             Gizmos.color = _gizmoColor;
             Gizmos.DrawWireCube(boundingBoxCenter, _boundingBoxSize);
+        }
+
+        public string GetID()
+        {
+            return _uniqueID.Id;
+        }
+
+        public static BoundingBox FindFirstContainingPoint(Vector3 point)
+        {
+            return FindObjectsByType<BoundingBox>(FindObjectsSortMode.None).First(box => box.IsPositionWithinBounds(point));
         }
     }
 }

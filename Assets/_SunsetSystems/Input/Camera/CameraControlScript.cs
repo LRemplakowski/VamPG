@@ -114,7 +114,7 @@ namespace SunsetSystems.Input.CameraControl
         {
             CameraSaveData saveData = new()
             {
-                CurrentBoundingBox = _currentBoundingBox,
+                CurrentBoundingBox = _currentBoundingBox.GetID(),
                 RigPosition = _moveTarget
             };
             return saveData;
@@ -124,8 +124,15 @@ namespace SunsetSystems.Input.CameraControl
         {
             if (data is not CameraSaveData saveData)
                 return false;
-            if (saveData.CurrentBoundingBox != null)
-                _currentBoundingBox = saveData.CurrentBoundingBox;
+            if (string.IsNullOrWhiteSpace(saveData.CurrentBoundingBox))
+            {
+                Debug.LogWarning($"{nameof(CameraControlScript)} >>> Invalid Bounding Box ID in Save Data! Finding Bounding Box by saved camera position!");
+                _currentBoundingBox = BoundingBox.FindFirstContainingPoint(saveData.RigPosition);
+            }
+            else
+            {
+                _currentBoundingBox = UniqueUtility.FindFirstUnique<BoundingBox>(saveData.CurrentBoundingBox);
+            }
             ForceToPosition(saveData.RigPosition);
             _movedToSavedPosition = true;
             return true;
@@ -134,7 +141,7 @@ namespace SunsetSystems.Input.CameraControl
 
     public class CameraSaveData : SaveData
     {
-        public BoundingBox CurrentBoundingBox;
+        public string CurrentBoundingBox;
         public Vector3 RigPosition;
         public Vector3 CameraRotationTarget;
     }

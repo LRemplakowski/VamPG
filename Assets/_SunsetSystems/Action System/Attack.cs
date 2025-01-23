@@ -23,7 +23,7 @@ namespace SunsetSystems.ActionSystem
         [SerializeField]
         private GridManager _combatGrid;
         [SerializeField]
-        private bool _preventLogging = false;
+        private bool _enableLogging = true;
 
         private ICombatContext _attackerContext;
         private ICombatContext _targetContext;
@@ -43,9 +43,14 @@ namespace SunsetSystems.ActionSystem
             conditions.Add(new WaitForFlag(_attackFinished));
         }
 
+        private Attack(Attack from) : this(from.Target, from.Attacker, from._attackModifier, from._combatGrid)
+        {
+            _enableLogging = from._enableLogging;
+        }
+
         public object Clone()
         {
-            return new Attack(Target, Attacker, _attackModifier, _combatGrid);
+            return new Attack(this);
         }
 
         public override void Cleanup()
@@ -67,7 +72,7 @@ namespace SunsetSystems.ActionSystem
                 _targetContext = targetContextSource.GetContext();
             //Debug.Log(Attacker.References.GameObject.name + " attacks " + TargetObject.References.GameObject.name);
             AttackResult result = CombatCalculator.CalculateAttackResult(new AttackContextFromAttackAction(this, _attackModifier));
-            if (!_preventLogging)
+            if (_enableLogging)
             {
                 LogAttack(Attacker, Target, result);
             }

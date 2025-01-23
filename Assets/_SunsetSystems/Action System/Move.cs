@@ -36,9 +36,14 @@ namespace SunsetSystems.ActionSystem
             gridInstance.HandleCombatantMovedIntoGridCell(owner, gridCell);
         }
 
+        private Move(Move from) : this(from.Owner, from.destination)
+        {
+
+        }
+
         public object Clone()
         {
-            return new Move(Owner, destination);
+            return new Move(this);
         }
 
         public override void Cleanup()

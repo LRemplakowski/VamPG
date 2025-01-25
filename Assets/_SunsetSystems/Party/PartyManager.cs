@@ -13,6 +13,7 @@ using SunsetSystems.Persistence;
 using UltEvents;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using SunsetSystems.LevelUtility;
 
 namespace SunsetSystems.Party
 {
@@ -112,9 +113,13 @@ namespace SunsetSystems.Party
                 return;
             var waypoint = WaypointManager.Instance.GetSceneDefaultEntryWaypoint();
             if (waypoint != null && !_forceSpawnPartyInStorage)
-                await InitializePartyAtPosition(waypoint.transform.position);
+            {
+                await InitializePartyAtWaypoint(waypoint);
+            }
             else
+            {
                 InitializePartyInCreatureStorage();
+            }
         }
 
         private async void InitializePartyInCreatureStorage()
@@ -124,29 +129,47 @@ namespace SunsetSystems.Party
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
                     if (_activeParty.ContainsKey(key))
+                    {
                         continue;
+                    }
                     _activeParty.Add(key, await InitializePartyMemberInCreatureStorage(template));
                     if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
-                        creature.ForceToPosition(savedPosition);                        
+                    {
+                        creature.ForceToPosition(savedPosition);
+                    }
                 }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        private async Awaitable InitializePartyAtPosition(Vector3 position)
+        private async Awaitable InitializePartyAtWaypoint(IWaypoint waypoint)
         {
-            foreach (string key in Instance._activeCoterieMemberKeys)
+            var positions = waypoint.GetPositions(_activeCoterieMemberKeys.Count);
+            int positionIndex = 0;
+            ICreature spawnedPartyMember;
+            Vector3 spawnPosition;
+            foreach (string key in _activeCoterieMemberKeys)
             {
+                if (_activeParty.ContainsKey(key))
+                {
+                    continue;
+                }
                 if (_cachedPartyTemplates.TryGetValue(key, out ICreatureTemplate template))
                 {
-                    if (_activeParty.ContainsKey(key))
-                        continue;
-                    _activeParty.Add(key, await InitializePartyMemberAtPosition(template, position));
-                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition) && _activeParty.TryGetValue(key, out ICreature creature))
+                    if (_initializeAtSavedPositions && _partyPositions.TryGetValue(key, out Vector3 savedPosition))
                     {
-                        creature.ForceToPosition(savedPosition);
-                        await Awaitable.NextFrameAsync();
+                        spawnPosition = savedPosition;
+                        spawnedPartyMember = await InitializePartyMemberAtPosition(template, spawnPosition);
                     }
+                    else
+                    {
+                        spawnPosition = positions[positionIndex];
+                        spawnedPartyMember = await InitializePartyMemberAtPosition(template, spawnPosition);
+                        spawnedPartyMember.FacePointInSpace(waypoint.GetFacingDirectionFromPosition(in spawnPosition));
+                    }
+                    _activeParty.Add(key, spawnedPartyMember);
+                    positionIndex++;
+                    await Awaitable.NextFrameAsync();
                 }
                 else
                 {
@@ -156,7 +179,7 @@ namespace SunsetSystems.Party
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
         }
 
-        private async Task<ICreature> InitializePartyMemberAtPosition(ICreatureTemplate data, Vector3 position)
+        private async Awaitable<ICreature> InitializePartyMemberAtPosition(ICreatureTemplate data, Vector3 position)
         {
             if (data == null)
             {
@@ -170,7 +193,7 @@ namespace SunsetSystems.Party
             }
         }
 
-        private async Task<ICreature> InitializePartyMemberInCreatureStorage(ICreatureTemplate data)
+        private async Awaitable<ICreature> InitializePartyMemberInCreatureStorage(ICreatureTemplate data)
         {
             if (data == null)
             {

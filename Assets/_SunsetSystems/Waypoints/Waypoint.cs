@@ -1,30 +1,36 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace SunsetSystems.LevelUtility
 {
-    [RequireComponent(typeof(BoxCollider))]
-    public class Waypoint : SerializedMonoBehaviour
+    public class Waypoint : SerializedMonoBehaviour, IWaypoint
     {
         [Title("Config")]
         [SerializeField]
         private string _waypointTag = "";
         [SerializeField, MinValue(1)]
-        private int _waypointCapacity = 3;
-        [SerializeField, MinValue(1)]
         private int _columns = 2;
+        [SerializeField, MinValue(.1)]
+        private float _defaultSpacing = .75f;
+        [SerializeField]
+        private Vector3 _spawnVolume = new(2, 1, 3);
         [SerializeField]
         private bool _alwaysHaveLeadCharacter;
+        [Title("Editor")]
+        [InfoBox("Shows how characters will be spread during spawn for given amount of characters.")]
+        [ShowInInspector, MinValue(1)]
+        private int _spawnDistribution = 5;
 
-        [SerializeField, HideInInspector]
-        private Collider _waypointSpawnVolume;
-        
         public string WaypointTag => _waypointTag;
-        [field: SerializeField]
-        public Transform FaceDirection { get; private set; }
 
+        private PositionCalculator _positionCalculator;
 
+        private void Awake()
+        {
+            EnsureCalculator();
+        }
 
         private void OnValidate()
         {
@@ -32,21 +38,63 @@ namespace SunsetSystems.LevelUtility
             {
                 _waypointTag = name;
             }
-            if (_waypointSpawnVolume == null)
-            {
-                _waypointSpawnVolume = GetComponent<Collider>();
-            }
-            _waypointSpawnVolume.isTrigger = true;
+            _positionCalculator = new(_columns, _defaultSpacing, new(transform.position, _spawnVolume));
         }
 
-        private void OnDrawGizmos()
+        public Vector3 GetPosition() => GetPositions(1).First();
+
+        public IList<Vector3> GetPositions(int amount)
+        {
+            return CalculateSpawnPositions(in amount, in _alwaysHaveLeadCharacter, _positionCalculator);
+        }
+
+        public Vector3 GetFacingDirection() => GetFacingDirectionFromPosition(GetPosition());
+
+        public Vector3 GetFacingDirectionFromPosition(in Vector3 position)
+        {
+            return position + transform.forward;
+        }
+
+        private static IList<Vector3> CalculateSpawnPositions(in int amount, in bool forceLeadPosition, PositionCalculator positionCalculator)
+        {
+            bool hasLeadPosition = amount % 2 == 1 || forceLeadPosition;
+            return positionCalculator.GetPositions(in amount, in hasLeadPosition);
+        }
+
+        private void EnsureCalculator()
+        {
+            _positionCalculator ??= new(_columns, _defaultSpacing, new(transform.position, _spawnVolume));
+        }
+
+#if UNITY_EDITOR
+        [UnityEditor.DrawGizmo(UnityEditor.GizmoType.NonSelected | UnityEditor.GizmoType.Pickable)]
+        private static void OnDrawGizmosNotSelected(Waypoint wp, UnityEditor.GizmoType gizmoType)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, 0.1f);
-            Vector3 xOffset = new(.1f, 0f, 0f);
-            Gizmos.DrawLine(transform.position - xOffset, transform.position + xOffset);
-            Vector3 zOffset = new(0f, 0f, .1f);
-            Gizmos.DrawLine(transform.position - zOffset, transform.position + zOffset);
+            Gizmos.DrawSphere(wp.transform.position, .25f);
         }
+
+        private void OnDrawGizmosSelected()
+        {
+            EnsureCalculator();
+            DrawSpawnVolume();
+            DrawPositionExamples();
+
+            void DrawSpawnVolume()
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube(transform.position, _spawnVolume);
+            }
+
+            void DrawPositionExamples()
+            {
+                Gizmos.color = Color.red;
+                foreach (var position in GetPositions(_spawnDistribution))
+                {
+                    Gizmos.DrawWireSphere(position, 0.5f);
+                }
+            }
+        }
+#endif
     }
 }

@@ -41,13 +41,13 @@ namespace SunsetSystems.ActionSystem
         }
 
 #if UNITY_EDITOR
-        [Button]
+        [Button(DirtyOnClick = true)]
         private void SetWaitTime(float waitTime)
         {
             _waitDurationProvider = new ConstantWaitTime(waitTime);
         }
 
-        [Button]
+        [Button(DirtyOnClick = true)]
         private void SetWaitTime(float minTime, float maxTime)
         {
             _waitDurationProvider = new RandomWaitTime(minTime, maxTime);

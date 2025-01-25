@@ -44,18 +44,27 @@ namespace SunsetSystems.Core
 
         public Waypoint GetSceneDefaultEntryWaypoint()
         {
-            if (string.IsNullOrWhiteSpace(_waypointOverride) is false && _sceneWaypoints.TryGetValue(_waypointOverride, out var waypointOverride))
+            if (!string.IsNullOrWhiteSpace(_waypointOverride) && _sceneWaypoints.TryGetValue(_waypointOverride, out var waypointOverride))
+            {
                 return waypointOverride;
+            }
             else
+            {
                 return _defaultSceneWaypoint;
+            }
         }
 
         public Waypoint GetWaypointByTag(string tag)
         {
             if (_sceneWaypoints.TryGetValue(tag, out var waypoint))
+            {
                 return waypoint;
-            Debug.LogError($"There is no waypoint with tag {tag} in scene {gameObject.scene}! Returning default waypoint!");
-            return _defaultSceneWaypoint;
+            }
+            else
+            {
+                Debug.LogError($"{nameof(WaypointManager)} >>> There is no waypoint with tag {tag} in scene {gameObject.scene}! Returning default waypoint!");
+                return _defaultSceneWaypoint;
+            }
         }
 
         public void OverrideSceneWaypoint(string waypointTag)

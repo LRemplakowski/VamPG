@@ -10,7 +10,7 @@ namespace SunsetSystems.ActionSystem
         MonoBehaviour CoroutineRunner { get; }
         ICreatureReferences References { get; }
 
-        Task PerformAction(EntityAction action, bool clearQueue = false);
+        Awaitable PerformAction(EntityAction action, bool clearQueue = false);
         EntityAction PeekCurrentAction { get;  }
         bool HasActionsQueued { get; }
     }

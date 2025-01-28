@@ -125,15 +125,18 @@ namespace SunsetSystems.Combat
 
         private static async Awaitable MoveAllCreaturesToNearestGridPosition(IEnumerable<ICombatant> actors, Encounter currentEncounter)
         {
-            List<Task> tasks = new();
+            List<Awaitable> moveIntoPositions = new();
             foreach (ICombatant combatant in actors)
             {
                 Vector3Int gridPosition = currentEncounter.GridManager.GetNearestWalkableGridPosition(combatant.References.Transform.position, false);
-                Debug.Log($"Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
-                tasks.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager), true));
+                Debug.Log($"{nameof(CombatManager)} >>> Nearest grid position for Combatant {combatant.References.GameObject.name} is {gridPosition}!");
+                moveIntoPositions.Add(combatant.PerformAction(new Move(combatant, currentEncounter.GridManager[gridPosition], currentEncounter.GridManager), true));
                 await Awaitable.NextFrameAsync();
             }
-            await Task.WhenAll(tasks);
+            foreach (var awaitable in moveIntoPositions)
+            {
+                await awaitable;
+            }
         }
 
         public bool IsBeforeFirstRound()

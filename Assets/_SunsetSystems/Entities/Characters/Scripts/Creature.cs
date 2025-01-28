@@ -125,12 +125,12 @@ namespace SunsetSystems.Entities.Characters
             return ActionQueue.Peek();
         }
 
-        public async Task PerformAction(EntityAction action, bool clearQueue = false)
+        public async Awaitable PerformAction(EntityAction action, bool clearQueue = false)
         {
             if (action.IsPriority || clearQueue)
                 ClearAllActions();
             ActionQueue.Enqueue(action);
-            await new WaitForUpdate();
+            await Awaitable.NextFrameAsync();
             await new WaitUntil(() => action.ActionFinished || action.ActionCanceled);
         }
 

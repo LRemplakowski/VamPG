@@ -173,7 +173,7 @@ namespace SunsetSystems.Party
                 }
                 else
                 {
-                    Debug.LogError($"Party Member {key} is active, but has no template!");
+                    Debug.LogError($"{nameof(PartyManager)} >>> Party Member {key} is active, but has no template!");
                 }
             }
             OnActivePartyInitialized?.InvokeSafe(_activeParty.Values.ToList());
@@ -183,7 +183,7 @@ namespace SunsetSystems.Party
         {
             if (data == null)
             {
-                throw new NullReferenceException("Party member initialization failed! Null CreatureData!");
+                throw new NullReferenceException($"{nameof(PartyManager)} >>> Party member initialization failed! Null CreatureData!");
             }
             else
             {
@@ -197,13 +197,12 @@ namespace SunsetSystems.Party
         {
             if (data == null)
             {
-                throw new NullReferenceException("Party member initialization failed! Null CreatureData!");
+                throw new NullReferenceException($"{nameof(PartyManager)} >>> Party member initialization failed! Null CreatureData!");
             }
             else
             {
                 ICreature memberInstance = await CreatureFactory.Instance.Create(data, _creatureParent);
                 memberInstance.References.GameObject.layer = LayerMask.NameToLayer(_defaultPartyLayer);
-                //memberInstance.References.NavigationManager.gameObject.layer = memberInstance.References.GameObject.layer;
                 return memberInstance;
             }
         }
@@ -217,7 +216,7 @@ namespace SunsetSystems.Party
         [Button]
         public void RecruitCharacter(ICreatureTemplate memberTemplate)
         {
-            Debug.Log($"Recruited {memberTemplate.FullName} to party!");
+            Debug.Log($"{nameof(PartyManager)} >>> Recruited {memberTemplate.FullName} to party!");
             _coterieMemberKeysCache.Add(memberTemplate.DatabaseID);
             _cachedPartyTemplates.Add(memberTemplate.DatabaseID, memberTemplate);
             OnPartyMemberRecruited?.InvokeSafe(memberTemplate.DatabaseID);
@@ -226,7 +225,7 @@ namespace SunsetSystems.Party
         [Button]
         public void RecruitCharacter(ICreature creature)
         {
-            Debug.Log($"Recruited {creature.References.CreatureData.FullName} to party!");
+            Debug.Log($"{nameof(PartyManager)} >>> Recruited {creature.References.CreatureData.FullName} to party!");
             var memberTemplate = creature.CreatureTemplate;
             _coterieMemberKeysCache.Add(creature.References.CreatureData.DatabaseID);
             _cachedPartyTemplates.Add(memberTemplate.DatabaseID, memberTemplate);
@@ -254,7 +253,7 @@ namespace SunsetSystems.Party
         {
             if (memberID.Equals(_mainCharacterKey))
             {
-                Debug.LogError("Cannot remove Main Character from active roster!");
+                Debug.LogError($"{nameof(PartyManager)} >>> Cannot remove Main Character from active roster!");
                 return false;
             }
             bool result = _activeCoterieMemberKeys.Remove(memberID);
@@ -323,11 +322,11 @@ namespace SunsetSystems.Party
             foreach (string key in _activeCoterieMemberKeys)
             {
                 if (saveData.PartyPositions.TryGetValue(key, out Vector3 position))
+                {
                     _partyPositions.Add(key, position);
-                else
-                    _partyPositions.Add(key, Vector3.zero);
+                }
             }
-            _initializeAtSavedPositions = saveData.PartyPositionsScene == SceneManager.GetActiveScene().name;
+            _initializeAtSavedPositions = saveData.PartyPositionsScene == gameObject.scene.name;
             return true;
         }
     }

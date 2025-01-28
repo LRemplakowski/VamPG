@@ -21,23 +21,33 @@ namespace SunsetSystems.Playables
         private List<EntityAction> _actionSequence = new();
 
         private IEnumerator _sequenceCoroutine;
+        private bool _isStopped;
 
         private void Start()
         {
+            _isStopped = !_playOnStart;
             if (_playOnStart)
+            {
                 StartSequence();
+            }    
         }
 
         private void Update()
         {
-            if (_loop && _sequenceCoroutine == null)
+            if (_loop && !_isStopped && _sequenceCoroutine == null)
+            {
                 StartSequence();
+            }
         }
 
         public void StartSequence()
         {
+            _isStopped = false;
             if (_sequenceCoroutine != null)
+            {
                 return;
+            }
+            CloneActions();
             _sequenceCoroutine = ActionSequence();
             StartCoroutine(_sequenceCoroutine);
         }
@@ -47,11 +57,20 @@ namespace SunsetSystems.Playables
             foreach (var action in _actionSequence)
             {
                 if (_actionPerformer.HasActionsQueued)
+                {
                     yield return new WaitUntil(() => _actionPerformer.HasActionsQueued is false);
+                }
                 _actionPerformer.PerformAction(action, false);
             }
             if (_actionPerformer.HasActionsQueued)
+            {
                 yield return new WaitUntil(() => _actionPerformer.HasActionsQueued is false);
+            }
+            _sequenceCoroutine = null;
+        }
+
+        private void CloneActions()
+        {
             var actionsClone = new List<EntityAction>();
             foreach (var action in _actionSequence)
             {
@@ -62,11 +81,11 @@ namespace SunsetSystems.Playables
             }
             _actionSequence.Clear();
             _actionSequence.AddRange(actionsClone);
-            _sequenceCoroutine = null;
         }
 
         public void StopSequence()
         {
+            _isStopped = true;
             if (_sequenceCoroutine != null)
             {
                 StopCoroutine(_sequenceCoroutine);

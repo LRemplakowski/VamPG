@@ -58,9 +58,13 @@ namespace SunsetSystems.Combat.Grid
             GridUnit cellObject = this[cell.GridPosition];
             cellObject.Occupier = combatant;
             if (_occupiedGridCells.TryAdd(combatant, cellObject))
+            {
                 combatant.References.StatsManager.OnCreatureDied += OnOccupierDied;
+            }
             else
-                Debug.LogError($"Combatant {combatant} moved into already occupied grid cell! This should not happen! Grid Cell: {cell.GridPosition}");
+            {
+                Debug.LogError($"{nameof(GridManager)} >>> Combatant {combatant} moved into already occupied grid cell! This should not happen! Grid Cell: {cell.GridPosition}");
+            }
             managedGrid.MarkCellDirty(cellObject);
         }
 
@@ -202,8 +206,10 @@ namespace SunsetSystems.Combat.Grid
                 float gridDistance = float.MaxValue;
                 foreach (GridUnit gridUnit in allWalkableUnits)
                 {
-                    if (includeOccupied is false || gridUnit.IsOccupied)
+                    if (!includeOccupied && gridUnit.IsOccupied)
+                    {
                         continue;
+                    }
                     float newDistance = Mathf.Abs((gridUnit.GridPosition - relativeTo.GridPosition).magnitude);
                     if (newDistance < gridDistance)
                     {

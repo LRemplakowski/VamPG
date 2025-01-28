@@ -133,7 +133,7 @@ namespace SunsetSystems.Combat
 
         public Transform Transform => Owner.Transform;
 
-        public Task PerformAction(EntityAction action, bool clearQueue = false)
+        public Awaitable PerformAction(EntityAction action, bool clearQueue = false)
         {
             return Owner.PerformAction(action, clearQueue);
         }

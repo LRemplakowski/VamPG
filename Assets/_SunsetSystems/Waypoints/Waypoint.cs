@@ -38,7 +38,7 @@ namespace SunsetSystems.LevelUtility
             {
                 _waypointTag = name;
             }
-            _positionCalculator = new(_columns, _defaultSpacing, new(transform.position, _spawnVolume));
+            _positionCalculator = new(_columns, _defaultSpacing, new(transform, _spawnVolume));
         }
 
         public Vector3 GetPosition() => GetPositions(1).First();
@@ -63,7 +63,7 @@ namespace SunsetSystems.LevelUtility
 
         private void EnsureCalculator()
         {
-            _positionCalculator ??= new(_columns, _defaultSpacing, new(transform.position, _spawnVolume));
+            _positionCalculator ??= new(_columns, _defaultSpacing, new(transform, _spawnVolume));
         }
 
 #if UNITY_EDITOR
@@ -83,12 +83,15 @@ namespace SunsetSystems.LevelUtility
             void DrawSpawnVolume()
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireCube(transform.position, _spawnVolume);
+                Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+                Gizmos.matrix = rotationMatrix;
+                Gizmos.DrawWireCube(Vector3.zero, _spawnVolume);
             }
 
             void DrawPositionExamples()
             {
                 Gizmos.color = Color.red;
+                Gizmos.matrix = Matrix4x4.identity;
                 foreach (var position in GetPositions(_spawnDistribution))
                 {
                     Gizmos.DrawWireSphere(position, 0.5f);

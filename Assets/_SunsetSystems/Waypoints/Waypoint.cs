@@ -13,9 +13,9 @@ namespace SunsetSystems.LevelUtility
         [SerializeField, MinValue(1)]
         private int _columns = 2;
         [SerializeField, MinValue(.1)]
-        private float _defaultSpacing = .75f;
+        private float _defaultSpacing = 1f;
         [SerializeField]
-        private Vector3 _spawnVolume = new(2, 1, 3);
+        private Vector3 _spawnVolumeSize = new(2, 1, 3);
         [SerializeField]
         private bool _alwaysHaveLeadCharacter;
         [Title("Editor")]
@@ -38,7 +38,7 @@ namespace SunsetSystems.LevelUtility
             {
                 _waypointTag = name;
             }
-            _positionCalculator = new(_columns, _defaultSpacing, new(transform, _spawnVolume));
+            _positionCalculator = new(_columns, _defaultSpacing, new TransformVolume(transform, _spawnVolumeSize));
         }
 
         public Vector3 GetPosition() => GetPositions(1).First();
@@ -63,7 +63,7 @@ namespace SunsetSystems.LevelUtility
 
         private void EnsureCalculator()
         {
-            _positionCalculator ??= new(_columns, _defaultSpacing, new(transform, _spawnVolume));
+            _positionCalculator ??= new(_columns, _defaultSpacing, new TransformVolume(transform, _spawnVolumeSize));
         }
 
 #if UNITY_EDITOR
@@ -85,16 +85,20 @@ namespace SunsetSystems.LevelUtility
                 Gizmos.color = Color.green;
                 Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
                 Gizmos.matrix = rotationMatrix;
-                Gizmos.DrawWireCube(Vector3.zero, _spawnVolume);
+                Gizmos.DrawWireCube(Vector3.zero, _spawnVolumeSize);
             }
 
             void DrawPositionExamples()
             {
                 Gizmos.color = Color.red;
-                Gizmos.matrix = Matrix4x4.identity;
+                Matrix4x4 rotationMatrix;
                 foreach (var position in GetPositions(_spawnDistribution))
                 {
-                    Gizmos.DrawWireSphere(position, 0.5f);
+                    rotationMatrix = Matrix4x4.TRS(position, transform.rotation, transform.lossyScale);
+                    Gizmos.matrix = rotationMatrix;
+                    Gizmos.DrawWireSphere(Vector3.zero, 0.4f);
+                    Gizmos.matrix = Matrix4x4.identity;
+                    Gizmos.DrawLine(transform.position, transform.position + transform.forward);
                 }
             }
         }
